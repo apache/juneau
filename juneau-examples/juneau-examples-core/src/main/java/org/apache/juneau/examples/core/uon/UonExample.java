@@ -42,11 +42,11 @@ public class UonExample {
 		 * Produces
 		 * (name=name,id=id)
 		 */
-		var serial = UonSerializer.DEFAULT.serialize(pojo);
+		var serial = UonSerializer.DEFAULT.write(pojo);
 		Logger.getLogger(UonExample.class).info(serial);
 
 		// Deserialize back to Pojo instance
-		var obj = UonParser.DEFAULT.parse(serial, Pojo.class);
+		var obj = UonParser.DEFAULT.read(serial, Pojo.class);
 
 		assert obj.getId().equals(pojo.getId());
 		assert obj.getName().equals(pojo.getName());

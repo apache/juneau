@@ -73,7 +73,7 @@ import org.apache.juneau.marshall.*;
  *
  * 	<jc>// Serialize a bean to JSON text </jc>
  * 	AddressBook <jv>addressBook</jv> = <jk>new</jk> AddressBook();  <jc>// Bean to serialize.</jc>
- * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>addressBook</jv>);
+ * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jv>addressBook</jv>);
  * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>

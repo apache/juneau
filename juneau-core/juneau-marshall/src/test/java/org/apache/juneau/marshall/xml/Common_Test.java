@@ -36,15 +36,15 @@ class Common_Test extends TestBase {
 		var p = XmlParser.DEFAULT;
 		var t1 = A.create();
 
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 		assertEquals("<object><s2>s2</s2></object>", r);
-		var t2 = p.parse(r, A.class);
+		var t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t1));
 
 		s.keepNullProperties();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("<object><s1 _type='null'/><s2>s2</s2></object>", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t1));
 	}
 
@@ -65,16 +65,16 @@ class Common_Test extends TestBase {
 		var s = XmlSerializer.create().sq();
 		var p = XmlParser.DEFAULT;
 		var t1 = B.create();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 
 		assertEquals("<object><f1/><f2><f2a _type='null'/><f2b><s2>s2</s2></f2b></f2></object>", r);
-		var t2 = p.parse(r, B.class);
+		var t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyMaps();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("<object><f2><f2a _type='null'/><f2b><s2>s2</s2></f2b></f2></object>", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertNull(t2.f1);
 	}
 
@@ -96,16 +96,16 @@ class Common_Test extends TestBase {
 		var s = XmlSerializer.create().sq();
 		var p = XmlParser.DEFAULT;
 		var t1 = C.create();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 
 		assertEquals("<object><f1></f1><f2><null/><object><s2>s2</s2></object></f2></object>", r);
-		var t2 = p.parse(r, C.class);
+		var t2 = p.read(r, C.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("<object><f2><null/><object><s2>s2</s2></object></f2></object>", r);
-		t2 = p.parse(r, C.class);
+		t2 = p.read(r, C.class);
 		assertNull(t2.f1);
 	}
 
@@ -127,16 +127,16 @@ class Common_Test extends TestBase {
 		var s = XmlSerializer.create().sq();
 		var p = XmlParser.DEFAULT;
 		var t1 = D.create();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 
 		assertEquals("<object><f1></f1><f2><null/><object><s2>s2</s2></object></f2></object>", r);
-		var t2 = p.parse(r, D.class);
+		var t2 = p.read(r, D.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("<object><f2><null/><object><s2>s2</s2></object></f2></object>", r);
-		t2 = p.parse(r, D.class);
+		t2 = p.read(r, D.class);
 		assertNull(t2.f1);
 	}
 
@@ -165,18 +165,18 @@ class Common_Test extends TestBase {
 		r3.r1 = r1;
 
 		// No recursion detection
-		assertThrowsWithMessage(Exception.class, "It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().serialize(r1));
+		assertThrowsWithMessage(Exception.class, "It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().write(r1));
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
 		assertThrowsWithMessage(
 			Exception.class,
 			l("[0] <noname>:org.apache.juneau.marshall.xml.Common_Test$R1", "->[1] r2:org.apache.juneau.marshall.xml.Common_Test$R2", "->[2] r3:org.apache.juneau.marshall.xml.Common_Test$R3", "->[3] r1:org.apache.juneau.marshall.xml.Common_Test$R1"),
-			()->s.build().serialize(r1)
+			()->s.build().write(r1)
 		);
 
 		s.ignoreRecursions();
-		assertEquals("<object><name>foo</name><r2><name>bar</name><r3><name>baz</name></r3></r2></object>", s.build().serialize(r1));
+		assertEquals("<object><name>foo</name><r2><name>bar</name><r3><name>baz</name></r3></r2></object>", s.build().write(r1));
 	}
 
 	public static class R1 {
@@ -201,7 +201,7 @@ class Common_Test extends TestBase {
 		var s = XmlSerializer.create().sq().build();
 
 		var bean = new K();
-		var xml = s.serialize(bean);
+		var xml = s.write(bean);
 
 		// Verify all formatted fields are serialized correctly
 		assertTrue(xml.contains("<doubleField>2.718</doubleField>"));

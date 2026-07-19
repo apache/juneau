@@ -162,12 +162,12 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 
 	/**
 	 * Convenience delegator that opens a {@link RecordReader} over the input using
-	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 * <b>default session arguments</b> (mirrors {@link #read(Object, Class)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link PlainTextParserSession#parseRecords(Object)}.  Callers
+	 * The real implementation lives on {@link PlainTextParserSession#readRecords(Object)}.  Callers
 	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
-	 * {@link #createSession()} and invoke {@link PlainTextParserSession#parseRecords(Object)} on the
+	 * {@link #createSession()} and invoke {@link PlainTextParserSession#readRecords(Object)} on the
 	 * built session instead.
 	 *
 	 * @param input The input.
@@ -175,8 +175,8 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
-		return getSession().parseRecords(input);
+	public RecordReader readRecords(Object input) throws IOException {
+		return getSession().readRecords(input);
 	}
 
 	@Override /* RecordReadable */

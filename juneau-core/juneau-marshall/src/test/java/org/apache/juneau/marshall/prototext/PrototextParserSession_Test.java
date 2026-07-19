@@ -30,130 +30,130 @@ import org.junit.jupiter.api.*;
 class PrototextParserSession_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
-	// doParse scalar paths
+	// doRead scalar paths
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_parseNull_returnsNullOrDefault() throws Exception {
+	@Test void a01_readNull_returnsNullOrDefault() throws Exception {
 		// Empty input → isEmpty(root) → newInstance path
-		var r = PrototextParser.DEFAULT.parse("", SimpleBean.class);
+		var r = PrototextParser.DEFAULT.read("", SimpleBean.class);
 		assertNotNull(r);
 	}
 
-	@Test void a02_parse_valueSingleField() throws Exception {
+	@Test void a02_read_valueSingleField() throws Exception {
 		// Single "_value" key in root map → convertValue path
-		var r = PrototextParser.DEFAULT.parse("_value: 42", Long.class);
+		var r = PrototextParser.DEFAULT.read("_value: 42", Long.class);
 		assertEquals(42L, r);
 	}
 
-	@Test void a03_parse_byteArraySingleValue() throws Exception {
+	@Test void a03_read_byteArraySingleValue() throws Exception {
 		// Single "_value" raw string for byte[] target → swap path
-		var proto = PrototextSerializer.DEFAULT.serialize(new byte[]{1, 2, 3});
-		var result = PrototextParser.DEFAULT.parse(proto, byte[].class);
+		var proto = PrototextSerializer.DEFAULT.write(new byte[]{1, 2, 3});
+		var result = PrototextParser.DEFAULT.read(proto, byte[].class);
 		assertNotNull(result);
 		assertArrayEquals(new byte[]{1, 2, 3}, result);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// parseMessage: semicolon/comma separator, angle brace, list message items
+	// readMessage: semicolon/comma separator, angle brace, list message items
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_parseSemicolonSeparator() throws Exception {
+	@Test void b01_readSemicolonSeparator() throws Exception {
 		// Semicolon separator between fields → t2.type() == SEMICOLON branch
-		var r = PrototextParser.DEFAULT.parse("name: \"Alice\"; age: 30", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("name: \"Alice\"; age: 30", JsonMap.class);
 		assertEquals("Alice", r.get("name"));
 		assertEquals(30L, r.get("age"));
 	}
 
-	@Test void b02_parseCommaSeparator() throws Exception {
+	@Test void b02_readCommaSeparator() throws Exception {
 		// Comma separator → t2.type() == COMMA branch
-		var r = PrototextParser.DEFAULT.parse("a: 1, b: 2", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("a: 1, b: 2", JsonMap.class);
 		assertEquals(1L, r.get("a"));
 		assertEquals(2L, r.get("b"));
 	}
 
-	@Test void b03_parseAngleBrace() throws Exception {
+	@Test void b03_readAngleBrace() throws Exception {
 		// Angle brace syntax for nested messages → LANGLE/RANGLE path
-		var r = PrototextParser.DEFAULT.parse("nested < x: \"hello\" >", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("nested < x: \"hello\" >", JsonMap.class);
 		assertNotNull(r.get("nested"));
 	}
 
-	@Test void b04_parseListWithMessageItems() throws Exception {
-		// List with nested message items → parseScalarOrMessageInList LBRACE branch
-		var r = PrototextParser.DEFAULT.parse("items: [{name: \"a\"}, {name: \"b\"}]", JsonMap.class);
+	@Test void b04_readListWithMessageItems() throws Exception {
+		// List with nested message items → readScalarOrMessageInList LBRACE branch
+		var r = PrototextParser.DEFAULT.read("items: [{name: \"a\"}, {name: \"b\"}]", JsonMap.class);
 		var items = (List<?>) r.get("items");
 		assertNotNull(items);
 		assertEquals(2, items.size());
 	}
 
-	@Test void b05_parseFieldNameAsInteger() throws Exception {
+	@Test void b05_readFieldNameAsInteger() throws Exception {
 		// Numeric field name (integer key) → readFieldName DEC_INT path
-		var r = PrototextParser.DEFAULT.parse("0: \"zero\" 1: \"one\"", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("0: \"zero\" 1: \"one\"", JsonMap.class);
 		assertNotNull(r);
 	}
 
-	@Test void b06_parseRepeatedFieldToList() throws Exception {
+	@Test void b06_readRepeatedFieldToList() throws Exception {
 		// Same field name repeated → merges into List (result.containsKey(fieldName))
-		var r = PrototextParser.DEFAULT.parse("tag: \"a\"\ntag: \"b\"\ntag: \"c\"", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("tag: \"a\"\ntag: \"b\"\ntag: \"c\"", JsonMap.class);
 		var v = r.get("tag");
 		assertInstanceOf(List.class, v);
 		assertEquals(3, ((List<?>) v).size());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// parseScalarValue: special IDENT values
+	// readScalarValue: special IDENT values
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_parseIdentTrue() throws Exception {
+	@Test void c01_readIdentTrue() throws Exception {
 		// "true" ident → Boolean.TRUE
-		var r = PrototextParser.DEFAULT.parse("flag: true", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("flag: true", JsonMap.class);
 		assertEquals(Boolean.TRUE, r.get("flag"));
 	}
 
-	@Test void c02_parseIdentFalse() throws Exception {
+	@Test void c02_readIdentFalse() throws Exception {
 		// "false" ident → Boolean.FALSE
-		var r = PrototextParser.DEFAULT.parse("flag: false", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("flag: false", JsonMap.class);
 		assertEquals(Boolean.FALSE, r.get("flag"));
 	}
 
-	@Test void c03_parseIdentT() throws Exception {
+	@Test void c03_readIdentT() throws Exception {
 		// "t" → Boolean.TRUE (short form)
-		var r = PrototextParser.DEFAULT.parse("flag: t", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("flag: t", JsonMap.class);
 		assertEquals(Boolean.TRUE, r.get("flag"));
 	}
 
-	@Test void c04_parseIdentF() throws Exception {
+	@Test void c04_readIdentF() throws Exception {
 		// "f" → Boolean.FALSE (short form)
-		var r = PrototextParser.DEFAULT.parse("flag: f", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("flag: f", JsonMap.class);
 		assertEquals(Boolean.FALSE, r.get("flag"));
 	}
 
-	@Test void c05_parseIdentInf() throws Exception {
+	@Test void c05_readIdentInf() throws Exception {
 		// "inf" → Double.POSITIVE_INFINITY
-		var r = PrototextParser.DEFAULT.parse("val: inf", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("val: inf", JsonMap.class);
 		assertEquals(Double.POSITIVE_INFINITY, r.get("val"));
 	}
 
-	@Test void c06_parseIdentNegInf() throws Exception {
+	@Test void c06_readIdentNegInf() throws Exception {
 		// "-inf" → Double.NEGATIVE_INFINITY
-		var r = PrototextParser.DEFAULT.parse("val: -inf", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("val: -inf", JsonMap.class);
 		assertEquals(Double.NEGATIVE_INFINITY, r.get("val"));
 	}
 
-	@Test void c07_parseIdentNaN() throws Exception {
+	@Test void c07_readIdentNaN() throws Exception {
 		// "nan" → Double.NaN
-		var r = PrototextParser.DEFAULT.parse("val: nan", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("val: nan", JsonMap.class);
 		assertTrue(Double.isNaN((Double) r.get("val")));
 	}
 
-	@Test void c08_parseIdentUnknownString() throws Exception {
+	@Test void c08_readIdentUnknownString() throws Exception {
 		// Unknown ident → yield as string
-		var r = PrototextParser.DEFAULT.parse("status: ACTIVE", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("status: ACTIVE", JsonMap.class);
 		assertEquals("ACTIVE", r.get("status"));
 	}
 
-	@Test void c09_parseHexInteger() throws Exception {
+	@Test void c09_readHexInteger() throws Exception {
 		// HEX_INT field tag
-		var r = PrototextParser.DEFAULT.parse("value: 0xFF", JsonMap.class);
+		var r = PrototextParser.DEFAULT.read("value: 0xFF", JsonMap.class);
 		assertNotNull(r.get("value"));
 	}
 
@@ -161,57 +161,57 @@ class PrototextParserSession_Test extends TestBase {
 	// convertMapToType: typed Map keys and bean type resolution
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_parseToBean() throws Exception {
+	@Test void d01_readToBean() throws Exception {
 		// convertMapToType → bean path
-		var r = PrototextParser.DEFAULT.parse("name: \"Alice\"\nage: 30", SimpleBean.class);
+		var r = PrototextParser.DEFAULT.read("name: \"Alice\"\nage: 30", SimpleBean.class);
 		assertEquals("Alice", r.name);
 		assertEquals(30, r.age);
 	}
 
-	@Test void d02_parseToIgnoreUnknown() throws Exception {
+	@Test void d02_readToIgnoreUnknown() throws Exception {
 		// populateBeanMap: pMeta == null && ignoreUnknownBeanProperties → continue
 		var p = PrototextParser.create().ignoreUnknownBeanProperties().build();
-		var r = p.parse("name: \"Alice\"\nage: 30\nunknown: \"x\"", SimpleBean.class);
+		var r = p.read("name: \"Alice\"\nage: 30\nunknown: \"x\"", SimpleBean.class);
 		assertEquals("Alice", r.name);
 	}
 
-	@Test void d03_parseToMap_stringKey() throws Exception {
+	@Test void d03_readToMap_stringKey() throws Exception {
 		// convertMapToType → isMap() → default string key path → return map
 		@SuppressWarnings("unchecked")
-		var r = (Map<String, String>) PrototextParser.DEFAULT.parse("a: \"1\" b: \"2\"", Map.class, String.class, String.class);
+		var r = (Map<String, String>) PrototextParser.DEFAULT.read("a: \"1\" b: \"2\"", Map.class, String.class, String.class);
 		assertNotNull(r);
 	}
 
-	@Test void d04_parseNestedBeanAsBeanProperty() throws Exception {
+	@Test void d04_readNestedBeanAsBeanProperty() throws Exception {
 		// convertValue: val instanceof Map → targetType.isBean() → populateBeanMap
-		var r = PrototextParser.DEFAULT.parse("address {\n  city: \"Boston\"\n  zip: \"02101\"\n}", BeanWithAddressProp.class);
+		var r = PrototextParser.DEFAULT.read("address {\n  city: \"Boston\"\n  zip: \"02101\"\n}", BeanWithAddressProp.class);
 		assertNotNull(r.address);
 		assertEquals("Boston", r.address.city);
 	}
 
-	@Test void d05_parseListAsBeanProperty() throws Exception {
+	@Test void d05_readListAsBeanProperty() throws Exception {
 		// convertValue: val instanceof List → isCollectionOrArray → result list
-		var r = PrototextParser.DEFAULT.parse("tags: [\"a\", \"b\", \"c\"]", BeanWithTagsProp.class);
+		var r = PrototextParser.DEFAULT.read("tags: [\"a\", \"b\", \"c\"]", BeanWithTagsProp.class);
 		assertNotNull(r.tags);
 		assertEquals(3, r.tags.size());
 	}
 
-	@Test void d06_parseListAsArrayProperty() throws Exception {
+	@Test void d06_readListAsArrayProperty() throws Exception {
 		// convertValue: val instanceof List → isArray → toArray
-		var r = PrototextParser.DEFAULT.parse("values: [1, 2, 3]", BeanWithIntArrayProp.class);
+		var r = PrototextParser.DEFAULT.read("values: [1, 2, 3]", BeanWithIntArrayProp.class);
 		assertNotNull(r.values);
 		assertEquals(3, r.values.length);
 	}
 
-	@Test void d07_parseMultipleStringConcatenation() throws Exception {
-		// parseScalarValue: adjacent string tokens are concatenated
-		var r = PrototextParser.DEFAULT.parse("text: \"hello\" \" world\"", JsonMap.class);
+	@Test void d07_readMultipleStringConcatenation() throws Exception {
+		// readScalarValue: adjacent string tokens are concatenated
+		var r = PrototextParser.DEFAULT.read("text: \"hello\" \" world\"", JsonMap.class);
 		assertEquals("hello world", r.get("text"));
 	}
 
-	@Test void d08_parseMapInsideMapAsBeanProperty() throws Exception {
+	@Test void d08_readMapInsideMapAsBeanProperty() throws Exception {
 		// convertValue: nested map → targetType.isMap() → toJsonMap
-		var r = PrototextParser.DEFAULT.parse("metadata { key: \"val\" }", BeanWithMapProp.class);
+		var r = PrototextParser.DEFAULT.read("metadata { key: \"val\" }", BeanWithMapProp.class);
 		assertNotNull(r.metadata);
 	}
 

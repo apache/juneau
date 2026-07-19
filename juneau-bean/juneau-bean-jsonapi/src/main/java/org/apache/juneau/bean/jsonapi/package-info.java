@@ -75,7 +75,7 @@
  * 		.setType(<js>"articles"</js>).setId(<js>"1"</js>)
  * 		.putAttribute(<js>"title"</js>, <js>"JSON:API paints my bikeshed!"</js>);
  * 	JsonApiDocument <jv>doc</jv> = <jk>new</jk> JsonApiDocument().setData(<jv>article</jv>);
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>doc</jv>);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>doc</jv>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

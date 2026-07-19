@@ -97,7 +97,7 @@ class BsonInputStream_Test extends TestBase {
 	@Test
 	void a01_readDocumentViaParser() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(JsonMap.of("x", 1, "y", "foo"));
+		var bytes = s.write(JsonMap.of("x", 1, "y", "foo"));
 		try (var pipe = new ParserPipe(bytes)) {
 			try (var is = new BsonInputStream(pipe)) {
 				var size = is.readDocumentSize();
@@ -110,9 +110,9 @@ class BsonInputStream_Test extends TestBase {
 	@Test
 	void a02_parseSimpleMap() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(JsonMap.of("a", 42, "b", "hello"));
+		var bytes = s.write(JsonMap.of("a", 42, "b", "hello"));
 		var p = BsonParser.create().build();
-		var result = p.parse(bytes, JsonMap.class);
+		var result = p.read(bytes, JsonMap.class);
 		assertNotNull(result);
 		assertEquals(42, result.get("a"));
 		assertEquals("hello", result.get("b"));
@@ -121,9 +121,9 @@ class BsonInputStream_Test extends TestBase {
 	@Test
 	void a03_parseArray() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(List.of(1, 2, 3));
+		var bytes = s.write(List.of(1, 2, 3));
 		var p = BsonParser.create().build();
-		var result = p.parse(bytes, List.class);
+		var result = p.read(bytes, List.class);
 		assertNotNull(result);
 		assertEquals(List.of(1, 2, 3), result);
 	}
@@ -737,7 +737,7 @@ class BsonInputStream_Test extends TestBase {
 		// document type (0x03) to verify skipValue can consume the whole thing.
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var nested = JsonMap.of("level", JsonMap.of("level", JsonMap.of("level", JsonMap.of("v", 1))));
-		var docBytes = s.serialize(nested);
+		var docBytes = s.write(nested);
 		// Append a sentinel after the doc to verify skipValue stops at the right offset
 		var withSentinel = cat(docBytes, new byte[]{0x42});
 		try (var is = openIs(withSentinel)) {

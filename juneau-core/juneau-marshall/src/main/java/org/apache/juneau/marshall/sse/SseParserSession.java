@@ -86,7 +86,7 @@ public class SseParserSession extends ReaderParserSession implements RecordReada
 	}
 
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.arrayReader(this, input);
 	}
 
@@ -99,7 +99,7 @@ public class SseParserSession extends ReaderParserSession implements RecordReada
 	@SuppressWarnings({
 		"java:S2095" // Reader is owned by ParserPipe and closed via SseEventReader in try-with-resources.
 	})
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		var r = pipe.getReader();
 		if (r == null)
 			return null;

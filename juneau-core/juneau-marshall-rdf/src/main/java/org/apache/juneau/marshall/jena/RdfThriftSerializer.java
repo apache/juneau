@@ -27,7 +27,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to RDF/THRIFT bytes.</jc>
  * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
- * 	<jk>byte</jk>[] <jv>thriftBytes</jv> = RdfThriftSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+ * 	<jk>byte</jk>[] <jv>thriftBytes</jv> = RdfThriftSerializer.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the RdfThrift marshaller for convenience.</jc>
@@ -35,12 +35,12 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Serialize to OutputStream.</jc>
- * 	RdfThriftSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>, <jv>outputStream</jv>);
+ * 	RdfThriftSerializer.<jsf>DEFAULT</jsf>.write(<jv>person</jv>, <jv>outputStream</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom serializer with swaps.</jc>
  * 	RdfThriftSerializer <jv>s</jv> = RdfThriftSerializer.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	<jk>byte</jk>[] <jv>bytes</jv> = <jv>s</jv>.serialize(<jv>bean</jv>);
+ * 	<jk>byte</jk>[] <jv>bytes</jv> = <jv>s</jv>.write(<jv>bean</jv>);
  * </p>
  *
  * <p>Output is binary (<jk>byte</jk>[]), Apache Thrift format. Complex structures (nested objects, arrays) serialize to equivalent RDF triples in binary form.</p>

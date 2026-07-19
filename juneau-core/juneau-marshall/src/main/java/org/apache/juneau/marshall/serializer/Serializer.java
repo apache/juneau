@@ -57,8 +57,8 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * Subclasses must implement parsing via one of the following methods:
  * <ul class='javatree'>
- * 	<li class='jmp'>{@link #doSerialize(SerializerSession, SerializerPipe, Object)}
- * 	<li class='jmp'>{@link SerializerSession#doSerialize(SerializerPipe, Object)}
+ * 	<li class='jmp'>{@link #doWrite(SerializerSession, SerializerPipe, Object)}
+ * 	<li class='jmp'>{@link SerializerSession#doWrite(SerializerPipe, Object)}
  * </ul>
  * <br>
  *
@@ -252,7 +252,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	JsonMap <jv>myMap</jv> = JsonMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
 		 *
 		 * 	<jc>// Will contain:  {"foo":{"_type":"mybean","foo":"bar"}}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>);
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jv>myMap</jv>);
 		 * </p>
 		 *
 		 * <p>
@@ -314,7 +314,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	}
 		 *
 		 * 	<jc>// Will contain:  {"_type":"mybean","foo":"bar"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -410,7 +410,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	}
 		 *
 		 * 	<jc>// Will contain "{foo:null}".</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -491,7 +491,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	}
 		 *
 		 * 	<jc>// Produces "{}" because both fields equal their defaults.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -549,7 +549,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	<jk>try</jk> (WriterSerializerSession <jv>session</jv> = <jv>serializer</jv>.createSession()) {
 		 *
 		 * 		<jc>// Serialize a bean.</jc>
-		 * 		String <jv>json</jv> = <jv>session</jv>.serialize(<jk>new</jk> MyBean());
+		 * 		String <jv>json</jv> = <jv>session</jv>.write(<jk>new</jk> MyBean());
 		 *
 		 * 		<jc>// Get the listener.</jc>
 		 * 		MySerializerListener <jv>listener</jv> = <jv>session</jv>.getListener(MySerializerListener.<jk>class</jk>);
@@ -560,7 +560,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * </p>
 		 *
 		 * <p>
-		 * <b>Token streams:</b> this setting is not honored by {@link TokenWritable#serializeTokens(Object) serializeTokens}
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenWritable#writeTokens(Object) writeTokens}
 		 * &mdash; listeners are POJO-level observers with no token-layer analog.
 		 *
 		 * @param value
@@ -606,7 +606,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	String[] <jv>myArray</jv> = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>};
 		 *
 		 * 	<jc>// Produces ["bar","baz","foo"]</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myArray</jv>);
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jv>myArray</jv>);
 		 * </p>
 		 *
 		 * <p>
@@ -653,7 +653,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	JsonMap <jv>myMap</jv> = JsonMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
 		 *
 		 * 	<jc>// Produces {"bar":2,"baz":3,"foo":1}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>);
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jv>myMap</jv>);
 		 * </p>
 		 *
 		 * <p>
@@ -708,7 +708,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	}
 		 *
 		 * 	<jc>// Produces {}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -762,7 +762,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	}
 		 *
 		 * 	<jc>// Produces {}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -863,7 +863,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * </ul>
 		 *
 		 * <p>
-		 * <b>Token streams:</b> this setting is not honored by {@link TokenWritable#serializeTokens(Object) serializeTokens}
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenWritable#writeTokens(Object) writeTokens}
 		 * &mdash; URI rewriting is a databind concern; the token layer emits string values verbatim.
 		 *
 		 * @param value The new value for this property.
@@ -901,7 +901,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * </ul>
 		 *
 		 * <p>
-		 * <b>Token streams:</b> this setting is not honored by {@link TokenWritable#serializeTokens(Object) serializeTokens}
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenWritable#writeTokens(Object) writeTokens}
 		 * &mdash; URI rewriting is a databind concern.
 		 *
 		 * @param value
@@ -943,7 +943,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * </ul>
 		 *
 		 * <p>
-		 * <b>Token streams:</b> this setting is not honored by {@link TokenWritable#serializeTokens(Object) serializeTokens}
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenWritable#writeTokens(Object) writeTokens}
 		 * &mdash; URI rewriting is a databind concern.
 		 *
 		 * @param value
@@ -1170,15 +1170,15 @@ public class Serializer extends MarshallingTraverseContext {
 	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public Object serialize(Object o) throws SerializeException {
-		return getSession().serialize(o);
+	public Object write(Object o) throws SerializeException {
+		return getSession().write(o);
 	}
 
 	/**
 	 * Serializes a POJO to the specified output stream or writer.
 	 *
 	 * <p>
-	 * Equivalent to calling <c>serializer.createSession().serialize(o, output);</c>
+	 * Equivalent to calling <c>serializer.createSession().write(o, output);</c>
 	 *
 	 * @param o The object to serialize.
 	 * @param output
@@ -1195,15 +1195,15 @@ public class Serializer extends MarshallingTraverseContext {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final void serialize(Object o, Object output) throws SerializeException, IOException {
-		getSession().serialize(o, output);
+	public final void write(Object o, Object output) throws SerializeException, IOException {
+		getSession().write(o, output);
 	}
 
 	/**
 	 * Convenience method for serializing an object to a String.
 	 *
 	 * <p>
-	 * For writer-based serializers, this is identical to calling {@link #serialize(Object)}.
+	 * For writer-based serializers, this is identical to calling {@link #write(Object)}.
 	 * <br>For stream-based serializers, this converts the returned byte array to a string based on
 	 * the {@link OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)} setting.
 	 *
@@ -1211,8 +1211,8 @@ public class Serializer extends MarshallingTraverseContext {
 	 * @return The output serialized to a string.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public final String serializeToString(Object o) throws SerializeException {
-		return getSession().serializeToString(o);
+	public final String writeToString(Object o) throws SerializeException {
+		return getSession().writeToString(o);
 	}
 
 	/**
@@ -1224,7 +1224,7 @@ public class Serializer extends MarshallingTraverseContext {
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException Problem occurred trying to serialize object.
 	 */
-	protected void doSerialize(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		throw uoex();
 	}
 

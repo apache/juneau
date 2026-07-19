@@ -37,15 +37,15 @@ class Common_Test extends TestBase {
 		var p = JsonParser.DEFAULT;
 		var t1 = A.create();
 
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 		assertEquals("{\"s2\":\"s2\"}", r);
-		var t2 = p.parse(r, A.class);
+		var t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t1));
 
 		s.keepNullProperties();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("{\"s1\":null,\"s2\":\"s2\"}", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t1));
 	}
 
@@ -66,16 +66,16 @@ class Common_Test extends TestBase {
 		var s = JsonSerializer.create();
 		var p = JsonParser.DEFAULT;
 		var t1 = B.create();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 
 		assertEquals("{\"f1\":{},\"f2\":{\"f2a\":null,\"f2b\":{\"s2\":\"s2\"}}}", r);
-		var t2 = p.parse(r, B.class);
+		var t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyMaps();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("{\"f2\":{\"f2a\":null,\"f2b\":{\"s2\":\"s2\"}}}", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertNull(t2.f1);
 	}
 
@@ -97,16 +97,16 @@ class Common_Test extends TestBase {
 		var s = JsonSerializer.create();
 		var p = JsonParser.DEFAULT;
 		var t1 = C.create();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 
 		assertEquals("{\"f1\":[],\"f2\":[null,{\"s2\":\"s2\"}]}", r);
-		var t2 = p.parse(r, C.class);
+		var t2 = p.read(r, C.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("{\"f2\":[null,{\"s2\":\"s2\"}]}", r);
-		t2 = p.parse(r, C.class);
+		t2 = p.read(r, C.class);
 		assertNull(t2.f1);
 	}
 
@@ -128,16 +128,16 @@ class Common_Test extends TestBase {
 		var s = JsonSerializer.create();
 		var p = JsonParser.DEFAULT;
 		var t1 = D.create();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 
 		assertEquals("{\"f1\":[],\"f2\":[null,{\"s2\":\"s2\"}]}", r);
-		var t2 = p.parse(r, D.class);
+		var t2 = p.read(r, D.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("{\"f2\":[null,{\"s2\":\"s2\"}]}", r);
-		t2 = p.parse(r, D.class);
+		t2 = p.read(r, D.class);
 		assertNull(t2.f1);
 	}
 
@@ -164,8 +164,8 @@ class Common_Test extends TestBase {
 		t.f1 = new URI("http://f1");
 		t.f2 = url("http://f2");
 
-		var json = s.serialize(t);
-		t = p.parse(json, G.class);
+		var json = s.write(t);
+		t = p.read(json, G.class);
 		assertEquals("http://uri", t.uri.toString());
 		assertEquals("http://f1", t.f1.toString());
 		assertEquals("http://f2", t.f2.toString());
@@ -191,17 +191,17 @@ class Common_Test extends TestBase {
 		r3.r1 = r1;
 
 		// No recursion detection
-		assertThrowsWithMessage(Exception.class, "It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().serialize(r1));
+		assertThrowsWithMessage(Exception.class, "It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().write(r1));
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
-		assertThrowsWithMessage(Exception.class, "$R1", ()->s.build().serialize(r1));
+		assertThrowsWithMessage(Exception.class, "$R1", ()->s.build().write(r1));
 
 		s.ignoreRecursions();
-		assertEquals("{\"name\":\"foo\",\"r2\":{\"name\":\"bar\",\"r3\":{\"name\":\"baz\"}}}", s.build().serialize(r1));
+		assertEquals("{\"name\":\"foo\",\"r2\":{\"name\":\"bar\",\"r3\":{\"name\":\"baz\"}}}", s.build().write(r1));
 
 		// Make sure this doesn't blow up.
-		s.build().getSchemaSerializer().serialize(r1);
+		s.build().getSchemaSerializer().write(r1);
 	}
 
 	public static class R1 {
@@ -227,7 +227,7 @@ class Common_Test extends TestBase {
 		a.setF1("J");
 		a.setF2(100);
 		a.setF3(true);
-		assertEquals("{\"f1\":\"J\",\"f2\":100,\"f3\":true}", s.serialize(a));
+		assertEquals("{\"f1\":\"J\",\"f2\":100,\"f3\":true}", s.write(a));
 	}
 
 	public static class J {
@@ -258,7 +258,7 @@ class Common_Test extends TestBase {
 		var s = JsonSerializer.create().build();
 
 		var bean = new K();
-		var json = s.serialize(bean);
+		var json = s.write(bean);
 
 		// Verify all formatted fields are serialized correctly
 		assertTrue(json.contains("floatField\":\"3.14\""));

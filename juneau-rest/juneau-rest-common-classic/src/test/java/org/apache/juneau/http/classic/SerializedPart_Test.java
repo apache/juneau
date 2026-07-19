@@ -88,7 +88,7 @@ class SerializedPart_Test extends TestBase {
 
 	private static class BadPartSerializerSession implements HttpPartSerializerSession {
 		@Override
-		public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+		public String write(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 			throw new SerializeException("Bad");
 		}
 	}

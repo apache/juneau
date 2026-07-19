@@ -41,7 +41,7 @@ class Json5lTokenStream_Test extends TestBase {
 	@Nested class A_reader extends TestBase {
 
 		@Test void a01_singleLine() throws Exception {
-			try (var r = Json5lParser.DEFAULT.parseTokens("{a:1}\n")) {
+			try (var r = Json5lParser.DEFAULT.readTokens("{a:1}\n")) {
 				assertSequence(r,
 					TokenType.START_OBJECT,
 					TokenType.FIELD_NAME,
@@ -52,7 +52,7 @@ class Json5lTokenStream_Test extends TestBase {
 		}
 
 		@Test void a02_multipleLinesFlat() throws Exception {
-			try (var r = Json5lParser.DEFAULT.parseTokens("{a:1}\n{b:2}\n")) {
+			try (var r = Json5lParser.DEFAULT.readTokens("{a:1}\n{b:2}\n")) {
 				assertSequence(r,
 					TokenType.START_OBJECT, TokenType.FIELD_NAME, TokenType.VALUE_NUMBER, TokenType.END_OBJECT,
 					TokenType.START_OBJECT, TokenType.FIELD_NAME, TokenType.VALUE_NUMBER, TokenType.END_OBJECT,
@@ -62,7 +62,7 @@ class Json5lTokenStream_Test extends TestBase {
 
 		@Test void a03_capability() throws Exception {
 			assertInstanceOf(TokenReadable.class, Json5lParser.DEFAULT);
-			try (var r = Json5lParser.DEFAULT.parseTokens("1\n")) {
+			try (var r = Json5lParser.DEFAULT.readTokens("1\n")) {
 				assertReaderStreaming(r);
 			}
 		}
@@ -76,7 +76,7 @@ class Json5lTokenStream_Test extends TestBase {
 
 		@Test void b01_strictDefault() throws Exception {
 			var sb = new StringWriter();
-			try (var w = Json5lSerializer.DEFAULT.serializeTokens(sb)) {
+			try (var w = Json5lSerializer.DEFAULT.writeTokens(sb)) {
 				w.startObject(); w.fieldName("a"); w.number(1); w.endObject();
 				w.startObject(); w.fieldName("b"); w.number(2); w.endObject();
 			}
@@ -86,7 +86,7 @@ class Json5lTokenStream_Test extends TestBase {
 		@Test void b02_sugarUnquotedKeysSingleQuotes() throws Exception {
 			var s = Json5lSerializer.create().json5Sugar().build();
 			var sb = new StringWriter();
-			try (var w = s.serializeTokens(sb)) {
+			try (var w = s.writeTokens(sb)) {
 				w.startObject(); w.fieldName("a"); w.string("x"); w.endObject();
 				w.startObject(); w.fieldName("b"); w.string("y"); w.endObject();
 			}
@@ -96,7 +96,7 @@ class Json5lTokenStream_Test extends TestBase {
 		@Test void b03_capability() throws Exception {
 			assertInstanceOf(TokenWritable.class, Json5lSerializer.DEFAULT);
 			var sb = new StringWriter();
-			try (var w = Json5lSerializer.DEFAULT.serializeTokens(sb)) {
+			try (var w = Json5lSerializer.DEFAULT.writeTokens(sb)) {
 				assertWriterStreaming(w);
 			}
 		}
@@ -117,7 +117,7 @@ class Json5lTokenStream_Test extends TestBase {
 
 		@Test void c02_roundTrip() throws Exception {
 			var sb = new StringWriter();
-			try (RecordWriter w = Json5lSerializer.DEFAULT.serializeArrayRecords(sb)) {
+			try (RecordWriter w = Json5lSerializer.DEFAULT.writeArrayRecords(sb)) {
 				assertTrue(w.isStreaming());
 				w.write(java.util.Map.of("x", 1));
 				w.write(java.util.Map.of("x", 2));
@@ -125,7 +125,7 @@ class Json5lTokenStream_Test extends TestBase {
 			assertString("{\"x\":1}\n{\"x\":2}\n", sb);
 
 			var records = new java.util.ArrayList<java.util.Map<?, ?>>();
-			try (RecordReader r = Json5lParser.DEFAULT.parseArrayRecords(sb.toString())) {
+			try (RecordReader r = Json5lParser.DEFAULT.readArrayRecords(sb.toString())) {
 				assertTrue(r.isStreaming());
 				while (r.canRead())
 					records.add(r.read(java.util.Map.class));

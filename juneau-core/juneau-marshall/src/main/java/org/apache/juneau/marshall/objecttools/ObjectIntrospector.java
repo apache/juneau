@@ -206,7 +206,7 @@ public class ObjectIntrospector {
 	public Object invokeMethod(Method method, Reader args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException, ParseException, IOException {
 		if (object == null)
 			return null;
-		Object[] params = args == null ? null : parser.parseArgs(args, method.getGenericParameterTypes());
+		Object[] params = args == null ? null : parser.readArgs(args, method.getGenericParameterTypes());
 		return method.invoke(object, params);
 	}
 

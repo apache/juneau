@@ -29,7 +29,7 @@ import java.io.*;
  * <p class='bjava'>
  * 	<jc>// Parse RDF/PROTO bytes into a bean.</jc>
  * 	<jk>byte</jk>[] <jv>protoBytes</jv> = RdfProto.<jsm>of</jsm>(<jv>person</jv>);
- * 	Person <jv>person</jv> = RdfProtoParser.<jsf>DEFAULT</jsf>.parse(<jv>protoBytes</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = RdfProtoParser.<jsf>DEFAULT</jsf>.read(<jv>protoBytes</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the RdfProto marshaller for convenience.</jc>
@@ -37,16 +37,16 @@ import java.io.*;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Parse into a map with key/value types.</jc>
- * 	Map&lt;String, String&gt; <jv>map</jv> = RdfProtoParser.<jsf>DEFAULT</jsf>.parse(<jv>protoBytes</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+ * 	Map&lt;String, String&gt; <jv>map</jv> = RdfProtoParser.<jsf>DEFAULT</jsf>.read(<jv>protoBytes</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Parse from InputStream.</jc>
- * 	Person <jv>person</jv> = RdfProtoParser.<jsf>DEFAULT</jsf>.parse(<jv>inputStream</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = RdfProtoParser.<jsf>DEFAULT</jsf>.read(<jv>inputStream</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>
  * 	RdfProtoParser <jv>p</jv> = RdfProtoParser.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>protoBytes</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.read(<jv>protoBytes</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <p>Input is binary (<jk>byte</jk>[] or {@link InputStream}). Complex structures (nested objects, arrays) are supported—they are encoded as equivalent RDF triples in Protocol Buffers format.</p>

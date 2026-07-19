@@ -78,10 +78,10 @@ class Marshalled_Test extends TestBase {
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = Json5Parser.create().apply(al).build();
 
-		var json = js.serialize(A2.create());
+		var json = js.write(A2.create());
 		assertEquals("{f1:1}", json);
-		var a = jp.parse(json, A2.class);
-		json = js.serialize(a);
+		var a = jp.read(json, A2.class);
+		json = js.write(a);
 		assertEquals("{f1:1}", json);
 	}
 
@@ -161,10 +161,10 @@ class Marshalled_Test extends TestBase {
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = Json5Parser.create().apply(al).build();
 
-		var json = js.serialize(B2.create());
+		var json = js.write(B2.create());
 		assertEquals("{f1:1,f2:2}", json);
-		var b = jp.parse(json, B2.class);
-		json = js.serialize(b);
+		var b = jp.read(json, B2.class);
+		json = js.write(b);
 		assertEquals("{f1:1,f2:2}", json);
 	}
 
@@ -228,10 +228,10 @@ class Marshalled_Test extends TestBase {
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = Json5Parser.create().apply(al).build();
 
-		var json = js.serialize(D1.create());
+		var json = js.write(D1.create());
 		assertEquals("{b:2,d:4}", json);
-		var d = jp.parse(json, D1.class);
-		json = js.serialize(d);
+		var d = jp.read(json, D1.class);
+		json = js.write(d);
 		assertEquals("{b:2,d:4}", json);
 	}
 
@@ -240,10 +240,10 @@ class Marshalled_Test extends TestBase {
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = Json5Parser.create().apply(al).build();
 
-		var json = js.serialize(D2.create());
+		var json = js.write(D2.create());
 		assertEquals("{b:2,d:4}", json);
-		var d = jp.parse(json, D2.class);
-		json = js.serialize(d);
+		var d = jp.read(json, D2.class);
+		json = js.write(d);
 		assertEquals("{b:2,d:4}", json);
 	}
 
@@ -252,10 +252,10 @@ class Marshalled_Test extends TestBase {
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
-		var json = js.serialize(D1.create());
+		var json = js.write(D1.create());
 		assertEquals("{b:2,d:4}", json);
-		var d = jp.parse(json, D1.class);
-		json = js.serialize(d);
+		var d = jp.read(json, D1.class);
+		json = js.write(d);
 		assertEquals("{b:2,d:4}", json);
 	}
 
@@ -264,10 +264,10 @@ class Marshalled_Test extends TestBase {
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
-		var json = js.serialize(D2.create());
+		var json = js.write(D2.create());
 		assertEquals("{b:2,d:4}", json);
-		var d = jp.parse(json, D2.class);
-		json = js.serialize(d);
+		var d = jp.read(json, D2.class);
+		json = js.write(d);
 		assertEquals("{b:2,d:4}", json);
 	}
 
@@ -339,10 +339,10 @@ class Marshalled_Test extends TestBase {
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = Json5Parser.create().apply(al).build();
 
-		var json = js.serialize(E1.create());
+		var json = js.write(E1.create());
 		assertEquals("{b:2,d:4}", json);
-		var e = jp.parse(json, E1.class);
-		json = js.serialize(e);
+		var e = jp.read(json, E1.class);
+		json = js.write(e);
 		assertEquals("{b:2,d:4}", json);
 	}
 
@@ -351,10 +351,10 @@ class Marshalled_Test extends TestBase {
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = Json5Parser.create().apply(al).build();
 
-		var json = js.serialize(E2.create());
+		var json = js.write(E2.create());
 		assertEquals("{b:2,d:4}", json);
-		var e = jp.parse(json, E2.class);
-		json = js.serialize(e);
+		var e = jp.read(json, E2.class);
+		json = js.write(e);
 		assertEquals("{b:2,d:4}", json);
 	}
 
@@ -363,10 +363,10 @@ class Marshalled_Test extends TestBase {
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
-		var json = js.serialize(E1.create());
+		var json = js.write(E1.create());
 		assertEquals("{b:2,d:4}", json);
-		var e = jp.parse(json, E1.class);
-		json = js.serialize(e);
+		var e = jp.read(json, E1.class);
+		json = js.write(e);
 		assertEquals("{b:2,d:4}", json);
 	}
 
@@ -375,10 +375,10 @@ class Marshalled_Test extends TestBase {
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
-		var json = js.serialize(E2.create());
+		var json = js.write(E2.create());
 		assertEquals("{b:2,d:4}", json);
-		var e = jp.parse(json, E2.class);
-		json = js.serialize(e);
+		var e = jp.read(json, E2.class);
+		json = js.write(e);
 		assertEquals("{b:2,d:4}", json);
 	}
 }

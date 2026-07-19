@@ -398,7 +398,7 @@ class RoundTripDateTime_Test extends TestBase {
 		var x = Instant.parse("2012-12-21T12:34:56Z");
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, Instant.class);
+			var x2 = p.read(out, Instant.class);
 			assertEquals(x, x2);
 		} catch (Exception e) {
 			// Some serializers (UrlEncoding) may not support standalone non-bean values
@@ -424,7 +424,7 @@ class RoundTripDateTime_Test extends TestBase {
 		var x = java.time.Duration.ofHours(2).plusMinutes(15);
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, java.time.Duration.class);
+			var x2 = p.read(out, java.time.Duration.class);
 			assertEquals(x, x2);
 		} catch (Exception e) {
 			// Some serializers (UrlEncoding) may not support standalone non-bean values
@@ -454,7 +454,7 @@ class RoundTripDateTime_Test extends TestBase {
 
 		try {
 			var out = t.serialize(c, s);
-			var c2 = p.parse(out, XMLGregorianCalendar.class);
+			var c2 = p.read(out, XMLGregorianCalendar.class);
 			assertEquals(c, c2);
 		} catch (Exception e) {
 			// Some serializers (UrlEncoding) may not support standalone non-bean values

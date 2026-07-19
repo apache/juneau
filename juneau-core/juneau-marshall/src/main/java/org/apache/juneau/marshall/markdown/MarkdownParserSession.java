@@ -45,8 +45,8 @@ import org.apache.juneau.marshall.swap.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for parser session hierarchy
 	"java:S115", // Constants use UPPER_snakeCase convention
-	"java:S3776", // Cognitive complexity acceptable for doParse / parseAnything
-	"java:S6541", // Brain method acceptable for parseAnything
+	"java:S3776", // Cognitive complexity acceptable for doRead / readAnything
+	"java:S6541", // Brain method acceptable for readAnything
 	"unchecked",
 	"rawtypes",
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
@@ -124,7 +124,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	}
 
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.reader(this, input);
 	}
 
@@ -134,10 +134,10 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	}
 
 	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		try (var r = new BufferedReader(pipe.getReader())) {
 			var lines = readAllLines(r);
-			return parseAnything(lines, type, getOuter(), null);
+			return readAnything(lines, type, getOuter(), null);
 		}
 	}
 
@@ -153,7 +153,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws ParseException If parsing fails.
 	 */
-	protected <T> T parseAnything(List<String> lines, ClassMeta<T> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException {
+	protected <T> T readAnything(List<String> lines, ClassMeta<T> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException {
 		if (eType == null)
 			eType = (ClassMeta<T>) object();
 
@@ -168,7 +168,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T) o(parseAnything(lines, eType.getElementType(), outer, pMeta));
+			return (T) o(readAnything(lines, eType.getElementType(), outer, pMeta));
 
 		// Skip blank lines and handle empty input
 		var nonBlank = lines.stream().filter(l -> !l.isBlank()).toList();
@@ -181,13 +181,13 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 
 		if (firstNonBlank.startsWith("|")) {
 			// Table input
-			o = parseTable(lines, sType, outer);
+			o = readTable(lines, sType, outer);
 		} else if (firstNonBlank.startsWith("- ") || firstNonBlank.startsWith("* ") || firstNonBlank.startsWith("+ ")) {
 			// Bulleted list input
-			o = parseBulletList(lines, sType, outer);
+			o = readBulletList(lines, sType, outer);
 		} else {
 			// Plain text — treat as simple value
-			o = parseCellValue(firstNonBlank, sType, null);
+			o = readCellValue(firstNonBlank, sType, null);
 		}
 
 		if (builder != null && o != null)
@@ -208,7 +208,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * @return The parsed object.
 	 * @throws ParseException If parsing fails.
 	 */
-	protected Object parseTable(List<String> lines, ClassMeta<?> eType, Object outer) throws ParseException {
+	protected Object readTable(List<String> lines, ClassMeta<?> eType, Object outer) throws ParseException {
 		// Extract table rows (lines starting with |)
 		var tableLines = lines.stream().filter(l -> l.trim().startsWith("|")).toList();
 		if (tableLines.isEmpty())
@@ -229,8 +229,8 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			&& headers.get(1).equalsIgnoreCase("Value");
 
 		if (isKeyValue)
-			return parseKeyValueTable(headers, dataLines, eType, outer);
-		return parseMultiColumnTable(headers, dataLines, eType, outer);
+			return readKeyValueTable(headers, dataLines, eType, outer);
+		return readMultiColumnTable(headers, dataLines, eType, outer);
 	}
 
 	/**
@@ -246,14 +246,14 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	@SuppressWarnings({
 		"java:S135" // Two continue statements needed: skip short rows and skip _type row
 	})
-	protected Object parseKeyValueTable(List<String> headers, List<String> dataLines, ClassMeta<?> eType, Object outer) throws ParseException {
+	protected Object readKeyValueTable(List<String> headers, List<String> dataLines, ClassMeta<?> eType, Object outer) throws ParseException {
 
 		// For types with ObjectSwaps or that can't be populated via BeanMap property-setting,
 		// convert the key-value table to a JSON5 object and delegate to the full JSON5 parser.
 		if (needsJson5Path(eType)) {
 			var json5 = keyValueTableToJson5(dataLines);
 			try {
-				return getJson5Parser().parseWithOuter(json5, eType, outer);
+				return getJson5Parser().readWithOuter(json5, eType, outer);
 			} catch (Exception e) {
 				throw new ParseException(this, e, "Could not parse key-value table as '%s' via JSON5 '%s'.", eType, json5);
 			}
@@ -289,7 +289,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 				if (pm != null) {
 					setCurrentProperty(pm);
 					var pmcm = (ClassMeta<?>) pm.getBeanInfo();
-					var val = parseCellValue(rawVal, pmcm, m.getBean(false));
+					var val = readCellValue(rawVal, pmcm, m.getBean(false));
 					try {
 						setName(pmcm, val, key);
 					} catch (Exception e) {
@@ -316,11 +316,11 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 				if (cells.size() < 2)
 					continue;
 				var rawKey = cells.get(0);
-				var key = parseCellValue(rawKey, keyType, null);
+				var key = readCellValue(rawKey, keyType, null);
 				// Pass the map being built as the outer when parsing values - non-static inner
 				// classes whose enclosing class is the map type (e.g. H1 inside H extends LinkedHashMap)
 				// need that map instance to satisfy their implicit outer-class constructor argument.
-				var val = parseCellValue(cells.get(1), valueType, map);
+				var val = readCellValue(cells.get(1), valueType, map);
 				try {
 					setName(valueType, val, key);
 				} catch (Exception e) {
@@ -338,7 +338,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			if (cells.size() < 2)
 				continue;
 			var key = cells.get(0);
-			var val = parseCellValue(cells.get(1), object(), null);
+			var val = readCellValue(cells.get(1), object(), null);
 			resultMap.put(key, val);
 		}
 		
@@ -360,7 +360,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * @return The parsed list of beans, maps, or other objects.
 	 * @throws ParseException If parsing fails.
 	 */
-	protected Object parseMultiColumnTable(List<String> headers, List<String> dataLines, ClassMeta<?> eType, Object outer) throws ParseException {
+	protected Object readMultiColumnTable(List<String> headers, List<String> dataLines, ClassMeta<?> eType, Object outer) throws ParseException {
 		ClassMeta<?> elementType;
 		Collection<Object> result;
 
@@ -377,14 +377,14 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			// Single bean/map with multiple columns — not a standard use case, parse first row
 			if (!dataLines.isEmpty()) {
 				var cells = splitTableRow(dataLines.get(0));
-				return parseRow(headers, cells, eType, outer);
+				return readRow(headers, cells, eType, outer);
 			}
 			return null;
 		}
 
 		for (var line : dataLines) {
 			var cells = splitTableRow(line);
-			var item = parseRow(headers, cells, elementType, result);
+			var item = readRow(headers, cells, elementType, result);
 			result.add(item);
 		}
 
@@ -404,7 +404,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * @return The parsed element.
 	 * @throws ParseException If parsing fails.
 	 */
-	protected Object parseRow(List<String> headers, List<String> cells, ClassMeta<?> eType, Object outer) throws ParseException {
+	protected Object readRow(List<String> headers, List<String> cells, ClassMeta<?> eType, Object outer) throws ParseException {
 		// Check if all cells are null - if so, return null for the entire row
 		boolean allNull = true;
 		for (var cell : cells) {
@@ -436,7 +436,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		if (needsJson5Path(actualType)) {
 			var json5 = rowToJson5(headers, cells);
 				try {
-				return getJson5Parser().parseWithOuter(json5, actualType, outer);
+				return getJson5Parser().readWithOuter(json5, actualType, outer);
 			} catch (Exception e) {
 				throw new ParseException(this, e, "Could not parse table row as '%s' via JSON5 '%s'.", actualType, json5);
 			}
@@ -449,7 +449,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 				if (CONST_type.equals(header))
 					continue;
 				var val = i < cells.size() ? cells.get(i) : null;
-				m.put(header, parseCellValue(val, object(), null));
+				m.put(header, readCellValue(val, object(), null));
 			}
 			if (typeColIndex >= 0 && m.size() > 0)
 				return cast(m, null, eType);
@@ -465,7 +465,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 				var pm = m.getPropertyMeta(header);
 				if (pm != null) {
 					setCurrentProperty(pm);
-					var val = parseCellValue(rawVal, (ClassMeta<?>) pm.getBeanInfo(), m.getBean(false));
+					var val = readCellValue(rawVal, (ClassMeta<?>) pm.getBeanInfo(), m.getBean(false));
 					pm.set(m, header, val);
 					setCurrentProperty(null);
 				} else {
@@ -490,13 +490,13 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 				// Pass the map being built as the outer when parsing values - mirrors the
 				// key-value-table branch so non-static inner classes whose enclosing class is the
 				// map type can be instantiated correctly.
-				var val = parseCellValue(rawVal, valueType, map);
+				var val = readCellValue(rawVal, valueType, map);
 				map.put(key, val);
 			}
 			return map;
 		}
 		// Simple type: use first cell
-		return parseCellValue(cells.isEmpty() ? null : cells.get(0), actualType, null);
+		return readCellValue(cells.isEmpty() ? null : cells.get(0), actualType, null);
 	}
 
 	/**
@@ -508,7 +508,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * @return The parsed collection, array, or single element.
 	 * @throws ParseException If parsing fails.
 	 */
-	protected Object parseBulletList(List<String> lines, ClassMeta<?> eType, Object outer) throws ParseException {
+	protected Object readBulletList(List<String> lines, ClassMeta<?> eType, Object outer) throws ParseException {
 		var items = new ArrayList<String>();
 		for (var line : lines) {
 			var trimmed = line.trim();
@@ -533,7 +533,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		}
 
 		for (var item : items)
-			result.add(parseCellValue(item, elementType, null));
+			result.add(readCellValue(item, elementType, null));
 
 		if (eType.isArray())
 			return toArray(eType, result);
@@ -566,7 +566,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * @return The parsed value.
 	 * @throws ParseException If parsing fails.
 	 */
-	protected <T> T parseCellValue(String val, ClassMeta<T> eType, Object outer) throws ParseException {
+	protected <T> T readCellValue(String val, ClassMeta<T> eType, Object outer) throws ParseException {
 		if (val == null)
 			return null;
 		val = val.trim();
@@ -583,7 +583,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		if (val.startsWith("`") && val.endsWith("`") && val.length() > 1) {
 			var inner = val.substring(1, val.length() - 1);
 			try {
-				return getJson5Parser().parseWithOuter(inner, eType, outer);
+				return getJson5Parser().readWithOuter(inner, eType, outer);
 			} catch (Exception e) {
 				throw new ParseException(this, e, "Could not parse inline JSON5 '%s' to type '%s'.", inner, eType);
 			}
@@ -607,15 +607,15 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		// fall-through to convertToType(val, eType) below would route a bare numeric cell through a
 		// generic Number → T coercion (e.g. Duration.ofMillis(long)) that drops the format hint.
 		if (eType.isDate())
-			return parseDate(val, eType);
+			return readDate(val, eType);
 		if (eType.isCalendar())
-			return parseCalendar(val, eType);
+			return readCalendar(val, eType);
 		if (eType.isTemporal())
-			return parseTemporal(val, eType);
+			return readTemporal(val, eType);
 		if (eType.isDuration())
-			return (T) parseDuration(val);
+			return (T) readDuration(val);
 		if (eType.isPeriod())
-			return (T) parsePeriod(val);
+			return (T) readPeriod(val);
 
 		try {
 			return convertToType(val, eType);
@@ -632,7 +632,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * <p>
 	 * When this returns true, table rows and key-value tables should be converted to a JSON5 string
 	 * and parsed via {@link Json5Parser} (using
-	 * {@link Parser#parseWithOuter}) to correctly handle swaps,
+	 * {@link Parser#readWithOuter}) to correctly handle swaps,
 	 * {@link ParentProperty @ParentProperty}, and non-standard constructors.
 	 */
 	private boolean needsJson5Path(ClassMeta<?> type) {

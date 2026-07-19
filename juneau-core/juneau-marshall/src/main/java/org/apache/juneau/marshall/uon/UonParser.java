@@ -145,7 +145,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * 		.build();
 		 *
 		 *  <jc>// Produces: ["foo bar", "baz quz"].</jc>
-		 * 	String[] <jv>foo</jv> = <jv>parser</jv>.parse(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
+		 * 	String[] <jv>foo</jv> = <jv>parser</jv>.read(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
 		 * </p>
 		 *
 		 * @return This object.
@@ -194,7 +194,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 *
 		 * 	<jc>// Should fail because input has multiple POJOs.</jc>
 		 * 	String <jv>in</jv> = <js>"(foo=bar)(baz=qux)"</js>;
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jv>in</jv>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<jv>in</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * @return This object.
@@ -317,12 +317,12 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 
 	/**
 	 * Convenience delegator that opens a whole-value {@link RecordReader} over the input using
-	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 * <b>default session arguments</b> (mirrors {@link #read(Object, Class)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link UonParserSession#parseRecords(Object)}.  Callers
+	 * The real implementation lives on {@link UonParserSession#readRecords(Object)}.  Callers
 	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
-	 * {@link #createSession()} and invoke {@link UonParserSession#parseRecords(Object)} on the
+	 * {@link #createSession()} and invoke {@link UonParserSession#readRecords(Object)} on the
 	 * built session instead.
 	 *
 	 * @param input The input.
@@ -330,8 +330,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
-		return getSession().parseRecords(input);
+	public RecordReader readRecords(Object input) throws IOException {
+		return getSession().readRecords(input);
 	}
 
 	@Override /* RecordReadable */
@@ -366,8 +366,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return getPartSession().parse(partType, schema, in, getClassMeta(toType));
+	public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return getPartSession().read(partType, schema, in, getClassMeta(toType));
 	}
 
 	/**
@@ -385,8 +385,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-		return getPartSession().parse(partType, schema, in, toType);
+	public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
+		return getPartSession().read(partType, schema, in, toType);
 	}
 
 	/**
@@ -405,8 +405,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
-		return getPartSession().parse(partType, schema, in, getClassMeta(toType, toTypeArgs));
+	public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+		return getPartSession().read(partType, schema, in, getClassMeta(toType, toTypeArgs));
 	}
 
 	/**

@@ -49,5 +49,5 @@ public interface HttpPartSerializerSession {
 	 * @throws SerializeException If a problem occurred while trying to parse the input.
 	 * @throws SchemaValidationException If the output fails schema validation.
 	 */
-	String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException;
+	String write(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException;
 }

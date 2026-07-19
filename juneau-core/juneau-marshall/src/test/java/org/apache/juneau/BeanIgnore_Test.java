@@ -108,7 +108,7 @@ class BeanIgnore_Test extends TestBase {
 		var bc = MarshallingContext.create().useJavaBeanIntrospector().build();
 		var s = Json5Serializer.DEFAULT.copy().marshallingContext(bc).build();
 		assertFalse(bc.getBeanMeta(PrivateFieldIgnoredWithAccessors.class).getProperties().containsKey("foo"));
-		assertEquals("{visible:'ok'}", s.serialize(new PrivateFieldIgnoredWithAccessors()));
+		assertEquals("{visible:'ok'}", s.write(new PrivateFieldIgnoredWithAccessors()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

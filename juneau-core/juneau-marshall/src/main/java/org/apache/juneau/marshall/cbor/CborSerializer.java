@@ -65,11 +65,11 @@ import org.apache.juneau.marshall.stream.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to CBOR bytes using the default serializer</jc>
- * 	byte[] <jv>cbor</jv> = CborSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myBean</jv>);
+ * 	byte[] <jv>cbor</jv> = CborSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
  *
  * 	<jc>// Custom serializer with bean type properties enabled</jc>
  * 	CborSerializer <jv>s</jv> = CborSerializer.<jsm>create</jsm>().addBeanTypes().build();
- * 	byte[] <jv>cbor</jv> = <jv>s</jv>.serialize(<jv>myBean</jv>);
+ * 	byte[] <jv>cbor</jv> = <jv>s</jv>.write(<jv>myBean</jv>);
  * </p>
  *
  * <h5 class='section'>Round-trip notes:</h5>
@@ -293,21 +293,21 @@ public class CborSerializer extends OutputStreamSerializer implements CborMetaPr
 
 	/**
 	 * Convenience delegator that opens a {@link CborTokenWriter} over the output using
-	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 * <b>default session arguments</b> (mirrors {@link #write(Object)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link CborSerializerSession#serializeTokens(Object)}.
+	 * The real implementation lives on {@link CborSerializerSession#writeTokens(Object)}.
 	 * Callers that need request-derived configuration (locale, timezone, schema, swaps) should
 	 * call {@link #createSession()} and invoke
-	 * {@link CborSerializerSession#serializeTokens(Object)} on the built session instead.
+	 * {@link CborSerializerSession#writeTokens(Object)} on the built session instead.
 	 *
 	 * @param output The output.  Accepts {@link OutputStream} or {@link File}.
 	 * @return A new {@link CborTokenWriter}.
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	@Override /* TokenWritable */
-	public TokenWriter serializeTokens(Object output) throws IOException {
-		return getSession().serializeTokens(output);
+	public TokenWriter writeTokens(Object output) throws IOException {
+		return getSession().writeTokens(output);
 	}
 
 	@Override
@@ -324,15 +324,15 @@ public class CborSerializer extends OutputStreamSerializer implements CborMetaPr
 
 	/**
 	 * Convenience delegator for the streaming array-element {@link RecordWriter} (uses default
-	 * session args; see {@link #serializeTokens(Object)}).  Real impl on
-	 * {@link CborSerializerSession#serializeArrayRecords(Object)}.
+	 * session args; see {@link #writeTokens(Object)}).  Real impl on
+	 * {@link CborSerializerSession#writeArrayRecords(Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new element-streamed {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
-		return getSession().serializeArrayRecords(output);
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
+		return getSession().writeArrayRecords(output);
 	}
 }

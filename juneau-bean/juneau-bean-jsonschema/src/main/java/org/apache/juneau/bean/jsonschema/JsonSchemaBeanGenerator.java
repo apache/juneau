@@ -133,7 +133,7 @@ public final class JsonSchemaBeanGenerator {
 		assertArgNotNull("schemaMap", schemaMap);
 		try {
 			var json = Json.of(schemaMap);
-			return JsonParser.create().ignoreUnknownBeanProperties().build().parse(json, JsonSchema.class);
+			return JsonParser.create().ignoreUnknownBeanProperties().build().read(json, JsonSchema.class);
 		} catch (ParseException e) {
 			throw toRex(e);
 		}

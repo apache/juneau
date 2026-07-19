@@ -29,7 +29,7 @@ import java.io.*;
  * <p class='bjava'>
  * 	<jc>// Parse RDF/THRIFT bytes into a bean.</jc>
  * 	<jk>byte</jk>[] <jv>thriftBytes</jv> = RdfThrift.<jsm>of</jsm>(<jv>person</jv>);
- * 	Person <jv>person</jv> = RdfThriftParser.<jsf>DEFAULT</jsf>.parse(<jv>thriftBytes</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = RdfThriftParser.<jsf>DEFAULT</jsf>.read(<jv>thriftBytes</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the RdfThrift marshaller for convenience.</jc>
@@ -37,16 +37,16 @@ import java.io.*;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Parse into a map with key/value types.</jc>
- * 	Map&lt;String, String&gt; <jv>map</jv> = RdfThriftParser.<jsf>DEFAULT</jsf>.parse(<jv>thriftBytes</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+ * 	Map&lt;String, String&gt; <jv>map</jv> = RdfThriftParser.<jsf>DEFAULT</jsf>.read(<jv>thriftBytes</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Parse from InputStream.</jc>
- * 	Person <jv>person</jv> = RdfThriftParser.<jsf>DEFAULT</jsf>.parse(<jv>inputStream</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = RdfThriftParser.<jsf>DEFAULT</jsf>.read(<jv>inputStream</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>
  * 	RdfThriftParser <jv>p</jv> = RdfThriftParser.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>thriftBytes</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.read(<jv>thriftBytes</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <p>Input is binary (<jk>byte</jk>[] or {@link InputStream}). Complex structures (nested objects, arrays) are supported—they are encoded as equivalent RDF triples in Apache Thrift format.</p>

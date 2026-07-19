@@ -44,11 +44,11 @@ import org.apache.juneau.marshall.jsonl.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Strict-per-line output (default)</jc>
- * 	String <jv>json5l</jv> = Json5lSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myList</jv>);
+ * 	String <jv>json5l</jv> = Json5lSerializer.<jsf>DEFAULT</jsf>.write(<jv>myList</jv>);
  *
  * 	<jc>// JSON5-sugar-per-line output</jc>
  * 	Json5lSerializer <jv>serializer</jv> = Json5lSerializer.<jsm>create</jsm>().json5Sugar().build();
- * 	String <jv>json5l</jv> = <jv>serializer</jv>.serialize(<jv>myList</jv>);
+ * 	String <jv>json5l</jv> = <jv>serializer</jv>.write(<jv>myList</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output, sugar off (List of beans):</h5>

@@ -97,7 +97,7 @@ public class Json5ParserSession extends JsonParserSession {
 	 * Opens a low-level pull-parser cursor over a JSON5 document, bound to this live session.
 	 *
 	 * <p>
-	 * Same honored/ignored builder properties as {@link JsonParserSession#parseTokens(Object)};
+	 * Same honored/ignored builder properties as {@link JsonParserSession#readTokens(Object)};
 	 * the JSON5 dialect relaxations (single-quoted strings, bare identifiers, trailing commas,
 	 * missing values) are applied unconditionally as part of the format.
 	 *
@@ -110,7 +110,7 @@ public class Json5ParserSession extends JsonParserSession {
 		"java:S2095" // ParserPipe lifecycle is transferred to the returned Json5TokenReader, which closes it via its own close(); the caller owns the cursor via try-with-resources.
 	})
 	@Override /* JsonParserSession */
-	public TokenReader parseTokens(Object input) throws IOException {
+	public TokenReader readTokens(Object input) throws IOException {
 		var pipe = new ParserPipe(
 			input,
 			isDebug(),
@@ -122,10 +122,10 @@ public class Json5ParserSession extends JsonParserSession {
 	}
 
 	@Override
-	protected String parseFieldName(ParserReader r) throws IOException, ParseException {
+	protected String readFieldName(ParserReader r) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
-			return parseString(r);
+			return readString(r);
 		if (! VALID_BARE_CHARS.contains(c))
 			throw new ParseException(this, "Could not find the start of the field name.");
 		r.mark();
@@ -141,7 +141,7 @@ public class Json5ParserSession extends JsonParserSession {
 	}
 
 	@Override
-	protected String parseString(ParserReader r) throws IOException, ParseException {
+	protected String readString(ParserReader r) throws IOException, ParseException {
 		r.mark();
 		int qc = r.read();
 		final boolean isQuoted = (qc == '\'' || qc == '"');
@@ -205,13 +205,13 @@ public class Json5ParserSession extends JsonParserSession {
 			})
 			int ignored = r.read();
 			skipCommentsAndSpace(r);
-			s += parseString(r);
+			s += readString(r);
 		}
 		return trim(s);
 	}
 
 	@Override
-	protected Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
+	protected Number readNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
 		return StringUtils.parseNumber(s, type);
 	}
 

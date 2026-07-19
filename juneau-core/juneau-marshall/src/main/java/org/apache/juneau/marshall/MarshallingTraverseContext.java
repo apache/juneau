@@ -131,7 +131,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * 	<jv>bean</jv>.<jf>f</jf> = <jv>bean</jv>;
 		 *
 		 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bean</jv>);
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jv>bean</jv>);
 		 * </p>
 		 *
 		 * @return This object.
@@ -202,7 +202,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * 	<jv>bean</jv>.<jf>f</jf> = <jv>bean</jv>;
 		 *
 		 * 	<jc>// Produces "{f:null}"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bean</jv>);
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jv>bean</jv>);
 		 * </p>
 		 *
 		 * @return This object.
@@ -241,7 +241,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * @param value

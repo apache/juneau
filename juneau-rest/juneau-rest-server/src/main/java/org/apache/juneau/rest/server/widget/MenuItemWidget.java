@@ -178,7 +178,7 @@ public abstract class MenuItemWidget extends Widget {
 			// @formatter:on
 			session.indent = 2;
 			try (Writer w = new StringBuilderWriter(sb)) {
-				session.serialize(o, w);
+				session.write(o, w);
 			} catch (Exception e) {
 				throw toRex(e);
 			}

@@ -90,7 +90,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 			.assertStatus(200)
 			.assertHeader("Content-Type").isContains("application/json")
 			.getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		Assertions.assertEquals("GET", parsed.get("method"));
 		Assertions.assertTrue(((String) parsed.get("path")).endsWith("/echo/foo/bar"),
 			"path should end with /echo/foo/bar; got: " + parsed.get("path"));
@@ -134,7 +134,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 			.run()
 			.assertStatus(200)
 			.getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		Assertions.assertEquals("POST", parsed.get("method"));
 		Assertions.assertEquals("hello-world", parsed.get("content"));
 		Assertions.assertEquals(11L, ((Number) parsed.get("contentLength")).longValue());
@@ -209,7 +209,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 			.run()
 			.assertStatus(200)
 			.getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		Assertions.assertEquals(Boolean.TRUE, parsed.get("truncated"),
 			"Body must be flagged truncated when it exceeds the cap; body was: " + body);
 		Assertions.assertEquals(8L, ((Number) parsed.get("contentLength")).longValue());
@@ -232,7 +232,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 			.run()
 			.assertStatus(200)
 			.getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		Assertions.assertEquals(Boolean.TRUE, parsed.get("truncated"),
 			"zero cap → truncated; body was: " + body);
 		Assertions.assertEquals(0L, ((Number) parsed.get("contentLength")).longValue());

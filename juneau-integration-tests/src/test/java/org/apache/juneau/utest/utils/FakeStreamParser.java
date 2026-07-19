@@ -74,7 +74,7 @@ public class FakeStreamParser extends InputStreamParser {
 	}
 
 	@Override
-	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	public <T> T doRead(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		if (function != null)
 			return type.cast(function.apply((InputStreamParserSession)session, readBytes(pipe.getInputStream()), type));
 		return null;

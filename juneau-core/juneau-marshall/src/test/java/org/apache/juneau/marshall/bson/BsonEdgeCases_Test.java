@@ -34,8 +34,8 @@ class BsonEdgeCases_Test extends TestBase {
 	void a01_emptyMap() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(JsonMap.of());
-		var result = p.parse(bytes, JsonMap.class);
+		var bytes = s.write(JsonMap.of());
+		var result = p.read(bytes, JsonMap.class);
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
 	}
@@ -44,8 +44,8 @@ class BsonEdgeCases_Test extends TestBase {
 	void a02_emptyList() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(List.of());
-		var result = p.parse(bytes, List.class);
+		var bytes = s.write(List.of());
+		var result = p.read(bytes, List.class);
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
 	}
@@ -57,8 +57,8 @@ class BsonEdgeCases_Test extends TestBase {
 		var m = new JsonMap();
 		m.put("a", 1);
 		m.put("b", null);
-		var bytes = s.serialize(m);
-		var result = p.parse(bytes, JsonMap.class);
+		var bytes = s.write(m);
+		var result = p.read(bytes, JsonMap.class);
 		assertNotNull(result);
 		assertEquals(1, result.get("a"));
 		assertNull(result.get("b"));
@@ -71,8 +71,8 @@ class BsonEdgeCases_Test extends TestBase {
 		m.put("emptyList", List.of());
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(m);
-		var result = p.parse(bytes, Map.class);
+		var bytes = s.write(m);
+		var result = p.read(bytes, Map.class);
 		assertNotNull(result);
 		assertTrue(((Map<?,?>)result.get("emptyMap")).isEmpty());
 		assertTrue(((List<?>)result.get("emptyList")).isEmpty());
@@ -83,8 +83,8 @@ class BsonEdgeCases_Test extends TestBase {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
 		var value = "café \uD83D\uDE00";
-		var bytes = s.serialize(JsonMap.of("s", value));
-		var result = p.parse(bytes, JsonMap.class);
+		var bytes = s.write(JsonMap.of("s", value));
+		var result = p.read(bytes, JsonMap.class);
 		assertEquals(value, result.get("s"));
 	}
 
@@ -92,8 +92,8 @@ class BsonEdgeCases_Test extends TestBase {
 	void a06_optionalWrappedRoundTrip() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(o(42));
-		var result = p.parse(bytes, Optional.class);
+		var bytes = s.write(o(42));
+		var result = p.read(bytes, Optional.class);
 		assertNotNull(result);
 		assertTrue(result.isPresent());
 		assertEquals(42, result.get());

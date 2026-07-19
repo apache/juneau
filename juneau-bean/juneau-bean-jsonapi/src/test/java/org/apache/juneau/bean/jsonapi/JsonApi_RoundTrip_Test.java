@@ -34,9 +34,9 @@ class JsonApi_RoundTrip_Test {
 	private static final JsonParser PAR = JsonParser.DEFAULT;
 
 	private static void assertJsonRoundTrip(Object bean, Class<?> type) {
-		var j1 = SER.serialize(bean);
-		var copy = PAR.parse(j1, type);
-		var j2 = SER.serialize(copy);
+		var j1 = SER.write(bean);
+		var copy = PAR.read(j1, type);
+		var j2 = SER.write(copy);
 		assertEquals(j1, j2, () -> "Round-trip JSON mismatch for " + type.getName() + ": " + j1);
 	}
 
@@ -147,11 +147,11 @@ class JsonApi_RoundTrip_Test {
 					"self", "/articles/1/relationships/author",
 					"related", new JsonApiLink("/articles/1/author").setTitle("Author")
 				)));
-			var j = SER.serialize(rel);
+			var j = SER.write(rel);
 			// One value should be a string, the other a JSON object.
 			assertTrue(j.contains("\"self\":\"/articles/1/relationships/author\""), () -> j);
 			assertTrue(j.contains("\"related\":{"), () -> j);
-			var back = PAR.parse(j, JsonApiRelationship.class);
+			var back = PAR.read(j, JsonApiRelationship.class);
 			assertInstanceOf(String.class, back.getLinks().get("self"));
 			assertInstanceOf(JsonApiLink.class, back.getLinks().get("related"));
 		}
@@ -247,9 +247,9 @@ class JsonApi_RoundTrip_Test {
 		void typeIsPlainString_notDiscriminator() {
 			// JSON:API ‘type’ is just data. Round-tripping a custom value must not require a Java dictionary entry.
 			var r = new JsonApiResource("very-custom-resource-not-in-any-registry", "1");
-			var j = SER.serialize(r);
+			var j = SER.write(r);
 			assertTrue(j.contains("\"type\":\"very-custom-resource-not-in-any-registry\""), () -> j);
-			var back = PAR.parse(j, JsonApiResource.class);
+			var back = PAR.read(j, JsonApiResource.class);
 			assertEquals("very-custom-resource-not-in-any-registry", back.getType());
 		}
 
@@ -438,7 +438,7 @@ class JsonApi_RoundTrip_Test {
 			// A nested map (object) that itself contains a scalar at the "x" key still parses to a JsonApiLink
 			// (the per-entry rule); a more direct scalar-passthrough is hit via the JsonApiDocument case below.
 			var json = "{\"links\":{\"self\":\"/x\"}}";
-			var rel = JsonParser.DEFAULT.parse(json, JsonApiRelationship.class);
+			var rel = JsonParser.DEFAULT.read(json, JsonApiRelationship.class);
 			assertEquals("/x", rel.getLinks().get("self"));
 		}
 	}

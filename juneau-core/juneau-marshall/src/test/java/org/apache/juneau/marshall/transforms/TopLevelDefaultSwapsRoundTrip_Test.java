@@ -50,15 +50,15 @@ class TopLevelDefaultSwapsRoundTrip_Test extends TestBase {
 
 	@Test void a01_locale_json5() throws Exception {
 		var a = Locale.US;
-		var json = JS.serialize(a);
+		var json = JS.write(a);
 		assertEquals("'en-US'", json);
-		assertEquals(a, JP.parse(json, Locale.class));
+		assertEquals(a, JP.read(json, Locale.class));
 	}
 
 	@Test void a02_locale_xml() throws Exception {
 		var a = Locale.US;
-		var xml = XS.serialize(a);
-		assertEquals(a, XP.parse(xml, Locale.class));
+		var xml = XS.write(a);
+		assertEquals(a, XP.read(xml, Locale.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -67,16 +67,16 @@ class TopLevelDefaultSwapsRoundTrip_Test extends TestBase {
 
 	@Test void b01_timeZone_json5() throws Exception {
 		var a = TimeZone.getTimeZone("America/New_York");
-		var json = JS.serialize(a);
+		var json = JS.write(a);
 		assertEquals("'America/New_York'", json);
-		var a2 = JP.parse(json, TimeZone.class);
+		var a2 = JP.read(json, TimeZone.class);
 		assertEquals(a.getID(), a2.getID());
 	}
 
 	@Test void b02_timeZone_xml() throws Exception {
 		var a = TimeZone.getTimeZone("America/New_York");
-		var xml = XS.serialize(a);
-		var a2 = XP.parse(xml, TimeZone.class);
+		var xml = XS.write(a);
+		var a2 = XP.read(xml, TimeZone.class);
 		assertEquals(a.getID(), a2.getID());
 	}
 
@@ -86,14 +86,14 @@ class TopLevelDefaultSwapsRoundTrip_Test extends TestBase {
 
 	@Test void c01_zoneId_json5() throws Exception {
 		var a = ZoneId.of("America/New_York");
-		var json = JS.serialize(a);
+		var json = JS.write(a);
 		assertEquals("'America/New_York'", json);
-		assertEquals(a, JP.parse(json, ZoneId.class));
+		assertEquals(a, JP.read(json, ZoneId.class));
 	}
 
 	@Test void c02_zoneId_xml() throws Exception {
 		var a = ZoneId.of("America/New_York");
-		var xml = XS.serialize(a);
-		assertEquals(a, XP.parse(xml, ZoneId.class));
+		var xml = XS.write(a);
+		assertEquals(a, XP.read(xml, ZoneId.class));
 	}
 }

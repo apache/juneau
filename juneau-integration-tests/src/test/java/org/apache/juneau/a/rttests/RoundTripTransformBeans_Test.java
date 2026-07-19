@@ -444,8 +444,8 @@ class RoundTripTransformBeans_Test extends TestBase {
 		var s = t.getSerializer();
 		var p = t.getParser();
 
-		var r = s.serialize(c);
-		var c2 = p.parse(r, XMLGregorianCalendar.class);
+		var r = s.write(c);
+		var c2 = p.read(r, XMLGregorianCalendar.class);
 		assertEquals(c, c2);
 	}
 
@@ -459,7 +459,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 		var s = JsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 
 		var x = C3.create();
-		var r = s.serialize(x);
+		var r = s.write(x);
 		assertEquals("{\"_type\":\"C3\",\"f1\":{\"f2\":\"f2\",\"f3\":3}}", r);
 	}
 
@@ -507,13 +507,13 @@ class RoundTripTransformBeans_Test extends TestBase {
 		var p = Json5Parser.create().swaps(D2.class).build();
 		var x = D1.create();
 
-		var r = (Object)s.serialize(x);
+		var r = (Object)s.write(x);
 		assertEquals("{f2:'f1'}", r);
 
-		x = p.parse(r, D1.class);
+		x = p.read(r, D1.class);
 		assertEquals("f1", x.f1);
 
-		r = t.getSerializer().serialize(x);
+		r = t.getSerializer().write(x);
 		assertTrue(toString(r).contains("f2"));
 
 		t.roundTrip(x, D1.class);
@@ -549,13 +549,13 @@ class RoundTripTransformBeans_Test extends TestBase {
 		var p = Json5Parser.DEFAULT;
 		var x = E1.create();
 
-		var r = (Object)s.serialize(x);
+		var r = (Object)s.write(x);
 		assertEquals("{f2:'f1'}", r);
 
-		x = p.parse(r, E1.class);
+		x = p.read(r, E1.class);
 		assertEquals("f1", x.f1);
 
-		r = t.getSerializer().serialize(x);
+		r = t.getSerializer().write(x);
 		assertTrue(toString(r).contains("f2"));
 
 		t.roundTrip(x, E1.class);
@@ -592,13 +592,13 @@ class RoundTripTransformBeans_Test extends TestBase {
 		var p = Json5Parser.DEFAULT.copy().applyAnnotations(E1cConfig.class).build();
 		var x = E1c.create();
 
-		var r = (Object)s.serialize(x);
+		var r = (Object)s.write(x);
 		assertEquals("{f2:'f1'}", r);
 
-		x = p.parse(r, E1c.class);
+		x = p.read(r, E1c.class);
 		assertEquals("f1", x.f1);
 
-		r = t.getSerializer().serialize(x);
+		r = t.getSerializer().write(x);
 		assertTrue(toString(r).contains("f2"));
 
 		t.roundTrip(x, E1c.class);
@@ -658,10 +658,10 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 		var x = F1.create();
 
-		var r = s.serialize(x);
+		var r = s.write(x);
 		assertEquals("{c:'2018-12-12T05:12:00Z'}", r);
 
-		x = p.parse(r, F1.class);
+		x = p.read(r, F1.class);
 		assertBean(x, "c", "2018-12-12T05:12:00Z");
 
 		t.roundTrip(x, F1.class);
@@ -691,10 +691,10 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 		var x = F1c.create();
 
-		var r = s.serialize(x);
+		var r = s.write(x);
 		assertEquals("{c:'2018-12-12T05:12:00Z'}", r);
 
-		x = p.parse(r, F1c.class);
+		x = p.read(r, F1c.class);
 		assertSerialized(x, s, "{c:'2018-12-12T05:12:00Z'}");
 
 		t.roundTrip(x, F1c.class);
@@ -725,10 +725,10 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 		var x = F2.create();
 
-		var r = s.serialize(x);
+		var r = s.write(x);
 		assertEquals("{c:'2018-12-12T05:12:00Z'}", r);
 
-		x = p.parse(r, F2.class);
+		x = p.read(r, F2.class);
 		assertBean(x, "c", "2018-12-12T05:12:00Z");
 
 		t.roundTrip(x, F2.class);
@@ -761,10 +761,10 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 		var x = F2.create();
 
-		var r = s.serialize(x);
+		var r = s.write(x);
 		assertEquals("{c:'2018-12-12T05:12:00Z'}", r);
 
-		x = p.parse(r, F2.class);
+		x = p.read(r, F2.class);
 		assertBean(x, "c", "2018-12-12T05:12:00Z");
 
 		t.roundTrip(x, F2.class);

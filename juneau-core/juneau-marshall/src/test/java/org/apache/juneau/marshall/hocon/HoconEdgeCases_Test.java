@@ -34,14 +34,14 @@ class HoconEdgeCases_Test extends TestBase {
 
 	@Test
 	void i01_emptyInput() throws Exception {
-		var m = HoconParser.DEFAULT.parse("", Map.class, String.class, Object.class);
+		var m = HoconParser.DEFAULT.read("", Map.class, String.class, Object.class);
 		assertNull(m);
 	}
 
 	@Test
 	void i02_onlyComments() throws Exception {
 		var hocon = "# comment\n// line";
-		var m = HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertNull(m);
 	}
 
@@ -50,8 +50,8 @@ class HoconEdgeCases_Test extends TestBase {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("text", "Hello 世界 café \uD83D\uDE00");
 		m.put("key\u4E2D", "value");
-		var hocon = HoconSerializer.DEFAULT.serialize(m);
-		var parsed = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var hocon = HoconSerializer.DEFAULT.write(m);
+		var parsed = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("Hello 世界 café \uD83D\uDE00", parsed.get("text"));
 		assertEquals("value", parsed.get("key\u4E2D"));
 	}
@@ -59,14 +59,14 @@ class HoconEdgeCases_Test extends TestBase {
 	@Test
 	void i04_windowsLineEndings() throws Exception {
 		var hocon = "a = x\r\nb = y";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertBean(m, "a,b", "x,y");
 	}
 
 	@Test
 	void i05_deeplyNested() throws Exception {
 		var hocon = "n0.n1.n2.n3.n4.n5.n6.n7.n8.n9 = 99";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var current = m;
 		for (var i = 0; i < 9; i++) {
 			var key = "n" + i;
@@ -80,7 +80,7 @@ class HoconEdgeCases_Test extends TestBase {
 	@Test
 	void i06_emptyObject() throws Exception {
 		var hocon = "{}";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertTrue(m.isEmpty());
 	}
@@ -88,7 +88,7 @@ class HoconEdgeCases_Test extends TestBase {
 	@Test
 	void i07_emptyArray() throws Exception {
 		var hocon = "arr = []";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var arr = (List<?>) m.get("arr");
 		assertNotNull(arr);
 		assertTrue(arr.isEmpty());
@@ -97,21 +97,21 @@ class HoconEdgeCases_Test extends TestBase {
 	@Test
 	void i08_tripleQuotedString() throws Exception {
 		var hocon = "x = \"\"\"line1\nline2\"\"\"";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("line1\nline2", m.get("x"));
 	}
 
 	@Test
 	void i09_valueWithSpaces() throws Exception {
 		var hocon = "key = \"value with spaces\"";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("value with spaces", m.get("key"));
 	}
 
 	@Test
 	void i10_hashCommentInline() throws Exception {
 		var hocon = "a = 1 # comment\nb = 2";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals(1, ((Number) m.get("a")).intValue());
 		assertEquals(2, ((Number) m.get("b")).intValue());
 	}

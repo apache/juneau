@@ -195,7 +195,7 @@ public class JsonTokenReader implements TokenReader {
 	}
 
 	/**
-	 * Constructor used by {@link JsonParser#parseTokens(Object)} to plumb the calling parser's
+	 * Constructor used by {@link JsonParser#readTokens(Object)} to plumb the calling parser's
 	 * session in so that {@link #read(Class)} can delegate to the existing databind path.
 	 *
 	 * @param pipe The parser input pipe to read from.  Must not be <jk>null</jk>.
@@ -439,7 +439,7 @@ public class JsonTokenReader implements TokenReader {
 		advanceToValueState();
 		assertReadValueState();
 		try {
-			T o = s.parseAnything(type, r, null, null);
+			T o = s.readAnything(type, r, null, null);
 			markValueConsumed();
 			return o;
 		} catch (Exception e) {
@@ -458,7 +458,7 @@ public class JsonTokenReader implements TokenReader {
 		if (session == null)
 			throw new UnsupportedOperationException(
 				"read is not available on this JsonTokenReader (no session attached). " +
-				"Open the cursor via JsonParser.parseTokens(...) to enable read.");
+				"Open the cursor via JsonParser.readTokens(...) to enable read.");
 		return session;
 	}
 
@@ -776,7 +776,7 @@ public class JsonTokenReader implements TokenReader {
 
 	/**
 	 * Reads a JSON number from the current input position.  Captures the lexeme via
-	 * {@link ParserReader#parseNumberString()} and validates it; defers actual numeric parsing
+	 * {@link ParserReader#readNumberString()} and validates it; defers actual numeric parsing
 	 * to {@link #getNumber()} (lazy).  Sets {@link #currentNumberLexeme} and {@link #currentToken}.
 	 *
 	 * @throws IOException If a problem occurred reading from the underlying stream.
@@ -786,7 +786,7 @@ public class JsonTokenReader implements TokenReader {
 		// Mirror JsonParserSession#parseNumber's lexeme-collection: collect "number chars" then
 		// hand off to StringUtils.parseNumber.  The lexeme is preserved as currentNumberLexeme so
 		// precision-sensitive consumers can recover the original textual form (resolved Q6).
-		var s = r.parseNumberString();
+		var s = r.readNumberString();
 		validateNumberLexeme(s);
 		currentNumberLexeme = s;
 		currentToken = TokenType.VALUE_NUMBER;

@@ -94,7 +94,7 @@ public class MediaRanges {
 	}
 
 	private static HeaderElement[] parse(String value) {
-		return HeaderValueParser.parseElements(emptyIfNull(trim(value)));
+		return HeaderValueParser.readElements(emptyIfNull(trim(value)));
 	}
 
 	private final MediaRange[] ranges;

@@ -27,7 +27,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Parse JSON-LD string into a bean.</jc>
  * 	String <jv>jsonLd</jv> = ...;  <jc>// JSON-LD content</jc>
- * 	Person <jv>person</jv> = JsonLdParser.<jsf>DEFAULT</jsf>.parse(<jv>jsonLd</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = JsonLdParser.<jsf>DEFAULT</jsf>.read(<jv>jsonLd</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the JsonLd marshaller for convenience.</jc>
@@ -35,12 +35,12 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Parse into a list of beans.</jc>
- * 	List&lt;Person&gt; <jv>people</jv> = JsonLdParser.<jsf>DEFAULT</jsf>.parse(<jv>jsonLd</jv>, List.<jk>class</jk>, Person.<jk>class</jk>);
+ * 	List&lt;Person&gt; <jv>people</jv> = JsonLdParser.<jsf>DEFAULT</jsf>.read(<jv>jsonLd</jv>, List.<jk>class</jk>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>
  * 	JsonLdParser <jv>p</jv> = JsonLdParser.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>jsonLd</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.read(<jv>jsonLd</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example input (bean with name/age):</h5>

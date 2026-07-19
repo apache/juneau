@@ -505,7 +505,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo","bar"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -554,7 +554,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Use it.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -653,7 +653,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	}
 		 *
 		 * 	<jc>// Parse bean.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <p>
@@ -679,7 +679,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Parse an HTML body into HTML beans.</jc>
-		 * 	Body <jv>body</jv> = <jv>parser</jv>.parse(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
+		 * 	Body <jv>body</jv> = <jv>parser</jv>.read(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -739,7 +739,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo":"bar"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -810,7 +810,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"taxInfo":"redacted"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> Address());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> Address());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -900,7 +900,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -960,7 +960,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -1023,7 +1023,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -1087,7 +1087,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -1143,7 +1143,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -1198,7 +1198,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -1254,7 +1254,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -1304,7 +1304,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// All 3 properties will be serialized.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 *
 		 * 	<jc>// Create a parser with read-only property settings.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
@@ -1314,7 +1314,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Parser ignores bar and baz properties.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <p>
@@ -1362,7 +1362,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// All 3 properties will be serialized.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 *
 		 * 	<jc>// Create a parser with read-only property settings.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
@@ -1372,7 +1372,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Parser ignores bar and baz properties.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <p>
@@ -1421,7 +1421,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// All 3 properties will be serialized.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 *
 		 * 	<jc>// Create a parser with read-only property settings.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
@@ -1431,7 +1431,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Parser ignores bar and baz properties.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <p>
@@ -1479,7 +1479,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Only foo will be serialized.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 *
 		 * 	<jc>// Create a parser with write-only property settings.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
@@ -1488,7 +1488,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Parser parses all 3 properties.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <p>
@@ -1536,7 +1536,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Only foo will be serialized.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 *
 		 * 	<jc>// Create a parser with write-only property settings.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
@@ -1545,7 +1545,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Parser parses all 3 properties.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <p>
@@ -1594,7 +1594,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Only foo will be serialized.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 *
 		 * 	<jc>// Create a parser with write-only property settings.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
@@ -1603,7 +1603,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Parser parses all 3 properties.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <p>
@@ -1661,7 +1661,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  "bar"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -1718,7 +1718,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  "bar"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -1773,7 +1773,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -1878,7 +1878,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Parse bean.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <p>
@@ -1923,7 +1923,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -1975,7 +1975,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Throws a ParseException.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -2023,7 +2023,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -2072,7 +2072,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -2254,7 +2254,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Parse into bean using fluent setter.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'bar'}"</js>);
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -2304,7 +2304,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Parse into bean using fluent setter.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'bar'}"</js>);
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -2480,7 +2480,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Exception is ignored.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -2527,7 +2527,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Exception is ignored.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -2572,7 +2572,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Doesn't throw an exception on unknown 'bar' property.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar'}"</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'foo',bar:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -2625,7 +2625,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jc>// Parser that validates inbound values.</jc>
 		 * 	ReaderParser <jv>p</jv> = JsonParser.<jsm>create</jsm>().validateSchema().build();
 		 *
-		 * 	<jv>p</jv>.parse(<js>"{name:'a'}"</js>, MyBean.<jk>class</jk>);  <jc>// throws ParseException - too short</jc>
+		 * 	<jv>p</jv>.read(<js>"{name:'a'}"</js>, MyBean.<jk>class</jk>);  <jc>// throws ParseException - too short</jc>
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -2705,7 +2705,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Instantiates a MyBeanImpl,</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"..."</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * @param interfaceClass The interface class.
@@ -2747,7 +2747,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Instantiates a MyBeanImpl,</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"..."</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * @param values
@@ -2786,7 +2786,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces "{"foo":"foo"}"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> A1());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> A1());
 		 * </p>
 		 *
 		 * <p>
@@ -2835,7 +2835,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces "{"foo":"foo"}"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> A1());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> A1());
 		 * </p>
 		 *
 		 * <p>
@@ -3003,7 +3003,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces "baz" instead of {"foo":"bar"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -3132,7 +3132,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo-bar-baz":"fooBarBaz"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -3183,7 +3183,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"foo-bar-baz":"fooBarBaz"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * @param value
@@ -3219,7 +3219,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"c":"1","b":"2","a":"3"} (JVM order)</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -3297,7 +3297,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"p3":"..."}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> C3());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> C3());
 		 * </p>
 		 *
 		 * @param on The class on which the stop class is being applied.
@@ -3458,7 +3458,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"date":"2012-03-03T04:05:06-0500"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 *
 		 * 	<jc>// Create a serializer that uses our date swap.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
@@ -3467,7 +3467,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Use our parser to parse a bean.</jc>
-		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -3799,7 +3799,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  {"_type":"mybean",...}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -3852,7 +3852,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces "{mySimpleField:{t:'foo',...}}".</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -3908,10 +3908,10 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	}
 		 *
 		 * 	<jc>// Produces "{mySimpleField:{t:'foo',...}}".</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 *
 		 * 	<jc>// Parse bean.</jc>
-		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -4461,7 +4461,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 				return (in, memberOf, session, args) -> {
 					try {
 						var ws = getBeanToStringSerializer();
-						return ws != null ? ws.serialize(in) : in.toString();
+						return ws != null ? ws.write(in) : in.toString();
 					} catch (Exception e) {
 						throw rex(e);
 					}
@@ -4713,7 +4713,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			return (in, memberOf, session, args) -> {
 				try {
 					var ws = getBeanToStringSerializer();
-					var str = ws != null ? ws.serialize(in) : in.toString();
+					var str = ws != null ? ws.write(in) : in.toString();
 					return toMeta.newInstanceFromString(memberOf, str);
 				} catch (Exception e) {
 					throw rex(e);

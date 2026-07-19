@@ -292,10 +292,10 @@
  * 	}
  *
  * 	<jc>// Serialize — channel iterated as a sequence.</jc>
- * 	String <jv>json</jv> = Json5Serializer.<jsf>DEFAULT</jsf>.serialize(<jv>collection</jv>);
+ * 	String <jv>json</jv> = Json5Serializer.<jsf>DEFAULT</jsf>.write(<jv>collection</jv>);
  *
  * 	<jc>// Parse — channel populated via acceptThrows().</jc>
- * 	Json5Parser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, EmployeeCollection.<jk>class</jk>);
+ * 	Json5Parser.<jsf>DEFAULT</jsf>.read(<jv>json</jv>, EmployeeCollection.<jk>class</jk>);
  * 	</p>
  *
  * 	<h5 class='figure'>Database-backed channel</h5>
@@ -482,11 +482,11 @@
  * 	<p class='bjava'>
  * 	<jc>// Serialized as the string "hello" — Supplier is unwrapped.</jc>
  * 	Supplier&lt;String&gt; <jv>lazy</jv> = () -&gt; <js>"hello"</js>;
- * 	String <jv>json</jv> = Json5Serializer.<jsf>DEFAULT</jsf>.serialize(<jv>lazy</jv>); <jc>// 'hello'</jc>
+ * 	String <jv>json</jv> = Json5Serializer.<jsf>DEFAULT</jsf>.write(<jv>lazy</jv>); <jc>// 'hello'</jc>
  *
  * 	<jc>// Nested Supplier chains are also unwrapped.</jc>
  * 	Supplier&lt;Supplier&lt;Integer&gt;&gt; <jv>nested</jv> = () -&gt; () -&gt; 42;
- * 	<jv>json</jv> = Json5Serializer.<jsf>DEFAULT</jsf>.serialize(<jv>nested</jv>); <jc>// 42</jc>
+ * 	<jv>json</jv> = Json5Serializer.<jsf>DEFAULT</jsf>.write(<jv>nested</jv>); <jc>// 42</jc>
  * 	</p>
  *
  * 	</div>

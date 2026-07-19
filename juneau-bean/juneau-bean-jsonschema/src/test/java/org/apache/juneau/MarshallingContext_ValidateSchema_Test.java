@@ -125,44 +125,44 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 
 	@Test void a01_parse_minLengthPasses() throws Exception {
 		var p = JsonParser.create().validateSchema().build();
-		var b = p.parse("{\"name\":\"abc\"}", StringBean.class);
+		var b = p.read("{\"name\":\"abc\"}", StringBean.class);
 		assertEquals("abc", b.name);
 	}
 
 	@Test void a01_parse_minLengthFails() {
 		var p = JsonParser.create().validateSchema().build();
-		var ex = assertThrows(RuntimeException.class, () -> p.parse("{\"name\":\"a\"}", StringBean.class));
+		var ex = assertThrows(RuntimeException.class, () -> p.read("{\"name\":\"a\"}", StringBean.class));
 		assertTrue(rootMessage(ex).contains("minLength"), "actual: " + rootMessage(ex));
 	}
 
 	@Test void a01_parse_maxLengthFails() {
 		var p = JsonParser.create().validateSchema().build();
-		var ex = assertThrows(RuntimeException.class, () -> p.parse("{\"name\":\"abcdef\"}", StringBean.class));
+		var ex = assertThrows(RuntimeException.class, () -> p.read("{\"name\":\"abcdef\"}", StringBean.class));
 		assertTrue(rootMessage(ex).contains("maxLength"), "actual: " + rootMessage(ex));
 	}
 
 	@Test void a02_parse_patternFails() {
 		var p = JsonParser.create().validateSchema().build();
-		var ex = assertThrows(RuntimeException.class, () -> p.parse("{\"code\":\"ABC\"}", PatternBean.class));
+		var ex = assertThrows(RuntimeException.class, () -> p.read("{\"code\":\"ABC\"}", PatternBean.class));
 		assertTrue(rootMessage(ex).contains("pattern"), "actual: " + rootMessage(ex));
 	}
 
 	@Test void a03_parse_numberOutOfRange() {
 		var p = JsonParser.create().validateSchema().build();
-		var ex = assertThrows(RuntimeException.class, () -> p.parse("{\"age\":200}", NumberBean.class));
+		var ex = assertThrows(RuntimeException.class, () -> p.read("{\"age\":200}", NumberBean.class));
 		assertTrue(rootMessage(ex).contains("maximum"), "actual: " + rootMessage(ex));
 	}
 
 	@Test void a04_parse_enumRejectsUnknown() {
 		var p = JsonParser.create().validateSchema().build();
-		assertThrows(RuntimeException.class, () -> p.parse("{\"status\":\"X\"}", EnumBean.class));
+		assertThrows(RuntimeException.class, () -> p.read("{\"status\":\"X\"}", EnumBean.class));
 	}
 
 	@Test void a05_parse_arraySizeBounds() throws Exception {
 		var p = JsonParser.create().validateSchema().build();
-		p.parse("{\"tags\":[\"a\"]}", ArrayBean.class);
-		assertThrows(RuntimeException.class, () -> p.parse("{\"tags\":[]}", ArrayBean.class));
-		assertThrows(RuntimeException.class, () -> p.parse("{\"tags\":[\"a\",\"b\",\"c\",\"d\"]}", ArrayBean.class));
+		p.read("{\"tags\":[\"a\"]}", ArrayBean.class);
+		assertThrows(RuntimeException.class, () -> p.read("{\"tags\":[]}", ArrayBean.class));
+		assertThrows(RuntimeException.class, () -> p.read("{\"tags\":[\"a\",\"b\",\"c\",\"d\"]}", ArrayBean.class));
 	}
 
 	// =================================================================================================================
@@ -173,14 +173,14 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 		var s = JsonSerializer.create().validateSchema().build();
 		var b = new StringBean();
 		b.name = "x";  // too short
-		assertThrows(RuntimeException.class, () -> s.serialize(b));
+		assertThrows(RuntimeException.class, () -> s.write(b));
 	}
 
 	@Test void b02_serialize_passesWhenValid() throws Exception {
 		var s = JsonSerializer.create().validateSchema().build();
 		var b = new StringBean();
 		b.name = "abc";
-		var out = s.serialize(b);
+		var out = s.write(b);
 		assertTrue(out.contains("abc"));
 	}
 
@@ -190,7 +190,7 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 
 	@Test void c01_validation_disabledByDefault_parse() throws Exception {
 		var p = JsonParser.create().build();
-		var b = p.parse("{\"name\":\"x\"}", StringBean.class);  // would fail with validation
+		var b = p.read("{\"name\":\"x\"}", StringBean.class);  // would fail with validation
 		assertEquals("x", b.name);
 	}
 
@@ -198,12 +198,12 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 		var s = JsonSerializer.create().build();
 		var b = new StringBean();
 		b.name = "x";
-		assertDoesNotThrow(() -> s.serialize(b));  // validation disabled by default — serialization must not throw
+		assertDoesNotThrow(() -> s.write(b));  // validation disabled by default — serialization must not throw
 	}
 
 	@Test void c03_validateSchema_falseExplicitOverride() {
 		var p = JsonParser.create().validateSchema(false).build();
-		var b = assertDoesNotThrow(() -> p.parse("{\"name\":\"x\"}", StringBean.class));  // explicit validateSchema(false) — parse must not throw
+		var b = assertDoesNotThrow(() -> p.read("{\"name\":\"x\"}", StringBean.class));  // explicit validateSchema(false) — parse must not throw
 		assertEquals("x", b.name);
 	}
 
@@ -258,31 +258,31 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 	@Test void e01_parse_getterAnnotation_isInstalled() throws Exception {
 		// @Schema on getter is discovered via the b.getter loop in installSchemaValidationTransforms.
 		var p = JsonParser.create().validateSchema().build();
-		var b = p.parse("{\"code\":\"ok\"}", GetterAnnotatedBean.class);
+		var b = p.read("{\"code\":\"ok\"}", GetterAnnotatedBean.class);
 		assertEquals("ok", b.code);
-		assertThrows(RuntimeException.class, () -> p.parse("{\"code\":\"x\"}", GetterAnnotatedBean.class));
+		assertThrows(RuntimeException.class, () -> p.read("{\"code\":\"x\"}", GetterAnnotatedBean.class));
 	}
 
 	@Test void e02_serialize_getterAnnotation_failsForViolation() {
 		var s = JsonSerializer.create().validateSchema().build();
 		var b = new GetterAnnotatedBean();
 		b.code = "x";  // too short
-		assertThrows(RuntimeException.class, () -> s.serialize(b));
+		assertThrows(RuntimeException.class, () -> s.write(b));
 	}
 
 	@Test void e03_parse_setterAnnotation_isInstalled() throws Exception {
 		// @Schema on setter is discovered via the b.setter loop.
 		var p = JsonParser.create().validateSchema().build();
-		var b = p.parse("{\"code\":\"ok\"}", SetterAnnotatedBean.class);
+		var b = p.read("{\"code\":\"ok\"}", SetterAnnotatedBean.class);
 		assertEquals("ok", b.code);
-		assertThrows(RuntimeException.class, () -> p.parse("{\"code\":\"x\"}", SetterAnnotatedBean.class));
+		assertThrows(RuntimeException.class, () -> p.read("{\"code\":\"x\"}", SetterAnnotatedBean.class));
 	}
 
 	@Test void e04_parse_noSchema_validateSchemaTrue_noopInstallSkippedPerProperty() throws Exception {
 		// validateSchema=true but no @Schema annotations on the bean — exercises the merged==null early-return in
 		// installSchemaValidationTransforms (and confirms parsing still works normally).
 		var p = JsonParser.create().validateSchema().build();
-		var b = p.parse("{\"name\":\"abc\",\"age\":42}", NoSchemaBean.class);
+		var b = p.read("{\"name\":\"abc\",\"age\":42}", NoSchemaBean.class);
 		assertEquals("abc", b.name);
 		assertEquals(42, b.age);
 	}
@@ -292,7 +292,7 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 		var b = new NoSchemaBean();
 		b.name = "abc";
 		b.age = 1;
-		assertTrue(s.serialize(b).contains("abc"));
+		assertTrue(s.write(b).contains("abc"));
 	}
 
 	@Test void e06_session_isValidateSchemaPropagatedFromContext() {
@@ -300,15 +300,15 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 		var s = JsonSerializer.create().validateSchema().build();
 		var b = new StringBean();
 		b.name = "abc";
-		assertDoesNotThrow(() -> s.serialize(b));  // valid value with validateSchema=true session — must not throw
+		assertDoesNotThrow(() -> s.write(b));  // valid value with validateSchema=true session — must not throw
 	}
 
 	@Test void e07_parse_dualAnnotations_mergedConstraintsApplied() throws Exception {
 		// @Schema(minLength=2) on field + @Schema(maxLength=4) on getter → merged map enforces both bounds.
 		var p = JsonParser.create().validateSchema().build();
-		p.parse("{\"code\":\"abc\"}", DualAnnotatedBean.class);
-		assertThrows(RuntimeException.class, () -> p.parse("{\"code\":\"a\"}", DualAnnotatedBean.class));
-		assertThrows(RuntimeException.class, () -> p.parse("{\"code\":\"toolong\"}", DualAnnotatedBean.class));
+		p.read("{\"code\":\"abc\"}", DualAnnotatedBean.class);
+		assertThrows(RuntimeException.class, () -> p.read("{\"code\":\"a\"}", DualAnnotatedBean.class));
+		assertThrows(RuntimeException.class, () -> p.read("{\"code\":\"toolong\"}", DualAnnotatedBean.class));
 	}
 
 	@Test void e08_serialize_swapAndSchemaProperty_chainsBothTransforms() throws Exception {
@@ -316,13 +316,13 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 		var s = JsonSerializer.create().validateSchema().build();
 		var b = new SwapAndSchemaBean();
 		b.code = "abc";  // swap → "@abc@" (length 5, in bounds)
-		assertTrue(s.serialize(b).contains("@abc@"));
+		assertTrue(s.write(b).contains("@abc@"));
 	}
 
 	@Test void e09_parse_swapAndSchemaProperty_chainsWriteTransform() throws Exception {
 		// Parse hits the writeTransform path: validator runs first, then swap unswaps.
 		var p = JsonParser.create().validateSchema().build();
-		var b = p.parse("{\"code\":\"@x@\"}", SwapAndSchemaBean.class);
+		var b = p.read("{\"code\":\"@x@\"}", SwapAndSchemaBean.class);
 		assertEquals("x", b.code);
 	}
 

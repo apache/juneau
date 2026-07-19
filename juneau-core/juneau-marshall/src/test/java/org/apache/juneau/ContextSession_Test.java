@@ -320,14 +320,14 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("trimStrings", true)
 				.build();
-			assertEquals("\"hello\"", session.serialize("  hello  "));
+			assertEquals("\"hello\"", session.write("  hello  "));
 		}
 
 		@Test void e23_serializer_trimStrings_qualifiedForm() {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("SerializerSession.trimStrings", "true")
 				.build();
-			assertEquals("\"hello\"", session.serialize("  hello  "));
+			assertEquals("\"hello\"", session.write("  hello  "));
 		}
 
 		// -- SerializerSession: keepNullProperties --
@@ -336,7 +336,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("keepNullProperties", true)
 				.build();
-			var result = session.serialize(new BeanWithNullField());
+			var result = session.write(new BeanWithNullField());
 			assertTrue(result.contains("\"a\""));
 		}
 
@@ -344,7 +344,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("SerializerSession.keepNullProperties", "false")
 				.build();
-			var result = session.serialize(new BeanWithNullField());
+			var result = session.write(new BeanWithNullField());
 			assertFalse(result.contains("\"a\""));
 		}
 
@@ -354,7 +354,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("sortCollections", true)
 				.build();
-			var result = session.serialize(new String[]{"c", "a", "b"});
+			var result = session.write(new String[]{"c", "a", "b"});
 			assertEquals("[\"a\",\"b\",\"c\"]", result);
 		}
 
@@ -368,7 +368,7 @@ class ContextSession_Test extends TestBase {
 			m.put("c", 3);
 			m.put("a", 1);
 			m.put("b", 2);
-			var result = session.serialize(m);
+			var result = session.write(m);
 			assertEquals("{\"a\":1,\"b\":2,\"c\":3}", result);
 		}
 
@@ -378,7 +378,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("trimEmptyCollections", true)
 				.build();
-			var result = session.serialize(new BeanWithEmptyCollection());
+			var result = session.write(new BeanWithEmptyCollection());
 			assertFalse(result.contains("\"a\""));
 			assertTrue(result.contains("\"b\""));
 		}
@@ -389,7 +389,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("trimEmptyMaps", true)
 				.build();
-			var result = session.serialize(new BeanWithEmptyMap());
+			var result = session.write(new BeanWithEmptyMap());
 			assertFalse(result.contains("\"a\""));
 			assertTrue(result.contains("\"b\""));
 		}
@@ -403,8 +403,8 @@ class ContextSession_Test extends TestBase {
 				.property("maxIndent", 0)
 				.build();
 			// With maxIndent=0, output should have no leading spaces on values
-			var unlimited = noLimitSession.serialize(JsonMap.of("a", 1));
-			var limited = limitedSession.serialize(JsonMap.of("a", 1));
+			var unlimited = noLimitSession.write(JsonMap.of("a", 1));
+			var limited = limitedSession.write(JsonMap.of("a", 1));
 			assertTrue(unlimited.contains("\t"));
 			assertFalse(limited.contains("\t"));
 		}
@@ -414,7 +414,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) ctx.createSession()
 				.property("WriterSerializerSession.maxIndent", "0")
 				.build();
-			var result = session.serialize(JsonMap.of("a", 1));
+			var result = session.write(JsonMap.of("a", 1));
 			assertFalse(result.contains("\t"));
 		}
 
@@ -424,7 +424,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) Json5Serializer.DEFAULT.createSession()
 				.property("quoteChar", '"')
 				.build();
-			var result = session.serialize("hello");
+			var result = session.write("hello");
 			assertEquals("\"hello\"", result);
 		}
 
@@ -432,7 +432,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) Json5Serializer.DEFAULT.createSession()
 				.property("WriterSerializerSession.quoteChar", "\"")
 				.build();
-			var result = session.serialize("hello");
+			var result = session.write("hello");
 			assertEquals("\"hello\"", result);
 		}
 
@@ -442,7 +442,7 @@ class ContextSession_Test extends TestBase {
 			var session = CsvSerializer.DEFAULT.createSession()
 				.property("nullValue", "N/A")
 				.build();
-			var result = session.serialize(JsonMap.of("a", null));
+			var result = session.write(JsonMap.of("a", null));
 			assertTrue(result.contains("N/A"));
 		}
 
@@ -450,7 +450,7 @@ class ContextSession_Test extends TestBase {
 			var session = CsvSerializer.DEFAULT.createSession()
 				.property("CsvSerializerSession.nullValue", "EMPTY")
 				.build();
-			var result = session.serialize(JsonMap.of("a", null));
+			var result = session.write(JsonMap.of("a", null));
 			assertTrue(result.contains("EMPTY"));
 		}
 
@@ -460,7 +460,7 @@ class ContextSession_Test extends TestBase {
 			var session = CsvSerializer.DEFAULT.createSession()
 				.property("byteArrayFormat", CsvByteArrayCellFormat.SEMICOLON_DELIMITED)
 				.build();
-			var result = session.serialize(new byte[]{1, 2, 3});
+			var result = session.write(new byte[]{1, 2, 3});
 			assertTrue(result.contains("1;2;3"));
 		}
 
@@ -470,7 +470,7 @@ class ContextSession_Test extends TestBase {
 			var session = JsonParser.DEFAULT.createSession()
 				.property("trimStrings", true)
 				.build();
-			var result = session.parse("\" hello \"", String.class);
+			var result = session.read("\" hello \"", String.class);
 			assertEquals("hello", result);
 		}
 
@@ -478,7 +478,7 @@ class ContextSession_Test extends TestBase {
 			var session = JsonParser.DEFAULT.createSession()
 				.property("ParserSession.trimStrings", "true")
 				.build();
-			var result = session.parse("\" hello \"", String.class);
+			var result = session.read("\" hello \"", String.class);
 			assertEquals("hello", result);
 		}
 
@@ -488,7 +488,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("escapeSolidus", true)
 				.build();
-			var result = session.serialize("http://example.com");
+			var result = session.write("http://example.com");
 			assertTrue(result.contains("\\/"));
 		}
 
@@ -496,7 +496,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("JsonSerializerSession.escapeSolidus", "true")
 				.build();
-			var result = session.serialize("http://example.com");
+			var result = session.write("http://example.com");
 			assertTrue(result.contains("\\/"));
 		}
 
@@ -507,7 +507,7 @@ class ContextSession_Test extends TestBase {
 				.property("validateEnd", true)
 				.build();
 			// With validateEnd=true, trailing content should throw an error
-			assertThrows(Exception.class, () -> session.parse("{\"a\":1}extra", JsonMap.class));
+			assertThrows(Exception.class, () -> session.read("{\"a\":1}extra", JsonMap.class));
 		}
 
 		// -- UonParserSession: validateEnd --
@@ -516,7 +516,7 @@ class ContextSession_Test extends TestBase {
 			var session = UonParser.DEFAULT.createSession()
 				.property("validateEnd", true)
 				.build();
-			assertThrows(Exception.class, () -> session.parse("(a=1)extra", JsonMap.class));
+			assertThrows(Exception.class, () -> session.read("(a=1)extra", JsonMap.class));
 		}
 
 		// -- UonSerializerSession: encoding --
@@ -525,7 +525,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) UonSerializer.DEFAULT.createSession()
 				.property("encoding", true)
 				.build();
-			var result = session.serialize("hello world");
+			var result = session.write("hello world");
 			assertTrue(result.contains("%20") || result.contains("+"));
 		}
 
@@ -535,7 +535,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) UonSerializer.DEFAULT.createSession()
 				.property("paramFormat", ParamFormat.PLAINTEXT)
 				.build();
-			var result = session.serialize("hello");
+			var result = session.write("hello");
 			assertEquals("hello", result);
 		}
 
@@ -545,7 +545,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) UrlEncodingSerializer.DEFAULT.createSession()
 				.property("expandedParams", true)
 				.build();
-			var result = session.serialize(JsonMap.of("a", new int[]{1, 2, 3}));
+			var result = session.write(JsonMap.of("a", new int[]{1, 2, 3}));
 			assertTrue(result.contains("a=1") && result.contains("a=2") && result.contains("a=3"));
 		}
 
@@ -555,7 +555,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) XmlSerializer.DEFAULT.createSession()
 				.property("enableNamespaces", false)
 				.build();
-			var result = session.serialize(JsonMap.of("a", 1));
+			var result = session.write(JsonMap.of("a", 1));
 			assertFalse(result.contains("xmlns"));
 		}
 
@@ -565,7 +565,7 @@ class ContextSession_Test extends TestBase {
 			var session = XmlParser.DEFAULT.createSession()
 				.property("preserveRootElement", true)
 				.build();
-			var result = session.parse("<root><a>1</a></root>", JsonMap.class);
+			var result = session.read("<root><a>1</a></root>", JsonMap.class);
 			assertTrue(result.containsKey("root"));
 		}
 
@@ -575,7 +575,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) HtmlSerializer.DEFAULT.createSession()
 				.property("detectLinksInStrings", false)
 				.build();
-			var result = session.serialize("http://example.com");
+			var result = session.write("http://example.com");
 			assertFalse(result.contains("<a "));
 		}
 
@@ -585,7 +585,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) HtmlSerializer.DEFAULT.createSession()
 				.property("labelParameter", "customlabel")
 				.build();
-			var result = session.serialize("http://example.com?customlabel=MyLink");
+			var result = session.write("http://example.com?customlabel=MyLink");
 			assertTrue(result.contains("MyLink"));
 		}
 	}

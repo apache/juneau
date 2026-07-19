@@ -27,7 +27,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Parse N-Triples string into a bean.</jc>
  * 	String <jv>nTriples</jv> = ...;  <jc>// N-Triples content</jc>
- * 	Person <jv>person</jv> = NTripleParser.<jsf>DEFAULT</jsf>.parse(<jv>nTriples</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = NTripleParser.<jsf>DEFAULT</jsf>.read(<jv>nTriples</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the NTriple marshaller for convenience.</jc>
@@ -35,12 +35,12 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Parse into a map.</jc>
- * 	Map&lt;String, String&gt; <jv>map</jv> = NTripleParser.<jsf>DEFAULT</jsf>.parse(<jv>nTriples</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+ * 	Map&lt;String, String&gt; <jv>map</jv> = NTripleParser.<jsf>DEFAULT</jsf>.read(<jv>nTriples</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>
  * 	NTripleParser <jv>p</jv> = NTripleParser.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>nTriples</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.read(<jv>nTriples</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example input (bean with name/age):</h5>

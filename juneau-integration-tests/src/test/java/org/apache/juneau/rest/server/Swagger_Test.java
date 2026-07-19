@@ -1864,7 +1864,7 @@ class Swagger_Test extends TestBase {
 
 	@Test void t01_bodyWithReadOnlyProperty() throws Exception {
 		var p = MockRestClient.build(T1.class);
-		var s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getContent().asString(), org.apache.juneau.bean.swagger.Swagger.class);
+		var s = JsonParser.DEFAULT.read(p.get("/api").accept("application/json").run().getContent().asString(), org.apache.juneau.bean.swagger.Swagger.class);
 		var o = s.getOperation("/", "get");
 
 		var ri = o.getResponse("200");

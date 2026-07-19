@@ -47,9 +47,9 @@ class XmlCollapsed_Test extends TestBase {
 		t.f3 = l("f3a","f3b");
 		t.f4 = a("f4a","f4b");
 
-		var xml = s.serialize(t);
+		var xml = s.write(t);
 		assertEquals("<object><f1>f1a</f1><f1>f1b</f1><f2>f2a</f2><f2>f2b</f2><xf3>f3a</xf3><xf3>f3b</xf3><xf4>f4a</xf4><xf4>f4b</xf4></object>", xml);
-		t = p.parse(xml, A.class);
+		t = p.read(xml, A.class);
 		assertEquals("f1a", t.f1.get(0));
 		assertEquals("f2a", t.f2[0]);
 		assertEquals("f3a", t.f3.get(0));
@@ -86,9 +86,9 @@ class XmlCollapsed_Test extends TestBase {
 		t.f3 = l("f3a","f3b");
 		t.f4 = a("f4a","f4b");
 
-		var xml = s.serialize(t);
+		var xml = s.write(t);
 		assertEquals("<object><f1>f1a</f1><f1>f1b</f1><f2>f2a</f2><f2>f2b</f2><xf3>f3a</xf3><xf3>f3b</xf3><xf4>f4a</xf4><xf4>f4b</xf4></object>", xml);
-		t = p.parse(xml, B.class);
+		t = p.read(xml, B.class);
 		assertEquals("f1a", t.f1.get(0));
 		assertEquals("f2a", t.f2[0]);
 		assertEquals("f3a", t.f3.get(0));
@@ -125,11 +125,11 @@ class XmlCollapsed_Test extends TestBase {
 		t.f3 = list("f3b");
 		t.f4 = a("f4b");
 
-		var xml = s.serialize(t);
+		var xml = s.write(t);
 		assertEquals("<object><f1>f1b</f1><f2>f2b</f2><xf3>f3b</xf3><xf4>f4b</xf4></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
-		t = p.parse(xml, C.class);
+		t = p.read(xml, C.class);
 		assertEquals("f1a", t.f1.get(0));
 		assertEquals("f1b", t.f1.get(1));
 		assertEquals("f2a", t.f2[0]);
@@ -170,11 +170,11 @@ class XmlCollapsed_Test extends TestBase {
 		t.f3 = l("f3a");
 		t.f4 = a("f4a");
 
-		var xml = s.serialize(t);
+		var xml = s.write(t);
 		assertEquals("<object><f1>f1a</f1><f2>f2a</f2><xf3>f3a</xf3><xf4>f4a</xf4></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
-		t = p.parse(xml, D.class);
+		t = p.read(xml, D.class);
 		assertEquals("f1a", t.f1.get(0));
 		assertEquals("f2a", t.f2[0]);
 		assertEquals("f3a", t.f3.get(0));
@@ -211,11 +211,11 @@ class XmlCollapsed_Test extends TestBase {
 		t.f1 = (ArrayList<String>)list("f1a");
 		t.f2 = (ArrayList<String>)list("f2a");
 
-		var xml = s.serialize(t);
+		var xml = s.write(t);
 		assertEquals("<object><f1>f1a</f1><xf2>f2a</xf2></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
-		t = p.parse(xml, E.class);
+		t = p.read(xml, E.class);
 		assertEquals("f1a", t.f1.get(0));
 		assertEquals("f2a", t.f2.get(0));
 
@@ -240,17 +240,17 @@ class XmlCollapsed_Test extends TestBase {
 		var s = XmlSerializer.DEFAULT_SQ;
 		var p = XmlParser.DEFAULT;
 		var t1 = (Object)FA.newInstance();
-		var r = s.serialize(t1);
+		var r = s.write(t1);
 
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
-		var t2 = (Object)p.parse(r, FA.class);
+		var t2 = (Object)p.read(r, FA.class);
 		assertEquals(json(t2), json(t1));
 		validateXml(t1, s);
 
 		t1 = FB.newInstance();
-		r = s.serialize(t1);
+		r = s.write(t1);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
-		t2 = p.parse(r, FB.class);
+		t2 = p.read(r, FB.class);
 		assertEquals(json(t2), json(t1));
 		validateXml(t1, s);
 	}
@@ -300,11 +300,11 @@ class XmlCollapsed_Test extends TestBase {
 		var p = XmlParser.DEFAULT;
 		var t = G.newInstance();
 
-		var xml = s.serialize(t);
+		var xml = s.write(t);
 		assertEquals("<object><yf1>x1</yf1><yf1>x2</yf1></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
-		var t2 = p.parse(xml, G.class);
+		var t2 = p.read(xml, G.class);
 		assertEquals(json(t2), json(t));
 
 		validateXml(t, s);
@@ -330,11 +330,11 @@ class XmlCollapsed_Test extends TestBase {
 		var p = XmlParser.DEFAULT;
 		var t = H.newInstance();
 
-		var xml = s.serialize(t);
+		var xml = s.write(t);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
-		var t2 = p.parse(xml, H.class);
+		var t2 = p.read(xml, H.class);
 		assertEquals(json(t2), json(t));
 
 		validateXml(t, s);
@@ -365,11 +365,11 @@ class XmlCollapsed_Test extends TestBase {
 		var p = XmlParser.DEFAULT;
 		var t = G.newInstance();
 
-		var xml = s.serialize(t);
+		var xml = s.write(t);
 		assertEquals("<object><yf1>x1</yf1><yf1>x2</yf1></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
-		var t2 = p.parse(xml, G.class);
+		var t2 = p.read(xml, G.class);
 		assertEquals(json(t2), json(t));
 
 		validateXml(t, s);

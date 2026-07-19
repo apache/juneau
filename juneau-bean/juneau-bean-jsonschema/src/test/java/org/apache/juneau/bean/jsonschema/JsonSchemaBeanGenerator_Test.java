@@ -80,11 +80,11 @@ class JsonSchemaBeanGenerator_Test extends TestBase {
 	@Test void a06_roundTripParityWithJsonMapOutput() throws Exception {
 		var map = JsonSchemaGenerator.DEFAULT.getSession().getSchema(SimpleBean.class);
 		var bean = JsonSchemaBeanGenerator.toBean(map);
-		var mapJson = JsonSerializer.DEFAULT.serialize(map);
-		var beanJson = JsonSerializer.DEFAULT.serialize(bean);
+		var mapJson = JsonSerializer.DEFAULT.write(map);
+		var beanJson = JsonSerializer.DEFAULT.write(bean);
 		assertEquals(
-			JsonParser.DEFAULT.parse(mapJson, JsonMap.class),
-			JsonParser.DEFAULT.parse(beanJson, JsonMap.class)
+			JsonParser.DEFAULT.read(mapJson, JsonMap.class),
+			JsonParser.DEFAULT.read(beanJson, JsonMap.class)
 		);
 	}
 

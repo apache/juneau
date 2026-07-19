@@ -52,13 +52,13 @@ import org.apache.juneau.marshall.stream.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Use the default serializer to serialize a bean</jc>
- * 	String <jv>md</jv> = MarkdownSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someObject</jv>);
+ * 	String <jv>md</jv> = MarkdownSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
  *
  * 	<jc>// Create a custom serializer</jc>
  * 	MarkdownSerializer <jv>serializer</jv> = MarkdownSerializer.<jsm>create</jsm>().nullValue(<js>"—"</js>).build();
  *
  * 	<jc>// Serialize a List of beans to a multi-column Markdown table</jc>
- * 	String <jv>md</jv> = <jv>serializer</jv>.serialize(<jv>listOfBeans</jv>);
+ * 	String <jv>md</jv> = <jv>serializer</jv>.write(<jv>listOfBeans</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (bean):</h5>
@@ -279,20 +279,20 @@ public class MarkdownSerializer extends WriterSerializer implements MarkdownMeta
 
 	/**
 	 * Convenience delegator that opens a {@link RecordWriter} over the output using
-	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 * <b>default session arguments</b> (mirrors {@link #write(Object)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link MarkdownSerializerSession#serializeRecords(Object)}.
+	 * The real implementation lives on {@link MarkdownSerializerSession#writeRecords(Object)}.
 	 * Callers that need request-derived configuration should call {@link #createSession()} and
-	 * invoke {@link MarkdownSerializerSession#serializeRecords(Object)} on the built session instead.
+	 * invoke {@link MarkdownSerializerSession#writeRecords(Object)} on the built session instead.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return getSession().serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return getSession().writeRecords(output);
 	}
 
 	@Override /* RecordWritable */

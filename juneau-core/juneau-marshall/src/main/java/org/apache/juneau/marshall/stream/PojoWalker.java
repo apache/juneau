@@ -65,12 +65,12 @@ public final class PojoWalker {
 	 * Databind-level settings honored by {@link PojoWalker}.
 	 *
 	 * <p>
-	 * Built by the format's {@code serializeTokens(...)} factory from the calling
+	 * Built by the format's {@code writeTokens(...)} factory from the calling
 	 * {@link org.apache.juneau.marshall.serializer.Serializer.Builder Serializer.Builder} and
 	 * passed through to the walker.  These are the same settings the POJO databind path
-	 * ({@code Serializer.serialize(...)}) consults; honoring them here means
-	 * {@code serializeTokens(out).object(o)} produces the same shape as
-	 * {@code serializer.serialize(o)} for the same configuration.
+	 * ({@code Serializer.write(...)}) consults; honoring them here means
+	 * {@code writeTokens(out).object(o)} produces the same shape as
+	 * {@code serializer.write(o)} for the same configuration.
 	 *
 	 * @param keepNullProperties Whether bean fields with null values are emitted (true) or
 	 * 	skipped (false).

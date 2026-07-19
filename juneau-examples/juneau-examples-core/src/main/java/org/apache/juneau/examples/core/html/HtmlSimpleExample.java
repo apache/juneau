@@ -43,12 +43,12 @@ public class HtmlSimpleExample {
 
 		var pojo = new Pojo("id", "name");
 
-		var flat = htmlSerializer.serialize(pojo);
+		var flat = htmlSerializer.write(pojo);
 
 		// Print out the created POJO in JSON format.
 		Logger.getLogger(HtmlSimpleExample.class).info(flat);
 
-		var parse = htmlParser.parse(flat, Pojo.class);
+		var parse = htmlParser.read(flat, Pojo.class);
 
 		assert parse.getId().equals(pojo.getId());
 		assert parse.getName().equals(pojo.getName());
@@ -59,7 +59,7 @@ public class HtmlSimpleExample {
 		 *  <div class="data" id="data"><table><tr><td>name</td><td>name</td></tr><tr><td>id</td><td>id</td></tr>
 		 *  </table></div></div></article></section></body></html>
 		 */
-		var docSerialized = HtmlDocSerializer.DEFAULT.serialize(pojo);
+		var docSerialized = HtmlDocSerializer.DEFAULT.write(pojo);
 		Logger.getLogger(HtmlSimpleExample.class).info(docSerialized);
 
 		// The object above can be parsed thanks to the @BeanCtor(properties = id,name) annotation on Pojo

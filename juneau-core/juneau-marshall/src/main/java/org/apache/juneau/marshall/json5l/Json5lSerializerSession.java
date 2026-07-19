@@ -114,9 +114,9 @@ public class Json5lSerializerSession extends JsonlSerializerSession {
 	}
 
 	@Override /* Overridden from JsonlSerializerSession */
-	public TokenWriter serializeTokens(Object output) throws IOException {
+	public TokenWriter writeTokens(Object output) throws IOException {
 		if (! json5Sugar)
-			return super.serializeTokens(output);
+			return super.writeTokens(output);
 		var walk = new PojoWalker.Options(
 			isKeepNullProperties(),
 			isTrimEmptyMaps(),

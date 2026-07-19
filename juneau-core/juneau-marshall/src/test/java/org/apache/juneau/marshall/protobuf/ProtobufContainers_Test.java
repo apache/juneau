@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
 class ProtobufContainers_Test extends TestBase {
 
 	private static String ser(Object o) throws Exception {
-		return toSpacedHex(ProtobufSerializer.DEFAULT.serialize(o));
+		return toSpacedHex(ProtobufSerializer.DEFAULT.write(o));
 	}
 
 	public static class PackedInts {
@@ -47,8 +47,8 @@ class ProtobufContainers_Test extends TestBase {
 
 	@Test
 	void a01b_packedRoundTrip() throws Exception {
-		var bytes = ProtobufSerializer.DEFAULT.serialize(new PackedInts(3, 270, 86942));
-		var p = ProtobufParser.DEFAULT.parse(bytes, PackedInts.class);
+		var bytes = ProtobufSerializer.DEFAULT.write(new PackedInts(3, 270, 86942));
+		var p = ProtobufParser.DEFAULT.read(bytes, PackedInts.class);
 		assertArrayEquals(new int[]{3, 270, 86942}, p.nums);
 	}
 
@@ -66,8 +66,8 @@ class ProtobufContainers_Test extends TestBase {
 	@Test
 	void a02b_mapRoundTrip() throws Exception {
 		var orig = new StrMap(map("a", 1, "b", 2));
-		var bytes = ProtobufSerializer.DEFAULT.serialize(orig);
-		var p = ProtobufParser.DEFAULT.parse(bytes, StrMap.class);
+		var bytes = ProtobufSerializer.DEFAULT.write(orig);
+		var p = ProtobufParser.DEFAULT.read(bytes, StrMap.class);
 		assertEquals(Integer.valueOf(1), p.m.get("a"));
 		assertEquals(Integer.valueOf(2), p.m.get("b"));
 	}
@@ -91,8 +91,8 @@ class ProtobufContainers_Test extends TestBase {
 
 	@Test
 	void a03b_nestedRoundTrip() throws Exception {
-		var bytes = ProtobufSerializer.DEFAULT.serialize(new Outer(new Inner(150)));
-		var p = ProtobufParser.DEFAULT.parse(bytes, Outer.class);
+		var bytes = ProtobufSerializer.DEFAULT.write(new Outer(new Inner(150)));
+		var p = ProtobufParser.DEFAULT.read(bytes, Outer.class);
 		assertEquals(150, p.inner.id);
 	}
 
@@ -109,8 +109,8 @@ class ProtobufContainers_Test extends TestBase {
 
 	@Test
 	void a04b_repeatedStringRoundTrip() throws Exception {
-		var bytes = ProtobufSerializer.DEFAULT.serialize(new StrList(list("a", "b", "c")));
-		var p = ProtobufParser.DEFAULT.parse(bytes, StrList.class);
+		var bytes = ProtobufSerializer.DEFAULT.write(new StrList(list("a", "b", "c")));
+		var p = ProtobufParser.DEFAULT.read(bytes, StrList.class);
 		assertEquals(list("a", "b", "c"), p.tags);
 	}
 
@@ -122,8 +122,8 @@ class ProtobufContainers_Test extends TestBase {
 
 	@Test
 	void a05_repeatedBeanRoundTrip() throws Exception {
-		var bytes = ProtobufSerializer.DEFAULT.serialize(new BeanList(list(new Inner(1), new Inner(2))));
-		var p = ProtobufParser.DEFAULT.parse(bytes, BeanList.class);
+		var bytes = ProtobufSerializer.DEFAULT.write(new BeanList(list(new Inner(1), new Inner(2))));
+		var p = ProtobufParser.DEFAULT.read(bytes, BeanList.class);
 		assertEquals(2, p.items.size());
 		assertEquals(1, p.items.get(0).id);
 		assertEquals(2, p.items.get(1).id);
@@ -133,7 +133,7 @@ class ProtobufContainers_Test extends TestBase {
 	void a06_unpackedRepeatedAcceptedOnParse() throws Exception {
 		// Hand-built UNPACKED repeated int32 for field 1: 08 03  08 8E 02 (two tagged varints).
 		var bytes = new byte[]{0x08, 0x03, 0x08, (byte)0x8E, 0x02};
-		var p = ProtobufParser.DEFAULT.parse(bytes, PackedInts.class);
+		var p = ProtobufParser.DEFAULT.read(bytes, PackedInts.class);
 		assertArrayEquals(new int[]{3, 270}, p.nums);
 	}
 
@@ -148,8 +148,8 @@ class ProtobufContainers_Test extends TestBase {
 	@Test
 	void a07_enumKeyMapRoundTrip() throws Exception {
 		var orig = new EnumMap2(map(E.B, 5));
-		var bytes = ProtobufSerializer.DEFAULT.serialize(orig);
-		var p = ProtobufParser.DEFAULT.parse(bytes, EnumMap2.class);
+		var bytes = ProtobufSerializer.DEFAULT.write(orig);
+		var p = ProtobufParser.DEFAULT.read(bytes, EnumMap2.class);
 		assertEquals(Integer.valueOf(5), p.m.get(E.B));
 	}
 }

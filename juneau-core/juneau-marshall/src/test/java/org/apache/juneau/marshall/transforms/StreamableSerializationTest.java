@@ -45,7 +45,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a01_iteratorWithJson() throws Exception {
 		var i = List.of("foo", "bar", "baz").iterator();
-		assertEquals("['foo','bar','baz']", JSON.serialize(i));
+		assertEquals("['foo','bar','baz']", JSON.write(i));
 	}
 
 	//====================================================================================================
@@ -53,7 +53,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a02_iterableWithJson() throws Exception {
 		Iterable<String> iterable = () -> List.of("foo", "bar", "baz").iterator();
-		assertEquals("['foo','bar','baz']", JSON.serialize(iterable));
+		assertEquals("['foo','bar','baz']", JSON.write(iterable));
 	}
 
 	//====================================================================================================
@@ -61,7 +61,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a03_streamWithJson() throws Exception {
 		var stream = Stream.of("foo", "bar", "baz");
-		assertEquals("['foo','bar','baz']", JSON.serialize(stream));
+		assertEquals("['foo','bar','baz']", JSON.write(stream));
 	}
 
 	//====================================================================================================
@@ -69,7 +69,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a04_iteratorWithXml() throws Exception {
 		var i = List.of("foo", "bar", "baz").iterator();
-		var result = XML.serialize(i);
+		var result = XML.write(i);
 		assertTrue(result.contains("foo"), "XML output should contain 'foo': " + result);
 		assertTrue(result.contains("bar"), "XML output should contain 'bar': " + result);
 		assertTrue(result.contains("baz"), "XML output should contain 'baz': " + result);
@@ -80,7 +80,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a05_iterableWithXml() throws Exception {
 		Iterable<String> iterable = () -> List.of("foo", "bar", "baz").iterator();
-		var result = XML.serialize(iterable);
+		var result = XML.write(iterable);
 		assertTrue(result.contains("foo"), "XML output should contain 'foo': " + result);
 		assertTrue(result.contains("bar"), "XML output should contain 'bar': " + result);
 	}
@@ -90,7 +90,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a06_streamWithXml() throws Exception {
 		var stream = Stream.of("foo", "bar", "baz");
-		var result = XML.serialize(stream);
+		var result = XML.write(stream);
 		assertTrue(result.contains("foo"), "XML output should contain 'foo': " + result);
 		assertTrue(result.contains("baz"), "XML output should contain 'baz': " + result);
 	}
@@ -100,7 +100,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a07_iteratorWithUon() throws Exception {
 		var i = List.of("foo", "bar", "baz").iterator();
-		assertEquals("@(foo,bar,baz)", UON.serialize(i));
+		assertEquals("@(foo,bar,baz)", UON.write(i));
 	}
 
 	//====================================================================================================
@@ -108,7 +108,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a08_iteratorWithMsgPack() throws Exception {
 		var i = List.of("foo", "bar", "baz").iterator();
-		var result = MSGPACK.serialize(i);
+		var result = MSGPACK.write(i);
 		assertNotNull(result);
 		assertTrue(result.length > 0, "MsgPack output should not be empty");
 	}
@@ -118,7 +118,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a09_iteratorWithHtml() throws Exception {
 		var i = List.of("foo", "bar", "baz").iterator();
-		var result = HTML.serialize(i);
+		var result = HTML.write(i);
 		assertTrue(result.contains("foo"), "HTML output should contain 'foo': " + result);
 		assertTrue(result.contains("bar"), "HTML output should contain 'bar': " + result);
 		assertTrue(result.contains("baz"), "HTML output should contain 'baz': " + result);
@@ -129,7 +129,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a10_streamWithHtml() throws Exception {
 		var stream = Stream.of("foo", "bar", "baz");
-		var result = HTML.serialize(stream);
+		var result = HTML.write(stream);
 		assertTrue(result.contains("foo"), "HTML output should contain 'foo': " + result);
 		assertTrue(result.contains("baz"), "HTML output should contain 'baz': " + result);
 	}
@@ -139,7 +139,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a11_iteratorWithCsv() throws Exception {
 		var i = List.of("foo", "bar", "baz").iterator();
-		var result = CSV.serialize(i);
+		var result = CSV.write(i);
 		assertTrue(result.contains("foo"), "CSV output should contain 'foo': " + result);
 		assertTrue(result.contains("bar"), "CSV output should contain 'bar': " + result);
 	}
@@ -149,7 +149,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a12_emptyIterator() throws Exception {
 		var i = Collections.emptyIterator();
-		assertEquals("[]", JSON.serialize(i));
+		assertEquals("[]", JSON.write(i));
 	}
 
 	//====================================================================================================
@@ -157,7 +157,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a13_emptyStream() throws Exception {
 		var stream = Stream.empty();
-		assertEquals("[]", JSON.serialize(stream));
+		assertEquals("[]", JSON.write(stream));
 	}
 
 	//====================================================================================================
@@ -165,7 +165,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a14_numericIterator() throws Exception {
 		var i = List.of(1, 2, 3).iterator();
-		assertEquals("[1,2,3]", JSON.serialize(i));
+		assertEquals("[1,2,3]", JSON.write(i));
 	}
 
 	//====================================================================================================
@@ -173,7 +173,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a15_iterableWithUon() throws Exception {
 		Iterable<String> iterable = () -> List.of("foo", "bar", "baz").iterator();
-		assertEquals("@(foo,bar,baz)", UON.serialize(iterable));
+		assertEquals("@(foo,bar,baz)", UON.write(iterable));
 	}
 
 	//====================================================================================================
@@ -181,7 +181,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a16_streamWithUon() throws Exception {
 		var stream = Stream.of("foo", "bar", "baz");
-		assertEquals("@(foo,bar,baz)", UON.serialize(stream));
+		assertEquals("@(foo,bar,baz)", UON.write(stream));
 	}
 
 	//====================================================================================================
@@ -190,7 +190,7 @@ class StreamableSerializationTest extends TestBase {
 	@Test void a17_enumerationWithJson() throws Exception {
 		var v = new Vector<>(List.of("foo", "bar", "baz"));
 		var e = v.elements();
-		var result = JSON.serialize(e);
+		var result = JSON.write(e);
 		assertEquals("['foo','bar','baz']", result);
 	}
 
@@ -199,7 +199,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a19_streamWithMsgPack() throws Exception {
 		var stream = Stream.of("foo", "bar", "baz");
-		var result = MSGPACK.serialize(stream);
+		var result = MSGPACK.write(stream);
 		assertNotNull(result);
 		assertTrue(result.length > 0, "MsgPack output should not be empty");
 	}
@@ -209,7 +209,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a20_iterableWithMsgPack() throws Exception {
 		Iterable<String> iterable = () -> List.of("foo", "bar", "baz").iterator();
-		var result = MSGPACK.serialize(iterable);
+		var result = MSGPACK.write(iterable);
 		assertNotNull(result);
 		assertTrue(result.length > 0, "MsgPack output should not be empty");
 	}
@@ -219,7 +219,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a21_mixedTypeIterator() throws Exception {
 		var i = List.<Object>of("foo", 123, true).iterator();
-		assertEquals("['foo',123,true]", JSON.serialize(i));
+		assertEquals("['foo',123,true]", JSON.write(i));
 	}
 
 	//====================================================================================================
@@ -227,7 +227,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a22_iterableWithCsv() throws Exception {
 		Iterable<String> iterable = () -> List.of("foo", "bar", "baz").iterator();
-		var result = CSV.serialize(iterable);
+		var result = CSV.write(iterable);
 		assertTrue(result.contains("foo"), "CSV output should contain 'foo': " + result);
 	}
 
@@ -236,7 +236,7 @@ class StreamableSerializationTest extends TestBase {
 	//====================================================================================================
 	@Test void a23_streamWithCsv() throws Exception {
 		var stream = Stream.of("foo", "bar", "baz");
-		var result = CSV.serialize(stream);
+		var result = CSV.write(stream);
 		assertTrue(result.contains("foo"), "CSV output should contain 'foo': " + result);
 	}
 }

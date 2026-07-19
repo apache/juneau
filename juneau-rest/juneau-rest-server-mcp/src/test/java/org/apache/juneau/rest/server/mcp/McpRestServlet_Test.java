@@ -76,7 +76,7 @@ class McpRestServlet_Test extends TestBase {
 			.setId(1)
 			.setMethod(McpMethods.INITIALIZE);
 		var resp = client().post("/", req).run().assertStatus(200).getContent().asString();
-		var parsed = PAR.parse(resp, JsonRpcResponse.class);
+		var parsed = PAR.read(resp, JsonRpcResponse.class);
 		assertNotNull(parsed.getResult());
 	}
 

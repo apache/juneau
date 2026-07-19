@@ -426,14 +426,14 @@ class StreamInternals_Test extends TestBase {
 
 		@Test void c01_readerNonArrayThrows() throws Exception {
 			// Cursor positioned at a scalar (not START_ARRAY) must be rejected.
-			try (var cursor = JsonParser.DEFAULT.parseTokens("42")) {
+			try (var cursor = JsonParser.DEFAULT.readTokens("42")) {
 				assertThrowsWithMessage(ParseException.class, "Expected START_ARRAY", () -> StreamingArrayRecord.reader(cursor));
 			}
 		}
 
 		@Test void c02_readerStreamsElementsAndCloses() throws Exception {
 			var cm = MarshallingContext.DEFAULT.getClassMeta(Integer.class);
-			try (var r = StreamingArrayRecord.reader(JsonParser.DEFAULT.parseTokens("[1,2,3]"))) {
+			try (var r = StreamingArrayRecord.reader(JsonParser.DEFAULT.readTokens("[1,2,3]"))) {
 				assertTrue(r.isStreaming());
 				assertEquals(1, r.read(Integer.class));
 				assertEquals(2, r.read(cm));
@@ -444,7 +444,7 @@ class StreamInternals_Test extends TestBase {
 
 		@Test void c03_writerStreamsElements() throws Exception {
 			var sb = new StringWriter();
-			try (var w = StreamingArrayRecord.writer(JsonSerializer.DEFAULT.serializeTokens(sb))) {
+			try (var w = StreamingArrayRecord.writer(JsonSerializer.DEFAULT.writeTokens(sb))) {
 				assertTrue(w.isStreaming());
 				w.write(1);
 				w.write(2);
@@ -455,7 +455,7 @@ class StreamInternals_Test extends TestBase {
 
 		@Test void c04_writerRejectsWriteAfterCloseAndIsIdempotent() throws Exception {
 			var sb = new StringWriter();
-			var w = StreamingArrayRecord.writer(JsonSerializer.DEFAULT.serializeTokens(sb));
+			var w = StreamingArrayRecord.writer(JsonSerializer.DEFAULT.writeTokens(sb));
 			w.write(1);
 			w.close();
 			assertThrowsWithMessage(IllegalStateException.class, "Array stream is closed", () -> w.write(2));
@@ -484,7 +484,7 @@ class StreamInternals_Test extends TestBase {
 			var marker = RecordAdapter.reader(JsonParser.DEFAULT.getSession(), "1");
 			ArrayRecordReadable ar = input -> marker;
 			// The 2-arg (rootElementName) default ignores the name and delegates to the 1-arg form.
-			assertSame(marker, ar.parseArrayRecords("x", "item"));
+			assertSame(marker, ar.readArrayRecords("x", "item"));
 			assertTrue(ar.isArrayRecordStreaming());
 			marker.close();
 		}
@@ -493,7 +493,7 @@ class StreamInternals_Test extends TestBase {
 			var marker = RecordAdapter.writer(JsonSerializer.DEFAULT.getSession(), new StringWriter());
 			ArrayRecordWritable aw = output -> marker;
 			// The count-prefixed default ignores the count and delegates to the 1-arg form.
-			assertSame(marker, aw.serializeArrayRecords(new StringWriter(), 3));
+			assertSame(marker, aw.writeArrayRecords(new StringWriter(), 3));
 			assertTrue(aw.isArrayRecordStreaming());
 			marker.close();
 		}
@@ -530,13 +530,13 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void e01_streamHappyPath() throws Exception {
-			try (var r = StreamingArrayRecord.reader(JsonParser.DEFAULT.parseTokens("[1,2,3]"))) {
+			try (var r = StreamingArrayRecord.reader(JsonParser.DEFAULT.readTokens("[1,2,3]"))) {
 				assertEquals(3, r.stream(Integer.class).count());
 			}
 		}
 
 		@Test void e02_iteratorHappyPath() throws Exception {
-			try (var r = StreamingArrayRecord.reader(JsonParser.DEFAULT.parseTokens("[1,2]"))) {
+			try (var r = StreamingArrayRecord.reader(JsonParser.DEFAULT.readTokens("[1,2]"))) {
 				var it = r.iterator(Integer.class);
 				var seen = new ArrayList<Integer>();
 				while (it.hasNext())

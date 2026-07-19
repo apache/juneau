@@ -357,7 +357,7 @@ class TemporalFormat_ZonedDateTime_RoundTrip_Test extends TestBase {
 		var x = ZonedDateTime.of(2024, 6, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, ZonedDateTime.class);
+			var x2 = p.read(out, ZonedDateTime.class);
 			// Binary serializers with native datetime support (BSON in particular) bypass the configured
 			// format swap at top-level and round-trip the value with full native fidelity.  Some text
 			// serializers (Hocon, Hjson, Toml, ...) emit a full ISO datetime literal at top-level and the

@@ -43,8 +43,8 @@ class HjsonRoundTrip_Test extends TestBase {
 		a.put("name", "Alice");
 		a.put("age", 30);
 		a.put("active", true);
-		var hjson = HjsonSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
+		var hjson = HjsonSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "name,age,active", "Alice,30,true");
 	}
 
@@ -56,8 +56,8 @@ class HjsonRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "Alice");
 		a.put("address", addr);
-		var hjson = HjsonSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
+		var hjson = HjsonSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "name,address{city,state}", "Alice,{Boston,MA}");
 	}
 
@@ -66,8 +66,8 @@ class HjsonRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("tags", list("a", "b", "c"));
 		a.put("counts", list(1, 2, 3));
-		var hjson = HjsonSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
+		var hjson = HjsonSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "tags,counts", "[a,b,c],[1,2,3]");
 	}
 
@@ -79,8 +79,8 @@ class HjsonRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "app");
 		a.put("database", nested);
-		var hjson = HjsonSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
+		var hjson = HjsonSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "name,database{host,port}", "app,{localhost,8080}");
 	}
 
@@ -89,8 +89,8 @@ class HjsonRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("size", "LARGE");
 		a.put("status", "ACTIVE");
-		var hjson = HjsonSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
+		var hjson = HjsonSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "size,status", "LARGE,ACTIVE");
 	}
 
@@ -98,8 +98,8 @@ class HjsonRoundTrip_Test extends TestBase {
 	void c06_multilineStringRoundTrip() throws Exception {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("desc", "line1\nline2\nline3");
-		var hjson = HjsonSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
+		var hjson = HjsonSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertEquals("line1\nline2\nline3", b.get("desc"));
 	}
 
@@ -107,8 +107,8 @@ class HjsonRoundTrip_Test extends TestBase {
 	void c07_specialCharStringRoundTrip() throws Exception {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("s", "a{b}c:d\"e");
-		var hjson = HjsonSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
+		var hjson = HjsonSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertEquals("a{b}c:d\"e", b.get("s"));
 	}
 
@@ -117,8 +117,8 @@ class HjsonRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("asBoolean", true);
 		a.put("asString", "true");
-		var hjson = HjsonSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
+		var hjson = HjsonSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertEquals(true, b.get("asBoolean"));
 		assertEquals("true", b.get("asString"));
 	}
@@ -128,8 +128,8 @@ class HjsonRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("asNumber", 42);
 		a.put("asString", "42");
-		var hjson = HjsonSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
+		var hjson = HjsonSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertEquals(42, b.get("asNumber"));
 		assertEquals("42", b.get("asString"));
 	}
@@ -137,7 +137,7 @@ class HjsonRoundTrip_Test extends TestBase {
 	@Test
 	void c10_nullRoundTrip() throws Exception {
 		var hjson = "{\"name\":\"x\",\"middle\":null}";
-		var b = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
+		var b = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertEquals("x", b.get("name"));
 		assertNull(b.get("middle"));
 	}
@@ -146,8 +146,8 @@ class HjsonRoundTrip_Test extends TestBase {
 	void c11_emptyStringRoundTrip() throws Exception {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("empty", "");
-		var hjson = HjsonSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
+		var hjson = HjsonSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertEquals("", b.get("empty"));
 	}
 
@@ -162,8 +162,8 @@ class HjsonRoundTrip_Test extends TestBase {
 		a.put("tags", list("x", "y"));
 		a.put("address", nested);
 		a.put("empty", "");
-		var hjson = HjsonSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
+		var hjson = HjsonSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "name,age,active,tags,address{city},empty", "Bob,25,true,[x,y],{NYC},");
 	}
 }

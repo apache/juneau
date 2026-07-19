@@ -82,11 +82,11 @@ class BinaryNativeKind_GenericConsumer_Test extends TestBase {
 	@Test void a01_cborTaggedString() throws Exception {
 		// CBOR: tag(0) wrapping "hi"
 		var bos = new ByteArrayOutputStream();
-		try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+		try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 			w.writeTag(0);
 			w.string("hi");
 		}
-		try (var r = CborParser.DEFAULT_NATIVE.parseTokens(bos.toByteArray())) {
+		try (var r = CborParser.DEFAULT_NATIVE.readTokens(bos.toByteArray())) {
 			assertEquals("VALUE_STRING(tagged:0;)", render(r));
 		}
 	}
@@ -95,20 +95,20 @@ class BinaryNativeKind_GenericConsumer_Test extends TestBase {
 		// Use simple value 16 (within the valid 0..19 range; 20-23 are reserved for
 		// false/true/null/undefined and 25-27 for float16/32/64).
 		var bos = new ByteArrayOutputStream();
-		try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+		try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 			w.writeSimple(16);
 		}
-		try (var r = CborParser.DEFAULT_NATIVE.parseTokens(bos.toByteArray())) {
+		try (var r = CborParser.DEFAULT_NATIVE.readTokens(bos.toByteArray())) {
 			assertEquals("VALUE_NULL(simple:16;)", render(r));
 		}
 	}
 
 	@Test void a03_msgpackExt() throws Exception {
 		var bos = new ByteArrayOutputStream();
-		try (var w = MsgPackSerializer.DEFAULT.serializeTokens(bos)) {
+		try (var w = MsgPackSerializer.DEFAULT.writeTokens(bos)) {
 			w.writeExt(5, new byte[]{1, 2, 3, 4});
 		}
-		try (var r = MsgPackParser.DEFAULT_NATIVE.parseTokens(bos.toByteArray())) {
+		try (var r = MsgPackParser.DEFAULT_NATIVE.readTokens(bos.toByteArray())) {
 			assertEquals("VALUE_BINARY(ext:5;)", render(r));
 		}
 	}

@@ -213,7 +213,7 @@ public abstract class Context {
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().annotations(<jv>annotation</jv>).build();
 		 *
 		 * 	<jc>// Serialize a bean with the dynamically applied annotation.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> B());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> B());
 		 * </p>
 		 *
 		 * <p>
@@ -677,7 +677,7 @@ public abstract class Context {
 		 * 	<jv>bean</jv>.<jf>f</jf> = <jv>bean</jv>;
 		 *
 		 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bean</jv>);
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jv>bean</jv>);
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>

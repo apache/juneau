@@ -108,7 +108,7 @@ public class TokenWriterArg extends SimpleRestOperationArg {
 		Object output = session.isWriterSerializer()
 			? res.getNegotiatedWriter()
 			: res.getNegotiatedOutputStream();
-		var cursor = ((TokenWritable) session).serializeTokens(output);
+		var cursor = ((TokenWritable) session).writeTokens(output);
 		if (!declaredType.isInstance(cursor))
 			throw new UnsupportedMediaType(
 				"Serializer '%s' produced cursor type '%s' which is not assignable to the declared parameter type '%s'.",

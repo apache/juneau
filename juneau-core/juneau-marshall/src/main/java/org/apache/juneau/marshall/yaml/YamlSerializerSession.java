@@ -95,21 +95,21 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 	}
 
 	@Override /* Overridden from SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		serializeAnything(getYamlWriter(out), o, getExpectedRootType(o), "root", null, true);
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
+		writeAnything(getYamlWriter(out), o, getExpectedRootType(o), "root", null, true);
 	}
 
 	/**
 	 * Opens a whole-value push generator targeting YAML output, bound to this live session.
 	 * {@link RecordWriter#write(Object) write(Object)} delegates to
-	 * {@link SerializerSession#serialize(Object, Object)}.
+	 * {@link SerializerSession#write(Object, Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -122,7 +122,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
 		return RecordAdapter.arrayWriter(this, output);
 	}
 
@@ -175,7 +175,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 		"rawtypes", // Raw types necessary for generic type handling
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 	})
-	protected YamlWriter serializeAnything(YamlWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta, boolean asField) throws SerializeException {
+	protected YamlWriter writeAnything(YamlWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta, boolean asField) throws SerializeException {
 
 		if (o == null) {
 			out.append("null");
@@ -217,16 +217,16 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0)) {
 			out.append("null");
 		} else if (sType.isBean()) {
-			serializeBeanMap(out, toBeanMap(o), typeName);
+			writeBeanMap(out, toBeanMap(o), typeName);
 		} else if (sType.isMap()) {
 			if (sType.isBeanMap())
-				serializeBeanMap(out, (BeanMap)o, typeName);
+				writeBeanMap(out, (BeanMap)o, typeName);
 			else
-				serializeMap(out, (Map)o, eType);
+				writeMap(out, (Map)o, eType);
 		} else if (sType.isCollection()) {
-			serializeCollection(out, (Collection)o, eType, asField);
+			writeCollection(out, (Collection)o, eType, asField);
 		} else if (sType.isArray()) {
-			serializeCollection(out, toList(sType.inner(), o), eType, asField);
+			writeCollection(out, toList(sType.inner(), o), eType, asField);
 		} else if (sType.isNumber() || sType.isBoolean()) {
 			out.append(o);
 		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
@@ -260,7 +260,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 		return false;
 	}
 
-	private SerializerWriter serializeBeanMap(YamlWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+	private SerializerWriter writeBeanMap(YamlWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		int i = indent - 1;
 
 		var addAtt = Flag.create();
@@ -286,14 +286,14 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 			if (value != null && isComplexValue(actualType)) {
 				out.keyName(key).w(": ");
 				if (actualType.isCollectionOrArrayOrOptional()) {
-					serializeAnything(out, value, cMeta, key, pMeta, false);
+					writeAnything(out, value, cMeta, key, pMeta, false);
 				} else {
 					out.yamlIndent(i + 1);
-					serializeAnything(out, value, cMeta, key, pMeta, true);
+					writeAnything(out, value, cMeta, key, pMeta, true);
 				}
 			} else {
 				out.key(key);
-				serializeAnything(out, value, cMeta, key, pMeta, true);
+				writeAnything(out, value, cMeta, key, pMeta, true);
 			}
 		});
 
@@ -307,7 +307,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 		"rawtypes", // Raw types necessary for generic collection/map serialization
 		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
 	})
-	private SerializerWriter serializeMap(YamlWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter writeMap(YamlWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 		int i = indent - 1;
 
 		var keyType = type.getKeyType();
@@ -328,14 +328,14 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 			if (value != null && isComplexValue(actualType)) {
 				out.keyName(toString(key)).w(": ");
 				if (actualType.isCollectionOrArrayOrOptional()) {
-					serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null, false);
+					writeAnything(out, value, valueType, (key == null ? null : toString(key)), null, false);
 				} else {
 					out.yamlIndent(i + 1);
-					serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null, true);
+					writeAnything(out, value, valueType, (key == null ? null : toString(key)), null, true);
 				}
 			} else {
 				out.key(toString(key));
-				serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null, true);
+				writeAnything(out, value, valueType, (key == null ? null : toString(key)), null, true);
 			}
 		});
 
@@ -346,7 +346,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 		"rawtypes", // Raw types necessary for generic collection/map serialization
 		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
 	})
-	private SerializerWriter serializeCollection(YamlWriter out, Collection c, ClassMeta<?> type, boolean asField) throws SerializeException {
+	private SerializerWriter writeCollection(YamlWriter out, Collection c, ClassMeta<?> type, boolean asField) throws SerializeException {
 		int i = indent - 1;
 
 		if (c.isEmpty()) {
@@ -364,7 +364,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 				out.listEntry(i);
 			}
 			addEntry.set();
-			serializeAnything(out, x, elementType, "<iterator>", null, true);
+			writeAnything(out, x, elementType, "<iterator>", null, true);
 		});
 
 		return out;

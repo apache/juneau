@@ -27,7 +27,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Parse TriX XML string into a bean.</jc>
  * 	String <jv>triX</jv> = ...;  <jc>// TriX XML content</jc>
- * 	Person <jv>person</jv> = TriXParser.<jsf>DEFAULT</jsf>.parse(<jv>triX</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = TriXParser.<jsf>DEFAULT</jsf>.read(<jv>triX</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the TriX marshaller for convenience.</jc>
@@ -36,7 +36,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>
  * 	TriXParser <jv>p</jv> = TriXParser.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>triX</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.read(<jv>triX</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example input (bean with name/age):</h5>

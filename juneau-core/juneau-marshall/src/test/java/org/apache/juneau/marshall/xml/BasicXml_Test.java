@@ -1182,9 +1182,9 @@ class BasicXml_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("input")
-	void a01_serializeNormal(Input input) {
+	void a01_writeNormal(Input input) {
 		try {
-			var r = s1.serialize(input.in);
+			var r = s1.write(input.in);
 			assertEquals(input.e1, r, fs("%s serialize-normal failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
@@ -1197,10 +1197,10 @@ class BasicXml_Test extends TestBase {
 	@MethodSource("input")
 	void a02_parseNormal(Input input) {
 		try {
-			var r = s1.serialize(input.in);
+			var r = s1.write(input.in);
 			var c = input.in == null ? Object.class : input.in.getClass();
-			var o = parser.parse(r, c);
-			r = s1.serialize(o);
+			var o = parser.read(r, c);
+			r = s1.write(o);
 			assertEquals(input.e1, r, fs("%s parse-normal failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
@@ -1211,9 +1211,9 @@ class BasicXml_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("input")
-	void a03_serializeReadable(Input input) {
+	void a03_writeReadable(Input input) {
 		try {
-			var r = s2.serialize(input.in);
+			var r = s2.write(input.in);
 			assertEquals(input.e2, r, fs("%s serialize-readable failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
@@ -1226,10 +1226,10 @@ class BasicXml_Test extends TestBase {
 	@MethodSource("input")
 	void a04_parseReadable(Input input) {
 		try {
-			var r = s2.serialize(input.in);
+			var r = s2.write(input.in);
 			var c = input.in == null ? Object.class : input.in.getClass();
-			var o = parser.parse(r, c);
-			r = s2.serialize(o);
+			var o = parser.read(r, c);
+			r = s2.write(o);
 			assertEquals(input.e2, r, fs("%s parse-readable failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
@@ -1240,9 +1240,9 @@ class BasicXml_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("input")
-	void a05_serializeNsEnabled(Input input) {
+	void a05_writeNsEnabled(Input input) {
 		try {
-			var r = s3.serialize(input.in);
+			var r = s3.write(input.in);
 			assertEquals(input.e3, r, fs("%s serialize-ns-enabled failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
@@ -1255,10 +1255,10 @@ class BasicXml_Test extends TestBase {
 	@MethodSource("input")
 	void a06_parseNsEnabled(Input input) {
 		try {
-			var r = s3.serialize(input.in);
+			var r = s3.write(input.in);
 			var c = input.in == null ? Object.class : input.in.getClass();
-			var o = parser.parse(r, c);
-			r = s3.serialize(o);
+			var o = parser.read(r, c);
+			r = s3.write(o);
 			assertEquals(input.e3, r, fs("%s parse-ns-enabled failed", input.label));
 		} catch (AssertionError e) {
 			throw e;

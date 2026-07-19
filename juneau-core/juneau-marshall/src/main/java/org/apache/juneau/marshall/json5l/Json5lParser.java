@@ -44,7 +44,7 @@ import org.apache.juneau.marshall.json5.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Parse JSON5L into a list of POJOs</jc>
- * 	List&lt;MyBean&gt; <jv>list</jv> = Json5lParser.<jsf>DEFAULT</jsf>.parse(<jv>json5lInput</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+ * 	List&lt;MyBean&gt; <jv>list</jv> = Json5lParser.<jsf>DEFAULT</jsf>.read(<jv>json5lInput</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example input:</h5>

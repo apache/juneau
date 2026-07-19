@@ -157,7 +157,7 @@ public @interface BeanType {
 	 * 	}
 	 *
 	 * 	<jc>// Produces "{f0:'f0'}"</jc>
-	 * 	String <jv>json</jv> = Json5Serializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> A1());
+	 * 	String <jv>json</jv> = Json5Serializer.<jsf>DEFAULT</jsf>.write(<jk>new</jk> A1());
 	 * </p>
 	 *
 	 * <p>

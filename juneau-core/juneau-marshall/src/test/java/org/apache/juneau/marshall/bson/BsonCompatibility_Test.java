@@ -36,7 +36,7 @@ class BsonCompatibility_Test extends TestBase {
 		// 05 00 00 00 00
 		var bytes = new byte[] { 0x05, 0x00, 0x00, 0x00, 0x00 };
 		var p = BsonParser.create().build();
-		var result = p.parse(bytes, JsonMap.class);
+		var result = p.read(bytes, JsonMap.class);
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
 	}
@@ -54,7 +54,7 @@ class BsonCompatibility_Test extends TestBase {
 			0x00                    // doc terminator
 		};
 		var p = BsonParser.create().build();
-		var result = p.parse(bytes, JsonMap.class);
+		var result = p.read(bytes, JsonMap.class);
 		assertNotNull(result);
 		assertEquals("foo", result.get("a"));
 	}
@@ -64,8 +64,8 @@ class BsonCompatibility_Test extends TestBase {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
 		var value = new BigDecimal("1.234567890123456789012345678901234");
-		var bytes = s.serialize(JsonMap.of("d", value));
-		var parsed = p.parse(bytes, JsonMap.class);
+		var bytes = s.write(JsonMap.of("d", value));
+		var parsed = p.read(bytes, JsonMap.class);
 		var roundTrip = (BigDecimal) parsed.get("d");
 		assertNotNull(roundTrip);
 		assertEquals(0, value.compareTo(roundTrip));
@@ -76,19 +76,19 @@ class BsonCompatibility_Test extends TestBase {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
 		var value = new BigInteger("12345678901234567890");
-		var bytes = s.serialize(value);
-		var roundTrip = p.parse(bytes, BigInteger.class);
+		var bytes = s.write(value);
+		var roundTrip = p.read(bytes, BigInteger.class);
 		assertNotNull(roundTrip);
 		assertEquals(value, roundTrip);
 	}
 
 	@Test
-	void a04_serializeParseProduceConsistentStructure() throws Exception {
+	void a04_writeParseProduceConsistentStructure() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
 		var original = JsonMap.of("x", 1, "y", "text", "z", true);
-		var bytes = s.serialize(original);
-		var parsed = p.parse(bytes, JsonMap.class);
+		var bytes = s.write(original);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertEquals(original.get("x"), parsed.get("x"));
 		assertEquals(original.get("y"), parsed.get("y"));
 		assertEquals(original.get("z"), parsed.get("z"));
@@ -98,16 +98,16 @@ class BsonCompatibility_Test extends TestBase {
 	void j01_emptyDocumentBytes() throws Exception {
 		var expected = new byte[] { 0x05, 0x00, 0x00, 0x00, 0x00 };
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(JsonMap.of());
+		var bytes = s.write(JsonMap.of());
 		assertArrayEquals(expected, bytes);
 	}
 
 	@Test
 	void j02_helloWorldBytes() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(JsonMap.of("hello", "world"));
+		var bytes = s.write(JsonMap.of("hello", "world"));
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertEquals("world", parsed.get("hello"));
 		assertTrue(bytes.length >= 22, "BSON {hello:world} should be at least 22 bytes");
 	}
@@ -115,9 +115,9 @@ class BsonCompatibility_Test extends TestBase {
 	@Test
 	void j03_int32Bytes() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(JsonMap.of("n", 42));
+		var bytes = s.write(JsonMap.of("n", 42));
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertEquals(42, parsed.get("n"));
 	}
 }

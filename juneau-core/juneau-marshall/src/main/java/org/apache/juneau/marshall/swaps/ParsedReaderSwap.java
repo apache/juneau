@@ -132,6 +132,6 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 	public Object swap(MarshallingSession session, Reader o) throws Exception {
 		if (parser == null)
 			return read(o);
-		return parser.parse(o, Object.class);
+		return parser.read(o, Object.class);
 	}
 }

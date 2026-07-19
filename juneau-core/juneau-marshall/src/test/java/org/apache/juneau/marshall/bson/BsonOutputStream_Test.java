@@ -90,11 +90,11 @@ class BsonOutputStream_Test extends TestBase {
 	void a05_roundTripViaSerializer() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var map = JsonMap.of("a", 1, "b", "foo", "c", true);
-		var bytes = s.serialize(map);
+		var bytes = s.write(map);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertEquals(1, parsed.getInt("a"));
 		assertEquals("foo", parsed.getString("b"));
 		assertEquals(true, parsed.getBoolean("c"));
@@ -112,7 +112,7 @@ class BsonOutputStream_Test extends TestBase {
 		var bytes = bson.endDocument();
 		assertNotNull(bytes);
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertEquals(Long.MAX_VALUE, parsed.get("max"));
 		assertEquals(Long.MIN_VALUE, parsed.get("min"));
 	}
@@ -127,7 +127,7 @@ class BsonOutputStream_Test extends TestBase {
 		var bytes = bson.endDocument();
 		assertNotNull(bytes);
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertEquals(false, parsed.get("flag"));
 	}
 
@@ -141,7 +141,7 @@ class BsonOutputStream_Test extends TestBase {
 		var bytes = bson.endDocument();
 		assertNotNull(bytes);
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertArrayEquals(new byte[] { 0x01, 0x02, 0x03 }, (byte[])parsed.get("data"));
 	}
 
@@ -155,7 +155,7 @@ class BsonOutputStream_Test extends TestBase {
 		var bytes = bson.endDocument();
 		assertNotNull(bytes);
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertEquals(1700000000000L, parsed.get("ts"));
 	}
 
@@ -175,7 +175,7 @@ class BsonOutputStream_Test extends TestBase {
 		var bytes = bson.endDocument();
 		assertNotNull(bytes);
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertEquals("outer", parsed.get("name"));
 		var inner = (java.util.Map<?,?>)parsed.get("inner");
 		assertNotNull(inner);
@@ -192,7 +192,7 @@ class BsonOutputStream_Test extends TestBase {
 		var bytes = bson.endDocument();
 		assertNotNull(bytes);
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertEquals("", parsed.get("s"));
 	}
 }

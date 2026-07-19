@@ -51,18 +51,18 @@ import org.apache.juneau.marshall.stream.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to TOML</jc>
- * 	String <jv>toml</jv> = TomlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myBean</jv>);
+ * 	String <jv>toml</jv> = TomlSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
  *
  * 	<jc>// Serialize a map (e.g. config with nested sections)</jc>
  * 	Map&lt;String, Object&gt; <jv>config</jv> = Map.of(<js>"name"</js>, <js>"myapp"</js>, <js>"port"</js>, 8080);
- * 	<jv>toml</jv> = TomlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>config</jv>);
+ * 	<jv>toml</jv> = TomlSerializer.<jsf>DEFAULT</jsf>.write(<jv>config</jv>);
  *
  * 	<jc>// Use the marshaller for convenience</jc>
  * 	<jv>toml</jv> = Toml.<jsm>of</jsm>(<jv>config</jv>);
  *
  * 	<jc>// Custom serializer with whitespace for readability</jc>
  * 	TomlSerializer <jv>s</jv> = TomlSerializer.<jsm>create</jsm>().ws().build();
- * 	<jv>toml</jv> = <jv>s</jv>.serialize(<jv>config</jv>);
+ * 	<jv>toml</jv> = <jv>s</jv>.write(<jv>config</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (Map of name/age):</h5>
@@ -291,20 +291,20 @@ public class TomlSerializer extends WriterSerializer implements RecordWritable {
 
 	/**
 	 * Convenience delegator that opens a {@link RecordWriter} over the output using
-	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 * <b>default session arguments</b> (mirrors {@link #write(Object)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link TomlSerializerSession#serializeRecords(Object)}.
+	 * The real implementation lives on {@link TomlSerializerSession#writeRecords(Object)}.
 	 * Callers that need request-derived configuration should call {@link #createSession()} and
-	 * invoke {@link TomlSerializerSession#serializeRecords(Object)} on the built session instead.
+	 * invoke {@link TomlSerializerSession#writeRecords(Object)} on the built session instead.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return ((RecordWritable) getSession()).serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).writeRecords(output);
 	}
 
 	@Override /* RecordWritable */

@@ -322,7 +322,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	public MarshalledMap(CharSequence in, Parser p) throws ParseException {
 		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
 		if (ine(in))
-			p.parseIntoMap(in, this, bs().string(), bs().object());
+			p.readIntoMap(in, this, bs().string(), bs().object());
 	}
 
 	/**
@@ -362,7 +362,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 */
 	public MarshalledMap(java.io.Reader in, Parser p) throws ParseException {
 		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
-		p.parseIntoMap(in, this, bs().string(), bs().object());
+		p.readIntoMap(in, this, bs().string(), bs().object());
 	}
 
 	/**

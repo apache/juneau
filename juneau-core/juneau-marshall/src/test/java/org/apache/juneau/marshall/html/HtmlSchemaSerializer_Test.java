@@ -36,17 +36,17 @@ class HtmlSchemaSerializer_Test extends TestBase {
 	@Test void simpleObjects() throws Exception {
 		var s = HtmlSchemaSerializer.DEFAULT_SIMPLE;
 
-		assertEquals("<table><tr><td>type</td><td>integer</td></tr><tr><td>format</td><td>int16</td></tr></table>", s.serialize((short)1));
-		assertEquals("<table><tr><td>type</td><td>integer</td></tr><tr><td>format</td><td>int32</td></tr></table>", s.serialize(1));
-		assertEquals("<table><tr><td>type</td><td>integer</td></tr><tr><td>format</td><td>int64</td></tr></table>", s.serialize(1L));
-		assertEquals("<table><tr><td>type</td><td>number</td></tr><tr><td>format</td><td>float</td></tr></table>", s.serialize(1f));
-		assertEquals("<table><tr><td>type</td><td>number</td></tr><tr><td>format</td><td>double</td></tr></table>", s.serialize(1d));
-		assertEquals("<table><tr><td>type</td><td>boolean</td></tr></table>", s.serialize(true));
-		assertEquals("<table><tr><td>type</td><td>string</td></tr></table>", s.serialize("foo"));
-		assertEquals("<table><tr><td>type</td><td>string</td></tr></table>", s.serialize(new StringBuilder("foo")));
-		assertEquals("<table><tr><td>type</td><td>string</td></tr></table>", s.serialize('c'));
-		assertEquals("<table><tr><td>type</td><td>string</td></tr><tr><td>enum</td><td><ul><li>one</li><li>two</li><li>three</li></ul></td></tr></table>", s.serialize(TestEnumToString.ONE));
-		assertEquals("<table><tr><td>type</td><td>object</td></tr><tr><td>properties</td><td><table><tr><td>f1</td><td><table><tr><td>type</td><td>string</td></tr></table></td></tr></table></td></tr></table>", s.serialize(new SimpleBean()));
+		assertEquals("<table><tr><td>type</td><td>integer</td></tr><tr><td>format</td><td>int16</td></tr></table>", s.write((short)1));
+		assertEquals("<table><tr><td>type</td><td>integer</td></tr><tr><td>format</td><td>int32</td></tr></table>", s.write(1));
+		assertEquals("<table><tr><td>type</td><td>integer</td></tr><tr><td>format</td><td>int64</td></tr></table>", s.write(1L));
+		assertEquals("<table><tr><td>type</td><td>number</td></tr><tr><td>format</td><td>float</td></tr></table>", s.write(1f));
+		assertEquals("<table><tr><td>type</td><td>number</td></tr><tr><td>format</td><td>double</td></tr></table>", s.write(1d));
+		assertEquals("<table><tr><td>type</td><td>boolean</td></tr></table>", s.write(true));
+		assertEquals("<table><tr><td>type</td><td>string</td></tr></table>", s.write("foo"));
+		assertEquals("<table><tr><td>type</td><td>string</td></tr></table>", s.write(new StringBuilder("foo")));
+		assertEquals("<table><tr><td>type</td><td>string</td></tr></table>", s.write('c'));
+		assertEquals("<table><tr><td>type</td><td>string</td></tr><tr><td>enum</td><td><ul><li>one</li><li>two</li><li>three</li></ul></td></tr></table>", s.write(TestEnumToString.ONE));
+		assertEquals("<table><tr><td>type</td><td>object</td></tr><tr><td>properties</td><td><table><tr><td>f1</td><td><table><tr><td>type</td><td>string</td></tr></table></td></tr></table></td></tr></table>", s.write(new SimpleBean()));
 	}
 
 	public static class SimpleBean {
@@ -78,6 +78,6 @@ class HtmlSchemaSerializer_Test extends TestBase {
 
 	@Test void documentationExample() throws Exception {
 		var s = HtmlSchemaSerializer.DEFAULT_SIMPLE;
-		assertEquals("<table><tr><td>type</td><td>object</td></tr><tr><td>properties</td><td><table><tr><td>name</td><td><table><tr><td>type</td><td>string</td></tr></table></td></tr><tr><td>birthDate</td><td><table><tr><td>type</td><td>string</td></tr></table></td></tr><tr><td>addresses</td><td><table><tr><td>type</td><td>array</td></tr><tr><td>items</td><td><table><tr><td>type</td><td>object</td></tr><tr><td>properties</td><td><table><tr><td>street</td><td><table><tr><td>type</td><td>string</td></tr></table></td></tr><tr><td>city</td><td><table><tr><td>type</td><td>string</td></tr></table></td></tr><tr><td>state</td><td><table><tr><td>type</td><td>string</td></tr><tr><td>enum</td><td><ul><li>AL</li><li>PA</li><li>NC</li></ul></td></tr></table></td></tr><tr><td>zip</td><td><table><tr><td>type</td><td>integer</td></tr><tr><td>format</td><td>int32</td></tr></table></td></tr><tr><td>isCurrent</td><td><table><tr><td>type</td><td>boolean</td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table>", s.serialize(Person.class));
+		assertEquals("<table><tr><td>type</td><td>object</td></tr><tr><td>properties</td><td><table><tr><td>name</td><td><table><tr><td>type</td><td>string</td></tr></table></td></tr><tr><td>birthDate</td><td><table><tr><td>type</td><td>string</td></tr></table></td></tr><tr><td>addresses</td><td><table><tr><td>type</td><td>array</td></tr><tr><td>items</td><td><table><tr><td>type</td><td>object</td></tr><tr><td>properties</td><td><table><tr><td>street</td><td><table><tr><td>type</td><td>string</td></tr></table></td></tr><tr><td>city</td><td><table><tr><td>type</td><td>string</td></tr></table></td></tr><tr><td>state</td><td><table><tr><td>type</td><td>string</td></tr><tr><td>enum</td><td><ul><li>AL</li><li>PA</li><li>NC</li></ul></td></tr></table></td></tr><tr><td>zip</td><td><table><tr><td>type</td><td>integer</td></tr><tr><td>format</td><td>int32</td></tr></table></td></tr><tr><td>isCurrent</td><td><table><tr><td>type</td><td>boolean</td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table>", s.write(Person.class));
 	}
 }

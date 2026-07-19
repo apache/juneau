@@ -316,7 +316,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 						if (currAttr == null)
 							currAttr = getElementName(r);
 						String key = convertAttrToType(null, currAttr, string());
-						var value = parseAnything(object(), currAttr, r, null, false, null);
+						var value = readAnything(object(), currAttr, r, null, false, null);
 						if (m.containsKey(key)) {
 							var o = m.get(key);
 							if (o instanceof MarshalledList o2)
@@ -358,7 +358,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
-	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m, boolean isNil) throws IOException, ParseException, ExecutableException, XMLStreamException {
+	private <T> BeanMap<T> readIntoBean(XmlReader r, BeanMap<T> m, boolean isNil) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		var bMeta = m.getMeta();
 		var xmlMeta = getXmlBeanMeta(bMeta);
 
@@ -420,7 +420,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 				}
 			} else if (event == START_ELEMENT) {
 				if (nn(cp) && cpf.isOneOf(TEXT, TEXT_PWS)) {
-					var s = parseText(r);
+					var s = readText(r);
 					if (nn(s)) {
 						if (sb == null)
 							sb = getStringBuilder();
@@ -437,35 +437,35 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 						if (cpcm.isCollectionOrArray()) {
 							if (l == null)
 								l = new LinkedList<>();
-							l.add(parseWhitespaceElement(r));
+							l.add(readWhitespaceElement(r));
 						} else {
-							cp.set(m, null, parseWhitespaceElement(r));
+							cp.set(m, null, readWhitespaceElement(r));
 						}
 					} else {
 						if (cpcm.isCollectionOrArray()) {
 							if (l == null)
 								l = new LinkedList<>();
-							l.add(parseAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
+							l.add(readAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
 						} else {
-							cp.set(m, null, parseAnything(cpcm, cp.getName(), r, m.getBean(false), false, cp));
+							cp.set(m, null, readAnything(cpcm, cp.getName(), r, m.getBean(false), false, cp));
 						}
 					}
 				} else if (nn(cp) && cpf == ELEMENTS) {
-					cp.add(m, null, parseAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
+					cp.add(m, null, readAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
 				} else {
 					currAttr = getNameProperty(r);
 					if (currAttr == null)
 						currAttr = getElementName(r);
 					var pMeta = xmlMeta.getPropertyMeta(currAttr);
 					if (pMeta == null) {
-						var value = parseAnything(object(), currAttr, r, m.getBean(false), false, null);
+						var value = readAnything(object(), currAttr, r, m.getBean(false), false, null);
 						onUnknownProperty(currAttr, m, value);
 					} else {
 						setCurrentProperty(pMeta);
 						var xf = getXmlBeanPropertyMeta(pMeta).getXmlFormat();
 						if (xf == COLLAPSED) {
 							var et = ((ClassMeta<?>) pMeta.getBeanInfo()).getElementType();
-							var value = parseAnything(et, currAttr, r, m.getBean(false), false, pMeta);
+							var value = readAnything(et, currAttr, r, m.getBean(false), false, pMeta);
 							setName(et, value, currAttr);
 							pMeta.add(m, currAttr, value);
 						} else if (xf == ATTR) {
@@ -473,7 +473,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 							r.nextTag();
 						} else {
 							var cm = (ClassMeta<?>) pMeta.getBeanInfo();
-							var value = parseAnything(cm, currAttr, r, m.getBean(false), false, pMeta);
+							var value = readAnything(cm, currAttr, r, m.getBean(false), false, pMeta);
 							setName(cm, value, currAttr);
 							pMeta.set(m, currAttr, value);
 						}
@@ -513,7 +513,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		return m;
 	}
 
-	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
+	private <E> Collection<E> readIntoCollection(XmlReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int depth = 0;
 		int argIndex = 0;
 		do {
@@ -528,7 +528,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 				} else {
 					elementType = type.getElementType();
 				}
-				E value = (E)parseAnything(elementType, null, r, l, false, pMeta);
+				E value = (E)readAnything(elementType, null, r, l, false, pMeta);
 				l.add(value);
 			} else if (event == END_ELEMENT) {
 				return l;
@@ -540,7 +540,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for parser state machine
 	})
-	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
+	private <K,V> Map<K,V> readIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int depth = 0;
 		for (var i = 0; i < r.getAttributeCount(); i++) {
@@ -561,7 +561,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 				if (currAttr == null)
 					currAttr = getElementName(r);
 				K key = convertAttrToType(m, currAttr, keyType);
-				V value = parseAnything(valueType, currAttr, r, m, false, pMeta);
+				V value = readAnything(valueType, currAttr, r, m, false, pMeta);
 				setName(valueType, value, currAttr);
 				if (valueType.isObject() && m.containsKey(key)) {
 					var o = m.get(key);
@@ -599,23 +599,23 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	}
 
 	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try {
-			return parseAnything(type, null, getXmlReader(pipe), getOuter(), true, null);
+			return readAnything(type, null, getXmlReader(pipe), getOuter(), true, null);
 		} catch (XMLStreamException e) {
 			throw new ParseException(e);
 		}
 	}
 
 	@Override /* Overridden from ReaderParserSession */
-	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
+	protected <E> Collection<E> doReadIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
 		var cm = getClassMeta(c.getClass(), elementType);
-		return parseIntoCollection(getXmlReader(pipe), c, cm.getElementType(), null);
+		return readIntoCollection(getXmlReader(pipe), c, cm.getElementType(), null);
 	}
 
 	@Override /* Overridden from ReaderParserSession */
-	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		return parseIntoMap(getXmlReader(pipe), m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
+	protected <K,V> Map<K,V> doReadIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+		return readIntoMap(getXmlReader(pipe), m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
 	}
 
 	/**
@@ -625,14 +625,14 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * Because XML's wire format (attributes, namespaces, mixed content) is non-trivial to expose
 	 * as a fine-grained token cursor, this implementation supports only the cursor-level POJO
 	 * bridge &mdash; {@link RecordReader#read(Class) read(...)} delegates to the polymorphic
-	 * {@link ParserSession#parse(Object, Class)} entry point.
+	 * {@link ParserSession#read(Object, Class)} entry point.
 	 *
 	 * @param input The input.
 	 * @return A new {@link RecordReader} cursor.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.reader(this, input);
 	}
 
@@ -641,14 +641,14 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * {@code parse(input, List.class, Object.class)} once and iterates the result.
 	 *
 	 * <p>
-	 * For caller-specified-root semantics use {@link #parseArrayRecords(Object, String)}.
+	 * For caller-specified-root semantics use {@link #readArrayRecords(Object, String)}.
 	 *
 	 * @param input The input.
 	 * @return A buffered {@link RecordReader}.
 	 * @throws IOException If a problem occurred reading the input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
+	public RecordReader readArrayRecords(Object input) throws IOException {
 		return RecordAdapter.arrayReader(this, input);
 	}
 
@@ -671,24 +671,24 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * </ul>
 	 *
 	 * <p>
-	 * A <jk>null</jk> {@code rootElementName} is equivalent to {@link #parseArrayRecords(Object)}.
+	 * A <jk>null</jk> {@code rootElementName} is equivalent to {@link #readArrayRecords(Object)}.
 	 * The cursor is buffered ({@link RecordReader#isStreaming()} == <jk>false</jk>); see
 	 * {@code 175ab} Item 3 for why true element-at-a-time XML streaming is left for a
 	 * demand-driven StAX cursor.
 	 *
 	 * @param input The input.
 	 * @param rootElementName The name of the wrapping/child element whose occurrences are the
-	 * 	records.  <jk>null</jk> defers to {@link #parseArrayRecords(Object)}.
+	 * 	records.  <jk>null</jk> defers to {@link #readArrayRecords(Object)}.
 	 * @return A buffered {@link RecordReader}.
 	 * @throws IOException If a problem occurred reading the input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input, String rootElementName) throws IOException {
+	public RecordReader readArrayRecords(Object input, String rootElementName) throws IOException {
 		if (rootElementName == null)
-			return parseArrayRecords(input);
+			return readArrayRecords(input);
 		Object parsed;
 		try {
-			parsed = parse(input, Object.class);
+			parsed = read(input, Object.class);
 		} catch (ParseException e) {
 			throw new IOException(e);
 		}
@@ -887,7 +887,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		"java:S3776",  // Cognitive complexity acceptable for this specific logic
 		"java:S6541",  // Brain Method — complex XML parsing logic; structural refactoring would reduce readability without meaningful benefit.
 	})
-	protected <T> T parseAnything(ClassMeta<T> eType, String currAttr, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta)
+	protected <T> T readAnything(ClassMeta<T> eType, String currAttr, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		if (eType == null)
@@ -903,7 +903,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)o(parseAnything(eType.getElementType(), currAttr, r, outer, isRoot, pMeta));
+			return (T)o(readAnything(eType.getElementType(), currAttr, r, outer, isRoot, pMeta));
 
 		setCurrentClass(sType);
 
@@ -937,12 +937,12 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		if (sType.isObject()) {
 			if (jsonType == OBJECT) {
 				var m = newGenericMap();
-				parseIntoMap(r, m, string(), object(), pMeta);
+				readIntoMap(r, m, string(), object(), pMeta);
 				if (nn(wrapperAttr))
 					m = newGenericMap().append(wrapperAttr, m);
 				o = cast(m, pMeta, eType);
 			} else if (jsonType == ARRAY)
-				o = parseIntoCollection(r, newGenericList(), null, pMeta);
+				o = readIntoCollection(r, newGenericList(), null, pMeta);
 			else if (jsonType == STRING) {
 				o = getElementText(r);
 				if (sType.isChar())
@@ -959,18 +959,18 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());
 				var bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);
 				var cm = (ClassMeta<?>) m.getMeta().getBeanInfo();
-				Object value = parseAnything(cm, currAttr, r, m.getBean(false), false, null);
+				Object value = readAnything(cm, currAttr, r, m.getBean(false), false, null);
 				setName(cm, value, currAttr);
 				bpm.set(m, currAttr, value);
 				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
 			} else {
 				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());
-				m = parseIntoBean(r, m, isNil);
+				m = readIntoBean(r, m, isNil);
 				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
 			}
 		} else if (sType.isMap()) {
 			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
-			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
+			o = readIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (nn(wrapperAttr)) {
 				var wrapper = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap());
 				wrapper.put(wrapperAttr, m);
@@ -978,9 +978,9 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 			}
 		} else if (sType.isCollection()) {
 			var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());
-			o = parseIntoCollection(r, l, sType, pMeta);
+			o = readIntoCollection(r, l, sType, pMeta);
 		} else if (sType.isArray() || sType.isArgs()) {
-			var l = (ArrayList)parseIntoCollection(r, list(), sType, pMeta);
+			var l = (ArrayList)readIntoCollection(r, list(), sType, pMeta);
 			o = toArray(sType, l);
 		} else if (sType.isCharSequence()) {
 			o = getElementText(r);
@@ -991,20 +991,20 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		} else if (sType.isBoolean()) {
 			o = Boolean.parseBoolean(getElementText(r));
 		} else if (sType.isDate()) {
-			o = parseDate(getElementText(r), sType);
+			o = readDate(getElementText(r), sType);
 		} else if (sType.isCalendar()) {
-			o = parseCalendar(getElementText(r), sType);
+			o = readCalendar(getElementText(r), sType);
 		} else if (sType.isTemporal()) {
-			o = parseTemporal(getElementText(r), sType);
+			o = readTemporal(getElementText(r), sType);
 		} else if (sType.isDuration()) {
-			o = parseDuration(getElementText(r));
+			o = readDuration(getElementText(r));
 		} else if (sType.isPeriod()) {
-			o = parsePeriod(getElementText(r));
+			o = readPeriod(getElementText(r));
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, getElementText(r));
 		} else if (nn(sType.getProxyInvocationHandler())) {
 			var m = newGenericMap();
-			parseIntoMap(r, m, string(), object(), pMeta);
+			readIntoMap(r, m, string(), object(), pMeta);
 			if (nn(wrapperAttr))
 				m = newGenericMap().append(wrapperAttr, m);
 			o = newBeanMap(outer, sType.inner()).load(m).getBean();
@@ -1031,7 +1031,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	protected String parseText(XmlReader r) throws IOException, XMLStreamException, ParseException {
+	protected String readText(XmlReader r) throws IOException, XMLStreamException, ParseException {
 		// Note that this is different than {@link #getText(XmlReader)} since it assumes that we're pointing to a
 		// whitespace element.
 
@@ -1071,7 +1071,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	protected String parseWhitespaceElement(XmlReader r) throws IOException, XMLStreamException, ParseException {
+	protected String readWhitespaceElement(XmlReader r) throws IOException, XMLStreamException, ParseException {
 		return null;
 	}
 }

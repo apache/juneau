@@ -35,12 +35,12 @@ class ParserGenerics_Test extends TestBase {
 		var p = Json5Parser.DEFAULT;
 
 		var t = "{foo:{bar:'baz'}}";
-		var r1 = p.parse(t, TestMap1.class);
+		var r1 = p.read(t, TestMap1.class);
 		assertEquals(TestMap1.class, r1.getClass());
 		assertEquals(TreeMap.class, r1.get("foo").getClass());
 
 		t = "{foo:[1,2,3]}";
-		var r2 = p.parse(t, TestMap2.class);
+		var r2 = p.read(t, TestMap2.class);
 		assertEquals(TestMap2.class, r2.getClass());
 		assertEquals(LinkedList.class, r2.get("foo").getClass());
 		assertEquals(Integer.class, r2.get("foo").get(0).getClass());
@@ -56,13 +56,13 @@ class ParserGenerics_Test extends TestBase {
 		var p = Json5Parser.DEFAULT;
 
 		var t = "[{foo:{bar:'baz'}}]";
-		var r1 = p.parse(t, TestCollection1.class);
+		var r1 = p.read(t, TestCollection1.class);
 		assertEquals(TestCollection1.class, r1.getClass());
 		assertEquals(TestMap1.class, r1.get(0).getClass());
 		assertEquals(TreeMap.class, r1.get(0).get("foo").getClass());
 
 		t = "[{foo:[1,2,3]}]";
-		var r2 = p.parse(t, TestCollection2.class);
+		var r2 = p.read(t, TestCollection2.class);
 		assertEquals(TestCollection2.class, r2.getClass());
 		assertEquals(TestMap2.class, r2.get(0).getClass());
 		assertEquals(LinkedList.class, r2.get(0).get("foo").getClass());

@@ -47,7 +47,7 @@ class Json5l_Test extends TestBase {
 	// =================================================================================
 
 	@Test
-	void a01_serializeCollectionOfBeans() throws Exception {
+	void a01_writeCollectionOfBeans() throws Exception {
 		var list = list(
 			new Person("Alice", 30),
 			new Person("Bob", 25),
@@ -65,7 +65,7 @@ class Json5l_Test extends TestBase {
 	}
 
 	@Test
-	void a02_serializeArray() throws Exception {
+	void a02_writeArray() throws Exception {
 		var arr = new Person[]{new Person("Alice", 30), new Person("Bob", 25)};
 		var json5l = Json5l.of(arr);
 		var lines = json5l.split("\n");
@@ -75,7 +75,7 @@ class Json5l_Test extends TestBase {
 	}
 
 	@Test
-	void a03_serializeSingleBean() throws Exception {
+	void a03_writeSingleBean() throws Exception {
 		var p = new Person("Alice", 30);
 		var json5l = Json5l.of(p);
 		assertEquals(1, json5l.split("\n").length);
@@ -84,7 +84,7 @@ class Json5l_Test extends TestBase {
 	}
 
 	@Test
-	void a04_serializeCollectionOfStrings() throws Exception {
+	void a04_writeCollectionOfStrings() throws Exception {
 		var list = list("foo", "bar", "baz");
 		var json5l = Json5l.of(list);
 		var lines = json5l.split("\n");
@@ -95,13 +95,13 @@ class Json5l_Test extends TestBase {
 	}
 
 	@Test
-	void a05_serializeEmptyCollection() throws Exception {
+	void a05_writeEmptyCollection() throws Exception {
 		var json5l = Json5l.of(list());
 		assertEquals("", json5l.trim());
 	}
 
 	@Test
-	void a06_serializeNullValues() throws Exception {
+	void a06_writeNullValues() throws Exception {
 		var list = list("a", null, "c");
 		var json5l = Json5l.of(list);
 		var lines = json5l.split("\n");
@@ -110,7 +110,7 @@ class Json5l_Test extends TestBase {
 	}
 
 	@Test
-	void a07_serializeNestedObjects() throws Exception {
+	void a07_writeNestedObjects() throws Exception {
 		var outer = JsonMap.of("name", "Alice", "inner", JsonMap.of("x", 1, "y", 2));
 		var json5l = Json5l.of(outer);
 		assertTrue(json5l.contains("\"inner\":{\"x\":1,\"y\":2}"));
@@ -143,7 +143,7 @@ class Json5l_Test extends TestBase {
 	@Test
 	void c01_sugarUsesSingleQuotesAndUnquotedKeys() throws Exception {
 		var s = Json5lSerializer.create().json5Sugar().build();
-		var out = s.serialize(JsonMap.of("name", "Alice", "age", 30));
+		var out = s.write(JsonMap.of("name", "Alice", "age", 30));
 		assertTrue(out.contains("name:'Alice'"), "Expected unquoted key + single quotes: " + out);
 		assertTrue(out.contains("age:30"), "Expected unquoted key: " + out);
 		assertFalse(out.contains("\""), "Expected no double quotes: " + out);
@@ -152,7 +152,7 @@ class Json5l_Test extends TestBase {
 	@Test
 	void c02_sugarStillOneLinePerRecord() throws Exception {
 		var s = Json5lSerializer.create().json5Sugar().build();
-		var out = s.serialize(list(new Person("Alice", 30), new Person("Bob", 25)));
+		var out = s.write(list(new Person("Alice", 30), new Person("Bob", 25)));
 		var lines = out.split("\n");
 		assertEquals(2, lines.length);
 		assertTrue(lines[0].contains("name:'Alice'"));

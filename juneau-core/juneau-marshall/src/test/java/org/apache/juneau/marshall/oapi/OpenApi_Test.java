@@ -45,11 +45,11 @@ public class OpenApi_Test extends TestBase {
 	public static final OpenApiParser DP = OpenApiParser.DEFAULT;
 
 	private static String serialize(HttpPartSchema schema, Object in) throws Exception {
-		return DS.serialize(null, schema, in);
+		return DS.write(null, schema, in);
 	}
 
 	private static <T> T parse(HttpPartSchema schema, String in, Class<T> c, Class<?>...args) throws Exception {
-		return DP.parse(null, schema, in, DP.getClassMeta(c, args));
+		return DP.read(null, schema, in, DP.getClassMeta(c, args));
 	}
 
 	@BeforeEach void before() {

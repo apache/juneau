@@ -98,15 +98,15 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 	}
 
 	@SuppressWarnings({
-		"resource" // w is closed by try-with-resources; analyzer false positive on super.doSerialize path
+		"resource" // w is closed by try-with-resources; analyzer false positive on super.doWrite path
 	})
 	@Override /* Overridden from SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try (var w = getHtmlWriter(out)) {
 			if (o == null || (o instanceof Collection o2 && o2.isEmpty()) || (isArray(o) && Array.getLength(o) == 0))
 				w.sTag(1, "p").append("No Results").eTag("p").nl(1);
 			else
-				super.doSerialize(out, o);
+				super.doWrite(out, o);
 		}
 	}
 }

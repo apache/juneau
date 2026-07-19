@@ -44,7 +44,7 @@ class JsonlTokenStream_Test extends TestBase {
 	@Nested class A_reader extends TestBase {
 
 		@Test void a01_singleLine() throws Exception {
-			try (var r = JsonlParser.DEFAULT.parseTokens("{\"a\":1}\n")) {
+			try (var r = JsonlParser.DEFAULT.readTokens("{\"a\":1}\n")) {
 				assertSequence(r,
 					TokenType.START_OBJECT,
 					TokenType.FIELD_NAME,
@@ -55,7 +55,7 @@ class JsonlTokenStream_Test extends TestBase {
 		}
 
 		@Test void a02_multipleLinesFlat() throws Exception {
-			try (var r = JsonlParser.DEFAULT.parseTokens("{\"a\":1}\n{\"b\":2}\n")) {
+			try (var r = JsonlParser.DEFAULT.readTokens("{\"a\":1}\n{\"b\":2}\n")) {
 				assertSequence(r,
 					TokenType.START_OBJECT, TokenType.FIELD_NAME, TokenType.VALUE_NUMBER, TokenType.END_OBJECT,
 					TokenType.START_OBJECT, TokenType.FIELD_NAME, TokenType.VALUE_NUMBER, TokenType.END_OBJECT,
@@ -64,7 +64,7 @@ class JsonlTokenStream_Test extends TestBase {
 		}
 
 		@Test void a03_scalarPerLine() throws Exception {
-			try (var r = JsonlParser.DEFAULT.parseTokens("1\n2\n3\n")) {
+			try (var r = JsonlParser.DEFAULT.readTokens("1\n2\n3\n")) {
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(1L, r.getNumber().longValue());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(2L, r.getNumber().longValue());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(3L, r.getNumber().longValue());
@@ -74,7 +74,7 @@ class JsonlTokenStream_Test extends TestBase {
 
 		@Test void a04_capability() throws Exception {
 			assertInstanceOf(TokenReadable.class, JsonlParser.DEFAULT);
-			try (var r = JsonlParser.DEFAULT.parseTokens("1\n")) {
+			try (var r = JsonlParser.DEFAULT.readTokens("1\n")) {
 				assertReaderStreaming(r);
 			}
 		}
@@ -88,7 +88,7 @@ class JsonlTokenStream_Test extends TestBase {
 
 		@Test void b01_singleObjectGetsTrailingNewline() throws Exception {
 			var sb = new StringWriter();
-			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
+			try (var w = JsonlSerializer.DEFAULT.writeTokens(sb)) {
 				w.startObject();
 				w.fieldName("a"); w.number(1);
 				w.endObject();
@@ -98,7 +98,7 @@ class JsonlTokenStream_Test extends TestBase {
 
 		@Test void b02_multipleObjects() throws Exception {
 			var sb = new StringWriter();
-			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
+			try (var w = JsonlSerializer.DEFAULT.writeTokens(sb)) {
 				w.startObject(); w.fieldName("a"); w.number(1); w.endObject();
 				w.startObject(); w.fieldName("b"); w.number(2); w.endObject();
 			}
@@ -107,7 +107,7 @@ class JsonlTokenStream_Test extends TestBase {
 
 		@Test void b03_topLevelScalars() throws Exception {
 			var sb = new StringWriter();
-			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
+			try (var w = JsonlSerializer.DEFAULT.writeTokens(sb)) {
 				w.number(1);
 				w.number(2);
 				w.string("hi");
@@ -118,14 +118,14 @@ class JsonlTokenStream_Test extends TestBase {
 		@Test void b04_capability() throws Exception {
 			assertInstanceOf(TokenWritable.class, JsonlSerializer.DEFAULT);
 			var sb = new StringWriter();
-			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
+			try (var w = JsonlSerializer.DEFAULT.writeTokens(sb)) {
 				assertWriterStreaming(w);
 			}
 		}
 
 		@Test void b05_writeAfterCloseThrows() throws Exception {
 			var sb = new StringWriter();
-			var w = JsonlSerializer.DEFAULT.serializeTokens(sb);
+			var w = JsonlSerializer.DEFAULT.writeTokens(sb);
 			w.startObject().endObject();
 			w.close();
 			// The JsonlTokenWriter guards its own directly-implemented methods (not just the delegate).
@@ -162,7 +162,7 @@ class JsonlTokenStream_Test extends TestBase {
 		@Test void c01_streamRecords() throws Exception {
 			var input = "{\"name\":\"alice\",\"age\":30}\n{\"name\":\"bob\",\"age\":40}\n";
 			var records = new java.util.ArrayList<Record>();
-			try (var r = JsonlParser.DEFAULT.parseTokens(input)) {
+			try (var r = JsonlParser.DEFAULT.readTokens(input)) {
 				while (r.canRead())
 					records.add(r.read(Record.class));
 			}
@@ -174,7 +174,7 @@ class JsonlTokenStream_Test extends TestBase {
 		}
 
 		@Test void c02_emptyInput() throws Exception {
-			try (var r = JsonlParser.DEFAULT.parseTokens("")) {
+			try (var r = JsonlParser.DEFAULT.readTokens("")) {
 				assertFalse(r.canRead());
 				assertEquals(TokenType.END_OF_STREAM, r.next());
 			}
@@ -189,14 +189,14 @@ class JsonlTokenStream_Test extends TestBase {
 
 		@Test void d01_writeThenRead() throws Exception {
 			var sb = new StringWriter();
-			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
+			try (var w = JsonlSerializer.DEFAULT.writeTokens(sb)) {
 				w.startObject(); w.fieldName("x"); w.number(1); w.endObject();
 				w.startObject(); w.fieldName("x"); w.number(2); w.endObject();
 			}
 			var produced = sb.toString();
 
 			var values = new java.util.ArrayList<Long>();
-			try (var r = JsonlParser.DEFAULT.parseTokens(produced)) {
+			try (var r = JsonlParser.DEFAULT.readTokens(produced)) {
 				while (r.canRead()) {
 					var m = r.read(java.util.Map.class);
 					values.add(((Number) m.get("x")).longValue());
@@ -221,13 +221,13 @@ class JsonlTokenStream_Test extends TestBase {
 			var b1 = new EBean(); b1.name = "alice"; b1.age = 30;
 			var b2 = new EBean(); b2.name = "bob";   b2.age = 40;
 			var sb = new StringWriter();
-			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
+			try (var w = JsonlSerializer.DEFAULT.writeTokens(sb)) {
 				w.object(b1);
 				w.object(b2);
 			}
 			// Each top-level value emits its trailing newline via the JsonlTokenWriter wrapper.
 			// BeanMap iterates properties in alphabetical order, so age comes before name.
-			assertEquals(JsonlSerializer.DEFAULT.serializeToString(b1) + JsonlSerializer.DEFAULT.serializeToString(b2),
+			assertEquals(JsonlSerializer.DEFAULT.writeToString(b1) + JsonlSerializer.DEFAULT.writeToString(b2),
 				sb.toString());
 		}
 
@@ -237,7 +237,7 @@ class JsonlTokenStream_Test extends TestBase {
 				java.util.Map.of("x", 2),
 				java.util.Map.of("x", 3));
 			var sb = new StringWriter();
-			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
+			try (var w = JsonlSerializer.DEFAULT.writeTokens(sb)) {
 				for (var r : records)
 					w.object(r);
 			}
@@ -276,7 +276,7 @@ class JsonlTokenStream_Test extends TestBase {
 			// End-to-end: on close() the underlying OutputStreamWriter is flushed, so the full JSONL
 			// content (including trailing newlines) reaches the target OutputStream.
 			var baos = new ByteArrayOutputStream();
-			try (var w = JsonlSerializer.DEFAULT.serializeTokens(baos)) {
+			try (var w = JsonlSerializer.DEFAULT.writeTokens(baos)) {
 				w.startObject(); w.fieldName("a"); w.number(1); w.endObject();
 				w.startObject(); w.fieldName("b"); w.number(2); w.endObject();
 			}
@@ -285,7 +285,7 @@ class JsonlTokenStream_Test extends TestBase {
 			assertString("{\"a\":1}\n{\"b\":2}\n", baos.toString(StandardCharsets.UTF_8));
 
 			// BCT state proof: stream the records back and assert each parsed record's shape.
-			try (var r = JsonlParser.DEFAULT.parseTokens(new ByteArrayInputStream(baos.toByteArray()))) {
+			try (var r = JsonlParser.DEFAULT.readTokens(new ByteArrayInputStream(baos.toByteArray()))) {
 				assertTrue(r.canRead());
 				assertBean(r.read(java.util.Map.class), "a", "1");
 				assertTrue(r.canRead());
@@ -311,9 +311,9 @@ class JsonlTokenStream_Test extends TestBase {
 		}
 
 		@Test void g02_roundTrip() throws Exception {
-			// Write several records via serializeArrayRecords(...).
+			// Write several records via writeArrayRecords(...).
 			var sb = new StringWriter();
-			try (RecordWriter w = JsonlSerializer.DEFAULT.serializeArrayRecords(sb)) {
+			try (RecordWriter w = JsonlSerializer.DEFAULT.writeArrayRecords(sb)) {
 				assertTrue(w.isStreaming());
 				w.write(java.util.Map.of("x", 1));
 				w.write(java.util.Map.of("x", 2));
@@ -323,9 +323,9 @@ class JsonlTokenStream_Test extends TestBase {
 			// Output is line-delimited JSONL — NOT a bracketed top-level [...] array.
 			assertString("{\"x\":1}\n{\"x\":2}\n{\"x\":3}\n", sb);
 
-			// Read them back via parseArrayRecords(...) and assert each record's shape with BCT.
+			// Read them back via readArrayRecords(...) and assert each record's shape with BCT.
 			var records = new java.util.ArrayList<java.util.Map<?, ?>>();
-			try (RecordReader r = JsonlParser.DEFAULT.parseArrayRecords(sb.toString())) {
+			try (RecordReader r = JsonlParser.DEFAULT.readArrayRecords(sb.toString())) {
 				assertTrue(r.isStreaming());
 				while (r.canRead())
 					records.add(r.read(java.util.Map.class));

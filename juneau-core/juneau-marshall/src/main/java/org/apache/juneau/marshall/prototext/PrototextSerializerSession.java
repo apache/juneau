@@ -41,7 +41,7 @@ import org.apache.juneau.marshall.stream.*;
 	"java:S110", // Session classes inherit many parameters from base
 	"java:S115", // ARG_/CONST_ prefix follows framework convention
 	"java:S3776", // Cognitive complexity acceptable for serialize dispatch
-	"java:S6541"  // Brain method acceptable for serializeAnything
+	"java:S6541"  // Brain method acceptable for writeAnything
 })
 public class PrototextSerializerSession extends WriterSerializerSession implements RecordWritable {
 
@@ -97,7 +97,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 	}
 
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -107,27 +107,27 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 	}
 
 	@Override
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		if (o == null)
 			return;
-		if (debugTrace) traceLog.add("[Prototext] doSerialize: o=" + cn(o) + ", getExpectedRootType=" + getExpectedRootType(o).inner().getName());
+		if (debugTrace) traceLog.add("[Prototext] doWrite: o=" + cn(o) + ", getExpectedRootType=" + getExpectedRootType(o).inner().getName());
 		var w = getPrototextWriter(out);
 		var eType = getExpectedRootType(o);
 		var cm = getClassMetaForObject(o);
 		// For root object: if it's a bean (or toBeanMap works), serialize as bean directly to avoid
-		// serializeAnything swap/optional complexity that can produce empty output for some POJOs
+		// writeAnything swap/optional complexity that can produce empty output for some POJOs
 		if (!cm.isMap() && !cm.isCollection() && !cm.isArray() && !cm.isStreamable()) {
 			try {
 				var bm = toBeanMap(o);
 			if (!isEmpty(bm)) {
-				serializeBeanMap(w, bm, getBeanTypeName(this, eType, cm, null));
+				writeBeanMap(w, bm, getBeanTypeName(this, eType, cm, null));
 					return;
 				}
 			} catch (@SuppressWarnings("unused") Exception e) {
-				// Not a bean, fall through to serializeAnything
+				// Not a bean, fall through to writeAnything
 			}
 		}
-		serializeAnything(w, o, eType, null, null);
+		writeAnything(w, o, eType, null, null);
 	}
 
 	protected final PrototextWriter getPrototextWriter(SerializerPipe out) {
@@ -139,7 +139,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 		return w;
 	}
 
-	private void serializeAnything(PrototextWriter out, Object o, ClassMeta<?> eType, String fieldName, BeanPropertyMeta pMeta) throws SerializeException {
+	private void writeAnything(PrototextWriter out, Object o, ClassMeta<?> eType, String fieldName, BeanPropertyMeta pMeta) throws SerializeException {
 		if (o == null)
 			return;
 		if (eType == null)
@@ -151,7 +151,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 			var aTypeName = aType == null ? "null" : aType.inner().getName();
 			var isBean = aType != null ? aType.isBean() : "n/a";
 			var isMap = aType != null ? aType.isMap() : "n/a";
-			traceLog.add("[Prototext] serializeAnything(root): push2 aType=" + aTypeName
+			traceLog.add("[Prototext] writeAnything(root): push2 aType=" + aTypeName
 				+ ", isBean=" + isBean + ", isMap=" + isMap + ", isRecursion=" + isRecursion);
 		}
 		if (aType == null) {
@@ -189,7 +189,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 				path = "collection";
 			else
 				path = "scalar";
-			traceLog.add("[Prototext] serializeAnything(root): sType=" + sType.inner().getName() + ", isBean=" + sType.isBean() + ", isMap=" + sType.isMap()
+			traceLog.add("[Prototext] writeAnything(root): sType=" + sType.inner().getName() + ", isBean=" + sType.isBean() + ", isMap=" + sType.isMap()
 				+ ", path=" + path);
 		}
 		// Workaround: when isBean() is false but toBeanMap works (e.g. POJO with public fields),
@@ -208,38 +208,38 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 			if (nn(fieldName)) {
 				out.messageStart(fieldName, ctx.useColonForMessages);
 				indent++;
-				serializeBeanMap(out, bm, typeName);
+				writeBeanMap(out, bm, typeName);
 				indent--;
 				out.messageEnd(indent);
 			} else {
-				serializeBeanMap(out, bm, typeName);
+				writeBeanMap(out, bm, typeName);
 			}
 		} else if (sType.isMap()) {
 			if (nn(fieldName)) {
 				out.messageStart(fieldName, ctx.useColonForMessages);
 				indent++;
 				if (sType.isBeanMap())
-					serializeBeanMap(out, (BeanMap) o, typeName);
+					writeBeanMap(out, (BeanMap) o, typeName);
 				else
-					serializeMap(out, (Map) o, sType);
+					writeMap(out, (Map) o, sType);
 				indent--;
 				out.messageEnd(indent);
 			} else {
 				if (sType.isBeanMap())
-					serializeBeanMap(out, (BeanMap) o, typeName);
+					writeBeanMap(out, (BeanMap) o, typeName);
 				else
-					serializeMap(out, (Map) o, sType);
+					writeMap(out, (Map) o, sType);
 			}
 		} else if (sType.isCollection()) {
-			serializeCollection(out, (Collection) o, sType, nn(fieldName) ? fieldName : CONST_value);
+			writeCollection(out, (Collection) o, sType, nn(fieldName) ? fieldName : CONST_value);
 		} else if (sType.isArray()) {
-			serializeCollection(out, toList(sType.inner(), o), sType, nn(fieldName) ? fieldName : CONST_value);
+			writeCollection(out, toList(sType.inner(), o), sType, nn(fieldName) ? fieldName : CONST_value);
 		} else if (sType.isStreamable()) {
-			serializeStreamable(out, o, sType, nn(fieldName) ? fieldName : CONST_value);
+			writeStreamable(out, o, sType, nn(fieldName) ? fieldName : CONST_value);
 		} else {
 			var name = nn(fieldName) ? fieldName : CONST_value;
 			out.scalarField(name);
-			serializeScalarValue(out, o, sType);
+			writeScalarValue(out, o, sType);
 			out.w('\n');
 		}
 
@@ -247,7 +247,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 			pop();
 	}
 
-	private void serializeBeanMap(PrototextWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+	private void writeBeanMap(PrototextWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		if (isAddBeanTypes() && nn(typeName)) {
 			out.cr(indent);
 			out.scalarField("_type");
@@ -272,9 +272,9 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 				out.messageStart(key, ctx.useColonForMessages);
 				indent++;
 				if (aType.isBean())
-					serializeBeanMap(out, toBeanMap(value), getBeanTypeName(this, cMeta, aType, pMeta));
+					writeBeanMap(out, toBeanMap(value), getBeanTypeName(this, cMeta, aType, pMeta));
 				else
-					serializeMap(out, (Map) value, aType);
+					writeMap(out, (Map) value, aType);
 				indent--;
 				out.messageEnd(indent);
 			} else if (aType.isCollection() || aType.isArray()) {
@@ -291,7 +291,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 							first = false;
 							out.w("{\n");
 							indent++;
-							serializeBeanOrMapItem(out, item);
+							writeBeanOrMapItem(out, item);
 							indent--;
 							out.i(indent).w('}');
 						}
@@ -300,7 +300,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 						for (var item : c) {
 							out.messageStart(key, ctx.useColonForMessages);
 							indent++;
-							serializeBeanOrMapItem(out, item);
+							writeBeanOrMapItem(out, item);
 							indent--;
 							out.messageEnd(indent);
 						}
@@ -313,19 +313,19 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 						if (!first)
 							out.w(", ");
 						first = false;
-						serializeScalarValue(out, el, elType);
+						writeScalarValue(out, el, elType);
 					}
 					out.listEnd().w('\n');
 				}
 			} else {
 				out.scalarField(key);
-				serializeScalarValue(out, value, aType);
+				writeScalarValue(out, value, aType);
 				out.w('\n');
 			}
 		});
 	}
 
-	private void serializeMap(PrototextWriter out, Map<?, ?> map, ClassMeta<?> type) throws SerializeException {
+	private void writeMap(PrototextWriter out, Map<?, ?> map, ClassMeta<?> type) throws SerializeException {
 		forEachEntry(map, e -> {
 			var k = toString(e.getKey());
 			var v = e.getValue();
@@ -338,41 +338,41 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 				out.messageStart(k, ctx.useColonForMessages);
 				indent++;
 				if (aType.isBean())
-					serializeBeanMap(out, toBeanMap(v), null);
+					writeBeanMap(out, toBeanMap(v), null);
 				else
-					serializeMap(out, (Map) v, aType);
+					writeMap(out, (Map) v, aType);
 				indent--;
 				out.messageEnd(indent);
 			} else if (aType.isCollection() || aType.isArray()) {
 				var c = aType.isArray() ? toList(aType.inner(), v) : (Collection<?>) v;
-				serializeCollection(out, c, aType, k);
+				writeCollection(out, c, aType, k);
 			} else {
 				out.scalarField(k);
-				serializeScalarValue(out, v, aType);
+				writeScalarValue(out, v, aType);
 				out.w('\n');
 			}
 		});
 	}
 
-	private void serializeCollectionItem(PrototextWriter out, Object item) throws SerializeException {
+	private void writeCollectionItem(PrototextWriter out, Object item) throws SerializeException {
 		var aType = getClassMetaForObject(item);
 		if (aType.isBean())
-			serializeBeanMap(out, toBeanMap(item), null);
+			writeBeanMap(out, toBeanMap(item), null);
 		else if (aType.isMap())
-			serializeMap(out, (Map) item, aType);
+			writeMap(out, (Map) item, aType);
 		else
-			serializeScalarValue(out, item, aType);
+			writeScalarValue(out, item, aType);
 	}
 
-	private void serializeBeanOrMapItem(PrototextWriter out, Object item) throws SerializeException {
+	private void writeBeanOrMapItem(PrototextWriter out, Object item) throws SerializeException {
 		var aType = getClassMetaForObject(item);
 		if (aType.isMap())
-			serializeMap(out, (Map) item, aType);
+			writeMap(out, (Map) item, aType);
 		else
-			serializeBeanMap(out, toBeanMap(item), null);
+			writeBeanMap(out, toBeanMap(item), null);
 	}
 
-	private void serializeCollection(PrototextWriter out, Collection<?> c, ClassMeta<?> type, String fieldName) throws SerializeException {
+	private void writeCollection(PrototextWriter out, Collection<?> c, ClassMeta<?> type, String fieldName) throws SerializeException {
 		var elType = type.getElementType();
 		// When element type is Object, resolve actual type from first element for beans/maps
 		var elementIsBeanOrMap = elType.isBean() || elType.isMap();
@@ -391,7 +391,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 					first = false;
 					out.w("{\n");
 					indent++;
-					serializeCollectionItem(out, item);
+					writeCollectionItem(out, item);
 					indent--;
 					out.i(indent).w('}');
 				}
@@ -400,7 +400,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 				for (var item : c) {
 					out.messageStart(fieldName, ctx.useColonForMessages);
 					indent++;
-					serializeCollectionItem(out, item);
+					writeCollectionItem(out, item);
 					indent--;
 					out.messageEnd(indent);
 				}
@@ -414,19 +414,19 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 					out.w(", ");
 				first = false;
 				var actualElType = elType.isObject() ? getClassMetaForObject(el, elType) : elType;
-				serializeScalarValue(out, el, actualElType);
+				writeScalarValue(out, el, actualElType);
 			}
 			out.listEnd().w('\n');
 		}
 	}
 
-	private void serializeStreamable(PrototextWriter out, Object o, ClassMeta<?> sType, String fieldName) throws SerializeException {
+	private void writeStreamable(PrototextWriter out, Object o, ClassMeta<?> sType, String fieldName) throws SerializeException {
 		var elType = sType.getElementType();
 		if (elType.isBean() || elType.isMap()) {
 			forEachStreamableEntry(o, sType, item -> {
 				out.messageStart(fieldName, ctx.useColonForMessages);
 				indent++;
-				serializeCollectionItem(out, item);
+				writeCollectionItem(out, item);
 				indent--;
 				out.messageEnd(indent);
 			});
@@ -436,17 +436,17 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 			var first = Flag.create();
 			forEachStreamableEntry(o, sType, el -> {
 				first.ifSet(() -> out.w(", ")).set();
-				serializeScalarValue(out, el, elType);
+				writeScalarValue(out, el, elType);
 			});
 			out.listEnd().w('\n');
 		}
 	}
 
-	private void serializeScalarValue(PrototextWriter out, Object value, ClassMeta<?> type) throws SerializeException {
+	private void writeScalarValue(PrototextWriter out, Object value, ClassMeta<?> type) throws SerializeException {
 		if (value == null)
 			return;
 		// Resolve to the runtime type and apply any registered swap.  Required for collection/array
-		// elements that arrive here without having gone through serializeAnything's swap step (e.g.
+		// elements that arrive here without having gone through writeAnything's swap step (e.g.
 		// List<Locale> elements where the bean-property swap is on the List, not on Locale).
 		// Bug #8: without this, Locale list-elements wire as Locale.toString() ("en_US") regardless
 		// of the configured LocaleFormat, breaking BCP_47 round-trips on the parser side.
@@ -471,15 +471,15 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 		} else if (type.isEnum()) {
 			out.enumValue(((Enum<?>) value).name());
 		} else if (type.isDate()) {
-			out.stringValue(serializeDate((Date)value, type));
+			out.stringValue(writeDate((Date)value, type));
 		} else if (type.isCalendar()) {
-			out.stringValue(serializeCalendar(value, type));
+			out.stringValue(writeCalendar(value, type));
 		} else if (type.isTemporal()) {
-			out.stringValue(serializeTemporal((TemporalAccessor)value, type));
+			out.stringValue(writeTemporal((TemporalAccessor)value, type));
 		} else if (type.isDuration()) {
-			out.stringValue(serializeDuration((Duration)value));
+			out.stringValue(writeDuration((Duration)value));
 		} else if (type.isPeriod()) {
-			out.stringValue(serializePeriod((Period)value));
+			out.stringValue(writePeriod((Period)value));
 		} else if (value instanceof byte[] value2) {
 			out.bytesValue(value2);
 		} else {

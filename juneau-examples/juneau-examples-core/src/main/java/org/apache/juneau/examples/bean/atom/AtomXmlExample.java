@@ -73,7 +73,7 @@ public class AtomXmlExample {
 		 *</feed>
 		 */
 		//Serialize to ATOM/XML
-		var atomXml = s.serialize(feed);
+		var atomXml = s.write(feed);
 
 		/**
 		 * Produces
@@ -108,6 +108,6 @@ public class AtomXmlExample {
 		var ns = XmlSerializer.create().sq().ws().build();
 
 		// Serialize to ATOM/XML
-		atomXml = ns.serialize(feed);
+		atomXml = ns.write(feed);
 	}
 }

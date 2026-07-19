@@ -38,16 +38,16 @@ class CommonParser_Test extends TestBase {
 	@Test void a01_fromSerializer() throws Exception {
 		var p = XmlParser.DEFAULT;
 
-		var m = (Map)p.parse("<object><a _type='number'>1</a></object>", Object.class);
+		var m = (Map)p.read("<object><a _type='number'>1</a></object>", Object.class);
 		assertEquals(1, m.get("a"));
-		m = (Map)p.parse("<object><a _type='number'>1</a><b _type='string'>foo bar</b></object>", Object.class);
+		m = (Map)p.read("<object><a _type='number'>1</a><b _type='string'>foo bar</b></object>", Object.class);
 		assertBean(m, "a,b", "1,foo bar");
-		m = (Map)p.parse("<object><a _type='number'>1</a><b _type='string'>foo bar</b><c _type='boolean'>false</c></object>", Object.class);
+		m = (Map)p.read("<object><a _type='number'>1</a><b _type='string'>foo bar</b><c _type='boolean'>false</c></object>", Object.class);
 		assertBean(m, "a,c", "1,false");
-		m = (Map)p.parse("   <object>	<a _type='number'>	1	</a>	<b _type='string'>	foo	</b>	<c _type='boolean'>	false 	</c>	</object>	", Object.class);
+		m = (Map)p.read("   <object>	<a _type='number'>	1	</a>	<b _type='string'>	foo	</b>	<c _type='boolean'>	false 	</c>	</object>	", Object.class);
 		assertBean(m, "a,b,c", "1,foo,false");
 
-		m = (Map)p.parse("<object><x _type='string'>org.apache.juneau.marshall.test.Person</x><addresses _type='array'><object><x _type='string'>org.apache.juneau.marshall.test.Address</x><city _type='string'>city A</city><state _type='string'>state A</state><street _type='string'>street A</street><zip _type='number'>12345</zip></object></addresses></object>", Object.class);
+		m = (Map)p.read("<object><x _type='string'>org.apache.juneau.marshall.test.Person</x><addresses _type='array'><object><x _type='string'>org.apache.juneau.marshall.test.Address</x><city _type='string'>city A</city><state _type='string'>state A</state><street _type='string'>street A</street><zip _type='number'>12345</zip></object></addresses></object>", Object.class);
 		assertEquals("org.apache.juneau.marshall.test.Person", m.get("x"));
 		var l = (List)m.get("addresses");
 		assertNotNull(l);
@@ -55,11 +55,11 @@ class CommonParser_Test extends TestBase {
 		assertNotNull(m);
 		assertBean(m, "x,city,state,street,zip", "org.apache.juneau.marshall.test.Address,city A,state A,street A,12345");
 
-		MarshalledList jl = (MarshalledList)p.parse("<array><object><attribute _type='string'>value</attribute></object><object><attribute _type='string'>value</attribute></object></array>", Object.class);
+		MarshalledList jl = (MarshalledList)p.read("<array><object><attribute _type='string'>value</attribute></object><object><attribute _type='string'>value</attribute></object></array>", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 
-		jl = (MarshalledList)p.parse("<array><object><attribute _type='string'>value</attribute></object><object><attribute _type='string'>value</attribute></object></array>", Object.class);
+		jl = (MarshalledList)p.read("<array><object><attribute _type='string'>value</attribute></object><object><attribute _type='string'>value</attribute></object></array>", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 
@@ -68,12 +68,12 @@ class CommonParser_Test extends TestBase {
 		t2.add(new A3("name0","value0"));
 		t2.add(new A3("name1","value1"));
 		t1.list = t2;
-		var r = XmlSerializer.DEFAULT_NS.serialize(t1);
-		t1 = p.parse(r, A1.class);
+		var r = XmlSerializer.DEFAULT_NS.write(t1);
+		t1 = p.read(r, A1.class);
 		assertEquals("value1", t1.list.get(1).value);
 
-		r = XmlSerializer.DEFAULT_NS.serialize(t1);
-		t1 = p.parse(r, A1.class);
+		r = XmlSerializer.DEFAULT_NS.write(t1);
+		t1 = p.read(r, A1.class);
 		assertEquals("value1", t1.list.get(1).value);
 	}
 
@@ -100,16 +100,16 @@ class CommonParser_Test extends TestBase {
 		var p = XmlParser.create().ignoreUnknownBeanProperties().build();
 
 		var in = "<object><a>1</a><unknown>foo</unknown><b>2</b></object>";
-		var t = p.parse(in, B.class);
+		var t = p.read(in, B.class);
 		assertEquals(1, t.a);
 		assertEquals(2, t.b);
 
 		var in2 = "<object><a>1</a><unknown><object><a _type='string'>foo</a></object></unknown><b>2</b></object>";
-		t = p.parse(in2, B.class);
+		t = p.read(in2, B.class);
 		assertEquals(1, t.a);
 		assertEquals(2, t.b);
 
-		assertThrows(ParseException.class, ()->XmlParser.DEFAULT.parse(in2, B.class));
+		assertThrows(ParseException.class, ()->XmlParser.DEFAULT.read(in2, B.class));
 	}
 
 	public static class B {
@@ -122,7 +122,7 @@ class CommonParser_Test extends TestBase {
 	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
 		var p = XmlParser.DEFAULT;
 		var in = "<object><ints _type='array'><number>1</number><number>2</number><number>3</number></ints><beans _type='array'><object><a _type='number'>1</a><b _type='number'>2</b></object></beans></object>";
-		var t = p.parse(in, C.class);
+		var t = p.read(in, C.class);
 		assertSize(3, t.getInts());
 		assertEquals(2, t.getBeans().get(0).b);
 	}
@@ -141,7 +141,7 @@ class CommonParser_Test extends TestBase {
 	@Test void a04_parserListeners() throws Exception {
 		var p = XmlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 		var in = "<object><a _type='number'>1</a><unknownProperty _type='string'>foo</unknownProperty><b _type='number'>2</b></object>";
-		p.parse(in, B.class);
+		p.read(in, B.class);
 		assertSize(1, MyParserListener.events);
 		// XML parser may or may not support line numbers.
 		assertTrue(MyParserListener.events.get(0).startsWith("unknownProperty,"));

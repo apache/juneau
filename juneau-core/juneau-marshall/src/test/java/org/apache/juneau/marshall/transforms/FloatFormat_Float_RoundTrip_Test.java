@@ -463,7 +463,7 @@ class FloatFormat_Float_RoundTrip_Test extends TestBase {
 		var x = 3.14f;
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, Float.class);
+			var x2 = p.read(out, Float.class);
 			assertFloatEquals(expectedAfter(x, t, fmt), x2, "fmt=" + fmt);
 		} catch (Exception e) {
 			// Mirror RoundTripDateTime_Test.a06_standaloneInstant: some serializers (URL-encoding, CSV-style)

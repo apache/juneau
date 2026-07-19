@@ -118,7 +118,7 @@ public class ReaderParser extends Parser {
 		 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 		 *
 		 * <p>
-		 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+		 * Used when passing in input streams and byte arrays to {@link Parser#read(Object, Class)}.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
@@ -129,7 +129,7 @@ public class ReaderParser extends Parser {
 		 * 		.build();
 		 *
 		 * 	<jc>// Use it to read a UTF-8 encoded input stream.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * @param value

@@ -31,7 +31,7 @@ class TomlSerializer_Test {
 		m.put("port", 8080);
 		m.put("debug", true);
 
-		String toml = TomlSerializer.DEFAULT.serialize(m);
+		String toml = TomlSerializer.DEFAULT.write(m);
 		assertNotNull(toml);
 		assertTrue(toml.contains("host = \"localhost\""));
 		assertTrue(toml.contains("port = 8080"));
@@ -43,7 +43,7 @@ class TomlSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of("web", "api", "rest"));
 
-		String toml = TomlSerializer.DEFAULT.serialize(m);
+		String toml = TomlSerializer.DEFAULT.write(m);
 		assertNotNull(toml);
 		assertTrue(toml.contains("[\"web\", \"api\", \"rest\"]") || toml.contains("tags = ["));
 	}
@@ -57,7 +57,7 @@ class TomlSerializer_Test {
 		config.put("name", "myapp");
 		config.put("database", db);
 
-		String toml = TomlSerializer.DEFAULT.serialize(config);
+		String toml = TomlSerializer.DEFAULT.write(config);
 		assertNotNull(toml);
 		assertTrue(toml.contains("name = \"myapp\""));
 		assertTrue(toml.contains("[database]"));

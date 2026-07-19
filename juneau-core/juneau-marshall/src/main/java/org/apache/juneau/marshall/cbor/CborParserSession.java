@@ -124,7 +124,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 		"java:S2095" // ParserPipe lifecycle is transferred to the returned CborTokenReader, which closes it via its own close(); the caller owns the cursor via try-with-resources.
 	})
 	@Override /* TokenReadable */
-	public TokenReader parseTokens(Object input) throws IOException {
+	public TokenReader readTokens(Object input) throws IOException {
 		var pipe = new ParserPipe(input, isDebug(), isAutoCloseStreams(), isUnbuffered(), null);
 		return new CborTokenReader(pipe, this).setNativeMode(nativeMode);
 	}
@@ -139,9 +139,9 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
+	public RecordReader readArrayRecords(Object input) throws IOException {
 		try {
-			return StreamingArrayRecord.reader(parseTokens(input));
+			return StreamingArrayRecord.reader(readTokens(input));
 		} catch (ParseException e) {
 			throw new IOException(e);
 		}
@@ -154,7 +154,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541"  // Single-threaded session contexts do not require synchronization
 	})
-	<T> T parseAnything(ClassMeta<?> eType, CborInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	<T> T readAnything(ClassMeta<?> eType, CborInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();
@@ -169,7 +169,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)o(parseAnything(eType.getElementType(), is, outer, pMeta));
+			return (T)o(readAnything(eType.getElementType(), is, outer, pMeta));
 
 		setCurrentClass(sType);
 
@@ -207,12 +207,12 @@ public class CborParserSession extends InputStreamParserSession implements Token
 			else if (dt == ARRAY && sType.isObject()) {
 				var jl = newGenericList();
 				for (var i = 0; shouldContinueContainer(is, len, i); i++)
-					jl.add(parseAnything(object(), is, outer, pMeta));
+					jl.add(readAnything(object(), is, outer, pMeta));
 				o = jl;
 			} else if (dt == MAP && sType.isObject()) {
 				var jm = newGenericMap();
 				for (var i = 0; shouldContinueContainer(is, len, i); i++)
-					jm.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, jm, pMeta));
+					jm.put((String)readAnything(string(), is, outer, pMeta), readAnything(object(), is, jm, pMeta));
 				o = cast(jm, pMeta, eType);
 			}
 
@@ -222,16 +222,16 @@ public class CborParserSession extends InputStreamParserSession implements Token
 				if (dt == MAP) {
 					BeanMap m = builder == null ? newBeanMap(outer, sType.inner()) : toBeanMap(builder.create(this, eType));
 					for (var i = 0; shouldContinueContainer(is, len, i); i++) {
-						String pName = parseAnything(string(), is, m.getBean(false), null);
+						String pName = readAnything(string(), is, m.getBean(false), null);
 						var bpm = m.getPropertyMeta(pName);
 						if (bpm == null) {
 							if (pName.equals(getBeanTypePropertyName(eType)))
-								parseAnything(string(), is, null, null);
+								readAnything(string(), is, null, null);
 							else
-								onUnknownProperty(pName, m, parseAnything(string(), is, null, null));
+								onUnknownProperty(pName, m, readAnything(string(), is, null, null));
 						} else {
 							var cm = (ClassMeta<?>) bpm.getBeanInfo();
-							Object value = parseAnything(cm, is, m.getBean(false), bpm);
+							Object value = readAnything(cm, is, m.getBean(false), bpm);
 							setName(cm, value, pName);
 							try {
 								bpm.set(m, pName, value);
@@ -249,9 +249,9 @@ public class CborParserSession extends InputStreamParserSession implements Token
 				if (dt == MAP) {
 					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 					for (var i = 0; shouldContinueContainer(is, len, i); i++) {
-						Object key = parseAnything(sType.getKeyType(), is, outer, pMeta);
+						Object key = readAnything(sType.getKeyType(), is, outer, pMeta);
 						var vt = sType.getValueType();
-						Object value = parseAnything(vt, is, m, pMeta);
+						Object value = readAnything(vt, is, m, pMeta);
 						setName(vt, value, key);
 						m.put(key, value);
 					}
@@ -264,27 +264,27 @@ public class CborParserSession extends InputStreamParserSession implements Token
 				// many scalar Java types — the read already happened above and convertToType narrows.
 				o = convertToType(o, sType);
 			} else if (sType.isDate()) {
-				o = parseDate(String.valueOf(o), sType);
+				o = readDate(String.valueOf(o), sType);
 			} else if (sType.isCalendar()) {
-				o = parseCalendar(String.valueOf(o), sType);
+				o = readCalendar(String.valueOf(o), sType);
 			} else if (sType.isTemporal()) {
-				o = parseTemporal(String.valueOf(o), sType);
+				o = readTemporal(String.valueOf(o), sType);
 			} else if (sType.isDuration()) {
-				o = parseDuration(String.valueOf(o));
+				o = readDuration(String.valueOf(o));
 			} else if (sType.isPeriod()) {
-				o = parsePeriod(String.valueOf(o));
+				o = readPeriod(String.valueOf(o));
 			} else if (sType.canCreateNewInstanceFromString(outer) && dt == STRING) {
 				o = sType.newInstanceFromString(outer, o == null ? "" : o.toString());
 			} else if (sType.isCollection()) {
 				if (dt == MAP) {
 					var m = newGenericMap();
 					for (var i = 0; shouldContinueContainer(is, len, i); i++)
-						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
+						m.put((String)readAnything(string(), is, outer, pMeta), readAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
 					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : newGenericList());
 					for (var i = 0; shouldContinueContainer(is, len, i); i++)
-						l.add(parseAnything(sType.getElementType(), is, l, pMeta));
+						l.add(readAnything(sType.getElementType(), is, l, pMeta));
 					o = l;
 				} else {
 					throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
@@ -293,12 +293,12 @@ public class CborParserSession extends InputStreamParserSession implements Token
 				if (dt == MAP) {
 					var m = newGenericMap();
 					for (var i = 0; shouldContinueContainer(is, len, i); i++)
-						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
+						m.put((String)readAnything(string(), is, outer, pMeta), readAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
 					Collection l = (sType.isCollection() && sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : newGenericList());
 					for (var i = 0; shouldContinueContainer(is, len, i); i++)
-						l.add(parseAnything(sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
+						l.add(readAnything(sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
 					o = toArray(sType, l);
 				} else {
 					throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
@@ -306,7 +306,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 			} else if (dt == MAP) {
 				var m = newGenericMap();
 				for (var i = 0; shouldContinueContainer(is, len, i); i++)
-					m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
+					m.put((String)readAnything(string(), is, outer, pMeta), readAnything(object(), is, m, pMeta));
 				if (m.containsKey(getBeanTypePropertyName(eType)))
 					o = cast(m, pMeta, eType);
 				else if (nn(sType.getProxyInvocationHandler()))
@@ -331,9 +331,9 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	}
 
 	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (CborInputStream is = new CborInputStream(pipe)) {
-			return parseAnything(type, is, getOuter(), null);
+			return readAnything(type, is, getOuter(), null);
 		}
 	}
 

@@ -45,16 +45,16 @@ class Visibility_Test extends TestBase {
 		s3.beanFieldVisibility(NONE);
 		s4.beanFieldVisibility(NONE);
 
-		var r = s1.build().serialize(a1);
+		var r = s1.build().write(a1);
 		assertEquals("{f5:5}", r);
 
-		r = s2.build().serialize(a1);
+		r = s2.build().write(a1);
 		assertEquals("{f5:5}", r);
 
-		r = s3.build().serialize(a1);
+		r = s3.build().write(a1);
 		assertEquals("{f5:5}", r);
 
-		r = s4.build().serialize(a1);
+		r = s4.build().write(a1);
 		assertEquals("{f5:5}", r);
 
 		s1.beanFieldVisibility(PUBLIC);
@@ -62,16 +62,16 @@ class Visibility_Test extends TestBase {
 		s3.beanFieldVisibility(PUBLIC);
 		s4.beanFieldVisibility(PUBLIC);
 
-		r = s1.build().serialize(a1);
+		r = s1.build().write(a1);
 		assertEquals("{f1:1,f5:5,g2:{f1:1,f5:5},g3:'A3',g4:'A4',g5:'A5'}", r);
 
-		r = s2.build().serialize(a1);
+		r = s2.build().write(a1);
 		assertEquals("{f1:1,f5:5,g2:{f1:1,f5:5},g3:{f1:1,f5:5},g4:'A4',g5:'A5'}", r);
 
-		r = s3.build().serialize(a1);
+		r = s3.build().write(a1);
 		assertEquals("{f1:1,f5:5,g2:{f1:1,f5:5},g3:{f1:1,f5:5},g4:{f1:1,f5:5},g5:'A5'}", r);
 
-		r = s4.build().serialize(a1);
+		r = s4.build().write(a1);
 		assertEquals("{f1:1,f5:5,g2:{f1:1,f5:5},g3:{f1:1,f5:5},g4:{f1:1,f5:5},g5:{f1:1,f5:5}}", r);
 
 		s1.beanFieldVisibility(PROTECTED);
@@ -79,16 +79,16 @@ class Visibility_Test extends TestBase {
 		s3.beanFieldVisibility(PROTECTED);
 		s4.beanFieldVisibility(PROTECTED);
 
-		r = s1.build().serialize(a1);
+		r = s1.build().write(a1);
 		assertEquals("{f1:1,f2:2,f5:5,g2:{f1:1,f2:2,f5:5},g3:'A3',g4:'A4',g5:'A5'}", r);
 
-		r = s2.build().serialize(a1);
+		r = s2.build().write(a1);
 		assertEquals("{f1:1,f2:2,f5:5,g2:{f1:1,f2:2,f5:5},g3:{f1:1,f2:2,f5:5},g4:'A4',g5:'A5'}", r);
 
-		r = s3.build().serialize(a1);
+		r = s3.build().write(a1);
 		assertEquals("{f1:1,f2:2,f5:5,g2:{f1:1,f2:2,f5:5},g3:{f1:1,f2:2,f5:5},g4:{f1:1,f2:2,f5:5},g5:'A5'}", r);
 
-		r = s4.build().serialize(a1);
+		r = s4.build().write(a1);
 		assertEquals("{f1:1,f2:2,f5:5,g2:{f1:1,f2:2,f5:5},g3:{f1:1,f2:2,f5:5},g4:{f1:1,f2:2,f5:5},g5:{f1:1,f2:2,f5:5}}", r);
 
 		s1.beanFieldVisibility(Visibility.DEFAULT);
@@ -96,16 +96,16 @@ class Visibility_Test extends TestBase {
 		s3.beanFieldVisibility(Visibility.DEFAULT);
 		s4.beanFieldVisibility(Visibility.DEFAULT);
 
-		r = s1.build().serialize(a1);
+		r = s1.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f5:5,g2:{f1:1,f2:2,f3:3,f5:5},g3:'A3',g4:'A4',g5:'A5'}", r);
 
-		r = s2.build().serialize(a1);
+		r = s2.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f5:5,g2:{f1:1,f2:2,f3:3,f5:5},g3:{f1:1,f2:2,f3:3,f5:5},g4:'A4',g5:'A5'}", r);
 
-		r = s3.build().serialize(a1);
+		r = s3.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f5:5,g2:{f1:1,f2:2,f3:3,f5:5},g3:{f1:1,f2:2,f3:3,f5:5},g4:{f1:1,f2:2,f3:3,f5:5},g5:'A5'}", r);
 
-		r = s4.build().serialize(a1);
+		r = s4.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f5:5,g2:{f1:1,f2:2,f3:3,f5:5},g3:{f1:1,f2:2,f3:3,f5:5},g4:{f1:1,f2:2,f3:3,f5:5},g5:{f1:1,f2:2,f3:3,f5:5}}", r);
 
 		s1.beanFieldVisibility(PRIVATE);
@@ -113,16 +113,16 @@ class Visibility_Test extends TestBase {
 		s3.beanFieldVisibility(PRIVATE);
 		s4.beanFieldVisibility(PRIVATE);
 
-		r = s1.build().serialize(a1);
+		r = s1.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,g2:{f1:1,f2:2,f3:3,f4:4,f5:5},g3:'A3',g4:'A4',g5:'A5'}", r);
 
-		r = s2.build().serialize(a1);
+		r = s2.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,g2:{f1:1,f2:2,f3:3,f4:4,f5:5},g3:{f1:1,f2:2,f3:3,f4:4,f5:5},g4:'A4',g5:'A5'}", r);
 
-		r = s3.build().serialize(a1);
+		r = s3.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,g2:{f1:1,f2:2,f3:3,f4:4,f5:5},g3:{f1:1,f2:2,f3:3,f4:4,f5:5},g4:{f1:1,f2:2,f3:3,f4:4,f5:5},g5:'A5'}", r);
 
-		r = s4.build().serialize(a1);
+		r = s4.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,g2:{f1:1,f2:2,f3:3,f4:4,f5:5},g3:{f1:1,f2:2,f3:3,f4:4,f5:5},g4:{f1:1,f2:2,f3:3,f4:4,f5:5},g5:{f1:1,f2:2,f3:3,f4:4,f5:5}}", r);
 
 		s1.beanMethodVisibility(NONE);
@@ -130,16 +130,16 @@ class Visibility_Test extends TestBase {
 		s3.beanMethodVisibility(NONE);
 		s4.beanMethodVisibility(NONE);
 
-		r = s1.build().serialize(a1);
+		r = s1.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,g2:{f1:1,f2:2,f3:3,f4:4},g3:'A3',g4:'A4',g5:'A5'}", r);
 
-		r = s2.build().serialize(a1);
+		r = s2.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,g2:{f1:1,f2:2,f3:3,f4:4},g3:{f1:1,f2:2,f3:3,f4:4},g4:'A4',g5:'A5'}", r);
 
-		r = s3.build().serialize(a1);
+		r = s3.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,g2:{f1:1,f2:2,f3:3,f4:4},g3:{f1:1,f2:2,f3:3,f4:4},g4:{f1:1,f2:2,f3:3,f4:4},g5:'A5'}", r);
 
-		r = s4.build().serialize(a1);
+		r = s4.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,g2:{f1:1,f2:2,f3:3,f4:4},g3:{f1:1,f2:2,f3:3,f4:4},g4:{f1:1,f2:2,f3:3,f4:4},g5:{f1:1,f2:2,f3:3,f4:4}}", r);
 
 		s1.beanMethodVisibility(PROTECTED);
@@ -147,16 +147,16 @@ class Visibility_Test extends TestBase {
 		s3.beanMethodVisibility(PROTECTED);
 		s4.beanMethodVisibility(PROTECTED);
 
-		r = s1.build().serialize(a1);
+		r = s1.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6,g2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g3:'A3',g4:'A4',g5:'A5'}", r);
 
-		r = s2.build().serialize(a1);
+		r = s2.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6,g2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g3:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g4:'A4',g5:'A5'}", r);
 
-		r = s3.build().serialize(a1);
+		r = s3.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6,g2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g3:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g4:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g5:'A5'}", r);
 
-		r = s4.build().serialize(a1);
+		r = s4.build().write(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6,g2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g3:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g4:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g5:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6}}", r);
 
 	}

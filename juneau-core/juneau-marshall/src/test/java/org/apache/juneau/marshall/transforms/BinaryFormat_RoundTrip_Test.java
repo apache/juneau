@@ -393,7 +393,7 @@ class BinaryFormat_RoundTrip_Test extends TestBase {
 		var x = cp(SHORT_MIXED);
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, byte[].class);
+			var x2 = p.read(out, byte[].class);
 			assertBytesEquals(SHORT_MIXED, x2, "fmt=" + fmt);
 		} catch (Exception e) {
 			// Mirror UuidFormat_RoundTrip_Test.a06: some serializers (URL-encoding, CSV-style) don't

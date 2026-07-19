@@ -57,7 +57,7 @@ import org.apache.juneau.marshall.xml.*;
 	"unchecked",  // Type erasure requires unchecked casts throughout HTML serializer session
 	"java:S110",  // Inheritance depth acceptable for this class hierarchy
 	"java:S115",  // Constants use UPPER_snakeCase naming convention
-	"java:S6541"  // Brain method acceptable for serializeAnything; refactoring would reduce clarity
+	"java:S6541"  // Brain method acceptable for writeAnything; refactoring would reduce clarity
 })
 public class HtmlSerializerSession extends XmlSerializerSession {
 
@@ -332,7 +332,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @throws IOException If a problem occurred trying to send output to the writer.
 	 */
 	private XmlWriter doSerialize(Object o, XmlWriter w) throws SerializeException {
-		serializeAnything(w, o, getExpectedRootType(o), null, null, getInitialDepth() - 1, true, false);
+		writeAnything(w, o, getExpectedRootType(o), null, null, getInitialDepth() - 1, true, false);
 		return w;
 	}
 
@@ -444,7 +444,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for bean map serialization
 	})
-	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws SerializeException {
+	private void writeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		var mcm = (ClassMeta<?>) m.getBeanInfo();
 		HtmlClassMeta cHtml = getHtmlClassMeta(mcm);
@@ -498,7 +498,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			try {
 				if (nn(link))
 					out.oTag(i + 3, "a").attrUri("href", link).cTag();
-				ContentResult cr = serializeAnything(out, value, cMeta, key, pMeta, 2, false, true);
+				ContentResult cr = writeAnything(out, value, cMeta, key, pMeta, 2, false, true);
 				if (cr == CR_ELEMENTS)
 					out.i(i + 2);
 				if (nn(link))
@@ -520,7 +520,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
-	private void serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws SerializeException {
+	private void writeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(sType);
 		HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(ppMeta);
@@ -587,7 +587,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 				if (cm == null) {
 					out.i(i + 2);
-					serializeAnything(out, o, null, null, null, 1, false, false);
+					writeAnything(out, o, null, null, null, 1, false, false);
 					out.nl(0);
 
 				} else if (cm.isMap() && ! (cm.isBeanMap())) {
@@ -598,7 +598,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 					for (var k : th) {
 						out.sTag(i + 2, "td");
-						ContentResult cr = serializeAnything(out, m2.get(k), eType.getElementType(), toString(k), null, 2, false, true);
+						ContentResult cr = writeAnything(out, m2.get(k), eType.getElementType(), toString(k), null, 2, false, true);
 						if (cr == CR_ELEMENTS)
 							out.i(i + 2);
 						out.eTag("td").nl(i + 2);
@@ -632,7 +632,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 							out.cTag();
 							if (nn(link))
 								out.oTag("a").attrUri("href", link).cTag();
-							ContentResult cr = serializeAnything(out, value, (ClassMeta<?>) pMeta.getBeanInfo(), p.getKey(), pMeta, 2, false, true);
+							ContentResult cr = writeAnything(out, value, (ClassMeta<?>) pMeta.getBeanInfo(), p.getKey(), pMeta, 2, false, true);
 							if (cr == CR_ELEMENTS)
 								out.i(i + 2);
 							if (nn(link))
@@ -664,7 +664,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					out.cTag();
 				if (nn(link))
 					out.oTag(i + 2, "a").attrUri("href", link.replace("{#}", s(o))).cTag();
-				ContentResult cr = serializeAnything(out, o, eType.getElementType(), name, null, 1, false, true);
+				ContentResult cr = writeAnything(out, o, eType.getElementType(), name, null, 1, false, true);
 				if (nn(link))
 					out.eTag("a");
 				if (cr == CR_ELEMENTS)
@@ -678,7 +678,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	
-	private void serializeMap(XmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws SerializeException {
+	private void writeMap(XmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		var keyType = eKeyType == null ? string() : eKeyType;
 		var valueType = eValueType == null ? object() : eValueType;
@@ -701,12 +701,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.ie(i + 1).eTag("tr").nl(i + 2);
 		}
 
-		forEachEntry(m, x -> serializeMapEntry(out, x, keyType, valueType, i, ppMeta));
+		forEachEntry(m, x -> writeMapEntry(out, x, keyType, valueType, i, ppMeta));
 
 		out.ie(i).eTag(TAG_table).nl(i);
 	}
 
-	private void serializeMapEntry(XmlWriter out, Map.Entry e, ClassMeta<?> keyType, ClassMeta<?> valueType, int i, BeanPropertyMeta ppMeta) throws SerializeException {
+	private void writeMapEntry(XmlWriter out, Map.Entry e, ClassMeta<?> keyType, ClassMeta<?> valueType, int i, BeanPropertyMeta ppMeta) throws SerializeException {
 		Object key = generalize(e.getKey(), keyType);
 		Object value = null;
 		try {
@@ -727,14 +727,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.cTag();
 		if (nn(link))
 			out.oTag(i + 3, "a").attrUri("href", link.replace("{#}", s(value))).cTag();
-		ContentResult cr = serializeAnything(out, key, keyType, null, null, 2, false, false);
+		ContentResult cr = writeAnything(out, key, keyType, null, null, 2, false, false);
 		if (nn(link))
 			out.eTag("a");
 		if (cr == CR_ELEMENTS)
 			out.i(i + 2);
 		out.eTag("td").nl(i + 2);
 		out.sTag(i + 2, "td");
-		cr = serializeAnything(out, value, valueType, (key == null ? "_x0000_" : toString(key)), null, 2, false, true);
+		cr = writeAnything(out, value, valueType, (key == null ? "_x0000_" : toString(key)), null, 2, false, true);
 		if (cr == CR_ELEMENTS)
 			out.ie(i + 2);
 		out.eTag("td").nl(i + 2);
@@ -743,7 +743,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@Override /* Overridden from Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		doSerialize(o, getHtmlWriter(out));
 	}
 
@@ -854,7 +854,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S107", // Method has many parameters; acceptable for builder/configuration methods
 	})
-	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement)
+	protected ContentResult writeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement)
 		throws SerializeException {
 
 		ClassMeta<?> aType = null;       // The actual type
@@ -938,7 +938,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					indent -= xIndent;
 					pop();
 					out.nl(indent);
-					return serializeAnything(out, o2, null, typeName, null, xIndent, false, false);
+					return writeAnything(out, o2, null, typeName, null, xIndent, false, false);
 				}
 			}
 
@@ -947,7 +947,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				indent++;
 				if (nlIfElement)
 					out.nl(0);
-				super.serializeAnything(out, o, null, null, null, null, false, XmlFormat.MIXED, false, false, null);
+				super.writeAnything(out, o, null, null, null, null, false, XmlFormat.MIXED, false, false, null);
 				indent -= xIndent + 1;
 				return cr;
 
@@ -974,25 +974,25 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					cr = CR_MIXED;
 				} else {
 					out.nlIf(! isRoot, xIndent + 2);
-					serializeBeanMap(out, m, eType, pMeta);
+					writeBeanMap(out, m, eType, pMeta);
 				}
 
 			} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
 				out.nlIf(! isRoot, xIndent + 1);
 				if (o instanceof BeanMap o2)
-					serializeBeanMap(out, o2, eType, pMeta);
+					writeBeanMap(out, o2, eType, pMeta);
 				else
-					serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), typeName, pMeta);
+					writeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), typeName, pMeta);
 
 			} else if (sType.isCollection() || sType.isArray() || (nn(wType) && wType.isCollection())) {
 				out.nlIf(! isRoot, xIndent + 1);
-				serializeCollection(out, o, sType, eType, name, pMeta);
+				writeCollection(out, o, sType, eType, name, pMeta);
 
 			} else if (sType.isStreamable()) {
 				// HTML must inspect elements to decide table vs. list layout (getTableHeaders), so materialization is unavoidable.
 				out.nlIf(! isRoot, xIndent + 1);
 				var list = toListFromStreamable(o, sType);
-				serializeCollection(out, list, getClassMeta(List.class), eType, name, pMeta);
+				writeCollection(out, list, getClassMeta(List.class), eType, name, pMeta);
 
 			} else if (sType.isNumber()) {
 				if (eType.isNumber() && ! (isRoot && addJsonTags))
@@ -1016,7 +1016,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				cr = CR_MIXED;
 
 			} else if (sType.isDate()) {
-				String s = serializeDate((Date)o, sType);
+				String s = writeDate((Date)o, sType);
 				if (isRoot && addJsonTags)
 					out.sTag(CONST_string).text(s).eTag(CONST_string);
 				else
@@ -1024,7 +1024,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				cr = CR_MIXED;
 
 			} else if (sType.isCalendar()) {
-				String s = serializeCalendar(o, sType);
+				String s = writeCalendar(o, sType);
 				if (isRoot && addJsonTags)
 					out.sTag(CONST_string).text(s).eTag(CONST_string);
 				else
@@ -1032,7 +1032,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				cr = CR_MIXED;
 
 			} else if (sType.isTemporal()) {
-				String s = serializeTemporal((TemporalAccessor)o, sType);
+				String s = writeTemporal((TemporalAccessor)o, sType);
 				if (isRoot && addJsonTags)
 					out.sTag(CONST_string).text(s).eTag(CONST_string);
 				else
@@ -1040,7 +1040,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				cr = CR_MIXED;
 
 			} else if (sType.isDuration()) {
-				String s = serializeDuration((Duration)o);
+				String s = writeDuration((Duration)o);
 				if (isRoot && addJsonTags)
 					out.sTag(CONST_string).text(s).eTag(CONST_string);
 				else
@@ -1048,7 +1048,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				cr = CR_MIXED;
 
 			} else if (sType.isPeriod()) {
-				String s = serializePeriod((Period)o);
+				String s = writePeriod((Period)o);
 				if (isRoot && addJsonTags)
 					out.sTag(CONST_string).text(s).eTag(CONST_string);
 				else
@@ -1069,7 +1069,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@Override /* Overridden from XmlSerializerSession */
-	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
+	protected ContentResult writeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
 		boolean isMixed, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {
 
 		// If this is a bean, then we want to serialize it as HTML unless it's @Html(format=XML).
@@ -1091,8 +1091,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		HtmlClassMeta cHtml = getHtmlClassMeta(type);
 
 		if (type.isMapOrBean() && ! cHtml.isXml())
-			return serializeAnything(out, o, eType, elementName, pMeta, 0, false, false);
+			return writeAnything(out, o, eType, elementName, pMeta, 0, false, false);
 
-		return super.serializeAnything(out, o, eType, keyName, elementName, elementNamespace, addNamespaceUris, format, isMixed, preserveWhitespace, pMeta);
+		return super.writeAnything(out, o, eType, keyName, elementName, elementNamespace, addNamespaceUris, format, isMixed, preserveWhitespace, pMeta);
 	}
 }

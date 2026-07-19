@@ -948,7 +948,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public Object serialize(Object o) throws SerializeException {
+	public Object write(Object o) throws SerializeException {
 		throw uoex();
 	}
 
@@ -960,13 +960,13 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final void serialize(Object o, Object out) throws SerializeException, IOException {
+	public final void write(Object o, Object out) throws SerializeException, IOException {
 		try (SerializerPipe pipe = createPipe(out)) {
 			var unwrapped = unwrapSupplier(o, 0);
 			if (unwrapped instanceof BeanConsumer && !(unwrapped instanceof BeanChannel))
 				throw new SerializeException(this,
 					"BeanConsumer cannot be used as a serializer source. Use BeanSupplier or BeanChannel for round-trip support.");
-			doSerialize(pipe, unwrapped);
+			doWrite(pipe, unwrapped);
 		} catch (SerializeException | IOException e) {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
@@ -1010,7 +1010,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code> converted to a string based on the {@link OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)} setting.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public String serializeToString(Object o) throws SerializeException {
+	public String writeToString(Object o) throws SerializeException {
 		throw uoex();
 	}
 
@@ -1084,15 +1084,15 @@ public class SerializerSession extends MarshallingTraverseSession {
 			return getClassMetaForObject(o).toString(o);
 		var cm = getClassMetaForObject(o);
 		if (cm.isDate())
-			return serializeDate((Date)o, cm);
+			return writeDate((Date)o, cm);
 		if (cm.isCalendar())
-			return serializeCalendar(o, cm);
+			return writeCalendar(o, cm);
 		if (cm.isTemporal())
-			return serializeTemporal((TemporalAccessor)o, cm);
+			return writeTemporal((TemporalAccessor)o, cm);
 		if (cm.isDuration())
-			return serializeDuration((Duration)o);
+			return writeDuration((Duration)o);
 		if (cm.isPeriod())
-			return serializePeriod((Period)o);
+			return writePeriod((Period)o);
 		var s = o.toString();
 		if (isTrimStrings())
 			s = s.trim();
@@ -1106,7 +1106,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param d The value to format. <jk>null</jk> returns <jk>null</jk>.
 	 * @return The formatted value, or <jk>null</jk> if {@code d} is <jk>null</jk>.
 	 */
-	protected final String serializeDuration(Duration d) {
+	protected final String writeDuration(Duration d) {
 		return Iso8601Utils.formatDuration(d, getDurationFormat());
 	}
 
@@ -1117,7 +1117,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param p The value to format. <jk>null</jk> returns <jk>null</jk>.
 	 * @return The formatted value, or <jk>null</jk> if {@code p} is <jk>null</jk>.
 	 */
-	protected final String serializePeriod(Period p) {
+	protected final String writePeriod(Period p) {
 		return Iso8601Utils.formatPeriod(p, getPeriodFormat());
 	}
 
@@ -1129,7 +1129,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param cm The class metadata for the value (kept for symmetry with {@link Iso8601Utils#formatDate}).
 	 * @return The formatted value, or <jk>null</jk> if {@code d} is <jk>null</jk>.
 	 */
-	protected final String serializeDate(Date d, ClassMeta<?> cm) {
+	protected final String writeDate(Date d, ClassMeta<?> cm) {
 		return Iso8601Utils.formatDate(d, cm, getDateFormat(), getTimeZone());
 	}
 
@@ -1148,7 +1148,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param cm The class metadata for the value (kept for symmetry with {@link Iso8601Utils#formatCalendar}).
 	 * @return The formatted value, or <jk>null</jk> if {@code c} is <jk>null</jk>.
 	 */
-	protected final String serializeCalendar(Object c, ClassMeta<?> cm) {
+	protected final String writeCalendar(Object c, ClassMeta<?> cm) {
 		return Iso8601Utils.formatCalendar(c, cm, getCalendarFormat(), getTimeZone());
 	}
 
@@ -1161,7 +1161,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param cm The class metadata for the value (kept for symmetry with {@link Iso8601Utils#formatTemporal}).
 	 * @return The formatted value, or <jk>null</jk> if {@code t} is <jk>null</jk>.
 	 */
-	protected final String serializeTemporal(TemporalAccessor t, ClassMeta<?> cm) {
+	protected final String writeTemporal(TemporalAccessor t, ClassMeta<?> cm) {
 		return Iso8601Utils.formatTemporal(t, cm, getTemporalFormat(), getTimeZone());
 	}
 
@@ -1224,15 +1224,15 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * This method should NOT close the context object.
 	 *
 	 * <p>
-	 * The default implementation of this method simply calls {@link Serializer#doSerialize(SerializerSession,SerializerPipe,Object)}.
+	 * The default implementation of this method simply calls {@link Serializer#doWrite(SerializerSession,SerializerPipe,Object)}.
 	 *
 	 * @param pipe Where to send the output from the serializer.
 	 * @param o The object to serialize.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException Problem occurred trying to serialize object.
 	 */
-	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
-		ctx.doSerialize(this, pipe, o);
+	protected void doWrite(SerializerPipe pipe, Object o) throws IOException, SerializeException {
+		ctx.doWrite(this, pipe, o);
 	}
 
 	/**

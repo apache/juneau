@@ -671,7 +671,7 @@ class Content_Test extends TestBase {
 			.assertContent(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/B?content=" + UonSerializer.DEFAULT.serialize(XBeans.XB.INSTANCE), "a")
+		e.put("/B?content=" + UonSerializer.DEFAULT.write(XBeans.XB.INSTANCE), "a")
 			.run()
 			.assertContent(expected);
 
@@ -681,7 +681,7 @@ class Content_Test extends TestBase {
 			.assertContent(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/C?content=" + UonSerializer.DEFAULT.serialize(XBeans.XB.INSTANCE), "a")
+		e.put("/C?content=" + UonSerializer.DEFAULT.write(XBeans.XB.INSTANCE), "a")
 			.run()
 			.assertContent(expected);
 	}
@@ -709,7 +709,7 @@ class Content_Test extends TestBase {
 			.assertContent(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/B?content=" + UonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().serialize(XBeans.XE.INSTANCE), "a")
+		e2.put("/B?content=" + UonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().write(XBeans.XE.INSTANCE), "a")
 			.run()
 			.assertContent(expected);
 
@@ -719,7 +719,7 @@ class Content_Test extends TestBase {
 			.assertContent(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/C?content=" + UonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().serialize(XBeans.XE.INSTANCE), "a")
+		e2.put("/C?content=" + UonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().write(XBeans.XE.INSTANCE), "a")
 			.run()
 			.assertContent(expected);
 	}

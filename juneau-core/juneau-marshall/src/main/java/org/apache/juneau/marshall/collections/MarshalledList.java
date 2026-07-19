@@ -412,7 +412,7 @@ public class MarshalledList extends LinkedList<Object> {
 	public MarshalledList(CharSequence in, Parser p) throws ParseException {
 		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
 		if (nn(in))
-			p.parseIntoCollection(in, this, bs().object());
+			p.readIntoCollection(in, this, bs().object());
 	}
 
 	/**
@@ -447,7 +447,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 */
 	public MarshalledList(java.io.Reader in, Parser p) throws ParseException {
 		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
-		p.parseIntoCollection(in, this, bs().object());
+		p.readIntoCollection(in, this, bs().object());
 	}
 
 	/**

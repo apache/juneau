@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
 class JsonTokenReaderSupplemental_Test extends TestBase {
 
 	private static void drain(String json) throws Exception {
-		try (var r = JsonParser.DEFAULT.parseTokens(json)) {
+		try (var r = JsonParser.DEFAULT.readTokens(json)) {
 			while (r.next() != TokenType.END_OF_STREAM) { /* drain */ }
 		}
 	}
@@ -128,7 +128,7 @@ class JsonTokenReaderSupplemental_Test extends TestBase {
 			var sb = new StringBuilder();
 			for (var i = 0; i < depth; i++) sb.append('[');
 			for (var i = 0; i < depth; i++) sb.append(']');
-			try (var r = JsonParser.DEFAULT.parseTokens(sb.toString())) {
+			try (var r = JsonParser.DEFAULT.readTokens(sb.toString())) {
 				for (var i = 0; i < depth; i++)
 					assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(depth, r.getDepth());
@@ -140,7 +140,7 @@ class JsonTokenReaderSupplemental_Test extends TestBase {
 
 		@Test void e01_readParseExceptionWrapped() throws Exception {
 			// A string scalar bound to int funnels through read()'s catch block (generic wrap).
-			try (var r = JsonParser.DEFAULT.parseTokens("\"abc\"")) {
+			try (var r = JsonParser.DEFAULT.readTokens("\"abc\"")) {
 				assertThrows(ParseException.class, () -> r.read(int.class));
 			}
 		}
@@ -148,7 +148,7 @@ class JsonTokenReaderSupplemental_Test extends TestBase {
 		@Test void e02_readSurfacesParserParseException() throws Exception {
 			// Malformed element content makes parseAnything throw a ParseException that the read()
 			// funnel rethrows as-is (the 'instanceof ParseException' branch).
-			try (var r = JsonParser.DEFAULT.parseTokens("[@]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[@]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertThrows(ParseException.class, () -> r.read(Object.class));
 			}
@@ -159,7 +159,7 @@ class JsonTokenReaderSupplemental_Test extends TestBase {
 
 		@Test void f01_emptyArrayCanReadFalse() throws Exception {
 			// canRead() peeks ']' at S00_expectValue and reports no value to read.
-			try (var r = JsonParser.DEFAULT.parseTokens("[]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertFalse(r.canRead());
 				assertEquals(TokenType.END_ARRAY, r.next());
@@ -170,7 +170,7 @@ class JsonTokenReaderSupplemental_Test extends TestBase {
 	@Nested class G_canReadAtEof extends TestBase {
 
 		@Test void g01_eofAfterCommaInArray() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[1,")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[1,")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertFalse(r.canRead());  // S04: comma then EOF
@@ -178,7 +178,7 @@ class JsonTokenReaderSupplemental_Test extends TestBase {
 		}
 
 		@Test void g02_eofInObjectCommaOrEndState() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\":1")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\":1")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -187,7 +187,7 @@ class JsonTokenReaderSupplemental_Test extends TestBase {
 		}
 
 		@Test void g03_eofAfterCommaInObject() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\":1,")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\":1,")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -196,7 +196,7 @@ class JsonTokenReaderSupplemental_Test extends TestBase {
 		}
 
 		@Test void g04_eofAfterFieldNameAwaitingColon() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\"")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\"")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertFalse(r.canRead());  // S02: EOF where ':' expected
@@ -204,7 +204,7 @@ class JsonTokenReaderSupplemental_Test extends TestBase {
 		}
 
 		@Test void g05_trailingCommaRejectedViaCanRead() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\":1,}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\":1,}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());

@@ -38,18 +38,18 @@ class MarshalledFilter_Test extends TestBase {
 		a1.f1 = "f1";
 		a1.fb = new B2();
 		((B2)a1.fb).f2 = "f2";
-		var r = s.serialize(a1);
+		var r = s.write(a1);
 		assertEquals("{_type:'A1',f0:'f0',f1:'f1',fb:{_type:'B2',f0b:'f0b',f2:'f2'}}", r);
 
 		assertBean(
-			p.parse(r, A.class),
+			p.read(r, A.class),
 			"class{simpleName},fb{class{simpleName}},f1,fb{f2}",
 			"{A1},{{B2}},f1,{f2}"
 		);
 
 		// Try out-of-order creation.
 		assertBean(
-			p.parse("{f0:'f0',f1:'f1',_type:'A1',fb:{f0b:'f0b',f2:'f2',_type:'B2'}}", A.class),
+			p.read("{f0:'f0',f1:'f1',_type:'A1',fb:{f0b:'f0b',f2:'f2',_type:'B2'}}", A.class),
 			"class{simpleName},fb{class{simpleName}},f1,fb{f2}",
 			"{A1},{{B2}},f1,{f2}"
 		);
@@ -94,11 +94,11 @@ class MarshalledFilter_Test extends TestBase {
 		e1.f1 = "f1";
 		e1.fb = new F2();
 		((F2)e1.fb).f2 = "f2";
-		var r = s.serialize(e1);
+		var r = s.write(e1);
 		assertEquals("{_type:'E1',f0:'f0',f1:'f1',fb:{_type:'F2',f0b:'f0b',f2:'f2'}}", r);
 
 		assertBean(
-			p.parse(r, E.class),
+			p.read(r, E.class),
 			"class{simpleName},fb{class{simpleName}},f1,fb{f2}",
 			"{E1},{{F2}},f1,{f2}"
 		);
@@ -106,7 +106,7 @@ class MarshalledFilter_Test extends TestBase {
 		// Try out-of-order creation.
 		r = "{f0:'f0',f1:'f1',_type:'E1',fb:{f0b:'f0b',f2:'f2',_type:'F2'}}";
 		assertBean(
-			p.parse(r, E.class),
+			p.read(r, E.class),
 			"class{simpleName},fb{class{simpleName}},f1,fb{f2}",
 			"{E1},{{F2}},f1,{f2}"
 		);
@@ -154,12 +154,12 @@ class MarshalledFilter_Test extends TestBase {
 		var s = Json5Serializer.create().interfaces(C1.class).build();
 
 		var c1 = new C2();
-		var r = s.serialize(c1);
+		var r = s.write(c1);
 		assertEquals("{f0:'f0'}", r);
 
 		var l = new LinkedList<>();
 		l.add(new C2());
-		r = s.serialize(l);
+		r = s.write(l);
 		assertEquals("[{f0:'f0'}]", r);
 	}
 
@@ -178,12 +178,12 @@ class MarshalledFilter_Test extends TestBase {
 		var s = Json5Serializer.create().interfaces(D1.class).build();
 
 		var d1 = new D2();
-		var r = s.serialize(d1);
+		var r = s.write(d1);
 		assertEquals("{f0:'f0'}", r);
 
 		var l = new LinkedList<>();
 		l.add(new D2());
-		r = s.serialize(l);
+		r = s.write(l);
 		assertEquals("[{f0:'f0'}]", r);
 	}
 

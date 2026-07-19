@@ -48,16 +48,16 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 
 		var in = (Object)" foo bar ";
 		var e = (Object)"foo bar";
-		var a = (Object)p.parse(s2.serialize(in), String.class);
+		var a = (Object)p.read(s2.write(in), String.class);
 		assertEquals(json(a), json(e));
-		a = p2.parse(s.serialize(in), String.class);
+		a = p2.read(s.write(in), String.class);
 		assertEquals(json(a), json(e));
 
 		in = JsonMap.ofString("{\" foo \": \" bar \"}");
 		e = JsonMap.ofString("{\"foo\":\"bar\"}");
-		a = p.parse(s2.serialize(in), JsonMap.class);
+		a = p.read(s2.write(in), JsonMap.class);
 		assertEquals(json(a), json(e));
-		a = p2.parse(s.serialize(in), JsonMap.class);
+		a = p2.read(s.write(in), JsonMap.class);
 		assertEquals(json(a), json(e));
 
 		// Skip Parquet for mixed-type JsonList and bean with JsonList/JsonMap properties.
@@ -65,16 +65,16 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 		if (!(s instanceof ParquetSerializer)) {
 			in = new JsonList("[\" foo \", {\" foo \": \" bar \"}]");
 			e = new JsonList("[\"foo\",{\"foo\":\"bar\"}]");
-			a = p.parse(s2.serialize(in), JsonList.class);
+			a = p.read(s2.write(in), JsonList.class);
 			assertEquals(json(a), json(e));
-			a = p2.parse(s.serialize(in), JsonList.class);
+			a = p2.read(s.write(in), JsonList.class);
 			assertEquals(json(a), json(e));
 
 			in = new A().init1();
 			e = new A().init2();
-			a = p.parse(s2.serialize(in), A.class);
+			a = p.read(s2.write(in), A.class);
 			assertEquals(json(a), json(e));
-			a = p2.parse(s.serialize(in), A.class);
+			a = p2.read(s.write(in), A.class);
 			assertEquals(json(a), json(e));
 		}
 	}

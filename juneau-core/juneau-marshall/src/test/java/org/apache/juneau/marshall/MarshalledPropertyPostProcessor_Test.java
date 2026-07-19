@@ -105,7 +105,7 @@ class MarshalledPropertyPostProcessor_Test {
 		var bean = new A_Calendar();
 		bean.f = c;
 		// Calendar isn't directly round-trippable in Json5 without a swap; just verify serialize doesn't throw.
-		assertNotNull(Json5Serializer.DEFAULT.serialize(bean));
+		assertNotNull(Json5Serializer.DEFAULT.write(bean));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -165,20 +165,20 @@ class MarshalledPropertyPostProcessor_Test {
 	@Test void c01_xmlGregorianCalendar_nullValue_serialize() {
 		var bean = new C_XmlGregorianCalendar();
 		bean.f = null;
-		var s = Json5Serializer.DEFAULT.serialize(bean);
-		var b = Json5Parser.DEFAULT.parse(s, C_XmlGregorianCalendar.class);
+		var s = Json5Serializer.DEFAULT.write(bean);
+		var b = Json5Parser.DEFAULT.read(s, C_XmlGregorianCalendar.class);
 		assertNull(b.f);
 	}
 
 	@Test void c02_xmlGregorianCalendar_emptyWire_parsesAsNull() {
 		// Empty string in wire — exercises the s.isEmpty() true branch in the unswap path.
-		var b = Json5Parser.DEFAULT.parse("{f:''}", C_XmlGregorianCalendar.class);
+		var b = Json5Parser.DEFAULT.read("{f:''}", C_XmlGregorianCalendar.class);
 		assertNull(b.f);
 	}
 
 	@Test void c03_xmlGregorianCalendar_nullWire_unswap() {
 		// Explicit null wire — exercises the o == null true branch in the unswap path.
-		var b = Json5Parser.DEFAULT.parse("{f:null}", C_XmlGregorianCalendar.class);
+		var b = Json5Parser.DEFAULT.read("{f:null}", C_XmlGregorianCalendar.class);
 		assertNull(b.f);
 	}
 
@@ -186,8 +186,8 @@ class MarshalledPropertyPostProcessor_Test {
 		var seed = DatatypeFactory.newInstance().newXMLGregorianCalendar("2026-05-22T12:00:00Z");
 		var bean = new C_XmlGregorianCalendar();
 		bean.f = seed;
-		var s = Json5Serializer.DEFAULT.serialize(bean);
-		var b = Json5Parser.DEFAULT.parse(s, C_XmlGregorianCalendar.class);
+		var s = Json5Serializer.DEFAULT.write(bean);
+		var b = Json5Parser.DEFAULT.read(s, C_XmlGregorianCalendar.class);
 		assertNotNull(b.f);
 		assertEquals(seed.toXMLFormat(), b.f.toXMLFormat());
 	}
@@ -207,8 +207,8 @@ class MarshalledPropertyPostProcessor_Test {
 		var p = Json5Parser.create().temporalFormat(TemporalFormat.MILLIS).build();
 		var bean = new D_MonthDay();
 		bean.f = MonthDay.of(6, 15);
-		var wire = s.serialize(bean);
-		var back = p.parse(wire, D_MonthDay.class);
+		var wire = s.write(bean);
+		var back = p.read(wire, D_MonthDay.class);
 		assertEquals(bean.f, back.f);
 	}
 
@@ -349,13 +349,13 @@ class MarshalledPropertyPostProcessor_Test {
 
 	@Test void h02_floatSwap_blankStringParsesToZero() {
 		var p = Json5Parser.create().build();
-		var b = p.parse("{f:''}", E_FloatFmt.class);
+		var b = p.read("{f:''}", E_FloatFmt.class);
 		assertEquals(Float.valueOf(0.0f), b.f);
 	}
 
 	@Test void h03_floatSwap_blankStringDouble() {
 		var p = Json5Parser.create().build();
-		var b = p.parse("{f:''}", E_DoubleFmt.class);
+		var b = p.read("{f:''}", E_DoubleFmt.class);
 		assertEquals(Double.valueOf(0.0d), b.f);
 	}
 
@@ -386,21 +386,21 @@ class MarshalledPropertyPostProcessor_Test {
 		var seed = DatatypeFactory.newInstance().newXMLGregorianCalendar("2026-05-22T12:00:00Z");
 		var bean = new I_XgcField();
 		bean.f = seed;
-		assertNotNull(Json5Serializer.DEFAULT.serialize(bean));
+		assertNotNull(Json5Serializer.DEFAULT.write(bean));
 	}
 
 	@Test void i02_xmlGregorianCalendar_marshalledPropOnGetter_swapAlreadySet() throws Exception {
 		var seed = DatatypeFactory.newInstance().newXMLGregorianCalendar("2026-05-22T12:00:00Z");
 		var bean = new I_XgcGetter();
 		bean.setF(seed);
-		assertNotNull(Json5Serializer.DEFAULT.serialize(bean));
+		assertNotNull(Json5Serializer.DEFAULT.write(bean));
 	}
 
 	@Test void i03_xmlGregorianCalendar_marshalledPropOnSetter_swapAlreadySet() throws Exception {
 		var seed = DatatypeFactory.newInstance().newXMLGregorianCalendar("2026-05-22T12:00:00Z");
 		var bean = new I_XgcSetter();
 		bean.setF(seed);
-		assertNotNull(Json5Serializer.DEFAULT.serialize(bean));
+		assertNotNull(Json5Serializer.DEFAULT.write(bean));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -420,10 +420,10 @@ class MarshalledPropertyPostProcessor_Test {
 		bean.f.add(new byte[] { 1, 2, 3 });
 		bean.f.add(new byte[] { 4, 5, 6 });
 		var s = Json5Serializer.create().binaryFormat(BinaryFormat.HEX).build();
-		var wire = s.serialize(bean);
+		var wire = s.write(bean);
 		assertNotNull(wire);
 		var p = Json5Parser.create().binaryFormat(BinaryFormat.HEX).build();
-		var back = p.parse(wire, J_ListOfBytes.class);
+		var back = p.read(wire, J_ListOfBytes.class);
 		assertEquals(2, back.f.size());
 		assertArrayEquals(new byte[] { 1, 2, 3 }, back.f.get(0));
 		assertArrayEquals(new byte[] { 4, 5, 6 }, back.f.get(1));
@@ -456,9 +456,9 @@ class MarshalledPropertyPostProcessor_Test {
 		bean.f = BigInteger.valueOf(42);
 		var s = Json5Serializer.create().swaps(BigIntStringSwap.class).build();
 		var p = Json5Parser.create().swaps(BigIntStringSwap.class).build();
-		var wire = s.serialize(bean);
+		var wire = s.write(bean);
 		assertNotNull(wire);
-		var back = p.parse(wire, K_NumberField.class);
+		var back = p.read(wire, K_NumberField.class);
 		assertNotNull(back.f);
 	}
 
@@ -469,8 +469,8 @@ class MarshalledPropertyPostProcessor_Test {
 		bean.f = null;
 		var s = Json5Serializer.create().swaps(BigIntStringSwap.class).build();
 		var p = Json5Parser.create().swaps(BigIntStringSwap.class).build();
-		var wire = s.serialize(bean);
-		var back = p.parse(wire, K_NumberField.class);
+		var wire = s.write(bean);
+		var back = p.read(wire, K_NumberField.class);
 		assertNull(back.f);
 	}
 
@@ -500,8 +500,8 @@ class MarshalledPropertyPostProcessor_Test {
 		// Reflectively set the property so the helper stays generic across the per-type fixture classes.
 		try {
 			bean.getClass().getField(propertyName).set(bean, value);
-			var s = Json5Serializer.DEFAULT.serialize(bean);
-			var b = (T) Json5Parser.DEFAULT.parse(s, bean.getClass());
+			var s = Json5Serializer.DEFAULT.write(bean);
+			var b = (T) Json5Parser.DEFAULT.read(s, bean.getClass());
 			assertNotNull(b, "parsed bean was null for " + cns(bean));
 			return b;
 		} catch (ReflectiveOperationException e) {

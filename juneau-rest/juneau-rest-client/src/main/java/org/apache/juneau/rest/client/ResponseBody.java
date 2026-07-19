@@ -184,7 +184,7 @@ public final class ResponseBody {
 		if (body == null)
 			return null;
 		try {
-			return parser.parse(body, type);
+			return parser.read(body, type);
 		} catch (ParseException e) {
 			throw new IOException(e);
 		}
@@ -238,8 +238,8 @@ public final class ResponseBody {
 
 		Object input = parser.isReaderParser() ? new InputStreamReader(stream, StandardCharsets.UTF_8) : stream;
 		var cursor = isToken
-			? ((TokenReadable) parser).parseTokens(input)
-			: ((RecordReadable) parser).parseRecords(input);
+			? ((TokenReadable) parser).readTokens(input)
+			: ((RecordReadable) parser).readRecords(input);
 
 		if (! type.isInstance(cursor))
 			throw ioex("Parser '%s' produced cursor type '%s' which is not assignable to the declared type '%s'.", parser.getClass().getName(), cursor == null ? "null" : cursor.getClass().getName(), type.getName());

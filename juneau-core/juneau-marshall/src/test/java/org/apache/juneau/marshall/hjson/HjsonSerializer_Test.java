@@ -33,7 +33,7 @@ class HjsonSerializer_Test {
 		m.put("name", "Alice");
 		m.put("age", 30);
 		m.put("active", true);
-		var hjson = HjsonSerializer.DEFAULT.serialize(m);
+		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("name") && hjson.contains("Alice"));
 		assertTrue(hjson.contains("age") && hjson.contains("30"));
@@ -48,7 +48,7 @@ class HjsonSerializer_Test {
 		var config = new LinkedHashMap<String, Object>();
 		config.put("name", "myapp");
 		config.put("address", address);
-		var hjson = HjsonSerializer.DEFAULT.serialize(config);
+		var hjson = HjsonSerializer.DEFAULT.write(config);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("name") && hjson.contains("myapp"));
 		assertTrue(hjson.contains("address") && hjson.contains("city") && hjson.contains("Boston"));
@@ -58,7 +58,7 @@ class HjsonSerializer_Test {
 	void a03_quotelessStrings() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("key", "simple");
-		var hjson = HjsonSerializer.DEFAULT.serialize(m);
+		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("simple"));
 		assertFalse(hjson.contains("\"simple\""));
@@ -69,7 +69,7 @@ class HjsonSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "Alice");
 		m.put("age", 30);
-		var hjson = HjsonSerializer.DEFAULT_COMPACT.serialize(m);
+		var hjson = HjsonSerializer.DEFAULT_COMPACT.write(m);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("name:Alice") || hjson.contains("name: Alice"));
 		assertFalse(hjson.contains("\n"));
@@ -81,7 +81,7 @@ class HjsonSerializer_Test {
 		m.put("name", "Alice");
 		m.put("middle", null);
 		var s = HjsonSerializer.create().keepNullProperties().build();
-		var hjson = s.serialize(m);
+		var hjson = s.write(m);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("null"));
 	}
@@ -90,7 +90,7 @@ class HjsonSerializer_Test {
 	void a06_arrayOfStrings() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of("web", "api", "rest"));
-		var hjson = HjsonSerializer.DEFAULT.serialize(m);
+		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("web") && hjson.contains("api") && hjson.contains("rest"));
 	}
@@ -99,7 +99,7 @@ class HjsonSerializer_Test {
 	void a07_quotedStringRequired() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("special", "a{b}c:d\"e");
-		var hjson = HjsonSerializer.DEFAULT.serialize(m);
+		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("\""));
 	}
@@ -108,7 +108,7 @@ class HjsonSerializer_Test {
 	void a08_multilineString() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("desc", "line1\nline2");
-		var hjson = HjsonSerializer.DEFAULT.serialize(m);
+		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("'''") || hjson.contains("line1"));
 	}
@@ -116,7 +116,7 @@ class HjsonSerializer_Test {
 	@Test
 	void a09_emptyBean() {
 		var m = new LinkedHashMap<String, Object>();
-		var hjson = HjsonSerializer.DEFAULT.serialize(m);
+		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("{") && hjson.contains("}"));
 	}
@@ -125,7 +125,7 @@ class HjsonSerializer_Test {
 	void a10_emptyCollection() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of());
-		var hjson = HjsonSerializer.DEFAULT.serialize(m);
+		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("[]"));
 	}
@@ -134,7 +134,7 @@ class HjsonSerializer_Test {
 	void a11_stringLikeBoolean() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("s", "true");
-		var hjson = HjsonSerializer.DEFAULT.serialize(m);
+		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("\"") && hjson.contains("true"));
 	}
@@ -144,7 +144,7 @@ class HjsonSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "x");
 		var s = HjsonSerializer.create().omitRootBraces(true).build();
-		var hjson = s.serialize(m);
+		var hjson = s.write(m);
 		assertNotNull(hjson);
 		assertFalse(hjson.trim().startsWith("{"));
 	}

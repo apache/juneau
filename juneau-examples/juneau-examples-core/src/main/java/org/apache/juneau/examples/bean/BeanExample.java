@@ -228,6 +228,6 @@ public class BeanExample {
 		 *  },
 		 *  }
 		 */
-		var swaggerJson = JsonSerializer.DEFAULT_READABLE.serialize(swagger);
+		var swaggerJson = JsonSerializer.DEFAULT_READABLE.write(swagger);
 	}
 }

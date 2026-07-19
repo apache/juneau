@@ -49,7 +49,7 @@ import org.apache.juneau.marshall.json.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Use the default parser to parse JSONL into a list of POJOs</jc>
- * 	List&lt;MyBean&gt; <jv>list</jv> = JsonlParser.<jsf>DEFAULT</jsf>.parse(<jv>jsonlInput</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+ * 	List&lt;MyBean&gt; <jv>list</jv> = JsonlParser.<jsf>DEFAULT</jsf>.read(<jv>jsonlInput</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Create a custom parser</jc>
  * 	JsonlParser <jv>parser</jv> = JsonlParser.<jsm>create</jsm>().build();

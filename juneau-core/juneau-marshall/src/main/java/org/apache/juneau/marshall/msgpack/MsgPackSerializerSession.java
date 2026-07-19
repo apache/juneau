@@ -141,7 +141,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	@Override /* TokenWritable */
-	public TokenWriter serializeTokens(Object output) throws IOException {
+	public TokenWriter writeTokens(Object output) throws IOException {
 		if (output == null)
 			throw new IOException("Output cannot be null.");
 		if (!(output instanceof OutputStream os))
@@ -160,14 +160,14 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 	/**
 	 * Buffered array-element {@link RecordWriter}.  MsgPack's array wire format is
 	 * length-prefixed, so streaming without a known element count requires either buffering
-	 * (this method) or the {@link #serializeArrayRecords(Object, int)} overload that takes a count.
+	 * (this method) or the {@link #writeArrayRecords(Object, int)} overload that takes a count.
 	 *
 	 * @param output The output.
 	 * @return A buffered {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
 		return RecordAdapter.arrayWriter(this, output);
 	}
 
@@ -186,7 +186,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output, int expectedCount) throws IOException {
+	public RecordWriter writeArrayRecords(Object output, int expectedCount) throws IOException {
 		if (!(output instanceof OutputStream))
 			throw new IOException("MsgPack streaming arrayRecordWriter requires an OutputStream");
 		var os = (OutputStream) output;
@@ -203,7 +203,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 					throw new IllegalStateException(
 						"Array stream is full; declared " + expectedCount + " elements, attempted to write more.");
 				try {
-					MsgPackSerializerSession.this.serialize(value, os);
+					MsgPackSerializerSession.this.write(value, os);
 				} catch (SerializeException e) {
 					throw new IOException(e);
 				}
@@ -236,7 +236,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 		"rawtypes",   // Raw types necessary for generic type handling
 		"java:S3776"  // Cognitive complexity acceptable for serialization dispatch logic
 	})
-	private MsgPackOutputStream serializeAnything(MsgPackOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
+	private MsgPackOutputStream writeAnything(MsgPackOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null)
 			return out.appendNull();
@@ -279,18 +279,18 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
 			out.appendNull();
 		else if (sType.isBean())
-			serializeBeanMap(out, toBeanMap(o), typeName);
+			writeBeanMap(out, toBeanMap(o), typeName);
 		else if (sType.isMap()) {
 			if (sType.isBeanMap())
-				serializeBeanMap(out, (BeanMap)o, typeName);
+				writeBeanMap(out, (BeanMap)o, typeName);
 			else
-				serializeMap(out, (Map)o, eType);
+				writeMap(out, (Map)o, eType);
 		} else if (sType.isCollection()) {
-			serializeCollection(out, (Collection)o, eType);
+			writeCollection(out, (Collection)o, eType);
 		} else if (sType.isByteArray()) {
 			out.appendBinary((byte[])o);
 		} else if (sType.isArray()) {
-			serializeCollection(out, toList(sType.inner(), o), eType);
+			writeCollection(out, toList(sType.inner(), o), eType);
 		} else if (sType.isBoolean()) {
 			out.appendBoolean((Boolean)o);
 		} else if (sType.isNumber()) {
@@ -298,18 +298,18 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
 			out.appendString(resolveUri(o.toString()));
 		} else if (sType.isDate()) {
-			out.appendString(serializeDate((Date)o, sType));
+			out.appendString(writeDate((Date)o, sType));
 		} else if (sType.isCalendar()) {
-			out.appendString(serializeCalendar(o, sType));
+			out.appendString(writeCalendar(o, sType));
 		} else if (sType.isTemporal()) {
-			out.appendString(serializeTemporal((TemporalAccessor)o, sType));
+			out.appendString(writeTemporal((TemporalAccessor)o, sType));
 		} else if (sType.isDuration()) {
 			appendDuration(out, (Duration)o);
 		} else if (sType.isPeriod()) {
-			out.appendString(serializePeriod((Period)o));
+			out.appendString(writePeriod((Period)o));
 		} else if (sType.isStreamable()) {
 			// MsgPack protocol requires array size in header (startArray(size)), so materialization is unavoidable.
-			serializeCollection(out, toListFromStreamable(o, sType), eType);
+			writeCollection(out, toListFromStreamable(o, sType), eType);
 		} else if (sType.isReader()) {
 			pipe((Reader)o, out, SerializerSession::handleThrown);
 		} else if (sType.isInputStream()) {
@@ -321,7 +321,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 		return out;
 	}
 
-	private void serializeBeanMap(MsgPackOutputStream out, BeanMap<?> m, String typeName) throws SerializeException {
+	private void writeBeanMap(MsgPackOutputStream out, BeanMap<?> m, String typeName) throws SerializeException {
 
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
@@ -354,8 +354,8 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 				ClassMeta<?> cMeta = (ClassMeta<?>) x.getBeanInfo();
 				String key = x.getName();
 				Object value = x.getValue();
-				serializeAnything(out, key, null, null, null);
-				serializeAnything(out, value, cMeta, key, pMeta);
+				writeAnything(out, key, null, null, null);
+				writeAnything(out, value, cMeta, key, pMeta);
 			}
 		});
 	}
@@ -364,20 +364,20 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 		"rawtypes",  // Raw types necessary for generic collection handling
 		"unchecked"  // Type erasure requires unchecked operations
 	})
-	private void serializeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
+	private void writeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
 		var elementType = type.getElementType();
 		List<Object> l = listOfSize(c.size());
 		c = sort(c);
 		l.addAll(c);
 		out.startArray(l.size());
-		l.forEach(x -> serializeAnything(out, x, elementType, "<iterator>", null));
+		l.forEach(x -> writeAnything(out, x, elementType, "<iterator>", null));
 	}
 
 	@SuppressWarnings({
 		"rawtypes",  // Raw types necessary for generic map handling
 		"unchecked"  // Type erasure requires unchecked operations
 	})
-	private void serializeMap(MsgPackOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
+	private void writeMap(MsgPackOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
 		var valueType = type.getValueType();
@@ -394,8 +394,8 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 		entries.forEach(x -> {
 			Object value = x.value;
 			Object key = generalize(x.key, keyType);
-			serializeAnything(out, key, keyType, null, null);
-			serializeAnything(out, value, valueType, null, null);
+			writeAnything(out, key, keyType, null, null);
+			writeAnything(out, value, valueType, null, null);
 		});
 	}
 
@@ -407,8 +407,8 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 	}
 
 	@Override /* Overridden from SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		serializeAnything(getMsgPackOutputStream(out), o, getExpectedRootType(o), "root", null);
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
+		writeAnything(getMsgPackOutputStream(out), o, getExpectedRootType(o), "root", null);
 	}
 
 	@Override
@@ -416,7 +416,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 
 	private void appendDuration(MsgPackOutputStream out, Duration value) {
 		var f = getDurationFormat();
-		var s = serializeDuration(value);
+		var s = writeDuration(value);
 		if (f == DurationFormat.NANOS || f == DurationFormat.MILLIS)
 			out.appendNumber(Long.parseLong(s));
 		else if (f == DurationFormat.SECONDS)

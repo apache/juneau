@@ -57,11 +57,11 @@ class MarkdownDocParserSession_Test {
 	}
 
 	//====================================================================================================
-	// a - parseDocAnything: null eType → falls back to object()
+	// a - readDocAnything: null eType → falls back to object()
 	//====================================================================================================
 
-	@Test void a01_parseDocAnything_nullEType_treatsAsObject() {
-		// When parsed to Object.class the document-mode parser dispatches through parseAnything.
+	@Test void a01_readDocAnything_nullEType_treatsAsObject() {
+		// When readD to Object.class the document-mode parser dispatches through readAnything.
 		var md = """
 			# Root
 
@@ -69,12 +69,12 @@ class MarkdownDocParserSession_Test {
 			|---|---|
 			| k | v |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, Object.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, Object.class);
 		assertNotNull(r);
 	}
 
 	//====================================================================================================
-	// b - parseDocAnything: builder swap path (line 128 / 146)
+	// b - readDocAnything: builder swap path (line 128 / 146)
 	//====================================================================================================
 
 	// Class detected as having a builder via static create() + build() pattern.
@@ -102,7 +102,7 @@ class MarkdownDocParserSession_Test {
 		}
 	}
 
-	@Test void b01_builderSwap_beanParsedViaBuilder() {
+	@Test void b01_builderSwap_beanreadDViaBuilder() {
 		var md = """
 			# BBean
 
@@ -110,14 +110,14 @@ class MarkdownDocParserSession_Test {
 			|---|---|
 			| name | Alice |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, BBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, BBean.class);
 		assertNotNull(r);
 		assertEquals("Alice", r.name);
 		assertTrue(r.builtByBuilder);
 	}
 
 	//====================================================================================================
-	// c - parseDocAnything: ObjectSwap path (line 130 / 149)
+	// c - readDocAnything: ObjectSwap path (line 130 / 149)
 	//====================================================================================================
 
 	public static class CWrapped {
@@ -140,16 +140,16 @@ class MarkdownDocParserSession_Test {
 	}
 
 	@Test void c01_objectSwapPath_topLevelType() {
-		// CWrapped has a swap registered → parseDocAnything takes the swap path.
+		// CWrapped has a swap registered → readDocAnything takes the swap path.
 		// The swap maps CWrapped → String, so sType becomes String.
 		var p = MarkdownDocParser.create().swaps(CSwap.class).build();
-		var r = p.parse("hello", CWrapped.class);
+		var r = p.read("hello", CWrapped.class);
 		assertNotNull(r);
 		assertEquals("hello", r.val);
 	}
 
 	//====================================================================================================
-	// d - parseBeanFromDoc: empty root section (ne(rootLines) == false)
+	// d - readBeanFromDoc: empty root section (ne(rootLines) == false)
 	//====================================================================================================
 
 	@Test void d01_emptyRootSection_onlySubHeadings() {
@@ -165,7 +165,7 @@ class MarkdownDocParserSession_Test {
 			""";
 		// headingLevel(1) → sub-headings are ## → address section maps to property.
 		var p = MarkdownDocParser.create().headingLevel(1).build();
-		var r = p.parse(md, ContainerBean.class);
+		var r = p.read(md, ContainerBean.class);
 		assertNotNull(r);
 		assertNotNull(r.address);
 		assertEquals("Portland", r.address.city);
@@ -173,7 +173,7 @@ class MarkdownDocParserSession_Test {
 	}
 
 	//====================================================================================================
-	// e - parseBeanFromDoc: root section with no table rows (tableRows.isEmpty())
+	// e - readBeanFromDoc: root section with no table rows (tableRows.isEmpty())
 	//====================================================================================================
 
 	@Test void e01_rootSectionNoTableRows_plainText() {
@@ -183,7 +183,7 @@ class MarkdownDocParserSession_Test {
 
 			Just some narrative text with no table.
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, SimpleBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, SimpleBean.class);
 		// No table rows → no properties set → defaults.
 		assertNotNull(r);
 		assertNull(r.name);
@@ -191,7 +191,7 @@ class MarkdownDocParserSession_Test {
 	}
 
 	//====================================================================================================
-	// f - parseBeanFromDoc: isKeyValue == false in root section (non-key-value table header)
+	// f - readBeanFromDoc: isKeyValue == false in root section (non-key-value table header)
 	//====================================================================================================
 
 	@Test void f01_rootSection_nonKeyValueTable_ignored() {
@@ -204,13 +204,13 @@ class MarkdownDocParserSession_Test {
 			|---|---|
 			| foo | bar |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, SimpleBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, SimpleBean.class);
 		assertNotNull(r);
 		assertNull(r.name);
 	}
 
 	//====================================================================================================
-	// g - parseBeanFromDoc: pm == null (unknown key in key/value table) → onUnknownProperty
+	// g - readBeanFromDoc: pm == null (unknown key in key/value table) → onUnknownProperty
 	//====================================================================================================
 
 	@Test void g01_unknownPropertyInRootTable_ignored() {
@@ -226,13 +226,13 @@ class MarkdownDocParserSession_Test {
 			| age | 30 |
 			""";
 		var p = MarkdownDocParser.create().ignoreUnknownBeanProperties().build();
-		var r = p.parse(md, SimpleBean.class);
+		var r = p.read(md, SimpleBean.class);
 		assertEquals("Alice", r.name);
 		assertEquals(30, r.age);
 	}
 
 	//====================================================================================================
-	// h - parseBeanFromDoc: malformed row (cells.size() < 2) in root key/value table
+	// h - readBeanFromDoc: malformed row (cells.size() < 2) in root key/value table
 	//====================================================================================================
 
 	@Test void h01_malformedRowInRootTable_skipped() {
@@ -246,13 +246,13 @@ class MarkdownDocParserSession_Test {
 			| badrow |
 			| age | 30 |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, SimpleBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, SimpleBean.class);
 		assertEquals("Alice", r.name);
 		assertEquals(30, r.age);
 	}
 
 	//====================================================================================================
-	// i - parseBeanFromDoc: unknown sub-section (pm == null for section name)
+	// i - readBeanFromDoc: unknown sub-section (pm == null for section name)
 	//====================================================================================================
 
 	@Test void i01_unknownSubSection_skipped() {
@@ -271,13 +271,13 @@ class MarkdownDocParserSession_Test {
 			|---|---|
 			| irrelevant | value |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, SimpleBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, SimpleBean.class);
 		assertEquals("Bob", r.name);
 		assertEquals(25, r.age);
 	}
 
 	//====================================================================================================
-	// j - parseBeanFromDoc: sub-section with non-key-value table → parseTable path
+	// j - readBeanFromDoc: sub-section with non-key-value table → readTable path
 	//====================================================================================================
 
 	public static class JBean {
@@ -286,7 +286,7 @@ class MarkdownDocParserSession_Test {
 	}
 
 	@Test void j01_subSection_nonKeyValueTable_toList() {
-		// The sub-section "items" has a multi-column table (not key/value) → parseTable.
+		// The sub-section "items" has a multi-column table (not key/value) → readTable.
 		var md = """
 			# Container
 
@@ -301,7 +301,7 @@ class MarkdownDocParserSession_Test {
 			| Alice | 30 |
 			| Bob | 25 |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, JBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, JBean.class);
 		assertEquals("TestJ", r.name);
 		assertNotNull(r.items);
 		assertEquals(2, r.items.size());
@@ -310,7 +310,7 @@ class MarkdownDocParserSession_Test {
 	}
 
 	//====================================================================================================
-	// k - parseBeanFromDoc: sub-section with bullet list content (line 256)
+	// k - readBeanFromDoc: sub-section with bullet list content (line 256)
 	//====================================================================================================
 
 	public static class KBean {
@@ -333,7 +333,7 @@ class MarkdownDocParserSession_Test {
 			* beta
 			* gamma
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, KBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, KBean.class);
 		assertEquals("Summary", r.name);
 		assertNotNull(r.tags);
 		assertEquals(List.of("alpha", "beta", "gamma"), r.tags);
@@ -353,14 +353,14 @@ class MarkdownDocParserSession_Test {
 			+ one
 			+ two
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, KBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, KBean.class);
 		assertEquals("Summary", r.name);
 		assertNotNull(r.tags);
 		assertEquals(List.of("one", "two"), r.tags);
 	}
 
 	//====================================================================================================
-	// l - parseBeanFromDoc: sub-section else-branch, non-bean simple type (line 260 false)
+	// l - readBeanFromDoc: sub-section else-branch, non-bean simple type (line 260 false)
 	//====================================================================================================
 
 	public static class LBean {
@@ -370,7 +370,7 @@ class MarkdownDocParserSession_Test {
 
 	@Test void l01_subSection_elseBranch_simpleType() {
 		// Sub-section content is plain text (not table, not bullet list) and property type is String.
-		// → propCm.isBean() == false → parseAnything path.
+		// → propCm.isBean() == false → readAnything path.
 		var md = """
 			# LBean
 
@@ -382,18 +382,18 @@ class MarkdownDocParserSession_Test {
 
 			Some plain text description here.
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, LBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, LBean.class);
 		assertEquals("Test", r.name);
 		assertNotNull(r.description);
 	}
 
 	//====================================================================================================
-	// m - parseBeanFromDoc: sub-section else-branch with empty content and nested bean (line 260 true)
+	// m - readBeanFromDoc: sub-section else-branch with empty content and nested bean (line 260 true)
 	//====================================================================================================
 
 	@Test void m01_subSection_emptyContent_nestedBean() {
 		// Sub-section content is empty (only blank lines).
-		// contentLines.isEmpty() → else branch → propCm.isBean() → parseDocAnything.
+		// contentLines.isEmpty() → else branch → propCm.isBean() → readDocAnything.
 		var md = """
 			# Container
 
@@ -404,16 +404,16 @@ class MarkdownDocParserSession_Test {
 			## address
 
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, ContainerBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, ContainerBean.class);
 		assertEquals("Test", r.name);
-		// address is a bean, empty section → parseDocAnything with empty lines → empty Address
+		// address is a bean, empty section → readDocAnything with empty lines → empty Address
 	}
 
 	//====================================================================================================
-	// n - parseMapFromDoc: canCreateNewInstance false → newGenericMap() (line 287)
+	// n - readMapFromDoc: canCreateNewInstance false → newGenericMap() (line 287)
 	//====================================================================================================
 
-	@Test void n01_parseMapFromDoc_rawMapType_usesGenericMap() {
+	@Test void n01_readMapFromDoc_rawMapType_usesGenericMap() {
 		// Parsing to raw Map.class — canCreateNewInstance is false → newGenericMap().
 		var md = """
 			# Data
@@ -423,16 +423,16 @@ class MarkdownDocParserSession_Test {
 			| a | 1 |
 			| b | 2 |
 			""";
-		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.parse(md, Map.class);
+		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertNotNull(r);
 		assertEquals(2, r.size());
 	}
 
 	//====================================================================================================
-	// o - parseMapFromDoc: keyType and valueType not null (TreeMap with typed params)
+	// o - readMapFromDoc: keyType and valueType not null (TreeMap with typed params)
 	//====================================================================================================
 
-	@Test void o01_parseMapFromDoc_typedKeyAndValue() {
+	@Test void o01_readMapFromDoc_typedKeyAndValue() {
 		// TreeMap<String,Integer> — getKeyType() != null and getValueType() != null.
 		var md = """
 			# Data
@@ -442,33 +442,33 @@ class MarkdownDocParserSession_Test {
 			| x | 10 |
 			| y | 20 |
 			""";
-		var r = (TreeMap<String, Integer>) MarkdownDocParser.DEFAULT.parse(md, TreeMap.class, String.class, Integer.class);
+		var r = (TreeMap<String, Integer>) MarkdownDocParser.DEFAULT.read(md, TreeMap.class, String.class, Integer.class);
 		assertNotNull(r);
 		assertEquals(10, (int) r.get("x"));
 		assertEquals(20, (int) r.get("y"));
 	}
 
 	//====================================================================================================
-	// p - parseMapFromDoc: no table rows in root section (line 295 false)
+	// p - readMapFromDoc: no table rows in root section (line 295 false)
 	//====================================================================================================
 
-	@Test void p01_parseMapFromDoc_noTableRows_plainText() {
+	@Test void p01_readMapFromDoc_noTableRows_plainText() {
 		// Map parsing with root section that has no | rows → tableRows.isEmpty() is true.
 		var md = """
 			# Data
 
 			Just text, no table.
 			""";
-		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.parse(md, Map.class);
+		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertNotNull(r);
 		assertTrue(r.isEmpty());
 	}
 
 	//====================================================================================================
-	// q - parseMapFromDoc: non-key-value table header in root (line 301 false)
+	// q - readMapFromDoc: non-key-value table header in root (line 301 false)
 	//====================================================================================================
 
-	@Test void q01_parseMapFromDoc_nonKeyValueHeader_ignored() {
+	@Test void q01_readMapFromDoc_nonKeyValueHeader_ignored() {
 		// Root section table with non-key-value headers → isKeyValue = false → table not processed.
 		var md = """
 			# Data
@@ -477,16 +477,16 @@ class MarkdownDocParserSession_Test {
 			|---|---|
 			| a | b |
 			""";
-		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.parse(md, Map.class);
+		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertNotNull(r);
 		assertTrue(r.isEmpty());
 	}
 
 	//====================================================================================================
-	// r - parseMapFromDoc: malformed row in key/value table (cells.size() < 2)
+	// r - readMapFromDoc: malformed row in key/value table (cells.size() < 2)
 	//====================================================================================================
 
-	@Test void r01_parseMapFromDoc_malformedRow_skipped() {
+	@Test void r01_readMapFromDoc_malformedRow_skipped() {
 		// Row with single cell in map key/value table → cells.size() < 2 → continue.
 		var md = """
 			# Data
@@ -497,17 +497,17 @@ class MarkdownDocParserSession_Test {
 			| badrow |
 			| k2 | v2 |
 			""";
-		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.parse(md, Map.class);
+		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertEquals("v1", r.get("k1"));
 		assertEquals("v2", r.get("k2"));
 		assertFalse(r.containsKey("badrow"));
 	}
 
 	//====================================================================================================
-	// s - parseMapFromDoc: sub-section adds entry to map (line 315-321)
+	// s - readMapFromDoc: sub-section adds entry to map (line 315-321)
 	//====================================================================================================
 
-	@Test void s01_parseMapFromDoc_withSubSection() {
+	@Test void s01_readMapFromDoc_withSubSection() {
 		// Map parsing where sub-sections also get added as entries.
 		// headingLevel(1) → sub-sections are ##.
 		var md = """
@@ -522,7 +522,7 @@ class MarkdownDocParserSession_Test {
 			some text
 			""";
 		var p = MarkdownDocParser.create().headingLevel(1).build();
-		var r = (Map<String, Object>) p.parse(md, Map.class);
+		var r = (Map<String, Object>) p.read(md, Map.class);
 		assertNotNull(r);
 		assertEquals("v1", r.get("k1"));
 		assertTrue(r.containsKey("section1"));
@@ -587,7 +587,7 @@ class MarkdownDocParserSession_Test {
 	}
 
 	//====================================================================================================
-	// v - parseDocAnything: builder swap — builder is null skip (o == null, no builder call)
+	// v - readDocAnything: builder swap — builder is null skip (o == null, no builder call)
 	//====================================================================================================
 
 	// A builder whose build() returns null when name is not set.
@@ -623,13 +623,13 @@ class MarkdownDocParserSession_Test {
 			|---|---|
 			| name | Carol |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, VBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, VBean.class);
 		assertNotNull(r);
 		assertEquals("Carol", r.name);
 	}
 
 	//====================================================================================================
-	// w - parseDocAnything: object swap with non-null result (line 149 true)
+	// w - readDocAnything: object swap with non-null result (line 149 true)
 	//====================================================================================================
 
 	public static class WWrapped {
@@ -654,16 +654,16 @@ class MarkdownDocParserSession_Test {
 	@Test void w01_objectSwap_nonNullResult() {
 		// swap != null && o != null → unswap is called at line 150.
 		var p = MarkdownDocParser.create().swaps(WSwap.class).build();
-		var r = p.parse("hello", WWrapped.class);
+		var r = p.read("hello", WWrapped.class);
 		assertNotNull(r);
 		assertEquals("hello", r.val);
 	}
 
 	//====================================================================================================
-	// x - parseMapFromDoc: empty rootLines (sections.get("") returns empty list)
+	// x - readMapFromDoc: empty rootLines (sections.get("") returns empty list)
 	//====================================================================================================
 
-	@Test void x01_parseMapFromDoc_emptyRoot_onlySubSections() {
+	@Test void x01_readMapFromDoc_emptyRoot_onlySubSections() {
 		// Map document where the root section has no content (no lines before sub-headings).
 		// headingLevel(1) → sub-sections are ##.
 		var md = """
@@ -676,7 +676,7 @@ class MarkdownDocParserSession_Test {
 			val2
 			""";
 		var p = MarkdownDocParser.create().headingLevel(1).build();
-		var r = (Map<String, Object>) p.parse(md, Map.class);
+		var r = (Map<String, Object>) p.read(md, Map.class);
 		assertNotNull(r);
 		assertTrue(r.containsKey("key1"));
 		assertTrue(r.containsKey("key2"));
@@ -721,10 +721,10 @@ class MarkdownDocParserSession_Test {
 	}
 
 	//====================================================================================================
-	// aa - parseMapFromDoc: 3-column table header (headers.size() != 2) → isKeyValue false
+	// aa - readMapFromDoc: 3-column table header (headers.size() != 2) → isKeyValue false
 	//====================================================================================================
 
-	@Test void aa01_parseMapFromDoc_threeColumnHeader_isKeyValueFalse() {
+	@Test void aa01_readMapFromDoc_threeColumnHeader_isKeyValueFalse() {
 		// A 3-column header → headers.size() == 2 is false → isKeyValue is false → table skipped.
 		var md = """
 			# Data
@@ -733,16 +733,16 @@ class MarkdownDocParserSession_Test {
 			|---|---|---|
 			| a | b | c |
 			""";
-		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.parse(md, Map.class);
+		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertNotNull(r);
 		assertTrue(r.isEmpty());
 	}
 
 	//====================================================================================================
-	// ab - parseMapFromDoc: "Value" header mismatch (second header not "Value")
+	// ab - readMapFromDoc: "Value" header mismatch (second header not "Value")
 	//====================================================================================================
 
-	@Test void ab01_parseMapFromDoc_secondHeaderNotValue_isKeyValueFalse() {
+	@Test void ab01_readMapFromDoc_secondHeaderNotValue_isKeyValueFalse() {
 		// "Key | Desc" — second header is not "Value" → isKeyValue false.
 		var md = """
 			# Data
@@ -751,16 +751,16 @@ class MarkdownDocParserSession_Test {
 			|---|---|
 			| k1 | v1 |
 			""";
-		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.parse(md, Map.class);
+		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertNotNull(r);
 		assertTrue(r.isEmpty());
 	}
 
 	//====================================================================================================
-	// ac - parseMapFromDoc: canCreateNewInstance true (TreeMap — concrete map)
+	// ac - readMapFromDoc: canCreateNewInstance true (TreeMap — concrete map)
 	//====================================================================================================
 
-	@Test void ac01_parseMapFromDoc_concreteMap_canCreateNewInstance() {
+	@Test void ac01_readMapFromDoc_concreteMap_canCreateNewInstance() {
 		// TreeMap.canCreateNewInstance() is true → takes the first branch at line 287.
 		// No type parameters → getKeyType() is null and getValueType() is null → string()/object() defaults.
 		var md = """
@@ -771,14 +771,14 @@ class MarkdownDocParserSession_Test {
 			| b | 2 |
 			| a | 1 |
 			""";
-		var r = (TreeMap<?, ?>) MarkdownDocParser.DEFAULT.parse(md, TreeMap.class);
+		var r = (TreeMap<?, ?>) MarkdownDocParser.DEFAULT.read(md, TreeMap.class);
 		assertNotNull(r);
 		assertInstanceOf(TreeMap.class, r);
 		assertEquals(2, r.size());
 	}
 
 	//====================================================================================================
-	// ad - parseBeanFromDoc: sub-section content has heading lines (isHeadingLine filter)
+	// ad - readBeanFromDoc: sub-section content has heading lines (isHeadingLine filter)
 	//====================================================================================================
 
 	public static class ADBean {
@@ -788,7 +788,7 @@ class MarkdownDocParserSession_Test {
 
 	@Test void ad01_subSection_withHeadingLine_filtered() {
 		// The sub-section "address" starts with a level-2 heading and then has content.
-		// The heading line is filtered out by the isHeadingLine check → parsed correctly.
+		// The heading line is filtered out by the isHeadingLine check → readD correctly.
 		var md = """
 			# ADBean
 
@@ -803,14 +803,14 @@ class MarkdownDocParserSession_Test {
 			| city | Denver |
 			| state | CO |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, ADBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, ADBean.class);
 		assertEquals("Test", r.name);
 		assertNotNull(r.address);
 		assertEquals("Denver", r.address.city);
 	}
 
 	//====================================================================================================
-	// ae - parseBeanFromDoc: sub-section where heading line is filtered from contentLines (line 233)
+	// ae - readBeanFromDoc: sub-section where heading line is filtered from contentLines (line 233)
 	//====================================================================================================
 
 	@Test void ae01_subSection_headingLineFilteredFromContentLines() {
@@ -831,7 +831,7 @@ class MarkdownDocParserSession_Test {
 			| city | Denver |
 			| state | CO |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, ADBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, ADBean.class);
 		assertEquals("Test", r.name);
 		assertNotNull(r.address);
 		assertEquals("Denver", r.address.city);
@@ -839,7 +839,7 @@ class MarkdownDocParserSession_Test {
 	}
 
 	//====================================================================================================
-	// af - parseBeanFromDoc: sub-section key/value table with non-bean property → parseTable
+	// af - readBeanFromDoc: sub-section key/value table with non-bean property → readTable
 	//====================================================================================================
 
 	public static class AEBean {
@@ -847,8 +847,8 @@ class MarkdownDocParserSession_Test {
 		public Map<String, String> props;
 	}
 
-	@Test void af01_subSection_keyValueTable_nonBeanProp_parseTable() {
-		// Sub-section "props" has a key/value table but propCm is Map (not bean) → parseTable path.
+	@Test void af01_subSection_keyValueTable_nonBeanProp_readTable() {
+		// Sub-section "props" has a key/value table but propCm is Map (not bean) → readTable path.
 		var md = """
 			# AEBean
 
@@ -863,9 +863,9 @@ class MarkdownDocParserSession_Test {
 			| p1 | v1 |
 			| p2 | v2 |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, AEBean.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, AEBean.class);
 		assertEquals("Test", r.name);
-		// props is a Map (non-bean) → parseTable path
+		// props is a Map (non-bean) → readTable path
 		assertNotNull(r.props);
 	}
 }

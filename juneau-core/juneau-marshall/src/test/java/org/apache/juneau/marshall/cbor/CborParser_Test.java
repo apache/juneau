@@ -32,18 +32,18 @@ import org.junit.jupiter.api.*;
 class CborParser_Test extends TestBase {
 
 	@Test
-	void d01_parseSimpleBean() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(JsonMap.of("name", "Alice", "age", 30));
-		var bean = CborParser.DEFAULT.parse(bytes, Person.class);
+	void d01_readSimpleBean() throws Exception {
+		var bytes = CborSerializer.DEFAULT.write(JsonMap.of("name", "Alice", "age", 30));
+		var bean = CborParser.DEFAULT.read(bytes, Person.class);
 		assertEquals("Alice", bean.name);
 		assertEquals(30, bean.age);
 	}
 
 	@Test
-	void d02_parseNestedBean() throws Exception {
+	void d02_readNestedBean() throws Exception {
 		var outer = JsonMap.of("name", "outer", "child", JsonMap.of("s", "inner", "i", 1, "b", false));
-		var bytes = CborSerializer.DEFAULT.serialize(outer);
-		var bean = CborParser.DEFAULT.parse(bytes, CborSerializer_Test.Bean2.class);
+		var bytes = CborSerializer.DEFAULT.write(outer);
+		var bean = CborParser.DEFAULT.read(bytes, CborSerializer_Test.Bean2.class);
 		assertEquals("outer", bean.name);
 		assertEquals("inner", bean.child.s);
 		assertEquals(1, bean.child.i);
@@ -51,109 +51,109 @@ class CborParser_Test extends TestBase {
 	}
 
 	@Test
-	void d03_parseCollectionOfBeans() throws Exception {
+	void d03_readCollectionOfBeans() throws Exception {
 		var list = list(
 			JsonMap.of("s", "a", "i", 1, "b", true),
 			JsonMap.of("s", "b", "i", 2, "b", false));
-		var bytes = CborSerializer.DEFAULT.serialize(list);
-		var parsed = CborParser.DEFAULT.parse(bytes, JsonList.class);
+		var bytes = CborSerializer.DEFAULT.write(list);
+		var parsed = CborParser.DEFAULT.read(bytes, JsonList.class);
 		assertEquals(2, parsed.size());
 		assertEquals("a", parsed.getMap(0).getString("s"));
 		assertEquals("b", parsed.getMap(1).getString("s"));
 	}
 
 	@Test
-	void d04_parseMapProperty() throws Exception {
+	void d04_readMapProperty() throws Exception {
 		var m = JsonMap.of("data", JsonMap.of("x", 1, "y", 2));
-		var bytes = CborSerializer.DEFAULT.serialize(m);
-		var parsed = CborParser.DEFAULT.parse(bytes, JsonMap.class);
+		var bytes = CborSerializer.DEFAULT.write(m);
+		var parsed = CborParser.DEFAULT.read(bytes, JsonMap.class);
 		var data = parsed.getMap("data");
 		assertEquals(1, data.getInt("x"));
 		assertEquals(2, data.getInt("y"));
 	}
 
 	@Test
-	void d05_parseNullValues() throws Exception {
+	void d05_readNullValues() throws Exception {
 		var m = JsonMap.of("a", 1, "b", null);
-		var bytes = CborSerializer.DEFAULT.serialize(m);
-		var parsed = CborParser.DEFAULT.parse(bytes, JsonMap.class);
+		var bytes = CborSerializer.DEFAULT.write(m);
+		var parsed = CborParser.DEFAULT.read(bytes, JsonMap.class);
 		assertNull(parsed.get("b"));
 	}
 
 	@Test
-	void d06_parseBooleans() throws Exception {
-		assertEquals(false, CborParser.DEFAULT.parse(fromHex("F4"), Boolean.class));
-		assertEquals(true, CborParser.DEFAULT.parse(fromHex("F5"), Boolean.class));
+	void d06_readBooleans() throws Exception {
+		assertEquals(false, CborParser.DEFAULT.read(fromHex("F4"), Boolean.class));
+		assertEquals(true, CborParser.DEFAULT.read(fromHex("F5"), Boolean.class));
 	}
 
 	@Test
-	void d07_parseIntegers() throws Exception {
-		assertEquals(100, CborParser.DEFAULT.parse(CborSerializer.DEFAULT.serialize(100), Integer.class));
-		assertEquals(1000000L, CborParser.DEFAULT.parse(CborSerializer.DEFAULT.serialize(1000000), Long.class));
+	void d07_readIntegers() throws Exception {
+		assertEquals(100, CborParser.DEFAULT.read(CborSerializer.DEFAULT.write(100), Integer.class));
+		assertEquals(1000000L, CborParser.DEFAULT.read(CborSerializer.DEFAULT.write(1000000), Long.class));
 	}
 
 	@Test
-	void d08_parseNegativeIntegers() throws Exception {
-		assertEquals(-1, CborParser.DEFAULT.parse(fromHex("20"), Integer.class));
-		assertEquals(-100, CborParser.DEFAULT.parse(fromHex("3863"), Integer.class));
+	void d08_readNegativeIntegers() throws Exception {
+		assertEquals(-1, CborParser.DEFAULT.read(fromHex("20"), Integer.class));
+		assertEquals(-100, CborParser.DEFAULT.read(fromHex("3863"), Integer.class));
 	}
 
 	@Test
-	void d09_parseFloats() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(1.5);
-		assertEquals(1.5, CborParser.DEFAULT.parse(bytes, Double.class), 0.001);
+	void d09_readFloats() throws Exception {
+		var bytes = CborSerializer.DEFAULT.write(1.5);
+		assertEquals(1.5, CborParser.DEFAULT.read(bytes, Double.class), 0.001);
 	}
 
 	@Test
-	void d10_parseStrings() throws Exception {
-		assertEquals("hello", CborParser.DEFAULT.parse(CborSerializer.DEFAULT.serialize("hello"), String.class));
+	void d10_readStrings() throws Exception {
+		assertEquals("hello", CborParser.DEFAULT.read(CborSerializer.DEFAULT.write("hello"), String.class));
 	}
 
 	@Test
-	void d11_parseBinary() throws Exception {
+	void d11_readBinary() throws Exception {
 		var data = new byte[] { 1, 2, 3 };
-		var bytes = CborSerializer.DEFAULT.serialize(data);
-		assertArrayEquals(data, CborParser.DEFAULT.parse(bytes, byte[].class));
+		var bytes = CborSerializer.DEFAULT.write(data);
+		assertArrayEquals(data, CborParser.DEFAULT.read(bytes, byte[].class));
 	}
 
 	@Test
-	void d12_parseEnums() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(CborSerializer_Test.Size.LARGE);
-		assertEquals(CborSerializer_Test.Size.LARGE, CborParser.DEFAULT.parse(bytes, CborSerializer_Test.Size.class));
+	void d12_readEnums() throws Exception {
+		var bytes = CborSerializer.DEFAULT.write(CborSerializer_Test.Size.LARGE);
+		assertEquals(CborSerializer_Test.Size.LARGE, CborParser.DEFAULT.read(bytes, CborSerializer_Test.Size.class));
 	}
 
 	@Test
-	void d14_parseEmptyStructures() throws Exception {
-		var emptyList = CborParser.DEFAULT.parse(fromHex("80"), JsonList.class);
+	void d14_readEmptyStructures() throws Exception {
+		var emptyList = CborParser.DEFAULT.read(fromHex("80"), JsonList.class);
 		assertTrue(emptyList.isEmpty());
-		var emptyMap = CborParser.DEFAULT.parse(fromHex("A0"), JsonMap.class);
+		var emptyMap = CborParser.DEFAULT.read(fromHex("A0"), JsonMap.class);
 		assertTrue(emptyMap.isEmpty());
 	}
 
 	@Test
 	void d16_spacedHexInput() throws Exception {
-		assertEquals("v", CborParser.DEFAULT_SPACED_HEX.parse(
-			CborSerializer.DEFAULT_SPACED_HEX.serialize(JsonMap.of("k", "v")), JsonMap.class).getString("k"));
+		assertEquals("v", CborParser.DEFAULT_SPACED_HEX.read(
+			CborSerializer.DEFAULT_SPACED_HEX.write(JsonMap.of("k", "v")), JsonMap.class).getString("k"));
 	}
 
 	@Test
 	void d17_base64Input() throws Exception {
-		assertEquals("v", CborParser.DEFAULT_BASE64.parse(
-			CborSerializer.DEFAULT_BASE64.serialize(JsonMap.of("k", "v")), JsonMap.class).getString("k"));
+		assertEquals("v", CborParser.DEFAULT_BASE64.read(
+			CborSerializer.DEFAULT_BASE64.write(JsonMap.of("k", "v")), JsonMap.class).getString("k"));
 	}
 
 	@Test
-	void d18_parseTag() throws Exception {
+	void d18_readTag() throws Exception {
 		var tagged = fromHex("C074323032332D30312D30315431323A30303A30305A");
-		var parsed = CborParser.DEFAULT.parse(tagged, String.class);
+		var parsed = CborParser.DEFAULT.read(tagged, String.class);
 		assertEquals("2023-01-01T12:00:00Z", parsed);
 	}
 
 	@Test
-	void d20_parseFromInputStream() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(JsonMap.of("x", 1));
+	void d20_readFromInputStream() throws Exception {
+		var bytes = CborSerializer.DEFAULT.write(JsonMap.of("x", 1));
 		try (var is = new ByteArrayInputStream(bytes)) {
-			var m = CborParser.DEFAULT.parse(is, JsonMap.class);
+			var m = CborParser.DEFAULT.read(is, JsonMap.class);
 			assertEquals(1, m.getInt("x"));
 		}
 	}

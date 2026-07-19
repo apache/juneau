@@ -108,8 +108,8 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 		Object o = switch (elementType) {
 			case 0x01 -> is.readDouble();
 			case 0x02 -> trim(is.readString());
-			case 0x03 -> parseDocument(is, targetType, outer, pMeta);
-			case 0x04 -> parseArray(is, targetType, outer, pMeta);
+			case 0x03 -> readDocument(is, targetType, outer, pMeta);
+			case 0x04 -> readArray(is, targetType, outer, pMeta);
 			case 0x05 -> is.readBinary();
 			case 0x07 -> is.readObjectId();
 			case 0x08 -> is.readBoolean();
@@ -128,7 +128,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 		return o;
 	}
 
-	private <T> T parseDocument(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <T> T readDocument(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 		is.readDocumentSize();
 		if (eType == null)
 			eType = object();
@@ -156,7 +156,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 		if (!eType.isOptional() && sType.isMap()) {
 			var map = sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType);
 			// Coerce string keys to the declared key type when non-String (e.g. Map<TestEnum,String>)
-			// so map.get(EnumConstant) works (Bug #7b).  Matches the JSON-family parseIntoMap2 pattern.
+			// so map.get(EnumConstant) works (Bug #7b).  Matches the JSON-family readIntoMap2 pattern.
 			var keyType = sType.getKeyType();
 			var coerceKeys = nn(keyType) && !keyType.isObject() && !keyType.isString();
 			while (!is.isDocumentEnd()) {
@@ -205,7 +205,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 			result = builder == null ? beanMap.getBean() : builder.build(this, beanMap.getBean(), eType);
 		} else {
 			// Fallback: read document elements. Handles scalar, array, Optional roots (all wrapped as {"value":x}).
-			// Do NOT call parseArray here - at root the next bytes are type+name of first element, not array doc.
+			// Do NOT call readArray here - at root the next bytes are type+name of first element, not array doc.
 			var map = newGenericMap();
 			while (!is.isDocumentEnd()) {
 				var et = is.readElementType();
@@ -256,10 +256,10 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 	}
 
 	@SuppressWarnings({
-		"unused",    // pMeta kept for API consistency with other parseXxx methods
+		"unused",    // pMeta kept for API consistency with other readXxx methods
 		"java:S1172" // Same as above
 	})
-	private Object parseArray(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private Object readArray(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 		is.readDocumentSize();
 		if (eType == null)
 			eType = object();
@@ -293,24 +293,24 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 	}
 
 	@Override
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (var is = new BsonInputStream(pipe)) {
 			is.setMaxLength(maxLength);
-			return (T)parseDocument(is, type, getOuter(), null);
+			return (T)readDocument(is, type, getOuter(), null);
 		}
 	}
 
 	/**
 	 * Opens a whole-value pull-parser cursor over a BSON document, bound to this live session.
 	 * {@link RecordReader#read(Class) read(...)} delegates to the polymorphic
-	 * {@link ParserSession#parse(Object, Class)} entry point.
+	 * {@link ParserSession#read(Object, Class)} entry point.
 	 *
 	 * @param input The input.
 	 * @return A new {@link RecordReader} cursor.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.reader(this, input);
 	}
 
@@ -323,7 +323,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 	 * @throws IOException If a problem occurred reading the input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
+	public RecordReader readArrayRecords(Object input) throws IOException {
 		return RecordAdapter.arrayReader(this, input);
 	}
 

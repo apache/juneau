@@ -33,7 +33,7 @@ class HoconMerging_Test {
 	@Test
 	void f01_duplicateObjectsMerge() {
 		var hocon = "a { x = 1 }\na { y = 2 }";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var a = (Map<String, Object>) m.get("a");
 		assertEquals(1, ((Number) a.get("x")).intValue());
 		assertEquals(2, ((Number) a.get("y")).intValue());
@@ -42,14 +42,14 @@ class HoconMerging_Test {
 	@Test
 	void f02_scalarOverwrite() {
 		var hocon = "k = 1\nk = 2";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals(2, ((Number) m.get("k")).intValue());
 	}
 
 	@Test
 	void f03_objectOverScalar() {
 		var hocon = "a = 1\na { b = 2 }";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var a = (Map<String, Object>) m.get("a");
 		assertNotNull(a);
 		assertEquals(2, ((Number) a.get("b")).intValue());
@@ -58,14 +58,14 @@ class HoconMerging_Test {
 	@Test
 	void f04_scalarOverObject() {
 		var hocon = "a { b = 1 }\na = 2";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals(2, ((Number) m.get("a")).intValue());
 	}
 
 	@Test
 	void f05_deepMerge() {
 		var hocon = "a { b { x = 1 } }\na { b { y = 2 } }";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var a = (Map<String, Object>) m.get("a");
 		var b = (Map<String, Object>) a.get("b");
 		assertEquals(1, ((Number) b.get("x")).intValue());
@@ -75,7 +75,7 @@ class HoconMerging_Test {
 	@Test
 	void f06_plusEqualsArray() {
 		var hocon = "list = [a, b]\nlist += c";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var list = (List<?>) m.get("list");
 		assertNotNull(list);
 		assertEquals(3, list.size());

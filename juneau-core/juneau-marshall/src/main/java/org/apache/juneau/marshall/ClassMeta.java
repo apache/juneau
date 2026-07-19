@@ -570,7 +570,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	public T getExample(MarshallingSession session, JsonParserSession jpSession) {
 		try {
 			if (example.isPresent())
-				return jpSession.parse(example.get(), this);
+				return jpSession.read(example.get(), this);
 			if (exampleMethod.isPresent())
 				return (T)exampleMethod.get().invokeLenient(null, session);
 			if (exampleField.isPresent())

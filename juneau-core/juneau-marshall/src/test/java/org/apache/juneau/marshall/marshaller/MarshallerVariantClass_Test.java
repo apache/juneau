@@ -90,7 +90,7 @@ class MarshallerVariantClass_Test extends TestBase {
 	@Test void b01_json5rReadableRoundTrip() throws Exception {
 		var bean = Map.of("a", 1);
 		var out = Json5R.of(bean);
-		assertEquals(Json5Serializer.DEFAULT_READABLE.serializeToString(bean), out);
+		assertEquals(Json5Serializer.DEFAULT_READABLE.writeToString(bean), out);
 		assertTrue(out.contains("\n"), () -> "Json5R output should be multi-line readable but was: " + out);
 		var m = Json5R.to(out, Map.class);
 		assertBean(m, "a", "1");
@@ -99,7 +99,7 @@ class MarshallerVariantClass_Test extends TestBase {
 	@Test void b02_inirReadableRoundTrip() throws Exception {
 		var bean = Map.of("a", 1);
 		var out = IniR.of(bean);
-		assertEquals(IniSerializer.DEFAULT_READABLE.serializeToString(bean), out);
+		assertEquals(IniSerializer.DEFAULT_READABLE.writeToString(bean), out);
 		var m = IniR.to(out, Map.class);
 		assertBean(m, "a", "1");
 	}
@@ -107,7 +107,7 @@ class MarshallerVariantClass_Test extends TestBase {
 	@Test void b03_hjsoncCompactRoundTrip() throws Exception {
 		var bean = Map.of("a", 1);
 		var out = HjsonC.of(bean);
-		assertEquals(HjsonSerializer.DEFAULT_COMPACT.serializeToString(bean), out);
+		assertEquals(HjsonSerializer.DEFAULT_COMPACT.writeToString(bean), out);
 		assertFalse(out.trim().contains("\n"), () -> "HjsonC output should be single-line compact but was: " + out);
 		var m = HjsonC.to(out, Map.class);
 		assertBean(m, "a", "1");

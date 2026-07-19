@@ -58,12 +58,12 @@ public final class CsvCellParser {
 	 * @return Parsed object: Map, List, String, Number, Boolean, or null.
 	 * @throws ParseException If the input is invalid.
 	 */
-	public static Object parse(String cell, String nullMarker) throws ParseException {
+	public static Object read(String cell, String nullMarker) throws ParseException {
 		if (cell == null || cell.isEmpty())
 			return null;
 		var p = new CsvCellParser(cell, nullMarker);
 		try {
-			return p.parseValue();
+			return p.readValue();
 		} catch (Exception e) {
 			throw new ParseException(e, "Invalid CSV cell notation at position %s: '%s'", p.pos, cell);
 		}
@@ -87,21 +87,21 @@ public final class CsvCellParser {
 		return pos < length ? input.charAt(pos++) : '\0';
 	}
 
-	private Object parseValue() throws ParseException {
+	private Object readValue() throws ParseException {
 		skipWhitespace();
 		if (pos >= length)
 			return null;
 		var c = peek();
 		if (c == '{')
-			return parseObject();
+			return readObject();
 		if (c == '[')
-			return parseArray();
+			return readArray();
 		if (c == '"')
-			return parseQuotedString();
-		return parseSimpleValue();
+			return readQuotedString();
+		return readSimpleValue();
 	}
 
-	private Map<String, Object> parseObject() throws ParseException {
+	private Map<String, Object> readObject() throws ParseException {
 		if (consume() != '{')
 			throw new ParseException("Expected opening brace");
 		var m = new LinkedHashMap<String, Object>();
@@ -111,11 +111,11 @@ public final class CsvCellParser {
 			return m;
 		}
 		while (hasMore()) {
-			var key = parseKey();
+			var key = readKey();
 			skipWhitespace();
 			if (consume() != ':')
 				throw new ParseException("Expected ':' after key at position " + pos);
-			var value = parseValue();
+			var value = readValue();
 			m.put(key, value);
 			skipWhitespace();
 			var c = peek();
@@ -130,16 +130,16 @@ public final class CsvCellParser {
 		return m;
 	}
 
-	private String parseKey() throws ParseException {
+	private String readKey() throws ParseException {
 		skipWhitespace();
 		if (pos >= length)
 			throw new ParseException("Unexpected end of input in key");
 		if (peek() == '"')
-			return parseQuotedString();
-		return parseIdentifier();
+			return readQuotedString();
+		return readIdentifier();
 	}
 
-	private List<Object> parseArray() throws ParseException {
+	private List<Object> readArray() throws ParseException {
 		if (consume() != '[')
 			throw new ParseException("Expected opening bracket");
 		var list = new ArrayList<>();
@@ -149,7 +149,7 @@ public final class CsvCellParser {
 			return list;
 		}
 		while (hasMore()) {
-			list.add(parseValue());
+			list.add(readValue());
 			skipWhitespace();
 			var c = peek();
 			if (c == ']') {
@@ -163,7 +163,7 @@ public final class CsvCellParser {
 		return list;
 	}
 
-	private String parseQuotedString() throws ParseException {
+	private String readQuotedString() throws ParseException {
 		if (consume() != '"')
 			throw new ParseException("Expected quote");
 		var sb = new StringBuilder();
@@ -179,7 +179,7 @@ public final class CsvCellParser {
 		throw new ParseException("Unterminated quoted string");
 	}
 
-	private String parseIdentifier() {
+	private String readIdentifier() {
 		var start = pos;
 		while (pos < length) {
 			var c = input.charAt(pos);
@@ -190,11 +190,11 @@ public final class CsvCellParser {
 		return input.substring(start, pos);
 	}
 
-	private Object parseSimpleValue() throws ParseException {
+	private Object readSimpleValue() throws ParseException {
 		skipWhitespace();
 		if (pos >= length || peek() == ';' || peek() == '}' || peek() == ']')
 			return "";
-		var id = parseIdentifier();
+		var id = readIdentifier();
 		if (id.isEmpty())
 			throw new ParseException("Expected value at position " + pos);
 		if (id.equalsIgnoreCase(nullMarker))

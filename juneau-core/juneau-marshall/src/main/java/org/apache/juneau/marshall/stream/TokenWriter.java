@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.serializer.*;
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
  * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder();
- * 	<jk>try</jk> (TokenWriter <jv>w</jv> = Json.<jsf>DEFAULT</jsf>.serializeTokens(<jv>sb</jv>)) {
+ * 	<jk>try</jk> (TokenWriter <jv>w</jv> = Json.<jsf>DEFAULT</jsf>.writeTokens(<jv>sb</jv>)) {
  * 		<jv>w</jv>.startObject();
  * 		<jv>w</jv>.fieldName(<js>"a"</js>);
  * 		<jv>w</jv>.number(1);
@@ -225,7 +225,7 @@ public interface TokenWriter extends RecordWriter {
 	 * <p>
 	 * <b>Swaps and {@code @Schema}:</b> this method is purely structural.  Object swaps and
 	 * schema annotations are NOT applied at the token layer &mdash; use the POJO databind path on
-	 * {@link Serializer#serialize(Object)} for those.
+	 * {@link Serializer#write(Object)} for those.
 	 *
 	 * @param value The value to emit.  May be <jk>null</jk>.
 	 * @return This object.

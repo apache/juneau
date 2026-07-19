@@ -1271,9 +1271,9 @@ public class Config extends Context implements ConfigEventListener {
 
 		String r = null;
 		if (multiLineValuesOnSeparateLines)
-			r = "\n" + (String)serializer.serialize(value);
+			r = "\n" + (String)serializer.write(value);
 		else
-			r = (String)serializer.serialize(value);
+			r = (String)serializer.write(value);
 
 		if (r.startsWith("'"))
 			return r.substring(1, r.length() - 1);

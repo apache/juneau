@@ -31,74 +31,74 @@ class CborEdgeCases_Test extends TestBase {
 
 	@Test
 	void h01_maxPositiveInt() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(Integer.MAX_VALUE);
-		assertEquals(Integer.MAX_VALUE, CborParser.DEFAULT.parse(bytes, Integer.class));
-		bytes = CborSerializer.DEFAULT.serialize(Long.MAX_VALUE);
-		assertEquals(Long.MAX_VALUE, CborParser.DEFAULT.parse(bytes, Long.class));
+		var bytes = CborSerializer.DEFAULT.write(Integer.MAX_VALUE);
+		assertEquals(Integer.MAX_VALUE, CborParser.DEFAULT.read(bytes, Integer.class));
+		bytes = CborSerializer.DEFAULT.write(Long.MAX_VALUE);
+		assertEquals(Long.MAX_VALUE, CborParser.DEFAULT.read(bytes, Long.class));
 	}
 
 	@Test
 	void h02_minNegativeInt() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(Integer.MIN_VALUE);
-		assertEquals(Integer.MIN_VALUE, CborParser.DEFAULT.parse(bytes, Integer.class));
+		var bytes = CborSerializer.DEFAULT.write(Integer.MIN_VALUE);
+		assertEquals(Integer.MIN_VALUE, CborParser.DEFAULT.read(bytes, Integer.class));
 	}
 
 	@Test
 	void h03_floatSpecialValues() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(Float.NaN);
-		var f = CborParser.DEFAULT.parse(bytes, Float.class);
+		var bytes = CborSerializer.DEFAULT.write(Float.NaN);
+		var f = CborParser.DEFAULT.read(bytes, Float.class);
 		assertTrue(Float.isNaN(f));
-		assertEquals(Float.POSITIVE_INFINITY, CborParser.DEFAULT.parse(CborSerializer.DEFAULT.serialize(Float.POSITIVE_INFINITY), Float.class));
-		assertEquals(Float.NEGATIVE_INFINITY, CborParser.DEFAULT.parse(CborSerializer.DEFAULT.serialize(Float.NEGATIVE_INFINITY), Float.class));
+		assertEquals(Float.POSITIVE_INFINITY, CborParser.DEFAULT.read(CborSerializer.DEFAULT.write(Float.POSITIVE_INFINITY), Float.class));
+		assertEquals(Float.NEGATIVE_INFINITY, CborParser.DEFAULT.read(CborSerializer.DEFAULT.write(Float.NEGATIVE_INFINITY), Float.class));
 	}
 
 	@Test
 	void h04_doubleSpecialValues() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(Double.NaN);
-		var d = CborParser.DEFAULT.parse(bytes, Double.class);
+		var bytes = CborSerializer.DEFAULT.write(Double.NaN);
+		var d = CborParser.DEFAULT.read(bytes, Double.class);
 		assertTrue(Double.isNaN(d));
 	}
 
 	@Test
 	void h05_veryLongString() throws Exception {
 		var s = "x".repeat(1000);
-		var bytes = CborSerializer.DEFAULT.serialize(s);
-		assertEquals(s, CborParser.DEFAULT.parse(bytes, String.class));
+		var bytes = CborSerializer.DEFAULT.write(s);
+		assertEquals(s, CborParser.DEFAULT.read(bytes, String.class));
 	}
 
 	@Test
 	void h09_emptyBinaryData() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(new byte[0]);
-		var parsed = CborParser.DEFAULT.parse(bytes, byte[].class);
+		var bytes = CborSerializer.DEFAULT.write(new byte[0]);
+		var parsed = CborParser.DEFAULT.read(bytes, byte[].class);
 		assertEquals(0, parsed.length);
 	}
 
 	@Test
 	void h10_unicodeEdgeCases() throws Exception {
 		var s = "\uD83D\uDE00";
-		var bytes = CborSerializer.DEFAULT.serialize(s);
-		assertEquals(s, CborParser.DEFAULT.parse(bytes, String.class));
+		var bytes = CborSerializer.DEFAULT.write(s);
+		assertEquals(s, CborParser.DEFAULT.read(bytes, String.class));
 	}
 
 	@Test
 	void h12_optionalProperties() throws Exception {
 		var m = JsonMap.of("x", o(42));
-		var bytes = CborSerializer.DEFAULT.serialize(m);
-		var parsed = CborParser.DEFAULT.parse(bytes, JsonMap.class);
+		var bytes = CborSerializer.DEFAULT.write(m);
+		var parsed = CborParser.DEFAULT.read(bytes, JsonMap.class);
 		assertNotNull(parsed.get("x"));
 	}
 
 	@Test
 	void h13_unknownTags() throws Exception {
 		var tagged = fromHex("C16161");
-		var parsed = CborParser.DEFAULT.parse(tagged, String.class);
+		var parsed = CborParser.DEFAULT.read(tagged, String.class);
 		assertEquals("a", parsed);
 	}
 
 	@Test
 	void h14_zeroLengthInput() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(null);
-		var parsed = CborParser.DEFAULT.parse(bytes, Object.class);
+		var bytes = CborSerializer.DEFAULT.write(null);
+		var parsed = CborParser.DEFAULT.read(bytes, Object.class);
 		assertNull(parsed);
 	}
 }

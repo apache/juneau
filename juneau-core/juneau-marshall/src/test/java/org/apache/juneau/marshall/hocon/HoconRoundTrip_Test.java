@@ -39,8 +39,8 @@ class HoconRoundTrip_Test extends TestBase {
 		a.put("name", "Alice");
 		a.put("age", 30);
 		a.put("active", true);
-		var hocon = HoconSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var hocon = HoconSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "name,age,active", "Alice,30,true");
 	}
 
@@ -52,8 +52,8 @@ class HoconRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "Alice");
 		a.put("address", addr);
-		var hocon = HoconSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var hocon = HoconSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "name,address{city,state}", "Alice,{Boston,MA}");
 	}
 
@@ -62,8 +62,8 @@ class HoconRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("tags", list("a", "b", "c"));
 		a.put("counts", list(1, 2, 3));
-		var hocon = HoconSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var hocon = HoconSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "tags,counts", "[a,b,c],[1,2,3]");
 	}
 
@@ -75,8 +75,8 @@ class HoconRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "app");
 		a.put("database", nested);
-		var hocon = HoconSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var hocon = HoconSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "name,database{host,port}", "app,{localhost,8080}");
 	}
 
@@ -85,8 +85,8 @@ class HoconRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("size", "LARGE");
 		a.put("status", "ACTIVE");
-		var hocon = HoconSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var hocon = HoconSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "size,status", "LARGE,ACTIVE");
 	}
 
@@ -94,8 +94,8 @@ class HoconRoundTrip_Test extends TestBase {
 	void c06_multilineStringRoundTrip() throws Exception {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("desc", "line1\nline2\nline3");
-		var hocon = HoconSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var hocon = HoconSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("line1\nline2\nline3", b.get("desc"));
 	}
 
@@ -103,8 +103,8 @@ class HoconRoundTrip_Test extends TestBase {
 	void c07_specialCharStringRoundTrip() throws Exception {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("s", "a{b}c:d\"e");
-		var hocon = HoconSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var hocon = HoconSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("a{b}c:d\"e", b.get("s"));
 	}
 
@@ -113,8 +113,8 @@ class HoconRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("asBoolean", true);
 		a.put("asString", "true");
-		var hocon = HoconSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var hocon = HoconSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals(true, b.get("asBoolean"));
 		assertEquals("true", b.get("asString"));
 	}
@@ -124,8 +124,8 @@ class HoconRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("asNumber", 42);
 		a.put("asString", "42");
-		var hocon = HoconSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var hocon = HoconSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals(42, b.get("asNumber"));
 		assertEquals("42", b.get("asString"));
 	}
@@ -133,7 +133,7 @@ class HoconRoundTrip_Test extends TestBase {
 	@Test
 	void c10_nullRoundTrip() throws Exception {
 		var hocon = "name = x\nmiddle = null";
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("x", b.get("name"));
 		assertNull(b.get("middle"));
 	}
@@ -142,8 +142,8 @@ class HoconRoundTrip_Test extends TestBase {
 	void c11_emptyStringRoundTrip() throws Exception {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("empty", "");
-		var hocon = HoconSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var hocon = HoconSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("", b.get("empty"));
 	}
 
@@ -158,8 +158,8 @@ class HoconRoundTrip_Test extends TestBase {
 		a.put("tags", list("x", "y"));
 		a.put("address", nested);
 		a.put("empty", "");
-		var hocon = HoconSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var hocon = HoconSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "name,age,active,tags,address{city},empty", "Bob,25,true,[x,y],{NYC},");
 	}
 
@@ -174,7 +174,7 @@ class HoconRoundTrip_Test extends TestBase {
 		a.put("star", "a*b");
 		a.put("amp", "a&b");
 
-		var hocon = HoconSerializer.DEFAULT.serialize(a);
+		var hocon = HoconSerializer.DEFAULT.write(a);
 		assertTrue(hocon.contains("caret = \"a^b\""));
 		assertTrue(hocon.contains("slash = \"a\\\\b\""));
 		assertTrue(hocon.contains("question = \"a?b\""));
@@ -183,7 +183,7 @@ class HoconRoundTrip_Test extends TestBase {
 		assertTrue(hocon.contains("star = \"a*b\""));
 		assertTrue(hocon.contains("amp = \"a&b\""));
 
-		var b = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var b = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertBean(
 			b,
 			"caret,slash,question,bang,at,star,amp",

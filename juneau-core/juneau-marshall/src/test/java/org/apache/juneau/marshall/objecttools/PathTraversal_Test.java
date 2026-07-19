@@ -80,7 +80,7 @@ class PathTraversal_Test extends TestBase {
 
 		// Make sure it got stored correctly.
 		var serializer = Json5Serializer.create().addRootType().build();
-		assertEquals("{person1:{name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}}", serializer.serialize(model.getRootObject()));
+		assertEquals("{person1:{name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}}", serializer.write(model.getRootObject()));
 
 		// Get the original Person object back.
 		p = (Person)model.get("/person1");
@@ -97,18 +97,18 @@ class PathTraversal_Test extends TestBase {
 		);
 
 		// Serialize it to JSON.
-		var s = serializer.serialize(p);
+		var s = serializer.write(p);
 		var expectedValue = "{_type:'Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);
 
 		// Parse it back to Java objects.
-		p = (Person)Json5Parser.create().beanDictionary(Person.class).build().parse(s, Object.class);
+		p = (Person)Json5Parser.create().beanDictionary(Person.class).build().read(s, Object.class);
 		expectedValue = "city B";
 		s = p.addresses[1].city;
 		assertEquals(expectedValue, s);
 
 		// Parse it back into JSON again.
-		s = serializer.serialize(p);
+		s = serializer.write(p);
 		expectedValue = "{_type:'Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);
 
@@ -124,25 +124,25 @@ class PathTraversal_Test extends TestBase {
 		model.put("addresses/1", new Address("street E", "city E", "state E", 12345, false));
 		model.put("addresses/2", new Address("street F", "city F", "state F", 12345, false));
 		serializer = Json5Serializer.create().build();
-		s = serializer.serialize(p);
+		s = serializer.write(p);
 		expectedValue = "{name:'some name',age:123,addresses:[{street:'street D',city:'city D',state:'state D',zip:12345,isCurrent:false},{street:'street E',city:'city E',state:'state E',zip:12345,isCurrent:false},{street:'street F',city:'city F',state:'state F',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);
 
 		// Try removing an address
 		model.delete("addresses/1");
-		s = serializer.serialize(p);
+		s = serializer.write(p);
 		expectedValue = "{name:'some name',age:123,addresses:[{street:'street D',city:'city D',state:'state D',zip:12345,isCurrent:false},{street:'street F',city:'city F',state:'state F',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);
 
 		model.delete("addresses/0");
 		model.delete("addresses/0");
-		s = serializer.serialize(p);
+		s = serializer.write(p);
 		expectedValue = "{name:'some name',age:123,addresses:[]}";
 		assertEquals(expectedValue, s);
 
 		// Try adding an out-of-bounds address (should pad it with nulls)
 		model.put("addresses/2", new Address("street A", "city A", "state A", 12345, true));
-		s = serializer.serialize(p);
+		s = serializer.write(p);
 		expectedValue = "{name:'some name',age:123,addresses:[null,null,{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true}]}";
 		assertEquals(expectedValue, s);
 

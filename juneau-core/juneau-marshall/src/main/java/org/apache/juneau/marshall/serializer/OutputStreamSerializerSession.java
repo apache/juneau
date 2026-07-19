@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.*;
  * This class is the parent class of all byte-based serializers.
  * <br>It has 1 abstract method to implement...
  * <ul>
- * 	<li>{@link #doSerialize(SerializerPipe, Object)}
+ * 	<li>{@link #doWrite(SerializerPipe, Object)}
  * </ul>
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -126,10 +126,10 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	@Override /* Overridden from SerializerSession */
-	public final byte[] serialize(Object o) throws SerializeException {
+	public final byte[] write(Object o) throws SerializeException {
 		var baos = new ByteArrayOutputStream();
 		try {
-			serialize(o, baos);
+			write(o, baos);
 			baos.flush();
 		} catch (IOException e) {
 			throw new SerializeException(e); // Should never happen.
@@ -138,13 +138,13 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	}
 
 	@Override /* Overridden from SerializerSession */
-	public final String serializeToString(Object o) throws SerializeException {
+	public final String writeToString(Object o) throws SerializeException {
 		// Stream-to-string is a debug / display convenience for binary serializer output (BSON / MsgPack /
 		// CBOR / Prototext / Parquet).  It always emits HEX irrespective of the configured BinaryFormat so that
 		// downstream tooling (test fixtures, log lines, REPL output) gets a stable, copy-pasteable
 		// representation of the binary frame regardless of how the surrounding context configures byte[]
 		// cell encoding.
-		return BinaryFormat.HEX.format(serialize(o));
+		return BinaryFormat.HEX.format(write(o));
 	}
 
 	@Override /* Overridden from SerializerSession */
@@ -157,7 +157,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	 *
 	 * @see MarshallingContext.Builder#binaryFormat(BinaryFormat)
 	 * @return
-	 * 	The format to use for the {@link #serializeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
+	 * 	The format to use for the {@link #writeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
 	 */
 	protected final BinaryFormat getBinaryFormat() { return ctx.getMarshallingContext().getBinaryFormat(); }
 

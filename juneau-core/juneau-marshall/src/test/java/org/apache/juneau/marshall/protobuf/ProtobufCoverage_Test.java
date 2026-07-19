@@ -198,8 +198,8 @@ class ProtobufCoverage_Test extends TestBase {
 	void b01_scalarTypeVarietyRoundTrip() throws Exception {
 		var a = new ScalarTypes();
 		a.f32 = 123456; a.f64 = 9_999_999_999L; a.sf32 = -42; a.sf64 = -9_999_999_999L; a.u32 = (int)4_000_000_000L; a.i64 = -5;
-		var bytes = ProtobufSerializer.DEFAULT.serialize(a);
-		var b = ProtobufParser.DEFAULT.parse(bytes, ScalarTypes.class);
+		var bytes = ProtobufSerializer.DEFAULT.write(a);
+		var b = ProtobufParser.DEFAULT.read(bytes, ScalarTypes.class);
 		assertEquals(123456, b.f32);
 		assertEquals(9_999_999_999L, b.f64);
 		assertEquals(-42, b.sf32);
@@ -217,8 +217,8 @@ class ProtobufCoverage_Test extends TestBase {
 	@Test
 	void b02_dateRoundTrip() throws Exception {
 		var d = new java.util.Date(1_700_000_000_000L);
-		var bytes = ProtobufSerializer.DEFAULT.serialize(new DateBean(d));
-		var b = ProtobufParser.DEFAULT.parse(bytes, DateBean.class);
+		var bytes = ProtobufSerializer.DEFAULT.write(new DateBean(d));
+		var b = ProtobufParser.DEFAULT.read(bytes, DateBean.class);
 		assertEquals(d, b.date);
 	}
 
@@ -278,8 +278,8 @@ class ProtobufCoverage_Test extends TestBase {
 		a.dur = Duration.ofSeconds(90);
 		a.ld = LocalDate.of(2024, Month.JANUARY, 2);
 		a.per = Period.of(1, 2, 3);
-		var bytes = ProtobufSerializer.DEFAULT.serialize(a);
-		var b = ProtobufParser.DEFAULT.parse(bytes, Temporals.class);
+		var bytes = ProtobufSerializer.DEFAULT.write(a);
+		var b = ProtobufParser.DEFAULT.read(bytes, Temporals.class);
 		assertEquals(a.dur, b.dur);
 		assertEquals(a.ld, b.ld);
 		assertEquals(a.per, b.per);
@@ -300,8 +300,8 @@ class ProtobufCoverage_Test extends TestBase {
 		var a = new Holder();
 		a.m = new java.util.LinkedHashMap<>();
 		a.m.put("k", new ProtobufContainers_Test.Inner(99));
-		var bytes = ProtobufSerializer.DEFAULT.serialize(a);
-		var b = ProtobufParser.DEFAULT.parse(bytes, Holder.class);
+		var bytes = ProtobufSerializer.DEFAULT.write(a);
+		var b = ProtobufParser.DEFAULT.read(bytes, Holder.class);
 		assertEquals(99, b.m.get("k").id);
 	}
 
@@ -326,8 +326,8 @@ class ProtobufCoverage_Test extends TestBase {
 		a.lds = java.util.Map.of("k", LocalDate.of(2024, Month.JANUARY, 2));
 		a.durs = java.util.Map.of("k", Duration.ofSeconds(90));
 		a.pers = java.util.Map.of("k", Period.of(1, 2, 3));
-		var bytes = ProtobufSerializer.DEFAULT.serialize(a);
-		var b = ProtobufParser.DEFAULT.parse(bytes, C03_TemporalMaps.class);
+		var bytes = ProtobufSerializer.DEFAULT.write(a);
+		var b = ProtobufParser.DEFAULT.read(bytes, C03_TemporalMaps.class);
 		assertEquals(d, b.dates.get("k"));
 		assertEquals(cal.toInstant(), b.cals.get("k").toInstant());
 		assertEquals(LocalDate.of(2024, Month.JANUARY, 2), b.lds.get("k"));
@@ -343,7 +343,7 @@ class ProtobufCoverage_Test extends TestBase {
 	void d01_rawMapRootRejected() {
 		var m = new java.util.LinkedHashMap<String,Object>();
 		m.put("a", 1);
-		assertThrows(SerializeException.class, () -> ProtobufSerializer.DEFAULT.serialize(m));
+		assertThrows(SerializeException.class, () -> ProtobufSerializer.DEFAULT.write(m));
 	}
 
 	public static class Cycle {
@@ -358,14 +358,14 @@ class ProtobufCoverage_Test extends TestBase {
 		c.name = "x";
 		c.self = c;
 		var s = ProtobufSerializer.create().detectRecursions().ignoreRecursions().build();
-		var bytes = s.serialize(c);
+		var bytes = s.write(c);
 		assertNotNull(bytes);
 	}
 
 	@Test
 	void d03_addBeanTypesSerializeStillWorks() throws Exception {
 		var s = ProtobufSerializer.create().addBeanTypesProtobuf().build();
-		var bytes = s.serialize(new ProtobufContainers_Test.Inner(7));
+		var bytes = s.write(new ProtobufContainers_Test.Inner(7));
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}

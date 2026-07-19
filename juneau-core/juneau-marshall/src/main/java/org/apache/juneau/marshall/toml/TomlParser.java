@@ -59,13 +59,13 @@ import org.apache.juneau.marshall.stream.*;
  * <p class='bjava'>
  * 	<jc>// Parse TOML into a JsonMap</jc>
  * 	String <jv>toml</jv> = <js>"name = \"myapp\"\nport = 8080"</js>;
- * 	JsonMap <jv>parsed</jv> = TomlParser.<jsf>DEFAULT</jsf>.parse(<jv>toml</jv>, JsonMap.<jk>class</jk>);
+ * 	JsonMap <jv>parsed</jv> = TomlParser.<jsf>DEFAULT</jsf>.read(<jv>toml</jv>, JsonMap.<jk>class</jk>);
  *
  * 	<jc>// Parse into a bean</jc>
- * 	MyConfig <jv>config</jv> = TomlParser.<jsf>DEFAULT</jsf>.parse(<jv>toml</jv>, MyConfig.<jk>class</jk>);
+ * 	MyConfig <jv>config</jv> = TomlParser.<jsf>DEFAULT</jsf>.read(<jv>toml</jv>, MyConfig.<jk>class</jk>);
  *
  * 	<jc>// Parse into a parameterized type (e.g. Map with type args)</jc>
- * 	Map&lt;String, Object&gt; <jv>map</jv> = TomlParser.<jsf>DEFAULT</jsf>.parse(<jv>toml</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, Object.<jk>class</jk>);
+ * 	Map&lt;String, Object&gt; <jv>map</jv> = TomlParser.<jsf>DEFAULT</jsf>.read(<jv>toml</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, Object.<jk>class</jk>);
  *
  * 	<jc>// Use the marshaller for convenience</jc>
  * 	<jv>parsed</jv> = Toml.<jsm>to</jsm>(<jv>toml</jv>, JsonMap.<jk>class</jk>);
@@ -204,12 +204,12 @@ public class TomlParser extends ReaderParser implements RecordReadable {
 
 	/**
 	 * Convenience delegator that opens a {@link RecordReader} over the input using
-	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 * <b>default session arguments</b> (mirrors {@link #read(Object, Class)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link TomlParserSession#parseRecords(Object)}.  Callers
+	 * The real implementation lives on {@link TomlParserSession#readRecords(Object)}.  Callers
 	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
-	 * {@link #createSession()} and invoke {@link TomlParserSession#parseRecords(Object)} on the
+	 * {@link #createSession()} and invoke {@link TomlParserSession#readRecords(Object)} on the
 	 * built session instead.
 	 *
 	 * @param input The input.
@@ -217,8 +217,8 @@ public class TomlParser extends ReaderParser implements RecordReadable {
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
-		return ((RecordReadable) getSession()).parseRecords(input);
+	public RecordReader readRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).readRecords(input);
 	}
 
 	@Override /* RecordReadable */

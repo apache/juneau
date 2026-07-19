@@ -41,7 +41,7 @@ class UonPartParser_Test extends TestBase {
 	private static MarshallingSession bs = p;
 
 	private static <T> T parse(String input, ClassMeta<T> type) throws SchemaValidationException, ParseException {
-		return p.parse((HttpPartType)null, (HttpPartSchema)null, input, type);
+		return p.read((HttpPartType)null, (HttpPartSchema)null, input, type);
 	}
 
 	//====================================================================================================
@@ -270,7 +270,7 @@ class UonPartParser_Test extends TestBase {
 		public int f2;
 	}
 
-	@Test void a04_parseParameterJsonMap() throws Exception {
+	@Test void a04_readParameterJsonMap() throws Exception {
 		var in = "(name='foo bar')";
 		var r = parse(in, MarshallingContext.DEFAULT.getClassMeta(JsonMap.class));
 		assertEquals("{name:'foo bar'}", Json5Serializer.DEFAULT.toString(r));

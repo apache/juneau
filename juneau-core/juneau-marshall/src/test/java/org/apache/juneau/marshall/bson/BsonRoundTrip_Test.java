@@ -39,8 +39,8 @@ class BsonRoundTrip_Test extends TestBase {
 	@Test
 	void a01_simpleMapRoundTrip() throws Exception {
 		var a = JsonMap.of("name", "Alice", "age", 30, "active", true);
-		var bytes = BsonSerializer.create().keepNullProperties().build().serialize(a);
-		var b = (Map<String, Object>) BsonParser.create().build().parse(bytes, Map.class, String.class, Object.class);
+		var bytes = BsonSerializer.create().keepNullProperties().build().write(a);
+		var b = (Map<String, Object>) BsonParser.create().build().read(bytes, Map.class, String.class, Object.class);
 		assertBean(b, "name,age,active", "Alice,30,true");
 	}
 
@@ -54,8 +54,8 @@ class BsonRoundTrip_Test extends TestBase {
 		a.put("address", addr);
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(a);
-		var b = (Map<String, Object>) p.parse(bytes, Map.class, String.class, Object.class);
+		var bytes = s.write(a);
+		var b = (Map<String, Object>) p.read(bytes, Map.class, String.class, Object.class);
 		assertBean(b, "name,address{city,state}", "Alice,{Boston,MA}");
 	}
 
@@ -64,8 +64,8 @@ class BsonRoundTrip_Test extends TestBase {
 		var a = list(1, 2, 3);
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(a);
-		var b = p.parse(bytes, List.class);
+		var bytes = s.write(a);
+		var b = p.read(bytes, List.class);
 		assertEquals(a, b);
 	}
 
@@ -73,8 +73,8 @@ class BsonRoundTrip_Test extends TestBase {
 	void a04_scalarWrappedRoundTrip() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(42);
-		var b = p.parse(bytes, int.class);
+		var bytes = s.write(42);
+		var b = p.read(bytes, int.class);
 		assertEquals(42, b);
 	}
 
@@ -83,8 +83,8 @@ class BsonRoundTrip_Test extends TestBase {
 		var a = ints(1, 2, 3);
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(a);
-		var b = p.parse(bytes, int[].class);
+		var bytes = s.write(a);
+		var b = p.read(bytes, int[].class);
 		assertArrayEquals(a, b);
 	}
 
@@ -92,8 +92,8 @@ class BsonRoundTrip_Test extends TestBase {
 	void a06_enumRoundTrip() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(JsonMap.of("size", "LARGE"));
-		var b = p.parse(bytes, Map.class);
+		var bytes = s.write(JsonMap.of("size", "LARGE"));
+		var b = p.read(bytes, Map.class);
 		assertEquals("LARGE", b.get("size"));
 	}
 
@@ -102,8 +102,8 @@ class BsonRoundTrip_Test extends TestBase {
 		var instant = Instant.ofEpochMilli(1700000000000L);
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(JsonMap.of("ts", instant));
-		var b = p.parse(bytes, Map.class);
+		var bytes = s.write(JsonMap.of("ts", instant));
+		var b = p.read(bytes, Map.class);
 		assertEquals(1700000000000L, b.get("ts"));
 	}
 
@@ -112,8 +112,8 @@ class BsonRoundTrip_Test extends TestBase {
 		var data = new byte[] { 0x01, 0x02, 0x03 };
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(JsonMap.of("data", data));
-		var b = p.parse(bytes, Map.class);
+		var bytes = s.write(JsonMap.of("data", data));
+		var b = p.read(bytes, Map.class);
 		assertArrayEquals(data, (byte[])b.get("data"));
 	}
 }

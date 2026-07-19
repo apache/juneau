@@ -55,8 +55,8 @@
  * 			<jk>new</jk> HalLink().setName(<js>"acme"</js>).setHref(<js>"https://acme.example/{rel}"</js>).setTemplated(<jk>true</jk>))
  * 		.set(<js>"total"</js>, 99.50);
  *
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>order</jv>);
- * 	HalResource <jv>back</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, HalResource.<jk>class</jk>);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>order</jv>);
+ * 	HalResource <jv>back</jv> = JsonParser.<jsf>DEFAULT</jsf>.read(<jv>json</jv>, HalResource.<jk>class</jk>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

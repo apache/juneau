@@ -41,27 +41,27 @@ class CommonParser_Test extends TestBase {
 		var p = HtmlParser.create().beanDictionary(A1.class).build();
 		var in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr></table>";
 
-		var m = (Map)p.parse(in, Object.class);
+		var m = (Map)p.read(in, Object.class);
 		assertEquals(1, m.get("a"));
 
 		in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><string>foo bar</string></td></tr></table>";
-		m = (Map)p.parse(in, Object.class);
+		m = (Map)p.read(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo bar", m.get("b"));
 
 		in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><string>foo bar</string></td></tr><tr><td><string>c</string></td><td><boolean>false</boolean></td></tr></table>";
-		m = (Map)p.parse(in, Object.class);
+		m = (Map)p.read(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals(false, m.get("c"));
 
 		in = " <table _type='object'> <tr> <th> <string> key </string> </th> <th> <string> value </string> </th> </tr> <tr> <td> <string> a </string> </td> <td> <number> 1 </number> </td> </tr> <tr> <td> <string> b </string> </td> <td> <string> foo </string> </td> </tr> <tr> <td> <string> c </string> </td> <td> <boolean> false </boolean> </td> </tr> </table> ";
-		m = (Map)p.parse(in, Object.class);
+		m = (Map)p.read(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo", m.get("b"));
 		assertEquals(false, m.get("c"));
 
 		in = "<table _type='array'><tr><th>attribute</th></tr><tr><td><string>value</string></td></tr><tr><td><string>value</string></td></tr></table>";
-		var jl = (MarshalledList)p.parse(in, Object.class);
+		var jl = (MarshalledList)p.read(in, Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 
@@ -70,12 +70,12 @@ class CommonParser_Test extends TestBase {
 		t2.add(new A3("name0","value0"));
 		t2.add(new A3("name1","value1"));
 		t1.list = t2;
-		in = HtmlSerializer.create().addBeanTypes().addRootType().build().serialize(t1);
-		t1 = (A1)p.parse(in, Object.class);
+		in = HtmlSerializer.create().addBeanTypes().addRootType().build().write(t1);
+		t1 = (A1)p.read(in, Object.class);
 		assertEquals("value1", t1.list.get(1).value);
 
-		in = HtmlSerializer.DEFAULT.serialize(t1);
-		t1 = p.parse(in, A1.class);
+		in = HtmlSerializer.DEFAULT.write(t1);
+		t1 = p.read(in, A1.class);
 		assertEquals("value1", t1.list.get(1).value);
 	}
 
@@ -102,10 +102,10 @@ class CommonParser_Test extends TestBase {
 	@Test void a02_correctHandlingOfUnknownProperties() throws Exception {
 		var p = HtmlParser.create().ignoreUnknownBeanProperties().build();
 		var in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
-		var t = p.parse(in, B.class);
+		var t = p.read(in, B.class);
 		assertEquals(1, t.a);
 		assertEquals(2, t.b);
-		assertThrows(Exception.class, ()->HtmlParser.DEFAULT.parse(in, B.class));
+		assertThrows(Exception.class, ()->HtmlParser.DEFAULT.read(in, B.class));
 	}
 
 	public static class B {
@@ -118,7 +118,7 @@ class CommonParser_Test extends TestBase {
 	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
 		var p = HtmlParser.DEFAULT;
 		var in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>ints</string></td><td><ul><li><number>1</number></li><li><number>2</number></li><li><number>3</number></li></ul></td></tr><tr><td><string>beans</string></td><td><table _type='array'><tr><th>a</th><th>b</th></tr><tr><td><number>1</number></td><td><number>2</number></td></tr></table></td></tr></table>";
-		var t = p.parse(in, C.class);
+		var t = p.read(in, C.class);
 		assertSize(3, t.getInts());
 		assertEquals(2, t.getBeans().get(0).b);
 	}
@@ -137,7 +137,7 @@ class CommonParser_Test extends TestBase {
 	@Test void a04_parserListeners() throws Exception {
 		var p = HtmlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 		var in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><string>/foo</string></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
-		p.parse(in, B.class);
+		p.read(in, B.class);
 		assertSize(1, MyParserListener.events);
 	}
 

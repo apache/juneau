@@ -122,7 +122,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void b02_serializeAndParseArrayOfTables() {
+	void b02_writeAndParseArrayOfTables() {
 		// Verify serializer produces array-of-tables for map with list-of-maps value
 		// and that the round-trip parser produces the same structure
 		var toml = """
@@ -192,9 +192,9 @@ class Toml_Test {
 		var outer = new LinkedHashMap<String, Object>();
 		outer.put("point", inner);
 
-		String toml = s.serialize(outer);
+		String toml = s.write(outer);
 		assertNotNull(toml);
-		// The inner map should be under a [point] table header since maps go through serializeMapAtRoot
+		// The inner map should be under a [point] table header since maps go through writeMapAtRoot
 		assertTrue(toml.contains("point") && toml.contains("x = 1"));
 	}
 
@@ -347,7 +347,7 @@ class Toml_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "test");
 		m.put("value", null);
-		String toml = s.serialize(m);
+		String toml = s.write(m);
 		assertTrue(toml.contains("~NULL~"), "Should contain custom null marker");
 	}
 
@@ -359,7 +359,7 @@ class Toml_Test {
 		db.put("host", "localhost");
 		m.put("database", db);
 
-		String toml = TomlSerializer.DEFAULT_READABLE.serialize(m);
+		String toml = TomlSerializer.DEFAULT_READABLE.write(m);
 		assertNotNull(toml);
 		assertTrue(toml.contains("[database]"));
 	}
@@ -444,7 +444,7 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void j01_serializeFloatSpecials() {
+	void j01_writeFloatSpecials() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("pos_inf", Double.POSITIVE_INFINITY);
 		m.put("neg_inf", Double.NEGATIVE_INFINITY);
@@ -456,7 +456,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void j02_serializeEscapedStrings() {
+	void j02_writeEscapedStrings() {
 		var m = JsonMap.of("msg", "hello\nworld\t\"quoted\"");
 		String toml = Toml.of(m);
 		assertTrue(toml.contains("\\n"), "Should contain escaped newline");

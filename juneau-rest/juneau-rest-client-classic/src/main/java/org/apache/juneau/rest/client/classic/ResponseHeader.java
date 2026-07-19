@@ -109,7 +109,7 @@ public class ResponseHeader extends BasicHeader {
 	 */
 	public <T> Optional<T> as(ClassMeta<T> type) {
 		try {
-			return o(parser.parse(HEADER, schema, getValue(), type));
+			return o(parser.read(HEADER, schema, getValue(), type));
 		} catch (ParseException e) {
 			throw rex(e, "Could not parse response header %s.", getName());
 		}

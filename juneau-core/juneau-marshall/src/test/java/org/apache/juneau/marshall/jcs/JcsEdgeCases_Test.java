@@ -32,41 +32,41 @@ class JcsEdgeCases_Test extends TestBase {
 
 	@Test
 	void f01_emptyBean() throws Exception {
-		assertEquals("{}", JcsSerializer.DEFAULT.serialize(JsonMap.of()));
+		assertEquals("{}", JcsSerializer.DEFAULT.write(JsonMap.of()));
 	}
 
 	@Test
 	void f02_nullRoot() throws Exception {
-		assertEquals("null", JcsSerializer.DEFAULT.serialize(null));
+		assertEquals("null", JcsSerializer.DEFAULT.write(null));
 	}
 
 	@Test
 	void f03_booleanRoot() throws Exception {
-		assertEquals("true", JcsSerializer.DEFAULT.serialize(true));
-		assertEquals("false", JcsSerializer.DEFAULT.serialize(false));
+		assertEquals("true", JcsSerializer.DEFAULT.write(true));
+		assertEquals("false", JcsSerializer.DEFAULT.write(false));
 	}
 
 	@Test
 	void f04_numberRoot() throws Exception {
-		assertEquals("42", JcsSerializer.DEFAULT.serialize(42));
-		assertEquals("3.14", JcsSerializer.DEFAULT.serialize(3.14));
+		assertEquals("42", JcsSerializer.DEFAULT.write(42));
+		assertEquals("3.14", JcsSerializer.DEFAULT.write(3.14));
 	}
 
 	@Test
 	void f05_stringRoot() throws Exception {
-		assertEquals("\"hello\"", JcsSerializer.DEFAULT.serialize("hello"));
+		assertEquals("\"hello\"", JcsSerializer.DEFAULT.write("hello"));
 	}
 
 	@Test
 	void f06_arrayRoot() throws Exception {
 		var a = list(1, 2, 3);
-		assertEquals("[1,2,3]", JcsSerializer.DEFAULT.serialize(a));
+		assertEquals("[1,2,3]", JcsSerializer.DEFAULT.write(a));
 	}
 
 	@Test
 	void f07_deepNesting() throws Exception {
 		var deep = JsonMap.of("a", JsonMap.of("b", JsonMap.of("c", JsonMap.of("d", JsonMap.of("e", 1)))));
-		assertEquals("{\"a\":{\"b\":{\"c\":{\"d\":{\"e\":1}}}}}", JcsSerializer.DEFAULT.serialize(deep));
+		assertEquals("{\"a\":{\"b\":{\"c\":{\"d\":{\"e\":1}}}}}", JcsSerializer.DEFAULT.write(deep));
 	}
 
 	@Test
@@ -76,7 +76,7 @@ class JcsEdgeCases_Test extends TestBase {
 		m.put("x", 1);
 		m.put("a", 2);
 		m.put("x", 3);  // overwrites
-		assertEquals("{\"a\":2,\"x\":3}", JcsSerializer.DEFAULT.serialize(m));
+		assertEquals("{\"a\":2,\"x\":3}", JcsSerializer.DEFAULT.write(m));
 	}
 
 	@Test
@@ -84,7 +84,7 @@ class JcsEdgeCases_Test extends TestBase {
 		var m = new TreeMap<String, Integer>();
 		for (var i = 0; i < 100; i++)
 			m.put("k" + i, i);
-		var s = JcsSerializer.DEFAULT.serialize(m);
+		var s = JcsSerializer.DEFAULT.write(m);
 		// All keys should be sorted (k0, k1, ..., k9, k10, ..., k99)
 		assertTrue(s.startsWith("{\"k0\":0,\"k1\":1"));
 		assertTrue(s.contains("\"k99\":99"));
@@ -94,6 +94,6 @@ class JcsEdgeCases_Test extends TestBase {
 	@Test
 	void f10_emptyStrings() throws Exception {
 		var m = JsonMap.of("", "emptyVal", "emptyKey", "");
-		assertEquals("{\"\":\"emptyVal\",\"emptyKey\":\"\"}", JcsSerializer.DEFAULT.serialize(m));
+		assertEquals("{\"\":\"emptyVal\",\"emptyKey\":\"\"}", JcsSerializer.DEFAULT.write(m));
 	}
 }

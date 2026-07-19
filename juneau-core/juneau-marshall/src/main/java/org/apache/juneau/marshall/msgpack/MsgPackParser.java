@@ -131,7 +131,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 
 		/**
 		 * Surfaces the MsgPack {@code ext} type byte as token-level metadata on
-		 * {@link TokenReader} cursors returned by {@link MsgPackParserSession#parseTokens(Object)}.
+		 * {@link TokenReader} cursors returned by {@link MsgPackParserSession#readTokens(Object)}.
 		 *
 		 * <p>
 		 * When enabled, ext tokens carry the signed type byte (visible via
@@ -141,7 +141,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 *
 		 * <p>
 		 * This is a token-cursor-level setting and does not affect the high-level POJO databind
-		 * path ({@link MsgPackParser#parse(Object, Class)}); that path always discards the type
+		 * path ({@link MsgPackParser#read(Object, Class)}); that path always discards the type
 		 * byte.
 		 *
 		 * @return This object.
@@ -260,12 +260,12 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 
 	/**
 	 * Convenience delegator that opens a {@link MsgPackTokenReader} over the input using
-	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 * <b>default session arguments</b> (mirrors {@link #read(Object, Class)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link MsgPackParserSession#parseTokens(Object)}.  Callers
+	 * The real implementation lives on {@link MsgPackParserSession#readTokens(Object)}.  Callers
 	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
-	 * {@link #createSession()} and invoke {@link MsgPackParserSession#parseTokens(Object)} on the
+	 * {@link #createSession()} and invoke {@link MsgPackParserSession#readTokens(Object)} on the
 	 * built session instead.
 	 *
 	 * @param input The input.
@@ -273,22 +273,22 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* TokenReadable */
-	public TokenReader parseTokens(Object input) throws IOException {
-		return getSession().parseTokens(input);
+	public TokenReader readTokens(Object input) throws IOException {
+		return getSession().readTokens(input);
 	}
 
 	/**
 	 * Convenience delegator for the array-element {@link RecordReader} (uses default session args;
-	 * see {@link #parseTokens(Object)}).  Real impl on
-	 * {@link MsgPackParserSession#parseArrayRecords(Object)}.
+	 * see {@link #readTokens(Object)}).  Real impl on
+	 * {@link MsgPackParserSession#readArrayRecords(Object)}.
 	 *
 	 * @param input The input.
 	 * @return A new array-element {@link RecordReader}.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
-		return getSession().parseArrayRecords(input);
+	public RecordReader readArrayRecords(Object input) throws IOException {
+		return getSession().readArrayRecords(input);
 	}
 
 	@Override /* Overridden from InputStreamParser */

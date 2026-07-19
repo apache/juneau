@@ -41,8 +41,8 @@
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
- * 	String <jv>hocon</jv> = HoconSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myBean</jv>);
- * 	MyBean <jv>bean</jv> = HoconParser.<jsf>DEFAULT</jsf>.parse(<jv>hocon</jv>, MyBean.<jk>class</jk>);
+ * 	String <jv>hocon</jv> = HoconSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
+ * 	MyBean <jv>bean</jv> = HoconParser.<jsf>DEFAULT</jsf>.read(<jv>hocon</jv>, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Or use the marshaller:</jc>
  * 	String <jv>hocon</jv> = Hocon.<jsf>of</jsf>(<jv>myBean</jv>);

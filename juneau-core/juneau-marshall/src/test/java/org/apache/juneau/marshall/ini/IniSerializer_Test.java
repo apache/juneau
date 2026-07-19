@@ -42,7 +42,7 @@ class IniSerializer_Test {
 		m.put("host", "localhost");
 		m.put("port", 8080);
 		m.put("debug", true);
-		var ini = IniSerializer.DEFAULT.serialize(m);
+		var ini = IniSerializer.DEFAULT.write(m);
 		assertNotNull(ini);
 		assertTrue(ini.contains("host = localhost") || ini.contains("host=localhost"));
 		assertTrue(ini.contains("port = 8080") || ini.contains("port=8080"));
@@ -57,7 +57,7 @@ class IniSerializer_Test {
 		var config = new LinkedHashMap<String, Object>();
 		config.put("name", "myapp");
 		config.put("database", db);
-		var ini = IniSerializer.DEFAULT.serialize(config);
+		var ini = IniSerializer.DEFAULT.write(config);
 		assertNotNull(ini);
 		assertTrue(ini.contains("name") && ini.contains("myapp"));
 		assertTrue(ini.contains("[database]"));
@@ -69,7 +69,7 @@ class IniSerializer_Test {
 	void a03_beanWithListOfStrings() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of("web", "api", "rest"));
-		var ini = IniSerializer.DEFAULT.serialize(m);
+		var ini = IniSerializer.DEFAULT.write(m);
 		assertNotNull(ini);
 		assertTrue(ini.contains("tags =") || ini.contains("tags="));
 		assertTrue(ini.contains("web") && ini.contains("api") && ini.contains("rest"));
@@ -81,7 +81,7 @@ class IniSerializer_Test {
 		m.put("name", "Alice");
 		m.put("middle", null);
 		var s = IniSerializer.create().keepNullProperties().build();
-		var ini = s.serialize(m);
+		var ini = s.write(m);
 		assertNotNull(ini);
 		assertTrue(ini.contains("name") && ini.contains("Alice"));
 		assertTrue(ini.contains("null") || ini.contains("middle"));
@@ -92,7 +92,7 @@ class IniSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("key", "123");
 		m.put("flag", "true");
-		var ini = IniSerializer.DEFAULT.serialize(m);
+		var ini = IniSerializer.DEFAULT.write(m);
 		assertNotNull(ini);
 		assertTrue(ini.contains("'123'") || ini.contains("123"));
 		assertTrue(ini.contains("'true'") || ini.contains("true"));
@@ -102,7 +102,7 @@ class IniSerializer_Test {
 	void a06_emptyStrings() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("empty", "");
-		var ini = IniSerializer.DEFAULT.serialize(m);
+		var ini = IniSerializer.DEFAULT.write(m);
 		assertNotNull(ini);
 		assertTrue(ini.contains("empty = ''") || ini.contains("empty=''") || ini.contains("empty ="));
 	}
@@ -115,7 +115,7 @@ class IniSerializer_Test {
 		var config = new LinkedHashMap<String, Object>();
 		config.put("name", "app");
 		config.put("settings", settings);
-		var ini = IniSerializer.DEFAULT.serialize(config);
+		var ini = IniSerializer.DEFAULT.write(config);
 		assertNotNull(ini);
 		assertTrue(ini.contains("[settings]"));
 		assertTrue(ini.contains("timeout") && ini.contains("30"));
@@ -133,7 +133,7 @@ class IniSerializer_Test {
 		var person = new LinkedHashMap<String, Object>();
 		person.put("name", "John");
 		person.put("employment", employment);
-		var ini = IniSerializer.DEFAULT.serialize(person);
+		var ini = IniSerializer.DEFAULT.write(person);
 		assertNotNull(ini);
 		assertTrue(ini.contains("name") && ini.contains("John"));
 		assertTrue(ini.contains("employment") && (ini.contains("[employment]") || ini.contains("employment")));
@@ -150,7 +150,7 @@ class IniSerializer_Test {
 		m.put("name", "x");
 		m.put("home", addr1);
 		m.put("work", addr2);
-		var ini = IniSerializer.DEFAULT.serialize(m);
+		var ini = IniSerializer.DEFAULT.write(m);
 		assertNotNull(ini);
 		assertTrue(ini.contains("[home]"));
 		assertTrue(ini.contains("[work]"));
@@ -160,14 +160,14 @@ class IniSerializer_Test {
 	@Test
 	void a10_topLevelCollectionThrows() {
 		var list = List.of("a", "b", "c");
-		var ex = assertThrows(Exception.class, () -> IniSerializer.DEFAULT.serialize(list));
+		var ex = assertThrows(Exception.class, () -> IniSerializer.DEFAULT.write(list));
 		assertTrue(ex.getMessage().contains("Collection") || ex.getMessage().contains("not supported")
 			|| cns(ex).contains("Serialize"));
 	}
 
 	@Test
 	void a11_topLevelScalarThrows() {
-		var ex = assertThrows(Exception.class, () -> IniSerializer.DEFAULT.serialize("hello"));
+		var ex = assertThrows(Exception.class, () -> IniSerializer.DEFAULT.write("hello"));
 		assertTrue(ex.getMessage().contains("not supported") || ex.getMessage().contains("bean")
 			|| cns(ex).contains("Serialize"));
 	}
@@ -175,7 +175,7 @@ class IniSerializer_Test {
 	@Test
 	void a12_emptyBean() {
 		var m = new LinkedHashMap<String, Object>();
-		var ini = IniSerializer.DEFAULT.serialize(m);
+		var ini = IniSerializer.DEFAULT.write(m);
 		assertNotNull(ini);
 		assertTrue(ini.trim().isEmpty() || ini.contains("\n\n"));
 	}
@@ -185,7 +185,7 @@ class IniSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("key", "value");
 		var s = IniSerializer.create().kvSeparator(':').build();
-		var ini = s.serialize(m);
+		var ini = s.write(m);
 		assertTrue(ini.contains(":") && ini.contains("value"));
 	}
 
@@ -194,7 +194,7 @@ class IniSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "test");
 		var s = IniSerializer.create().addBeanTypes().addRootType().build();
-		var ini = s.serialize(m);
+		var ini = s.write(m);
 		assertNotNull(ini);
 		assertTrue(ini.contains("name") && ini.contains("test"));
 	}
@@ -208,7 +208,7 @@ class IniSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("date", LocalDate.of(2024, 3, 15));
 		m.put("instant", Instant.parse("2024-03-15T12:00:00Z"));
-		var ini = IniSerializer.DEFAULT.serialize(m);
+		var ini = IniSerializer.DEFAULT.write(m);
 		assertNotNull(ini);
 		assertTrue(ini.contains("2024"));
 	}
@@ -217,7 +217,7 @@ class IniSerializer_Test {
 	void b02_enumValues() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("status", TestEnum.ACTIVE);
-		var ini = IniSerializer.DEFAULT.serialize(m);
+		var ini = IniSerializer.DEFAULT.write(m);
 		assertTrue(ini.contains("ACTIVE"));
 	}
 

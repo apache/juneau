@@ -375,7 +375,7 @@ class DateFormat_RoundTrip_Test extends TestBase {
 		var x = new Date(1234567890000L);
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, Date.class);
+			var x2 = p.read(out, Date.class);
 			// Binary serializers with native datetime support (BSON in particular) bypass the configured
 			// format swap at top-level and round-trip the Date with full native fidelity.  Bean-property
 			// tests above cover the swap path; here we accept either the lossy-canonical (format applied)

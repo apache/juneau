@@ -87,7 +87,7 @@ public class SseSerializerSession extends WriterSerializerSession implements Rec
 	}
 
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.arrayWriter(this, output);
 	}
 
@@ -100,7 +100,7 @@ public class SseSerializerSession extends WriterSerializerSession implements Rec
 	@SuppressWarnings({
 		"java:S2095" // Writer is owned by SerializerPipe/caller and must not be closed by this session.
 	})
-	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		var w = pipe.getWriter();
 		if (o == null)
 			return;

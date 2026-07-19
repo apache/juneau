@@ -41,9 +41,9 @@ class JsonPatch_RoundTrip_Test {
 			.build();
 
 	private static void assertJsonRoundTrip(Object bean, Class<?> type) {
-		var j1 = SER.serialize(bean);
-		var copy = PAR.parse(j1, type);
-		var j2 = SER.serialize(copy);
+		var j1 = SER.write(bean);
+		var copy = PAR.read(j1, type);
+		var j2 = SER.write(copy);
 		assertEquals(j1, j2, () -> "Round-trip JSON mismatch for " + type.getName() + ": " + j1);
 	}
 
@@ -173,8 +173,8 @@ class JsonPatch_RoundTrip_Test {
 				.append(new MoveOp("/d", "/e"))
 				.append(new CopyOp("/f", "/g"))
 				.append(new TestOp("/h", true));
-			var j = SER.serialize(patch);
-			var back = PAR.parse(j, JsonPatch.class);
+			var j = SER.write(patch);
+			var back = PAR.read(j, JsonPatch.class);
 			assertEquals(6, back.size());
 			assertInstanceOf(AddOp.class, back.get(0));
 			assertInstanceOf(RemoveOp.class, back.get(1));
@@ -188,7 +188,7 @@ class JsonPatch_RoundTrip_Test {
 		@Test
 		void wireFormat_isJsonArrayOfOperationObjects() {
 			var patch = new JsonPatch().append(new AddOp("/x", 1));
-			var j = SER.serialize(patch);
+			var j = SER.write(patch);
 			assertTrue(j.startsWith("["), () -> "Top-level should be a JSON array: " + j);
 			assertTrue(j.contains("\"op\":\"add\""), () -> j);
 			assertTrue(j.contains("\"path\":\"/x\""), () -> j);

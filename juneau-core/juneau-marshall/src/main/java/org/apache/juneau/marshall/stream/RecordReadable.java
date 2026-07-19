@@ -26,8 +26,8 @@ import java.io.*;
  * <ul>
  * 	<li>the convenience {@link org.apache.juneau.marshall.parser.Parser Parser} subclass (the
  * 		object REST negotiation matches on) &mdash; a thin delegator that mirrors
- * 		{@link org.apache.juneau.marshall.parser.Parser#parse(Object, Class) parse(...)} by
- * 		forwarding to {@code getSession().parseRecords(input)};
+ * 		{@link org.apache.juneau.marshall.parser.Parser#read(Object, Class) read(...)} by
+ * 		forwarding to {@code getSession().readRecords(input)};
  * 	<li>the {@link org.apache.juneau.marshall.parser.ParserSession ParserSession} subclass (where
  * 		the live {@code BeanSession}/{@code MarshallingContext} is) &mdash; the real cursor
  * 		creation.
@@ -52,7 +52,7 @@ public interface RecordReadable {
 	 * <p>
 	 * When invoked on a convenience {@link org.apache.juneau.marshall.parser.Parser Parser} the
 	 * cursor is opened with <b>default session args</b> (mirroring
-	 * {@link org.apache.juneau.marshall.parser.Parser#parse(Object, Class) parse(...)}).  Callers
+	 * {@link org.apache.juneau.marshall.parser.Parser#read(Object, Class) read(...)}).  Callers
 	 * that need request-derived configuration (locale, timezone, schema, swaps) should instead
 	 * call {@code createSession(args).build()} and invoke this method on the resulting
 	 * {@link org.apache.juneau.marshall.parser.ParserSession ParserSession} (which is also a
@@ -63,12 +63,12 @@ public interface RecordReadable {
 	 * @return A new {@link RecordReader} cursor.
 	 * @throws IOException If a problem occurred reading the underlying input.
 	 */
-	RecordReader parseRecords(Object input) throws IOException;
+	RecordReader readRecords(Object input) throws IOException;
 
 	/**
 	 * Streaming-quality signal queryable <em>before</em> opening a cursor.
 	 *
-	 * @return <jk>true</jk> if {@link #parseRecords(Object)} returns an O(1)-memory streaming
+	 * @return <jk>true</jk> if {@link #readRecords(Object)} returns an O(1)-memory streaming
 	 * 	cursor; <jk>false</jk> for buffered (whole-value) formats backed by
 	 * 	{@link RecordAdapter}.
 	 */

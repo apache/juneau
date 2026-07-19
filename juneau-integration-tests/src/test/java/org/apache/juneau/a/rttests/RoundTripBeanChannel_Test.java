@@ -63,7 +63,7 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 		assumeTrue(t.getParser() != null, "Skipping serialization-only tester: " + t.label);
 		var serialized = t.serialize(list(), t.getSerializer());
 		var parsed = new ListBeanChannel<Item>();
-		t.getParser().getSession().parseToBeanConsumer(serialized, parsed, Item.class);
+		t.getParser().getSession().readToBeanConsumer(serialized, parsed, Item.class);
 		assertEquals(0, parsed.getList().size());
 	}
 
@@ -73,7 +73,7 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 		assumeTrue(t.getParser() != null, "Skipping serialization-only tester: " + t.label);
 		var serialized = t.serialize(list(new Item("alpha", 1)), t.getSerializer());
 		var parsed = new ListBeanChannel<Item>();
-		t.getParser().getSession().parseToBeanConsumer(serialized, parsed, Item.class);
+		t.getParser().getSession().readToBeanConsumer(serialized, parsed, Item.class);
 		assertEquals(1, parsed.getList().size());
 		assertEquals("alpha", parsed.getList().get(0).name);
 		assertEquals(1, parsed.getList().get(0).value);
@@ -85,7 +85,7 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 		assumeTrue(t.getParser() != null, "Skipping serialization-only tester: " + t.label);
 		var serialized = t.serialize(list(new Item("alpha", 1), new Item("beta", 2), new Item("gamma", 3)), t.getSerializer());
 		var parsed = new ListBeanChannel<Item>();
-		t.getParser().getSession().parseToBeanConsumer(serialized, parsed, Item.class);
+		t.getParser().getSession().readToBeanConsumer(serialized, parsed, Item.class);
 		assertEquals(3, parsed.getList().size());
 		assertEquals("alpha", parsed.getList().get(0).name);
 		assertEquals("beta",  parsed.getList().get(1).name);
@@ -98,7 +98,7 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 		assumeTrue(t.getParser() != null, "Skipping serialization-only tester: " + t.label);
 		var serialized = t.serialize(list("x", "y", "z"), t.getSerializer());
 		var parsed = new ListBeanChannel<String>();
-		t.getParser().getSession().parseToBeanConsumer(serialized, parsed, String.class);
+		t.getParser().getSession().readToBeanConsumer(serialized, parsed, String.class);
 		assertEquals(List.of("x", "y", "z"), parsed.getList());
 	}
 
@@ -124,7 +124,7 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 			@Override public void complete() throws Exception { log.add("consumer.complete"); }
 		};
 
-		t.getParser().getSession().parseToBeanConsumer(serialized, consumer, String.class);
+		t.getParser().getSession().readToBeanConsumer(serialized, consumer, String.class);
 
 		assertEquals(
 			List.of("consumer.begin", "accept:a", "accept:b", "consumer.complete"),
@@ -156,7 +156,7 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 			@Override public void complete() throws Exception { log.add("supplier.complete"); }
 		};
 
-		var serialized = t.getSerializer().serialize(supplier);
+		var serialized = t.getSerializer().write(supplier);
 
 		BeanConsumer<String> consumer = new BeanConsumer<>() {
 			@Override public void begin() throws Exception { log.add("consumer.begin"); }
@@ -164,7 +164,7 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 			@Override public void complete() throws Exception { log.add("consumer.complete"); }
 		};
 
-		t.getParser().getSession().parseToBeanConsumer(serialized, consumer, String.class);
+		t.getParser().getSession().readToBeanConsumer(serialized, consumer, String.class);
 
 		assertEquals(
 			List.of("supplier.begin", "supplier.complete", "consumer.begin", "accept:a", "accept:b", "consumer.complete"),
@@ -181,7 +181,7 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 	void c01_beanConsumer_rejected_by_serializer(RoundTrip_Tester t) {
 		BeanConsumer<String> a = item -> {};
 		var s = t.getSerializer();
-		assertThrows(SerializeException.class, () -> s.serialize(a));
+		assertThrows(SerializeException.class, () -> s.write(a));
 	}
 
 	@ParameterizedTest
@@ -193,6 +193,6 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 			@Override public Iterator<String> iterator() { return List.of("hello").iterator(); }
 			@Override public void acceptThrows(String item) { /* intentionally empty */ }
 		};
-		assertDoesNotThrow(() -> t.getSerializer().serialize(a));
+		assertDoesNotThrow(() -> t.getSerializer().write(a));
 	}
 }

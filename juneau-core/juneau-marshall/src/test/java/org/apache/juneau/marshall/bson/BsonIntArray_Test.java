@@ -31,8 +31,8 @@ class BsonIntArray_Test {
 	void parseListOfIntegers() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(list(1, 2, 3));
-		var result = p.parse(bytes, List.class);
+		var bytes = s.write(list(1, 2, 3));
+		var result = p.read(bytes, List.class);
 		assertNotNull(result);
 		assertEquals(list(1, 2, 3), result);
 	}
@@ -41,8 +41,8 @@ class BsonIntArray_Test {
 	void parseToObjectReturnsMapWithValue() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(ints(1, 2, 3));
-		var result = p.parse(bytes, Object.class);
+		var bytes = s.write(ints(1, 2, 3));
+		var result = p.read(bytes, Object.class);
 		assertNotNull(result);
 		assertTrue(result instanceof Map);
 		var m = (Map<?,?>)result;
@@ -64,7 +64,7 @@ class BsonIntArray_Test {
 		};
 
 		var p = BsonParser.create().build();
-		var result = p.parse(bytes, int[].class);
+		var result = p.read(bytes, int[].class);
 		assertNotNull(result);
 		assertArrayEquals(new int[]{1, 2, 3}, result);
 	}
@@ -73,8 +73,8 @@ class BsonIntArray_Test {
 	void parseScalarRoot() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(42);
-		var result = p.parse(bytes, int.class);
+		var bytes = s.write(42);
+		var result = p.read(bytes, int.class);
 		assertNotNull(result);
 		assertEquals(42, result);
 	}
@@ -83,8 +83,8 @@ class BsonIntArray_Test {
 	void parseIntArray() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(ints(1, 2, 3));
-		var result = p.parse(bytes, int[].class);
+		var bytes = s.write(ints(1, 2, 3));
+		var result = p.read(bytes, int[].class);
 		assertNotNull(result);
 		assertArrayEquals(new int[]{1, 2, 3}, result);
 	}
@@ -94,8 +94,8 @@ class BsonIntArray_Test {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
 		var value = new BigDecimal("123.45");
-		var bytes = s.serialize(value);
-		var result = p.parse(bytes, BigDecimal.class);
+		var bytes = s.write(value);
+		var result = p.read(bytes, BigDecimal.class);
 		assertNotNull(result);
 		assertEquals(0, value.compareTo(result), "BigDecimal round-trip via Decimal128");
 	}

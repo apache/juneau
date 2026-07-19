@@ -29,155 +29,155 @@ class PrototextTokenizer_Test {
 
 	@Test
 	void a01_bareIdentifier() {
-		var a = PrototextParser.DEFAULT.parse("field_name: 1", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("field_name: 1", JsonMap.class);
 		assertEquals(1L, a.get("field_name"));
 
-		var b = PrototextParser.DEFAULT.parse("_private: 2", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("_private: 2", JsonMap.class);
 		assertEquals(2L, b.get("_private"));
 
-		var c = PrototextParser.DEFAULT.parse("camelCase: 3", JsonMap.class);
+		var c = PrototextParser.DEFAULT.read("camelCase: 3", JsonMap.class);
 		assertEquals(3L, c.get("camelCase"));
 	}
 
 	@Test
 	void a02_quotedString() {
-		var a = PrototextParser.DEFAULT.parse("s: \"hello\"", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("s: \"hello\"", JsonMap.class);
 		assertEquals("hello", a.get("s"));
 
-		var b = PrototextParser.DEFAULT.parse("s: 'world'", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("s: 'world'", JsonMap.class);
 		assertEquals("world", b.get("s"));
 	}
 
 	@Test
 	void a03_multiPartString() {
-		var a = PrototextParser.DEFAULT.parse("s: \"hello\" \" world\"", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("s: \"hello\" \" world\"", JsonMap.class);
 		assertEquals("hello world", a.get("s"));
 	}
 
 	@Test
 	void a04_decimalInteger() {
-		var a = PrototextParser.DEFAULT.parse("n: 42", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("n: 42", JsonMap.class);
 		assertEquals(42L, a.get("n"));
 
-		var b = PrototextParser.DEFAULT.parse("n: -17", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("n: -17", JsonMap.class);
 		assertEquals(-17L, b.get("n"));
 
-		var c = PrototextParser.DEFAULT.parse("n: +99", JsonMap.class);
+		var c = PrototextParser.DEFAULT.read("n: +99", JsonMap.class);
 		assertEquals(99L, c.get("n"));
 	}
 
 	@Test
 	void a05_hexInteger() {
-		var a = PrototextParser.DEFAULT.parse("n: 0xDEAD", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("n: 0xDEAD", JsonMap.class);
 		assertEquals(0xDEADL, a.get("n"));
 
-		var b = PrototextParser.DEFAULT.parse("n: 0xFF", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("n: 0xFF", JsonMap.class);
 		assertEquals(255L, b.get("n"));
 	}
 
 	@Test
 	void a06_octalInteger() {
-		var a = PrototextParser.DEFAULT.parse("n: 0755", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("n: 0755", JsonMap.class);
 		assertEquals(0755L, a.get("n"));
 
-		var b = PrototextParser.DEFAULT.parse("n: 0123", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("n: 0123", JsonMap.class);
 		assertEquals(83L, b.get("n"));
 	}
 
 	@Test
 	void a07_floatLiteral() {
-		var a = PrototextParser.DEFAULT.parse("x: 3.14", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: 3.14", JsonMap.class);
 		assertEquals(3.14, a.get("x"));
 
-		var b = PrototextParser.DEFAULT.parse("x: 1e06", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("x: 1e06", JsonMap.class);
 		assertEquals(1e6, ((Number) b.get("x")).doubleValue(), 1e-6);
 
-		var c = PrototextParser.DEFAULT.parse("x: 10f", JsonMap.class);
+		var c = PrototextParser.DEFAULT.read("x: 10f", JsonMap.class);
 		assertEquals(10.0, ((Number) c.get("x")).doubleValue(), 1e-6);
 	}
 
 	@Test
 	void a08_specialFloats() {
-		var a = PrototextParser.DEFAULT.parse("x: inf", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: inf", JsonMap.class);
 		assertEquals(Double.POSITIVE_INFINITY, a.get("x"));
 
-		var b = PrototextParser.DEFAULT.parse("x: -inf", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("x: -inf", JsonMap.class);
 		assertEquals(Double.NEGATIVE_INFINITY, b.get("x"));
 
-		var c = PrototextParser.DEFAULT.parse("x: nan", JsonMap.class);
+		var c = PrototextParser.DEFAULT.read("x: nan", JsonMap.class);
 		assertTrue(Double.isNaN(((Number) c.get("x")).doubleValue()));
 	}
 
 	@Test
 	void a09_booleans() {
-		var a = PrototextParser.DEFAULT.parse("b: true", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("b: true", JsonMap.class);
 		assertEquals(true, a.get("b"));
 
-		var b = PrototextParser.DEFAULT.parse("b: false", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("b: false", JsonMap.class);
 		assertEquals(false, b.get("b"));
 	}
 
 	@Test
 	void a10_comments() {
-		var a = PrototextParser.DEFAULT.parse("# comment\nname: 1", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("# comment\nname: 1", JsonMap.class);
 		assertEquals(1L, a.get("name"));
 
-		var b = PrototextParser.DEFAULT.parse("name: 1  # trailing comment", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("name: 1  # trailing comment", JsonMap.class);
 		assertEquals(1L, b.get("name"));
 	}
 
 	@Test
 	void a11_structuralTokens() {
-		var a = PrototextParser.DEFAULT.parse("m { k: 1 }", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("m { k: 1 }", JsonMap.class);
 		var m = a.getMap("m");
 		assertNotNull(m);
 		assertEquals(1L, m.get("k"));
 
-		var b = PrototextParser.DEFAULT.parse("arr: [1, 2]", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("arr: [1, 2]", JsonMap.class);
 		var arr = b.getList("arr");
 		assertNotNull(arr);
 		assertEquals(2, arr.size());
 
-		var c = PrototextParser.DEFAULT.parse("a: 1; b: 2", JsonMap.class);
+		var c = PrototextParser.DEFAULT.read("a: 1; b: 2", JsonMap.class);
 		assertEquals(1L, c.get("a"));
 		assertEquals(2L, c.get("b"));
 
-		var d = PrototextParser.DEFAULT.parse("a: 1, b: 2", JsonMap.class);
+		var d = PrototextParser.DEFAULT.read("a: 1, b: 2", JsonMap.class);
 		assertEquals(1L, d.get("a"));
 		assertEquals(2L, d.get("b"));
 	}
 
 	@Test
 	void a12_stringEscapes() {
-		var a = PrototextParser.DEFAULT.parse("s: \"\\n\"", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("s: \"\\n\"", JsonMap.class);
 		assertEquals("\n", a.get("s"));
 
-		var b = PrototextParser.DEFAULT.parse("s: \"\\t\"", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("s: \"\\t\"", JsonMap.class);
 		assertEquals("\t", b.get("s"));
 
-		var c = PrototextParser.DEFAULT.parse("s: \"\\\\\"", JsonMap.class);
+		var c = PrototextParser.DEFAULT.read("s: \"\\\\\"", JsonMap.class);
 		assertEquals("\\", c.get("s"));
 
-		var d = PrototextParser.DEFAULT.parse("s: \"\\\"\"", JsonMap.class);
+		var d = PrototextParser.DEFAULT.read("s: \"\\\"\"", JsonMap.class);
 		assertEquals("\"", d.get("s"));
 	}
 
 	@Test
 	void a13_edgeCaseNumberIdent() {
 		assertThrows(ParseException.class, () ->
-			PrototextParser.DEFAULT.parse("n: 10bar", JsonMap.class));
+			PrototextParser.DEFAULT.read("n: 10bar", JsonMap.class));
 	}
 
 	@Test
 	void a14_whitespaceHandling() {
-		var a = PrototextParser.DEFAULT.parse("  name  :  42  ", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("  name  :  42  ", JsonMap.class);
 		assertEquals(42L, a.get("name"));
 
-		var b = PrototextParser.DEFAULT.parse("a: 1\nb: 2", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("a: 1\nb: 2", JsonMap.class);
 		assertEquals(1L, b.get("a"));
 		assertEquals(2L, b.get("b"));
 
-		var c = PrototextParser.DEFAULT.parse("a: 1\r\nb: 2", JsonMap.class);
+		var c = PrototextParser.DEFAULT.read("a: 1\r\nb: 2", JsonMap.class);
 		assertEquals(1L, c.get("a"));
 		assertEquals(2L, c.get("b"));
 	}
@@ -198,212 +198,212 @@ class PrototextTokenizer_Test {
 
 	@Test void b02_commentTerminatedByCRLF() {
 		// Hits `\r\n` after `#` comment (lines 108-109).
-		var a = PrototextParser.DEFAULT.parse("# c1\r\nname: 1", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("# c1\r\nname: 1", JsonMap.class);
 		assertEquals(1L, a.get("name"));
 	}
 
 	@Test void b03_commentTerminatedByEOF() {
 		// Hits the EOF-terminator branch in skipWhitespaceAndComments (c < 0 in inner loop).
-		var a = PrototextParser.DEFAULT.parse("name: 1\n# trailing eof", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("name: 1\n# trailing eof", JsonMap.class);
 		assertEquals(1L, a.get("name"));
 	}
 
 	@Test void b04_negativeHex() {
 		// Hits the neg-hex branch (line 230).
-		var a = PrototextParser.DEFAULT.parse("n: -0xFF", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("n: -0xFF", JsonMap.class);
 		assertEquals(-255L, a.get("n"));
 	}
 
 	@Test void b05_negativeOctal() {
 		// Hits the neg-octal branch (line 234).
-		var a = PrototextParser.DEFAULT.parse("n: -0755", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("n: -0755", JsonMap.class);
 		assertEquals(-0755L, a.get("n"));
 	}
 
 	@Test void b06_zeroFloat() {
 		// Hits the leading-0 with float-suffix branch (lines 236-238).
-		var a = PrototextParser.DEFAULT.parse("x: 0.5", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: 0.5", JsonMap.class);
 		assertEquals(0.5, ((Number) a.get("x")).doubleValue(), 1e-12);
 
-		var b = PrototextParser.DEFAULT.parse("x: 0e2", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("x: 0e2", JsonMap.class);
 		assertEquals(0.0, ((Number) b.get("x")).doubleValue(), 1e-12);
 
-		var c = PrototextParser.DEFAULT.parse("x: 0f", JsonMap.class);
+		var c = PrototextParser.DEFAULT.read("x: 0f", JsonMap.class);
 		assertEquals(0.0, ((Number) c.get("x")).doubleValue(), 1e-12);
 	}
 
 	@Test void b07_zeroBare() {
 		// Hits the bare-0 returning DEC_INT(0) branch (line 240).
-		var a = PrototextParser.DEFAULT.parse("n: 0", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("n: 0", JsonMap.class);
 		assertEquals(0L, a.get("n"));
 	}
 
 	@Test void b08_dotPrefixFloat() {
 		// Hits the `.5`-style leading-dot float branch (line 243).
-		var a = PrototextParser.DEFAULT.parse("x: .5", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: .5", JsonMap.class);
 		assertEquals(0.5, ((Number) a.get("x")).doubleValue(), 1e-12);
 
-		var b = PrototextParser.DEFAULT.parse("x: -.25", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("x: -.25", JsonMap.class);
 		assertEquals(-0.25, ((Number) b.get("x")).doubleValue(), 1e-12);
 	}
 
 	@Test void b09_floatWithUnderscores() {
 		// Hits underscore handling in readDecimalOrFloat (lines 280-292).
-		var a = PrototextParser.DEFAULT.parse("x: 1_000.5", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: 1_000.5", JsonMap.class);
 		assertEquals(1000.5, ((Number) a.get("x")).doubleValue(), 1e-9);
 
-		var b = PrototextParser.DEFAULT.parse("x: 1.5_5", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("x: 1.5_5", JsonMap.class);
 		assertEquals(1.55, ((Number) b.get("x")).doubleValue(), 1e-9);
 	}
 
 	@Test void b10_floatExponent_signed() {
 		// Hits the e+/e- branch in readDecimalOrFloat (lines 297-298).
-		var a = PrototextParser.DEFAULT.parse("x: 1.5e+2", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: 1.5e+2", JsonMap.class);
 		assertEquals(150.0, ((Number) a.get("x")).doubleValue(), 1e-9);
 
-		var b = PrototextParser.DEFAULT.parse("x: 1.5e-2", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("x: 1.5e-2", JsonMap.class);
 		assertEquals(0.015, ((Number) b.get("x")).doubleValue(), 1e-9);
 	}
 
 	@Test void b11_floatExponentWithUnderscores() {
 		// Hits underscore handling in exponent loop (lines 299-302).
-		var a = PrototextParser.DEFAULT.parse("x: 1e1_0", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: 1e1_0", JsonMap.class);
 		assertEquals(1e10, ((Number) a.get("x")).doubleValue(), 1e-3);
 	}
 
 	@Test void b12_floatWithFSuffixOnInt() {
 		// Hits the `f` after raw int branch in readDecimalOrFloat (line 315-316).
-		var a = PrototextParser.DEFAULT.parse("x: 5f", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: 5f", JsonMap.class);
 		assertEquals(5.0, ((Number) a.get("x")).doubleValue(), 1e-12);
 
-		var b = PrototextParser.DEFAULT.parse("x: -5f", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("x: -5f", JsonMap.class);
 		assertEquals(-5.0, ((Number) b.get("x")).doubleValue(), 1e-12);
 	}
 
 	@Test void b13_specialFloat_negInf() {
 		// Hits the special-float-with-neg branch (line 347).
-		var a = PrototextParser.DEFAULT.parse("x: -infinity", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: -infinity", JsonMap.class);
 		assertEquals(Double.NEGATIVE_INFINITY, a.get("x"));
 	}
 
 	@Test void b14_specialFloatNanIdentifier() {
 		// IDENT path returning name 'nano_seconds' (or anything starting with n + non-special).
 		// readSpecialFloatOrIdent must yield IDENT when not 'nan'/'inf'/'infinity' (line 352).
-		var a = PrototextParser.DEFAULT.parse("nan: 1", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("nan: 1", JsonMap.class);
 		assertEquals(1L, a.get("nan"));
 
-		var b = PrototextParser.DEFAULT.parse("infrastructure: 2", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("infrastructure: 2", JsonMap.class);
 		assertEquals(2L, b.get("infrastructure"));
 	}
 
 	@Test void b15_floatLiteral_underscores() {
 		// Hits readFloatLiteral underscore-skip code paths (lines 373-377, 383-387).
-		var a = PrototextParser.DEFAULT.parse("x: 0.5_5", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: 0.5_5", JsonMap.class);
 		assertEquals(0.55, ((Number) a.get("x")).doubleValue(), 1e-9);
 
-		var b = PrototextParser.DEFAULT.parse("x: 0.5e1_0", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("x: 0.5e1_0", JsonMap.class);
 		assertEquals(0.5e10, ((Number) b.get("x")).doubleValue(), 1e-3);
 	}
 
 	@Test void b16_floatLiteral_signedExponent() {
 		// readFloatLiteral signed-exponent branch (lines 381-382).
-		var a = PrototextParser.DEFAULT.parse("x: 0.5e+2", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: 0.5e+2", JsonMap.class);
 		assertEquals(50.0, ((Number) a.get("x")).doubleValue(), 1e-9);
 
-		var b = PrototextParser.DEFAULT.parse("x: 0.5e-2", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("x: 0.5e-2", JsonMap.class);
 		assertEquals(0.005, ((Number) b.get("x")).doubleValue(), 1e-9);
 	}
 
 	@Test void b17_floatLiteral_fSuffix() {
 		// readFloatLiteral `f`/`F` suffix branch (lines 389-390).
-		var a = PrototextParser.DEFAULT.parse("x: 0.5f", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: 0.5f", JsonMap.class);
 		assertEquals(0.5, ((Number) a.get("x")).doubleValue(), 1e-12);
 	}
 
 	@Test void b18_stringEscape_a_b_f_v() {
 		// Hits processEscape cases 'a','b','f','v' (lines 450-456).
-		var a = PrototextParser.DEFAULT.parse("s: \"\\a\"", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("s: \"\\a\"", JsonMap.class);
 		assertEquals("", a.get("s"));
-		var b = PrototextParser.DEFAULT.parse("s: \"\\b\"", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("s: \"\\b\"", JsonMap.class);
 		assertEquals("\b", b.get("s"));
-		var c = PrototextParser.DEFAULT.parse("s: \"\\f\"", JsonMap.class);
+		var c = PrototextParser.DEFAULT.read("s: \"\\f\"", JsonMap.class);
 		assertEquals("\f", c.get("s"));
-		var d = PrototextParser.DEFAULT.parse("s: \"\\v\"", JsonMap.class);
+		var d = PrototextParser.DEFAULT.read("s: \"\\v\"", JsonMap.class);
 		assertEquals("", d.get("s"));
 	}
 
 	@Test void b19_stringEscape_r() {
-		var a = PrototextParser.DEFAULT.parse("s: \"\\r\"", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("s: \"\\r\"", JsonMap.class);
 		assertEquals("\r", a.get("s"));
 	}
 
 	@Test void b20_stringEscape_questionAndQuote() {
 		// Hits processEscape cases '?', '\'', '"' (lines 457-460).
-		var a = PrototextParser.DEFAULT.parse("s: \"\\?\"", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("s: \"\\?\"", JsonMap.class);
 		assertEquals("?", a.get("s"));
-		var b = PrototextParser.DEFAULT.parse("s: \"\\'\"", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("s: \"\\'\"", JsonMap.class);
 		assertEquals("'", b.get("s"));
 	}
 
 	@Test void b21_stringEscape_hex() {
 		// Hits processEscape '\\x'/'\\X' (line 461) and readHexEscape.
-		var a = PrototextParser.DEFAULT.parse("s: \"\\x41\"", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("s: \"\\x41\"", JsonMap.class);
 		assertEquals("A", a.get("s"));
 
-		var b = PrototextParser.DEFAULT.parse("s: \"\\X41\"", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("s: \"\\X41\"", JsonMap.class);
 		assertEquals("A", b.get("s"));
 	}
 
 	@Test void b22_stringEscape_octal() {
 		// Hits processEscape octal-digit branch (lines 462-465) and readOctalEscape.
 		// Octal 101 = decimal 65 = 'A'.
-		var a = PrototextParser.DEFAULT.parse("s: \"\\101\"", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("s: \"\\101\"", JsonMap.class);
 		assertEquals("A", a.get("s"));
 
 		// Octal 7 (single digit) — terminator restricts the loop to one digit.
-		var b = PrototextParser.DEFAULT.parse("s: \"\\7\"", JsonMap.class);
+		var b = PrototextParser.DEFAULT.read("s: \"\\7\"", JsonMap.class);
 		assertEquals("", b.get("s"));
 	}
 
 	@Test void b23_stringEscape_unicode4() {
 		// Hits processEscape backslash-u + readUnicodeEscape(4) (line 466).
-		var a = PrototextParser.DEFAULT.parse("s: \"\\u0041\"", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("s: \"\\u0041\"", JsonMap.class);
 		assertEquals("A", a.get("s"));
 	}
 
 	@Test void b24_stringEscape_unicode8() {
 		// Hits processEscape backslash-U + readUnicodeEscape(8) (line 467).
-		var a = PrototextParser.DEFAULT.parse("s: \"\\U00000041\"", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("s: \"\\U00000041\"", JsonMap.class);
 		assertEquals("A", a.get("s"));
 	}
 
 	@Test void b25_stringEscape_invalid() {
 		// Hits the default error-path in processEscape (line 468).
 		assertThrows(ParseException.class, () ->
-			PrototextParser.DEFAULT.parse("s: \"\\q\"", JsonMap.class));
+			PrototextParser.DEFAULT.read("s: \"\\q\"", JsonMap.class));
 	}
 
 	@Test void b26_invalidHexEscape() {
 		// Hits the empty-hex error in readHexEscape (line 477).
 		assertThrows(ParseException.class, () ->
-			PrototextParser.DEFAULT.parse("s: \"\\x\"", JsonMap.class));
+			PrototextParser.DEFAULT.read("s: \"\\x\"", JsonMap.class));
 	}
 
 	@Test void b27_invalidUnicodeEscape() {
 		// Hits the invalid-unicode-char error in readUnicodeEscape (line 495).
 		assertThrows(ParseException.class, () ->
-			PrototextParser.DEFAULT.parse("s: \"\\u00ZZ\"", JsonMap.class));
+			PrototextParser.DEFAULT.read("s: \"\\u00ZZ\"", JsonMap.class));
 	}
 
 	@Test void b28_unterminatedString() {
 		// Hits the EOF-during-string error (line 444).
 		assertThrows(ParseException.class, () ->
-			PrototextParser.DEFAULT.parse("s: \"unterminated", JsonMap.class));
+			PrototextParser.DEFAULT.read("s: \"unterminated", JsonMap.class));
 	}
 
 	@Test void b29_singleQuotedStringWithEscape() {
 		// Exercises readSingleQuotedString + readStringContent.
-		var a = PrototextParser.DEFAULT.parse("s: 'hi\\nbye'", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("s: 'hi\\nbye'", JsonMap.class);
 		assertEquals("hi\nbye", a.get("s"));
 	}
 
@@ -510,32 +510,32 @@ class PrototextTokenizer_Test {
 	@Test void b43_invalidEscape_endOfStream() {
 		// Hits the unterminated-escape path (escape char EOF).
 		assertThrows(ParseException.class, () ->
-			PrototextParser.DEFAULT.parse("s: \"\\", JsonMap.class));
+			PrototextParser.DEFAULT.read("s: \"\\", JsonMap.class));
 	}
 
 	@Test void b44_integerOverflow() {
 		// Hits the integer-overflow error in readDecimalOrFloat (line 331).
 		assertThrows(ParseException.class, () ->
-			PrototextParser.DEFAULT.parse("n: 99999999999999999999999", JsonMap.class));
+			PrototextParser.DEFAULT.read("n: 99999999999999999999999", JsonMap.class));
 	}
 
 	@Test void b45_hexOverflow() {
 		// Hits the integer-overflow error in readHexInteger (line 263).
 		assertThrows(ParseException.class, () ->
-			PrototextParser.DEFAULT.parse("n: 0xFFFFFFFFFFFFFFFFFF", JsonMap.class));
+			PrototextParser.DEFAULT.read("n: 0xFFFFFFFFFFFFFFFFFF", JsonMap.class));
 	}
 
 	@Test void b46_emptyHexInteger() {
 		// Hits the empty-hex error in readHexInteger (line 259).
 		assertThrows(ParseException.class, () ->
-			PrototextParser.DEFAULT.parse("n: 0x", JsonMap.class));
+			PrototextParser.DEFAULT.read("n: 0x", JsonMap.class));
 	}
 
 	@Test void b47_unicodeInvalidCodePoint() {
 		// Hits the invalid-codepoint error in readUnicodeEscape — \U with a non-codepoint.
 		// 0xFFFFFFFF is not a valid codepoint per Character.isValidCodePoint.
 		assertThrows(ParseException.class, () ->
-			PrototextParser.DEFAULT.parse("s: \"\\UFFFFFFFF\"", JsonMap.class));
+			PrototextParser.DEFAULT.read("s: \"\\UFFFFFFFF\"", JsonMap.class));
 	}
 
 	@Test void b48_invalidOctalEscape() {
@@ -543,7 +543,7 @@ class PrototextTokenizer_Test {
 		// path when the first digit is 0-7, so triggering the empty error directly requires a
 		// non-octal first digit. The empty error path is unreachable from processEscape; to cover
 		// the success case for max-3-digit octal we use \\377 = decimal 255 = ÿ.
-		var a = PrototextParser.DEFAULT.parse("s: \"\\377\"", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("s: \"\\377\"", JsonMap.class);
 		assertEquals("ÿ", a.get("s"));
 	}
 
@@ -552,14 +552,14 @@ class PrototextTokenizer_Test {
 		// Construct a literal like "1.2.3" which the lexer reads as 1.2 followed by .3 — but that
 		// won't error here. Instead use a raw underscore-only mantissa.
 		assertThrows(ParseException.class, () ->
-			PrototextParser.DEFAULT.parse("x: 1.0e", JsonMap.class));
+			PrototextParser.DEFAULT.read("x: 1.0e", JsonMap.class));
 	}
 
 	@Test void b50_specialFloatLookaheadIdent() {
 		// The startsSpecialFloatLiteral lookahead returns false for `infrastructure` because
 		// the assembled token isn't a special-float; this exercises the unread/restore path
 		// (lines 203-209).
-		var a = PrototextParser.DEFAULT.parse("infrastructure: 1", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("infrastructure: 1", JsonMap.class);
 		assertEquals(1L, a.get("infrastructure"));
 	}
 
@@ -591,7 +591,7 @@ class PrototextTokenizer_Test {
 
 	@Test void b54_skipMultipleWhitespaceTypes() {
 		// Hits each whitespace-type branch in skipWhitespaceAndComments (line 100): space/tab/newline/CR/0x0B/0x0C.
-		var a = PrototextParser.DEFAULT.parse(" \t\n\rname: 1", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read(" \t\n\rname: 1", JsonMap.class);
 		assertEquals(1L, a.get("name"));
 	}
 
@@ -604,13 +604,13 @@ class PrototextTokenizer_Test {
 
 	@Test void b56_signedPlusFloat() {
 		// `+0.5` exercises the c == '+' branch in lexNumber (lines 220-222).
-		var a = PrototextParser.DEFAULT.parse("x: +0.5", JsonMap.class);
+		var a = PrototextParser.DEFAULT.read("x: +0.5", JsonMap.class);
 		assertEquals(0.5, ((Number) a.get("x")).doubleValue(), 1e-12);
 	}
 
 	@Test void b57_octalInvalid() {
 		// Hits readOctalInteger overflow path (line 274).
 		assertThrows(ParseException.class, () ->
-			PrototextParser.DEFAULT.parse("n: 0777777777777777777777777", JsonMap.class));
+			PrototextParser.DEFAULT.read("n: 0777777777777777777777777", JsonMap.class));
 	}
 }

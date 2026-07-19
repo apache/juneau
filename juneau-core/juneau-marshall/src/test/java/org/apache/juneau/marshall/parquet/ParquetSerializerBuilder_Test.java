@@ -120,21 +120,21 @@ class ParquetSerializerBuilder_Test extends TestBase {
 	}
 
 	@Test
-	void a05_serializeRecordsAndRoundTrip() throws Exception {
+	void a05_writeRecordsAndRoundTrip() throws Exception {
 		// Exercises the convenience serialize path on a configured serializer.
 		var s = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new KBean("v"));
-		var bytes = s.serialize(in);
-		var out = (List<KBean>) ParquetParser.DEFAULT.parse(bytes, List.class, KBean.class);
+		var bytes = s.write(in);
+		var out = (List<KBean>) ParquetParser.DEFAULT.read(bytes, List.class, KBean.class);
 		assertEquals("v", out.get(0).k);
 	}
 
 	@Test
 	@SuppressWarnings("resource")
 	void a07_contextSerializeRecordsDelegator() throws Exception {
-		// The context-level serializeRecords(...) convenience delegator forwards to the session.
+		// The context-level writeRecords(...) convenience delegator forwards to the session.
 		var sb = new StringBuilder();
-		try (var w = ParquetSerializer.DEFAULT.serializeRecords(new java.io.ByteArrayOutputStream())) {
+		try (var w = ParquetSerializer.DEFAULT.writeRecords(new java.io.ByteArrayOutputStream())) {
 			assertNotNull(w);
 		}
 		assertNotNull(sb);

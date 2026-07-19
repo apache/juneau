@@ -110,7 +110,7 @@ public class CborTokenReader implements TokenReader {
 	}
 
 	/**
-	 * Constructor used by {@link CborParserSession#parseTokens(Object)} to plumb the calling
+	 * Constructor used by {@link CborParserSession#readTokens(Object)} to plumb the calling
 	 * session through so that {@link #read(Class)} can delegate to the CBOR databind path.
 	 *
 	 * @param pipe The parser input pipe.  Must not be <jk>null</jk>.
@@ -451,7 +451,7 @@ public class CborTokenReader implements TokenReader {
 		if (!canRead())
 			throw new IllegalStateException(MSG_READ_NON_VALUE_STATE);
 		try {
-			T o = s.parseAnything(type, is, null, null);
+			T o = s.readAnything(type, is, null, null);
 			consumedOneElement();
 			currentToken = TokenType.NOT_AVAILABLE;
 			return o;
@@ -471,7 +471,7 @@ public class CborTokenReader implements TokenReader {
 		if (session == null)
 			throw new UnsupportedOperationException(
 				"read is not available on this CborTokenReader (no session attached). " +
-				"Open the cursor via CborParser.parseTokens(...) to enable read.");
+				"Open the cursor via CborParser.readTokens(...) to enable read.");
 		return session;
 	}
 

@@ -96,7 +96,7 @@ import org.apache.juneau.marshall.uon.*;
  *
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
  * 	<jc>// Produces "a=b&amp;c=1&amp;d=false&amp;e=@(f,1,false)&amp;g=(h=i)"</jc>
- * 	String <jv>uenc</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
+ * 	String <jv>uenc</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.write(<jv>map</jv>);
  *
  * 	<jc>// Serialize a bean</jc>
  * 	<jk>public class</jk> Person {
@@ -117,7 +117,7 @@ import org.apache.juneau.marshall.uon.*;
  * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"John Doe"</js>, 23, <js>"123 Main St"</js>, <js>"Anywhere"</js>, <js>"NY"</js>, 12345, <jk>false</jk>);
  *
  * 	<jc>// Produces "name=John+Doe&amp;age=23&amp;address=(street='123+Main+St',city=Anywhere,state=NY,zip=12345)&amp;deceased=false"</jc>
- * 	String <jv>uenc</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+ * 	String <jv>uenc</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
  * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -216,10 +216,10 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * 	WriterSerializer <jv>serializer2</jv> = UrlEncodingSerializer.<jsm>create</jsm>().expandedParams().build();
 		 *
 		 *  <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
-		 * 	String <jv>out1</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> A());
+		 * 	String <jv>out1</jv> = <jv>serializer1</jv>.write(<jk>new</jk> A());
 		 *
 		 * 	<jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
-		 * 	String <jv>out2</jv> = <jv>serializer2</jv>.serialize(<jk>new</jk> A());
+		 * 	String <jv>out2</jv> = <jv>serializer2</jv>.write(<jk>new</jk> A());
 		 * </p>
 		 *
 		 * @return This object.

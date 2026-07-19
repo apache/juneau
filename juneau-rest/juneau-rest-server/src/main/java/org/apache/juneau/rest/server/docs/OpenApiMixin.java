@@ -166,7 +166,7 @@ public class OpenApiMixin {
 	public void getOpenApiJson(RestRequest req, RestResponse res) throws IOException {
 		var doc = req.getOpenApi().orElseThrow(NotFound::new);
 		try (var w = res.getDirectWriter("application/json")) {
-			JsonSerializer.DEFAULT_READABLE.serialize(doc, w);
+			JsonSerializer.DEFAULT_READABLE.write(doc, w);
 		}
 	}
 
@@ -189,7 +189,7 @@ public class OpenApiMixin {
 	public void getOpenApiYaml(RestRequest req, RestResponse res) throws IOException {
 		var doc = req.getOpenApi().orElseThrow(NotFound::new);
 		try (var w = res.getDirectWriter("application/yaml")) {
-			YamlSerializer.DEFAULT_READABLE.serialize(doc, w);
+			YamlSerializer.DEFAULT_READABLE.write(doc, w);
 		}
 	}
 }

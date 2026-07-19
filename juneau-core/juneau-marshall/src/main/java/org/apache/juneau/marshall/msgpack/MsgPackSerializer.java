@@ -255,21 +255,21 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 
 	/**
 	 * Convenience delegator that opens a {@link MsgPackTokenWriter} over the output using
-	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 * <b>default session arguments</b> (mirrors {@link #write(Object)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link MsgPackSerializerSession#serializeTokens(Object)}.
+	 * The real implementation lives on {@link MsgPackSerializerSession#writeTokens(Object)}.
 	 * Callers that need request-derived configuration (locale, timezone, schema, swaps) should
 	 * call {@link #createSession()} and invoke
-	 * {@link MsgPackSerializerSession#serializeTokens(Object)} on the built session instead.
+	 * {@link MsgPackSerializerSession#writeTokens(Object)} on the built session instead.
 	 *
 	 * @param output The output.
 	 * @return A new {@link MsgPackTokenWriter}.
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	@Override /* TokenWritable */
-	public TokenWriter serializeTokens(Object output) throws IOException {
-		return getSession().serializeTokens(output);
+	public TokenWriter writeTokens(Object output) throws IOException {
+		return getSession().writeTokens(output);
 	}
 
 	@Override
@@ -283,16 +283,16 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 
 	/**
 	 * Convenience delegator for the buffered array-element {@link RecordWriter} (uses default
-	 * session args; see {@link #serializeTokens(Object)}).  Real impl on
-	 * {@link MsgPackSerializerSession#serializeArrayRecords(Object)}.
+	 * session args; see {@link #writeTokens(Object)}).  Real impl on
+	 * {@link MsgPackSerializerSession#writeArrayRecords(Object)}.
 	 *
 	 * @param output The output.
 	 * @return A buffered {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
-		return getSession().serializeArrayRecords(output);
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
+		return getSession().writeArrayRecords(output);
 	}
 
 	@Override /* ArrayRecordWritable */
@@ -300,8 +300,8 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 
 	/**
 	 * Convenience delegator for the streaming, count-prefixed array-element {@link RecordWriter}
-	 * (uses default session args; see {@link #serializeTokens(Object)}).  Real impl on
-	 * {@link MsgPackSerializerSession#serializeArrayRecords(Object, int)}.
+	 * (uses default session args; see {@link #writeTokens(Object)}).  Real impl on
+	 * {@link MsgPackSerializerSession#writeArrayRecords(Object, int)}.
 	 *
 	 * @param output The output (must be an {@link OutputStream}).
 	 * @param expectedCount The number of elements that will be written.
@@ -309,7 +309,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output, int expectedCount) throws IOException {
-		return getSession().serializeArrayRecords(output, expectedCount);
+	public RecordWriter writeArrayRecords(Object output, int expectedCount) throws IOException {
+		return getSession().writeArrayRecords(output, expectedCount);
 	}
 }

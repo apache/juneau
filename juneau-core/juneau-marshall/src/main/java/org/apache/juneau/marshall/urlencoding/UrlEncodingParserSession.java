@@ -145,7 +145,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for parser state machine
 	})
-	private <T> T parseAnything(ClassMeta<T> eType, UonReader r, Object outer) throws IOException, ParseException, ExecutableException {
+	private <T> T readAnything(ClassMeta<T> eType, UonReader r, Object outer) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -160,7 +160,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)o(parseAnything(eType.getElementType(), r, outer));
+			return (T)o(readAnything(eType.getElementType(), r, outer));
 
 		int c = r.peekSkipWs();
 		if (c == '?') {
@@ -174,27 +174,27 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 		if (sType.isObject()) {
 			var m = newGenericMap();
-			parseIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
+			readIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey(CONST_value))
 				o = m.get(CONST_value);
 			else
 				o = cast(m, null, eType);
 		} else if (nn(builder)) {
 			var m = toBeanMap(builder.create(this, eType));
-			m = parseIntoBeanMap(r, m);
+			m = readIntoBeanMap(r, m);
 			o = m == null ? null : builder.build(this, m.getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
 			var m = newBeanMap(outer, sType.inner());
-			m = parseIntoBeanMap(r, m);
+			m = readIntoBeanMap(r, m);
 			o = m == null ? null : m.getBean();
 		} else if (sType.isMap()) {
 			var m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : newGenericMap(sType));
-			o = parseIntoMap2(r, m, sType, m);
+			o = readIntoMap2(r, m, sType, m);
 		} else if (sType.isCollection() || sType.isArray() || sType.isArgs()) {
 			// ?1=foo&2=bar...
 			var c2 = ((sType.isArray() || sType.isArgs()) || ! sType.canCreateNewInstance(outer)) ? newGenericList() : (Collection)sType.newInstance();
 			var m = new TreeMap<Integer,Object>();
-			parseIntoMap2(r, m, sType, c2);
+			readIntoMap2(r, m, sType, c2);
 			c2.addAll(m.values());
 			if (sType.isArgs())
 				o = c2.toArray(new Object[c2.size()]);
@@ -205,7 +205,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		} else {
 			// It could be a non-bean with _type attribute.
 			var m = newGenericMap();
-			parseIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
+			readIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast(m, null, eType);
 			else if (m.containsKey(CONST_value))
@@ -230,14 +230,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 	@SuppressWarnings({
 		"java:S1168",    // Null when currAttr is '%00'. Parser state machine.
-		"java:S2177",    // Intentional: UrlEncodingParserSession provides its own private parseIntoBeanMap() with expanded-params logic
+		"java:S2177",    // Intentional: UrlEncodingParserSession provides its own private readIntoBeanMap() with expanded-params logic
 		"java:S125",     // State-machine comments (S1: ..., S2: ...)
 		"java:S2583",    // State variables persist across loop iterations
 		"java:S2589",    // Final if (state==S4) is always true given prior checks; exhaustive state error-reporting pattern
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
-	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
+	private <T> BeanMap<T> readIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		int c = r.peekSkipWs();
 		if (c == -1)
@@ -263,7 +263,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 						}
 						r.unread();
 						mark();
-						currAttr = parseAttrName(r, true);
+						currAttr = readAttrName(r, true);
 						if (currAttr == null)  // Value was '%00'
 							return null;
 						state = S2;
@@ -312,14 +312,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 							if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getBeanInfo()))) {
 								var pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
-									onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), true, null));
+									onUnknownProperty(currAttr, m, readAnything(object(), r.unread(), m.getBean(false), true, null));
 									unmark();
 								} else {
 									unmark();
 									setCurrentProperty(pMeta);
 									if (shouldUseExpandedParams(pMeta)) {
 										var et = ((ClassMeta<?>) pMeta.getBeanInfo()).getElementType();
-										var value = parseAnything(et, r.unread(), m.getBean(false), true, pMeta);
+										var value = readAnything(et, r.unread(), m.getBean(false), true, pMeta);
 										setName(et, value, currAttr);
 										try {
 											pMeta.add(m, currAttr, value);
@@ -329,7 +329,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 										}
 									} else {
 										var cm = (ClassMeta<?>) pMeta.getBeanInfo();
-										var value = parseAnything(cm, r.unread(), m.getBean(false), true, pMeta);
+										var value = readAnything(cm, r.unread(), m.getBean(false), true, pMeta);
 										setName(cm, value, currAttr);
 										try {
 											pMeta.set(m, currAttr, value);
@@ -372,7 +372,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		"java:S1168",    // Compiler-satisfying return: all paths return m or throw. S1168 flags null returns; here null is unreachable.
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
-	private <K,V> Map<K,V> parseIntoMap2(UonReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws IOException, ParseException, ExecutableException {
+	private <K,V> Map<K,V> readIntoMap2(UonReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws IOException, ParseException, ExecutableException {
 
 		var keyType = (ClassMeta<K>)(type.isArgs() || type.isCollectionOrArray() ? getClassMeta(Integer.class) : type.getKeyType());
 
@@ -397,7 +397,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 					if (c == -1)
 						return m;
 					r.unread();
-					var attr = parseAttr(r, true);
+					var attr = readAttr(r, true);
 					currAttr = attr == null ? null : convertAttrToType(m, trim(attr.toString()), keyType);
 					state = S2;
 					c = 0; // Avoid isInEscape if c was '\'
@@ -426,7 +426,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 							return m;
 						state = S1;
 					} else {
-						// For performance, we bypass parseAnything for string values.
+						// For performance, we bypass readAnything for string values.
 						ClassMeta<V> valueType;
 						if (type.isArgs()) {
 							valueType = (ClassMeta<V>)type.getArg(argIndex++);
@@ -435,7 +435,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 						} else {
 							valueType = (ClassMeta<V>)type.getValueType();
 						}
-						V value = (V)(valueType.isString() ? super.parseString(r.unread(), true) : super.parseAnything(valueType, r.unread(), outer, true, null));
+						V value = (V)(valueType.isString() ? super.readString(r.unread(), true) : super.readAnything(valueType, r.unread(), outer, true, null));
 
 						// If we already encountered this parameter, turn it into a list.
 						if (m.containsKey(currAttr) && valueType.isObject()) {
@@ -474,14 +474,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 	}
 
 	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (var r = getUonReader(pipe, true)) {
-			return parseAnything(type, r, getOuter());
+			return readAnything(type, r, getOuter());
 		}
 	}
 
 	@Override /* Overridden from ReaderParserSession */
-	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+	protected <K,V> Map<K,V> doReadIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		try (var r = getUonReader(pipe, true)) {
 			if (r.peekSkipWs() == '?') {
 				@SuppressWarnings({
@@ -489,7 +489,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 				})
 				int ignored = r.read();
 			}
-			m = parseIntoMap2(r, m, getClassMeta(Map.class, keyType, valueType), null);
+			m = readIntoMap2(r, m, getClassMeta(Map.class, keyType, valueType), null);
 			return m;
 		}
 	}
@@ -519,15 +519,15 @@ public class UrlEncodingParserSession extends UonParserSession {
 	private <T> Object unwrapValueAs(Object rawValue, ClassMeta<T> sType) {
 		if (rawValue != null) {
 			if (sType.isDuration())
-				return parseDuration(rawValue.toString());
+				return readDuration(rawValue.toString());
 			if (sType.isPeriod())
-				return parsePeriod(rawValue.toString());
+				return readPeriod(rawValue.toString());
 			if (sType.isDate())
-				return parseDate(rawValue.toString(), sType);
+				return readDate(rawValue.toString(), sType);
 			if (sType.isCalendar())
-				return parseCalendar(rawValue.toString(), sType);
+				return readCalendar(rawValue.toString(), sType);
 			if (sType.isTemporal())
-				return parseTemporal(rawValue.toString(), sType);
+				return readTemporal(rawValue.toString(), sType);
 		}
 		return convertToType(rawValue, sType);
 	}

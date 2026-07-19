@@ -106,8 +106,8 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull(ARG_toType, toType)));
+	public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return getPartSession().read(partType, schema, in, getClassMeta(assertArgNotNull(ARG_toType, toType)));
 	}
 
 	/**
@@ -128,8 +128,8 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-		return getPartSession().parse(partType, schema, in, assertArgNotNull(ARG_toType, toType));
+	public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
+		return getPartSession().read(partType, schema, in, assertArgNotNull(ARG_toType, toType));
 	}
 
 	/**
@@ -152,8 +152,8 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+	public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
 		assertArgNoNulls(ARG_toTypeArgs, toTypeArgs);
-		return getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull(ARG_toType, toType), toTypeArgs));
+		return getPartSession().read(partType, schema, in, getClassMeta(assertArgNotNull(ARG_toType, toType), toTypeArgs));
 	}
 }

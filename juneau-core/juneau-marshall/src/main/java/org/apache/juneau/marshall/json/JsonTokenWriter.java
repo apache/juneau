@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.stream.*;
  * Emits RFC-8259-compliant JSON.  Output style is driven by a small {@link Settings} bundle that
  * mirrors the structurally-applicable subset of {@link JsonSerializer.Builder}'s formatting flags:
  * <c>useWhitespace</c>, <c>maxIndent</c>, <c>quoteChar</c>, <c>escapeSolidus</c>, and
- * <c>trimStrings</c>.  When opened via {@link JsonSerializer#serializeTokens(Object)} the writer
+ * <c>trimStrings</c>.  When opened via {@link JsonSerializer#writeTokens(Object)} the writer
  * inherits the settings from the calling serializer; constructing the writer directly via
  * {@link #JsonTokenWriter(Writer)} uses {@link Settings#DEFAULT} (compact, double-quoted, RFC-8259
  * strict).
@@ -139,7 +139,7 @@ public class JsonTokenWriter implements TokenWriter {
 	}
 
 	/**
-	 * Internal constructor used by {@link JsonSerializer#serializeTokens(Object)} factory paths to
+	 * Internal constructor used by {@link JsonSerializer#writeTokens(Object)} factory paths to
 	 * record an underlying {@link Closeable} the writer should close on shutdown (e.g. a file
 	 * stream).
 	 *
@@ -537,11 +537,11 @@ public class JsonTokenWriter implements TokenWriter {
 	}
 
 	// =================================================================================
-	// Static factory used by JsonSerializer.serializeTokens(Object)
+	// Static factory used by JsonSerializer.writeTokens(Object)
 	// =================================================================================
 
 	/**
-	 * Internal factory used by {@link JsonSerializer#serializeTokens(Object)}.  Coerces the supported
+	 * Internal factory used by {@link JsonSerializer#writeTokens(Object)}.  Coerces the supported
 	 * output types ({@link Writer} / {@link OutputStream}) into a {@link Writer} the JSON encoder can
 	 * target.
 	 *

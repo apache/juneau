@@ -143,8 +143,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var b1 = new ListBean(); b1.name = "a"; b1.tags = list("x", "y");
 		var b2 = new ListBean(); b2.name = "b"; b2.tags = list();
 		var b3 = new ListBean(); b3.name = "c"; b3.tags = null;
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b1, b2, b3));
-		var out = (List<ListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ListBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b1, b2, b3));
+		var out = (List<ListBean>) ParquetParser.DEFAULT.read(bytes, List.class, ListBean.class);
 		assertEquals(3, out.size());
 		assertEquals(list("x", "y"), out.get(0).tags);
 		assertTrue(out.get(1).tags == null || out.get(1).tags.isEmpty());
@@ -152,8 +152,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 
 	@Test void a02_listOfStringsWithNullElement() throws Exception {
 		var b = new ListBean(); b.name = "n"; b.tags = list("a", null, "c");
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<ListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ListBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<ListBean>) ParquetParser.DEFAULT.read(bytes, List.class, ListBean.class);
 		assertEquals(3, out.get(0).tags.size());
 		assertEquals("a", out.get(0).tags.get(0));
 		assertNull(out.get(0).tags.get(1));
@@ -162,8 +162,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 
 	@Test void a03_topLevelListOfLists() throws Exception {
 		var in = list(list("a", "b"), list("c"), list());
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<List<String>>) ParquetParser.DEFAULT.parse(bytes, List.class, List.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<List<String>>) ParquetParser.DEFAULT.read(bytes, List.class, List.class);
 		assertEquals(3, out.size());
 	}
 
@@ -175,8 +175,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var b = new NestedListBean();
 		b.name = "grid";
 		b.matrix = list(list("a", "b"), list("c"), list());
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<NestedListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedListBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<NestedListBean>) ParquetParser.DEFAULT.read(bytes, List.class, NestedListBean.class);
 		assertEquals(1, out.size());
 		assertEquals("grid", out.get(0).name);
 		assertNotNull(out.get(0).matrix);
@@ -187,8 +187,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void b02_intMatrixRoundTrip() throws Exception {
 		var b = new IntMatrixBean();
 		b.grid = new int[][]{{1, 2, 3}, {4, 5}, {}};
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<IntMatrixBean>) ParquetParser.DEFAULT.parse(bytes, List.class, IntMatrixBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<IntMatrixBean>) ParquetParser.DEFAULT.read(bytes, List.class, IntMatrixBean.class);
 		assertEquals(1, out.size());
 		assertArrayEquals(new int[]{1, 2, 3}, out.get(0).grid[0]);
 		assertArrayEquals(new int[]{4, 5}, out.get(0).grid[1]);
@@ -201,8 +201,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		b.matrix.add(list("a"));
 		b.matrix.add(null);
 		b.matrix.add(list("b", "c"));
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<NestedListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedListBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<NestedListBean>) ParquetParser.DEFAULT.read(bytes, List.class, NestedListBean.class);
 		assertEquals(3, out.get(0).matrix.size());
 		assertEquals(list("a"), out.get(0).matrix.get(0));
 	}
@@ -211,8 +211,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var b1 = new NestedListBean(); b1.name = "r1"; b1.matrix = list(list("a"), list("b", "c"));
 		var b2 = new NestedListBean(); b2.name = "r2"; b2.matrix = list(list("d", "e", "f"));
 		var b3 = new NestedListBean(); b3.name = "r3"; b3.matrix = list();
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b1, b2, b3));
-		var out = (List<NestedListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedListBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b1, b2, b3));
+		var out = (List<NestedListBean>) ParquetParser.DEFAULT.read(bytes, List.class, NestedListBean.class);
 		assertEquals(3, out.size());
 		assertEquals(list("d", "e", "f"), out.get(1).matrix.get(0));
 	}
@@ -221,8 +221,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// One row with matrix==null exercises reconstructNestedListColumn's whole-field-null branch (def==0,rep==0).
 		var b1 = new NestedListBean(); b1.name = "has"; b1.matrix = list(list("a", "b"));
 		var b2 = new NestedListBean(); b2.name = "none"; b2.matrix = null;
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(b1, b2));
-		var out = (List<NestedListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedListBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(b1, b2));
+		var out = (List<NestedListBean>) ParquetParser.DEFAULT.read(bytes, List.class, NestedListBean.class);
 		assertEquals(2, out.size());
 		assertEquals(list("a", "b"), out.get(0).matrix.get(0));
 		assertTrue(out.get(1).matrix == null || out.get(1).matrix.isEmpty());
@@ -233,8 +233,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var b = new NestedListBean();
 		b.name = "emptyInner";
 		b.matrix = list(list(), list("x"), list());
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<NestedListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedListBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<NestedListBean>) ParquetParser.DEFAULT.read(bytes, List.class, NestedListBean.class);
 		assertEquals(3, out.get(0).matrix.size());
 		assertTrue(out.get(0).matrix.get(0).isEmpty());
 		assertEquals(list("x"), out.get(0).matrix.get(1));
@@ -251,16 +251,16 @@ class ParquetParserSessionFull_Test extends TestBase {
 		b.attrs = new LinkedHashMap<>();
 		b.attrs.put("k1", "v1");
 		b.attrs.put("k2", "v2");
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<MapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, MapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<MapBean>) ParquetParser.DEFAULT.read(bytes, List.class, MapBean.class);
 		assertEquals(2, out.get(0).attrs.size());
 		assertEquals("v1", out.get(0).attrs.get("k1"));
 	}
 
 	@Test void c02_emptyMapInBean() throws Exception {
 		var b = new MapBean(); b.name = "empty"; b.attrs = map();
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<MapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, MapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<MapBean>) ParquetParser.DEFAULT.read(bytes, List.class, MapBean.class);
 		assertNotNull(out.get(0).attrs);
 		assertTrue(out.get(0).attrs.isEmpty());
 	}
@@ -270,8 +270,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		b.codes = new LinkedHashMap<>();
 		b.codes.put(1, "one");
 		b.codes.put(2, "two");
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<IntKeyMapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, IntKeyMapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<IntKeyMapBean>) ParquetParser.DEFAULT.read(bytes, List.class, IntKeyMapBean.class);
 		assertEquals(2, out.get(0).codes.size());
 		assertEquals("one", out.get(0).codes.get(1));
 	}
@@ -282,8 +282,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		b.codes = new LinkedHashMap<>();
 		b.codes.put(1, "one");
 		b.codes.put(null, "none");
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(b));
-		var out = (List<IntKeyMapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, IntKeyMapBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(b));
+		var out = (List<IntKeyMapBean>) ParquetParser.DEFAULT.read(bytes, List.class, IntKeyMapBean.class);
 		assertEquals("one", out.get(0).codes.get(1));
 		assertTrue(out.get(0).codes.containsKey(null));
 	}
@@ -291,8 +291,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void c04_multipleRowsWithMaps() throws Exception {
 		var b1 = new MapBean(); b1.name = "r1"; b1.attrs = new LinkedHashMap<>(); b1.attrs.put("a", "1");
 		var b2 = new MapBean(); b2.name = "r2"; b2.attrs = new LinkedHashMap<>(); b2.attrs.put("b", "2"); b2.attrs.put("c", "3");
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b1, b2));
-		var out = (List<MapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, MapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b1, b2));
+		var out = (List<MapBean>) ParquetParser.DEFAULT.read(bytes, List.class, MapBean.class);
 		assertEquals(2, out.size());
 		assertEquals("1", out.get(0).attrs.get("a"));
 		assertEquals("2", out.get(1).attrs.get("b"));
@@ -307,8 +307,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		b.attrs = new LinkedHashMap<>();
 		b.attrs.put(null, "nullval");
 		b.attrs.put("k", "v");
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(b));
-		var out = (List<MapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, MapBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(b));
+		var out = (List<MapBean>) ParquetParser.DEFAULT.read(bytes, List.class, MapBean.class);
 		assertEquals("nullval", out.get(0).attrs.get(null));
 		assertEquals("v", out.get(0).attrs.get("k"));
 	}
@@ -320,16 +320,16 @@ class ParquetParserSessionFull_Test extends TestBase {
 		b.attrs = new LinkedHashMap<>();
 		b.attrs.put("k1", "v1");
 		b.attrs.put("k2", null);
-		var bytes = s.serialize(list(b));
-		var out = (List<MapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, MapBean.class);
+		var bytes = s.write(list(b));
+		var out = (List<MapBean>) ParquetParser.DEFAULT.read(bytes, List.class, MapBean.class);
 		assertEquals("v1", out.get(0).attrs.get("k1"));
 	}
 
 	@Test void c07_emptyFileAsIntKeyMap() throws Exception {
 		// Empty file parsed as Map<Integer,String>: rows is empty, isKeyValuePairFormat returns false
 		// via e(rows) early-exit (line 731 true branch), exercises the isEmpty branch.
-		var bytes = ParquetSerializer.DEFAULT.serialize(list());
-		var out = (Map<Integer, String>) ParquetParser.DEFAULT.parse(bytes, Map.class, Integer.class, String.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list());
+		var out = (Map<Integer, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
 		// An empty Parquet file with no rows produces null or empty map for a Map target.
 		assertTrue(out == null || out.isEmpty());
 	}
@@ -342,8 +342,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var b = new OptionalBean();
 		b.nick = o("ace");
 		b.age = 10;
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<OptionalBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<OptionalBean>) ParquetParser.DEFAULT.read(bytes, List.class, OptionalBean.class);
 		assertEquals(1, out.size());
 		assertEquals(10, out.get(0).age);
 		assertNotNull(out.get(0).nick);
@@ -354,8 +354,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var b = new OptionalBean();
 		b.nick = oe();
 		b.age = 20;
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(b));
-		var out = (List<OptionalBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(b));
+		var out = (List<OptionalBean>) ParquetParser.DEFAULT.read(bytes, List.class, OptionalBean.class);
 		assertEquals(20, out.get(0).age);
 		assertNotNull(out.get(0).nick);
 		assertFalse(out.get(0).nick.isPresent());
@@ -364,8 +364,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void d03_mixedOptionalRows() throws Exception {
 		var b1 = new OptionalBean(); b1.nick = o("x"); b1.age = 1;
 		var b2 = new OptionalBean(); b2.nick = oe(); b2.age = 2;
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(b1, b2));
-		var out = (List<OptionalBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(b1, b2));
+		var out = (List<OptionalBean>) ParquetParser.DEFAULT.read(bytes, List.class, OptionalBean.class);
 		assertEquals("x", out.get(0).nick.orElse(null));
 		assertFalse(out.get(1).nick.isPresent());
 	}
@@ -376,8 +376,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		o.a = o("hi");
 		var inner = new Inner(); inner.v = "x"; inner.n = 5;
 		o.b = Optional.of(inner);
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
-		var out = (List<OptionalBeanProp>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBeanProp.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(o));
+		var out = (List<OptionalBeanProp>) ParquetParser.DEFAULT.read(bytes, List.class, OptionalBeanProp.class);
 		assertEquals("hi", out.get(0).a.orElse(null));
 		assertTrue(out.get(0).b.isPresent());
 		assertEquals("x", out.get(0).b.get().v);
@@ -389,8 +389,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var o = new OptionalBeanProp();
 		o.a = oe();
 		o.b = oe();
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
-		var out = (List<OptionalBeanProp>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBeanProp.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(o));
+		var out = (List<OptionalBeanProp>) ParquetParser.DEFAULT.read(bytes, List.class, OptionalBeanProp.class);
 		assertFalse(out.get(0).a.isPresent());
 		assertFalse(out.get(0).b.isPresent());
 	}
@@ -401,23 +401,23 @@ class ParquetParserSessionFull_Test extends TestBase {
 
 	@Test void e01_gzipScalarRoundTrip() throws Exception {
 		var ser = ParquetSerializer.create().compressionCodec(CompressionCodec.GZIP).build();
-		var bytes = ser.serialize("hello-gzip");
-		assertEquals("hello-gzip", ParquetParser.DEFAULT.parse(bytes, String.class));
+		var bytes = ser.write("hello-gzip");
+		assertEquals("hello-gzip", ParquetParser.DEFAULT.read(bytes, String.class));
 	}
 
 	@Test void e02_gzipBeanListRoundTrip() throws Exception {
 		var ser = ParquetSerializer.create().compressionCodec(CompressionCodec.GZIP).build();
 		var b1 = new MapBean(); b1.name = "a"; b1.attrs = new LinkedHashMap<>(); b1.attrs.put("k", "v");
-		var bytes = ser.serialize(list(b1));
-		var out = (List<MapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, MapBean.class);
+		var bytes = ser.write(list(b1));
+		var out = (List<MapBean>) ParquetParser.DEFAULT.read(bytes, List.class, MapBean.class);
 		assertEquals("v", out.get(0).attrs.get("k"));
 	}
 
 	@Test void e03_gzipListColumnRoundTrip() throws Exception {
 		var ser = ParquetSerializer.create().compressionCodec(CompressionCodec.GZIP).build();
 		var b = new ListBean(); b.name = "z"; b.tags = list("p", "q", "r");
-		var bytes = ser.serialize(list(b));
-		var out = (List<ListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ListBean.class);
+		var bytes = ser.write(list(b));
+		var out = (List<ListBean>) ParquetParser.DEFAULT.read(bytes, List.class, ListBean.class);
 		assertEquals(list("p", "q", "r"), out.get(0).tags);
 	}
 
@@ -427,8 +427,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		for (var i = 0; i < 100; i++) {
 			var b = new ListBean(); b.name = "n" + i; b.tags = list("t" + i); in.add(b);
 		}
-		var bytes = ser.serialize(in);
-		var out = (List<ListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ListBean.class);
+		var bytes = ser.write(in);
+		var out = (List<ListBean>) ParquetParser.DEFAULT.read(bytes, List.class, ListBean.class);
 		assertEquals(100, out.size());
 		assertEquals("n99", out.get(99).name);
 	}
@@ -438,16 +438,16 @@ class ParquetParserSessionFull_Test extends TestBase {
 	// =================================================================================
 
 	@Test void f01_trimStringsScalar() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize("  padded  ");
+		var bytes = ParquetSerializer.DEFAULT.write("  padded  ");
 		var p = ParquetParser.create().trimStrings().build();
-		assertEquals("padded", p.parse(bytes, String.class));
+		assertEquals("padded", p.read(bytes, String.class));
 	}
 
 	@Test void f02_trimStringsBean() throws Exception {
 		var b = new MapBean(); b.name = "  trimmed  "; b.attrs = map();
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
 		var p = ParquetParser.create().trimStrings().build();
-		var out = (List<MapBean>) p.parse(bytes, List.class, MapBean.class);
+		var out = (List<MapBean>) p.read(bytes, List.class, MapBean.class);
 		assertEquals("trimmed", out.get(0).name);
 	}
 
@@ -456,9 +456,9 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// in reassembleRows (lines 1356-1357).
 		var nullGroup = new NestedA();           // b == null -> GroupNull on read
 		var present = new NestedA(); present.b = new NestedB(); present.b.v = "  z  ";
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(nullGroup, present));
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(nullGroup, present));
 		var p = ParquetParser.create().trimStrings().build();
-		var out = (List<NestedA>) p.parse(bytes, List.class, NestedA.class);
+		var out = (List<NestedA>) p.read(bytes, List.class, NestedA.class);
 		assertNull(out.get(0).b);
 		assertEquals("z", out.get(1).b.v);
 	}
@@ -467,17 +467,17 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// trimStrings=true + null string value exercises the s==null short-circuit in readValue
 		// (trimStrings && s != null → false → return s=null without calling trim()).
 		var b = new MapBean(); b.name = null; b.attrs = map();
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(b));
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(b));
 		var p = ParquetParser.create().trimStrings().build();
-		var out = (List<MapBean>) p.parse(bytes, List.class, MapBean.class);
+		var out = (List<MapBean>) p.read(bytes, List.class, MapBean.class);
 		assertNull(out.get(0).name);
 	}
 
 	@Test void f03_trimStringsListElements() throws Exception {
 		var b = new ListBean(); b.name = "x"; b.tags = list(" a ", " b ");
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
 		var p = ParquetParser.create().trimStrings().build();
-		var out = (List<ListBean>) p.parse(bytes, List.class, ListBean.class);
+		var out = (List<ListBean>) p.read(bytes, List.class, ListBean.class);
 		assertEquals("a", out.get(0).tags.get(0));
 		assertEquals("b", out.get(0).tags.get(1));
 	}
@@ -489,16 +489,16 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void g01_rawByteArrayRoundTrip() throws Exception {
 		var b = new RawBytesBean();
 		b.data = new byte[]{1, 2, 3, 4, 5};
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<RawBytesBean>) ParquetParser.DEFAULT.parse(bytes, List.class, RawBytesBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<RawBytesBean>) ParquetParser.DEFAULT.read(bytes, List.class, RawBytesBean.class);
 		assertArrayEquals(new byte[]{1, 2, 3, 4, 5}, out.get(0).data);
 	}
 
 	@Test void g02_uuidRoundTrip() throws Exception {
 		var b = new UuidBean();
 		b.id = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<UuidBean>) ParquetParser.DEFAULT.parse(bytes, List.class, UuidBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<UuidBean>) ParquetParser.DEFAULT.read(bytes, List.class, UuidBean.class);
 		assertEquals(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), out.get(0).id);
 	}
 
@@ -506,8 +506,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// Null UUID field exercises the FIXED_LEN_BYTE_ARRAY null-bytes guard (readValue line 1242-1243).
 		var b = new UuidBean();
 		b.id = null;
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(b));
-		var out = (List<UuidBean>) ParquetParser.DEFAULT.parse(bytes, List.class, UuidBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(b));
+		var out = (List<UuidBean>) ParquetParser.DEFAULT.read(bytes, List.class, UuidBean.class);
 		assertEquals(1, out.size());
 		assertNull(out.get(0).id);
 	}
@@ -515,8 +515,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void g03_enumRoundTrip() throws Exception {
 		var b = new EnumBean();
 		b.color = Color.GREEN;
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<EnumBean>) ParquetParser.DEFAULT.parse(bytes, List.class, EnumBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<EnumBean>) ParquetParser.DEFAULT.read(bytes, List.class, EnumBean.class);
 		assertEquals(Color.GREEN, out.get(0).color);
 	}
 
@@ -528,16 +528,16 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// Small-precision DECIMAL fits in INT32 backing — exercises CONVERTED_DECIMAL INT32 branch.
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new DecBean(new BigDecimal("12.34")));
-		var bytes = ser.serialize(in);
-		var out = (List<DecBean>) ParquetParser.DEFAULT.parse(bytes, List.class, DecBean.class);
+		var bytes = ser.write(in);
+		var out = (List<DecBean>) ParquetParser.DEFAULT.read(bytes, List.class, DecBean.class);
 		assertEquals(0, new BigDecimal("12.34").compareTo(out.get(0).amount));
 	}
 
 	@Test void h02_decimalInt64NativeRoundTrip() throws Exception {
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new DecBean(new BigDecimal("12345.678901")));
-		var bytes = ser.serialize(in);
-		var out = (List<DecBean>) ParquetParser.DEFAULT.parse(bytes, List.class, DecBean.class);
+		var bytes = ser.write(in);
+		var out = (List<DecBean>) ParquetParser.DEFAULT.read(bytes, List.class, DecBean.class);
 		assertEquals(0, new BigDecimal("12345.678901").compareTo(out.get(0).amount));
 	}
 
@@ -545,8 +545,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// LocalTime with millisecond precision exercises CONVERTED_TIME_MILLIS / CONVERTED_DATE.
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new DateTimeBean(LocalDate.parse("2020-02-29"), LocalTime.parse("08:09:10.123")));
-		var bytes = ser.serialize(in);
-		var out = (List<DateTimeBean>) ParquetParser.DEFAULT.parse(bytes, List.class, DateTimeBean.class);
+		var bytes = ser.write(in);
+		var out = (List<DateTimeBean>) ParquetParser.DEFAULT.read(bytes, List.class, DateTimeBean.class);
 		assertEquals(LocalDate.parse("2020-02-29"), out.get(0).d);
 		assertEquals(LocalTime.parse("08:09:10.123"), out.get(0).t);
 	}
@@ -564,8 +564,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 			b.attrs = map();
 			in.add(b);
 		}
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<MapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, MapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<MapBean>) ParquetParser.DEFAULT.read(bytes, List.class, MapBean.class);
 		assertEquals(50, out.size());
 		assertEquals("repeated-name", out.get(25).name);
 	}
@@ -578,8 +578,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var in = new LinkedHashMap<String, String>();
 		in.put("a", "1");
 		in.put("b", "2");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (Map<String, String>) ParquetParser.DEFAULT.parse(bytes, Map.class, String.class, String.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (Map<String, String>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, String.class);
 		assertEquals("1", out.get("a"));
 		assertEquals("2", out.get("b"));
 	}
@@ -589,8 +589,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var in = new LinkedHashMap<Integer, String>();
 		in.put(10, "ten");
 		in.put(20, "twenty");
-		var bytes = s.serialize(in);
-		var out = (Map<Integer, String>) ParquetParser.DEFAULT.parse(bytes, Map.class, Integer.class, String.class);
+		var bytes = s.write(in);
+		var out = (Map<Integer, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
 		assertEquals("ten", out.get(10));
 		assertEquals("twenty", out.get(20));
 	}
@@ -600,25 +600,25 @@ class ParquetParserSessionFull_Test extends TestBase {
 	// =================================================================================
 
 	@Test void k01_emptyCollectionTarget() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(list());
-		var c = (Collection<MapBean>) ParquetParser.DEFAULT.parse(bytes, Collection.class, MapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list());
+		var c = (Collection<MapBean>) ParquetParser.DEFAULT.read(bytes, Collection.class, MapBean.class);
 		assertNotNull(c);
 		assertTrue(c.isEmpty());
 	}
 
 	@Test void k02_emptyArrayTargetStrings() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(list());
-		var arr = ParquetParser.DEFAULT.parse(bytes, String[].class);
+		var bytes = ParquetSerializer.DEFAULT.write(list());
+		var arr = ParquetParser.DEFAULT.read(bytes, String[].class);
 		assertEquals(0, arr.length);
 	}
 
 	@Test void k03_multiRowToSingleBeanTargetReturnsList() throws Exception {
 		// Multiple rows parsed against a non-collection bean target falls through to the raw-rows return
-		// (doParse line 303-305).
+		// (doRead line 303-305).
 		var b1 = new MapBean(); b1.name = "a"; b1.attrs = map();
 		var b2 = new MapBean(); b2.name = "b"; b2.attrs = map();
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b1, b2));
-		Object out = ParquetParser.DEFAULT.parse(bytes, (Class<Object>)(Class<?>) MapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b1, b2));
+		Object out = ParquetParser.DEFAULT.read(bytes, (Class<Object>)(Class<?>) MapBean.class);
 		assertNotNull(out);
 		assertTrue(out instanceof List);
 		assertEquals(2, ((List<?>) out).size());
@@ -626,9 +626,9 @@ class ParquetParserSessionFull_Test extends TestBase {
 
 	@Test void k04_nullScalarSerializesToEmpty() throws Exception {
 		// Serializing a null value yields a zero-row file; parsing back gives null / empty per target shape.
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize((Object) null);
-		assertNull(ParquetParser.DEFAULT.parse(bytes, String.class));
-		assertEquals(0, ParquetParser.DEFAULT.parse(bytes, String[].class).length);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write((Object) null);
+		assertNull(ParquetParser.DEFAULT.read(bytes, String.class));
+		assertEquals(0, ParquetParser.DEFAULT.read(bytes, String[].class).length);
 	}
 
 	// =================================================================================
@@ -642,8 +642,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var t2 = new TeamBean(); t2.team = "t2"; t2.members = list();
 		var i3 = new Inner(); i3.v = "c"; i3.n = 3;
 		var t3 = new TeamBean(); t3.team = "t3"; t3.members = list(i3);
-		var bytes = ParquetSerializer.create().addBeanTypes().build().serialize(list(t1, t2, t3));
-		var out = (List<TeamBean>) ParquetParser.DEFAULT.parse(bytes, List.class, TeamBean.class);
+		var bytes = ParquetSerializer.create().addBeanTypes().build().write(list(t1, t2, t3));
+		var out = (List<TeamBean>) ParquetParser.DEFAULT.read(bytes, List.class, TeamBean.class);
 		assertEquals(3, out.size());
 		assertEquals(2, out.get(0).members.size());
 		assertEquals("a", out.get(0).members.get(0).v);
@@ -653,28 +653,28 @@ class ParquetParserSessionFull_Test extends TestBase {
 	}
 
 	// =================================================================================
-	// m. Single-row {value:X} unwrap to array / collection / optional targets (doParse 222-235).
+	// m. Single-row {value:X} unwrap to array / collection / optional targets (doRead 222-235).
 	// =================================================================================
 
 	@Test void m01_singleScalarToArray() throws Exception {
 		// A single scalar serializes to one {value:X} row; parsing to an array wraps it (line 223-227).
-		var bytes = ParquetSerializer.DEFAULT.serialize(42);
-		var arr = ParquetParser.DEFAULT.parse(bytes, Integer[].class);
+		var bytes = ParquetSerializer.DEFAULT.write(42);
+		var arr = ParquetParser.DEFAULT.read(bytes, Integer[].class);
 		assertEquals(1, arr.length);
 		assertEquals(42, arr[0]);
 	}
 
 	@Test void m02_singleScalarToCollection() throws Exception {
 		// Single scalar -> Collection target (line 229-235).
-		var bytes = ParquetSerializer.DEFAULT.serialize("solo");
-		var c = (Collection<String>) ParquetParser.DEFAULT.parse(bytes, ArrayList.class, String.class);
+		var bytes = ParquetSerializer.DEFAULT.write("solo");
+		var c = (Collection<String>) ParquetParser.DEFAULT.read(bytes, ArrayList.class, String.class);
 		assertEquals(1, c.size());
 		assertEquals("solo", c.iterator().next());
 	}
 
 	@Test void m03_singleScalarToList() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(7);
-		var l = (List<Integer>) ParquetParser.DEFAULT.parse(bytes, List.class, Integer.class);
+		var bytes = ParquetSerializer.DEFAULT.write(7);
+		var l = (List<Integer>) ParquetParser.DEFAULT.read(bytes, List.class, Integer.class);
 		assertEquals(1, l.size());
 		assertEquals(7, l.get(0));
 	}
@@ -682,8 +682,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void m04_rawCollectionNoElementType() throws Exception {
 		// Raw ArrayList target (no element type) with multiple rows — exercises toCollection's
 		// elemType==null fallback to Object (line 1673-1674).
-		var bytes = ParquetSerializer.DEFAULT.serialize(list("a", "b", "c"));
-		var c = (Collection<Object>) ParquetParser.DEFAULT.parse(bytes, ArrayList.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list("a", "b", "c"));
+		var c = (Collection<Object>) ParquetParser.DEFAULT.read(bytes, ArrayList.class);
 		assertEquals(3, c.size());
 	}
 
@@ -746,7 +746,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 	}
 
 	// =================================================================================
-	// p. Map-target {root:{...}} unwrap and ValueHolder variants (doParse lines 262-266).
+	// p. Map-target {root:{...}} unwrap and ValueHolder variants (doRead lines 262-266).
 	// =================================================================================
 
 	// Bean for nested-Optional tests: Optional<Optional<String>> property.
@@ -768,24 +768,24 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void p01_rootKeyNamedRootUnwrap() throws Exception {
 		// A Map whose key is literally "root" with a nested Map value triggers the {root:{...}} unwrap
 		// on line 264: buildSchemaFromMap creates root.root.key_value.key/value columns; reassembleRows
-		// merges them into row["root"] = innerMap; doParse unwraps the single-key root map.
+		// merges them into row["root"] = innerMap; doRead unwraps the single-key root map.
 		var inner = new LinkedHashMap<String, Object>();
 		inner.put("inner", "val");
 		var in = new LinkedHashMap<String, Object>();
 		in.put("root", inner);
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (Map<?, ?>) ParquetParser.DEFAULT.parse(bytes, Map.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (Map<?, ?>) ParquetParser.DEFAULT.read(bytes, Map.class);
 		// The parser unwraps {root:{...}} → the inner map is returned directly.
 		assertNotNull(out);
 	}
 
 	@Test void p02_rootMapStringKeysFlatUnwrap() throws Exception {
-		// Normal string-keyed map: doParse single-row Map branch returns the flat row map directly.
+		// Normal string-keyed map: doRead single-row Map branch returns the flat row map directly.
 		var in = new LinkedHashMap<String, Object>();
 		in.put("a", "1");
 		in.put("b", "2");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (Map<String, Object>) ParquetParser.DEFAULT.parse(bytes, Map.class, String.class, Object.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (Map<String, Object>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
 		assertEquals("1", out.get("a"));
 		assertEquals("2", out.get("b"));
 	}
@@ -794,9 +794,9 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// More than one row for a Map target falls through to the raw-rows return.
 		var b1 = new MapBean(); b1.name = "r1"; b1.attrs = map();
 		var b2 = new MapBean(); b2.name = "r2"; b2.attrs = map();
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b1, b2));
+		var bytes = ParquetSerializer.DEFAULT.write(list(b1, b2));
 		// Parsing as a raw Map will return a List because rows.size() != 1
-		Object out = ParquetParser.DEFAULT.parse(bytes, (Class<Object>)(Class<?>) Map.class);
+		Object out = ParquetParser.DEFAULT.read(bytes, (Class<Object>)(Class<?>) Map.class);
 		assertNotNull(out);
 	}
 
@@ -805,8 +805,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var in = new LinkedHashMap<Integer, String>();
 		in.put(1, "one");
 		in.put(null, "nullval");
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
-		var out = (Map<Integer, String>) ParquetParser.DEFAULT.parse(bytes, Map.class, Integer.class, String.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(in);
+		var out = (Map<Integer, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
 		assertEquals("one", out.get(1));
 		assertTrue(out.containsKey(null));
 		assertEquals("nullval", out.get(null));
@@ -816,30 +816,30 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// valueType == null path in the non-string-key map branch (line 249)
 		var in = new LinkedHashMap<Integer, String>();
 		in.put(10, "ten");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		// Parse as Map<Integer, ?> without explicit value type
-		var out = (Map<?, ?>) ParquetParser.DEFAULT.parse(bytes, Map.class, Integer.class);
+		var out = (Map<?, ?>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class);
 		assertEquals("ten", out.get(10));
 	}
 
 	// =================================================================================
-	// q. doParse null-inner scalar rows (line 296-298) and edge branches.
+	// q. doRead null-inner scalar rows (line 296-298) and edge branches.
 	// =================================================================================
 
 	@Test void q01_nullValueInScalarRowToBean() throws Exception {
 		// Serializing a null scalar gives a row {value: null}; parsing to a non-null bean type
 		// exercises the inner==null → "" branch on line 298.
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize((Object) null);
-		var result = ParquetParser.DEFAULT.parse(bytes, String.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write((Object) null);
+		var result = ParquetParser.DEFAULT.read(bytes, String.class);
 		assertNull(result);
 	}
 
 	@Test void q02_optionalTargetWithRows() throws Exception {
 		// Optional target with multiple rows falls through to the Optional(unwrapValueHolder) branch.
 		var b = new MapBean(); b.name = "x"; b.attrs = map();
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
 		// Shouldn't throw; unwrapValueHolder handles a Map row
-		Object out = ParquetParser.DEFAULT.parse(bytes, (Class<Object>)(Class<?>) Optional.class);
+		Object out = ParquetParser.DEFAULT.read(bytes, (Class<Object>)(Class<?>) Optional.class);
 		assertNotNull(out);
 	}
 
@@ -859,8 +859,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var o = new DeepOptBean();
 		o.a = oe();
 		o.b = oe();
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
-		var out = (List<DeepOptBean>) ParquetParser.DEFAULT.parse(bytes, List.class, DeepOptBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(o));
+		var out = (List<DeepOptBean>) ParquetParser.DEFAULT.read(bytes, List.class, DeepOptBean.class);
 		assertFalse(out.get(0).a.isPresent());
 		assertFalse(out.get(0).b.isPresent());
 	}
@@ -871,8 +871,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		o.b = o(new Inner());
 		o.b.get().v = "val";
 		o.b.get().n = 99;
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
-		var out = (List<OptionalBeanProp>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBeanProp.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(o));
+		var out = (List<OptionalBeanProp>) ParquetParser.DEFAULT.read(bytes, List.class, OptionalBeanProp.class);
 		assertTrue(out.get(0).b.isPresent());
 		assertEquals("val", out.get(0).b.get().v);
 		assertEquals(99, out.get(0).b.get().n);
@@ -881,8 +881,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void r03_collapseOptionalNonBeanPropSkipped() throws Exception {
 		// A bean with no Optional properties: collapseOptionalWrappers hasOptional=false early-exit (line 1526).
 		var b = new NoOptBean(); b.name = "no-opt"; b.val = 7;
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<NoOptBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NoOptBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<NoOptBean>) ParquetParser.DEFAULT.read(bytes, List.class, NoOptBean.class);
 		assertEquals("no-opt", out.get(0).name);
 		assertEquals(7, out.get(0).val);
 	}
@@ -890,8 +890,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void r04_collapseOptionalBeanNestedRecurse() throws Exception {
 		// NestedA.b is a non-Optional bean: collapseOptionalWrappers recurses into it (line 1546).
 		var a = new NestedA(); a.b = new NestedB(); a.b.v = "recurse";
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(a));
-		var out = (List<NestedA>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedA.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(a));
+		var out = (List<NestedA>) ParquetParser.DEFAULT.read(bytes, List.class, NestedA.class);
 		assertEquals("recurse", out.get(0).b.v);
 	}
 
@@ -901,8 +901,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// then recurses through {value:{value:"x"}} → "x".
 		var o = new NestedOptBean();
 		o.deep = o(o("hello"));
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
-		var out = (List<NestedOptBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedOptBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(o));
+		var out = (List<NestedOptBean>) ParquetParser.DEFAULT.read(bytes, List.class, NestedOptBean.class);
 		assertTrue(out.get(0).deep.isPresent());
 		assertTrue(out.get(0).deep.get().isPresent());
 		assertEquals("hello", out.get(0).deep.get().get());
@@ -913,8 +913,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// isAbsentOptionalMap recurses (elemType.isOptional branch, line 1574) and returns true.
 		var o = new NestedOptBean();
 		o.deep = o(oe());
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
-		var out = (List<NestedOptBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedOptBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(o));
+		var out = (List<NestedOptBean>) ParquetParser.DEFAULT.read(bytes, List.class, NestedOptBean.class);
 		assertTrue(out.get(0).deep.isPresent());
 		assertFalse(out.get(0).deep.get().isPresent());
 	}
@@ -925,8 +925,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var b = new OptionalBean();
 		b.nick = null;
 		b.age = 42;
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<OptionalBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<OptionalBean>) ParquetParser.DEFAULT.read(bytes, List.class, OptionalBean.class);
 		assertEquals(42, out.get(0).age);
 	}
 
@@ -936,8 +936,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// MarshallingSession converts null Optional<Optional<String>> property to Optional.empty or Optional.of(empty).
 		var o = new NestedOptBean();
 		o.deep = oe();
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
-		var out = (List<NestedOptBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedOptBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(o));
+		var out = (List<NestedOptBean>) ParquetParser.DEFAULT.read(bytes, List.class, NestedOptBean.class);
 		// Parquet round-trip serializes Optional.empty() as a null group; on parse the outer Optional is
 		// reconstructed — it may be empty or present(empty) depending on MarshallingSession coercion.
 		assertNotNull(out.get(0).deep);
@@ -950,8 +950,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// isAbsentOptionalMap returns true → property set to null → MarshallingSession → Optional.empty().
 		var o = new OptNullInnerBean();
 		o.inner = o(new NestedB());  // NestedB.v stays null
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
-		var out = (List<OptNullInnerBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptNullInnerBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(o));
+		var out = (List<OptNullInnerBean>) ParquetParser.DEFAULT.read(bytes, List.class, OptNullInnerBean.class);
 		assertFalse(out.get(0).inner.isPresent());
 	}
 
@@ -1078,8 +1078,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 			b.attrs.put("k" + i, "v" + i);
 			in.add(b);
 		}
-		var bytes = ParquetSerializer.create().pageSize(512).build().serialize(in);
-		var out = (List<MapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, MapBean.class);
+		var bytes = ParquetSerializer.create().pageSize(512).build().write(in);
+		var out = (List<MapBean>) ParquetParser.DEFAULT.read(bytes, List.class, MapBean.class);
 		assertEquals(200, out.size());
 		assertEquals("n99", out.get(99).name);
 	}
@@ -1089,8 +1089,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// (rep==REQUIRED → maxDefLevel = 0).
 		var b = new ParquetSerializer_Test.PrimitiveBean();
 		b.i = 7; b.l = 8L; b.d = 1.5; b.b = true; b.s = "req";
-		var bytes = ParquetSerializer.DEFAULT.serialize(b);
-		var out = ParquetParser.DEFAULT.parse(bytes, ParquetSerializer_Test.PrimitiveBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(b);
+		var out = ParquetParser.DEFAULT.read(bytes, ParquetSerializer_Test.PrimitiveBean.class);
 		assertEquals(7, out.i);
 	}
 
@@ -1101,8 +1101,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void w01_listBeanColumnsEmptyGroup() throws Exception {
 		// A List<Inner> bean property where all rows have empty inner lists exercises the listSize==0 path.
 		var t = new TeamBean(); t.team = "empty"; t.members = list();
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(t));
-		var out = (List<TeamBean>) ParquetParser.DEFAULT.parse(bytes, List.class, TeamBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(t));
+		var out = (List<TeamBean>) ParquetParser.DEFAULT.read(bytes, List.class, TeamBean.class);
 		assertNotNull(out.get(0).members);
 		assertTrue(out.get(0).members == null || out.get(0).members.isEmpty());
 	}
@@ -1111,8 +1111,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// List<Inner> where some members are non-null and some rows are missing values.
 		var i1 = new Inner(); i1.v = "a"; i1.n = 1;
 		var t1 = new TeamBean(); t1.team = "t"; t1.members = list(i1, null);
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(t1));
-		var out = (List<TeamBean>) ParquetParser.DEFAULT.parse(bytes, List.class, TeamBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(t1));
+		var out = (List<TeamBean>) ParquetParser.DEFAULT.read(bytes, List.class, TeamBean.class);
 		assertEquals("a", out.get(0).members.get(0).v);
 	}
 
@@ -1126,8 +1126,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var b = new MapBean(); b.name = "nested"; b.attrs = new LinkedHashMap<>();
 		b.attrs.put(null, "nullval");
 		b.attrs.put("k", "v");
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(b));
-		var out = (List<MapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, MapBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(b));
+		var out = (List<MapBean>) ParquetParser.DEFAULT.read(bytes, List.class, MapBean.class);
 		assertTrue(out.get(0).attrs.containsKey(null));
 		assertEquals("nullval", out.get(0).attrs.get(null));
 	}
@@ -1141,8 +1141,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// Achieved indirectly: a null Optional<String> property stores null in the row map,
 		// then prepareMapForBean(null, ...) is invoked on the collapsed value.
 		var o = new OptionalBean(); o.nick = oe(); o.age = 5;
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
-		var out = (List<OptionalBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(o));
+		var out = (List<OptionalBean>) ParquetParser.DEFAULT.read(bytes, List.class, OptionalBean.class);
 		assertFalse(out.get(0).nick.isPresent());
 		assertEquals(5, out.get(0).age);
 	}
@@ -1151,8 +1151,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// prepareMapForBean: value is already a JsonMap → returned as-is (line 1637 true branch).
 		// Exercised by any normal bean round-trip that goes through reassembleRows.
 		var b = new MapBean(); b.name = "already"; b.attrs = new LinkedHashMap<>(); b.attrs.put("x", "1");
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<MapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, MapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<MapBean>) ParquetParser.DEFAULT.read(bytes, List.class, MapBean.class);
 		assertEquals("already", out.get(0).name);
 	}
 
@@ -1163,8 +1163,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void z01_mergeMapColumnsEmptyAttrs() throws Exception {
 		// MapBean with null attrs: key_value column data is empty (rowIndex >= size → return empty map).
 		var b = new MapBean(); b.name = "nomap"; b.attrs = null;
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<MapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, MapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<MapBean>) ParquetParser.DEFAULT.read(bytes, List.class, MapBean.class);
 		assertEquals("nomap", out.get(0).name);
 		assertTrue(out.get(0).attrs == null || out.get(0).attrs.isEmpty());
 	}
@@ -1174,28 +1174,28 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// Both rows share the same schema; second row's key column list slot is null.
 		var b1 = new MapBean(); b1.name = "a"; b1.attrs = new LinkedHashMap<>(); b1.attrs.put("k", "v");
 		var b2 = new MapBean(); b2.name = "b"; b2.attrs = null;
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b1, b2));
-		var out = (List<MapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, MapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b1, b2));
+		var out = (List<MapBean>) ParquetParser.DEFAULT.read(bytes, List.class, MapBean.class);
 		assertEquals("a", out.get(0).name);
 		assertEquals("v", out.get(0).attrs.get("k"));
 		assertEquals("b", out.get(1).name);
 	}
 
 	// =================================================================================
-	// aa. doParse scalar type branches: Boolean, Character targets.
+	// aa. doRead scalar type branches: Boolean, Character targets.
 	// =================================================================================
 
-	@Test void aa01_parseBoolean() throws Exception {
+	@Test void aa01_readBoolean() throws Exception {
 		// Exercises inner==Boolean.class branch in the scalar-type guard (line 1060).
-		var bytes = ParquetSerializer.DEFAULT.serialize(true);
-		var result = ParquetParser.DEFAULT.parse(bytes, Boolean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(true);
+		var result = ParquetParser.DEFAULT.read(bytes, Boolean.class);
 		assertTrue(result);
 	}
 
-	@Test void aa02_parseInteger() throws Exception {
+	@Test void aa02_readInteger() throws Exception {
 		// Exercises Number.class.isAssignableFrom(inner) in the scalar-type guard.
-		var bytes = ParquetSerializer.DEFAULT.serialize(42);
-		var result = ParquetParser.DEFAULT.parse(bytes, Integer.class);
+		var bytes = ParquetSerializer.DEFAULT.write(42);
+		var result = ParquetParser.DEFAULT.read(bytes, Integer.class);
 		assertEquals(42, result);
 	}
 
@@ -1205,74 +1205,74 @@ class ParquetParserSessionFull_Test extends TestBase {
 
 	@Test void bb01_valueHolderToArray() throws Exception {
 		// Single-row {value: "x"} parsed as String[] wraps the value in a list then converts to array.
-		var bytes = ParquetSerializer.DEFAULT.serialize("x");
-		var out = ParquetParser.DEFAULT.parse(bytes, String[].class);
+		var bytes = ParquetSerializer.DEFAULT.write("x");
+		var out = ParquetParser.DEFAULT.read(bytes, String[].class);
 		assertArrayEquals(new String[]{"x"}, out);
 	}
 
 	@Test void bb02_valueHolderToCollection() throws Exception {
 		// Single-row {value: "y"} parsed as ArrayList<String> exercises the isCollection unwrap path.
-		var bytes = ParquetSerializer.DEFAULT.serialize("y");
-		var out = (List<String>) ParquetParser.DEFAULT.parse(bytes, ArrayList.class, String.class);
+		var bytes = ParquetSerializer.DEFAULT.write("y");
+		var out = (List<String>) ParquetParser.DEFAULT.read(bytes, ArrayList.class, String.class);
 		assertEquals(List.of("y"), out);
 	}
 
 	// =================================================================================
-	// cc. Optional doParse with empty rows (line 1098) and unwrapValueHolder (line 1658).
+	// cc. Optional doRead with empty rows (line 1098) and unwrapValueHolder (line 1658).
 	// =================================================================================
 
 	@Test void cc01_optionalTargetEmptyRows() throws Exception {
 		// Parsing an empty Parquet file as Optional target returns Optional.empty().
-		var bytes = ParquetSerializer.DEFAULT.serialize(list());
-		Optional<?> out = (Optional<?>) ParquetParser.DEFAULT.parse(bytes, Optional.class, String.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list());
+		Optional<?> out = (Optional<?>) ParquetParser.DEFAULT.read(bytes, Optional.class, String.class);
 		assertFalse(out.isPresent());
 	}
 
 	// =================================================================================
-	// dd. doParse: Collection<Map>, array-null-inner, Optional-null-inner, Map root/multi-row.
+	// dd. doRead: Collection<Map>, array-null-inner, Optional-null-inner, Map root/multi-row.
 	// =================================================================================
 
-	@Test void dd01_parseCollectionOfMaps() throws Exception {
+	@Test void dd01_readCollectionOfMaps() throws Exception {
 		// targetWantsScalar=false for List<Map> target — exercises the isCollection+isMap branch (line 217).
 		var b1 = new MapBean(); b1.name = "a"; b1.attrs = map("k", "v");
 		var b2 = new MapBean(); b2.name = "b"; b2.attrs = map();
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b1, b2));
-		var out = (List<Map<?,?>>) ParquetParser.DEFAULT.parse(bytes, List.class, Map.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b1, b2));
+		var out = (List<Map<?,?>>) ParquetParser.DEFAULT.read(bytes, List.class, Map.class);
 		assertEquals(2, out.size());
 		assertNotNull(out.get(0));
 	}
 
-	@Test void dd02_parseArrayEmptyInner() throws Exception {
+	@Test void dd02_readArrayEmptyInner() throws Exception {
 		// Null scalar produces 0 rows; parse as String[] gives empty array.
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize((Object) null);
-		var out = ParquetParser.DEFAULT.parse(bytes, String[].class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write((Object) null);
+		var out = ParquetParser.DEFAULT.read(bytes, String[].class);
 		assertNotNull(out);
 		assertEquals(0, out.length);
 	}
 
-	@Test void dd03_parseCollectionEmptyInner() throws Exception {
+	@Test void dd03_readCollectionEmptyInner() throws Exception {
 		// Null scalar produces 0 rows; parse as ArrayList<String> gives empty list.
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize((Object) null);
-		var out = (List<String>) ParquetParser.DEFAULT.parse(bytes, ArrayList.class, String.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write((Object) null);
+		var out = (List<String>) ParquetParser.DEFAULT.read(bytes, ArrayList.class, String.class);
 		assertNotNull(out);
 		assertTrue(out.isEmpty());
 	}
 
-	@Test void dd04_parseOptionalNonEmptyRows() throws Exception {
+	@Test void dd04_readOptionalNonEmptyRows() throws Exception {
 		// Multiple rows with Optional target — exercises unwrapValueHolder path (line 272).
 		var b = new MapBean(); b.name = "p"; b.attrs = map();
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		Optional<?> out = (Optional<?>) ParquetParser.DEFAULT.parse(bytes, Optional.class, MapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		Optional<?> out = (Optional<?>) ParquetParser.DEFAULT.read(bytes, Optional.class, MapBean.class);
 		assertTrue(out.isPresent());
 	}
 
-	@Test void dd05_parseMapTargetMultipleRows() throws Exception {
+	@Test void dd05_readMapTargetMultipleRows() throws Exception {
 		// Two-row result with Map target — exercises rows.size()!=1 path in the type.isMap() block (line 262 false).
 		var b1 = new MapBean(); b1.name = "a"; b1.attrs = map("x", "1");
 		var b2 = new MapBean(); b2.name = "b"; b2.attrs = map("y", "2");
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b1, b2));
+		var bytes = ParquetSerializer.DEFAULT.write(list(b1, b2));
 		// Parsing a list of MapBeans as raw List — rows is size 2, doesn't take the size==1 path
-		var out = (List<Map<?,?>>) ParquetParser.DEFAULT.parse(bytes, List.class, Map.class);
+		var out = (List<Map<?,?>>) ParquetParser.DEFAULT.read(bytes, List.class, Map.class);
 		assertEquals(2, out.size());
 	}
 
@@ -1284,15 +1284,15 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// value is a Map and target type is Map — exercises the !type.isMap() false branch (line 1575).
 		var in = new LinkedHashMap<String, String>();
 		in.put("a", "1");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (Map<String, String>) ParquetParser.DEFAULT.parse(bytes, Map.class, String.class, String.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (Map<String, String>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, String.class);
 		assertEquals("1", out.get("a"));
 	}
 
 	@Test void ee02_characterTarget() throws Exception {
 		// inner==Character.class exercises the Character branch in the scalar-type guard.
-		var bytes = ParquetSerializer.DEFAULT.serialize('Z');
-		var result = ParquetParser.DEFAULT.parse(bytes, Character.class);
+		var bytes = ParquetSerializer.DEFAULT.write('Z');
+		var result = ParquetParser.DEFAULT.read(bytes, Character.class);
 		assertEquals('Z', (char) result);
 	}
 
@@ -1309,8 +1309,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var i1 = new Inner(); i1.v = "a"; i1.n = 1;
 		var i2 = new Inner(); i2.v = "b"; i2.n = 2;
 		b.items = new Inner[]{i1, i2};
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (List<BeanArrayPropBean>) ParquetParser.DEFAULT.parse(bytes, List.class, BeanArrayPropBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (List<BeanArrayPropBean>) ParquetParser.DEFAULT.read(bytes, List.class, BeanArrayPropBean.class);
 		assertEquals(1, out.size());
 		assertEquals("x", out.get(0).name);
 		assertNotNull(out.get(0).items);
@@ -1395,15 +1395,15 @@ class ParquetParserSessionFull_Test extends TestBase {
 	}
 
 	// =================================================================================
-	// hh. doParse edge branches: scalar-as-map, raw collection, collection-newInstance-null,
+	// hh. doRead edge branches: scalar-as-map, raw collection, collection-newInstance-null,
 	//     prepareMapForBean map-target, unwrapValueHolder non-map row, collapseOptionalValue.
 	// =================================================================================
 
 	@Test void hh01_scalarRowParsedAsMapTarget() throws Exception {
 		// Serializing a scalar produces {value:"x"} rows; parsing as Map target hits the
 		// isMap() branch where inner is NOT a Map → inner instanceof Map<?,?> = false (line 240).
-		var bytes = ParquetSerializer.DEFAULT.serialize("hello");
-		var out = (Map<?, ?>) ParquetParser.DEFAULT.parse(bytes, (Class<Object>)(Class<?>)Map.class);
+		var bytes = ParquetSerializer.DEFAULT.write("hello");
+		var out = (Map<?, ?>) ParquetParser.DEFAULT.read(bytes, (Class<Object>)(Class<?>)Map.class);
 		// Falls through to single-row Map branch and returns the {value:"hello"} row as-is.
 		assertNotNull(out);
 	}
@@ -1412,8 +1412,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// parse(bytes, Collection.class) → effectiveType is raw Collection → elementType == null
 		// → line 205 elementType-null branch fires, elementType becomes Map.class.
 		var b = new MapBean(); b.name = "x"; b.attrs = map();
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
-		var out = (Collection<?>) ParquetParser.DEFAULT.parse(bytes, (Class<Object>)(Class<?>)Collection.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
+		var out = (Collection<?>) ParquetParser.DEFAULT.read(bytes, (Class<Object>)(Class<?>)Collection.class);
 		assertNotNull(out);
 		assertFalse(out.isEmpty());
 	}
@@ -1421,8 +1421,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void hh03_valueHolderToAbstractCollection() throws Exception {
 		// Serializing a single scalar → {value:"v"} row; parsing as raw Collection (abstract interface)
 		// means type.newInstance() returns null → coll = new ArrayList<>() fallback (line 229-230).
-		var bytes = ParquetSerializer.DEFAULT.serialize("v");
-		var out = (Collection<?>) ParquetParser.DEFAULT.parse(bytes, (Class<Object>)(Class<?>)Collection.class);
+		var bytes = ParquetSerializer.DEFAULT.write("v");
+		var out = (Collection<?>) ParquetParser.DEFAULT.read(bytes, (Class<Object>)(Class<?>)Collection.class);
 		assertNotNull(out);
 		assertEquals(1, out.size());
 	}
@@ -1432,8 +1432,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// → falls through to return value as-is (line 1539 false branch on !type.isMap()).
 		var in = new LinkedHashMap<String, Object>();
 		in.put("a", "1");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (Map<?, ?>) ParquetParser.DEFAULT.parse(bytes, Map.class, String.class, Object.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (Map<?, ?>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
 		assertEquals("1", out.get("a"));
 	}
 
@@ -1445,8 +1445,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var o = new OptionalBeanProp();
 		o.a = o("strval");
 		o.b = null;
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
-		var out = (List<OptionalBeanProp>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBeanProp.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(list(o));
+		var out = (List<OptionalBeanProp>) ParquetParser.DEFAULT.read(bytes, List.class, OptionalBeanProp.class);
 		assertTrue(out.get(0).a.isPresent());
 		assertEquals("strval", out.get(0).a.get());
 	}
@@ -1458,8 +1458,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		var inner = new LinkedHashMap<String, Object>();
 		inner.put("k", "v");
 		var in = list(inner);
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (Map<?, ?>) ParquetParser.DEFAULT.parse(bytes, (Class<Object>)(Class<?>)Map.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (Map<?, ?>) ParquetParser.DEFAULT.read(bytes, (Class<Object>)(Class<?>)Map.class);
 		assertNotNull(out);
 	}
 

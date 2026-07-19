@@ -74,7 +74,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<jv>list</jv> = JsonList.<jsm>ofString</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
  * 	String <jv>json</jv> = <jv>list</jv>.toString();  <jc>// Produces "[{foo:'bar'},{baz:'bing'}]"</jc>
  * 	<jv>json</jv> = <jv>list</jv>.toString(JsonSerializer.<jsf>DEFAULT</jsf>);  <jc>// Equivalent</jc>
- * 	<jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>list</jv>);  <jc>// Equivalent</jc>
+ * 	<jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>list</jv>);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Get one of the entries in the list as an Integer</jc>
  * 	<jv>list</jv> = JsonList.<jsm>ofString</jsm>(<js>"[1,2,3]"</js>);

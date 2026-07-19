@@ -215,10 +215,10 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 		 * 	String <jv>xml</jv> = <js>"&lt;root&gt;&lt;a&gt;foobar&lt;/a&gt;&lt;/root&gt;"</js>;
 		 *
 		 * 	<jc>// Produces:  "{ root: { a:'foobar' }}"</jc>
-		 * 	JsonMap <jv>map1</jv> = <jv>parser1</jv>.parse(<jv>xml</jv>, JsonMap.<jk>class</jk>);
+		 * 	JsonMap <jv>map1</jv> = <jv>parser1</jv>.read(<jv>xml</jv>, JsonMap.<jk>class</jk>);
 		 *
 		 * 	<jc>// Produces:  "{ a:'foobar' }"</jc>
-		 * 	JsonMap <jv>map2</jv> = <jv>parser2</jv>.parse(<jv>xml</jv>, JsonMap.<jk>class</jk>);
+		 * 	JsonMap <jv>map2</jv> = <jv>parser2</jv>.read(<jv>xml</jv>, JsonMap.<jk>class</jk>);
 		 * </p>
 		 *
 		 * @return This object.
@@ -382,35 +382,35 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 
 	/**
 	 * Convenience delegator for the whole-value {@link RecordReader} using <b>default session
-	 * arguments</b>.  The real implementation lives on {@link XmlParserSession#parseRecords(Object)}.
+	 * arguments</b>.  The real implementation lives on {@link XmlParserSession#readRecords(Object)}.
 	 *
 	 * @param input The input.
 	 * @return A new {@link RecordReader} cursor.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
-		return getSession().parseRecords(input);
+	public RecordReader readRecords(Object input) throws IOException {
+		return getSession().readRecords(input);
 	}
 
 	/**
 	 * Convenience delegator for the buffered array-element {@link RecordReader} using <b>default
 	 * session arguments</b>.  The real implementation lives on
-	 * {@link XmlParserSession#parseArrayRecords(Object)}.
+	 * {@link XmlParserSession#readArrayRecords(Object)}.
 	 *
 	 * @param input The input.
 	 * @return A buffered {@link RecordReader}.
 	 * @throws IOException If a problem occurred reading the input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
-		return getSession().parseArrayRecords(input);
+	public RecordReader readArrayRecords(Object input) throws IOException {
+		return getSession().readArrayRecords(input);
 	}
 
 	/**
 	 * Convenience delegator for the buffered array-element {@link RecordReader} with a
 	 * caller-specified root element name, using <b>default session arguments</b>.  The real
-	 * implementation lives on {@link XmlParserSession#parseArrayRecords(Object, String)}.
+	 * implementation lives on {@link XmlParserSession#readArrayRecords(Object, String)}.
 	 *
 	 * @param input The input.
 	 * @param rootElementName The expected root element wrapping the array.
@@ -418,8 +418,8 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 	 * @throws IOException If a problem occurred reading the input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input, String rootElementName) throws IOException {
-		return getSession().parseArrayRecords(input, rootElementName);
+	public RecordReader readArrayRecords(Object input, String rootElementName) throws IOException {
+		return getSession().readArrayRecords(input, rootElementName);
 	}
 
 	/**

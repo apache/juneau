@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.stream.*;
 	"java:S115",  // ARG_ctx follows project assertion-param naming convention
 	"java:S3776", // Cognitive complexity acceptable for Hjson parse logic
 	"java:S6541", // Acceptable for session implementation
-	"unchecked",  // (T) casts in doParse for generic return type
+	"unchecked",  // (T) casts in doRead for generic return type
 	"resource"    // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class HjsonParserSession extends ReaderParserSession implements RecordReadable {
@@ -75,7 +75,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	}
 
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.reader(this, input);
 	}
 
@@ -85,7 +85,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	}
 
 	@Override
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		String inputStr;
 		try {
 			inputStr = pipe.asString();
@@ -103,9 +103,9 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 		if (peek.type() == HjsonTokenizer.TokenType.EOF)
 			return null;
 		var peekType = peek.type();
-		// LBRACE/LBRACKET -> parseValue (object/array)
+		// LBRACE/LBRACKET -> readValue (object/array)
 		if (peekType == HjsonTokenizer.TokenType.LBRACE || peekType == HjsonTokenizer.TokenType.LBRACKET) {
-			return (T) parseValue(tokenizer, type);
+			return (T) readValue(tokenizer, type);
 		}
 		// QUOTELESS/STRING: distinguish braceless root "key: value" from lone value "string"
 		if (peekType == HjsonTokenizer.TokenType.QUOTELESS || peekType == HjsonTokenizer.TokenType.STRING) {
@@ -118,22 +118,22 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 				return (T) coerceMemberValue(firstVal, type);
 			// Target is Map/Bean: COLON means key:value (braceless root)
 			if (nextType == HjsonTokenizer.TokenType.COLON)
-				return (T) parseRootBraceless(tokenizer, type, firstVal);
+				return (T) readRootBraceless(tokenizer, type, firstVal);
 			// No COLON - lone value (e.g. "1.0" or "true" tokenized as QUOTELESS)
 			return (T) coerceMemberValue(firstVal, type);
 		}
 		// NUMBER, TRUE, FALSE, NULL, etc - lone value; use (T) not type.cast (cast fails for boxed->primitive)
-		return (T) coerceMemberValue(parseValue(tokenizer, type), type);
+		return (T) coerceMemberValue(readValue(tokenizer, type), type);
 	}
 
-	private Object parseRootBraceless(HjsonTokenizer t, ClassMeta<?> type, String firstKey) throws IOException, ParseException, ExecutableException {
+	private Object readRootBraceless(HjsonTokenizer t, ClassMeta<?> type, String firstKey) throws IOException, ParseException, ExecutableException {
 		var result = newGenericMap();
-		// Same per-property type threading as parseObject so braceless-root beans get typed-map keys (Bug #7b).
+		// Same per-property type threading as readObject so braceless-root beans get typed-map keys (Bug #7b).
 		var beanMeta = (type != null && type.isBean()) ? type.getBeanMeta() : null;
 		if (t.read().type() != HjsonTokenizer.TokenType.COLON)
 			throw new ParseException(this, "Expected : after key at line %s", t.getLine());
 		t.skipWhitespaceAndComments();
-		var value = parseValue(t, propertyType(beanMeta, firstKey, type));
+		var value = readValue(t, propertyType(beanMeta, firstKey, type));
 		result.put(firstKey, value);
 		t.skipWhitespaceAndComments();
 		if (t.peek().type() == HjsonTokenizer.TokenType.NEWLINE)
@@ -144,7 +144,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 			if (t.read().type() != HjsonTokenizer.TokenType.COLON)
 				throw new ParseException(this, "Expected : after key at line %s", t.getLine());
 			t.skipWhitespaceAndComments();
-			value = parseValue(t, propertyType(beanMeta, key, type));
+			value = readValue(t, propertyType(beanMeta, key, type));
 			result.put(key, value);
 			t.skipWhitespaceAndComments();
 			if (t.peek().type() == HjsonTokenizer.TokenType.NEWLINE)
@@ -153,7 +153,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 		return convertToBean(result, type);
 	}
 
-	private Object parseValue(HjsonTokenizer t, ClassMeta<?> type) throws IOException, ParseException, ExecutableException {
+	private Object readValue(HjsonTokenizer t, ClassMeta<?> type) throws IOException, ParseException, ExecutableException {
 		var tok = t.read();
 		Object raw = switch (tok.type()) {
 			case STRING, QUOTELESS, MULTILINE -> isTrimStrings() ? tok.stringValue().trim() : tok.stringValue();
@@ -161,8 +161,8 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 			case TRUE -> true;
 			case FALSE -> false;
 			case NULL -> null;
-			case LBRACE -> parseObject(t, type);
-			case LBRACKET -> parseArray(t, type);
+			case LBRACE -> readObject(t, type);
+			case LBRACKET -> readArray(t, type);
 			case EOF -> null;
 			default -> throw new ParseException(this, "Unexpected token %s at line %s", tok.type(), t.getLine());
 		};
@@ -173,11 +173,11 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 		return coerceMemberValue(raw, type);
 	}
 
-	private Object parseObject(HjsonTokenizer t, ClassMeta<?> type) throws IOException, ParseException, ExecutableException {
+	private Object readObject(HjsonTokenizer t, ClassMeta<?> type) throws IOException, ParseException, ExecutableException {
 		var result = newGenericMap();
 		// When parsing a typed Bean, look up per-property ClassMetas so that nested Map<K,V> properties
-		// see their declared key/value types and the key coercion in the inner parseObject can fire
-		// (matches JsonParserSession.parseIntoBeanMap2 / parseIntoMap2 pattern).
+		// see their declared key/value types and the key coercion in the inner readObject can fire
+		// (matches JsonParserSession.readIntoBeanMap2 / readIntoMap2 pattern).
 		var beanMeta = (type != null && type.isBean()) ? type.getBeanMeta() : null;
 		t.skipWhitespaceAndComments();
 		var next = t.peek();
@@ -192,7 +192,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 				throw new ParseException(this, "Expected : after key at line %s", t.getLine());
 			t.skipWhitespaceAndComments();
 			var valueType = propertyType(beanMeta, key, type);
-			var value = parseValue(t, valueType);
+			var value = readValue(t, valueType);
 			result.put(key, value);
 			t.skipWhitespaceAndComments();
 			next = t.peek();
@@ -236,7 +236,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	 *
 	 * <p>
 	 * Extended in Bug #12 to also surface {@link ClassMeta#isCollectionOrArray()} property types so the
-	 * collection-element dispatch in {@link #parseArray} threads the parent's element type into recursion —
+	 * collection-element dispatch in {@link #readArray} threads the parent's element type into recursion —
 	 * that's where {@link #coerceMemberValue} reads the {@code byte[]} target and invokes the configured
 	 * {@link org.apache.juneau.marshall.swaps.BinarySwap}'s unswap on the wire-form string.  Other property shapes
 	 * (Optional, primitive, bean) still pass through as {@code object()} so this parser's lazy-typed
@@ -266,7 +266,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 		};
 	}
 
-	private Object parseArray(HjsonTokenizer t, ClassMeta<?> type) throws IOException, ParseException, ExecutableException {
+	private Object readArray(HjsonTokenizer t, ClassMeta<?> type) throws IOException, ParseException, ExecutableException {
 		if (type == null)
 			type = object();
 		var result = new JsonList();
@@ -278,7 +278,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 		}
 		while (true) {
 			var eType = coalesce(type.getElementType(), object());
-			result.add(parseValue(t, eType));
+			result.add(readValue(t, eType));
 			t.skipWhitespaceAndComments();
 			next = t.peek();
 			if (next.type() == HjsonTokenizer.TokenType.RBRACKET) {

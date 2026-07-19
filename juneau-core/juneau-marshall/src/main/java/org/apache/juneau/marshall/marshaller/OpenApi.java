@@ -215,7 +215,7 @@ public class OpenApi extends CharMarshaller {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String of(HttpPartSchema schema, Object object) throws SerializeException {
-		return DEFAULT.s.serialize(HttpPartType.ANY, schema, object);
+		return DEFAULT.s.write(HttpPartType.ANY, schema, object);
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class OpenApi extends CharMarshaller {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T to(HttpPartSchema schema, String input, Class<T> type) throws ParseException {
-		return DEFAULT.p.parse(HttpPartType.ANY, schema, input, type);
+		return DEFAULT.p.read(HttpPartType.ANY, schema, input, type);
 	}
 
 	private final OpenApiSerializer s;

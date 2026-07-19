@@ -41,8 +41,8 @@ class ParquetRoundTrip_Test extends TestBase {
 		var a = new ParquetSerializer_Test.SimpleBean();
 		a.name = "Alice";
 		a.age = 30;
-		var bytes = ParquetSerializer.DEFAULT.serialize(a);
-		var b = (List<ParquetSerializer_Test.SimpleBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ParquetSerializer_Test.SimpleBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(a);
+		var b = (List<ParquetSerializer_Test.SimpleBean>) ParquetParser.DEFAULT.read(bytes, List.class, ParquetSerializer_Test.SimpleBean.class);
 		assertBeans(b, "name,age", "Alice,30");
 	}
 
@@ -55,8 +55,8 @@ class ParquetRoundTrip_Test extends TestBase {
 		b.name = "b";
 		b.age = 2;
 		var list = list(a, b);
-		var bytes = ParquetSerializer.DEFAULT.serialize(list);
-		var parsed = (List<ParquetSerializer_Test.SimpleBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ParquetSerializer_Test.SimpleBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list);
+		var parsed = (List<ParquetSerializer_Test.SimpleBean>) ParquetParser.DEFAULT.read(bytes, List.class, ParquetSerializer_Test.SimpleBean.class);
 		assertBeans(parsed, "name,age", "a,1", "b,2");
 	}
 
@@ -68,15 +68,15 @@ class ParquetRoundTrip_Test extends TestBase {
 		a.d = 2.718;
 		a.b = false;
 		a.s = "world";
-		var bytes = ParquetSerializer.DEFAULT.serialize(a);
-		var parsed = (List<ParquetSerializer_Test.PrimitiveBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ParquetSerializer_Test.PrimitiveBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(a);
+		var parsed = (List<ParquetSerializer_Test.PrimitiveBean>) ParquetParser.DEFAULT.read(bytes, List.class, ParquetSerializer_Test.PrimitiveBean.class);
 		assertBeans(parsed, "i,l,d,b,s", "-1,999999,2.718,false,world");
 	}
 
 	@Test
 	void a04_emptyRoundTrip() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(list());
-		var parsed = ParquetParser.DEFAULT.parse(bytes, List.class, ParquetSerializer_Test.SimpleBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list());
+		var parsed = ParquetParser.DEFAULT.read(bytes, List.class, ParquetSerializer_Test.SimpleBean.class);
 		assertBeans(parsed, "name,age");
 	}
 
@@ -91,7 +91,7 @@ class ParquetRoundTrip_Test extends TestBase {
 		var a = new BeanWithList();
 		a.name = "Alice";
 		a.tags = list("a", "b", "c");
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(a));
+		var bytes = ParquetSerializer.DEFAULT.write(list(a));
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -101,8 +101,8 @@ class ParquetRoundTrip_Test extends TestBase {
 		var a = new BeanWithList();
 		a.name = "Alice";
 		a.tags = list("a", "b", "c");
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(a));
-		var parsed = (List<BeanWithList>) ParquetParser.DEFAULT.parse(bytes, List.class, BeanWithList.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(a));
+		var parsed = (List<BeanWithList>) ParquetParser.DEFAULT.read(bytes, List.class, BeanWithList.class);
 		assertBeans(parsed, "name,tags", "Alice,[a,b,c]");
 	}
 
@@ -130,8 +130,8 @@ class ParquetRoundTrip_Test extends TestBase {
 		var members = List.of(new Person("Alice", 30), new Person("Bob", 25));
 		var in = new Team("devs", members);
 		var ser = ParquetSerializer.create().addBeanTypes().build();
-		var bytes = ser.serialize(in);
-		var out = (Team) ParquetParser.DEFAULT.parse(bytes, Team.class);
+		var bytes = ser.write(in);
+		var out = (Team) ParquetParser.DEFAULT.read(bytes, Team.class);
 		assertBean(out, "name,members{0{name,age},1{name,age}}", "devs,{{Alice,30},{Bob,25}}");
 	}
 
@@ -141,8 +141,8 @@ class ParquetRoundTrip_Test extends TestBase {
 		in.put(1, "a");
 		in.put(2, "b");
 		in.put(3, "c");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (Map<Integer, String>) ParquetParser.DEFAULT.parse(bytes, Map.class, Integer.class, String.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (Map<Integer, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
 		assertEquals(3, out.size());
 		assertEquals("a", out.get(1));
 		assertEquals("b", out.get(2));
@@ -152,13 +152,13 @@ class ParquetRoundTrip_Test extends TestBase {
 	@Test
 	void a09_scalarAndArrayUnwrap() throws Exception {
 		// 2.1: Top-level scalar/array - parser unwraps {value: X} to X
-		assertEquals("foobar", ParquetParser.DEFAULT.parse(ParquetSerializer.DEFAULT.serialize("foobar"), String.class));
-		assertEquals(123, ParquetParser.DEFAULT.parse(ParquetSerializer.DEFAULT.serialize(123), Integer.class));
-		assertEquals(123, ParquetParser.DEFAULT.parse(ParquetSerializer.DEFAULT.serialize(123), int.class).intValue());
-		assertEquals(true, ParquetParser.DEFAULT.parse(ParquetSerializer.DEFAULT.serialize(true), Boolean.class));
-		var intArr = ParquetParser.DEFAULT.parse(ParquetSerializer.DEFAULT.serialize(new int[]{1, 2, 3}), int[].class);
+		assertEquals("foobar", ParquetParser.DEFAULT.read(ParquetSerializer.DEFAULT.write("foobar"), String.class));
+		assertEquals(123, ParquetParser.DEFAULT.read(ParquetSerializer.DEFAULT.write(123), Integer.class));
+		assertEquals(123, ParquetParser.DEFAULT.read(ParquetSerializer.DEFAULT.write(123), int.class).intValue());
+		assertEquals(true, ParquetParser.DEFAULT.read(ParquetSerializer.DEFAULT.write(true), Boolean.class));
+		var intArr = ParquetParser.DEFAULT.read(ParquetSerializer.DEFAULT.write(new int[]{1, 2, 3}), int[].class);
 		assertArrayEquals(new int[]{1, 2, 3}, intArr);
-		var strArr = ParquetParser.DEFAULT.parse(ParquetSerializer.DEFAULT.serialize(new String[]{"a", "b"}), String[].class);
+		var strArr = ParquetParser.DEFAULT.read(ParquetSerializer.DEFAULT.write(new String[]{"a", "b"}), String[].class);
 		assertArrayEquals(new String[]{"a", "b"}, strArr);
 	}
 
@@ -166,8 +166,8 @@ class ParquetRoundTrip_Test extends TestBase {
 	void a10_stringArrayWithNull() throws Exception {
 		// 2.1: Arrays with null - ["foo", null, "null", ""]
 		var in = new String[]{"foo", null, "null", ""};
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = ParquetParser.DEFAULT.parse(bytes, String[].class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = ParquetParser.DEFAULT.read(bytes, String[].class);
 		assertArrayEquals(in, out);
 	}
 
@@ -177,8 +177,8 @@ class ParquetRoundTrip_Test extends TestBase {
 		var in = new LinkedHashMap<TestEnum, String>();
 		in.put(TestEnum.FOO, "x");
 		in.put(TestEnum.BAR, "y");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (Map<TestEnum, String>) ParquetParser.DEFAULT.parse(bytes,
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (Map<TestEnum, String>) ParquetParser.DEFAULT.read(bytes,
 			Map.class, TestEnum.class, String.class);
 		assertEquals(2, out.size());
 		assertEquals("x", out.get(TestEnum.FOO));
@@ -197,8 +197,8 @@ class ParquetRoundTrip_Test extends TestBase {
 		var x = new TreeMap<Integer, String>();
 		x.put(1, "a");
 		x.put(2, null);
-		var bytes = ParquetSerializer.DEFAULT.serialize(x);
-		var parsed = (TreeMap<Integer, String>) ParquetParser.DEFAULT.parse(bytes, TreeMap.class, Integer.class, String.class);
+		var bytes = ParquetSerializer.DEFAULT.write(x);
+		var parsed = (TreeMap<Integer, String>) ParquetParser.DEFAULT.read(bytes, TreeMap.class, Integer.class, String.class);
 		assertEquals("a", parsed.get(1));
 		assertNull(parsed.get(2));
 		assertEquals(2, parsed.size());
@@ -212,8 +212,8 @@ class ParquetRoundTrip_Test extends TestBase {
 		var x = new TreeMap<Integer, String>();
 		x.put(1, "a");
 		x.put(2, null);
-		var bytes = s.serialize(x);
-		var parsed = (TreeMap<Integer, String>) p.parse(bytes, TreeMap.class, Integer.class, String.class);
+		var bytes = s.write(x);
+		var parsed = (TreeMap<Integer, String>) p.read(bytes, TreeMap.class, Integer.class, String.class);
 		assertEquals("a", parsed.get(1));
 		assertNull(parsed.get(2));
 		assertEquals(2, parsed.size());
@@ -229,8 +229,8 @@ class ParquetRoundTrip_Test extends TestBase {
 		var x = new TreeMap<Date, String>();
 		x.put(xd1, "a");
 		x.put(xd2, null);
-		var bytes = s.serialize(x);
-		var parsed = (TreeMap<Date, String>) p.parse(bytes, TreeMap.class, Date.class, String.class);
+		var bytes = s.write(x);
+		var parsed = (TreeMap<Date, String>) p.read(bytes, TreeMap.class, Date.class, String.class);
 		assertEquals("a", parsed.get(xd1));
 		assertNull(parsed.get(xd2));
 		assertEquals(2, parsed.size());
@@ -246,8 +246,8 @@ class ParquetRoundTrip_Test extends TestBase {
 		var x = new TreeMap<Calendar, String>();
 		x.put(xc1, "a");
 		x.put(xc2, null);
-		var bytes = s.serialize(x);
-		var parsed = (TreeMap<Calendar, String>) p.parse(bytes, TreeMap.class, GregorianCalendar.class, String.class);
+		var bytes = s.write(x);
+		var parsed = (TreeMap<Calendar, String>) p.read(bytes, TreeMap.class, GregorianCalendar.class, String.class);
 		assertEquals("a", parsed.get(xc1));
 		assertNull(parsed.get(xc2));
 		assertEquals(2, parsed.size());
@@ -265,12 +265,12 @@ class ParquetRoundTrip_Test extends TestBase {
 		withEntries.statusMap.put(TestEnum.FOO, TestEnum.BAR);
 		withEntries.statusMap.put(TestEnum.BAR, TestEnum.FOO);
 
-		var bytesEmpty = ParquetSerializer.DEFAULT.serialize(list(empty));
-		var parsedEmpty = (List<BeanWithNestedMap>) ParquetParser.DEFAULT.parse(bytesEmpty, List.class, BeanWithNestedMap.class);
+		var bytesEmpty = ParquetSerializer.DEFAULT.write(list(empty));
+		var parsedEmpty = (List<BeanWithNestedMap>) ParquetParser.DEFAULT.read(bytesEmpty, List.class, BeanWithNestedMap.class);
 		assertBeans(parsedEmpty, "name,statusMap", "empty,{}");
 
-		var bytesWithEntries = ParquetSerializer.DEFAULT.serialize(list(withEntries));
-		var parsedWithEntries = (List<BeanWithNestedMap>) ParquetParser.DEFAULT.parse(bytesWithEntries, List.class, BeanWithNestedMap.class);
+		var bytesWithEntries = ParquetSerializer.DEFAULT.write(list(withEntries));
+		var parsedWithEntries = (List<BeanWithNestedMap>) ParquetParser.DEFAULT.read(bytesWithEntries, List.class, BeanWithNestedMap.class);
 		assertEquals(1, parsedWithEntries.size());
 		assertEquals("withEntries", parsedWithEntries.get(0).name);
 		var m = parsedWithEntries.get(0).statusMap;

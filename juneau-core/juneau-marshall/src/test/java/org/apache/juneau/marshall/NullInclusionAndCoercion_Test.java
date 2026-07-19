@@ -65,21 +65,21 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	}
 
 	@Test void a01_nonDefault_omitsPrimitiveDefaults() throws Exception {
-		assertEquals("{}", JsonSerializer.create().nonDefault().build().serializeToString(new A1()));
+		assertEquals("{}", JsonSerializer.create().nonDefault().build().writeToString(new A1()));
 	}
 
 	@Test void a02_nonDefault_emitsNonDefaultPrimitives() throws Exception {
 		var b = new A1();
 		b.i = 5;
-		assertEquals("{\"i\":5}", JsonSerializer.create().nonDefault().build().serializeToString(b));
+		assertEquals("{\"i\":5}", JsonSerializer.create().nonDefault().build().writeToString(b));
 	}
 
 	@Test void a03_nonDefault_disabledByDefault() throws Exception {
-		assertEquals("{\"d\":0.0,\"i\":0}", JsonSerializer.create().build().serializeToString(new A1()));
+		assertEquals("{\"d\":0.0,\"i\":0}", JsonSerializer.create().build().writeToString(new A1()));
 	}
 
 	@Test void a04_nonDefault_keepNullPropertiesFirst() throws Exception {
-		assertEquals("{\"boxed\":null,\"s\":null}", JsonSerializer.create().nonDefault().keepNullProperties().build().serializeToString(new A1()));
+		assertEquals("{\"boxed\":null,\"s\":null}", JsonSerializer.create().nonDefault().keepNullProperties().build().writeToString(new A1()));
 	}
 
 	public static class A2 {
@@ -90,10 +90,10 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	@Test void a05_nonDefault_usesBeanConstructedDefaults_cached() throws Exception {
 		var s = JsonSerializer.create().nonDefault().build();
 		// Serialize twice so the per-ClassMeta reference instance is resolved once then read from cache.
-		assertEquals("{}", s.serializeToString(new A2()));
+		assertEquals("{}", s.writeToString(new A2()));
 		var b = new A2();
 		b.name = "world";
-		assertEquals("{\"name\":\"world\"}", s.serializeToString(b));
+		assertEquals("{\"name\":\"world\"}", s.writeToString(b));
 	}
 
 	// Numeric-default equality across Number subtypes — exercises defaultEquals() + toBigDecimal() branches.
@@ -108,7 +108,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 
 	@Test void a06_nonDefault_numericEquality_allMatchDefaults() throws Exception {
 		// Every field equals its bean-constructed default (Double + Float NaN both match) → all omitted.
-		assertEquals("{}", JsonSerializer.create().nonDefault().build().serializeToString(new A3()));
+		assertEquals("{}", JsonSerializer.create().nonDefault().build().writeToString(new A3()));
 	}
 
 	// Value-equal-but-not-reference-equal + String + null-default → defaultEquals non-Number/null/BigInteger paths.
@@ -123,7 +123,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 		b.name = "y";                       // diverges from "x" (both non-null, non-Number) → emitted
 		b.nul = "z";                        // reference default null, value non-null → emitted
 		b.big = new BigInteger("10");       // value-equal but != reference → BigDecimal compare → omitted
-		var json = JsonSerializer.create().nonDefault().build().serializeToString(b);
+		var json = JsonSerializer.create().nonDefault().build().writeToString(b);
 		assertTrue(json.contains("\"name\":\"y\""), json);
 		assertTrue(json.contains("\"nul\":\"z\""), json);
 		assertFalse(json.contains("\"big\""), json);
@@ -134,7 +134,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 		b.l = 6L;
 		b.bd = new BigDecimal("2.0");
 		b.nan = 1.0;  // NaN default vs non-NaN value → emitted
-		var json = JsonSerializer.create().nonDefault().build().serializeToString(b);
+		var json = JsonSerializer.create().nonDefault().build().writeToString(b);
 		assertTrue(json.contains("\"l\":6"), json);
 		assertTrue(json.contains("\"bd\":2.0"), json);
 		assertTrue(json.contains("\"nan\":1.0"), json);
@@ -150,7 +150,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	}
 
 	@Test void a08_nonDefault_noNoArgCtor_emitsEverything() throws Exception {
-		assertEquals("{\"x\":5}", JsonSerializer.create().nonDefault().build().serializeToString(new A4(5)));
+		assertEquals("{\"x\":5}", JsonSerializer.create().nonDefault().build().writeToString(new A4(5)));
 	}
 
 	//====================================================================================================
@@ -167,13 +167,13 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	}
 
 	@Test void b01_emptyOptionals_omittedByDefault() throws Exception {
-		var json = JsonSerializer.DEFAULT.serializeToString(new B1());
+		var json = JsonSerializer.DEFAULT.writeToString(new B1());
 		assertFalse(json.contains("\"a\":"), json);
 		assertFalse(json.contains("\"c\":"), json);
 	}
 
 	@Test void b02_presentOptionals_emittedUnwrapped() throws Exception {
-		var json = JsonSerializer.DEFAULT.serializeToString(new B1());
+		var json = JsonSerializer.DEFAULT.writeToString(new B1());
 		assertTrue(json.contains("\"b\":\"x\""), json);
 		assertTrue(json.contains("\"d\":7"), json);
 		assertTrue(json.contains("\"e\":9"), json);
@@ -181,7 +181,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	}
 
 	@Test void b03_emptyOptionals_emittedAsNullWhenKept() throws Exception {
-		var json = JsonSerializer.create().keepNullProperties().build().serializeToString(new B1());
+		var json = JsonSerializer.create().keepNullProperties().build().writeToString(new B1());
 		assertTrue(json.contains("\"a\":null"), json);
 		assertTrue(json.contains("\"c\":null"), json);
 	}
@@ -194,7 +194,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	@Test void b04_emptyPrimitiveLongDouble_unwrapToNull() throws Exception {
 		// keepNullProperties forces traversal of the empty OptionalLong/OptionalDouble — exercises both the
 		// canIgnoreValue unwrap and the traverse-session getOptionalValue empty branches.
-		var json = JsonSerializer.create().keepNullProperties().build().serializeToString(new B2());
+		var json = JsonSerializer.create().keepNullProperties().build().writeToString(new B2());
 		assertTrue(json.contains("\"e\":null"), json);
 		assertTrue(json.contains("\"f\":null"), json);
 	}
@@ -204,7 +204,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void c01_absentAndNullOptional_resolveToEmpty() throws Exception {
-		var b = JsonParser.DEFAULT.parse("{\"a\":null,\"c\":null,\"e\":null,\"f\":null}", B1.class);
+		var b = JsonParser.DEFAULT.read("{\"a\":null,\"c\":null,\"e\":null,\"f\":null}", B1.class);
 		assertTrue(b.a.isEmpty());
 		assertTrue(b.c.isEmpty());
 		assertTrue(b.e.isEmpty());
@@ -212,17 +212,17 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	}
 
 	@Test void c02_presentPrimitiveOptionals_parse() throws Exception {
-		var b = JsonParser.DEFAULT.parse("{\"d\":42,\"e\":43,\"f\":4.5}", B1.class);
+		var b = JsonParser.DEFAULT.read("{\"d\":42,\"e\":43,\"f\":4.5}", B1.class);
 		assertEquals(42, b.d.getAsInt());
 		assertEquals(43L, b.e.getAsLong());
 		assertEquals(4.5, b.f.getAsDouble());
 	}
 
 	@Test void c03_topLevelPrimitiveOptional_parse() throws Exception {
-		assertEquals(5, JsonParser.DEFAULT.parse("5", OptionalInt.class).getAsInt());
-		assertEquals(6L, JsonParser.DEFAULT.parse("6", OptionalLong.class).getAsLong());
-		assertEquals(7.5, JsonParser.DEFAULT.parse("7.5", OptionalDouble.class).getAsDouble());
-		assertTrue(JsonParser.DEFAULT.parse("null", OptionalInt.class).isEmpty());
+		assertEquals(5, JsonParser.DEFAULT.read("5", OptionalInt.class).getAsInt());
+		assertEquals(6L, JsonParser.DEFAULT.read("6", OptionalLong.class).getAsLong());
+		assertEquals(7.5, JsonParser.DEFAULT.read("7.5", OptionalDouble.class).getAsDouble());
+		assertTrue(JsonParser.DEFAULT.read("null", OptionalInt.class).isEmpty());
 	}
 
 	//====================================================================================================
@@ -243,9 +243,9 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	@Test void cb01_indices_default_roundTrip() throws Exception {
 		var bean = new CB1();
 		bean.bits = bitSet(0, 2, 5);
-		var json = JsonSerializer.DEFAULT.serializeToString(bean);
+		var json = JsonSerializer.DEFAULT.writeToString(bean);
 		assertTrue(json.contains("\"bits\":\"0,2,5\""), json);
-		assertEquals(bean.bits, JsonParser.DEFAULT.parse(json, CB1.class).bits);
+		assertEquals(bean.bits, JsonParser.DEFAULT.read(json, CB1.class).bits);
 	}
 
 	@Test void cb02_bits_format_roundTrip() throws Exception {
@@ -253,9 +253,9 @@ class NullInclusionAndCoercion_Test extends TestBase {
 		var p = JsonParser.create().bitSetFormat(BitSetFormat.BITS).build();
 		var bean = new CB1();
 		bean.bits = bitSet(0, 2, 5);
-		var json = s.serializeToString(bean);
+		var json = s.writeToString(bean);
 		assertTrue(json.contains("\"bits\":\"101001\""), json);
-		assertEquals(bean.bits, p.parse(json, CB1.class).bits);
+		assertEquals(bean.bits, p.read(json, CB1.class).bits);
 	}
 
 	@Test void cb03_hex_format_roundTrip() throws Exception {
@@ -263,9 +263,9 @@ class NullInclusionAndCoercion_Test extends TestBase {
 		var p = JsonParser.create().bitSetFormat(BitSetFormat.HEX).build();
 		var bean = new CB1();
 		bean.bits = bitSet(0, 2, 5);
-		var json = s.serializeToString(bean);
+		var json = s.writeToString(bean);
 		assertTrue(json.contains("\"bits\":\"25\""), json);
-		assertEquals(bean.bits, p.parse(json, CB1.class).bits);
+		assertEquals(bean.bits, p.read(json, CB1.class).bits);
 	}
 
 	public static class CB2 {
@@ -276,9 +276,9 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	@Test void cb04_perProperty_overridesContext() throws Exception {
 		var bean = new CB2();
 		bean.bits = bitSet(0, 2, 5);
-		var json = JsonSerializer.DEFAULT.serializeToString(bean);
+		var json = JsonSerializer.DEFAULT.writeToString(bean);
 		assertTrue(json.contains("\"bits\":\"101001\""), json);
-		assertEquals(bean.bits, JsonParser.DEFAULT.parse(json, CB2.class).bits);
+		assertEquals(bean.bits, JsonParser.DEFAULT.read(json, CB2.class).bits);
 	}
 
 	@Marshalled(bitSetFormat = BitSetFormat.HEX)
@@ -289,16 +289,16 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	@Test void cb05_perClass_overridesContext() throws Exception {
 		var bean = new CB3();
 		bean.bits = bitSet(0, 2, 5);
-		var json = JsonSerializer.DEFAULT.serializeToString(bean);
+		var json = JsonSerializer.DEFAULT.writeToString(bean);
 		assertTrue(json.contains("\"bits\":\"25\""), json);
-		assertEquals(bean.bits, JsonParser.DEFAULT.parse(json, CB3.class).bits);
+		assertEquals(bean.bits, JsonParser.DEFAULT.read(json, CB3.class).bits);
 	}
 
 	@Test void cb06_emptyBitSet_roundTrip() throws Exception {
 		var bean = new CB1();
 		bean.bits = new BitSet();
-		var json = JsonSerializer.DEFAULT.serializeToString(bean);
-		assertEquals(new BitSet(), JsonParser.DEFAULT.parse(json, CB1.class).bits);
+		var json = JsonSerializer.DEFAULT.writeToString(bean);
+		assertEquals(new BitSet(), JsonParser.DEFAULT.read(json, CB1.class).bits);
 	}
 
 	//====================================================================================================
@@ -355,14 +355,14 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	}
 
 	@Test void d01_nulls_LEAVE_default() throws Exception {
-		var b = JsonParser.DEFAULT.parse("{\"s\":null,\"i\":null,\"list\":null}", D1.class);
+		var b = JsonParser.DEFAULT.read("{\"s\":null,\"i\":null,\"list\":null}", D1.class);
 		assertNull(b.s);
 		assertNull(b.i);
 		assertNull(b.list);
 	}
 
 	@Test void d02_nulls_EMPTY() throws Exception {
-		var b = JsonParser.create().nulls(Nulls.EMPTY).build().parse("{\"s\":null,\"i\":null,\"list\":null}", D1.class);
+		var b = JsonParser.create().nulls(Nulls.EMPTY).build().read("{\"s\":null,\"i\":null,\"list\":null}", D1.class);
 		assertEquals("", b.s);
 		assertNull(b.i);            // boxed Integer has no empty sentinel → LEAVE fallback
 		assertNotNull(b.list);
@@ -375,20 +375,20 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	}
 
 	@Test void d03_nulls_DEFAULT() throws Exception {
-		var b = JsonParser.create().nulls(Nulls.DEFAULT).build().parse("{\"s\":null,\"i\":null}", D2.class);
+		var b = JsonParser.create().nulls(Nulls.DEFAULT).build().read("{\"s\":null,\"i\":null}", D2.class);
 		assertEquals("hello", b.s);
 		assertEquals(5, b.i);
 	}
 
 	@Test void d04_nulls_SKIP() throws Exception {
-		var b = JsonParser.create().nulls(Nulls.SKIP).build().parse("{\"s\":null,\"i\":null}", D2.class);
+		var b = JsonParser.create().nulls(Nulls.SKIP).build().read("{\"s\":null,\"i\":null}", D2.class);
 		assertEquals("hello", b.s);
 		assertEquals(5, b.i);
 	}
 
 	@Test void d05_nulls_nullArg_treatedAsNotSet() throws Exception {
 		// nulls(null) → NOT_SET → behaves as LEAVE.
-		var b = JsonParser.create().nulls(null).build().parse("{\"s\":null}", D1.class);
+		var b = JsonParser.create().nulls(null).build().read("{\"s\":null}", D1.class);
 		assertNull(b.s);
 	}
 
@@ -424,7 +424,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 		var json = "{\"s\":null,\"cs\":null,\"arr\":null,\"list\":null,\"coll\":null,\"set\":null,\"map\":null,"
 			+ "\"opt\":null,\"oi\":null,\"ol\":null,\"od\":null,\"pi\":null,\"pl\":null,\"pd\":null,\"pf\":null,"
 			+ "\"psh\":null,\"pby\":null,\"pbo\":null,\"pch\":null,\"obj\":null,\"sb\":null}";
-		var b = JsonParser.create().nulls(Nulls.EMPTY).build().parse(json, E1.class);
+		var b = JsonParser.create().nulls(Nulls.EMPTY).build().read(json, E1.class);
 		assertEquals("", b.s);
 		assertEquals("", b.cs);
 		assertNull(b.obj);
@@ -462,7 +462,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	}
 
 	@Test void f01_perProperty_overridesContext() throws Exception {
-		var b = JsonParser.DEFAULT.parse("{\"s\":null,\"t\":null,\"u\":null}", F1.class);
+		var b = JsonParser.DEFAULT.read("{\"s\":null,\"t\":null,\"u\":null}", F1.class);
 		assertEquals("", b.s);
 		assertEquals("initial", b.t);
 		assertNull(b.u);
@@ -480,7 +480,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	}
 
 	@Test void f02_optionalContract_underCoercion() throws Exception {
-		var b = JsonParser.create().nulls(Nulls.EMPTY).build().parse("{\"a\":null,\"b\":null,\"d\":null,\"e\":null,\"f\":null}", F2.class);
+		var b = JsonParser.create().nulls(Nulls.EMPTY).build().read("{\"a\":null,\"b\":null,\"d\":null,\"e\":null,\"f\":null}", F2.class);
 		assertTrue(b.a.isEmpty());
 		assertTrue(b.b.isEmpty());
 		assertTrue(b.d.isEmpty());
@@ -489,7 +489,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	}
 
 	@Test void f03_optional_DEFAULT_usesBeanDefault() throws Exception {
-		var b = JsonParser.DEFAULT.parse("{\"c\":null}", F2.class);
+		var b = JsonParser.DEFAULT.read("{\"c\":null}", F2.class);
 		assertTrue(b.c.isPresent());
 		assertEquals("seed", b.c.orElse(null));
 	}
@@ -507,7 +507,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	}
 
 	@Test void f04_perProperty_nullsOnGetterAndSetter() throws Exception {
-		var b = JsonParser.DEFAULT.parse("{\"g\":null,\"s\":null}", F4.class);
+		var b = JsonParser.DEFAULT.read("{\"g\":null,\"s\":null}", F4.class);
 		assertEquals("", b.g);
 		assertEquals("", b.s);
 	}
@@ -531,7 +531,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 			PrototextSerializer.DEFAULT, TomlSerializer.DEFAULT, UonSerializer.DEFAULT, XmlSerializer.DEFAULT,
 			YamlSerializer.DEFAULT);
 		for (var s : serializers)
-			assertDoesNotThrow(() -> s.serialize(bean), () -> s.getClass().getSimpleName());
+			assertDoesNotThrow(() -> s.write(bean), () -> s.getClass().getSimpleName());
 	}
 
 	//====================================================================================================

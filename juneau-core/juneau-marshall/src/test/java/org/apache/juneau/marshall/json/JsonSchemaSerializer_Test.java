@@ -34,17 +34,17 @@ class JsonSchemaSerializer_Test extends TestBase {
 	@Test void simpleObjects() throws Exception {
 		var s = JsonSchemaSerializer.DEFAULT;
 
-		assertEquals("{\"type\":\"integer\",\"format\":\"int16\"}", s.serialize((short)1));
-		assertEquals("{\"type\":\"integer\",\"format\":\"int32\"}", s.serialize(1));
-		assertEquals("{\"type\":\"integer\",\"format\":\"int64\"}", s.serialize(1L));
-		assertEquals("{\"type\":\"number\",\"format\":\"float\"}", s.serialize(1f));
-		assertEquals("{\"type\":\"number\",\"format\":\"double\"}", s.serialize(1d));
-		assertEquals("{\"type\":\"boolean\"}", s.serialize(true));
-		assertEquals("{\"type\":\"string\"}", s.serialize("foo"));
-		assertEquals("{\"type\":\"string\"}", s.serialize(new StringBuilder("foo")));
-		assertEquals("{\"type\":\"string\"}", s.serialize('c'));
-		assertEquals("{\"type\":\"string\",\"enum\":[\"one\",\"two\",\"three\"]}", s.serialize(TestEnumToString.ONE));
-		assertEquals("{\"type\":\"object\",\"properties\":{\"f1\":{\"type\":\"string\"}}}", s.serialize(new SimpleBean()));
+		assertEquals("{\"type\":\"integer\",\"format\":\"int16\"}", s.write((short)1));
+		assertEquals("{\"type\":\"integer\",\"format\":\"int32\"}", s.write(1));
+		assertEquals("{\"type\":\"integer\",\"format\":\"int64\"}", s.write(1L));
+		assertEquals("{\"type\":\"number\",\"format\":\"float\"}", s.write(1f));
+		assertEquals("{\"type\":\"number\",\"format\":\"double\"}", s.write(1d));
+		assertEquals("{\"type\":\"boolean\"}", s.write(true));
+		assertEquals("{\"type\":\"string\"}", s.write("foo"));
+		assertEquals("{\"type\":\"string\"}", s.write(new StringBuilder("foo")));
+		assertEquals("{\"type\":\"string\"}", s.write('c'));
+		assertEquals("{\"type\":\"string\",\"enum\":[\"one\",\"two\",\"three\"]}", s.write(TestEnumToString.ONE));
+		assertEquals("{\"type\":\"object\",\"properties\":{\"f1\":{\"type\":\"string\"}}}", s.write(new SimpleBean()));
 	}
 
 	public static class SimpleBean {

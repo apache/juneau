@@ -79,7 +79,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 			.assertStatus(200)
 			.assertHeader("Content-Type").isContains("application/json")
 			.getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, List.class);
+		var parsed = JsonParser.DEFAULT.read(body, List.class);
 		Assertions.assertFalse(parsed.isEmpty(), "route index should not be empty");
 	}
 
@@ -211,7 +211,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
 	private static List<Map<String,Object>> parseEntries(String body) throws Exception {
-		return (List<Map<String,Object>>) JsonParser.DEFAULT.parse(body, List.class);
+		return (List<Map<String,Object>>) JsonParser.DEFAULT.read(body, List.class);
 	}
 
 	private static List<String> pathsOf(List<Map<String,Object>> entries) {

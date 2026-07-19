@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 class ProtobufRoundTrip_Test extends TestBase {
 
 	private static <T> T roundTrip(T o, Class<T> c) throws Exception {
-		return ProtobufParser.DEFAULT.parse(ProtobufSerializer.DEFAULT.serialize(o), c);
+		return ProtobufParser.DEFAULT.read(ProtobufSerializer.DEFAULT.write(o), c);
 	}
 
 	public static class AllScalars {

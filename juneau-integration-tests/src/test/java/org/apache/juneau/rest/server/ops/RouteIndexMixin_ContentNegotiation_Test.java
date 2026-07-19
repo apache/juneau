@@ -74,7 +74,7 @@ class RouteIndexMixin_ContentNegotiation_Test extends TestBase {
 			.assertHeader("Content-Type").isContains("application/json")
 			.getContent().asString();
 		// Must be strict, parseable JSON (not Json5) preserving the path/methods/summary/description/deprecated shape.
-		var parsed = JsonParser.DEFAULT.parse(body, List.class);
+		var parsed = JsonParser.DEFAULT.read(body, List.class);
 		assertFalse(parsed.isEmpty(), "JSON route index should not be empty");
 		assertTrue(body.contains("\"path\""), "JSON output should carry the 'path' property; got: " + body);
 		assertTrue(body.contains("/items"), "JSON output should list /items; got: " + body);

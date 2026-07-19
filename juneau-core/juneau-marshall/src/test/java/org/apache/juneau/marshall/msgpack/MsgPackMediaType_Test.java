@@ -84,7 +84,7 @@ class MsgPackMediaType_Test extends TestBase {
 	@Test
 	void i06_parserStillDecodesWireData() throws Exception {
 		var bytes = fromSpacedHex("A5 68 65 6C 6C 6F");
-		var s = MsgPackParser.DEFAULT.parse(new ByteArrayInputStream(bytes), String.class);
+		var s = MsgPackParser.DEFAULT.read(new ByteArrayInputStream(bytes), String.class);
 		assertEquals("hello", s);
 	}
 }

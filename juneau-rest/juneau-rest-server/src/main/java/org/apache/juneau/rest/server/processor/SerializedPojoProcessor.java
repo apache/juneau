@@ -95,19 +95,19 @@ public class SerializedPojoProcessor implements CatchAllResponseProcessor {
 					if (req.isPlainText()) {
 						FinishablePrintWriter w = res.getNegotiatedWriter();
 						var baos = new ByteArrayOutputStream();
-						session.serialize(o, baos);
+						session.write(o, baos);
 						w.write(toSpacedHex(baos.toByteArray()));
 						w.flush();
 						w.finish();
 					} else {
 						FinishableServletOutputStream os = res.getNegotiatedOutputStream();
-						session.serialize(o, os);
+						session.write(o, os);
 						os.flush();
 						os.finish();
 					}
 				} else {
 					FinishablePrintWriter w = res.getNegotiatedWriter();
-					session.serialize(o, w);
+					session.write(o, w);
 					w.flush();
 					w.finish();
 				}

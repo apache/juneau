@@ -133,7 +133,7 @@ public class RoundTrip_Tester {
 			var out = serialize(object, s);
 			if (p == null)
 				return object;
-			var o = (T)p.parse(out, c, args);
+			var o = (T)p.read(out, c, args);
 			return (returnOriginalObject ? object : o);
 		} catch (Exception e) {
 			if (ignoreErrors) return object;
@@ -152,7 +152,7 @@ public class RoundTrip_Tester {
 			var out = serialize(object, serializer);
 			if (parser == null)
 				return object;
-			var o = (T)parser.parse(out,  object == null ? Object.class : object.getClass());
+			var o = (T)parser.read(out,  object == null ? Object.class : object.getClass());
 			return (returnOriginalObject ? object : o);
 		} catch (Exception e) {
 			if (ignoreErrors) return object;
@@ -181,9 +181,9 @@ public class RoundTrip_Tester {
 
 		Object out;
 		if (s.isWriterSerializer())
-			out = ((WriterSerializer)s).serialize(object);
+			out = ((WriterSerializer)s).write(object);
 		else {
-			out = ((OutputStreamSerializer)s).serialize(object);
+			out = ((OutputStreamSerializer)s).write(object);
 		}
 
 		if (debug)

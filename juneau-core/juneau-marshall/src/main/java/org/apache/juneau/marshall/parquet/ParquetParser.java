@@ -156,29 +156,29 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 	/**
 	 * Convenience delegator for the whole-value {@link RecordReader} using <b>default session
 	 * arguments</b>.  The real implementation lives on
-	 * {@link ParquetParserSession#parseRecords(Object)}.
+	 * {@link ParquetParserSession#readRecords(Object)}.
 	 *
 	 * @param input The input.
 	 * @return A new {@link RecordReader} cursor.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
-		return ((RecordReadable) getSession()).parseRecords(input);
+	public RecordReader readRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).readRecords(input);
 	}
 
 	/**
 	 * Convenience delegator for the buffered array-element {@link RecordReader} using <b>default
 	 * session arguments</b>.  The real implementation lives on
-	 * {@link ParquetParserSession#parseArrayRecords(Object)}.
+	 * {@link ParquetParserSession#readArrayRecords(Object)}.
 	 *
 	 * @param input The input.
 	 * @return A buffered {@link RecordReader}.
 	 * @throws IOException If a problem occurred reading the input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
-		return ((ArrayRecordReadable) getSession()).parseArrayRecords(input);
+	public RecordReader readArrayRecords(Object input) throws IOException {
+		return ((ArrayRecordReadable) getSession()).readArrayRecords(input);
 	}
 
 	/**

@@ -37,7 +37,7 @@ package org.apache.juneau.marshall.swap;
  *
  * 	<jc>// Use it to serialize a byte array.</jc>
  * 	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
- * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new byte</jk>[] {1,2,3});  <jc>// Produces "'AQID'"</jc>
+ * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new byte</jk>[] {1,2,3});  <jc>// Produces "'AQID'"</jc>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

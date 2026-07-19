@@ -39,21 +39,21 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void a01_emptyMap() throws Exception {
 			// 0xA0 = definite-length map, length=0
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xA0})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xA0})) {
 				assertSequence(r, TokenType.START_OBJECT, TokenType.END_OBJECT, TokenType.END_OF_STREAM);
 			}
 		}
 
 		@Test void a02_emptyArray() throws Exception {
 			// 0x80 = definite-length array, length=0
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0x80})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0x80})) {
 				assertSequence(r, TokenType.START_ARRAY, TokenType.END_ARRAY, TokenType.END_OF_STREAM);
 			}
 		}
 
 		@Test void a03_definiteLengthArray() throws Exception {
 			// [1,2,3] = 0x83 0x01 0x02 0x03
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0x83, 0x01, 0x02, 0x03})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0x83, 0x01, 0x02, 0x03})) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(1L, r.getNumber().longValue());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(2L, r.getNumber().longValue());
@@ -65,7 +65,7 @@ class CborTokenStream_Test extends TestBase {
 		@Test void a04_definiteLengthMap() throws Exception {
 			// {"a":1,"b":2} = 0xA2 0x61 'a' 0x01 0x61 'b' 0x02
 			var bytes = new byte[]{(byte) 0xA2, 0x61, 'a', 0x01, 0x61, 'b', 0x02};
-			try (var r = CborParser.DEFAULT.parseTokens(bytes)) {
+			try (var r = CborParser.DEFAULT.readTokens(bytes)) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("a", r.getFieldName());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(1L, r.getNumber().longValue());
@@ -78,7 +78,7 @@ class CborTokenStream_Test extends TestBase {
 		@Test void a05_indefiniteLengthArray() throws Exception {
 			// 0x9F 0x01 0x02 0xFF = indefinite [1,2]
 			var bytes = new byte[]{(byte) 0x9F, 0x01, 0x02, (byte) 0xFF};
-			try (var r = CborParser.DEFAULT.parseTokens(bytes)) {
+			try (var r = CborParser.DEFAULT.readTokens(bytes)) {
 				assertSequence(r,
 					TokenType.START_ARRAY,
 					TokenType.VALUE_NUMBER,
@@ -90,7 +90,7 @@ class CborTokenStream_Test extends TestBase {
 		@Test void a06_indefiniteLengthMap() throws Exception {
 			// 0xBF 0x61 'a' 0x01 0xFF = indefinite {"a":1}
 			var bytes = new byte[]{(byte) 0xBF, 0x61, 'a', 0x01, (byte) 0xFF};
-			try (var r = CborParser.DEFAULT.parseTokens(bytes)) {
+			try (var r = CborParser.DEFAULT.readTokens(bytes)) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("a", r.getFieldName());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -101,7 +101,7 @@ class CborTokenStream_Test extends TestBase {
 		@Test void a07_binaryValue() throws Exception {
 			// 0x44 0x01 0x02 0x03 0x04 = 4-byte binary
 			var bytes = new byte[]{0x44, 0x01, 0x02, 0x03, 0x04};
-			try (var r = CborParser.DEFAULT.parseTokens(bytes)) {
+			try (var r = CborParser.DEFAULT.readTokens(bytes)) {
 				assertEquals(TokenType.VALUE_BINARY, r.next());
 				assertArrayEquals(new byte[]{1, 2, 3, 4}, r.getBinary());
 			}
@@ -110,7 +110,7 @@ class CborTokenStream_Test extends TestBase {
 		@Test void a08_booleanAndNull() throws Exception {
 			// 0x83 0xF5 0xF4 0xF6 = [true, false, null]
 			var bytes = new byte[]{(byte) 0x83, (byte) 0xF5, (byte) 0xF4, (byte) 0xF6};
-			try (var r = CborParser.DEFAULT.parseTokens(bytes)) {
+			try (var r = CborParser.DEFAULT.readTokens(bytes)) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_BOOLEAN, r.next()); assertTrue(r.getBool());
 				assertEquals(TokenType.VALUE_BOOLEAN, r.next()); assertFalse(r.getBool());
@@ -121,7 +121,7 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void a09_capability() throws Exception {
 			assertInstanceOf(TokenReadable.class, CborParser.DEFAULT);
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xF6})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xF6})) {
 				assertReaderStreaming(r);
 			}
 		}
@@ -131,7 +131,7 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void b01_emptyMap() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startObject().endObject();
 			}
 			// 0xBF 0xFF = indefinite-length empty map
@@ -140,7 +140,7 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void b02_emptyArray() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startArray().endArray();
 			}
 			// 0x9F 0xFF = indefinite-length empty array
@@ -149,7 +149,7 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void b03_simpleMap() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startObject();
 				w.fieldName("a"); w.number(1);
 				w.endObject();
@@ -160,7 +160,7 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void b04_binaryNative() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.binary(new byte[]{1, 2, 3, 4});
 			}
 			// 0x44 = byte string length 4, then the bytes
@@ -173,7 +173,7 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void b06_doubleFieldNameRejected() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startObject();
 				w.fieldName("a");
 				assertThrows(IllegalStateException.class, () -> w.fieldName("b"));
@@ -182,7 +182,7 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void b07_endKindMismatch() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startObject();
 				assertThrows(IllegalStateException.class, w::endArray);
 			}
@@ -190,7 +190,7 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void b08_writeAfterCloseThrows() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			var w = CborSerializer.DEFAULT.serializeTokens(bos);
+			var w = CborSerializer.DEFAULT.writeTokens(bos);
 			w.startArray().endArray();
 			w.close();
 			// Every mutating method must reject writes after close() with the closed-writer message.
@@ -215,7 +215,7 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void c01_simpleStructure() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startObject();
 				w.fieldName("greeting"); w.string("hello");
 				w.fieldName("count"); w.number(3);
@@ -224,7 +224,7 @@ class CborTokenStream_Test extends TestBase {
 				w.endArray();
 				w.endObject();
 			}
-			try (var r = CborParser.DEFAULT.parseTokens(bos.toByteArray())) {
+			try (var r = CborParser.DEFAULT.readTokens(bos.toByteArray())) {
 				assertSequence(r,
 					TokenType.START_OBJECT,
 					TokenType.FIELD_NAME, TokenType.VALUE_STRING,
@@ -240,10 +240,10 @@ class CborTokenStream_Test extends TestBase {
 			// Binary value emitted via binary() should round-trip back as VALUE_BINARY (no base64).
 			var bytes = new byte[]{1, 2, 3, 4, 5};
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.binary(bytes);
 			}
-			try (var r = CborParser.DEFAULT.parseTokens(bos.toByteArray())) {
+			try (var r = CborParser.DEFAULT.readTokens(bos.toByteArray())) {
 				assertEquals(TokenType.VALUE_BINARY, r.next());
 				assertArrayEquals(bytes, r.getBinary());
 			}
@@ -262,9 +262,9 @@ class CborTokenStream_Test extends TestBase {
 			var b = new Bean();
 			b.name = "alice";
 			b.age = 30;
-			var bytes = CborSerializer.DEFAULT.serialize(b);
+			var bytes = CborSerializer.DEFAULT.write(b);
 
-			try (var r = CborParser.DEFAULT.parseTokens((byte[]) bytes)) {
+			try (var r = CborParser.DEFAULT.readTokens((byte[]) bytes)) {
 				var got = r.read(Bean.class);
 				assertEquals("alice", got.name);
 				assertEquals(30, got.age);
@@ -275,10 +275,10 @@ class CborTokenStream_Test extends TestBase {
 			var b1 = new Bean(); b1.name = "alice"; b1.age = 30;
 			var b2 = new Bean(); b2.name = "bob";   b2.age = 40;
 			var list = java.util.List.of(b1, b2);
-			var bytes = CborSerializer.DEFAULT.serialize(list);
+			var bytes = CborSerializer.DEFAULT.write(list);
 
 			var seen = new java.util.ArrayList<Bean>();
-			try (var r = CborParser.DEFAULT.parseTokens((byte[]) bytes)) {
+			try (var r = CborParser.DEFAULT.readTokens((byte[]) bytes)) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				while (r.canRead())
 					seen.add(r.read(Bean.class));
@@ -303,15 +303,15 @@ class CborTokenStream_Test extends TestBase {
 			b.age = 30;
 
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.object(b);
 			}
 
 			// The walker emits indefinite-length containers, while the canonical serializer
 			// emits definite-length.  Both decode to the same logical value via the same
 			// CborParser, so re-decode and compare.
-			var fromWalker = CborParser.DEFAULT.parse(bos.toByteArray(), Bean.class);
-			var fromCanonical = CborParser.DEFAULT.parse((byte[]) CborSerializer.DEFAULT.serialize(b), Bean.class);
+			var fromWalker = CborParser.DEFAULT.read(bos.toByteArray(), Bean.class);
+			var fromCanonical = CborParser.DEFAULT.read((byte[]) CborSerializer.DEFAULT.write(b), Bean.class);
 			assertEquals(fromCanonical.name, fromWalker.name);
 			assertEquals(fromCanonical.age, fromWalker.age);
 		}
@@ -323,12 +323,12 @@ class CborTokenStream_Test extends TestBase {
 			m.put("data", new byte[]{1, 2, 3});
 
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.object(m);
 			}
 
 			// Decode via the cursor and verify VALUE_BINARY for the data field.
-			try (var r = CborParser.DEFAULT.parseTokens(bos.toByteArray())) {
+			try (var r = CborParser.DEFAULT.readTokens(bos.toByteArray())) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				while (r.next() != TokenType.END_OBJECT) {
 					var key = r.getFieldName();
@@ -353,7 +353,7 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void f01_atDefaultLimitParses() throws Exception {
 			// Exactly at the default limit (64 tags) — must still unwrap and emit the value.
-			try (var r = CborParser.DEFAULT.parseTokens(nestedTags(CborTokenReader.DEFAULT_MAX_TAG_NESTING_DEPTH))) {
+			try (var r = CborParser.DEFAULT.readTokens(nestedTags(CborTokenReader.DEFAULT_MAX_TAG_NESTING_DEPTH))) {
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals(0L, r.getNumber().longValue());
 			}
@@ -361,14 +361,14 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void f02_exceedingDefaultLimitThrows() throws Exception {
 			// One past the default limit — must throw a ParseException, not a StackOverflowError.
-			try (var r = CborParser.DEFAULT.parseTokens(nestedTags(CborTokenReader.DEFAULT_MAX_TAG_NESTING_DEPTH + 1))) {
+			try (var r = CborParser.DEFAULT.readTokens(nestedTags(CborTokenReader.DEFAULT_MAX_TAG_NESTING_DEPTH + 1))) {
 				assertThrowsWithMessage(ParseException.class, "CBOR tag nesting depth exceeded the maximum of 64", r::next);
 			}
 		}
 
 		@Test void f03_configurableLimitAtBoundaryParses() throws Exception {
 			// A custom (lower) limit is honored: depth == limit still parses.
-			try (var r = (CborTokenReader) CborParser.DEFAULT.parseTokens(nestedTags(4))) {
+			try (var r = (CborTokenReader) CborParser.DEFAULT.readTokens(nestedTags(4))) {
 				r.setMaxTagNestingDepth(4);
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals(0L, r.getNumber().longValue());
@@ -377,7 +377,7 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void f04_configurableLimitExceededThrows() throws Exception {
 			// A custom (lower) limit is honored: depth > limit throws with the configured bound.
-			try (var r = (CborTokenReader) CborParser.DEFAULT.parseTokens(nestedTags(5))) {
+			try (var r = (CborTokenReader) CborParser.DEFAULT.readTokens(nestedTags(5))) {
 				r.setMaxTagNestingDepth(4);
 				assertThrowsWithMessage(ParseException.class, "CBOR tag nesting depth exceeded the maximum of 4", r::next);
 			}
@@ -386,7 +386,7 @@ class CborTokenStream_Test extends TestBase {
 		@Test void f05_singleTagStillUnwraps() throws Exception {
 			// Baseline: a single tag around an integer unwraps to the value (regression guard for
 			// the tag counter reset between independent values).
-			try (var r = CborParser.DEFAULT.parseTokens(nestedTags(1))) {
+			try (var r = CborParser.DEFAULT.readTokens(nestedTags(1))) {
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals(0L, r.getNumber().longValue());
 				assertEquals(TokenType.END_OF_STREAM, r.next());

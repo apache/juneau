@@ -226,7 +226,7 @@ public class ComboSerialize_Tester<T> {
 		try {
 			if (isSkipped(testName + "-serialize", exp)) return;
 
-			var r = s.serializeToString(in.get());
+			var r = s.writeToString(in.get());
 
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 			if (eq(exp, "xxx")) {

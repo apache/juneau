@@ -258,7 +258,7 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		 * The character set to use when writing to <c>OutputStreams</c>.
 		 *
 		 * <p>
-		 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+		 * Used when passing in output streams and byte arrays to {@link WriterSerializer#write(Object, Object)}.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
@@ -304,7 +304,7 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		 * 	}
 		 *
 		 * 	<jc>// Produces "\{\n\t"foo": "bar"\n\}\n"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * @return This object.
@@ -344,7 +344,7 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		 * 	}
 		 *
 		 * 	<jc>// Produces "\{\n\t"foo": "bar"\n\}\n"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * @return This object.
@@ -457,8 +457,8 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	@Override /* Overridden from Serializer */
-	public final String serialize(Object o) throws SerializeException {
-		return getSession().serialize(o);
+	public final String write(Object o) throws SerializeException {
+		return getSession().write(o);
 	}
 
 	/**
@@ -480,11 +480,11 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 	 */
 	@Override /* Overridden from ThrowingFunction */
 	public final String applyThrows(Object o) throws Exception {
-		return serialize(o);
+		return write(o);
 	}
 
 	/**
-	 * Identical to {@link #serialize(Object)} except throws a {@link RuntimeException} instead of a {@link SerializeException}.
+	 * Identical to {@link #write(Object)} except throws a {@link RuntimeException} instead of a {@link SerializeException}.
 	 *
 	 * <p>
 	 * This is typically good enough for debugging purposes.
@@ -494,7 +494,7 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 	 */
 	public final String toString(Object o) {
 		try {
-			return serialize(o);
+			return write(o);
 		} catch (Exception e) {
 			throw toRex(e);
 		}

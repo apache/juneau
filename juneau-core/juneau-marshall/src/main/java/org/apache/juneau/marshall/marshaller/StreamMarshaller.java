@@ -84,7 +84,7 @@ public class StreamMarshaller extends Marshaller {
 	 */
 	public final <T> T read(byte[] input, Class<T> type) throws ParseException {
 		try {
-			return p.parse(input, type);
+			return p.read(input, type);
 		} catch (IOException e) {
 			throw new ParseException(e);
 		}
@@ -108,7 +108,7 @@ public class StreamMarshaller extends Marshaller {
 	 */
 	public final <T> T read(byte[] input, Type type, Type...args) throws ParseException {
 		try {
-			return p.parse(input, type, args);
+			return p.read(input, type, args);
 		} catch (IOException e) {
 			throw new ParseException(e);
 		}
@@ -123,6 +123,6 @@ public class StreamMarshaller extends Marshaller {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public final byte[] write(Object o) throws SerializeException {
-		return s.serialize(o);
+		return s.write(o);
 	}
 }

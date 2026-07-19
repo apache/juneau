@@ -46,11 +46,11 @@ import org.junit.jupiter.api.*;
 class MsgPackConformance_Test extends TestBase {
 
 	private static byte[] mp(Object o) throws Exception {
-		return MsgPackSerializer.DEFAULT.serialize(o);
+		return MsgPackSerializer.DEFAULT.write(o);
 	}
 
 	private static <T> T parse(String spacedHex, Class<T> type) throws Exception {
-		return MsgPackParser.DEFAULT.parse(fromSpacedHex(spacedHex), type);
+		return MsgPackParser.DEFAULT.read(fromSpacedHex(spacedHex), type);
 	}
 
 	//====================================================================================================
@@ -144,12 +144,12 @@ class MsgPackConformance_Test extends TestBase {
 
 	@Test void c06_bigInteger_roundTrip2pow63() throws Exception {
 		var a = new BigInteger("9223372036854775808");
-		assertEquals(a, MsgPackParser.DEFAULT.parse(mp(a), BigInteger.class));
+		assertEquals(a, MsgPackParser.DEFAULT.read(mp(a), BigInteger.class));
 	}
 
 	@Test void c07_bigInteger_roundTripMaxUint64() throws Exception {
 		var a = new BigInteger("18446744073709551615");
-		assertEquals(a, MsgPackParser.DEFAULT.parse(mp(a), BigInteger.class));
+		assertEquals(a, MsgPackParser.DEFAULT.read(mp(a), BigInteger.class));
 	}
 
 	//====================================================================================================
@@ -177,7 +177,7 @@ class MsgPackConformance_Test extends TestBase {
 	})
 	@Test void d04_tokenCursorBinLengthAbove2pow31Rejected() throws Exception {
 		// The token-cursor BIN path reads through readBinary(), which carries its own length guard.
-		try (var r = MsgPackParser.DEFAULT.parseTokens(fromSpacedHex("C6 80 00 00 00"))) {
+		try (var r = MsgPackParser.DEFAULT.readTokens(fromSpacedHex("C6 80 00 00 00"))) {
 			assertThrowsWithMessage(IOException.class, "exceeds the maximum supported size", r::next);
 		}
 	}
@@ -200,7 +200,7 @@ class MsgPackConformance_Test extends TestBase {
 	}
 
 	@Test void e04_loneSurrogateRoundTripsToReplacementChar() throws Exception {
-		var a = MsgPackParser.DEFAULT.parse(mp("\uDC00"), String.class);
+		var a = MsgPackParser.DEFAULT.read(mp("\uDC00"), String.class);
 		assertEquals("\uFFFD", a);
 	}
 

@@ -87,7 +87,7 @@ public class FakeStreamSerializer extends OutputStreamSerializer {
 		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 	})
 	@Override /* SerializerSession */
-	protected void doSerialize(SerializerSession session, SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerSession session, SerializerPipe out, Object o) throws IOException, SerializeException {
 		out.getOutputStream().write(function.apply(session, o));
 	}
 }

@@ -28,24 +28,24 @@ class JcsStrings_Test extends TestBase {
 
 	@Test
 	void b01_simpleString() throws Exception {
-		assertEquals("{\"x\":\"hello\"}", JcsSerializer.DEFAULT.serialize(JsonMap.of("x", "hello")));
+		assertEquals("{\"x\":\"hello\"}", JcsSerializer.DEFAULT.write(JsonMap.of("x", "hello")));
 	}
 
 	@Test
 	void b02_escapeBackslash() throws Exception {
-		assertEquals("{\"x\":\"\\\\\\\\\"}", JcsSerializer.DEFAULT.serialize(JsonMap.of("x", "\\\\")));
+		assertEquals("{\"x\":\"\\\\\\\\\"}", JcsSerializer.DEFAULT.write(JsonMap.of("x", "\\\\")));
 	}
 
 	@Test
 	void b03_escapeQuote() throws Exception {
 		var m = JsonMap.of("x", "\"");
-		assertTrue(JcsSerializer.DEFAULT.serialize(m).contains("\\\""));
+		assertTrue(JcsSerializer.DEFAULT.write(m).contains("\\\""));
 	}
 
 	@Test
 	void b04_controlChars() throws Exception {
 		var m = JsonMap.of("x", "\t\n");
-		var s = JcsSerializer.DEFAULT.serialize(m);
+		var s = JcsSerializer.DEFAULT.write(m);
 		assertTrue(s.contains("\\t"));
 		assertTrue(s.contains("\\n"));
 	}
@@ -54,7 +54,7 @@ class JcsStrings_Test extends TestBase {
 	void b05_otherControlChars() throws Exception {
 		// U+000F (non-predefined) uses lowercase \u000f
 		var m = JsonMap.of("x", Character.toString((char) 0x000F));
-		var s = JcsSerializer.DEFAULT.serialize(m);
+		var s = JcsSerializer.DEFAULT.write(m);
 		assertTrue(s.contains("\\u000f"));
 	}
 
@@ -62,7 +62,7 @@ class JcsStrings_Test extends TestBase {
 	void b06_nonAsciiLiteral() throws Exception {
 		// € (U+20AC) output as literal UTF-8 per RFC 8785
 		var m = JsonMap.of("x", Character.toString((char) 0x20AC));
-		var s = JcsSerializer.DEFAULT.serialize(m);
+		var s = JcsSerializer.DEFAULT.write(m);
 		assertTrue(s.contains(Character.toString((char) 0x20AC)));
 	}
 
@@ -71,7 +71,7 @@ class JcsStrings_Test extends TestBase {
 		// RFC 8785 Section 3.2.2: €$\u000f\nA'B\"\\\/
 		var s = Character.toString((char) 0x20AC) + "$" + Character.toString((char) 0x000F) + "\nA'B\"\\\\\"/";
 		var m = JsonMap.of("string", s);
-		var out = JcsSerializer.DEFAULT.serialize(m);
+		var out = JcsSerializer.DEFAULT.write(m);
 		assertTrue(out.contains("\\u000f"));
 		assertTrue(out.contains("\\n"));
 		assertTrue(out.contains("\\\\"));
@@ -82,9 +82,9 @@ class JcsStrings_Test extends TestBase {
 		// Emoji (surrogate pair) output as literal UTF-8 per RFC 8785
 		var emoji = Character.toString(Character.toCodePoint('\uD83D', '\uDE00'));
 		var m = JsonMap.of("x", emoji);
-		var s = JcsSerializer.DEFAULT.serialize(m);
+		var s = JcsSerializer.DEFAULT.write(m);
 		// Round-trip: parse back and verify
-		var parsed = JsonParser.DEFAULT.parse(s, JsonMap.class);
+		var parsed = JsonParser.DEFAULT.read(s, JsonMap.class);
 		assertEquals(emoji, parsed.getString("x"));
 	}
 
@@ -94,11 +94,11 @@ class JcsStrings_Test extends TestBase {
 	@Test
 	void b09_loneSurrogateError() {
 		var s = "\uDEAD";
-		assertThrows(SerializeException.class, () -> JcsSerializer.DEFAULT.serialize(JsonMap.of("x", s)));
+		assertThrows(SerializeException.class, () -> JcsSerializer.DEFAULT.write(JsonMap.of("x", s)));
 	}
 
 	@Test
 	void b10_emptyString() throws Exception {
-		assertEquals("{\"x\":\"\"}", JcsSerializer.DEFAULT.serialize(JsonMap.of("x", "")));
+		assertEquals("{\"x\":\"\"}", JcsSerializer.DEFAULT.write(JsonMap.of("x", "")));
 	}
 }

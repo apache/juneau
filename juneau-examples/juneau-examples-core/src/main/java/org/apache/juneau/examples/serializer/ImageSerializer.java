@@ -47,7 +47,7 @@ public class ImageSerializer extends OutputStreamSerializer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void doSerialize(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {
+	public void doWrite(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		var image = (RenderedImage)o;
 		MediaType mediaType = session.getMediaType();
 		try (var os = pipe.getOutputStream()) {

@@ -42,7 +42,7 @@ import org.apache.juneau.http.*;
  * <p class='bjava'>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>builder</jsm>()
  * 		.bodyConverter(BodyConverter.<jsm>of</jsm>(MyBean.<jk>class</jk>,
- * 			<jv>bean</jv> -&gt; TransportBody.<jsm>of</jsm>(StringBody.<jsm>of</jsm>(<jv>mySerializer</jv>.serialize(<jv>bean</jv>)))))
+ * 			<jv>bean</jv> -&gt; TransportBody.<jsm>of</jsm>(StringBody.<jsm>of</jsm>(<jv>mySerializer</jv>.write(<jv>bean</jv>)))))
  * 		.build();
  * </p>
  *

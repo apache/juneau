@@ -106,14 +106,14 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 	/**
 	 * Opens a whole-value push generator targeting BSON output, bound to this live session.
 	 * {@link RecordWriter#write(Object) write(Object)} delegates to
-	 * {@link SerializerSession#serialize(Object, Object)}.
+	 * {@link SerializerSession#write(Object, Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -127,7 +127,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
 		return RecordAdapter.arrayWriter(this, output);
 	}
 
@@ -183,20 +183,20 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 			out.writeElement(DOCUMENT.value, name);
 			var child = out.createChild();
 			child.startDocument();
-			serializeBeanMap(child, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta));
+			writeBeanMap(child, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta));
 			out.writeChildDocument(child);
 		} else if (sType.isMap()) {
 			if (sType.isBeanMap()) {
 				out.writeElement(DOCUMENT.value, name);
 				var child = out.createChild();
 				child.startDocument();
-				serializeBeanMap(child, (BeanMap)o, getBeanTypeName(this, eType, aType, pMeta));
+				writeBeanMap(child, (BeanMap)o, getBeanTypeName(this, eType, aType, pMeta));
 				out.writeChildDocument(child);
 			} else {
 				out.writeElement(DOCUMENT.value, name);
 				var child = out.createChild();
 				child.startDocument();
-				serializeMap(child, (Map)o, eType);
+				writeMap(child, (Map)o, eType);
 				out.writeChildDocument(child);
 			}
 		} else if (sType.isByteArray()) {
@@ -206,7 +206,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 			out.writeElement(ARRAY.value, name);
 			var child = out.createChild();
 			child.startDocument();
-			serializeArray(child, sType.isArray() ? toList(sType.inner(), o) : (Collection)o, eType);
+			writeArray(child, sType.isArray() ? toList(sType.inner(), o) : (Collection)o, eType);
 			out.writeChildDocument(child);
 		} else if (sType.isCharSequence() || sType.isChar() || sType.isEnum()) {
 			out.writeElement(STRING.value, name);
@@ -241,7 +241,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 				out.writeDateTime(toEpochMillis(o));
 			} else {
 				out.writeElement(STRING.value, name);
-				out.writeString(serializeDate((Date)o, sType));
+				out.writeString(writeDate((Date)o, sType));
 			}
 		} else if (sType.isCalendar()) {
 			if (ctx.writeDatesAsDatetime) {
@@ -249,7 +249,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 				out.writeDateTime(toEpochMillis(o));
 			} else {
 				out.writeElement(STRING.value, name);
-				out.writeString(serializeCalendar(o, sType));
+				out.writeString(writeCalendar(o, sType));
 			}
 		} else if (sType.isTemporal()) {
 			// BSON datetime (0x09) is int64 millis-since-epoch, so only instant-bearing temporals can use it.
@@ -260,18 +260,18 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 				out.writeDateTime(toEpochMillis(o));
 			} else {
 				out.writeElement(STRING.value, name);
-				out.writeString(serializeTemporal((TemporalAccessor)o, sType));
+				out.writeString(writeTemporal((TemporalAccessor)o, sType));
 			}
 		} else if (sType.isDuration()) {
 			writeDuration(out, name, (Duration)o);
 		} else if (sType.isPeriod()) {
 			out.writeElement(STRING.value, name);
-			out.writeString(serializePeriod((Period)o));
+			out.writeString(writePeriod((Period)o));
 		} else if (sType.isStreamable()) {
 			out.writeElement(ARRAY.value, name);
 			var child = out.createChild();
 			child.startDocument();
-			serializeArray(child, toListFromStreamable(o, sType), eType);
+			writeArray(child, toListFromStreamable(o, sType), eType);
 			out.writeChildDocument(child);
 		} else {
 			out.writeElement(STRING.value, name);
@@ -280,7 +280,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 		pop();
 	}
 
-	private void serializeBeanMap(BsonOutputStream out, BeanMap<?> m, String typeName) throws SerializeException {
+	private void writeBeanMap(BsonOutputStream out, BeanMap<?> m, String typeName) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		var values = new ArrayList<BeanPropertyValue>();
 
@@ -311,7 +311,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 	@SuppressWarnings({
 		"unchecked" // Cast from raw type is safe by checked conditional above.
 	})
-	private void serializeArray(BsonOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
+	private void writeArray(BsonOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
 		var elementType = type.getElementType();
 		c = sort(c);
 		var idx = 0;
@@ -322,7 +322,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 	@SuppressWarnings({
 		"unchecked" // Cast from raw type is safe by checked conditional above.
 	})
-	private void serializeMap(BsonOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
+	private void writeMap(BsonOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
 		var valueType = type.getValueType();
 		var keyType = type.getKeyType();
 		m = sort(m);
@@ -369,7 +369,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 	}
 
 	@Override
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		var bsonOut = getBsonOutputStream(out);
 		bsonOut.startDocument();
 
@@ -386,10 +386,10 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 
 		if (sType != null && sType.isBean()) {
 			pop();
-			serializeBeanMap(bsonOut, toBeanMap(o), getBeanTypeName(this, eType, sType, null));
+			writeBeanMap(bsonOut, toBeanMap(o), getBeanTypeName(this, eType, sType, null));
 		} else if (sType != null && sType.isMap() && !sType.isBeanMap()) {
 			pop();
-			serializeMap(bsonOut, (Map)o, eType);
+			writeMap(bsonOut, (Map)o, eType);
 		} else {
 			pop();
 			writeElement(bsonOut, "value", o, eType, null);
@@ -400,7 +400,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 
 	private void writeDuration(BsonOutputStream out, String name, Duration value) {
 		var f = getDurationFormat();
-		var s = serializeDuration(value);
+		var s = writeDuration(value);
 		if (f == DurationFormat.NANOS || f == DurationFormat.MILLIS) {
 			out.writeElement(INT64.value, name);
 			out.writeInt64(Long.parseLong(s));

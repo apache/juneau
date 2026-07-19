@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.stream.*;
  * The most ergonomic way to consume a JSONL stream is via {@link #read(Class)}, which binds one
  * line to a POJO per call:
  * <p class='bjava'>
- * 	<jk>try</jk> (TokenReader <jv>r</jv> = Jsonl.<jsf>DEFAULT</jsf>.parseTokens(<jv>reader</jv>)) {
+ * 	<jk>try</jk> (TokenReader <jv>r</jv> = Jsonl.<jsf>DEFAULT</jsf>.readTokens(<jv>reader</jv>)) {
  * 		<jk>while</jk> (<jv>r</jv>.canRead()) {
  * 			MyRecord <jv>rec</jv> = <jv>r</jv>.read(MyRecord.<jk>class</jk>);
  * 			process(<jv>rec</jv>);
@@ -65,7 +65,7 @@ public class JsonlTokenReader extends JsonTokenReader {
 	}
 
 	/**
-	 * Constructor used by {@link JsonlParserSession#parseTokens(Object)} to plumb the calling
+	 * Constructor used by {@link JsonlParserSession#readTokens(Object)} to plumb the calling
 	 * session through.
 	 *
 	 * @param pipe The parser input pipe.  Must not be <jk>null</jk>.

@@ -124,7 +124,7 @@ import org.apache.juneau.marshall.stream.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable
 	"java:S115", // Constants use UPPER_snakeCase convention
-	"resource"   // parseTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
+	"resource"   // readTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
 })
 public class JsonParser extends ReaderParser implements JsonMetaProvider, TokenReadable, ArrayRecordReadable {
 
@@ -214,11 +214,11 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, TokenR
 		 *
 		 * 	<jc>// Should fail because input has multiple POJOs.</jc>
 		 * 	String <jv>json</jv> = <js>"{foo:'bar'}{baz:'qux'}"</js>;
-		 * 	MyBean <jv>myBean</jv> =<jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> =<jv>parser</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <p>
-		 * <b>Token streams:</b> this setting is not honored by {@link #parseTokens(Object) parseTokens}
+		 * <b>Token streams:</b> this setting is not honored by {@link #readTokens(Object) readTokens}
 		 * &mdash; the cursor leaves end-of-input checking to the caller.
 		 *
 		 * @return This object.
@@ -297,12 +297,12 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, TokenR
 
 	/**
 	 * Convenience delegator that opens a {@link JsonTokenReader} over the input using
-	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 * <b>default session arguments</b> (mirrors {@link #read(Object, Class)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link JsonParserSession#parseTokens(Object)}.  Callers
+	 * The real implementation lives on {@link JsonParserSession#readTokens(Object)}.  Callers
 	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
-	 * {@link #createSession()} and invoke {@link JsonParserSession#parseTokens(Object)} on the
+	 * {@link #createSession()} and invoke {@link JsonParserSession#readTokens(Object)} on the
 	 * built session instead.
 	 *
 	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence}, {@link InputStream},
@@ -311,8 +311,8 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, TokenR
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* TokenReadable */
-	public TokenReader parseTokens(Object input) throws IOException {
-		return getSession().parseTokens(input);
+	public TokenReader readTokens(Object input) throws IOException {
+		return getSession().readTokens(input);
 	}
 
 	/**
@@ -327,15 +327,15 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, TokenR
 
 	/**
 	 * Convenience delegator for the streaming array-element {@link RecordReader} (uses default
-	 * session args; see {@link #parseTokens(Object)}).  Real impl on
-	 * {@link JsonParserSession#parseArrayRecords(Object)}.
+	 * session args; see {@link #readTokens(Object)}).  Real impl on
+	 * {@link JsonParserSession#readArrayRecords(Object)}.
 	 *
 	 * @param input The input.
 	 * @return A new element-streamed {@link RecordReader}.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
-		return getSession().parseArrayRecords(input);
+	public RecordReader readArrayRecords(Object input) throws IOException {
+		return getSession().readArrayRecords(input);
 	}
 }

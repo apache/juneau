@@ -333,7 +333,7 @@ public class ComboRoundTrip_Tester<T> {
 		try {
 			if (isSkipped(testName + "-serialize", exp)) return;
 
-			var r = s.serializeToString(in.get());
+			var r = s.writeToString(in.get());
 
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 			if (eq(exp, "xxx")) {
@@ -360,10 +360,10 @@ public class ComboRoundTrip_Tester<T> {
 		try {
 			if (isSkipped(testName + "-parse", exp)) return;
 
-			var r = s.serializeToString(in.get());
-			var o = p.parse(r, type);
+			var r = s.writeToString(in.get());
+			var o = p.read(r, type);
 			o = postConvert.apply((T)o);
-			r = s.serializeToString(o);
+			r = s.writeToString(o);
 
 			assertEquals(exp, r, fs("%s/%s parse-normal failed", label, testName));
 		} catch (AssertionError e) {
@@ -383,8 +383,8 @@ public class ComboRoundTrip_Tester<T> {
 		try {
 			if (isSkipped(testName + "verify", expected.get(testName))) return;
 
-			var r = s.serializeToString(in.get());
-			var o = p.parse(r, type);
+			var r = s.writeToString(in.get());
+			var o = p.read(r, type);
 
 			verify((T)o, testName);
 		} catch (AssertionError e) {
@@ -405,9 +405,9 @@ public class ComboRoundTrip_Tester<T> {
 		try {
 			if (isSkipped(testName + "-parseJsonEquivalency", expected.get(testName))) return;
 
-			var r = s.serializeToString(in.get());
-			var o = p.parse(r, type);
-			r = jsonForEquivalency.serialize(o);
+			var r = s.writeToString(in.get());
+			var o = p.read(r, type);
+			r = jsonForEquivalency.write(o);
 			assertEquals(exp, r, fs("%s/%s parse-normal failed on JSON equivalency", label, testName));
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)

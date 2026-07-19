@@ -667,15 +667,15 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	/**
 	 * Convenience delegator for the whole-value {@link RecordWriter} using <b>default session
 	 * arguments</b>.  The real implementation lives on
-	 * {@link XmlSerializerSession#serializeRecords(Object)}.
+	 * {@link XmlSerializerSession#writeRecords(Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return getSession().serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return getSession().writeRecords(output);
 	}
 
 	/**

@@ -50,26 +50,26 @@ class Json5lCoverage_Test extends TestBase {
 	}
 
 	// =================================================================================
-	// A. Parser session — doParse array/null branches
+	// A. Parser session — doRead array/null branches
 	// =================================================================================
 
 	@Test
 	void a01_parseToArrayType() throws Exception {
 		var in = "{name:'Alice',age:30}\n{name:'Bob',age:25}";
-		var arr = Json5lParser.DEFAULT.parse(in, Person[].class);
+		var arr = Json5lParser.DEFAULT.read(in, Person[].class);
 		assertBean(arr, "0{name,age},1{name,age}", "{Alice,30},{Bob,25}");
 	}
 
 	@Test
 	void a02_singleTargetNoParseableLineReturnsNull() throws Exception {
 		// Only comment/blank lines → the single-value loop falls through to return null.
-		var p = Json5lParser.DEFAULT.parse("// just a comment\n\n", Person.class);
+		var p = Json5lParser.DEFAULT.read("// just a comment\n\n", Person.class);
 		assertNull(p);
 	}
 
 	@Test
 	void a03_nullInputReturnsNull() throws Exception {
-		assertNull(Json5lParser.DEFAULT.parse((String) null, Person.class));
+		assertNull(Json5lParser.DEFAULT.read((String) null, Person.class));
 	}
 
 	// =================================================================================
@@ -80,14 +80,14 @@ class Json5lCoverage_Test extends TestBase {
 	void b01_blockCommentWithTrailingContentIsParseable() throws Exception {
 		// `/* ... */ {a:1}` — closing */ is NOT at end of line, so the line IS parsed.
 		var in = "/* lead */ {name:'Alice',age:30}";
-		var list = (List<Person>) Json5lParser.DEFAULT.parse(in, List.class, Person.class);
+		var list = (List<Person>) Json5lParser.DEFAULT.read(in, List.class, Person.class);
 		assertBean(list, "0{name,age}", "{Alice,30}");
 	}
 
 	@Test
 	void b02_lineNotStartingWithCommentIsParseable() throws Exception {
 		var in = "{name:'Alice',age:30}";
-		var list = (List<Person>) Json5lParser.DEFAULT.parse(in, List.class, Person.class);
+		var list = (List<Person>) Json5lParser.DEFAULT.read(in, List.class, Person.class);
 		assertBean(list, "0{name}", "{Alice}");
 	}
 
@@ -123,14 +123,14 @@ class Json5lCoverage_Test extends TestBase {
 	@Test
 	void d03_parserBuilderCopy() throws Exception {
 		var p = Json5lParser.create().copy().build();
-		var person = p.parse("{name:'Alice',age:30}", Person.class);
+		var person = p.read("{name:'Alice',age:30}", Person.class);
 		assertBean(person, "name,age", "Alice,30");
 	}
 
 	@Test
 	void d04_parserContextCopy() throws Exception {
 		var p = Json5lParser.DEFAULT.copy().build();
-		var person = p.parse("{name:'Bob',age:25}", Person.class);
+		var person = p.read("{name:'Bob',age:25}", Person.class);
 		assertBean(person, "name,age", "Bob,25");
 	}
 
@@ -140,16 +140,16 @@ class Json5lCoverage_Test extends TestBase {
 
 	@Test
 	void e01_sugarSerializeViaStringRoundTrip() throws Exception {
-		// Drives the getJsonWriter() sugar branch through serializeToString (which wraps a fresh writer).
+		// Drives the getJsonWriter() sugar branch through writeToString (which wraps a fresh writer).
 		var s = Json5lSerializer.create().json5Sugar().build();
-		var out = s.serialize(JsonMap.of("name", "Alice"));
+		var out = s.write(JsonMap.of("name", "Alice"));
 		assertEquals("{name:'Alice'}", out.trim());
 	}
 
 	@Test
 	void e02_strictSerializeViaStringUsesDoubleQuotes() throws Exception {
 		// Drives the getJsonWriter() strict (non-sugar) branch.
-		var out = Json5lSerializer.DEFAULT.serialize(JsonMap.of("name", "Alice"));
+		var out = Json5lSerializer.DEFAULT.write(JsonMap.of("name", "Alice"));
 		assertEquals("{\"name\":\"Alice\"}", out.trim());
 	}
 
@@ -179,21 +179,21 @@ class Json5lCoverage_Test extends TestBase {
 	@Test
 	void g01_blankLinesOnlyBetweenRecords() throws Exception {
 		// Blank line in the array loop hits the isEmpty()==true branch.
-		var list = (List<Person>) Json5lParser.DEFAULT.parse("{name:'A'}\n   \n{name:'B'}", List.class, Person.class);
+		var list = (List<Person>) Json5lParser.DEFAULT.read("{name:'A'}\n   \n{name:'B'}", List.class, Person.class);
 		assertBean(list, "0{name},1{name}", "{A},{B}");
 	}
 
 	@Test
 	void g02_lineCommentInArrayLoopSkipped() throws Exception {
 		// `//`-prefixed line in the array loop hits the startsWith("//")==true branch.
-		var list = (List<Person>) Json5lParser.DEFAULT.parse("{name:'A'}\n// skip\n{name:'B'}", List.class, Person.class);
+		var list = (List<Person>) Json5lParser.DEFAULT.read("{name:'A'}\n// skip\n{name:'B'}", List.class, Person.class);
 		assertBean(list, "0{name},1{name}", "{A},{B}");
 	}
 
 	@Test
 	void g03_blockCommentWithTextBeforeCloseIsParseable() throws Exception {
 		// `/* */ x` style: indexOf("*/") != end so the line is parsed (the &&-chain's last branch).
-		var list = (List<Person>) Json5lParser.DEFAULT.parse("/* a */{name:'A'}", List.class, Person.class);
+		var list = (List<Person>) Json5lParser.DEFAULT.read("/* a */{name:'A'}", List.class, Person.class);
 		assertBean(list, "0{name}", "{A}");
 	}
 }

@@ -245,7 +245,7 @@ class EnumFormat_RoundTrip_Test extends TestBase {
 		var x = TestEnum.GAMMA;
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, TestEnum.class);
+			var x2 = p.read(out, TestEnum.class);
 			assertEquals(x, x2, "fmt=" + fmt);
 		} catch (Exception e) {
 			// Mirror BigNumberFormat_BigInteger_RoundTrip_Test.a06: some serializers (URL-encoding, CSV-style)

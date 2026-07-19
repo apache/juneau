@@ -66,7 +66,7 @@ class ViewProjection_Test extends TestBase {
 
 	@Test void b02_summaryView_parser_outOfViewIgnored() {
 		var p = Json5Parser.DEFAULT.copy().activeView("summary").ignoreUnknownBeanProperties().build();
-		var x = p.parse("{id:'2',name:'Bob',description:'ignored'}", A.class);
+		var x = p.read("{id:'2',name:'Bob',description:'ignored'}", A.class);
 		assertEquals("2", x.id);
 		assertEquals("Bob", x.name);
 		assertEquals("A person", x.description); // unchanged — never set
@@ -131,13 +131,13 @@ class ViewProjection_Test extends TestBase {
 		var s = Json5Serializer.DEFAULT.copy().activeView("summary").build();
 
 		// default from context: summary
-		assertEquals("{id:'1',name:'Alice'}", s.serialize(A.create()));
+		assertEquals("{id:'1',name:'Alice'}", s.write(A.create()));
 
 		// per-call override to detail
-		assertEquals("{description:'A person',id:'1'}", s.createSession().activeView("detail").build().serialize(A.create()));
+		assertEquals("{description:'A person',id:'1'}", s.createSession().activeView("detail").build().write(A.create()));
 
 		// per-call override to null → all properties
-		assertEquals("{description:'A person',id:'1',name:'Alice'}", s.createSession().activeView(null).build().serialize(A.create()));
+		assertEquals("{description:'A person',id:'1',name:'Alice'}", s.createSession().activeView(null).build().write(A.create()));
 	}
 
 	// F: precedence — @MarshalledIgnore overrides view
@@ -187,7 +187,7 @@ class ViewProjection_Test extends TestBase {
 
 	@Test void g03_readOnlyPlusView_parser_nameIgnored_descriptionSet() {
 		var p = Json5Parser.DEFAULT.copy().activeView("detail").ignoreUnknownBeanProperties().build();
-		var x = p.parse("{name:'Bob',description:'New'}", G.class);
+		var x = p.read("{name:'Bob',description:'New'}", G.class);
 		assertEquals("Alice", x.name);  // read-only: not written
 		assertEquals("New", x.description);  // in detail view and write-only
 	}
@@ -220,7 +220,7 @@ class ViewProjection_Test extends TestBase {
 
 	@Test void h03_configApply_parser_outOfView() {
 		var p = Json5Parser.DEFAULT.copy().applyAnnotations(HConfig.class).activeView("summary").ignoreUnknownBeanProperties().build();
-		var x = p.parse("{id:'2',name:'Bob',description:'ignored'}", H.class);
+		var x = p.read("{id:'2',name:'Bob',description:'ignored'}", H.class);
 		assertEquals("2", x.id);
 		assertEquals("Bob", x.name);
 		assertEquals("A person", x.description); // unchanged
@@ -241,7 +241,7 @@ class ViewProjection_Test extends TestBase {
 
 	@Test void i01_xmlFormat_summaryView() {
 		var s = XmlSerializer.DEFAULT_NS_SQ.copy().activeView("summary").build();
-		var xml = s.serialize(I.create());
+		var xml = s.write(I.create());
 		// id (untagged, always included) and name (in summary) should appear
 		assertTrue(xml.contains("1"), "Expected id value in XML: " + xml);
 		assertTrue(xml.contains("Alice"), "Expected name value in XML: " + xml);
@@ -249,7 +249,7 @@ class ViewProjection_Test extends TestBase {
 
 	@Test void i02_xmlFormat_detailView_nameNotVisible() {
 		var s = XmlSerializer.DEFAULT_NS_SQ.copy().activeView("detail").build();
-		var xml = s.serialize(I.create());
+		var xml = s.write(I.create());
 		// name is only in summary view, not detail → should not appear
 		assertFalse(xml.contains("Alice"), "name should not appear in detail view: " + xml);
 		assertTrue(xml.contains("1"), "Expected id value in XML: " + xml);
@@ -261,8 +261,8 @@ class ViewProjection_Test extends TestBase {
 		// MsgPack with summary view — only id (untagged) and name (in summary) should appear
 		var s = MsgPackSerializer.DEFAULT.copy().activeView("summary").build();
 		// Serialize to hex string and verify it's shorter than a full serialization (fewer properties)
-		var fullBytes = MsgPackSerializer.DEFAULT.serialize(A.create());
-		var summaryBytes = s.serialize(A.create());
+		var fullBytes = MsgPackSerializer.DEFAULT.write(A.create());
+		var summaryBytes = s.write(A.create());
 		// The summary view should produce fewer bytes (omits description)
 		assertNotEquals(fullBytes, summaryBytes);
 	}
@@ -284,12 +284,12 @@ class ViewProjection_Test extends TestBase {
 
 	@Test void l01_parseSide_outOfViewThrowsWhenIgnoreDisabled() {
 		var p = Json5Parser.DEFAULT.copy().activeView("summary").build();
-		assertThrows(Exception.class, () -> p.parse("{id:'1',description:'x'}", A.class));
+		assertThrows(Exception.class, () -> p.read("{id:'1',description:'x'}", A.class));
 	}
 
 	@Test void l02_parseSide_outOfViewIgnoredWhenIgnoreEnabled() {
 		var p = Json5Parser.DEFAULT.copy().activeView("summary").ignoreUnknownBeanProperties().build();
-		assertDoesNotThrow(() -> p.parse("{id:'1',description:'x'}", A.class));
+		assertDoesNotThrow(() -> p.read("{id:'1',description:'x'}", A.class));
 	}
 
 	// M: context-level default view is part of hashKey (different contexts cached separately)
@@ -299,9 +299,9 @@ class ViewProjection_Test extends TestBase {
 		var s2 = Json5Serializer.DEFAULT.copy().activeView("detail").build();
 		var s3 = Json5Serializer.DEFAULT.copy().activeView("summary").build();
 		// same active view → same output (different instances, but same serialization result)
-		assertEquals(s1.serialize(A.create()), s3.serialize(A.create()));
+		assertEquals(s1.write(A.create()), s3.write(A.create()));
 		// different active view → different output
-		assertNotEquals(s1.serialize(A.create()), s2.serialize(A.create()));
+		assertNotEquals(s1.write(A.create()), s2.write(A.create()));
 	}
 
 	// N: MarshalledIgnore annotation on a field with no view tag — never visible

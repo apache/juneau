@@ -16,11 +16,10 @@
  */
 package org.apache.juneau.marshall.plaintext;
 
-import static org.apache.juneau.commons.utils.IoUtils.*;
-
 import java.io.*;
 
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.stream.*;
@@ -79,7 +78,7 @@ public class PlainTextParserSession extends ReaderParserSession implements Recor
 	}
 
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.reader(this, input);
 	}
 
@@ -89,7 +88,7 @@ public class PlainTextParserSession extends ReaderParserSession implements Recor
 	}
 
 	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-		return convertToType(read(pipe.getReader()), type);
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		return convertToType(IoUtils.read(pipe.getReader()), type);
 	}
 }

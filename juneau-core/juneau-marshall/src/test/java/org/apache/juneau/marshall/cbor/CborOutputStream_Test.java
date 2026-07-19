@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
 class CborOutputStream_Test extends TestBase {
 
 	private static void enc(Object input, String expected) throws Exception {
-		var b = CborSerializer.DEFAULT.serialize(input);
+		var b = CborSerializer.DEFAULT.write(input);
 		assertEquals(expected, toSpacedHex(b));
 	}
 
@@ -156,7 +156,7 @@ class CborOutputStream_Test extends TestBase {
 	@Test
 	void a20_mediumString() throws Exception {
 		var s = "a".repeat(24);
-		var b = CborSerializer.DEFAULT.serialize(s);
+		var b = CborSerializer.DEFAULT.write(s);
 		assertEquals(26, b.length);
 		assertEquals("78", String.format("%02X", b[0] & 0xFF));
 		assertEquals(24, b[1] & 0xFF);
@@ -165,7 +165,7 @@ class CborOutputStream_Test extends TestBase {
 	@Test
 	void a21_longString() throws Exception {
 		var s = "a".repeat(256);
-		var b = CborSerializer.DEFAULT.serialize(s);
+		var b = CborSerializer.DEFAULT.write(s);
 		assertEquals(259, b.length);
 		assertEquals(0x79, b[0] & 0xFF);
 		assertEquals(1, b[1] & 0xFF);
@@ -192,7 +192,7 @@ class CborOutputStream_Test extends TestBase {
 	void a25_longBinary() throws Exception {
 		var data = new byte[24];
 		Arrays.fill(data, (byte) 0xFF);
-		var b = CborSerializer.DEFAULT.serialize(data);
+		var b = CborSerializer.DEFAULT.write(data);
 		assertEquals(26, b.length);
 		assertEquals(0x58, b[0] & 0xFF);
 		assertEquals(24, b[1] & 0xFF);
@@ -214,7 +214,7 @@ class CborOutputStream_Test extends TestBase {
 		var l = new ArrayList<Integer>();
 		for (int i = 0; i < 24; i++)
 			l.add(i);
-		var b = CborSerializer.DEFAULT.serialize(l);
+		var b = CborSerializer.DEFAULT.write(l);
 		assertTrue(toSpacedHex(b).startsWith("98 18"));
 	}
 
@@ -233,7 +233,7 @@ class CborOutputStream_Test extends TestBase {
 		var m = new LinkedHashMap<String, Integer>();
 		for (int i = 0; i < 24; i++)
 			m.put("k" + i, i);
-		var b = CborSerializer.DEFAULT.serialize(m);
+		var b = CborSerializer.DEFAULT.write(m);
 		assertTrue(toSpacedHex(b).startsWith("B8 18"));
 	}
 

@@ -40,21 +40,21 @@ class JsonParser_Test extends TestBase {
 	// Test invalid input
 	//====================================================================================================
 	@Test void a01_invalidJson() {
-		assertThrows(ParseException.class, ()->p.parse("{\na:1,\nb:xxx\n}", Object.class));
+		assertThrows(ParseException.class, ()->p.read("{\na:1,\nb:xxx\n}", Object.class));
 	}
 
 	@Test void a02_nonExistentAttribute() throws Exception {
 		var json = "{foo:,bar:}";
-		var m = Json5Parser.DEFAULT.parse(json, Json5Map.class);
+		var m = Json5Parser.DEFAULT.read(json, Json5Map.class);
 		assertEquals("{foo:null,bar:null}", m.toString());
 	}
 
 	@Test void a03_nonStringAsString() {
-		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->p.parse("123", String.class));
-		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->p.parse(" 123 ", String.class));
-		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->p.parse("{\"fa\":123}", A.class));
-		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->p.parse(" { \"fa\" : 123 } ", A.class));
-		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->p.parse("'123'", String.class));
+		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->p.read("123", String.class));
+		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->p.read(" 123 ", String.class));
+		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->p.read("{\"fa\":123}", A.class));
+		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->p.read(" { \"fa\" : 123 } ", A.class));
+		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->p.read("'123'", String.class));
 	}
 
 	public static class A {
@@ -62,13 +62,13 @@ class JsonParser_Test extends TestBase {
 	}
 
 	@Test void a04_strictMode() {
-		assertThrowsWithMessage(Exception.class, "Missing value detected.", ()->p.parse("{\"foo\":,\"bar\":}", JsonMap.class));
-		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->p.parse("{\"foo\":'bar'}", JsonMap.class));
-		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->p.parse("{'foo':\"bar\"}", JsonMap.class));
-		assertThrowsWithMessage(Exception.class, "Unquoted attribute detected.", ()->p.parse("{foo:\"bar\"}", JsonMap.class));
-		assertThrowsWithMessage(Exception.class, "String concatenation detected.", ()->p.parse("{\"foo\":\"bar\"+\"baz\"}", JsonMap.class));
-		assertThrowsWithMessage(Exception.class, "String concatenation detected.", ()->p.parse("{\"foo\":\"bar\" + \"baz\"}", JsonMap.class));
-		assertThrowsWithMessage(Exception.class, "Javascript comment detected.", ()->p.parse("{\"foo\":/*comment*/\"bar\"}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "Missing value detected.", ()->p.read("{\"foo\":,\"bar\":}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->p.read("{\"foo\":'bar'}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->p.read("{'foo':\"bar\"}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "Unquoted attribute detected.", ()->p.read("{foo:\"bar\"}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "String concatenation detected.", ()->p.read("{\"foo\":\"bar\"+\"baz\"}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "String concatenation detected.", ()->p.read("{\"foo\":\"bar\" + \"baz\"}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "Javascript comment detected.", ()->p.read("{\"foo\":/*comment*/\"bar\"}", JsonMap.class));
 	}
 
 	/**
@@ -79,11 +79,11 @@ class JsonParser_Test extends TestBase {
 		var s = Json5Serializer.DEFAULT;
 
 		var json = "{f01:'1',f02:'1',f03:'true',f04:'true',f05:'1',f06:'1',f07:'1',f08:'1',f09:'1',f10:'1'}";
-		var b = p2.parse(json, B.class);
+		var b = p2.read(json, B.class);
 		assertEquals("{f01:1,f02:1,f03:true,f04:true,f05:1.0,f06:1.0,f07:1,f08:1,f09:1,f10:1}", s.toString(b));
 
 		json = "{f01:'',f02:'',f03:'',f04:'',f05:'',f06:'',f07:'',f08:'',f09:'',f10:''}";
-		b = p2.parse(json, B.class);
+		b = p2.read(json, B.class);
 		assertEquals("{f01:0,f02:0,f03:false,f04:false,f05:0.0,f06:0.0,f07:0,f08:0,f09:0,f10:0}", s.toString(b));
 	}
 
@@ -105,16 +105,16 @@ class JsonParser_Test extends TestBase {
 	// Lax parser allows octal and hexadecimal numbers.  Strict parser does not.
 	//====================================================================================================
 	@Test void a06_invalidJsonNumbers() {
-		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.parse("\"\"", Number.class));
-		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.parse("0123", Number.class));
-		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.parse("-0123", Number.class));
-		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.parse("0x123", Number.class));
-		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.parse("-0x123", Number.class));
+		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.read("\"\"", Number.class));
+		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.read("0123", Number.class));
+		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.read("-0123", Number.class));
+		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.read("0x123", Number.class));
+		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.read("-0x123", Number.class));
 	}
 
 	@Test void a06b_validJsonNumbers() throws Exception {
-		assertEquals(0, p.parse("0", Number.class).intValue());
-		assertEquals(0, p.parse("-0", Number.class).intValue());
+		assertEquals(0, p.read("0", Number.class).intValue());
+		assertEquals(0, p.read("-0", Number.class).intValue());
 	}
 
 	//====================================================================================================
@@ -122,7 +122,7 @@ class JsonParser_Test extends TestBase {
 	// Lax parser allows unquoted strings if POJO can be converted from a string.
 	//====================================================================================================
 	@Test void a07_unquotedStrings() {
-		assertThrows(ParseException.class, ()->p.parse("foobar", C.class));
+		assertThrows(ParseException.class, ()->p.read("foobar", C.class));
 	}
 
 	public static class C {
@@ -146,9 +146,9 @@ class JsonParser_Test extends TestBase {
 		var p2 = Json5Parser.DEFAULT.copy().autoCloseStreams().build();
 		var r = reader("{foo:'bar'}{baz:'qux'}");
 
-		var x = p2.parse(r, JsonMap.class);
+		var x = p2.read(r, JsonMap.class);
 		assertBean(x, "foo", "bar");
-		assertThrowsWithMessage(Exception.class, "Reader is closed", ()->p2.parse(r, JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "Reader is closed", ()->p2.read(r, JsonMap.class));
 	}
 
 	//====================================================================================================
@@ -159,15 +159,15 @@ class JsonParser_Test extends TestBase {
 		var p2 = Json5Parser.create().unbuffered().build();
 		var r = reader("{foo:'bar'}{baz:'qux'}");
 
-		var x = (Object)p2.parse(r, JsonMap.class);
+		var x = (Object)p2.read(r, JsonMap.class);
 		assertBean(x, "foo", "bar");
-		x = p2.parse(r, JsonMap.class);
+		x = p2.read(r, JsonMap.class);
 		assertBean(x, "baz", "qux");
 
 		r = reader("[123][456]");
-		x = p2.parse(r, JsonList.class);
+		x = p2.read(r, JsonList.class);
 		assertList(x, "123");
-		x = p2.parse(r, JsonList.class);
+		x = p2.read(r, JsonList.class);
 		assertList(x, "456");
 	}
 
@@ -186,7 +186,7 @@ class JsonParser_Test extends TestBase {
 	// Headline case, mirroring the exact repro from FINISHED-147 (abstract Set<Enum>, empty array, null field).
 	@Test void b01_emptyArrayIntoAbstractSetOfEnum() throws Exception {
 		var p2 = JsonParser.create().ignoreUnknownBeanProperties().build();
-		var x = p2.parse("{\"v\":[]}", B01_Bean.class);
+		var x = p2.read("{\"v\":[]}", B01_Bean.class);
 		assertNotNull(x.getV());
 		assertTrue(x.getV().isEmpty());
 		assertInstanceOf(LinkedHashSet.class, x.getV());
@@ -194,7 +194,7 @@ class JsonParser_Test extends TestBase {
 
 	// Non-empty array of the same shape must still populate (guards the populated path).
 	@Test void b02_populatedArrayIntoAbstractSetOfEnum() throws Exception {
-		var x = p.parse("{\"v\":[\"A\",\"B\"]}", B01_Bean.class);
+		var x = p.read("{\"v\":[\"A\",\"B\"]}", B01_Bean.class);
 		assertInstanceOf(LinkedHashSet.class, x.getV());
 		assertEquals(Set.of(B_Enum.A, B_Enum.B), x.getV());
 	}
@@ -208,7 +208,7 @@ class JsonParser_Test extends TestBase {
 	// For a List field the parser's native JsonList is itself a List, so it is assigned directly (no
 	// abstract-materialization coercion is needed).  Either way the contract is: non-null, empty List.
 	@Test void b03_emptyArrayIntoAbstractListOfEnum() throws Exception {
-		var x = p.parse("{\"v\":[]}", B03_Bean.class);
+		var x = p.read("{\"v\":[]}", B03_Bean.class);
 		assertNotNull(x.getV());
 		assertTrue(x.getV().isEmpty());
 		assertInstanceOf(List.class, x.getV());
@@ -221,7 +221,7 @@ class JsonParser_Test extends TestBase {
 	}
 
 	@Test void b04_emptyObjectIntoAbstractMapOfEnum() throws Exception {
-		var x = p.parse("{\"v\":{}}", B04_Bean.class);
+		var x = p.read("{\"v\":{}}", B04_Bean.class);
 		assertNotNull(x.getV());
 		assertTrue(x.getV().isEmpty());
 		assertInstanceOf(LinkedHashMap.class, x.getV());
@@ -234,7 +234,7 @@ class JsonParser_Test extends TestBase {
 	}
 
 	@Test void b05_emptyArrayIntoAbstractSetOfString() throws Exception {
-		var x = p.parse("{\"v\":[]}", B05_Bean.class);
+		var x = p.read("{\"v\":[]}", B05_Bean.class);
 		assertNotNull(x.getV());
 		assertTrue(x.getV().isEmpty());
 		assertInstanceOf(LinkedHashSet.class, x.getV());
@@ -247,7 +247,7 @@ class JsonParser_Test extends TestBase {
 	}
 
 	@Test void b06_emptyArrayIntoAbstractListOfString() throws Exception {
-		var x = p.parse("{\"v\":[]}", B06_Bean.class);
+		var x = p.read("{\"v\":[]}", B06_Bean.class);
 		assertNotNull(x.getV());
 		assertTrue(x.getV().isEmpty());
 		assertInstanceOf(List.class, x.getV());
@@ -260,7 +260,7 @@ class JsonParser_Test extends TestBase {
 	}
 
 	@Test void b07_emptyObjectIntoAbstractMapOfString() throws Exception {
-		var x = p.parse("{\"v\":{}}", B07_Bean.class);
+		var x = p.read("{\"v\":{}}", B07_Bean.class);
 		assertNotNull(x.getV());
 		assertTrue(x.getV().isEmpty());
 		assertInstanceOf(LinkedHashMap.class, x.getV());

@@ -84,8 +84,8 @@ class ParquetLogicalTypes_Test extends TestBase {
 	void b2_01_decimalNativeRoundTrip() throws Exception {
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = List.of(new DecBean(new BigDecimal("123.456")), new DecBean(new BigDecimal("0.000000001")));
-		var bytes = ser.serialize(in);
-		var out = (List<DecBean>) ParquetParser.DEFAULT.parse(bytes, List.class, DecBean.class);
+		var bytes = ser.write(in);
+		var out = (List<DecBean>) ParquetParser.DEFAULT.read(bytes, List.class, DecBean.class);
 		assertEquals(0, new BigDecimal("123.456000000").compareTo(out.get(0).amount));
 		assertEquals(0, new BigDecimal("0.000000001").compareTo(out.get(1).amount));
 	}
@@ -110,8 +110,8 @@ class ParquetLogicalTypes_Test extends TestBase {
 		// A timestamp with microsecond precision the default millis path would truncate.
 		var ts = Instant.parse("2026-06-17T12:34:56.123456Z");
 		var in = List.of(new TemporalBean(LocalDate.parse("2026-06-17"), LocalTime.parse("12:34:56.123456"), ts));
-		var bytes = ser.serialize(in);
-		var out = (List<TemporalBean>) ParquetParser.DEFAULT.parse(bytes, List.class, TemporalBean.class);
+		var bytes = ser.write(in);
+		var out = (List<TemporalBean>) ParquetParser.DEFAULT.read(bytes, List.class, TemporalBean.class);
 		assertEquals(LocalDate.parse("2026-06-17"), out.get(0).d);
 		// Native TIME(MICROS)/TIMESTAMP(MICROS) round-trips microsecond precision exactly.
 		assertEquals(LocalTime.parse("12:34:56.123456"), out.get(0).t);
@@ -125,8 +125,8 @@ class ParquetLogicalTypes_Test extends TestBase {
 		// string/timestamp-millis normalization — the interop point of nativeLogicalTypes().
 		var ts = Instant.parse("2026-06-17T12:34:56.123456Z");
 		var in = List.of(new TemporalBean(LocalDate.parse("2026-06-17"), LocalTime.parse("12:34:56.123456"), ts));
-		var bytesDefault = ParquetSerializer.DEFAULT.serialize(in);
-		var bytesNative = ParquetSerializer.create().nativeLogicalTypes(true).build().serialize(in);
+		var bytesDefault = ParquetSerializer.DEFAULT.write(in);
+		var bytesNative = ParquetSerializer.create().nativeLogicalTypes(true).build().write(in);
 		assertFalse(Arrays.equals(bytesDefault, bytesNative), "native temporal wire form must differ from default");
 	}
 
@@ -137,16 +137,16 @@ class ParquetLogicalTypes_Test extends TestBase {
 	@Test
 	void b4_01_defaultOutputByteIdenticalWhenFlagOff() throws Exception {
 		var in = List.of(new DecBean(new BigDecimal("123.456")));
-		var bytesDefault = ParquetSerializer.DEFAULT.serialize(in);
-		var bytesFlagOff = ParquetSerializer.create().nativeLogicalTypes(false).build().serialize(in);
+		var bytesDefault = ParquetSerializer.DEFAULT.write(in);
+		var bytesFlagOff = ParquetSerializer.create().nativeLogicalTypes(false).build().write(in);
 		assertArrayEquals(bytesDefault, bytesFlagOff);
 	}
 
 	@Test
 	void b4_02_nativeChangesWireForm() throws Exception {
 		var in = List.of(new DecBean(new BigDecimal("123.456")));
-		var bytesDefault = ParquetSerializer.DEFAULT.serialize(in);
-		var bytesNative = ParquetSerializer.create().nativeLogicalTypes(true).build().serialize(in);
+		var bytesDefault = ParquetSerializer.DEFAULT.write(in);
+		var bytesNative = ParquetSerializer.create().nativeLogicalTypes(true).build().write(in);
 		// Native DECIMAL (INT64) produces a different wire form than the default UTF-8-string normalization.
 		assertFalse(Arrays.equals(bytesDefault, bytesNative));
 	}

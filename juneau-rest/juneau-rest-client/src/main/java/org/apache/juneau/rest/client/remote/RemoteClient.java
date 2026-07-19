@@ -674,7 +674,7 @@ public final class RemoteClient {
 		private static String serializePart(HttpPartType partType, HttpPartSchema schema, Object value, HttpPartSerializer serializer) {
 			try {
 				var session = serializer != null ? serializer.getPartSession() : OpenApiSerializer.DEFAULT.getPartSession();
-				return session.serialize(partType, schema, value);
+				return session.write(partType, schema, value);
 			} catch (Exception e) {
 				throw rex(e, "Could not serialize HTTP %s part value of type %s", partType, value == null ? "null" : cn(value));
 			}
@@ -1237,7 +1237,7 @@ public final class RemoteClient {
 			var h = resp.getFirstHeader("Content-Type");
 			var parser = selectParser(resp, h == null ? null : h.value(), acceptFallback);
 			try {
-				return parser.parse(body, returnType);
+				return parser.read(body, returnType);
 			} catch (ParseException e) {
 				if (returnType == Object.class)
 					return body;

@@ -126,7 +126,7 @@ class AdminMixin_AsMixin_Test extends TestBase {
 			.assertStatus(200)
 			.assertHeader("Content-Type").isContains("application/json")
 			.getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, List.class);
+		var parsed = JsonParser.DEFAULT.read(body, List.class);
 		Assertions.assertFalse(parsed.isEmpty(), "thread list should not be empty");
 		var first = (Map<?,?>) parsed.get(0);
 		Assertions.assertNotNull(first.get("name"));
@@ -140,7 +140,7 @@ class AdminMixin_AsMixin_Test extends TestBase {
 			.assertStatus(200)
 			.assertHeader("Content-Type").isContains("application/json")
 			.getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		var heap = (Map<?,?>) parsed.get("heap");
 		Assertions.assertNotNull(heap.get("total"));
 		Assertions.assertNotNull(heap.get("free"));
@@ -210,7 +210,7 @@ class AdminMixin_AsMixin_Test extends TestBase {
 			.run()
 			.assertStatus(200)
 			.getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		var guardsMap = (Map<?,?>) parsed.get("guards");
 		Assertions.assertEquals(1, guardsMap.size(), "expected one entry; got: " + guardsMap.keySet());
 		var first = (Map<?,?>) guardsMap.values().iterator().next();

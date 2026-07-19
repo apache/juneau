@@ -302,18 +302,18 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	List&lt;MyBean&gt; <jv>list</jv> = <jsm>createListOfMyBeans</jsm>();
 		 *
 		 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-		 * 	String <jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>list</jv>);
+		 * 	String <jv>rdfXml</jv> = <jv>serializer</jv>.write(<jv>list</jv>);
 		 *
 		 * 	<jc>// Parse back into a Java collection</jc>
-		 * 	<jv>list</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+		 * 	<jv>list</jv> = <jv>parser</jv>.read(<jv>rdfXml</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 		 *
 		 * 	MyBean[] <jv>bean</jv> = <jsm>createArrayOfMyBeans</jsm>();
 		 *
 		 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-		 * 	<jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>beans</jv>);
+		 * 	<jv>rdfXml</jv> = <jv>serializer</jv>.write(<jv>beans</jv>);
 		 *
 		 * 	<jc>// Parse back into a bean array</jc>
-		 * 	<jv>beans</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, MyBean[].<jk>class</jk>);
+		 * 	<jv>beans</jv> = <jv>parser</jv>.read(<jv>rdfXml</jv>, MyBean[].<jk>class</jk>);
 		 * </p>
 		 *
 		 * @return This object.

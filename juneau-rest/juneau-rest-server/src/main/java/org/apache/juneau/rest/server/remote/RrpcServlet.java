@@ -132,7 +132,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 
 		// Parse the args and invoke the method.
 		java.lang.reflect.Method m = rmm.getJavaMethod();
-		Object[] params = p.parseArgs(r, m.getGenericParameterTypes());
+		Object[] params = p.readArgs(r, m.getGenericParameterTypes());
 		return m.invoke(service, params);
 	}
 

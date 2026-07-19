@@ -74,7 +74,7 @@ import org.apache.juneau.marshall.stream.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
- * 	String <jv>yaml</jv> = YamlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someObject</jv>);
+ * 	String <jv>yaml</jv> = YamlSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
  *
  * 	<jc>// Create a custom serializer</jc>
  * 	YamlSerializer <jv>serializer</jv> = YamlSerializer.<jsm>create</jsm>().build();
@@ -83,7 +83,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<jv>serializer</jv> = YamlSerializer.<jsf>DEFAULT</jsf>.copy().ws().build();
  *
  * 	<jc>// Serialize a POJO to YAML</jc>
- * 	String <jv>yaml</jv> = <jv>serializer</jv>.serialize(<jv>someObject</jv>);
+ * 	String <jv>yaml</jv> = <jv>serializer</jv>.write(<jv>someObject</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (Map of name/age):</h5>
@@ -302,29 +302,29 @@ public class YamlSerializer extends WriterSerializer implements RecordWritable, 
 	/**
 	 * Convenience delegator for the whole-value {@link RecordWriter} using <b>default session
 	 * arguments</b>.  The real implementation lives on
-	 * {@link YamlSerializerSession#serializeRecords(Object)}.
+	 * {@link YamlSerializerSession#writeRecords(Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return getSession().serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return getSession().writeRecords(output);
 	}
 
 	/**
 	 * Convenience delegator for the buffered array-element {@link RecordWriter} using <b>default
 	 * session arguments</b>.  The real implementation lives on
-	 * {@link YamlSerializerSession#serializeArrayRecords(Object)}.
+	 * {@link YamlSerializerSession#writeArrayRecords(Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
-		return getSession().serializeArrayRecords(output);
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
+		return getSession().writeArrayRecords(output);
 	}
 
 	/**

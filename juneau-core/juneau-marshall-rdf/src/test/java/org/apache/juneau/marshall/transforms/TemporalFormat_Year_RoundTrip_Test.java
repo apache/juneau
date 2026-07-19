@@ -258,7 +258,7 @@ class TemporalFormat_Year_RoundTrip_Test extends TestBase {
 		var x = Year.of(2024);
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, Year.class);
+			var x2 = p.read(out, Year.class);
 			// Binary serializers with native datetime support may bypass the configured format swap at
 			// top-level; bean-property tests above cover the swap path strictly.  Accept either the
 			// lossy-canonical (format applied) or the structural original (format bypassed).

@@ -33,7 +33,7 @@ class HoconSubstitution_Test {
 	@Test
 	void e01_simpleSubstitution() {
 		var hocon = "x = hello\nval = ${x}";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("hello", m.get("x"));
 		assertEquals("hello", m.get("val"));
 	}
@@ -41,47 +41,47 @@ class HoconSubstitution_Test {
 	@Test
 	void e02_nestedPathSubstitution() {
 		var hocon = "a { b { c = 42 } }\nv = ${a.b.c}";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals(42, ((Number) m.get("v")).intValue());
 	}
 
 	@Test
 	void e03_optionalSubstitutionPresent() {
 		var hocon = "x = hello\nval = ${?x}";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("hello", m.get("val"));
 	}
 
 	@Test
 	void e04_optionalSubstitutionMissing() {
 		var hocon = "val = ${?missing}";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertNull(m.get("val"));
 	}
 
 	@Test
 	void e05_requiredSubstitutionMissing() {
 		var hocon = "val = ${missing}";
-		assertThrows(Exception.class, () -> HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class));
+		assertThrows(Exception.class, () -> HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class));
 	}
 
 	@Test
 	void e06_circularSubstitution() {
 		var hocon = "a = ${b}\nb = ${a}";
-		assertThrows(Exception.class, () -> HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class));
+		assertThrows(Exception.class, () -> HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class));
 	}
 
 	@Test
 	void e07_stringConcatSubstitution() {
 		var hocon = "name = World\nval = \"Hello \" ${name}";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("Hello World", m.get("val"));
 	}
 
 	@Test
 	void e08_selfReferentialAppend() {
 		var hocon = "path = /usr\npath = ${path}\"/bin\"";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("/usr/bin", m.get("path"));
 	}
 }

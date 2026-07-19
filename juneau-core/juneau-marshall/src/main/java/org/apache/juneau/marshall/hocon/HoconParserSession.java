@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.stream.*;
 @SuppressWarnings({
 	"java:S110", "java:S115", "java:S135", "java:S3776", "java:S6541", "unchecked",
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
-	// java:S135: parseValueOrConcat uses two distinct breaks — one for standard HOCON terminators, one for unquoted keys after arrays/objects; merging them would obscure intent
+	// java:S135: readArrayOrConcat uses two distinct breaks — one for standard HOCON terminators, one for unquoted keys after arrays/objects; merging them would obscure intent
 })
 public class HoconParserSession extends ReaderParserSession implements RecordReadable {
 
@@ -79,7 +79,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 	}
 
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.reader(this, input);
 	}
 
@@ -89,7 +89,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 	}
 
 	@Override
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		String inputStr;
 		try {
 			inputStr = pipe.asString();
@@ -102,7 +102,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 		if (trimmed.isEmpty())
 			return null;
 		var tokenizer = new HoconTokenizer(new StringReader(inputStr));
-		var root = parseRoot(tokenizer);
+		var root = readRoot(tokenizer);
 		if (root == null)
 			return null;
 		if (hoconParser.resolveSubstitutions) {
@@ -113,19 +113,19 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 		return (T) convertToBean(map, type);
 	}
 
-	private HoconValue.HoconObject parseRoot(HoconTokenizer t) throws IOException, ParseException {
+	private HoconValue.HoconObject readRoot(HoconTokenizer t) throws IOException, ParseException {
 		t.skipWhitespaceAndComments();
 		var peek = t.peek();
 		if (peek.type() == HoconTokenizer.TokenType.EOF)
 			return null;
 		if (peek.type() == HoconTokenizer.TokenType.LBRACE) {
 			t.read();
-			return parseObject(t, null, new String[0]);
+			return readObject(t, null, new String[0]);
 		}
-		return parseRootBraceless(t);
+		return readRootBraceless(t);
 	}
 
-	private HoconValue.HoconObject parseRootBraceless(HoconTokenizer t) throws IOException, ParseException {
+	private HoconValue.HoconObject readRootBraceless(HoconTokenizer t) throws IOException, ParseException {
 		var root = new HoconValue.HoconObject();
 		while (t.peek().type() != HoconTokenizer.TokenType.EOF) {
 			var path = readPath(t);
@@ -135,7 +135,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 			var next = t.peek();
 			if (next.type() == HoconTokenizer.TokenType.LBRACE) {
 				t.read();
-				var nested = parseObject(t, root, path);
+				var nested = readObject(t, root, path);
 				var existing = root.getPath(path);
 				if (existing instanceof HoconValue.HoconObject existingObj)
 					existingObj.merge(nested);
@@ -144,7 +144,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 			} else if (next.type() == HoconTokenizer.TokenType.PLUS_EQUALS) {
 				t.read();
 				t.skipWhitespaceAndComments();
-				var value = parseValueOrConcat(t);
+				var value = readValueOrConcat(t);
 				var existing = root.getPath(path);
 				if (existing instanceof HoconValue.HoconArray arr)
 					arr.add(value);
@@ -158,7 +158,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 			} else if (next.type() == HoconTokenizer.TokenType.EQUALS || next.type() == HoconTokenizer.TokenType.COLON) {
 				t.read();
 				t.skipWhitespaceAndComments();
-				var value = parseValueOrConcat(t);
+				var value = readValueOrConcat(t);
 				value = resolveSelfRefConcatIfNeeded(value, path, root);
 				root.setPath(path, value);
 			} else {
@@ -210,9 +210,9 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 	 * Parses a value, supporting HOCON concatenation: adjacent values on the same line
 	 * are concatenated (strings) or merged (objects/arrays).
 	 */
-	private HoconValue parseValueOrConcat(HoconTokenizer t) throws IOException, ParseException {
+	private HoconValue readValueOrConcat(HoconTokenizer t) throws IOException, ParseException {
 		var values = new ArrayList<HoconValue>();
-		values.add(parseValue(t));
+		values.add(readValue(t));
 		while (true) {
 			t.skipWhitespaceAndCommentsExceptNewlines();
 			var peek = t.peekNoSkip();
@@ -229,7 +229,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 			if (peek.type() == HoconTokenizer.TokenType.UNQUOTED_STRING
 					&& (last instanceof HoconValue.HoconArray || last instanceof HoconValue.HoconObject))
 				break;
-			values.add(parseValue(t));
+			values.add(readValue(t));
 		}
 		if (values.size() == 1)
 			return values.get(0);
@@ -281,7 +281,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 		return resolver.resolveConcatWithLookup(concat, lookup);
 	}
 
-	private HoconValue parseValue(HoconTokenizer t) throws IOException, ParseException {
+	private HoconValue readValue(HoconTokenizer t) throws IOException, ParseException {
 		var tok = t.peek();
 		return switch (tok.type()) {
 			case UNQUOTED_STRING, QUOTED_STRING, TRIPLE_QUOTED -> {
@@ -307,11 +307,11 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 			}
 			case LBRACE -> {
 				t.read();
-				yield parseObject(t, null, new String[0]);
+				yield readObject(t, null, new String[0]);
 			}
 			case LBRACKET -> {
 				t.read();
-				yield parseArray(t);
+				yield readArray(t);
 			}
 			case SUBSTITUTION, OPT_SUBSTITUTION -> {
 				var st = t.read();
@@ -322,7 +322,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 		};
 	}
 
-	private HoconValue.HoconObject parseObject(HoconTokenizer t, HoconValue.HoconObject root, String[] pathPrefix)
+	private HoconValue.HoconObject readObject(HoconTokenizer t, HoconValue.HoconObject root, String[] pathPrefix)
 			throws IOException, ParseException {
 		var obj = new HoconValue.HoconObject();
 		var effectiveRoot = or(root, obj);
@@ -335,7 +335,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 			var next = t.peek();
 			if (next.type() == HoconTokenizer.TokenType.LBRACE) {
 				t.read();
-				var nested = parseObject(t, effectiveRoot, concatenatePaths(pathPrefix, path));
+				var nested = readObject(t, effectiveRoot, concatenatePaths(pathPrefix, path));
 				var existing = obj.getPath(path);
 				if (existing instanceof HoconValue.HoconObject existingObj)
 					existingObj.merge(nested);
@@ -344,7 +344,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 			} else if (next.type() == HoconTokenizer.TokenType.PLUS_EQUALS) {
 				t.read();
 				t.skipWhitespaceAndComments();
-				var value = parseValueOrConcat(t);
+				var value = readValueOrConcat(t);
 				var existing = obj.getPath(path);
 				if (existing instanceof HoconValue.HoconArray arr)
 					arr.add(value);
@@ -358,7 +358,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 			} else if (next.type() == HoconTokenizer.TokenType.EQUALS || next.type() == HoconTokenizer.TokenType.COLON) {
 				t.read();
 				t.skipWhitespaceAndComments();
-				var value = parseValueOrConcat(t);
+				var value = readValueOrConcat(t);
 				var fullPath = concatenatePaths(pathPrefix, path);
 				value = resolveSelfRefConcatIfNeeded(value, fullPath, effectiveRoot);
 				obj.setPath(path, value);
@@ -366,7 +366,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 				throw new ParseException(this, "Expected =, : or brace at line %s", t.getLine());
 			}
 			// skipWhitespaceAndComments is a no-op while a token is cached (see HoconTokenizer), so a
-			// closing `}` already peeked by parseValueOrConcat's concat loop is preserved here and the
+			// closing `}` already peeked by readArrayOrConcat's concat loop is preserved here and the
 			// loop terminates naturally via the while-condition above rather than chewing through a
 			// newline that belongs to an enclosing scope.
 			t.skipWhitespaceAndComments();
@@ -379,18 +379,18 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 		return obj;
 	}
 
-	private HoconValue.HoconArray parseArray(HoconTokenizer t) throws IOException, ParseException {
+	private HoconValue.HoconArray readArray(HoconTokenizer t) throws IOException, ParseException {
 		var arr = new HoconValue.HoconArray();
 		t.skipWhitespaceAndComments();
 		while (t.peek().type() != HoconTokenizer.TokenType.RBRACKET && t.peek().type() != HoconTokenizer.TokenType.EOF) {
 			// Elements inside [ ... ] are separated by COMMA or NEWLINE (handled below), so each
-			// parseValueOrConcat call returns a single element.  HOCON array-concatenation
-			// (`[a,b] [c,d]` ≡ `[a,b,c,d]`) is performed inside parseValueOrConcat when adjacent
+			// readArrayOrConcat call returns a single element.  HOCON array-concatenation
+			// (`[a,b] [c,d]` ≡ `[a,b,c,d]`) is performed inside readArrayOrConcat when adjacent
 			// arrays appear without a separator; the result is already a flattened HoconArray at
 			// that point.  Here we must add the element as-is so nested arrays like
 			// `[[1,2,3], [4,5,6]]` (with separators) stay nested rather than flattening.
-			arr.add(parseValueOrConcat(t));
-			// parseValueOrConcat's internal concat loop calls peekNoSkip(), which eagerly consumes the
+			arr.add(readValueOrConcat(t));
+			// readArrayOrConcat's internal concat loop calls peekNoSkip(), which eagerly consumes the
 			// closing-bracket char from the underlying reader and stashes it as peeked=RBRACKET.
 			// skipWhitespaceAndComments is a no-op while a token is cached (see HoconTokenizer), so it
 			// will NOT read past the cached `]` and eat a following newline — a newline that is either

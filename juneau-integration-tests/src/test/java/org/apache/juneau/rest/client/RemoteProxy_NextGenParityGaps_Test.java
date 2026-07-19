@@ -688,7 +688,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 			}
 			var tb = captured.get(0).getBody();
 			assertTrue(tb.isRepeatable(), "streaming POJO body must be repeatable (re-serialize on retry)");
-			var expected = (String) JsonSerializer.DEFAULT.serialize(new J_Bean());
+			var expected = (String) JsonSerializer.DEFAULT.write(new J_Bean());
 			var first = new J_RecordingOutputStream();
 			tb.writeTo(first);
 			var second = new J_RecordingOutputStream();
@@ -1466,7 +1466,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 
 		@Test void u01_acceptHeaderSent_and_responseParsedByContentType() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
-			var xmlBody = (String) XmlSerializer.DEFAULT.serialize(new T8_Bean("Bob", 30));
+			var xmlBody = (String) XmlSerializer.DEFAULT.write(new T8_Bean("Bob", 30));
 			try (var c = RestClient.builder().transport(captureAndRespond(captured, xmlBody, "application/xml").build()).rootUrl("http://x.com").parsers(jsonXmlParsers()).build()) {
 				var bean = c.remote(U_AcceptClient.class).get();
 				assertEquals("Bob", bean.name);
@@ -1479,7 +1479,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 
 		@Test void u02_acceptFallbackParser_whenResponseUnlabeled() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
-			var xmlBody = (String) XmlSerializer.DEFAULT.serialize(new T8_Bean("Sue", 25));
+			var xmlBody = (String) XmlSerializer.DEFAULT.write(new T8_Bean("Sue", 25));
 			// Response carries NO Content-Type → must fall back to the accept (XML) parser, not the default JSON parser
 			// (parsing XML as JSON would throw — a clean success proves the fallback fired).
 			try (var c = RestClient.builder().transport(captureAndRespond(captured, xmlBody, null).build()).rootUrl("http://x.com").parsers(jsonXmlParsers()).build()) {
@@ -1491,13 +1491,13 @@ class RemoteProxy_NextGenParityGaps_Test {
 
 		@Test void u03_methodAcceptOverridesInterfaceDefault() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
-			var xmlBody = (String) XmlSerializer.DEFAULT.serialize(new T8_Bean("a", 1));
+			var xmlBody = (String) XmlSerializer.DEFAULT.write(new T8_Bean("a", 1));
 			try (var c = RestClient.builder().transport(captureAndRespond(captured, xmlBody, "application/xml").build()).rootUrl("http://x.com").parsers(jsonXmlParsers()).build()) {
 				c.remote(U_LevelClient.class).methodWins();
 				assertEquals("application/xml", headerValue(captured.get(0), "Accept"));
 			}
 			captured.clear();
-			var jsonBody = (String) JsonSerializer.DEFAULT.serialize(new T8_Bean("a", 1));
+			var jsonBody = (String) JsonSerializer.DEFAULT.write(new T8_Bean("a", 1));
 			try (var c = RestClient.builder().transport(captureAndRespond(captured, jsonBody, "application/json").build()).rootUrl("http://x.com").parsers(jsonXmlParsers()).build()) {
 				c.remote(U_LevelClient.class).ifaceDefault();
 				assertEquals("application/json", headerValue(captured.get(0), "Accept"));
@@ -1528,7 +1528,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 
 		@Test void v02_acceptAttributeWinsOverConstantHeader() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
-			var xmlBody = (String) XmlSerializer.DEFAULT.serialize(new T8_Bean("a", 1));
+			var xmlBody = (String) XmlSerializer.DEFAULT.write(new T8_Bean("a", 1));
 			try (var c = RestClient.builder().transport(captureAndRespond(captured, xmlBody, "application/xml").build()).rootUrl("http://x.com").parsers(jsonXmlParsers()).build()) {
 				c.remote(V_PrecedenceClient.class).acceptWins();
 			}

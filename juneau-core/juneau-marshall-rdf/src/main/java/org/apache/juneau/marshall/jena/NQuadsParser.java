@@ -27,7 +27,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Parse N-Quads string into a bean.</jc>
  * 	String <jv>nQuads</jv> = ...;  <jc>// N-Quads content</jc>
- * 	Person <jv>person</jv> = NQuadsParser.<jsf>DEFAULT</jsf>.parse(<jv>nQuads</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = NQuadsParser.<jsf>DEFAULT</jsf>.read(<jv>nQuads</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the NQuads marshaller for convenience.</jc>
@@ -36,7 +36,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>
  * 	NQuadsParser <jv>p</jv> = NQuadsParser.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>nQuads</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.read(<jv>nQuads</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example input (bean with name/age):</h5>

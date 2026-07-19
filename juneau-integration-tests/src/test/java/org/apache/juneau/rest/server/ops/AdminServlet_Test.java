@@ -98,7 +98,7 @@ class AdminServlet_Test extends TestBase {
 			.assertStatus(200)
 			.assertHeader("Content-Type").isContains("application/json")
 			.getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, List.class);
+		var parsed = JsonParser.DEFAULT.read(body, List.class);
 		Assertions.assertFalse(parsed.isEmpty(), "thread list should not be empty");
 	}
 
@@ -108,7 +108,7 @@ class AdminServlet_Test extends TestBase {
 			.assertStatus(200)
 			.assertHeader("Content-Type").isContains("application/json")
 			.getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		var heap = (Map<?,?>) parsed.get("heap");
 		Assertions.assertNotNull(heap.get("used"));
 	}

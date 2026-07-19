@@ -36,38 +36,38 @@ class ProtobufParser_Test extends TestBase {
 	}
 
 	@Test
-	void a01_parseIntAndString() throws Exception {
-		var b = ProtobufParser.DEFAULT.parse(bytes(0x08,0x96,0x01, 0x12,0x07,0x74,0x65,0x73,0x74,0x69,0x6E,0x67), Simple.class);
+	void a01_readIntAndString() throws Exception {
+		var b = ProtobufParser.DEFAULT.read(bytes(0x08,0x96,0x01, 0x12,0x07,0x74,0x65,0x73,0x74,0x69,0x6E,0x67), Simple.class);
 		assertBean(b, "id,name", "150,testing");
 	}
 
 	@Test
 	void a02_unknownFieldSkipped() throws Exception {
 		// field9=42 (varint, unknown -> skipped), then field1=150.
-		var b = ProtobufParser.DEFAULT.parse(bytes(0x48,0x2A, 0x08,0x96,0x01), Simple.class);
+		var b = ProtobufParser.DEFAULT.read(bytes(0x48,0x2A, 0x08,0x96,0x01), Simple.class);
 		assertBean(b, "id,name", "150,<null>");
 	}
 
 	@Test
 	void a03_absentFieldsLeftDefault() throws Exception {
-		var b = ProtobufParser.DEFAULT.parse(bytes(0x12,0x01,0x61), Simple.class);
+		var b = ProtobufParser.DEFAULT.read(bytes(0x12,0x01,0x61), Simple.class);
 		assertBean(b, "id,name", "0,a");
 	}
 
 	@Test
 	void a04_enumParse() throws Exception {
-		var b = ProtobufParser.DEFAULT.parse(bytes(0x08,0x02), WithEnum.class);
+		var b = ProtobufParser.DEFAULT.read(bytes(0x08,0x02), WithEnum.class);
 		assertBean(b, "color", "BLUE");
 	}
 
 	@Test
 	void a05_emptyInputYieldsEmptyBean() throws Exception {
-		var b = ProtobufParser.DEFAULT.parse(new byte[0], Simple.class);
+		var b = ProtobufParser.DEFAULT.read(new byte[0], Simple.class);
 		assertBean(b, "id,name", "0,<null>");
 	}
 
 	@Test
 	void a06_nonBeanTargetThrows() {
-		assertThrows(Exception.class, () -> ProtobufParser.DEFAULT.parse(bytes(0x08,0x01), String.class));
+		assertThrows(Exception.class, () -> ProtobufParser.DEFAULT.read(bytes(0x08,0x01), String.class));
 	}
 }

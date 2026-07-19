@@ -52,7 +52,7 @@ public class Json5lTokenReader extends Json5TokenReader {
 	}
 
 	/**
-	 * Constructor used by {@link Json5lParserSession#parseTokens(Object)} to plumb the calling
+	 * Constructor used by {@link Json5lParserSession#readTokens(Object)} to plumb the calling
 	 * session through so that {@link #read(Class)} can delegate to the JSON5L databind path.
 	 *
 	 * @param pipe The parser input pipe.  Must not be <jk>null</jk>.

@@ -38,12 +38,12 @@ import org.apache.juneau.marshall.serializer.*;
  * Reduces per-format override boilerplate to a one-liner on the session class:
  * <p class='bjava'>
  * 	<ja>@Override</ja>
- * 	<jk>public</jk> RecordReader parseRecords(Object <jv>input</jv>) <jk>throws</jk> IOException {
+ * 	<jk>public</jk> RecordReader readRecords(Object <jv>input</jv>) <jk>throws</jk> IOException {
  * 		<jk>return</jk> RecordAdapter.<jsm>reader</jsm>(<jk>this</jk>, <jv>input</jv>);
  * 	}
  *
  * 	<ja>@Override</ja>
- * 	<jk>public</jk> RecordWriter serializeRecords(Object <jv>output</jv>) <jk>throws</jk> IOException {
+ * 	<jk>public</jk> RecordWriter writeRecords(Object <jv>output</jv>) <jk>throws</jk> IOException {
  * 		<jk>return</jk> RecordAdapter.<jsm>writer</jsm>(<jk>this</jk>, <jv>output</jv>);
  * 	}
  * </p>
@@ -71,7 +71,7 @@ public final class RecordAdapter {
 
 	/**
 	 * Creates a single-shot {@link RecordReader} that delegates {@code read(...)} calls to the
-	 * session's {@link ParserSession#parse(Object, Class) parse(...)} entry point.
+	 * session's {@link ParserSession#read(Object, Class) read(...)} entry point.
 	 *
 	 * @param session The format's live parser session.  Must not be <jk>null</jk>.
 	 * @param input The input to bind on the first {@code read(...)} call.
@@ -88,19 +88,19 @@ public final class RecordAdapter {
 			@Override public <T> T read(Class<T> type) throws IOException, ParseException {
 				checkNotExhausted();
 				exhausted = true;
-				return session.parse(input, type);
+				return session.read(input, type);
 			}
 
 			@Override public <T> T read(ClassMeta<T> type) throws IOException, ParseException {
 				checkNotExhausted();
 				exhausted = true;
-				return session.parse(input, type);
+				return session.read(input, type);
 			}
 
 			@Override public <T> T read(Type type, Type... args) throws IOException, ParseException {
 				checkNotExhausted();
 				exhausted = true;
-				return session.parse(input, type, args);
+				return session.read(input, type, args);
 			}
 
 			@Override public boolean isStreaming() {
@@ -123,10 +123,10 @@ public final class RecordAdapter {
 	 * Creates an array-element {@link RecordReader} backed by a buffered list parse.
 	 *
 	 * <p>
-	 * Equivalent to calling {@code session.parse(input, List.class, Object.class)} once and
+	 * Equivalent to calling {@code session.read(input, List.class, Object.class)} once and
 	 * iterating the result.  This is correct but NOT streaming &mdash; the whole array is
 	 * materialized.  Format-specific implementations may override
-	 * {@link ArrayRecordReadable#parseArrayRecords(Object)} directly for actual streaming.
+	 * {@link ArrayRecordReadable#readArrayRecords(Object)} directly for actual streaming.
 	 *
 	 * @param session The format's live parser session.  Must not be <jk>null</jk>.
 	 * @param input The input to bind on the first read.
@@ -137,7 +137,7 @@ public final class RecordAdapter {
 	public static RecordReader arrayReader(ParserSession session, Object input) throws IOException {
 		List<?> all;
 		try {
-			all = session.parse(input, List.class, Object.class);
+			all = session.read(input, List.class, Object.class);
 		} catch (ParseException e) {
 			throw new IOException(e);
 		}
@@ -176,7 +176,7 @@ public final class RecordAdapter {
 	 * <p>
 	 * This is correct but NOT streaming &mdash; the writes are accumulated in memory.
 	 * Format-specific implementations may override
-	 * {@link ArrayRecordWritable#serializeArrayRecords(Object)} directly for actual streaming.
+	 * {@link ArrayRecordWritable#writeArrayRecords(Object)} directly for actual streaming.
 	 *
 	 * @param session The format's live serializer session.  Must not be <jk>null</jk>.
 	 * @param output The output to write to.
@@ -205,7 +205,7 @@ public final class RecordAdapter {
 					return;
 				closed = true;
 				try {
-					session.serialize(buf, output);
+					session.write(buf, output);
 				} catch (SerializeException e) {
 					throw new IOException(e);
 				}
@@ -216,7 +216,7 @@ public final class RecordAdapter {
 
 	/**
 	 * Creates a single-shot {@link RecordWriter} that delegates {@code write(Object)} calls to the
-	 * session's {@link SerializerSession#serialize(Object, Object) serialize(...)} entry point.
+	 * session's {@link SerializerSession#write(Object, Object) write(...)} entry point.
 	 *
 	 * @param session The format's live serializer session.  Must not be <jk>null</jk>.
 	 * @param output The output to write to.
@@ -231,7 +231,7 @@ public final class RecordAdapter {
 					throw new IllegalStateException("Cursor has already accepted its single root value.");
 				written = true;
 				try {
-					session.serialize(value, output);
+					session.write(value, output);
 				} catch (SerializeException e) {
 					throw new IOException(e);
 				}

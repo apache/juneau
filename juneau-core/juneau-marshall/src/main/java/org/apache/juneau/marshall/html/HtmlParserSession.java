@@ -164,7 +164,7 @@ public class HtmlParserSession extends XmlParserSession {
 	/*
 	 * Reads an anchor tag and converts it into a bean.
 	 */
-	private <T> T parseAnchor(XmlReader r, ClassMeta<T> beanType) throws IOException, ParseException, XMLStreamException {
+	private <T> T readAnchor(XmlReader r, ClassMeta<T> beanType) throws IOException, ParseException, XMLStreamException {
 		String href = r.getAttributeValue(null, "href");
 		String name = getElementText(r);
 		if (nn(beanType) && getAnnotationProvider().has(HtmlLink.class, beanType)) {
@@ -189,7 +189,7 @@ public class HtmlParserSession extends XmlParserSession {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for HTML parsing with type detection
 	})
-	private <T> T parseAnything(ClassMeta<T> eType, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
+	private <T> T readAnything(ClassMeta<T> eType, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -204,13 +204,13 @@ public class HtmlParserSession extends XmlParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)o(parseAnything(eType.getElementType(), r, outer, isRoot, pMeta));
+			return (T)o(readAnything(eType.getElementType(), r, outer, isRoot, pMeta));
 
 		setCurrentClass(sType);
 
 		int event = r.getEventType();
 		if (event != START_ELEMENT)
-			throw new ParseException(this, "parseAnything must be called on outer start element.");
+			throw new ParseException(this, "readAnything must be called on outer start element.");
 
 		if (! isRoot)
 			event = r.next();
@@ -221,12 +221,12 @@ public class HtmlParserSession extends XmlParserSession {
 			event = skipWs(r);
 
 		if (event == END_DOCUMENT)
-			throw new ParseException(this, "Unexpected end of stream in parseAnything for type '%s'", eType);
+			throw new ParseException(this, "Unexpected end of stream in readAnything for type '%s'", eType);
 
 		// Handle @Html(asXml=true) beans.
 		var hcm = getHtmlClassMeta(sType);
 		if (hcm.getFormat() == HtmlFormat.XML)
-			return super.parseAnything(eType, null, r, outer, false, pMeta);
+			return super.readAnything(eType, null, r, outer, false, pMeta);
 
 		Object o = null;
 
@@ -236,7 +236,7 @@ public class HtmlParserSession extends XmlParserSession {
 		// If it's not a known tag, then parse it as XML.
 		// Allows us to parse stuff like "<div/>" into HTML5 beans.
 		if (tag == null && event != CHARACTERS)
-			return super.parseAnything(eType, null, r, outer, false, pMeta);
+			return super.readAnything(eType, null, r, outer, false, pMeta);
 
 		if (tag == HTML)
 			tag = skipToData(r);
@@ -244,7 +244,7 @@ public class HtmlParserSession extends XmlParserSession {
 		if (isEmpty) {
 			o = "";
 		} else if (tag == null || tag.isOneOf(BR, BS, FF, SP)) {
-			String text = parseText(r);
+			String text = readText(r);
 			if (sType.isObject() || sType.isCharSequence())
 				o = text;
 			else if (sType.isChar())
@@ -254,15 +254,15 @@ public class HtmlParserSession extends XmlParserSession {
 			else if (sType.isBoolean())
 				o = Boolean.parseBoolean(text);
 			else if (sType.isDate())
-				o = parseDate(text, sType);
+				o = readDate(text, sType);
 			else if (sType.isCalendar())
-				o = parseCalendar(text, sType);
+				o = readCalendar(text, sType);
 			else if (sType.isTemporal())
-				o = parseTemporal(text, sType);
+				o = readTemporal(text, sType);
 			else if (sType.isDuration())
-				o = parseDuration(text);
+				o = readDuration(text);
 			else if (sType.isPeriod())
-				o = parsePeriod(text);
+				o = readPeriod(text);
 			else if (sType.canCreateNewInstanceFromString(outer))
 				o = sType.newInstanceFromString(outer, text);
 			else
@@ -275,15 +275,15 @@ public class HtmlParserSession extends XmlParserSession {
 			else if (sType.isChar())
 				o = parseCharacter(text);
 			else if (sType.isDate())
-				o = parseDate(text, sType);
+				o = readDate(text, sType);
 			else if (sType.isCalendar())
-				o = parseCalendar(text, sType);
+				o = readCalendar(text, sType);
 			else if (sType.isTemporal())
-				o = parseTemporal(text, sType);
+				o = readTemporal(text, sType);
 			else if (sType.isDuration())
-				o = parseDuration(text);
+				o = readDuration(text);
 			else if (sType.isPeriod())
-				o = parsePeriod(text);
+				o = readPeriod(text);
 			else if (sType.canCreateNewInstanceFromString(outer))
 				o = sType.newInstanceFromString(outer, text);
 			else
@@ -319,7 +319,7 @@ public class HtmlParserSession extends XmlParserSession {
 			skipTag(r, X_NULL);
 
 		} else if (tag == A) {
-			o = parseAnchor(r, swap == null ? eType : null);
+			o = readAnchor(r, swap == null ? eType : null);
 			skipTag(r, X_A);
 
 		} else if (tag == TABLE) {
@@ -337,18 +337,18 @@ public class HtmlParserSession extends XmlParserSession {
 
 			if (typeName.equals(TAG_object)) {
 				if (sType.isObject()) {
-					o = parseIntoMap(r, newGenericMap(sType), sType.getKeyType(), sType.getValueType(), pMeta);
+					o = readIntoMap(r, newGenericMap(sType), sType.getKeyType(), sType.getValueType(), pMeta);
 				} else if (nn(builder)) {
 					BeanMap m = toBeanMap(builder.create(this, eType));
-					o = builder.build(this, parseIntoBean(r, m).getBean(), eType);
+					o = builder.build(this, readIntoBean(r, m).getBean(), eType);
 				} else if (sType.canCreateNewBean(outer)) {
 					BeanMap m = newBeanMap(outer, sType.inner());
-					o = parseIntoBean(r, m).getBean();
+					o = readIntoBean(r, m).getBean();
 				} else if (sType.isMap()) {
-					o = parseIntoMap(r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : newGenericMap(sType)), sType.getKeyType(), sType.getValueType(), pMeta);
+					o = readIntoMap(r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : newGenericMap(sType)), sType.getKeyType(), sType.getValueType(), pMeta);
 				} else if (nn(sType.getProxyInvocationHandler())) {
 					BeanMap m = newBeanMap(outer, sType.inner());
-					o = parseIntoBean(r, m).getBean();
+					o = readIntoBean(r, m).getBean();
 				} else {
 					isValid = false;
 				}
@@ -356,11 +356,11 @@ public class HtmlParserSession extends XmlParserSession {
 
 			} else if (typeName.equals(TAG_array)) {
 				if (sType.isObject())
-					o = parseTableIntoCollection(r, (Collection)newGenericList(), sType, pMeta);
+					o = readTableIntoCollection(r, (Collection)newGenericList(), sType, pMeta);
 				else if (sType.isCollection())
-					o = parseTableIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : newGenericList()), sType, pMeta);
+					o = readTableIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : newGenericList()), sType, pMeta);
 				else if (sType.isArray() || sType.isArgs()) {
-					var l = (ArrayList)parseTableIntoCollection(r, list(), sType, pMeta);
+					var l = (ArrayList)readTableIntoCollection(r, list(), sType, pMeta);
 					o = toArray(sType, l);
 				} else
 					isValid = false;
@@ -377,11 +377,11 @@ public class HtmlParserSession extends XmlParserSession {
 				sType = eType = cm;
 
 			if (sType.isObject())
-				o = parseIntoCollection(r, newGenericList(), sType, pMeta);
+				o = readIntoCollection(r, newGenericList(), sType, pMeta);
 			else if (sType.isCollection() || sType.isObject())
-				o = parseIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : newGenericList()), sType, pMeta);
+				o = readIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : newGenericList()), sType, pMeta);
 			else if (sType.isArray() || sType.isArgs())
-				o = toArray(sType, parseIntoCollection(r, list(), sType, pMeta));
+				o = toArray(sType, readIntoCollection(r, list(), sType, pMeta));
 			else
 				isValid = false;
 			skipTag(r, X_UL);
@@ -409,7 +409,7 @@ public class HtmlParserSession extends XmlParserSession {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for HTML bean parsing
 	})
-	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException, XMLStreamException {
+	private <T> BeanMap<T> readIntoBean(XmlReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		while (true) {
 			HtmlTag tag = nextTag(r, TR, X_TABLE);
 			if (tag == X_TABLE)
@@ -425,10 +425,10 @@ public class HtmlParserSession extends XmlParserSession {
 				nextTag(r, TD);
 				var pMeta = m.getPropertyMeta(key);
 				if (pMeta == null) {
-					onUnknownProperty(key, m, parseAnything(object(), r, null, false, null));
+					onUnknownProperty(key, m, readAnything(object(), r, null, false, null));
 				} else {
 					var cm = (ClassMeta<?>) pMeta.getBeanInfo();
-					Object value = parseAnything(cm, r, m.getBean(false), false, pMeta);
+					Object value = readAnything(cm, r, m.getBean(false), false, pMeta);
 					setName(cm, value, key);
 					try {
 						pMeta.set(m, key, value);
@@ -451,9 +451,9 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
 	@SuppressWarnings({
-		"java:S2177" // Intentional: HtmlParserSession provides its own private parseIntoCollection() with HTML-specific logic
+		"java:S2177" // Intentional: HtmlParserSession provides its own private readIntoCollection() with HTML-specific logic
 	})
-	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
+	private <E> Collection<E> readIntoCollection(XmlReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int argIndex = 0;
 		while (true) {
 			HtmlTag tag = nextTag(r, LI, X_UL, X_LI);
@@ -462,7 +462,7 @@ public class HtmlParserSession extends XmlParserSession {
 			if (tag == X_UL)
 				break;
 			var elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
-			l.add((E)parseAnything(elementType, r, l, false, pMeta));
+			l.add((E)readAnything(elementType, r, l, false, pMeta));
 		}
 		return l;
 	}
@@ -473,9 +473,9 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
 	@SuppressWarnings({
-		"java:S2177" // Intentional: HtmlParserSession provides its own private parseIntoMap() with HTML-specific logic
+		"java:S2177" // Intentional: HtmlParserSession provides its own private readIntoMap() with HTML-specific logic
 	})
-	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
+	private <K,V> Map<K,V> readIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 		while (true) {
 			HtmlTag tag = nextTag(r, TR, X_TABLE);
@@ -488,9 +488,9 @@ public class HtmlParserSession extends XmlParserSession {
 				r.nextTag();
 				skipTag(r);
 			} else {
-				K key = parseAnything(keyType, r, m, false, pMeta);
+				K key = readAnything(keyType, r, m, false, pMeta);
 				nextTag(r, TD);
-				V value = parseAnything(valueType, r, m, false, pMeta);
+				V value = readAnything(valueType, r, m, false, pMeta);
 				setName(valueType, value, key);
 				m.put(key, value);
 			}
@@ -510,7 +510,7 @@ public class HtmlParserSession extends XmlParserSession {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for HTML table parsing into collection
 	})
-	private <E> Collection<E> parseTableIntoCollection(XmlReader r, Collection<E> l, ClassMeta<E> type, BeanPropertyMeta pMeta)
+	private <E> Collection<E> readTableIntoCollection(XmlReader r, Collection<E> l, ClassMeta<E> type, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		nextTag(r, TR);
@@ -561,11 +561,11 @@ public class HtmlParserSession extends XmlParserSession {
 					}
 					BeanMapEntry e = m.getProperty(key);
 					if (e == null) {
-						parseAnything(object(), r, l, false, null);
+						readAnything(object(), r, l, false, null);
 					} else {
 						BeanPropertyMeta bpm = e.getMeta();
 						var cm = (ClassMeta<?>) bpm.getBeanInfo();
-						Object value = parseAnything(cm, r, m.getBean(false), false, bpm);
+						Object value = readAnything(cm, r, m.getBean(false), false, bpm);
 						setName(cm, value, key);
 						bpm.set(m, key, value);
 					}
@@ -592,7 +592,7 @@ public class HtmlParserSession extends XmlParserSession {
 					if (nn(m)) {
 						var kt = elementType.getKeyType();
 						var vt = elementType.getValueType();
-						Object value = parseAnything(vt, r, l, false, pMeta);
+						Object value = readAnything(vt, r, l, false, pMeta);
 						setName(vt, value, key);
 						m.put(convertToType(key, kt), value);
 					}
@@ -676,26 +676,26 @@ public class HtmlParserSession extends XmlParserSession {
 	}
 
 	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try {
-			return parseAnything(type, getXmlReader(pipe), getOuter(), true, null);
+			return readAnything(type, getXmlReader(pipe), getOuter(), true, null);
 		} catch (XMLStreamException e) {
 			throw new ParseException(e);
 		}
 	}
 
 	@Override /* Overridden from ReaderParserSession */
-	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		return parseIntoCollection(getXmlReader(pipe), c, getClassMeta(elementType), null);
+	protected <E> Collection<E> doReadIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
+		return readIntoCollection(getXmlReader(pipe), c, getClassMeta(elementType), null);
 	}
 
 	@Override /* Overridden from ReaderParserSession */
-	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		return parseIntoMap(getXmlReader(pipe), m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
+	protected <K,V> Map<K,V> doReadIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+		return readIntoMap(getXmlReader(pipe), m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
 	}
 
 	/**
-	 * Identical to {@link #parseText(XmlReader)} except assumes the current event is the opening tag.
+	 * Identical to {@link #readText(XmlReader)} except assumes the current event is the opening tag.
 	 *
 	 * <p>
 	 * Precondition:  Pointing to opening tag.
@@ -709,7 +709,7 @@ public class HtmlParserSession extends XmlParserSession {
 	@Override /* Overridden from XmlParserSession */
 	protected String getElementText(XmlReader r) throws IOException, XMLStreamException, ParseException {
 		r.next();
-		return parseText(r);
+		return readText(r);
 	}
 
 	/**
@@ -753,7 +753,7 @@ public class HtmlParserSession extends XmlParserSession {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for HTML text parsing with whitespace handling
 	})
-	protected String parseText(XmlReader r) throws IOException, ParseException, XMLStreamException {
+	protected String readText(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
 		StringBuilder sb = getStringBuilder();
 
@@ -833,7 +833,7 @@ public class HtmlParserSession extends XmlParserSession {
 	}
 
 	@Override /* Overridden from XmlParserSession */
-	protected String parseWhitespaceElement(XmlReader r) throws IOException, ParseException, XMLStreamException {
+	protected String readWhitespaceElement(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
 		var tag = HtmlTag.forEvent(this, r);
 		int et = r.next();
@@ -853,7 +853,7 @@ public class HtmlParserSession extends XmlParserSession {
 			}
 			return "";
 		} else {
-			throw new ParseException(this, "Invalid tag found in parseWhitespaceElement(): '%s'", tag);
+			throw new ParseException(this, "Invalid tag found in readWhitespaceElement(): '%s'", tag);
 		}
 	}
 }

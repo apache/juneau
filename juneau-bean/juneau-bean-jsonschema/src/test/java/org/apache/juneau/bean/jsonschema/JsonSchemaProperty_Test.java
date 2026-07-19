@@ -241,7 +241,7 @@ class JsonSchemaProperty_Test extends TestBase {
 			.setMinLength(1)
 			.setMaxLength(50);
 
-		String json = JsonSerializer.DEFAULT.serialize(p);
+		String json = JsonSerializer.DEFAULT.write(p);
 
 		// Verify basic schema properties are serialized
 		assertTrue(json.contains("\"type\":\"string\""));

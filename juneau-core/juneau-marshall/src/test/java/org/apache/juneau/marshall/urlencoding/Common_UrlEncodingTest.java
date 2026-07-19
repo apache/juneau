@@ -36,15 +36,15 @@ class Common_UrlEncodingTest extends TestBase {
 		var s = UrlEncodingSerializer.create();
 		var t1 = A.create();
 
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 		assertEquals("s2=s2", r);
-		var t2 = p.parse(r, A.class);
+		var t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t1));
 
 		s.keepNullProperties();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("s1=null&s2=s2", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t1));
 	}
 
@@ -64,16 +64,16 @@ class Common_UrlEncodingTest extends TestBase {
 	@Test void a02_trimEmptyMaps() throws Exception {
 		var s = UrlEncodingSerializer.create();
 		var t1 = B.create();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 
 		assertEquals("f1=()&f2=(f2a=null,f2b=(s2=s2))", r);
-		var t2 = p.parse(r, B.class);
+		var t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyMaps();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("f2=(f2a=null,f2b=(s2=s2))", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertNull(t2.f1);
 	}
 
@@ -94,16 +94,16 @@ class Common_UrlEncodingTest extends TestBase {
 	@Test void a03_trimEmptyLists() throws Exception {
 		var s = UrlEncodingSerializer.create();
 		var t1 = C.create();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 
 		assertEquals("f1=@()&f2=@(null,(s2=s2))", r);
-		var t2 = p.parse(r, C.class);
+		var t2 = p.read(r, C.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("f2=@(null,(s2=s2))", r);
-		t2 = p.parse(r, C.class);
+		t2 = p.read(r, C.class);
 		assertNull(t2.f1);
 	}
 
@@ -124,16 +124,16 @@ class Common_UrlEncodingTest extends TestBase {
 	@Test void a04_trimEmptyArrays() throws Exception {
 		var s = UrlEncodingSerializer.create();
 		var t1 = D.create();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 
 		assertEquals("f1=@()&f2=@(null,(s2=s2))", r);
-		var t2 = p.parse(r, D.class);
+		var t2 = p.read(r, D.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("f2=@(null,(s2=s2))", r);
-		t2 = p.parse(r, D.class);
+		t2 = p.read(r, D.class);
 		assertNull(t2.f1);
 	}
 
@@ -160,8 +160,8 @@ class Common_UrlEncodingTest extends TestBase {
 		t.f1 = new URI("http://f1");
 		t.f2 = url("http://f2");
 
-		var r = s.serialize(t);
-		t = p2.parse(r, G.class);
+		var r = s.write(t);
+		t = p2.read(r, G.class);
 		assertEquals("http://uri", t.uri.toString());
 		assertEquals("http://f1", t.f1.toString());
 		assertEquals("http://f2", t.f2.toString());
@@ -187,14 +187,14 @@ class Common_UrlEncodingTest extends TestBase {
 		r3.r1 = r1;
 
 		// No recursion detection
-		assertThrowsWithMessage(Exception.class, "It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().serialize(r1));
+		assertThrowsWithMessage(Exception.class, "It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().write(r1));
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
-		assertThrowsWithMessage(Exception.class, l("[0] root:org.apache.juneau.marshall.urlencoding.Common_UrlEncodingTest$R1", "->[1] r2:org.apache.juneau.marshall.urlencoding.Common_UrlEncodingTest$R2", "->[2] r3:org.apache.juneau.marshall.urlencoding.Common_UrlEncodingTest$R3", "->[3] r1:org.apache.juneau.marshall.urlencoding.Common_UrlEncodingTest$R1"), ()->s.build().serialize(r1));
+		assertThrowsWithMessage(Exception.class, l("[0] root:org.apache.juneau.marshall.urlencoding.Common_UrlEncodingTest$R1", "->[1] r2:org.apache.juneau.marshall.urlencoding.Common_UrlEncodingTest$R2", "->[2] r3:org.apache.juneau.marshall.urlencoding.Common_UrlEncodingTest$R3", "->[3] r1:org.apache.juneau.marshall.urlencoding.Common_UrlEncodingTest$R1"), ()->s.build().write(r1));
 
 		s.ignoreRecursions();
-		assertEquals("name=foo&r2=(name=bar,r3=(name=baz))", s.build().serialize(r1));
+		assertEquals("name=foo&r2=(name=bar,r3=(name=baz))", s.build().write(r1));
 	}
 
 	public static class R1 {

@@ -191,7 +191,7 @@ class PrototextAnnotation_Test extends TestBase {
 	void h01_comment() throws Exception {
 		// Serialize structure with name/test; @Prototext(comment) on bean field emits comment when bean is used
 		var a = JsonMap.of("name", "test");
-		var proto = PrototextSerializer.DEFAULT.serialize(a);
+		var proto = PrototextSerializer.DEFAULT.write(a);
 		assertNotNull(proto);
 		assertTrue(proto.contains("name"));
 		assertTrue(proto.contains("test"));

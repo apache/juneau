@@ -250,7 +250,7 @@ public class SerializedEntity extends BasicHttpEntity {
 			} else {
 				SerializerSession session = serializer.createSession().schema(schema).build();
 				try (Closeable c = session.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os) {
-					session.serialize(o, c);
+					session.write(o, c);
 				}
 			}
 		} catch (SerializeException e) {

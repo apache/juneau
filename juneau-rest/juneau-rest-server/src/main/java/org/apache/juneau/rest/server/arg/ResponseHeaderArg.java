@@ -120,7 +120,7 @@ public class ResponseHeaderArg implements RestOpArg {
 			if (rpm == null)
 				rpm = ResponseHeaderArg.this.meta;
 			var pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().getPartSession();
-			var s = pss.serialize(HttpPartType.HEADER, rpm.getSchema(), o);
+			var s = pss.write(HttpPartType.HEADER, rpm.getSchema(), o);
 			res.setHeader(HttpStringHeader.of(name, s));
 		});
 		return v;

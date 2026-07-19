@@ -33,7 +33,7 @@ import org.apache.juneau.commons.collections.*;
  * <br>It has 1 abstract method to implement...
  * <ul class='spaced-list'>
  * 	<li>
- * 		{@link #doSerialize(SerializerPipe, Object)}
+ * 		{@link #doWrite(SerializerPipe, Object)}
  * </ul>
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -146,7 +146,7 @@ public class WriterSerializerSession extends SerializerSession {
 		 * The character set to use when writing to OutputStreams.
 		 *
 		 * <p>
-		 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+		 * Used when passing in output streams and byte arrays to {@link WriterSerializer#write(Object, Object)}.
 		 *
 		 * <p>
 		 * If not specified, defaults to UTF-8.
@@ -240,10 +240,10 @@ public class WriterSerializerSession extends SerializerSession {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	@Override /* Overridden from SerializerSession */
-	public final String serialize(Object o) throws SerializeException {
+	public final String write(Object o) throws SerializeException {
 		var w = new StringWriter();
 		try {
-			serialize(o, w);
+			write(o, w);
 		} catch (IOException e) {
 			throw new SerializeException(e); // Shouldn't happen.
 		}
@@ -251,8 +251,8 @@ public class WriterSerializerSession extends SerializerSession {
 	}
 
 	@Override /* Overridden from SerializerSession */
-	public final String serializeToString(Object o) throws SerializeException {
-		return serialize(o);
+	public final String writeToString(Object o) throws SerializeException {
+		return write(o);
 	}
 
 	@Override /* Overridden from SerializerSession */

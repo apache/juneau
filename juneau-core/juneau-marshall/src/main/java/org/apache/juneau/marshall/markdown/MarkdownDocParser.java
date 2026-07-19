@@ -36,12 +36,12 @@ import org.apache.juneau.commons.collections.*;
  * <p class='bjava'>
  * 	<jc>// Parse a Markdown document back to a bean</jc>
  * 	String <jv>md</jv> = <js>"# Person\n\n| Property | Value |\n|---|---|\n| name | Alice |\n\n## address\n\n| Property | Value |\n|---|---|\n| city | Boston |"</js>;
- * 	Person <jv>p</jv> = MarkdownDocParser.<jsf>DEFAULT</jsf>.parse(<jv>md</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>p</jv> = MarkdownDocParser.<jsf>DEFAULT</jsf>.read(<jv>md</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Round-trip example</jc>
- * 	String <jv>md</jv> = MarkdownDocSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myBean</jv>);
- * 	MyBean <jv>parsed</jv> = MarkdownDocParser.<jsf>DEFAULT</jsf>.parse(<jv>md</jv>, MyBean.<jk>class</jk>);
+ * 	String <jv>md</jv> = MarkdownDocSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
+ * 	MyBean <jv>parsed</jv> = MarkdownDocParser.<jsf>DEFAULT</jsf>.read(<jv>md</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='section'>Limitations:</h5><ul>

@@ -73,7 +73,7 @@ import org.apache.juneau.marshall.*;
  *
  * 	<jc>// Parse a bean from JSON</jc>
  * 	String <jv>json</jv> = <js>"{...}"</js>;
- * 	AddressBook <jv>addressBook</jv> = <jv>parser</jv>.parse(<jv>json</jv>, AddressBook.<jk>class</jk>);
+ * 	AddressBook <jv>addressBook</jv> = <jv>parser</jv>.read(<jv>json</jv>, AddressBook.<jk>class</jk>);
  * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>

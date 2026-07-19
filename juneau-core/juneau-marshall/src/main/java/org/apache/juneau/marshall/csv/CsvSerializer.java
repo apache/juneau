@@ -273,7 +273,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 
 	/**
 	 * Convenience delegator that opens a {@link RecordWriter} over the output using
-	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 * <b>default session arguments</b> (mirrors {@link #write(Object)}).
 	 *
 	 * <p>
 	 * CSV is naturally row-oriented &mdash; each {@link RecordWriter#write(Object) write(...)} call appends
@@ -281,17 +281,17 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 	 * implementation is a Phase 3b deferred item, so {@link #isRecordStreaming()} returns <jk>false</jk>.
 	 *
 	 * <p>
-	 * The real implementation lives on {@link CsvSerializerSession#serializeRecords(Object)}.  Callers that
+	 * The real implementation lives on {@link CsvSerializerSession#writeRecords(Object)}.  Callers that
 	 * need request-derived configuration should call {@link #createSession()} and invoke
-	 * {@link CsvSerializerSession#serializeRecords(Object)} on the built session instead.
+	 * {@link CsvSerializerSession#writeRecords(Object)} on the built session instead.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return getSession().serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return getSession().writeRecords(output);
 	}
 
 	@Override /* RecordWritable */

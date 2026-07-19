@@ -43,17 +43,17 @@ class XmlContent_Test extends TestBase {
 		t.f2 = null;
 
 		var sw = new StringWriter();
-		s1.serialize(t, sw);
+		s1.write(t, sw);
 		var r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>", r);
-		var t2 = p.parse(r, A.class);
+		var t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t));
 
 		sw = new StringWriter();
-		s2.serialize(t, sw);
+		s2.write(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>\n", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -61,14 +61,14 @@ class XmlContent_Test extends TestBase {
 		//-------------------------------------------------------------------------------------------------------------
 		t.f2 = "foobar";
 
-		r = s1.serialize(t);
+		r = s1.write(t);
 		assertEquals("<A f1='f1'>foobar</A>", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t));
 
-		r = s2.serialize(t);
+		r = s2.write(t);
 		assertEquals("<A f1='f1'>foobar</A>\n", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -76,14 +76,14 @@ class XmlContent_Test extends TestBase {
 		//-------------------------------------------------------------------------------------------------------------
 		t.f2 = "~!@#$%^&*()_+`-={}|[]\\:\";'<>?,.\n\r\t\b";
 
-		r = s1.serialize(t);
+		r = s1.write(t);
 		assertEquals("<A f1='f1'>~!@#$%^&amp;*()_+`-={}|[]\\:\";'&lt;&gt;?,.&#x000a;&#x000d;&#x0009;_x0008_</A>", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t));
 
-		r = s2.serialize(t);
+		r = s2.write(t);
 		assertEquals("<A f1='f1'>~!@#$%^&amp;*()_+`-={}|[]\\:\";'&lt;&gt;?,.&#x000a;&#x000d;&#x0009;_x0008_</A>\n", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -91,14 +91,14 @@ class XmlContent_Test extends TestBase {
 		//-------------------------------------------------------------------------------------------------------------
 		t.f2 = "  foobar";
 
-		r = s1.serialize(t);
+		r = s1.write(t);
 		assertEquals("<A f1='f1'>_x0020_ foobar</A>", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t));
 
-		r = s2.serialize(t);
+		r = s2.write(t);
 		assertEquals("<A f1='f1'>_x0020_ foobar</A>\n", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -106,14 +106,14 @@ class XmlContent_Test extends TestBase {
 		//-------------------------------------------------------------------------------------------------------------
 		t.f2 = "foobar  ";
 
-		r = s1.serialize(t);
+		r = s1.write(t);
 		assertEquals("<A f1='f1'>foobar _x0020_</A>", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t));
 
-		r = s2.serialize(t);
+		r = s2.write(t);
 		assertEquals("<A f1='f1'>foobar _x0020_</A>\n", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t));
 	}
 
@@ -145,17 +145,17 @@ class XmlContent_Test extends TestBase {
 		//-------------------------------------------------------------------------------------------------------------
 		t.f2 = null;
 
-		s1.serialize(t, sw);
+		s1.write(t, sw);
 		var r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>", r);
-		var t2 = p.parse(r, B.class);
+		var t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t));
 
 		sw = new StringWriter();
-		s2.serialize(t, sw);
+		s2.write(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>\n", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -163,14 +163,14 @@ class XmlContent_Test extends TestBase {
 		//-------------------------------------------------------------------------------------------------------------
 		t.f2 = "foobar";
 
-		r = s1.serialize(t);
+		r = s1.write(t);
 		assertEquals("<A f1='f1'>foobar</A>", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t));
 
-		r = s2.serialize(t);
+		r = s2.write(t);
 		assertEquals("<A f1='f1'>foobar</A>\n", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -178,14 +178,14 @@ class XmlContent_Test extends TestBase {
 		//-------------------------------------------------------------------------------------------------------------
 		t.f2 = "<xxx>foobar<yyy>baz</yyy>foobar</xxx>";
 
-		r = s1.serialize(t);
+		r = s1.write(t);
 		assertEquals("<A f1='f1'>&lt;xxx&gt;foobar&lt;yyy&gt;baz&lt;/yyy&gt;foobar&lt;/xxx&gt;</A>", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t));
 
-		r = s2.serialize(t);
+		r = s2.write(t);
 		assertEquals("<A f1='f1'>&lt;xxx&gt;foobar&lt;yyy&gt;baz&lt;/yyy&gt;foobar&lt;/xxx&gt;</A>\n", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -193,14 +193,14 @@ class XmlContent_Test extends TestBase {
 		//-------------------------------------------------------------------------------------------------------------
 		t.f2 = "  <xxx>foobar<yyy>baz</yyy>foobar</xxx>  ";
 
-		r = s1.serialize(t);
+		r = s1.write(t);
 		assertEquals("<A f1='f1'>_x0020_ &lt;xxx&gt;foobar&lt;yyy&gt;baz&lt;/yyy&gt;foobar&lt;/xxx&gt; _x0020_</A>", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t));
 
-		r = s2.serialize(t);
+		r = s2.write(t);
 		assertEquals("<A f1='f1'>_x0020_ &lt;xxx&gt;foobar&lt;yyy&gt;baz&lt;/yyy&gt;foobar&lt;/xxx&gt; _x0020_</A>\n", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -208,14 +208,14 @@ class XmlContent_Test extends TestBase {
 		//-------------------------------------------------------------------------------------------------------------
 		t.f2 = "<xxx x=\"x\">foobar</xxx>";
 
-		r = s1.serialize(t);
+		r = s1.write(t);
 		assertEquals("<A f1='f1'>&lt;xxx x=\"x\"&gt;foobar&lt;/xxx&gt;</A>", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t));
 
-		r = s2.serialize(t);
+		r = s2.write(t);
 		assertEquals("<A f1='f1'>&lt;xxx x=\"x\"&gt;foobar&lt;/xxx&gt;</A>\n", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -223,14 +223,14 @@ class XmlContent_Test extends TestBase {
 		//-------------------------------------------------------------------------------------------------------------
 		t.f2 = "<xxx x=\"x\">foo&lt;&gt;bar</xxx>";
 
-		r = s1.serialize(t);
+		r = s1.write(t);
 		assertEquals("<A f1='f1'>&lt;xxx x=\"x\"&gt;foo&amp;lt;&amp;gt;bar&lt;/xxx&gt;</A>", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t));
 
-		r = s2.serialize(t);
+		r = s2.write(t);
 		assertEquals("<A f1='f1'>&lt;xxx x=\"x\"&gt;foo&amp;lt;&amp;gt;bar&lt;/xxx&gt;</A>\n", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t));
 	}
 

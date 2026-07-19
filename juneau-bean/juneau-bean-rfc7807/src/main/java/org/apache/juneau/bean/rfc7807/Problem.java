@@ -45,7 +45,7 @@ import org.apache.juneau.marshall.*;
  * 		.set(<js>"balance"</js>, 30)
  * 		.set(<js>"accounts"</js>, <jsm>list</jsm>(<js>"/account/12345"</js>, <js>"/account/67890"</js>));
  *
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>problem</jv>);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>problem</jv>);
  * </p>
  *
  * <h5 class='section'>Notes:</h5>

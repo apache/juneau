@@ -126,7 +126,7 @@ public class FakeWriterSerializer extends WriterSerializer implements HttpPartSe
 	@SuppressWarnings({
 		"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 	})
-	protected void doSerialize(SerializerSession session, SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerSession session, SerializerPipe out, Object o) throws IOException, SerializeException {
 		out.getWriter().write(function.apply((WriterSerializerSession)session,o));
 	}
 

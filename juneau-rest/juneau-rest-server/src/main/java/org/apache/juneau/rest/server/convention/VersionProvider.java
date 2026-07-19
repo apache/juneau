@@ -119,7 +119,7 @@ public class VersionProvider {
 	 */
 	public void serve(RestResponse res) throws IOException {
 		try (var w = res.getDirectWriter("application/json")) {
-			JsonSerializer.DEFAULT_READABLE.serialize(info, w);
+			JsonSerializer.DEFAULT_READABLE.write(info, w);
 		}
 	}
 

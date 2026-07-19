@@ -119,7 +119,7 @@ public @interface SerializerConfig {
 	 * Binary output format.
 	 *
 	 * <p>
-	 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
+	 * When using the {@link OutputStreamSerializer#writeToString(Object)} method on stream-based serializers, this defines the format to use
 	 * when converting the resulting byte array to a string.
 	 *
 	 * <ul class='values'>
@@ -455,7 +455,7 @@ public @interface SerializerConfig {
 	 * The character set to use when writing to OutputStreams.
 	 *
 	 * <p>
-	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#write(Object, Object)}.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>

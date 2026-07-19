@@ -84,7 +84,7 @@ public class TestUtils extends BasicTestUtils {
 	 */
 	public static final void validateXml(Object o, XmlSerializer s) throws Exception {
 		s = s.copy().ws().ns().addNamespaceUrisToRoot().build();
-		var xml = s.serialize(o);
+		var xml = s.write(o);
 		XmlTestUtils.checkXmlWhitespace(xml);
 	}
 }

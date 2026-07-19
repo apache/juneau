@@ -111,18 +111,18 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 	}
 
 	@Override /* Overridden from SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		var w = getProtobufWriter(out);
 		if (o == null)
 			return;
 		var cm = getClassMetaForObject(o);
 		if (cm != null && (cm.isMap() && ! cm.isBean()) && ! cm.isBeanMap())
 			throw new SerializeException("Protobuf binary serialization requires a bean root type, not a raw Map.");
-		serializeBean(w, toBeanMap(o), getClassMetaForObject(o));
+		writeBean(w, toBeanMap(o), getClassMetaForObject(o));
 		w.flush();
 	}
 
-	private void serializeBean(ProtobufWriter out, BeanMap<?> m, ClassMeta<?> cm) throws SerializeException {
+	private void writeBean(ProtobufWriter out, BeanMap<?> m, ClassMeta<?> cm) throws SerializeException {
 		var pcm = ctx.getProtobufClassMeta(cm);
 
 		// Collect non-null property values keyed by name (presence model:  null => omit).
@@ -139,17 +139,17 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 			var value = values.get(entry.name());
 			if (value == null)
 				continue;
-			serializeField(out, entry, value);
+			writeField(out, entry, value);
 		}
 	}
 
-	private void serializeField(ProtobufWriter out, ProtobufFieldEntry entry, Object value) throws SerializeException {
+	private void writeField(ProtobufWriter out, ProtobufFieldEntry entry, Object value) throws SerializeException {
 		var fn = entry.fieldNumber();
 		switch (entry.kind()) {
-			case SCALAR, MESSAGE -> serializeSingle(out, fn, entry.scalarType(), value, entry.propertyType());
-			case PACKED_REPEATED -> serializePackedField(out, fn, entry, value);
-			case TAGGED_REPEATED -> serializeTaggedRepeatedField(out, fn, entry, value);
-			case MAP -> serializeMapField(out, fn, (Map)value, entry.propertyType());
+			case SCALAR, MESSAGE -> writeSingle(out, fn, entry.scalarType(), value, entry.propertyType());
+			case PACKED_REPEATED -> writePackedField(out, fn, entry, value);
+			case TAGGED_REPEATED -> writeTaggedRepeatedField(out, fn, entry, value);
+			case MAP -> writeMapField(out, fn, (Map)value, entry.propertyType());
 		}
 	}
 
@@ -161,7 +161,7 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 	 * The protobuf field table ({@link ProtobufClassMeta}) is built once per bean from declared/raw property types and
 	 * is session-independent, so the precomputed {@link ProtobufFieldEntry#kind() kind}/{@link
 	 * ProtobufFieldEntry#scalarType() scalarType} cannot account for session-registered swaps.  This method therefore
-	 * re-derives the shape at dispatch time, mirroring {@code CborSerializerSession.serializeAnything}'s
+	 * re-derives the shape at dispatch time, mirroring {@code CborSerializerSession.writeAnything}'s
 	 * {@link ClassMeta#getSwap(MarshallingSession) getSwap(this)} step.
 	 *
 	 * <p>
@@ -187,7 +187,7 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 	 * @param value The non-null value to serialize.
 	 * @param declaredType The declared property (or element/key/value) type, used only as a runtime-type hint.
 	 */
-	private void serializeSingle(ProtobufWriter out, int fn, ProtobufScalarType declaredScalar, Object value, ClassMeta<?> declaredType) throws SerializeException {
+	private void writeSingle(ProtobufWriter out, int fn, ProtobufScalarType declaredScalar, Object value, ClassMeta<?> declaredType) throws SerializeException {
 		var rType = getClassMetaForObject(value, declaredType);
 		var swap = rType.getSwap(this);
 		var v = value;
@@ -202,12 +202,12 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 			st = ProtobufClassMeta.defaultScalarType(rType);
 		}
 		if (rType.isBean() || rType.isMap())
-			serializeMessageField(out, fn, v);
+			writeMessageField(out, fn, v);
 		else
-			serializeScalarField(out, fn, st == ProtobufScalarType.AUTO ? ProtobufClassMeta.defaultScalarType(rType) : st, v, rType);
+			writeScalarField(out, fn, st == ProtobufScalarType.AUTO ? ProtobufClassMeta.defaultScalarType(rType) : st, v, rType);
 	}
 
-	private void serializeMessageField(ProtobufWriter out, int fn, Object value) throws SerializeException {
+	private void writeMessageField(ProtobufWriter out, int fn, Object value) throws SerializeException {
 		var aType = push2("field", value, getClassMetaForObject(value));
 		if (aType == null) {  // Recursion detected.
 			pop();
@@ -215,7 +215,7 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 		}
 		try {
 			var block = new ByteArrayOutputStream();
-			serializeBean(new ProtobufWriter(block), toBeanMap(value), aType);
+			writeBean(new ProtobufWriter(block), toBeanMap(value), aType);
 			out.writeTag(fn, WireType.LEN);
 			out.writeLenDelimited(block.toByteArray());
 		} finally {
@@ -223,7 +223,7 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 		}
 	}
 
-	private void serializePackedField(ProtobufWriter out, int fn, ProtobufFieldEntry entry, Object value) throws SerializeException {
+	private void writePackedField(ProtobufWriter out, int fn, ProtobufFieldEntry entry, Object value) throws SerializeException {
 		var elements = toElementList(value);
 		if (elements.isEmpty())
 			return;
@@ -240,17 +240,17 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 		out.writeLenDelimited(block.toByteArray());
 	}
 
-	private void serializeTaggedRepeatedField(ProtobufWriter out, int fn, ProtobufFieldEntry entry, Object value) throws SerializeException {
+	private void writeTaggedRepeatedField(ProtobufWriter out, int fn, ProtobufFieldEntry entry, Object value) throws SerializeException {
 		var elements = toElementList(value);
 		var elType = entry.propertyType().getElementType();
 		for (var el : elements) {
 			if (el == null)
 				continue;
-			serializeSingle(out, fn, entry.scalarType(), el, elType);
+			writeSingle(out, fn, entry.scalarType(), el, elType);
 		}
 	}
 
-	private void serializeMapField(ProtobufWriter out, int fn, Map map, ClassMeta<?> mapType) throws SerializeException {
+	private void writeMapField(ProtobufWriter out, int fn, Map map, ClassMeta<?> mapType) throws SerializeException {
 		var keyType = mapType.getKeyType();
 		var valueType = mapType.getValueType();
 		var keySt = ProtobufClassMeta.defaultScalarType(keyType);
@@ -263,14 +263,14 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 			var block = new ByteArrayOutputStream();
 			var bw = new ProtobufWriter(block);
 			// Entry message:  key=field 1, value=field 2.  Keys and values honor any registered swap.
-			serializeSingle(bw, 1, keySt, k, keyType);
-			serializeSingle(bw, 2, valSt, v, valueType);
+			writeSingle(bw, 1, keySt, k, keyType);
+			writeSingle(bw, 2, valSt, v, valueType);
 			out.writeTag(fn, WireType.LEN);
 			out.writeLenDelimited(block.toByteArray());
 		});
 	}
 
-	private void serializeScalarField(ProtobufWriter out, int fn, ProtobufScalarType scalarType, Object value, ClassMeta<?> cm) throws SerializeException {
+	private void writeScalarField(ProtobufWriter out, int fn, ProtobufScalarType scalarType, Object value, ClassMeta<?> cm) throws SerializeException {
 		var st = scalarType;
 		out.writeTag(fn, st.wireType());
 		encodeScalarValue(out, st, value, cm);
@@ -319,15 +319,15 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 
 	private String scalarToString(Object value, ClassMeta<?> cm) throws SerializeException {
 		if (cm.isDate())
-			return serializeDate((Date)value, cm);
+			return writeDate((Date)value, cm);
 		if (cm.isCalendar())
-			return serializeCalendar(value, cm);
+			return writeCalendar(value, cm);
 		if (cm.isTemporal())
-			return serializeTemporal((TemporalAccessor)value, cm);
+			return writeTemporal((TemporalAccessor)value, cm);
 		if (cm.isDuration())
-			return serializeDuration((Duration)value);
+			return writeDuration((Duration)value);
 		if (cm.isPeriod())
-			return serializePeriod((Period)value);
+			return writePeriod((Period)value);
 		return toString(value);
 	}
 }

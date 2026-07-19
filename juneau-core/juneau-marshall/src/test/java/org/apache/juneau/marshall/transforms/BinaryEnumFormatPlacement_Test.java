@@ -39,12 +39,12 @@ class BinaryEnumFormatPlacement_Test {
 	@Test void a01_binary_defaultIsNotSet() {
 		// NOT_SET → no swap fires → byte[] falls back to the serializer's native array representation.
 		var s = Json5Serializer.create().build();
-		assertEquals("{b:[72,101,108,108,111]}", s.serialize(new A01()));
+		assertEquals("{b:[72,101,108,108,111]}", s.write(new A01()));
 	}
 
 	@Test void a02_binary_contextOverridesDefault() {
 		var s = Json5Serializer.create().binaryFormat(BinaryFormat.BASE64).build();
-		assertEquals("{b:'SGVsbG8='}", s.serialize(new A01()));
+		assertEquals("{b:'SGVsbG8='}", s.write(new A01()));
 	}
 
 	@Marshalled(binaryFormat = BinaryFormat.BASE64)
@@ -52,7 +52,7 @@ class BinaryEnumFormatPlacement_Test {
 
 	@Test void a03_binary_classOverridesContext() {
 		var s = Json5Serializer.create().binaryFormat(BinaryFormat.HEX).build();
-		assertEquals("{b:'SGVsbG8='}", s.serialize(new A03()));
+		assertEquals("{b:'SGVsbG8='}", s.write(new A03()));
 	}
 
 	@Marshalled(binaryFormat = BinaryFormat.HEX)
@@ -63,14 +63,14 @@ class BinaryEnumFormatPlacement_Test {
 
 	@Test void a04_binary_propertyOverridesClass() {
 		var s = Json5Serializer.create().build();
-		assertEquals("{b:'48 65 6C 6C 6F'}", s.serialize(new A04()));
+		assertEquals("{b:'48 65 6C 6C 6F'}", s.write(new A04()));
 	}
 
 	public static class A05 { public byte[] b = BYTES; }
 
 	@Test void a05_binary_base64Url() {
 		var s = Json5Serializer.create().binaryFormat(BinaryFormat.BASE64_URL).build();
-		assertEquals("{b:'SGVsbG8'}", s.serialize(new A05()));
+		assertEquals("{b:'SGVsbG8'}", s.write(new A05()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -90,12 +90,12 @@ class BinaryEnumFormatPlacement_Test {
 
 	@Test void b01_enum_defaultIsToString() {
 		var s = Json5Serializer.create().build();
-		assertEquals("{e:'alpha beta'}", s.serialize(new B01()));
+		assertEquals("{e:'alpha beta'}", s.write(new B01()));
 	}
 
 	@Test void b02_enum_contextOverridesDefault() {
 		var s = Json5Serializer.create().enumFormat(EnumFormat.NAME).build();
-		assertEquals("{e:'ALPHA_BETA'}", s.serialize(new B01()));
+		assertEquals("{e:'ALPHA_BETA'}", s.write(new B01()));
 	}
 
 	@Marshalled(enumFormat = EnumFormat.NAME)
@@ -103,7 +103,7 @@ class BinaryEnumFormatPlacement_Test {
 
 	@Test void b03_enum_classOverridesContext() {
 		var s = Json5Serializer.create().enumFormat(EnumFormat.LOWER_HYPHEN).build();
-		assertEquals("{e:'ALPHA_BETA'}", s.serialize(new B03()));
+		assertEquals("{e:'ALPHA_BETA'}", s.write(new B03()));
 	}
 
 	@Marshalled(enumFormat = EnumFormat.NAME)
@@ -114,14 +114,14 @@ class BinaryEnumFormatPlacement_Test {
 
 	@Test void b04_enum_propertyOverridesClass() {
 		var s = Json5Serializer.create().build();
-		assertEquals("{e:'alpha-beta'}", s.serialize(new B04()));
+		assertEquals("{e:'alpha-beta'}", s.write(new B04()));
 	}
 
 	public static class B05 { public E e = E.ALPHA_BETA; }
 
 	@Test void b05_enum_ordinal() {
 		var s = Json5Serializer.create().enumFormat(EnumFormat.ORDINAL).build();
-		assertEquals("{e:0}", s.serialize(new B05()));
+		assertEquals("{e:0}", s.write(new B05()));
 	}
 
 	@Marshalled(enumFormat = EnumFormat.ORDINAL)
@@ -129,7 +129,7 @@ class BinaryEnumFormatPlacement_Test {
 
 	@Test void b06_enum_ordinalAtClass() {
 		var s = Json5Serializer.create().build();
-		assertEquals("{e:1}", s.serialize(new B06()));
+		assertEquals("{e:1}", s.write(new B06()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ class BinaryEnumFormatPlacement_Test {
 
 	@Test void c01_marshalledConfig_applies() {
 		var s = Json5Serializer.create().applyAnnotations(C01Config.class).build();
-		var json = s.serialize(new C01Bean());
+		var json = s.write(new C01Bean());
 		assertTrue(json.contains("b:'48656C6C6F'"), "binary hex: " + json);
 		assertTrue(json.contains("e:'ALPHA_BETA'"), "enum name: " + json);
 	}
@@ -169,7 +169,7 @@ class BinaryEnumFormatPlacement_Test {
 			.binaryFormat(BinaryFormat.HEX)
 			.enumFormat(EnumFormat.NAME)
 			.build();
-		var json = s.serialize(new D01());
+		var json = s.write(new D01());
 		assertTrue(json.contains("b:'48656C6C6F'"), "binary hex: " + json);
 		assertTrue(json.contains("e:'ALPHA_BETA'"), "enum name: " + json);
 	}

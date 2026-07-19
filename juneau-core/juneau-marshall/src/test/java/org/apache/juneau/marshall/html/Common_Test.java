@@ -38,15 +38,15 @@ class Common_Test extends TestBase {
 		var t1 = A.create();
 
 		s.keepNullProperties();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>s1</td><td><null/></td></tr><tr><td>s2</td><td>s2</td></tr></table>", r);
-		var t2 = p.parse(r, A.class);
+		var t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t1));
 
 		s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>s2</td><td>s2</td></tr></table>", r);
-		t2 = p.parse(r, A.class);
+		t2 = p.read(r, A.class);
 		assertEquals(json(t2), json(t1));
 	}
 
@@ -67,16 +67,16 @@ class Common_Test extends TestBase {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		var p = HtmlParser.DEFAULT;
 		var t1 = B.create();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><table><tr><th>key</th><th>value</th></tr></table></td></tr><tr><td>f2</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>f2a</td><td><null/></td></tr><tr><td>f2b</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>s2</td><td>s2</td></tr></table></td></tr></table></td></tr></table>", r);
-		var t2 = p.parse(r, B.class);
+		var t2 = p.read(r, B.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyMaps();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f2</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>f2a</td><td><null/></td></tr><tr><td>f2b</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>s2</td><td>s2</td></tr></table></td></tr></table></td></tr></table>", r);
-		t2 = p.parse(r, B.class);
+		t2 = p.read(r, B.class);
 		assertNull(t2.f1);
 	}
 
@@ -98,16 +98,16 @@ class Common_Test extends TestBase {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		var p = HtmlParser.DEFAULT;
 		var t1 = C.create();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><ul></ul></td></tr><tr><td>f2</td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td>s2</td></tr></table></td></tr></table>", r);
-		var t2 = p.parse(r, C.class);
+		var t2 = p.read(r, C.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f2</td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td>s2</td></tr></table></td></tr></table>", r);
-		t2 = p.parse(r, C.class);
+		t2 = p.read(r, C.class);
 		assertNull(t2.f1);
 	}
 
@@ -129,7 +129,7 @@ class Common_Test extends TestBase {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		var p = HtmlParser.DEFAULT;
 		var t1 = D.create();
-		var r = s.build().serialize(t1);
+		var r = s.build().write(t1);
 
 		assertEquals(
 			"<table>"
@@ -151,11 +151,11 @@ class Common_Test extends TestBase {
 			+"</table>",
 			r);
 
-		var t2 = p.parse(r, D.class);
+		var t2 = p.read(r, D.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
-		r = s.build().serialize(t1);
+		r = s.build().write(t1);
 		assertEquals(
 			"<table>"
 				+"<tr><th>key</th><th>value</th></tr>"
@@ -171,7 +171,7 @@ class Common_Test extends TestBase {
 				+"</tr>"
 			+"</table>",
 			r);
-		t2 = p.parse(r, D.class);
+		t2 = p.read(r, D.class);
 		assertNull(t2.f1);
 	}
 
@@ -198,8 +198,8 @@ class Common_Test extends TestBase {
 		t.f1 = new URI("http://f1");
 		t.f2 = url("http://f2");
 
-		var html = s.serialize(t);
-		t = p.parse(html, G.class);
+		var html = s.write(t);
+		t = p.read(html, G.class);
 		assertEquals("http://uri", t.uri.toString());
 		assertEquals("http://f1", t.f1.toString());
 		assertEquals("http://f2", t.f2.toString());
@@ -225,21 +225,21 @@ class Common_Test extends TestBase {
 		r3.r1 = r1;
 
 		// No recursion detection
-		assertThrowsWithMessage(Exception.class, "It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().serialize(r1));
-		assertThrowsWithMessage(Exception.class, "It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().serialize(r1));
+		assertThrowsWithMessage(Exception.class, "It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().write(r1));
+		assertThrowsWithMessage(Exception.class, "It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().write(r1));
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
-		assertThrowsWithMessage(Exception.class, l("[0] <noname>:org.apache.juneau.marshall.html.Common_Test$R1", "->[1] r2:org.apache.juneau.marshall.html.Common_Test$R2", "->[2] r3:org.apache.juneau.marshall.html.Common_Test$R3", "->[3] r1:org.apache.juneau.marshall.html.Common_Test$R1"), ()->s.build().serialize(r1));
+		assertThrowsWithMessage(Exception.class, l("[0] <noname>:org.apache.juneau.marshall.html.Common_Test$R1", "->[1] r2:org.apache.juneau.marshall.html.Common_Test$R2", "->[2] r3:org.apache.juneau.marshall.html.Common_Test$R3", "->[3] r1:org.apache.juneau.marshall.html.Common_Test$R1"), ()->s.build().write(r1));
 
 		s.ignoreRecursions();
 		assertEquals(
 			"<table><tr><th>key</th><th>value</th></tr><tr><td>name</td><td>foo</td></tr><tr><td>r2</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>name</td><td>bar</td></tr><tr><td>r3</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>name</td><td>baz</td></tr></table></td></tr></table></td></tr></table>",
-			s.build().serialize(r1)
+			s.build().write(r1)
 		);
 
 		// Make sure this doesn't blow up.
-		s.build().getSchemaSerializer().serialize(r1);
+		s.build().getSchemaSerializer().write(r1);
 	}
 
 	public static class R1 {
@@ -272,7 +272,7 @@ class Common_Test extends TestBase {
 				+"<tr><td>f2</td><td>100</td></tr>"
 				+"<tr><td>f3</td><td>true</td></tr>"
 			+"</table>",
-			s.serialize(a));
+			s.write(a));
 	}
 
 	public static class J {
@@ -303,7 +303,7 @@ class Common_Test extends TestBase {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 
 		var bean = new K();
-		var html = s.serialize(bean);
+		var html = s.write(bean);
 
 		// Verify all formatted fields are serialized correctly
 		assertTrue(html.contains("<td>doubleField</td><td>2.718</td>"));

@@ -117,14 +117,14 @@ class Problem_RoundTrip_Test {
 				.setDetail("Your current balance is 30, but that costs 50.")
 				.setInstance(new URI("/account/12345/msgs/abc"));
 
-			var j1 = READABLE.serialize(a);
-			var copy = PAR.parse(j1, Problem.class);
+			var j1 = READABLE.write(a);
+			var copy = PAR.read(j1, Problem.class);
 			assertEquals(a.getType(), copy.getType());
 			assertEquals(a.getTitle(), copy.getTitle());
 			assertEquals(a.getStatus(), copy.getStatus());
 			assertEquals(a.getDetail(), copy.getDetail());
 			assertEquals(a.getInstance(), copy.getInstance());
-			var j2 = READABLE.serialize(copy);
+			var j2 = READABLE.write(copy);
 			assertEquals(j1, j2);
 		}
 
@@ -137,25 +137,25 @@ class Problem_RoundTrip_Test {
 				.setDetail("d")
 				.setInstance(new URI("/i"));
 
-			var j1 = SER.serialize(a);
+			var j1 = SER.write(a);
 			assertEquals(
 				"{\"detail\":\"d\",\"instance\":\"/i\",\"status\":400,\"title\":\"t\",\"type\":\"https://example.com/x\"}",
 				j1
 			);
-			var copy = PAR.parse(j1, Problem.class);
-			assertEquals(j1, SER.serialize(copy));
+			var copy = PAR.read(j1, Problem.class);
+			assertEquals(j1, SER.write(copy));
 		}
 
 		@Test
 		void b03_emptyProblem_serializesAsEmptyObject() {
 			var a = new Problem();
-			assertEquals("{}", SER.serialize(a));
+			assertEquals("{}", SER.write(a));
 		}
 
 		@Test
 		void b04_typeAbsent_doesNotAppearInJson() {
 			var a = new Problem().setTitle("t").setStatus(500);
-			var json = SER.serialize(a);
+			var json = SER.write(a);
 			assertFalse(json.contains("type"), () -> "JSON should not contain 'type': " + json);
 			assertFalse(json.contains("about:blank"), () -> "JSON should not contain 'about:blank': " + json);
 		}
@@ -165,7 +165,7 @@ class Problem_RoundTrip_Test {
 			var a = new Problem().setTitle("t");
 			a.getTypeOrDefault();
 			assertNull(a.getType(), "getTypeOrDefault() must not eagerly populate the type field");
-			assertFalse(SER.serialize(a).contains("type"));
+			assertFalse(SER.write(a).contains("type"));
 		}
 
 		@Test
@@ -173,7 +173,7 @@ class Problem_RoundTrip_Test {
 			var a = Problem.fromStatus(404, "Not Found", "Resource missing");
 			assertEquals(
 				"{\"detail\":\"Resource missing\",\"status\":404,\"title\":\"Not Found\"}",
-				SER.serialize(a)
+				SER.write(a)
 			);
 		}
 
@@ -182,14 +182,14 @@ class Problem_RoundTrip_Test {
 			var a = Problem.fromStatus(500, "Internal Server Error", "boom");
 			assertEquals(
 				"{\"detail\":\"boom\",\"status\":500,\"title\":\"Internal Server Error\"}",
-				SER.serialize(a)
+				SER.write(a)
 			);
 		}
 
 		@Test
 		void b08_statusOmitted_whenNull() {
 			var a = new Problem().setTitle("t");
-			var json = SER.serialize(a);
+			var json = SER.write(a);
 			assertEquals("{\"title\":\"t\"}", json);
 		}
 
@@ -217,7 +217,7 @@ class Problem_RoundTrip_Test {
 				.set("balance", 30)
 				.set("accounts", new String[]{"/account/12345", "/account/67890"});
 
-			var json = SER.serialize(a);
+			var json = SER.write(a);
 			assertTrue(json.contains("\"balance\":30"), () -> "Missing flat balance: " + json);
 			assertTrue(json.contains("\"accounts\":[\"/account/12345\",\"/account/67890\"]"),
 				() -> "Missing flat accounts: " + json);
@@ -235,14 +235,14 @@ class Problem_RoundTrip_Test {
 				.set("balance", 30)
 				.set("accountId", "abc");
 
-			var json = SER.serialize(a);
-			var copy = PAR.parse(json, Problem.class);
+			var json = SER.write(a);
+			var copy = PAR.read(json, Problem.class);
 
 			assertEquals(30, ((Number) copy.get("balance")).intValue());
 			assertEquals("abc", copy.get("accountId"));
 			assertTrue(copy.extraKeys().contains("balance"));
 			assertTrue(copy.extraKeys().contains("accountId"));
-			assertEquals(json, SER.serialize(copy));
+			assertEquals(json, SER.write(copy));
 		}
 
 		@Test
@@ -256,7 +256,7 @@ class Problem_RoundTrip_Test {
 		void c04_extensionsRoundTripFromJson_intoExtra() throws Exception {
 			var json = "{\"type\":\"https://example.com/x\",\"title\":\"t\",\"status\":403,"
 				+ "\"detail\":\"d\",\"instance\":\"/i\",\"balance\":30,\"answer\":42}";
-			var a = PAR.parse(json, Problem.class);
+			var a = PAR.read(json, Problem.class);
 
 			assertEquals(new URI("https://example.com/x"), a.getType());
 			assertEquals("t", a.getTitle());

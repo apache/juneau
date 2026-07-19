@@ -454,7 +454,7 @@ class BigNumberFormat_BigDecimal_RoundTrip_Test extends TestBase {
 		var x = new BigDecimal("3.14159");
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, BigDecimal.class);
+			var x2 = p.read(out, BigDecimal.class);
 			assertBigDecimalEquals(expectedAfter(x, t, fmt), x2, "fmt=" + fmt);
 		} catch (Exception e) {
 			// Mirror RoundTripDateTime_Test.a06_standaloneInstant: some serializers (URL-encoding, CSV-style)

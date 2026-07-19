@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
  * Unit tests for the MsgPack opt-in binary-native token surface (175ad).  Verifies that
  * {@link MsgPackParserSession#parseNativeTokens(Object) parseNativeTokens} surfaces the {@code ext}
  * type byte as token-level metadata, and that the default
- * {@link MsgPackParserSession#parseTokens(Object) parseTokens} path still drops it.
+ * {@link MsgPackParserSession#readTokens(Object) readTokens} path still drops it.
  */
 @SuppressWarnings({
 	"resource" // Token readers are closed via try-with-resources; JDT's flow analysis over chained factory calls yields false-positive leak reports.
@@ -46,7 +46,7 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 	@Test void a01_ext() throws Exception {
 		// fixext4 with type 5 and 4-byte payload.
 		var data = ext(5, (byte) 1, (byte) 2, (byte) 3, (byte) 4);
-		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().parseTokens(data)) {
+		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().readTokens(data)) {
 			assertEquals(TokenType.VALUE_BINARY, r.next());
 			assertEquals(BinaryNativeKind.MSGPACK_EXT, r.getNativeKind());
 			assertEquals(5, r.getExtType());
@@ -57,16 +57,16 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 	@Test void a02_negativeExtType() throws Exception {
 		// Negative ext type (-1) — must round-trip as signed int8.
 		var data = ext(-1, (byte) 0x7F);
-		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().parseTokens(data)) {
+		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().readTokens(data)) {
 			assertEquals(TokenType.VALUE_BINARY, r.next());
 			assertEquals(-1, r.getExtType());
 		}
 	}
 
 	@Test void a03_defaultStillNormalizes() throws Exception {
-		// Same input via plain parseTokens: VALUE_BINARY with no native metadata, type byte dropped.
+		// Same input via plain readTokens: VALUE_BINARY with no native metadata, type byte dropped.
 		var data = ext(5, (byte) 1, (byte) 2, (byte) 3, (byte) 4);
-		try (var r = MsgPackParser.DEFAULT.parseTokens(data)) {
+		try (var r = MsgPackParser.DEFAULT.readTokens(data)) {
 			assertEquals(TokenType.VALUE_BINARY, r.next());
 			assertArrayEquals(new byte[]{1, 2, 3, 4}, r.getBinary());
 		}
@@ -74,7 +74,7 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 
 	@Test void a04_tagAccessOnMsgPack() throws Exception {
 		var data = ext(5, (byte) 0);
-		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().parseTokens(data)) {
+		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().readTokens(data)) {
 			assertEquals(TokenType.VALUE_BINARY, r.next());
 			// MsgPack has no tags.
 			assertEquals(0, r.getTagCount());
@@ -84,7 +84,7 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 
 	@Test void a05_simpleValueOnMsgPack() throws Exception {
 		var data = ext(5, (byte) 0);
-		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().parseTokens(data)) {
+		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().readTokens(data)) {
 			assertEquals(TokenType.VALUE_BINARY, r.next());
 			// MsgPack has no CBOR simple values.
 			assertThrows(IllegalStateException.class, r::getSimpleValue);
@@ -94,7 +94,7 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 	@Test void a06_extTypeOutOfStateThrows() throws Exception {
 		// A plain string token has no ext: getExtType must throw.
 		var data = new byte[]{(byte) 0xA1, (byte) 'a'};  // fixstr len 1, "a"
-		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().parseTokens(data)) {
+		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().readTokens(data)) {
 			assertEquals(TokenType.VALUE_STRING, r.next());
 			assertThrows(IllegalStateException.class, r::getExtType);
 		}
@@ -105,7 +105,7 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 		var p = new byte[257];
 		for (var i = 0; i < 257; i++) p[i] = (byte) i;
 		var data = ext(127, p);
-		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().parseTokens(data)) {
+		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().readTokens(data)) {
 			assertEquals(TokenType.VALUE_BINARY, r.next());
 			assertEquals(127, r.getExtType());
 			assertArrayEquals(p, r.getBinary());
@@ -114,10 +114,10 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 
 	@Test void b01_writeExt() throws Exception {
 		var bos = new ByteArrayOutputStream();
-		try (var w = MsgPackSerializer.DEFAULT.getSession().serializeTokens(bos)) {
+		try (var w = MsgPackSerializer.DEFAULT.getSession().writeTokens(bos)) {
 			w.writeExt(5, new byte[]{1, 2, 3, 4});
 		}
-		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().parseTokens(bos.toByteArray())) {
+		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().readTokens(bos.toByteArray())) {
 			assertEquals(TokenType.VALUE_BINARY, r.next());
 			assertEquals(BinaryNativeKind.MSGPACK_EXT, r.getNativeKind());
 			assertEquals(5, r.getExtType());
@@ -128,12 +128,12 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 	@Test void b02_extInsideArray() throws Exception {
 		// Round-trips an ext value inside an array.
 		var bos = new ByteArrayOutputStream();
-		try (var w = MsgPackSerializer.DEFAULT.getSession().serializeTokens(bos)) {
+		try (var w = MsgPackSerializer.DEFAULT.getSession().writeTokens(bos)) {
 			w.startArray();
 			w.writeExt(5, new byte[]{1, 2, 3, 4});
 			w.endArray();
 		}
-		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().parseTokens(bos.toByteArray())) {
+		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().readTokens(bos.toByteArray())) {
 			assertEquals(TokenType.START_ARRAY, r.next());
 			assertEquals(TokenType.VALUE_BINARY, r.next());
 			assertEquals(5, r.getExtType());
@@ -145,13 +145,13 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 	@Test void b03_extInsideMap() throws Exception {
 		// Round-trips an ext value inside a map.
 		var bos = new ByteArrayOutputStream();
-		try (var w = MsgPackSerializer.DEFAULT.getSession().serializeTokens(bos)) {
+		try (var w = MsgPackSerializer.DEFAULT.getSession().writeTokens(bos)) {
 			w.startObject();
 			w.fieldName("k");
 			w.writeExt(5, new byte[]{9});
 			w.endObject();
 		}
-		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().parseTokens(bos.toByteArray())) {
+		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().readTokens(bos.toByteArray())) {
 			assertEquals(TokenType.START_OBJECT, r.next());
 			assertEquals(TokenType.FIELD_NAME, r.next());
 			assertEquals("k", r.getFieldName());
@@ -164,10 +164,10 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 
 	@Test void b04_negativeType() throws Exception {
 		var bos = new ByteArrayOutputStream();
-		try (var w = MsgPackSerializer.DEFAULT.getSession().serializeTokens(bos)) {
+		try (var w = MsgPackSerializer.DEFAULT.getSession().writeTokens(bos)) {
 			w.writeExt(-1, new byte[]{0});
 		}
-		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().parseTokens(bos.toByteArray())) {
+		try (var r = MsgPackParser.DEFAULT_NATIVE.getSession().readTokens(bos.toByteArray())) {
 			assertEquals(TokenType.VALUE_BINARY, r.next());
 			assertEquals(-1, r.getExtType());
 		}
@@ -177,7 +177,7 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 		// MsgPack doesn't support CBOR tags; the inherited default-throwing writeTag/writeSimple
 		// should fire.
 		var bos = new ByteArrayOutputStream();
-		try (var w = MsgPackSerializer.DEFAULT.getSession().serializeTokens(bos)) {
+		try (var w = MsgPackSerializer.DEFAULT.getSession().writeTokens(bos)) {
 			assertThrows(UnsupportedOperationException.class, () -> w.writeTag(0));
 			assertThrows(UnsupportedOperationException.class, () -> w.writeSimple(16));
 		}

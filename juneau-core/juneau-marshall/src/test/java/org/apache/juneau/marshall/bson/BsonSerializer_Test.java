@@ -33,79 +33,79 @@ import org.junit.jupiter.api.*;
 class BsonSerializer_Test extends TestBase {
 
 	@Test
-	void a01_serializeMap() throws Exception {
+	void a01_writeMap() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(JsonMap.of("a", 1, "b", "foo"));
+		var bytes = s.write(JsonMap.of("a", 1, "b", "foo"));
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
 
 	@Test
-	void a02_serializeList() throws Exception {
+	void a02_writeList() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(List.of(1, 2, 3));
+		var bytes = s.write(List.of(1, 2, 3));
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
 
 	@Test
-	void a03_serializeToOutputStream() throws Exception {
+	void a03_writeToOutputStream() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var out = new ByteArrayOutputStream();
-		s.serialize(JsonMap.of("x", 42), out);
+		s.write(JsonMap.of("x", 42), out);
 		var bytes = out.toByteArray();
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
 
 	@Test
-	void a04_serializeBigDecimalAsDecimal128() throws Exception {
+	void a04_writeBigDecimalAsDecimal128() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
 		var value = new BigDecimal("123.45");
-		var bytes = s.serialize(value);
-		var result = p.parse(bytes, BigDecimal.class);
+		var bytes = s.write(value);
+		var result = p.read(bytes, BigDecimal.class);
 		assertNotNull(result);
 		assertEquals(0, value.compareTo(result), "BigDecimal round-trip via Decimal128");
 	}
 
 	@Test
-	void a05_serializeScalarWrapsInValue() throws Exception {
+	void a05_writeScalarWrapsInValue() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize("hello");
+		var bytes = s.write("hello");
 		assertNotNull(bytes);
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertTrue(parsed.containsKey("value"));
 		assertEquals("hello", parsed.get("value"));
 	}
 
 	@Test
-	void a06_serializeDateAsDatetime() throws Exception {
+	void a06_writeDateAsDatetime() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var instant = Instant.ofEpochMilli(1700000000000L);
-		var bytes = s.serialize(JsonMap.of("ts", instant));
+		var bytes = s.write(JsonMap.of("ts", instant));
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertEquals(1700000000000L, parsed.get("ts"));
 	}
 
 	@Test
-	void a07_serializeByteArray() throws Exception {
+	void a07_writeByteArray() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var data = new byte[] { 0x01, 0x02, 0x03 };
-		var bytes = s.serialize(JsonMap.of("data", data));
+		var bytes = s.write(JsonMap.of("data", data));
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertArrayEquals(data, (byte[])parsed.get("data"));
 	}
 
 	@Test
-	void a08_serializeEnum() throws Exception {
+	void a08_writeEnum() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(JsonMap.of("size", Size.LARGE));
+		var bytes = s.write(JsonMap.of("size", Size.LARGE));
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertEquals("LARGE", parsed.get("size"));
 	}
 

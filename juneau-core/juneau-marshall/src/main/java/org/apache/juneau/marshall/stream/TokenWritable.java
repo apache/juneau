@@ -24,8 +24,8 @@ import java.io.*;
  *
  * <p>
  * Because {@link TokenWriter} IS-A {@link RecordWriter}, FULL formats get the record surface for
- * free &mdash; the {@link #serializeRecords(Object)} default returns
- * {@link #serializeTokens(Object)}.  Capability is detected via {@code instanceof}.
+ * free &mdash; the {@link #writeRecords(Object)} default returns
+ * {@link #writeTokens(Object)}.  Capability is detected via {@code instanceof}.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li>{@link TokenReadable} &mdash; the symmetric reader role.
@@ -46,7 +46,7 @@ public interface TokenWritable extends RecordWritable {
 	 * @return A new {@link TokenWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
-	TokenWriter serializeTokens(Object output) throws IOException;
+	TokenWriter writeTokens(Object output) throws IOException;
 
 	/**
 	 * FULL formats get record semantics for free &mdash; a {@link TokenWriter} IS-A
@@ -54,11 +54,11 @@ public interface TokenWritable extends RecordWritable {
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter} cursor (the same object as
-	 * 	{@link #serializeTokens(Object)}).
+	 * 	{@link #writeTokens(Object)}).
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override
-	default RecordWriter serializeRecords(Object output) throws IOException {
-		return serializeTokens(output);
+	default RecordWriter writeRecords(Object output) throws IOException {
+		return writeTokens(output);
 	}
 }

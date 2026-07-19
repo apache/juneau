@@ -2860,8 +2860,8 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				: buf;
 
 			try (var w = (writerKind == TokenWriter.class)
-					? ((TokenWritable) serializer).serializeTokens(output)
-					: ((RecordWritable) serializer).serializeRecords(output)) {
+					? ((TokenWritable) serializer).writeTokens(output)
+					: ((RecordWritable) serializer).writeRecords(output)) {
 				((Consumer) consumer).accept(w);
 				w.flush();
 			}

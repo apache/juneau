@@ -56,7 +56,7 @@ class OpenApiYamlRoundTrip_Test extends TestBase {
 		assertTrue(yaml.contains("openapi"), () -> "Expected YAML to mention 'openapi' field — got: " + yaml);
 		assertTrue(yaml.contains("Pet Store"), () -> "Expected YAML to retain title 'Pet Store' — got: " + yaml);
 
-		var parsed = YamlParser.DEFAULT.parse(yaml, OpenApi.class);
+		var parsed = YamlParser.DEFAULT.read(yaml, OpenApi.class);
 
 		// Structural equality across each meaningful slot.
 		assertEquals(original.getOpenapi(), parsed.getOpenapi());
@@ -112,7 +112,7 @@ class OpenApiYamlRoundTrip_Test extends TestBase {
 		var yaml = YamlSerializer.DEFAULT_READABLE.toString(original);
 		assertTrue(yaml.contains("3.1.0"), () -> "Expected YAML to keep the 3.1.0 version literal — got first 500 chars: " + yaml.substring(0, Math.min(500, yaml.length())));
 
-		var parsed = YamlParser.DEFAULT.parse(yaml, OpenApi.class);
+		var parsed = YamlParser.DEFAULT.read(yaml, OpenApi.class);
 
 		// openapi version preserved.
 		assertEquals(original.getOpenapi(), parsed.getOpenapi());
@@ -147,7 +147,7 @@ class OpenApiYamlRoundTrip_Test extends TestBase {
 		assertTrue(body.contains("3.1.0"), () -> "Expected 3.1.0 in YAML body — got first 500 chars: " + body.substring(0, Math.min(500, body.length())));
 
 		// Round-trip the served bytes through the YAML parser.
-		var parsed = YamlParser.DEFAULT.parse(body, OpenApi.class);
+		var parsed = YamlParser.DEFAULT.read(body, OpenApi.class);
 		assertEquals("3.1.0", parsed.getOpenapi());
 		assertNotNull(parsed.getPaths());
 		assertTrue(parsed.getPaths().containsKey("/pet"), () -> "Expected /pet path in parsed YAML doc — actual: " + parsed.getPaths().keySet());

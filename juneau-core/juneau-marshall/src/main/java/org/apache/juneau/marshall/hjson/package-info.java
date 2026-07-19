@@ -47,8 +47,8 @@
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
- * 	String <jv>hjson</jv> = HjsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myBean</jv>);
- * 	MyBean <jv>bean</jv> = HjsonParser.<jsf>DEFAULT</jsf>.parse(<jv>hjson</jv>, MyBean.<jk>class</jk>);
+ * 	String <jv>hjson</jv> = HjsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
+ * 	MyBean <jv>bean</jv> = HjsonParser.<jsf>DEFAULT</jsf>.read(<jv>hjson</jv>, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Or use the marshaller:</jc>
  * 	String <jv>hjson</jv> = Hjson.<jsf>of</jsf>(<jv>myBean</jv>);

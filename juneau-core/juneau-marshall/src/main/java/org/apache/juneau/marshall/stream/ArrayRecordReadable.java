@@ -46,15 +46,15 @@ public interface ArrayRecordReadable {
 	 * @return A new element-streamed {@link RecordReader}.
 	 * @throws IOException If a problem occurred reading the underlying input.
 	 */
-	RecordReader parseArrayRecords(Object input) throws IOException;
+	RecordReader readArrayRecords(Object input) throws IOException;
 
 	/**
-	 * Variant of {@link #parseArrayRecords(Object)} that accepts a caller-specified root element
+	 * Variant of {@link #readArrayRecords(Object)} that accepts a caller-specified root element
 	 * name.  Used by HTML/XML when the wire format is e.g. {@code <items><item>...} and the caller
 	 * needs to declare which child element is the array element.
 	 *
 	 * <p>
-	 * The default ignores the root name and delegates to {@link #parseArrayRecords(Object)}.
+	 * The default ignores the root name and delegates to {@link #readArrayRecords(Object)}.
 	 *
 	 * @param input The input.
 	 * @param rootElementName The element name whose children are array elements.  May be
@@ -62,8 +62,8 @@ public interface ArrayRecordReadable {
 	 * @return A new element-streamed {@link RecordReader}.
 	 * @throws IOException If a problem occurred reading the underlying input.
 	 */
-	default RecordReader parseArrayRecords(Object input, String rootElementName) throws IOException {
-		return parseArrayRecords(input);
+	default RecordReader readArrayRecords(Object input, String rootElementName) throws IOException {
+		return readArrayRecords(input);
 	}
 
 	/**

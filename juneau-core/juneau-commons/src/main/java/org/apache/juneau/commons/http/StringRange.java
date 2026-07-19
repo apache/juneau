@@ -46,7 +46,7 @@ import org.apache.juneau.commons.bean.*;
 public class StringRange {
 
 	private static HeaderElement parse(String value) {
-		HeaderElement[] elements = HeaderValueParser.parseElements(emptyIfNull(trim(value)));
+		HeaderElement[] elements = HeaderValueParser.readElements(emptyIfNull(trim(value)));
 		return (elements.length > 0 ? elements[0] : new HeaderElement("*", NameValuePair.EMPTY_ARRAY));
 	}
 

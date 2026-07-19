@@ -268,7 +268,7 @@ class PeriodFormat_RoundTrip_Test extends TestBase {
 		var x = Period.of(1, 2, 3);
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, Period.class);
+			var x2 = p.read(out, Period.class);
 			assertEquals(expectedAfter(x, t, fmt), x2, "fmt=" + fmt);
 		} catch (Exception e) {
 			// Mirror RoundTripDateTime_Test.a06_standaloneInstant: some serializers (URL-encoding, CSV-style)

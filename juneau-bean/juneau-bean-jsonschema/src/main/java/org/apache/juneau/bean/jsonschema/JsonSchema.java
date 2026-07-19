@@ -62,7 +62,7 @@ import org.apache.juneau.marshall.swap.*;
  * 		.addRequired(<js>"firstName"</js>, <js>"lastName"</js>);
  *
  * 	<jc>// Serialize to JSON Schema</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>schema</jv>);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>schema</jv>);
  * </p>
  *
  * <p>

@@ -99,7 +99,7 @@ public final class SerializerBody implements HttpBody {
 	@Override /* HttpBody */
 	public void writeTo(OutputStream out) throws IOException {
 		try {
-			serializer.serialize(value, out);
+			serializer.write(value, out);
 		} catch (SerializeException e) {
 			throw new IOException(e);
 		}

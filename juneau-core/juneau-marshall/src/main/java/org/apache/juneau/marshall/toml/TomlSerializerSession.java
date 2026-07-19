@@ -82,7 +82,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 	}
 
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -92,11 +92,11 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 	}
 
 	@Override
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		if (o == null)
 			return;
 		TomlWriter w = getTomlWriter(out);
-		serializeRoot(w, o);
+		writeRoot(w, o);
 	}
 
 	protected final TomlWriter getTomlWriter(SerializerPipe out) {
@@ -108,12 +108,12 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		return w;
 	}
 
-	private void serializeRoot(TomlWriter w, Object o) throws SerializeException {
+	private void writeRoot(TomlWriter w, Object o) throws SerializeException {
 		ClassMeta<?> eType = getExpectedRootType(o);
 		if (eType.isBean()) {
-			serializeBean(w, toBeanMap(o), "");
+			writeBean(w, toBeanMap(o), "");
 		} else if (eType.isMap()) {
-			serializeMapAtRoot(w, (Map<?,?>)o, eType);
+			writeMapAtRoot(w, (Map<?,?>)o, eType);
 		} else if (eType.isCollection() || eType.isArray()) {
 			Collection<?> c = eType.isArray() ? toList(eType.inner(), o) : (Collection<?>)o;
 			ClassMeta<?> elType = eType.getElementType();
@@ -123,27 +123,27 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 					w.blankLine();
 					w.arrayOfTablesHeader("item");
 					if (elType.isBean())
-						serializeBean(w, toBeanMap(item), "item");
+						writeBean(w, toBeanMap(item), "item");
 					else
-						serializeMapAsTable(w, "item", (Map)item, elType);
+						writeMapAsTable(w, "item", (Map)item, elType);
 				}
 			} else {
 				// Root array of simples: wrap in _value
 				w.bareKey("_value");
 				w.w(" = ");
-				serializeArray(w, c, eType);
+				writeArray(w, c, eType);
 				w.w('\n');
 			}
 		} else {
 			// Root primitive: wrap in _value
 			w.bareKey("_value");
 			w.w(" = ");
-			serializeValue(w, o, eType);
+			writeValue(w, o, eType);
 			w.w('\n');
 		}
 	}
 
-	private void serializeMapAtRoot(TomlWriter w, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
+	private void writeMapAtRoot(TomlWriter w, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		forEachEntry(map, e -> {
 			String k = e.getKey() == null ? "null" : toString(e.getKey());
@@ -154,14 +154,14 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			if (aType.isMap() && v instanceof Map<?,?> nested) {
 				w.blankLine();
 				w.tableHeader(k);
-				serializeMapAsTable(w, k, nested, aType);
+				writeMapAsTable(w, k, nested, aType);
 			} else {
 				writeKeyValue(w, k, v, null);
 			}
 		});
 	}
 
-	private void serializeBean(TomlWriter w, BeanMap<?> m, String tablePath) throws SerializeException {
+	private void writeBean(TomlWriter w, BeanMap<?> m, String tablePath) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		List<Map.Entry<BeanPropertyMeta, Object>> simple = new ArrayList<>();
 		List<Map.Entry<BeanPropertyMeta, Object>> complex = new ArrayList<>();
@@ -206,10 +206,10 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 				ClassMeta<?> aType = getClassMetaForObject(value, cMeta);
 				if (aType.isBean()) {
 					w.tableHeader(newPath);
-					serializeBean(w, toBeanMap(value), newPath);
+					writeBean(w, toBeanMap(value), newPath);
 				} else if (aType.isMap()) {
 					w.tableHeader(newPath);
-					serializeMapAsTable(w, newPath, (Map)value, cMeta);
+					writeMapAsTable(w, newPath, (Map)value, cMeta);
 				} else if (aType.isCollection() || aType.isArray()) {
 					Collection<?> col = aType.isArray() ? toList(aType.inner(), value) : (Collection<?>)value;
 					ClassMeta<?> elType = aType.getElementType();
@@ -218,9 +218,9 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 							w.blankLine();
 							w.arrayOfTablesHeader(newPath);
 							if (elType.isBean())
-								serializeBean(w, toBeanMap(item), newPath);
+								writeBean(w, toBeanMap(item), newPath);
 							else
-								serializeMapAsTable(w, newPath, (Map)item, elType);
+								writeMapAsTable(w, newPath, (Map)item, elType);
 						}
 					} else {
 						writeKeyValue(w, key, value, pMeta);
@@ -310,7 +310,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 				});
 				w.inlineTableEnd();
 			} else {
-				serializeBean(w, bm, "");
+				writeBean(w, bm, "");
 			}
 		} else if (aType.isNumber()) {
 			if (value instanceof Float || value instanceof Double)
@@ -322,19 +322,19 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		} else if (aType.isEnum()) {
 			w.stringValue(((Enum<?>)value).name());
 		} else if (aType.isDate()) {
-			w.w(serializeDate((Date)value, aType));
+			w.w(writeDate((Date)value, aType));
 		} else if (aType.isCalendar()) {
-			w.w(serializeCalendar(value, aType));
+			w.w(writeCalendar(value, aType));
 		} else if (aType.isTemporal()) {
 			Class<?> inner = aType.inner();
 			if (inner == Year.class || inner == YearMonth.class)
-				w.stringValue(serializeTemporal((TemporalAccessor)value, aType));
+				w.stringValue(writeTemporal((TemporalAccessor)value, aType));
 			else
-				w.w(serializeTemporal((TemporalAccessor)value, aType));
+				w.w(writeTemporal((TemporalAccessor)value, aType));
 		} else if (aType.isDuration()) {
-			w.stringValue(serializeDuration((Duration)value));
+			w.stringValue(writeDuration((Duration)value));
 		} else if (aType.isPeriod()) {
-			w.stringValue(serializePeriod((Period)value));
+			w.stringValue(writePeriod((Period)value));
 		} else if (value.getClass().isArray()) {
 			// Bug #11/#12 a04 residual (generalized): when aType arrives erased — most commonly
 			// because the value is a typed List<T[]> bean-property element and the parent List's
@@ -387,7 +387,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		}
 	}
 
-	private void serializeValue(TomlWriter w, Object value, ClassMeta<?> aType) throws SerializeException {
+	private void writeValue(TomlWriter w, Object value, ClassMeta<?> aType) throws SerializeException {
 		writeValue(w, value, aType, null);
 	}
 
@@ -395,7 +395,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		"unused",       // path and type reserved for future section-header and type-aware serialization
 		"java:S1172"    // Same as above
 	})
-	private void serializeMapAsTable(TomlWriter w, String path, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
+	private void writeMapAsTable(TomlWriter w, String path, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		forEachEntry(map, e -> {
 			String k = e.getKey() == null ? "null" : toString(e.getKey());
@@ -406,14 +406,14 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		});
 	}
 
-	private void serializeArray(TomlWriter w, Collection<?> c, ClassMeta<?> type) throws SerializeException {
+	private void writeArray(TomlWriter w, Collection<?> c, ClassMeta<?> type) throws SerializeException {
 		ClassMeta<?> elType = type.getElementType();
 		w.arrayStart();
 		boolean first = true;
 		for (Object el : c) {
 			if (!first) w.w(", ");
 			first = false;
-			serializeValue(w, el, elType);
+			writeValue(w, el, elType);
 		}
 		w.arrayEnd();
 	}

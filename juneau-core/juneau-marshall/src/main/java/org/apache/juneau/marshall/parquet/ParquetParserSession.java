@@ -121,14 +121,14 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	/**
 	 * Opens a whole-value pull-parser cursor over a Parquet document, bound to this live session.
 	 * {@link RecordReader#read(Class) read(...)} delegates to the polymorphic
-	 * {@link ParserSession#parse(Object, Class)} entry point.
+	 * {@link ParserSession#read(Object, Class)} entry point.
 	 *
 	 * @param input The input.
 	 * @return A new {@link RecordReader} cursor.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.reader(this, input);
 	}
 
@@ -151,7 +151,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * @throws IOException If a problem occurred reading the input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
+	public RecordReader readArrayRecords(Object input) throws IOException {
 		return RecordAdapter.arrayReader(this, input);
 	}
 
@@ -169,7 +169,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * <p>
 	 * Parquet's end-of-file metadata footer and column-major value layout require whole-file
 	 * buffering before any record can be reconstructed, so genuine element-at-a-time streaming is
-	 * not feasible here; see {@link #parseArrayRecords(Object)} for the full rationale.
+	 * not feasible here; see {@link #readArrayRecords(Object)} for the full rationale.
 	 *
 	 * @return Always <jk>false</jk>.
 	 */
@@ -186,9 +186,9 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 	@Override
 	@SuppressWarnings({
-		"unchecked" // Generic (T) casts required due to type erasure in doParse
+		"unchecked" // Generic (T) casts required due to type erasure in doRead
 	})
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		var bytes = readAllBytes(pipe);
 		if (bytes.length < 12)
 			throw new ParseException("Parquet file too small");
@@ -199,7 +199,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		if (footerStart < 4)
 			throw new ParseException("Invalid footer length");
 		var footer = Arrays.copyOfRange(bytes, footerStart, bytes.length - 8);
-		var meta = parseFileMetaData(footer);
+		var meta = readFileMetaData(footer);
 		if (meta.numRows() < 0 || meta.numRows() > MAX_NUM_ROWS)
 			throw new ParseException("Invalid numRows: %s", meta.numRows());
 		ClassMeta<?> effectiveType = type;
@@ -451,7 +451,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 */
 	record ColumnLogical(Integer convertedType, int scale, int precision) {}
 
-	private static FileMeta parseFileMetaData(byte[] footer) throws ParseException {
+	private static FileMeta readFileMetaData(byte[] footer) throws ParseException {
 		try {
 			var dec = new ThriftCompactDecoder(footer);
 			dec.readStructBegin();

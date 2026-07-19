@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Branch-coverage tests for {@link JsonTokenReader} &mdash; the structural JSON tokenizer behind
- * {@link JsonParser#parseTokens(Object)}.
+ * {@link JsonParser#readTokens(Object)}.
  *
  * <p>
  * These tests deliberately drive every tokenizer branch (scalar shapes, every escape sequence,
@@ -44,7 +44,7 @@ import org.junit.jupiter.api.*;
 class JsonTokenReaderCoverage_Test extends TestBase {
 
 	private static void drain(String json) throws Exception {
-		try (var r = JsonParser.DEFAULT.parseTokens(json)) {
+		try (var r = JsonParser.DEFAULT.readTokens(json)) {
 			while (r.next() != TokenType.END_OF_STREAM) {
 				// drain
 			}
@@ -60,7 +60,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		@Test void a01_getStringForEveryTokenView() throws Exception {
 			// getString() is defined for VALUE_STRING, FIELD_NAME, VALUE_NUMBER (lexeme),
 			// VALUE_BOOLEAN ("true"/"false") and VALUE_NULL (null).
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\":\"s\",\"b\":12,\"c\":true,\"d\":false,\"e\":null}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\":\"s\",\"b\":12,\"c\":true,\"d\":false,\"e\":null}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertEquals("a", r.getString());           // FIELD_NAME view
@@ -82,14 +82,14 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void a02_getStringOnStructuralTokenThrows() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertThrows(IllegalStateException.class, r::getString);
 			}
 		}
 
 		@Test void a03_getNumberIsLazyAndCached() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[7]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[7]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				var n1 = r.getNumber();
@@ -100,14 +100,14 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void a04_getBinaryAlwaysThrows() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("\"hi\"")) {
+			try (var r = JsonParser.DEFAULT.readTokens("\"hi\"")) {
 				r.next();
 				assertThrowsWithMessage(IllegalStateException.class, "JSON does not produce VALUE_BINARY tokens", r::getBinary);
 			}
 		}
 
 		@Test void a05_getFieldNameWrongStateThrows() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[1]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[1]")) {
 				r.next();  // START_ARRAY
 				assertThrows(IllegalStateException.class, r::getFieldName);
 			}
@@ -115,7 +115,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 
 		@Test void a06_nextAfterEndOfStreamStaysEndOfStream() throws Exception {
 			// Hits the early-return state==S05_end branch in next().
-			try (var r = JsonParser.DEFAULT.parseTokens("1")) {
+			try (var r = JsonParser.DEFAULT.readTokens("1")) {
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals(TokenType.END_OF_STREAM, r.next());
 				assertEquals(TokenType.END_OF_STREAM, r.next());
@@ -136,7 +136,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 				"0", "-0", "12", "-7", "3.14", "-2.5", "0.5", "100",
 				"1e10", "1E10", "1e+10", "1e-10", "2.5E-3", "123456789012345"
 			};
-			try (var r = JsonParser.DEFAULT.parseTokens(input)) {
+			try (var r = JsonParser.DEFAULT.readTokens(input)) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				for (var lex : expectedLexemes) {
 					assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -148,7 +148,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void b02_numberValuesParse() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[0, 12, 3.14, 1e3]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[0, 12, 3.14, 1e3]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());  assertEquals(0L, r.getNumber().longValue());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());  assertEquals(12L, r.getNumber().longValue());
@@ -160,7 +160,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 
 		@Test void b03_topLevelNegativeOnlyLexeme() throws Exception {
 			// "-" survives lexeme validation (length-1 minus branch) even though it is not a real number.
-			try (var r = JsonParser.DEFAULT.parseTokens("-")) {
+			try (var r = JsonParser.DEFAULT.readTokens("-")) {
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals("-", r.getNumberLexeme());
 			}
@@ -195,7 +195,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 
 		@Test void c01_allEscapeSequences() throws Exception {
 			// \" \\ \/ \b \f \n \r \t and \' (the parent accepts \' even in double-quoted strings).
-			try (var r = JsonParser.DEFAULT.parseTokens("[\"\\\"\", \"\\\\\", \"\\/\", \"\\b\", \"\\f\", \"\\n\", \"\\r\", \"\\t\", \"\\'\"]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[\"\\\"\", \"\\\\\", \"\\/\", \"\\b\", \"\\f\", \"\\n\", \"\\r\", \"\\t\", \"\\'\"]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("\"", r.getString());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("\\", r.getString());
@@ -211,7 +211,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void c02_unicodeEscape() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[\"\\u00e9\", \"\\u0041BC\"]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[\"\\u00e9\", \"\\u0041BC\"]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("\u00e9", r.getString());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("ABC", r.getString());
@@ -238,7 +238,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 
 		@Test void c07_trimStringsTrimsValuesAndFieldNames() throws Exception {
 			var p = JsonParser.create().trimStrings().build();
-			try (var r = p.parseTokens("{\"  k  \":\"  v  \"}")) {
+			try (var r = p.readTokens("{\"  k  \":\"  v  \"}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("k", r.getFieldName());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("v", r.getString());
@@ -247,7 +247,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void c08_defaultPreservesWhitespace() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[\"  v  \"]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[\"  v  \"]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_STRING, r.next());
 				assertEquals("  v  ", r.getString());
@@ -263,7 +263,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 				sb.append('"').append(big).append('"');
 			}
 			sb.append(']');
-			try (var r = JsonParser.DEFAULT.parseTokens(sb.toString())) {
+			try (var r = JsonParser.DEFAULT.readTokens(sb.toString())) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				for (var i = 0; i < 200; i++) {
 					assertEquals(TokenType.VALUE_STRING, r.next());
@@ -282,7 +282,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 	@Nested class D_keywords extends TestBase {
 
 		@Test void d01_trueFalseNull() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[true,false,null]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[true,false,null]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_BOOLEAN, r.next()); assertTrue(r.getBool());
 				assertEquals(TokenType.VALUE_BOOLEAN, r.next()); assertFalse(r.getBool());
@@ -298,7 +298,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void d03_getBoolWrongStateThrows() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("\"hi\"")) {
+			try (var r = JsonParser.DEFAULT.readTokens("\"hi\"")) {
 				r.next();
 				assertThrows(IllegalStateException.class, r::getBool);
 			}
@@ -312,7 +312,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 	@Nested class E_whitespaceAndComments extends TestBase {
 
 		@Test void e01_whitespaceBetweenTokens() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{ \n\t\"a\" :\r 1 ,\n\"b\" : 2 }")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{ \n\t\"a\" :\r 1 ,\n\"b\" : 2 }")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("a", r.getFieldName());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(1L, r.getNumber().longValue());
@@ -323,7 +323,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void e02_blockComments() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("/* lead */ [1, /* mid */ 2 /* trail */]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("/* lead */ [1, /* mid */ 2 /* trail */]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -332,7 +332,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void e03_lineComments() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("// lead\n[1,// mid\n2]// trail")) {
+			try (var r = JsonParser.DEFAULT.readTokens("// lead\n[1,// mid\n2]// trail")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -403,7 +403,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void f12_getNumberWrongStateThrows() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("\"hi\"")) {
+			try (var r = JsonParser.DEFAULT.readTokens("\"hi\"")) {
 				r.next();
 				assertThrows(IllegalStateException.class, r::getNumber);
 				assertThrows(IllegalStateException.class, r::getNumberLexeme);
@@ -421,7 +421,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 			// >64 levels of nesting forces the heap-allocated container-overflow array (and growth).
 			var depth = 80;
 			var input = "[".repeat(depth) + "1" + "]".repeat(depth);
-			try (var r = JsonParser.DEFAULT.parseTokens(input)) {
+			try (var r = JsonParser.DEFAULT.readTokens(input)) {
 				var max = 0;
 				for (var i = 0; i < depth; i++) {
 					assertEquals(TokenType.START_ARRAY, r.next());
@@ -448,7 +448,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void g03_nestedMixedDocument() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\":[1,[2,3],{\"b\":4}]}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\":[1,[2,3],{\"b\":4}]}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertEquals(TokenType.START_ARRAY, r.next());
@@ -475,7 +475,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 	@Nested class H_skipChildren extends TestBase {
 
 		@Test void h01_skipObjectSubtree() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[{\"a\":1,\"b\":[2,3]},42]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[{\"a\":1,\"b\":[2,3]},42]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.START_OBJECT, r.next());
 				r.skipChildren();
@@ -487,7 +487,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void h02_skipArraySubtree() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[[1,2,[3]],99]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[[1,2,[3]],99]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.START_ARRAY, r.next());
 				r.skipChildren();
@@ -498,7 +498,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void h03_skipChildrenOnScalarIsNoop() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[1,2]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[1,2]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				r.skipChildren();
@@ -516,7 +516,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 	@Nested class I_canRead extends TestBase {
 
 		@Test void i01_emptyContainersCanReadFalse() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertFalse(r.canRead());
 				assertEquals(TokenType.END_ARRAY, r.next());
@@ -524,7 +524,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void i02_canReadConsumesArrayComma() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[1,2]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[1,2]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(1, r.read(Integer.class));
 				assertTrue(r.canRead());   // S04 comma path -> S00 -> peek value
@@ -537,7 +537,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		@Test void i03_canReadFalseAtObjectFieldName() throws Exception {
 			// After reading a value inside an object, the cursor is at S03; canRead consumes the
 			// comma, lands at a field name, and reports false (not a value position).
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\":1,\"b\":2}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\":1,\"b\":2}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());  // value -> S03
@@ -546,7 +546,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void i04_canReadFalseAtObjectEnd() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\":1}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\":1}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());  // value -> S03
@@ -556,7 +556,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void i05_canReadAtEndOfInputInArray() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[1")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[1")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());  // S04, input now exhausted
 				assertFalse(r.canRead());  // S04 c==-1 path
@@ -564,7 +564,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void i06_trailingCommaRejectedInArrayViaCanRead() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[1,]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[1,]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertThrowsWithMessage(ParseException.class, "Trailing comma not allowed", r::canRead);
@@ -572,7 +572,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void i07_trailingCommaRejectedInObjectViaCanRead() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\":1,}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\":1,}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -582,7 +582,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 
 		@Test void i08_canReadAfterFieldNameConsumesColon() throws Exception {
 			// From S02 (just emitted FIELD_NAME), canRead consumes the ':' and reports true.
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\":1}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\":1}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());  // S02
 				assertTrue(r.canRead());
@@ -591,7 +591,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void i09_canReadBadSeparatorInArray() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[1 2]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[1 2]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertThrowsWithMessage(ParseException.class, "Expected , or ]", r::canRead);
@@ -599,7 +599,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void i10_canReadBadSeparatorInObject() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\":1 \"b\":2}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\":1 \"b\":2}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -608,7 +608,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void i11_canReadBadCharAfterFieldName() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\" 1}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\" 1}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());  // S02
 				assertThrowsWithMessage(ParseException.class, "Expected : after field name", r::canRead);
@@ -628,14 +628,14 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void j01_readScalar() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("42")) {
+			try (var r = JsonParser.DEFAULT.readTokens("42")) {
 				assertEquals(42, r.read(Integer.class));
 				assertEquals(TokenType.END_OF_STREAM, r.next());
 			}
 		}
 
 		@Test void j02_readBean() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"name\":\"alice\",\"age\":30}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"name\":\"alice\",\"age\":30}")) {
 				var b = r.read(Bean.class);
 				assertBean(b, "name,age", "alice,30");
 			}
@@ -643,14 +643,14 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 
 		@Test void j03_readParameterizedTypeOverload() throws Exception {
 			// Two-argument call resolves to read(Type, Type...) rather than read(Class).
-			try (var r = JsonParser.DEFAULT.parseTokens("[1,2,3]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[1,2,3]")) {
 				List<Integer> v = r.read(List.class, Integer.class);
 				assertList(v, 1, 2, 3);
 			}
 		}
 
 		@Test void j04_readClassMetaOverload() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[\"a\",\"b\"]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[\"a\",\"b\"]")) {
 				var cm = JsonParser.DEFAULT.getSession().getClassMeta(List.class);
 				List<?> v = r.read(cm);
 				assertList(v, "a", "b");
@@ -659,7 +659,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 
 		@Test void j05_streamArrayOfBeans() throws Exception {
 			var seen = new ArrayList<Bean>();
-			try (var r = JsonParser.DEFAULT.parseTokens("[{\"name\":\"a\",\"age\":1},{\"name\":\"b\",\"age\":2}]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[{\"name\":\"a\",\"age\":1},{\"name\":\"b\",\"age\":2}]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				while (r.canRead())
 					seen.add(r.read(Bean.class));
@@ -671,14 +671,14 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void j06_readAfterStartObjectThrows() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\":1}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{\"a\":1}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertThrows(IllegalStateException.class, () -> r.read(Bean.class));
 			}
 		}
 
 		@Test void j07_readAtEndOfArrayThrows() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[1]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[1]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(1, r.read(Integer.class));
 				assertFalse(r.canRead());
@@ -714,7 +714,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 	@Nested class K_topLevel extends TestBase {
 
 		@Test void k01_emptyObject() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("{}")) {
+			try (var r = JsonParser.DEFAULT.readTokens("{}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.END_OBJECT, r.next());
 				assertEquals(TokenType.END_OF_STREAM, r.next());
@@ -722,7 +722,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void k02_emptyArray() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.END_ARRAY, r.next());
 				assertEquals(TokenType.END_OF_STREAM, r.next());
@@ -730,22 +730,22 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void k03_topLevelScalars() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("\"hi\"")) {
+			try (var r = JsonParser.DEFAULT.readTokens("\"hi\"")) {
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("hi", r.getString());
 			}
-			try (var r = JsonParser.DEFAULT.parseTokens("true")) {
+			try (var r = JsonParser.DEFAULT.readTokens("true")) {
 				assertEquals(TokenType.VALUE_BOOLEAN, r.next()); assertTrue(r.getBool());
 			}
-			try (var r = JsonParser.DEFAULT.parseTokens("null")) {
+			try (var r = JsonParser.DEFAULT.readTokens("null")) {
 				assertEquals(TokenType.VALUE_NULL, r.next());
 			}
-			try (var r = JsonParser.DEFAULT.parseTokens("123")) {
+			try (var r = JsonParser.DEFAULT.readTokens("123")) {
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(123L, r.getNumber().longValue());
 			}
 		}
 
 		@Test void k04_initialTokenIsNotAvailableAndStreaming() throws Exception {
-			try (var r = JsonParser.DEFAULT.parseTokens("[]")) {
+			try (var r = JsonParser.DEFAULT.readTokens("[]")) {
 				assertEquals(TokenType.NOT_AVAILABLE, r.getCurrentToken());
 				assertTrue(r.isStreaming());
 			}

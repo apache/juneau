@@ -121,7 +121,7 @@ class TomlSerializerSession_Test extends TestBase {
 		x.name = "alpha";
 		x.port = 80;
 		x.active = true;
-		var toml = TomlSerializer.DEFAULT.serialize(x);
+		var toml = TomlSerializer.DEFAULT.write(x);
 		assertTrue(toml.contains("name = \"alpha\""));
 		assertTrue(toml.contains("port = 80"));
 		assertTrue(toml.contains("active = true"));
@@ -131,7 +131,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void a02_rootMap() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("k", "v");
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("k = \"v\""));
 	}
 
@@ -143,15 +143,15 @@ class TomlSerializerSession_Test extends TestBase {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "myapp");
 		m.put("database", inner);
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("[database]"));
 		assertTrue(toml.contains("host = \"localhost\""));
 	}
 
 	@Test
 	void a04_rootNullObject() throws Exception {
-		// doSerialize returns immediately for null
-		var toml = TomlSerializer.DEFAULT.serialize(null);
+		// doWrite returns immediately for null
+		var toml = TomlSerializer.DEFAULT.write(null);
 		assertNotNull(toml);
 		assertEquals("", toml.replace("\r", "").replace("\n", ""));
 	}
@@ -160,7 +160,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void a05_rootCollectionOfBeans() throws Exception {
 		// Root collection of beans — at runtime, List.of() loses generic info and the element type
 		// resolves to Object, so the simple-array branch fires (stringifies elements). This still
-		// exercises the "elType.isBean() || elType.isMap()" false branch in serializeRoot for
+		// exercises the "elType.isBean() || elType.isMap()" false branch in writeRoot for
 		// collections, which is the coverage goal. The bean-element [[item]] path is exercised in
 		// a11_rootArrayOfBeans where the runtime array type preserves component info.
 		var a1 = new A_Simple();
@@ -171,7 +171,7 @@ class TomlSerializerSession_Test extends TestBase {
 		a2.name = "b";
 		a2.port = 2;
 		a2.active = false;
-		var toml = TomlSerializer.DEFAULT.serialize(List.of(a1, a2));
+		var toml = TomlSerializer.DEFAULT.write(List.of(a1, a2));
 		assertNotNull(toml);
 		assertTrue(toml.contains("_value"), () -> "Expected _value wrapper in output but got: " + toml);
 	}
@@ -183,14 +183,14 @@ class TomlSerializerSession_Test extends TestBase {
 		m1.put("k", "v1");
 		var m2 = new LinkedHashMap<String, Object>();
 		m2.put("k", "v2");
-		var toml = TomlSerializer.DEFAULT.serialize(List.of(m1, m2));
+		var toml = TomlSerializer.DEFAULT.write(List.of(m1, m2));
 		assertNotNull(toml);
 	}
 
 	@Test
 	void a07_rootCollectionOfPrimitives() throws Exception {
 		// Root collection of simples wraps in _value
-		var toml = TomlSerializer.DEFAULT.serialize(List.of("a", "b", "c"));
+		var toml = TomlSerializer.DEFAULT.write(List.of("a", "b", "c"));
 		assertTrue(toml.contains("_value = ["));
 		assertTrue(toml.contains("\"a\""));
 	}
@@ -198,7 +198,7 @@ class TomlSerializerSession_Test extends TestBase {
 	@Test
 	void a08_rootArrayOfPrimitives() throws Exception {
 		// Root array (not collection) - hits eType.isArray() branch
-		var toml = TomlSerializer.DEFAULT.serialize(new int[]{1, 2, 3});
+		var toml = TomlSerializer.DEFAULT.write(new int[]{1, 2, 3});
 		assertTrue(toml.contains("_value = ["));
 		assertTrue(toml.contains("1"));
 		assertTrue(toml.contains("2"));
@@ -208,13 +208,13 @@ class TomlSerializerSession_Test extends TestBase {
 	@Test
 	void a09_rootPrimitive() throws Exception {
 		// Root primitive wrapped in _value
-		var toml = TomlSerializer.DEFAULT.serialize("hello");
+		var toml = TomlSerializer.DEFAULT.write("hello");
 		assertTrue(toml.contains("_value = \"hello\""));
 	}
 
 	@Test
 	void a10_rootInteger() throws Exception {
-		var toml = TomlSerializer.DEFAULT.serialize(42);
+		var toml = TomlSerializer.DEFAULT.write(42);
 		assertTrue(toml.contains("_value = 42"));
 	}
 
@@ -227,14 +227,14 @@ class TomlSerializerSession_Test extends TestBase {
 		var a2 = new A_Simple();
 		a2.name = "y";
 		a2.port = 2;
-		var toml = TomlSerializer.DEFAULT.serialize(new A_Simple[]{a1, a2});
+		var toml = TomlSerializer.DEFAULT.write(new A_Simple[]{a1, a2});
 		assertTrue(toml.contains("[[item]]"));
 		assertTrue(toml.contains("name = \"x\""));
 		assertTrue(toml.contains("name = \"y\""));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// b. Nested bean serialization (serializeBean complex pass)
+	// b. Nested bean serialization (writeBean complex pass)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
@@ -247,7 +247,7 @@ class TomlSerializerSession_Test extends TestBase {
 		x.inner.active = true;
 		// Force non-inline by using more than threshold and a sub-bean — easier: turn off inline tables
 		var s = TomlSerializer.create().useInlineTables(false).build();
-		var toml = s.serialize(x);
+		var toml = s.write(x);
 		assertTrue(toml.contains("[inner]"), () -> "Expected nested table header [inner] but got: " + toml);
 		assertTrue(toml.contains("name = \"inner\""));
 	}
@@ -255,7 +255,7 @@ class TomlSerializerSession_Test extends TestBase {
 	@Test
 	void b02_beanWithListOfBeans() throws Exception {
 		// Exercises the bean.complex pass for a List<Bean> property. The runtime list-element type
-		// detection inside serializeBean's complex branch may resolve to Object and fall into the
+		// detection inside writeBean's complex branch may resolve to Object and fall into the
 		// writeKeyValue fallthrough at line 216 — this still drives the complex-pass dispatch.
 		var x = new A_WithList();
 		x.title = "store";
@@ -267,7 +267,7 @@ class TomlSerializerSession_Test extends TestBase {
 		p2.port = 2;
 		x.servers = List.of(p1, p2);
 		var s = TomlSerializer.create().useInlineTables(false).build();
-		var toml = s.serialize(x);
+		var toml = s.write(x);
 		assertTrue(toml.contains("title = \"store\""));
 		assertTrue(toml.contains("servers"), () -> "Expected 'servers' key in output but got: " + toml);
 	}
@@ -287,7 +287,7 @@ class TomlSerializerSession_Test extends TestBase {
 		x.title = "store";
 		x.servers = new A_Simple[]{p1, p2};
 		var s = TomlSerializer.create().useInlineTables(false).build();
-		var toml = s.serialize(x);
+		var toml = s.write(x);
 		assertTrue(toml.contains("title = \"store\""));
 		assertTrue(toml.contains("[[servers]]"), () -> "Expected [[servers]] header but got: " + toml);
 		assertTrue(toml.contains("Hammer"));
@@ -303,7 +303,7 @@ class TomlSerializerSession_Test extends TestBase {
 		inner.put("k2", 42);
 		x.props = inner;
 		var s = TomlSerializer.create().useInlineTables(false).build();
-		var toml = s.serialize(x);
+		var toml = s.write(x);
 		assertTrue(toml.contains("[props]"));
 		assertTrue(toml.contains("k1 = \"v1\""));
 		assertTrue(toml.contains("k2 = 42"));
@@ -314,7 +314,7 @@ class TomlSerializerSession_Test extends TestBase {
 		var x = new A_WithSimpleList();
 		x.name = "outer";
 		x.tags = List.of("red", "green", "blue");
-		var toml = TomlSerializer.DEFAULT.serialize(x);
+		var toml = TomlSerializer.DEFAULT.write(x);
 		assertTrue(toml.contains("name = \"outer\""));
 		assertTrue(toml.contains("tags = ["));
 		assertTrue(toml.contains("\"red\""));
@@ -325,7 +325,7 @@ class TomlSerializerSession_Test extends TestBase {
 		var x = new A_WithArray();
 		x.name = "outer";
 		x.codes = new int[]{1, 2, 3};
-		var toml = TomlSerializer.DEFAULT.serialize(x);
+		var toml = TomlSerializer.DEFAULT.write(x);
 		assertTrue(toml.contains("codes = ["));
 		assertTrue(toml.contains("1"));
 		assertTrue(toml.contains("2"));
@@ -337,7 +337,7 @@ class TomlSerializerSession_Test extends TestBase {
 		var x = new A_WithStringArray();
 		x.name = "outer";
 		x.tags = new String[]{"a", "b"};
-		var toml = TomlSerializer.DEFAULT.serialize(x);
+		var toml = TomlSerializer.DEFAULT.write(x);
 		assertTrue(toml.contains("tags = ["));
 		assertTrue(toml.contains("\"a\""));
 		assertTrue(toml.contains("\"b\""));
@@ -358,7 +358,7 @@ class TomlSerializerSession_Test extends TestBase {
 		x.inner.i = 7;
 		x.inner.b = true;
 		var s = TomlSerializer.create().useInlineTables(true).inlineTableThreshold(5).build();
-		var toml = s.serialize(x);
+		var toml = s.write(x);
 		// Inner becomes inline table: inner = {s = "hi", i = 7, b = true}
 		assertTrue(toml.contains("inner = {"), () -> "Expected inline table for inner but got: " + toml);
 	}
@@ -374,7 +374,7 @@ class TomlSerializerSession_Test extends TestBase {
 		x.inner.b = true;
 		// Set threshold to 2 to force overshoot
 		var s = TomlSerializer.create().useInlineTables(true).inlineTableThreshold(2).build();
-		var toml = s.serialize(x);
+		var toml = s.write(x);
 		// Inner has 3 fields > 2 threshold → should be a [table] not inline
 		assertTrue(toml.contains("[inner]"), () -> "Expected [inner] table header but got: " + toml);
 	}
@@ -388,7 +388,7 @@ class TomlSerializerSession_Test extends TestBase {
 		x.inner.i = 1;
 		x.inner.b = true;
 		var s = TomlSerializer.create().useInlineTables(false).build();
-		var toml = s.serialize(x);
+		var toml = s.write(x);
 		assertTrue(toml.contains("[inner]"), () -> "Expected [inner] table header but got: " + toml);
 	}
 
@@ -400,7 +400,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void d01_keyWithDots() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("a.b.c", "val");
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("\"a.b.c\""));
 	}
 
@@ -408,7 +408,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void d02_keyWithSpaces() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("with spaces", "val");
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("\"with spaces\""));
 	}
 
@@ -416,7 +416,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void d03_emptyKeyQuoted() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("", "val");
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		// Empty key => quoted
 		assertTrue(toml.contains("\"\" = \"val\""));
 	}
@@ -425,7 +425,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void d04_bareKeyAlphanumDashUnderscore() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("my-key_1", "val");
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		// bare key: no quotes
 		assertTrue(toml.contains("my-key_1 = \"val\""));
 	}
@@ -434,7 +434,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void d05_nullKeyBecomesNullString() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put(null, "val");
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		// Null key serialized as "null"
 		assertTrue(toml.contains("null = \"val\""));
 	}
@@ -447,7 +447,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void e01_floatValue() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("pi", 3.14);
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("pi = 3.14"));
 	}
 
@@ -455,7 +455,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void e02_floatValueWrappedFloat() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("f", Float.valueOf(1.5f));
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("f = 1.5"));
 	}
 
@@ -463,7 +463,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void e03_longValue() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("n", 1234567890123L);
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("n = 1234567890123"));
 	}
 
@@ -472,7 +472,7 @@ class TomlSerializerSession_Test extends TestBase {
 		var x = new A_WithEnum();
 		x.name = "outer";
 		x.unit = TimeUnit.SECONDS;
-		var toml = TomlSerializer.DEFAULT.serialize(x);
+		var toml = TomlSerializer.DEFAULT.write(x);
 		assertTrue(toml.contains("unit = \"SECONDS\""));
 	}
 
@@ -480,8 +480,8 @@ class TomlSerializerSession_Test extends TestBase {
 	void e05_dateValue() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("when", new Date(0L));
-		var toml = TomlSerializer.DEFAULT.serialize(m);
-		// Date should serialize via serializeDate
+		var toml = TomlSerializer.DEFAULT.write(m);
+		// Date should serialize via writeDate
 		assertTrue(toml.contains("when ="));
 	}
 
@@ -490,7 +490,7 @@ class TomlSerializerSession_Test extends TestBase {
 		var c = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		var m = new LinkedHashMap<String, Object>();
 		m.put("when", c);
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("when ="));
 	}
 
@@ -498,7 +498,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void e07_temporalOffsetDateTime() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("ts", OffsetDateTime.of(2024, 1, 15, 10, 30, 0, 0, ZoneOffset.UTC));
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		// OffsetDateTime should serialize as raw temporal (not quoted)
 		assertTrue(toml.contains("ts = 2024-01-15"));
 	}
@@ -507,7 +507,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void e08_temporalYear() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("y", Year.of(2024));
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		// Year should be string-quoted
 		assertTrue(toml.contains("y = \"2024\""), () -> "Expected quoted Year but got: " + toml);
 	}
@@ -516,7 +516,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void e09_temporalYearMonth() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("ym", YearMonth.of(2024, 6));
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("ym = \"2024-06\""));
 	}
 
@@ -524,7 +524,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void e10_durationValue() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("d", Duration.ofSeconds(30));
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		// Duration should be string-quoted
 		assertTrue(toml.contains("d = \""));
 	}
@@ -533,7 +533,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void e11_periodValue() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("p", Period.ofDays(5));
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("p = \""));
 	}
 
@@ -546,7 +546,7 @@ class TomlSerializerSession_Test extends TestBase {
 		var x = new A_NullProperty();
 		x.name = "alpha";
 		x.missing = null;
-		var toml = TomlSerializer.DEFAULT.serialize(x);
+		var toml = TomlSerializer.DEFAULT.write(x);
 		assertTrue(toml.contains("name = \"alpha\""));
 		assertFalse(toml.contains("missing"));
 	}
@@ -557,7 +557,7 @@ class TomlSerializerSession_Test extends TestBase {
 		var x = new A_NullProperty();
 		x.name = "alpha";
 		x.missing = null;
-		var toml = s.serialize(x);
+		var toml = s.write(x);
 		assertTrue(toml.contains("name = \"alpha\""));
 		assertTrue(toml.contains("missing = \"<NULL>\""));
 	}
@@ -571,7 +571,7 @@ class TomlSerializerSession_Test extends TestBase {
 		list.add(null);
 		list.add("b");
 		m.put("items", list);
-		var toml = s.serialize(m);
+		var toml = s.write(m);
 		// Null element within array should appear as nullValue
 		assertTrue(toml.contains("\"<NULL>\""), () -> "Expected nullValue for null element but got: " + toml);
 	}
@@ -582,7 +582,7 @@ class TomlSerializerSession_Test extends TestBase {
 		var s = TomlSerializer.create().keepNullProperties().build();
 		var m = new LinkedHashMap<String, Object>();
 		m.put("arr", new String[]{"a", null, "b"});
-		var toml = s.serialize(m);
+		var toml = s.write(m);
 		assertTrue(toml.contains("\"<NULL>\""), () -> "Expected nullValue for null array element but got: " + toml);
 	}
 
@@ -598,7 +598,7 @@ class TomlSerializerSession_Test extends TestBase {
 		x.f2 = "b";
 		x.f1 = "a";
 		x.f3 = "c";
-		var toml = s.serialize(x);
+		var toml = s.write(x);
 		// Verify order: f1 before f2 before f3 before f4
 		var i1 = toml.indexOf("f1 ");
 		var i2 = toml.indexOf("f2 ");
@@ -619,7 +619,7 @@ class TomlSerializerSession_Test extends TestBase {
 		inner.put("a.dotted", "v");
 		var m = new LinkedHashMap<String, Object>();
 		m.put("section", inner);
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("[section]"));
 		assertTrue(toml.contains("\"a.dotted\""));
 	}
@@ -630,7 +630,7 @@ class TomlSerializerSession_Test extends TestBase {
 		var m = new LinkedHashMap<>();
 		m.put(1, "one");
 		m.put(2, "two");
-		var toml = TomlSerializer.DEFAULT.serialize(m);
+		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("1 = \"one\""));
 		assertTrue(toml.contains("2 = \"two\""));
 	}

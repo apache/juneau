@@ -96,7 +96,7 @@ public class ReaderParserSession extends ParserSession {
 		 * The character set to use for converting InputStreams and byte arrays to readers.
 		 *
 		 * <p>
-		 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+		 * Used when passing in input streams and byte arrays to {@link Parser#read(Object, Class)}.
 		 *
 		 * <p>
 		 * If not specified, defaults to UTF-8.

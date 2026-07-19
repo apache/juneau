@@ -238,7 +238,7 @@ class RecordStreamArg_Test {
 	@Test
 	void g02_abstractTokenReader_cborContentType() throws Exception {
 		try (var client = MockRestClient.create(G_AbstractTokenReaderResource.class)) {
-			var cbor = CborSerializer.DEFAULT.serialize(new Bean("y", 2));
+			var cbor = CborSerializer.DEFAULT.write(new Bean("y", 2));
 			try (var response = client.post("/").header("Accept", "text/plain").body(
 					ByteArrayBody.of(cbor, "application/cbor")).run()) {
 				assertEquals(200, response.getStatusCode());

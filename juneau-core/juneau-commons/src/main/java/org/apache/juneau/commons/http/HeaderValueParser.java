@@ -47,7 +47,7 @@ public final class HeaderValueParser {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for parser logic
 	})
-	public static HeaderElement[] parseElements(String value) {
+	public static HeaderElement[] readElements(String value) {
 		if (isEmpty(value))
 			return new HeaderElement[0];
 
@@ -60,7 +60,7 @@ public final class HeaderValueParser {
 			if (pos >= len)
 				break;
 
-			var name = parseName(value, pos);
+			var name = readName(value, pos);
 			pos += name.length();
 			name = name.trim();
 
@@ -70,7 +70,7 @@ public final class HeaderValueParser {
 				pos++;
 				pos = skipWhitespace(value, pos);
 
-				var paramName = parseToken(value, pos, '=', ';', ',');
+				var paramName = readToken(value, pos, '=', ';', ',');
 				pos += paramName.length();
 				paramName = paramName.trim();
 
@@ -79,11 +79,11 @@ public final class HeaderValueParser {
 					pos++;
 					pos = skipWhitespace(value, pos);
 					if (pos < len && value.charAt(pos) == '"') {
-						var q = parseQuotedString(value, pos);
+						var q = readQuotedString(value, pos);
 						paramValue = q.text();
 						pos = q.nextPos();
 					} else {
-						paramValue = parseToken(value, pos, ';', ',');
+						paramValue = readToken(value, pos, ';', ',');
 						pos += paramValue.length();
 						paramValue = paramValue.trim();
 					}
@@ -103,11 +103,11 @@ public final class HeaderValueParser {
 		return elements.toArray(new HeaderElement[0]);
 	}
 
-	private static String parseName(String value, int pos) {
-		return parseToken(value, pos, ';', ',');
+	private static String readName(String value, int pos) {
+		return readToken(value, pos, ';', ',');
 	}
 
-	private static String parseToken(String value, int pos, char... delimiters) {
+	private static String readToken(String value, int pos, char... delimiters) {
 		var start = pos;
 		var len = value.length();
 		var inQuotes = false;
@@ -134,7 +134,7 @@ public final class HeaderValueParser {
 	 * @return Parsed text and the index immediately after the closing {@code "}, or after the last character if
 	 * 	the string is unterminated.
 	 */
-	private static QuotedString parseQuotedString(String value, int openQuoteIndex) {
+	private static QuotedString readQuotedString(String value, int openQuoteIndex) {
 		var sb = new StringBuilder();
 		var pos = openQuoteIndex + 1;
 		var len = value.length();

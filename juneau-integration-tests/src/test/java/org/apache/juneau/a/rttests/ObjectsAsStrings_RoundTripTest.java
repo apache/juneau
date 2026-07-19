@@ -123,7 +123,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 	void a02_enumWithOverriddenStringValue(RoundTrip_Tester t) throws Exception {
 		var x = new B().init();
 		if (! t.returnOriginalObject) {
-			var r = t.getSerializer().serialize(x);
+			var r = t.getSerializer().write(x);
 			assertTrue(toString(r).contains("X-2"));
 		}
 		x = t.roundTrip(x);

@@ -45,11 +45,11 @@ public class XmlSimpleExample {
 		 * <id>id</id>
 		 * </object>
 		 */
-		var serial = XmlSerializer.DEFAULT_SQ_READABLE.serialize(pojo);
+		var serial = XmlSerializer.DEFAULT_SQ_READABLE.write(pojo);
 		Logger.getLogger(XmlSimpleExample.class).info(serial);
 
 		// Deserialize back to Pojo instance
-		var obj = XmlParser.DEFAULT.parse(serial, Pojo.class);
+		var obj = XmlParser.DEFAULT.read(serial, Pojo.class);
 
 		assert obj.getId().equals(pojo.getId());
 		assert obj.getName().equals(pojo.getName());

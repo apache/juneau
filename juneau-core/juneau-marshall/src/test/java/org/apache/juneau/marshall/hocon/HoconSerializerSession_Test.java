@@ -131,12 +131,12 @@ class HoconSerializerSession_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a. doSerialize root dispatch
+	// a. doWrite root dispatch
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_rootNull() throws Exception {
-		// doSerialize early-out on o == null branch (lines 94-95).
-		var hocon = HoconSerializer.DEFAULT.serialize(null);
+		// doWrite early-out on o == null branch (lines 94-95).
+		var hocon = HoconSerializer.DEFAULT.write(null);
 		assertNotNull(hocon);
 		// Output is empty (no body) when input is null.
 		assertEquals("", hocon.replace("\r","").replace("\n",""));
@@ -147,7 +147,7 @@ class HoconSerializerSession_Test extends TestBase {
 		var x = new B_Simple();
 		x.name = "alpha";
 		x.port = 80;
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertTrue(hocon.contains("name") && hocon.contains("alpha"));
 		assertTrue(hocon.contains("port") && hocon.contains("80"));
 	}
@@ -158,7 +158,7 @@ class HoconSerializerSession_Test extends TestBase {
 		x.name = "alpha";
 		x.port = 80;
 		var s = HoconSerializer.create().omitRootBraces(false).build();
-		var hocon = s.serialize(x);
+		var hocon = s.write(x);
 		assertTrue(hocon.trim().startsWith("{"));
 		assertTrue(hocon.trim().endsWith("}"));
 	}
@@ -167,37 +167,37 @@ class HoconSerializerSession_Test extends TestBase {
 		// Root sType.isMap() branch.
 		var m = new LinkedHashMap<String,Object>();
 		m.put("k","v");
-		var hocon = HoconSerializer.DEFAULT.serialize(m);
+		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertTrue(hocon.contains("k") && hocon.contains("v"));
 	}
 
 	@Test void a05_rootMapWithBraces() throws Exception {
-		// Root map + omitRootBraces=false branch in serializeMap (lines 173-176, 199-202).
+		// Root map + omitRootBraces=false branch in writeMap (lines 173-176, 199-202).
 		var m = new LinkedHashMap<String,Object>();
 		m.put("k","v");
 		var s = HoconSerializer.create().omitRootBraces(false).build();
-		var hocon = s.serialize(m);
+		var hocon = s.write(m);
 		assertTrue(hocon.trim().startsWith("{"));
 		assertTrue(hocon.trim().endsWith("}"));
 	}
 
 	@Test void a06_rootScalar() throws Exception {
 		// Root non-bean/non-map dispatch (line 114).
-		var hocon = HoconSerializer.DEFAULT.serialize("hello");
+		var hocon = HoconSerializer.DEFAULT.write("hello");
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("hello"));
 	}
 
 	@Test void a07_rootCollection() throws Exception {
-		// Root dispatched as serializeAnything → serializeCollection (lines 205-220).
-		var hocon = HoconSerializer.DEFAULT.serialize(List.of("a","b","c"));
+		// Root dispatched as writeAnything → writeCollection (lines 205-220).
+		var hocon = HoconSerializer.DEFAULT.write(List.of("a","b","c"));
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("a") && hocon.contains("b") && hocon.contains("c"));
 	}
 
 	@Test void a08_rootArray() throws Exception {
-		// Root array → serializeAnything → serializeCollection via toList (line 281).
-		var hocon = HoconSerializer.DEFAULT.serialize(new int[]{1,2,3});
+		// Root array → writeAnything → writeCollection via toList (line 281).
+		var hocon = HoconSerializer.DEFAULT.write(new int[]{1,2,3});
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("1") && hocon.contains("2") && hocon.contains("3"));
 	}
@@ -214,20 +214,20 @@ class HoconSerializerSession_Test extends TestBase {
 		typed.name = "alpha";
 		holder.value = typed;
 		var s = HoconSerializer.create().addBeanTypes().addRootType().beanDictionary(B_Typed.class).build();
-		var hocon = s.serialize(holder);
+		var hocon = s.write(holder);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("myBean"), () -> "Expected typeName 'myBean' in: " + hocon);
 		assertTrue(hocon.contains("alpha"));
 	}
 
 	@Test void b02_beanTypeNameInMapValue() throws Exception {
-		// Map<String,Object> → BeanMap value path in serializeMap (lines 184, 188-189).
+		// Map<String,Object> → BeanMap value path in writeMap (lines 184, 188-189).
 		var typed = new B_Typed();
 		typed.name = "x";
 		var m = new LinkedHashMap<String,Object>();
 		m.put("kid", typed);
 		var s = HoconSerializer.create().addBeanTypes().addRootType().beanDictionary(B_Typed.class).build();
-		var hocon = s.serialize(m);
+		var hocon = s.write(m);
 		assertNotNull(hocon);
 		// The bean value should serialize as a nested object
 		assertTrue(hocon.contains("kid"));
@@ -235,11 +235,11 @@ class HoconSerializerSession_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c. Bean nested-bean & map-value branches in serializeBeanMap
+	// c. Bean nested-bean & map-value branches in writeBeanMap
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_beanWithNestedBean_serializesViaToBeanMap() throws Exception {
-		// serializeBeanMap routes nested bean-typed property values through toBeanMap() before dispatch
+		// writeBeanMap routes nested bean-typed property values through toBeanMap() before dispatch
 		// (matching TomlSerializerSession), so a bean property whose value is a raw bean now serializes
 		// correctly instead of failing with ClassCastException.
 		var x = new B_Nested();
@@ -247,21 +247,21 @@ class HoconSerializerSession_Test extends TestBase {
 		x.inner = new B_Simple();
 		x.inner.name = "in";
 		x.inner.port = 8;
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("outer"), () -> "Expected outer label in output: " + hocon);
 		assertTrue(hocon.contains("in"), () -> "Expected inner name in output: " + hocon);
 	}
 
 	@Test void c02_beanWithMapProperty() throws Exception {
-		// isObject true branch in serializeBeanMap → Map dispatch (line 148).
+		// isObject true branch in writeBeanMap → Map dispatch (line 148).
 		var x = new B_WithMap();
 		x.label = "L";
 		var p = new LinkedHashMap<String,Object>();
 		p.put("k1","v1");
 		p.put("k2",2);
 		x.props = p;
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertTrue(hocon.contains("label") && hocon.contains("L"));
 		assertTrue(hocon.contains("props"));
 		assertTrue(hocon.contains("k1") && hocon.contains("v1"));
@@ -277,14 +277,14 @@ class HoconSerializerSession_Test extends TestBase {
 		var m2 = new LinkedHashMap<String,Object>();
 		m2.put("k","beta");
 		x.items = List.of(m1, m2);
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertTrue(hocon.contains("items"));
 		assertTrue(hocon.contains("alpha") && hocon.contains("beta"));
 	}
 
 	@Test void c04_mapValueIsPlainBean() throws Exception {
-		// Map containing a bean → serializeMap dispatches to serializeBeanMap via toBeanMap.
-		// (Covers the value-is-bean branch in serializeMap. The BeanMap-instance check at line
+		// Map containing a bean → writeMap dispatches to writeBeanMap via toBeanMap.
+		// (Covers the value-is-bean branch in writeMap. The BeanMap-instance check at line
 		// 188 is also exercised when the underlying value is a Bean since Juneau's session
 		// wraps it before passing.)
 		var simple = new B_Simple();
@@ -292,67 +292,67 @@ class HoconSerializerSession_Test extends TestBase {
 		simple.port = 5;
 		var m = new LinkedHashMap<String,Object>();
 		m.put("entry", simple);
-		var hocon = HoconSerializer.DEFAULT.serialize(m);
+		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertTrue(hocon.contains("entry"));
 		assertTrue(hocon.contains("x") && hocon.contains("5"));
 	}
 
 	@Test void c07_mapValueIsBeanMap() throws Exception {
-		// Map containing a BeanMap → serializeMap line 188-189 BeanMap branch.
+		// Map containing a BeanMap → writeMap line 188-189 BeanMap branch.
 		var simple = new B_Simple();
 		simple.name = "y";
 		simple.port = 7;
 		var bm = MarshallingContext.DEFAULT_SESSION.toBeanMap(simple);
 		var m = new LinkedHashMap<String,Object>();
 		m.put("entry", bm);
-		var hocon = HoconSerializer.DEFAULT.serialize(m);
+		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertTrue(hocon.contains("entry"));
 		assertTrue(hocon.contains("y") && hocon.contains("7"));
 	}
 
-	@Test void c08_serializeAnythingBeanMap() throws Exception {
-		// Top-level BeanMap → serializeAnything line 274-275 BeanMap-in-isMap branch.
+	@Test void c08_writeAnythingBeanMap() throws Exception {
+		// Top-level BeanMap → writeAnything line 274-275 BeanMap-in-isMap branch.
 		var simple = new B_Simple();
 		simple.name = "z";
 		simple.port = 9;
 		var bm = MarshallingContext.DEFAULT_SESSION.toBeanMap(simple);
-		// Wrap in a list so the root dispatch goes through serializeCollection → serializeAnything.
-		var hocon = HoconSerializer.DEFAULT.serialize(List.of(bm));
+		// Wrap in a list so the root dispatch goes through writeCollection → writeAnything.
+		var hocon = HoconSerializer.DEFAULT.write(List.of(bm));
 		assertTrue(hocon.contains("z") && hocon.contains("9"));
 	}
 
 	@Test void c09_beanWithBeanMapInObjectField() throws Exception {
 		// Bean field of type Object holding a BeanMap → exercises the BeanMap branch of
-		// serializeBeanMap (lines 145-146) at the property-value level.
+		// writeBeanMap (lines 145-146) at the property-value level.
 		// Note: cMeta of an Object field is "object", not bean/map, so isObject is false
-		// and dispatch goes through serializeAnything → which then hits the BeanMap branch
+		// and dispatch goes through writeAnything → which then hits the BeanMap branch
 		// at line 274-275. Document the path here.
 		var holder = new B_Holder();
 		var inner = new B_Simple();
 		inner.name = "q";
 		inner.port = 11;
 		holder.value = MarshallingContext.DEFAULT_SESSION.toBeanMap(inner);
-		var hocon = HoconSerializer.DEFAULT.serialize(holder);
+		var hocon = HoconSerializer.DEFAULT.write(holder);
 		assertTrue(hocon.contains("q") && hocon.contains("11"));
 	}
 
 	@Test void c05_mapWithNullKey() throws Exception {
-		// Map with null key — covers key == null branch in serializeMap (line 194).
+		// Map with null key — covers key == null branch in writeMap (line 194).
 		var m = new LinkedHashMap<>();
 		m.put(null, "v");
 		m.put("ok","y");
-		var hocon = HoconSerializer.DEFAULT.serialize(m);
+		var hocon = HoconSerializer.DEFAULT.write(m);
 		// Null key is rendered (Juneau toString(null) → "null").
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("ok") && hocon.contains("y"));
 	}
 
 	@Test void c06_mapWithIntegerKeys() throws Exception {
-		// Non-string keys exercise generalize() & toString() in serializeMap.
+		// Non-string keys exercise generalize() & toString() in writeMap.
 		var m = new LinkedHashMap<>();
 		m.put(1, "one");
 		m.put(2, "two");
-		var hocon = HoconSerializer.DEFAULT.serialize(m);
+		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertTrue(hocon.contains("one") && hocon.contains("two"));
 	}
 
@@ -361,11 +361,11 @@ class HoconSerializerSession_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_nullPropertyOmittedByDefault() throws Exception {
-		// Default skip-null branch in serializeBeanMap checkNull predicate.
+		// Default skip-null branch in writeBeanMap checkNull predicate.
 		var x = new B_NullProp();
 		x.name = "a";
 		x.missing = null;
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertTrue(hocon.contains("name") && hocon.contains("a"));
 		assertFalse(hocon.contains("missing"));
 	}
@@ -376,14 +376,14 @@ class HoconSerializerSession_Test extends TestBase {
 		var x = new B_NullProp();
 		x.name = "a";
 		x.missing = null;
-		var hocon = s.serialize(x);
+		var hocon = s.write(x);
 		assertTrue(hocon.contains("name") && hocon.contains("a"));
 		assertTrue(hocon.contains("missing"));
 		assertTrue(hocon.contains("null"));
 	}
 
 	@Test void d03_nullValueInCollection() throws Exception {
-		// Null element in collection → serializeAnything null branch (lines 236-239).
+		// Null element in collection → writeAnything null branch (lines 236-239).
 		var m = new LinkedHashMap<String,Object>();
 		var list = new ArrayList<String>();
 		list.add("a");
@@ -391,7 +391,7 @@ class HoconSerializerSession_Test extends TestBase {
 		list.add("b");
 		m.put("items", list);
 		var s = HoconSerializer.create().keepNullProperties().build();
-		var hocon = s.serialize(m);
+		var hocon = s.write(m);
 		assertTrue(hocon.contains("a") && hocon.contains("b"));
 		assertTrue(hocon.contains("null"));
 	}
@@ -402,30 +402,30 @@ class HoconSerializerSession_Test extends TestBase {
 		// SerializeException unless ignoreInvocationExceptionsOnGetters is set.
 		var s = HoconSerializer.create().ignoreInvocationExceptionsOnGetters().build();
 		var x = new B_GetterThrows();
-		var hocon = s.serialize(x);
+		var hocon = s.write(x);
 		assertNotNull(hocon);
 	}
 
 	@Test void d04_nullStringInSerializeString() throws Exception {
-		// Null parameter to serializeString → "null" branch (line 222-225).
-		// Reach via Optional.empty() inside a map entry which routes to serializeString
-		// for the unwrapped null. (Optional path in serializeAnything → recursion).
+		// Null parameter to writeString → "null" branch (line 222-225).
+		// Reach via Optional.empty() inside a map entry which routes to writeString
+		// for the unwrapped null. (Optional path in writeAnything → recursion).
 		var m = new LinkedHashMap<String,Object>();
 		m.put("opt", oe());
-		var hocon = HoconSerializer.create().keepNullProperties().build().serialize(m);
+		var hocon = HoconSerializer.create().keepNullProperties().build().write(m);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("opt"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// e. Multiline / quoted string branches in serializeString
+	// e. Multiline / quoted string branches in writeString
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_tripleQuotedMultilineString() throws Exception {
 		// useMultilineStrings=true + s.contains("\n") → tripleQuotedString branch (lines 227-228).
 		var m = new LinkedHashMap<String,Object>();
 		m.put("desc", "line1\nline2\nline3");
-		var hocon = HoconSerializer.DEFAULT.serialize(m);
+		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertTrue(hocon.contains("\"\"\""), () -> "Expected triple-quoted string but got: " + hocon);
 		assertTrue(hocon.contains("line1") && hocon.contains("line2"));
 	}
@@ -435,7 +435,7 @@ class HoconSerializerSession_Test extends TestBase {
 		var s = HoconSerializer.create().useMultilineStrings(false).build();
 		var m = new LinkedHashMap<String,Object>();
 		m.put("desc", "line1\nline2");
-		var hocon = s.serialize(m);
+		var hocon = s.write(m);
 		assertFalse(hocon.contains("\"\"\""));
 		// Newline must be escaped inside a basic quoted string.
 		assertTrue(hocon.contains("\\n") || hocon.contains("line1"));
@@ -445,7 +445,7 @@ class HoconSerializerSession_Test extends TestBase {
 		// out.isSimpleValue branch → unquotedString (line 229-230).
 		var m = new LinkedHashMap<String,Object>();
 		m.put("k", "simpleValue");
-		var hocon = HoconSerializer.DEFAULT.serialize(m);
+		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertFalse(hocon.contains("\"simpleValue\""));
 		assertTrue(hocon.contains("simpleValue"));
 	}
@@ -454,19 +454,19 @@ class HoconSerializerSession_Test extends TestBase {
 		// Forced quotedString branch (line 231-232).
 		var m = new LinkedHashMap<String,Object>();
 		m.put("k", "a\"b");
-		var hocon = HoconSerializer.DEFAULT.serialize(m);
+		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertTrue(hocon.contains("\""));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// f. serializeAnything scalar dispatch branches
+	// f. writeAnything scalar dispatch branches
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_byteArray() throws Exception {
 		// byte[] gate (lines 268-270): Base64 encode.
 		var x = new B_WithBytes();
 		x.data = "abc".getBytes();
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("YWJj"), () -> "Expected base64 'YWJj' but got: " + hocon);
 	}
@@ -475,7 +475,7 @@ class HoconSerializerSession_Test extends TestBase {
 		// sType.isDate() branch (lines 286-287).
 		var x = new B_WithDate();
 		x.when = new Date(0L);
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertTrue(hocon.contains("when"));
 	}
 
@@ -484,7 +484,7 @@ class HoconSerializerSession_Test extends TestBase {
 		var c = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		var x = new B_WithCalendar();
 		x.when = c;
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertTrue(hocon.contains("when"));
 	}
 
@@ -492,7 +492,7 @@ class HoconSerializerSession_Test extends TestBase {
 		// sType.isTemporal() branch (lines 290-291).
 		var x = new B_WithTemporal();
 		x.day = LocalDate.of(2024,1,15);
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertTrue(hocon.contains("day"));
 		assertTrue(hocon.contains("2024-01-15"));
 	}
@@ -501,7 +501,7 @@ class HoconSerializerSession_Test extends TestBase {
 		// sType.isDuration() with string format (non-numeric) (line 297).
 		var x = new B_WithDuration();
 		x.d = Duration.ofSeconds(30);
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertTrue(hocon.contains("d"));
 		assertTrue(hocon.contains("PT") || hocon.contains("30"));
 	}
@@ -511,7 +511,7 @@ class HoconSerializerSession_Test extends TestBase {
 		var s = HoconSerializer.create().durationFormat(DurationFormat.MILLIS).build();
 		var x = new B_WithDuration();
 		x.d = Duration.ofSeconds(2);
-		var hocon = s.serialize(x);
+		var hocon = s.write(x);
 		assertTrue(hocon.contains("2000"), () -> "Expected '2000' (millis) in: " + hocon);
 	}
 
@@ -519,7 +519,7 @@ class HoconSerializerSession_Test extends TestBase {
 		// sType.isPeriod() branch (line 298-299).
 		var x = new B_WithPeriod();
 		x.p = Period.ofDays(7);
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertTrue(hocon.contains("p"));
 		assertTrue(hocon.contains("P7D") || hocon.contains("7D"));
 	}
@@ -528,7 +528,7 @@ class HoconSerializerSession_Test extends TestBase {
 		// pMeta.isUri() branch (lines 284-285).
 		var x = new B_WithUri();
 		x.link = "http://example.com/foo";
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertTrue(hocon.contains("link"));
 		assertTrue(hocon.contains("http://example.com/foo"));
 	}
@@ -537,7 +537,7 @@ class HoconSerializerSession_Test extends TestBase {
 		// sType.isUri() branch (URI class) (line 284).
 		var m = new LinkedHashMap<String,Object>();
 		m.put("u", URI.create("http://example.com/x"));
-		var hocon = HoconSerializer.DEFAULT.serialize(m);
+		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertTrue(hocon.contains("http://example.com/x"));
 	}
 
@@ -546,7 +546,7 @@ class HoconSerializerSession_Test extends TestBase {
 		var x = new B_WithChar();
 		x.ch = '\0';
 		var s = HoconSerializer.create().keepNullProperties().build();
-		var hocon = s.serialize(x);
+		var hocon = s.write(x);
 		assertTrue(hocon.contains("ch"));
 		assertTrue(hocon.contains("null"));
 	}
@@ -555,32 +555,32 @@ class HoconSerializerSession_Test extends TestBase {
 		// Non-null Character → falls through to default toString branch (line 307).
 		var x = new B_WithChar();
 		x.ch = 'A';
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertTrue(hocon.contains("A"));
 	}
 
 	@Test void f12_readerAtRoot() throws Exception {
 		// sType.isReader() branch (lines 302-303) — content piped raw.
-		var hocon = HoconSerializer.DEFAULT.serialize(new StringReader("piped-reader-content"));
+		var hocon = HoconSerializer.DEFAULT.write(new StringReader("piped-reader-content"));
 		assertTrue(hocon.contains("piped-reader-content"));
 	}
 
 	@Test void f13_inputStreamAtRoot() throws Exception {
 		// sType.isInputStream() branch (lines 304-305) — content piped raw.
-		var hocon = HoconSerializer.DEFAULT.serialize(new ByteArrayInputStream("hello-bytes".getBytes()));
+		var hocon = HoconSerializer.DEFAULT.write(new ByteArrayInputStream("hello-bytes".getBytes()));
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("hello-bytes"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// g. serializeAnything special branches
+	// g. writeAnything special branches
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_optionalPresent() throws Exception {
 		// Optional present → isOptional branch (lines 251-254).
 		var x = new B_WithOptional();
 		x.name = o("alpha");
-		var hocon = HoconSerializer.DEFAULT.serialize(x);
+		var hocon = HoconSerializer.DEFAULT.write(x);
 		assertTrue(hocon.contains("alpha"));
 	}
 
@@ -589,25 +589,25 @@ class HoconSerializerSession_Test extends TestBase {
 		var x = new B_WithOptional();
 		x.name = oe();
 		var s = HoconSerializer.create().keepNullProperties().build();
-		var hocon = s.serialize(x);
+		var hocon = s.write(x);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("name"));
 	}
 
 	@Test void g03_topLevelStreamable() throws Exception {
-		// Top-level Iterable → serializeAnything Collection branch (sType.isCollection()).
+		// Top-level Iterable → writeAnything Collection branch (sType.isCollection()).
 		Iterable<String> it = List.of("p","q","r");
-		var hocon = HoconSerializer.DEFAULT.serialize(it);
+		var hocon = HoconSerializer.DEFAULT.write(it);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("p") && hocon.contains("q"));
 	}
 
 	@Test void g04_topLevelStreamProperty() throws Exception {
 		// Stream<T> property in a bean — exercises sType.isStreamable() branch (line 300-301)
-		// via serializeStreamable (lines 315-330).
+		// via writeStreamable (lines 315-330).
 		var m = new LinkedHashMap<String,Object>();
 		m.put("vals", java.util.stream.Stream.of("x","y","z"));
-		var hocon = HoconSerializer.DEFAULT.serialize(m);
+		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertTrue(hocon.contains("vals"));
 		assertTrue(hocon.contains("x") && hocon.contains("y"));
 	}
@@ -621,7 +621,7 @@ class HoconSerializerSession_Test extends TestBase {
 		list.add(m);   // self reference via parent map
 		m.put("self", list);
 		var s = HoconSerializer.create().detectRecursions().ignoreRecursions().build();
-		var hocon = s.serialize(m);
+		var hocon = s.write(m);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("self"));
 	}
@@ -630,7 +630,7 @@ class HoconSerializerSession_Test extends TestBase {
 	// h. Pre-existing HoconWriter wrapping path
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void h01_serializeToProvidedHoconWriter() throws Exception {
+	@Test void h01_writeToProvidedHoconWriter() throws Exception {
 		// getHoconWriter: output instanceof HoconWriter → return as-is (line 83-84).
 		// We can't easily inject a HoconWriter into the public serialize path, but the
 		// session.serialize(Object, Writer) path lets us pass a SerializerPipe whose
@@ -641,7 +641,7 @@ class HoconSerializerSession_Test extends TestBase {
 		var m = new LinkedHashMap<String,Object>();
 		m.put("k","v");
 		var sw = new StringWriter();
-		HoconSerializer.DEFAULT.createSession().build().serialize(m, sw);
+		HoconSerializer.DEFAULT.createSession().build().write(m, sw);
 		assertTrue(sw.toString().contains("k") && sw.toString().contains("v"));
 	}
 
@@ -654,7 +654,7 @@ class HoconSerializerSession_Test extends TestBase {
 		var s = HoconSerializer.create().useEqualsSign(false).build();
 		var m = new LinkedHashMap<String,Object>();
 		m.put("k","v");
-		var hocon = s.serialize(m);
+		var hocon = s.write(m);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains(":") || hocon.contains("="));
 	}
@@ -664,7 +664,7 @@ class HoconSerializerSession_Test extends TestBase {
 		var s = HoconSerializer.create().useUnquotedKeys(false).build();
 		var m = new LinkedHashMap<String,Object>();
 		m.put("k","v");
-		var hocon = s.serialize(m);
+		var hocon = s.write(m);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("\"k\""), () -> "Expected quoted key but got: " + hocon);
 	}
@@ -674,7 +674,7 @@ class HoconSerializerSession_Test extends TestBase {
 		var s = HoconSerializer.create().useUnquotedStrings(false).build();
 		var m = new LinkedHashMap<String,Object>();
 		m.put("k","simple");
-		var hocon = s.serialize(m);
+		var hocon = s.write(m);
 		assertTrue(hocon.contains("\"simple\""), () -> "Expected quoted value but got: " + hocon);
 	}
 }

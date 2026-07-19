@@ -42,12 +42,12 @@ class UuidBigNumberFormatPlacement_Test {
 
 	@Test void a01_uuid_defaultIsStandard() {
 		var s = Json5Serializer.create().build();
-		assertEquals("{u:'550e8400-e29b-41d4-a716-446655440000'}", s.serialize(new A01()));
+		assertEquals("{u:'550e8400-e29b-41d4-a716-446655440000'}", s.write(new A01()));
 	}
 
 	@Test void a02_uuid_contextOverridesDefault() {
 		var s = Json5Serializer.create().uuidFormat(UuidFormat.NO_DASHES).build();
-		assertEquals("{u:'550e8400e29b41d4a716446655440000'}", s.serialize(new A01()));
+		assertEquals("{u:'550e8400e29b41d4a716446655440000'}", s.write(new A01()));
 	}
 
 	@Marshalled(uuidFormat = UuidFormat.URN)
@@ -55,7 +55,7 @@ class UuidBigNumberFormatPlacement_Test {
 
 	@Test void a03_uuid_classOverridesContext() {
 		var s = Json5Serializer.create().uuidFormat(UuidFormat.NO_DASHES).build();
-		assertEquals("{u:'urn:uuid:550e8400-e29b-41d4-a716-446655440000'}", s.serialize(new A03()));
+		assertEquals("{u:'urn:uuid:550e8400-e29b-41d4-a716-446655440000'}", s.write(new A03()));
 	}
 
 	@Marshalled(uuidFormat = UuidFormat.URN)
@@ -66,7 +66,7 @@ class UuidBigNumberFormatPlacement_Test {
 
 	@Test void a04_uuid_propertyOverridesClass() {
 		var s = Json5Serializer.create().build();
-		assertEquals("{u:'550e8400e29b41d4a716446655440000'}", s.serialize(new A04()));
+		assertEquals("{u:'550e8400e29b41d4a716446655440000'}", s.write(new A04()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -78,12 +78,12 @@ class UuidBigNumberFormatPlacement_Test {
 	@Test void b01_bigNumber_defaultIsNumber() {
 		var s = Json5Serializer.create().build();
 		// Bare numeric token (today's wire).
-		assertEquals("{n:" + HUGE + "}", s.serialize(new B01()));
+		assertEquals("{n:" + HUGE + "}", s.write(new B01()));
 	}
 
 	@Test void b02_bigNumber_contextString() {
 		var s = Json5Serializer.create().bigNumberFormat(BigNumberFormat.STRING).build();
-		assertEquals("{n:'" + HUGE + "'}", s.serialize(new B01()));
+		assertEquals("{n:'" + HUGE + "'}", s.write(new B01()));
 	}
 
 	@Marshalled(bigNumberFormat = BigNumberFormat.STRING)
@@ -91,7 +91,7 @@ class UuidBigNumberFormatPlacement_Test {
 
 	@Test void b03_bigNumber_classOverridesContext() {
 		var s = Json5Serializer.create().bigNumberFormat(BigNumberFormat.NUMBER).build();
-		assertEquals("{n:'" + HUGE + "'}", s.serialize(new B03()));
+		assertEquals("{n:'" + HUGE + "'}", s.write(new B03()));
 	}
 
 	@Marshalled(bigNumberFormat = BigNumberFormat.NUMBER)
@@ -102,28 +102,28 @@ class UuidBigNumberFormatPlacement_Test {
 
 	@Test void b04_bigNumber_propertyOverridesClass() {
 		var s = Json5Serializer.create().build();
-		assertEquals("{n:'" + HUGE + "'}", s.serialize(new B04()));
+		assertEquals("{n:'" + HUGE + "'}", s.write(new B04()));
 	}
 
 	public static class B05 { public BigInteger n = BigInteger.valueOf(42L); }
 
 	@Test void b05_bigNumber_auto_safeStaysNumber() {
 		var s = Json5Serializer.create().bigNumberFormat(BigNumberFormat.AUTO).build();
-		assertEquals("{n:42}", s.serialize(new B05()));
+		assertEquals("{n:42}", s.write(new B05()));
 	}
 
 	public static class B06 { public BigInteger n = HUGE; }
 
 	@Test void b06_bigNumber_auto_unsafeBecomesString() {
 		var s = Json5Serializer.create().bigNumberFormat(BigNumberFormat.AUTO).build();
-		assertEquals("{n:'" + HUGE + "'}", s.serialize(new B06()));
+		assertEquals("{n:'" + HUGE + "'}", s.write(new B06()));
 	}
 
 	public static class B07 { public BigDecimal n = new BigDecimal("3.14"); }
 
 	@Test void b07_bigDecimal_auto_fractionalAlwaysString() {
 		var s = Json5Serializer.create().bigNumberFormat(BigNumberFormat.AUTO).build();
-		assertEquals("{n:'3.14'}", s.serialize(new B07()));
+		assertEquals("{n:'3.14'}", s.write(new B07()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -143,7 +143,7 @@ class UuidBigNumberFormatPlacement_Test {
 
 	@Test void c01_marshalledConfig_applies() {
 		var s = Json5Serializer.create().applyAnnotations(C01Config.class).build();
-		var json = s.serialize(new C01Bean());
+		var json = s.write(new C01Bean());
 		assertTrue(json.contains("u:'550e8400e29b41d4a716446655440000'"), "uuid no-dashes: " + json);
 		assertTrue(json.contains("n:'" + HUGE + "'"), "bigNumber string: " + json);
 	}
@@ -163,7 +163,7 @@ class UuidBigNumberFormatPlacement_Test {
 			.uuidFormat(UuidFormat.NO_DASHES)
 			.bigNumberFormat(BigNumberFormat.STRING)
 			.build();
-		var json = s.serialize(new D01());
+		var json = s.write(new D01());
 		assertTrue(json.contains("u:'550e8400e29b41d4a716446655440000'"), "uuid: " + json);
 		assertTrue(json.contains("n:'" + HUGE + "'"), "bigNumber: " + json);
 	}

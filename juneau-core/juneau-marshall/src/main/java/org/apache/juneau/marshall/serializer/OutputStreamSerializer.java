@@ -149,8 +149,8 @@ public class OutputStreamSerializer extends Serializer implements ThrowingFuncti
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	@Override
-	public final byte[] serialize(Object o) throws SerializeException {
-		return getSession().serialize(o);
+	public final byte[] write(Object o) throws SerializeException {
+		return getSession().write(o);
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class OutputStreamSerializer extends Serializer implements ThrowingFuncti
 	 */
 	@Override /* Overridden from ThrowingFunction */
 	public final byte[] applyThrows(Object o) throws Exception {
-		return serialize(o);
+		return write(o);
 	}
 
 	/**

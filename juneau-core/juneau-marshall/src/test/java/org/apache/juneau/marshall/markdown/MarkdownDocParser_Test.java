@@ -31,7 +31,7 @@ class MarkdownDocParser_Test {
 	// a - Parse simple flat document to bean
 	//====================================================================================================
 
-	@Test void a01_parseSimpleFlatDoc_toBean() {
+	@Test void a01_readSimpleFlatDoc_toBean() {
 		var md = """
 			# Person
 
@@ -40,15 +40,15 @@ class MarkdownDocParser_Test {
 			| name | Alice |
 			| age | 30 |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, A.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, A.class);
 		assertEquals("Alice", r.name);
 		assertEquals(30, r.age);
 	}
 
-	@Test void a02_parseFlatDocNoTitle_toBean() {
+	@Test void a02_readFlatDocNoTitle_toBean() {
 		// Document without a top-level heading should still parse the table
 		var md = "| Property | Value |\n|---|---|\n| name | Bob |\n| age | 25 |";
-		var r = MarkdownDocParser.DEFAULT.parse(md, A.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, A.class);
 		assertEquals("Bob", r.name);
 		assertEquals(25, r.age);
 	}
@@ -62,7 +62,7 @@ class MarkdownDocParser_Test {
 	// b - Parse nested bean via sub-heading
 	//====================================================================================================
 
-	@Test void b01_parseNestedBeanViaSubHeading() {
+	@Test void b01_readNestedBeanViaSubHeading() {
 		var md = """
 			# Person
 
@@ -78,7 +78,7 @@ class MarkdownDocParser_Test {
 			| city | Boston |
 			| state | MA |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, B.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, B.class);
 		assertEquals("Alice", r.name);
 		assertEquals(30, r.age);
 		assertNotNull(r.address);
@@ -101,7 +101,7 @@ class MarkdownDocParser_Test {
 	// c - Parse collection under sub-heading
 	//====================================================================================================
 
-	@Test void c01_parseListOfStringsViaSubHeading() {
+	@Test void c01_readListOfStringsViaSubHeading() {
 		var md = """
 			# Report
 
@@ -115,13 +115,13 @@ class MarkdownDocParser_Test {
 			- beta
 			- gamma
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, C.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, C.class);
 		assertEquals("Summary", r.name);
 		assertNotNull(r.tags);
 		assertEquals(List.of("alpha", "beta", "gamma"), r.tags);
 	}
 
-	@Test void c02_parseMultiColumnTableViaSubHeading() {
+	@Test void c02_readMultiColumnTableViaSubHeading() {
 		var md = """
 			# Container
 
@@ -132,7 +132,7 @@ class MarkdownDocParser_Test {
 			| Alice | 30 |
 			| Bob | 25 |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, D.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, D.class);
 		assertNotNull(r.items);
 		assertEquals(2, r.items.size());
 		assertEquals("Alice", r.items.get(0).name);
@@ -158,7 +158,7 @@ class MarkdownDocParser_Test {
 	@SuppressWarnings({
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
-	void d01_parseFlatDocToMap() {
+	void d01_readFlatDocToMap() {
 		var md = """
 			# Data
 
@@ -167,7 +167,7 @@ class MarkdownDocParser_Test {
 			| k1 | v1 |
 			| k2 | v2 |
 			""";
-		var r = (Map<String, String>) MarkdownDocParser.DEFAULT.parse(md, Map.class, String.class, String.class);
+		var r = (Map<String, String>) MarkdownDocParser.DEFAULT.read(md, Map.class, String.class, String.class);
 		assertEquals("v1", r.get("k1"));
 		assertEquals("v2", r.get("k2"));
 	}
@@ -176,7 +176,7 @@ class MarkdownDocParser_Test {
 	// e - Null handling
 	//====================================================================================================
 
-	@Test void e01_parseNullPropertyValue() {
+	@Test void e01_readNullPropertyValue() {
 		var md = """
 			# Data
 
@@ -185,7 +185,7 @@ class MarkdownDocParser_Test {
 			| name | *null* |
 			| age | 30 |
 			""";
-		var r = MarkdownDocParser.DEFAULT.parse(md, E.class);
+		var r = MarkdownDocParser.DEFAULT.read(md, E.class);
 		assertNull(r.name);
 		assertEquals(30, r.age);
 	}
@@ -209,7 +209,7 @@ class MarkdownDocParser_Test {
 			| age | 30 |
 			""";
 		var p = MarkdownDocParser.create().headingLevel(2).build();
-		var r = p.parse(md, A.class);
+		var r = p.read(md, A.class);
 		assertEquals("Alice", r.name);
 		assertEquals(30, r.age);
 	}
@@ -222,8 +222,8 @@ class MarkdownDocParser_Test {
 		var original = new A();
 		original.name = "Alice";
 		original.age = 30;
-		var md = MarkdownDocSerializer.DEFAULT.serialize(original);
-		var parsed = MarkdownDocParser.DEFAULT.parse(md, A.class);
+		var md = MarkdownDocSerializer.DEFAULT.write(original);
+		var parsed = MarkdownDocParser.DEFAULT.read(md, A.class);
 		assertEquals("Alice", parsed.name);
 		assertEquals(30, parsed.age);
 	}
@@ -235,8 +235,8 @@ class MarkdownDocParser_Test {
 		original.address = new Address();
 		original.address.city = "Boston";
 		original.address.state = "MA";
-		var md = MarkdownDocSerializer.DEFAULT.serialize(original);
-		var parsed = MarkdownDocParser.DEFAULT.parse(md, B.class);
+		var md = MarkdownDocSerializer.DEFAULT.write(original);
+		var parsed = MarkdownDocParser.DEFAULT.read(md, B.class);
 		assertEquals("Alice", parsed.name);
 		assertEquals(30, parsed.age);
 		assertNotNull(parsed.address);
@@ -252,8 +252,8 @@ class MarkdownDocParser_Test {
 		original.address.city = "Seattle";
 		original.address.state = "WA";
 		var s = MarkdownDocSerializer.create().title("Employee Report").build();
-		var md = s.serialize(original);
-		var parsed = MarkdownDocParser.DEFAULT.parse(md, B.class);
+		var md = s.write(original);
+		var parsed = MarkdownDocParser.DEFAULT.read(md, B.class);
 		assertEquals("Bob", parsed.name);
 		assertEquals(25, parsed.age);
 		assertNotNull(parsed.address);

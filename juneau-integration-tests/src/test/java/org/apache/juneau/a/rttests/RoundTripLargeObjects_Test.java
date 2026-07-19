@@ -203,20 +203,20 @@ class RoundTripLargeObjects_Test extends TestBase {
 		System.err.println("\n---Speed test on " + t.label + "---"); // NOT DEBUG
 
 		// Initialization run.
-		Object r = s.serialize(a);
+		Object r = s.write(a);
 		System.err.println(f("Serialized size: %s ", (r instanceof String ? r.toString().length() : ((byte[])r).length))); // NOT DEBUG
-		p.parse(r, A.class);
+		p.read(r, A.class);
 
 		startTime = System.currentTimeMillis();
 		for (var i = 0; i < numRuns; i++)
-			r = s.serialize(a);
+			r = s.write(a);
 		System.err.println(f("Average serialize time: %sms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
 		startTime = System.currentTimeMillis();
 		for (var i = 0; i < numRuns; i++)
-			p.parse(r, A.class);
+			p.read(r, A.class);
 		System.err.println(f("Average parsed time: %sms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
 		// Verify round-trip correctness
-		var parsed = p.parse(r, A.class);
+		var parsed = p.read(r, A.class);
 		assertNotNull(parsed);
 		assertEquals(a.a1Map.size(), parsed.a1Map.size());
 		assertEquals(a.a1List.size(), parsed.a1List.size());

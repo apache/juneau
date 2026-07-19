@@ -394,18 +394,18 @@ class JsonParserEdgeCases_Test extends TestBase {
 
 		// 'y' tests should always succeed.
 		if (input.expected == 'y') {
-			p.parse(input.json, Object.class);
+			p.read(input.json, Object.class);
 
 		// 'n' tests should always fail.
 		} else if (input.expected == 'n') {
 			var p2 = p;
-			assertParseError(input, assertThrows(Throwable.class, () -> p2.parse(input.json, Object.class), () -> "ParseException expected.  Test="+input.name+", Input=" + input.jsonReadable));
+			assertParseError(input, assertThrows(Throwable.class, () -> p2.read(input.json, Object.class), () -> "ParseException expected.  Test="+input.name+", Input=" + input.jsonReadable));
 
 		// 'i' tests may or may not fail, but should throw a ParseException and not kill the JVM.
 		} else if (input.expected == 'i') {
 			var p2 = p;
 			try {
-				p2.parse(input.json, Object.class);
+				p2.read(input.json, Object.class);
 			} catch (Throwable t) {
 				assertParseError(input, t);
 			}
@@ -423,13 +423,13 @@ class JsonParserEdgeCases_Test extends TestBase {
 
 		// 'y' tests should always succeed.
 		if (input.expected == 'y') {
-			p.parse(input.json, Object.class);
+			p.read(input.json, Object.class);
 
 		// 'n' tests may or may not fail for lax parser.
 		} else if (input.expected == 'n') {
 			var p2 = p;
 			try {
-				p2.parse(input.json, Object.class);
+				p2.read(input.json, Object.class);
 			} catch (Throwable t) {
 				assertParseError(input, t);
 			}
@@ -438,7 +438,7 @@ class JsonParserEdgeCases_Test extends TestBase {
 		} else if (input.expected == 'i') {
 			var p2 = p;
 			try {
-				p2.parse(input.json, Object.class);
+				p2.read(input.json, Object.class);
 			} catch (Throwable t) {
 				assertParseError(input, t);
 			}

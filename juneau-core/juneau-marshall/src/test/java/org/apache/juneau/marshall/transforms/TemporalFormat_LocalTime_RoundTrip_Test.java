@@ -358,7 +358,7 @@ class TemporalFormat_LocalTime_RoundTrip_Test extends TestBase {
 		var x = LocalTime.of(12, 30, 45);
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, LocalTime.class);
+			var x2 = p.read(out, LocalTime.class);
 			// Binary serializers with native datetime support may bypass the configured format swap at
 			// top-level; bean-property tests above cover the swap path strictly.  Accept either the
 			// lossy-canonical (format applied) or the structural original (format bypassed).

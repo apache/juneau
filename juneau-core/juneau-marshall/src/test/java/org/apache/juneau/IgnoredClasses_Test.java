@@ -42,23 +42,23 @@ class IgnoredClasses_Test extends TestBase {
 	@Test void a02_ignorePackages() throws Exception {
 		var a = new A();
 		var s = Json5Serializer.create();
-		assertEquals("{f1:'isBean'}", s.build().serialize(a));
+		assertEquals("{f1:'isBean'}", s.build().write(a));
 		s.notBeanPackages("org.apache.juneau");
-		assertEquals("'isNotBean'", s.build().serialize(a));
+		assertEquals("'isNotBean'", s.build().write(a));
 		s.marshallingContext().notBeanPackages().remove("org.apache.juneau");
-		assertEquals("{f1:'isBean'}", s.build().serialize(a));
+		assertEquals("{f1:'isBean'}", s.build().write(a));
 		s.notBeanPackages("org.apache.juneau.*");
-		assertEquals("'isNotBean'", s.build().serialize(a));
+		assertEquals("'isNotBean'", s.build().write(a));
 		s.marshallingContext().notBeanPackages().remove("org.apache.juneau.*");
-		assertEquals("{f1:'isBean'}", s.build().serialize(a));
+		assertEquals("{f1:'isBean'}", s.build().write(a));
 		s.notBeanPackages("org.apache.juneau.*");
-		assertEquals("'isNotBean'", s.build().serialize(a));
+		assertEquals("'isNotBean'", s.build().write(a));
 		s.marshallingContext().notBeanPackages().remove("org.apache.juneau.*");
-		assertEquals("{f1:'isBean'}", s.build().serialize(a));
+		assertEquals("{f1:'isBean'}", s.build().write(a));
 		s.notBeanPackages("org.apache.juneau");
-		assertEquals("'isNotBean'", s.build().serialize(a));
+		assertEquals("'isNotBean'", s.build().write(a));
 		s.notBeanPackages("org.apache.juneau.x");
-		assertEquals("'isNotBean'", s.build().serialize(a));
+		assertEquals("'isNotBean'", s.build().write(a));
 	}
 
 	public static class A {

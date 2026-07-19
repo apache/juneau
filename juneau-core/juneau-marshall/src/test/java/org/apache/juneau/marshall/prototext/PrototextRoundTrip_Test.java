@@ -154,7 +154,7 @@ class PrototextRoundTrip_Test {
 	void a11_objectSwapRoundTrip() {
 		var ser = PrototextSerializer.create().binaryFormat(BinaryFormat.BASE64).build();
 		var a = JsonMap.of("data", new byte[] { 0x0a, 0x05, (byte) 0xff });
-		var proto = ser.serialize(a);
+		var proto = ser.write(a);
 		assertTrue(proto.contains("data"));
 		assertFalse(proto.contains("\\x"), "Base64 swap should produce base64, not hex escape");
 	}

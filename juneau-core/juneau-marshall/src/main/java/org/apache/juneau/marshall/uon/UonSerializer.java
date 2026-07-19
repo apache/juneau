@@ -114,7 +114,7 @@ import org.apache.juneau.marshall.stream.*;
  *
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
  * 	<jc>// Produces "(a=b,c=1,d=false,e=@(f,1,false),g=(h=i))"</jc>
- * 	String <jv>uon</jv> = UonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
+ * 	String <jv>uon</jv> = UonSerializer.<jsf>DEFAULT</jsf>.write(<jv>map</jv>);
  *
  * 	<jc>// Serialize a bean</jc>
  * 	<jk>public class</jk> Person {
@@ -136,7 +136,7 @@ import org.apache.juneau.marshall.stream.*;
  * 		<js>"NY"</js>, 12345, <jk>false</jk>);
  *
  * 	<jc>// Produces "(name='John Doe',age=23,address=(street='123 Main St',city=Anywhere,state=NY,zip=12345),deceased=false)"</jc>
- * 	String <jv>uon</jv> = UonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+ * 	String <jv>uon</jv> = UonSerializer.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
  * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -281,10 +281,10 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 	JsonMap <jv>map</jv> = JsonMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"foo bar"</js>);
 		 *
 		 * 	<jc>// Produces: "(foo=foo bar)"</jc>
-		 * 	String <jv>uon1</jv> = <jv>serializer1</jv>.serialize(<jv>map</jv>)
+		 * 	String <jv>uon1</jv> = <jv>serializer1</jv>.write(<jv>map</jv>)
 		 *
 		 * 	<jc>// Produces: "(foo=foo%20bar)"</jc>
-		 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.serialize(<jv>map</jv>)
+		 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.write(<jv>map</jv>)
 		 * </p>
 		 *
 		 * @return This object.
@@ -342,10 +342,10 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 	);
 		 *
 		 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
-		 * 	String <jv>uon1</jv> = <jv>serializer1</jv>.serialize(<jv>map</jv>)
+		 * 	String <jv>uon1</jv> = <jv>serializer1</jv>.write(<jv>map</jv>)
 		 *
 		 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
-		 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.serialize(<jv>map</jv>)
+		 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.write(<jv>map</jv>)
 		 * </p>
 		 *
 		 * <p>
@@ -385,7 +385,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 	);
 		 *
 		 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
-		 * 	String <jv>uon</jv> = <jv>serializer</jv>.serialize(<jv>map</jv>)
+		 * 	String <jv>uon</jv> = <jv>serializer</jv>.write(<jv>map</jv>)
 		 * </p>
 		 *
 		 * @return This object.
@@ -531,20 +531,20 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 
 	/**
 	 * Convenience delegator that opens a whole-value {@link RecordWriter} over the output using
-	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 * <b>default session arguments</b> (mirrors {@link #write(Object)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link UonSerializerSession#serializeRecords(Object)}.
+	 * The real implementation lives on {@link UonSerializerSession#writeRecords(Object)}.
 	 * Callers that need request-derived configuration should call {@link #createSession()} and
-	 * invoke {@link UonSerializerSession#serializeRecords(Object)} on the built session instead.
+	 * invoke {@link UonSerializerSession#writeRecords(Object)} on the built session instead.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return getSession().serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return getSession().writeRecords(output);
 	}
 
 	@Override /* RecordWritable */
@@ -581,8 +581,8 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * @throws SerializeException If a problem occurred while trying to parse the input.
 	 * @throws SchemaValidationException If the output fails schema validation.
 	 */
-	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-		return getPartSession().serialize(partType, schema, value);
+	public String write(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return getPartSession().write(partType, schema, value);
 	}
 
 	/**

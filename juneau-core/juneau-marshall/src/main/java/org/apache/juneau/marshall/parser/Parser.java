@@ -112,7 +112,7 @@ import org.apache.juneau.marshall.xml.*;
  * When registered with this parser, you can construct {@code Calendar} objects from {@code Strings} using the
  * following syntax...
  * <p class='bjava'>
- * 	Calendar <jv>calendar</jv> = <jv>parser</jv>.parse(<js>"'Sun Mar 03 04:05:06 EST 2001'"</js>, GregorianCalendar.<jk>class</jk>);
+ * 	Calendar <jv>calendar</jv> = <jv>parser</jv>.read(<js>"'Sun Mar 03 04:05:06 EST 2001'"</js>, GregorianCalendar.<jk>class</jk>);
  * </p>
  *
  * <p>
@@ -229,7 +229,7 @@ public class Parser extends MarshallingContextable {
 		 * 		.build();
 		 *
 		 * 	Reader <jv>myReader</jv> = <jk>new</jk> FileReader(<js>"/tmp/myfile.json"</js>);
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jv>myReader</jv>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<jv>myReader</jv>, MyBean.<jk>class</jk>);
 		 *
 		 * 	<jsm>assertTrue</jsm>(<jv>myReader</jv>.isClosed());
 		 * </p>
@@ -260,7 +260,7 @@ public class Parser extends MarshallingContextable {
 		 * Specifies the media type that this parser consumes.
 		 *
 		 * <p>
-		 * <b>Token streams:</b> this setting is not honored by {@link TokenReadable#parseTokens(Object) parseTokens}
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenReadable#readTokens(Object) readTokens}
 		 * &mdash; media-type metadata is informational, not behavioral.
 		 *
 		 * @param value The value for this setting.
@@ -293,14 +293,14 @@ public class Parser extends MarshallingContextable {
 		 *
 		 * 	Reader <jv>myReader</jv> = <jk>new</jk> FileReader(<js>"/tmp/mybadfile.json"</js>);
 		 * 	<jk>try</jk> {
-		 * 		<jv>parser</jv>.parse(<jv>myReader</jv>, Object.<jk>class</jk>);
+		 * 		<jv>parser</jv>.read(<jv>myReader</jv>, Object.<jk>class</jk>);
 		 * 	} <jk>catch</jk> (ParseException <jv>e</jv>) {
 		 * 		System.<jsf>err</jsf>.println(<jv>e</jv>.getMessage());  <jc>// Will display 200 lines of the output.</jc>
 		 * 	}
 		 * </p>
 		 *
 		 * <p>
-		 * <b>Token streams:</b> this setting is not honored by {@link TokenReadable#parseTokens(Object) parseTokens}
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenReadable#readTokens(Object) readTokens}
 		 * &mdash; it controls error-message formatting on the POJO databind path; the cursor uses its own
 		 * exception text.
 		 *
@@ -370,7 +370,7 @@ public class Parser extends MarshallingContextable {
 		 * 	<jk>try</jk> (ReaderParserSession <jv>session</jv> = <jv>parser</jv>.createSession()) {
 		 *
 		 * 		<jc>// Parse some JSON object.</jc>
-		 * 		MyBean <jv>myBean</jv> = <jv>session</jv>.parse(<js>"{...}"</js>, MyBean.<jk>class</jk>);
+		 * 		MyBean <jv>myBean</jv> = <jv>session</jv>.read(<js>"{...}"</js>, MyBean.<jk>class</jk>);
 		 *
 		 * 		<jc>// Get the listener.</jc>
 		 * 		MyParserListener <jv>listener</jv> = <jv>session</jv>.getListener(MyParserListener.<jk>class</jk>);
@@ -381,7 +381,7 @@ public class Parser extends MarshallingContextable {
 		 * </p>
 		 *
 		 * <p>
-		 * <b>Token streams:</b> this setting is not honored by {@link TokenReadable#parseTokens(Object) parseTokens}
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenReadable#readTokens(Object) readTokens}
 		 * &mdash; listeners are POJO-level observers with no token-layer analog.
 		 *
 		 * @param value The new value for this property.
@@ -447,7 +447,7 @@ public class Parser extends MarshallingContextable {
 		 *
 		 * 	<jc>// Use it.</jc>
 		 * 	String <jv>json</jv> = <js>"{' foo ':' bar '}"</js>;
-		 * 	Map&lt;String,String&gt; <jv>myMap</jv> = <jv>parser</jv>.parse(<jv>json</jv>, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+		 * 	Map&lt;String,String&gt; <jv>myMap</jv> = <jv>parser</jv>.read(<jv>json</jv>, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 		 *
 		 * 	<jc>// Make sure strings are parsed.</jc>
 		 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, <jv>myMap</jv>.get(<js>"foo"</js>));
@@ -495,8 +495,8 @@ public class Parser extends MarshallingContextable {
 		 *
 		 * 	<jc>// Read input with multiple POJOs</jc>
 		 * 	Reader <jv>json</jv> = <jk>new</jk> StringReader(<js>"{foo:'bar'}{foo:'baz'}"</js>);
-		 * 	MyBean <jv>myBean1</jv> = <jv>session</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
-		 * 	MyBean <jv>myBean2</jv> = <jv>session</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean1</jv> = <jv>session</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean2</jv> = <jv>session</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -654,7 +654,7 @@ public class Parser extends MarshallingContextable {
 	 * Workhorse method.
 	 *
 	 * <p>
-	 * Subclasses are expected to either implement this method or {@link ParserSession#doParse(ParserPipe, ClassMeta)}.
+	 * Subclasses are expected to either implement this method or {@link ParserSession#doRead(ParserPipe, ClassMeta)}.
 	 *
 	 * @param session The current session.
 	 * @param pipe Where to get the input from.
@@ -669,7 +669,7 @@ public class Parser extends MarshallingContextable {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
+	public <T> T doRead(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		throw uoex();
 	}
 
@@ -698,7 +698,7 @@ public class Parser extends MarshallingContextable {
 	public boolean isReaderParser() { return true; }
 
 	/**
-	 * Same as {@link #parse(Object, Type, Type...)} except optimized for a non-parameterized class.
+	 * Same as {@link #read(Object, Type, Type...)} except optimized for a non-parameterized class.
 	 *
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
@@ -708,36 +708,36 @@ public class Parser extends MarshallingContextable {
 	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	String <jv>string</jv> = <jv>parser</jv>.parse(<jv>json</jv>, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>parser</jv>.read(<jv>json</jv>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] <jv>beanArray</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>parser</jv>.read(<jv>json</jv>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List <jv>list</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>parser</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map <jv>map</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>parser</jv>.read(<jv>json</jv>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * 	See {@link #read(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final <T> T parse(Object input, Class<T> type) throws ParseException, IOException {
-		return getSession().parse(input, type);
+	public final <T> T read(Object input, Class<T> type) throws ParseException, IOException {
+		return getSession().read(input, type);
 	}
 
 	/**
-	 * Same as {@link #parse(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta}
+	 * Same as {@link #read(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta}
 	 * object.
 	 *
 	 * <p>
@@ -746,14 +746,14 @@ public class Parser extends MarshallingContextable {
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * 	See {@link #read(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException, IOException {
-		return getSession().parse(input, type);
+	public final <T> T read(Object input, ClassMeta<T> type) throws ParseException, IOException {
+		return getSession().read(input, type);
 	}
 
 	/**
@@ -767,19 +767,19 @@ public class Parser extends MarshallingContextable {
 	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List <jv>list1</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list1</jv> = <jv>parser</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 * 	List <jv>list2</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List <jv>list2</jv> = <jv>parser</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List <jv>list3</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list3</jv> = <jv>parser</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map <jv>map1</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map <jv>map1</jv> = <jv>parser</jv>.read(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map <jv>map2</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map <jv>map2</jv> = <jv>parser</jv>.read(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -793,7 +793,7 @@ public class Parser extends MarshallingContextable {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
+	 * 		Use the {@link #read(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 *
 	 * @param <T> The class type of the object to create.
@@ -828,42 +828,42 @@ public class Parser extends MarshallingContextable {
 	 * @throws IOException Thrown by underlying stream.
 	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public final <T> T parse(Object input, Type type, Type...args) throws ParseException, IOException {
-		return getSession().parse(input, type, args);
+	public final <T> T read(Object input, Type type, Type...args) throws ParseException, IOException {
+		return getSession().read(input, type, args);
 	}
 
 	/**
-	 * Same as {@link #parse(Object, Class)} but since it's a {@link String} input doesn't throw an {@link IOException}.
+	 * Same as {@link #read(Object, Class)} but since it's a {@link String} input doesn't throw an {@link IOException}.
 	 *
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * 	See {@link #read(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public final <T> T parse(String input, Class<T> type) throws ParseException {
-		return getSession().parse(input, type);
+	public final <T> T read(String input, Class<T> type) throws ParseException {
+		return getSession().read(input, type);
 	}
 
 	/**
-	 * Same as {@link #parse(Object, ClassMeta)} but since it's a {@link String} input doesn't throw an {@link IOException}.
+	 * Same as {@link #read(Object, ClassMeta)} but since it's a {@link String} input doesn't throw an {@link IOException}.
 	 *
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * 	See {@link #read(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public final <T> T parse(String input, ClassMeta<T> type) throws ParseException {
-		return getSession().parse(input, type);
+	public final <T> T read(String input, ClassMeta<T> type) throws ParseException {
+		return getSession().read(input, type);
 	}
 
 	/**
-	 * Same as {@link #parse(String, ClassMeta)} but creates the parser session with a specific outer object.
+	 * Same as {@link #read(String, ClassMeta)} but creates the parser session with a specific outer object.
 	 *
 	 * <p>
 	 * The outer object is used when instantiating top-level non-static inner classes and when setting
@@ -882,17 +882,17 @@ public class Parser extends MarshallingContextable {
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public final <T> T parseWithOuter(String input, ClassMeta<T> type, Object outer) throws ParseException {
-		return createSession().outer(outer).build().parse(input, type);
+	public final <T> T readWithOuter(String input, ClassMeta<T> type, Object outer) throws ParseException {
+		return createSession().outer(outer).build().read(input, type);
 	}
 
 	/**
-	 * Same as {@link #parse(Object, Type, Type...)} but since it's a {@link String} input doesn't throw an {@link IOException}.
+	 * Same as {@link #read(Object, Type, Type...)} but since it's a {@link String} input doesn't throw an {@link IOException}.
 	 *
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * 	See {@link #read(Object, Type, Type...)} for details.
 	 * @param type
 	 * 	The object type to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -903,8 +903,8 @@ public class Parser extends MarshallingContextable {
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public final <T> T parse(String input, Type type, Type...args) throws ParseException {
-		return getSession().parse(input, type, args);
+	public final <T> T read(String input, Type type, Type...args) throws ParseException {
+		return getSession().read(input, type, args);
 	}
 
 	/**
@@ -927,10 +927,10 @@ public class Parser extends MarshallingContextable {
 	 * @return An array of parsed objects.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
+	public final Object[] readArgs(Object input, Type[] argTypes) throws ParseException {
 		if (argTypes == null || argTypes.length == 0)
 			return new Object[0];
-		return getSession().parseArgs(input, argTypes);
+		return getSession().readArgs(input, argTypes);
 	}
 
 	/**
@@ -945,15 +945,15 @@ public class Parser extends MarshallingContextable {
 	 * </ul>
 	 *
 	 * @param <E> The element class type.
-	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
+	 * @param input The input.  See {@link #read(Object, ClassMeta)} for supported input types.
 	 * @param c The collection being loaded.
 	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
 	 * @return The same collection that was passed in to allow this method to be chained.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
-	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
-		return getSession().parseIntoCollection(input, c, elementType);
+	public final <E> Collection<E> readIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
+		return getSession().readIntoCollection(input, c, elementType);
 	}
 
 	/**
@@ -972,7 +972,7 @@ public class Parser extends MarshallingContextable {
 	 *
 	 * @param <K> The key class type.
 	 * @param <V> The value class type.
-	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
+	 * @param input The input.  See {@link #read(Object, ClassMeta)} for supported input types.
 	 * @param m The map being loaded.
 	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.
 	 * @param valueType The class type of the values, or <jk>null</jk> to default to whatever is being parsed.
@@ -980,8 +980,8 @@ public class Parser extends MarshallingContextable {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
-	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
-		return getSession().parseIntoMap(input, m, keyType, valueType);
+	public final <K,V> Map<K,V> readIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
+		return getSession().readIntoMap(input, m, keyType, valueType);
 	}
 
 	/**

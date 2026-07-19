@@ -35,7 +35,7 @@ class JcsCanonical_Test extends TestBase {
 		var s = Character.toString((char) 0x20AC) + "$" + Character.toString((char) 0x000F) + "\nA'B\"\\\\\"/";
 		var literals = list((Object) null, true, false);
 		var m = JsonMap.of("numbers", numbers, "string", s, "literals", literals);
-		var out = JcsSerializer.DEFAULT.serialize(m);
+		var out = JcsSerializer.DEFAULT.write(m);
 		// Keys sorted: literals, numbers, string
 		assertTrue(out.startsWith("{\"literals\":"));
 		assertTrue(out.contains("\"numbers\":"));
@@ -49,14 +49,14 @@ class JcsCanonical_Test extends TestBase {
 		var numbers = list(333333333.33333329, 1E30, 4.50, 2e-3, 0.000000000000000000000000001);
 		var literals = list((Object) null, true, false);
 		var m = JsonMap.of("literals", literals, "numbers", numbers);
-		var out = JcsSerializer.DEFAULT.serialize(m);
+		var out = JcsSerializer.DEFAULT.write(m);
 		assertTrue(out.startsWith("{\"literals\":[null,true,false],\"numbers\":"));
 	}
 
 	@Test
 	void d03_noWhitespace() throws Exception {
 		var m = JsonMap.of("a", 1, "b", 2);
-		var s = JcsSerializer.DEFAULT.serialize(m);
+		var s = JcsSerializer.DEFAULT.write(m);
 		assertFalse(s.contains(" "));
 		assertFalse(s.contains("\n"));
 		assertFalse(s.contains("\t"));
@@ -65,7 +65,7 @@ class JcsCanonical_Test extends TestBase {
 	@Test
 	void d04_simpleBeanCanonical() throws Exception {
 		var m = JsonMap.of("name", "Alice", "age", 30);
-		var s = JcsSerializer.DEFAULT.serialize(m);
+		var s = JcsSerializer.DEFAULT.write(m);
 		assertEquals("{\"age\":30,\"name\":\"Alice\"}", s);
 	}
 
@@ -73,7 +73,7 @@ class JcsCanonical_Test extends TestBase {
 	void d05_nestedBeanCanonical() throws Exception {
 		var inner = JsonMap.of("zip", "80201", "city", "Denver");
 		var outer = JsonMap.of("address", inner, "name", "Alice");
-		var s = JcsSerializer.DEFAULT.serialize(outer);
+		var s = JcsSerializer.DEFAULT.write(outer);
 		assertTrue(s.contains("\"address\":{\"city\":\"Denver\",\"zip\":\"80201\"}"));
 		assertTrue(s.contains("\"name\":\"Alice\""));
 	}
@@ -81,7 +81,7 @@ class JcsCanonical_Test extends TestBase {
 	@Test
 	void d06_mixedTypesCanonical() throws Exception {
 		var m = JsonMap.of("n", 42, "s", "hi", "b", true, "x", (Object) null, "a", list(1, 2));
-		var s = JcsSerializer.DEFAULT.serialize(m);
+		var s = JcsSerializer.DEFAULT.write(m);
 		assertFalse(s.contains(" "));
 		// All keys present, sorted
 		assertTrue(s.contains("\"a\":"));
@@ -94,16 +94,16 @@ class JcsCanonical_Test extends TestBase {
 	@Test
 	void d07_deterministicRoundTrip() throws Exception {
 		var m = JsonMap.of("z", 3, "a", 1, "m", 2);
-		var s1 = JcsSerializer.DEFAULT.serialize(m);
-		var s2 = JcsSerializer.DEFAULT.serialize(m);
+		var s1 = JcsSerializer.DEFAULT.write(m);
+		var s2 = JcsSerializer.DEFAULT.write(m);
 		assertEquals(s1, s2);
 	}
 
 	@Test
 	void d08_hashStability() throws Exception {
 		var m = JsonMap.of("c", 3, "a", 1, "b", 2);
-		var s1 = JcsSerializer.DEFAULT.serialize(m);
-		var s2 = JcsSerializer.DEFAULT.serialize(m);
+		var s1 = JcsSerializer.DEFAULT.write(m);
+		var s2 = JcsSerializer.DEFAULT.write(m);
 		var md = MessageDigest.getInstance("SHA-256");
 		var bytes1 = s1.getBytes(StandardCharsets.UTF_8);
 		var bytes2 = s2.getBytes(StandardCharsets.UTF_8);
@@ -113,13 +113,13 @@ class JcsCanonical_Test extends TestBase {
 
 	@Test
 	void d09_emptyObject() throws Exception {
-		assertEquals("{}", JcsSerializer.DEFAULT.serialize(JsonMap.of()));
+		assertEquals("{}", JcsSerializer.DEFAULT.write(JsonMap.of()));
 	}
 
 	@Test
 	void d10_alphabeticalOrder() throws Exception {
 		var m = JsonMap.of("c", 3, "a", 1, "b", 2);
-		assertEquals("{\"a\":1,\"b\":2,\"c\":3}", JcsSerializer.DEFAULT.serialize(m));
+		assertEquals("{\"a\":1,\"b\":2,\"c\":3}", JcsSerializer.DEFAULT.write(m));
 	}
 
 	private static String bytesToHex(byte[] bytes) {

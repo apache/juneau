@@ -79,7 +79,7 @@ class AdminMixin_RateLimitSnapshot_Test extends TestBase {
 		ca.get("/items").header("X-Key", "client-a").run().assertStatus(200);
 
 		var body = ca.get("/admin/ratelimit").run().assertStatus(200).getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		var guards = (Map<?,?>) parsed.get("guards");
 		Assertions.assertEquals(1, guards.size(), "expected exactly one guard entry");
 		var entry = (Map<?,?>) guards.values().iterator().next();
@@ -145,7 +145,7 @@ class AdminMixin_RateLimitSnapshot_Test extends TestBase {
 		cb.get("/items").run().assertStatus(429);
 
 		var body = cb.get("/admin/ratelimit").run().assertStatus(200).getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		var entry = (Map<?,?>) ((Map<?,?>) parsed.get("guards")).values().iterator().next();
 		var snapshot = (List<?>) entry.get("snapshot");
 		Assertions.assertFalse(snapshot.isEmpty());
@@ -187,7 +187,7 @@ class AdminMixin_RateLimitSnapshot_Test extends TestBase {
 		cc.get("/items").header("X-Forwarded-For", "10.0.0.20").run().assertStatus(200);
 
 		var body = cc.get("/admin/ratelimit").run().assertStatus(200).getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		var entry = (Map<?,?>) ((Map<?,?>) parsed.get("guards")).values().iterator().next();
 		var snapshot = (List<?>) entry.get("snapshot");
 		Assertions.assertTrue(snapshot.size() >= 3, "expected at least 3 entries; got " + snapshot.size());
@@ -205,7 +205,7 @@ class AdminMixin_RateLimitSnapshot_Test extends TestBase {
 
 	@Test void c02_configReflectsXForwardedForAndExemptPaths() throws Exception {
 		var body = cc.get("/admin/ratelimit").run().assertStatus(200).getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		var entry = (Map<?,?>) ((Map<?,?>) parsed.get("guards")).values().iterator().next();
 		var config = (Map<?,?>) entry.get("config");
 		Assertions.assertEquals(Boolean.TRUE, config.get("xForwardedForAware"));
@@ -246,7 +246,7 @@ class AdminMixin_RateLimitSnapshot_Test extends TestBase {
 
 	@Test void e01_customStorageWithoutSnapshotOverrideEmitsEmptyArray() throws Exception {
 		var body = ce.get("/admin/ratelimit").run().assertStatus(200).getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		var entry = (Map<?,?>) ((Map<?,?>) parsed.get("guards")).values().iterator().next();
 		Assertions.assertNotNull(entry.get("config"));
 		var snapshot = (List<?>) entry.get("snapshot");

@@ -179,7 +179,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
-	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+	public String write(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 
 		ClassMeta<?> type = getClassMetaForObject(value);
 		if (type == null)
@@ -239,7 +239,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				} else if (f == DATE_TIME) {
 					out = Iso8601Utils.formatAsDateTime(value, type, getTimeZone());
 				} else if (f == HttpPartFormat.UON) {
-					out = super.serialize(partType, schema, value);
+					out = super.write(partType, schema, value);
 				} else {
 					out = toType(value, string());
 				}
@@ -265,7 +265,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			} else if (t == ARRAY) {
 
 				if (cf == HttpPartCollectionFormat.UONC)
-					out = super.serialize(partType, null, toList(partType, type, value, schema));
+					out = super.write(partType, null, toList(partType, type, value, schema));
 				else {
 
 					HttpPartSchema items = schema.getItems();
@@ -274,15 +274,15 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 					if (type.isArray()) {
 						for (var i = 0; i < Array.getLength(value); i++)
-							sb.append(serialize(partType, items, Array.get(value, i)));
+							sb.append(write(partType, items, Array.get(value, i)));
 					} else if (type.isCollection()) {
-						((Collection<?>)value).forEach(x -> sb.append(serialize(partType, items, x)));
+						((Collection<?>)value).forEach(x -> sb.append(write(partType, items, x)));
 					} else if (type.isStreamable()) {
-						forEachStreamableEntry(value, type, x -> sb.append(serialize(partType, items, x)));
+						forEachStreamableEntry(value, type, x -> sb.append(write(partType, items, x)));
 					} else if (vt.hasMutaterTo(String[].class)) {
 						String[] ss = toType(value, CM_StringArray);
 						for (var element : ss)
-							sb.append(serialize(partType, items, element));
+							sb.append(write(partType, items, element));
 					} else {
 						throw new SerializeException("Input is not a valid array type: " + type);
 					}
@@ -295,7 +295,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				if (cf == HttpPartCollectionFormat.UONC) {
 					if (schema.hasProperties() && type.isMapOrBean())
 						value = toMap(partType, type, value, schema);
-					out = super.serialize(partType, null, value);
+					out = super.write(partType, null, value);
 
 				} else if (type.isBean()) {
 					var sb = new OapiStringBuilder(cf);
@@ -304,14 +304,14 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 					toBeanMap(value).forEachValue(checkNull, (pMeta, key, val, thrown) -> {
 						if (thrown == null)
-							sb.append(key, serialize(partType, schema2.getProperty(key), val));
+							sb.append(key, write(partType, schema2.getProperty(key), val));
 					});
 					out = sb.toString();
 
 				} else if (type.isMap()) {
 					var sb = new OapiStringBuilder(cf);
 					HttpPartSchema schema2 = schema;
-					((Map<?,?>)value).forEach((k, v) -> sb.append(k, serialize(partType, schema2.getProperty(s(k)), v)));
+					((Map<?,?>)value).forEach((k, v) -> sb.append(k, write(partType, schema2.getProperty(s(k)), v)));
 					out = sb.toString();
 
 				} else {
@@ -431,9 +431,9 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	}
 
 	@Override /* Overridden from Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try {
-			out.getWriter().write(serialize(HttpPartType.BODY, getSchema(), o));
+			out.getWriter().write(write(HttpPartType.BODY, getSchema(), o));
 		} catch (SchemaValidationException e) {
 			throw new SerializeException(e);
 		}

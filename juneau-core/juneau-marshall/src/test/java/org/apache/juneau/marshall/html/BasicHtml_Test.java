@@ -2551,9 +2551,9 @@ class BasicHtml_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("input")
-	void a1_serializeNormal(Input input) {
+	void a1_writeNormal(Input input) {
 		try {
-			var r = s1.serialize(input.in);
+			var r = s1.write(input.in);
 			assertEquals(input.e1, r, fs("%s serialize-normal failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
@@ -2566,9 +2566,9 @@ class BasicHtml_Test extends TestBase {
 	@MethodSource("input")
 	<T> void a2_parseNormal(Input<T> input) {
 		try {
-			var r = s1.serialize(input.in);
-			var o = parser.parse(r, input.type);
-			r = s1.serialize(o);
+			var r = s1.write(input.in);
+			var o = parser.read(r, input.type);
+			r = s1.write(o);
 			assertEquals(input.e1, r, fs("%s parse-normal failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
@@ -2581,8 +2581,8 @@ class BasicHtml_Test extends TestBase {
 	@MethodSource("input")
 	<T> void a3_verifyNormal(Input<T> input) {
 		try {
-			var r = s1.serialize(input.in);
-			var o = parser.parse(r, input.type);
+			var r = s1.write(input.in);
+			var o = parser.read(r, input.type);
 			input.verify(input.type.cast(o));
 		} catch (AssertionError e) {
 			throw e;
@@ -2593,9 +2593,9 @@ class BasicHtml_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("input")
-	void b1_serializeReadable(Input input) {
+	void b1_writeReadable(Input input) {
 		try {
-			var r = s2.serialize(input.in);
+			var r = s2.write(input.in);
 			assertEquals(input.e2, r, fs("%s serialize-readable failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
@@ -2608,9 +2608,9 @@ class BasicHtml_Test extends TestBase {
 	@MethodSource("input")
 	<T> void b2_parseReadable(Input<T> input) {
 		try {
-			var r = s2.serialize(input.in);
-			var o = parser.parse(r, input.type);
-			r = s2.serialize(o);
+			var r = s2.write(input.in);
+			var o = parser.read(r, input.type);
+			r = s2.write(o);
 			assertEquals(input.e2, r, fs("%s parse-readable failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
@@ -2623,8 +2623,8 @@ class BasicHtml_Test extends TestBase {
 	@MethodSource("input")
 	<T> void b3_verifyReadable(Input<T> input) {
 		try {
-			var r = s2.serialize(input.in);
-			var o = parser.parse(r, input.type);
+			var r = s2.write(input.in);
+			var o = parser.read(r, input.type);
 			input.verify(o);
 		} catch (AssertionError e) {
 			throw e;
@@ -2635,9 +2635,9 @@ class BasicHtml_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("input")
-	void c1_serializeAbridged(Input input) {
+	void c1_writeAbridged(Input input) {
 		try {
-			var r = s3.serialize(input.in);
+			var r = s3.write(input.in);
 			assertEquals(input.e3, r, fs("%s serialize-addRootType failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
@@ -2650,9 +2650,9 @@ class BasicHtml_Test extends TestBase {
 	@MethodSource("input")
 	<T> void c2_parseAbridged(Input<T> input) {
 		try {
-			var r = s3.serialize(input.in);
-			var o = parser.parse(r, input.type);
-			r = s3.serialize(o);
+			var r = s3.write(input.in);
+			var o = parser.read(r, input.type);
+			r = s3.write(o);
 			assertEquals(input.e3, r, fs("%s parse-addRootType failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
@@ -2665,8 +2665,8 @@ class BasicHtml_Test extends TestBase {
 	@MethodSource("input")
 	void c3_verifyAbridged(Input<Object> input) {
 		try {
-			var r = s3.serialize(input.in);
-			var o = parser.parse(r, input.type);
+			var r = s3.write(input.in);
+			var o = parser.read(r, input.type);
 			input.verify(o);
 		} catch (AssertionError e) {
 			throw e;

@@ -44,28 +44,28 @@ class BeanStreaming_Test extends TestBase {
 		@Test
 		void a01_singleLevelSupplier() {
 			Supplier<String> a = () -> "hello";
-			var json = Json5Serializer.DEFAULT.serialize(a);
+			var json = Json5Serializer.DEFAULT.write(a);
 			assertEquals("'hello'", json);
 		}
 
 		@Test
 		void a02_nestedSupplier() {
 			Supplier<Supplier<String>> a = () -> () -> "nested";
-			var json = Json5Serializer.DEFAULT.serialize(a);
+			var json = Json5Serializer.DEFAULT.write(a);
 			assertEquals("'nested'", json);
 		}
 
 		@Test
 		void a03_supplierReturningNull() {
 			Supplier<String> a = () -> null;
-			var json = Json5Serializer.DEFAULT.serialize(a);
+			var json = Json5Serializer.DEFAULT.write(a);
 			assertEquals("null", json);
 		}
 
 		@Test
 		void a04_supplierReturningList() {
 			Supplier<List<String>> a = () -> list("x", "y", "z");
-			var json = Json5Serializer.DEFAULT.serialize(a);
+			var json = Json5Serializer.DEFAULT.write(a);
 			assertEquals("['x','y','z']", json);
 		}
 
@@ -78,7 +78,7 @@ class BeanStreaming_Test extends TestBase {
 				chain = () -> prev;
 			}
 			final Supplier<?> deep = chain;
-			assertThrows(SerializeException.class, () -> Json5Serializer.DEFAULT.serialize(deep));
+			assertThrows(SerializeException.class, () -> Json5Serializer.DEFAULT.write(deep));
 		}
 
 		@Test
@@ -86,7 +86,7 @@ class BeanStreaming_Test extends TestBase {
 			var channel = new ListBeanChannel<String>();
 			channel.acceptThrows("a");
 			channel.acceptThrows("b");
-			var json = Json5Serializer.DEFAULT.serialize(channel);
+			var json = Json5Serializer.DEFAULT.write(channel);
 			assertEquals("['a','b']", json);
 		}
 	}
@@ -106,7 +106,7 @@ class BeanStreaming_Test extends TestBase {
 				@Override public Iterator<String> iterator() { return list("x", "y").iterator(); }
 				@Override public void complete() throws Exception { lifecycleLog.add("complete"); }
 			};
-			var json = Json5Serializer.DEFAULT.serialize(a);
+			var json = Json5Serializer.DEFAULT.write(a);
 			assertEquals("['x','y']", json);
 			assertEquals(list("begin", "complete"), lifecycleLog);
 		}
@@ -132,7 +132,7 @@ class BeanStreaming_Test extends TestBase {
 				}
 				@Override public void complete() throws Exception { lifecycleLog.add("complete"); }
 			};
-			assertThrows(Exception.class, () -> Json5Serializer.DEFAULT.serialize(a));
+			assertThrows(Exception.class, () -> Json5Serializer.DEFAULT.write(a));
 			assertTrue(lifecycleLog.contains("begin"), "begin should be called");
 			assertTrue(lifecycleLog.contains("complete"), "complete should always be called");
 			assertTrue(lifecycleLog.stream().anyMatch(s -> s.startsWith("onError")), "onError should be called");
@@ -141,7 +141,7 @@ class BeanStreaming_Test extends TestBase {
 		@Test
 		void b03_beanConsumer_used_as_serializer_source_throws() {
 			BeanConsumer<String> a = item -> {};
-			assertThrows(SerializeException.class, () -> Json5Serializer.DEFAULT.serialize(a));
+			assertThrows(SerializeException.class, () -> Json5Serializer.DEFAULT.write(a));
 		}
 	}
 
@@ -156,7 +156,7 @@ class BeanStreaming_Test extends TestBase {
 		void c01_parseToBeanConsumer_basic() throws Exception {
 			var received = new ArrayList<String>();
 			BeanConsumer<String> a = received::add;
-			Json5Parser.DEFAULT.getSession().parseToBeanConsumer("['x','y','z']", a, String.class);
+			Json5Parser.DEFAULT.getSession().readToBeanConsumer("['x','y','z']", a, String.class);
 			assertEquals(list("x", "y", "z"), received);
 		}
 
@@ -168,7 +168,7 @@ class BeanStreaming_Test extends TestBase {
 				@Override public void acceptThrows(String item) { lifecycleLog.add("accept:" + item); }
 				@Override public void complete() throws Exception { lifecycleLog.add("complete"); }
 			};
-			Json5Parser.DEFAULT.getSession().parseToBeanConsumer("['x','y']", a, String.class);
+			Json5Parser.DEFAULT.getSession().readToBeanConsumer("['x','y']", a, String.class);
 			assertEquals(list("begin", "accept:x", "accept:y", "complete"), lifecycleLog);
 		}
 
@@ -188,7 +188,7 @@ class BeanStreaming_Test extends TestBase {
 			};
 			var session = Json5Parser.DEFAULT.getSession();
 			assertThrows(ParseException.class, () ->
-				session.parseToBeanConsumer("['good','bad','ignored']", a, String.class));
+				session.readToBeanConsumer("['good','bad','ignored']", a, String.class));
 			assertTrue(lifecycleLog.contains("complete"), "complete should always be called");
 			assertTrue(lifecycleLog.contains("onError"), "onError should be called");
 			assertFalse(lifecycleLog.contains("accept:ignored"), "parsing should stop after rethrow");
@@ -207,7 +207,7 @@ class BeanStreaming_Test extends TestBase {
 					skipped.add(e.getMessage());
 				}
 			};
-			Json5Parser.DEFAULT.getSession().parseToBeanConsumer("['good','bad','also-good']", a, String.class);
+			Json5Parser.DEFAULT.getSession().readToBeanConsumer("['good','bad','also-good']", a, String.class);
 			assertEquals(list("good", "also-good"), received);
 			assertEquals(list("bad item"), skipped);
 		}
@@ -217,7 +217,7 @@ class BeanStreaming_Test extends TestBase {
 		BeanSupplier<String> a = Collections::emptyIterator;
 		var session = Json5Parser.DEFAULT.getSession();
 		var type = a.getClass();
-		assertThrows(ParseException.class, () -> session.parse("['x']", type));
+		assertThrows(ParseException.class, () -> session.read("['x']", type));
 		}
 	}
 
@@ -234,14 +234,14 @@ class BeanStreaming_Test extends TestBase {
 			a.acceptThrows("one");
 			a.acceptThrows("two");
 			a.acceptThrows("three");
-			var json = Json5Serializer.DEFAULT.serialize(a);
+			var json = Json5Serializer.DEFAULT.write(a);
 			assertEquals("['one','two','three']", json);
 		}
 
 		@Test
 		void d02_listBeanChannel_parse_to_consumer() throws Exception {
 			var a = new ListBeanChannel<String>();
-			Json5Parser.DEFAULT.getSession().parseToBeanConsumer("['x','y','z']", a, String.class);
+			Json5Parser.DEFAULT.getSession().readToBeanConsumer("['x','y','z']", a, String.class);
 			assertEquals(list("x", "y", "z"), a.getList());
 		}
 
@@ -252,10 +252,10 @@ class BeanStreaming_Test extends TestBase {
 			original.acceptThrows("beta");
 			original.acceptThrows("gamma");
 
-			var json = Json5Serializer.DEFAULT.serialize(original);
+			var json = Json5Serializer.DEFAULT.write(original);
 
 			var parsed = new ListBeanChannel<String>();
-			Json5Parser.DEFAULT.getSession().parseToBeanConsumer(json, parsed, String.class);
+			Json5Parser.DEFAULT.getSession().readToBeanConsumer(json, parsed, String.class);
 
 			assertEquals(original.getList(), parsed.getList());
 		}

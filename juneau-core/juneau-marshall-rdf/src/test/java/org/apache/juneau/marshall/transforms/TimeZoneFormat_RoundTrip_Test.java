@@ -275,7 +275,7 @@ class TimeZoneFormat_RoundTrip_Test extends TestBase {
 		var x = TimeZone.getTimeZone("America/New_York");
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, TimeZone.class);
+			var x2 = p.read(out, TimeZone.class);
 			// Accept either the lossy-canonical (format applied) or the structural original (format bypassed
 			// by native type handling — matches the BSON-style divergence already documented for DateFormat /
 			// CalendarFormat at top-level).

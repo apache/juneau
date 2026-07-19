@@ -29,7 +29,7 @@ import java.io.*;
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
  * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder();
- * 	<jk>try</jk> (RecordWriter <jv>w</jv> = Json.<jsf>DEFAULT</jsf>.serializeRecords(<jv>sb</jv>)) {
+ * 	<jk>try</jk> (RecordWriter <jv>w</jv> = Json.<jsf>DEFAULT</jsf>.writeRecords(<jv>sb</jv>)) {
  * 		<jv>w</jv>.write(<jv>bean</jv>);
  * 	}
  * </p>

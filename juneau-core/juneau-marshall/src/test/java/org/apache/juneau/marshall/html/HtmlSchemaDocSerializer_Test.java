@@ -25,56 +25,56 @@ import org.junit.jupiter.api.*;
 
 class HtmlSchemaDocSerializer_Test extends TestBase {
 
-	@Test void a01_serializeInteger() throws Exception {
+	@Test void a01_writeInteger() throws Exception {
 		var s = HtmlSchemaDocSerializer.create().build();
-		var result = s.serialize(42);
+		var result = s.write(42);
 		assertTrue(result.contains("integer"), "Expected 'integer' in: " + result);
 	}
 
-	@Test void a02_serializeString() throws Exception {
+	@Test void a02_writeString() throws Exception {
 		var s = HtmlSchemaDocSerializer.create().build();
-		var result = s.serialize("hello");
+		var result = s.write("hello");
 		assertTrue(result.contains("string"), "Expected 'string' in: " + result);
 	}
 
-	@Test void a03_serializeBean() throws Exception {
+	@Test void a03_writeBean() throws Exception {
 		var s = HtmlSchemaDocSerializer.create().build();
-		var result = s.serialize(new SimpleBean());
+		var result = s.write(new SimpleBean());
 		assertTrue(result.contains("object"), "Expected 'object' in: " + result);
 		assertTrue(result.contains("f1"), "Expected field 'f1' in: " + result);
 	}
 
-	@Test void a04_serializeList() throws Exception {
+	@Test void a04_writeList() throws Exception {
 		var s = HtmlSchemaDocSerializer.create().build();
-		var result = s.serialize(List.of("a", "b"));
+		var result = s.write(List.of("a", "b"));
 		assertNotNull(result);
 		assertTrue(result.contains("array") || result.contains("string"), "Expected schema output: " + result);
 	}
 
-	@Test void a05_serializeMap() throws Exception {
+	@Test void a05_writeMap() throws Exception {
 		var s = HtmlSchemaDocSerializer.create().build();
-		var result = s.serialize(Map.of("k", "v"));
+		var result = s.write(Map.of("k", "v"));
 		assertNotNull(result);
 		assertTrue(result.contains("object") || result.contains("string"), "Expected schema output: " + result);
 	}
 
-	@Test void a06_serializeBoolean() throws Exception {
+	@Test void a06_writeBoolean() throws Exception {
 		var s = HtmlSchemaDocSerializer.create().build();
-		var result = s.serialize(true);
+		var result = s.write(true);
 		assertNotNull(result);
 		assertTrue(result.contains("boolean") || result.contains("true"), "Expected schema output: " + result);
 	}
 
-	@Test void a07_serializeArray() throws Exception {
+	@Test void a07_writeArray() throws Exception {
 		var s = HtmlSchemaDocSerializer.create().build();
-		var result = s.serialize(new String[] {"a", "b"});
+		var result = s.write(new String[] {"a", "b"});
 		assertNotNull(result);
 		assertTrue(result.contains("array") || result.contains("string"), "Expected schema output: " + result);
 	}
 
-	@Test void a08_serializeNull() throws Exception {
+	@Test void a08_writeNull() throws Exception {
 		var s = HtmlSchemaDocSerializer.create().build();
-		var result = s.serialize(null);
+		var result = s.write(null);
 		assertNotNull(result);
 	}
 
@@ -88,49 +88,49 @@ class HtmlSchemaDocSerializer_Test extends TestBase {
 
 	@Test void b01_strippedDocSerializer_nullInput() throws Exception {
 		// null → o == null branch → "No Results" output
-		var html = HtmlStrippedDocSerializer.DEFAULT.serialize(null);
+		var html = HtmlStrippedDocSerializer.DEFAULT.write(null);
 		assertNotNull(html);
 		assertTrue(html.contains("No Results"), "Expected 'No Results' for null: " + html);
 	}
 
 	@Test void b02_strippedDocSerializer_emptyCollection() throws Exception {
 		// Empty Collection → isEmpty() branch → "No Results" output
-		var html = HtmlStrippedDocSerializer.DEFAULT.serialize(List.of());
+		var html = HtmlStrippedDocSerializer.DEFAULT.write(List.of());
 		assertNotNull(html);
 		assertTrue(html.contains("No Results"), "Expected 'No Results' for empty list: " + html);
 	}
 
 	@Test void b03_strippedDocSerializer_emptyArray() throws Exception {
 		// Empty array → Array.getLength == 0 branch → "No Results" output
-		var html = HtmlStrippedDocSerializer.DEFAULT.serialize(new String[0]);
+		var html = HtmlStrippedDocSerializer.DEFAULT.write(new String[0]);
 		assertNotNull(html);
 		assertTrue(html.contains("No Results"), "Expected 'No Results' for empty array: " + html);
 	}
 
 	@Test void b04_strippedDocSerializer_nonEmptyCollection() throws Exception {
-		// Non-empty Collection → falls through to super.doSerialize
-		var html = HtmlStrippedDocSerializer.DEFAULT.serialize(List.of("a", "b"));
+		// Non-empty Collection → falls through to super.doWrite
+		var html = HtmlStrippedDocSerializer.DEFAULT.write(List.of("a", "b"));
 		assertNotNull(html);
 		assertFalse(html.contains("No Results"), "Did not expect 'No Results' for non-empty list: " + html);
 	}
 
 	@Test void b05_strippedDocSerializer_nonEmptyArray() throws Exception {
 		// Non-empty array → isArray check false branch + Array.getLength > 0 → falls through
-		var html = HtmlStrippedDocSerializer.DEFAULT.serialize(new String[]{"a", "b"});
+		var html = HtmlStrippedDocSerializer.DEFAULT.write(new String[]{"a", "b"});
 		assertNotNull(html);
 		assertFalse(html.contains("No Results"), "Did not expect 'No Results' for non-empty array: " + html);
 	}
 
 	@Test void b06_strippedDocSerializer_nonCollectionNonArray() throws Exception {
 		// Non-null, non-Collection, non-array → all conditions false → falls through to super
-		var html = HtmlStrippedDocSerializer.DEFAULT.serialize("hello");
+		var html = HtmlStrippedDocSerializer.DEFAULT.write("hello");
 		assertNotNull(html);
 		assertTrue(html.contains("hello"), "Expected 'hello' in: " + html);
 	}
 
 	@Test void b07_strippedDocSerializer_nonEmptyBeanList() throws Exception {
 		// Non-empty list of beans → non-empty collection branch
-		var html = HtmlStrippedDocSerializer.DEFAULT.serialize(List.of(new SimpleBean()));
+		var html = HtmlStrippedDocSerializer.DEFAULT.write(List.of(new SimpleBean()));
 		assertNotNull(html);
 		assertFalse(html.contains("No Results"), "Did not expect 'No Results': " + html);
 	}

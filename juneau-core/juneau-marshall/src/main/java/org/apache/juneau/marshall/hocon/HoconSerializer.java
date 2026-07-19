@@ -80,11 +80,11 @@ import org.apache.juneau.marshall.swap.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean</jc>
- * 	String <jv>hocon</jv> = HoconSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myBean</jv>);
+ * 	String <jv>hocon</jv> = HoconSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
  *
  * 	<jc>// Create a custom serializer instance</jc>
  * 	HoconSerializer <jv>s</jv> = HoconSerializer.<jsm>create</jsm>().omitRootBraces(<jk>false</jk>).build();
- * 	String <jv>hocon2</jv> = <jv>s</jv>.serialize(<jv>myBean</jv>);
+ * 	String <jv>hocon2</jv> = <jv>s</jv>.write(<jv>myBean</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (bean, root braces omitted):</h5>
@@ -369,20 +369,20 @@ public class HoconSerializer extends WriterSerializer implements HoconMetaProvid
 
 	/**
 	 * Convenience delegator that opens a {@link RecordWriter} over the output using
-	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 * <b>default session arguments</b> (mirrors {@link #write(Object)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link HoconSerializerSession#serializeRecords(Object)}.
+	 * The real implementation lives on {@link HoconSerializerSession#writeRecords(Object)}.
 	 * Callers that need request-derived configuration should call {@link #createSession()} and
-	 * invoke {@link HoconSerializerSession#serializeRecords(Object)} on the built session instead.
+	 * invoke {@link HoconSerializerSession#writeRecords(Object)} on the built session instead.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return ((RecordWritable) getSession()).serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).writeRecords(output);
 	}
 
 	@Override /* RecordWritable */

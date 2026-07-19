@@ -85,9 +85,9 @@ public class HtmlSchemaSerializerSession extends HtmlSerializerSession {
 	}
 
 	@Override /* Overridden from SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try {
-			super.doSerialize(out, genSession.getSchema(o));
+			super.doWrite(out, genSession.getSchema(o));
 		} catch (MarshallingRecursionException e) {
 			throw new SerializeException(e);
 		}

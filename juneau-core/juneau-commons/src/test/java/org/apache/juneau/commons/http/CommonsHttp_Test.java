@@ -30,19 +30,19 @@ class CommonsHttp_Test extends TestBase {
 
 	@Test
 	void a01_parseElements_nullOrEmpty() {
-		assertEquals(0, HeaderValueParser.parseElements(null).length);
-		assertEquals(0, HeaderValueParser.parseElements("").length);
+		assertEquals(0, HeaderValueParser.readElements(null).length);
+		assertEquals(0, HeaderValueParser.readElements("").length);
 	}
 
 	@Test
 	void a02_parseElements_whitespaceOnly() {
-		var a = HeaderValueParser.parseElements("   \t  ");
+		var a = HeaderValueParser.readElements("   \t  ");
 		assertEquals(0, a.length);
 	}
 
 	@Test
 	void a03_parseElements_singleTypeNoParams() {
-		var a = HeaderValueParser.parseElements("text/html");
+		var a = HeaderValueParser.readElements("text/html");
 		assertEquals(1, a.length);
 		assertBean(a[0], "name", "text/html");
 		assertEquals(0, a[0].getParameters().length);
@@ -50,7 +50,7 @@ class CommonsHttp_Test extends TestBase {
 
 	@Test
 	void a04_parseElements_typeWithParameters() {
-		var a = HeaderValueParser.parseElements("application/json;charset=UTF-8;version=2");
+		var a = HeaderValueParser.readElements("application/json;charset=UTF-8;version=2");
 		assertEquals(1, a.length);
 		assertEquals("application/json", a[0].getName());
 		assertEquals(2, a[0].getParameters().length);
@@ -62,7 +62,7 @@ class CommonsHttp_Test extends TestBase {
 
 	@Test
 	void a05_parseElements_twoElementsCommaSeparated() {
-		var a = HeaderValueParser.parseElements("text/html, application/json");
+		var a = HeaderValueParser.readElements("text/html, application/json");
 		assertEquals(2, a.length);
 		assertEquals("text/html", a[0].getName());
 		assertEquals("application/json", a[1].getName());
@@ -70,7 +70,7 @@ class CommonsHttp_Test extends TestBase {
 
 	@Test
 	void a06_parseElements_quotedParameterValue() {
-		var a = HeaderValueParser.parseElements("foo;bar=\"a,b;c\"");
+		var a = HeaderValueParser.readElements("foo;bar=\"a,b;c\"");
 		assertEquals(1, a.length);
 		assertEquals("foo", a[0].getName());
 		assertEquals(1, a[0].getParameters().length);
@@ -80,7 +80,7 @@ class CommonsHttp_Test extends TestBase {
 
 	@Test
 	void a07_parseElements_escapedBackslashInQuotedString() {
-		var a = HeaderValueParser.parseElements("p;q=\"a\\\\b\"");
+		var a = HeaderValueParser.readElements("p;q=\"a\\\\b\"");
 		assertEquals(1, a.length);
 		assertEquals("p", a[0].getName());
 		assertEquals(1, a[0].getParameters().length);
@@ -90,7 +90,7 @@ class CommonsHttp_Test extends TestBase {
 
 	@Test
 	void a08_parseElements_mediaRangeStyle() {
-		var a = HeaderValueParser.parseElements("text/html;charset=UTF-8;q=0.9");
+		var a = HeaderValueParser.readElements("text/html;charset=UTF-8;q=0.9");
 		assertEquals(1, a.length);
 		assertEquals("text/html", a[0].getName());
 		assertEquals(2, a[0].getParameters().length);
@@ -100,7 +100,7 @@ class CommonsHttp_Test extends TestBase {
 
 	@Test
 	void a09_parseElements_paramWithoutValue() {
-		var a = HeaderValueParser.parseElements("multipart/form-data; boundary");
+		var a = HeaderValueParser.readElements("multipart/form-data; boundary");
 		assertEquals(1, a.length);
 		assertEquals(1, a[0].getParameters().length);
 		assertEquals("boundary", a[0].getParameters()[0].getName());
@@ -109,14 +109,14 @@ class CommonsHttp_Test extends TestBase {
 
 	@Test
 	void a10_parseElements_emptyQuotedParameterValue() {
-		var a = HeaderValueParser.parseElements("t;a=\"\"");
+		var a = HeaderValueParser.readElements("t;a=\"\"");
 		assertEquals(1, a.length);
 		assertEquals("", a[0].getParameters()[0].getValue());
 	}
 
 	@Test
 	void a11_parseElements_leadingTrailingWhitespace() {
-		var a = HeaderValueParser.parseElements("  text/plain  ;  charset=utf-8  ");
+		var a = HeaderValueParser.readElements("  text/plain  ;  charset=utf-8  ");
 		assertEquals(1, a.length);
 		assertEquals("text/plain", a[0].getName());
 		assertEquals("utf-8", a[0].getParameters()[0].getValue());
@@ -124,7 +124,7 @@ class CommonsHttp_Test extends TestBase {
 
 	@Test
 	void a12_parseElements_unterminatedQuotedValue() {
-		var a = HeaderValueParser.parseElements("x;y=\"no-close");
+		var a = HeaderValueParser.readElements("x;y=\"no-close");
 		assertEquals(1, a.length);
 		assertEquals("no-close", a[0].getParameters()[0].getValue());
 	}

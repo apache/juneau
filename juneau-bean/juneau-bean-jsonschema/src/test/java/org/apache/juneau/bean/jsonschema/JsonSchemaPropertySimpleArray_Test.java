@@ -184,7 +184,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 			.setMinItems(1)
 			.setMaxItems(5);
 
-		String json = JsonSerializer.DEFAULT.serialize(p);
+		String json = JsonSerializer.DEFAULT.write(p);
 
 		assertTrue(json.contains("\"type\":\"array\""));
 		assertTrue(json.contains("\"minItems\":1"));
@@ -271,7 +271,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 			.setUniqueItems(true)
 			.setDescription("List of unique IDs");
 
-		String json = JsonSerializer.DEFAULT.serialize(p);
+		String json = JsonSerializer.DEFAULT.write(p);
 
 		assertTrue(json.contains("\"type\":\"array\""));
 		assertTrue(json.contains("\"minItems\":1"));

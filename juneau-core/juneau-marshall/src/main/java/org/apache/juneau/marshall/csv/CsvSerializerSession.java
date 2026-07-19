@@ -47,8 +47,8 @@ import org.apache.juneau.marshall.swap.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., ARG_ctx)
-	"java:S3776", // Cognitive complexity acceptable for doSerialize, formatForCsvCell
-	"java:S6541", // Brain method acceptable for doSerialize, formatForCsvCell
+	"java:S3776", // Cognitive complexity acceptable for doWrite, formatForCsvCell
+	"java:S6541", // Brain method acceptable for doWrite, formatForCsvCell
 	"resource"   // Internal helpers return Closeables wired into pipe lifecycle; Eclipse JDT @Owning warning is by design.
 })
 public class CsvSerializerSession extends WriterSerializerSession implements RecordWritable {
@@ -177,7 +177,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 	}
 
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.arrayWriter(this, output);
 	}
 
@@ -210,15 +210,15 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 				return swap(swap, value);
 			}
 			if (type.isDate())
-				return serializeDate((Date)value, type);
+				return writeDate((Date)value, type);
 			if (type.isCalendar())
-				return serializeCalendar(value, type);
+				return writeCalendar(value, type);
 			if (type.isTemporal())
-				return serializeTemporal((TemporalAccessor)value, type);
+				return writeTemporal((TemporalAccessor)value, type);
 			if (type.isDuration())
-				return serializeDuration((Duration)value);
+				return writeDuration((Duration)value);
 			if (type.isPeriod())
-				return serializePeriod((Period)value);
+				return writePeriod((Period)value);
 			return value;
 		} catch (SerializeException e) {
 			throw rex(e);
@@ -230,7 +230,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 		"unchecked" // Type erasure requires unchecked casts
 	})
 	@Override /* Overridden from SerializerSession */
-	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		var cm = push2("root", o, getClassMetaForObject(o));
 		if (cm == null)
 			return;
@@ -412,11 +412,11 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 			return null;
 		var cm = getClassMetaForObject(value);
 		if (value instanceof Date d)
-			return serializeDate(d, cm);
+			return writeDate(d, cm);
 		if (value instanceof Calendar || value instanceof javax.xml.datatype.XMLGregorianCalendar)
-			return serializeCalendar(value, cm);
+			return writeCalendar(value, cm);
 		if (value instanceof TemporalAccessor t)
-			return serializeTemporal(t, cm);
+			return writeTemporal(t, cm);
 		if (value instanceof Duration)
 			return value.toString();
 		return value;
@@ -432,7 +432,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 			var type = getClassMetaForObject(value);
 			if (value instanceof Map || value instanceof Collection || value instanceof Object[]
 					|| (type.isBean() && !(value instanceof Map)))
-				return new CsvCellSerializer(byteArrayFormat, nullValue).serialize(value, this);
+				return new CsvCellSerializer(byteArrayFormat, nullValue).write(value, this);
 		}
 		if (value instanceof byte[] b) {
 			return byteArrayFormat == CsvByteArrayCellFormat.SEMICOLON_DELIMITED
@@ -533,11 +533,11 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 		if (type.isBean() && !(swapped instanceof Map))
 			return toBeanMap(swapped);
 		if (swapped instanceof Date d)
-			return serializeDate(d, type);
+			return writeDate(d, type);
 		if (swapped instanceof Calendar || swapped instanceof XMLGregorianCalendar)
-			return serializeCalendar(swapped, type);
+			return writeCalendar(swapped, type);
 		if (swapped instanceof TemporalAccessor t)
-			return serializeTemporal(t, type);
+			return writeTemporal(t, type);
 		if (swapped instanceof Duration)
 			return swapped.toString();
 		return swapped;

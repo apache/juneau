@@ -29,7 +29,7 @@ class HtmlDocSerializer_Nonce_Test extends TestBase {
 
 	private static String serialize(String nonce, Object o) throws Exception {
 		var s = HtmlDocSerializer.create().build();
-		return s.createSession().nonce(nonce).build().serializeToString(o);
+		return s.createSession().nonce(nonce).build().writeToString(o);
 	}
 
 	@Test void a01_nonceStampedOnStyleAndScript() throws Exception {

@@ -36,7 +36,7 @@ class PrototextSerializer_Test {
 		m.put("debug", true);
 		m.put("ratio", 3.14);
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("host:"));
 		assertTrue(proto.contains("localhost"));
@@ -57,7 +57,7 @@ class PrototextSerializer_Test {
 		config.put("name", "myapp");
 		config.put("database", db);
 
-		String proto = PrototextSerializer.DEFAULT.serialize(config);
+		String proto = PrototextSerializer.DEFAULT.write(config);
 		assertNotNull(proto);
 		assertTrue(proto.contains("name:"));
 		assertTrue(proto.contains("database {"));
@@ -75,7 +75,7 @@ class PrototextSerializer_Test {
 		var config = new LinkedHashMap<String, Object>();
 		config.put("server", server);
 
-		String proto = PrototextSerializer.DEFAULT.serialize(config);
+		String proto = PrototextSerializer.DEFAULT.write(config);
 		assertNotNull(proto);
 		assertTrue(proto.contains("server {"));
 		assertTrue(proto.contains("ssl {"));
@@ -87,7 +87,7 @@ class PrototextSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of("a", "b", "c"));
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("tags"));
 		assertTrue(proto.contains("a") && proto.contains("b") && proto.contains("c"));
@@ -98,7 +98,7 @@ class PrototextSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("ports", List.of(8080, 8443, 9090));
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("ports"));
 		assertTrue(proto.contains("8080"));
@@ -115,7 +115,7 @@ class PrototextSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("servers", List.of(a, b));
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("servers"));
 		assertTrue(proto.contains("alpha") && proto.contains("beta"));
@@ -126,7 +126,7 @@ class PrototextSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("env", Map.of("PATH", "/usr/bin", "HOME", "/home/user"));
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("env {"));
 		assertTrue(proto.contains("PATH") || proto.contains("HOME"));
@@ -139,7 +139,7 @@ class PrototextSerializer_Test {
 		m.put("b", null);
 		m.put("c", 1);
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("a:"));
 		assertTrue(proto.contains("c:"));
@@ -152,7 +152,7 @@ class PrototextSerializer_Test {
 		m.put("t", true);
 		m.put("f", false);
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertTrue(proto.contains("true"));
 		assertTrue(proto.contains("false"));
 	}
@@ -164,7 +164,7 @@ class PrototextSerializer_Test {
 		m.put("inf", Double.POSITIVE_INFINITY);
 		m.put("nan", Double.NaN);
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("3.14") || proto.contains("3.14"));
 		assertTrue(proto.contains("inf"));
@@ -176,7 +176,7 @@ class PrototextSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("s", "a\nb\tc\\d\"e");
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("\\n") || proto.contains("\\\\"));
 	}
@@ -186,7 +186,7 @@ class PrototextSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("level", LogLevel.WARN);
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertTrue(proto.contains("WARN"));
 		assertFalse(proto.contains("\"WARN\""));
 	}
@@ -195,7 +195,7 @@ class PrototextSerializer_Test {
 	void a13_emptyBean() {
 		var m = new LinkedHashMap<String, Object>();
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
 		assertTrue(proto.trim().isEmpty() || proto.equals(""));
 	}
@@ -205,7 +205,7 @@ class PrototextSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of());
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertTrue(proto.contains("tags") && proto.contains("[]"));
 	}
 
@@ -216,7 +216,7 @@ class PrototextSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("inner", inner);
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertTrue(proto.contains("inner {"));
 		assertFalse(proto.contains("inner: {"));
 	}
@@ -228,7 +228,7 @@ class PrototextSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("inner", inner);
 
-		String proto = PrototextSerializer.DEFAULT_READABLE.serialize(m);
+		String proto = PrototextSerializer.DEFAULT_READABLE.write(m);
 		assertTrue(proto.contains("\n") || proto.contains("inner"));
 	}
 
@@ -236,7 +236,7 @@ class PrototextSerializer_Test {
 	void a18_addBeanTypesAndRootType() {
 		var m = JsonMap.of("name", "test");
 		var serializer = PrototextSerializer.create().addBeanTypes().addRootType().build();
-		String proto = serializer.serialize(m);
+		String proto = serializer.write(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("name"));
 		assertTrue(proto.contains("test"));
@@ -247,7 +247,7 @@ class PrototextSerializer_Test {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("data", new byte[] { 0x0a, 0x05 });
 
-		String proto = PrototextSerializer.DEFAULT.serialize(m);
+		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("data:"));
 	}
@@ -259,7 +259,7 @@ class PrototextSerializer_Test {
 		// Triggers PrototextWriter.stringValue() trimStrings=true branch (line 124)
 		var serializer = PrototextSerializer.create().trimStrings().build();
 		var m = JsonMap.of("name", "  Alice  ");
-		var proto = serializer.serialize(m);
+		var proto = serializer.write(m);
 		assertTrue(proto.contains("\"Alice\""), "expected trimmed value in: " + proto);
 	}
 
@@ -267,7 +267,7 @@ class PrototextSerializer_Test {
 		// Triggers PrototextWriter.fieldName() quoted-key branch: key starts with digit
 		var m = new LinkedHashMap<String, Object>();
 		m.put("123abc", "val");
-		var proto = PrototextSerializer.DEFAULT.serialize(m);
+		var proto = PrototextSerializer.DEFAULT.write(m);
 		assertTrue(proto.contains("\"123abc\""), "expected quoted key in: " + proto);
 	}
 
@@ -275,7 +275,7 @@ class PrototextSerializer_Test {
 		// Triggers isBareIntegerTag false branch: negative integer
 		var m = new LinkedHashMap<String, Object>();
 		m.put("-1", "val");
-		var proto = PrototextSerializer.DEFAULT.serialize(m);
+		var proto = PrototextSerializer.DEFAULT.write(m);
 		assertTrue(proto.contains("\"-1\""), "expected quoted negative key in: " + proto);
 	}
 

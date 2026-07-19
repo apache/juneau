@@ -31,8 +31,8 @@ class CborRoundTrip_Test extends TestBase {
 	@Test
 	void e01_simpleBeanRoundTrip() throws Exception {
 		var a = new CborSerializer_Test.Bean1("x", 42, true);
-		var bytes = CborSerializer.DEFAULT.serialize(a);
-		var b = CborParser.DEFAULT.parse(bytes, CborSerializer_Test.Bean1.class);
+		var bytes = CborSerializer.DEFAULT.write(a);
+		var b = CborParser.DEFAULT.read(bytes, CborSerializer_Test.Bean1.class);
 		assertEquals(a.s, b.s);
 		assertEquals(a.i, b.i);
 		assertEquals(a.b, b.b);
@@ -41,8 +41,8 @@ class CborRoundTrip_Test extends TestBase {
 	@Test
 	void e02_nestedBeanRoundTrip() throws Exception {
 		var a = new CborSerializer_Test.Bean2("outer", new CborSerializer_Test.Bean1("inner", 1, false));
-		var bytes = CborSerializer.DEFAULT.serialize(a);
-		var b = CborParser.DEFAULT.parse(bytes, CborSerializer_Test.Bean2.class);
+		var bytes = CborSerializer.DEFAULT.write(a);
+		var b = CborParser.DEFAULT.read(bytes, CborSerializer_Test.Bean2.class);
 		assertEquals(a.name, b.name);
 		assertEquals(a.child.s, b.child.s);
 	}
@@ -50,8 +50,8 @@ class CborRoundTrip_Test extends TestBase {
 	@Test
 	void e03_collectionOfBeansRoundTrip() throws Exception {
 		var list = list(new CborSerializer_Test.Bean1("a", 1, true), new CborSerializer_Test.Bean1("b", 2, false));
-		var bytes = CborSerializer.DEFAULT.serialize(list);
-		var parsed = CborParser.DEFAULT.parse(bytes, JsonList.class);
+		var bytes = CborSerializer.DEFAULT.write(list);
+		var parsed = CborParser.DEFAULT.read(bytes, JsonList.class);
 		assertEquals(2, parsed.size());
 		assertEquals("a", parsed.getMap(0).getString("s"));
 		assertEquals("b", parsed.getMap(1).getString("s"));
@@ -60,8 +60,8 @@ class CborRoundTrip_Test extends TestBase {
 	@Test
 	void e04_mapRoundTrip() throws Exception {
 		var m = JsonMap.of("a", 1, "b", "x", "c", list(1, 2, 3));
-		var bytes = CborSerializer.DEFAULT.serialize(m);
-		var parsed = CborParser.DEFAULT.parse(bytes, JsonMap.class);
+		var bytes = CborSerializer.DEFAULT.write(m);
+		var parsed = CborParser.DEFAULT.read(bytes, JsonMap.class);
 		assertEquals(1, parsed.getInt("a"));
 		assertEquals("x", parsed.getString("b"));
 		assertEquals(3, parsed.getList("c").size());
@@ -70,8 +70,8 @@ class CborRoundTrip_Test extends TestBase {
 	@Test
 	void e05_allPrimitiveTypesRoundTrip() throws Exception {
 		var m = JsonMap.of("i", 1, "l", 2L, "f", 3.0f, "d", 4.0, "b", true, "s", "x");
-		var bytes = CborSerializer.DEFAULT.serialize(m);
-		var p = CborParser.DEFAULT.parse(bytes, JsonMap.class);
+		var bytes = CborSerializer.DEFAULT.write(m);
+		var p = CborParser.DEFAULT.read(bytes, JsonMap.class);
 		assertEquals(1, p.getInt("i"));
 		assertEquals(2L, p.getLong("l"));
 		assertEquals(3.0f, ((Number)p.get("f")).floatValue(), 0.001f);
@@ -82,16 +82,16 @@ class CborRoundTrip_Test extends TestBase {
 
 	@Test
 	void e06_nullRoundTrip() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(null);
-		var parsed = CborParser.DEFAULT.parse(bytes, Object.class);
+		var bytes = CborSerializer.DEFAULT.write(null);
+		var parsed = CborParser.DEFAULT.read(bytes, Object.class);
 		assertNull(parsed);
 	}
 
 	@Test
 	void e07_binaryDataRoundTrip() throws Exception {
 		var data = new byte[] { 1, 2, 3, 4, 5 };
-		var bytes = CborSerializer.DEFAULT.serialize(data);
-		assertArrayEquals(data, CborParser.DEFAULT.parse(bytes, byte[].class));
+		var bytes = CborSerializer.DEFAULT.write(data);
+		assertArrayEquals(data, CborParser.DEFAULT.read(bytes, byte[].class));
 	}
 
 	@Test
@@ -119,8 +119,8 @@ class CborRoundTrip_Test extends TestBase {
 			"name", "test",
 			"tags", list("a", "b"),
 			"meta", JsonMap.of("x", 1, "y", 2));
-		var bytes = CborSerializer.DEFAULT.serialize(m);
-		var p = CborParser.DEFAULT.parse(bytes, JsonMap.class);
+		var bytes = CborSerializer.DEFAULT.write(m);
+		var p = CborParser.DEFAULT.read(bytes, JsonMap.class);
 		assertEquals("test", p.getString("name"));
 		assertEquals(2, p.getList("tags").size());
 		assertEquals(1, p.getMap("meta").getInt("x"));
@@ -128,14 +128,14 @@ class CborRoundTrip_Test extends TestBase {
 
 	@Test
 	void e13_emptyCollectionsRoundTrip() throws Exception {
-		var emptyList = CborParser.DEFAULT.parse(CborSerializer.DEFAULT.serialize(list()), JsonList.class);
+		var emptyList = CborParser.DEFAULT.read(CborSerializer.DEFAULT.write(list()), JsonList.class);
 		assertTrue(emptyList.isEmpty());
-		var emptyMap = CborParser.DEFAULT.parse(CborSerializer.DEFAULT.serialize(JsonMap.ofString("{}")), JsonMap.class);
+		var emptyMap = CborParser.DEFAULT.read(CborSerializer.DEFAULT.write(JsonMap.ofString("{}")), JsonMap.class);
 		assertTrue(emptyMap.isEmpty());
 	}
 
 	private static <T> T roundTrip(T o, Class<T> type) throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(o);
-		return CborParser.DEFAULT.parse(bytes, type);
+		var bytes = CborSerializer.DEFAULT.write(o);
+		return CborParser.DEFAULT.read(bytes, type);
 	}
 }

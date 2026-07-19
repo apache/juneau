@@ -51,9 +51,9 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void a01_json_instant() throws Exception {
 		var i = Instant.parse("2012-12-21T12:34:56Z");
-		var json = JS.serialize(i);
+		var json = JS.write(i);
 		assertEquals("'2012-12-21T12:34:56Z'", json);
-		var i2 = JP.parse(json, Instant.class);
+		var i2 = JP.read(json, Instant.class);
 		assertEquals(i, i2);
 	}
 
@@ -63,7 +63,7 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void b01_json_zonedDateTime() throws Exception {
 		var zdt = ZonedDateTime.parse("2012-12-21T12:34:56Z");
-		var json = JS.serialize(zdt);
+		var json = JS.write(zdt);
 		assertEquals("'2012-12-21T12:34:56Z'", json);
 	}
 
@@ -73,9 +73,9 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void c01_json_localDate() throws Exception {
 		var ld = LocalDate.parse("2012-12-21");
-		var json = JS.serialize(ld);
+		var json = JS.write(ld);
 		assertEquals("'2012-12-21'", json);
-		var ld2 = JP.parse(json, LocalDate.class);
+		var ld2 = JP.read(json, LocalDate.class);
 		assertEquals(ld, ld2);
 	}
 
@@ -85,9 +85,9 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void d01_json_localDateTime() throws Exception {
 		var ldt = LocalDateTime.parse("2012-12-21T12:34:56");
-		var json = JS.serialize(ldt);
+		var json = JS.write(ldt);
 		assertEquals("'2012-12-21T12:34:56'", json);
-		var ldt2 = JP.parse(json, LocalDateTime.class);
+		var ldt2 = JP.read(json, LocalDateTime.class);
 		assertEquals(ldt, ldt2);
 	}
 
@@ -97,9 +97,9 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void e01_json_localTime() throws Exception {
 		var lt = LocalTime.parse("12:34:56");
-		var json = JS.serialize(lt);
+		var json = JS.write(lt);
 		assertEquals("'12:34:56'", json);
-		var lt2 = JP.parse(json, LocalTime.class);
+		var lt2 = JP.read(json, LocalTime.class);
 		assertEquals(lt, lt2);
 	}
 
@@ -109,9 +109,9 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void f01_json_offsetDateTime() throws Exception {
 		var odt = OffsetDateTime.parse("2012-12-21T12:34:56-05:00");
-		var json = JS.serialize(odt);
+		var json = JS.write(odt);
 		assertEquals("'2012-12-21T12:34:56-05:00'", json);
-		var odt2 = JP.parse(json, OffsetDateTime.class);
+		var odt2 = JP.read(json, OffsetDateTime.class);
 		assertEquals(odt, odt2);
 	}
 
@@ -121,9 +121,9 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void g01_json_offsetTime() throws Exception {
 		var ot = OffsetTime.parse("12:34:56-05:00");
-		var json = JS.serialize(ot);
+		var json = JS.write(ot);
 		assertEquals("'12:34:56-05:00'", json);
-		var ot2 = JP.parse(json, OffsetTime.class);
+		var ot2 = JP.read(json, OffsetTime.class);
 		assertEquals(ot, ot2);
 	}
 
@@ -133,9 +133,9 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void h01_json_year() throws Exception {
 		var y = Year.parse("2012");
-		var json = JS.serialize(y);
+		var json = JS.write(y);
 		assertEquals("'2012'", json);
-		var y2 = JP.parse(json, Year.class);
+		var y2 = JP.read(json, Year.class);
 		assertEquals(y, y2);
 	}
 
@@ -145,9 +145,9 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void i01_json_yearMonth() throws Exception {
 		var ym = YearMonth.parse("2012-12");
-		var json = JS.serialize(ym);
+		var json = JS.write(ym);
 		assertEquals("'2012-12'", json);
-		var ym2 = JP.parse(json, YearMonth.class);
+		var ym2 = JP.read(json, YearMonth.class);
 		assertEquals(ym, ym2);
 	}
 
@@ -157,9 +157,9 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void j01_json_calendar() throws Exception {
 		var c = GregorianCalendar.from(ZonedDateTime.parse("2012-12-21T12:34:56Z"));
-		var json = JS.serialize(c);
+		var json = JS.write(c);
 		assertEquals("'2012-12-21T12:34:56Z'", json);
-		var c2 = JP.parse(json, Calendar.class);
+		var c2 = JP.read(json, Calendar.class);
 		assertEquals(c.getTimeInMillis(), c2.getTimeInMillis());
 	}
 
@@ -169,9 +169,9 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void k01_json_date() throws Exception {
 		var d = Date.from(Instant.from(DateTimeFormatter.ISO_INSTANT.parse("2012-12-21T12:34:56Z")));
-		var json = JS.serialize(d);
+		var json = JS.write(d);
 		assertEquals("'2012-12-21T07:34:56'", json);
-		var d2 = JP.parse(json, Date.class);
+		var d2 = JP.read(json, Date.class);
 		assertNotNull(d2);
 	}
 
@@ -181,57 +181,57 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void l01_json_duration_basic() throws Exception {
 		var d = Duration.ofHours(1).plusMinutes(30);
-		var json = JS.serialize(d);
+		var json = JS.write(d);
 		assertEquals("'PT1H30M'", json);
-		var d2 = JP.parse(json, Duration.class);
+		var d2 = JP.read(json, Duration.class);
 		assertEquals(d, d2);
 	}
 
 	@Test void l02_json_duration_hours() throws Exception {
 		var d = Duration.ofHours(48);
-		var json = JS.serialize(d);
+		var json = JS.write(d);
 		assertEquals("'P2D'", json);
-		var d2 = JP.parse(json, Duration.class);
+		var d2 = JP.read(json, Duration.class);
 		assertEquals(d, d2);
 	}
 
 	@Test void l03_json_duration_seconds() throws Exception {
 		var d = Duration.ofSeconds(45);
-		var json = JS.serialize(d);
+		var json = JS.write(d);
 		assertEquals("'PT45S'", json);
-		var d2 = JP.parse(json, Duration.class);
+		var d2 = JP.read(json, Duration.class);
 		assertEquals(d, d2);
 	}
 
 	@Test void l04_json_duration_zero() throws Exception {
 		var d = Duration.ZERO;
-		var json = JS.serialize(d);
+		var json = JS.write(d);
 		assertEquals("'PT0S'", json);
-		var d2 = JP.parse(json, Duration.class);
+		var d2 = JP.read(json, Duration.class);
 		assertEquals(d, d2);
 	}
 
 	@Test void l05_json_duration_negative() throws Exception {
 		var d = Duration.ofHours(-6);
-		var json = JS.serialize(d);
+		var json = JS.write(d);
 		assertEquals("'-PT6H'", json);
-		var d2 = JP.parse(json, Duration.class);
+		var d2 = JP.read(json, Duration.class);
 		assertEquals(d, d2);
 	}
 
 	@Test void l06_json_duration_fractionalSeconds() throws Exception {
 		var d = Duration.ofSeconds(20, 345000000);
-		var json = JS.serialize(d);
+		var json = JS.write(d);
 		assertEquals("'PT20.345S'", json);
-		var d2 = JP.parse(json, Duration.class);
+		var d2 = JP.read(json, Duration.class);
 		assertEquals(d, d2);
 	}
 
 	@Test void l07_json_duration_complex() throws Exception {
 		var d = Duration.ofHours(26).plusMinutes(3);
-		var json = JS.serialize(d);
+		var json = JS.write(d);
 		assertEquals("'P1DT2H3M'", json);
-		var d2 = JP.parse(json, Duration.class);
+		var d2 = JP.read(json, Duration.class);
 		assertEquals(d, d2);
 	}
 
@@ -239,17 +239,17 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 		var d = Duration.ofSeconds(45);
 		var s = Json5Serializer.create().durationFormat(org.apache.juneau.marshall.DurationFormat.MILLIS).build();
 		var p = Json5Parser.create().durationFormat(org.apache.juneau.marshall.DurationFormat.MILLIS).build();
-		var json = s.serialize(d);
+		var json = s.write(d);
 		assertEquals("45000", json);
-		var d2 = p.parse(json, Duration.class);
+		var d2 = p.read(json, Duration.class);
 		assertEquals(d, d2);
 	}
 
 	@Test void l09_json_period_basic() throws Exception {
 		var p = Period.of(1, 2, 3);
-		var json = JS.serialize(p);
+		var json = JS.write(p);
 		assertEquals("'P1Y2M3D'", json);
-		var p2 = JP.parse(json, Period.class);
+		var p2 = JP.read(json, Period.class);
 		assertEquals(p, p2);
 	}
 
@@ -267,11 +267,11 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 		bean.timeout = Duration.ofHours(1).plusMinutes(30);
 		bean.interval = Duration.ofSeconds(45);
 
-		var json = JS.serialize(bean);
+		var json = JS.write(bean);
 		assertTrue(json.contains("'PT1H30M'"));
 		assertTrue(json.contains("'PT45S'"));
 
-		var bean2 = JP.parse(json, DurationBean.class);
+		var bean2 = JP.read(json, DurationBean.class);
 		assertEquals(bean.timeout, bean2.timeout);
 		assertEquals(bean.interval, bean2.interval);
 	}
@@ -285,8 +285,8 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 		bean.timeout = null;
 		bean.interval = null;
 
-		var json = JS.serialize(bean);
-		var bean2 = JP.parse(json, DurationBean.class);
+		var json = JS.write(bean);
+		var bean2 = JP.read(json, DurationBean.class);
 		assertNull(bean2.timeout);
 		assertNull(bean2.interval);
 	}
@@ -307,12 +307,12 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 		bean.date = LocalDate.parse("2012-12-21");
 		bean.timeout = Duration.ofHours(1).plusMinutes(30);
 
-		var json = JS.serialize(bean);
+		var json = JS.write(bean);
 		assertTrue(json.contains("'2012-12-21T12:34:56Z'"));
 		assertTrue(json.contains("'2012-12-21'"));
 		assertTrue(json.contains("'PT1H30M'"));
 
-		var bean2 = JP.parse(json, MixedBean.class);
+		var bean2 = JP.read(json, MixedBean.class);
 		assertEquals(bean.created, bean2.created);
 		assertEquals(bean.date, bean2.date);
 		assertEquals(bean.timeout, bean2.timeout);
@@ -324,7 +324,7 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 
 	@Test void p01_json_listOfLocalDates() throws Exception {
 		var dates = List.of(LocalDate.parse("2012-12-21"), LocalDate.parse("2013-01-15"));
-		var json = JS.serialize(dates);
+		var json = JS.write(dates);
 		assertTrue(json.contains("'2012-12-21'"));
 		assertTrue(json.contains("'2013-01-15'"));
 	}

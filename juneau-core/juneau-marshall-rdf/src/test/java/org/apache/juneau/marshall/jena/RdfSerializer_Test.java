@@ -232,35 +232,35 @@ class RdfSerializer_Test extends TestBase {
 
 		@Test void c01_serialize_string_ntriple() throws Exception {
 			var s = RdfSerializer.create().language("N-TRIPLE").build();
-			var result = s.serialize("foo");
+			var result = s.write("foo");
 			assertNotNull(result);
 			assertFalse(result.isEmpty());
 		}
 
 		@Test void c02_serialize_string_turtle() throws Exception {
 			var s = RdfSerializer.create().language("TURTLE").build();
-			var result = s.serialize("foo");
+			var result = s.write("foo");
 			assertNotNull(result);
 			assertFalse(result.isEmpty());
 		}
 
 		@Test void c03_serialize_string_rdfxml() throws Exception {
 			var s = RdfSerializer.create().language("RDF/XML").build();
-			var result = s.serialize("foo");
+			var result = s.write("foo");
 			assertNotNull(result);
 			assertFalse(result.isEmpty());
 		}
 
 		@Test void c04_serialize_with_addLiteralTypes() throws Exception {
 			var s = RdfSerializer.create().language("N-TRIPLE").addLiteralTypes().build();
-			var result = s.serialize(42);
+			var result = s.write(42);
 			assertNotNull(result);
 			assertFalse(result.isEmpty());
 		}
 
 		@Test void c05_serialize_with_addRootProperty() throws Exception {
 			var s = RdfSerializer.create().language("TURTLE").addRootProperty().build();
-			var result = s.serialize("foo");
+			var result = s.write("foo");
 			assertNotNull(result);
 			assertFalse(result.isEmpty());
 		}
@@ -300,7 +300,7 @@ class RdfSerializer_Test extends TestBase {
 			// The PARENTS traversal should find it
 			assertNotNull(rdfBpm.getCollectionFormat()); // SEQ or DEFAULT
 			// Also serialize to trigger the coverage paths
-			var result = s.serialize(new E01_ChildBean());
+			var result = s.write(new E01_ChildBean());
 			assertNotNull(result);
 		}
 
@@ -335,7 +335,7 @@ class RdfSerializer_Test extends TestBase {
 			assertNotNull(rdfCm);
 			assertNotNull(rdfCm.getNamespace());  // exercises getNamespace() at line 82
 			assertEquals(RdfCollectionFormat.SEQ, rdfCm.getCollectionFormat());
-			var result = s.serialize(new E02_BeanWithRdfParent());
+			var result = s.write(new E02_BeanWithRdfParent());
 			assertNotNull(result);
 		}
 
@@ -348,7 +348,7 @@ class RdfSerializer_Test extends TestBase {
 			var rdfCm = s.getRdfClassMeta(cm);
 			assertNotNull(rdfCm);
 			assertEquals(RdfCollectionFormat.DEFAULT, rdfCm.getCollectionFormat());
-			var result = s.serialize(new E03_BeanWithNoCollectionFormat());
+			var result = s.write(new E03_BeanWithNoCollectionFormat());
 			assertNotNull(result);
 		}
 	}
@@ -618,7 +618,7 @@ class RdfSerializer_Test extends TestBase {
 			// N3 language variant — not covered by A_builderSettings session-getter tests
 			var s = RdfSerializer.create().n3().build();
 			assertEquals("N3", s.getSession().getLanguage());
-			var result = s.serialize("hello");
+			var result = s.write("hello");
 			assertNotNull(result);
 			assertFalse(result.isEmpty());
 		}
@@ -626,7 +626,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void h02_serialize_ntriple_string_containsContent() throws Exception {
 			// N-TRIPLE output always emits at least one triple line
 			var s = RdfSerializer.create().ntriple().build();
-			var result = s.serialize("world");
+			var result = s.write("world");
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}
@@ -634,7 +634,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void h03_serialize_turtle_string_containsContent() throws Exception {
 			// TURTLE output for a plain string value is non-empty
 			var s = RdfSerializer.create().turtle().build();
-			var result = s.serialize("test");
+			var result = s.write("test");
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}
@@ -645,7 +645,7 @@ class RdfSerializer_Test extends TestBase {
 			assertNotNull(s);
 			var bean = new NamedBean();
 			bean.setName("test");
-			var result = s.serialize(bean);
+			var result = s.write(bean);
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}
@@ -656,7 +656,7 @@ class RdfSerializer_Test extends TestBase {
 			assertNotNull(s);
 			var bean = new NamedBean();
 			bean.setName("test");
-			var result = s.serialize(bean);
+			var result = s.write(bean);
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}
@@ -665,7 +665,7 @@ class RdfSerializer_Test extends TestBase {
 			// Collection serialization via N-TRIPLE language
 			var s = RdfSerializer.create().ntriple().build();
 			var list = new ArrayList<>(List.of("a", "b", "c"));
-			var result = s.serialize(list);
+			var result = s.write(list);
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}
@@ -674,7 +674,7 @@ class RdfSerializer_Test extends TestBase {
 			// Collection serialization via TURTLE language
 			var s = RdfSerializer.create().turtle().build();
 			var list = new ArrayList<>(List.of("x", "y"));
-			var result = s.serialize(list);
+			var result = s.write(list);
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}
@@ -686,8 +686,8 @@ class RdfSerializer_Test extends TestBase {
 			var s2 = RdfSerializer.create().trimStrings(false).build();
 			assertNotNull(s2);
 			// Serialize a string with surrounding whitespace; trimStrings strips it before output
-			var trimmed = s1.serialize("  hello  ");
-			var notTrimmed = s2.serialize("  hello  ");
+			var trimmed = s1.write("  hello  ");
+			var notTrimmed = s2.write("  hello  ");
 			assertNotNull(trimmed);
 			assertNotNull(notTrimmed);
 		}
@@ -704,7 +704,7 @@ class RdfSerializer_Test extends TestBase {
 			var bean = new BeanWithList();
 			bean.items = new ArrayList<>(List.of("a", "b", "c"));
 			var s = RdfSerializer.create().ntriple().collectionFormat(RdfCollectionFormat.BAG).build();
-			var result = s.serialize(bean);
+			var result = s.write(bean);
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}
@@ -714,7 +714,7 @@ class RdfSerializer_Test extends TestBase {
 			var bean = new BeanWithList();
 			bean.items = new ArrayList<>(List.of("x", "y"));
 			var s = RdfSerializer.create().ntriple().collectionFormat(RdfCollectionFormat.SEQ).build();
-			var result = s.serialize(bean);
+			var result = s.write(bean);
 			assertNotNull(result);
 		}
 
@@ -723,7 +723,7 @@ class RdfSerializer_Test extends TestBase {
 			var bean = new BeanWithList();
 			bean.items = new ArrayList<>(List.of("p", "q"));
 			var s = RdfSerializer.create().turtle().collectionFormat(RdfCollectionFormat.MULTI_VALUED).build();
-			var result = s.serialize(bean);
+			var result = s.write(bean);
 			assertNotNull(result);
 		}
 
@@ -732,7 +732,7 @@ class RdfSerializer_Test extends TestBase {
 			var bean = new BeanWithList();
 			bean.items = null;
 			var s = RdfSerializer.create().ntriple().keepNullProperties().build();
-			var result = s.serialize(bean);
+			var result = s.write(bean);
 			assertNotNull(result);
 		}
 	}
@@ -740,12 +740,12 @@ class RdfSerializer_Test extends TestBase {
 	@Nested class J_serializationVariousTypes extends TestBase {
 
 		@Test void j01_serialize_map_ntriple() throws Exception {
-			// sType.isMap() path with a plain HashMap (non-BeanMap) exercises serializeMap()
+			// sType.isMap() path with a plain HashMap (non-BeanMap) exercises writeMap()
 			var s = RdfSerializer.create().ntriple().build();
 			var map = new LinkedHashMap<String,String>();
 			map.put("key1", "val1");
 			map.put("key2", "val2");
-			assertFalse(s.serialize(map).isBlank());
+			assertFalse(s.write(map).isBlank());
 		}
 
 		@Test void j02_serialize_map_turtle() throws Exception {
@@ -753,37 +753,37 @@ class RdfSerializer_Test extends TestBase {
 			var s = RdfSerializer.create().turtle().build();
 			var map = new LinkedHashMap<String,String>();
 			map.put("alpha", "one");
-			assertFalse(s.serialize(map).isBlank());
+			assertFalse(s.write(map).isBlank());
 		}
 
 		@Test void j03_serialize_reader() throws Exception {
-			// sType.isReader() path in serializeAnything
+			// sType.isReader() path in writeAnything
 			var s = RdfSerializer.create().ntriple().build();
-			assertNotNull(s.serialize(new StringReader("reader content")));
+			assertNotNull(s.write(new StringReader("reader content")));
 		}
 
 		@Test void j04_serialize_inputstream() throws Exception {
-			// sType.isInputStream() path in serializeAnything
+			// sType.isInputStream() path in writeAnything
 			var s = RdfSerializer.create().ntriple().build();
-			assertNotNull(s.serialize(new ByteArrayInputStream("bytes".getBytes())));
+			assertNotNull(s.write(new ByteArrayInputStream("bytes".getBytes())));
 		}
 
 		@Test void j05_serialize_number_with_literal_types() throws Exception {
 			// isAddLiteralTypes()=true exercises the createTypedLiteral branch (line 325)
 			var s = RdfSerializer.create().ntriple().addLiteralTypes().build();
-			assertNotNull(s.serialize(42));
+			assertNotNull(s.write(42));
 		}
 
 		@Test void j06_serialize_boolean_with_literal_types() throws Exception {
 			// isAddLiteralTypes()=true for boolean value
 			var s = RdfSerializer.create().ntriple().addLiteralTypes().build();
-			assertNotNull(s.serialize(true));
+			assertNotNull(s.write(true));
 		}
 
 		@Test void j07_serialize_list_format() throws Exception {
-			// LIST switch case in serializeAnything (line 313) — distinct from BAG/SEQ/DEFAULT
+			// LIST switch case in writeAnything (line 313) — distinct from BAG/SEQ/DEFAULT
 			var s = RdfSerializer.create().ntriple().collectionFormat(RdfCollectionFormat.LIST).build();
-			assertFalse(s.serialize(new ArrayList<>(List.of("a", "b", "c"))).isBlank());
+			assertFalse(s.write(new ArrayList<>(List.of("a", "b", "c"))).isBlank());
 		}
 
 		public static class J08_SimpleBean {
@@ -791,24 +791,24 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void j08_looseCollections_list() throws Exception {
-			// doSerialize looseCollections + isCollection branch (lines 447-448)
+			// doWrite looseCollections + isCollection branch (lines 447-448)
 			// Uses beans so each element produces an RDF resource with properties
 			var s = RdfSerializer.create().ntriple().looseCollections().build();
 			var list = new ArrayList<>(List.of(new J08_SimpleBean(), new J08_SimpleBean()));
-			assertFalse(s.serialize(list).isBlank());
+			assertFalse(s.write(list).isBlank());
 		}
 
 		@Test void j09_looseCollections_array() throws Exception {
-			// doSerialize looseCollections + isArray (not isCollection) branch (line 448)
+			// doWrite looseCollections + isArray (not isCollection) branch (line 448)
 			var s = RdfSerializer.create().ntriple().looseCollections().build();
 			var arr = new J08_SimpleBean[]{ new J08_SimpleBean(), new J08_SimpleBean() };
-			assertFalse(s.serialize(arr).isBlank());
+			assertFalse(s.write(arr).isBlank());
 		}
 
 		@Test void j10_serialize_string_array() throws Exception {
 			// sType.isCollectionOrArray() via array — exercises toList() path
 			var s = RdfSerializer.create().ntriple().build();
-			assertFalse(s.serialize(new String[]{"one", "two", "three"}).isBlank());
+			assertFalse(s.write(new String[]{"one", "two", "three"}).isBlank());
 		}
 
 		@Test void j11_language_n3pp_n3plain_n3triples() {
@@ -821,7 +821,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void j12_invalid_language_throws_on_serialize() {
 			// lang==null path in session constructor — throws exception on first serialize call
 			var s = RdfSerializer.create().language("NOT-A-REAL-LANGUAGE").build();
-			assertThrows(Exception.class, () -> s.serialize("test"));
+			assertThrows(Exception.class, () -> s.write("test"));
 		}
 
 		@Test void j13_copy_from_serializer_with_disabled_settings() {
@@ -840,10 +840,10 @@ class RdfSerializer_Test extends TestBase {
 
 		@Test void j14_serialize_typed_bean_in_object_array() throws Exception {
 			// getBeanTypeName returns non-null when eType=Object != aType=J14_TypedBean
-			// exercises the nn(typeName) true branch at line 344 in serializeBeanMap
+			// exercises the nn(typeName) true branch at line 344 in writeBeanMap
 			var s = RdfSerializer.create().ntriple().addBeanTypesRdf(true)
 				.beanDictionary(J14_TypedBean.class).build();
-			assertFalse(s.serialize(new Object[]{ new J14_TypedBean() }).isBlank());
+			assertFalse(s.write(new Object[]{ new J14_TypedBean() }).isBlank());
 		}
 
 		public static class J15_BeanWithNullField {
@@ -854,13 +854,13 @@ class RdfSerializer_Test extends TestBase {
 		@Test void j15_serialize_bean_null_prop_keepNullProperties() throws Exception {
 			// null property value with bpm set and isKeepNullProperties()=true (lines 255-257)
 			var s = RdfSerializer.create().ntriple().keepNullProperties().build();
-			assertNotNull(s.serialize(new J15_BeanWithNullField()));
+			assertNotNull(s.write(new J15_BeanWithNullField()));
 		}
 
 		@Test void j16_serialize_bean_null_prop_no_keepNullProperties() throws Exception {
 			// null property value with bpm set and isKeepNullProperties()=false (line 255 false branch)
 			var s = RdfSerializer.create().ntriple().build();
-			assertNotNull(s.serialize(new J15_BeanWithNullField()));
+			assertNotNull(s.write(new J15_BeanWithNullField()));
 		}
 
 		public static class J17_BeanWithFilteredProp {
@@ -872,7 +872,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void j17_serialize_bean_with_property_filter() throws Exception {
 			// beanProperties filter exercises canIgnoreValue() at line 368
 			var s = RdfSerializer.create().ntriple().beanProperties(J17_BeanWithFilteredProp.class, "included").build();
-			assertNotNull(s.serialize(new J17_BeanWithFilteredProp()));
+			assertNotNull(s.write(new J17_BeanWithFilteredProp()));
 		}
 
 		public static class J18_BeanWithMultiValued {
@@ -880,21 +880,21 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void j18_serialize_multi_valued_collection() throws Exception {
-			// MULTI_VALUED format routes to serializeToMultiProperties (line 308) for bean collection properties
+			// MULTI_VALUED format routes to writeToMultiProperties (line 308) for bean collection properties
 			var s = RdfSerializer.create().ntriple().collectionFormat(RdfCollectionFormat.MULTI_VALUED).build();
-			assertFalse(s.serialize(new J18_BeanWithMultiValued()).isBlank());
+			assertFalse(s.write(new J18_BeanWithMultiValued()).isBlank());
 		}
 
 		@Test void j19_serialize_char_zero() throws Exception {
 			// sType.isChar() && charValue()==0 branch (line 254) — char(0) → null in RDF
 			var s = RdfSerializer.create().ntriple().build();
-			assertNotNull(s.serialize('\0'));
+			assertNotNull(s.write('\0'));
 		}
 
 		@Test void j20_serialize_char_nonzero() throws Exception {
 			// isChar() with a normal non-zero char goes to isCharSequence()||isChar() at line 318
 			var s = RdfSerializer.create().ntriple().build();
-			assertNotNull(s.serialize('X'));
+			assertNotNull(s.write('X'));
 		}
 
 		@Rdf(collectionFormat = RdfCollectionFormat.BAG)
@@ -908,7 +908,7 @@ class RdfSerializer_Test extends TestBase {
 			list.add("x");
 			list.add("y");
 			var s = RdfSerializer.create().ntriple().build();
-			assertFalse(s.serialize(list).isBlank());
+			assertFalse(s.write(list).isBlank());
 		}
 
 		public static class J22_BeanWithUriField {
@@ -917,10 +917,10 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void j22_serialize_bean_with_uri_property() throws Exception {
-			// bpMeta.isUri() path in serializeBeanMap → isURI=true passed to serializeAnything (line 380)
+			// bpMeta.isUri() path in writeBeanMap → isURI=true passed to writeAnything (line 380)
 			// exercises sType.isUri() || isURI branch (line 263) with an absolute URI
 			var s = RdfSerializer.create().ntriple().build();
-			assertFalse(s.serialize(new J22_BeanWithUriField()).isBlank());
+			assertFalse(s.write(new J22_BeanWithUriField()).isBlank());
 		}
 
 		public static class J23_BeanWithRelativeUri {
@@ -932,7 +932,7 @@ class RdfSerializer_Test extends TestBase {
 			// Non-absolute URI path (line 266 false branch) → encodeTextInvalidChars (line 269)
 			// also exercises encodeTextInvalidChars with a non-null value
 			var s = RdfSerializer.create().ntriple().build();
-			assertNotNull(s.serialize(new J23_BeanWithRelativeUri()));
+			assertNotNull(s.write(new J23_BeanWithRelativeUri()));
 		}
 
 		public static class J24_BeanWithRdfNs {
@@ -944,13 +944,13 @@ class RdfSerializer_Test extends TestBase {
 			// bpRdf.getNamespace() != null path (line 372 false branch, line 374 false branch, line 376)
 			// → autoDetectNamespaces adds the namespace prefix to the model
 			var s = RdfSerializer.create().ntriple().build();
-			assertFalse(s.serialize(new J24_BeanWithRdfNs()).isBlank());
+			assertFalse(s.write(new J24_BeanWithRdfNs()).isBlank());
 		}
 
 		@Test void j25_serialize_seq_collection_format() throws Exception {
 			// SEQ format exercises the default branch in the switch (line 314)
 			var s = RdfSerializer.create().ntriple().collectionFormat(RdfCollectionFormat.SEQ).build();
-			assertFalse(s.serialize(new ArrayList<>(List.of("p", "q"))).isBlank());
+			assertFalse(s.write(new ArrayList<>(List.of("p", "q"))).isBlank());
 		}
 	}
 
@@ -958,7 +958,7 @@ class RdfSerializer_Test extends TestBase {
 
 		@Test void k01_stream_serialize_string_thrift() throws Exception {
 			// Actual serialization with RDF Thrift to cover RdfStreamSerializerSession branches
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize("hello");
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write("hello");
 			assertTrue(bytes.length > 0);
 		}
 
@@ -966,14 +966,14 @@ class RdfSerializer_Test extends TestBase {
 			// Serialize a bean via Thrift — exercises bean handling in RdfStreamSerializerSession
 			var bean = new NamedBean();
 			bean.setName("test");
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(bean);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(bean);
 			assertTrue(bytes.length > 0);
 		}
 
 		@Test void k03_stream_serialize_list_thrift() throws Exception {
 			// Collection serialization via Thrift
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(new ArrayList<>(List.of("a", "b", "c")));
+				.write(new ArrayList<>(List.of("a", "b", "c")));
 			assertTrue(bytes.length > 0);
 		}
 
@@ -981,95 +981,95 @@ class RdfSerializer_Test extends TestBase {
 			// Map serialization via Thrift (non-BeanMap path)
 			var map = new LinkedHashMap<String,String>();
 			map.put("k", "v");
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(map);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(map);
 			assertTrue(bytes.length > 0);
 		}
 
 		@Test void k05_stream_roundtrip_string_thrift() throws Exception {
 			// Round-trip String via Thrift — exercises RdfStreamParserSession
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize("roundtrip");
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write("roundtrip");
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, String.class);
+				.read(bytes, String.class);
 			assertEquals("roundtrip", result);
 		}
 
 		@Test void k06_stream_roundtrip_bean_thrift() throws Exception {
-			// Round-trip bean via Thrift — exercises parseIntoBeanMap in stream session
+			// Round-trip bean via Thrift — exercises readIntoBeanMap in stream session
 			var bean = new NamedBean();
 			bean.setName("stream-test");
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(bean);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(bean);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, NamedBean.class);
+				.read(bytes, NamedBean.class);
 			assertNotNull(result);
 		}
 
 		@Test void k07_stream_serialize_array_thrift() throws Exception {
 			// Array serialization via Thrift exercises isArray path in stream session
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(new String[]{"a", "b", "c"});
+				.write(new String[]{"a", "b", "c"});
 			assertTrue(bytes.length > 0);
 		}
 
 		@Test void k08_stream_serialize_boolean_thrift() throws Exception {
 			// Boolean serialization via Thrift — exercises isBoolean path in stream session
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(Boolean.TRUE);
+				.write(Boolean.TRUE);
 			assertTrue(bytes.length > 0);
 		}
 
 		@Test void k09_stream_serialize_byte_array_thrift() throws Exception {
 			// sType.isByteArray() path in stream session — emitted as base64 typed literal (line 350-353)
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(new byte[]{1, 2, 3, 4});
+				.write(new byte[]{1, 2, 3, 4});
 			assertTrue(bytes.length > 0);
 		}
 
 		@Test void k10_stream_serialize_char_thrift() throws Exception {
 			// sType.isChar() with non-zero char — routes to isCharSequence()||isChar() (line 372)
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize('Q');
+				.write('Q');
 			assertTrue(bytes.length > 0);
 		}
 
 		@Test void k11_stream_serialize_url_thrift() throws Exception {
 			// sType.isUri() path — absolute URL serialized as resource (line 321-325)
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(new java.net.URL("http://example.org/stream"));
+				.write(new java.net.URL("http://example.org/stream"));
 			assertTrue(bytes.length > 0);
 		}
 
 		@Test void k12_stream_roundtrip_byte_array() throws Exception {
 			// Round-trip byte[] via Thrift — exercises isByteArray() in stream parser session
 			var input = new byte[]{10, 20, 30};
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(input);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(input);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, byte[].class);
+				.read(bytes, byte[].class);
 			assertNotNull(result);
 		}
 
 		@Test void k13_stream_roundtrip_char() throws Exception {
 			// Round-trip char via Thrift — exercises isChar() in stream parser session
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize('X');
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write('X');
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Character.class);
+				.read(bytes, Character.class);
 			assertNotNull(result);
 		}
 
 		@Test void k14_stream_roundtrip_url() throws Exception {
 			// Round-trip URL via Thrift — exercises isUri() in stream parser session (line 347)
 			var url = new java.net.URL("http://example.org/k14");
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(url);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(url);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, java.net.URL.class);
+				.read(bytes, java.net.URL.class);
 			assertNotNull(result);
 		}
 
 		@Test void k15_stream_optional_thrift() throws Exception {
 			// Optional serialized and parsed via Thrift — covers isOptional() branch in stream sessions
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(o("opt-val"));
+				.write(o("opt-val"));
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Optional.class);
+				.read(bytes, Optional.class);
 			assertNotNull(result);
 		}
 
@@ -1081,7 +1081,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void k16_stream_keepnull_thrift() throws Exception {
 			// keepNullProperties on stream serializer — covers isKeepNullProperties() TRUE in stream session
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).keepNullProperties().build()
-				.serialize(new K16_BeanWithNull());
+				.write(new K16_BeanWithNull());
 			assertTrue(bytes.length > 0);
 		}
 
@@ -1094,34 +1094,34 @@ class RdfSerializer_Test extends TestBase {
 		@Test void k17_stream_beanuri_thrift() throws Exception {
 			// Bean with @Rdf(beanUri=true) — covers hasBeanUri() TRUE and bpRdf.isBeanUri() skip in stream session
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(new K17_BeanWithUri());
+				.write(new K17_BeanWithUri());
 			assertTrue(bytes.length > 0);
 		}
 
 		@Test void k18_stream_instant_thrift() throws Exception {
 			// Serialize Instant and round-trip via Thrift — covers isTemporal() branch in stream parser session
 			var now = Instant.now();
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(now);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(now);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Instant.class);
+				.read(bytes, Instant.class);
 			assertNotNull(result);
 		}
 
 		@Test void k19_stream_duration_thrift() throws Exception {
 			// Serialize Duration and round-trip via Thrift — covers isDuration() branch in stream parser session
 			var d = Duration.ofHours(2);
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(d);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(d);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Duration.class);
+				.read(bytes, Duration.class);
 			assertNotNull(result);
 		}
 
 		@Test void k20_stream_period_thrift() throws Exception {
 			// Serialize Period and round-trip via Thrift — covers isPeriod() branch in stream parser session
 			var p = Period.ofDays(5);
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(p);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(p);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Period.class);
+				.read(bytes, Period.class);
 			assertNotNull(result);
 		}
 
@@ -1135,9 +1135,9 @@ class RdfSerializer_Test extends TestBase {
 			var list = new K21_BagList();
 			list.add("p");
 			list.add("q");
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(list);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(list);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, K21_BagList.class);
+				.read(bytes, K21_BagList.class);
 			assertNotNull(result);
 		}
 
@@ -1149,7 +1149,7 @@ class RdfSerializer_Test extends TestBase {
 			var dl = new DelegateList(cm);
 			dl.add("alpha");
 			dl.add("beta");
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(dl);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(dl);
 			assertTrue(bytes.length > 0);
 		}
 
@@ -1157,9 +1157,9 @@ class RdfSerializer_Test extends TestBase {
 			// Serialize integer (number branch in stream serializer line 374) and parse as Object
 			// — covers non-String literal path (line 269 FALSE) in stream parser parseAnything
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(42);
+				.write(42);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Object.class);
+				.read(bytes, Object.class);
 			assertNotNull(result);
 		}
 
@@ -1172,37 +1172,37 @@ class RdfSerializer_Test extends TestBase {
 		@Test void k24_stream_bean_with_null_beanuri() throws Exception {
 			// @Rdf(beanUri=true) where uri is null — covers getUri(null,null) nn(uri)=FALSE in stream session
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(new K24_BeanWithNullUri());
+				.write(new K24_BeanWithNullUri());
 			assertTrue(bytes.length > 0);
 		}
 
 		@Test void k25_stream_beanuri_roundtrip() throws Exception {
-			// Round-trip bean with @Rdf(beanUri=true) via Thrift — covers parseIntoBeanMap hasBeanUri() TRUE
+			// Round-trip bean with @Rdf(beanUri=true) via Thrift — covers readIntoBeanMap hasBeanUri() TRUE
 			// in stream parser session (line 389: hasBeanUri && nn(r2.getURI()) → set uri from resource URI)
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(new K17_BeanWithUri());
+				.write(new K17_BeanWithUri());
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, K17_BeanWithUri.class);
+				.read(bytes, K17_BeanWithUri.class);
 			assertNotNull(result);
 		}
 
 		@Test void k26_stream_null_to_null() throws Exception {
 			// Serialize null via Thrift → model has no triples → getRoots() empty → null returned
-			// Covers stream doParse: roots.isEmpty()=TRUE, type.isOptional()=FALSE branch
+			// Covers stream doRead: roots.isEmpty()=TRUE, type.isOptional()=FALSE branch
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize((Object)null);
+				.write((Object)null);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Object.class);
+				.read(bytes, Object.class);
 			assertNull(result);
 		}
 
 		@Test void k27_stream_null_as_optional() throws Exception {
 			// Serialize null, parse as Optional → isEmpty=TRUE → opte()
-			// Covers stream doParse: roots.isEmpty()=TRUE, type.isOptional()=TRUE branch
+			// Covers stream doRead: roots.isEmpty()=TRUE, type.isOptional()=TRUE branch
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize((Object)null);
+				.write((Object)null);
 			var result = (Optional<?>)RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Optional.class);
+				.read(bytes, Optional.class);
 			assertNotNull(result);
 			assertTrue(result.isEmpty());
 		}
@@ -1210,18 +1210,18 @@ class RdfSerializer_Test extends TestBase {
 		@Test void k28_stream_date_roundtrip() throws Exception {
 			// Serialize Date and parse back via Thrift — covers isDate() branch in stream parser parseAnything
 			var date = new Date(1000000000L);
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(date);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(date);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Date.class);
+				.read(bytes, Date.class);
 			assertNotNull(result);
 		}
 
 		@Test void k29_stream_calendar_roundtrip() throws Exception {
 			// Serialize Calendar and parse back via Thrift — covers isCalendar() branch in stream parser parseAnything
 			var cal = Calendar.getInstance();
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(cal);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(cal);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Calendar.class);
+				.read(bytes, Calendar.class);
 			assertNotNull(result);
 		}
 
@@ -1233,75 +1233,75 @@ class RdfSerializer_Test extends TestBase {
 		@Test void k30_stream_multivalue_annotation_thrift() throws Exception {
 			// Bean with @Rdf(collectionFormat=MULTI_VALUED) via Thrift — covers MULTI_VALUED path in stream sessions
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(new K30_MultiValuedBean());
+				.write(new K30_MultiValuedBean());
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, K30_MultiValuedBean.class);
+				.read(bytes, K30_MultiValuedBean.class);
 			assertNotNull(result);
 		}
 
 		@Test void k31_stream_list_roundtrip() throws Exception {
 			// Non-empty ArrayList serialized/parsed via Thrift (default SEQ format) —
-			// covers SEQ container loop body in stream parser parseIntoCollection
+			// covers SEQ container loop body in stream parser readIntoCollection
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(new ArrayList<>(List.of("x", "y", "z")));
+				.write(new ArrayList<>(List.of("x", "y", "z")));
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, ArrayList.class);
+				.read(bytes, ArrayList.class);
 			assertNotNull(result);
 		}
 
 		@Test void k32_stream_string_roundtrip() throws Exception {
 			// Plain String round-trip via Thrift — covers sType.isCharSequence() parse branch
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize("hello");
+				.write("hello");
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, String.class);
+				.read(bytes, String.class);
 			assertEquals("hello", result);
 		}
 
 		@Test void k33_stream_char_roundtrip() throws Exception {
 			// Character round-trip via Thrift — covers sType.isChar() parse branch
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize('Z');
+				.write('Z');
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Character.class);
+				.read(bytes, Character.class);
 			assertEquals('Z', result);
 		}
 
 		@Test void k34_stream_boolean_roundtrip() throws Exception {
 			// Boolean round-trip via Thrift — covers sType.isBoolean() parse branch
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(true);
+				.write(true);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Boolean.class);
+				.read(bytes, Boolean.class);
 			assertEquals(Boolean.TRUE, result);
 		}
 
 		@Test void k35_stream_integer_typed_roundtrip() throws Exception {
 			// Integer round-trip via Thrift — covers sType.isNumber() parse branch + parseNumber()
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(99);
+				.write(99);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Integer.class);
+				.read(bytes, Integer.class);
 			assertEquals(99, result);
 		}
 
 		@Test void k36_stream_map_roundtrip() throws Exception {
 			// Map round-trip via Thrift — covers sType.isMap() path in stream parser parseAnything
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(Map.of("key1", "val1"));
+				.write(Map.of("key1", "val1"));
 			var result = (Map<?,?>)RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Map.class);
+				.read(bytes, Map.class);
 			assertNotNull(result);
 		}
 
 		@Test void k37_stream_bean_unknown_property() throws Exception {
 			// Bean with unknown property → ignoreUnknownBeanProperties() FALSE branch in stream parser
-			// onUnknownProperty called (default: ignore) — covers parseIntoBeanMap else branch (line 444+)
+			// onUnknownProperty called (default: ignore) — covers readIntoBeanMap else branch (line 444+)
 			// Serialize a richer bean, parse into a slimmer one
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(new K17_BeanWithUri());
+				.write(new K17_BeanWithUri());
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).ignoreUnknownBeanProperties().build()
-				.parse(bytes, K37_SlimBean.class);
+				.read(bytes, K37_SlimBean.class);
 			assertNotNull(result);
 		}
 
@@ -1313,9 +1313,9 @@ class RdfSerializer_Test extends TestBase {
 			var list = new K21_BagList();
 			list.add("p");
 			list.add("q");
-			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(list);
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(list);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Object.class);
+				.read(bytes, Object.class);
 			assertNotNull(result);
 		}
 
@@ -1326,11 +1326,11 @@ class RdfSerializer_Test extends TestBase {
 
 		@Test void k39_stream_list_annotation_list_parse() throws Exception {
 			// LIST (RDFList) collection round-trip via Thrift — covers r.canAs(RDFList.class) TRUE path
-			// in stream parser parseIntoCollection(RDFList, ...)
+			// in stream parser readIntoCollection(RDFList, ...)
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(new K39_BeanWithList());
+				.write(new K39_BeanWithList());
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, K39_BeanWithList.class);
+				.read(bytes, K39_BeanWithList.class);
 			assertNotNull(result);
 		}
 
@@ -1338,9 +1338,9 @@ class RdfSerializer_Test extends TestBase {
 			// Serialize string, parse as Object — covers sType.isObject() + n.isLiteral() TRUE
 			// + o instanceof String → decodeString() path (line 269-270 TRUE)
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize("world");
+				.write("world");
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, Object.class);
+				.read(bytes, Object.class);
 			assertNotNull(result);
 		}
 	}
@@ -1356,7 +1356,7 @@ class RdfSerializer_Test extends TestBase {
 			// keepNullProperties() → isKeepNullProperties() TRUE (line 256): null property gets rdf:nil node.
 			// Also covers the checkNull predicate (line 349): isKeepNullProperties()||nn(x) with x=null.
 			var s = RdfSerializer.create().ntriple().keepNullProperties().build();
-			var result = s.serialize(new M01_BeanWithNull());
+			var result = s.write(new M01_BeanWithNull());
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}
@@ -1367,7 +1367,7 @@ class RdfSerializer_Test extends TestBase {
 			var s = RdfSerializer.create().ntriple().build();
 			var bm = s.getMarshallingContext().toBeanMap(new NamedBean());
 			bm.put("name", "bm-test");
-			var result = s.serialize(bm);
+			var result = s.write(bm);
 			assertNotNull(result);
 		}
 
@@ -1380,7 +1380,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void m03_serialize_bean_with_rdf_bean_uri() throws Exception {
 			// Bean with @Rdf(beanUri=true) — covers hasBeanUri() TRUE (line 275) and bpRdf.isBeanUri() skip (line 359)
 			var s = RdfSerializer.create().ntriple().build();
-			var result = s.serialize(new M03_BeanWithBeanUri());
+			var result = s.write(new M03_BeanWithBeanUri());
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}
@@ -1394,72 +1394,72 @@ class RdfSerializer_Test extends TestBase {
 		@Test void m04_serialize_bean_with_null_bean_uri() throws Exception {
 			// @Rdf(beanUri=true) where uri field is null → getUri(null,null) covers nn(uri)=FALSE (line 190 FALSE)
 			var s = RdfSerializer.create().ntriple().build();
-			var result = s.serialize(new M04_BeanWithNullBeanUri());
+			var result = s.write(new M04_BeanWithNullBeanUri());
 			assertNotNull(result);
 		}
 
 		@Test void m05_serialize_loose_collections_list() throws Exception {
-			// looseCollections() → doSerialize line 447 TRUE: iterates each element as a separate root
+			// looseCollections() → doWrite line 447 TRUE: iterates each element as a separate root
 			var s = RdfSerializer.create().ntriple().looseCollections().build();
 			var b1 = new NamedBean();
 			b1.setName("a");
 			var b2 = new NamedBean();
 			b2.setName("b");
-			var result = s.serialize(new ArrayList<>(List.of(b1, b2)));
+			var result = s.write(new ArrayList<>(List.of(b1, b2)));
 			assertNotNull(result);
 		}
 
 		@Test void m06_serialize_loose_collections_array() throws Exception {
-			// looseCollections() + array type → doSerialize line 448 isCollection()=FALSE → toList()
+			// looseCollections() + array type → doWrite line 448 isCollection()=FALSE → toList()
 			var s = RdfSerializer.create().ntriple().looseCollections().build();
 			var b1 = new NamedBean();
 			b1.setName("x");
 			var b2 = new NamedBean();
 			b2.setName("y");
-			var result = s.serialize(new NamedBean[]{b1, b2});
+			var result = s.write(new NamedBean[]{b1, b2});
 			assertNotNull(result);
 		}
 
 		@Test void m07_serialize_add_literal_types() throws Exception {
-			// isAddLiteralTypes() TRUE → serializeAnything line 325: n = m.createTypedLiteral(o)
+			// isAddLiteralTypes() TRUE → writeAnything line 325: n = m.createTypedLiteral(o)
 			var s = RdfSerializer.create().ntriple().addLiteralTypes().build();
-			var result = s.serialize(42);
+			var result = s.write(42);
 			assertNotNull(result);
 		}
 
 		@Test void m08_serialize_add_root_property() throws Exception {
-			// isAddRootProp() TRUE → doSerialize line 460-461: r.addProperty(pRoot,"true")
+			// isAddRootProp() TRUE → doWrite line 460-461: r.addProperty(pRoot,"true")
 			var s = RdfSerializer.create().ntriple().addRootProperty().build();
-			var result = s.serialize("hello");
+			var result = s.write("hello");
 			assertNotNull(result);
 		}
 
 		@Test void m09_serialize_non_absolute_uri_as_literal() throws Exception {
-			// isUri() but URI is not absolute (relative) → serializeAnything line 268-269:
+			// isUri() but URI is not absolute (relative) → writeAnything line 268-269:
 			// isAbsoluteUri() FALSE → createLiteral(encodeTextInvalidChars(uri))
 			var s = RdfSerializer.create().ntriple().build();
 			@Uri
 			class RelativeUriBean {
 				public String getPath() { return "relative/path"; }
 			}
-			var result = s.serialize(new RelativeUriBean().getPath());
+			var result = s.write(new RelativeUriBean().getPath());
 			assertNotNull(result);
 		}
 
 		@Test void m10_serialize_null_char_value() throws Exception {
-			// char '\0' → serializeAnything line 254 TRUE branch: sType.isChar() && charValue==0
+			// char '\0' → writeAnything line 254 TRUE branch: sType.isChar() && charValue==0
 			// → null branch (bpm==null here) → n = createResource(RDF_NIL)
 			var s = RdfSerializer.create().ntriple().build();
-			var result = s.serialize('\0');
+			var result = s.write('\0');
 			assertNotNull(result);
 		}
 
 		@Test void m11_serialize_rdf_namespace_no_autodetect() throws Exception {
 			// Bean with @Rdf(prefix+namespace) on class → bpRdf's underlying @Rdf(on-class) produces non-null ns
-			// in findNamespace →  serializeBeanMap: ns set from class @Rdf → first if FALSE, second if FALSE
+			// in findNamespace →  writeBeanMap: ns set from class @Rdf → first if FALSE, second if FALSE
 			// disableAutoDetectNamespaces() → else-if isAutoDetectNamespaces()=FALSE → else-if skipped
 			var s = RdfSerializer.create().ntriple().disableAutoDetectNamespaces().build();
-			var result = s.serialize(new M11_BeanWithRdfNs());
+			var result = s.write(new M11_BeanWithRdfNs());
 			assertNotNull(result);
 		}
 
@@ -1473,7 +1473,7 @@ class RdfSerializer_Test extends TestBase {
 			// first if-condition(ns==null) FALSE → goes to else-if isAutoDetectNamespaces()=TRUE →
 			// addModelPrefix(ns) called (covers the else-if TRUE branch in lambda$4)
 			var s = RdfSerializer.create().ntriple().build();
-			var result = s.serialize(new M12_BeanWithPropNs());
+			var result = s.write(new M12_BeanWithPropNs());
 			assertNotNull(result);
 		}
 
@@ -1483,11 +1483,11 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void m13_serialize_multivalue_with_rdf_property_ns() throws Exception {
-			// MULTI_VALUED collection + @Rdf(prefix+namespace) on property → serializeToMultiProperties:
+			// MULTI_VALUED collection + @Rdf(prefix+namespace) on property → writeToMultiProperties:
 			// ns = bpRdf.getNamespace() (non-null) → first if FALSE → else-if isAutoDetectNamespaces() →
 			// addModelPrefix(ns) called in lambda$8
 			var s = RdfSerializer.create().ntriple().build();
-			var result = s.serialize(new M13_BeanWithMultiNs());
+			var result = s.write(new M13_BeanWithMultiNs());
 			assertNotNull(result);
 		}
 
@@ -1498,11 +1498,11 @@ class RdfSerializer_Test extends TestBase {
 
 		@Test void m14_serialize_loose_collections_non_collection() throws Exception {
 			// looseCollections=true, o is NOT a collection → compound condition [T,T,F] (isCollectionOrArray=false)
-			// → falls through to else branch in doSerialize
+			// → falls through to else branch in doWrite
 			var s = RdfSerializer.create().ntriple().looseCollections().build();
 			var b = new NamedBean();
 			b.setName("loose-bean");
-			var result = s.serialize(b);
+			var result = s.write(b);
 			assertNotNull(result);
 		}
 	}
@@ -1510,16 +1510,15 @@ class RdfSerializer_Test extends TestBase {
 	@Nested class L_serializerSessionBranchFills extends TestBase {
 
 		@Test void l01_serialize_optional() throws Exception {
-			// Serialize Optional<String> — covers isOptional(aType) branch (line 220) in serializeAnything
+			// Serialize Optional<String> — covers isOptional(aType) branch (line 220) in writeAnything
 			var s = RdfSerializer.create().ntriple().build();
-			var result = s.serialize(o("opt-value"));
+			var result = s.write(o("opt-value"));
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}
 
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		@Test void l02_serialize_delegate_list() throws Exception {
-			// Serialize DelegateList — covers isDelegate() branch (line 228) in serializeAnything
 			// DelegateList implements Delegate<T>; its wType is the wrapped collection type
 			var s = RdfSerializer.create().ntriple().build();
 			var ctx = s.getMarshallingContext();
@@ -1527,7 +1526,7 @@ class RdfSerializer_Test extends TestBase {
 			var dl = new DelegateList(cm);
 			dl.add("alpha");
 			dl.add("beta");
-			var result = s.serialize(dl);
+			var result = s.write(dl);
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}

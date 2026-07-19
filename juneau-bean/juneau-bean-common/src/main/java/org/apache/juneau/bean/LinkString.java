@@ -161,7 +161,7 @@ public class LinkString implements Comparable<LinkString> {
 	public LinkString setUri(String value, Object...args) {
 		for (var i = 0; i < args.length; i++)
 			try {
-				args[i] = OpenApiSerializer.DEFAULT.getSession().serialize(HttpPartType.PATH, null, args[i]);
+				args[i] = OpenApiSerializer.DEFAULT.getSession().write(HttpPartType.PATH, null, args[i]);
 			} catch (SchemaValidationException | SerializeException e) { // HTT - requires OpenApiSerializer to throw during default serialization
 				throw rex(e); // HTT
 			}

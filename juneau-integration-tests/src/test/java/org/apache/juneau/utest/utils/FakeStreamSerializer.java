@@ -84,7 +84,7 @@ public class FakeStreamSerializer extends OutputStreamSerializer {
 	}
 
 	@Override /* SerializerSession */
-	protected void doSerialize(SerializerSession session, SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerSession session, SerializerPipe out, Object o) throws IOException, SerializeException {
 		out.getOutputStream().write(function.apply(session, o));
 	}
 }

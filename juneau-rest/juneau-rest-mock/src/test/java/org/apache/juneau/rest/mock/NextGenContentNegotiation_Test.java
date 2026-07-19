@@ -87,7 +87,7 @@ class NextGenContentNegotiation_Test {
 			// A registered set is no longer an implicit default — designate the default serializer explicitly.
 			try (var nc = RestClient.builder().transport(mock.getClient().getTransport()).serializers(sset).defaultSerializer(JsonlSerializer.DEFAULT).build()) {
 				var rawBody = nc.post("/echoContentType").body(new Bean("a", 1)).run().body().asString();
-				var echoed = JsonParser.DEFAULT.parse(rawBody, String.class);
+				var echoed = JsonParser.DEFAULT.read(rawBody, String.class);
 				assertTrue(echoed.startsWith("application/jsonl"), () -> "Echoed Content-Type was: " + echoed);
 			}
 		}
@@ -98,7 +98,7 @@ class NextGenContentNegotiation_Test {
 		try (var mock = MockRestClient.create(JsonlServer.class)) {
 			try (var nc = RestClient.builder().transport(mock.getClient().getTransport()).defaultSerializer(MsgPackSerializer.DEFAULT).build()) {
 				var rawBody = nc.post("/echoContentType").body(new Bean("a", 1)).run().body().asString();
-				var echoed = JsonParser.DEFAULT.parse(rawBody, String.class);
+				var echoed = JsonParser.DEFAULT.read(rawBody, String.class);
 				assertTrue(echoed.startsWith("application/msgpack"), () -> "Echoed Content-Type was: " + echoed);
 			}
 		}
@@ -110,7 +110,7 @@ class NextGenContentNegotiation_Test {
 		try (var mock = MockRestClient.create(JsonlServer.class)) {
 			try (var nc = RestClient.builder().transport(mock.getClient().getTransport()).parsers(pset).build()) {
 				var rawBody = nc.get("/echoAccept").run().body().asString();
-				var echoed = JsonParser.DEFAULT.parse(rawBody, String.class);
+				var echoed = JsonParser.DEFAULT.read(rawBody, String.class);
 				assertTrue(echoed.startsWith("application/jsonl"), () -> "Echoed Accept was: " + echoed);
 			}
 		}
@@ -122,7 +122,7 @@ class NextGenContentNegotiation_Test {
 		try (var mock = MockRestClient.create(JsonlServer.class)) {
 			try (var nc = RestClient.builder().transport(mock.getClient().getTransport()).defaultParser(JsonlParser.DEFAULT).build()) {
 				var rawBody = nc.get("/echoAccept").run().body().asString();
-				var echoed = JsonParser.DEFAULT.parse(rawBody, String.class);
+				var echoed = JsonParser.DEFAULT.read(rawBody, String.class);
 				assertTrue(echoed.contains("application/jsonl"), () -> "Echoed Accept was: " + echoed);
 			}
 		}

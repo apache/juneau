@@ -156,7 +156,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for parser state machine
 	})
-	<T> T parseAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	<T> T readAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();
@@ -171,7 +171,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)o(parseAnything(eType.getElementType(), r, outer, pMeta));
+			return (T)o(readAnything(eType.getElementType(), r, outer, pMeta));
 
 		setCurrentClass(sType);
 		var wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
@@ -187,77 +187,77 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		} else if ((c == ',' || c == '}' || c == ']')) {
 			onMissingValue();
 		} else if (c == 'n') {
-			parseKeyword("null", r);
+			readKeyword("null", r);
 		} else if (sType.isObject()) {
 			if (c == '{') {
 				var m2 = newGenericMap();
-				parseIntoMap2(r, m2, string(), object(), pMeta);
+				readIntoMap2(r, m2, string(), object(), pMeta);
 				o = cast(m2, pMeta, eType);
 			} else if (c == '[') {
-				o = parseIntoCollection2(r, newGenericList(), object(), pMeta);
+				o = readIntoCollection2(r, newGenericList(), object(), pMeta);
 			} else if (c == '\'' || c == '"') {
-				o = parseString(r);
+				o = readString(r);
 				if (sType.isChar())
 					o = parseCharacter(o);
 			} else if (c >= '0' && c <= '9' || c == '-' || c == '.') {
-				o = parseNumber(r, null);
+				o = readNumber(r, null);
 			} else if (c == 't') {
-				parseKeyword("true", r);
+				readKeyword("true", r);
 				o = Boolean.TRUE;
 			} else {
-				parseKeyword("false", r);
+				readKeyword("false", r);
 				o = Boolean.FALSE;
 			}
 		} else if (nn(builder)) {
 			var m = toBeanMap(builder.create(this, eType));
-			o = builder.build(this, parseIntoBeanMap2(r, m).getBean(), eType);
+			o = builder.build(this, readIntoBeanMap2(r, m).getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
 			var m = newBeanMap(outer, sType.inner());
-			o = parseIntoBeanMap2(r, m).getBean();
+			o = readIntoBeanMap2(r, m).getBean();
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
-			o = parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
+			o = readIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '{') {
 				var m = newGenericMap();
-				parseIntoMap2(r, m, string(), object(), pMeta);
+				readIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : newGenericList());
-				o = parseIntoCollection2(r, l, sType, pMeta);
+				o = readIntoCollection2(r, l, sType, pMeta);
 			}
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '{') {
 				var m = newGenericMap();
-				parseIntoMap2(r, m, string(), object(), pMeta);
+				readIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
-				var l = (ArrayList)parseIntoCollection2(r, list(), sType, pMeta);
+				var l = (ArrayList)readIntoCollection2(r, list(), sType, pMeta);
 				o = toArray(sType, l);
 			}
 		} else if (sType.isCharSequence()) {
-			o = parseString(r);
+			o = readString(r);
 		} else if (sType.isChar()) {
-			o = parseCharacter(parseString(r));
+			o = parseCharacter(readString(r));
 		} else if (sType.isNumber()) {
-			o = parseNumber(r, (Class<? extends Number>)sType.inner());
+			o = readNumber(r, (Class<? extends Number>)sType.inner());
 		} else if (sType.isBoolean()) {
-			o = parseBoolean(r);
+			o = readBoolean(r);
 		} else if (sType.isDate()) {
-			o = parseDate(parseString(r), sType);
+			o = readDate(readString(r), sType);
 		} else if (sType.isCalendar()) {
-			o = parseCalendar(parseString(r), sType);
+			o = readCalendar(readString(r), sType);
 		} else if (sType.isTemporal()) {
-			o = parseTemporal(parseString(r), sType);
+			o = readTemporal(readString(r), sType);
 		} else if (sType.isDuration()) {
-			o = parseDuration(parseString(r));
+			o = readDuration(readString(r));
 		} else if (sType.isPeriod()) {
-			o = parsePeriod(parseString(r));
+			o = readPeriod(readString(r));
 		} else if (sType.canCreateNewInstanceFromString(outer) && (c == '\'' || c == '"')) {
-			o = sType.newInstanceFromString(outer, parseString(r));
+			o = sType.newInstanceFromString(outer, readString(r));
 		} else if (c == '{') {
 			Map m = newGenericMap();
-			parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
+			readIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast((MarshalledMap)m, pMeta, eType);
 			else if (nn(sType.getProxyInvocationHandler()))
@@ -265,7 +265,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 			else
 				throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 		} else if (sType.canCreateNewInstanceFromString(outer) && canCoerceNonStringToString()) {
-			o = sType.newInstanceFromString(outer, parseString(r));
+			o = sType.newInstanceFromString(outer, readString(r));
 		} else {
 			throw new ParseException(this, "Unrecognized syntax for class type '%s', starting character '%s'", sType, (char)c);
 		}
@@ -282,15 +282,15 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		return (T)o;
 	}
 
-	private Boolean parseBoolean(ParserReader r) throws IOException, ParseException {
+	private Boolean readBoolean(ParserReader r) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
-			return b(parseString(r));
+			return b(readString(r));
 		if (c == 't') {
-			parseKeyword("true", r);
+			readKeyword("true", r);
 			return Boolean.TRUE;
 		} else if (c == 'f') {
-			parseKeyword("false", r);
+			readKeyword("false", r);
 			return Boolean.FALSE;
 		} else {
 			throw new ParseException(this, "Unrecognized syntax.  Expected boolean value, actual='%s'", r.read(100));
@@ -301,12 +301,12 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	 * Parse a JSON attribute from the character array at the specified position, then
 	 * set the position marker to the last character in the field name.
 	 */
-	protected String parseFieldName(ParserReader r) throws IOException, ParseException {
+	protected String readFieldName(ParserReader r) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
-			return parseString(r);
+			return readString(r);
 		if (c == 'n') {
-			parseKeyword("null", r);
+			readKeyword("null", r);
 			return null;
 		}
 		throw new ParseException(this, "Unquoted attribute detected.");
@@ -317,7 +317,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		"java:S2583",    // State variables persist across loop iterations
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
-	private <T> BeanMap<T> parseIntoBeanMap2(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
+	private <T> BeanMap<T> readIntoBeanMap2(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		// S1: Looking for outer {
 		// S2: Looking for attrName start.
@@ -348,7 +348,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 					} else {
 						r.unread();
 						mark();
-						currAttr = parseFieldName(r);
+						currAttr = readFieldName(r);
 						state = S3;
 					}
 				} else if (state == S3) {  // NOSONAR - State check necessary for state machine
@@ -362,12 +362,12 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 						var pMeta = m.getPropertyMeta(currAttr);
 						setCurrentProperty(pMeta);
 						if (pMeta == null) {
-							onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), null));
+							onUnknownProperty(currAttr, m, readAnything(object(), r.unread(), m.getBean(false), null));
 							unmark();
 						} else {
 							unmark();
 							var cm = (ClassMeta<?>) pMeta.getBeanInfo();
-							Object value = parseAnything(cm, r.unread(), m.getBean(false), pMeta);
+							Object value = readAnything(cm, r.unread(), m.getBean(false), pMeta);
 							setName(cm, value, currAttr);
 								try {
 									pMeta.set(m, currAttr, value);
@@ -413,7 +413,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		"java:S2583",    // State variables persist across loop iterations
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
-	private <E> Collection<E> parseIntoCollection2(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <E> Collection<E> readIntoCollection2(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		// S1: Looking for outermost [
 		// S2: Looking for starting [ or { or " or ' or LITERAL or ]
@@ -439,7 +439,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 				} else if (isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(r.unread());
 				} else if (c != -1) {
-					l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, pMeta));
+					l.add((E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, pMeta));
 					state = S3;
 				}
 			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
@@ -458,7 +458,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 				} else if (c == ']') {
 					break;
 				} else if (c != -1) {
-					l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, pMeta));
+					l.add((E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, pMeta));
 					state = S3;
 				}
 			}
@@ -481,7 +481,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		"java:S2583",    // State variables persist across loop iterations
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
-	private <K,V> Map<K,V> parseIntoMap2(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <K,V> Map<K,V> readIntoMap2(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
 			keyType = (ClassMeta<K>)string();
@@ -510,7 +510,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 				} else if (isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(r.unread());
 				} else {
-					currAttr = parseFieldName(r.unread());
+					currAttr = readFieldName(r.unread());
 					state = S3;
 				}
 			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
@@ -521,7 +521,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 					skipCommentsAndSpace(r.unread());
 				} else {
 					K key = convertAttrToType(m, currAttr, keyType);
-					V value = parseAnything(valueType, r.unread(), m, pMeta);
+					V value = readAnything(valueType, r.unread(), m, pMeta);
 					setName(valueType, value, key);
 					m.put(key, value);
 					state = S5;
@@ -542,7 +542,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 				} else if (isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(r.unread());
 				} else {
-					currAttr = parseFieldName(r.unread());
+					currAttr = readFieldName(r.unread());
 					state = S3;
 				}
 			}
@@ -567,7 +567,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	 * Looks for the keywords true, false, or null.
 	 * Throws an exception if any of these keywords are not found at the specified position.
 	 */
-	protected void parseKeyword(String keyword, ParserReader r) throws IOException, ParseException {
+	protected void readKeyword(String keyword, ParserReader r) throws IOException, ParseException {
 		try {
 			String s = r.read(keyword.length());
 			if (s.equals(keyword))
@@ -578,11 +578,11 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		}
 	}
 
-	protected Number parseNumber(ParserReader r, Class<? extends Number> type) throws IOException, ParseException {
+	protected Number readNumber(ParserReader r, Class<? extends Number> type) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
-			return parseNumber(r, parseString(r), type);
-		return parseNumber(r, r.parseNumberString(), type);
+			return readNumber(r, readString(r), type);
+		return readNumber(r, r.readNumberString(), type);
 	}
 
 	@SuppressWarnings({
@@ -590,7 +590,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		"java:S1172", // Same as above
 		"java:S3776"  // Cognitive complexity acceptable for number parsing logic
 	})
-	protected Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
+	protected Number readNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
 
 		if (s.isEmpty())
 			throw new ParseException(this, "Invalid JSON number: '%s'", s);
@@ -628,7 +628,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		"java:S3776", // Cognitive complexity acceptable for parser state machine
 		"java:S135" // Multiple break statements necessary for state machine error handling
 	})
-	protected String parseString(ParserReader r) throws IOException, ParseException {
+	protected String readString(ParserReader r) throws IOException, ParseException {
 		r.mark();
 		int qc = r.read();
 		if (qc != '"') {
@@ -768,7 +768,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 				if (isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(r.unread());
 				} else {
-					currAttr = parseFieldName(r.unread());
+					currAttr = readFieldName(r.unread());
 					if (! currAttr.equals(wrapperAttr))
 						throw new ParseException(this, "Expected to find wrapper attribute '%s' but found attribute '%s'", wrapperAttr, currAttr);
 					state = S3;
@@ -807,11 +807,11 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	}
 
 	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (var r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
-			T o = parseAnything(type, r, getOuter(), null);
+			T o = readAnything(type, r, getOuter(), null);
 			validateEnd(r);
 			return o;
 		}
@@ -844,7 +844,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		"java:S2095" // ParserPipe lifecycle is transferred to the returned JsonTokenReader, which closes it via its own close(); the caller owns the cursor via try-with-resources.
 	})
 	@Override /* TokenReadable */
-	public TokenReader parseTokens(Object input) throws IOException {
+	public TokenReader readTokens(Object input) throws IOException {
 		var pipe = new ParserPipe(
 			input,
 			isDebug(),
@@ -864,27 +864,27 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
+	public RecordReader readArrayRecords(Object input) throws IOException {
 		try {
-			return StreamingArrayRecord.reader(parseTokens(input));
+			return StreamingArrayRecord.reader(readTokens(input));
 		} catch (ParseException e) {
 			throw new IOException(e);
 		}
 	}
 
 	@Override /* Overridden from ReaderParserSession */
-	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws IOException, ParseException, ExecutableException {
+	protected <E> Collection<E> doReadIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws IOException, ParseException, ExecutableException {
 		try (var r = pipe.getParserReader()) {
-			c = parseIntoCollection2(r, c, getClassMeta(elementType == null ? Object.class : elementType), null);
+			c = readIntoCollection2(r, c, getClassMeta(elementType == null ? Object.class : elementType), null);
 			validateEnd(r);
 			return c;
 		}
 	}
 
 	@Override /* Overridden from ReaderParserSession */
-	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws IOException, ParseException, ExecutableException {
+	protected <K,V> Map<K,V> doReadIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws IOException, ParseException, ExecutableException {
 		try (var r = pipe.getParserReader()) {
-			m = parseIntoMap2(r, m, (ClassMeta<K>)getClassMeta(keyType == null ? Object.class : keyType), (ClassMeta<V>)getClassMeta(valueType == null ? Object.class : valueType), null);
+			m = readIntoMap2(r, m, (ClassMeta<K>)getClassMeta(keyType == null ? Object.class : keyType), (ClassMeta<V>)getClassMeta(valueType == null ? Object.class : valueType), null);
 			validateEnd(r);
 			return m;
 		}
@@ -936,7 +936,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	}
 
 	/**
-	 * Hook called when empty input is detected in {@code parseAnything()}.
+	 * Hook called when empty input is detected in {@code readAnything()}.
 	 *
 	 * @throws ParseException Always in strict mode.
 	 */
@@ -945,7 +945,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	}
 
 	/**
-	 * Hook called when a missing value is detected in {@code parseAnything()}.
+	 * Hook called when a missing value is detected in {@code readAnything()}.
 	 *
 	 * @throws ParseException Always in strict mode.
 	 */

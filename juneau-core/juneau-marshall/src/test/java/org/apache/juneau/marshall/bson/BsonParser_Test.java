@@ -30,33 +30,33 @@ import org.junit.jupiter.api.*;
 class BsonParser_Test extends TestBase {
 
 	@Test
-	void a01_parseMap() throws Exception {
+	void a01_readMap() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(JsonMap.of("a", 42, "b", "hello"));
+		var bytes = s.write(JsonMap.of("a", 42, "b", "hello"));
 		var p = BsonParser.create().build();
-		var result = p.parse(bytes, JsonMap.class);
+		var result = p.read(bytes, JsonMap.class);
 		assertNotNull(result);
 		assertEquals(42, result.get("a"));
 		assertEquals("hello", result.get("b"));
 	}
 
 	@Test
-	void a02_parseList() throws Exception {
+	void a02_readList() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(List.of(1, 2, 3));
+		var bytes = s.write(List.of(1, 2, 3));
 		var p = BsonParser.create().build();
-		var result = p.parse(bytes, List.class);
+		var result = p.read(bytes, List.class);
 		assertNotNull(result);
 		assertEquals(List.of(1, 2, 3), result);
 	}
 
 	@Test
-	void a03_parseFromInputStream() throws Exception {
+	void a03_readFromInputStream() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(JsonMap.of("k", "v"));
+		var bytes = s.write(JsonMap.of("k", "v"));
 		var p = BsonParser.create().build();
 		try (var is = new java.io.ByteArrayInputStream(bytes)) {
-			var result = p.parse(is, JsonMap.class);
+			var result = p.read(is, JsonMap.class);
 			assertNotNull(result);
 			assertEquals("v", result.get("k"));
 		}
@@ -67,9 +67,9 @@ class BsonParser_Test extends TestBase {
 		var s = BsonSerializer.create().keepNullProperties().nullKeyString("__null__").build();
 		var m = new JsonMap();
 		m.put(null, "val");
-		var bytes = s.serialize(m);
+		var bytes = s.write(m);
 		var p = BsonParser.create().nullKeyString("__null__").build();
-		var result = p.parse(bytes, JsonMap.class);
+		var result = p.read(bytes, JsonMap.class);
 		assertNotNull(result);
 		assertTrue(result.containsKey(null));
 		assertEquals("val", result.get(null));

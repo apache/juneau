@@ -689,7 +689,7 @@ public class BasicSwaggerProviderSession {
 
 		try {
 			var swaggerJson = Json5R.of(omSwagger);
-			return jp.parse(swaggerJson, Swagger.class);
+			return jp.read(swaggerJson, Swagger.class);
 		} catch (Exception e) {
 			throw new ServletException("Error detected in swagger.", e);
 		}
@@ -715,7 +715,7 @@ public class BasicSwaggerProviderSession {
 
 		Object example = null;
 		if (isProbablyJson(sex)) {
-			example = jp.parse(sex, type);
+			example = jp.read(sex, type);
 		} else {
 			var cm = js.getClassMeta(type);
 			if (cm.hasStringMutater()) {
@@ -743,7 +743,7 @@ public class BasicSwaggerProviderSession {
 							.mediaType(mt)
 							.apply(WriterSerializerSession.Builder.class, x -> x.useWhitespace(true))
 							.build()
-							.serializeToString(example);
+							.writeToString(example);
 						// @formatter:on
 						examples.put(s2.getPrimaryMediaType().toString(), eVal);
 					} catch (Exception e) {

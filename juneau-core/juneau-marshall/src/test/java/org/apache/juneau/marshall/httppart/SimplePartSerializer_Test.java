@@ -26,17 +26,17 @@ class SimplePartSerializer_Test extends TestBase {
 
 	@Test void a01_default_serializesString() {
 		var session = SimplePartSerializer.DEFAULT.getPartSession();
-		assertEquals("hello", session.serialize(QUERY, null, "hello"));
+		assertEquals("hello", session.write(QUERY, null, "hello"));
 	}
 
 	@Test void a02_default_serializesInteger() {
 		var session = SimplePartSerializer.DEFAULT.getPartSession();
-		assertEquals("42", session.serialize(HEADER, null, 42));
+		assertEquals("42", session.write(HEADER, null, 42));
 	}
 
 	@Test void a03_default_serializesNull() {
 		var session = SimplePartSerializer.DEFAULT.getPartSession();
-		assertNull(session.serialize(QUERY, null, null));
+		assertNull(session.write(QUERY, null, null));
 	}
 
 	@Test void a04_create_build_returnsSameInstance() {

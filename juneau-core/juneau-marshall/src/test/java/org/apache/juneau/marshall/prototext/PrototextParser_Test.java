@@ -29,16 +29,16 @@ import org.junit.jupiter.api.*;
 class PrototextParser_Test {
 
 	@Test
-	void a01_parseSimpleBean() {
-		var a = PrototextParser.DEFAULT.parse("name: \"Alice\"\nage: 30\nactive: true", JsonMap.class);
+	void a01_readSimpleBean() {
+		var a = PrototextParser.DEFAULT.read("name: \"Alice\"\nage: 30\nactive: true", JsonMap.class);
 		assertEquals("Alice", a.get("name"));
 		assertEquals(30L, a.get("age"));
 		assertEquals(true, a.get("active"));
 	}
 
 	@Test
-	void a02_parseNestedBean() {
-		var a = PrototextParser.DEFAULT.parse("address {\n  city: \"Boston\"\n  state: \"MA\"\n}", JsonMap.class);
+	void a02_readNestedBean() {
+		var a = PrototextParser.DEFAULT.read("address {\n  city: \"Boston\"\n  state: \"MA\"\n}", JsonMap.class);
 		var addr = a.getMap("address");
 		assertNotNull(addr);
 		assertEquals("Boston", addr.get("city"));
@@ -46,8 +46,8 @@ class PrototextParser_Test {
 	}
 
 	@Test
-	void a03_parseDeeplyNestedBean() {
-		var a = PrototextParser.DEFAULT.parse("a { b { c: 1 } }", JsonMap.class);
+	void a03_readDeeplyNestedBean() {
+		var a = PrototextParser.DEFAULT.read("a { b { c: 1 } }", JsonMap.class);
 		var b = a.getMap("a");
 		assertNotNull(b);
 		var c = b.getMap("b");
@@ -56,16 +56,16 @@ class PrototextParser_Test {
 	}
 
 	@Test
-	void a04_parseListOfStrings() {
-		var a = PrototextParser.DEFAULT.parse("tags: [\"a\", \"b\", \"c\"]", JsonMap.class);
+	void a04_readListOfStrings() {
+		var a = PrototextParser.DEFAULT.read("tags: [\"a\", \"b\", \"c\"]", JsonMap.class);
 		var list = a.getList("tags");
 		assertNotNull(list);
 		assertEquals(List.of("a", "b", "c"), list);
 	}
 
 	@Test
-	void a05_parseListOfIntegers() {
-		var a = PrototextParser.DEFAULT.parse("ports: [8080, 8443, 9090]", JsonMap.class);
+	void a05_readListOfIntegers() {
+		var a = PrototextParser.DEFAULT.read("ports: [8080, 8443, 9090]", JsonMap.class);
 		var list = a.getList("ports");
 		assertNotNull(list);
 		assertEquals(3, list.size());
@@ -75,8 +75,8 @@ class PrototextParser_Test {
 	}
 
 	@Test
-	void a06_parseRepeatedMessages() {
-		var a = PrototextParser.DEFAULT.parse(
+	void a06_readRepeatedMessages() {
+		var a = PrototextParser.DEFAULT.read(
 			"servers { host: \"alpha\" port: 8080 }\nservers { host: \"beta\" port: 8081 }",
 			JsonMap.class);
 		var list = a.getList("servers");
@@ -87,8 +87,8 @@ class PrototextParser_Test {
 	}
 
 	@Test
-	void a07_parseMapProperty() {
-		var a = PrototextParser.DEFAULT.parse("env { PATH: \"/usr/bin\" HOME: \"/home\" }", JsonMap.class);
+	void a07_readMapProperty() {
+		var a = PrototextParser.DEFAULT.read("env { PATH: \"/usr/bin\" HOME: \"/home\" }", JsonMap.class);
 		var env = a.getMap("env");
 		assertNotNull(env);
 		assertEquals("/usr/bin", env.get("PATH"));
@@ -96,23 +96,23 @@ class PrototextParser_Test {
 	}
 
 	@Test
-	void a08_parseBooleans() {
-		var a = PrototextParser.DEFAULT.parse("t: true f: false", JsonMap.class);
+	void a08_readBooleans() {
+		var a = PrototextParser.DEFAULT.read("t: true f: false", JsonMap.class);
 		assertEquals(true, a.get("t"));
 		assertEquals(false, a.get("f"));
 	}
 
 	@Test
-	void a09_parseIntegers() {
-		var a = PrototextParser.DEFAULT.parse("d: 42 h: 0xFF o: 0755", JsonMap.class);
+	void a09_readIntegers() {
+		var a = PrototextParser.DEFAULT.read("d: 42 h: 0xFF o: 0755", JsonMap.class);
 		assertEquals(42L, a.get("d"));
 		assertEquals(255L, a.get("h"));
 		assertEquals(493L, a.get("o"));
 	}
 
 	@Test
-	void a10_parseFloats() {
-		var a = PrototextParser.DEFAULT.parse("x: 3.14 inf: inf neg: -inf n: nan", JsonMap.class);
+	void a10_readFloats() {
+		var a = PrototextParser.DEFAULT.read("x: 3.14 inf: inf neg: -inf n: nan", JsonMap.class);
 		assertEquals(3.14, ((Number) a.get("x")).doubleValue(), 1e-6);
 		assertEquals(Double.POSITIVE_INFINITY, a.get("inf"));
 		assertEquals(Double.NEGATIVE_INFINITY, a.get("neg"));
@@ -120,70 +120,70 @@ class PrototextParser_Test {
 	}
 
 	@Test
-	void a11_parseStrings() {
-		var a = PrototextParser.DEFAULT.parse("a: \"hello\" b: 'world'", JsonMap.class);
+	void a11_readStrings() {
+		var a = PrototextParser.DEFAULT.read("a: \"hello\" b: 'world'", JsonMap.class);
 		assertEquals("hello", a.get("a"));
 		assertEquals("world", a.get("b"));
 	}
 
 	@Test
-	void a12_parseMultiPartStrings() {
-		var a = PrototextParser.DEFAULT.parse("s: \"hello\" \" world\"", JsonMap.class);
+	void a12_readMultiPartStrings() {
+		var a = PrototextParser.DEFAULT.read("s: \"hello\" \" world\"", JsonMap.class);
 		assertEquals("hello world", a.get("s"));
 	}
 
 	@Test
-	void a13_parseComments() {
-		var a = PrototextParser.DEFAULT.parse("# comment\nname: 1", JsonMap.class);
+	void a13_readComments() {
+		var a = PrototextParser.DEFAULT.read("# comment\nname: 1", JsonMap.class);
 		assertEquals(1L, a.get("name"));
 	}
 
 	@Test
-	void a14_parseSemicolonSeparators() {
-		var a = PrototextParser.DEFAULT.parse("a: 1; b: 2", JsonMap.class);
+	void a14_readSemicolonSeparators() {
+		var a = PrototextParser.DEFAULT.read("a: 1; b: 2", JsonMap.class);
 		assertEquals(1L, a.get("a"));
 		assertEquals(2L, a.get("b"));
 	}
 
 	@Test
-	void a15_parseCommaSeparators() {
-		var a = PrototextParser.DEFAULT.parse("a: 1, b: 2", JsonMap.class);
+	void a15_readCommaSeparators() {
+		var a = PrototextParser.DEFAULT.read("a: 1, b: 2", JsonMap.class);
 		assertEquals(1L, a.get("a"));
 		assertEquals(2L, a.get("b"));
 	}
 
 	@Test
-	void a16_parseMissingFields() {
-		var a = PrototextParser.DEFAULT.parse("a: 1", JsonMap.class);
+	void a16_readMissingFields() {
+		var a = PrototextParser.DEFAULT.read("a: 1", JsonMap.class);
 		assertEquals(1L, a.get("a"));
 		assertNull(a.get("b"));
 	}
 
 	@Test
-	void a17_parseAngleBrackets() {
-		var a = PrototextParser.DEFAULT.parse("m < k: 1 >", JsonMap.class);
+	void a17_readAngleBrackets() {
+		var a = PrototextParser.DEFAULT.read("m < k: 1 >", JsonMap.class);
 		var m = a.getMap("m");
 		assertNotNull(m);
 		assertEquals(1L, m.get("k"));
 	}
 
 	@Test
-	void a18_parseColonBeforeMessage() {
-		var a = PrototextParser.DEFAULT.parse("m: { k: 1 }", JsonMap.class);
+	void a18_readColonBeforeMessage() {
+		var a = PrototextParser.DEFAULT.read("m: { k: 1 }", JsonMap.class);
 		var m = a.getMap("m");
 		assertNotNull(m);
 		assertEquals(1L, m.get("k"));
 	}
 
 	@Test
-	void a19_parseEnumValues() {
-		var a = PrototextParser.DEFAULT.parse("level: WARN", JsonMap.class);
+	void a19_readEnumValues() {
+		var a = PrototextParser.DEFAULT.read("level: WARN", JsonMap.class);
 		assertEquals("WARN", a.get("level"));
 	}
 
 	@Test
-	void a20_parseQuotedKeys() {
-		var a = PrototextParser.DEFAULT.parse("\"special.key\": \"value\"; \"key.with.dots\": 42", JsonMap.class);
+	void a20_readQuotedKeys() {
+		var a = PrototextParser.DEFAULT.read("\"special.key\": \"value\"; \"key.with.dots\": 42", JsonMap.class);
 		assertEquals("value", a.get("special.key"));
 		assertEquals(42L, a.get("key.with.dots"));
 	}

@@ -52,12 +52,12 @@ import org.apache.juneau.marshall.stream.*;
  * <p class='bjava'>
  * 	<jc>// Parse a Markdown table to a bean</jc>
  * 	String <jv>md</jv> = <js>"| Property | Value |\n|---|---|\n| name | Alice |\n| age | 30 |"</js>;
- * 	Person <jv>p</jv> = MarkdownParser.<jsf>DEFAULT</jsf>.parse(<jv>md</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>p</jv> = MarkdownParser.<jsf>DEFAULT</jsf>.read(<jv>md</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Round-trip example</jc>
- * 	String <jv>md</jv> = MarkdownSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myBean</jv>);
- * 	MyBean <jv>parsed</jv> = MarkdownParser.<jsf>DEFAULT</jsf>.parse(<jv>md</jv>, MyBean.<jk>class</jk>);
+ * 	String <jv>md</jv> = MarkdownSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
+ * 	MyBean <jv>parsed</jv> = MarkdownParser.<jsf>DEFAULT</jsf>.read(<jv>md</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='section'>Limitations:</h5><ul>
@@ -242,12 +242,12 @@ public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider
 
 	/**
 	 * Convenience delegator that opens a {@link RecordReader} over the input using
-	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 * <b>default session arguments</b> (mirrors {@link #read(Object, Class)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link MarkdownParserSession#parseRecords(Object)}.  Callers
+	 * The real implementation lives on {@link MarkdownParserSession#readRecords(Object)}.  Callers
 	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
-	 * {@link #createSession()} and invoke {@link MarkdownParserSession#parseRecords(Object)} on the
+	 * {@link #createSession()} and invoke {@link MarkdownParserSession#readRecords(Object)} on the
 	 * built session instead.
 	 *
 	 * @param input The input.
@@ -255,8 +255,8 @@ public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
-		return getSession().parseRecords(input);
+	public RecordReader readRecords(Object input) throws IOException {
+		return getSession().readRecords(input);
 	}
 
 	@Override /* RecordReadable */

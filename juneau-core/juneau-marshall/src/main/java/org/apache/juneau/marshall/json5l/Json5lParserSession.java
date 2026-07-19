@@ -97,7 +97,7 @@ public class Json5lParserSession extends Json5ParserSession {
 	 * <p>
 	 * Each top-level JSON5 value (one per line) is emitted as a flat sequence at depth 0; there is
 	 * no virtual root container.  Same honored/ignored builder properties as
-	 * {@link Json5ParserSession#parseTokens(Object)}.
+	 * {@link Json5ParserSession#readTokens(Object)}.
 	 *
 	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence}, {@link InputStream},
 	 * 	or <code><jk>byte</jk>[]</code>.
@@ -108,7 +108,7 @@ public class Json5lParserSession extends Json5ParserSession {
 		"java:S2095" // ParserPipe lifecycle is transferred to the returned Json5lTokenReader, which closes it via its own close(); the caller owns the cursor via try-with-resources.
 	})
 	@Override /* Json5ParserSession */
-	public TokenReader parseTokens(Object input) throws IOException {
+	public TokenReader readTokens(Object input) throws IOException {
 		var pipe = new ParserPipe(
 			input,
 			isDebug(),
@@ -124,7 +124,7 @@ public class Json5lParserSession extends Json5ParserSession {
 	 *
 	 * <p>
 	 * Aliases the JSON5L line record stream: the {@link Json5lTokenReader} returned by
-	 * {@link #parseTokens(Object)} is itself a {@link RecordReader} that yields one record per
+	 * {@link #readTokens(Object)} is itself a {@link RecordReader} that yields one record per
 	 * top-level line at depth 0.  Memory is O(1) in the number of lines.
 	 *
 	 * @param input The input.
@@ -132,12 +132,12 @@ public class Json5lParserSession extends Json5ParserSession {
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
-		return parseTokens(input);
+	public RecordReader readArrayRecords(Object input) throws IOException {
+		return readTokens(input);
 	}
 
 	@Override /* Overridden from JsonParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (var r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
@@ -151,7 +151,7 @@ public class Json5lParserSession extends Json5ParserSession {
 					var trimmed = line.trim();
 					if (isParseable(trimmed)) {
 						try (var linePipe = createPipe(trimmed)) {
-							var item = super.doParse(linePipe, elementType);
+							var item = super.doRead(linePipe, elementType);
 							results.add(item);
 						}
 					}
@@ -166,7 +166,7 @@ public class Json5lParserSession extends Json5ParserSession {
 				var trimmed = line.trim();
 				if (isParseable(trimmed)) {
 					try (var linePipe = createPipe(trimmed)) {
-						return super.doParse(linePipe, type);
+						return super.doRead(linePipe, type);
 					}
 				}
 			}

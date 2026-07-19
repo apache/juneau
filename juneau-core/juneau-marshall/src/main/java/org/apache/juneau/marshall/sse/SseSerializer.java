@@ -176,20 +176,20 @@ public class SseSerializer extends WriterSerializer implements RecordWritable {
 
 	/**
 	 * Convenience delegator that opens a {@link RecordWriter} over the output using
-	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 * <b>default session arguments</b> (mirrors {@link #write(Object)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link SseSerializerSession#serializeRecords(Object)}.
+	 * The real implementation lives on {@link SseSerializerSession#writeRecords(Object)}.
 	 * Callers that need request-derived configuration should call {@link #createSession()} and
-	 * invoke {@link SseSerializerSession#serializeRecords(Object)} on the built session instead.
+	 * invoke {@link SseSerializerSession#writeRecords(Object)} on the built session instead.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return getSession().serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return getSession().writeRecords(output);
 	}
 
 	@Override /* RecordWritable */

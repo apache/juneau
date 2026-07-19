@@ -344,7 +344,7 @@ class RestUtils_Test extends TestBase {
 		var p = UrlEncodingParser.DEFAULT;
 
 		var s = "";
-		var b = p.parse(s, B.class);
+		var b = p.read(s, B.class);
 		assertEquals("f1", b.f1);
 	}
 

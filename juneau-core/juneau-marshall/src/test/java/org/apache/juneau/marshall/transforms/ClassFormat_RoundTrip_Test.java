@@ -354,7 +354,7 @@ class ClassFormat_RoundTrip_Test extends TestBase {
 		Class<?> x = String.class;
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, Class.class);
+			var x2 = p.read(out, Class.class);
 			assertEquals(x, x2, "fmt=" + fmt);
 		} catch (Exception e) {
 			// Mirror BigNumberFormat_BigInteger_RoundTrip_Test.a06: some serializers (URL-encoding, CSV-style)

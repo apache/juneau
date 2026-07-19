@@ -270,7 +270,7 @@ class UuidFormat_RoundTrip_Test extends TestBase {
 		var x = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, UUID.class);
+			var x2 = p.read(out, UUID.class);
 			assertEquals(expectedAfter(x, t, fmt), x2, "fmt=" + fmt);
 		} catch (Exception e) {
 			// Mirror BigNumberFormat_BigInteger_RoundTrip_Test.a06: some serializers (URL-encoding, CSV-style)

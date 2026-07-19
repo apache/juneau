@@ -45,10 +45,10 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void r01_floatRoundTripsAsNumber() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.number(3.5d);
 			}
-			try (var r = CborParser.DEFAULT.parseTokens(bos.toByteArray())) {
+			try (var r = CborParser.DEFAULT.readTokens(bos.toByteArray())) {
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals(3.5d, r.getNumber().doubleValue());
 				assertEquals("3.5", r.getNumberLexeme());
@@ -57,7 +57,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void r02_tagUnwrapsToWrappedValue() throws Exception {
 			// 0xC1 = tag 1 (epoch time), wrapping uint 1.
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xC1, 0x01})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xC1, 0x01})) {
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals(1L, r.getNumber().longValue());
 			}
@@ -65,37 +65,37 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void r03_simpleAndUndefinedAreNull() throws Exception {
 			// 0xF8 0xFF = simple value 255; 0xF7 = undefined.  Both normalize to VALUE_NULL.
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xF8, (byte) 0xFF})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xF8, (byte) 0xFF})) {
 				assertEquals(TokenType.VALUE_NULL, r.next());
 			}
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xF7})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xF7})) {
 				assertEquals(TokenType.VALUE_NULL, r.next());
 			}
 		}
 
 		@Test void r04_nonStringMapKeysCoerced() throws Exception {
 			// {1:2} integer key.
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xA1, 0x01, 0x02})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xA1, 0x01, 0x02})) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("1", r.getFieldName());
 			}
 			// {-1:2} negative-integer key.
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xA1, 0x20, 0x02})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xA1, 0x20, 0x02})) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("-1", r.getFieldName());
 			}
 			// {true:2} boolean key.
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xA1, (byte) 0xF5, 0x02})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xA1, (byte) 0xF5, 0x02})) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("true", r.getFieldName());
 			}
 			// {1.0:2} single-precision float key (0xFA + 4 bytes = 1.0f).
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xA1, (byte) 0xFA, 0x3F, (byte) 0x80, 0x00, 0x00, 0x02})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xA1, (byte) 0xFA, 0x3F, (byte) 0x80, 0x00, 0x00, 0x02})) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("1.0", r.getFieldName());
 			}
 			// {h'78':2} binary key decodes as UTF-8 "x".
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xA1, 0x41, 'x', 0x02})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xA1, 0x41, 'x', 0x02})) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("x", r.getFieldName());
 			}
@@ -103,28 +103,28 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void r05_invalidMapKeyTypeThrows() throws Exception {
 			// {[]:...} — array as a map key is rejected.
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xA1, (byte) 0x80})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xA1, (byte) 0x80})) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertThrows(ParseException.class, r::next);
 			}
 		}
 
 		@Test void r06_breakAtRootThrows() throws Exception {
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xFF})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xFF})) {
 				assertThrows(ParseException.class, r::next);
 			}
 		}
 
 		@Test void r07_breakInsideDefiniteContainerThrows() throws Exception {
 			// 0x81 = definite array length 1, but a BREAK appears where the element should be.
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0x81, (byte) 0xFF})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0x81, (byte) 0xFF})) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertThrows(ParseException.class, r::next);
 			}
 		}
 
 		@Test void r08_endOfStreamRepeatsAndCanReadFalse() throws Exception {
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{0x01})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{0x01})) {
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals(TokenType.END_OF_STREAM, r.next());
 				assertEquals(TokenType.END_OF_STREAM, r.next());  // ended branch repeats
@@ -134,7 +134,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void r09_truncatedDefiniteContainerRethrowsIo() throws Exception {
 			// 0x82 = array length 2, only one element present.
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0x82, 0x01})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0x82, 0x01})) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertThrows(IOException.class, r::next);
@@ -143,10 +143,10 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void r10_getStringViews() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startArray().number(5).bool(true).nil().string("hi").endArray();
 			}
-			try (var r = CborParser.DEFAULT.parseTokens(bos.toByteArray())) {
+			try (var r = CborParser.DEFAULT.readTokens(bos.toByteArray())) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());  assertEquals("5", r.getString());
 				assertEquals(TokenType.VALUE_BOOLEAN, r.next()); assertEquals("true", r.getString());
@@ -157,7 +157,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 		}
 
 		@Test void r11_accessorsRejectWrongToken() throws Exception {
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0x80})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0x80})) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertThrows(IllegalStateException.class, r::getFieldName);
 				assertThrows(IllegalStateException.class, r::getNumber);
@@ -169,7 +169,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 		}
 
 		@Test void r12_currentTokenAndDepth() throws Exception {
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0x81, (byte) 0x80})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0x81, (byte) 0x80})) {
 				assertEquals(TokenType.NOT_AVAILABLE, r.getCurrentToken());
 				assertEquals(0, r.getDepth());
 				assertEquals(TokenType.START_ARRAY, r.next());
@@ -182,19 +182,19 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void r13_skipChildren() throws Exception {
 			// no-op when positioned at a scalar.
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{0x01})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{0x01})) {
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertDoesNotThrow(r::skipChildren);
 			}
 			// skips an entire object subtree.
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startObject();
 				w.fieldName("a").number(1);
 				w.fieldName("b").startArray().number(1).number(2).endArray();
 				w.endObject();
 			}
-			try (var r = CborParser.DEFAULT.parseTokens(bos.toByteArray())) {
+			try (var r = CborParser.DEFAULT.readTokens(bos.toByteArray())) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				r.skipChildren();
 				assertEquals(0, r.getDepth());
@@ -204,7 +204,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void r14_readNonValueStateThrows() throws Exception {
 			// [1] — after reading the single element the cursor is at an exhausted container.
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0x81, 0x01})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0x81, 0x01})) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(Integer.valueOf(1), r.read(Integer.class));
 				assertThrows(IllegalStateException.class, () -> r.read(Integer.class));
@@ -212,7 +212,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 		}
 
 		@Test void r15_readTypeOverload() throws Exception {
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{0x01})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{0x01})) {
 				Integer v = r.read((Type) Integer.class);
 				assertEquals(Integer.valueOf(1), v);
 			}
@@ -226,7 +226,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void r17_getStringOnFieldName() throws Exception {
 			// {"a":1} — getString() on a FIELD_NAME token returns the field name view.
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0xA1, 0x61, 'a', 0x01})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0xA1, 0x61, 'a', 0x01})) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertEquals("a", r.getString());
@@ -235,10 +235,10 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void r18_skipChildrenOverArray() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startArray().number(1).startArray().number(2).endArray().endArray();
 			}
-			try (var r = CborParser.DEFAULT.parseTokens(bos.toByteArray())) {
+			try (var r = CborParser.DEFAULT.readTokens(bos.toByteArray())) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				r.skipChildren();
 				assertEquals(0, r.getDepth());
@@ -249,8 +249,8 @@ class CborTokenStreamCoverage_Test extends TestBase {
 		@Test void r19_readParseExceptionWrapped() throws Exception {
 			// A string scalar bound to an incompatible numeric type funnels through the read() catch
 			// block and surfaces as a ParseException.
-			var bytes = CborSerializer.DEFAULT.serialize("not-a-number");
-			try (var r = CborParser.DEFAULT.parseTokens((byte[]) bytes)) {
+			var bytes = CborSerializer.DEFAULT.write("not-a-number");
+			try (var r = CborParser.DEFAULT.readTokens((byte[]) bytes)) {
 				assertThrows(ParseException.class, () -> r.read(int.class));
 			}
 		}
@@ -258,7 +258,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 		@Test void r20_readIoExceptionRethrown() throws Exception {
 			// 0x82 = array length 2, only one element present.  Binding the whole truncated array
 			// drives parseAnything to EOF, which the read() funnel rethrows as IOException.
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0x82, 0x01})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0x82, 0x01})) {
 				assertThrows(IOException.class, () -> r.read(java.util.List.class));
 			}
 		}
@@ -267,7 +267,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 			// 0x9F = indefinite-length array, one element, no BREAK, then EOF.  skipChildren() drives
 			// next() inside the open container; the underlying stream raises IOException at EOF before
 			// END_OF_STREAM can ever surface mid-container (so the skipChildren EOF guard is defensive).
-			try (var r = CborParser.DEFAULT.parseTokens(new byte[]{(byte) 0x9F, 0x01})) {
+			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0x9F, 0x01})) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertThrows(IOException.class, r::skipChildren);
 			}
@@ -276,8 +276,8 @@ class CborTokenStreamCoverage_Test extends TestBase {
 		@Test void r21_readBeanFromScalarSurfacesParseException() throws Exception {
 			// A bare integer scalar bound to a bean type drives parseAnything to throw a ParseException
 			// that the read() funnel rethrows as-is (the 'instanceof ParseException' branch).
-			var bytes = CborSerializer.DEFAULT.serialize(1);
-			try (var r = CborParser.DEFAULT.parseTokens((byte[]) bytes)) {
+			var bytes = CborSerializer.DEFAULT.write(1);
+			try (var r = CborParser.DEFAULT.readTokens((byte[]) bytes)) {
 				assertThrows(ParseException.class, () -> r.read(ABean.class));
 			}
 		}
@@ -317,14 +317,14 @@ class CborTokenStreamCoverage_Test extends TestBase {
 			// The Object-to-OutputStream narrowing (and null/illegal-type rejection) lives on the
 			// session (the Object interface boundary); the writer takes a statically-typed OutputStream.
 			assertThrowsWithMessage(IOException.class, "Output cannot be null.",
-				() -> CborSerializer.DEFAULT.serializeTokens(null));
+				() -> CborSerializer.DEFAULT.writeTokens(null));
 			assertThrowsWithMessage(IOException.class, "Cannot convert object of type",
-				() -> CborSerializer.DEFAULT.serializeTokens("not-a-stream"));
+				() -> CborSerializer.DEFAULT.writeTokens("not-a-stream"));
 		}
 
 		@Test void w03_numberOverloadsRoundTrip() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startArray();
 				w.number((Number) Integer.valueOf(5));
 				w.number(2.5d);
@@ -332,7 +332,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 				w.number(new BigInteger("7"));
 				w.endArray();
 			}
-			try (var r = CborParser.DEFAULT.parseTokens(bos.toByteArray())) {
+			try (var r = CborParser.DEFAULT.readTokens(bos.toByteArray())) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(5L, r.getNumber().longValue());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(2.5d, r.getNumber().doubleValue());
@@ -344,7 +344,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void w04_nullValueOverloadsEmitNull() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startArray();
 				w.number((Number) null);
 				w.number((BigDecimal) null);
@@ -353,7 +353,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 				w.binary(null);
 				w.endArray();
 			}
-			try (var r = CborParser.DEFAULT.parseTokens(bos.toByteArray())) {
+			try (var r = CborParser.DEFAULT.readTokens(bos.toByteArray())) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				for (var i = 0; i < 5; i++)
 					assertEquals(TokenType.VALUE_NULL, r.next());
@@ -363,7 +363,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void w05_fieldNameOutsideObjectThrows() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				assertThrows(IllegalStateException.class, () -> w.fieldName("a"));  // depth 0
 				w.startArray();
 				assertThrows(IllegalStateException.class, () -> w.fieldName("a"));  // inside array
@@ -373,7 +373,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void w06_valueAtKeyPositionThrows() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startObject();
 				assertThrows(IllegalStateException.class, () -> w.number(1));
 			}
@@ -381,13 +381,13 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void w07_deepNestingGrowsStack() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				for (var i = 0; i < 20; i++)
 					w.startArray();
 				for (var i = 0; i < 20; i++)
 					w.endArray();
 			}
-			try (var r = CborParser.DEFAULT.parseTokens(bos.toByteArray())) {
+			try (var r = CborParser.DEFAULT.readTokens(bos.toByteArray())) {
 				for (var i = 0; i < 20; i++)
 					assertEquals(TokenType.START_ARRAY, r.next());
 			}
@@ -401,7 +401,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void w09_endContainerKindMismatchBothDirections() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				w.startObject();
 				assertThrows(IllegalStateException.class, w::endArray);   // object open, array close
 				w.endObject();
@@ -413,7 +413,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 
 		@Test void w10_isStreaming() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = CborSerializer.DEFAULT.writeTokens(bos)) {
 				assertTrue(w.isStreaming());
 			}
 		}

@@ -44,7 +44,7 @@ class Jsonl_Test extends TestBase {
 	}
 
 	@Test
-	void a01_serializeCollectionOfBeans() throws Exception {
+	void a01_writeCollectionOfBeans() throws Exception {
 		var list = list(
 			new Person("Alice", 30),
 			new Person("Bob", 25),
@@ -62,7 +62,7 @@ class Jsonl_Test extends TestBase {
 	}
 
 	@Test
-	void a02_serializeArray() throws Exception {
+	void a02_writeArray() throws Exception {
 		var arr = new Person[]{new Person("Alice", 30), new Person("Bob", 25)};
 		var jsonl = Jsonl.of(arr);
 		var lines = jsonl.split("\n");
@@ -72,7 +72,7 @@ class Jsonl_Test extends TestBase {
 	}
 
 	@Test
-	void a03_serializeSingleBean() throws Exception {
+	void a03_writeSingleBean() throws Exception {
 		var p = new Person("Alice", 30);
 		var jsonl = Jsonl.of(p);
 		assertEquals(1, jsonl.split("\n").length);
@@ -81,7 +81,7 @@ class Jsonl_Test extends TestBase {
 	}
 
 	@Test
-	void a04_serializeCollectionOfMaps() throws Exception {
+	void a04_writeCollectionOfMaps() throws Exception {
 		var list = list(
 			JsonMap.of("a", 1, "b", 2),
 			JsonMap.of("x", "y")
@@ -94,7 +94,7 @@ class Jsonl_Test extends TestBase {
 	}
 
 	@Test
-	void a05_serializeCollectionOfStrings() throws Exception {
+	void a05_writeCollectionOfStrings() throws Exception {
 		var list = list("foo", "bar", "baz");
 		var jsonl = Jsonl.of(list);
 		var lines = jsonl.split("\n");
@@ -105,7 +105,7 @@ class Jsonl_Test extends TestBase {
 	}
 
 	@Test
-	void a06_serializeCollectionOfNumbers() throws Exception {
+	void a06_writeCollectionOfNumbers() throws Exception {
 		var list = list(1, 2, 3);
 		var jsonl = Jsonl.of(list);
 		var lines = jsonl.split("\n");
@@ -116,13 +116,13 @@ class Jsonl_Test extends TestBase {
 	}
 
 	@Test
-	void a07_serializeEmptyCollection() throws Exception {
+	void a07_writeEmptyCollection() throws Exception {
 		var jsonl = Jsonl.of(list());
 		assertEquals("", jsonl.trim());
 	}
 
 	@Test
-	void a08_serializeNullValues() throws Exception {
+	void a08_writeNullValues() throws Exception {
 		var list = list("a", null, "c");
 		var jsonl = Jsonl.of(list);
 		var lines = jsonl.split("\n");
@@ -131,7 +131,7 @@ class Jsonl_Test extends TestBase {
 	}
 
 	@Test
-	void a09_serializeNestedObjects() throws Exception {
+	void a09_writeNestedObjects() throws Exception {
 		var outer = JsonMap.of("name", "Alice", "inner", JsonMap.of("x", 1, "y", 2));
 		var jsonl = Jsonl.of(outer);
 		assertTrue(jsonl.contains("\"inner\":{\"x\":1,\"y\":2}"));
@@ -159,10 +159,10 @@ class Jsonl_Test extends TestBase {
 	}
 
 	@Test
-	void a12_serializeWithSwaps() throws Exception {
+	void a12_writeWithSwaps() throws Exception {
 		var s = (JsonlSerializer) JsonlSerializer.create().binaryFormat(BinaryFormat.BASE64).build();
 		var list = list(JsonMap.of("data", new byte[]{1, 2, 3}));
-		var jsonl = s.serialize(list);
+		var jsonl = s.write(list);
 		assertTrue(jsonl.contains("AQID"));
 	}
 }

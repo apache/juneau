@@ -37,10 +37,10 @@ class CommonXml_Test extends TestBase {
 		var s = XmlSerializer.DEFAULT_SQ;
 
 		var t = new A("http://foo", 123, "bar");
-		var xml = s.serialize(t);
+		var xml = s.write(t);
 		assertEquals("<object url='http://foo' id='123'><name>bar</name></object>", xml);
 
-		t = p.parse(xml, A.class);
+		t = p.read(xml, A.class);
 		assertEquals("http://foo", t.url.toString());
 		assertEquals(123, t.id);
 		assertEquals("bar", t.name);
@@ -68,7 +68,7 @@ class CommonXml_Test extends TestBase {
 		var s = XmlSerializer.create().sq().build();
 
 		var t = new B("http://foo");
-		var xml = s.serialize(t);
+		var xml = s.write(t);
 		assertEquals("<object url='http://foo'><url2>http://foo/2</url2></object>", xml);
 	}
 

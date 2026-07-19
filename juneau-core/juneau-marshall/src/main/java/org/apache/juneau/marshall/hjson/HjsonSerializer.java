@@ -73,7 +73,7 @@ import org.apache.juneau.marshall.swap.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
- * 	String <jv>hjson</jv> = HjsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someObject</jv>);
+ * 	String <jv>hjson</jv> = HjsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
  *
  * 	<jc>// Create a compact serializer (comma-separated, no newlines between members)</jc>
  * 	HjsonSerializer <jv>compact</jv> = HjsonSerializer.<jsm>create</jsm>().compact().build();
@@ -336,20 +336,20 @@ public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvid
 
 	/**
 	 * Convenience delegator that opens a {@link RecordWriter} over the output using
-	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 * <b>default session arguments</b> (mirrors {@link #write(Object)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link HjsonSerializerSession#serializeRecords(Object)}.
+	 * The real implementation lives on {@link HjsonSerializerSession#writeRecords(Object)}.
 	 * Callers that need request-derived configuration should call {@link #createSession()} and
-	 * invoke {@link HjsonSerializerSession#serializeRecords(Object)} on the built session instead.
+	 * invoke {@link HjsonSerializerSession#writeRecords(Object)} on the built session instead.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return ((RecordWritable) getSession()).serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).writeRecords(output);
 	}
 
 	@Override /* RecordWritable */

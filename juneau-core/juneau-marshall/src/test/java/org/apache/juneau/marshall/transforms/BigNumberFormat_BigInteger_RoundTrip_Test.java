@@ -391,7 +391,7 @@ class BigNumberFormat_BigInteger_RoundTrip_Test extends TestBase {
 		var x = BigInteger.valueOf(12345);
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, BigInteger.class);
+			var x2 = p.read(out, BigInteger.class);
 			assertEquals(expectedAfter(x, t, fmt), x2, "fmt=" + fmt);
 		} catch (Exception e) {
 			// Mirror RoundTripDateTime_Test.a06_standaloneInstant: some serializers (URL-encoding, CSV-style)

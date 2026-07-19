@@ -40,7 +40,7 @@ class Html_Test extends TestBase {
 	@Test void a01_testTables1() throws Exception {
 		var s = HtmlSerializer.DEFAULT_SQ;
 		var t = a(new A1(), new A1());
-		var html = s.serialize(t);
+		var html = s.write(t);
 		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td>f1</td></tr><tr><td>f1</td></tr></table>", html);
 	}
 
@@ -56,7 +56,7 @@ class Html_Test extends TestBase {
 		var t = new TestURI();
 
 		s.uriAnchorText(AnchorText.TO_STRING);
-		var r = strip(s.build().serialize(t));
+		var r = strip(s.build().write(t));
 		var expected = """
 
 			[f0]=<a href='f0/x0'>f0/x0</a>
@@ -77,7 +77,7 @@ class Html_Test extends TestBase {
 		assertEquals(expected, r);
 
 		s.uriAnchorText(AnchorText.URI);
-		r = strip(s.build().serialize(t));
+		r = strip(s.build().write(t));
 		expected = """
 
 			[f0]=<a href='f0/x0'>f0/x0</a>
@@ -98,7 +98,7 @@ class Html_Test extends TestBase {
 		assertEquals(expected, r);
 
 		s.uriAnchorText(AnchorText.LAST_TOKEN);
-		r = strip(s.build().serialize(t));
+		r = strip(s.build().write(t));
 		expected = """
 
 			[f0]=<a href='f0/x0'>x0</a>
@@ -119,7 +119,7 @@ class Html_Test extends TestBase {
 		assertEquals(expected, r);
 
 		s.uriAnchorText(AnchorText.URI_ANCHOR);
-		r = strip(s.build().serialize(t));
+		r = strip(s.build().write(t));
 		expected = """
 
 			[f0]=<a href='f0/x0'>f0/x0</a>
@@ -140,7 +140,7 @@ class Html_Test extends TestBase {
 		assertEquals(expected, r);
 
 		s.labelParameter("label2");
-		r = strip(s.build().serialize(t));
+		r = strip(s.build().write(t));
 		expected = """
 
 			[f0]=<a href='f0/x0'>f0/x0</a>
@@ -161,7 +161,7 @@ class Html_Test extends TestBase {
 		assertEquals(expected, r);
 
 		s.disableDetectLinksInStrings();
-		r = strip(s.build().serialize(t));
+		r = strip(s.build().write(t));
 		expected = """
 
 			[f0]=<a href='f0/x0'>f0/x0</a>
@@ -183,7 +183,7 @@ class Html_Test extends TestBase {
 
 		s.disableDetectLinksInStrings(false);
 		s.disableDetectLabelParameters();
-		r = strip(s.build().serialize(t));
+		r = strip(s.build().write(t));
 		expected = """
 
 			[f0]=<a href='f0/x0'>f0/x0</a>
@@ -220,11 +220,11 @@ class Html_Test extends TestBase {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 
 		var o = new B1();
-		var r = s.serialize(o);
+		var r = s.write(o);
 		assertEquals("<test>", r);
 
 		var o2 = new B2();
-		r = s.serialize(o2);
+		r = s.write(o2);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><f1></td></tr></table>", r);
 	}
 
@@ -246,11 +246,11 @@ class Html_Test extends TestBase {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(B3Config.class).build();
 
 		var o = new B3();
-		var r = s.serialize(o);
+		var r = s.write(o);
 		assertEquals("<test>", r);
 
 		var o2 = new B4();
-		r = s.serialize(o2);
+		r = s.write(o2);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><f1></td></tr></table>", r);
 	}
 
@@ -277,11 +277,11 @@ class Html_Test extends TestBase {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 
 		var o = new C1();
-		var r = s.serialize(o);
+		var r = s.write(o);
 		assertEquals("<object><f1>&lt;f1&gt;</f1></object>", r);
 
 		var o2 = new C2();
-		r = s.serialize(o2);
+		r = s.write(o2);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td>&lt;f1&gt;</td></tr></table>", r);
 	}
 
@@ -299,11 +299,11 @@ class Html_Test extends TestBase {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(C3Config.class).build();
 
 		var o = new C3();
-		var r = s.serialize(o);
+		var r = s.write(o);
 		assertEquals("<object><f1>&lt;f1&gt;</f1></object>", r);
 
 		var o2 = new C4();
-		r = s.serialize(o2);
+		r = s.write(o2);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td>&lt;f1&gt;</td></tr></table>", r);
 	}
 
@@ -327,7 +327,7 @@ class Html_Test extends TestBase {
 		var m = new MyMap();
 		m.put("foo", "bar");
 		var o = JsonList.of(m);
-		var r = s.serialize(o);
+		var r = s.write(o);
 		assertEquals("<ul><li><table><tr><td>foo</td><td>bar</td></tr></table></li></ul>", r);
 	}
 
@@ -340,7 +340,7 @@ class Html_Test extends TestBase {
 		var m = new MyMap2();
 		m.put("foo", "bar");
 		var o = JsonList.of(m);
-		var r = s.serialize(o);
+		var r = s.write(o);
 		assertEquals("<ul><li><table><tr><td>foo</td><td>bar</td></tr></table></li></ul>", r);
 	}
 
@@ -357,7 +357,7 @@ class Html_Test extends TestBase {
 
 		var b = new MyBean();
 		var o = JsonList.of(b,b);
-		var r = s.serialize(o);
+		var r = s.write(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
 	}
 
@@ -371,7 +371,7 @@ class Html_Test extends TestBase {
 
 		var b = new MyBean();
 		var o = JsonList.of(b,b);
-		var r = s.serialize(o);
+		var r = s.write(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
 	}
 
@@ -387,7 +387,7 @@ class Html_Test extends TestBase {
 
 		var b = new MyBean();
 		var o = JsonList.of(b,b);
-		var r = s.serialize(o);
+		var r = s.write(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
 	}
 
@@ -431,7 +431,7 @@ class Html_Test extends TestBase {
 			new F("foo", "bar"),
 			new F("baz", "qux")
 		};
-		var html = s.serialize(ff);
+		var html = s.write(ff);
 		assertTrue(html.contains("style='white-space:normal'"));
 		assertTrue(html.contains("style='min-width:200px'"));
 	}

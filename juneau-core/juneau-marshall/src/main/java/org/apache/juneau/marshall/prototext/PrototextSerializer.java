@@ -83,7 +83,7 @@ import org.apache.juneau.marshall.stream.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
- * 	String <jv>proto</jv> = PrototextSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someObject</jv>);
+ * 	String <jv>proto</jv> = PrototextSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
  *
  * 	<jc>// Create a custom serializer</jc>
  * 	PrototextSerializer <jv>serializer</jv> = PrototextSerializer.<jsm>create</jsm>().addBeanTypes().build();
@@ -92,7 +92,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<jv>serializer</jv> = PrototextSerializer.<jsf>DEFAULT</jsf>.copy().useColonForMessages().build();
  *
  * 	<jc>// Serialize a POJO to Protobuf Text Format</jc>
- * 	<jv>proto</jv> = <jv>serializer</jv>.serialize(<jv>someObject</jv>);
+ * 	<jv>proto</jv> = <jv>serializer</jv>.write(<jv>someObject</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (Map of name/age):</h5>
@@ -289,20 +289,20 @@ public class PrototextSerializer extends WriterSerializer implements PrototextMe
 
 	/**
 	 * Convenience delegator that opens a {@link RecordWriter} over the output using
-	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 * <b>default session arguments</b> (mirrors {@link #write(Object)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link PrototextSerializerSession#serializeRecords(Object)}.
+	 * The real implementation lives on {@link PrototextSerializerSession#writeRecords(Object)}.
 	 * Callers that need request-derived configuration should call {@link #createSession()} and
-	 * invoke {@link PrototextSerializerSession#serializeRecords(Object)} on the built session instead.
+	 * invoke {@link PrototextSerializerSession#writeRecords(Object)} on the built session instead.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return ((RecordWritable) getSession()).serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).writeRecords(output);
 	}
 
 	@Override /* RecordWritable */

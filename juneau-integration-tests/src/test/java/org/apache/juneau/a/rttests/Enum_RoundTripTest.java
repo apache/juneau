@@ -51,7 +51,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 	void a02_enumB(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.create().build();
 		var x = BEnum.FOO;
-		assertEquals("'xfoo'", s.serialize(x));
+		assertEquals("'xfoo'", s.write(x));
 		x = t.roundTrip(x, BEnum.class);
 		assertEquals(BEnum.FOO, x);
 	}

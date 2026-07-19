@@ -79,7 +79,7 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 	}
 
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -100,7 +100,7 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 	}
 
 	@Override
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		if (o == null)
 			return;
 		var aType = getClassMetaForObject(o);
@@ -117,15 +117,15 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 		if (sType.isBean() || sType.isMap()) {
 			var omitRoot = ctx.omitRootBraces;
 			if (sType.isBean())
-				serializeBeanMap(hw, toBeanMap(o), getBeanTypeName(this, eType, sType, null), omitRoot);
+				writeBeanMap(hw, toBeanMap(o), getBeanTypeName(this, eType, sType, null), omitRoot);
 			else
-				serializeMap(hw, (Map) o, eType, omitRoot);
+				writeMap(hw, (Map) o, eType, omitRoot);
 		} else {
-			serializeAnything(hw, o, eType, "root", null);
+			writeAnything(hw, o, eType, "root", null);
 		}
 	}
 
-	private void serializeBeanMap(HoconWriter out, BeanMap<?> m, String typeName, boolean omitRootBraces) throws SerializeException {
+	private void writeBeanMap(HoconWriter out, BeanMap<?> m, String typeName, boolean omitRootBraces) throws SerializeException {
 		var i = indent;
 		if (!omitRootBraces) {
 			out.objectStart(i);
@@ -138,7 +138,7 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 			var pm = m.getMeta().getTypeProperty();
 			writeKeyPrefix(out, pm.getName(), i, first);
 			out.equalsSign();
-			serializeString(out, typeName);
+			writeString(out, typeName);
 			first.set();
 		}
 
@@ -153,14 +153,14 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 			if (isObject) {
 				out.append(" ");
 				if (value instanceof BeanMap bm)
-					serializeBeanMap(out, bm, getBeanTypeName(this, cMeta, cMeta, pMeta), false);
+					writeBeanMap(out, bm, getBeanTypeName(this, cMeta, cMeta, pMeta), false);
 				else if (cMeta.isBean())
-					serializeBeanMap(out, toBeanMap(value), getBeanTypeName(this, cMeta, cMeta, pMeta), false);
+					writeBeanMap(out, toBeanMap(value), getBeanTypeName(this, cMeta, cMeta, pMeta), false);
 				else
-					serializeMap(out, (Map) value, cMeta, false);
+					writeMap(out, (Map) value, cMeta, false);
 			} else {
 				out.equalsSign();
-				serializeAnything(out, value, cMeta, key, pMeta);
+				writeAnything(out, value, cMeta, key, pMeta);
 			}
 			first.set();
 		});
@@ -180,7 +180,7 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 		out.key(keyStr);
 	}
 
-	private void serializeMap(HoconWriter out, Map m, ClassMeta<?> type, boolean omitRootBraces) throws SerializeException {
+	private void writeMap(HoconWriter out, Map m, ClassMeta<?> type, boolean omitRootBraces) throws SerializeException {
 		var i = indent;
 		if (!omitRootBraces) {
 			out.objectStart(i);
@@ -198,12 +198,12 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 			if (isObject) {
 				out.append(" ");
 				if (value instanceof BeanMap bm)
-					serializeBeanMap(out, bm, getBeanTypeName(this, valueType, getClassMetaForObject(value), null), false);
+					writeBeanMap(out, bm, getBeanTypeName(this, valueType, getClassMetaForObject(value), null), false);
 				else
-					serializeMap(out, (Map) value, object(), false);
+					writeMap(out, (Map) value, object(), false);
 			} else {
 				out.equalsSign();
-				serializeAnything(out, value, valueType, key == null ? null : toString(key), null);
+				writeAnything(out, value, valueType, key == null ? null : toString(key), null);
 			}
 			first.set();
 		});
@@ -214,7 +214,7 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 		}
 	}
 
-	private void serializeCollection(HoconWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
+	private void writeCollection(HoconWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 		var eType = type.getElementType();
 		out.arrayStart();
 		indent++;
@@ -224,14 +224,14 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 				out.separator(indent);
 			else
 				out.cr(indent);
-			serializeAnything(out, x, eType, "<iterator>", null);
+			writeAnything(out, x, eType, "<iterator>", null);
 			first.set();
 		});
 		indent--;
 		out.arrayEnd();
 	}
 
-	private void serializeString(HoconWriter out, String s) throws SerializeException {
+	private void writeString(HoconWriter out, String s) throws SerializeException {
 		if (s == null) {
 			out.w("null");
 			return;
@@ -244,7 +244,7 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 			out.quotedString(s);
 	}
 
-	protected HoconWriter serializeAnything(HoconWriter hw, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
+	protected HoconWriter writeAnything(HoconWriter hw, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 		if (o == null) {
 			hw.w("null");
 			return hw;
@@ -279,44 +279,44 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 			hw.w("null");
 		} else if (o instanceof byte[] bytes) {
 			// byte[] gate: encode as Base64 before isArray would otherwise route it as a generic array.
-			serializeString(hw, Base64.getEncoder().encodeToString(bytes));
+			writeString(hw, Base64.getEncoder().encodeToString(bytes));
 		} else if (sType.isBean()) {
-			serializeBeanMap(hw, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta), false);
+			writeBeanMap(hw, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta), false);
 		} else if (sType.isMap()) {
 			if (sType.isBeanMap())
-				serializeBeanMap(hw, (BeanMap) o, getBeanTypeName(this, eType, aType, pMeta), false);
+				writeBeanMap(hw, (BeanMap) o, getBeanTypeName(this, eType, aType, pMeta), false);
 			else
-				serializeMap(hw, (Map) o, eType, false);
+				writeMap(hw, (Map) o, eType, false);
 		} else if (sType.isCollection()) {
-			serializeCollection(hw, (Collection) o, eType);
+			writeCollection(hw, (Collection) o, eType);
 		} else if (sType.isArray()) {
-			serializeCollection(hw, toList(sType.inner(), o), eType);
+			writeCollection(hw, toList(sType.inner(), o), eType);
 		} else if (sType.isNumber() || sType.isBoolean()) {
 			hw.append(o);
 		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
-			serializeString(hw, getUriResolver().resolve(o));
+			writeString(hw, getUriResolver().resolve(o));
 		} else if (sType.isDate()) {
-			serializeString(hw, serializeDate((Date)o, sType));
+			writeString(hw, writeDate((Date)o, sType));
 		} else if (sType.isCalendar()) {
-			serializeString(hw, serializeCalendar(o, sType));
+			writeString(hw, writeCalendar(o, sType));
 		} else if (sType.isTemporal()) {
-			serializeString(hw, serializeTemporal((TemporalAccessor)o, sType));
+			writeString(hw, writeTemporal((TemporalAccessor)o, sType));
 		} else if (sType.isDuration()) {
-			var value = serializeDuration((Duration)o);
+			var value = writeDuration((Duration)o);
 			if (getDurationFormat().isNumeric())
 				hw.append(value);
 			else
-				serializeString(hw, value);
+				writeString(hw, value);
 		} else if (sType.isPeriod()) {
-			serializeString(hw, serializePeriod((Period)o));
+			writeString(hw, writePeriod((Period)o));
 		} else if (sType.isStreamable()) {
-			serializeStreamable(hw, o, sType, eType);
+			writeStreamable(hw, o, sType, eType);
 		} else if (sType.isReader()) {
 			pipe((Reader) o, hw, SerializerSession::handleThrown);
 		} else if (sType.isInputStream()) {
 			pipe((InputStream) o, hw, SerializerSession::handleThrown);
 		} else {
-			serializeString(hw, toString(o));
+			writeString(hw, toString(o));
 		}
 
 		if (!isRecursion)
@@ -324,7 +324,7 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 		return hw;
 	}
 
-	private void serializeStreamable(HoconWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
+	private void writeStreamable(HoconWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
 		var eType = type.getElementType();
 		out.arrayStart();
 		indent++;
@@ -334,7 +334,7 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 				out.separator(indent);
 			else
 				out.cr(indent);
-			serializeAnything(out, x, eType, "<iterator>", null);
+			writeAnything(out, x, eType, "<iterator>", null);
 			first.set();
 		});
 		indent--;

@@ -32,10 +32,10 @@ class BsonTrimStrings_Test {
 		var s = BsonSerializer.create().build();
 		var in = " foo bar ";
 		// Parser without trimStrings should preserve spaces
-		var a = p.parse(s.serialize(in), String.class);
+		var a = p.read(s.write(in), String.class);
 		assertEquals(" foo bar ", a);
 		// Parser with trimStrings should trim
-		var a2 = p2.parse(s.serialize(in), String.class);
+		var a2 = p2.read(s.write(in), String.class);
 		assertEquals("foo bar", a2);
 	}
 
@@ -46,7 +46,7 @@ class BsonTrimStrings_Test {
 		var p = BsonParser.create().build();
 		var p2 = p.copy().trimStrings().build();
 		var in = " foo bar ";
-		var a = p2.parse(s.serialize(in), String.class);
+		var a = p2.read(s.write(in), String.class);
 		assertEquals("foo bar", a, "Parser with trimStrings should trim when using RoundTrip test config");
 	}
 

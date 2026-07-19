@@ -103,25 +103,25 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	}
 
 	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (var r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
-			return parseAnything(type, r, getOuter(), null);
+			return readAnything(type, r, getOuter(), null);
 		}
 	}
 
 	/**
 	 * Opens a whole-value pull-parser cursor over a YAML document, bound to this live session.
 	 * {@link RecordReader#read(Class) read(...)} delegates to the polymorphic
-	 * {@link ParserSession#parse(Object, Class)} entry point.
+	 * {@link ParserSession#read(Object, Class)} entry point.
 	 *
 	 * @param input The input.
 	 * @return A new {@link RecordReader} cursor.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.reader(this, input);
 	}
 
@@ -134,7 +134,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	 * A top-level YAML block sequence ({@code - elem} per line) <i>is</i> forward-readable in
 	 * principle, so true element-at-a-time streaming is <b>feasible</b> here (unlike Parquet/BSON).
 	 * It is left buffered for now: Juneau's YAML reader is a single hand-written indentation state
-	 * machine ({@code parseBlockSequence}/{@code parseFlowSequence}) whose per-element advance and
+	 * machine ({@code readBlockSequence}/{@code readFlowSequence}) whose per-element advance and
 	 * dedent bookkeeping are not currently exposed as a pull cursor, and extracting that safely is a
 	 * non-trivial parser refactor with real regression surface.  This
 	 * is demand-driven &mdash; convert when a large-YAML-array use case justifies the refactor.
@@ -144,7 +144,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	 * @throws IOException If a problem occurred reading the input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
+	public RecordReader readArrayRecords(Object input) throws IOException {
 		return RecordAdapter.arrayReader(this, input);
 	}
 
@@ -161,7 +161,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	 *
 	 * <p>
 	 * Genuine streaming is feasible for YAML block sequences but deferred (demand-driven) pending a
-	 * pull-cursor refactor of the indentation state machine; see {@link #parseArrayRecords(Object)}.
+	 * pull-cursor refactor of the indentation state machine; see {@link #readArrayRecords(Object)}.
 	 *
 	 * @return Always <jk>false</jk>.
 	 */
@@ -169,28 +169,28 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	public boolean isArrayRecordStreaming() { return false; }
 
 	@Override /* Overridden from ReaderParserSession */
-	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws IOException, ParseException, ExecutableException {
+	protected <E> Collection<E> doReadIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws IOException, ParseException, ExecutableException {
 		try (var r = pipe.getParserReader()) {
 			skipWhitespaceAndComments(r);
 			int ch = r.peek();
 			if (ch == '[') {
-				parseFlowSequence(r, c, getClassMeta(elementType), null);
+				readFlowSequence(r, c, getClassMeta(elementType), null);
 			} else {
-				parseBlockSequence(r, c, getClassMeta(elementType), null, 0);
+				readBlockSequence(r, c, getClassMeta(elementType), null, 0);
 			}
 			return c;
 		}
 	}
 
 	@Override /* Overridden from ReaderParserSession */
-	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws IOException, ParseException, ExecutableException {
+	protected <K,V> Map<K,V> doReadIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws IOException, ParseException, ExecutableException {
 		try (var r = pipe.getParserReader()) {
 			skipWhitespaceAndComments(r);
 			int ch = r.peek();
 			if (ch == '{') {
-				parseFlowMapping(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
+				readFlowMapping(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
 			} else {
-				parseBlockMapping(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null, 0);
+				readBlockMapping(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null, 0);
 			}
 			return m;
 		}
@@ -200,7 +200,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		"java:S3776", // Cognitive complexity acceptable for parser dispatch
 		"java:S6541" // Brain method acceptable for parser dispatch
 	})
-	private <T> T parseAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <T> T readAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();
@@ -215,7 +215,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)o(parseAnything(eType.getElementType(), r, outer, pMeta));
+			return (T)o(readAnything(eType.getElementType(), r, outer, pMeta));
 
 		setCurrentClass(sType);
 
@@ -232,28 +232,28 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		} else if (c == '{') {
 			if (sType.isObject()) {
 				var m2 = newGenericMap();
-				parseFlowMapping(r, m2, string(), object(), pMeta);
+				readFlowMapping(r, m2, string(), object(), pMeta);
 				o = cast(m2, pMeta, eType);
 			} else if (nn(builder)) {
 				var m = toBeanMap(builder.create(this, eType));
-				o = builder.build(this, parseIntoBeanMap(r, m).getBean(), eType);
+				o = builder.build(this, readIntoBeanMap(r, m).getBean(), eType);
 			} else if (sType.canCreateNewBean(outer)) {
 				var m = newBeanMap(outer, sType.inner());
-				o = parseIntoBeanMap(r, m).getBean();
+				o = readIntoBeanMap(r, m).getBean();
 			} else if (sType.isMap()) {
 				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
-				o = parseFlowMapping(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
+				o = readFlowMapping(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			} else if (sType.isCollection()) {
 				var m = newGenericMap();
-				parseFlowMapping(r, m, string(), object(), pMeta);
+				readFlowMapping(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else if (sType.isArray() || sType.isArgs()) {
 				var m = newGenericMap();
-				parseFlowMapping(r, m, string(), object(), pMeta);
+				readFlowMapping(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
 				Map m = newGenericMap();
-				parseFlowMapping(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
+				readFlowMapping(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 				if (m.containsKey(getBeanTypePropertyName(eType)))
 					o = cast((MarshalledMap)m, pMeta, eType);
 				else if (nn(sType.getProxyInvocationHandler()))
@@ -263,48 +263,48 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 			}
 		} else if (c == '[') {
 			if (sType.isObject()) {
-				o = parseFlowSequence(r, newGenericList(), object(), pMeta);
+				o = readFlowSequence(r, newGenericList(), object(), pMeta);
 			} else if (sType.isCollection()) {
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : newGenericList());
-				o = parseFlowSequence(r, l, sType, pMeta);
+				o = readFlowSequence(r, l, sType, pMeta);
 			} else if (sType.isArray() || sType.isArgs()) {
-				var l = (ArrayList)parseFlowSequence(r, list(), sType, pMeta);
+				var l = (ArrayList)readFlowSequence(r, list(), sType, pMeta);
 				o = toArray(sType, l);
 			} else {
 				throw new ParseException(this, "Unrecognized syntax for class type '%s', starting character '%s'", sType, (char)c);
 			}
 		} else if (c == '\'') {
-			String s = parseSingleQuotedString(r);
+			String s = readSingleQuotedString(r);
 			o = handleQuotedScalar(s, r, sType, eType, builder, outer, pMeta, contentColumn > 0 ? contentColumn - 1 : 0);
 		} else if (c == '"') {
-			String s = parseDoubleQuotedString(r);
+			String s = readDoubleQuotedString(r);
 			o = handleQuotedScalar(s, r, sType, eType, builder, outer, pMeta, contentColumn > 0 ? contentColumn - 1 : 0);
 		} else if (c == '-') {
 			int c2 = peekSecondChar(r);
 			if (c2 == ' ' || c2 == '\n' || c2 == '\r') {
 				if (sType.isObject()) {
-					o = parseBlockSequence(r, newGenericList(), object(), pMeta, 0);
+					o = readBlockSequence(r, newGenericList(), object(), pMeta, 0);
 				} else if (sType.isCollection()) {
 					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : newGenericList());
-					o = parseBlockSequence(r, l, sType, pMeta, 0);
+					o = readBlockSequence(r, l, sType, pMeta, 0);
 				} else if (sType.isArray() || sType.isArgs()) {
-					var l = (ArrayList)parseBlockSequence(r, list(), sType, pMeta, 0);
+					var l = (ArrayList)readBlockSequence(r, list(), sType, pMeta, 0);
 					o = toArray(sType, l);
 				} else {
 					throw new ParseException(this, "Unrecognized syntax for class type '%s', starting character '%s'", sType, (char)c);
 				}
 			} else {
-				String s = parsePlainScalar(r, 0);
+				String s = readPlainScalar(r, 0);
 				o = convertToType(s, sType, eType, outer, pMeta);
 			}
 		} else if (c == '|' || c == '>') {
-			String s = parseBlockScalar(r, (char)c);
+			String s = readBlockScalar(r, (char)c);
 			o = convertToType(s, sType, eType, outer, pMeta);
 		} else if (c == '~') {
 			r.read(); // consume '~'
 			// o remains null (initialized at line 255)
 		} else {
-			String s = parsePlainScalar(r, 0);
+			String s = readPlainScalar(r, 0);
 			o = handlePlainScalar(s, r, sType, eType, builder, outer, pMeta, contentColumn > 0 ? contentColumn - 1 : 0);
 		}
 
@@ -331,35 +331,35 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 
 			if (sType.isObject()) {
 				var m2 = newGenericMap();
-				Object value = parseAnything(object(), r, m2, pMeta);
+				Object value = readAnything(object(), r, m2, pMeta);
 				String ts = trim(s);
 				setName(object(), value, ts);
 				m2.put(ts, value);
-				parseBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);
+				readBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);
 				return cast(m2, pMeta, eType);
 			} else if (nn(builder)) {
 				var m = toBeanMap(builder.create(this, eType));
-				parseBeanProperty(r, m, s);
-				parseIntoBeanMapBlockRemainder(r, m, keyIndent);
+				readBeanProperty(r, m, s);
+				readIntoBeanMapBlockRemainder(r, m, keyIndent);
 				return builder.build(this, m.getBean(), eType);
 			} else if (sType.canCreateNewBean(outer)) {
 				var m = newBeanMap(outer, sType.inner());
-				parseBeanProperty(r, m, s);
-				parseIntoBeanMapBlockRemainder(r, m, keyIndent);
+				readBeanProperty(r, m, s);
+				readIntoBeanMapBlockRemainder(r, m, keyIndent);
 				return m.getBean();
 			} else if (sType.isMap()) {
 				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
-				Object value = parseAnything(sType.getValueType(), r, m, pMeta);
+				Object value = readAnything(sType.getValueType(), r, m, pMeta);
 				Object key = convertAttrToType(m, trim(s), sType.getKeyType());
 				setName(sType.getValueType(), value, key);
 				m.put(key, value);
-				parseBlockMappingRemainder(r, m, sType.getKeyType(), sType.getValueType(), pMeta, keyIndent);
+				readBlockMappingRemainder(r, m, sType.getKeyType(), sType.getValueType(), pMeta, keyIndent);
 				return m;
 			} else {
 				var m2 = newGenericMap();
-				Object value = parseAnything(object(), r, m2, pMeta);
+				Object value = readAnything(object(), r, m2, pMeta);
 				m2.put(s, value);
-				parseBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);
+				readBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);
 				if (m2.containsKey(getBeanTypePropertyName(eType)))
 					return cast(m2, pMeta, eType);
 				if (nn(sType.getProxyInvocationHandler()))
@@ -390,34 +390,34 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 			String keyStr = isYamlNull(s) ? null : trim(s);
 			if (sType.isObject()) {
 				var m2 = newGenericMap();
-				Object value = parseAnything(object(), r, m2, pMeta);
+				Object value = readAnything(object(), r, m2, pMeta);
 				setName(object(), value, keyStr);
 				m2.put(keyStr, value);
-				parseBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);
+				readBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);
 				return cast(m2, pMeta, eType);
 			} else if (nn(builder)) {
 				var m = toBeanMap(builder.create(this, eType));
-				parseBeanProperty(r, m, s);
-				parseIntoBeanMapBlockRemainder(r, m, keyIndent);
+				readBeanProperty(r, m, s);
+				readIntoBeanMapBlockRemainder(r, m, keyIndent);
 				return builder.build(this, m.getBean(), eType);
 			} else if (sType.canCreateNewBean(outer)) {
 				var m = newBeanMap(outer, sType.inner());
-				parseBeanProperty(r, m, s);
-				parseIntoBeanMapBlockRemainder(r, m, keyIndent);
+				readBeanProperty(r, m, s);
+				readIntoBeanMapBlockRemainder(r, m, keyIndent);
 				return m.getBean();
 			} else if (sType.isMap()) {
 				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
-				Object value = parseAnything(sType.getValueType(), r, m, pMeta);
+				Object value = readAnything(sType.getValueType(), r, m, pMeta);
 				Object key = convertAttrToType(m, keyStr, sType.getKeyType());
 				setName(sType.getValueType(), value, key);
 				m.put(key, value);
-				parseBlockMappingRemainder(r, m, sType.getKeyType(), sType.getValueType(), pMeta, keyIndent);
+				readBlockMappingRemainder(r, m, sType.getKeyType(), sType.getValueType(), pMeta, keyIndent);
 				return m;
 			} else {
 				var m2 = newGenericMap();
-				Object value = parseAnything(object(), r, m2, pMeta);
+				Object value = readAnything(object(), r, m2, pMeta);
 				m2.put(s, value);
-				parseBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);
+				readBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);
 				if (m2.containsKey(getBeanTypePropertyName(eType)))
 					return cast(m2, pMeta, eType);
 				if (nn(sType.getProxyInvocationHandler()))
@@ -454,15 +454,15 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		} else if (sType.isBoolean()) {
 			return b(s);
 		} else if (sType.isDate()) {
-			return parseDate(s, sType);
+			return readDate(s, sType);
 		} else if (sType.isCalendar()) {
-			return parseCalendar(s, sType);
+			return readCalendar(s, sType);
 		} else if (sType.isTemporal()) {
-			return parseTemporal(s, sType);
+			return readTemporal(s, sType);
 		} else if (sType.isDuration()) {
-			return parseDuration(s);
+			return readDuration(s);
 		} else if (sType.isPeriod()) {
-			return parsePeriod(s);
+			return readPeriod(s);
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			return sType.newInstanceFromString(outer, s);
 		} else {
@@ -478,22 +478,22 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		return "null".equals(s) || "Null".equals(s) || "NULL".equals(s) || "~".equals(s);
 	}
 
-	private <K,V> void parseBlockMappingRemainder(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta, int parentIndent) throws IOException, ParseException, ExecutableException {
-		parseBlockMapping(r, m, keyType, valueType, pMeta, parentIndent);
+	private <K,V> void readBlockMappingRemainder(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta, int parentIndent) throws IOException, ParseException, ExecutableException {
+		readBlockMapping(r, m, keyType, valueType, pMeta, parentIndent);
 	}
 
-	private <T> void parseIntoBeanMapBlockRemainder(ParserReader r, BeanMap<T> m, int parentIndent) throws IOException, ParseException, ExecutableException {
-		parseIntoBeanMapBlock(r, m, parentIndent);
+	private <T> void readIntoBeanMapBlockRemainder(ParserReader r, BeanMap<T> m, int parentIndent) throws IOException, ParseException, ExecutableException {
+		readIntoBeanMapBlock(r, m, parentIndent);
 	}
 
-	private <T> void parseBeanProperty(ParserReader r, BeanMap<T> m, String currAttr) throws IOException, ParseException, ExecutableException {
+	private <T> void readBeanProperty(ParserReader r, BeanMap<T> m, String currAttr) throws IOException, ParseException, ExecutableException {
 		var pm = m.getPropertyMeta(currAttr);
 		setCurrentProperty(pm);
 		if (pm == null) {
-			onUnknownProperty(currAttr, m, parseAnything(object(), r, m.getBean(false), null));
+			onUnknownProperty(currAttr, m, readAnything(object(), r, m.getBean(false), null));
 		} else {
 			var cm = (ClassMeta<?>) pm.getBeanInfo();
-			Object value = parseAnything(cm, r, m.getBean(false), pm);
+			Object value = readAnything(cm, r, m.getBean(false), pm);
 			setName(cm, value, currAttr);
 			try {
 				pm.set(m, currAttr, value);
@@ -544,7 +544,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		"java:S3776",
 		"java:S6541" // Brain method acceptable for flow mapping state machine
 	})
-	private <K,V> Map<K,V> parseFlowMapping(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <K,V> Map<K,V> readFlowMapping(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
 			keyType = (ClassMeta<K>)string();
@@ -575,7 +575,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 					continue;
 				} else {
 					r.unread();
-					currKey = parseFlowMappingKey(r);
+					currKey = readFlowMappingKey(r);
 					state = S3;
 				}
 			} else if (state == S3) {
@@ -588,7 +588,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 					continue;
 				r.unread();
 				K key = convertAttrToType(m, currKey, keyType);
-				V value = parseAnything(valueType, r, m, pMeta);
+				V value = readAnything(valueType, r, m, pMeta);
 				setName(valueType, value, key);
 				m.put(key, value);
 				state = S5;
@@ -609,7 +609,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 					continue;
 				} else {
 					r.unread();
-					currKey = parseFlowMappingKey(r);
+					currKey = readFlowMappingKey(r);
 					state = S3;
 				}
 			}
@@ -630,19 +630,19 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		return null; // Unreachable.
 	}
 
-	private String parseFlowMappingKey(ParserReader r) throws IOException, ParseException {
+	private String readFlowMappingKey(ParserReader r) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'' )
-			return parseSingleQuotedString(r);
+			return readSingleQuotedString(r);
 		if (c == '"')
-			return parseDoubleQuotedString(r);
-		var key = parsePlainFlowKey(r);
+			return readDoubleQuotedString(r);
+		var key = readPlainFlowKey(r);
 		if (isYamlNull(key))
 			return null;
 		return key;
 	}
 
-	private static String parsePlainFlowKey(ParserReader r) throws IOException {
+	private static String readPlainFlowKey(ParserReader r) throws IOException {
 		var sb = new StringBuilder();
 		int c;
 		while ((c = r.read()) != -1) {
@@ -664,7 +664,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		"java:S2583",
 		"java:S3776"
 	})
-	private <E> Collection<E> parseFlowSequence(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <E> Collection<E> readFlowSequence(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		// S1: Looking for outermost [
 		// S2: Looking for value or ]
@@ -691,7 +691,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 					continue;
 				} else if (c != -1) {
 					r.unread();
-					l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r, l, pMeta));
+					l.add((E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r, l, pMeta));
 					state = S3;
 				}
 			} else if (state == S3) {
@@ -711,7 +711,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 					break;
 				} else if (c != -1) {
 					r.unread();
-					l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r, l, pMeta));
+					l.add((E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r, l, pMeta));
 					state = S3;
 				}
 			}
@@ -734,7 +734,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for block mapping parsing
 	})
-	private <K,V> Map<K,V> parseBlockMapping(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta, int parentIndent) throws IOException, ParseException, ExecutableException {
+	private <K,V> Map<K,V> readBlockMapping(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta, int parentIndent) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
 			keyType = (ClassMeta<K>)string();
@@ -767,7 +767,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				continue;
 			}
 
-			String keyStr = trim(parseBlockMappingKey(r));
+			String keyStr = trim(readBlockMappingKey(r));
 
 			c = r.read(); // Should be ':'
 			if (c != ':')
@@ -777,7 +777,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 			if (c == ' ')
 				r.read();
 			K key = convertAttrToType(m, keyStr, keyType);
-			V value = (V)parseAnything(valueType, r, m, pMeta);
+			V value = (V)readAnything(valueType, r, m, pMeta);
 			setName(valueType, value, key);
 			m.put(key, value);
 		}
@@ -808,12 +808,12 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 			r.unread();
 	}
 
-	private String parseBlockMappingKey(ParserReader r) throws IOException, ParseException {
+	private String readBlockMappingKey(ParserReader r) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'')
-			return parseSingleQuotedString(r);
+			return readSingleQuotedString(r);
 		if (c == '"')
-			return parseDoubleQuotedString(r);
+			return readDoubleQuotedString(r);
 		var sb = new StringBuilder();
 		while ((c = r.read()) != -1) {
 			if (c == ':') {
@@ -842,12 +842,12 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	@SuppressWarnings({
 		"java:S3776"
 	})
-	private <T> BeanMap<T> parseIntoBeanMap(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
+	private <T> BeanMap<T> readIntoBeanMap(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 		int c = r.peek();
 		if (c == '{') {
-			return parseIntoBeanMapFlow(r, m);
+			return readIntoBeanMapFlow(r, m);
 		}
-		return parseIntoBeanMapBlock(r, m, 0);
+		return readIntoBeanMapBlock(r, m, 0);
 	}
 
 	@SuppressWarnings({
@@ -856,7 +856,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		"java:S3776",
 		"java:S6541" // Brain method acceptable for bean map flow state machine
 	})
-	private <T> BeanMap<T> parseIntoBeanMapFlow(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
+	private <T> BeanMap<T> readIntoBeanMapFlow(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		// S1: Looking for outer {
 		// S2: Looking for attrName start.
@@ -886,7 +886,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 					} else {
 						r.unread();
 						mark();
-						currAttr = parseFlowMappingKey(r);
+						currAttr = readFlowMappingKey(r);
 						state = S3;
 					}
 				} else if (state == S3) {
@@ -901,12 +901,12 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 						var pm = m.getPropertyMeta(currAttr);
 						setCurrentProperty(pm);
 						if (pm == null) {
-							onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), null));
+							onUnknownProperty(currAttr, m, readAnything(object(), r.unread(), m.getBean(false), null));
 							unmark();
 						} else {
 							unmark();
 							var cm = (ClassMeta<?>) pm.getBeanInfo();
-							Object value = parseAnything(cm, r.unread(), m.getBean(false), pm);
+							Object value = readAnything(cm, r.unread(), m.getBean(false), pm);
 							setName(cm, value, currAttr);
 							try {
 								pm.set(m, currAttr, value);
@@ -948,7 +948,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	@SuppressWarnings({
 		"java:S3776"
 	})
-	private <T> BeanMap<T> parseIntoBeanMapBlock(ParserReader r, BeanMap<T> m, int parentIndent) throws IOException, ParseException, ExecutableException {
+	private <T> BeanMap<T> readIntoBeanMapBlock(ParserReader r, BeanMap<T> m, int parentIndent) throws IOException, ParseException, ExecutableException {
 
 		int blockIndent = -1;
 
@@ -980,7 +980,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 					continue;
 				}
 
-				String currAttr = trim(parseBlockMappingKey(r));
+				String currAttr = trim(readBlockMappingKey(r));
 
 				c = r.read(); // Should be ':'
 				if (c != ':')
@@ -993,7 +993,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 						c = r.peek();
 						if (c == ' ')
 							r.read();
-						Object v = isNullBlockValue(r, blockIndent) ? null : parseAnything(object(), r, m.getBean(false), null);
+						Object v = isNullBlockValue(r, blockIndent) ? null : readAnything(object(), r, m.getBean(false), null);
 						onUnknownProperty(currAttr, m, v);
 						unmark();
 					} else {
@@ -1002,7 +1002,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 						c = r.peek();
 						if (c == ' ')
 							r.read();
-						Object value = isNullBlockValue(r, blockIndent) ? null : parseAnything(cm, r, m.getBean(false), pm);
+						Object value = isNullBlockValue(r, blockIndent) ? null : readAnything(cm, r, m.getBean(false), pm);
 						setName(cm, value, currAttr);
 						try {
 							pm.set(m, currAttr, value);
@@ -1028,7 +1028,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for block sequence parsing
 	})
-	private <E> Collection<E> parseBlockSequence(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta, int parentIndent) throws IOException, ParseException, ExecutableException {
+	private <E> Collection<E> readBlockSequence(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta, int parentIndent) throws IOException, ParseException, ExecutableException {
 
 		int blockIndent = -1;
 		int argIndex = 0;
@@ -1074,7 +1074,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				r.read(); // consume space after '-'
 
 			ClassMeta<?> elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
-			l.add((E)parseAnything(elementType, r, l, pMeta));
+			l.add((E)readAnything(elementType, r, l, pMeta));
 		}
 
 		return l;
@@ -1083,7 +1083,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	// ==========================================
 	// Single-quoted string: 'hello ''world'''
 	// ==========================================
-	private String parseSingleQuotedString(ParserReader r) throws IOException, ParseException {
+	private String readSingleQuotedString(ParserReader r) throws IOException, ParseException {
 		int c = r.read(); // consume opening '
 		if (c != '\'')
 			throw new ParseException(this, "Expected single quote to start string.");
@@ -1111,7 +1111,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	@SuppressWarnings({
 		"java:S3776"
 	})
-	private String parseDoubleQuotedString(ParserReader r) throws IOException, ParseException {
+	private String readDoubleQuotedString(ParserReader r) throws IOException, ParseException {
 		int c = r.read(); // consume opening "
 		if (c != '"')
 			throw new ParseException(this, "Expected double quote to start string.");
@@ -1172,7 +1172,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		"java:S1172", // Same as above
 		"java:S3776"  // Cognitive complexity acceptable for plain scalar parsing
 	})
-	private static String parsePlainScalar(ParserReader r, int indent) throws IOException {
+	private static String readPlainScalar(ParserReader r, int indent) throws IOException {
 		var sb = new StringBuilder();
 		int c;
 		while ((c = r.read()) != -1) {
@@ -1217,7 +1217,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		"java:S3776", // Cognitive complexity acceptable for block scalar parsing
 		"java:S6541" // Brain method acceptable for block scalar state machine
 	})
-	private String parseBlockScalar(ParserReader r, char indicator) throws IOException, ParseException {
+	private String readBlockScalar(ParserReader r, char indicator) throws IOException, ParseException {
 		r.read(); // consume '|' or '>'
 
 		// Parse indicator line for chomping

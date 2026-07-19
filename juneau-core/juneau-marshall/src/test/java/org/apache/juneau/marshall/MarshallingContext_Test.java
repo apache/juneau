@@ -76,10 +76,10 @@ class BeanContext_Test extends TestBase {
 
 	@Test void b01_ignoreUnknownEnumValues() {
 		var p1 = Json5Parser.DEFAULT;
-		assertThrowsWithMessage(Exception.class, "Could not resolve enum value 'UNKNOWN' on class 'org.apache.juneau.testutils.pojos.TestEnum'", () -> p1.parse("'UNKNOWN'", TestEnum.class));
+		assertThrowsWithMessage(Exception.class, "Could not resolve enum value 'UNKNOWN' on class 'org.apache.juneau.testutils.pojos.TestEnum'", () -> p1.read("'UNKNOWN'", TestEnum.class));
 
 		var p2 = Json5Parser.create().ignoreUnknownEnumValues().build();
-		assertNull(p2.parse("'UNKNOWN'", TestEnum.class));
+		assertNull(p2.read("'UNKNOWN'", TestEnum.class));
 	}
 
 	//====================================================================================================

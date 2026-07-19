@@ -417,7 +417,7 @@ class CalendarFormat_RoundTrip_Test extends TestBase {
 		var x = makeCal(2024, 6, 15, 12, 30, 45);
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, Calendar.class);
+			var x2 = p.read(out, Calendar.class);
 			// Binary serializers with native datetime support (BSON in particular) bypass the configured
 			// format swap at top-level and round-trip the Calendar with full native fidelity.  Bean-property
 			// tests above cover the swap path; here we accept either the lossy-canonical (format applied)

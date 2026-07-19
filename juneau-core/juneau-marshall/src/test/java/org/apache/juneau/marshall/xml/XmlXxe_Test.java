@@ -45,7 +45,7 @@ class XmlXxe_Test extends TestBase {
 			+ "<A>&xxe;</A>";
 
 		// DTD processing is disabled, so parsing must fail rather than resolving the external entity.
-		var e = assertThrows(Exception.class, () -> XmlParser.DEFAULT.parse(xml, Json5Map.class));
+		var e = assertThrows(Exception.class, () -> XmlParser.DEFAULT.read(xml, Json5Map.class));
 
 		// The secret file contents must never appear anywhere in the failure.
 		assertFalse(e.toString().contains("TOP-SECRET-CONTENTS"), "External entity was resolved");
@@ -57,12 +57,12 @@ class XmlXxe_Test extends TestBase {
 			+ "<A>x</A>";
 
 		// Any DOCTYPE declaration is rejected on the non-validating path.
-		assertThrows(Exception.class, () -> XmlParser.DEFAULT.parse(xml, Json5Map.class));
+		assertThrows(Exception.class, () -> XmlParser.DEFAULT.read(xml, Json5Map.class));
 	}
 
 	@Test void a03_normalDocumentStillParses() throws Exception {
 		var xml = "<A b='1'><c>2</c></A>";
-		var m = XmlParser.DEFAULT.parse(xml, Json5Map.class);
+		var m = XmlParser.DEFAULT.read(xml, Json5Map.class);
 		assertEquals("{b:'1',c:'2'}", m.toString());
 	}
 }

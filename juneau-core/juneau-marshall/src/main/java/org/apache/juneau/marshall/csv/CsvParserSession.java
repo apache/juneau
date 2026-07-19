@@ -56,7 +56,7 @@ import org.apache.juneau.marshall.swap.*;
 	"unchecked", // Type erasure requires unchecked casts in parse logic
 	"rawtypes",  // Raw types necessary for generic Map/List handling
 	"java:S3776", // Cognitive complexity acceptable for CSV parse logic; branching is inherent to format
-	"java:S6541", // Brain method acceptable for doParse; CSV parse flow is inherently sequential
+	"java:S6541", // Brain method acceptable for doRead; CSV parse flow is inherently sequential
 	"resource"    // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class CsvParserSession extends ReaderParserSession implements RecordReadable {
@@ -116,7 +116,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 	}
 
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.arrayReader(this, input);
 	}
 
@@ -126,11 +126,11 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 	}
 
 	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		try (var r = CsvReader.from(pipe, ',', '"', isTrimStrings())) {
 			if (r == null)
 				return null;
-			return parseAnything(type, r, getOuter(), null);
+			return readAnything(type, r, getOuter(), null);
 		}
 	}
 
@@ -141,7 +141,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 	 * Reads the header row, then dispatches to the appropriate parsing strategy based on the
 	 * target type.
 	 */
-	private <T> T parseAnything(ClassMeta<T> eType, CsvReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException {
+	private <T> T readAnything(ClassMeta<T> eType, CsvReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException {
 		if (eType == null)
 			eType = (ClassMeta<T>) object();
 
@@ -156,7 +156,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T) o(parseAnything(eType.getElementType(), r, outer, pMeta));
+			return (T) o(readAnything(eType.getElementType(), r, outer, pMeta));
 
 		// Read header row
 		var headers = r.readRow();
@@ -169,25 +169,25 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 			var elementType = sType.getElementType();
 			var list = list();
 			for (var row = r.readRow(); row != null; row = r.readRow())
-				list.add(parseRow(headers, row, elementType, list));
+				list.add(readRow(headers, row, elementType, list));
 			o = toArray(sType, list);
 
 		} else if (sType.isCollection()) {
 			var elementType = sType.getElementType();
 			Collection<Object> l = sType.canCreateNewInstance(outer) ? (Collection<Object>) sType.newInstance() : new ArrayList<>();
 			for (var row = r.readRow(); row != null; row = r.readRow())
-				l.add(parseRow(headers, row, elementType, l));
+				l.add(readRow(headers, row, elementType, l));
 			o = l;
 
 		} else if (sType.isBean()) {
 			var row = r.readRow();
 			if (row != null)
-				o = parseRowIntoBean(headers, row, sType, outer);
+				o = readRowIntoBean(headers, row, sType, outer);
 
 		} else if (sType.isMap()) {
 			var row = r.readRow();
 			if (row != null)
-				o = parseRowIntoMap(headers, row, sType, outer);
+				o = readRowIntoMap(headers, row, sType, outer);
 
 		} else if (sType.isObject()) {
 			// For Object target type: return a list of maps (or a single map if one row)
@@ -196,7 +196,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 				var m = newGenericMap();
 				for (var i = 0; i < headers.size(); i++) {
 					var val = i < row.size() ? row.get(i) : null;
-					m.put(headers.get(i), parseCellValue(val, object()));
+					m.put(headers.get(i), readCellValue(val, object()));
 				}
 				results.add(m);
 			}
@@ -213,7 +213,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 			if (valueColIdx < 0) valueColIdx = 0;
 			var row = r.readRow();
 			if (row != null && valueColIdx < row.size())
-				o = parseCellValue(row.get(valueColIdx), sType);
+				o = readCellValue(row.get(valueColIdx), sType);
 		}
 
 		if (builder != null && o != null)
@@ -232,12 +232,12 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 	 * Matches JSON behavior: for polymorphic types (interface/abstract with dictionary), parse to map
 	 * first then use {@link #cast(JsonMap, BeanPropertyMeta, ClassMeta)} when <code>_type</code> is present.
 	 */
-	private Object parseRow(List<String> headers, List<String> row, ClassMeta<?> eType, Object outer) throws ParseException {
+	private Object readRow(List<String> headers, List<String> row, ClassMeta<?> eType, Object outer) throws ParseException {
 		if (eType == null || eType.isObject()) {
 			var m = newGenericMap();
 			for (var i = 0; i < headers.size(); i++) {
 				var val = i < row.size() ? row.get(i) : null;
-				m.put(headers.get(i), parseCellValue(val, object()));
+				m.put(headers.get(i), readCellValue(val, object()));
 			}
 			return m;
 		}
@@ -247,21 +247,21 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 			var m = newGenericMap();
 			for (var i = 0; i < headers.size(); i++) {
 				var val = i < row.size() ? row.get(i) : null;
-				m.put(headers.get(i), parseCellValue(val, object()));
+				m.put(headers.get(i), readCellValue(val, object()));
 			}
 			if (m.containsKey(typeColName))
 				return cast(m, null, eType);
 			throw new ParseException(this, "Polymorphic type '%s' requires _type column for resolution", eType);
 		}
 		if (eType.isBean()) {
-			return parseRowIntoBean(headers, row, eType, outer);
+			return readRowIntoBean(headers, row, eType, outer);
 		}
 		if (eType.isMap()) {
-			return parseRowIntoMap(headers, row, eType, outer);
+			return readRowIntoMap(headers, row, eType, outer);
 		}
 		// Simple type: use the "value" column (first column) or the only column present
 		var val = row.isEmpty() ? null : row.get(0);
-		return parseCellValue(val, eType);
+		return readCellValue(val, eType);
 	}
 
 	/**
@@ -271,7 +271,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 	 * When a <code>_type</code> column (or configured type property) is present with a non-empty
 	 * value, the type name is resolved to a concrete class for polymorphic bean creation.
 	 */
-	private <T> T parseRowIntoBean(List<String> headers, List<String> row, ClassMeta<T> eType, Object outer) throws ParseException {
+	private <T> T readRowIntoBean(List<String> headers, List<String> row, ClassMeta<T> eType, Object outer) throws ParseException {
 		var typeColName = getBeanTypePropertyName(eType);
 		var typeColIdx = headers.indexOf(typeColName);
 		ClassMeta<?> beanType = eType;
@@ -292,7 +292,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 			var pm = m.getPropertyMeta(header);
 			if (pm != null) {
 				setCurrentProperty(pm);
-				var converted = parseCellValue(val, (ClassMeta<?>) pm.getBeanInfo());
+				var converted = readCellValue(val, (ClassMeta<?>) pm.getBeanInfo());
 				pm.set(m, header, converted);
 				setCurrentProperty(null);
 			} else {
@@ -308,7 +308,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 	@SuppressWarnings({
 		"java:S3740" // Raw Map required for generic map from ClassMeta
 	})
-	private Object parseRowIntoMap(List<String> headers, List<String> row, ClassMeta<?> eType, Object outer) throws ParseException {
+	private Object readRowIntoMap(List<String> headers, List<String> row, ClassMeta<?> eType, Object outer) throws ParseException {
 		Map m;
 		if (eType.canCreateNewInstance(outer))
 			m = (Map) eType.newInstance(outer);
@@ -320,7 +320,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 			var header = headers.get(i);
 			var val = i < row.size() ? row.get(i) : null;
 			var key = convertAttrToType(m, header, keyType);
-			var value = parseCellValue(val, valueType);
+			var value = readCellValue(val, valueType);
 			m.put(key, value);
 		}
 		return m;
@@ -334,7 +334,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 	 * Handles {@code byte[]} (BASE64 or semicolon-delimited) and primitive arrays {@code [1;2;3]}.
 	 * All other values are converted via {@link #convertToType(Object, ClassMeta)}.
 	 */
-	private <T> T parseCellValue(String val, ClassMeta<T> eType) throws ParseException {
+	private <T> T readCellValue(String val, ClassMeta<T> eType) throws ParseException {
 		if (val == null)
 			return null;
 		// Apply trimStrings at the cell level (before type conversion)
@@ -348,12 +348,12 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 			if (allowNestedStructures && !val.isEmpty()) {
 				var trimmed = isTrimStrings() ? val.trim() : val;
 				if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
-					var parsed = CsvCellParser.parse(trimmed, nullValue);
+					var parsed = CsvCellParser.read(trimmed, nullValue);
 					if (parsed != null)
 						return convertToType(parsed, eType);
 				}
 			}
-			var csvParsed = parseCsvCellValue(val, eType);
+			var csvParsed = readCsvCellValue(val, eType);
 			if (csvParsed != null)
 				return (T) csvParsed;
 			return convertToType(val, eType);
@@ -365,7 +365,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 	/**
 	 * CSV-specific parsing for byte[] and primitive arrays. Returns null if not applicable.
 	 */
-	private Object parseCsvCellValue(String val, ClassMeta<?> eType) throws ParseException {
+	private Object readCsvCellValue(String val, ClassMeta<?> eType) throws ParseException {
 		if (ie(val))
 			return null;
 		if (eType.isByteArray()) {

@@ -597,17 +597,17 @@ class RecordStream_Test extends TestBase {
 	private static String serialize(Format fmt, Object value) throws Exception {
 		if (fmt.mode == Mode.BINARY) {
 			var baos = new ByteArrayOutputStream();
-			writeAll(fmt, ((RecordWritable) fmt.serializer).serializeRecords(baos), value);
+			writeAll(fmt, ((RecordWritable) fmt.serializer).writeRecords(baos), value);
 			return Base64.getEncoder().encodeToString(baos.toByteArray());
 		}
 		var sb = new StringWriter();
-		writeAll(fmt, ((RecordWritable) fmt.serializer).serializeRecords(sb), value);
+		writeAll(fmt, ((RecordWritable) fmt.serializer).writeRecords(sb), value);
 		return sb.toString();
 	}
 
-	private static byte[] serializeBytes(Format fmt, Object value) throws Exception {
+	private static byte[] writeBytes(Format fmt, Object value) throws Exception {
 		var baos = new ByteArrayOutputStream();
-		writeAll(fmt, ((RecordWritable) fmt.serializer).serializeRecords(baos), value);
+		writeAll(fmt, ((RecordWritable) fmt.serializer).writeRecords(baos), value);
 		return baos.toByteArray();
 	}
 
@@ -624,7 +624,7 @@ class RecordStream_Test extends TestBase {
 
 	private static <T> T parse(Format fmt, String wire, Class<T> type) throws Exception {
 		Object input = (fmt.mode == Mode.BINARY) ? Base64.getDecoder().decode(wire) : wire;
-		try (var r = ((RecordReadable) fmt.parser).parseRecords(input)) {
+		try (var r = ((RecordReadable) fmt.parser).readRecords(input)) {
 			return r.read(type);
 		}
 	}
@@ -634,14 +634,14 @@ class RecordStream_Test extends TestBase {
 		// Use Parser.parse(Object input, Type type, Type... args) for generic type binding.
 		var args = new java.lang.reflect.Type[element.length];
 		System.arraycopy(element, 0, args, 0, element.length);
-		return fmt.parser.parse(input, (java.lang.reflect.Type) outer, args);
+		return fmt.parser.read(input, (java.lang.reflect.Type) outer, args);
 	}
 
 	private static <T> T roundTrip(Format fmt, Object value, Class<T> type) throws Exception {
 		assertNotNull(fmt.parser, "format has no parser: " + fmt);
 		if (fmt.mode == Mode.BINARY) {
-			var bytes = serializeBytes(fmt, value);
-			try (var r = ((RecordReadable) fmt.parser).parseRecords(bytes)) {
+			var bytes = writeBytes(fmt, value);
+			try (var r = ((RecordReadable) fmt.parser).readRecords(bytes)) {
 				return r.read(type);
 			}
 		}

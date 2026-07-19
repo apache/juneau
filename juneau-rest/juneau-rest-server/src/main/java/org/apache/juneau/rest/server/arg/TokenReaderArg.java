@@ -43,7 +43,7 @@ import org.apache.juneau.rest.server.*;
  * <ol>
  *   <li>Negotiating the request's {@code Content-Type} to a matched {@link Parser}.
  *   <li>Building a request-configured {@link ParserSession ParserSession}
- *       and calling {@link TokenReadable#parseTokens(Object) parseTokens(input)} on it &mdash; so the
+ *       and calling {@link TokenReadable#readTokens(Object) readTokens(input)} on it &mdash; so the
  *       cursor honors the same locale / timezone / schema / charset as a normal parsed body.
  *   <li>Verifying the returned cursor is assignable to the declared parameter type.
  * </ol>
@@ -118,7 +118,7 @@ public class TokenReaderArg extends SimpleRestOperationArg {
 			.debug(req.isDebug() ? true : null)
 			.build();
 		var input = session.isReaderParser() ? content.getReader() : content.getInputStream();
-		var cursor = ((TokenReadable) session).parseTokens(input);
+		var cursor = ((TokenReadable) session).readTokens(input);
 		if (!declaredType.isInstance(cursor))
 			throw new UnsupportedMediaType(
 				"Parser '%s' produced cursor type '%s' which is not assignable to the declared parameter type '%s'.",

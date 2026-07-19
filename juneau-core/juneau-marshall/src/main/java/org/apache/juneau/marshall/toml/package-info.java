@@ -24,8 +24,8 @@
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
- * 	String toml = TomlSerializer.<jsf>DEFAULT</jsf>.serialize(myBean);
- * 	MyBean bean = TomlParser.<jsf>DEFAULT</jsf>.parse(toml, MyBean.<jk>class</jk>);
+ * 	String toml = TomlSerializer.<jsf>DEFAULT</jsf>.write(myBean);
+ * 	MyBean bean = TomlParser.<jsf>DEFAULT</jsf>.read(toml, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Or use the marshaller:</jc>
  * 	String toml = Toml.<jsf>of</jsf>(myBean);

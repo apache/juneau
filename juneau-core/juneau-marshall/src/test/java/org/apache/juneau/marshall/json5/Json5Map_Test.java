@@ -230,7 +230,7 @@ class Json5Map_Test extends TestBase {
 	}
 
 	@Test void a22_parserProducesJson5Map() throws Exception {
-		Object o = Json5Parser.DEFAULT.parse("{a:1,b:[1,2,3]}", Object.class);
+		Object o = Json5Parser.DEFAULT.read("{a:1,b:[1,2,3]}", Object.class);
 		assertTrue(o instanceof Json5Map, "Expected Json5Map, got " + cn(o));
 		Object inner = ((Json5Map)o).get("b");
 		assertTrue(inner instanceof Json5List, "Expected Json5List for nested array, got " + cn(inner));

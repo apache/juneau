@@ -57,8 +57,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void a01_collectionOfBeans() throws Exception {
 		var in = list(new Bean("a", 1), new Bean("b", 2), new Bean("c", 3));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<Bean>) ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertEquals(3, out.size());
 		assertEquals("a", out.get(0).name);
 		assertEquals(3, out.get(2).age);
@@ -67,8 +67,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void a02_arrayOfBeans() throws Exception {
 		var in = new Bean[] { new Bean("a", 1), new Bean("b", 2) };
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<Bean>) ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertEquals(2, out.size());
 		assertEquals("b", out.get(1).name);
 	}
@@ -76,8 +76,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void a03_collectionOfScalars() throws Exception {
 		var in = list("x", "y", "z");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = ParquetParser.DEFAULT.parse(bytes, String[].class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = ParquetParser.DEFAULT.read(bytes, String[].class);
 		assertArrayEquals(new String[]{"x", "y", "z"}, out);
 	}
 
@@ -87,29 +87,29 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		in.add(new Bean("a", 1));
 		in.add(null);
 		in.add(new Bean("c", 3));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<Bean>) ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertEquals(3, out.size());
 	}
 
 	@Test
 	void a05_immutableCollection() throws Exception {
 		var in = List.of(new Bean("a", 1), new Bean("b", 2));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<Bean>) ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertEquals(2, out.size());
 	}
 
 	@Test
 	void a06_emptyCollection() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(list());
-		var out = ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list());
+		var out = ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertTrue(((List<?>) out).isEmpty());
 	}
 
 	@Test
 	void a07_nullRoot() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(null);
+		var bytes = ParquetSerializer.DEFAULT.write(null);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -120,17 +120,17 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	@Test
 	void b01_optionalRootPresent() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(o(new Bean("a", 1)));
-		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(o(new Bean("a", 1)));
+		var out = (List<Bean>) ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertEquals(1, out.size());
 		assertEquals("a", out.get(0).name);
 	}
 
 	@Test
 	void b02_optionalRootEmpty() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(oe());
+		var bytes = ParquetSerializer.DEFAULT.write(oe());
 		assertNotNull(bytes);
-		var out = ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var out = ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertTrue(((List<?>) out).isEmpty());
 	}
 
@@ -144,8 +144,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void b03_optionalPropertyPresentAndEmpty() throws Exception {
 		var in = list(new OptBean("a", o("aa")), new OptBean("b", oe()));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<OptBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<OptBean>) ParquetParser.DEFAULT.read(bytes, List.class, OptBean.class);
 		assertEquals(2, out.size());
 	}
 
@@ -157,8 +157,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void c01_nullPropertyValues() throws Exception {
 		var in = list(new Bean(null, 0), new Bean("b", 2));
 		var ser = ParquetSerializer.create().keepNullProperties().build();
-		var bytes = ser.serialize(in);
-		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var bytes = ser.write(in);
+		var out = (List<Bean>) ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertEquals(2, out.size());
 	}
 
@@ -176,8 +176,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void d01_listProperty() throws Exception {
 		var in = list(new ListBean("a", list("x", "y")), new ListBean("b", list("z")));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<ListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ListBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<ListBean>) ParquetParser.DEFAULT.read(bytes, List.class, ListBean.class);
 		assertEquals(2, out.size());
 		assertEquals(list("x", "y"), out.get(0).tags);
 	}
@@ -187,8 +187,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var in = new ArrayList<ListBean>();
 		in.add(new ListBean("a", list()));
 		in.add(new ListBean("b", null));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<ListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ListBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<ListBean>) ParquetParser.DEFAULT.read(bytes, List.class, ListBean.class);
 		assertEquals(2, out.size());
 	}
 
@@ -202,15 +202,15 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void d03_nestedList() throws Exception {
 		var in = list(new NestedListBean("a", list(list("x", "y"), list("z"))));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<NestedListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedListBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<NestedListBean>) ParquetParser.DEFAULT.read(bytes, List.class, NestedListBean.class);
 		assertEquals(1, out.size());
 	}
 
 	@Test
 	void d04_arrayOfPrimitiveArrays() throws Exception {
 		var in = new int[][] { {1, 2}, {3, 4, 5} };
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -225,7 +225,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void d05_primitiveArrayProperty() throws Exception {
 		var in = list(new IntArrayBean("a", new int[]{1, 2, 3}));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -258,8 +258,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 			new Outer("a", new Middle("m1", new Inner("i1", 1))),
 			new Outer("b", new Middle("m2", null)),     // deepest group present, inner null
 			new Outer("c", null));                       // intermediate group null
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
-		var out = (List<Outer>) ParquetParser.DEFAULT.parse(bytes, List.class, Outer.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(in);
+		var out = (List<Outer>) ParquetParser.DEFAULT.read(bytes, List.class, Outer.class);
 		assertEquals(3, out.size());
 		assertEquals("i1", out.get(0).middle.inner.label);
 	}
@@ -274,8 +274,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void d11_objectArrayListColumn() throws Exception {
 		var in = list(new ObjArrBean("a", new String[]{"x", "y"}), new ObjArrBean("b", new String[0]));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<ObjArrBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ObjArrBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<ObjArrBean>) ParquetParser.DEFAULT.read(bytes, List.class, ObjArrBean.class);
 		assertEquals(2, out.size());
 	}
 
@@ -289,8 +289,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void d12_primitiveArrayListColumn() throws Exception {
 		var in = list(new IntArrColBean("a", new int[]{1, 2, 3}), new IntArrColBean("b", new int[]{}));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<IntArrColBean>) ParquetParser.DEFAULT.parse(bytes, List.class, IntArrColBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<IntArrColBean>) ParquetParser.DEFAULT.read(bytes, List.class, IntArrColBean.class);
 		assertEquals(2, out.size());
 	}
 
@@ -302,8 +302,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		tags.add(null);
 		tags.add("c");
 		in.add(new ListBean("a", tags));
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
-		var out = (List<ListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ListBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(in);
+		var out = (List<ListBean>) ParquetParser.DEFAULT.read(bytes, List.class, ListBean.class);
 		assertEquals(1, out.size());
 	}
 
@@ -325,7 +325,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		inner.add(null);              // null element
 		grid.add(inner);
 		var in = list(new DeepListBean("a", grid));
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -333,8 +333,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void d15_beanWithObjectArrayList() throws Exception {
 		var in = list(new ObjArrBean("a", new String[]{"x", "y", "z"}));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<ObjArrBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ObjArrBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<ObjArrBean>) ParquetParser.DEFAULT.read(bytes, List.class, ObjArrBean.class);
 		assertEquals(1, out.size());
 	}
 
@@ -351,7 +351,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		rows.add(new int[]{1, 2});
 		rows.add(new int[]{3});
 		var in = list(new ListOfArraysBean("a", rows));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -365,7 +365,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var in = new LinkedHashMap<String, Object>();
 		in.put("a", 1);
 		in.put("b", "two");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -375,7 +375,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var in = new HashMap<String, Object>();
 		in.put(null, "nullval");
 		in.put("a", "aval");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -385,8 +385,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var in = new TreeMap<Integer, String>();
 		in.put(1, "a");
 		in.put(2, "b");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (Map<Integer, String>) ParquetParser.DEFAULT.parse(bytes, Map.class, Integer.class, String.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (Map<Integer, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
 		assertEquals("a", out.get(1));
 		assertEquals("b", out.get(2));
 	}
@@ -396,8 +396,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var in = new LinkedHashMap<Color, String>();
 		in.put(Color.RED, "r");
 		in.put(Color.GREEN, "g");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (Map<Color, String>) ParquetParser.DEFAULT.parse(bytes, Map.class, Color.class, String.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (Map<Color, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Color.class, String.class);
 		assertEquals("r", out.get(Color.RED));
 	}
 
@@ -414,8 +414,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		m.put("x", 1);
 		m.put("y", 2);
 		var in = list(new NestedMapBean("a", m), new NestedMapBean("b", map()));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<NestedMapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedMapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<NestedMapBean>) ParquetParser.DEFAULT.read(bytes, List.class, NestedMapBean.class);
 		assertEquals(2, out.size());
 		assertEquals(Integer.valueOf(1), out.get(0).counts.get("x"));
 	}
@@ -426,7 +426,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var in = new LinkedHashMap<LocalDate, String>();
 		in.put(LocalDate.parse("2020-01-01"), "a");
 		in.put(LocalDate.parse("2021-02-02"), "b");
-		var bytes = ParquetSerializer.create().keepNullProperties().addBeanTypes().addRootType().build().serialize(in);
+		var bytes = ParquetSerializer.create().keepNullProperties().addBeanTypes().addRootType().build().write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -445,7 +445,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		m.put("start", Instant.parse("2020-01-02T03:04:05Z"));
 		m.put("end", Instant.parse("2020-01-03T03:04:05Z"));
 		var in = list(new TemporalMapBean("a", m), new TemporalMapBean("b", map()));
-		var bytes = ParquetSerializer.create().writeDatesAsTimestamp(false).build().serialize(in);
+		var bytes = ParquetSerializer.create().writeDatesAsTimestamp(false).build().write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -463,8 +463,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		m.put("x", 1);
 		m.put("y", null);
 		var in = list(new IntMapBean("a", m));
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
-		var out = (List<IntMapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, IntMapBean.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(in);
+		var out = (List<IntMapBean>) ParquetParser.DEFAULT.read(bytes, List.class, IntMapBean.class);
 		assertEquals(1, out.size());
 	}
 
@@ -481,8 +481,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		m.put(1, "a");
 		m.put(2, "b");
 		var in = list(new NonStrKeyMapBean("x", m));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<NonStrKeyMapBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NonStrKeyMapBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<NonStrKeyMapBean>) ParquetParser.DEFAULT.read(bytes, List.class, NonStrKeyMapBean.class);
 		assertEquals(1, out.size());
 		assertEquals("a", out.get(0).byId.get(1));
 	}
@@ -501,8 +501,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void f01_byteArrayColumn() throws Exception {
 		var in = list(new ByteArrayBean("a", new byte[]{1, 2, 3}));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<ByteArrayBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ByteArrayBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<ByteArrayBean>) ParquetParser.DEFAULT.read(bytes, List.class, ByteArrayBean.class);
 		assertEquals(1, out.size());
 	}
 
@@ -516,8 +516,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void f02_enumColumn() throws Exception {
 		var in = list(new EnumBean("a", Color.RED), new EnumBean("b", Color.BLUE));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<EnumBean>) ParquetParser.DEFAULT.parse(bytes, List.class, EnumBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<EnumBean>) ParquetParser.DEFAULT.read(bytes, List.class, EnumBean.class);
 		assertEquals(Color.RED, out.get(0).color);
 		assertEquals(Color.BLUE, out.get(1).color);
 	}
@@ -533,8 +533,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void f03_uuidColumn() throws Exception {
 		var u = UUID.fromString("12345678-1234-5678-1234-567812345678");
 		var in = list(new UuidBean("a", u));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<UuidBean>) ParquetParser.DEFAULT.parse(bytes, List.class, UuidBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<UuidBean>) ParquetParser.DEFAULT.read(bytes, List.class, UuidBean.class);
 		assertEquals(u, out.get(0).id);
 	}
 
@@ -548,8 +548,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void f04_durationColumn() throws Exception {
 		var in = list(new DurationBean("a", Duration.ofSeconds(90)));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<DurationBean>) ParquetParser.DEFAULT.parse(bytes, List.class, DurationBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<DurationBean>) ParquetParser.DEFAULT.read(bytes, List.class, DurationBean.class);
 		assertEquals(1, out.size());
 	}
 
@@ -563,8 +563,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void f05_bigDecimalDefaultStringPath() throws Exception {
 		var in = list(new DecBean("a", new BigDecimal("123.456")));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (List<DecBean>) ParquetParser.DEFAULT.parse(bytes, List.class, DecBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
+		var out = (List<DecBean>) ParquetParser.DEFAULT.read(bytes, List.class, DecBean.class);
 		assertEquals(0, new BigDecimal("123.456").compareTo(out.get(0).amount));
 	}
 
@@ -572,8 +572,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void f06_bigDecimalNativePath() throws Exception {
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new DecBean("a", new BigDecimal("123.456")));
-		var bytes = ser.serialize(in);
-		var out = (List<DecBean>) ParquetParser.DEFAULT.parse(bytes, List.class, DecBean.class);
+		var bytes = ser.write(in);
+		var out = (List<DecBean>) ParquetParser.DEFAULT.read(bytes, List.class, DecBean.class);
 		assertEquals(0, new BigDecimal("123.456000000").compareTo(out.get(0).amount));
 	}
 
@@ -611,7 +611,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void g01_temporalsDefaultTimestampMillis() throws Exception {
 		var in = list(fullTemporal());
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -633,7 +633,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		b.inst = Instant.parse("2020-01-02T03:04:05Z");
 		b.zdt = ZonedDateTime.parse("2020-01-02T03:04:05Z");
 		b.odt = OffsetDateTime.parse("2020-01-02T03:04:05+01:00");
-		var bytes = ParquetSerializer.create().nativeLogicalTypes(true).build().serialize(list(b));
+		var bytes = ParquetSerializer.create().nativeLogicalTypes(true).build().write(list(b));
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -651,7 +651,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var cal = new GregorianCalendar();
 		cal.setTimeInMillis(2_000_000_000L);
 		b.c = cal;
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
+		var bytes = ParquetSerializer.DEFAULT.write(list(b));
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -665,7 +665,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void g04_instantNative() throws Exception {
 		var b = new InstantBean();
 		b.inst = Instant.parse("2020-01-02T03:04:05.123456Z");
-		var bytes = ParquetSerializer.create().nativeLogicalTypes(true).build().serialize(list(b));
+		var bytes = ParquetSerializer.create().nativeLogicalTypes(true).build().write(list(b));
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -674,7 +674,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void g05_temporalsAsString() throws Exception {
 		// writeDatesAsTimestamp(false) -> temporals stored as BYTE_ARRAY/STRING.
 		var in = list(fullTemporal());
-		var bytes = ParquetSerializer.create().writeDatesAsTimestamp(false).build().serialize(in);
+		var bytes = ParquetSerializer.create().writeDatesAsTimestamp(false).build().write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -707,7 +707,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		in.put("ot", OffsetTime.parse("03:04:05+01:00"));
 		in.put("year", Year.of(2020));
 		in.put("ym", YearMonth.of(2020, Month.JANUARY));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -719,14 +719,14 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// DATE (INT32 / toEpochDay) — LocalDate, LocalDateTime, Instant, ZonedDateTime, OffsetDateTime.
 		var dates = new LinkedHashMap<String, Object>();
 		dates.put("ld", LocalDate.parse("2020-01-02"));
-		assertNotNull(ser.serialize(dates));
+		assertNotNull(ser.write(dates));
 		// TIME (INT64 micros / toTimeMicros) — LocalTime, OffsetTime.
 		var times = new LinkedHashMap<String, Object>();
 		times.put("lt", LocalTime.parse("03:04:05"));
-		assertNotNull(ser.serialize(times));
+		assertNotNull(ser.write(times));
 		var times2 = new LinkedHashMap<String, Object>();
 		times2.put("ot", OffsetTime.parse("03:04:05+01:00"));
-		assertNotNull(ser.serialize(times2));
+		assertNotNull(ser.write(times2));
 		// TIMESTAMP (INT64 micros / toInstant) — Date, Calendar, Instant, LocalDate, LocalDateTime, ZonedDateTime, OffsetDateTime.
 		for (var v : new Object[] {
 				new Date(1_000_000_000L),
@@ -737,7 +737,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 				OffsetDateTime.parse("2020-01-02T03:04:05+01:00") }) {
 			var m = new LinkedHashMap<String, Object>();
 			m.put("ts", v);
-			assertNotNull(ser.serialize(m));
+			assertNotNull(ser.write(m));
 		}
 	}
 
@@ -757,7 +757,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("amt", new BigDecimal("12.5"));
 		m.put("amt2", new BigInteger("42"));
-		assertNotNull(ser.serialize(m));
+		assertNotNull(ser.write(m));
 	}
 
 	/** Root Map with byte[], enum, UUID, Duration values — drives toByteArray / toFixedLenByteArray branches with raw objects. */
@@ -768,7 +768,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		m.put("color", Color.GREEN);
 		m.put("id", UUID.fromString("12345678-1234-5678-1234-567812345678"));
 		m.put("dur", Duration.ofSeconds(5));
-		var bytes = ParquetSerializer.DEFAULT.serialize(m);
+		var bytes = ParquetSerializer.DEFAULT.write(m);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -779,7 +779,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void g14_mapTemporalValuesAsString() throws Exception {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("inst", Instant.parse("2020-01-02T03:04:05Z"));
-		var bytes = ParquetSerializer.create().writeDatesAsTimestamp(false).build().serialize(m);
+		var bytes = ParquetSerializer.create().writeDatesAsTimestamp(false).build().write(m);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -794,7 +794,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("n", 42L);
 		m.put("s", "str");
-		var bytes = ParquetSerializer.DEFAULT.serialize(m);
+		var bytes = ParquetSerializer.DEFAULT.write(m);
 		assertNotNull(bytes);
 	}
 
@@ -808,8 +808,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		for (var i = 0; i < 50; i++)
 			in.add(new Bean("n" + i, i));
 		var ser = ParquetSerializer.create().rowGroupSize(1024).build();
-		var bytes = ser.serialize(in);
-		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var bytes = ser.write(in);
+		var out = (List<Bean>) ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertEquals(50, out.size());
 		assertEquals("n49", out.get(49).name);
 	}
@@ -820,8 +820,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		for (var i = 0; i < 50; i++)
 			in.add(new Bean("n" + i, i));
 		var ser = ParquetSerializer.create().pageSize(1024).build();
-		var bytes = ser.serialize(in);
-		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var bytes = ser.write(in);
+		var out = (List<Bean>) ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertEquals(50, out.size());
 		assertEquals("n49", out.get(49).name);
 	}
@@ -832,8 +832,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		for (var i = 0; i < 30; i++)
 			in.add(new ListBean("n" + i, list("a" + i, "b" + i)));
 		var ser = ParquetSerializer.create().pageSize(1024).rowGroupSize(2048).build();
-		var bytes = ser.serialize(in);
-		var out = (List<ListBean>) ParquetParser.DEFAULT.parse(bytes, List.class, ListBean.class);
+		var bytes = ser.write(in);
+		var out = (List<ListBean>) ParquetParser.DEFAULT.read(bytes, List.class, ListBean.class);
 		assertEquals(30, out.size());
 	}
 
@@ -852,7 +852,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		a.name = "root";
 		a.child = a;
 		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.NULL).addBeanTypes().build();
-		var bytes = ser.serialize(a);
+		var bytes = ser.write(a);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -863,7 +863,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		a.name = "root";
 		a.child = a;
 		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.THROW).addBeanTypes().build();
-		assertThrows(SerializeException.class, () -> ser.serialize(a));
+		assertThrows(SerializeException.class, () -> ser.write(a));
 	}
 
 	public static class CyclicListBean {
@@ -878,7 +878,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		a.children = new ArrayList<>();
 		a.children.add(a);
 		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.NULL).addBeanTypes().build();
-		var bytes = ser.serialize(a);
+		var bytes = ser.write(a);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -890,7 +890,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		a.children = new ArrayList<>();
 		a.children.add(a);
 		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.THROW).addBeanTypes().build();
-		assertThrows(SerializeException.class, () -> ser.serialize(a));
+		assertThrows(SerializeException.class, () -> ser.write(a));
 	}
 
 	public static class MapCycleBean {
@@ -907,20 +907,20 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		a.data = new LinkedHashMap<>();
 		a.data.put("self", a.data);  // map references itself
 		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.NULL).build();
-		var bytes = ser.serialize(list(a));
+		var bytes = ser.write(list(a));
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Streaming entry points: serializeRecords / serializeArrayRecords.
+	// Streaming entry points: writeRecords / writeArrayRecords.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void j01_serializeRecords() throws Exception {
+	void j01_writeRecords() throws Exception {
 		var session = (ParquetSerializerSession) ParquetSerializer.DEFAULT.getSession();
 		var baos = new ByteArrayOutputStream();
-		try (var w = session.serializeRecords(baos)) {
+		try (var w = session.writeRecords(baos)) {
 			w.write(list(new Bean("a", 1), new Bean("b", 2)));
 		}
 		assertTrue(baos.toByteArray().length > 0);
@@ -928,10 +928,10 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	}
 
 	@Test
-	void j02_serializeArrayRecords() throws Exception {
+	void j02_writeArrayRecords() throws Exception {
 		var session = (ParquetSerializerSession) ParquetSerializer.DEFAULT.getSession();
 		var baos = new ByteArrayOutputStream();
-		try (var w = session.serializeArrayRecords(baos)) {
+		try (var w = session.writeArrayRecords(baos)) {
 			w.write(new Bean("a", 1));
 			w.write(new Bean("b", 2));
 		}
@@ -952,28 +952,28 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void k00_streamableRoot() throws Exception {
 		// A Stream is streamable -> collectBeans isStreamable branch (toListFromStreamable).
-		var bytes = ParquetSerializer.DEFAULT.serialize(java.util.stream.Stream.of(new Bean("a", 1), new Bean("b", 2)));
-		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(java.util.stream.Stream.of(new Bean("a", 1), new Bean("b", 2)));
+		var out = (List<Bean>) ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertEquals(2, out.size());
 	}
 
 	@Test
 	void k00b_iteratorRoot() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(new Bean("a", 1)).iterator());
-		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(new Bean("a", 1)).iterator());
+		var out = (List<Bean>) ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertEquals(1, out.size());
 	}
 
 	@Test
 	void k01_singleScalar() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize("hello");
-		assertEquals("hello", ParquetParser.DEFAULT.parse(bytes, String.class));
+		var bytes = ParquetSerializer.DEFAULT.write("hello");
+		assertEquals("hello", ParquetParser.DEFAULT.read(bytes, String.class));
 	}
 
 	@Test
 	void k02_singleBean() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(new Bean("a", 1));
-		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(new Bean("a", 1));
+		var out = (List<Bean>) ParquetParser.DEFAULT.read(bytes, List.class, Bean.class);
 		assertEquals("a", out.get(0).name);
 	}
 
@@ -1007,28 +1007,28 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// DATE column inferred from row-0 LocalDate value (Object-typed property); row-1 passes LocalDateTime -> toEpochDay(LocalDateTime).
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjDateBean(LocalDate.parse("2020-01-01")), new ObjDateBean(LocalDateTime.parse("2021-06-15T00:00:00")));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	@Test
 	void l02_toEpochDayInstantAlt() throws Exception {
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjDateBean(LocalDate.parse("2020-01-01")), new ObjDateBean(Instant.parse("2021-06-15T00:00:00Z")));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	@Test
 	void l03_toEpochDayZonedDateTimeAlt() throws Exception {
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjDateBean(LocalDate.parse("2020-01-01")), new ObjDateBean(ZonedDateTime.parse("2021-06-15T00:00:00Z")));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	@Test
 	void l04_toEpochDayOffsetDateTimeAlt() throws Exception {
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjDateBean(LocalDate.parse("2020-01-01")), new ObjDateBean(OffsetDateTime.parse("2021-06-15T00:00:00+00:00")));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	@Test
@@ -1036,7 +1036,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// DATE column from row-0 LocalDate; row-1 passes a Long (days-since-epoch) -> toEpochDay(Number).
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjDateBean(LocalDate.parse("2020-01-01")), new ObjDateBean(18793L));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	@Test
@@ -1044,7 +1044,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// TIME_MICROS column from row-0 LocalTime; row-1 passes a Number -> toTimeMicros(Number).
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjTimeBean(LocalTime.parse("01:02:03")), new ObjTimeBean(3_723_000_000L));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	@Test
@@ -1052,7 +1052,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes LocalDate -> toInstant(LocalDate).
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean(LocalDate.parse("2021-06-15")));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1082,7 +1082,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void l08_writeBooleanStringFallback() throws Exception {
 		// BOOLEAN column (from row-0 Boolean); row-1 passes "true" String -> Boolean.parseBoolean fires.
 		var in = list(new ObjBoolBean(Boolean.TRUE), new ObjBoolBean("true"));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1090,7 +1090,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void l09_writeFloatStringFallback() throws Exception {
 		// FLOAT column (from row-0 Float); row-1 passes "2.5" String -> Float.parseFloat fires.
 		var in = list(new ObjFloatBean(1.5f), new ObjFloatBean("2.5"));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1098,7 +1098,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void l10_writeDoubleStringFallback() throws Exception {
 		// DOUBLE column (from row-0 Double); row-1 passes "2.5" String -> Double.parseDouble fires.
 		var in = list(new ObjDblBean(1.5d), new ObjDblBean("2.5"));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1112,7 +1112,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// A Date value at a BYTE_ARRAY/TIMESTAMP_MILLIS column reaches the timestamp-to-string branch.
 		var m = new LinkedHashMap<String, Object>();
 		m.put("d", new Date(1_000_000_000L));
-		var bytes = ParquetSerializer.create().writeDatesAsTimestamp(false).build().serialize(m);
+		var bytes = ParquetSerializer.create().writeDatesAsTimestamp(false).build().write(m);
 		assertNotNull(bytes);
 	}
 
@@ -1125,7 +1125,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// A Class<?> value in a Map column: applyDefaultSwap finds the ClassSwap and returns a String.
 		var m = new LinkedHashMap<String, Object>();
 		m.put("type", String.class);
-		var bytes = ParquetSerializer.DEFAULT.serialize(m);
+		var bytes = ParquetSerializer.DEFAULT.write(m);
 		assertNotNull(bytes);
 	}
 
@@ -1144,7 +1144,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void l13_toInt64StringFallback() throws Exception {
 		// INT64 column (from row-0 Long); row-1 passes "123" String -> Long.parseLong fires.
 		var in = list(new ObjLongBean(100L), new ObjLongBean("123"));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1157,7 +1157,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes an Instant-parseable String.
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean("2021-06-15T12:00:00Z"));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1169,7 +1169,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes an unparseable String -> SerializeException.
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean("not-a-timestamp"));
-		assertThrows(Exception.class, () -> ser.serialize(in));
+		assertThrows(Exception.class, () -> ser.write(in));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1185,10 +1185,10 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		m0.put("s", "hello");
 		var m1 = new LinkedHashMap<String, Object>();
 		m1.put("s", 42);
-		// Two maps serialized as two-row list equivalent via serializeRecords
+		// Two maps serialized as two-row list equivalent via writeRecords
 		var ser = ParquetSerializer.DEFAULT;
-		assertNotNull(ser.serialize(m0));
-		assertNotNull(ser.serialize(m1));
+		assertNotNull(ser.write(m0));
+		assertNotNull(ser.write(m1));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1207,7 +1207,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// DECIMAL column from row-0 BigDecimal; row-1 passes an Integer -> Number branch fires.
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjDecBean(new BigDecimal("1.5")), new ObjDecBean(42));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	@Test
@@ -1215,7 +1215,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// DECIMAL column from row-0 BigDecimal; row-1 passes "2.5" String -> String branch fires.
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjDecBean(new BigDecimal("1.5")), new ObjDecBean("2.5"));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1225,7 +1225,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void m01_emptyRootMap() throws Exception {
 		// sType.isMap() && m.isEmpty() -> true branch on line 249: returns List.of().
-		var bytes = ParquetSerializer.DEFAULT.serialize(new LinkedHashMap<String, Object>());
+		var bytes = ParquetSerializer.DEFAULT.write(new LinkedHashMap<String, Object>());
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -1236,7 +1236,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("a", "x");
 		m.put("b", null);
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(m);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(m);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -1266,8 +1266,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 			new OptBeanOuter("a", new OptNestedBean(o("x"))),
 			new OptBeanOuter("b", new OptNestedBean(oe())),
 			new OptBeanOuter("c", null));
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
-		var out = (List<OptBeanOuter>) ParquetParser.DEFAULT.parse(bytes, List.class, OptBeanOuter.class);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(in);
+		var out = (List<OptBeanOuter>) ParquetParser.DEFAULT.read(bytes, List.class, OptBeanOuter.class);
 		assertEquals(3, out.size());
 	}
 
@@ -1285,7 +1285,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		m.put("x", "1");
 		m.put("y", "2");
 		var in = list(new MapNestedBean("a", m), new MapNestedBean("b", null));
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1304,7 +1304,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void m05_flattenListOptionalElements() throws Exception {
 		// List column with Optional<String> elements -> flattenListValues Optional.value branch (line 785).
 		var in = list(new ListOptBean("a", list(o("x"), oe(), o("z"))));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -1324,7 +1324,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var row2 = new LinkedHashMap<String, String>();
 		row2.put("k", "v2");
 		var in = list(new ListMapBean("a", list(row1, row2)));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -1347,7 +1347,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void m07_flattenListBeanElements() throws Exception {
 		// List<bean> -> flattenListValues plain-object (toBeanMap) path (line 792).
 		var in = list(new ListBeanObjBean("a", list(new ListInnerBean("x", 1), new ListInnerBean("y", 2))));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -1368,7 +1368,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void m08_getValueByPathOptional() throws Exception {
 		// Bean with Optional<String> tag -> getValueByPath hits Optional.value branch (line 819).
 		var in = list(new PathOptBean("a", o("t1")), new PathOptBean("b", oe()));
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1385,7 +1385,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("sub", "val");
 		var in = list(new MapValueBean("a", m));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1407,7 +1407,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var child = new PlainNested();
 		child.label = "lbl";
 		var in = list(new PlainOuter("a", child));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1428,7 +1428,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		a.name = "root";
 		a.child = a;
 		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.THROW).build();
-		assertThrows(Exception.class, () -> ser.serialize(list(a)));
+		assertThrows(Exception.class, () -> ser.write(list(a)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1444,7 +1444,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var in = new LinkedHashMap<Integer, String>();
 		in.put(1, "a");
 		in.put(2, null);  // null value -> def=1 branch in extractFlattenedMapValues (line 683)
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -1454,7 +1454,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// Single-entry non-string-key root Map -> isRootKeyValue path with exactly one entry (rep=0 only).
 		var in = new LinkedHashMap<Long, String>();
 		in.put(42L, "answer");
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1468,7 +1468,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void m14_nestedMapNullProperty() throws Exception {
 		// Bean with Map property = null -> getMapAtPath: getValueByPath returns null -> obj==null true branch (line 694-695).
 		var in = list(new NonStrKeyMapBean("a", null));
-		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1481,7 +1481,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// TIME_MICROS column from row-0 LocalTime; row-1 passes OffsetTime -> toTimeMicros OffsetTime branch (line 958-959).
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjTimeBean(LocalTime.parse("01:02:03")), new ObjTimeBean(OffsetTime.parse("02:03:04+01:00")));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	@Test
@@ -1490,7 +1490,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// (Duplicate of l06 intent but with OffsetTime sample to confirm OffsetTime also reaches the Number branch.)
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjTimeBean(LocalTime.parse("01:02:03")), new ObjTimeBean(999_999L));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1502,7 +1502,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes ZonedDateTime -> toInstant ZonedDateTime branch.
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean(ZonedDateTime.parse("2021-06-15T00:00:00Z")));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1514,7 +1514,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// DATE column from row-0 LocalDate; row-1 passes a String -> toEpochDay String/parse fallback branch (line 951).
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjDateBean(LocalDate.parse("2020-01-01")), new ObjDateBean("2021-06-15"));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	@Test
@@ -1522,7 +1522,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// TIME_MICROS column from row-0 LocalTime; row-1 passes a String -> LocalTime.parse fallback branch (line 962).
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjTimeBean(LocalTime.parse("01:02:03")), new ObjTimeBean("04:05:06"));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1534,7 +1534,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes Date -> toInstant Date branch.
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean(new Date(1_000_000_000L)));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	@Test
@@ -1544,7 +1544,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var cal = new GregorianCalendar();
 		cal.setTimeInMillis(1_000_000_000L);
 		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean(cal));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	@Test
@@ -1552,7 +1552,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes LocalDateTime -> toInstant LocalDateTime branch.
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean(LocalDateTime.parse("2021-06-15T12:00:00")));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1571,7 +1571,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var ser = ParquetSerializer.DEFAULT;
 		var uuid = UUID.fromString("12345678-1234-5678-1234-567812345678");
 		var in = list(new UuidObjBean(uuid), new UuidObjBean("not-a-uuid"));
-		assertNotNull(ser.serialize(in));
+		assertNotNull(ser.write(in));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1589,7 +1589,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void m24_toByteArrayEnumAtUtf8Column() throws Exception {
 		// BYTE_ARRAY/UTF8 column from row-0 String; row-1 passes Enum -> String.valueOf(enum) via CONVERTED_UTF8 branch.
 		var in = list(new EnumObjBean("red"), new EnumObjBean(Color.GREEN));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1609,7 +1609,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// Instant.from() -> catch fires -> Long.parseLong("JUNE") throws NumberFormatException.
 		// The catch branch in toInt64 IS exercised regardless of what Long.parseLong does.
 		var in = list(new LongObjBean(1L), new LongObjBean(Month.JUNE));
-		assertThrows(Exception.class, () -> ParquetSerializer.DEFAULT.serialize(in));
+		assertThrows(Exception.class, () -> ParquetSerializer.DEFAULT.write(in));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1622,7 +1622,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// fails Instant.from() -> catch fires -> Instant.parse("JUNE") also fails -> SerializeException.
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		var in = list(new LongObjBean(Instant.EPOCH), new LongObjBean(Month.JUNE));
-		assertThrows(Exception.class, () -> ser.serialize(in));
+		assertThrows(Exception.class, () -> ser.write(in));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1643,7 +1643,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void m27_collectBeansOrigBeanSwappedToNonBean() throws Exception {
 		// ObjectSwap<SwappedBean, String>: swappedType.isBean()=false, origType.isBean()=true -> line 289 true branch.
 		var ser = ParquetSerializer.create().swaps(SwapToString.class).build();
-		var bytes = ser.serialize(list(new SwappedBean("Alice"), new SwappedBean("Bob")));
+		var bytes = ser.write(list(new SwappedBean("Alice"), new SwappedBean("Bob")));
 		assertNotNull(bytes);
 	}
 
@@ -1672,7 +1672,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var row2 = new SelfRefObjBean(null);
 		row2.ref = row2;
 		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.THROW).build();
-		assertThrows(Exception.class, () -> ser.serialize(list(row1, row2)));
+		assertThrows(Exception.class, () -> ser.write(list(row1, row2)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1691,7 +1691,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// Schema from first row: v=[["x"]] -> root.v.list.element.list.element (2-level list, String leaf).
 		// Second row: v="scalar" -> at list.element, obj="scalar" -> singletonList fires (line ~692).
 		var in = list(new ObjListBean(list(list("x"))), new ObjListBean("scalar"));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1715,7 +1715,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		circularList.add(circularList);
 		var row2 = new CircularListBean(circularList);
 		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.THROW).build();
-		assertThrows(Exception.class, () -> ser.serialize(list(row1, row2)));
+		assertThrows(Exception.class, () -> ser.write(list(row1, row2)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1740,7 +1740,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var m = new LinkedHashMap<String, Integer>();
 		m.put("x", 1);
 		var in = list(new OuterMapHolder("a", new InnerMapHolder(m)), new OuterMapHolder("b", null));
-		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
 	}
 
@@ -1767,7 +1767,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var row1 = new CycleFlatMapBean("a", m);
 		var row2 = new CycleFlatMapBean("b", null);
 		row2.counts = row2;
-		var bytes = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.NULL).build().serialize(list(row1, row2));
+		var bytes = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.NULL).build().write(list(row1, row2));
 		assertNotNull(bytes);
 	}
 
@@ -1780,7 +1780,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var row2 = new CycleFlatMapBean("b", null);
 		row2.counts = row2;
 		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.THROW).build();
-		assertThrows(Exception.class, () -> ser.serialize(list(row1, row2)));
+		assertThrows(Exception.class, () -> ser.write(list(row1, row2)));
 	}
 
 }

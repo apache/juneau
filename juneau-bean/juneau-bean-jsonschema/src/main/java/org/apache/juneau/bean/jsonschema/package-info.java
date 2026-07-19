@@ -108,7 +108,7 @@
  * 		.addRequired(<js>"firstName"</js>, <js>"lastName"</js>);
  *
  * 	<jc>// Serialize to JSON</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>schema</jv>);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.write(<jv>schema</jv>);
  * </p>
  *
  * <p>
@@ -184,7 +184,7 @@
  * 		.addDefinition(<js>"tmpfs"</js>, <jk>new</jk> JsonSchema());
  *
  * 	<jc>// Serialize to JSON</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>schema</jv>);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.write(<jv>schema</jv>);
  * </p>
  *
  * <h5 class='topic'>Serializing to Other Data Types</h5>
@@ -202,7 +202,7 @@
  * </p>
  * <p class='bjava'>
  * 	<jc>// Use parser to load JSON Schema document into JSON Schema DTOs</jc>
- * 	JsonSchema <jv>schema</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, JsonSchema.<jk>class</jk>);
+ * 	JsonSchema <jv>schema</jv> = JsonParser.<jsf>DEFAULT</jsf>.read(<jv>json</jv>, JsonSchema.<jk>class</jk>);
  * </p>
  *
  * <p>

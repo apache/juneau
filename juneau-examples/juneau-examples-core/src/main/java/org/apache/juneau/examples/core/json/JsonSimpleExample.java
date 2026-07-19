@@ -51,30 +51,30 @@ public class JsonSimpleExample {
 
 		var pojo = new Pojo("id", "name");
 
-		var flat = jsonSerializer.serialize(pojo);
+		var flat = jsonSerializer.write(pojo);
 		// Print out the created POJO in JSON format.
 		Logger.getLogger(JsonSimpleExample.class).info(flat);
 
-		var parse = jsonParser.parse(flat, Pojo.class);
+		var parse = jsonParser.read(flat, Pojo.class);
 
 		assert parse.getId().equals(pojo.getId());
 		assert parse.getName().equals(pojo.getName());
 
-		var json5 = Json5Serializer.DEFAULT.serialize(pojo);
+		var json5 = Json5Serializer.DEFAULT.write(pojo);
 		Logger.getLogger(JsonSimpleExample.class).info(json5);
 
 		// Parse a JSON object (creates a generic JsonMap).
 		var json = "{name:'John Smith',age:21}";
-		Map m1 = jsonParser.parse(json, Map.class);
+		Map m1 = jsonParser.read(json, Map.class);
 
 		// Parse a JSON string.
 		json = "'foobar'";
-		var s2 = jsonParser.parse(json, String.class);
+		var s2 = jsonParser.read(json, String.class);
 
 		// Parse a JSON number as a Long or Float.
 		json = "123";
-		var l3 = jsonParser.parse(json, Long.class);
-		var f3 = jsonParser.parse(json, Float.class);
+		var l3 = jsonParser.read(json, Long.class);
+		var f3 = jsonParser.read(json, Float.class);
 
 		// The object above can be parsed thanks to the @BeanCtor(properties = id,name) annotation on Pojo
 		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.

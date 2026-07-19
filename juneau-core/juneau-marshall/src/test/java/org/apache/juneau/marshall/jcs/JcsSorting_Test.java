@@ -34,13 +34,13 @@ class JcsSorting_Test extends TestBase {
 	@Test
 	void c01_alphabeticalOrder() throws Exception {
 		var m = JsonMap.of("a", 1, "b", 2, "c", 3);
-		assertEquals("{\"a\":1,\"b\":2,\"c\":3}", JcsSerializer.DEFAULT.serialize(m));
+		assertEquals("{\"a\":1,\"b\":2,\"c\":3}", JcsSerializer.DEFAULT.write(m));
 	}
 
 	@Test
 	void c02_reverseInputOrder() throws Exception {
 		var m = JsonMap.of("c", 3, "b", 2, "a", 1);
-		assertEquals("{\"a\":1,\"b\":2,\"c\":3}", JcsSerializer.DEFAULT.serialize(m));
+		assertEquals("{\"a\":1,\"b\":2,\"c\":3}", JcsSerializer.DEFAULT.write(m));
 	}
 
 	@Test
@@ -48,14 +48,14 @@ class JcsSorting_Test extends TestBase {
 		var inner = JsonMap.of("z", 1, "y", 2, "x", 3);
 		var outer = JsonMap.of("b", inner, "a", "top");
 		// Outer keys sorted: a, b. Inner keys sorted: x, y, z.
-		assertEquals("{\"a\":\"top\",\"b\":{\"x\":3,\"y\":2,\"z\":1}}", JcsSerializer.DEFAULT.serialize(outer));
+		assertEquals("{\"a\":\"top\",\"b\":{\"x\":3,\"y\":2,\"z\":1}}", JcsSerializer.DEFAULT.write(outer));
 	}
 
 	@Test
 	void c04_arrayOrderPreserved() throws Exception {
 		var m = JsonMap.of("arr", list(3, 1, 2));
 		// Array order preserved; object keys sorted
-		assertEquals("{\"arr\":[3,1,2]}", JcsSerializer.DEFAULT.serialize(m));
+		assertEquals("{\"arr\":[3,1,2]}", JcsSerializer.DEFAULT.write(m));
 	}
 
 	@Test
@@ -68,9 +68,9 @@ class JcsSorting_Test extends TestBase {
 		m.put(Character.toString((char) 0x20AC), 4);   // €
 		m.put(Character.toString((char) 0x80), 5);    // C1 control
 		m.put(Character.toString((char) 0xFB33), 6);  // Hebrew letter
-		var s = JcsSerializer.DEFAULT.serialize(m);
+		var s = JcsSerializer.DEFAULT.write(m);
 		// Parse and verify key order: \r < 1 < U+0080 < ö < € < Hebrew
-		var parsed = JsonParser.DEFAULT.parse(s, JsonMap.class);
+		var parsed = JsonParser.DEFAULT.read(s, JsonMap.class);
 		var keys = parsed.keySet().stream().toList();
 		assertEquals(6, keys.size());
 		assertEquals("\r", keys.get(0));
@@ -87,31 +87,31 @@ class JcsSorting_Test extends TestBase {
 		m.put("z", 1);
 		m.put("a", 2);
 		m.put("m", 3);
-		assertEquals("{\"a\":2,\"m\":3,\"z\":1}", JcsSerializer.DEFAULT.serialize(m));
+		assertEquals("{\"a\":2,\"m\":3,\"z\":1}", JcsSerializer.DEFAULT.write(m));
 	}
 
 	@Test
 	void c07_emptyObject() throws Exception {
-		assertEquals("{}", JcsSerializer.DEFAULT.serialize(JsonMap.of()));
+		assertEquals("{}", JcsSerializer.DEFAULT.write(JsonMap.of()));
 	}
 
 	@Test
 	void c08_singleProperty() throws Exception {
 		var m = JsonMap.of("a", 1);
-		assertEquals("{\"a\":1}", JcsSerializer.DEFAULT.serialize(m));
+		assertEquals("{\"a\":1}", JcsSerializer.DEFAULT.write(m));
 	}
 
 	@Test
 	void c09_numericStringKeys() throws Exception {
 		// Lexicographic (UTF-16), not numeric: "1" < "10" < "2"
 		var m = JsonMap.of("10", 1, "2", 2, "1", 3);
-		assertEquals("{\"1\":3,\"10\":1,\"2\":2}", JcsSerializer.DEFAULT.serialize(m));
+		assertEquals("{\"1\":3,\"10\":1,\"2\":2}", JcsSerializer.DEFAULT.write(m));
 	}
 
 	@Test
 	void c10_caseSensitive() throws Exception {
 		// UTF-16: "A" (U+0041) < "a" (U+0061)
 		var m = JsonMap.of("a", 1, "A", 2, "B", 3, "b", 4);
-		assertEquals("{\"A\":2,\"B\":3,\"a\":1,\"b\":4}", JcsSerializer.DEFAULT.serialize(m));
+		assertEquals("{\"A\":2,\"B\":3,\"a\":1,\"b\":4}", JcsSerializer.DEFAULT.write(m));
 	}
 }

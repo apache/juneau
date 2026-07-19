@@ -308,12 +308,12 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 
 	/**
 	 * Convenience delegator (default session args) for the raw-JSON token writer.  Real impl on
-	 * {@link JsonSchemaSerializerSession#serializeTokens(Object)}.
+	 * {@link JsonSchemaSerializerSession#writeTokens(Object)}.
 	 *
 	 * <p>
 	 * <b>Note:</b> the cursor's structural methods produce ordinary JSON regardless of the
-	 * JsonSchema-aware {@link #serialize(Object)} path; the {@link TokenWriter#object(Object)
-	 * object(Object)} bridge is <b>disabled</b>.  Use {@link #serialize(Object)} for schema
+	 * JsonSchema-aware {@link #write(Object)} path; the {@link TokenWriter#object(Object)
+	 * object(Object)} bridge is <b>disabled</b>.  Use {@link #write(Object)} for schema
 	 * generation, or compose the schema manually via the structural methods.
 	 *
 	 * @param output The output.
@@ -321,22 +321,22 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	@Override /* TokenWritable */
-	public TokenWriter serializeTokens(Object output) throws IOException {
-		return getSession().serializeTokens(output);
+	public TokenWriter writeTokens(Object output) throws IOException {
+		return getSession().writeTokens(output);
 	}
 
 	/**
 	 * Convenience delegator (default session args) for a record writer that emits the JSON Schema
 	 * for each value passed to {@link RecordWriter#write(Object) write(...)}.  Real impl on
-	 * {@link JsonSchemaSerializerSession#serializeRecords(Object)}.
+	 * {@link JsonSchemaSerializerSession#writeRecords(Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return getSession().serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return getSession().writeRecords(output);
 	}
 
 	@Override /* RecordWritable */

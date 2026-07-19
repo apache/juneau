@@ -44,12 +44,12 @@ public interface ArrayRecordWritable {
 	 * @return A new element-streamed {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
-	RecordWriter serializeArrayRecords(Object output) throws IOException;
+	RecordWriter writeArrayRecords(Object output) throws IOException;
 
 	/**
-	 * Variant of {@link #serializeArrayRecords(Object)} for length-prefixed binary formats that
+	 * Variant of {@link #writeArrayRecords(Object)} for length-prefixed binary formats that
 	 * require the element count up front (msgpack, bson).  Other formats may ignore the count and
-	 * behave the same as {@link #serializeArrayRecords(Object)}.
+	 * behave the same as {@link #writeArrayRecords(Object)}.
 	 *
 	 * @param output The output.
 	 * @param expectedCount The number of elements that will be written.  Must match the number of
@@ -57,8 +57,8 @@ public interface ArrayRecordWritable {
 	 * @return A new element-streamed {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
-	default RecordWriter serializeArrayRecords(Object output, int expectedCount) throws IOException {
-		return serializeArrayRecords(output);
+	default RecordWriter writeArrayRecords(Object output, int expectedCount) throws IOException {
+		return writeArrayRecords(output);
 	}
 
 	/**

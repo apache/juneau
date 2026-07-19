@@ -60,7 +60,7 @@ public class XmlValidatorParser extends XmlParser {
 				return new XmlParserSession(this) {
 
 					@Override
-					protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+					protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 						try {
 							return type.cast(validate(pipe.getReader()));
 						} catch (Exception e) {
@@ -69,12 +69,12 @@ public class XmlValidatorParser extends XmlParser {
 					}
 
 					@Override /* ReaderParser */
-					protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+					protected <K,V> Map<K,V> doReadIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 						return (Map<K,V>)validate(pipe.getReader());
 					}
 
 					@Override /* ReaderParser */
-					protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
+					protected <E> Collection<E> doReadIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
 						return (Collection<E>)validate(pipe.getReader());
 					}
 				};

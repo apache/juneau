@@ -64,8 +64,8 @@ class ParquetLogicalType_Test extends TestBase {
 	@Test
 	void a01_uuidRoundTrip_defaultMode() throws Exception {
 		var a = uuidBean("alice", UUID_A);
-		var bytes = ParquetSerializer.DEFAULT.serialize(a);
-		var parsed = (List<UuidBean>) ParquetParser.DEFAULT.parse(bytes, List.class, UuidBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(a);
+		var parsed = (List<UuidBean>) ParquetParser.DEFAULT.read(bytes, List.class, UuidBean.class);
 		assertBeans(parsed, "name,id", "alice," + UUID_A);
 	}
 
@@ -73,16 +73,16 @@ class ParquetLogicalType_Test extends TestBase {
 	void a02_uuidRoundTrip_emitLogicalTypes() throws Exception {
 		var ser = ParquetSerializer.create().emitLogicalTypes(true).build();
 		var a = uuidBean("alice", UUID_A);
-		var bytes = ser.serialize(a);
-		var parsed = (List<UuidBean>) ParquetParser.DEFAULT.parse(bytes, List.class, UuidBean.class);
+		var bytes = ser.write(a);
+		var parsed = (List<UuidBean>) ParquetParser.DEFAULT.read(bytes, List.class, UuidBean.class);
 		assertBeans(parsed, "name,id", "alice," + UUID_A);
 	}
 
 	@Test
 	void a03_uuidListRoundTrip_emitLogicalTypes() throws Exception {
 		var ser = ParquetSerializer.create().emitLogicalTypes(true).build();
-		var bytes = ser.serialize(list(uuidBean("alice", UUID_A), uuidBean("bob", UUID_B)));
-		var parsed = (List<UuidBean>) ParquetParser.DEFAULT.parse(bytes, List.class, UuidBean.class);
+		var bytes = ser.write(list(uuidBean("alice", UUID_A), uuidBean("bob", UUID_B)));
+		var parsed = (List<UuidBean>) ParquetParser.DEFAULT.read(bytes, List.class, UuidBean.class);
 		assertBeans(parsed, "name,id", "alice," + UUID_A, "bob," + UUID_B);
 	}
 
@@ -95,8 +95,8 @@ class ParquetLogicalType_Test extends TestBase {
 		// Default-mode output is byte-identical to the pre-change writer (the knob is purely additive),
 		// so a DEFAULT-serialized file is an equivalent, drift-free stand-in for a committed golden fixture.
 		var a = uuidBean("alice", UUID_A);
-		var preChangeBytes = ParquetSerializer.DEFAULT.serialize(a);
-		var parsed = (List<UuidBean>) ParquetParser.DEFAULT.parse(preChangeBytes, List.class, UuidBean.class);
+		var preChangeBytes = ParquetSerializer.DEFAULT.write(a);
+		var parsed = (List<UuidBean>) ParquetParser.DEFAULT.read(preChangeBytes, List.class, UuidBean.class);
 		assertBeans(parsed, "name,id", "alice," + UUID_A);
 	}
 
@@ -105,10 +105,10 @@ class ParquetLogicalType_Test extends TestBase {
 		// A file carrying the additive LogicalType union must round-trip to the same value as the
 		// default (union-free) file — adding the union does not change the parsed result.
 		var a = uuidBean("alice", UUID_A);
-		var defaultBytes = ParquetSerializer.DEFAULT.serialize(a);
-		var emitBytes = ParquetSerializer.create().emitLogicalTypes(true).build().serialize(a);
-		var fromDefault = (List<UuidBean>) ParquetParser.DEFAULT.parse(defaultBytes, List.class, UuidBean.class);
-		var fromEmit = (List<UuidBean>) ParquetParser.DEFAULT.parse(emitBytes, List.class, UuidBean.class);
+		var defaultBytes = ParquetSerializer.DEFAULT.write(a);
+		var emitBytes = ParquetSerializer.create().emitLogicalTypes(true).build().write(a);
+		var fromDefault = (List<UuidBean>) ParquetParser.DEFAULT.read(defaultBytes, List.class, UuidBean.class);
+		var fromEmit = (List<UuidBean>) ParquetParser.DEFAULT.read(emitBytes, List.class, UuidBean.class);
 		assertBeans(fromDefault, "name,id", "alice," + UUID_A);
 		assertBeans(fromEmit, "name,id", "alice," + UUID_A);
 		assertEquals(fromDefault.get(0).id, fromEmit.get(0).id);
@@ -121,9 +121,9 @@ class ParquetLogicalType_Test extends TestBase {
 	@Test
 	void c01_emitAddsBytesAndIsDeterministic() throws Exception {
 		var a = uuidBean("alice", UUID_A);
-		var defaultBytes1 = ParquetSerializer.DEFAULT.serialize(a);
-		var defaultBytes2 = ParquetSerializer.DEFAULT.serialize(a);
-		var emitBytes = ParquetSerializer.create().emitLogicalTypes(true).build().serialize(a);
+		var defaultBytes1 = ParquetSerializer.DEFAULT.write(a);
+		var defaultBytes2 = ParquetSerializer.DEFAULT.write(a);
+		var emitBytes = ParquetSerializer.create().emitLogicalTypes(true).build().write(a);
 		// Default output is deterministic (drift-free fixture guarantee).
 		assertArrayEquals(defaultBytes1, defaultBytes2);
 		// Enabling the discriminator changes the wire shape (the LogicalType union is emitted).
@@ -136,8 +136,8 @@ class ParquetLogicalType_Test extends TestBase {
 		var a = new ParquetSerializer_Test.SimpleBean();
 		a.name = "alice";
 		a.age = 30;
-		var defaultBytes = ParquetSerializer.DEFAULT.serialize(a);
-		var emitBytes = ParquetSerializer.create().emitLogicalTypes(true).build().serialize(a);
+		var defaultBytes = ParquetSerializer.DEFAULT.write(a);
+		var emitBytes = ParquetSerializer.create().emitLogicalTypes(true).build().write(a);
 		assertArrayEquals(defaultBytes, emitBytes);
 	}
 }

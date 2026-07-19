@@ -27,7 +27,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Parse N3 string into a bean.</jc>
  * 	String <jv>n3</jv> = ...;  <jc>// N3 content</jc>
- * 	Person <jv>person</jv> = N3Parser.<jsf>DEFAULT</jsf>.parse(<jv>n3</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = N3Parser.<jsf>DEFAULT</jsf>.read(<jv>n3</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the N3 marshaller for convenience.</jc>
@@ -36,7 +36,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>
  * 	N3Parser <jv>p</jv> = N3Parser.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>n3</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.read(<jv>n3</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example input (bean with name/age):</h5>

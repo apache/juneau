@@ -29,11 +29,11 @@ import org.junit.jupiter.params.provider.*;
 class YamlParser_Test extends TestBase {
 
 	@ParameterizedTest @MethodSource
-	void a01_parseString(String input, String expected) throws Exception {
-		assertEquals(expected, YamlParser.DEFAULT.parse(input, String.class));
+	void a01_readString(String input, String expected) throws Exception {
+		assertEquals(expected, YamlParser.DEFAULT.read(input, String.class));
 	}
 
-	static Stream<Arguments> a01_parseString() {
+	static Stream<Arguments> a01_readString() {
 		return Stream.of(
 			Arguments.of("hello", "hello"),
 			Arguments.of("null", null),
@@ -43,54 +43,54 @@ class YamlParser_Test extends TestBase {
 		);
 	}
 
-	@Test void a02_parseQuotedString() throws Exception {
+	@Test void a02_readQuotedString() throws Exception {
 		var p = YamlParser.DEFAULT;
-		assertEquals("hello world", p.parse("\"hello world\"", String.class));
-		assertEquals("hello world", p.parse("'hello world'", String.class));
+		assertEquals("hello world", p.read("\"hello world\"", String.class));
+		assertEquals("hello world", p.read("'hello world'", String.class));
 	}
 
-	@Test void a03_parseNumber() throws Exception {
+	@Test void a03_readNumber() throws Exception {
 		var p = YamlParser.DEFAULT;
-		assertEquals(123, p.parse("123", int.class));
-		assertEquals(1.5, p.parse("1.5", double.class));
+		assertEquals(123, p.read("123", int.class));
+		assertEquals(1.5, p.read("1.5", double.class));
 	}
 
-	@Test void a04_parseBoolean() throws Exception {
+	@Test void a04_readBoolean() throws Exception {
 		var p = YamlParser.DEFAULT;
-		assertEquals(true, p.parse("true", boolean.class));
-		assertEquals(false, p.parse("false", boolean.class));
+		assertEquals(true, p.read("true", boolean.class));
+		assertEquals(false, p.read("false", boolean.class));
 	}
 
-	@Test void a06_parseFlowMapping() throws Exception {
+	@Test void a06_readFlowMapping() throws Exception {
 		var p = YamlParser.DEFAULT;
-		JsonMap m = p.parse("{a: 1, b: 2}", JsonMap.class);
+		JsonMap m = p.read("{a: 1, b: 2}", JsonMap.class);
 		assertEquals("1", m.getString("a"));
 		assertEquals("2", m.getString("b"));
 	}
 
-	@Test void a07_parseFlowSequence() throws Exception {
+	@Test void a07_readFlowSequence() throws Exception {
 		var p = YamlParser.DEFAULT;
-		JsonList l = p.parse("[1, 2, 3]", JsonList.class);
+		JsonList l = p.read("[1, 2, 3]", JsonList.class);
 		assertEquals(3, l.size());
 	}
 
-	@Test void a08_parseBlockMapping() throws Exception {
+	@Test void a08_readBlockMapping() throws Exception {
 		var p = YamlParser.DEFAULT;
-		JsonMap m = p.parse("a: 1\nb: 2", JsonMap.class);
+		JsonMap m = p.read("a: 1\nb: 2", JsonMap.class);
 		assertEquals("1", m.getString("a"));
 		assertEquals("2", m.getString("b"));
 	}
 
-	@Test void a09_parseBlockSequence() throws Exception {
+	@Test void a09_readBlockSequence() throws Exception {
 		var p = YamlParser.DEFAULT;
-		JsonList l = p.parse("- a\n- b\n- c", JsonList.class);
+		JsonList l = p.read("- a\n- b\n- c", JsonList.class);
 		assertEquals(3, l.size());
 		assertEquals("a", l.getString(0));
 	}
 
-	@Test void a10_parseNestedBlockMapping() throws Exception {
+	@Test void a10_readNestedBlockMapping() throws Exception {
 		var p = YamlParser.DEFAULT;
-		JsonMap m = p.parse("outer:\n  inner: value", JsonMap.class);
+		JsonMap m = p.read("outer:\n  inner: value", JsonMap.class);
 		assertNotNull(m.get("outer"));
 	}
 
@@ -100,7 +100,7 @@ class YamlParser_Test extends TestBase {
 		public java.time.Duration large;
 	}
 
-	@Test void a14_parseBeanWithDuration() throws Exception {
+	@Test void a14_readBeanWithDuration() throws Exception {
 		var s = YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType().build();
 		var p = YamlParser.DEFAULT;
 
@@ -109,8 +109,8 @@ class YamlParser_Test extends TestBase {
 		x.fractional = java.time.Duration.ofSeconds(20, 345000000);
 		x.large = java.time.Duration.ofDays(365);
 
-		String yaml = s.serialize(x);
-		var x2 = p.parse(yaml, DurationBean.class);
+		String yaml = s.write(x);
+		var x2 = p.read(yaml, DurationBean.class);
 		assertEquals(x.negative, x2.negative);
 		assertEquals(x.fractional, x2.fractional);
 		assertEquals(x.large, x2.large);
@@ -120,17 +120,17 @@ class YamlParser_Test extends TestBase {
 		public boolean[][] paBoolean;
 	}
 
-	@Test void a15_parse2dArrayBean() throws Exception {
+	@Test void a15_read2dArrayBean() throws Exception {
 		var s = YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType().build();
 		var p = YamlParser.DEFAULT;
 
 		var x = new ArrayBean();
 		x.paBoolean = new boolean[][]{{true, false}, {true}};
 
-		String yaml = s.serialize(x);
+		String yaml = s.write(x);
 		System.out.println("2D Array YAML:\n[" + yaml + "]");
 
-		var x2 = p.parse(yaml, ArrayBean.class);
+		var x2 = p.read(yaml, ArrayBean.class);
 		assertEquals(true, x2.paBoolean[0][0]);
 		assertEquals(false, x2.paBoolean[0][1]);
 		assertEquals(true, x2.paBoolean[1][0]);

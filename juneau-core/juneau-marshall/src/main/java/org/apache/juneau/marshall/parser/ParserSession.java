@@ -381,7 +381,7 @@ public class ParserSession extends MarshallingSession {
 	public boolean isReaderParser() { return false; }
 
 	/**
-	 * Same as {@link #parse(Object, Type, Type...)} except optimized for a non-parameterized class.
+	 * Same as {@link #read(Object, Type, Type...)} except optimized for a non-parameterized class.
 	 *
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
@@ -391,38 +391,38 @@ public class ParserSession extends MarshallingSession {
 	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	String <jv>string</jv> = <jv>parser</jv>.parse(<jv>json</jv>, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>parser</jv>.read(<jv>json</jv>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] <jv>beanArray</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>parser</jv>.read(<jv>json</jv>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List <jv>list</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>parser</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map <jv>map</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>parser</jv>.read(<jv>json</jv>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * 	See {@link #read(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final <T> T parse(Object input, Class<T> type) throws ParseException, IOException {
+	public final <T> T read(Object input, Class<T> type) throws ParseException, IOException {
 		try (var p = createPipe(input)) {
-			return parseInner(p, getClassMeta(type));
+			return readInner(p, getClassMeta(type));
 		}
 	}
 
 	/**
-	 * Same as {@link #parse(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta}
+	 * Same as {@link #read(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta}
 	 * object.
 	 *
 	 * <p>
@@ -431,15 +431,15 @@ public class ParserSession extends MarshallingSession {
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * 	See {@link #read(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException, IOException {
+	public final <T> T read(Object input, ClassMeta<T> type) throws ParseException, IOException {
 		try (var p = createPipe(input)) {
-			return parseInner(p, type);
+			return readInner(p, type);
 		}
 	}
 
@@ -454,19 +454,19 @@ public class ParserSession extends MarshallingSession {
 	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List <jv>list1</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list1</jv> = <jv>parser</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 * 	List <jv>list2</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List <jv>list2</jv> = <jv>parser</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List <jv>list3</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list3</jv> = <jv>parser</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map <jv>map1</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map <jv>map1</jv> = <jv>parser</jv>.read(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map <jv>map2</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map <jv>map2</jv> = <jv>parser</jv>.read(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -480,7 +480,7 @@ public class ParserSession extends MarshallingSession {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
+	 * 		Use the {@link #read(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 *
 	 * @param <T> The class type of the object to create.
@@ -514,14 +514,14 @@ public class ParserSession extends MarshallingSession {
 	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final <T> T parse(Object input, Type type, Type...args) throws ParseException, IOException {
+	public final <T> T read(Object input, Type type, Type...args) throws ParseException, IOException {
 		try (var p = createPipe(input)) {
-			return (T)parseInner(p, getClassMeta(type, args));
+			return (T)readInner(p, getClassMeta(type, args));
 		}
 	}
 
 	/**
-	 * Same as {@link #parse(Object, Class)} but parses from a string and doesn't throw an {@link IOException}.
+	 * Same as {@link #read(Object, Class)} but parses from a string and doesn't throw an {@link IOException}.
 	 *
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
@@ -531,39 +531,39 @@ public class ParserSession extends MarshallingSession {
 	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	String <jv>string</jv> = <jv>parser</jv>.parse(<jv>json</jv>, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>parser</jv>.read(<jv>json</jv>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] <jv>beanArray</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>parser</jv>.read(<jv>json</jv>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List <jv>list</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>parser</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map <jv>map</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>parser</jv>.read(<jv>json</jv>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * 	See {@link #read(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public final <T> T parse(String input, Class<T> type) throws ParseException {
+	public final <T> T read(String input, Class<T> type) throws ParseException {
 		try (var p = createPipe(input)) {
-			return parseInner(p, getClassMeta(type));
+			return readInner(p, getClassMeta(type));
 		} catch (IOException e) {
 			throw new ParseException(e); // Shouldn't happen.
 		}
 	}
 
 	/**
-	 * Same as {@link #parse(Object, ClassMeta)} except parses from a string and doesn't throw an {@link IOException}.
+	 * Same as {@link #read(Object, ClassMeta)} except parses from a string and doesn't throw an {@link IOException}.
 	 *
 	 * <p>
 	 * This is mostly an internal method used by the framework.
@@ -571,21 +571,21 @@ public class ParserSession extends MarshallingSession {
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * 	See {@link #read(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public final <T> T parse(String input, ClassMeta<T> type) throws ParseException {
+	public final <T> T read(String input, ClassMeta<T> type) throws ParseException {
 		try (var p = createPipe(input)) {
-			return parseInner(p, type);
+			return readInner(p, type);
 		} catch (IOException e) {
 			throw new ParseException(e); // Shouldn't happen.
 		}
 	}
 
 	/**
-	 * Same as {@link #parse(Object,Type,Type...)} but parses from a string and doesn't throw an {@link IOException}.
+	 * Same as {@link #read(Object,Type,Type...)} but parses from a string and doesn't throw an {@link IOException}.
 	 *
 	 * @param <T> The class type of the object to create.
 	 * @param input
@@ -617,9 +617,9 @@ public class ParserSession extends MarshallingSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public final <T> T parse(String input, Type type, Type...args) throws ParseException {
+	public final <T> T read(String input, Type type, Type...args) throws ParseException {
 		try (var p = createPipe(input)) {
-			return (T)parseInner(p, getClassMeta(type, args));
+			return (T)readInner(p, getClassMeta(type, args));
 		} catch (IOException e) {
 			throw new ParseException(e); // Shouldn't happen.
 		}
@@ -645,9 +645,9 @@ public class ParserSession extends MarshallingSession {
 	 * @return An array of parsed objects.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
+	public final Object[] readArgs(Object input, Type[] argTypes) throws ParseException {
 		try (var p = createPipe(input)) {
-			return doParse(p, getArgsClassMeta(argTypes));
+			return doRead(p, getArgsClassMeta(argTypes));
 		} catch (ParseException e) {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
@@ -673,16 +673,16 @@ public class ParserSession extends MarshallingSession {
 	 * </ul>
 	 *
 	 * @param <E> The element class type.
-	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
+	 * @param input The input.  See {@link #read(Object, ClassMeta)} for supported input types.
 	 * @param c The collection being loaded.
 	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
 	 * @return The same collection that was passed in to allow this method to be chained.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
-	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
+	public final <E> Collection<E> readIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
 		try (var p = createPipe(input)) {
-			return doParseIntoCollection(p, c, elementType);
+			return doReadIntoCollection(p, c, elementType);
 		} catch (ParseException e) {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
@@ -712,7 +712,7 @@ public class ParserSession extends MarshallingSession {
 	 *
 	 * @param <K> The key class type.
 	 * @param <V> The value class type.
-	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
+	 * @param input The input.  See {@link #read(Object, ClassMeta)} for supported input types.
 	 * @param m The map being loaded.
 	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.
 	 * @param valueType The class type of the values, or <jk>null</jk> to default to whatever is being parsed.
@@ -720,9 +720,9 @@ public class ParserSession extends MarshallingSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
-	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
+	public final <K,V> Map<K,V> readIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
 		try (var p = createPipe(input)) {
-			return doParseIntoMap(p, m, keyType, valueType);
+			return doReadIntoMap(p, m, keyType, valueType);
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
@@ -736,7 +736,7 @@ public class ParserSession extends MarshallingSession {
 	 * Entry point for all parsing calls.
 	 *
 	 * <p>
-	 * Calls the {@link #doParse(ParserPipe, ClassMeta)} implementation class and catches/re-wraps any exceptions
+	 * Calls the {@link #doRead(ParserPipe, ClassMeta)} implementation class and catches/re-wraps any exceptions
 	 * thrown.
 	 *
 	 * @param pipe The parser input.
@@ -746,13 +746,13 @@ public class ParserSession extends MarshallingSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by the underlying stream.
 	 */
-	private <T> T parseInner(ParserPipe pipe, ClassMeta<T> type) throws ParseException, IOException {
+	private <T> T readInner(ParserPipe pipe, ClassMeta<T> type) throws ParseException, IOException {
 		if (type.isVoid())
 			return null;
 		if (BeanSupplier.class.isAssignableFrom(type.inner()) && !BeanChannel.class.isAssignableFrom(type.inner()))
 			throw new ParseException(this, "BeanSupplier cannot be used as a parser target. Use BeanConsumer or BeanChannel for round-trip support.");
 		try {
-			var r = doParse(pipe, type);
+			var r = doRead(pipe, type);
 			// Primitive optionals (OptionalInt/Long/Double) are parsed as first-class optionals — the format
 			// parsers wrap the element in a generic Optional, so coerce the top-level result to the matching
 			// primitive-optional type (mirrors the Optional<T> contract; absent/null already resolved to empty).
@@ -789,7 +789,7 @@ public class ParserSession extends MarshallingSession {
 	 *
 	 * <p>
 	 * The default implementation parses the input into a {@link List} first and then feeds each element
-	 * to the consumer. Format-specific subclasses may override {@link #doParseToBeanConsumer} for true
+	 * to the consumer. Format-specific subclasses may override {@link #doReadToBeanConsumer} for true
 	 * streaming behavior without loading all elements into memory.
 	 *
 	 * @param <T> The element type.
@@ -799,14 +799,14 @@ public class ParserSession extends MarshallingSession {
 	 * @throws ParseException If a parse error occurs that causes {@code onError()} to rethrow.
 	 * @throws IOException If an I/O error occurs reading the input.
 	 */
-	public final <T> void parseToBeanConsumer(Object input, BeanConsumer<T> consumer, Class<T> elementType) throws ParseException, IOException {
+	public final <T> void readToBeanConsumer(Object input, BeanConsumer<T> consumer, Class<T> elementType) throws ParseException, IOException {
 		try (var p = createPipe(input)) {
-			doParseToBeanConsumer(p, consumer, elementType);
+			doReadToBeanConsumer(p, consumer, elementType);
 		}
 	}
 
 	/**
-	 * Format-specific implementation for {@link #parseToBeanConsumer}.
+	 * Format-specific implementation for {@link #readToBeanConsumer}.
 	 *
 	 * <p>
 	 * The default implementation parses the input as a {@link List} and feeds each element to the consumer.
@@ -820,8 +820,8 @@ public class ParserSession extends MarshallingSession {
 	 * @throws ParseException If a parse error occurs.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	protected <T> void doParseToBeanConsumer(ParserPipe pipe, BeanConsumer<T> consumer, Class<T> elementType) throws ParseException, IOException {
-		List<T> list = (List<T>) doParse(pipe, getClassMeta(List.class, elementType));
+	protected <T> void doReadToBeanConsumer(ParserPipe pipe, BeanConsumer<T> consumer, Class<T> elementType) throws ParseException, IOException {
+		List<T> list = (List<T>) doRead(pipe, getClassMeta(List.class, elementType));
 		if (list == null)
 			return;
 		var bodyThrown = drainToConsumer(consumer, list);
@@ -938,15 +938,15 @@ public class ParserSession extends MarshallingSession {
 		else if (sType.isBoolean())
 			o = Boolean.parseBoolean(s);
 		else if (sType.isDate())
-			o = parseDate(s, sType);
+			o = readDate(s, sType);
 		else if (sType.isCalendar())
-			o = parseCalendar(s, sType);
+			o = readCalendar(s, sType);
 		else if (sType.isTemporal())
-			o = parseTemporal(s, sType);
+			o = readTemporal(s, sType);
 		else if (sType.isDuration())
-			o = parseDuration(s);
+			o = readDuration(s);
 		else if (sType.isPeriod())
-			o = parsePeriod(s);
+			o = readPeriod(s);
 		else if (! (sType.isCharSequence() || sType.isObject())) {
 			if (sType.canCreateNewInstanceFromString(outer))
 				o = sType.newInstanceFromString(outer, s);
@@ -994,10 +994,10 @@ public class ParserSession extends MarshallingSession {
 	 * Workhorse method.
 	 *
 	 * <p>
-	 * Subclasses are expected to implement this method or {@link Parser#doParse(ParserSession,ParserPipe,ClassMeta)}.
+	 * Subclasses are expected to implement this method or {@link Parser#doRead(ParserSession,ParserPipe,ClassMeta)}.
 	 *
 	 * <p>
-	 * The default implementation of this method simply calls {@link Parser#doParse(ParserSession,ParserPipe,ClassMeta)}.
+	 * The default implementation of this method simply calls {@link Parser#doRead(ParserSession,ParserPipe,ClassMeta)}.
 	 *
 	 * @param pipe Where to get the input from.
 	 * @param type
@@ -1011,8 +1011,8 @@ public class ParserSession extends MarshallingSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-		return ctx.doParse(this, pipe, type);
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		return ctx.doRead(this, pipe, type);
 	}
 
 	/**
@@ -1031,7 +1031,7 @@ public class ParserSession extends MarshallingSession {
 	@SuppressWarnings({
 		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
-	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
+	protected <E> Collection<E> doReadIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
 		throw uoex("Parser '%s' does not support this method.", cn(getClass()));
 	}
 
@@ -1053,7 +1053,7 @@ public class ParserSession extends MarshallingSession {
 	@SuppressWarnings({
 		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
-	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+	protected <K,V> Map<K,V> doReadIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		throw uoex("Parser '%s' does not support this method.", cn(getClass()));
 	}
 
@@ -1238,7 +1238,7 @@ public class ParserSession extends MarshallingSession {
 	 * @param s The wire value to parse. <jk>null</jk> or empty returns <jk>null</jk>.
 	 * @return The parsed {@link Duration}, or <jk>null</jk> if {@code s} is <jk>null</jk> or empty.
 	 */
-	protected final Duration parseDuration(String s) {
+	protected final Duration readDuration(String s) {
 		return Iso8601Utils.parseDuration(s, getDurationFormat());
 	}
 
@@ -1249,7 +1249,7 @@ public class ParserSession extends MarshallingSession {
 	 * @param s The wire value to parse. <jk>null</jk> or empty returns <jk>null</jk>.
 	 * @return The parsed {@link Period}, or <jk>null</jk> if {@code s} is <jk>null</jk> or empty.
 	 */
-	protected final Period parsePeriod(String s) {
+	protected final Period readPeriod(String s) {
 		return Iso8601Utils.parsePeriod(s, getPeriodFormat());
 	}
 
@@ -1263,7 +1263,7 @@ public class ParserSession extends MarshallingSession {
 	 * @return The parsed value, or <jk>null</jk> if {@code s} is <jk>null</jk> or the target is not a
 	 * 	recognized {@link Date} type.
 	 */
-	protected final <T> T parseDate(String s, ClassMeta<T> cm) {
+	protected final <T> T readDate(String s, ClassMeta<T> cm) {
 		return Iso8601Utils.parseDate(s, cm, getDateFormat(), getTimeZone());
 	}
 
@@ -1279,7 +1279,7 @@ public class ParserSession extends MarshallingSession {
 	 * @return The parsed value, or <jk>null</jk> if {@code s} is <jk>null</jk> or the target is not a
 	 * 	recognized calendar type.
 	 */
-	protected final <T> T parseCalendar(String s, ClassMeta<T> cm) {
+	protected final <T> T readCalendar(String s, ClassMeta<T> cm) {
 		return Iso8601Utils.parseCalendar(s, cm, getCalendarFormat(), getTimeZone());
 	}
 
@@ -1294,7 +1294,7 @@ public class ParserSession extends MarshallingSession {
 	 * @return The parsed value, or <jk>null</jk> if {@code s} is <jk>null</jk> or the target is not a
 	 * 	{@link Temporal} subtype.
 	 */
-	protected final <T> T parseTemporal(String s, ClassMeta<T> cm) {
+	protected final <T> T readTemporal(String s, ClassMeta<T> cm) {
 		return Iso8601Utils.parseTemporal(s, cm, getTemporalFormat(), getTimeZone());
 	}
 

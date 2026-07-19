@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.*;
  * <ol>
  *   <li>Negotiating the request's {@code Content-Type} to a matched {@link Parser}.
  *   <li>Building a request-configured {@link ParserSession ParserSession}
- *       and calling {@link RecordReadable#parseRecords(Object) parseRecords(input)} on it where
+ *       and calling {@link RecordReadable#readRecords(Object) readRecords(input)} on it where
  *       {@code input} is the request reader (text formats) or input stream (binary formats).
  *   <li>Verifying the returned cursor's runtime type is assignable to the declared parameter
  *       type &mdash; this enforces the two-layer resolution for concrete cursor subtypes
@@ -116,7 +116,7 @@ public class RecordReaderArg extends SimpleRestOperationArg {
 			.debug(req.isDebug() ? true : null)
 			.build();
 		var input = session.isReaderParser() ? content.getReader() : content.getInputStream();
-		var cursor = ((RecordReadable) session).parseRecords(input);
+		var cursor = ((RecordReadable) session).readRecords(input);
 		if (!declaredType.isInstance(cursor))
 			throw new UnsupportedMediaType(
 				"Parser '%s' produced cursor type '%s' which is not assignable to the declared parameter type '%s'.",

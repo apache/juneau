@@ -64,17 +64,17 @@ class ParquetParser_Test extends TestBase {
 	}
 
 	@Test
-	void a01_parseSimpleBean() throws Exception {
+	void a01_readSimpleBean() throws Exception {
 		var a = new ParquetSerializer_Test.SimpleBean();
 		a.name = "Alice";
 		a.age = 30;
-		var bytes = ParquetSerializer.DEFAULT.serialize(a);
-		var parsed = ParquetParser.DEFAULT.parse(bytes, List.class, ParquetSerializer_Test.SimpleBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(a);
+		var parsed = ParquetParser.DEFAULT.read(bytes, List.class, ParquetSerializer_Test.SimpleBean.class);
 		assertBeans(parsed, "name,age", "Alice,30");
 	}
 
 	@Test
-	void a02_parseCollectionOfBeans() throws Exception {
+	void a02_readCollectionOfBeans() throws Exception {
 		var a = new ParquetSerializer_Test.SimpleBean();
 		a.name = "a";
 		a.age = 1;
@@ -84,35 +84,35 @@ class ParquetParser_Test extends TestBase {
 		var list = new ArrayList<ParquetSerializer_Test.SimpleBean>();
 		list.add(a);
 		list.add(b);
-		var bytes = ParquetSerializer.DEFAULT.serialize(list);
-		var parsed = ParquetParser.DEFAULT.parse(bytes, List.class, ParquetSerializer_Test.SimpleBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list);
+		var parsed = ParquetParser.DEFAULT.read(bytes, List.class, ParquetSerializer_Test.SimpleBean.class);
 		assertBeans(parsed, "name,age", "a,1", "b,2");
 	}
 
 	@Test
-	void a03_parseEmptyCollection() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(list());
-		var parsed = ParquetParser.DEFAULT.parse(bytes, List.class, ParquetSerializer_Test.SimpleBean.class);
+	void a03_readEmptyCollection() throws Exception {
+		var bytes = ParquetSerializer.DEFAULT.write(list());
+		var parsed = ParquetParser.DEFAULT.read(bytes, List.class, ParquetSerializer_Test.SimpleBean.class);
 		assertBeans(parsed, "name,age");
 	}
 
 	@Test
-	void a03b_parseScalarString() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize("foobar");
-		var parsed = ParquetParser.DEFAULT.parse(bytes, String.class);
+	void a03b_readScalarString() throws Exception {
+		var bytes = ParquetSerializer.DEFAULT.write("foobar");
+		var parsed = ParquetParser.DEFAULT.read(bytes, String.class);
 		assertEquals("foobar", parsed);
 	}
 
 	@Test
-	void a04_parsePrimitiveTypes() throws Exception {
+	void a04_readPrimitiveTypes() throws Exception {
 		var a = new ParquetSerializer_Test.PrimitiveBean();
 		a.i = 42;
 		a.l = 12345L;
 		a.d = 3.14;
 		a.b = true;
 		a.s = "hello";
-		var bytes = ParquetSerializer.DEFAULT.serialize(a);
-		var parsed = ParquetParser.DEFAULT.parse(bytes, List.class, ParquetSerializer_Test.PrimitiveBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(a);
+		var parsed = ParquetParser.DEFAULT.read(bytes, List.class, ParquetSerializer_Test.PrimitiveBean.class);
 		assertBeans(parsed, "i,l,d,b,s", "42,12345,3.14,true,hello");
 	}
 }

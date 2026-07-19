@@ -305,29 +305,29 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 
 	/**
 	 * Convenience delegator for the whole-value {@link RecordReader} using <b>default session
-	 * arguments</b>.  The real implementation lives on {@link BsonParserSession#parseRecords(Object)}.
+	 * arguments</b>.  The real implementation lives on {@link BsonParserSession#readRecords(Object)}.
 	 *
 	 * @param input The input.
 	 * @return A new {@link RecordReader} cursor.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
-		return getSession().parseRecords(input);
+	public RecordReader readRecords(Object input) throws IOException {
+		return getSession().readRecords(input);
 	}
 
 	/**
 	 * Convenience delegator for the buffered array-element {@link RecordReader} using <b>default
 	 * session arguments</b>.  The real implementation lives on
-	 * {@link BsonParserSession#parseArrayRecords(Object)}.
+	 * {@link BsonParserSession#readArrayRecords(Object)}.
 	 *
 	 * @param input The input.
 	 * @return A buffered {@link RecordReader}.
 	 * @throws IOException If a problem occurred reading the input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
-		return getSession().parseArrayRecords(input);
+	public RecordReader readArrayRecords(Object input) throws IOException {
+		return getSession().readArrayRecords(input);
 	}
 
 	/**

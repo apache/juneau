@@ -31,11 +31,11 @@ import org.junit.jupiter.api.*;
 
 /**
  * Coverage-focused tests for {@link ParserSession} targeting low-coverage paths:
- *  - parseIntoMap / parseIntoCollection overload variants and error wrapping
- *  - Parametric parse(...) type paths (Type, Class<T>, ClassMeta<T>)
- *  - parseArgs (Method invocation array parsing) success and error paths
- *  - parseToBeanConsumer lifecycle (begin / acceptThrows / onError absorb / onError rethrow / complete)
- *  - parseInner BeanSupplier guard, void short-circuit
+ *  - readIntoMap / readIntoCollection overload variants and error wrapping
+ *  - Parametric read(...) type paths (Type, Class<T>, ClassMeta<T>)
+ *  - readArgs (Method invocation array parsing) success and error paths
+ *  - readToBeanConsumer lifecycle (begin / acceptThrows / onError absorb / onError rethrow / complete)
+ *  - readInner BeanSupplier guard, void short-circuit
  *  - Listener notifications (onUnknownBeanProperty, onError)
  *  - Builder property() switch (javaMethod, outer, schema, trimStrings, alternates)
  *  - schemaDefault no-overwrite semantics
@@ -44,16 +44,16 @@ import org.junit.jupiter.api.*;
  *  - Trim-strings behavior at session level
  *
  * Implementation notes for coverage tests:
- *  - {@link ParserSession#doParseIntoMap}/{@code doParseIntoCollection} default impls throw
+ *  - {@link ParserSession#doReadIntoMap}/{@code doReadIntoCollection} default impls throw
  *    {@code UnsupportedOperationException}; this is exercised below via a parser that does not
  *    override them (HTML-table-style parsers all do).  No JSON parser sets this path because
  *    {@link JsonParserSession} overrides both, but the public
- *    {@link ParserSession#parseIntoMap}/{@link ParserSession#parseIntoCollection} wrappers
+	 *    {@link ParserSession#readIntoMap}/{@link ParserSession#readIntoCollection} wrappers
  *    re-wrap the {@code UnsupportedOperationException} as a {@link ParseException}.
- *  - The XML follow-up bug (issue 155 #12) was a {@code doParseIntoMap}/{@code doParseIntoCollection}
- *    self-recursion where the override called {@code super.doParse(...)} instead of the
+ *  - The XML follow-up bug (issue 155 #12) was a {@code doReadIntoMap}/{@code doReadIntoCollection}
+ *    self-recursion where the override called {@code super.doRead(...)} instead of the
  *    format-specific parse-anything routine.  No similar dispatch issues were observed in JSON,
- *    UON, or CSV parser sessions; all override and call their internal {@code parseAnything}.
+ *    UON, or CSV parser sessions; all override and call their internal {@code readAnything}.
  */
 @SuppressWarnings({
 	"unchecked",
@@ -87,94 +87,94 @@ class ParserSession_Test extends TestBase {
 	// a - parse(...) type/class/classmeta paths
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_parse_classFromString() throws Exception {
-		assertEquals(Integer.valueOf(123), P.parse("123", Integer.class));
+	@Test void a01_read_classFromString() throws Exception {
+		assertEquals(Integer.valueOf(123), P.read("123", Integer.class));
 	}
 
-	@Test void a02_parse_classMetaFromString() throws Exception {
+	@Test void a02_read_classMetaFromString() throws Exception {
 		var ses = P.getSession();
 		var cm = ses.getClassMeta(Integer.class);
-		assertEquals(Integer.valueOf(7), ses.parse("7", cm));
+		assertEquals(Integer.valueOf(7), ses.read("7", cm));
 	}
 
-	@Test void a03_parse_classFromObject() throws Exception {
+	@Test void a03_read_classFromObject() throws Exception {
 		// Uses the (Object,Class<T>) overload throwing IOException.
 		var ses = P.getSession();
-		var bean = ses.parse((Object) "{\"f1\":\"a\",\"f2\":2}", Bean.class);
+		var bean = ses.read((Object) "{\"f1\":\"a\",\"f2\":2}", Bean.class);
 		assertEquals("a", bean.f1);
 		assertEquals(2, bean.f2);
 	}
 
-	@Test void a04_parse_classMetaFromObject() throws Exception {
+	@Test void a04_read_classMetaFromObject() throws Exception {
 		var ses = P.getSession();
 		var cm = ses.getClassMeta(Bean.class);
-		var bean = ses.parse((Object) "{\"f1\":\"x\",\"f2\":5}", cm);
+		var bean = ses.read((Object) "{\"f1\":\"x\",\"f2\":5}", cm);
 		assertEquals("x", bean.f1);
 		assertEquals(5, bean.f2);
 	}
 
-	@Test void a05_parse_typeWithArgs_object() throws Exception {
+	@Test void a05_read_typeWithArgs_object() throws Exception {
 		var ses = P.getSession();
-		var l = (List<Integer>) ses.parse((Object) "[1,2,3]", List.class, Integer.class);
+		var l = (List<Integer>) ses.read((Object) "[1,2,3]", List.class, Integer.class);
 		assertEquals(List.of(1, 2, 3), l);
 	}
 
-	@Test void a06_parse_typeWithArgs_string() throws Exception {
-		var l = (List<Integer>) P.parse("[1,2,3]", List.class, Integer.class);
+	@Test void a06_read_typeWithArgs_string() throws Exception {
+		var l = (List<Integer>) P.read("[1,2,3]", List.class, Integer.class);
 		assertEquals(3, l.size());
 	}
 
-	@Test void a07_parse_typeWithArgs_nestedMap() throws Exception {
-		var m = (Map<String, List<Bean>>) P.parse(
+	@Test void a07_read_typeWithArgs_nestedMap() throws Exception {
+		var m = (Map<String, List<Bean>>) P.read(
 			"{\"a\":[{\"f1\":\"x\",\"f2\":1}]}",
 			Map.class, String.class, List.class, Bean.class);
 		assertEquals(1, m.size());
 		assertEquals("x", m.get("a").get(0).f1);
 	}
 
-	@Test void a08_parse_voidShortCircuit() throws Exception {
-		// parseInner: type.isVoid() → returns null without invoking doParse.
-		assertNull(P.parse("\"anything\"", Void.class));
-		assertNull(P.parse("123", Void.class));
-		assertNull(P.parse("[1,2,3]", Void.class));
+	@Test void a08_read_voidShortCircuit() throws Exception {
+		// readInner: type.isVoid() → returns null without invoking doRead.
+		assertNull(P.read("\"anything\"", Void.class));
+		assertNull(P.read("123", Void.class));
+		assertNull(P.read("[1,2,3]", Void.class));
 	}
 
-	@Test void a09_parse_nullInputForObject() throws Exception {
+	@Test void a09_read_nullInputForObject() throws Exception {
 		// Reader parser createPipe accepts null - returns null.
 		var ses = P.getSession();
-		assertNull(ses.parse((Object) null, Bean.class));
+		assertNull(ses.read((Object) null, Bean.class));
 	}
 
-	@Test void a10_parse_nullInputForString() throws Exception {
+	@Test void a10_read_nullInputForString() throws Exception {
 		// String overload also accepts null.
-		assertNull(P.parse((String) null, Bean.class));
+		assertNull(P.read((String) null, Bean.class));
 	}
 
-	@Test void a11_parse_nullInputForType() throws Exception {
-		assertNull(P.parse((String) null, List.class, Integer.class));
+	@Test void a11_read_nullInputForType() throws Exception {
+		assertNull(P.read((String) null, List.class, Integer.class));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// b - parseInner exception wrapping
+	// b - readInner exception wrapping
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_parse_malformedRethrowsParseException() {
+	@Test void b01_read_malformedRethrowsParseException() {
 		// ParseException path → re-thrown directly.
-		assertThrows(ParseException.class, () -> P.parse("{not-json", Bean.class));
+		assertThrows(ParseException.class, () -> P.read("{not-json", Bean.class));
 	}
 
-	@Test void b02_parse_runtimeWrappedInParseException() {
-		// Bad setter throws IllegalStateException; parseInner wraps it as ParseException.
+	@Test void b02_read_runtimeWrappedInParseException() {
+		// Bad setter throws IllegalStateException; readInner wraps it as ParseException.
 		var ex = assertThrows(ParseException.class,
-			() -> P.parse("{\"f1\":\"v\"}", BeanWithBadSetter.class));
+			() -> P.read("{\"f1\":\"v\"}", BeanWithBadSetter.class));
 		assertNotNull(ex);
 	}
 
 	@Test void b03_beanSupplierGuard() {
-		// parseInner guard: BeanSupplier (non-BeanChannel) is not allowed as parser target.
+		// readInner guard: BeanSupplier (non-BeanChannel) is not allowed as parser target.
 		// Use a concrete BeanSupplier-only iterable type.
 		assertThrows(ParseException.class,
-			() -> P.parse("[]", MyBeanSupplier.class));
+			() -> P.read("[]", MyBeanSupplier.class));
 	}
 
 	public static class MyBeanSupplier implements BeanSupplier<String> {
@@ -182,116 +182,116 @@ class ParserSession_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// c - parseIntoMap / parseIntoCollection overloads
+	// c - readIntoMap / readIntoCollection overloads
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_parseIntoMap_basic() throws Exception {
+	@Test void c01_readIntoMap_basic() throws Exception {
 		var dest = new HashMap<String, Integer>();
-		P.parseIntoMap("{\"a\":1,\"b\":2}", dest, String.class, Integer.class);
+		P.readIntoMap("{\"a\":1,\"b\":2}", dest, String.class, Integer.class);
 		assertEquals(1, dest.get("a"));
 		assertEquals(2, dest.get("b"));
 	}
 
-	@Test void c02_parseIntoMap_intKeys() throws Exception {
+	@Test void c02_readIntoMap_intKeys() throws Exception {
 		var dest = new HashMap<Integer, String>();
-		P.parseIntoMap("{\"1\":\"a\",\"2\":\"b\"}", dest, Integer.class, String.class);
+		P.readIntoMap("{\"1\":\"a\",\"2\":\"b\"}", dest, Integer.class, String.class);
 		assertEquals("a", dest.get(1));
 		assertEquals("b", dest.get(2));
 	}
 
-	@Test void c03_parseIntoMap_defaultElementTypes() throws Exception {
+	@Test void c03_readIntoMap_defaultElementTypes() throws Exception {
 		// Passing null types defaults to String/Object.
 		var dest = new HashMap<String, Object>();
-		P.parseIntoMap("{\"a\":1}", dest, null, null);
+		P.readIntoMap("{\"a\":1}", dest, null, null);
 		assertEquals(1, dest.get("a"));
 	}
 
-	@Test void c04_parseIntoMap_malformedThrowsParseException() {
+	@Test void c04_readIntoMap_malformedThrowsParseException() {
 		var dest = new HashMap<String, Object>();
 		assertThrows(ParseException.class,
-			() -> P.parseIntoMap("{not-json", dest, String.class, Object.class));
+			() -> P.readIntoMap("{not-json", dest, String.class, Object.class));
 	}
 
-	@Test void c05_parseIntoCollection_basic() throws Exception {
+	@Test void c05_readIntoCollection_basic() throws Exception {
 		var dest = new ArrayList<Integer>();
-		P.parseIntoCollection("[1,2,3]", dest, Integer.class);
+		P.readIntoCollection("[1,2,3]", dest, Integer.class);
 		assertEquals(List.of(1, 2, 3), dest);
 	}
 
-	@Test void c06_parseIntoCollection_strings() throws Exception {
+	@Test void c06_readIntoCollection_strings() throws Exception {
 		var dest = new ArrayList<String>();
-		P.parseIntoCollection("[\"a\",\"b\"]", dest, String.class);
+		P.readIntoCollection("[\"a\",\"b\"]", dest, String.class);
 		assertEquals(List.of("a", "b"), dest);
 	}
 
-	@Test void c07_parseIntoCollection_nullElementType() throws Exception {
-		// JsonParserSession.doParseIntoCollection now defaults a null elementType to Object.class,
+	@Test void c07_readIntoCollection_nullElementType() throws Exception {
+		// JsonParserSession.doReadIntoCollection now defaults a null elementType to Object.class,
 		// matching the doc claim that null defaults "to whatever is being parsed".
 		var dest = new ArrayList<>();
-		P.parseIntoCollection("[1,2,3]", dest, null);
+		P.readIntoCollection("[1,2,3]", dest, null);
 		assertEquals(3, dest.size());
 		assertEquals(1, dest.get(0));
 		assertEquals(2, dest.get(1));
 		assertEquals(3, dest.get(2));
 	}
 
-	@Test void c08_parseIntoCollection_malformedThrowsParseException() {
+	@Test void c08_readIntoCollection_malformedThrowsParseException() {
 		var dest = new ArrayList<>();
 		assertThrows(ParseException.class,
-			() -> P.parseIntoCollection("[1,2,", dest, Integer.class));
+			() -> P.readIntoCollection("[1,2,", dest, Integer.class));
 	}
 
-	@Test void c09_parseIntoCollection_emptyArrayInput() throws Exception {
+	@Test void c09_readIntoCollection_emptyArrayInput() throws Exception {
 		var dest = new ArrayList<Integer>();
-		P.parseIntoCollection("[]", dest, Integer.class);
+		P.readIntoCollection("[]", dest, Integer.class);
 		assertTrue(dest.isEmpty());
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// d - parseArgs
+	// d - readArgs
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_parseArgs_basic() throws Exception {
-		var args = P.getSession().parseArgs("[\"hello\",42,true]",
+	@Test void d01_readArgs_basic() throws Exception {
+		var args = P.getSession().readArgs("[\"hello\",42,true]",
 			new Type[] { String.class, Integer.class, Boolean.class });
 		assertEquals("hello", args[0]);
 		assertEquals(42, args[1]);
 		assertEquals(true, args[2]);
 	}
 
-	@Test void d02_parseArgs_emptyArray() throws Exception {
-		var args = P.getSession().parseArgs("[]", new Type[0]);
+	@Test void d02_readArgs_emptyArray() throws Exception {
+		var args = P.getSession().readArgs("[]", new Type[0]);
 		assertEquals(0, args.length);
 	}
 
-	@Test void d03_parseArgs_malformedThrowsParseException() {
+	@Test void d03_readArgs_malformedThrowsParseException() {
 		assertThrows(ParseException.class,
-			() -> P.getSession().parseArgs("[1,2,", new Type[] { Integer.class, Integer.class, Integer.class }));
+			() -> P.getSession().readArgs("[1,2,", new Type[] { Integer.class, Integer.class, Integer.class }));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// e - parseToBeanConsumer lifecycle
+	// e - readToBeanConsumer lifecycle
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void e01_parseToBeanConsumer_basic() throws Exception {
+	@Test void e01_readToBeanConsumer_basic() throws Exception {
 		var received = new ArrayList<String>();
 		BeanConsumer<String> a = received::add;
-		P.getSession().parseToBeanConsumer("[\"x\",\"y\",\"z\"]", a, String.class);
+		P.getSession().readToBeanConsumer("[\"x\",\"y\",\"z\"]", a, String.class);
 		assertEquals(List.of("x", "y", "z"), received);
 	}
 
-	@Test void e02_parseToBeanConsumer_beginAndCompleteCalled() throws Exception {
+	@Test void e02_readToBeanConsumer_beginAndCompleteCalled() throws Exception {
 		var stages = new ArrayList<String>();
 		BeanConsumer<String> a = new BeanConsumer<>() {
 			@Override public void begin() { stages.add("begin"); }
 			@Override public void complete() { stages.add("complete"); }
 			@Override public void acceptThrows(String t) { stages.add("accept:" + t); }
 		};
-		P.getSession().parseToBeanConsumer("[\"x\",\"y\"]", a, String.class);
+		P.getSession().readToBeanConsumer("[\"x\",\"y\"]", a, String.class);
 		assertEquals(List.of("begin", "accept:x", "accept:y", "complete"), stages);
 	}
 
-	@Test void e03_parseToBeanConsumer_onErrorRethrow_stops() {
+	@Test void e03_readToBeanConsumer_onErrorRethrow_stops() {
 		var received = new ArrayList<String>();
 		BeanConsumer<String> a = new BeanConsumer<>() {
 			@Override public void acceptThrows(String t) throws Exception {
@@ -301,12 +301,12 @@ class ParserSession_Test extends TestBase {
 			@Override public void onError(Exception e) throws Exception { throw e; }
 		};
 		assertThrows(IOException.class,
-			() -> P.getSession().parseToBeanConsumer("[\"good\",\"bad\",\"after\"]", a, String.class));
+			() -> P.getSession().readToBeanConsumer("[\"good\",\"bad\",\"after\"]", a, String.class));
 		// "good" was processed before "bad" threw.
 		assertEquals(List.of("good"), received);
 	}
 
-	@Test void e04_parseToBeanConsumer_onErrorAbsorbs_continues() throws Exception {
+	@Test void e04_readToBeanConsumer_onErrorAbsorbs_continues() throws Exception {
 		var received = new ArrayList<String>();
 		BeanConsumer<String> a = new BeanConsumer<>() {
 			@Override public void acceptThrows(String t) {
@@ -317,11 +317,11 @@ class ParserSession_Test extends TestBase {
 				// absorbed; no rethrow.
 			}
 		};
-		P.getSession().parseToBeanConsumer("[\"good\",\"bad\",\"also-good\"]", a, String.class);
+		P.getSession().readToBeanConsumer("[\"good\",\"bad\",\"also-good\"]", a, String.class);
 		assertEquals(List.of("good", "also-good"), received);
 	}
 
-	@Test void e05_parseToBeanConsumer_completeStillCalledOnError() {
+	@Test void e05_readToBeanConsumer_completeStillCalledOnError() {
 		var stages = new ArrayList<String>();
 		BeanConsumer<String> a = new BeanConsumer<>() {
 			@Override public void begin() { stages.add("begin"); }
@@ -332,12 +332,12 @@ class ParserSession_Test extends TestBase {
 			}
 		};
 		assertThrows(IOException.class,
-			() -> P.getSession().parseToBeanConsumer("[\"x\"]", a, String.class));
+			() -> P.getSession().readToBeanConsumer("[\"x\"]", a, String.class));
 		// Even though body threw, complete() was still invoked.
 		assertTrue(stages.contains("complete"));
 	}
 
-	@Test void e06_parseToBeanConsumer_completeThrows_wrappedAsParseException() {
+	@Test void e06_readToBeanConsumer_completeThrows_wrappedAsParseException() {
 		BeanConsumer<String> a = new BeanConsumer<>() {
 			@Override public void acceptThrows(String t) { /* ok */ }
 			@Override public void complete() throws Exception {
@@ -345,11 +345,11 @@ class ParserSession_Test extends TestBase {
 			}
 		};
 		var ex = assertThrows(ParseException.class,
-			() -> P.getSession().parseToBeanConsumer("[\"x\"]", a, String.class));
+			() -> P.getSession().readToBeanConsumer("[\"x\"]", a, String.class));
 		assertTrue(ex.getMessage().contains("BeanConsumer.complete()"));
 	}
 
-	@Test void e07_parseToBeanConsumer_bodyAndCompleteBothThrow_bodyWins() {
+	@Test void e07_readToBeanConsumer_bodyAndCompleteBothThrow_bodyWins() {
 		BeanConsumer<String> a = new BeanConsumer<>() {
 			@Override public void acceptThrows(String t) throws Exception {
 				throw new IOException("body-boom");
@@ -359,13 +359,13 @@ class ParserSession_Test extends TestBase {
 			}
 		};
 		var ex = assertThrows(IOException.class,
-			() -> P.getSession().parseToBeanConsumer("[\"x\"]", a, String.class));
+			() -> P.getSession().readToBeanConsumer("[\"x\"]", a, String.class));
 		// The complete() exception should be added as a suppressed exception.
 		assertTrue(Arrays.asList(ex.getSuppressed()).stream()
 			.anyMatch(t -> t.getMessage() != null && t.getMessage().contains("complete-boom")));
 	}
 
-	@Test void e08_parseToBeanConsumer_runtimeFromBodyWrappedInParseException() {
+	@Test void e08_readToBeanConsumer_runtimeFromBodyWrappedInParseException() {
 		BeanConsumer<String> a = new BeanConsumer<>() {
 			@Override public void acceptThrows(String t) {
 				throw new RuntimeException("runtime-boom");
@@ -373,10 +373,10 @@ class ParserSession_Test extends TestBase {
 		};
 		// Default onError rethrows — runtime wraps in ParseException at end.
 		assertThrows(ParseException.class,
-			() -> P.getSession().parseToBeanConsumer("[\"x\"]", a, String.class));
+			() -> P.getSession().readToBeanConsumer("[\"x\"]", a, String.class));
 	}
 
-	@Test void e09_parseToBeanConsumer_nullList_noOp() throws Exception {
+	@Test void e09_readToBeanConsumer_nullList_noOp() throws Exception {
 		// Parsing "null" yields a null List → method returns without invoking begin/complete.
 		var stages = new ArrayList<String>();
 		BeanConsumer<String> a = new BeanConsumer<>() {
@@ -384,7 +384,7 @@ class ParserSession_Test extends TestBase {
 			@Override public void complete() { stages.add("complete"); }
 			@Override public void acceptThrows(String t) { stages.add("accept"); }
 		};
-		P.getSession().parseToBeanConsumer("null", a, String.class);
+		P.getSession().readToBeanConsumer("null", a, String.class);
 		assertTrue(stages.isEmpty());
 	}
 
@@ -411,7 +411,7 @@ class ParserSession_Test extends TestBase {
 			.ignoreUnknownBeanProperties()
 			.listener(CountingListener.class)
 			.build();
-		p.parse("{\"f1\":\"x\",\"f2\":1,\"unknown\":\"v\"}", Bean.class);
+		p.read("{\"f1\":\"x\",\"f2\":1,\"unknown\":\"v\"}", Bean.class);
 		assertTrue(CountingListener.events.stream().anyMatch(s -> s.startsWith("unknown:unknown")));
 	}
 
@@ -421,7 +421,7 @@ class ParserSession_Test extends TestBase {
 		CountingListener.events.clear();
 		var p = JsonParser.create().listener(CountingListener.class).build();
 		assertThrows(ParseException.class,
-			() -> p.parse("{\"unknown\":\"v\"}", Bean.class));
+			() -> p.read("{\"unknown\":\"v\"}", Bean.class));
 		// Listener is NOT invoked in strict mode (per onUnknownProperty implementation).
 		assertTrue(CountingListener.events.stream().noneMatch(s -> s.startsWith("unknown:")));
 	}
@@ -434,7 +434,7 @@ class ParserSession_Test extends TestBase {
 		// Setter throws → listener.onBeanSetterException invoked but parse continues.
 		// The default JsonParserSession adds a warning rather than rethrowing for setter failures.
 		try {
-			p.parse("{\"f1\":\"v\"}", BeanWithBadSetter.class);
+			p.read("{\"f1\":\"v\"}", BeanWithBadSetter.class);
 		} catch (ParseException e) {
 			// Acceptable: depending on parser, the setter exception may or may not propagate.
 		}
@@ -633,13 +633,13 @@ class ParserSession_Test extends TestBase {
 	}
 
 	@Test void i01_trimStrings_disabledByDefault() throws Exception {
-		var b = P.parse("{\"f1\":\"  hello  \"}", TrimBean.class);
+		var b = P.read("{\"f1\":\"  hello  \"}", TrimBean.class);
 		assertEquals("  hello  ", b.f1);
 	}
 
 	@Test void i02_trimStrings_enabledViaBuilder() throws Exception {
 		var p = JsonParser.create().trimStrings().build();
-		var b = p.parse("{\"f1\":\"  hello  \"}", TrimBean.class);
+		var b = p.read("{\"f1\":\"  hello  \"}", TrimBean.class);
 		assertEquals("hello", b.f1);
 	}
 
@@ -672,24 +672,24 @@ class ParserSession_Test extends TestBase {
 
 	@Test void k01_beanDictionary_resolvesType() throws Exception {
 		var p = JsonParser.create().beanDictionary(Alpha.class, Beta.class).build();
-		var o = p.parse("{\"_type\":\"alpha\",\"a\":7}", Object.class);
+		var o = p.read("{\"_type\":\"alpha\",\"a\":7}", Object.class);
 		assertInstanceOf(Alpha.class, o);
 		assertEquals(7, ((Alpha) o).a);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// l - parseInner stack overflow guard
+	// l - readInner stack overflow guard
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void l01_parseInner_deepStackProducesParseException() {
+	@Test void l01_readInner_deepStackProducesParseException() {
 		// Construct deeply-nested JSON that may trigger StackOverflowError → wrapped as ParseException.
 		// We don't strictly require StackOverflow to fire on every JVM; if it parses cleanly the test still passes
-		// for the "no-throw" branch.  This primarily exercises the doParse → ParseException pathway.
+		// for the "no-throw" branch.  This primarily exercises the doRead → ParseException pathway.
 		var sb = new StringBuilder();
 		for (int i = 0; i < 5000; i++) sb.append("[");
 		for (int i = 0; i < 5000; i++) sb.append("]");
 		try {
-			P.parse(sb.toString(), List.class);
+			P.read(sb.toString(), List.class);
 		} catch (Exception e) {
 			// Either ParseException or IOException; both are documented.
 			assertTrue(e instanceof ParseException || e instanceof IOException);
@@ -697,21 +697,21 @@ class ParserSession_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// m - parseIntoMap / parseIntoCollection: error messaging for non-ParseException
+	// m - readIntoMap / readIntoCollection: error messaging for non-ParseException
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void m01_parseIntoMap_runtimeWrappedAsParseException() {
+	@Test void m01_readIntoMap_runtimeWrappedAsParseException() {
 		// Malformed JSON (truncated input) triggers ParseException re-wrapping.
 		var dest = new HashMap<String, Object>();
 		assertThrows(ParseException.class,
-			() -> P.parseIntoMap("{\"a\":[1,2", dest, String.class, Object.class));
+			() -> P.readIntoMap("{\"a\":[1,2", dest, String.class, Object.class));
 	}
 
-	@Test void m02_parseIntoCollection_runtimeWrappedAsParseException() {
+	@Test void m02_readIntoCollection_runtimeWrappedAsParseException() {
 		// Malformed JSON (truncated input) → ParseException.
 		var dest = new ArrayList<>();
 		assertThrows(ParseException.class,
-			() -> P.parseIntoCollection("[1,2,{", dest, Object.class));
+			() -> P.readIntoCollection("[1,2,{", dest, Object.class));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -719,13 +719,13 @@ class ParserSession_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void n01_convertAttr_charType() throws Exception {
-		var m = (Map<Character, String>) P.parse(
+		var m = (Map<Character, String>) P.read(
 			"{\"x\":\"foo\"}", HashMap.class, Character.class, String.class);
 		assertTrue(m.containsKey('x'));
 	}
 
 	@Test void n02_convertAttr_booleanType() throws Exception {
-		var m = (Map<Boolean, String>) P.parse(
+		var m = (Map<Boolean, String>) P.read(
 			"{\"true\":\"yes\",\"false\":\"no\"}", HashMap.class, Boolean.class, String.class);
 		assertEquals("yes", m.get(true));
 		assertEquals("no", m.get(false));
@@ -734,31 +734,31 @@ class ParserSession_Test extends TestBase {
 	@Test void n03_convertAttr_invalidThrows() {
 		// Non-convertible string-to-type should throw.
 		assertThrows(ParseException.class,
-			() -> P.parse("{\"x\":\"v\"}", HashMap.class, BeanWithBadSetter.class, String.class));
+			() -> P.read("{\"x\":\"v\"}", HashMap.class, BeanWithBadSetter.class, String.class));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// o - parseToBeanConsumer to bean elements (not just strings)
+	// o - readToBeanConsumer to bean elements (not just strings)
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void o01_parseToBeanConsumer_beans() throws Exception {
+	@Test void o01_readToBeanConsumer_beans() throws Exception {
 		var beans = new ArrayList<Bean>();
 		BeanConsumer<Bean> a = beans::add;
-		P.getSession().parseToBeanConsumer(
+		P.getSession().readToBeanConsumer(
 			"[{\"f1\":\"a\",\"f2\":1},{\"f1\":\"b\",\"f2\":2}]", a, Bean.class);
 		assertEquals(2, beans.size());
 		assertEquals("a", beans.get(0).f1);
 		assertEquals(2, beans.get(1).f2);
 	}
 
-	@Test void o02_parseToBeanConsumer_emptyArray_lifecycleStillRuns() throws Exception {
+	@Test void o02_readToBeanConsumer_emptyArray_lifecycleStillRuns() throws Exception {
 		var stages = new ArrayList<String>();
 		BeanConsumer<String> a = new BeanConsumer<>() {
 			@Override public void begin() { stages.add("begin"); }
 			@Override public void complete() { stages.add("complete"); }
 			@Override public void acceptThrows(String t) { stages.add("accept"); }
 		};
-		P.getSession().parseToBeanConsumer("[]", a, String.class);
+		P.getSession().readToBeanConsumer("[]", a, String.class);
 		assertEquals(List.of("begin", "complete"), stages);
 	}
 
@@ -768,7 +768,7 @@ class ParserSession_Test extends TestBase {
 
 	@Test void p01_convertAttr_temporalKey() throws Exception {
 		// Use java.time.LocalDate as a map key — exercises sType.isTemporal() branch.
-		var m = (Map<java.time.LocalDate, String>) P.parse(
+		var m = (Map<java.time.LocalDate, String>) P.read(
 			"{\"2020-01-02\":\"v\"}", HashMap.class, java.time.LocalDate.class, String.class);
 		assertEquals(1, m.size());
 		assertEquals("v", m.values().iterator().next());
@@ -776,35 +776,35 @@ class ParserSession_Test extends TestBase {
 
 	@Test void p02_convertAttr_durationKey() throws Exception {
 		// Duration as a map key — exercises sType.isDuration() branch.
-		var m = (Map<java.time.Duration, String>) P.parse(
+		var m = (Map<java.time.Duration, String>) P.read(
 			"{\"PT1H\":\"v\"}", HashMap.class, java.time.Duration.class, String.class);
 		assertEquals(1, m.size());
 	}
 
 	@Test void p03_convertAttr_periodKey() throws Exception {
 		// Period as a map key — exercises sType.isPeriod() branch.
-		var m = (Map<java.time.Period, String>) P.parse(
+		var m = (Map<java.time.Period, String>) P.read(
 			"{\"P1D\":\"v\"}", HashMap.class, java.time.Period.class, String.class);
 		assertEquals(1, m.size());
 	}
 
 	@Test void p04_convertAttr_dateKey() throws Exception {
 		// Date as a map key — exercises sType.isDate() branch.
-		var m = (Map<Date, String>) P.parse(
+		var m = (Map<Date, String>) P.read(
 			"{\"2020-01-02T00:00:00Z\":\"v\"}", HashMap.class, Date.class, String.class);
 		assertEquals(1, m.size());
 	}
 
 	@Test void p05_convertAttr_calendarKey() throws Exception {
 		// Calendar as a map key — exercises sType.isCalendar() branch.
-		var m = (Map<Calendar, String>) P.parse(
+		var m = (Map<Calendar, String>) P.read(
 			"{\"2020-01-02T00:00:00Z\":\"v\"}", HashMap.class, Calendar.class, String.class);
 		assertEquals(1, m.size());
 	}
 
 	@Test void p06_convertAttr_numberKey() throws Exception {
 		// Number subtype (Long) as a map key.
-		var m = (Map<Long, String>) P.parse(
+		var m = (Map<Long, String>) P.read(
 			"{\"100\":\"v\"}", HashMap.class, Long.class, String.class);
 		assertEquals("v", m.get(100L));
 	}
@@ -836,19 +836,19 @@ class ParserSession_Test extends TestBase {
 		public CalendarFormat exposeGetCalendarFormat() { return getCalendarFormat(); }
 		public DateFormat exposeGetDateFormat() { return getDateFormat(); }
 		public TemporalFormat exposeGetTemporalFormat() { return getTemporalFormat(); }
-		public java.time.Duration exposeParseDuration(String s) { return parseDuration(s); }
-		public java.time.Period exposeParsePeriod(String s) { return parsePeriod(s); }
+		public java.time.Duration exposeParseDuration(String s) { return readDuration(s); }
+		public java.time.Period exposeParsePeriod(String s) { return readPeriod(s); }
 		public void exposeMark() { mark(); }
 		public void exposeUnmark() { unmark(); }
 		public org.apache.juneau.marshall.collections.JsonMap exposeGetLastLocation() { return getLastLocation(); }
 		public ParserPipe exposeSetPipe(ParserPipe pp) { return setPipe(pp); }
 		public Map<String,Object> doParseIntoMap_callDirect() throws Exception {
-			// Direct call to the (default) doParseIntoMap which throws UnsupportedOperationException.
-			return doParseIntoMap(null, new HashMap<>(), String.class, Object.class);
+			// Direct call to the (default) doReadIntoMap which throws UnsupportedOperationException.
+			return doReadIntoMap(null, new HashMap<>(), String.class, Object.class);
 		}
 		public Collection<Object> doParseIntoCollection_callDirect() throws Exception {
-			// Direct call to the (default) doParseIntoCollection which throws.
-			return doParseIntoCollection(null, new ArrayList<>(), Object.class);
+			// Direct call to the (default) doReadIntoCollection which throws.
+			return doReadIntoCollection(null, new ArrayList<>(), Object.class);
 		}
 	}
 
@@ -878,7 +878,7 @@ class ParserSession_Test extends TestBase {
 		assertNotNull(s.exposeGetLocaleFormat());
 	}
 
-	@Test void q03_protectedHelpers_parseDurationPeriod() {
+	@Test void q03_protectedHelpers_readDurationPeriod() {
 		var s = new ExposingSession(JsonParser.DEFAULT);
 		assertNull(s.exposeParseDuration(null));
 		assertNull(s.exposeParseDuration(""));
@@ -941,10 +941,10 @@ class ParserSession_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// r - parseInner/wrapping: throw a checked-but-non-IOException from within accept body
+	// r - readInner/wrapping: throw a checked-but-non-IOException from within accept body
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void r01_parseToBeanConsumer_checkedNonIOExceptionThroughBody() {
+	@Test void r01_readToBeanConsumer_checkedNonIOExceptionThroughBody() {
 		// Throw a checked exception that is neither IOException nor ParseException.
 		// The drainToConsumer→onError default rethrow path → wraps as ParseException.
 		BeanConsumer<String> a = new BeanConsumer<>() {
@@ -953,16 +953,16 @@ class ParserSession_Test extends TestBase {
 			}
 		};
 		var ex = assertThrows(ParseException.class,
-			() -> P.getSession().parseToBeanConsumer("[\"x\"]", a, String.class));
+			() -> P.getSession().readToBeanConsumer("[\"x\"]", a, String.class));
 		assertNotNull(ex);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// s - doParseIntoMap / doParseIntoCollection unsupported-op default impls
+	// s - doReadIntoMap / doReadIntoCollection unsupported-op default impls
 	// -----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * A bare ParserSession that does not override doParseIntoMap/doParseIntoCollection,
+	 * A bare ParserSession that does not override doReadIntoMap/doReadIntoCollection,
 	 * exercising the default unsupported-op path (lines ~1019, 1041 of ParserSession).
 	 */
 	@Test void s01_doParseIntoMap_default_throwsUnsupported() {

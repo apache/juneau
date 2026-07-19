@@ -120,7 +120,7 @@ class ProtobufSwap_Test extends TestBase {
 	void a01_scalarSwapOnBeanProperty() throws Exception {
 		var ser = ProtobufSerializer.create().swaps(ColorSwap.class).build();
 		var par = ProtobufParser.create().swaps(ColorSwap.class).build();
-		var b2 = par.parse(ser.serialize(new ScalarSwapBean(new Color("red"))), ScalarSwapBean.class);
+		var b2 = par.read(ser.write(new ScalarSwapBean(new Color("red"))), ScalarSwapBean.class);
 		assertBean(b2, "color{name}", "{red}");
 	}
 
@@ -128,7 +128,7 @@ class ProtobufSwap_Test extends TestBase {
 	void a02_surrogateBeanSwap() throws Exception {
 		var ser = ProtobufSerializer.create().swaps(PointSwap.class).build();
 		var par = ProtobufParser.create().swaps(PointSwap.class).build();
-		var b2 = par.parse(ser.serialize(new SurrogateSwapBean(new Point(3, 4))), SurrogateSwapBean.class);
+		var b2 = par.read(ser.write(new SurrogateSwapBean(new Point(3, 4))), SurrogateSwapBean.class);
 		assertBean(b2, "point{x,y}", "{3,4}");
 	}
 
@@ -136,7 +136,7 @@ class ProtobufSwap_Test extends TestBase {
 	void a03_listElementSwap() throws Exception {
 		var ser = ProtobufSerializer.create().swaps(ColorSwap.class).build();
 		var par = ProtobufParser.create().swaps(ColorSwap.class).build();
-		var b2 = par.parse(ser.serialize(new ListSwapBean(list(new Color("red"), new Color("blue")))), ListSwapBean.class);
+		var b2 = par.read(ser.write(new ListSwapBean(list(new Color("red"), new Color("blue")))), ListSwapBean.class);
 		assertBeans(b2.colors, "name", "red", "blue");
 	}
 
@@ -144,7 +144,7 @@ class ProtobufSwap_Test extends TestBase {
 	void a04_mapValueSwap() throws Exception {
 		var ser = ProtobufSerializer.create().swaps(ColorSwap.class).build();
 		var par = ProtobufParser.create().swaps(ColorSwap.class).build();
-		var b2 = par.parse(ser.serialize(new MapSwapBean(map("primary", new Color("red"), "secondary", new Color("blue")))), MapSwapBean.class);
+		var b2 = par.read(ser.write(new MapSwapBean(map("primary", new Color("red"), "secondary", new Color("blue")))), MapSwapBean.class);
 		assertBean(b2.colors.get("primary"), "name", "red");
 		assertBean(b2.colors.get("secondary"), "name", "blue");
 	}

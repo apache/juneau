@@ -47,7 +47,7 @@ public class JsonConfigurationExample {
 		 * 	"id": "a"
 		 * }
 		 */
-		var withWhitespace = JsonSerializer.create().ws().build().serialize(aPojo);
+		var withWhitespace = JsonSerializer.create().ws().build().write(aPojo);
 		// the output will be padded with spaces after format characters
 		Logger.getLogger(JsonConfigurationExample.class).info(withWhitespace);
 
@@ -55,7 +55,7 @@ public class JsonConfigurationExample {
 		 * Produces
 		 * {"name":"<\/pojo>","id":"a"}
 		 */
-		var escaped = JsonSerializer.create().escapeSolidus().build().serialize(aPojo);
+		var escaped = JsonSerializer.create().escapeSolidus().build().write(aPojo);
 		// the output will have escaped /
 		Logger.getLogger(JsonConfigurationExample.class).info(escaped);
 
@@ -71,7 +71,7 @@ public class JsonConfigurationExample {
 			.ws()  // Use whitespace
 			.sq()  // Use single quotes
 			.build()
-			.serialize(aPojo);  // Create a Json5Serializer
+			.write(aPojo);  // Create a Json5Serializer
 
 		Logger.getLogger(JsonConfigurationExample.class).info(configurableJson);
 

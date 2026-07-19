@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 class ProtobufAnnotation_Test extends TestBase {
 
 	private static String ser(Object o) throws Exception {
-		return toSpacedHex(ProtobufSerializer.DEFAULT.serialize(o));
+		return toSpacedHex(ProtobufSerializer.DEFAULT.write(o));
 	}
 
 	public static class ExplicitNumber {
@@ -43,7 +43,7 @@ class ProtobufAnnotation_Test extends TestBase {
 	void a01_explicitFieldNumber() throws Exception {
 		// field 10, varint -> tag (10<<3)|0 = 80 = 0x50; value 5.
 		assertEquals("50 05", ser(new ExplicitNumber(5)));
-		var p = ProtobufParser.DEFAULT.parse(ProtobufSerializer.DEFAULT.serialize(new ExplicitNumber(5)), ExplicitNumber.class);
+		var p = ProtobufParser.DEFAULT.read(ProtobufSerializer.DEFAULT.write(new ExplicitNumber(5)), ExplicitNumber.class);
 		assertBean(p, "x", "5");
 	}
 
@@ -58,7 +58,7 @@ class ProtobufAnnotation_Test extends TestBase {
 	void a02_zigzagType() throws Exception {
 		// delta=-1, sint32 zigzag -> 1.  field 1 varint -> 08 01
 		assertEquals("08 01", ser(new ZigZag(-1)));
-		var p = ProtobufParser.DEFAULT.parse(ProtobufSerializer.DEFAULT.serialize(new ZigZag(-75)), ZigZag.class);
+		var p = ProtobufParser.DEFAULT.read(ProtobufSerializer.DEFAULT.write(new ZigZag(-75)), ZigZag.class);
 		assertBean(p, "delta", "-75");
 	}
 
@@ -73,7 +73,7 @@ class ProtobufAnnotation_Test extends TestBase {
 	void a03_fixed32Type() throws Exception {
 		// n=1, fixed32 -> field 1 I32 tag (1<<3)|5 = 0x0D; little-endian 01 00 00 00
 		assertEquals("0D 01 00 00 00", ser(new Fixed(1)));
-		var p = ProtobufParser.DEFAULT.parse(ProtobufSerializer.DEFAULT.serialize(new Fixed(123456)), Fixed.class);
+		var p = ProtobufParser.DEFAULT.read(ProtobufSerializer.DEFAULT.write(new Fixed(123456)), Fixed.class);
 		assertBean(p, "n", "123456");
 	}
 
@@ -90,7 +90,7 @@ class ProtobufAnnotation_Test extends TestBase {
 	void a04_enumNameType() throws Exception {
 		// color=1 LEN "BLUE" -> 0A 04 42 4C 55 45
 		assertEquals("0A 04 42 4C 55 45", ser(new EnumName(Color.BLUE)));
-		var p = ProtobufParser.DEFAULT.parse(ProtobufSerializer.DEFAULT.serialize(new EnumName(Color.GREEN)), EnumName.class);
+		var p = ProtobufParser.DEFAULT.read(ProtobufSerializer.DEFAULT.write(new EnumName(Color.GREEN)), EnumName.class);
 		assertBean(p, "color", "GREEN");
 	}
 
@@ -105,7 +105,7 @@ class ProtobufAnnotation_Test extends TestBase {
 	void a05_uint64BigIntegerLossless() throws Exception {
 		// value > Long.MAX_VALUE round-trips losslessly via BigInteger magnitude (R5).
 		var big = new java.math.BigInteger("18446744073709551615"); // 2^64 - 1
-		var p = ProtobufParser.DEFAULT.parse(ProtobufSerializer.DEFAULT.serialize(new Unsigned(big)), Unsigned.class);
+		var p = ProtobufParser.DEFAULT.read(ProtobufSerializer.DEFAULT.write(new Unsigned(big)), Unsigned.class);
 		assertBean(p, "v", "18446744073709551615");
 	}
 }

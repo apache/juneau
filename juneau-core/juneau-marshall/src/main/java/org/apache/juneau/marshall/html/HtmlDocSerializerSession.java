@@ -155,7 +155,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	public final String[] getNavLinks() { return ctx.navlinks; }
 
 	/**
-	 * Calls the parent {@link #doSerialize(SerializerPipe, Object)} method which invokes just the HTML serializer.
+	 * Calls the parent {@link #doWrite(SerializerPipe, Object)} method which invokes just the HTML serializer.
 	 *
 	 * @param out
 	 * 	Where to send the output from the serializer.
@@ -167,7 +167,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	})
 	public void parentSerialize(Object out, Object o) throws Exception {
 		try (var pipe = createPipe(out)) {
-			super.doSerialize(pipe, o);
+			super.doWrite(pipe, o);
 		}
 	}
 
@@ -177,7 +177,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	@Override /* Overridden from Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 
 		try (var w = getHtmlWriter(out)) {
 			try {

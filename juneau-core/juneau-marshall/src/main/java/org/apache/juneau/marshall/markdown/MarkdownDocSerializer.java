@@ -38,11 +38,11 @@ import org.apache.juneau.commons.collections.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to a Markdown document</jc>
- * 	String <jv>md</jv> = MarkdownDocSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someBean</jv>);
+ * 	String <jv>md</jv> = MarkdownDocSerializer.<jsf>DEFAULT</jsf>.write(<jv>someBean</jv>);
  *
  * 	<jc>// Create a custom doc serializer with a document title</jc>
  * 	MarkdownDocSerializer <jv>s</jv> = MarkdownDocSerializer.<jsm>create</jsm>().title(<js>"My Report"</js>).build();
- * 	String <jv>md</jv> = <jv>s</jv>.serialize(<jv>someBean</jv>);
+ * 	String <jv>md</jv> = <jv>s</jv>.write(<jv>someBean</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (nested bean):</h5>

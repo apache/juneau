@@ -292,7 +292,7 @@ class SerializerSession_Test extends TestBase {
 		var bean = new BeanWithArrays();
 		bean.empty = new String[0];
 		bean.nonEmpty = new String[]{"a"};
-		var json = s.serialize(bean);
+		var json = s.write(bean);
 		// empty array should be omitted.
 		assertFalse(json.contains("\"empty\""));
 		assertTrue(json.contains("\"nonEmpty\""));
@@ -303,7 +303,7 @@ class SerializerSession_Test extends TestBase {
 		var bean = new BeanWithCollections();
 		bean.empty = list();
 		bean.nonEmpty = list("a");
-		var json = s.serialize(bean);
+		var json = s.write(bean);
 		assertFalse(json.contains("\"empty\""));
 		assertTrue(json.contains("\"nonEmpty\""));
 	}
@@ -314,7 +314,7 @@ class SerializerSession_Test extends TestBase {
 		bean.empty = new LinkedHashMap<>();
 		bean.nonEmpty = new LinkedHashMap<>();
 		bean.nonEmpty.put("k", "v");
-		var json = s.serialize(bean);
+		var json = s.write(bean);
 		assertFalse(json.contains("\"empty\""));
 		assertTrue(json.contains("\"nonEmpty\""));
 	}
@@ -322,7 +322,7 @@ class SerializerSession_Test extends TestBase {
 	@Test void c04_keepNullProperties_keepsNullField() throws Exception {
 		var s = JsonSerializer.create().keepNullProperties().build();
 		var bean = new BeanWithNullField();
-		var json = s.serialize(bean);
+		var json = s.write(bean);
 		assertTrue(json.contains("\"a\""));  // null kept.
 	}
 
@@ -605,13 +605,13 @@ class SerializerSession_Test extends TestBase {
 
 	@Test void g01_unwrapSupplier_singleLevel() throws Exception {
 		Supplier<String> sup = () -> "hi";
-		var json = Json5Serializer.DEFAULT.serialize(sup);
+		var json = Json5Serializer.DEFAULT.write(sup);
 		assertEquals("'hi'", json);
 	}
 
 	@Test void g02_unwrapSupplier_nested() throws Exception {
 		Supplier<Supplier<String>> sup = () -> () -> "deep";
-		var json = Json5Serializer.DEFAULT.serialize(sup);
+		var json = Json5Serializer.DEFAULT.write(sup);
 		assertEquals("'deep'", json);
 	}
 
@@ -622,7 +622,7 @@ class SerializerSession_Test extends TestBase {
 			chain = () -> prev;
 		}
 		final Supplier<?> deep = chain;
-		assertThrows(SerializeException.class, () -> Json5Serializer.DEFAULT.serialize(deep));
+		assertThrows(SerializeException.class, () -> Json5Serializer.DEFAULT.write(deep));
 	}
 
 	//====================================================================================================
@@ -631,7 +631,7 @@ class SerializerSession_Test extends TestBase {
 
 	@Test void h01_serialize_beanConsumer_rejected() {
 		BeanConsumer<String> bc = item -> {};
-		var ex = assertThrows(SerializeException.class, () -> Json5Serializer.DEFAULT.serialize(bc));
+		var ex = assertThrows(SerializeException.class, () -> Json5Serializer.DEFAULT.write(bc));
 		assertTrue(ex.getMessage().contains("BeanConsumer cannot be used as a serializer source"));
 	}
 
@@ -641,7 +641,7 @@ class SerializerSession_Test extends TestBase {
 	@Test void h02_serialize_runtimeException_wrapped() {
 		// A bean property getter that throws RuntimeException should bubble up as SerializeException.
 		assertThrows(SerializeException.class,
-			() -> JsonSerializer.DEFAULT.serialize(new BeanThatThrowsRE()));
+			() -> JsonSerializer.DEFAULT.write(new BeanThatThrowsRE()));
 	}
 
 	public static class BeanThatThrowsRE {
@@ -674,7 +674,7 @@ class SerializerSession_Test extends TestBase {
 			.listener(CapturingListener.class)
 			.build();
 		// Should not throw because exceptions on getters are ignored.
-		var json = s.serialize(new BeanThatThrowsRE());
+		var json = s.write(new BeanThatThrowsRE());
 		assertNotNull(json);
 		// Listener does not fire because the underlying exception is swallowed by BeanPropertyMeta.getRaw.
 		assertTrue(CapturingListener.events.isEmpty(), "Listener unexpectedly fired: " + CapturingListener.events);
@@ -689,7 +689,7 @@ class SerializerSession_Test extends TestBase {
 			.listener(CapturingListener.class)
 			.build();
 		// Exceptions on getters are NOT ignored; SerializeException is thrown.
-		assertThrows(SerializeException.class, () -> s.serialize(new BeanThatThrowsRE()));
+		assertThrows(SerializeException.class, () -> s.write(new BeanThatThrowsRE()));
 		assertTrue(CapturingListener.events.stream().anyMatch(e -> e.startsWith("bean:")),
 			"Listener should fire even when exception is rethrown");
 	}
@@ -799,7 +799,7 @@ class SerializerSession_Test extends TestBase {
 		assertTrue(ex.getCause().getMessage().contains("Stack overflow occurred"));
 	}
 
-	@Test void m04_handleThrown_serializeException() throws Exception {
+	@Test void m04_handleThrown_writeException() throws Exception {
 		var method = SerializerSession.class.getDeclaredMethod("handleThrown", Throwable.class);
 		method.setAccessible(true);
 		var se = new SerializeException("boom");
@@ -872,7 +872,7 @@ class SerializerSession_Test extends TestBase {
 			.addRootType()
 			.beanDictionary(A2.class)
 			.build();
-		var json = s.serialize(new A2());
+		var json = s.write(new A2());
 		// _type=A2 should be added at root.
 		assertTrue(json.contains("_type") && json.contains("A2"), "Expected type marker, got: " + json);
 	}
@@ -883,7 +883,7 @@ class SerializerSession_Test extends TestBase {
 			.build();
 		var c = new Container();
 		c.prop = new A2();
-		var json = s.serialize(c);
+		var json = s.write(c);
 		// Subtype A2 should be marked with _type since expected type is A1.
 		assertTrue(json.contains("A2"), "Expected subtype marker: " + json);
 	}
@@ -974,7 +974,7 @@ class SerializerSession_Test extends TestBase {
 	// s. serialize (Object) shortcut throws unsupportedOp on raw SerializerSession (line 773)
 	//====================================================================================================
 
-	// Note: SerializerSession.serialize(Object) and serializeToString(Object) base implementations throw
+	// Note: SerializerSession.serialize(Object) and writeToString(Object) base implementations throw
 	// UnsupportedOperationException. They are normally overridden by WriterSerializerSession/OutputStreamSerializerSession
 	// and unreachable via concrete sessions. Lines 772-774/834-836 are intentionally dead code on this path.
 
@@ -987,7 +987,7 @@ class SerializerSession_Test extends TestBase {
 		// Object-typed field holding empty array (cm.isObject() == true, isArray(value) == true).
 		var bean = new BeanWithObjectField();
 		bean.a = new String[0];
-		var json = s.serialize(bean);
+		var json = s.write(bean);
 		assertFalse(json.contains("\"a\""), "Empty Object-typed array should be trimmed: " + json);
 	}
 
@@ -995,7 +995,7 @@ class SerializerSession_Test extends TestBase {
 		var s = JsonSerializer.create().trimEmptyCollections().build();
 		var bean = new BeanWithObjectField();
 		bean.a = list();
-		var json = s.serialize(bean);
+		var json = s.write(bean);
 		assertFalse(json.contains("\"a\""), "Empty Object-typed collection should be trimmed: " + json);
 	}
 
@@ -1003,7 +1003,7 @@ class SerializerSession_Test extends TestBase {
 		var s = JsonSerializer.create().trimEmptyMaps().build();
 		var bean = new BeanWithObjectField();
 		bean.a = new LinkedHashMap<>();
-		var json = s.serialize(bean);
+		var json = s.write(bean);
 		assertFalse(json.contains("\"a\""), "Empty Object-typed map should be trimmed: " + json);
 	}
 
@@ -1036,7 +1036,7 @@ class SerializerSession_Test extends TestBase {
 		var s = JsonSerializer.create().addBeanTypes().beanDictionary(U_A.class).build();
 		var holder = new U_Holder();
 		holder.prop = new U_A();  // expected and actual both U_A.
-		var json = s.serialize(holder);
+		var json = s.write(holder);
 		// _type marker should not be on the inner property.
 		assertFalse(json.contains("U_A"), "Did not expect type name to appear: " + json);
 	}
@@ -1046,7 +1046,7 @@ class SerializerSession_Test extends TestBase {
 		var s = JsonSerializer.create().addBeanTypes().beanDictionary(U_B.class).build();
 		var holder = new U_Holder();
 		holder.prop = new U_B();
-		var json = s.serialize(holder);
+		var json = s.write(holder);
 		assertTrue(json.contains("U_B"), "Expected U_B type marker: " + json);
 	}
 
@@ -1055,7 +1055,7 @@ class SerializerSession_Test extends TestBase {
 		var s = JsonSerializer.create().addBeanTypes().build();
 		var holder = new U_HolderWithDictAtBean();
 		holder.prop = new U_B();
-		var json = s.serialize(holder);
+		var json = s.write(holder);
 		assertTrue(json.contains("U_B"), "Expected U_B type marker via bean registry: " + json);
 	}
 
@@ -1086,7 +1086,7 @@ class SerializerSession_Test extends TestBase {
 		var c = new V_Cycle();
 		c.ref = c;
 		// Should not throw; recursion ignored.
-		var json = s.serialize(c);
+		var json = s.write(c);
 		assertNotNull(json);
 	}
 

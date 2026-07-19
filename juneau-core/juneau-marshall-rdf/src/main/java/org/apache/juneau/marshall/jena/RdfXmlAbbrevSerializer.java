@@ -26,7 +26,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to abbreviated RDF/XML.</jc>
  * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
- * 	String <jv>rdfXml</jv> = RdfXmlAbbrevSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+ * 	String <jv>rdfXml</jv> = RdfXmlAbbrevSerializer.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the RdfXmlAbbrev marshaller for convenience.</jc>
@@ -35,7 +35,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Custom serializer.</jc>
  * 	RdfXmlAbbrevSerializer <jv>s</jv> = RdfXmlAbbrevSerializer.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	String <jv>rdfXml</jv> = <jv>s</jv>.serialize(<jv>bean</jv>);
+ * 	String <jv>rdfXml</jv> = <jv>s</jv>.write(<jv>bean</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (bean with name/age):</h5>

@@ -75,7 +75,7 @@ import org.apache.juneau.marshall.xml.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
- * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someObject</jv>);
+ * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
  *
  * 	<jc>// Create a custom serializer that doesn't use whitespace and newlines</jc>
  * 	HtmlSerializer <jv>serializer</jv> = HtmlSerializer.<jsm>create</jsm>().ws().build();
@@ -88,7 +88,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	<jc>// Produces: </jc>
  * 	<jc>// &lt;ul&gt;&lt;li&gt;1&lt;li&gt;2&lt;li&gt;3&lt;/ul&gt;</jc>
  * 	List <jv>list</jv> = JsonList.<jsm>of</jsm>(1, 2, 3);
- * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>list</jv>);
+ * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.write(<jv>list</jv>);
  *
  * 	<jc>// Produces: </jc>
  * 	<jc>//    &lt;table&gt; </jc>
@@ -102,7 +102,7 @@ import org.apache.juneau.marshall.xml.*;
  * 		JsonMap.<jsm>ofText</jsm>(<js>"{firstName:'Billy',lastName:'TheKid'}"</js>),
  * 		JsonMap.<jsm>ofText</jsm>(<js>"{firstName:'Barney',lastName:'Miller'}"</js>)
  * 	);
- * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>list</jv>);
+ * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.write(<jv>list</jv>);
  *
  * 	<jc>// Produces: </jc>
  * 	<jc>//    &lt;table&gt; </jc>
@@ -111,7 +111,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	<jc>//       &lt;tr&gt;&lt;td&gt;baz&lt;/td&gt;&lt;td&gt;123&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//    &lt;/table&gt; </jc>
  * 	Map <jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{foo:'bar',baz:123}"</js>);
- * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
+ * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.write(<jv>map</jv>);
  *
  * 	<jc>// HTML elements can be nested arbitrarily deep</jc>
  * 	<jc>// Produces: </jc>
@@ -130,7 +130,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	Map <jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{foo:'bar',baz:123}"</js>);
  * 	<jv>map</jv>.put(<js>"someNumbers"</js>, JsonList.<jsm>of</jsm>(1, 2, 3));
  * 	<jv>map</jv>.put(<js>"someSubMap"</js>, JsonMap.<jsm>ofText</jsm>(<js>"{a:'b'}"</js>));
- * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
+ * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.write(<jv>map</jv>);
  * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -273,8 +273,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		.addKeyValueTableHeaders()
 		 * 		.build();
 		 *
-		 * 	String <jv>withoutHeaders</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> MyBean());
-		 * 	String <jv>withHeaders</jv> = <jv>serializer2</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>withoutHeaders</jv> = <jv>serializer1</jv>.write(<jk>new</jk> MyBean());
+		 * 	String <jv>withHeaders</jv> = <jv>serializer2</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -356,8 +356,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		.disableDetectLabelParameters()
 		 * 		.build();
 		 *
-		 * 	String <jv>withLabels</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> MyBean());
-		 * 	String <jv>withoutLabels</jv> = <jv>serializer2</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>withLabels</jv> = <jv>serializer1</jv>.write(<jk>new</jk> MyBean());
+		 * 	String <jv>withoutLabels</jv> = <jv>serializer2</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -429,8 +429,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		.disableDetectLinksInStrings()
 		 * 		.build();
 		 *
-		 * 	String <jv>withLinks</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> MyBean());
-		 * 	String <jv>withoutLinks</jv> = <jv>serializer2</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>withLinks</jv> = <jv>serializer1</jv>.write(<jk>new</jk> MyBean());
+		 * 	String <jv>withoutLinks</jv> = <jv>serializer2</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <p>
@@ -531,7 +531,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	WriterSerializer <jv>serializer1</jv> = HtmlSerializer.<jsm>create</jsm>().anchorText(<jsf>TO_STRING</jsf>).build();
 		 *
 		 * 	<jc>// Produces: &lt;a href='http://www.apache.org?foo=bar#myAnchor'&gt;http://www.apache.org?foo=bar#myAnchor&lt;/a&gt;</jc>
-		 * 	String <jv>html</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>html</jv> = <jv>serializer1</jv>.write(<jk>new</jk> MyBean());
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#PROPERTY_NAME PROPERTY_NAME} - Set to the bean property name.
 		 * 			<br>
@@ -546,7 +546,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	WriterSerializer <jv>serializer1</jv> = HtmlSerializer.<jsm>create</jsm>().anchorText(<jsf>PROPERTY_NAME</jsf>).build();
 		 *
 		 * 	<jc>// Produces: &lt;a href='http://www.apache.org?foo=bar#myAnchor'&gt;f1&lt;/a&gt;</jc>
-		 * 	String <jv>html</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>html</jv> = <jv>serializer1</jv>.write(<jk>new</jk> MyBean());
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#URI URI} - Set to the URI value.
 		 * 			<br>
@@ -561,7 +561,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	WriterSerializer <jv>serializer1</jv> = HtmlSerializer.<jsm>create</jsm>().anchorText(<jsf>URI</jsf>).build();
 		 *
 		 * 	<jc>// Produces: &lt;a href='http://www.apache.org?foo=bar#myAnchor'&gt;http://www.apache.org?foo=bar&lt;/a&gt;</jc>
-		 * 	String <jv>html</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>html</jv> = <jv>serializer1</jv>.write(<jk>new</jk> MyBean());
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#LAST_TOKEN LAST_TOKEN} - Set to the last token of the URI value.
 		 * 			<br>
@@ -576,7 +576,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	WriterSerializer <jv>serializer1</jv> = HtmlSerializer.<jsm>create</jsm>().anchorText(<jsf>LAST_TOKEN</jsf>).build();
 		 *
 		 * 	<jc>// Produces: &lt;a href='http://www.apache.org/foo/bar?baz=qux#myAnchor'&gt;bar&lt;/a&gt;</jc>
-		 * 	String <jv>html</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>html</jv> = <jv>serializer1</jv>.write(<jk>new</jk> MyBean());
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#URI_ANCHOR URI_ANCHOR} - Set to the anchor of the URL.
 		 * 			<br>
@@ -591,7 +591,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	WriterSerializer <jv>serializer1</jv> = HtmlSerializer.<jsm>create</jsm>().anchorText(<jsf>URI_ANCHOR</jsf>).build();
 		 *
 		 * 	<jc>// Produces: &lt;a href='http://www.apache.org/foo/bar?baz=qux#myAnchor'&gt;myAnchor&lt;/a&gt;</jc>
-		 * 	String <jv>html</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>html</jv> = <jv>serializer1</jv>.write(<jk>new</jk> MyBean());
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#CONTEXT_RELATIVE CONTEXT_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a context-relative path.
 		 * 			<br>
@@ -612,7 +612,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces: &lt;a href&#61;'/myContext/myServlet/bar/baz'&gt;myServlet/bar/baz&lt;/a&gt;</jc>
-		 * 	String <jv>html</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>html</jv> = <jv>serializer1</jv>.write(<jk>new</jk> MyBean());
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#SERVLET_RELATIVE SERVLET_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a servlet-relative path.
 		 * 			<br>
@@ -633,7 +633,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces: &lt;a href&#61;'/myContext/myServlet/bar/baz'&gt;bar/baz&lt;/a&gt;</jc>
-		 * 	String <jv>html</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>html</jv> = <jv>serializer1</jv>.write(<jk>new</jk> MyBean());
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#PATH_RELATIVE PATH_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a path-relative path.
 		 * 			<br>
@@ -654,7 +654,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces: &lt;a href&#61;'/myContext/myServlet/foo/bar/baz'&gt;bar/baz&lt;/a&gt;</jc>
-		 * 	String <jv>html</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>html</jv> = <jv>serializer1</jv>.write(<jk>new</jk> MyBean());
 		 * 			</p>
 		 * 	</ul>
 		 * </ul>

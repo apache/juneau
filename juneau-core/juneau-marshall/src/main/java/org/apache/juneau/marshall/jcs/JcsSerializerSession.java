@@ -224,15 +224,15 @@ public class JcsSerializerSession extends JsonSerializerSession {
 	/**
 	 * Opens a low-level push generator that emits raw JSON (NOT canonical JCS) one structural
 	 * event at a time, with the {@link TokenWriter#object(Object)} POJO bridge disabled (the
-	 * walker would emit ordinary JSON, not canonical JCS).  Use {@link #serializeRecords(Object)}
-	 * or {@link #serialize(Object, Object)} for canonical output.
+	 * walker would emit ordinary JSON, not canonical JCS).  Use {@link #writeRecords(Object)}
+	 * or {@link #write(Object, Object)} for canonical output.
 	 *
 	 * @param output The output.
 	 * @return A new {@link JsonTokenWriter} with {@code object(...)} disabled.
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	@Override /* TokenWritable */
-	public TokenWriter serializeTokens(Object output) throws IOException {
+	public TokenWriter writeTokens(Object output) throws IOException {
 		var walk = new PojoWalker.Options(
 			isKeepNullProperties(),
 			isTrimEmptyMaps(),
@@ -256,14 +256,14 @@ public class JcsSerializerSession extends JsonSerializerSession {
 	/**
 	 * Returns a record writer that emits canonical JCS for each value passed to
 	 * {@link RecordWriter#write(Object) write(...)} (delegates to this session's
-	 * {@link #serialize(Object, Object)}).
+	 * {@link #write(Object, Object)}).
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -285,7 +285,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
 	})
 	@Override /* Overridden from JsonSerializerSession - package visibility, override by making accessible */
-	protected SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+	protected SerializerWriter writeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 		var keyType = type.getKeyType();
 		var valueType = type.getValueType();
 
@@ -301,7 +301,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 			Object key = generalize(x.getKey(), keyType);
 			addComma.ifSet(() -> out.w(',').smi(i)).set();
 			out.cr(i).attr(toString(key)).w(':').s(i);
-			serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null);
+			writeAnything(out, value, valueType, (key == null ? null : toString(key)), null);
 		}
 
 		out.cre(i - 1).w('}');
@@ -330,7 +330,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 	}
 
 	@Override /* Overridden from JsonSerializerSession */
-	protected SerializerWriter serializeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+	protected SerializerWriter writeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		var entries = new ArrayList<BeanProp>();
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
@@ -356,7 +356,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 		for (var entry : entries) {
 			addComma.ifSet(() -> out.append(',').smi(i)).set();
 			out.cr(i).attr(entry.getKey()).w(':').s(i);
-			serializeAnything(out, entry.getValue(), (ClassMeta<?>) entry.pMeta.getBeanInfo(), entry.getKey(), entry.pMeta);
+			writeAnything(out, entry.getValue(), (ClassMeta<?>) entry.pMeta.getBeanInfo(), entry.getKey(), entry.pMeta);
 		}
 
 		out.cre(i - 1).w('}');

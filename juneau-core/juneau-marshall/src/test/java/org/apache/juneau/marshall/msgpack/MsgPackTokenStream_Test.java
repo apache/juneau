@@ -38,14 +38,14 @@ class MsgPackTokenStream_Test extends TestBase {
 
 		@Test void a01_emptyMap() throws Exception {
 			// 0x80 = fixmap with 0 entries
-			try (var r = MsgPackParser.DEFAULT.parseTokens(new byte[]{(byte) 0x80})) {
+			try (var r = MsgPackParser.DEFAULT.readTokens(new byte[]{(byte) 0x80})) {
 				assertSequence(r, TokenType.START_OBJECT, TokenType.END_OBJECT, TokenType.END_OF_STREAM);
 			}
 		}
 
 		@Test void a02_emptyArray() throws Exception {
 			// 0x90 = fixarray with 0 entries
-			try (var r = MsgPackParser.DEFAULT.parseTokens(new byte[]{(byte) 0x90})) {
+			try (var r = MsgPackParser.DEFAULT.readTokens(new byte[]{(byte) 0x90})) {
 				assertSequence(r, TokenType.START_ARRAY, TokenType.END_ARRAY, TokenType.END_OF_STREAM);
 			}
 		}
@@ -53,7 +53,7 @@ class MsgPackTokenStream_Test extends TestBase {
 		@Test void a03_simpleArray() throws Exception {
 			// 0x93 0x01 0x02 0x03 = fixarray[3] of 1,2,3
 			var bytes = new byte[]{(byte) 0x93, 0x01, 0x02, 0x03};
-			try (var r = MsgPackParser.DEFAULT.parseTokens(bytes)) {
+			try (var r = MsgPackParser.DEFAULT.readTokens(bytes)) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(1L, r.getNumber().longValue());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(2L, r.getNumber().longValue());
@@ -65,7 +65,7 @@ class MsgPackTokenStream_Test extends TestBase {
 		@Test void a04_simpleMap() throws Exception {
 			// 0x82 0xA1 'a' 0x01 0xA1 'b' 0x02 = {"a":1,"b":2}
 			var bytes = new byte[]{(byte) 0x82, (byte) 0xA1, 'a', 0x01, (byte) 0xA1, 'b', 0x02};
-			try (var r = MsgPackParser.DEFAULT.parseTokens(bytes)) {
+			try (var r = MsgPackParser.DEFAULT.readTokens(bytes)) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("a", r.getFieldName());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -84,7 +84,7 @@ class MsgPackTokenStream_Test extends TestBase {
 
 		@Test void b01_emptyMap() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = MsgPackSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = MsgPackSerializer.DEFAULT.writeTokens(bos)) {
 				w.startObject().endObject();
 			}
 			// 0x80 = fixmap[0]
@@ -93,7 +93,7 @@ class MsgPackTokenStream_Test extends TestBase {
 
 		@Test void b02_emptyArray() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = MsgPackSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = MsgPackSerializer.DEFAULT.writeTokens(bos)) {
 				w.startArray().endArray();
 			}
 			// 0x90 = fixarray[0]
@@ -102,7 +102,7 @@ class MsgPackTokenStream_Test extends TestBase {
 
 		@Test void b03_simpleMapBufferedAndCounted() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = MsgPackSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = MsgPackSerializer.DEFAULT.writeTokens(bos)) {
 				w.startObject();
 				w.fieldName("a"); w.number(1);
 				w.fieldName("b"); w.number(2);
@@ -116,7 +116,7 @@ class MsgPackTokenStream_Test extends TestBase {
 
 		@Test void b04_nestedContainersBufferIndependently() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = MsgPackSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = MsgPackSerializer.DEFAULT.writeTokens(bos)) {
 				w.startObject();
 				w.fieldName("a");
 				w.startArray();
@@ -133,7 +133,7 @@ class MsgPackTokenStream_Test extends TestBase {
 
 		@Test void b05_binaryNative() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = MsgPackSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = MsgPackSerializer.DEFAULT.writeTokens(bos)) {
 				w.binary(new byte[]{1, 2, 3});
 			}
 			// 0xC4 0x03 0x01 0x02 0x03 = bin8 length 3
@@ -146,7 +146,7 @@ class MsgPackTokenStream_Test extends TestBase {
 
 		@Test void b07_writeAfterCloseThrows() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			var w = MsgPackSerializer.DEFAULT.serializeTokens(bos);
+			var w = MsgPackSerializer.DEFAULT.writeTokens(bos);
 			w.startArray().endArray();
 			w.close();
 			// Every mutating method must reject writes after close() with the closed-writer message.
@@ -171,13 +171,13 @@ class MsgPackTokenStream_Test extends TestBase {
 
 		@Test void c01_writeThenRead() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = MsgPackSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = MsgPackSerializer.DEFAULT.writeTokens(bos)) {
 				w.startObject();
 				w.fieldName("name"); w.string("alice");
 				w.fieldName("age"); w.number(30);
 				w.endObject();
 			}
-			try (var r = MsgPackParser.DEFAULT.parseTokens(bos.toByteArray())) {
+			try (var r = MsgPackParser.DEFAULT.readTokens(bos.toByteArray())) {
 				assertSequence(r,
 					TokenType.START_OBJECT,
 					TokenType.FIELD_NAME, TokenType.VALUE_STRING,
@@ -189,10 +189,10 @@ class MsgPackTokenStream_Test extends TestBase {
 		@Test void c02_binaryRoundTripsAsBinary() throws Exception {
 			var bytes = new byte[]{1, 2, 3, 4};
 			var bos = new ByteArrayOutputStream();
-			try (var w = MsgPackSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = MsgPackSerializer.DEFAULT.writeTokens(bos)) {
 				w.binary(bytes);
 			}
-			try (var r = MsgPackParser.DEFAULT.parseTokens(bos.toByteArray())) {
+			try (var r = MsgPackParser.DEFAULT.readTokens(bos.toByteArray())) {
 				assertEquals(TokenType.VALUE_BINARY, r.next());
 				assertArrayEquals(bytes, r.getBinary());
 			}
@@ -210,9 +210,9 @@ class MsgPackTokenStream_Test extends TestBase {
 			var b = new Bean();
 			b.name = "alice";
 			b.age = 30;
-			var bytes = MsgPackSerializer.DEFAULT.serialize(b);
+			var bytes = MsgPackSerializer.DEFAULT.write(b);
 
-			try (var r = MsgPackParser.DEFAULT.parseTokens((byte[]) bytes)) {
+			try (var r = MsgPackParser.DEFAULT.readTokens((byte[]) bytes)) {
 				var got = r.read(Bean.class);
 				assertEquals("alice", got.name);
 				assertEquals(30, got.age);
@@ -225,13 +225,13 @@ class MsgPackTokenStream_Test extends TestBase {
 			b.age = 30;
 
 			var bos = new ByteArrayOutputStream();
-			try (var w = MsgPackSerializer.DEFAULT.serializeTokens(bos)) {
+			try (var w = MsgPackSerializer.DEFAULT.writeTokens(bos)) {
 				w.object(b);
 			}
 
 			// Round-trip via MsgPackParser (the cursor walks the bean alphabetically by BeanMap;
 			// canonical MsgPackSerializer also alphabetical).  Compare the parsed Bean.
-			var fromWalker = MsgPackParser.DEFAULT.parse(bos.toByteArray(), Bean.class);
+			var fromWalker = MsgPackParser.DEFAULT.read(bos.toByteArray(), Bean.class);
 			assertEquals("alice", fromWalker.name);
 			assertEquals(30, fromWalker.age);
 		}
@@ -240,10 +240,10 @@ class MsgPackTokenStream_Test extends TestBase {
 			var b1 = new Bean(); b1.name = "alice"; b1.age = 30;
 			var b2 = new Bean(); b2.name = "bob";   b2.age = 40;
 			var list = java.util.List.of(b1, b2);
-			var bytes = MsgPackSerializer.DEFAULT.serialize(list);
+			var bytes = MsgPackSerializer.DEFAULT.write(list);
 
 			var seen = new java.util.ArrayList<Bean>();
-			try (var r = MsgPackParser.DEFAULT.parseTokens((byte[]) bytes)) {
+			try (var r = MsgPackParser.DEFAULT.readTokens((byte[]) bytes)) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				while (r.canRead())
 					seen.add(r.read(Bean.class));

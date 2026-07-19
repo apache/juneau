@@ -31,11 +31,11 @@ import org.junit.jupiter.api.*;
 class ProtobufEdgeCases_Test extends TestBase {
 
 	private static String ser(Object o) throws Exception {
-		return toSpacedHex(ProtobufSerializer.DEFAULT.serialize(o));
+		return toSpacedHex(ProtobufSerializer.DEFAULT.write(o));
 	}
 
 	private static <T> T roundTrip(T o, Class<T> c) throws Exception {
-		return ProtobufParser.DEFAULT.parse(ProtobufSerializer.DEFAULT.serialize(o), c);
+		return ProtobufParser.DEFAULT.read(ProtobufSerializer.DEFAULT.write(o), c);
 	}
 
 	public static class Ints {

@@ -84,7 +84,7 @@ public class PlainTextSerializerSession extends WriterSerializerSession implemen
 	}
 
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -94,7 +94,7 @@ public class PlainTextSerializerSession extends WriterSerializerSession implemen
 	}
 
 	@Override /* Overridden from SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		out.getWriter().write(o == null ? "null" : convertToType(o, String.class));
 	}
 }

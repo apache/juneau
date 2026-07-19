@@ -276,7 +276,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	void c05_polymorphicRecordWithTypeName() throws Exception {
 		var dog = new DogRecord("Rex", "Labrador");
 		var s = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build();
-		var json = s.serialize(dog);
+		var json = s.write(dog);
 		assertTrue(json.contains("dog"));
 		assertTrue(json.contains("Rex"));
 	}

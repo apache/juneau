@@ -60,12 +60,12 @@ public class JsonComplexExample {
 		values.put("setTwo", setTwo);
 		var pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
 
-		var flat = jsonSerializer.serialize(pojoc);
+		var flat = jsonSerializer.write(pojoc);
 
 		// Print out the created POJO in JSON format.
 		Logger.getLogger(JsonComplexExample.class).info(flat);
 
-		var parse = jsonParser.parse(flat, PojoComplex.class);
+		var parse = jsonParser.read(flat, PojoComplex.class);
 
 		assert parse.getId().equals(pojoc.getId());
 		assert parse.getInnerPojo().getName().equals(pojoc.getInnerPojo().getName());

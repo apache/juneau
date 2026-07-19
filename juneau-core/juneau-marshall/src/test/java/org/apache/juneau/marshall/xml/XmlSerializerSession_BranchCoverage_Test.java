@@ -45,11 +45,11 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 		var bean = new SimpleBean();
 		bean.name = "Alice";
 		bean.age = 30;
-		var xml = SER.serialize(bean);
+		var xml = SER.write(bean);
 		assertNotNull(xml);
 		assertTrue(xml.contains("<name>Alice</name>"), "Expected name element in: " + xml);
 		assertTrue(xml.contains("<age>30</age>"), "Expected age element in: " + xml);
-		var parsed = PAR.parse(xml, SimpleBean.class);
+		var parsed = PAR.read(xml, SimpleBean.class);
 		assertEquals("Alice", parsed.name);
 		assertEquals(30, parsed.age);
 	}
@@ -59,9 +59,9 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 		var bean = new SimpleBean();
 		bean.name = null;
 		bean.age = 5;
-		var xml = SER.serialize(bean);
+		var xml = SER.write(bean);
 		assertNotNull(xml);
-		var parsed = PAR.parse(xml, SimpleBean.class);
+		var parsed = PAR.read(xml, SimpleBean.class);
 		assertNull(parsed.name);
 		assertEquals(5, parsed.age);
 	}
@@ -71,30 +71,30 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("k1", "v1");
 		m.put("k2", 42);
-		var xml = SER.serialize(m);
+		var xml = SER.write(m);
 		assertNotNull(xml);
 		assertTrue(xml.contains("k1"), "Expected key k1 in: " + xml);
 		assertTrue(xml.contains("v1"), "Expected value v1 in: " + xml);
-		var parsed = PAR.parse(xml, JsonMap.class);
+		var parsed = PAR.read(xml, JsonMap.class);
 		assertEquals("v1", parsed.get("k1"));
 	}
 
 	/** List serializes to XML and round-trips via JsonList. */
 	@Test void a04_list() {
 		var list = new ArrayList<>(Arrays.asList("alpha", "beta", "gamma"));
-		var xml = SER.serialize(list);
+		var xml = SER.write(list);
 		assertNotNull(xml);
 		assertTrue(xml.contains("alpha"), "Expected alpha in: " + xml);
-		var parsed = PAR.parse(xml, JsonList.class);
+		var parsed = PAR.read(xml, JsonList.class);
 		assertEquals(3, parsed.size());
 	}
 
 	/** Empty bean serializes to an element with no children and round-trips. */
 	@Test void a05_emptyBean() {
 		var bean = new EmptyBean();
-		var xml = SER.serialize(bean);
+		var xml = SER.write(bean);
 		assertNotNull(xml);
-		assertNotNull(PAR.parse(xml, EmptyBean.class));
+		assertNotNull(PAR.read(xml, EmptyBean.class));
 	}
 
 	/** Nested bean serializes with child elements and round-trips. */
@@ -104,10 +104,10 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 		outer.inner = new SimpleBean();
 		outer.inner.name = "Bob";
 		outer.inner.age = 25;
-		var xml = SER.serialize(outer);
+		var xml = SER.write(outer);
 		assertNotNull(xml);
 		assertTrue(xml.contains("Bob"), "Expected nested name in: " + xml);
-		var parsed = PAR.parse(xml, OuterBean.class);
+		var parsed = PAR.read(xml, OuterBean.class);
 		assertEquals("outer", parsed.label);
 		assertEquals("Bob", parsed.inner.name);
 	}
@@ -115,9 +115,9 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	/** Array serializes as repeated elements and round-trips. */
 	@Test void a07_array() {
 		var arr = new int[]{1, 2, 3};
-		var xml = SER.serialize(arr);
+		var xml = SER.write(arr);
 		assertNotNull(xml);
-		var parsed = PAR.parse(xml, JsonList.class);
+		var parsed = PAR.read(xml, JsonList.class);
 		assertEquals(3, parsed.size());
 	}
 
@@ -126,7 +126,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 		var s = XmlSerializer.create().trimStrings().build();
 		var m = new LinkedHashMap<String, Object>();
 		m.put("key", "  padded  ");
-		var xml = s.serialize(m);
+		var xml = s.write(m);
 		assertNotNull(xml);
 		assertTrue(xml.contains("padded"), "Expected trimmed value in: " + xml);
 		assertFalse(xml.contains("  padded  "), "Expected padding removed in: " + xml);
@@ -138,14 +138,14 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 		var bean = new SimpleBean();
 		bean.name = "typeTest";
 		bean.age = 1;
-		var xml = s.serialize(bean);
+		var xml = s.write(bean);
 		assertNotNull(xml);
 		assertTrue(xml.contains("name"), "Expected bean content in: " + xml);
 	}
 
 	/** Parsing invalid XML throws a ParseException. */
 	@Test void a10_parseError() {
-		assertThrows(ParseException.class, () -> PAR.parse("<<not valid xml>>", SimpleBean.class));
+		assertThrows(ParseException.class, () -> PAR.read("<<not valid xml>>", SimpleBean.class));
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 		var b = XmlSerializer.create();
 		b.textNodeDelimiter(null);
 		var s = b.build();
-		assertNotNull(s.serialize("hello"));
+		assertNotNull(s.write("hello"));
 	}
 
 	/** property(null, value) → null-key branch at line 170. */
@@ -169,14 +169,14 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	/** property() with addNamespaceUrisToRoot key → switch case at line 172. */
 	@Test void b03_property_addNamespaceUrisToRoot() {
 		var s = XmlSerializer.DEFAULT.createSession().property("addNamespaceUrisToRoot", true).build();
-		var xml = s.serialize(new SimpleBean());
+		var xml = s.write(new SimpleBean());
 		assertNotNull(xml);
 	}
 
 	/** property() with textNodeDelimiter key → switch case at line 180. */
 	@Test void b04_property_textNodeDelimiter() {
 		var s = XmlSerializer.DEFAULT.createSession().property("textNodeDelimiter", " | ").build();
-		var xml = s.serialize(new SimpleBean());
+		var xml = s.write(new SimpleBean());
 		assertNotNull(xml);
 	}
 
@@ -200,7 +200,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	/** Bean with namespace enabled → namespace-aware serialization. */
 	@Test void c01_enableNamespaces() {
 		var s = XmlSerializer.create().enableNamespaces().addNamespaceUrisToRoot().build();
-		var xml = s.serialize(new SimpleBean());
+		var xml = s.write(new SimpleBean());
 		assertNotNull(xml);
 	}
 
@@ -208,13 +208,13 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	@Test void c02_enableNamespaces_collection() {
 		var s = XmlSerializer.create().enableNamespaces().build();
 		var list = new ArrayList<>(List.of("alpha", "beta"));
-		var xml = s.serialize(list);
+		var xml = s.write(list);
 		assertNotNull(xml);
 	}
 
 	/** Null root object serializes to XML. */
 	@Test void c03_nullRoot() {
-		var xml = SER.serialize(null);
+		var xml = SER.write(null);
 		assertNotNull(xml);
 	}
 
@@ -224,43 +224,43 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 
 	/** Date serializes without error. */
 	@Test void d01_date() {
-		var xml = SER.serialize(new Date(0));
+		var xml = SER.write(new Date(0));
 		assertNotNull(xml);
 	}
 
 	/** java.time.Instant serializes without error. */
 	@Test void d02_instant() {
-		var xml = SER.serialize(java.time.Instant.EPOCH);
+		var xml = SER.write(java.time.Instant.EPOCH);
 		assertNotNull(xml);
 	}
 
 	/** java.time.Duration serializes without error. */
 	@Test void d03_duration() {
-		var xml = SER.serialize(java.time.Duration.ofSeconds(42));
+		var xml = SER.write(java.time.Duration.ofSeconds(42));
 		assertNotNull(xml);
 	}
 
 	/** java.time.Period serializes without error. */
 	@Test void d04_period() {
-		var xml = SER.serialize(java.time.Period.of(1, 2, 3));
+		var xml = SER.write(java.time.Period.of(1, 2, 3));
 		assertNotNull(xml);
 	}
 
 	/** Boolean serializes to XML. */
 	@Test void d05_booleanValue() {
-		var xml = SER.serialize(true);
+		var xml = SER.write(true);
 		assertNotNull(xml);
 	}
 
 	/** Number serializes to XML. */
 	@Test void d06_number() {
-		var xml = SER.serialize(42);
+		var xml = SER.write(42);
 		assertNotNull(xml);
 	}
 
 	/** char value zero serializes to XML. */
 	@Test void d07_charZero() {
-		var xml = SER.serialize('\0');
+		var xml = SER.write('\0');
 		assertNotNull(xml);
 	}
 
@@ -275,7 +275,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	}
 
 	@Test void e01_beanWithListProperty() {
-		var xml = SER.serialize(new BeanWithListProp());
+		var xml = SER.write(new BeanWithListProp());
 		assertNotNull(xml);
 		assertTrue(xml.contains("a"), "Expected items in: " + xml);
 	}
@@ -283,7 +283,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	/** Stream serialized as collection. */
 	@Test void e02_streamAsCollection() {
 		var stream = java.util.stream.Stream.of("x", "y", "z");
-		var xml = SER.serialize(stream);
+		var xml = SER.write(stream);
 		assertNotNull(xml);
 	}
 
@@ -297,7 +297,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 		var dl = new org.apache.juneau.marshall.internal.DelegateList<>(cm);
 		dl.add("alpha");
 		dl.add("beta");
-		var xml = SER.serialize(dl);
+		var xml = SER.write(dl);
 		assertNotNull(xml);
 	}
 
@@ -308,7 +308,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	@Test void g01_autoDetectNamespaces() {
 		// autoDetectNamespaces is on by default (disable method is disableAutoDetectNamespaces)
 		var s = XmlSerializer.create().enableNamespaces(true).addNamespaceUrisToRoot().build();
-		var xml = s.serialize(new SimpleBean());
+		var xml = s.write(new SimpleBean());
 		assertNotNull(xml);
 	}
 

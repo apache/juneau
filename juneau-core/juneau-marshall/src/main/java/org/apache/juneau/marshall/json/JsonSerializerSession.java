@@ -150,7 +150,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 		escapeSolidus = builder.escapeSolidus;
 	}
 
-	protected SerializerWriter serializeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+	protected SerializerWriter writeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		int i = indent;
 		out.w('{');
 
@@ -175,7 +175,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 
 			out.cr(i).attr(key).w(':').s(i);
 
-			serializeAnything(out, value, cMeta, key, pMeta);
+			writeAnything(out, value, cMeta, key, pMeta);
 		});
 
 		out.cre(i - 1).w('}');
@@ -183,7 +183,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	}
 
 	
-	private SerializerWriter serializeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter writeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 
 		var elementType = type.getElementType();
 
@@ -192,14 +192,14 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 		forEachEntry(c, x -> {
 			addComma.ifSet(() -> out.w(',').smi(indent)).set();
 			out.cr(indent);
-			serializeAnything(out, x, elementType, "<iterator>", null);
+			writeAnything(out, x, elementType, "<iterator>", null);
 		});
 
 		out.cre(indent - 1).w(']');
 		return out;
 	}
 
-	private SerializerWriter serializeStreamable(JsonWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter writeStreamable(JsonWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
 		var elementType = type.getElementType();
 
 		out.w('[');
@@ -207,7 +207,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 		forEachStreamableEntry(o, sType, x -> {
 			addComma.ifSet(() -> out.w(',').smi(indent)).set();
 			out.cr(indent);
-			serializeAnything(out, x, elementType, "<iterator>", null);
+			writeAnything(out, x, elementType, "<iterator>", null);
 		});
 
 		out.cre(indent - 1).w(']');
@@ -215,7 +215,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	}
 
 	
-	protected SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+	protected SerializerWriter writeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
 		var valueType = type.getValueType();
@@ -229,7 +229,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 			Object value = x.getValue();
 			Object key = generalize(x.getKey(), keyType);
 			out.cr(i).attr(toString(key)).w(':').s(i);
-			serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null);
+			writeAnything(out, value, valueType, (key == null ? null : toString(key)), null);
 		});
 
 		out.cre(i - 1).w('}');
@@ -238,8 +238,8 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	}
 
 	@Override /* Overridden from SerializerSesssion */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		serializeAnything(getJsonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
+		writeAnything(getJsonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
 	}
 
 	/**
@@ -303,7 +303,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	@Override /* TokenWritable */
-	public TokenWriter serializeTokens(Object output) throws IOException {
+	public TokenWriter writeTokens(Object output) throws IOException {
 		var walk = new PojoWalker.Options(
 			isKeepNullProperties(),
 			isTrimEmptyMaps(),
@@ -333,8 +333,8 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
-		return StreamingArrayRecord.writer(serializeTokens(output));
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
+		return StreamingArrayRecord.writer(writeTokens(output));
 	}
 
 	/**
@@ -353,7 +353,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 	})
-	protected JsonWriter serializeAnything(JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
+	protected JsonWriter writeAnything(JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null) {
 			out.append("null");
@@ -407,36 +407,36 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0)) {
 			out.append("null");
 		} else if (sType.isBean()) {
-			serializeBeanMap(out, toBeanMap(o), typeName);
+			writeBeanMap(out, toBeanMap(o), typeName);
 		} else if (sType.isMap()) {
 			if (sType.isBeanMap())
-				serializeBeanMap(out, (BeanMap)o, typeName);
+				writeBeanMap(out, (BeanMap)o, typeName);
 			else
-				serializeMap(out, (Map)o, eType);
+				writeMap(out, (Map)o, eType);
 		} else if (sType.isCollection()) {
-			serializeCollection(out, (Collection)o, eType);
+			writeCollection(out, (Collection)o, eType);
 		} else if (sType.isArray()) {
-			serializeCollection(out, toList(sType.inner(), o), eType);
+			writeCollection(out, toList(sType.inner(), o), eType);
 		} else if (sType.isNumber() || sType.isBoolean()) {
 			out.append(o);
 		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
 			out.uriValue(o);
 		} else if (sType.isDate()) {
-			out.stringValue(serializeDate((Date)o, sType));
+			out.stringValue(writeDate((Date)o, sType));
 		} else if (sType.isCalendar()) {
-			out.stringValue(serializeCalendar(o, sType));
+			out.stringValue(writeCalendar(o, sType));
 		} else if (sType.isTemporal()) {
-			out.stringValue(serializeTemporal((TemporalAccessor)o, sType));
+			out.stringValue(writeTemporal((TemporalAccessor)o, sType));
 		} else if (sType.isDuration()) {
-			var value = serializeDuration((Duration)o);
+			var value = writeDuration((Duration)o);
 			if (getDurationFormat().isNumeric())
 				out.append(value);
 			else
 				out.stringValue(value);
 		} else if (sType.isPeriod()) {
-			out.stringValue(serializePeriod((Period)o));
+			out.stringValue(writePeriod((Period)o));
 		} else if (sType.isStreamable()) {
-			serializeStreamable(out, o, sType, eType);
+			writeStreamable(out, o, sType, eType);
 		} else if (sType.isReader()) {
 			pipe((Reader)o, out, SerializerSession::handleThrown);
 		} else if (sType.isInputStream()) {
@@ -469,9 +469,9 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	@SuppressWarnings({
 		"java:S112" // throws Exception intentional - callback/lifecycle method for serialization hooks
 	})
-	protected String serializeJson(Object o) throws Exception {
+	protected String writeJson(Object o) throws Exception {
 		var sw = new StringWriter();
-		serializeAnything(getJsonWriter(createPipe(sw)).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
+		writeAnything(getJsonWriter(createPipe(sw)).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
 		return sw.toString();
 	}
 }

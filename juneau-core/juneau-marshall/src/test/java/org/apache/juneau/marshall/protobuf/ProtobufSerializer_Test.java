@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
 class ProtobufSerializer_Test extends TestBase {
 
 	private static String ser(Object o) throws Exception {
-		return toSpacedHex(ProtobufSerializer.DEFAULT.serialize(o));
+		return toSpacedHex(ProtobufSerializer.DEFAULT.write(o));
 	}
 
 	// Alphabetical: id=1, name=2.

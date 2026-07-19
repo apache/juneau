@@ -100,7 +100,7 @@ public class JsonlParserSession extends JsonParserSession {
 	 * <p>
 	 * Each top-level JSON value (one per line) is emitted as a flat sequence at depth 0; there
 	 * is no virtual root container.  See {@link JsonlTokenReader} for the contract.  Same
-	 * honored/ignored builder properties as {@link JsonParserSession#parseTokens(Object)}.
+	 * honored/ignored builder properties as {@link JsonParserSession#readTokens(Object)}.
 	 *
 	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence},
 	 * 	{@link InputStream}, or <code><jk>byte</jk>[]</code>.
@@ -111,7 +111,7 @@ public class JsonlParserSession extends JsonParserSession {
 		"java:S2095" // ParserPipe lifecycle is transferred to the returned JsonlTokenReader, which closes it via its own close(); the caller owns the cursor via try-with-resources.
 	})
 	@Override /* JsonParserSession */
-	public TokenReader parseTokens(Object input) throws IOException {
+	public TokenReader readTokens(Object input) throws IOException {
 		var pipe = new ParserPipe(
 			input,
 			isDebug(),
@@ -126,9 +126,9 @@ public class JsonlParserSession extends JsonParserSession {
 	 * Streaming array-element {@link RecordReader} for JSONL.
 	 *
 	 * <p>
-	 * Unlike the inherited {@link JsonParserSession#parseArrayRecords(Object)} &mdash; which expects a
+	 * Unlike the inherited {@link JsonParserSession#readArrayRecords(Object)} &mdash; which expects a
 	 * bracketed top-level <c>[...]</c> array and is invalid for line-delimited JSONL &mdash; this aliases
-	 * the JSONL line record stream: the {@link JsonlTokenReader} returned by {@link #parseTokens(Object)}
+	 * the JSONL line record stream: the {@link JsonlTokenReader} returned by {@link #readTokens(Object)}
 	 * is itself a {@link RecordReader} that yields one record per top-level line at depth 0.  Memory is
 	 * O(1) in the number of lines.
 	 *
@@ -137,12 +137,12 @@ public class JsonlParserSession extends JsonParserSession {
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
-		return parseTokens(input);
+	public RecordReader readArrayRecords(Object input) throws IOException {
+		return readTokens(input);
 	}
 
 	@Override /* Overridden from JsonParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (var r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
@@ -156,7 +156,7 @@ public class JsonlParserSession extends JsonParserSession {
 					var trimmed = line.trim();
 					if (!trimmed.isEmpty()) {
 						try (var linePipe = createPipe(trimmed)) {
-							var item = super.doParse(linePipe, elementType);
+							var item = super.doRead(linePipe, elementType);
 							results.add(item);
 						}
 					}
@@ -171,7 +171,7 @@ public class JsonlParserSession extends JsonParserSession {
 				var trimmed = line.trim();
 				if (!trimmed.isEmpty()) {
 					try (var linePipe = createPipe(trimmed)) {
-						return super.doParse(linePipe, type);
+						return super.doRead(linePipe, type);
 					}
 				}
 			}

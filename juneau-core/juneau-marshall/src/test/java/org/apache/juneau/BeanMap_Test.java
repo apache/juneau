@@ -524,10 +524,10 @@ class BeanMap_Test extends TestBase {
 		m.put("s2", JsonList.ofString("[[\"foo\"]]"));
 		m.put("i", JsonList.ofString("[1,2,3]"));
 		m.put("i2", JsonList.ofString("[[1,2,3],[4,5,6]]"));
-		assertEquals("{s:['foo'],s2:[['foo']],i:[1,2,3],i2:[[1,2,3],[4,5,6]]}", Json5Serializer.DEFAULT.serialize(t));
+		assertEquals("{s:['foo'],s2:[['foo']],i:[1,2,3],i2:[[1,2,3],[4,5,6]]}", Json5Serializer.DEFAULT.write(t));
 		m.put("i", JsonList.ofString("[null,null,null]"));
 		m.put("i2", JsonList.ofString("[[null,null,null],[null,null,null]]"));
-		assertEquals("{s:['foo'],s2:[['foo']],i:[0,0,0],i2:[[0,0,0],[0,0,0]]}", Json5Serializer.DEFAULT.serialize(t));
+		assertEquals("{s:['foo'],s2:[['foo']],i:[0,0,0],i2:[[0,0,0],[0,0,0]]}", Json5Serializer.DEFAULT.write(t));
 	}
 
 	@BeanType(p="s,s2,i,i2")
@@ -638,19 +638,19 @@ class BeanMap_Test extends TestBase {
 		var m = bc.toBeanMap(t7);
 		m.put("enum1", "ONE");
 		m.put("enum2", "TWO");
-		assertEquals("{_type:'H',enum1:'ONE',enum2:'TWO'}", serializer.serialize(t7));
+		assertEquals("{_type:'H',enum1:'ONE',enum2:'TWO'}", serializer.write(t7));
 		assertBean(t7, "enum1,enum2", "ONE,TWO");
 
 		// Use MarshallingContext to create bean instance.
 		m = BeanMapLoader.load(MarshallingContext.DEFAULT.newBeanMap(H.class), "{enum1:'TWO',enum2:'THREE'}");
-		assertEquals("{_type:'H',enum1:'TWO',enum2:'THREE'}", serializer.serialize(m.getBean()));
+		assertEquals("{_type:'H',enum1:'TWO',enum2:'THREE'}", serializer.write(m.getBean()));
 		t7 = m.getBean();
 		assertBean(t7, "enum1,enum2", "TWO,THREE");
 
 		// Create instance directly from JSON.
 		var p = Json5Parser.create().beanDictionary(H.class).build();
-		t7 = (H)p.parse("{_type:'H',enum1:'THREE',enum2:'ONE'}", Object.class);
-		assertEquals("{_type:'H',enum1:'THREE',enum2:'ONE'}", serializer.serialize(t7));
+		t7 = (H)p.read("{_type:'H',enum1:'THREE',enum2:'ONE'}", Object.class);
+		assertEquals("{_type:'H',enum1:'THREE',enum2:'ONE'}", serializer.write(t7));
 		assertBean(t7, "enum1,enum2", "THREE,ONE");
 	}
 
@@ -878,42 +878,42 @@ class BeanMap_Test extends TestBase {
 		// JSON
 		var json = "{baz:789,foo:123,bar:456}";
 		var p = (ReaderParser)Json5Parser.create().ignoreUnknownBeanProperties().build();
-		var t = p.parse(json, O.class);
+		var t = p.read(json, O.class);
 		assertBean(t, "foo", "123");
 
-		assertThrows(Exception.class, ()->Json5Parser.DEFAULT.parse(json, O.class));
+		assertThrows(Exception.class, ()->Json5Parser.DEFAULT.read(json, O.class));
 
 		// XML
 		var xml = "<object><baz type='number'>789</baz><foo type='number'>123</foo><bar type='number'>456</bar></object>";
 		p = XmlParser.create().ignoreUnknownBeanProperties().build();
-		t = p.parse(xml, O.class);
+		t = p.read(xml, O.class);
 		assertBean(t, "foo", "123");
 
-		assertThrows(Exception.class, ()->XmlParser.DEFAULT.parse(json, O.class));
+		assertThrows(Exception.class, ()->XmlParser.DEFAULT.read(json, O.class));
 
 		// HTML
 		var html = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>baz</string></td><td><number>789</number></td></tr><tr><td><string>foo</string></td><td><number>123</number></td></tr><tr><td><string>bar</string></td><td><number>456</number></td></tr></table>";
 		p = HtmlParser.create().ignoreUnknownBeanProperties().build();
-		t = p.parse(html, O.class);
+		t = p.read(html, O.class);
 		assertBean(t, "foo", "123");
 
-		assertThrows(Exception.class, ()->HtmlParser.DEFAULT.parse(json, O.class));
+		assertThrows(Exception.class, ()->HtmlParser.DEFAULT.read(json, O.class));
 
 		// UON
 		var uon = "(baz=789,foo=123,bar=456)";
 		p = UonParser.create().ignoreUnknownBeanProperties().build();
-		t = p.parse(uon, O.class);
+		t = p.read(uon, O.class);
 		assertBean(t, "foo", "123");
 
-		assertThrows(Exception.class, ()->UonParser.DEFAULT.parse(json, O.class));
+		assertThrows(Exception.class, ()->UonParser.DEFAULT.read(json, O.class));
 
 		// URL-Encoding
 		var urlencoding = "baz=789&foo=123&bar=456";
 		p = UrlEncodingParser.create().ignoreUnknownBeanProperties().build();
-		t = p.parse(urlencoding, O.class);
+		t = p.read(urlencoding, O.class);
 		assertBean(t, "foo", "123");
 
-		assertThrows(Exception.class, ()->UrlEncodingParser.DEFAULT.parse(json, O.class));
+		assertThrows(Exception.class, ()->UrlEncodingParser.DEFAULT.read(json, O.class));
 	}
 
 	public static class O {
@@ -1587,11 +1587,11 @@ class BeanMap_Test extends TestBase {
 		var t = new U();
 		t.a = "a";
 		t.b = "b";
-		var r = s.serialize(t);
+		var r = s.write(t);
 		assertEquals("{a:'a',b:'b'}", r);
 
 		// Make sure setters are used if present.
-		t = Json5Parser.DEFAULT.parse(r, U.class);
+		t = Json5Parser.DEFAULT.read(r, U.class);
 		assertEquals("b(setter)", t.b);
 	}
 
@@ -1621,11 +1621,11 @@ class BeanMap_Test extends TestBase {
 		var t = new Uc();
 		t.a = "a";
 		t.b = "b";
-		var r = s.serialize(t);
+		var r = s.write(t);
 		assertEquals("{a:'a',b:'b'}", r);
 
 		// Make sure setters are used if present.
-		t = Json5Parser.DEFAULT.copy().applyAnnotations(Uc.class).build().parse(r, Uc.class);
+		t = Json5Parser.DEFAULT.copy().applyAnnotations(Uc.class).build().read(r, Uc.class);
 		assertEquals("b(setter)", t.b);
 	}
 
@@ -1725,16 +1725,16 @@ class BeanMap_Test extends TestBase {
 		var p = Json5Parser.DEFAULT;
 
 		var t1 = X1.create();
-		var r = s.serialize(t1);
+		var r = s.write(t1);
 		assertEquals("{f1:'1',f2:'2'}", r);
-		t1 = p.parse(r, X1.class);
+		t1 = p.read(r, X1.class);
 		assertEquals("1", t1.f1);
 		assertEquals("2", t1.getF2());
 
 		var t2 = X2.create();
-		r = s.serialize(t2);
+		r = s.write(t2);
 		assertEquals("{f1:1,f2:2}", r);
-		t2 = p.parse(r, X2.class);
+		t2 = p.read(r, X2.class);
 		assertEquals(1, t2.f1.intValue());
 		assertEquals(2, t2.getF2().intValue());
 	}

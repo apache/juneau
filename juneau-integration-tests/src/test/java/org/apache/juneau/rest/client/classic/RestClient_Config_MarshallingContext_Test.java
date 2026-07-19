@@ -769,7 +769,7 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 		}
 		public static A28 fromString(String foo) throws ParseException {
 			var x = new A28();
-			x.foo = Json5Parser.DEFAULT.parse(foo,int.class);
+			x.foo = Json5Parser.DEFAULT.read(foo,int.class);
 			return x;
 		}
 	}

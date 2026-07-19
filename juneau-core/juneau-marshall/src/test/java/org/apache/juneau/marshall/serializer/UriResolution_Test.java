@@ -55,7 +55,7 @@ class UriResolution_Test extends TestBase {
 
 		void testSerialize(Serializer s, String expected, Object testBean) throws Exception {
 			try {
-				var r = s.serializeToString(testBean);
+				var r = s.writeToString(testBean);
 
 				// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 				if (expected.equals("xxx")) {
@@ -75,9 +75,9 @@ class UriResolution_Test extends TestBase {
 
 		void testParse(Serializer s, Parser p, Object testBean) throws Exception {
 			try {
-				var r = s.serializeToString(testBean);
+				var r = s.writeToString(testBean);
 
-				var m = p.parse(r, TreeMap.class, String.class, String.class);
+				var m = p.read(r, TreeMap.class, String.class, String.class);
 
 				var r2 = Json5Serializer.DEFAULT.toString(m);
 				assertEquals(r2, results.json, fs("%s/%s parse failed", label, cns(s)));

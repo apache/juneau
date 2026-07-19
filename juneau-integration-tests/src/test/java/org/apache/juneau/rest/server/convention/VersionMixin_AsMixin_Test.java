@@ -75,7 +75,7 @@ class VersionMixin_AsMixin_Test extends TestBase {
 
 	@Test void a03_defaultPayloadHasJavaVersionAtMinimum() throws Exception {
 		var body = ca.get("/version").run().assertStatus(200).getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		Assertions.assertNotNull(parsed.get("javaVersion"), "javaVersion present");
 	}
 
@@ -103,7 +103,7 @@ class VersionMixin_AsMixin_Test extends TestBase {
 
 	@Test void b01_programmaticEntriesSurface() throws Exception {
 		var body = cb.get("/version").run().assertStatus(200).getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		Assertions.assertEquals("my-app", parsed.get("name"));
 		Assertions.assertEquals("1.2.3", parsed.get("version"));
 		Assertions.assertEquals("abc123", parsed.get("gitCommit"));
@@ -132,7 +132,7 @@ class VersionMixin_AsMixin_Test extends TestBase {
 
 	@Test void c01_syntheticManifestSurfaces() throws Exception {
 		var body = cc.get("/version").run().assertStatus(200).getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		Assertions.assertEquals("synthetic-app", parsed.get("name"));
 		Assertions.assertEquals("9.9.9", parsed.get("version"));
 		Assertions.assertEquals("Acme", parsed.get("vendor"));

@@ -41,7 +41,7 @@ class OpenApiPartSerializer_Test extends TestBase {
 	static OpenApiSerializerSession s = OpenApiSerializer.DEFAULT.getSession();
 
 	private static String serialize(HttpPartSchema schema, Object o) throws SchemaValidationException, SerializeException {
-		return s.serialize(null, schema, o);
+		return s.write(null, schema, o);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

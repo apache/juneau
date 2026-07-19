@@ -64,12 +64,12 @@ public class HtmlComplexExample {
 		values.put("setTwo", setTwo);
 		var pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
 
-		var flat = htmlSerializer.serialize(pojoc);
+		var flat = htmlSerializer.write(pojoc);
 
 		// Print out the created POJO in JSON format.
 		Logger.getLogger(HtmlComplexExample.class).info(flat);
 
-		var parse = htmlParser.parse(flat, PojoComplex.class);
+		var parse = htmlParser.read(flat, PojoComplex.class);
 
 		assert parse.getId().equals(pojoc.getId());
 		assert parse.getInnerPojo().getName().equals(pojoc.getInnerPojo().getName());

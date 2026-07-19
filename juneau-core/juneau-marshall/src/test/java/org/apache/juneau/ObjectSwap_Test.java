@@ -34,14 +34,14 @@ class ObjectSwap_Test extends TestBase {
 	@Test void a01_sameType() throws Exception {
 		var s = Json5Serializer.create().swaps(ASwap.class).build();
 		var p = Json5Parser.create().swaps(ASwap.class).build();
-		var r = s.serialize("foobar");
+		var r = s.write("foobar");
 
 		assertEquals("'xfoobarx'", r);
-		r = p.parse(r, String.class);
+		r = p.read(r, String.class);
 		assertEquals("foobar", r);
 
 		var m = Json5Map.ofString("{foo:'bar'}");
-		r = s.serialize(m);
+		r = s.write(m);
 		assertEquals("{xfoox:'xbarx'}", r);
 	}
 

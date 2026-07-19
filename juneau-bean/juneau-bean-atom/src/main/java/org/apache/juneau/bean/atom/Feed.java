@@ -97,7 +97,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	);
  *
  * 	<jc>// Serialize to ATOM/XML</jc>
- * 	String <jv>atomXml</jv> = XmlSerializer.<jsf>DEFAULT_SQ_READABLE</jsf>.serialize(<jv>feed</jv>);
+ * 	String <jv>atomXml</jv> = XmlSerializer.<jsf>DEFAULT_SQ_READABLE</jsf>.write(<jv>feed</jv>);
  * </p>
  *
  * <h5 class='section'>Specification:</h5>

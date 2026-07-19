@@ -51,7 +51,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 			<jk>new</jk> HalLink().setName(<js>"acme"</js>).setHref(<js>"https://acme.example/{rel}"</js>).setTemplated(<jk>true</jk>))
  * 		.set(<js>"total"</js>, 99.50);
  *
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>order</jv>);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>order</jv>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.*;
  * <ol>
  *   <li>Negotiating the response's {@code Accept} to a matched {@link Serializer}.
  *   <li>Building a request-configured {@link SerializerSession SerializerSession}
- *       and calling {@link RecordWritable#serializeRecords(Object) serializeRecords(output)} on it.
+ *       and calling {@link RecordWritable#writeRecords(Object) writeRecords(output)} on it.
  *   <li>Verifying the returned cursor is assignable to the declared parameter type.
  * </ol>
  *
@@ -117,7 +117,7 @@ public class RecordWriterArg extends SimpleRestOperationArg {
 		Object output = session.isWriterSerializer()
 			? res.getNegotiatedWriter()
 			: res.getNegotiatedOutputStream();
-		var cursor = ((RecordWritable) session).serializeRecords(output);
+		var cursor = ((RecordWritable) session).writeRecords(output);
 		if (!declaredType.isInstance(cursor))
 			throw new UnsupportedMediaType(
 				"Serializer '%s' produced cursor type '%s' which is not assignable to the declared parameter type '%s'.",

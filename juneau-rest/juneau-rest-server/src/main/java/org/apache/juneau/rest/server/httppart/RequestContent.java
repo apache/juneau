@@ -568,7 +568,7 @@ public class RequestContent {
 			// @formatter:on
 
 			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
-				var o = session.parse(in, cm);
+				var o = session.read(in, cm);
 				if (nn(schema))
 					schema.validateOutput(o);
 				return o;

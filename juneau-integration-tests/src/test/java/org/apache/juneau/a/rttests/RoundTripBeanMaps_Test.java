@@ -332,20 +332,20 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var p = t. getParser();
 
 		var b1 = B1.create();
-		var r = s.serialize(b1);
-		var b = p.parse(r, B.class);
+		var r = s.write(b1);
+		var b = p.read(r, B.class);
 		assertTrue(b instanceof B1);
 		assertSerialized(b, js, "{_type:'B1',f0:'f0',f1:'f1'}");
 
 		var b2 = B2.create();
-		r = s.serialize(b2);
-		b = p.parse(r, B.class);
+		r = s.write(b2);
+		b = p.read(r, B.class);
 		assertTrue(b instanceof B2);
 		assertSerialized(b, js, "{_type:'B2',f0:'f0',f2:1}");
 
 		var b3 = B3.create();
-		r = s.serialize(b3);
-		b = p.parse(r, B.class);
+		r = s.write(b3);
+		b = p.read(r, B.class);
 		assertTrue(b instanceof B3);
 		assertSerialized(b, js, "{_type:'B3',f0:'f0',f3:'2001-01-01T12:34:56.789Z'}");
 	}
@@ -407,20 +407,20 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var p = t.getParser().copy().dictionaryOn(C.class, CFilterDictionaryMap.class).build();
 
 		var c1 = C1.create();
-		var r = s.serialize(c1);
-		var c = p.parse(r, C.class);
+		var r = s.write(c1);
+		var c = p.read(r, C.class);
 		assertTrue(c instanceof C1);
 		assertSerialized(c, js, "{f0:'f0',f1:'f1'}");
 
 		var c2 = C2.create();
-		r = s.serialize(c2);
-		c = p.parse(r, C.class);
+		r = s.write(c2);
+		c = p.read(r, C.class);
 		assertTrue(c instanceof C2);
 		assertSerialized(c, js, "{f0:'f0',f2:1}");
 
 		var c3 = C3.create();
-		r = s.serialize(c3);
-		c = p.parse(r, C.class);
+		r = s.write(c3);
+		c = p.read(r, C.class);
 		assertTrue(c instanceof C3);
 		assertSerialized(c, js, "{f0:'f0',f3:'2001-01-01T12:34:56.789Z'}");
 	}
@@ -482,8 +482,8 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var p = t.getParser();
 
 		var ba1 = BA1.create();
-		var r = s.serialize(ba1);
-		var b = p.parse(r, BA.class);
+		var r = s.write(ba1);
+		var b = p.read(r, BA.class);
 		assertBean(b, "class{simpleName},f0a,f0b,f1", "{BA1},f0a,f0b,f1");
 	}
 
@@ -524,8 +524,8 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var p = t.getParser().copy().annotations(MarshalledApplyAnnotation.create(CA.class).value(MarshalledAnnotation.create().dictionary(CAFilterDictionaryMap.class).build()).build()).build();
 
 		var c1 = CA1.create();
-		var r = s.serialize(c1);
-		var c = p.parse(r, CA.class);
+		var r = s.write(c1);
+		var c = p.read(r, CA.class);
 		assertBean(c, "class{simpleName},f0a,f0b,f1", "{CA1},f0a,f0b,f1");
 	}
 
@@ -570,8 +570,8 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var p = t.getParser();
 
 		var d = new D1().init();
-		var r = s.serialize(d);
-		d = p.parse(r, D1.class);
+		var r = s.write(d);
+		d = p.read(r, D1.class);
 		assertNull(d.f1);
 		assertBean(d, "f3,f2", "f3,f2");
 	}
@@ -604,8 +604,8 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var p = t.getParser().copy().beanProperties(D2.class, "f3,f2").build();
 
 		var d = new D2().init();
-		var r = s.serialize(d);
-		d = p.parse(r, D2.class);
+		var r = s.write(d);
+		d = p.read(r, D2.class);
 		assertNull(d.f1);
 		assertSerialized(d, js, "{f3:'f3',f2:'f2'}");
 	}
@@ -635,8 +635,8 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var p = t.getParser();
 
 		var e = new E1().init();
-		var r = s.serialize(e);
-		e = p.parse(r, E1.class);
+		var r = s.write(e);
+		e = p.read(r, E1.class);
 		assertBean(e, "f1,f3", "f1,f3");
 	}
 
@@ -666,8 +666,8 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var p = t.getParser().copy().beanPropertiesExcludes(E2.class, "f2").build();
 
 		var e = new E2().init();
-		var r = s.serialize(e);
-		e = p.parse(r, E2.class);
+		var r = s.write(e);
+		e = p.read(r, E2.class);
 		assertBean(e, "f1,f3", "f1,f3");
 	}
 
@@ -696,8 +696,8 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var p = t.getParser();
 
 		var x = new FA2().init();
-		var r = s.serialize(x);
-		x = p.parse(r, FA2.class);
+		var r = s.write(x);
+		x = p.read(r, FA2.class);
 		assertBean(x, "f1", "f1");
 	}
 
@@ -736,8 +736,8 @@ class RoundTripBeanMaps_Test extends TestBase {
 		p.interfaces(FB1.class);
 
 		x = new FB2().init();
-		r = s.build().serialize(x);
-		x = p.build().parse(r, FB2.class);
+		r = s.build().write(x);
+		x = p.build().read(r, FB2.class);
 		assertBean(x, "f1", "f1");
 
 		// --- MarshalledFilter defined on child class class ---
@@ -745,8 +745,8 @@ class RoundTripBeanMaps_Test extends TestBase {
 		p.interfaces(FB1.class);
 
 		x = new FB2().init();
-		r = s.build().serialize(x);
-		x = p.build().parse(r, FB2.class);
+		r = s.build().write(x);
+		x = p.build().read(r, FB2.class);
 		assertBean(x, "f1", "f1");
 
 		// --- MarshalledFilter defined as plain class ---
@@ -754,8 +754,8 @@ class RoundTripBeanMaps_Test extends TestBase {
 		p.interfaces(FB1.class);
 
 		x = new FB2().init();
-		r = s.build().serialize(x);
-		x = p.build().parse(r, FB2.class);
+		r = s.build().write(x);
+		x = p.build().read(r, FB2.class);
 		assertBean(x, "f1", "f1");
 	}
 

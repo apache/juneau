@@ -74,7 +74,7 @@ public @interface ParserConfig {
 	 * Binary input format.
 	 *
 	 * <p>
-	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
+	 * When using the {@link Parser#read(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
 	 * when converting the string into a byte array.
 	 *
 	 * <ul class='values'>
@@ -151,7 +151,7 @@ public @interface ParserConfig {
 	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 	 *
 	 * <p>
-	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+	 * Used when passing in input streams and byte arrays to {@link Parser#read(Object, Class)}.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>

@@ -107,7 +107,7 @@ public class StringRanges {
 	}
 
 	private static HeaderElement[] parse(String value) {
-		return value == null ? null : HeaderValueParser.parseElements(emptyIfNull(trim(value)));
+		return value == null ? null : HeaderValueParser.readElements(emptyIfNull(trim(value)));
 	}
 
 	private final StringRange[] value;

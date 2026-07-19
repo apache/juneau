@@ -52,7 +52,7 @@ class VersionServlet_Test extends TestBase {
 
 	@Test void a02_defaultPayloadHasJavaVersion() throws Exception {
 		var body = c.get("/version").run().assertStatus(200).getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		Assertions.assertNotNull(parsed.get("javaVersion"), "javaVersion present");
 	}
 
@@ -72,7 +72,7 @@ class VersionServlet_Test extends TestBase {
 
 	@Test void b01_customDelegateEntriesSurface() throws Exception {
 		var body = cb.get("/version").run().assertStatus(200).getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		Assertions.assertEquals("my-app", parsed.get("name"));
 		Assertions.assertEquals("1.2.3", parsed.get("version"));
 		Assertions.assertNotNull(parsed.get("javaVersion"));

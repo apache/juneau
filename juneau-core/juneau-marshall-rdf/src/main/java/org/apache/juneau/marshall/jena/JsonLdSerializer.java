@@ -27,7 +27,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to JSON-LD string.</jc>
  * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
- * 	String <jv>jsonLd</jv> = JsonLdSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+ * 	String <jv>jsonLd</jv> = JsonLdSerializer.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the JsonLd marshaller for convenience.</jc>
@@ -36,7 +36,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Custom serializer with swaps.</jc>
  * 	JsonLdSerializer <jv>s</jv> = JsonLdSerializer.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	String <jv>jsonLd</jv> = <jv>s</jv>.serialize(<jv>bean</jv>);
+ * 	String <jv>jsonLd</jv> = <jv>s</jv>.write(<jv>bean</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (bean with name/age):</h5>

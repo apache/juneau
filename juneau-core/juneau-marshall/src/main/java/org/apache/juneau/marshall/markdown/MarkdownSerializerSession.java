@@ -45,8 +45,8 @@ import org.apache.juneau.marshall.swap.*;
 	"java:S110",  // Inheritance depth acceptable for serializer session hierarchy
 	"java:S115",  // Constants use UPPER_snakeCase convention
 	"java:S3740", // Raw ClassMeta/ObjectSwap types used throughout serializer session; parameterization requires extensive generic changes
-	"java:S3776", // Cognitive complexity acceptable for doSerialize
-	"java:S6541", // Brain method acceptable for doSerialize / serializeAnything
+	"java:S3776", // Cognitive complexity acceptable for doWrite
+	"java:S6541", // Brain method acceptable for doWrite / writeAnything
 	"resource",   // MarkdownWriter/Writer lifecycle managed by SerializerPipe
 	"rawtypes",
 })
@@ -124,7 +124,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 	}
 
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -134,9 +134,9 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 	}
 
 	@Override /* Overridden from SerializerSession */
-	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		try (var w = getMarkdownWriter(pipe)) {
-			serializeAnything(w, o, getExpectedRootType(o), null);
+			writeAnything(w, o, getExpectedRootType(o), null);
 		}
 	}
 
@@ -150,7 +150,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException If serialization fails.
 	 */
-	protected void serializeAnything(MarkdownWriter w, Object o, ClassMeta<?> eType, BeanPropertyMeta pMeta) throws IOException, SerializeException {
+	protected void writeAnything(MarkdownWriter w, Object o, ClassMeta<?> eType, BeanPropertyMeta pMeta) throws IOException, SerializeException {
 		if (o == null) {
 			w.text(nullValue);
 			return;
@@ -176,31 +176,31 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 				pop();
 				w.text(nullValue);
 			} else {
-				serializeAnything(w, opt.get(), eType, pMeta);
+				writeAnything(w, opt.get(), eType, pMeta);
 				pop();
 			}
 			return;
 		}
 
 		if (cm.isBean()) {
-			serializeBeanMap(w, toBeanMap(o), eType, cm);
+			writeBeanMap(w, toBeanMap(o), eType, cm);
 		} else if (cm.isMap()) {
-			serializeMap(w, (Map<?,?>) o, cm);
+			writeMap(w, (Map<?,?>) o, cm);
 		} else if (cm.isCollectionOrArray()) {
 			var l = cm.isArray() ? toObjectList(o) : (Collection<?>) o;
-			serializeCollection(w, l, eType, cm);
+			writeCollection(w, l, eType, cm);
 		} else if (cm.isStreamable()) {
-			serializeCollection(w, toListFromStreamable(o, cm), eType, cm);
+			writeCollection(w, toListFromStreamable(o, cm), eType, cm);
 		} else if (cm.isDate()) {
-			w.text(serializeDate((Date)o, cm));
+			w.text(writeDate((Date)o, cm));
 		} else if (cm.isCalendar()) {
-			w.text(serializeCalendar(o, cm));
+			w.text(writeCalendar(o, cm));
 		} else if (cm.isTemporal()) {
-			w.text(serializeTemporal((TemporalAccessor)o, cm));
+			w.text(writeTemporal((TemporalAccessor)o, cm));
 		} else if (cm.isDuration()) {
-			w.text(serializeDuration((Duration)o));
+			w.text(writeDuration((Duration)o));
 		} else if (cm.isPeriod()) {
-			w.text(serializePeriod((Period)o));
+			w.text(writePeriod((Period)o));
 		} else {
 			var s = toString(o);
 			// Only use JSON5 wrapping for actual string/enum types where auto-detection could misinterpret
@@ -225,7 +225,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException If serialization fails.
 	 */
-	protected void serializeBeanMap(MarkdownWriter w, BeanMap<?> bm, ClassMeta<?> eType, ClassMeta<?> aType) throws IOException, SerializeException {
+	protected void writeBeanMap(MarkdownWriter w, BeanMap<?> bm, ClassMeta<?> eType, ClassMeta<?> aType) throws IOException, SerializeException {
 		if (showHeaders) {
 			w.tableHeader("Property", "Value");
 			w.tableSeparator(2);
@@ -241,7 +241,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 		for (var entry : bm.entrySet()) {
 			if (entry instanceof BeanMapEntry bme && !bme.getMeta().canRead())
 				continue;
-			w.tableRow(MarkdownWriter.escapeCell(entry.getKey()), serializeInlineValue(entry.getValue()));
+			w.tableRow(MarkdownWriter.escapeCell(entry.getKey()), writeInlineValue(entry.getValue()));
 		}
 	}
 
@@ -254,7 +254,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException If serialization fails.
 	 */
-	protected void serializeMap(MarkdownWriter w, Map<?,?> m, ClassMeta<?> cm) throws IOException, SerializeException {
+	protected void writeMap(MarkdownWriter w, Map<?,?> m, ClassMeta<?> cm) throws IOException, SerializeException {
 		if (showHeaders) {
 			w.tableHeader("Key", "Value");
 			w.tableSeparator(2);
@@ -268,7 +268,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 				keyStr = "`'" + escapeJson5String(rawKey) + "'`";
 			else
 				keyStr = MarkdownWriter.escapeCell(rawKey);
-			w.tableRow(keyStr, serializeInlineValue(entry.getValue()));
+			w.tableRow(keyStr, writeInlineValue(entry.getValue()));
 		}
 	}
 
@@ -282,7 +282,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException If serialization fails.
 	 */
-	protected void serializeCollection(MarkdownWriter w, Collection<?> c, ClassMeta<?> eType, ClassMeta<?> cm) throws IOException, SerializeException {
+	protected void writeCollection(MarkdownWriter w, Collection<?> c, ClassMeta<?> eType, ClassMeta<?> cm) throws IOException, SerializeException {
 		if (c.isEmpty())
 			return;
 
@@ -340,13 +340,13 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 					var bm = toBeanMap(swapped);
 					for (var i = 0; i < headers.length; i++) {
 						var val = bm.get(headers[i]);
-						row[i + colOffset] = serializeInlineValue(val);
+						row[i + colOffset] = writeInlineValue(val);
 					}
 				} else if (swappedCm.isMap()) {
 					var map = (Map<?,?>) swapped;
 					for (var i = 0; i < headers.length; i++) {
 						var val = map.get(headers[i]);
-						row[i + colOffset] = serializeInlineValue(val);
+						row[i + colOffset] = writeInlineValue(val);
 					}
 				}
 				w.tableRow(row);
@@ -354,7 +354,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 		} else {
 			// Mixed or simple values → bulleted list
 			for (var item : c)
-				w.bulletItem(0, serializeInlineValue(item));
+				w.bulletItem(0, writeInlineValue(item));
 		}
 	}
 
@@ -436,7 +436,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 	 * @return The cell string value.
 	 * @throws SerializeException If serialization fails.
 	 */
-	protected String serializeInlineValue(Object o) throws SerializeException {
+	protected String writeInlineValue(Object o) throws SerializeException {
 		if (o == null)
 			return nullValue;
 
@@ -458,23 +458,23 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 			return o.toString();
 
 		if (cm.isDate())
-			return MarkdownWriter.escapeCell(serializeDate((Date)o, cm));
+			return MarkdownWriter.escapeCell(writeDate((Date)o, cm));
 
 		if (cm.isCalendar())
-			return MarkdownWriter.escapeCell(serializeCalendar(o, cm));
+			return MarkdownWriter.escapeCell(writeCalendar(o, cm));
 
 		if (cm.isTemporal())
-			return MarkdownWriter.escapeCell(serializeTemporal((TemporalAccessor)o, cm));
+			return MarkdownWriter.escapeCell(writeTemporal((TemporalAccessor)o, cm));
 
 		if (cm.isDuration())
-			return MarkdownWriter.escapeCell(serializeDuration((Duration)o));
+			return MarkdownWriter.escapeCell(writeDuration((Duration)o));
 
 		if (cm.isPeriod())
-			return MarkdownWriter.escapeCell(serializePeriod((Period)o));
+			return MarkdownWriter.escapeCell(writePeriod((Period)o));
 
 		// Complex value: serialize as JSON5 in backticks — use context-aware serializer for swaps
 		try {
-			var json5 = getJson5Serializer().serialize(o);
+			var json5 = getJson5Serializer().write(o);
 			return "`" + json5 + "`";
 		} catch (@SuppressWarnings("unused") SerializeException e) {
 			return MarkdownWriter.escapeCell(o.toString());

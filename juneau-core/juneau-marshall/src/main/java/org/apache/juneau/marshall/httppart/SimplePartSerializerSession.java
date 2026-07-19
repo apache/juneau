@@ -33,7 +33,7 @@ import org.apache.juneau.commons.httppart.*;
  */
 public class SimplePartSerializerSession extends BaseHttpPartSerializerSession {
 	@Override /* Overridden from PartSerializer */
-	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
+	public String write(HttpPartType type, HttpPartSchema schema, Object value) {
 		return BasicConverter.INSTANCE.to(value, String.class);
 	}
 }

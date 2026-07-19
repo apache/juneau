@@ -30,9 +30,9 @@ class DurationFormatPlacement_Test {
 		var mc = MarshallingContext.create().durationFormat(DurationFormat.MILLIS).periodFormat(PeriodFormat.DAYS).build();
 		var s = Json5Serializer.create().marshallingContext(mc).build();
 		var p = Json5Parser.create().marshallingContext(mc).build();
-		assertEquals("5000", s.serialize(Duration.ofSeconds(5)));
-		assertEquals("'3'", s.serialize(Period.ofDays(3)));
-		assertEquals(Duration.ofSeconds(5), p.parse("5000", Duration.class));
+		assertEquals("5000", s.write(Duration.ofSeconds(5)));
+		assertEquals("'3'", s.write(Period.ofDays(3)));
+		assertEquals(Duration.ofSeconds(5), p.read("5000", Duration.class));
 	}
 
 	@Marshalled(durationFormat=DurationFormat.SECONDS, periodFormat=PeriodFormat.DAYS)
@@ -43,7 +43,7 @@ class DurationFormatPlacement_Test {
 
 	@Test void a02_marshalled_appliesClassLevelDefault() {
 		var s = Json5Serializer.create().durationFormat(DurationFormat.MILLIS).periodFormat(PeriodFormat.ISO_8601).build();
-		assertEquals("{d:5.0,p:2}", s.serialize(new A02()));
+		assertEquals("{d:5.0,p:2}", s.write(new A02()));
 	}
 
 	public static class A03 {
@@ -55,7 +55,7 @@ class DurationFormatPlacement_Test {
 
 	@Test void a03_marshalledProp_overridesClassAndContext() {
 		var s = Json5Serializer.create().durationFormat(DurationFormat.MILLIS).periodFormat(PeriodFormat.ISO_8601).build();
-		assertEquals("{d:'2h',p:7}", s.serialize(new A03()));
+		assertEquals("{d:'2h',p:7}", s.write(new A03()));
 	}
 
 	@MarshalledConfig(durationFormat=DurationFormat.SECONDS, periodFormat=PeriodFormat.DAYS)
@@ -63,8 +63,8 @@ class DurationFormatPlacement_Test {
 
 	@Test void a04_marshalledConfig_appliesToBuilderApply() {
 		var s = Json5Serializer.create().applyAnnotations(A04Config.class).build();
-		assertEquals("5.000000000", s.serialize(Duration.ofSeconds(5)));
-		assertEquals("'4'", s.serialize(Period.ofDays(4)));
+		assertEquals("5.000000000", s.write(Duration.ofSeconds(5)));
+		assertEquals("'4'", s.write(Period.ofDays(4)));
 	}
 
 	@Marshalled(durationFormat=DurationFormat.SECONDS)
@@ -75,6 +75,6 @@ class DurationFormatPlacement_Test {
 
 	@Test void a05_precedence_property_over_class_over_context() {
 		var s = Json5Serializer.create().durationFormat(DurationFormat.MILLIS).build();
-		assertEquals("{d:'90m'}", s.serialize(new A05()));
+		assertEquals("{d:'90m'}", s.write(new A05()));
 	}
 }

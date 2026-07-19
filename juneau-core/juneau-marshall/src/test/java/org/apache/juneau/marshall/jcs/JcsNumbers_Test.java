@@ -26,109 +26,109 @@ class JcsNumbers_Test extends TestBase {
 
 	@Test
 	void a01_zero() throws Exception {
-		assertEquals("0", JcsSerializer.DEFAULT.serialize(0.0));
+		assertEquals("0", JcsSerializer.DEFAULT.write(0.0));
 	}
 
 	@Test
 	void a02_negativeZero() throws Exception {
-		assertEquals("0", JcsSerializer.DEFAULT.serialize(-0.0));
+		assertEquals("0", JcsSerializer.DEFAULT.write(-0.0));
 	}
 
 	@Test
 	void a03_minPosNumber() throws Exception {
 		// Double.MIN_VALUE is the smallest positive double (~4.9e-324)
-		assertEquals("4.9e-324", JcsSerializer.DEFAULT.serialize(Double.MIN_VALUE));
+		assertEquals("4.9e-324", JcsSerializer.DEFAULT.write(Double.MIN_VALUE));
 	}
 
 	@Test
 	void a04_minNegNumber() throws Exception {
-		assertEquals("-4.9e-324", JcsSerializer.DEFAULT.serialize(-Double.MIN_VALUE));
+		assertEquals("-4.9e-324", JcsSerializer.DEFAULT.write(-Double.MIN_VALUE));
 	}
 
 	@Test
 	void a05_maxPosNumber() throws Exception {
-		assertEquals("1.7976931348623157e+308", JcsSerializer.DEFAULT.serialize(Double.MAX_VALUE));
+		assertEquals("1.7976931348623157e+308", JcsSerializer.DEFAULT.write(Double.MAX_VALUE));
 	}
 
 	@Test
 	void a06_maxNegNumber() throws Exception {
-		assertEquals("-1.7976931348623157e+308", JcsSerializer.DEFAULT.serialize(-Double.MAX_VALUE));
+		assertEquals("-1.7976931348623157e+308", JcsSerializer.DEFAULT.write(-Double.MAX_VALUE));
 	}
 
 	@Test
 	void a07_maxPosInt() throws Exception {
-		assertEquals("9007199254740992", JcsSerializer.DEFAULT.serialize(9007199254740992L));
+		assertEquals("9007199254740992", JcsSerializer.DEFAULT.write(9007199254740992L));
 	}
 
 	@Test
 	void a08_maxNegInt() throws Exception {
-		assertEquals("-9007199254740992", JcsSerializer.DEFAULT.serialize(-9007199254740992L));
+		assertEquals("-9007199254740992", JcsSerializer.DEFAULT.write(-9007199254740992L));
 	}
 
 	@Test
 	void a09_largeInteger() throws Exception {
 		// In [1e-6, 1e21) so ECMAScript uses fixed notation
-		assertEquals("295147905179352830000", JcsSerializer.DEFAULT.serialize(295147905179352830000.0));
+		assertEquals("295147905179352830000", JcsSerializer.DEFAULT.write(295147905179352830000.0));
 	}
 
 	@Test
 	void a10_noTrailingZeros() throws Exception {
-		assertEquals("4.5", JcsSerializer.DEFAULT.serialize(4.50));
+		assertEquals("4.5", JcsSerializer.DEFAULT.write(4.50));
 	}
 
 	@Test
 	void a11_scientificNotation() throws Exception {
 		// RFC 8785: 1E30 → 1e+30
-		assertEquals("1e+30", JcsSerializer.DEFAULT.serialize(1E30));
+		assertEquals("1e+30", JcsSerializer.DEFAULT.write(1E30));
 	}
 
 	@Test
 	void a12_smallDecimal() throws Exception {
-		assertEquals("0.002", JcsSerializer.DEFAULT.serialize(2e-3));
+		assertEquals("0.002", JcsSerializer.DEFAULT.write(2e-3));
 	}
 
 	@Test
 	void a13_verySmallDecimal() throws Exception {
 		// RFC 8785: 0.000...001 → 1e-27
-		assertEquals("1e-27", JcsSerializer.DEFAULT.serialize(0.000000000000000000000000001));
+		assertEquals("1e-27", JcsSerializer.DEFAULT.write(0.000000000000000000000000001));
 	}
 
 	@Test
 	void a14_rejectNaN() {
-		assertThrows(SerializeException.class, () -> JcsSerializer.DEFAULT.serialize(Double.NaN));
+		assertThrows(SerializeException.class, () -> JcsSerializer.DEFAULT.write(Double.NaN));
 	}
 
 	@Test
 	void a15_rejectInfinity() {
-		assertThrows(SerializeException.class, () -> JcsSerializer.DEFAULT.serialize(Double.POSITIVE_INFINITY));
+		assertThrows(SerializeException.class, () -> JcsSerializer.DEFAULT.write(Double.POSITIVE_INFINITY));
 	}
 
 	@Test
 	void a16_rejectNegInfinity() {
-		assertThrows(SerializeException.class, () -> JcsSerializer.DEFAULT.serialize(Double.NEGATIVE_INFINITY));
+		assertThrows(SerializeException.class, () -> JcsSerializer.DEFAULT.write(Double.NEGATIVE_INFINITY));
 	}
 
 	@Test
 	void a17_integerNoDecimalPoint() throws Exception {
-		assertEquals("42", JcsSerializer.DEFAULT.serialize(42.0));
+		assertEquals("42", JcsSerializer.DEFAULT.write(42.0));
 	}
 
 	@Test
 	void a18_roundToEven() throws Exception {
 		// In [1e-6, 1e21) so ECMAScript uses fixed notation
-		assertEquals("1424953923781206.2", JcsSerializer.DEFAULT.serialize(1424953923781206.2));
+		assertEquals("1424953923781206.2", JcsSerializer.DEFAULT.write(1424953923781206.2));
 	}
 
 	@Test
 	void a19_edgeCasePrecision() throws Exception {
 		// RFC 8785 Section 3.2.2: 333333333.33333329 → 333333333.3333333
-		assertEquals("333333333.3333333", JcsSerializer.DEFAULT.serialize(333333333.33333329));
+		assertEquals("333333333.3333333", JcsSerializer.DEFAULT.write(333333333.33333329));
 	}
 
 	@Test
 	void a20_floatValues() throws Exception {
 		// Float promoted to double; 42f serializes as integer
-		assertEquals("42", JcsSerializer.DEFAULT.serialize(42f));
-		assertEquals("0", JcsSerializer.DEFAULT.serialize(0f));
+		assertEquals("42", JcsSerializer.DEFAULT.write(42f));
+		assertEquals("0", JcsSerializer.DEFAULT.write(0f));
 	}
 }

@@ -99,7 +99,7 @@ public interface RecordReader extends Closeable {
 	/**
 	 * Same as {@link #read(Class)} but accepts a parameterized {@link Type} and optional type
 	 * arguments (the same shape as
-	 * {@link Parser#parse(Object, Type, Type...)}).
+	 * {@link Parser#read(Object, Type, Type...)}).
 	 *
 	 * @param <T> The expected return type.
 	 * @param type The target type.

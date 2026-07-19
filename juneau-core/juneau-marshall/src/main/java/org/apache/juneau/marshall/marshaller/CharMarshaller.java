@@ -82,7 +82,7 @@ public class CharMarshaller extends Marshaller {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T read(String input, Class<T> type) throws ParseException {
-		return p.parse(input, type);
+		return p.read(input, type);
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class CharMarshaller extends Marshaller {
 	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T read(String input, Type type, Type...args) throws ParseException {
-		return p.parse(input, type, args);
+		return p.read(input, type, args);
 	}
 
 	/**
@@ -114,6 +114,6 @@ public class CharMarshaller extends Marshaller {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public final String write(Object object) throws SerializeException {
-		return s.serializeToString(object);
+		return s.writeToString(object);
 	}
 }

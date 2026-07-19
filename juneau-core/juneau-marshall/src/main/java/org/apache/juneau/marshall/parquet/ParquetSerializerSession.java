@@ -86,14 +86,14 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	/**
 	 * Opens a whole-value push generator targeting Parquet output, bound to this live session.
 	 * {@link RecordWriter#write(Object) write(Object)} delegates to
-	 * {@link SerializerSession#serialize(Object, Object)}.
+	 * {@link SerializerSession#write(Object, Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -106,7 +106,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
 		return RecordAdapter.arrayWriter(this, output);
 	}
 
@@ -135,7 +135,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	}
 
 	@Override
-	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		var out = pipe.getOutputStream();
 		var rows = collectBeans(o);
 		if (rows.isEmpty()) {
@@ -346,7 +346,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	 * Mirrors the {@code aType.getSwap(session)} layer applied by every other serializer
 	 * ({@link org.apache.juneau.marshall.json.JsonSerializerSession},
 	 * {@link org.apache.juneau.marshall.msgpack.MsgPackSerializerSession}, etc.) in their {@code
-	 * serializeAnything} dispatcher.  No-op for values whose runtime type has no registered swap.
+	 * writeAnything} dispatcher.  No-op for values whose runtime type has no registered swap.
 	 */
 	private Object applyDefaultSwap(Object value) throws SerializeException {
 		var cm = getClassMetaForObject(value);
@@ -586,15 +586,15 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 			return ctx.nullKeyString;
 		if (key instanceof Date d) {
 			var cm = getClassMetaForObject(d);
-			return serializeDate(d, cm);
+			return writeDate(d, cm);
 		}
 		if (key instanceof Calendar) {
 			var cm = getClassMetaForObject(key);
-			return serializeCalendar(key, cm);
+			return writeCalendar(key, cm);
 		}
 		if (key instanceof TemporalAccessor t) {
 			var cm = getClassMetaForObject(t);
-			return serializeTemporal(t, cm);
+			return writeTemporal(t, cm);
 		}
 		if (key instanceof Enum<?> e)
 			return ctx.getMarshallingContext().getEnumFormat().format(e);

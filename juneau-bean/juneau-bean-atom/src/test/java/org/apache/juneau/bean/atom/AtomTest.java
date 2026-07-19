@@ -100,9 +100,9 @@ class AtomTest extends TestBase {
 		</feed>
 		""";
 		var s = XmlSerializer.create().sq().ws().build();
-		var r = s.serialize(f);
+		var r = s.write(f);
 		assertEquals(expected, r);
-		var f2 = p.parse(r, Feed.class);
+		var f2 = p.read(r, Feed.class);
 		assertEquals(json(f2), json(f));
 	}
 
@@ -142,9 +142,9 @@ class AtomTest extends TestBase {
 		</atom:feed>
 		""";
 		var s = XmlSerializer.create().sq().ws().enableNamespaces().addNamespaceUrisToRoot().build();
-		var r = s.serialize(f);
+		var r = s.write(f);
 		assertEquals(expected, r);
-		var f2 = p.parse(r, Feed.class);
+		var f2 = p.read(r, Feed.class);
 		assertEquals(json(f2), json(f));
 	}
 
@@ -184,9 +184,9 @@ class AtomTest extends TestBase {
 		</feed>
 		""";
 		var s = XmlSerializer.create().sq().ws().defaultNamespace(Namespace.of("atom")).enableNamespaces().addNamespaceUrisToRoot().build();
-		var r = s.serialize(f);
+		var r = s.write(f);
 		assertEquals(expected, r);
-		var f2 = p.parse(r, Feed.class);
+		var f2 = p.read(r, Feed.class);
 		assertEquals(json(f2), json(f));
 	}
 
@@ -194,7 +194,7 @@ class AtomTest extends TestBase {
 		var p = XmlParser.DEFAULT;
 		var f = createFeed();
 		var r = f.toString();
-		var f2 = p.parse(r, Feed.class);
+		var f2 = p.read(r, Feed.class);
 		assertEquals(json(f2), json(f));
 	}
 

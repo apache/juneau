@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Branch-coverage tests for {@link Json5TokenReader} &mdash; the JSON5 dialect tokenizer behind
- * {@link Json5Parser#parseTokens(Object)}.
+ * {@link Json5Parser#readTokens(Object)}.
  *
  * <p>
  * Targets the JSON5-specific relaxations layered on top of {@link JsonTokenReader}: single-quoted
@@ -46,7 +46,7 @@ import org.junit.jupiter.api.*;
 class Json5TokenReaderCoverage_Test extends TestBase {
 
 	private static void drain(String json) throws Exception {
-		try (var r = Json5Parser.DEFAULT.parseTokens(json)) {
+		try (var r = Json5Parser.DEFAULT.readTokens(json)) {
 			while (r.next() != TokenType.END_OF_STREAM) {
 				// drain
 			}
@@ -60,13 +60,13 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 	@Nested class A_singleQuoted extends TestBase {
 
 		@Test void a01_singleQuotedValues() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("['a','b']")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("['a','b']")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("a", r.getString());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("b", r.getString());
 				assertEquals(TokenType.END_ARRAY, r.next());
 			}
-			try (var r = Json5Parser.DEFAULT.parseTokens("'hi'")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("'hi'")) {
 				assertEquals(TokenType.VALUE_STRING, r.next());
 				assertEquals("hi", r.getString());
 			}
@@ -77,7 +77,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 			// tab, form-feed, backspace, backslash, solidus, single-quote, double-quote, unicode).
 			var input = "['\\n','\\r','\\t','\\f','\\b','\\\\','\\/','\\'','\\\"','\\u0041']";
 			var expected = new String[]{"\n", "\r", "\t", "\f", "\b", "\\", "/", "'", "\"", "A"};
-			try (var r = Json5Parser.DEFAULT.parseTokens(input)) {
+			try (var r = Json5Parser.DEFAULT.readTokens(input)) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				for (var e : expected) {
 					assertEquals(TokenType.VALUE_STRING, r.next());
@@ -100,7 +100,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void a06_singleQuotedFieldName() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("{'foo':1}")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("{'foo':1}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("foo", r.getFieldName());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -116,7 +116,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 	@Nested class B_bareIdentifiers extends TestBase {
 
 		@Test void b01_bareValueStrings() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("[foo, bar, baz]")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("[foo, bar, baz]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("foo", r.getString());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("bar", r.getString());
@@ -127,7 +127,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 
 		@Test void b02_bareStartVariants() throws Exception {
 			// isBareStart accepts letters, '_' and '$'; isBareCont additionally accepts digits.
-			try (var r = Json5Parser.DEFAULT.parseTokens("[$foo, _bar, a1b2_$]")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("[$foo, _bar, a1b2_$]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("$foo", r.getString());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("_bar", r.getString());
@@ -138,7 +138,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 
 		@Test void b03_bareKeywordsResolveToTokens() throws Exception {
 			// true/false/null bare-words must resolve to boolean/null tokens, not strings.
-			try (var r = Json5Parser.DEFAULT.parseTokens("[true, false, null]")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("[true, false, null]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_BOOLEAN, r.next()); assertTrue(r.getBool());
 				assertEquals(TokenType.VALUE_BOOLEAN, r.next()); assertFalse(r.getBool());
@@ -148,7 +148,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void b04_bareFieldNames() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("{foo: 1, bar: 2}")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("{foo: 1, bar: 2}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("foo", r.getFieldName());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -160,7 +160,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 
 		@Test void b05_bareWordAtEndOfInput() throws Exception {
 			// readBareWord terminates on EOF (the c==-1 branch) rather than a delimiter.
-			try (var r = Json5Parser.DEFAULT.parseTokens("hello")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("hello")) {
 				assertEquals(TokenType.VALUE_STRING, r.next());
 				assertEquals("hello", r.getString());
 				assertEquals(TokenType.END_OF_STREAM, r.next());
@@ -175,7 +175,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 	@Nested class C_trailingAndMissing extends TestBase {
 
 		@Test void c01_trailingCommaInArray() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("[1,2,3,]")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("[1,2,3,]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -186,7 +186,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void c02_trailingCommaInObject() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("{a:1, b:2,}")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("{a:1, b:2,}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -198,7 +198,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void c03_missingValuesInArrayAsNull() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("[,1,,3,]")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("[,1,,3,]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NULL, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(1L, r.getNumber().longValue());
@@ -210,7 +210,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 
 		@Test void c04_missingValueInObjectAsNull() throws Exception {
 			// `{a:,b:1}` -> a is the missing-value VALUE_NULL, b is 1.
-			try (var r = Json5Parser.DEFAULT.parseTokens("{a:,b:1}")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("{a:,b:1}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("a", r.getFieldName());
 				assertEquals(TokenType.VALUE_NULL, r.next());
@@ -222,7 +222,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 
 		@Test void c05_trailingCommaStreamingWithCanRead() throws Exception {
 			var seen = new ArrayList<Integer>();
-			try (var r = Json5Parser.DEFAULT.parseTokens("[1,2,3,]")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("[1,2,3,]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				while (r.canRead())
 					seen.add(r.read(Integer.class));
@@ -239,7 +239,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 	@Nested class D_parentDelegation extends TestBase {
 
 		@Test void d01_doubleQuotedStringsAndNumbers() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("[\"x\", 1, 2.5, true]")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("[\"x\", 1, 2.5, true]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("x", r.getString());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals("1", r.getNumberLexeme());
@@ -250,7 +250,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void d02_doubleQuotedFieldName() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("{\"a\":1}")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("{\"a\":1}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("a", r.getFieldName());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -259,7 +259,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void d03_mixedQuotingStyles() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("{foo:1, 'bar':2, \"baz\":3}")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("{foo:1, 'bar':2, \"baz\":3}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("foo", r.getFieldName());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -272,7 +272,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void d04_comments() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("/* lead */ [1, /* mid */ 2 // trail\n]")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("/* lead */ [1, /* mid */ 2 // trail\n]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
@@ -312,7 +312,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 
 		@Test void f01_infinityAndNaNAreBareStrings() throws Exception {
 			// This cursor does not implement JSON5 numeric Infinity/NaN; bare-words become strings.
-			try (var r = Json5Parser.DEFAULT.parseTokens("[Infinity, NaN]")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("[Infinity, NaN]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("Infinity", r.getString());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("NaN", r.getString());
@@ -347,7 +347,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void g01_readBeanFromBareKeys() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("{name:'alice', age:30}")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("{name:'alice', age:30}")) {
 				var b = r.read(Bean.class);
 				assertBean(b, "name,age", "alice,30");
 			}
@@ -355,7 +355,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 
 		@Test void g02_streamArrayOfBeansWithTrailingComma() throws Exception {
 			var seen = new ArrayList<Bean>();
-			try (var r = Json5Parser.DEFAULT.parseTokens("[{name:'a',age:1},{name:'b',age:2},]")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("[{name:'a',age:1},{name:'b',age:2},]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				while (r.canRead())
 					seen.add(r.read(Bean.class));
@@ -368,7 +368,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 
 		@Test void g03_trimStringsOnSingleQuotedAndBare() throws Exception {
 			var p = Json5Parser.create().trimStrings().build();
-			try (var r = p.parseTokens("{ '  k  ' : '  v  ' }")) {
+			try (var r = p.readTokens("{ '  k  ' : '  v  ' }")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("k", r.getFieldName());
 				assertEquals(TokenType.VALUE_STRING, r.next()); assertEquals("v", r.getString());
@@ -377,7 +377,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 		}
 
 		@Test void g04_defaultDoesNotTrim() throws Exception {
-			try (var r = Json5Parser.DEFAULT.parseTokens("['  v  ']")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("['  v  ']")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_STRING, r.next());
 				assertEquals("  v  ", r.getString());
@@ -402,7 +402,7 @@ class Json5TokenReaderCoverage_Test extends TestBase {
 
 		@Test void g07_capabilityIsStreaming() throws Exception {
 			assertInstanceOf(TokenReadable.class, Json5Parser.DEFAULT);
-			try (var r = Json5Parser.DEFAULT.parseTokens("null")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("null")) {
 				assertReaderStreaming(r);
 			}
 		}

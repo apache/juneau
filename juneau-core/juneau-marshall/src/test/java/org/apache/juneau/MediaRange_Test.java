@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 class MediaRange_Test extends TestBase {
 
 	@Test void a01_basic() {
-		var element = HeaderValueParser.parseElements("text/html;charset=UTF-8;q=0.9")[0];
+		var element = HeaderValueParser.readElements("text/html;charset=UTF-8;q=0.9")[0];
 
 		var x = new MediaRange(element);
 
@@ -40,7 +40,7 @@ class MediaRange_Test extends TestBase {
 	}
 
 	@Test void a02_forEachParameter_fluentChaining() {
-		var element = HeaderValueParser.parseElements("text/html;charset=UTF-8;level=1")[0];
+		var element = HeaderValueParser.readElements("text/html;charset=UTF-8;level=1")[0];
 
 		var x = new MediaRange(element);
 
@@ -58,7 +58,7 @@ class MediaRange_Test extends TestBase {
 	}
 
 	@Test void a03_forEachParameter_withConsumer() {
-		var element = HeaderValueParser.parseElements("application/json;charset=UTF-8;version=2")[0];
+		var element = HeaderValueParser.readElements("application/json;charset=UTF-8;version=2")[0];
 
 		var x = new MediaRange(element);
 
@@ -71,7 +71,7 @@ class MediaRange_Test extends TestBase {
 	}
 
 	@Test void a04_forEachParameter_emptyParameters() {
-		var element = HeaderValueParser.parseElements("text/plain")[0];
+		var element = HeaderValueParser.readElements("text/plain")[0];
 
 		var x = new MediaRange(element);
 
@@ -84,7 +84,7 @@ class MediaRange_Test extends TestBase {
 	}
 
 	@Test void a05_fluentChaining_combined() {
-		var element = HeaderValueParser.parseElements("text/html;charset=UTF-8;level=1")[0];
+		var element = HeaderValueParser.readElements("text/html;charset=UTF-8;level=1")[0];
 
 		var x = new MediaRange(element);
 
@@ -102,7 +102,7 @@ class MediaRange_Test extends TestBase {
 	}
 
 	@Test void a06_forEachParameter_withExtensions() {
-		var element = HeaderValueParser.parseElements("text/html;q=0.9")[0];
+		var element = HeaderValueParser.readElements("text/html;q=0.9")[0];
 
 		var x = new MediaRange(element);
 

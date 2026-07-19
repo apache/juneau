@@ -41,7 +41,7 @@ class ReaderFilter_Test extends TestBase {
 		var r = reader("{foo:'bar',baz:'quz'}");
 		var m = new HashMap<>();
 		m.put("X", r);
-		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.serialize(m));
+		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.write(m));
 	}
 
 	//====================================================================================================
@@ -52,7 +52,7 @@ class ReaderFilter_Test extends TestBase {
 		var m = new HashMap<>();
 		var r = reader("<object><foo _type='string'>bar</foo><baz _type='string'>quz</baz></object>");
 		m.put("X", r);
-		assertEquals("<object><X _type='object'><foo>bar</foo><baz>quz</baz></X></object>", s.serialize(m));
+		assertEquals("<object><X _type='object'><foo>bar</foo><baz>quz</baz></X></object>", s.write(m));
 	}
 
 	//====================================================================================================
@@ -63,7 +63,7 @@ class ReaderFilter_Test extends TestBase {
 		var m = new HashMap<>();
 		var r = reader("<table><tr><td>foo</td><td>bar</td></tr><tr><td>baz</td><td>quz</td></tr></table>");
 		m.put("X", r);
-		assertEquals("<table><tr><td>X</td><td><table><tr><td>foo</td><td>bar</td></tr><tr><td>baz</td><td>quz</td></tr></table></td></tr></table>", s.serialize(m));
+		assertEquals("<table><tr><td>X</td><td><table><tr><td>foo</td><td>bar</td></tr><tr><td>baz</td><td>quz</td></tr></table></td></tr></table>", s.write(m));
 	}
 
 	//====================================================================================================
@@ -74,7 +74,7 @@ class ReaderFilter_Test extends TestBase {
 		var r = reader("{foo:'bar',baz:'quz'}");
 		var m = new HashMap<>();
 		m.put("X", r);
-		assertEquals("{X:'{foo:\\'bar\\',baz:\\'quz\\'}'}", s.serialize(m));
+		assertEquals("{X:'{foo:\\'bar\\',baz:\\'quz\\'}'}", s.write(m));
 	}
 
 	//====================================================================================================
@@ -85,7 +85,7 @@ class ReaderFilter_Test extends TestBase {
 		var m = new HashMap<>();
 		var r = reader("(foo=bar,baz=quz)");
 		m.put("X", r);
-		assertEquals("(X=(foo=bar,baz=quz))", s.serialize(m));
+		assertEquals("(X=(foo=bar,baz=quz))", s.write(m));
 	}
 
 	//====================================================================================================
@@ -96,6 +96,6 @@ class ReaderFilter_Test extends TestBase {
 		var m = new HashMap<>();
 		var r = reader("foo=bar&baz=quz");
 		m.put("X", r);
-		assertEquals("X='foo=bar%26baz=quz'", s.serialize(m));
+		assertEquals("X='foo=bar%26baz=quz'", s.write(m));
 	}
 }

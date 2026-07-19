@@ -45,39 +45,39 @@ class Json_Test extends TestBase{
 		m.clear();
 		m.put(null, null);
 		m.put("aaa", "bbb");
-		assertEquals("{null:null,aaa:'bbb'}", s1.serialize(m));
+		assertEquals("{null:null,aaa:'bbb'}", s1.write(m));
 
 		// Escapes.
 		// String = ["]
 		m.clear();
 		m.put("x", "[\"]");
-		assertEquals("{\"x\":\"[\\\"]\"}",  s2.serialize(m));
+		assertEquals("{\"x\":\"[\\\"]\"}",  s2.write(m));
 		// String = [\"]
 		m.clear();
 		m.put("x", "[\\\"]");
-		assertEquals("{\"x\":\"[\\\\\\\"]\"}",  s2.serialize(m));
+		assertEquals("{\"x\":\"[\\\\\\\"]\"}",  s2.write(m));
 
 		// String = [\w[\w\-\.]{3,}\w]
 		m.clear();
 		var r = "\\w[\\w\\-\\.]{3,}\\w";
 		m.put("x", r);
-		assertEquals("{\"x\":\"\\\\w[\\\\w\\\\-\\\\.]{3,}\\\\w\"}", s2.serialize(m));
-		assertEquals(r, JsonMap.ofString(s2.serialize(m)).getString("x"));
+		assertEquals("{\"x\":\"\\\\w[\\\\w\\\\-\\\\.]{3,}\\\\w\"}", s2.write(m));
+		assertEquals(r, JsonMap.ofString(s2.write(m)).getString("x"));
 
 		// String = [foo\bar]
 		m.clear();
 		m.put("x", "foo\\bar");
-		assertEquals("{\"x\":\"foo\\\\bar\"}", s2.serialize(m));
+		assertEquals("{\"x\":\"foo\\\\bar\"}", s2.write(m));
 
 		m.clear();
 		m.put("null", null);
 		m.put("aaa", "bbb");
-		assertEquals("{'null':null,aaa:'bbb'}", s1.serialize(m));
+		assertEquals("{'null':null,aaa:'bbb'}", s1.write(m));
 
 		m.clear();
 		m.put(null, "null");
 		m.put("aaa", "bbb");
-		assertEquals("{null:'null',aaa:'bbb'}", s1.serialize(m));
+		assertEquals("{null:'null',aaa:'bbb'}", s1.write(m));
 
 		// Arrays
 		m.clear();
@@ -90,7 +90,7 @@ class Json_Test extends TestBase{
 		l.add("3");
 		var o = a(m, l);
 		var o2 = a(o, "foo", "bar", Integer.valueOf(1), b(false), Float.valueOf(1.2f), null);
-		assertEquals("[[{J:'f1',B:'b',C:'c'},['1','2','3']],'foo','bar',1,false,1.2,null]", s1.serialize(o2));
+		assertEquals("[[{J:'f1',B:'b',C:'c'},['1','2','3']],'foo','bar',1,false,1.2,null]", s1.write(o2));
 	}
 
 	@Test void a02_reservedKeywordAttributes() {
@@ -112,26 +112,26 @@ class Json_Test extends TestBase{
 
 		// [\\]
 		var r = "\\";
-		var r2 = s.serialize(r);
+		var r2 = s.write(r);
 		assertEquals("\"\\\\\"", r2);
-		assertEquals(JsonParser.DEFAULT.parse(r2, Object.class), r);
+		assertEquals(JsonParser.DEFAULT.read(r2, Object.class), r);
 
 		// [\b\f\n\t]
 		r = "\b\f\n\t";
-		r2 = s.serialize(r);
+		r2 = s.write(r);
 		assertEquals("\"\\b\\f\\n\\t\"", r2);
-		assertEquals(r, JsonParser.DEFAULT.parse(r2, Object.class));
+		assertEquals(r, JsonParser.DEFAULT.read(r2, Object.class));
 
 		// Special JSON case:  Forward slashes can OPTIONALLY be escaped.
 		// [\/]
-		assertEquals("/", JsonParser.DEFAULT.parse("\"\\/\"", Object.class));
+		assertEquals("/", JsonParser.DEFAULT.read("\"\\/\"", Object.class));
 
 		// Unicode
 		r = "\u1234\u1ABC\u1abc";
-		r2 = s.serialize(r);
+		r2 = s.write(r);
 		assertEquals("\"\u1234\u1ABC\u1abc\"", r2);
 
-		assertEquals("\u1234", JsonParser.DEFAULT.parse("\"\\u1234\"", Object.class));
+		assertEquals("\u1234", JsonParser.DEFAULT.read("\"\\u1234\"", Object.class));
 	}
 
 	//====================================================================================================
@@ -159,7 +159,7 @@ class Json_Test extends TestBase{
 				},
 				I: 'j'
 			}""";
-		assertEquals(e, Json5Serializer.DEFAULT_READABLE.serialize(m));
+		assertEquals(e, Json5Serializer.DEFAULT_READABLE.write(m));
 	}
 
 	//====================================================================================================
@@ -167,10 +167,10 @@ class Json_Test extends TestBase{
 	//====================================================================================================
 	@Test void a05_escapingDoubleQuotes() throws Exception {
 		var s = JsonSerializer.DEFAULT;
-		var r = s.serialize(JsonMap.of("f1", "x'x\"x"));
+		var r = s.write(JsonMap.of("f1", "x'x\"x"));
 		assertEquals("{\"f1\":\"x'x\\\"x\"}", r);
 		var p = JsonParser.DEFAULT;
-		assertEquals("x'x\"x", p.parse(r, JsonMap.class).getString("f1"));
+		assertEquals("x'x\"x", p.read(r, JsonMap.class).getString("f1"));
 	}
 
 	//====================================================================================================
@@ -178,10 +178,10 @@ class Json_Test extends TestBase{
 	//====================================================================================================
 	@Test void a06_escapingSingleQuotes() throws Exception {
 		var s = Json5Serializer.DEFAULT;
-		var r = s.serialize(JsonMap.of("f1", "x'x\"x"));
+		var r = s.write(JsonMap.of("f1", "x'x\"x"));
 		assertEquals("{f1:'x\\'x\"x'}", r);
 		var p = Json5Parser.DEFAULT;
-		assertEquals("x'x\"x", p.parse(r, JsonMap.class).getString("f1"));
+		assertEquals("x'x\"x", p.read(r, JsonMap.class).getString("f1"));
 	}
 
 	//====================================================================================================
@@ -192,17 +192,17 @@ class Json_Test extends TestBase{
 		var p = Json5Parser.DEFAULT;
 
 		var t = A.create();
-		var r = s.serialize(t);
+		var r = s.write(t);
 		assertEquals("{foo:{f1:1}}", r);
-		t = p.parse(r, A.class);
+		t = p.read(r, A.class);
 		assertEquals(1, t.f1);
 
 		var m = new LinkedHashMap<String,A>();
 		m.put("bar", A.create());
-		r = s.serialize(m);
+		r = s.write(m);
 		assertEquals("{bar:{foo:{f1:1}}}", r);
 
-		m = p.parse(r, LinkedHashMap.class, String.class, A.class);
+		m = p.read(r, LinkedHashMap.class, String.class, A.class);
 		assertEquals(1, m.get("bar").f1);
 	}
 
@@ -222,17 +222,17 @@ class Json_Test extends TestBase{
 		var p = Json5Parser.DEFAULT.copy().applyAnnotations(A2Config.class).build();
 
 		var t = A2.create();
-		var r = s.serialize(t);
+		var r = s.write(t);
 		assertEquals("{foo:{f1:1}}", r);
-		t = p.parse(r, A2.class);
+		t = p.read(r, A2.class);
 		assertEquals(1, t.f1);
 
 		var m = new LinkedHashMap<String,A2>();
 		m.put("bar", A2.create());
-		r = s.serialize(m);
+		r = s.write(m);
 		assertEquals("{bar:{foo:{f1:1}}}", r);
 
-		m = p.parse(r, LinkedHashMap.class, String.class, A2.class);
+		m = p.read(r, LinkedHashMap.class, String.class, A2.class);
 		assertEquals(1, m.get("bar").f1);
 	}
 
@@ -259,17 +259,17 @@ class Json_Test extends TestBase{
 		var p = Json5Parser.DEFAULT;
 
 		var t = B.create();
-		var r = s.serialize(t);
+		var r = s.write(t);
 		assertEquals("{foo:'1'}", r);
-		t = p.parse(r, B.class);
+		t = p.read(r, B.class);
 		assertEquals(1, t.f1);
 
 		var m = new LinkedHashMap<String,B>();
 		m.put("bar", B.create());
-		r = s.serialize(m);
+		r = s.write(m);
 		assertEquals("{bar:{foo:'1'}}", r);
 
-		m = p.parse(r, LinkedHashMap.class, String.class, B.class);
+		m = p.read(r, LinkedHashMap.class, String.class, B.class);
 		assertEquals(1, m.get("bar").f1);
 	}
 
@@ -300,17 +300,17 @@ class Json_Test extends TestBase{
 		var p = Json5Parser.DEFAULT.copy().applyAnnotations(B2Config.class).build();
 
 		var t = B2.create();
-		var r = s.serialize(t);
+		var r = s.write(t);
 		assertEquals("{foo:'1'}", r);
-		t = p.parse(r, B2.class);
+		t = p.read(r, B2.class);
 		assertEquals(1, t.f1);
 
 		var m = new LinkedHashMap<String,B2>();
 		m.put("bar", B2.create());
-		r = s.serialize(m);
+		r = s.write(m);
 		assertEquals("{bar:{foo:'1'}}", r);
 
-		m = p.parse(r, LinkedHashMap.class, String.class, B2.class);
+		m = p.read(r, LinkedHashMap.class, String.class, B2.class);
 		assertEquals(1, m.get("bar").f1);
 	}
 
@@ -345,7 +345,7 @@ class Json_Test extends TestBase{
 		var s = JsonSerializer.DEFAULT;
 		var o = new HashMap<>();
 		o.put("c", new C());
-		assertEquals("{\"c\":[]}", s.serialize(o));
+		assertEquals("{\"c\":[]}", s.write(o));
 	}
 
 	public static class C extends LinkedList<String> {
@@ -356,21 +356,21 @@ class Json_Test extends TestBase{
 	//====================================================================================================
 	@Test void a12_escapeSolidus() throws Exception {
 		var s = JsonSerializer.create().build();
-		var r = s.serialize("foo/bar");
+		var r = s.write("foo/bar");
 		assertEquals("\"foo/bar\"", r);
-		r = JsonParser.DEFAULT.parse(r, String.class);
+		r = JsonParser.DEFAULT.read(r, String.class);
 		assertEquals("foo/bar", r);
 
 		s = JsonSerializer.create().escapeSolidus().build();
-		r = s.serialize("foo/bar");
+		r = s.write("foo/bar");
 		assertEquals("\"foo\\/bar\"", r);
-		r = JsonParser.DEFAULT.parse(r, String.class);
+		r = JsonParser.DEFAULT.read(r, String.class);
 		assertEquals("foo/bar", r);
 
 		s = JsonSerializer.create().escapeSolidus().build();
-		r = s.serialize("foo/bar");
+		r = s.write("foo/bar");
 		assertEquals("\"foo\\/bar\"", r);
-		r = JsonParser.DEFAULT.parse(r, String.class);
+		r = JsonParser.DEFAULT.read(r, String.class);
 		assertEquals("foo/bar", r);
 	}
 }

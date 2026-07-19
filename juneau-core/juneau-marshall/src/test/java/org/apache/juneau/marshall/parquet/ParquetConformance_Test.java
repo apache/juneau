@@ -46,8 +46,8 @@ class ParquetConformance_Test extends TestBase {
 		// > Integer.MAX_VALUE: the old INT32 mapping corrupted this to 705032704.  DOUBLE preserves it exactly.
 		var big = new NumBean();
 		big.n = 5_000_000_000L;
-		var bytes = ParquetSerializer.DEFAULT.serialize(big);
-		var parsed = (List<NumBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NumBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(big);
+		var parsed = (List<NumBean>) ParquetParser.DEFAULT.read(bytes, List.class, NumBean.class);
 
 		assertEquals(1, parsed.size());
 		assertNotNull(parsed.get(0).n);
@@ -59,8 +59,8 @@ class ParquetConformance_Test extends TestBase {
 		// The old INT32 mapping truncated 3.14 to 3.
 		var frac = new NumBean();
 		frac.n = 3.14d;
-		var bytes = ParquetSerializer.DEFAULT.serialize(frac);
-		var parsed = (List<NumBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NumBean.class);
+		var bytes = ParquetSerializer.DEFAULT.write(frac);
+		var parsed = (List<NumBean>) ParquetParser.DEFAULT.read(bytes, List.class, NumBean.class);
 
 		assertEquals(3.14d, parsed.get(0).n.doubleValue(), 0.0);
 	}
@@ -83,8 +83,8 @@ class ParquetConformance_Test extends TestBase {
 		a.next.next = new Node();
 		a.next.next.val = "c";
 
-		var bytes = ParquetSerializer.DEFAULT.serialize(a);
-		var parsed = (List<Node>) ParquetParser.DEFAULT.parse(bytes, List.class, Node.class);
+		var bytes = ParquetSerializer.DEFAULT.write(a);
+		var parsed = (List<Node>) ParquetParser.DEFAULT.read(bytes, List.class, Node.class);
 
 		assertEquals(1, parsed.size());
 		var n = parsed.get(0);
@@ -107,8 +107,8 @@ class ParquetConformance_Test extends TestBase {
 		a.next.next = new Node();
 		a.next.next.val = "c";
 
-		var bytes = ser.serialize(a);
-		var parsed = (List<Node>) ParquetParser.DEFAULT.parse(bytes, List.class, Node.class);
+		var bytes = ser.write(a);
+		var parsed = (List<Node>) ParquetParser.DEFAULT.read(bytes, List.class, Node.class);
 
 		var n = parsed.get(0);
 		assertEquals("a", n.val);
@@ -139,8 +139,8 @@ class ParquetConformance_Test extends TestBase {
 		present.b = new B();
 		present.b.v = "x";
 
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(nullGroup, nullLeaf, present));
-		var parsed = (List<A>) ParquetParser.DEFAULT.parse(bytes, List.class, A.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(nullGroup, nullLeaf, present));
+		var parsed = (List<A>) ParquetParser.DEFAULT.read(bytes, List.class, A.class);
 
 		assertEquals(3, parsed.size());
 		assertNull(parsed.get(0).b, "null intermediate group must reconstruct as null");

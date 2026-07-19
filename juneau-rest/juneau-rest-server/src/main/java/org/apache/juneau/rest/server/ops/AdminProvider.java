@@ -265,7 +265,7 @@ public class AdminProvider {
 
 	private static void writeJson(RestResponse res, Object payload) throws IOException {
 		try (var w = res.getDirectWriter("application/json")) {
-			JsonSerializer.DEFAULT_READABLE.serialize(payload, w);
+			JsonSerializer.DEFAULT_READABLE.write(payload, w);
 		}
 	}
 

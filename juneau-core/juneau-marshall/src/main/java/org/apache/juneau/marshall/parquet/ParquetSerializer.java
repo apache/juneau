@@ -346,29 +346,29 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 	/**
 	 * Convenience delegator for the whole-value {@link RecordWriter} using <b>default session
 	 * arguments</b>.  The real implementation lives on
-	 * {@link ParquetSerializerSession#serializeRecords(Object)}.
+	 * {@link ParquetSerializerSession#writeRecords(Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return ((RecordWritable) getSession()).serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).writeRecords(output);
 	}
 
 	/**
 	 * Convenience delegator for the buffered array-element {@link RecordWriter} using <b>default
 	 * session arguments</b>.  The real implementation lives on
-	 * {@link ParquetSerializerSession#serializeArrayRecords(Object)}.
+	 * {@link ParquetSerializerSession#writeArrayRecords(Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
-		return ((ArrayRecordWritable) getSession()).serializeArrayRecords(output);
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
+		return ((ArrayRecordWritable) getSession()).writeArrayRecords(output);
 	}
 
 	/**

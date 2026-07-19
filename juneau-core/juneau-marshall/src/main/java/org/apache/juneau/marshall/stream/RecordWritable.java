@@ -27,8 +27,8 @@ import java.io.*;
  * <ul>
  * 	<li>the convenience {@link org.apache.juneau.marshall.serializer.Serializer Serializer}
  * 		subclass &mdash; a thin delegator that mirrors
- * 		{@link org.apache.juneau.marshall.serializer.Serializer#serialize(Object) serialize(...)} by
- * 		forwarding to {@code getSession().serializeRecords(output)};
+ * 		{@link org.apache.juneau.marshall.serializer.Serializer#write(Object) write(...)} by
+ * 		forwarding to {@code getSession().writeRecords(output)};
  * 	<li>the {@link org.apache.juneau.marshall.serializer.SerializerSession SerializerSession}
  * 		subclass (where the live {@code BeanSession}/{@code MarshallingContext} is) &mdash; the real
  * 		cursor creation.
@@ -51,7 +51,7 @@ public interface RecordWritable {
 	 * <p>
 	 * When invoked on a convenience {@link org.apache.juneau.marshall.serializer.Serializer
 	 * Serializer} the cursor is opened with <b>default session args</b> (mirroring
-	 * {@link org.apache.juneau.marshall.serializer.Serializer#serialize(Object) serialize(...)}).
+	 * {@link org.apache.juneau.marshall.serializer.Serializer#write(Object) write(...)}).
 	 * Callers that need request-derived configuration should instead call
 	 * {@code createSession(args).build()} and invoke this method on the resulting
 	 * {@link org.apache.juneau.marshall.serializer.SerializerSession SerializerSession}.
@@ -61,12 +61,12 @@ public interface RecordWritable {
 	 * @return A new {@link RecordWriter} cursor.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
-	RecordWriter serializeRecords(Object output) throws IOException;
+	RecordWriter writeRecords(Object output) throws IOException;
 
 	/**
 	 * Streaming-quality signal queryable <em>before</em> opening a cursor.
 	 *
-	 * @return <jk>true</jk> if {@link #serializeRecords(Object)} returns an O(1)-memory streaming
+	 * @return <jk>true</jk> if {@link #writeRecords(Object)} returns an O(1)-memory streaming
 	 * 	cursor; <jk>false</jk> for buffered (whole-value) formats backed by
 	 * 	{@link RecordAdapter}.
 	 */

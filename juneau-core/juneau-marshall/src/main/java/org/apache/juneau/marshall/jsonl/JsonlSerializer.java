@@ -48,7 +48,7 @@ import org.apache.juneau.marshall.swap.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Use the default serializer to serialize a list of POJOs</jc>
- * 	String <jv>jsonl</jv> = JsonlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myList</jv>);
+ * 	String <jv>jsonl</jv> = JsonlSerializer.<jsf>DEFAULT</jsf>.write(<jv>myList</jv>);
  *
  * 	<jc>// Create a custom serializer</jc>
  * 	JsonlSerializer <jv>serializer</jv> = JsonlSerializer.<jsm>create</jsm>().build();
@@ -57,7 +57,7 @@ import org.apache.juneau.marshall.swap.*;
  * 	<jv>serializer</jv> = JsonlSerializer.<jsf>DEFAULT</jsf>.copy().build();
  *
  * 	<jc>// Serialize a list of POJOs to JSONL</jc>
- * 	String <jv>jsonl</jv> = <jv>serializer</jv>.serialize(<jv>myList</jv>);
+ * 	String <jv>jsonl</jv> = <jv>serializer</jv>.write(<jv>myList</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (List of beans):</h5>

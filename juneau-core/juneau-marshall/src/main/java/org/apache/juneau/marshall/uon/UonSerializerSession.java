@@ -171,7 +171,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	}
 
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -181,7 +181,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	}
 
 	@Override /* Overridden from HttpPartSerializer */
-	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+	public String write(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 		try {
 			// Shortcut for simple types.
 			var cm = getClassMetaForObject(value);
@@ -195,7 +195,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 				}
 			}
 			var w = new StringWriter();
-			serializeAnything(getUonWriter(w).i(getInitialDepth()), value, getExpectedRootType(value), "root", null);
+			writeAnything(getUonWriter(w).i(getInitialDepth()), value, getExpectedRootType(value), "root", null);
 			return w.toString();
 		} catch (Exception e) {
 			throw toRex(e);
@@ -206,7 +206,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return new UonWriter(this, out, isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
 	}
 
-	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+	private SerializerWriter writeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 
 		if (! plainTextParams)
 			out.append('(');
@@ -233,7 +233,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 
 			out.cr(indent).appendObject(key, false).append('=');
 
-			serializeAnything(out, value, cMeta, key, pMeta);
+			writeAnything(out, value, cMeta, key, pMeta);
 		});
 
 		if (m.size() > 0)
@@ -248,7 +248,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		"rawtypes", // Raw types necessary for generic collection/map serialization
 		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
 	})
-	private SerializerWriter serializeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter writeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 
 		var elementType = type.getElementType();
 
@@ -259,7 +259,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		forEachEntry(c, x -> {
 			addComma.ifSet(() -> out.append(',')).set();
 			out.cr(indent);
-			serializeAnything(out, x, elementType, "<iterator>", null);
+			writeAnything(out, x, elementType, "<iterator>", null);
 		});
 
 		addComma.ifSet(() -> out.cre(indent - 1));
@@ -269,7 +269,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return out;
 	}
 
-	private SerializerWriter serializeStreamable(UonWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter writeStreamable(UonWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
 
 		var elementType = type.getElementType();
 
@@ -280,7 +280,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		forEachStreamableEntry(o, sType, x -> {
 			addComma.ifSet(() -> out.append(',')).set();
 			out.cr(indent);
-			serializeAnything(out, x, elementType, "<iterator>", null);
+			writeAnything(out, x, elementType, "<iterator>", null);
 		});
 
 		addComma.ifSet(() -> out.cre(indent - 1));
@@ -294,7 +294,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		"rawtypes", // Raw types necessary for generic collection/map serialization
 		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
 	})
-	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter writeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
 		var valueType = type.getValueType();
@@ -308,7 +308,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			var value = x.getValue();
 			var key = generalize(x.getKey(), keyType);
 			out.cr(indent).appendObject(key, false).append('=');
-			serializeAnything(out, value, valueType, toString(key), null);
+			writeAnything(out, value, valueType, toString(key), null);
 		});
 
 		addComma.ifSet(() -> out.cre(indent - 1));
@@ -320,8 +320,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	}
 
 	@Override /* Overridden from Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		serializeAnything(getUonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
+		writeAnything(getUonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
 	}
 
 	/**
@@ -381,7 +381,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		"rawtypes", // Raw types necessary for generic type handling
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 	})
-	protected SerializerWriter serializeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
+	protected SerializerWriter writeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null) {
 			out.appendObject(null, false);
@@ -429,16 +429,16 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
 			out.appendObject(null, false);
 		else if (sType.isBean())
-			serializeBeanMap(out, toBeanMap(o), typeName);
+			writeBeanMap(out, toBeanMap(o), typeName);
 		else if (sType.isMap()) {
 			if (sType.isBeanMap())
-				serializeBeanMap(out, (BeanMap)o, typeName);
+				writeBeanMap(out, (BeanMap)o, typeName);
 			else
-				serializeMap(out, (Map)o, eType);
+				writeMap(out, (Map)o, eType);
 		} else if (sType.isCollection()) {
-			serializeCollection(out, (Collection)o, eType);
+			writeCollection(out, (Collection)o, eType);
 		} else if (sType.isArray()) {
-			serializeCollection(out, toList(sType.inner(), o), eType);
+			writeCollection(out, toList(sType.inner(), o), eType);
 		} else if (sType.isBoolean()) {
 			out.appendBoolean(o);
 		} else if (sType.isNumber()) {
@@ -446,17 +446,17 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
 			out.appendUri(o);
 		} else if (sType.isDate()) {
-			out.appendObject(serializeDate((Date)o, sType), false);
+			out.appendObject(writeDate((Date)o, sType), false);
 		} else if (sType.isCalendar()) {
-			out.appendObject(serializeCalendar(o, sType), false);
+			out.appendObject(writeCalendar(o, sType), false);
 		} else if (sType.isTemporal()) {
-			out.appendObject(serializeTemporal((TemporalAccessor)o, sType), false);
+			out.appendObject(writeTemporal((TemporalAccessor)o, sType), false);
 		} else if (sType.isDuration()) {
-			out.appendObject(serializeDuration((Duration)o), false);
+			out.appendObject(writeDuration((Duration)o), false);
 		} else if (sType.isPeriod()) {
-			out.appendObject(serializePeriod((Period)o), false);
+			out.appendObject(writePeriod((Period)o), false);
 		} else if (sType.isStreamable()) {
-			serializeStreamable(out, o, sType, eType);
+			writeStreamable(out, o, sType, eType);
 		} else if (sType.isReader()) {
 			pipe((Reader)o, out, SerializerSession::handleThrown);
 		} else if (sType.isInputStream()) {

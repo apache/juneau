@@ -85,8 +85,8 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 
 	@Test
 	void a01_allScalarsDefault() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(AllScalars.sample()));
-		var out = (List<AllScalars>) ParquetParser.DEFAULT.parse(bytes, List.class, AllScalars.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(AllScalars.sample()));
+		var out = (List<AllScalars>) ParquetParser.DEFAULT.read(bytes, List.class, AllScalars.class);
 		assertEquals(1, out.size());
 		assertEquals(3, out.get(0).i);
 	}
@@ -94,8 +94,8 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 	@Test
 	void a02_allScalarsNative() throws Exception {
 		var s = ParquetSerializer.create().nativeLogicalTypes(true).build();
-		var bytes = s.serialize(list(AllScalars.sample()));
-		var out = (List<AllScalars>) ParquetParser.DEFAULT.parse(bytes, List.class, AllScalars.class);
+		var bytes = s.write(list(AllScalars.sample()));
+		var out = (List<AllScalars>) ParquetParser.DEFAULT.read(bytes, List.class, AllScalars.class);
 		assertEquals(LocalDate.parse("2026-06-17"), out.get(0).date);
 	}
 
@@ -109,22 +109,22 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 		n.matrix = list(list(1, 2), list(3));
 		n.nums = new int[]{9, 8};
 		n.counts = map("x", 1, "y", 2);
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(n));
-		var out = (List<Nested>) ParquetParser.DEFAULT.parse(bytes, List.class, Nested.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(n));
+		var out = (List<Nested>) ParquetParser.DEFAULT.read(bytes, List.class, Nested.class);
 		assertEquals("n", out.get(0).name);
 	}
 
 	@Test
 	void a04_stringKeyedMapRoot() throws Exception {
 		// Drives buildSchemaFromMap.
-		var bytes = ParquetSerializer.DEFAULT.serialize(JsonMap.of("a", 1, "b", "two"));
+		var bytes = ParquetSerializer.DEFAULT.write(JsonMap.of("a", 1, "b", "two"));
 		assertNotEquals(0, bytes.length);
 	}
 
 	@Test
 	void a05_emptyCollection() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(list());
-		var out = (List<Object>) ParquetParser.DEFAULT.parse(bytes, List.class, Object.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list());
+		var out = (List<Object>) ParquetParser.DEFAULT.read(bytes, List.class, Object.class);
 		assertTrue(out.isEmpty());
 	}
 
@@ -139,8 +139,8 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 		head.val = 1;
 		head.next = new Node();
 		head.next.val = 2;
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(head));
-		var out = (List<Node>) ParquetParser.DEFAULT.parse(bytes, List.class, Node.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(head));
+		var out = (List<Node>) ParquetParser.DEFAULT.read(bytes, List.class, Node.class);
 		assertEquals(1, out.get(0).val);
 	}
 
@@ -158,8 +158,8 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 	void a08_boxedWrapperTypes() throws Exception {
 		var x = new Boxed();
 		x.bool = true; x.b = 1; x.sh = 2; x.i = 3; x.l = 4L; x.f = 1.5f; x.d = 2.5;
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(x));
-		var out = (List<Boxed>) ParquetParser.DEFAULT.parse(bytes, List.class, Boxed.class);
+		var bytes = ParquetSerializer.DEFAULT.write(list(x));
+		var out = (List<Boxed>) ParquetParser.DEFAULT.read(bytes, List.class, Boxed.class);
 		assertEquals(3, out.get(0).i);
 	}
 
@@ -175,8 +175,8 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 		t.date = LocalDate.parse("2026-06-17");
 		t.ts = Instant.parse("2026-06-17T00:00:00Z");
 		var s = ParquetSerializer.create().writeDatesAsTimestamp(false).build();
-		var bytes = s.serialize(list(t));
-		var out = (List<Temporals>) ParquetParser.DEFAULT.parse(bytes, List.class, Temporals.class);
+		var bytes = s.write(list(t));
+		var out = (List<Temporals>) ParquetParser.DEFAULT.read(bytes, List.class, Temporals.class);
 		assertEquals(LocalDate.parse("2026-06-17"), out.get(0).date);
 	}
 
@@ -198,7 +198,7 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 		var s = ParquetSerializer.create().maxRecursionDepth(2).cycleHandling(ParquetCycleHandling.NULL).build();
 		// Beyond the depth limit the recursive type collapses to a String placeholder (documented-lossy);
 		// the point here is that serialize succeeds and exercises the indirect-recursion schema branch.
-		var bytes = s.serialize(list(h));
+		var bytes = s.write(list(h));
 		assertNotEquals(0, bytes.length);
 	}
 
@@ -208,7 +208,7 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 		var n = new Nested();
 		n.name = "m";
 		n.counts = map("x", 1);
-		var bytes = ParquetSerializer.DEFAULT.serialize(list(n));
+		var bytes = ParquetSerializer.DEFAULT.write(list(n));
 		assertNotEquals(0, bytes.length);
 	}
 
@@ -219,6 +219,6 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 		var deep = head;
 		for (var i = 0; i < 10; i++) { deep.next = new Node(); deep = deep.next; }
 		var s = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.THROW).maxRecursionDepth(3).build();
-		assertThrows(Exception.class, () -> s.serialize(list(head)));
+		assertThrows(Exception.class, () -> s.write(list(head)));
 	}
 }

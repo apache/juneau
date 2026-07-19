@@ -52,7 +52,7 @@ public class PetPhotoParser extends InputStreamParser {
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast for image return
 	})
-	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
+	public <T> T doRead(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		try (var is = pipe.getInputStream()) {
 			var image = ImageIO.read(is);
 			return (T)image;

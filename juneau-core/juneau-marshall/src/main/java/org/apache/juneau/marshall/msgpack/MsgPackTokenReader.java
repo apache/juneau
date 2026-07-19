@@ -82,7 +82,7 @@ public class MsgPackTokenReader implements TokenReader {
 	}
 
 	/**
-	 * Constructor used by {@link MsgPackParserSession#parseTokens(Object)} to plumb the calling
+	 * Constructor used by {@link MsgPackParserSession#readTokens(Object)} to plumb the calling
 	 * session through.
 	 *
 	 * @param pipe The parser input pipe.  Must not be <jk>null</jk>.
@@ -357,7 +357,7 @@ public class MsgPackTokenReader implements TokenReader {
 		if (!canRead())
 			throw new IllegalStateException(MSG_READ_NON_VALUE_STATE);
 		try {
-			T o = s.parseAnything(type, is, null, null);
+			T o = s.readAnything(type, is, null, null);
 			consumedOneElement();
 			currentToken = TokenType.NOT_AVAILABLE;
 			return o;
@@ -377,7 +377,7 @@ public class MsgPackTokenReader implements TokenReader {
 		if (session == null)
 			throw new UnsupportedOperationException(
 				"read is not available on this MsgPackTokenReader (no session attached). " +
-				"Open the cursor via MsgPackParser.parseTokens(...) to enable read.");
+				"Open the cursor via MsgPackParser.readTokens(...) to enable read.");
 		return session;
 	}
 

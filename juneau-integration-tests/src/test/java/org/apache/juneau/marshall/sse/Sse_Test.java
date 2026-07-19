@@ -683,18 +683,18 @@ class Sse_Test extends TestBase {
 	}
 
 	@Test void f17_parseNullInputReturnsNullViaPublicApi() throws Exception {
-		// Null input -> ParserPipe.getReader() returns null -> doParse hits the r==null early-return branch.
+		// Null input -> ParserPipe.getReader() returns null -> doRead hits the r==null early-return branch.
 		var result = Sse.DEFAULT.read((Object) null, SseEvent.class);
 		assertNull(result);
 	}
 
 	@Test void f18_doParseWithNullClassMetaReturnsList() throws Exception {
 		// Public parse() path requires non-null type (parseInner calls type.isVoid()), so the
-		// type==null branch in SseParserSession.doParse() is only reachable via direct invocation.
-		// Same package -> protected doParse is accessible.
+		// type==null branch in SseParserSession.doRead() is only reachable via direct invocation.
+		// Same package -> protected doRead is accessible.
 		var session = SseParser.DEFAULT.getSession();
 		try (var pipe = session.createPipe("data: x\n\n")) {
-			Object result = session.doParse(pipe, null);
+			Object result = session.doRead(pipe, null);
 			assertTrue(result instanceof List);
 			var events = (List<?>) result;
 			assertEquals(1, events.size());

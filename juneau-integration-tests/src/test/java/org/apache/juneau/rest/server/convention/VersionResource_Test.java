@@ -56,7 +56,7 @@ class VersionResource_Test extends TestBase {
 			.assertStatus(200)
 			.assertHeader("Content-Type").isContains("application/json")
 			.getContent().asString();
-		var parsed = JsonParser.DEFAULT.parse(body, Map.class);
+		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		Assertions.assertNotNull(parsed.get("javaVersion"), "javaVersion present");
 	}
 

@@ -40,7 +40,7 @@ class Json5TokenReaderSupplemental_Test extends TestBase {
 		@Test void a01_emptyArrayEmitsMissingNull() throws Exception {
 			// Documents current behavior: at value position a ']' is treated as a missing value
 			// (VALUE_NULL) before the array closes.  Covers the ']' arm of the missing-value guard.
-			try (var r = Json5Parser.DEFAULT.parseTokens("[]")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("[]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NULL, r.next());
 				assertEquals(TokenType.END_ARRAY, r.next());
@@ -49,7 +49,7 @@ class Json5TokenReaderSupplemental_Test extends TestBase {
 
 		@Test void a02_missingObjectValueEmitsNull() throws Exception {
 			// {a:} — value position sees '}' and emits a missing VALUE_NULL.  Covers the '}' arm.
-			try (var r = Json5Parser.DEFAULT.parseTokens("{a:}")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("{a:}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next()); assertEquals("a", r.getFieldName());
 				assertEquals(TokenType.VALUE_NULL, r.next());
@@ -59,7 +59,7 @@ class Json5TokenReaderSupplemental_Test extends TestBase {
 
 		@Test void a03_emptyObjectClosesImmediately() throws Exception {
 			// {} — field-name position sees '}' and closes the object via the JSON5 override.
-			try (var r = Json5Parser.DEFAULT.parseTokens("{}")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("{}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.END_OBJECT, r.next());
 			}
@@ -71,7 +71,7 @@ class Json5TokenReaderSupplemental_Test extends TestBase {
 		@Test void b01_trailingCommaObjectCanReadReturnsFalse() throws Exception {
 			// JSON5 allows trailing commas, so canRead() over {a:1,} consumes the comma, sees '}',
 			// and (allowsTrailingComma() == true) returns without error — reporting no further value.
-			try (var r = Json5Parser.DEFAULT.parseTokens("{a:1,}")) {
+			try (var r = Json5Parser.DEFAULT.readTokens("{a:1,}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(TokenType.FIELD_NAME, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());

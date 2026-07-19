@@ -41,7 +41,7 @@ import java.util.*;
  * <p>
  * Binary serializers (BSON / CBOR / MsgPack / Prototext) emit native bytes regardless of the configured
  * {@code BinaryFormat}; this setting only affects text-based serializers and the
- * {@code OutputStreamSerializerSession#serializeToString(Object)} stream-to-string convenience.
+ * {@code OutputStreamSerializerSession#writeToString(Object)} stream-to-string convenience.
  */
 public enum BinaryFormat {
 

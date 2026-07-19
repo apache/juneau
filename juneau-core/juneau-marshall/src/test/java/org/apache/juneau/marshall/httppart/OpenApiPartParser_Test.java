@@ -45,11 +45,11 @@ class OpenApiPartParser_Test extends TestBase {
 	static OpenApiParserSession p = OpenApiParser.DEFAULT.getSession();
 
 	private static <T> T parse(HttpPartSchema schema, String input, Class<T> type) throws SchemaValidationException, ParseException {
-		return p.parse(null, schema, input, p.getClassMeta(type));
+		return p.read(null, schema, input, p.getClassMeta(type));
 	}
 
 	private static <T> T parse(HttpPartSchema schema, String input, Class<T> type, Type...args) throws SchemaValidationException, ParseException {
-		return p.parse(null, schema, input, p.getClassMeta(type, args));
+		return p.read(null, schema, input, p.getClassMeta(type, args));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

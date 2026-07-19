@@ -84,7 +84,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 	}
 
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -94,7 +94,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 	}
 
 	@Override
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		if (o == null)
 			return;
 		var aType = getClassMetaForObject(o);
@@ -110,9 +110,9 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 			w.keyValue(typeKey, typeName);
 		}
 		if (aType.isBean())
-			serializeBean(w, toBeanMap(o), "");
+			writeBean(w, toBeanMap(o), "");
 		else
-			serializeMapAtRoot(w, (Map<?,?>)o, eType);
+			writeMapAtRoot(w, (Map<?,?>)o, eType);
 	}
 
 	protected final IniWriter getIniWriter(SerializerPipe out) {
@@ -125,7 +125,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 		return w;
 	}
 
-	private void serializeBean(IniWriter w, BeanMap<?> m, String sectionPath) throws IOException, SerializeException {
+	private void writeBean(IniWriter w, BeanMap<?> m, String sectionPath) throws IOException, SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		var simple = new ArrayList<Map.Entry<BeanPropertyMeta, Object>>();
 		var sections = new ArrayList<Map.Entry<BeanPropertyMeta, Object>>();
@@ -174,12 +174,12 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 				var aType = getClassMetaForObject(value, cMeta);
 				if (aType.isBean()) {
 					w.section(newPath);
-					serializeBean(w, toBeanMap(value), newPath);
+					writeBean(w, toBeanMap(value), newPath);
 				} else if (aType.isMap()) {
 					var map = (Map<?,?>)value;
 					if (isSimpleMap(map, aType)) {
 						w.section(newPath);
-						serializeMapSection(w, map, aType);
+						writeMapSection(w, map, aType);
 					} else {
 						if (ctx.useComments && ine(iniMeta.getComment()))
 							w.comment(iniMeta.getComment());
@@ -198,7 +198,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 		}
 	}
 
-	private void serializeMapAtRoot(IniWriter w, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
+	private void writeMapAtRoot(IniWriter w, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		forEachEntry(map, e -> {
 			var k = toString(e.getKey());
@@ -211,14 +211,14 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 					if (isUseWhitespace())
 						w.blankLine();
 					w.section(k);
-					serializeBean(w, toBeanMap(v), k);
+					writeBean(w, toBeanMap(v), k);
 				} else if (aType.isMap() && v != null) {
 					var nested = (Map<?,?>)v;
 					if (isSimpleMap(nested, aType)) {
 						if (isUseWhitespace())
 							w.blankLine();
 						w.section(k);
-						serializeMapSection(w, nested, aType);
+						writeMapSection(w, nested, aType);
 					} else {
 						writeKeyValue(w, k, v, null);
 					}
@@ -235,7 +235,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 		"unused",    // type reserved for future type-aware section serialization
 		"java:S1172" // Same as above
 	})
-	private void serializeMapSection(IniWriter w, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
+	private void writeMapSection(IniWriter w, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		forEachEntry(map, e -> {
 			var k = toString(e.getKey());
@@ -289,15 +289,15 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 		if (aType.isEnum())
 			return ((Enum<?>)value).name();
 		if (aType.isDate())
-			return serializeDate((Date)value, aType);
+			return writeDate((Date)value, aType);
 		if (aType.isCalendar())
-			return serializeCalendar(value, aType);
+			return writeCalendar(value, aType);
 		if (aType.isTemporal())
-			return serializeTemporal((TemporalAccessor)value, aType);
+			return writeTemporal((TemporalAccessor)value, aType);
 		if (aType.isDuration())
-			return serializeDuration((Duration)value);
+			return writeDuration((Duration)value);
 		if (aType.isPeriod())
-			return serializePeriod((Period)value);
+			return writePeriod((Period)value);
 		return toString(value);
 	}
 
@@ -316,7 +316,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 	}
 
 	private String encodeComplexValue(Object value) throws SerializeException {
-		return getJson5Serializer().serialize(value);
+		return getJson5Serializer().write(value);
 	}
 
 	private JsonSerializer getJson5Serializer() {

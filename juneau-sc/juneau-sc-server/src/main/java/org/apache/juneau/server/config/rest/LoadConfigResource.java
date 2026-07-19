@@ -57,6 +57,6 @@ public class LoadConfigResource extends RestServlet {
 			throw new Forbidden("Access denied.");
 		}
 
-		return jsonSerializer.serialize(config.get());
+		return jsonSerializer.write(config.get());
 	}
 }

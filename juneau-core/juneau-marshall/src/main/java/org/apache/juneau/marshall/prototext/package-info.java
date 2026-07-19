@@ -28,8 +28,8 @@
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
- * 	String proto = PrototextSerializer.<jsf>DEFAULT</jsf>.serialize(myBean);
- * 	MyBean bean = PrototextParser.<jsf>DEFAULT</jsf>.parse(proto, MyBean.<jk>class</jk>);
+ * 	String proto = PrototextSerializer.<jsf>DEFAULT</jsf>.write(myBean);
+ * 	MyBean bean = PrototextParser.<jsf>DEFAULT</jsf>.read(proto, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Or use the marshaller:</jc>
  * 	String proto = Prototext.<jsm>of</jsm>(myBean);

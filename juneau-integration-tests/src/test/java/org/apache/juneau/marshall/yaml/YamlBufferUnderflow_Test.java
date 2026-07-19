@@ -79,7 +79,7 @@ class YamlBufferUnderflow_Test extends TestBase {
 		assertTrue(yaml.length() > 1024, () -> "YAML too small for test (got " + yaml.length() + " chars)");
 		assertTrue(yaml.contains("                "), () -> "YAML must contain >10-space indent line for repro");
 
-		Map<?,?> parsed = YamlParser.DEFAULT.parse(yaml, Map.class);
+		Map<?,?> parsed = YamlParser.DEFAULT.read(yaml, Map.class);
 
 		assertEquals(top.size(), parsed.size(), "Top-level entry count must match");
 		assertEquals(top.keySet(), parsed.keySet(), "Top-level keys must match");
@@ -93,16 +93,16 @@ class YamlBufferUnderflow_Test extends TestBase {
 			top.put("k" + i, nestedMap(7));
 
 		String json = JsonSerializer.DEFAULT.toString(top);
-		Map<?,?> fromJson = JsonParser.DEFAULT.parse(json, Map.class);
+		Map<?,?> fromJson = JsonParser.DEFAULT.read(json, Map.class);
 		String yaml = YamlSerializer.DEFAULT_READABLE.toString(fromJson);
 		assertTrue(yaml.length() > 1024);
 
 		// This is the line that used to throw IOException: Buffer underflow.
-		Map<?,?> fromYaml = YamlParser.DEFAULT.parse(yaml, Map.class);
+		Map<?,?> fromYaml = YamlParser.DEFAULT.read(yaml, Map.class);
 		String json2 = JsonSerializer.DEFAULT.toString(fromYaml);
 
 		// Sanity: the second JSON has all the top-level keys.
-		Map<?,?> reparsed = JsonParser.DEFAULT.parse(json2, Map.class);
+		Map<?,?> reparsed = JsonParser.DEFAULT.read(json2, Map.class);
 		assertEquals(top.keySet(), reparsed.keySet());
 	}
 
@@ -122,7 +122,7 @@ class YamlBufferUnderflow_Test extends TestBase {
 		top.put("nested", nestedMap(10));
 
 		String yaml = YamlSerializer.DEFAULT_READABLE.toString(top);
-		Map<?,?> parsed = YamlParser.DEFAULT.parse(yaml, Map.class);
+		Map<?,?> parsed = YamlParser.DEFAULT.read(yaml, Map.class);
 
 		assertEquals(top.keySet(), parsed.keySet());
 		assertEquals(bigStr.toString(), parsed.get("filler"));
@@ -137,7 +137,7 @@ class YamlBufferUnderflow_Test extends TestBase {
 			top.put("key_" + i, nestedMap(6));
 
 		String yaml = YamlSerializer.DEFAULT_READABLE.toString(top);
-		Map<?,?> parsed = YamlParser.DEFAULT.parse(yaml, Map.class);
+		Map<?,?> parsed = YamlParser.DEFAULT.read(yaml, Map.class);
 
 		assertEquals(40, parsed.size());
 	}
@@ -177,7 +177,7 @@ class YamlBufferUnderflow_Test extends TestBase {
 		// ParserReader buffer boundary; deep schema nesting puts indent depth well past the
 		// reader's no-mark unread-lookback limit. Pre-fix this throws IOException: Buffer
 		// underflow.
-		var parsed = YamlParser.DEFAULT.parse(yaml, OpenApi.class);
+		var parsed = YamlParser.DEFAULT.read(yaml, OpenApi.class);
 		assertEquals(doc.getOpenapi(), parsed.getOpenapi());
 		assertNotNull(parsed.getPaths());
 	}

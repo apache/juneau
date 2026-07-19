@@ -24,7 +24,7 @@ import java.io.*;
  *
  * <p>
  * Because {@link TokenReader} IS-A {@link RecordReader}, FULL formats get the record surface for
- * free &mdash; the {@link #parseRecords(Object)} default returns {@link #parseTokens(Object)}.
+ * free &mdash; the {@link #readRecords(Object)} default returns {@link #readTokens(Object)}.
  * Capability is detected via {@code instanceof}; a format that supports tokens is a
  * {@code TokenReadable} (and transitively a {@link RecordReadable}).
  *
@@ -46,18 +46,18 @@ public interface TokenReadable extends RecordReadable {
 	 * @return A new {@link TokenReader} cursor positioned at {@link TokenType#NOT_AVAILABLE}.
 	 * @throws IOException If a problem occurred reading the underlying input.
 	 */
-	TokenReader parseTokens(Object input) throws IOException;
+	TokenReader readTokens(Object input) throws IOException;
 
 	/**
 	 * FULL formats get record semantics for free &mdash; a {@link TokenReader} IS-A
 	 * {@link RecordReader}.
 	 *
 	 * @param input The input.
-	 * @return A new {@link RecordReader} cursor (the same object as {@link #parseTokens(Object)}).
+	 * @return A new {@link RecordReader} cursor (the same object as {@link #readTokens(Object)}).
 	 * @throws IOException If a problem occurred reading the underlying input.
 	 */
 	@Override
-	default RecordReader parseRecords(Object input) throws IOException {
-		return parseTokens(input);
+	default RecordReader readRecords(Object input) throws IOException {
+		return readTokens(input);
 	}
 }

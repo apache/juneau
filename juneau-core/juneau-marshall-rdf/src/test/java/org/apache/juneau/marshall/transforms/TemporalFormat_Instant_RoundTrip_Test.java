@@ -277,7 +277,7 @@ class TemporalFormat_Instant_RoundTrip_Test extends TestBase {
 		var x = Instant.parse("2024-06-15T12:00:00Z");
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, Instant.class);
+			var x2 = p.read(out, Instant.class);
 			// Binary serializers with native datetime support (BSON in particular) bypass the configured
 			// format swap at top-level and round-trip the Instant with full native fidelity.  Bean-property
 			// tests above cover the swap path; here we accept either the lossy-canonical (format applied)

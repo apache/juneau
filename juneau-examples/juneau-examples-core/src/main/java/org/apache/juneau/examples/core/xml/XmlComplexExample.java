@@ -50,11 +50,11 @@ public class XmlComplexExample {
 		var pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
 
 		// Serialize to human readable XML and print
-		var serial = XmlSerializer.DEFAULT_SQ_READABLE.serialize(pojoc);
+		var serial = XmlSerializer.DEFAULT_SQ_READABLE.write(pojoc);
 		Logger.getLogger(XmlComplexExample.class).info(serial);
 
 		// Deserialize back to PojoComplex instance
-		var obj = XmlParser.DEFAULT.parse(serial, PojoComplex.class);
+		var obj = XmlParser.DEFAULT.read(serial, PojoComplex.class);
 
 		assert obj.getClass().equals(pojoc.getClass());
 		assert obj.getInnerPojo().getId().equals(pojoc.getInnerPojo().getId());

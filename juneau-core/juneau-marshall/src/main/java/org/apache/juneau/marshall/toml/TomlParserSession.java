@@ -46,8 +46,8 @@ import org.apache.juneau.marshall.stream.*;
 @SuppressWarnings({
 	"rawtypes", // Raw types necessary for generic Map/List handling
 	"unchecked", // Type erasure requires unchecked casts in convertValue
-	"java:S3776", // Cognitive complexity acceptable for parseMessage
-	"java:S6541", // Brain method acceptable for parseMessage
+	"java:S3776", // Cognitive complexity acceptable for readMessage
+	"java:S6541", // Brain method acceptable for readMessage
 	"java:S135", // Multiple breaks acceptable in parse loop
 	"java:S115", // ARG_ prefix follows framework convention
 	"java:S1612", // Class.isAssignableFrom necessary when checking target type (Class<?>), not object instance
@@ -95,7 +95,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 	}
 
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.reader(this, input);
 	}
 
@@ -105,11 +105,11 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 	}
 
 	@Override
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (Reader r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
-			Map<String, Object> root = parseTomlDocument(new TomlTokenizer(r));
+			Map<String, Object> root = readTomlDocument(new TomlTokenizer(r));
 			if (isEmpty(root))
 				return type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : null;
 			// Root _value wrapper: document has exactly one key _value
@@ -121,7 +121,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		}
 	}
 
-	private Map<String, Object> parseTomlDocument(TomlTokenizer t) throws IOException, ParseException {
+	private Map<String, Object> readTomlDocument(TomlTokenizer t) throws IOException, ParseException {
 		Map<String, Object> root = new LinkedHashMap<>();
 		Map<String, Object> currentTable = root;
 
@@ -135,7 +135,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 				t.read();
 				if (t.peek() == '[') {
 					t.read();
-					String path = parseTablePath(t);
+					String path = readTablePath(t);
 					Object existing = getOrCreateAt(root, path);
 					if (!(existing instanceof List)) {
 						if (existing != null)
@@ -147,18 +147,18 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 					((List)existing).add(newTable);
 					currentTable = newTable;
 				} else {
-					String path = parseTablePath(t);
+					String path = readTablePath(t);
 					currentTable = getOrCreateTableAt(root, path);
 				}
 			} else if (c == '=' || Character.isLetterOrDigit(c) || c == '"' || c == '\'' || c == '_' || c == '-') {
-				List<String> keyPath = parseKey(t);
+				List<String> keyPath = readKey(t);
 				if (keyPath.isEmpty())
 					throw t.parseException("Expected key");
 				t.skipWhitespace();
 				if (t.read() != '=')
 					throw t.parseException("Expected '='");
 				t.skipWhitespace();
-				Object value = parseValue(t);
+				Object value = readValue(t);
 				setValueAt(currentTable, keyPath, value);
 			} else {
 				break;
@@ -167,7 +167,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		return root;
 	}
 
-	private static String parseTablePath(TomlTokenizer t) throws IOException, ParseException {
+	private static String readTablePath(TomlTokenizer t) throws IOException, ParseException {
 		t.skipWhitespace();
 		var parts = new ArrayList<String>();
 		while (true) {
@@ -188,7 +188,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		return String.join(".", parts);
 	}
 
-	private static List<String> parseKey(TomlTokenizer t) throws IOException, ParseException {
+	private static List<String> readKey(TomlTokenizer t) throws IOException, ParseException {
 		var parts = new ArrayList<String>();
 		while (true) {
 			String key = t.readBareKey();
@@ -204,7 +204,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		return parts;
 	}
 
-	private Object parseValue(TomlTokenizer t) throws IOException, ParseException {
+	private Object readValue(TomlTokenizer t) throws IOException, ParseException {
 		int c = t.peek();
 		if (c == '"') {
 			if (isTripleQuote(t, '"'))
@@ -223,7 +223,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 			t.skipWhitespaceAndComments();
 			var list = new ArrayList<>();
 			while (t.peek() != ']') {
-				list.add(parseValue(t));
+				list.add(readValue(t));
 				t.skipWhitespaceAndComments();
 				if (t.peek() == ',') {
 					t.read();
@@ -239,14 +239,14 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 			var map = new LinkedHashMap<String, Object>();
 			while (t.peek() != '}') {
 				t.skipWhitespace();
-				List<String> k = parseKey(t);
+				List<String> k = readKey(t);
 				if (k.isEmpty())
 					throw t.parseException("Expected key in inline table");
 				t.skipWhitespace();
 				if (t.read() != '=')
 					throw t.parseException("Expected '='");
 				t.skipWhitespace();
-				Object v = parseValue(t);
+				Object v = readValue(t);
 				map.put(k.get(0), v);
 				t.skipWhitespace();
 				if (t.peek() == ',') {
@@ -261,10 +261,10 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 			String s = readUntilValueEnd(t);
 			if (isEmpty(s))
 				throw t.parseException("Expected value");
-			Number special = parseSpecialFloat(s);
+			Number special = readSpecialFloat(s);
 			if (special != null)
 				return special;
-			Number radix = parseRadixInteger(s, t);
+			Number radix = readRadixInteger(s, t);
 			if (radix != null)
 				return radix;
 			String noUnderscore = s.replace("_", "");
@@ -286,7 +286,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		}
 		if (c == 'i' || c == 'n') {
 			String s = readUntilValueEnd(t);
-			Number special = parseSpecialFloat(s);
+			Number special = readSpecialFloat(s);
 			if (special != null)
 				return special;
 			throw t.parseException("Expected inf or nan");
@@ -326,7 +326,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		return sb.isEmpty() ? null : sb.toString().trim();
 	}
 
-	private static Number parseSpecialFloat(String s) {
+	private static Number readSpecialFloat(String s) {
 		if (s == null)
 			return null;
 		if (s.equals("inf") || s.equals("+inf"))
@@ -338,7 +338,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		return null;
 	}
 
-	private static Number parseRadixInteger(String s, TomlTokenizer t) throws ParseException {
+	private static Number readRadixInteger(String s, TomlTokenizer t) throws ParseException {
 		if (s == null || s.length() < 3 || s.charAt(0) != '0')
 			return null;
 		char p = s.charAt(1);
@@ -476,35 +476,35 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 			if (targetType.isNumber())
 				return convertToMemberType(null, num, targetType);
 			if (targetType.isDuration())
-				return parseDuration(num.toString());
+				return readDuration(num.toString());
 			if (targetType.isPeriod())
-				return parsePeriod(num.toString());
+				return readPeriod(num.toString());
 			if (targetType.isDate())
-				return parseDate(num.toString(), targetType);
+				return readDate(num.toString(), targetType);
 			if (targetType.isCalendar())
-				return parseCalendar(num.toString(), targetType);
+				return readCalendar(num.toString(), targetType);
 			if (targetType.isTemporal())
-				return parseTemporal(num.toString(), targetType);
+				return readTemporal(num.toString(), targetType);
 		}
 		if (val instanceof String string) {
 			if (targetType.isDate())
-				return parseDate(string, targetType);
+				return readDate(string, targetType);
 			if (targetType.isCalendar())
-				return parseCalendar(string, targetType);
+				return readCalendar(string, targetType);
 			if (targetType.isTemporal())
-				return parseTemporal(string, targetType);
+				return readTemporal(string, targetType);
 			if (targetType.isDuration())
-				return parseDuration(string);
+				return readDuration(string);
 			if (targetType.isPeriod())
-				return parsePeriod(string);
+				return readPeriod(string);
 		}
 		// Native TOML datetime literals (Z-zoned / offset / local) are returned by TomlTokenizer as
 		// java.time.OffsetDateTime / LocalDateTime / LocalDate / LocalTime objects.  Re-stringify
-		// through the temporal's own ISO toString() and route through parseTemporal so the
+		// through the temporal's own ISO toString() and route through readTemporal so the
 		// configured TemporalFormat hint (e.g. ISO_INSTANT) is honored — otherwise the generic
 		// Temporal → T coercion below applies the local zone and we lose the wire's UTC anchor.
 		if (val instanceof TemporalAccessor ta && targetType.isTemporal())
-			return parseTemporal(ta.toString(), targetType);
+			return readTemporal(ta.toString(), targetType);
 		// Bug #12: route String-shaped byte[] values (collection-element + top-level dispatch sites)
 		// through the configured BinaryFormat's variant binarySwap before falling through to the
 		// default String → byte[] coercion.  The bean-property path is unaffected because the

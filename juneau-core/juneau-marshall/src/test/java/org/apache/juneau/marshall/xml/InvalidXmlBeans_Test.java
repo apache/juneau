@@ -136,7 +136,7 @@ class InvalidXmlBeans_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void a01_basic(Input input) {
-		assertThrows(SerializeException.class, ()->s1.serialize(input.in), input.expected);
+		assertThrows(SerializeException.class, ()->s1.write(input.in), input.expected);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

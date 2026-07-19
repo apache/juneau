@@ -84,7 +84,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	}
 
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.reader(this, input);
 	}
 
@@ -94,11 +94,11 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	}
 
 	@Override
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (Reader r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
-			var sections = parseIniContent(r);
+			var sections = readIniContent(r);
 			if (sections.isEmpty())
 				return type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : null;
 			if (!type.isBean() && !type.isMap())
@@ -119,7 +119,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	 * @param r The reader.
 	 * @return Map of section name to key-value map. Default section uses "".
 	 */
-	protected Map<String, Map<String, String>> parseIniContent(Reader r) throws IOException {
+	protected Map<String, Map<String, String>> readIniContent(Reader r) throws IOException {
 		var sections = new LinkedHashMap<String, Map<String, String>>();
 		var current = sections.computeIfAbsent("", k -> new LinkedHashMap<>());
 		var br = r instanceof BufferedReader r2 ? r2 : new BufferedReader(r);
@@ -184,7 +184,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 					continue;
 				if (pMeta == null)
 					throw new ParseException(this, "Unknown property '%s'", key);
-				var value = parseValue(rawValue, (ClassMeta<?>) pMeta.getBeanInfo());
+				var value = readValue(rawValue, (ClassMeta<?>) pMeta.getBeanInfo());
 				bm.put(key, value);
 			}
 		}
@@ -217,7 +217,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 					valueType = object();
 				var map = new LinkedHashMap<String, Object>();
 				for (Entry<String, String> e : sub.entrySet())
-					map.put(e.getKey(), parseValue(e.getValue(), valueType));
+					map.put(e.getKey(), readValue(e.getValue(), valueType));
 				bm.put(childName, convertMapToTarget(map, cMeta));
 			}
 		}
@@ -228,7 +228,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 		var defaultSection = sections.get(sectionPath);
 		if (defaultSection != null) {
 			for (Entry<String, String> e : defaultSection.entrySet())
-				result.put(e.getKey(), parseValue(e.getValue(), object()));
+				result.put(e.getKey(), readValue(e.getValue(), object()));
 		}
 		for (var entry : sections.entrySet()) {
 			var sectionName = entry.getKey();
@@ -250,14 +250,14 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 			} else if (childSection != null) {
 				var map = new LinkedHashMap<String, Object>();
 				for (Entry<String, String> e : childSection.entrySet())
-					map.put(e.getKey(), parseValue(e.getValue(), object()));
+					map.put(e.getKey(), readValue(e.getValue(), object()));
 				result.put(childName, map);
 			}
 		}
 		return result;
 	}
 
-	private Object parseValue(String raw, ClassMeta<?> targetType) throws ParseException, ExecutableException {
+	private Object readValue(String raw, ClassMeta<?> targetType) throws ParseException, ExecutableException {
 		if (raw == null)
 			return null;
 		var trimmed = raw.trim();
@@ -272,7 +272,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 			return convertToMemberType(null, inner, targetType);
 		}
 		if (trimmed.startsWith("[") || trimmed.startsWith("{"))
-			return getJson5Parser().parse(trimmed, targetType);
+			return getJson5Parser().read(trimmed, targetType);
 		if (targetType.isNumber()) {
 			try {
 				if (trimmed.contains(".") || trimmed.toLowerCase(Locale.ROOT).contains("e"))
@@ -283,15 +283,15 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 			}
 		}
 		if (targetType.isDate())
-			return parseDate(trimmed, targetType);
+			return readDate(trimmed, targetType);
 		if (targetType.isCalendar())
-			return parseCalendar(trimmed, targetType);
+			return readCalendar(trimmed, targetType);
 		if (targetType.isTemporal())
-			return parseTemporal(trimmed, targetType);
+			return readTemporal(trimmed, targetType);
 		if (targetType.isDuration())
-			return parseDuration(trimmed);
+			return readDuration(trimmed);
 		if (targetType.isPeriod())
-			return parsePeriod(trimmed);
+			return readPeriod(trimmed);
 		return convertToMemberType(null, trimmed, targetType);
 	}
 
@@ -306,7 +306,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	 *
 	 * <p>
 	 * Memoized via {@link Memoizer} — first call constructs the parser; subsequent calls return
-	 * the cached instance.  {@link #parseValue} calls this once per JSON5-encoded value, so a single
+	 * the cached instance.  {@link #readValue} calls this once per JSON5-encoded value, so a single
 	 * builder-construction + parser-instantiation is amortized across the whole INI document rather
 	 * than repeated for every {@code […]} / {@code {…}} value.
 	 *

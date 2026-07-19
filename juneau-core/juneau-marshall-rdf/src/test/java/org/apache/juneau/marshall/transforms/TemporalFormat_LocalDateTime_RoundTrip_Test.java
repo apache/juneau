@@ -255,7 +255,7 @@ class TemporalFormat_LocalDateTime_RoundTrip_Test extends TestBase {
 		var x = LocalDateTime.of(2024, 6, 15, 12, 30, 45);
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, LocalDateTime.class);
+			var x2 = p.read(out, LocalDateTime.class);
 			// Binary serializers with native datetime support (BSON in particular) bypass the configured
 			// format swap at top-level and round-trip the value with full native fidelity.  Bean-property
 			// tests above cover the swap path; here we accept either the lossy-canonical (format applied)

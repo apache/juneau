@@ -37,8 +37,8 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Parameterized contract test for the {@link Parser#parseArrayRecords(Object)} /
- * {@link Serializer#serializeArrayRecords(Object)} surface across every Juneau format declaring a
+ * Parameterized contract test for the {@link Parser#readArrayRecords(Object)} /
+ * {@link Serializer#writeArrayRecords(Object)} surface across every Juneau format declaring a
  * non-{@code NONE} array-record-stream capability.
  *
  * <p>
@@ -221,9 +221,9 @@ class ArrayRecordStream_Test extends TestBase {
 	@Test
 	void f01_xmlArrayRecordReader() throws Exception {
 		var beans = List.of(new Bean("alice", 30), new Bean("bob", 25));
-		var wire = org.apache.juneau.marshall.xml.XmlSerializer.DEFAULT.serialize(beans);
+		var wire = org.apache.juneau.marshall.xml.XmlSerializer.DEFAULT.write(beans);
 		var got = new ArrayList<Bean>();
-		try (var r = org.apache.juneau.marshall.xml.XmlParser.DEFAULT.parseArrayRecords(wire, "object")) {
+		try (var r = org.apache.juneau.marshall.xml.XmlParser.DEFAULT.readArrayRecords(wire, "object")) {
 			while (r.canRead())
 				got.add(r.read(Bean.class));
 		}
@@ -235,9 +235,9 @@ class ArrayRecordStream_Test extends TestBase {
 	@Test
 	void f02_htmlArrayRecordReader() throws Exception {
 		var beans = List.of(new Bean("alice", 30), new Bean("bob", 25));
-		var wire = org.apache.juneau.marshall.html.HtmlSerializer.DEFAULT.serialize(beans);
+		var wire = org.apache.juneau.marshall.html.HtmlSerializer.DEFAULT.write(beans);
 		var got = new ArrayList<Bean>();
-		try (var r = org.apache.juneau.marshall.html.HtmlParser.DEFAULT.parseArrayRecords(wire, "tr")) {
+		try (var r = org.apache.juneau.marshall.html.HtmlParser.DEFAULT.readArrayRecords(wire, "tr")) {
 			while (r.canRead())
 				got.add(r.read(Bean.class));
 		}
@@ -257,10 +257,10 @@ class ArrayRecordStream_Test extends TestBase {
 		var wrapper = new LinkedHashMap<String,Object>();
 		wrapper.put("item", List.of(new Bean("alice", 30), new Bean("bob", 25)));
 		wrapper.put("note", "ignore me");
-		var wire = org.apache.juneau.marshall.xml.XmlSerializer.DEFAULT.serialize(wrapper);
+		var wire = org.apache.juneau.marshall.xml.XmlSerializer.DEFAULT.write(wrapper);
 
 		var got = new ArrayList<Bean>();
-		try (var r = org.apache.juneau.marshall.xml.XmlParser.DEFAULT.parseArrayRecords(wire, "item")) {
+		try (var r = org.apache.juneau.marshall.xml.XmlParser.DEFAULT.readArrayRecords(wire, "item")) {
 			while (r.canRead())
 				got.add(r.read(Bean.class));
 		}
@@ -276,10 +276,10 @@ class ArrayRecordStream_Test extends TestBase {
 	void f04_xmlArrayRecordReaderSingleNamedChild() throws Exception {
 		var wrapper = new LinkedHashMap<String,Object>();
 		wrapper.put("item", List.of(new Bean("solo", 42)));
-		var wire = org.apache.juneau.marshall.xml.XmlSerializer.DEFAULT.serialize(wrapper);
+		var wire = org.apache.juneau.marshall.xml.XmlSerializer.DEFAULT.write(wrapper);
 
 		var got = new ArrayList<Bean>();
-		try (var r = org.apache.juneau.marshall.xml.XmlParser.DEFAULT.parseArrayRecords(wire, "item")) {
+		try (var r = org.apache.juneau.marshall.xml.XmlParser.DEFAULT.readArrayRecords(wire, "item")) {
 			while (r.canRead())
 				got.add(r.read(Bean.class));
 		}
@@ -293,10 +293,10 @@ class ArrayRecordStream_Test extends TestBase {
 	void f05_xmlArrayRecordReaderUnknownRootYieldsEmpty() throws Exception {
 		var wrapper = new LinkedHashMap<String,Object>();
 		wrapper.put("item", List.of(new Bean("a", 1)));
-		var wire = org.apache.juneau.marshall.xml.XmlSerializer.DEFAULT.serialize(wrapper);
+		var wire = org.apache.juneau.marshall.xml.XmlSerializer.DEFAULT.write(wrapper);
 
 		var got = new ArrayList<Bean>();
-		try (var r = org.apache.juneau.marshall.xml.XmlParser.DEFAULT.parseArrayRecords(wire, "missing")) {
+		try (var r = org.apache.juneau.marshall.xml.XmlParser.DEFAULT.readArrayRecords(wire, "missing")) {
 			while (r.canRead())
 				got.add(r.read(Bean.class));
 		}
@@ -311,18 +311,18 @@ class ArrayRecordStream_Test extends TestBase {
 	void g01_msgpackCountOverloadStreams() throws Exception {
 		var beans = List.of(new Bean("a", 1), new Bean("b", 2), new Bean("c", 3));
 		var baos = new ByteArrayOutputStream();
-		try (var w = MsgPackSerializer.DEFAULT.serializeArrayRecords(baos, 3)) {
+		try (var w = MsgPackSerializer.DEFAULT.writeArrayRecords(baos, 3)) {
 			for (var b : beans)
 				w.write(b);
 		}
 
 		// Wire output should be byte-equal to serializing the list directly.
-		var bulk = MsgPackSerializer.DEFAULT.serialize(beans);
+		var bulk = MsgPackSerializer.DEFAULT.write(beans);
 		assertArrayEquals(bulk, baos.toByteArray());
 
 		// Round-trip: parse the streamed bytes back and verify.
 		@SuppressWarnings("unchecked")
-		var got = (List<Bean>) MsgPackParser.DEFAULT.parse(baos.toByteArray(), List.class, Bean.class);
+		var got = (List<Bean>) MsgPackParser.DEFAULT.read(baos.toByteArray(), List.class, Bean.class);
 		assertEquals(3, got.size());
 		assertEquals("a", got.get(0).name);
 		assertEquals(3, got.get(2).age);
@@ -331,7 +331,7 @@ class ArrayRecordStream_Test extends TestBase {
 	@Test
 	void g02_msgpackCountMismatchThrows() throws Exception {
 		var baos = new ByteArrayOutputStream();
-		var w = MsgPackSerializer.DEFAULT.serializeArrayRecords(baos, 3);
+		var w = MsgPackSerializer.DEFAULT.writeArrayRecords(baos, 3);
 		w.write(new Bean("a", 1));
 		w.write(new Bean("b", 2));
 		// declared 3, only wrote 2 → close should throw
@@ -341,7 +341,7 @@ class ArrayRecordStream_Test extends TestBase {
 	@Test
 	void g03_msgpackCountOverflowThrows() throws Exception {
 		var baos = new ByteArrayOutputStream();
-		try (var w = MsgPackSerializer.DEFAULT.serializeArrayRecords(baos, 1)) {
+		try (var w = MsgPackSerializer.DEFAULT.writeArrayRecords(baos, 1)) {
 			w.write(new Bean("a", 1));
 			var overflow = new Bean("b", 2);
 			assertThrows(IllegalStateException.class, () -> w.write(overflow));
@@ -392,14 +392,14 @@ class ArrayRecordStream_Test extends TestBase {
 	private static Object writeAll(Format fmt, List<?> beans) throws Exception {
 		if (fmt.mode == Mode.BINARY) {
 			var baos = new ByteArrayOutputStream();
-			try (var w = ((ArrayRecordWritable) fmt.serializer).serializeArrayRecords(baos)) {
+			try (var w = ((ArrayRecordWritable) fmt.serializer).writeArrayRecords(baos)) {
 				for (var b : beans)
 					w.write(b);
 			}
 			return baos.toByteArray();
 		}
 		var sb = new StringWriter();
-		try (var w = ((ArrayRecordWritable) fmt.serializer).serializeArrayRecords(sb)) {
+		try (var w = ((ArrayRecordWritable) fmt.serializer).writeArrayRecords(sb)) {
 			for (var b : beans)
 				w.write(b);
 		}
@@ -423,6 +423,6 @@ class ArrayRecordStream_Test extends TestBase {
 			actualInput = (input instanceof byte[]) ? input : ((String) input).getBytes();
 		else
 			actualInput = input.toString();
-		return ((ArrayRecordReadable) fmt.parser).parseArrayRecords(actualInput);
+		return ((ArrayRecordReadable) fmt.parser).readArrayRecords(actualInput);
 	}
 }

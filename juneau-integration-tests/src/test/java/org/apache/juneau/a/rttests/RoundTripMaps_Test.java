@@ -290,27 +290,27 @@ class RoundTripMaps_Test extends TestBase {
 
 		var s = (Serializer)Json5Serializer.create().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
 		e = "{AQID:'a',BAUG:null,null:'b'}";
-		r = s.serialize(x);
+		r = s.write(x);
 		assertEquals(e, r);
 
 		s = XmlSerializer.create().ns().sq().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
 		e = "<object><AQID>a</AQID><BAUG _type='null'/><_x0000_>b</_x0000_></object>";
-		r = s.serialize(x);
+		r = s.write(x);
 		assertEquals(e, r);
 
 		s = HtmlSerializer.create().sq().keepNullProperties().addKeyValueTableHeaders().binaryFormat(BinaryFormat.BASE64).build();
 		e = "<table><tr><th>key</th><th>value</th></tr><tr><td>AQID</td><td>a</td></tr><tr><td>BAUG</td><td><null/></td></tr><tr><td><null/></td><td>b</td></tr></table>";
-		r = s.serialize(x);
+		r = s.write(x);
 		assertEquals(e, r);
 
 		s = UonSerializer.create().encoding().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
 		e = "(AQID=a,BAUG=null,null=b)";
-		r = s.serialize(x);
+		r = s.write(x);
 		assertEquals(e, r);
 
 		s = UrlEncodingSerializer.create().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
 		e = "AQID=a&BAUG=null&null=b";
-		r = s.serialize(x);
+		r = s.write(x);
 		assertEquals(e, r);
 	}
 

@@ -46,10 +46,10 @@ public class OapiExample {
 
 		var pojo = new Pojo("id", "name");
 
-		var flat = oapiSerializer.serialize(pojo);
+		var flat = oapiSerializer.write(pojo);
 		// Print out the created POJO in OpenAPI format.
 
-		var parse = oapiParser.parse(flat, Pojo.class);
+		var parse = oapiParser.read(flat, Pojo.class);
 
 		assert parse.getId().equals(pojo.getId());
 		assert parse.getName().equals(pojo.getName());
@@ -68,17 +68,17 @@ public class OapiExample {
 			)
 			.build();
 		var value = new long[][] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-		var output = OpenApiSerializer.DEFAULT.serialize(HEADER, schema, value);
+		var output = OpenApiSerializer.DEFAULT.write(HEADER, schema, value);
 
 		var schemab = HttpPartSchema.create().type("string").build();
 		// Convert POJO to BASE64-encoded string.
 		var s = OpenApiSerializer.DEFAULT;
-		var httpPart = s.getPartSession().serialize(HEADER, schemab, pojo);
+		var httpPart = s.getPartSession().write(HEADER, schemab, pojo);
 		Logger.getLogger(OapiExample.class).info(httpPart);
 
 		// Convert BASE64-encoded string back into a POJO.
 		var p = OpenApiParser.DEFAULT;
-		pojo = p.getPartSession().parse(HEADER, schemab, httpPart, oapiParser.getClassMeta(Pojo.class));
+		pojo = p.getPartSession().read(HEADER, schemab, httpPart, oapiParser.getClassMeta(Pojo.class));
 
 		// The object above can be parsed thanks to the @BeanCtor(properties = id,name) annotation on Pojo
 		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.

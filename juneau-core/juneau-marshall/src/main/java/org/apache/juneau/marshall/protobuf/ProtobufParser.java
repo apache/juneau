@@ -54,7 +54,7 @@ import org.apache.juneau.marshall.parser.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Parse protobuf binary bytes into a bean</jc>
- * 	MyBean <jv>bean</jv> = ProtobufParser.<jsf>DEFAULT</jsf>.parse(<jv>bytes</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = ProtobufParser.<jsf>DEFAULT</jsf>.read(<jv>bytes</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>

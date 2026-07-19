@@ -2519,7 +2519,7 @@ class ThirdPartyProxy_Test extends TestBase {
 		public HttpPartSerializerSession getPartSession() {
 			return new BaseHttpPartSerializerSession() {
 				@Override
-				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+				public String write(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 					return "dummy-"+value;
 				}
 			};

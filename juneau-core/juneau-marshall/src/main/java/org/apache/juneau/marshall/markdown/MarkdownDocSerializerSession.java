@@ -38,8 +38,8 @@ import org.apache.juneau.marshall.swap.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
 	"java:S115", // Constants use UPPER_snakeCase convention
-	"java:S3776", // Cognitive complexity acceptable for doSerialize / serializeBeanWithHeadings
-	"java:S6541", // Brain method acceptable for doSerialize
+	"java:S3776", // Cognitive complexity acceptable for doWrite / writeBeanWithHeadings
+	"java:S6541", // Brain method acceptable for doWrite
 	"resource", // MarkdownWriter/Writer lifecycle managed by SerializerPipe
 	"rawtypes",
 })
@@ -115,7 +115,7 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 	}
 
 	@Override /* Overridden from MarkdownSerializerSession */
-	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		try (var w = getMarkdownWriter(pipe)) {
 			if (ine(headerContent)) {
 				w.append(headerContent);
@@ -144,12 +144,12 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 			}
 
 			if (cm.isBean()) {
-				serializeBeanWithHeadings(w, toBeanMap(o), headingLevel);
+				writeBeanWithHeadings(w, toBeanMap(o), headingLevel);
 			} else if (cm.isCollectionOrArray()) {
 				var l = cm.isArray() ? Arrays.asList((Object[]) o) : (Collection<?>) o;
-				serializeCollection(w, l, object(), cm);
+				writeCollection(w, l, object(), cm);
 			} else {
-				serializeAnything(w, o, cm, null);
+				writeAnything(w, o, cm, null);
 			}
 		}
 
@@ -173,7 +173,7 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException If serialization fails.
 	 */
-	protected void serializeBeanWithHeadings(MarkdownWriter w, BeanMap<?> bm, int level) throws IOException, SerializeException {
+	protected void writeBeanWithHeadings(MarkdownWriter w, BeanMap<?> bm, int level) throws IOException, SerializeException {
 		// Collect simple properties for the key/value table
 		var simpleProps = new LinkedHashMap<String, Object>();
 		var complexProps = new LinkedHashMap<String, Object>();
@@ -207,7 +207,7 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 				w.tableSeparator(2);
 			}
 			for (var e : simpleProps.entrySet())
-				w.tableRow(MarkdownWriter.escapeCell(e.getKey()), serializeInlineValue(e.getValue()));
+				w.tableRow(MarkdownWriter.escapeCell(e.getKey()), writeInlineValue(e.getValue()));
 			w.blankLine();
 		}
 
@@ -233,21 +233,21 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 
 			if (swappedCm.isBean()) {
 				if (level + 1 < 6) {
-					serializeBeanWithHeadings(w, toBeanMap(swapped), level + 1);
+					writeBeanWithHeadings(w, toBeanMap(swapped), level + 1);
 				} else {
 					// Heading cap: fall back to inline rendering
-					serializeBeanMap(w, toBeanMap(swapped), object(), swappedCm);
+					writeBeanMap(w, toBeanMap(swapped), object(), swappedCm);
 					w.blankLine();
 				}
 			} else if (swappedCm.isMap()) {
-				serializeMap(w, (Map<?,?>) swapped, swappedCm);
+				writeMap(w, (Map<?,?>) swapped, swappedCm);
 				w.blankLine();
 			} else if (swappedCm.isCollectionOrArray()) {
 				var l = swappedCm.isArray() ? Arrays.asList((Object[]) swapped) : (Collection<?>) swapped;
-				serializeCollection(w, l, object(), swappedCm);
+				writeCollection(w, l, object(), swappedCm);
 				w.blankLine();
 			} else {
-				serializeAnything(w, val, swappedCm, null);
+				writeAnything(w, val, swappedCm, null);
 				w.blankLine();
 			}
 		}

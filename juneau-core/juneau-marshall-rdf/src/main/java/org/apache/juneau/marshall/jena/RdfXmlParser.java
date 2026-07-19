@@ -27,7 +27,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Parse RDF/XML string into a bean.</jc>
  * 	String <jv>rdfXml</jv> = ...;  <jc>// RDF/XML content</jc>
- * 	Person <jv>person</jv> = RdfXmlParser.<jsf>DEFAULT</jsf>.parse(<jv>rdfXml</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = RdfXmlParser.<jsf>DEFAULT</jsf>.read(<jv>rdfXml</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the RdfXml marshaller for convenience.</jc>
@@ -35,12 +35,12 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Parse into a map.</jc>
- * 	Map&lt;String, String&gt; <jv>map</jv> = RdfXmlParser.<jsf>DEFAULT</jsf>.parse(<jv>rdfXml</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+ * 	Map&lt;String, String&gt; <jv>map</jv> = RdfXmlParser.<jsf>DEFAULT</jsf>.read(<jv>rdfXml</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>
  * 	RdfXmlParser <jv>p</jv> = RdfXmlParser.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>rdfXml</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.read(<jv>rdfXml</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example input (bean with name/age):</h5>

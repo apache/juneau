@@ -238,7 +238,7 @@ public class SerializedHeader extends BasicHeader {
 				return null;
 			if (ie(s(v)) && skipIfEmpty && def == null)
 				return null;
-			return serializer == null ? s(v) : serializer.serialize(HttpPartType.HEADER, schema2, v);
+			return serializer == null ? s(v) : serializer.write(HttpPartType.HEADER, schema2, v);
 		} catch (SchemaValidationException e) {
 			throw rex(e, "Validation error on request %s parameter '%s'='%s'", HttpPartType.HEADER, getName(), value);
 		} catch (SerializeException e) {

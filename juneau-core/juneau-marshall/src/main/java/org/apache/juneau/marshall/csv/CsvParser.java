@@ -269,7 +269,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider, RecordRe
 
 	/**
 	 * Convenience delegator that opens a {@link RecordReader} over the input using
-	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 * <b>default session arguments</b> (mirrors {@link #read(Object, Class)}).
 	 *
 	 * <p>
 	 * CSV is naturally row-oriented &mdash; each row becomes one record &mdash; but the current cursor
@@ -277,17 +277,17 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider, RecordRe
 	 * deferred item, so {@link #isRecordStreaming()} returns <jk>false</jk>.
 	 *
 	 * <p>
-	 * The real implementation lives on {@link CsvParserSession#parseRecords(Object)}.  Callers that need
+	 * The real implementation lives on {@link CsvParserSession#readRecords(Object)}.  Callers that need
 	 * request-derived configuration (locale, timezone, schema, swaps) should call {@link #createSession()}
-	 * and invoke {@link CsvParserSession#parseRecords(Object)} on the built session instead.
+	 * and invoke {@link CsvParserSession#readRecords(Object)} on the built session instead.
 	 *
 	 * @param input The input.
 	 * @return A new {@link RecordReader} cursor.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
-		return getSession().parseRecords(input);
+	public RecordReader readRecords(Object input) throws IOException {
+		return getSession().readRecords(input);
 	}
 
 	@Override /* RecordReadable */

@@ -109,14 +109,14 @@ class ClassFormatSwap_SessionClassLoader_Test extends TestBase {
 	@Test void a01_sessionCL_resolvesClassInvisibleToThreadContextCL() throws Exception {
 		// Confirm thread-context CL cannot find IsolatedBean — our baseline.
 		assertThrows(Exception.class,
-			() -> JsonParser.create().build().parse("\"" + ISOLATED_FQCN + "\"", Class.class),
+			() -> JsonParser.create().build().read("\"" + ISOLATED_FQCN + "\"", Class.class),
 			"Precondition: thread-context CL must NOT resolve IsolatedBean"
 		);
 
 		// With the session CL pointing at the compiled class, parsing must succeed.
 		try (var sessionCL = new URLClassLoader(isolatedUrls, null)) {
 			var parser = JsonParser.create().classLoader(sessionCL).build();
-			var result = parser.parse("\"" + ISOLATED_FQCN + "\"", Class.class);
+			var result = parser.read("\"" + ISOLATED_FQCN + "\"", Class.class);
 
 			assertNotNull(result);
 			assertEquals(ISOLATED_FQCN, result.getName());
@@ -139,7 +139,7 @@ class ClassFormatSwap_SessionClassLoader_Test extends TestBase {
 		var fqcn = JsonParser.class.getName();
 		var parser = JsonParser.create().build();
 
-		var result = parser.parse("\"" + fqcn + "\"", Class.class);
+		var result = parser.read("\"" + fqcn + "\"", Class.class);
 
 		assertNotNull(result);
 		assertEquals(fqcn, result.getName());
@@ -169,7 +169,7 @@ class ClassFormatSwap_SessionClassLoader_Test extends TestBase {
 
 			// Must fail: session CL cannot find JsonParser, and there is no thread-CL fallback.
 			assertThrows(Exception.class,
-				() -> parser.parse("\"" + fqcn + "\"", Class.class),
+				() -> parser.read("\"" + fqcn + "\"", Class.class),
 				"Should fail — session CL is set but cannot find " + fqcn
 					+ "; thread-context CL must NOT be consulted as a fallback"
 			);

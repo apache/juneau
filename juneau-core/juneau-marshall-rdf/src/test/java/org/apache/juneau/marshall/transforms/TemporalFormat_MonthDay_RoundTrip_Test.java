@@ -259,7 +259,7 @@ class TemporalFormat_MonthDay_RoundTrip_Test extends TestBase {
 		var x = MonthDay.of(6, 15);
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, MonthDay.class);
+			var x2 = p.read(out, MonthDay.class);
 			// Binary serializers with native datetime support may bypass the configured format swap at
 			// top-level; bean-property tests above cover the swap path strictly.  Accept either the
 			// lossy-canonical (format applied) or the structural original (format bypassed).

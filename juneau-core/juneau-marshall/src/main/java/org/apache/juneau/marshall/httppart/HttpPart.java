@@ -64,7 +64,7 @@ public class HttpPart implements NameValuePair {
 	@Override /* Overridden from NameValuePair */
 	public String getValue() {
 		try {
-			return serializer.serialize(partType, schema, opart);
+			return serializer.write(partType, schema, opart);
 		} catch (Exception e) {
 			throw toRex(e);
 		}

@@ -440,7 +440,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 			try {
 				if (c.isAssignableFrom(ABean.class))
 					return Json5.to(in.substring(1),c);
-				return SimplePartParser.DEFAULT.parse(type,schema,in,c);
+				return SimplePartParser.DEFAULT.read(type,schema,in,c);
 			} catch (Exception e) {
 				throw ThrowableUtils.toRex(e);
 			}

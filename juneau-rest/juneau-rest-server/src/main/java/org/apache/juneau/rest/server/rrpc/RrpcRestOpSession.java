@@ -146,7 +146,7 @@ public class RrpcRestOpSession extends RestOpSession {
 						args = new Object[0];
 					else {
 						try (Closeable in = p.isReaderParser() ? req.getReader() : req.getInputStream()) {
-							args = p.parseArgs(in, m.getGenericParameterTypes());
+							args = p.readArgs(in, m.getGenericParameterTypes());
 						}
 					}
 					res.setContent(m.invoke(o, args));

@@ -139,12 +139,12 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 	 * and {@code skipIfEmpty} semantics apply.
 	 */
 	@SuppressWarnings({
-		"java:S112" // Propagates the checked exceptions thrown by HttpPartSerializerSession.serialize(...); the caller already re-wraps them in InternalServerError.
+		"java:S112" // Propagates the checked exceptions thrown by HttpPartSerializerSession.write(...); the caller already re-wraps them in InternalServerError.
 	})
 	private static HttpHeader toHeader(String name, Object value, HttpPartSerializerSession session, HttpPartSchema schema) throws Exception {
 		String v;
 		if (session != null)
-			v = session.serialize(HttpPartType.HEADER, schema, value);
+			v = session.write(HttpPartType.HEADER, schema, value);
 		else
 			v = value == null ? null : value.toString();
 		if (v != null && v.isEmpty())

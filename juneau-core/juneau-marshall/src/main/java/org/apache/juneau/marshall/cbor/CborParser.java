@@ -141,7 +141,7 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 
 		/**
 		 * Surfaces CBOR semantic tags and simple values as token-level metadata on
-		 * {@link TokenReader} cursors returned by {@link CborParserSession#parseTokens(Object)}.
+		 * {@link TokenReader} cursors returned by {@link CborParserSession#readTokens(Object)}.
 		 *
 		 * <p>
 		 * When enabled, tags accumulate on the cursor's tag stack (visible via
@@ -152,7 +152,7 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 		 *
 		 * <p>
 		 * This is a token-cursor-level setting and does not affect the high-level POJO databind
-		 * path ({@link CborParser#parse(Object, Class)}); that path always discards tags.
+		 * path ({@link CborParser#read(Object, Class)}); that path always discards tags.
 		 *
 		 * @return This object.
 		 */
@@ -271,12 +271,12 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 
 	/**
 	 * Convenience delegator that opens a {@link CborTokenReader} over the input using
-	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 * <b>default session arguments</b> (mirrors {@link #read(Object, Class)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link CborParserSession#parseTokens(Object)}.  Callers
+	 * The real implementation lives on {@link CborParserSession#readTokens(Object)}.  Callers
 	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
-	 * {@link #createSession()} and invoke {@link CborParserSession#parseTokens(Object)} on the
+	 * {@link #createSession()} and invoke {@link CborParserSession#readTokens(Object)} on the
 	 * built session instead.
 	 *
 	 * @param input The input.
@@ -284,22 +284,22 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* TokenReadable */
-	public TokenReader parseTokens(Object input) throws IOException {
-		return getSession().parseTokens(input);
+	public TokenReader readTokens(Object input) throws IOException {
+		return getSession().readTokens(input);
 	}
 
 	/**
 	 * Convenience delegator for the streaming array-element {@link RecordReader} (uses default
-	 * session args; see {@link #parseTokens(Object)}).  Real impl on
-	 * {@link CborParserSession#parseArrayRecords(Object)}.
+	 * session args; see {@link #readTokens(Object)}).  Real impl on
+	 * {@link CborParserSession#readArrayRecords(Object)}.
 	 *
 	 * @param input The input.
 	 * @return A new element-streamed {@link RecordReader}.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* ArrayRecordReadable */
-	public RecordReader parseArrayRecords(Object input) throws IOException {
-		return getSession().parseArrayRecords(input);
+	public RecordReader readArrayRecords(Object input) throws IOException {
+		return getSession().readArrayRecords(input);
 	}
 
 	@Override /* Overridden from InputStreamParser */

@@ -27,7 +27,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Parse TriG string into a bean.</jc>
  * 	String <jv>triG</jv> = ...;  <jc>// TriG content</jc>
- * 	Person <jv>person</jv> = TriGParser.<jsf>DEFAULT</jsf>.parse(<jv>triG</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = TriGParser.<jsf>DEFAULT</jsf>.read(<jv>triG</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the TriG marshaller for convenience.</jc>
@@ -36,7 +36,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>
  * 	TriGParser <jv>p</jv> = TriGParser.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>triG</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.read(<jv>triG</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example input (bean with name/age):</h5>

@@ -169,7 +169,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		try {
 			var passThroughHeaders = request.getHeaderParam("x-response-headers").orElse(null);
 			if (nn(passThroughHeaders)) {
-				var m = context.getPartParser().getPartSession().parse(HEADER, null, passThroughHeaders, MarshallingContext.DEFAULT.getClassMeta(JsonMap.class));
+				var m = context.getPartParser().getPartSession().read(HEADER, null, passThroughHeaders, MarshallingContext.DEFAULT.getClassMeta(JsonMap.class));
 				for (var e : m.entrySet())
 					addHeader(e.getKey(), resolveUris(e.getValue()));
 			}
@@ -887,7 +887,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @throws SerializeException Header could not be serialized.
 	 */
 	public RestResponse setHeader(HttpPartSchema schema, String name, Object value) throws SchemaValidationException, SerializeException {
-		setHeader(name, request.getPartSerializerSession().serialize(HEADER, schema, value));
+		setHeader(name, request.getPartSerializerSession().write(HEADER, schema, value));
 		return this;
 	}
 
@@ -905,7 +905,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @throws SerializeException Header could not be serialized.
 	 */
 	public RestResponse setHeader(String name, Object value) throws SchemaValidationException, SerializeException {
-		setHeader(name, request.getPartSerializerSession().serialize(HEADER, null, value));
+		setHeader(name, request.getPartSerializerSession().write(HEADER, null, value));
 		return this;
 	}
 

@@ -446,7 +446,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	private String toJson(Object o) throws SerializeException {
 		if (jsSession == null)
 			jsSession = ctx.getJsonSerializer().getSession();
-		return jsSession.serializeToString(o);
+		return jsSession.writeToString(o);
 	}
 
 	/**

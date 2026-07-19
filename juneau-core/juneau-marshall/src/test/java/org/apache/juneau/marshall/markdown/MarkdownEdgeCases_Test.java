@@ -168,7 +168,7 @@ class MarkdownEdgeCases_Test {
 		var nested = Map.<String, Object>of("x", "deep");
 		var l1 = new LinkedHashMap<String, Object>();
 		l1.put("nested", nested);
-		var md = s.serialize(l1);
+		var md = s.write(l1);
 		assertTrue(md.contains("deep"), "Expected deep value: " + md);
 		assertNotNull(md);
 	}

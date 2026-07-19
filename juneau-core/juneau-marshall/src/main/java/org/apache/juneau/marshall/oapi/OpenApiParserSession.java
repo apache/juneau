@@ -119,7 +119,7 @@ public class OpenApiParserSession extends UonParserSession {
 		"unchecked" // Type erasure requires cast to T
 	})
 	@Override /* Overridden from HttpPartParser */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
+	public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
 		if (partType == null)
 			partType = HttpPartType.OTHER;
 
@@ -133,7 +133,7 @@ public class OpenApiParserSession extends UonParserSession {
 
 		schema = coalesce(schema, getSchema(), DEFAULT_SCHEMA);
 
-		T t = parseInner(partType, schema, in, type);
+		T t = readInner(partType, schema, in, type);
 		if (t == null && type.isPrimitive())
 			t = type.getPrimitiveDefault();
 		schema.validateOutput(t);
@@ -149,7 +149,7 @@ public class OpenApiParserSession extends UonParserSession {
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
-	private <T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationException, ParseException {
+	private <T> T readInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationException, ParseException {
 		schema.validateInput(in);
 		if (in == null || "null".equals(in)) {
 			if (schema.getDefault() == null)
@@ -168,7 +168,7 @@ public class OpenApiParserSession extends UonParserSession {
 				sType = type;
 
 			if (sType.isOptional())
-				return (T)o(parseInner(partType, schema, in, sType.getElementType()));
+				return (T)o(readInner(partType, schema, in, sType.getElementType()));
 
 			var t = schema.getType(sType);
 			if (partType == null)
@@ -191,7 +191,7 @@ public class OpenApiParserSession extends UonParserSession {
 					if (f == BINARY_SPACED)
 						return toType(fromSpacedHex(in), type);
 					if (f == HttpPartFormat.UON)
-						return super.parse(partType, schema, in, type);
+						return super.read(partType, schema, in, type);
 					return toType(in, type);
 				}
 				if (f == BYTE)
@@ -206,15 +206,15 @@ public class OpenApiParserSession extends UonParserSession {
 				if (f == BINARY_SPACED)
 					return toType(fromSpacedHex(in), type);
 				if (f == HttpPartFormat.UON)
-					return super.parse(partType, schema, in, type);
+					return super.read(partType, schema, in, type);
 				return toType(in, type);
 
 			} else if (t == BOOLEAN) {
 				if (type.isObject())
 					type = (ClassMeta<T>)CM_Boolean;
 				if (type.isBoolean())
-					return super.parse(partType, schema, in, type);
-				return toType(super.parse(partType, schema, in, CM_Boolean), type);
+					return super.read(partType, schema, in, type);
+				return toType(super.read(partType, schema, in, CM_Boolean), type);
 
 			} else if (t == INTEGER) {
 				if (type.isObject()) {
@@ -224,8 +224,8 @@ public class OpenApiParserSession extends UonParserSession {
 						type = (ClassMeta<T>)CM_Integer;
 				}
 				if (type.isNumber())
-					return super.parse(partType, schema, in, type);
-				return toType(super.parse(partType, schema, in, CM_Integer), type);
+					return super.read(partType, schema, in, type);
+				return toType(super.read(partType, schema, in, CM_Integer), type);
 
 			} else if (t == NUMBER) {
 				if (type.isObject()) {
@@ -235,8 +235,8 @@ public class OpenApiParserSession extends UonParserSession {
 						type = (ClassMeta<T>)CM_Float;
 				}
 				if (type.isNumber())
-					return super.parse(partType, schema, in, type);
-				return toType(super.parse(partType, schema, in, CM_Double), type);
+					return super.read(partType, schema, in, type);
+				return toType(super.read(partType, schema, in, CM_Double), type);
 
 			} else if (t == ARRAY) {
 
@@ -245,7 +245,7 @@ public class OpenApiParserSession extends UonParserSession {
 					cf = ctx.getCollectionFormat();
 
 				if (cf == HttpPartCollectionFormat.UONC)
-					return super.parse(partType, schema, in, type);
+					return super.read(partType, schema, in, type);
 
 				if (type.isObject())
 					type = (ClassMeta<T>)CM_JsonList;
@@ -270,10 +270,10 @@ public class OpenApiParserSession extends UonParserSession {
 				else if (cf == TSV)
 					ss = StringUtils.splita(in, '\t');
 				else if (cf == HttpPartCollectionFormat.UONC)
-					return super.parse(partType, null, in, type);
+					return super.read(partType, null, in, type);
 				else if (cf == NO_COLLECTION_FORMAT) {
 					if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
-						return super.parse(partType, null, in, type);
+						return super.read(partType, null, in, type);
 					ss = StringUtils.splita(in, ',');
 				}
 
@@ -282,7 +282,7 @@ public class OpenApiParserSession extends UonParserSession {
 					items = HttpPartSchema.DEFAULT;
 				var o = Array.newInstance(eType.inner(), ss.length);
 				for (var i = 0; i < ss.length; i++)
-					Array.set(o, i, parse(partType, items, ss[i], eType));
+					Array.set(o, i, read(partType, items, ss[i], eType));
 				if (type.hasMutaterFrom(spt) || spt.hasMutaterTo(type))
 					return toType(toType(o, spt), type);
 				return toType(o, type);
@@ -294,7 +294,7 @@ public class OpenApiParserSession extends UonParserSession {
 					cf = ctx.getCollectionFormat();
 
 				if (cf == HttpPartCollectionFormat.UONC)
-					return super.parse(partType, schema, in, type);
+					return super.read(partType, schema, in, type);
 
 				if (type.isObject())
 					type = (ClassMeta<T>)CM_JsonMap;
@@ -315,10 +315,10 @@ public class OpenApiParserSession extends UonParserSession {
 				else if (cf == TSV)
 					ss = StringUtils.splita(in, '\t');
 				else if (cf == HttpPartCollectionFormat.UONC)
-					return super.parse(partType, null, in, type);
+					return super.read(partType, null, in, type);
 				else if (cf == NO_COLLECTION_FORMAT) {
 					if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
-						return super.parse(partType, null, in, type);
+						return super.read(partType, null, in, type);
 					ss = StringUtils.splita(in, ',');
 				}
 
@@ -333,7 +333,7 @@ public class OpenApiParserSession extends UonParserSession {
 						var bpm = m.getPropertyMeta(key);
 						if (bpm == null && ! isIgnoreUnknownBeanProperties())
 							throw new ParseException("Invalid input %s for part type OBJECT.  Cannot find property %s", in, key);
-						m.put(key, parse(partType, schema.getProperty(key), value, ((ClassMeta<T>)(bpm == null ? object() : bpm.getBeanInfo()))));
+						m.put(key, read(partType, schema.getProperty(key), value, ((ClassMeta<T>)(bpm == null ? object() : bpm.getBeanInfo()))));
 					}
 					return m.getBean();
 				}
@@ -355,7 +355,7 @@ public class OpenApiParserSession extends UonParserSession {
 							throw new ParseException("Invalid input %s for part type OBJECT.", in);
 						var key = kv[0];
 						var value = kv[1];
-						m.put(key, parse(partType, schema.getProperty(key), value, eType));
+						m.put(key, read(partType, schema.getProperty(key), value, eType));
 					}
 					return (T)m;
 				} catch (ExecutableException e) {
@@ -371,7 +371,7 @@ public class OpenApiParserSession extends UonParserSession {
 			}
 		}
 
-		return super.parse(partType, schema, in, type);
+		return super.read(partType, schema, in, type);
 	}
 
 	private <T> T toType(Object in, ClassMeta<T> type) throws ParseException {
@@ -383,7 +383,7 @@ public class OpenApiParserSession extends UonParserSession {
 	}
 
 	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-		return parseInner(null, HttpPartSchema.DEFAULT, pipe.asString(), type);
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		return readInner(null, HttpPartSchema.DEFAULT, pipe.asString(), type);
 	}
 }

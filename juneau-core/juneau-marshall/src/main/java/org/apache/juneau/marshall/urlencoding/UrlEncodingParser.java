@@ -128,9 +128,9 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		 * 	UrlEncodingParser <jv>parser1</jv> = UrlEncodingParser.<jsf>DEFAULT</jsf>;
 		 * 	UrlEncodingParser <jv>parser2</jv> = UrlEncodingParser.<jsm>create</jsm>().expandedParams().build();
 		 *
-		 * 	MyBean <jv>myBean1</jv> = <jv>parser1</jv>.parse(<js>"f1=@(a,b)&amp;f2=@(c,d)"</js>, A.<jk>class</jk>);
+		 * 	MyBean <jv>myBean1</jv> = <jv>parser1</jv>.read(<js>"f1=@(a,b)&amp;f2=@(c,d)"</js>, A.<jk>class</jk>);
 		 *
-		 * 	MyBean <jv>myBean2</jv> = <jv>parser2</jv>.parse(<js>"f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</js>, A.<jk>class</jk>);
+		 * 	MyBean <jv>myBean2</jv> = <jv>parser2</jv>.read(<js>"f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</js>, A.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <p>

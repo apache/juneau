@@ -44,18 +44,18 @@ class McpBeans_RoundTrip_Test {
 			.build();
 
 	private static void assertJsonRoundTrip(Object bean, Class<?> type) {
-		var j1 = MCP_JSON.serialize(bean);
-		var copy = MCP_JSON_PARSER.parse(j1, type);
-		var j2 = MCP_JSON.serialize(copy);
+		var j1 = MCP_JSON.write(bean);
+		var copy = MCP_JSON_PARSER.read(j1, type);
+		var j2 = MCP_JSON.write(copy);
 		assertEquals(j1, j2, () -> "Round-trip JSON mismatch for " + type.getName() + ": " + j1);
 	}
 
 	private static void assertJsonRoundTripPlain(Object bean, Class<?> type) {
 		var ser = JsonSerializer.DEFAULT;
 		var par = JsonParser.DEFAULT;
-		var j1 = ser.serialize(bean);
-		var copy = par.parse(j1, type);
-		var j2 = ser.serialize(copy);
+		var j1 = ser.write(bean);
+		var copy = par.read(j1, type);
+		var j2 = ser.write(copy);
 		assertEquals(j1, j2, () -> "Round-trip JSON mismatch for " + type.getName() + ": " + j1);
 	}
 

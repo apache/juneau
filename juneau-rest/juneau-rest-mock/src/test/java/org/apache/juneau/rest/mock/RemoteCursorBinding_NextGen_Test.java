@@ -192,7 +192,7 @@ class RemoteCursorBinding_NextGen_Test {
 					throw new UncheckedIOException(e);
 				}
 			})).run()) {
-				var got = JsonParser.DEFAULT.parse(resp.body().asString(), Bean.class);
+				var got = JsonParser.DEFAULT.read(resp.body().asString(), Bean.class);
 				assertEquals("frank", got.name);
 				assertEquals(12, got.age);
 			}

@@ -167,7 +167,7 @@ public class SerializedPart extends BasicPart {
 				return null;
 			if (ie(s(v)) && skipIfEmpty && def == null)
 				return null;
-			return serializer == null ? s(v) : serializer.serialize(type, schema2, v);
+			return serializer == null ? s(v) : serializer.write(type, schema2, v);
 		} catch (SchemaValidationException e) {
 			throw rex(e, "Validation error on request %s part '%s'='%s'", type, getName(), value);
 		} catch (SerializeException e) {

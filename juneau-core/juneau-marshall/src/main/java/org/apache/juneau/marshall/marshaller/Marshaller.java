@@ -138,7 +138,7 @@ public abstract class Marshaller {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public final <T> T read(Object input, Class<T> type) throws ParseException, IOException {
-		return p.parse(input, type);
+		return p.read(input, type);
 	}
 
 	/**
@@ -216,14 +216,14 @@ public abstract class Marshaller {
 	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T read(Object input, Type type, Type...args) throws ParseException, IOException {
-		return p.parse(input, type, args);
+		return p.read(input, type, args);
 	}
 
 	/**
 	 * Serializes a POJO to the specified output stream or writer.
 	 *
 	 * <p>
-	 * Equivalent to calling <c>serializer.createSession().serialize(o, output);</c>
+	 * Equivalent to calling <c>serializer.createSession().write(o, output);</c>
 	 *
 	 * @param object The object to serialize.
 	 * @param output
@@ -244,14 +244,14 @@ public abstract class Marshaller {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public final void write(Object object, Object output) throws SerializeException, IOException {
-		s.serialize(object, output);
+		s.write(object, output);
 	}
 
 	/**
 	 * Opens a low-level {@link TokenReader} cursor over the specified input.
 	 *
 	 * <p>
-	 * Shortcut for <c>((TokenReadable)getParser()).parseTokens(<jv>input</jv>)</c>.  See
+	 * Shortcut for <c>((TokenReadable)getParser()).readTokens(<jv>input</jv>)</c>.  See
 	 * {@link TokenReader} for the cursor contract.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -266,14 +266,14 @@ public abstract class Marshaller {
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	public TokenReader readTokens(Object input) throws IOException {
-		return ((TokenReadable) getParser()).parseTokens(input);
+		return ((TokenReadable) getParser()).readTokens(input);
 	}
 
 	/**
 	 * Opens a low-level push generator that emits structural events one at a time.
 	 *
 	 * <p>
-	 * Shortcut for <c>((TokenWritable)getSerializer()).serializeTokens(<jv>output</jv>)</c>.  See
+	 * Shortcut for <c>((TokenWritable)getSerializer()).writeTokens(<jv>output</jv>)</c>.  See
 	 * {@link TokenWriter} for the generator contract.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -288,14 +288,14 @@ public abstract class Marshaller {
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	public TokenWriter writeTokens(Object output) throws IOException {
-		return ((TokenWritable) getSerializer()).serializeTokens(output);
+		return ((TokenWritable) getSerializer()).writeTokens(output);
 	}
 
 	/**
 	 * Opens a low-level {@link RecordReader} cursor that yields each top-level value as a record.
 	 *
 	 * <p>
-	 * Shortcut for <c>((RecordReadable)getParser()).parseRecords(<jv>input</jv>)</c>.  See
+	 * Shortcut for <c>((RecordReadable)getParser()).readRecords(<jv>input</jv>)</c>.  See
 	 * {@link RecordReader} for the cursor contract.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -309,14 +309,14 @@ public abstract class Marshaller {
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	public RecordReader readRecords(Object input) throws IOException {
-		return ((RecordReadable) getParser()).parseRecords(input);
+		return ((RecordReadable) getParser()).readRecords(input);
 	}
 
 	/**
 	 * Opens a low-level {@link RecordWriter} cursor that emits each whole value as a record.
 	 *
 	 * <p>
-	 * Shortcut for <c>((RecordWritable)getSerializer()).serializeRecords(<jv>output</jv>)</c>.  See
+	 * Shortcut for <c>((RecordWritable)getSerializer()).writeRecords(<jv>output</jv>)</c>.  See
 	 * {@link RecordWriter} for the cursor contract.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -330,7 +330,7 @@ public abstract class Marshaller {
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	public RecordWriter writeRecords(Object output) throws IOException {
-		return ((RecordWritable) getSerializer()).serializeRecords(output);
+		return ((RecordWritable) getSerializer()).writeRecords(output);
 	}
 
 	/**
@@ -338,7 +338,7 @@ public abstract class Marshaller {
 	 * separate record.
 	 *
 	 * <p>
-	 * Shortcut for <c>((ArrayRecordReadable)getParser()).parseArrayRecords(<jv>input</jv>)</c>.
+	 * Shortcut for <c>((ArrayRecordReadable)getParser()).readArrayRecords(<jv>input</jv>)</c>.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>This capability depends on the underlying parser.  Formats whose parser
@@ -351,7 +351,7 @@ public abstract class Marshaller {
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	public RecordReader readArrayRecords(Object input) throws IOException {
-		return ((ArrayRecordReadable) getParser()).parseArrayRecords(input);
+		return ((ArrayRecordReadable) getParser()).readArrayRecords(input);
 	}
 
 	/**
@@ -359,7 +359,7 @@ public abstract class Marshaller {
 	 * wire array.
 	 *
 	 * <p>
-	 * Shortcut for <c>((ArrayRecordWritable)getSerializer()).serializeArrayRecords(<jv>output</jv>)</c>.
+	 * Shortcut for <c>((ArrayRecordWritable)getSerializer()).writeArrayRecords(<jv>output</jv>)</c>.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>This capability depends on the underlying serializer.  Formats whose
@@ -373,6 +373,6 @@ public abstract class Marshaller {
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	public RecordWriter writeArrayRecords(Object output) throws IOException {
-		return ((ArrayRecordWritable) getSerializer()).serializeArrayRecords(output);
+		return ((ArrayRecordWritable) getSerializer()).writeArrayRecords(output);
 	}
 }

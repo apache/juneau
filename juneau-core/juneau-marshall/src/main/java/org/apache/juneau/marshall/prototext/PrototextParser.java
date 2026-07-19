@@ -77,14 +77,14 @@ import org.apache.juneau.marshall.stream.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Use the default parser to parse into a bean</jc>
- * 	MyBean <jv>bean</jv> = PrototextParser.<jsf>DEFAULT</jsf>.parse(<jv>input</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = PrototextParser.<jsf>DEFAULT</jsf>.read(<jv>input</jv>, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Parse into an untyped map</jc>
- * 	JsonMap <jv>map</jv> = PrototextParser.<jsf>DEFAULT</jsf>.parse(<jv>input</jv>, JsonMap.<jk>class</jk>);
+ * 	JsonMap <jv>map</jv> = PrototextParser.<jsf>DEFAULT</jsf>.read(<jv>input</jv>, JsonMap.<jk>class</jk>);
  *
  * 	<jc>// Create a parser with validate-end enabled</jc>
  * 	PrototextParser <jv>parser</jv> = PrototextParser.<jsm>create</jsm>().build();
- * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>input</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = <jv>parser</jv>.read(<jv>input</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -180,12 +180,12 @@ public class PrototextParser extends ReaderParser implements PrototextMetaProvid
 
 	/**
 	 * Convenience delegator that opens a {@link RecordReader} over the input using
-	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 * <b>default session arguments</b> (mirrors {@link #read(Object, Class)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link PrototextParserSession#parseRecords(Object)}.  Callers
+	 * The real implementation lives on {@link PrototextParserSession#readRecords(Object)}.  Callers
 	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
-	 * {@link #createSession()} and invoke {@link PrototextParserSession#parseRecords(Object)} on the
+	 * {@link #createSession()} and invoke {@link PrototextParserSession#readRecords(Object)} on the
 	 * built session instead.
 	 *
 	 * @param input The input.
@@ -193,8 +193,8 @@ public class PrototextParser extends ReaderParser implements PrototextMetaProvid
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
-		return ((RecordReadable) getSession()).parseRecords(input);
+	public RecordReader readRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).readRecords(input);
 	}
 
 	@Override /* RecordReadable */

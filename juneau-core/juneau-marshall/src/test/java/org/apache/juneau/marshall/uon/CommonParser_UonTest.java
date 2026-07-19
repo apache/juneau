@@ -42,30 +42,30 @@ class CommonParser_UonTest extends TestBase {
 	@Test void a01_fromSerializer() throws Exception {
 		var in = "(a=1)";
 
-		var m = (Map)p.parse(in, Object.class);
+		var m = (Map)p.read(in, Object.class);
 		assertEquals(1, m.get("a"));
 
 		in = "(a=1,b='foo+bar')";
-		m = (Map)p.parse(in, Object.class);
+		m = (Map)p.read(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo+bar", m.get("b"));
-		m = (Map)pe.parse(in, Object.class);
+		m = (Map)pe.read(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo bar", m.get("b"));
 
 		in = "(a=1,b='foo+bar',c=false)";
-		m = (Map)pe.parse(in, Object.class);
+		m = (Map)pe.read(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo bar", m.get("b"));
 		assertEquals(false, m.get("c"));
 
 		in = "(a=1,b='foo%20bar',c=false)";
-		m = (Map)pe.parse(in, Object.class);
+		m = (Map)pe.read(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo bar", m.get("b"));
 		assertEquals(false, m.get("c"));
 
-		var jl = (MarshalledList)p.parse("@((attribute=value),(attribute=~'value~'))", Object.class);
+		var jl = (MarshalledList)p.read("@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("'value'", jl.getMap(1).getString("attribute"));
 
@@ -75,12 +75,12 @@ class CommonParser_UonTest extends TestBase {
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
 
-		in = UonSerializer.create().addBeanTypes().addRootType().build().serialize(b);
-		b = (A1)p.parse(in, Object.class);
+		in = UonSerializer.create().addBeanTypes().addRootType().build().write(b);
+		b = (A1)p.read(in, Object.class);
 		assertEquals("value1", b.list.get(1).value);
 
-		in = UonSerializer.DEFAULT.serialize(b);
-		b = p.parse(in, A1.class);
+		in = UonSerializer.DEFAULT.write(b);
+		b = p.read(in, A1.class);
 		assertEquals("value1", b.list.get(1).value);
 	}
 
@@ -107,11 +107,11 @@ class CommonParser_UonTest extends TestBase {
 	@Test void a02_correctHandlingOfUnknownProperties() throws Exception {
 		var p2 = UonParser.create().ignoreUnknownBeanProperties().build();
 		var in = "(a=1,unknown=3,b=2)";
-		var t = p2.parse(in, B.class);
+		var t = p2.read(in, B.class);
 		assertEquals(1, t.a);
 		assertEquals(2, t.b);
 
-		assertThrows(ParseException.class, ()->UonParser.DEFAULT.parse(in, B.class));
+		assertThrows(ParseException.class, ()->UonParser.DEFAULT.read(in, B.class));
 	}
 
 	public static class B {
@@ -124,7 +124,7 @@ class CommonParser_UonTest extends TestBase {
 	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
 		var p2 = UonParser.DEFAULT;
 		var json = "(ints=@(1,2,3),beans=@((a=1,b=2)))";
-		var t = p2.parse(json, C.class);
+		var t = p2.read(json, C.class);
 		assertSize(3, t.getInts());
 		assertEquals(2, t.getBeans().get(0).b);
 	}
@@ -143,7 +143,7 @@ class CommonParser_UonTest extends TestBase {
 	@Test void a04_parserListeners() throws Exception {
 		var p2 = UonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 		var in = "(a=1,unknownProperty=foo,b=2)";
-		p2.parse(in, B.class);
+		p2.read(in, B.class);
 		assertSize(1, MyParserListener.events);
 		assertEquals("unknownProperty, line 1, column 5", MyParserListener.events.get(0));
 	}

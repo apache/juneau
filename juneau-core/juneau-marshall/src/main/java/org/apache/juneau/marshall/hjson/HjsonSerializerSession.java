@@ -79,7 +79,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 	}
 
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -100,7 +100,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 	}
 
 	@Override
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		if (o == null)
 			return;
 		var aType = getClassMetaForObject(o);
@@ -118,15 +118,15 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 		if (sType.isBean() || sType.isMap()) {
 			var omitRoot = ctx.omitRootBraces;
 			if (sType.isBean())
-				serializeBeanMap(hw, toBeanMap(o), getBeanTypeName(this, eType, sType, null), omitRoot);
+				writeBeanMap(hw, toBeanMap(o), getBeanTypeName(this, eType, sType, null), omitRoot);
 			else
-				serializeMap(hw, (Map) o, eType, omitRoot);
+				writeMap(hw, (Map) o, eType, omitRoot);
 		} else {
-			serializeAnything(hw, o, eType, "root", null);
+			writeAnything(hw, o, eType, "root", null);
 		}
 	}
 
-	private void serializeBeanMap(HjsonWriter out, BeanMap<?> m, String typeName, boolean omitBraces) throws SerializeException {
+	private void writeBeanMap(HjsonWriter out, BeanMap<?> m, String typeName, boolean omitBraces) throws SerializeException {
 		var i = indent;
 		out.objectStart(omitBraces, i);
 		indent++;
@@ -136,7 +136,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 		if (nn(typeName)) {
 			var pm = m.getMeta().getTypeProperty();
 			writeKey(out, pm.getName(), i, first);
-			serializeString(out, typeName);
+			writeString(out, typeName);
 			first.set();
 		}
 
@@ -147,7 +147,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 			if (canIgnoreValue(pMeta, key, value))
 				return;
 			writeKey(out, key, i, first);
-			serializeAnything(out, value, cMeta, key, pMeta);
+			writeAnything(out, value, cMeta, key, pMeta);
 			first.set();
 		});
 
@@ -168,7 +168,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 		out.keyValueSeparator();
 	}
 
-	private void serializeMap(HjsonWriter out, Map m, ClassMeta<?> type, boolean omitBraces) throws SerializeException {
+	private void writeMap(HjsonWriter out, Map m, ClassMeta<?> type, boolean omitBraces) throws SerializeException {
 		var i = indent;
 		out.objectStart(omitBraces, i);
 		indent++;
@@ -180,7 +180,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 			var value = x.getValue();
 			var key = generalize(x.getKey(), keyType);
 			writeKey(out, key, i, first);
-			serializeAnything(out, value, valueType, key == null ? null : toString(key), null);
+			writeAnything(out, value, valueType, key == null ? null : toString(key), null);
 			first.set();
 		});
 
@@ -188,7 +188,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 		out.objectEnd(omitBraces, indent);
 	}
 
-	private void serializeCollection(HjsonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
+	private void writeCollection(HjsonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 		var eType = type.getElementType();
 		out.arrayStart();
 		indent++;
@@ -198,14 +198,14 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 				out.memberSeparator(indent);
 			else
 				out.cr(indent);
-			serializeAnything(out, x, eType, "<iterator>", null);
+			writeAnything(out, x, eType, "<iterator>", null);
 			first.set();
 		});
 		indent--;
 		out.arrayEnd();
 	}
 
-	private void serializeString(HjsonWriter out, String s) throws SerializeException {
+	private void writeString(HjsonWriter out, String s) throws SerializeException {
 		if (s == null) {
 			out.w("null");
 			return;
@@ -218,7 +218,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 			out.quotedString(s);
 	}
 
-	protected HjsonWriter serializeAnything(HjsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
+	protected HjsonWriter writeAnything(HjsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 		if (o == null) {
 			out.w("null");
 			return out;
@@ -252,42 +252,42 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 		if (o == null || (sType.isChar() && ((Character) o).charValue() == 0)) {
 			out.w("null");
 		} else if (sType.isBean()) {
-			serializeBeanMap(out, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta), false);
+			writeBeanMap(out, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta), false);
 		} else if (sType.isMap()) {
 			if (sType.isBeanMap())
-				serializeBeanMap(out, (BeanMap) o, getBeanTypeName(this, eType, aType, pMeta), false);
+				writeBeanMap(out, (BeanMap) o, getBeanTypeName(this, eType, aType, pMeta), false);
 			else
-				serializeMap(out, (Map) o, eType, false);
+				writeMap(out, (Map) o, eType, false);
 		} else if (sType.isCollection()) {
-			serializeCollection(out, (Collection) o, eType);
+			writeCollection(out, (Collection) o, eType);
 		} else if (sType.isArray()) {
-			serializeCollection(out, toList(sType.inner(), o), eType);
+			writeCollection(out, toList(sType.inner(), o), eType);
 		} else if (sType.isNumber() || sType.isBoolean()) {
 			out.append(o);
 		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
-			serializeString(out, getUriResolver().resolve(o));
+			writeString(out, getUriResolver().resolve(o));
 		} else if (sType.isDate()) {
-			serializeString(out, serializeDate((Date)o, sType));
+			writeString(out, writeDate((Date)o, sType));
 		} else if (sType.isCalendar()) {
-			serializeString(out, serializeCalendar(o, sType));
+			writeString(out, writeCalendar(o, sType));
 		} else if (sType.isTemporal()) {
-			serializeString(out, serializeTemporal((TemporalAccessor)o, sType));
+			writeString(out, writeTemporal((TemporalAccessor)o, sType));
 		} else if (sType.isDuration()) {
-			var value = serializeDuration((Duration)o);
+			var value = writeDuration((Duration)o);
 			if (getDurationFormat().isNumeric())
 				out.append(value);
 			else
-				serializeString(out, value);
+				writeString(out, value);
 		} else if (sType.isPeriod()) {
-			serializeString(out, serializePeriod((Period)o));
+			writeString(out, writePeriod((Period)o));
 		} else if (sType.isStreamable()) {
-			serializeStreamable(out, o, sType, eType);
+			writeStreamable(out, o, sType, eType);
 		} else if (sType.isReader()) {
 			pipe((Reader) o, out, SerializerSession::handleThrown);
 		} else if (sType.isInputStream()) {
 			pipe((InputStream) o, out, SerializerSession::handleThrown);
 		} else {
-			serializeString(out, toString(o));
+			writeString(out, toString(o));
 		}
 
 		if (!isRecursion)
@@ -295,7 +295,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 		return out;
 	}
 
-	private void serializeStreamable(HjsonWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
+	private void writeStreamable(HjsonWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
 		var eType = type.getElementType();
 		out.arrayStart();
 		indent++;
@@ -305,7 +305,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 				out.memberSeparator(indent);
 			else
 				out.cr(indent);
-			serializeAnything(out, x, eType, "<iterator>", null);
+			writeAnything(out, x, eType, "<iterator>", null);
 			first.set();
 		});
 		indent--;

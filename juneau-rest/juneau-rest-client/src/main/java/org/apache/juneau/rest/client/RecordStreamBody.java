@@ -185,8 +185,8 @@ public final class RecordStreamBody implements HttpBody {
 			throw new IOException("Non-repeatable streaming body cannot be resent.  Mark the body repeatable() if its producer can be replayed.");
 		written = true;
 		try (var w = (writerKind == TokenWriter.class)
-				? ((TokenWritable) serializer).serializeTokens(out)
-				: ((RecordWritable) serializer).serializeRecords(out)) {
+				? ((TokenWritable) serializer).writeTokens(out)
+				: ((RecordWritable) serializer).writeRecords(out)) {
 			((Consumer<RecordWriter>) consumer).accept(w);
 			w.flush();
 		}

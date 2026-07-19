@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.parser.*;
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
  * 	<jc>// Tokenize a JSON document without materializing it.</jc>
- * 	<jk>try</jk> (TokenReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.parseTokens(<js>"{\"a\":1,\"b\":[true,null]}"</js>)) {
+ * 	<jk>try</jk> (TokenReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.readTokens(<js>"{\"a\":1,\"b\":[true,null]}"</js>)) {
  * 		<jk>while</jk> (<jv>r</jv>.next() != TokenType.<jsf>END_OF_STREAM</jsf>) {
  * 			<jk>switch</jk> (<jv>r</jv>.getCurrentToken()) {
  * 				<jk>case</jk> <jsf>FIELD_NAME</jsf>   -&gt; handleKey(<jv>r</jv>.getFieldName());
@@ -184,7 +184,7 @@ public interface TokenReader extends RecordReader {
 	 * <p>
 	 * This is the natural loop predicate when streaming records:
 	 * <p class='bjava'>
-	 * 	<jk>try</jk> (TokenReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.parseTokens(<jv>input</jv>)) {
+	 * 	<jk>try</jk> (TokenReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.readTokens(<jv>input</jv>)) {
 	 * 		<jv>r</jv>.next();  <jc>// consume the opening [ </jc>
 	 * 		<jk>while</jk> (<jv>r</jv>.canRead()) {
 	 * 			Item <jv>item</jv> = <jv>r</jv>.read(Item.<jk>class</jk>);
@@ -257,7 +257,7 @@ public interface TokenReader extends RecordReader {
 
 	/**
 	 * Same as {@link #read(Class)} but accepts a parameterized {@link Type} and optional type
-	 * arguments (the same shape as {@link Parser#parse(Object, Type, Type...)}).
+	 * arguments (the same shape as {@link Parser#read(Object, Type, Type...)}).
 	 *
 	 * @param <T> The expected return type.
 	 * @param type The target type.

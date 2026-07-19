@@ -319,7 +319,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	@Test void widgets_resolution() throws Exception {
 		var al = AnnotationWorkList.of(sr, rstream(e.getAnnotations()));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
-		var r = x.serialize(null).replaceAll("[\r\n]+", "|");
+		var r = x.write(null).replaceAll("[\r\n]+", "|");
 		assertContainsAll(r, "<aside>xxx</aside>","<footer>xxx</footer>","<head>xxx","<style>@import \"xxx\"; xxx zzz</style>","<nav><ol><li>xxx</li></ol>xxx</nav>","<script>xxx| yyy|</script>");
 	}
 

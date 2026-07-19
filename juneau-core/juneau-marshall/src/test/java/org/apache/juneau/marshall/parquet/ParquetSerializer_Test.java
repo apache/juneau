@@ -43,7 +43,7 @@ class ParquetSerializer_Test extends TestBase {
 		var a = new SimpleBean();
 		a.name = "Alice";
 		a.age = 30;
-		var bytes = ParquetSerializer.DEFAULT.serialize(a);
+		var bytes = ParquetSerializer.DEFAULT.write(a);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 		assertTrue(bytes.length >= 4);
@@ -58,7 +58,7 @@ class ParquetSerializer_Test extends TestBase {
 		var a = new SimpleBean();
 		a.name = null;
 		a.age = 0;
-		var bytes = ParquetSerializer.DEFAULT.serialize(a);
+		var bytes = ParquetSerializer.DEFAULT.write(a);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -79,7 +79,7 @@ class ParquetSerializer_Test extends TestBase {
 		a.d = 3.14;
 		a.b = true;
 		a.s = "hello";
-		var bytes = ParquetSerializer.DEFAULT.serialize(a);
+		var bytes = ParquetSerializer.DEFAULT.write(a);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -96,10 +96,10 @@ class ParquetSerializer_Test extends TestBase {
 		a.name = "root";
 		a.child = a;
 		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.NULL).addBeanTypes().build();
-		var bytes = ser.serialize(a);
+		var bytes = ser.write(a);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
-		var parsed = (List<CyclicBean>) ParquetParser.DEFAULT.parse(bytes, List.class, CyclicBean.class);
+		var parsed = (List<CyclicBean>) ParquetParser.DEFAULT.read(bytes, List.class, CyclicBean.class);
 		assertBeans(parsed, "name,child", "root,<null>");
 	}
 
@@ -109,7 +109,7 @@ class ParquetSerializer_Test extends TestBase {
 		a.name = "root";
 		a.child = a;
 		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.THROW).addBeanTypes().build();
-		var ex = assertThrows(SerializeException.class, () -> ser.serialize(a));
+		var ex = assertThrows(SerializeException.class, () -> ser.write(a));
 		assertTrue(ex.getMessage().contains("Cyclic") || ex.getMessage().contains("cyclic"), "Expected cycle-related message: " + ex.getMessage());
 	}
 }

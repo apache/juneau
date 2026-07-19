@@ -198,7 +198,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	@SuppressWarnings({
 		"null" // Null analysis not applicable to RDF serialization
 	})
-	private RDFNode serializeAnything(Object o, boolean isURI, ClassMeta<?> eType, String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {
+	private RDFNode writeAnything(Object o, boolean isURI, ClassMeta<?> eType, String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {
 		var m = model;
 
 		ClassMeta<?> wType = null;            // The wrapped type
@@ -275,7 +275,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 				uri = rbm.getBeanUriProperty().get(bm, null);
 			String uri2 = getUri(uri, null);
 			n = m.createResource(uri2);
-			serializeBeanMap(bm, (Resource)n, typeName);
+			writeBeanMap(bm, (Resource)n, typeName);
 
 		} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
 			if (o instanceof BeanMap o2) {
@@ -285,11 +285,11 @@ public class RdfSerializerSession extends WriterSerializerSession {
 					uri = rbm.getBeanUriProperty().get(o2, null);
 				var uri2 = getUri(uri, null);
 				n = m.createResource(uri2);
-				serializeBeanMap(o2, (Resource)n, typeName);
+				writeBeanMap(o2, (Resource)n, typeName);
 			} else {
 				var m2 = (Map)o;
 				n = m.createResource();
-				serializeMap(m2, (Resource)n, sType);
+				writeMap(m2, (Resource)n, sType);
 			}
 
 		} else if (sType.isCollectionOrArray() || (nn(wType) && wType.isCollection())) {
@@ -305,12 +305,12 @@ public class RdfSerializerSession extends WriterSerializerSession {
 				f = bpRdf.getCollectionFormat();
 
 			if (f == RdfCollectionFormat.MULTI_VALUED) {
-				serializeToMultiProperties(c, eType, bpm, attrName, parentResource);
+				writeToMultiProperties(c, eType, bpm, attrName, parentResource);
 			} else {
 				n = switch (f) {
-					case BAG -> serializeToContainer(c, eType, m.createBag());
-					case LIST -> serializeToList(c, eType);
-					default -> serializeToContainer(c, eType, m.createSeq());
+					case BAG -> writeToContainer(c, eType, m.createBag());
+					case LIST -> writeToList(c, eType);
+					default -> writeToContainer(c, eType, m.createSeq());
 				};
 			}
 
@@ -337,7 +337,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		return n;
 	}
 
-	private void serializeBeanMap(BeanMap<?> m, Resource r, String typeName) throws SerializeException {
+	private void writeBeanMap(BeanMap<?> m, Resource r, String typeName) throws SerializeException {
 		var l = new ArrayList<BeanPropertyValue>();
 
 		if (nn(typeName)) {
@@ -376,13 +376,13 @@ public class RdfSerializerSession extends WriterSerializerSession {
 				addModelPrefix(ns);
 
 			var p = model.createProperty(ns.getUri(), encodeElementName(key));
-			var n = serializeAnything(value, bpMeta.isUri(), cMeta, key, bpMeta, r);
+			var n = writeAnything(value, bpMeta.isUri(), cMeta, key, bpMeta, r);
 			if (nn(n))
 				r.addProperty(p, n);
 		});
 	}
 
-	private void serializeMap(Map m, Resource r, ClassMeta<?> type) throws SerializeException {
+	private void writeMap(Map m, Resource r, ClassMeta<?> type) throws SerializeException {
 
 		m = sort(m);
 
@@ -396,26 +396,26 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			Object key = generalize(x.getKey(), keyType);
 			Namespace ns = getJuneauBpNs();
 			Property p = model.createProperty(ns.getUri(), encodeElementName(toString(key)));
-			RDFNode n = serializeAnything(value, false, valueType, toString(key), null, r);
+			RDFNode n = writeAnything(value, false, valueType, toString(key), null, r);
 			if (nn(n))
 				r.addProperty(p, n);
 		});
 	}
 
-	private Container serializeToContainer(Collection c, ClassMeta<?> type, Container list) throws SerializeException {
+	private Container writeToContainer(Collection c, ClassMeta<?> type, Container list) throws SerializeException {
 		var elementType = type.getElementType();
-		c.forEach(x -> list.add(serializeAnything(x, false, elementType, null, null, null)));
+		c.forEach(x -> list.add(writeAnything(x, false, elementType, null, null, null)));
 		return list;
 	}
 
-	private RDFList serializeToList(Collection c, ClassMeta<?> type) throws SerializeException {
+	private RDFList writeToList(Collection c, ClassMeta<?> type) throws SerializeException {
 		var elementType = type.getElementType();
 		List<RDFNode> l = listOfSize(c.size());
-		c.forEach(x -> l.add(serializeAnything(x, false, elementType, null, null, null)));
+		c.forEach(x -> l.add(writeAnything(x, false, elementType, null, null, null)));
 		return model.createList(l.iterator());
 	}
 
-	private void serializeToMultiProperties(Collection c, ClassMeta<?> sType, BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {
+	private void writeToMultiProperties(Collection c, ClassMeta<?> sType, BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {
 
 		var elementType = sType.getElementType();
 		RdfBeanPropertyMeta bpRdf = getRdfBeanPropertyMeta(bpm);
@@ -429,7 +429,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 				ns = getJuneauBpNs();
 			else if (isAutoDetectNamespaces())
 				addModelPrefix(ns);
-			RDFNode n2 = serializeAnything(x, false, elementType, null, null, null);
+			RDFNode n2 = writeAnything(x, false, elementType, null, null, null);
 			Property p = model.createProperty(ns.getUri(), encodeElementName(attrName));
 			parentResource.addProperty(p, n2);
 		});
@@ -440,14 +440,14 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		"resource" // Resource management handled by Serializer
 	})
 	@Override /* Overridden from Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws SerializeException {
 
 		var cm = getClassMetaForObject(o);
 		if (isLooseCollections() && nn(cm) && cm.isCollectionOrArray()) {
 			Collection c = cm.isCollection() ? (Collection)o : toList(cm.inner(), o);
-			forEachEntry(c, x -> serializeAnything(x, false, object(), "root", null, null));
+			forEachEntry(c, x -> writeAnything(x, false, object(), "root", null, null));
 		} else {
-			RDFNode n = serializeAnything(o, false, getExpectedRootType(o), "root", null, null);
+			RDFNode n = writeAnything(o, false, getExpectedRootType(o), "root", null, null);
 			Resource r;
 			if (n.isLiteral()) {
 				r = model.createResource();

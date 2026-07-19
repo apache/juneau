@@ -142,7 +142,7 @@ public class Entry {
 				else if (s1 != '[' && s1 != '{' && ! "null".equals(v))
 					v = '\'' + v + '\'';
 			}
-			return o(parser.parse(v, type, args));
+			return o(parser.read(v, type, args));
 		} catch (ParseException e) {
 			throw brex(e, (Class<?>)null, "Value could not be parsed.");
 		}
@@ -452,7 +452,7 @@ public class Entry {
 		var s2 = lastNonWhitespaceChar(v);
 		if (s1 == '[' && s2 == ']' && config.parser instanceof JsonParser parser2) {
 			try {
-				return o(parser2.parse(v, String[].class));
+				return o(parser2.read(v, String[].class));
 			} catch (ParseException e) {
 				throw brex(e);
 			}

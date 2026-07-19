@@ -38,8 +38,8 @@ import org.apache.juneau.marshall.utils.*;
 @SuppressWarnings({
 	"rawtypes", // Raw types necessary for generic Map/List handling
 	"unchecked", // Type erasure requires unchecked casts in convertValue
-	"java:S3776", // Cognitive complexity acceptable for parseMessage
-	"java:S6541", // Brain method acceptable for parseMessage
+	"java:S3776", // Cognitive complexity acceptable for readMessage
+	"java:S6541", // Brain method acceptable for readMessage
 	"java:S135", // Multiple breaks acceptable in parse loop
 	"java:S115", // ARG_ prefix follows framework convention
 	"resource"   // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
@@ -78,7 +78,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 	}
 
 	@Override /* RecordReadable */
-	public RecordReader parseRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return RecordAdapter.reader(this, input);
 	}
 
@@ -88,12 +88,12 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 	}
 
 	@Override
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (Reader r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
 			var t = new PrototextTokenizer(r);
-			Map<String, Object> root = parseMessage(t, false);
+			Map<String, Object> root = readMessage(t, false);
 			if (isEmpty(root))
 				return type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : null;
 			if (root.size() == 1 && root.containsKey("_value")) {
@@ -113,7 +113,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		}
 	}
 
-	private Map<String, Object> parseMessage(PrototextTokenizer t, boolean requireBraces) throws IOException, ParseException {
+	private Map<String, Object> readMessage(PrototextTokenizer t, boolean requireBraces) throws IOException, ParseException {
 		PrototextToken.TokenType closeBrace = null;
 		if (requireBraces) {
 			var tok = t.read();
@@ -150,14 +150,14 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 				t.skipWhitespaceAndComments();
 				t2 = t.peek();
 				if (t2.type() == PrototextToken.TokenType.LBRACKET) {
-					value = parseList(t);
+					value = readList(t);
 				} else if (t2.type() == PrototextToken.TokenType.LBRACE || t2.type() == PrototextToken.TokenType.LANGLE) {
-					value = parseMessage(t, true);
+					value = readMessage(t, true);
 				} else {
-					value = parseScalarValue(t);
+					value = readScalarValue(t);
 				}
 			} else if (t2.type() == PrototextToken.TokenType.LBRACE || t2.type() == PrototextToken.TokenType.LANGLE) {
-				value = parseMessage(t, true);
+				value = readMessage(t, true);
 			} else {
 				throw t.parseException("Expected ':' or '{' after field name");
 			}
@@ -201,7 +201,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		return null;
 	}
 
-	private List<Object> parseList(PrototextTokenizer t) throws IOException, ParseException {
+	private List<Object> readList(PrototextTokenizer t) throws IOException, ParseException {
 		var tok = t.read();
 		if (tok.type() != PrototextToken.TokenType.LBRACKET)
 			throw t.parseException("Expected '['");
@@ -213,7 +213,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 			return list;
 		}
 		while (true) {
-			list.add(parseScalarOrMessageInList(t));
+			list.add(readScalarOrMessageInList(t));
 			t.skipWhitespaceAndComments();
 			tok = t.peek();
 			if (tok.type() == PrototextToken.TokenType.RBRACKET) {
@@ -230,14 +230,14 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		return list;
 	}
 
-	private Object parseScalarOrMessageInList(PrototextTokenizer t) throws IOException, ParseException {
+	private Object readScalarOrMessageInList(PrototextTokenizer t) throws IOException, ParseException {
 		var tok = t.peek();
 		if (tok.type() == PrototextToken.TokenType.LBRACE || tok.type() == PrototextToken.TokenType.LANGLE)
-			return parseMessage(t, true);
-		return parseScalarValue(t);
+			return readMessage(t, true);
+		return readScalarValue(t);
 	}
 
-	private static Object parseScalarValue(PrototextTokenizer t) throws IOException, ParseException {
+	private static Object readScalarValue(PrototextTokenizer t) throws IOException, ParseException {
 		var tok = t.read();
 		if (tok.type() == PrototextToken.TokenType.STRING) {
 			var sb = new StringBuilder(tok.stringValue());
@@ -365,18 +365,18 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		}
 		if (val instanceof CharSequence val2) {
 			if (targetType.isDate())
-				return parseDate(val2.toString(), targetType);
+				return readDate(val2.toString(), targetType);
 			if (targetType.isCalendar())
-				return parseCalendar(val2.toString(), targetType);
+				return readCalendar(val2.toString(), targetType);
 			if (targetType.isTemporal())
-				return parseTemporal(val2.toString(), targetType);
+				return readTemporal(val2.toString(), targetType);
 			if (targetType.isDuration())
-				return parseDuration(val2.toString());
+				return readDuration(val2.toString());
 			if (targetType.isPeriod())
-				return parsePeriod(val2.toString());
+				return readPeriod(val2.toString());
 		}
 		// String → byte[] dispatch at the collection-element / map-value / top-level call site.
-		// Mirrors the Bug #12 top-level fix in doParse but for the collection-element path that
+		// Mirrors the Bug #12 top-level fix in doRead but for the collection-element path that
 		// was intentionally carved out of that turn.  Two routes:
 		//   (1) non-NOT_SET: consult the variant BinarySwap installed on byte[].class via
 		//       targetType.getSwap(this); the wire is a hex / base64 string emitted by the

@@ -119,10 +119,10 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 *	);
 		 *
 		 * 	<jc>// Produces: "foo=bar,baz=qux\,true\,123"</jc>
-		 * 	String <jv>value1</jv> = <jv>serializer1</jv>.serialize(<jv>list</jv>)
+		 * 	String <jv>value1</jv> = <jv>serializer1</jv>.write(<jv>list</jv>)
 		 *
 		 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
-		 * 	String <jv>value2</jv> = <jv>serializer2</jv>.serialize(<jv>list</jv>)
+		 * 	String <jv>value2</jv> = <jv>serializer2</jv>.write(<jv>list</jv>)
 		 * </p>
 		 *
 		 * <ul class='values javatree'>
@@ -172,10 +172,10 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 * 	String <jv>string</jv> = <js>"foo bar"</js>;
 		 *
 		 * 	<jc>// Produces: "foo bar"</jc>
-		 * 	String <jv>value1</jv> = <jv>serializer1</jv>.serialize(<jv>string</jv>);
+		 * 	String <jv>value1</jv> = <jv>serializer1</jv>.write(<jv>string</jv>);
 		 *
 		 * 	<jc>// Produces: "'foo bar'"</jc>
-		 * 	String <jv>value2</jv> = <jv>serializer2</jv>.serialize(<jv>string</jv>);
+		 * 	String <jv>value2</jv> = <jv>serializer2</jv>.write(<jv>string</jv>);
 		 * </p>
 		 *
 		 * <ul class='values javatree'>

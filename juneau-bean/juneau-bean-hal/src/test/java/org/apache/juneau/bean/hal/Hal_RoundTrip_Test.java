@@ -32,9 +32,9 @@ class Hal_RoundTrip_Test {
 	private static final JsonParser HAL_PARSER = JsonParser.DEFAULT;
 
 	private static void assertJsonRoundTrip(Object bean, Class<?> type) {
-		var j1 = HAL_JSON.serialize(bean);
-		var copy = HAL_PARSER.parse(j1, type);
-		var j2 = HAL_JSON.serialize(copy);
+		var j1 = HAL_JSON.write(bean);
+		var copy = HAL_PARSER.read(j1, type);
+		var j2 = HAL_JSON.write(copy);
 		assertEquals(j1, j2, () -> "Round-trip JSON mismatch for " + type.getName() + ": " + j1);
 	}
 
@@ -82,7 +82,7 @@ class Hal_RoundTrip_Test {
 		@Test
 		void singleLink_roundTripsAsObject() {
 			var r = new HalResource().addLink("self", new HalLink("/orders/123"));
-			var j = HAL_JSON.serialize(r);
+			var j = HAL_JSON.write(r);
 			// Single-link form ⇒ JSON object, not array.
 			assertTrue(j.contains("\"self\":{"), () -> "Expected single-object form for self link: " + j);
 			assertJsonRoundTrip(r, HalResource.class);
@@ -95,7 +95,7 @@ class Hal_RoundTrip_Test {
 					new HalLink("https://acme.example/{rel}").setName("acme").setTemplated(true),
 					new HalLink("https://acme.example/v2/{rel}").setName("acme2").setTemplated(true)
 				);
-			var j = HAL_JSON.serialize(r);
+			var j = HAL_JSON.write(r);
 			assertTrue(j.contains("\"curies\":["), () -> "Expected multi-link array form for curies: " + j);
 			assertJsonRoundTrip(r, HalResource.class);
 		}
@@ -141,7 +141,7 @@ class Hal_RoundTrip_Test {
 			var r = new HalResource()
 				.addLink("self", new HalLink("/orders/123"))
 				.addEmbedded("item", inner);
-			var j = HAL_JSON.serialize(r);
+			var j = HAL_JSON.write(r);
 			assertTrue(j.contains("\"item\":{"), () -> "Expected single-embedded object form: " + j);
 			assertJsonRoundTrip(r, HalResource.class);
 		}
@@ -154,7 +154,7 @@ class Hal_RoundTrip_Test {
 					new HalResource().addLink("self", new HalLink("/items/1")).set("name", "a"),
 					new HalResource().addLink("self", new HalLink("/items/2")).set("name", "b")
 				);
-			var j = HAL_JSON.serialize(r);
+			var j = HAL_JSON.write(r);
 			assertTrue(j.contains("\"items\":["), () -> "Expected multi-embedded array form: " + j);
 			assertJsonRoundTrip(r, HalResource.class);
 		}
@@ -206,7 +206,7 @@ class Hal_RoundTrip_Test {
 				.addLink("self", new HalLink("/orders/123"))
 				.set("total", 99.50)
 				.set("currency", "USD");
-			var j = HAL_JSON.serialize(r);
+			var j = HAL_JSON.write(r);
 			assertTrue(j.contains("\"total\":99.5"), () -> j);
 			assertTrue(j.contains("\"currency\":\"USD\""), () -> j);
 			assertJsonRoundTrip(r, HalResource.class);
@@ -247,7 +247,7 @@ class Hal_RoundTrip_Test {
 		@Test
 		void halLinkArray_serializesAsJsonArray() {
 			var arr = new HalLinkArray(new HalLink("/x"), new HalLink("/y"));
-			var j = HAL_JSON.serialize(arr);
+			var j = HAL_JSON.write(arr);
 			assertTrue(j.startsWith("["), j);
 			assertJsonRoundTrip(arr, HalLinkArray.class);
 		}
@@ -280,7 +280,7 @@ class Hal_RoundTrip_Test {
 		void linkOrArraySwap_mapWithScalarPassesValueThrough() {
 			// Round-trip via parser to exercise the "else" branch (scalar entries inside a links map).
 			var json = "{\"_links\":{\"x\":\"a-string-not-a-link\"}}";
-			var r = JsonParser.DEFAULT.parse(json, HalResource.class);
+			var r = JsonParser.DEFAULT.read(json, HalResource.class);
 			assertEquals("a-string-not-a-link", r.getLinks().get("x"));
 		}
 
@@ -307,7 +307,7 @@ class Hal_RoundTrip_Test {
 		@Test
 		void resourceOrArraySwap_mapWithScalarPassesValueThrough() {
 			var json = "{\"_embedded\":{\"x\":\"a-string-not-a-resource\"}}";
-			var r = JsonParser.DEFAULT.parse(json, HalResource.class);
+			var r = JsonParser.DEFAULT.read(json, HalResource.class);
 			assertEquals("a-string-not-a-resource", r.getEmbedded().get("x"));
 		}
 	}

@@ -50,11 +50,11 @@ import org.apache.juneau.marshall.stream.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to INI</jc>
- * 	String <jv>ini</jv> = IniSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myBean</jv>);
+ * 	String <jv>ini</jv> = IniSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
  *
  * 	<jc>// Create a custom serializer</jc>
  * 	IniSerializer <jv>s</jv> = IniSerializer.<jsm>create</jsm>().useComments().build();
- * 	<jv>ini</jv> = <jv>s</jv>.serialize(<jv>myBean</jv>);
+ * 	<jv>ini</jv> = <jv>s</jv>.write(<jv>myBean</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (Map of name/age):</h5>
@@ -281,20 +281,20 @@ public class IniSerializer extends WriterSerializer implements IniMetaProvider, 
 
 	/**
 	 * Convenience delegator that opens a {@link RecordWriter} over the output using
-	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 * <b>default session arguments</b> (mirrors {@link #write(Object)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link IniSerializerSession#serializeRecords(Object)}.
+	 * The real implementation lives on {@link IniSerializerSession#writeRecords(Object)}.
 	 * Callers that need request-derived configuration should call {@link #createSession()} and
-	 * invoke {@link IniSerializerSession#serializeRecords(Object)} on the built session instead.
+	 * invoke {@link IniSerializerSession#writeRecords(Object)} on the built session instead.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return ((RecordWritable) getSession()).serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).writeRecords(output);
 	}
 
 	@Override /* RecordWritable */

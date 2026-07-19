@@ -97,7 +97,7 @@ public class JsonlSerializerSession extends JsonSerializerSession {
 	 * trailing newline after every top-level value, bound to this live session.
 	 *
 	 * <p>
-	 * Same honored/ignored builder properties as {@link JsonSerializerSession#serializeTokens(Object)}
+	 * Same honored/ignored builder properties as {@link JsonSerializerSession#writeTokens(Object)}
 	 * except that <c>useWhitespace</c> is forced to <jk>false</jk> &mdash; pretty-printed JSONL is
 	 * not standard.
 	 *
@@ -106,7 +106,7 @@ public class JsonlSerializerSession extends JsonSerializerSession {
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	@Override /* JsonSerializerSession */
-	public TokenWriter serializeTokens(Object output) throws IOException {
+	public TokenWriter writeTokens(Object output) throws IOException {
 		var walk = new PojoWalker.Options(
 			isKeepNullProperties(),
 			isTrimEmptyMaps(),
@@ -131,10 +131,10 @@ public class JsonlSerializerSession extends JsonSerializerSession {
 	 * Streaming array-element {@link RecordWriter} for JSONL.
 	 *
 	 * <p>
-	 * Unlike the inherited {@link JsonSerializerSession#serializeArrayRecords(Object)} &mdash; which wraps
+	 * Unlike the inherited {@link JsonSerializerSession#writeArrayRecords(Object)} &mdash; which wraps
 	 * the writes in a bracketed top-level <c>[...]</c> array and is invalid for line-delimited JSONL &mdash;
 	 * this aliases the JSONL line record stream: the {@link JsonlTokenWriter} returned by
-	 * {@link #serializeTokens(Object)} is itself a {@link RecordWriter} whose
+	 * {@link #writeTokens(Object)} is itself a {@link RecordWriter} whose
 	 * {@link RecordWriter#write(Object) write(...)} emits one top-level value per line (no surrounding
 	 * brackets).  Memory is O(1) in the number of records.
 	 *
@@ -143,12 +143,12 @@ public class JsonlSerializerSession extends JsonSerializerSession {
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
-		return serializeTokens(output);
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
+		return writeTokens(output);
 	}
 
 	@Override /* Overridden from JsonSerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		var w = getJsonWriter(out);
 		var cm = getClassMetaForObject(o);
 		var depth = getInitialDepth();
@@ -157,17 +157,17 @@ public class JsonlSerializerSession extends JsonSerializerSession {
 			var c = cm.isArray() ? toList(cm.inner(), o) : (Collection<?>) o;
 			var elementType = cm.getElementType();
 			for (Object item : c) {
-				serializeAnything(w.i(depth), item, elementType, "root", null);
+				writeAnything(w.i(depth), item, elementType, "root", null);
 				w.w('\n');
 			}
 		} else if (cm != null && cm.isStreamable()) {
 			var elementType = cm.getElementType();
 			forEachStreamableEntry(o, cm, item -> {
-				serializeAnything(w.i(depth), item, elementType, "root", null);
+				writeAnything(w.i(depth), item, elementType, "root", null);
 				w.w('\n');
 			});
 		} else {
-			serializeAnything(w.i(depth), o, getExpectedRootType(o), "root", null);
+			writeAnything(w.i(depth), o, getExpectedRootType(o), "root", null);
 			w.w('\n');
 		}
 	}

@@ -113,10 +113,10 @@ public class JsonSchema_Test extends TestBase {
 			}""";
 
 		var t = getTest1();
-		var r = s.serialize(t);
+		var r = s.write(t);
 		assertEquals(expected, r);
-		var t2 = p.parse(r, JsonSchema.class);
-		r = s.serialize(t2);
+		var t2 = p.read(r, JsonSchema.class);
+		r = s.write(t2);
 		assertEquals(expected, r);
 	}
 
@@ -147,10 +147,10 @@ public class JsonSchema_Test extends TestBase {
 			}""";
 
 		var t = getTest2();
-		var r = s.serialize(t);
+		var r = s.write(t);
 		assertEquals(expected, r);
-		var t2 = p.parse(r, JsonSchema.class);
-		r = s.serialize(t2);
+		var t2 = p.read(r, JsonSchema.class);
+		r = s.write(t2);
 		assertEquals(expected, r);
 	}
 
@@ -239,8 +239,8 @@ public class JsonSchema_Test extends TestBase {
 
 		var t = getTest1();
 		var r = t.toString();
-		var t2 = p.parse(r, JsonSchema.class);
-		r = s.serialize(t2);
+		var t2 = p.read(r, JsonSchema.class);
+		r = s.write(t2);
 		assertEquals(expected, r);
 	}
 
@@ -579,12 +579,12 @@ public class JsonSchema_Test extends TestBase {
 			.setComment("schema note")
 			.setDeprecated(true);
 
-		var r = s.serialize(x);
+		var r = s.write(x);
 		assertTrue(r.contains("format: 'uri'"));
 		assertTrue(r.contains("'$comment': 'schema note'"));
 		assertTrue(r.contains("deprecated: true"));
 
-		var x2 = p.parse(r, JsonSchema.class);
+		var x2 = p.read(r, JsonSchema.class);
 		assertEquals("uri", x2.getFormat());
 		assertEquals("schema note", x2.getComment());
 		assertEquals(Boolean.TRUE, x2.getDeprecated());
@@ -598,10 +598,10 @@ public class JsonSchema_Test extends TestBase {
 			.setType(JsonType.STRING)
 			.setSummary("AI-friendly short description");
 
-		var r = s.serialize(x);
+		var r = s.write(x);
 		assertTrue(r.contains("summary: 'AI-friendly short description'"));
 
-		var x2 = p.parse(r, JsonSchema.class);
+		var x2 = p.read(r, JsonSchema.class);
 		assertEquals("AI-friendly short description", x2.getSummary());
 	}
 

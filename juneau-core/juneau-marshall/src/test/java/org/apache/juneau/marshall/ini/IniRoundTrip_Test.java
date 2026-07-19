@@ -78,16 +78,16 @@ class IniRoundTrip_Test extends TestBase {
 	@Test
 	void a01_simpleBeanRoundTrip() throws Exception {
 		var a = new Person("Alice", 30);
-		var ini = IniSerializer.DEFAULT.serialize(a);
-		var b = IniParser.DEFAULT.parse(ini, Person.class);
+		var ini = IniSerializer.DEFAULT.write(a);
+		var b = IniParser.DEFAULT.read(ini, Person.class);
 		assertBean(b, "name,age", "Alice,30");
 	}
 
 	@Test
 	void a02_nestedBeanRoundTrip() throws Exception {
 		var a = new ComplexPerson("Alice", new Address("123 Main", "Boston"), list("a", "b", "c"));
-		var ini = IniSerializer.DEFAULT.serialize(a);
-		var b = IniParser.DEFAULT.parse(ini, ComplexPerson.class);
+		var ini = IniSerializer.DEFAULT.write(a);
+		var b = IniParser.DEFAULT.read(ini, ComplexPerson.class);
 		assertBean(b, "name,address{street,city},tags", "Alice,{123 Main,Boston},[a,b,c]");
 	}
 
@@ -97,8 +97,8 @@ class IniRoundTrip_Test extends TestBase {
 		a.put("name", "test");
 		a.put("count", 42);
 		a.put("flag", true);
-		var ini = IniSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) IniParser.DEFAULT.parse(ini, Map.class, String.class, Object.class);
+		var ini = IniSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(b, "name,count,flag", "test,42,true");
 	}
 
@@ -110,8 +110,8 @@ class IniRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "app");
 		a.put("database", nested);
-		var ini = IniSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) IniParser.DEFAULT.parse(ini, Map.class, String.class, Object.class);
+		var ini = IniSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(b, "name,database{host,port}", "app,{localhost,8080}");
 	}
 
@@ -121,8 +121,8 @@ class IniRoundTrip_Test extends TestBase {
 		a.put("name", "Alice");
 		a.put("middle", null);
 		var s = IniSerializer.create().keepNullProperties().build();
-		var ini = s.serialize(a);
-		var b = (Map<String, Object>) IniParser.DEFAULT.parse(ini, Map.class, String.class, Object.class);
+		var ini = s.write(a);
+		var b = (Map<String, Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(b, "name,middle", "Alice,<null>");
 	}
 
@@ -132,8 +132,8 @@ class IniRoundTrip_Test extends TestBase {
 		a.put("name", "x");
 		a.put("tags", list("a", "b", "c"));
 		a.put("counts", list(1, 2, 3));
-		var ini = IniSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) IniParser.DEFAULT.parse(ini, Map.class, String.class, Object.class);
+		var ini = IniSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(b, "name,tags,counts", "x,[a,b,c],[1,2,3]");
 	}
 
@@ -148,8 +148,8 @@ class IniRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "John");
 		a.put("employment", employment);
-		var ini = IniSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) IniParser.DEFAULT.parse(ini, Map.class, String.class, Object.class);
+		var ini = IniSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(b, "name,employment{title,company{name,ticker}}", "John,{Engineer,{Acme,ACME}}");
 	}
 
@@ -158,8 +158,8 @@ class IniRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "x");
 		a.put("tags", list());
-		var ini = IniSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) IniParser.DEFAULT.parse(ini, Map.class, String.class, Object.class);
+		var ini = IniSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(b, "name,tags", "x,[]");
 	}
 
@@ -169,8 +169,8 @@ class IniRoundTrip_Test extends TestBase {
 		a.put("empty", "");
 		a.put("numeric", "123");
 		a.put("boolean", "true");
-		var ini = IniSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) IniParser.DEFAULT.parse(ini, Map.class, String.class, Object.class);
+		var ini = IniSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(b, "empty,numeric,boolean", ",123,true");
 	}
 
@@ -179,8 +179,8 @@ class IniRoundTrip_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "José");
 		a.put("emoji", "Hello \uD83D\uDE00");
-		var ini = IniSerializer.DEFAULT.serialize(a);
-		var b = (Map<String, Object>) IniParser.DEFAULT.parse(ini, Map.class, String.class, Object.class);
+		var ini = IniSerializer.DEFAULT.write(a);
+		var b = (Map<String, Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(b, "name,emoji", "José,Hello \uD83D\uDE00");
 	}
 }

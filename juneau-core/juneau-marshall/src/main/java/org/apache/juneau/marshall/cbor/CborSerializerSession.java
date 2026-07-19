@@ -142,7 +142,7 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	@Override /* TokenWritable */
-	public TokenWriter serializeTokens(Object output) throws IOException {
+	public TokenWriter writeTokens(Object output) throws IOException {
 		if (output == null)
 			throw new IOException("Output cannot be null.");
 		if (!(output instanceof OutputStream os))
@@ -168,8 +168,8 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
-		return StreamingArrayRecord.writer(serializeTokens(output));
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
+		return StreamingArrayRecord.writer(writeTokens(output));
 	}
 
 	/*
@@ -180,7 +180,7 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 		"rawtypes",   // Raw types necessary for generic type handling
 		"java:S3776"  // Cognitive complexity acceptable for serialization dispatch logic
 	})
-	private CborOutputStream serializeAnything(CborOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
+	private CborOutputStream writeAnything(CborOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null)
 			return out.appendNull();
@@ -217,18 +217,18 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
 			out.appendNull();
 		else if (sType.isBean())
-			serializeBeanMap(out, toBeanMap(o), typeName);
+			writeBeanMap(out, toBeanMap(o), typeName);
 		else if (sType.isMap()) {
 			if (sType.isBeanMap())
-				serializeBeanMap(out, (BeanMap)o, typeName);
+				writeBeanMap(out, (BeanMap)o, typeName);
 			else
-				serializeMap(out, (Map)o, eType);
+				writeMap(out, (Map)o, eType);
 		} else if (sType.isCollection()) {
-			serializeCollection(out, (Collection)o, eType);
+			writeCollection(out, (Collection)o, eType);
 		} else if (sType.isByteArray()) {
 			out.appendBinary((byte[])o);
 		} else if (sType.isArray()) {
-			serializeCollection(out, toList(sType.inner(), o), eType);
+			writeCollection(out, toList(sType.inner(), o), eType);
 		} else if (sType.isBoolean()) {
 			out.appendBoolean((Boolean)o);
 		} else if (sType.isNumber()) {
@@ -236,17 +236,17 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
 			out.appendString(resolveUri(o.toString()));
 		} else if (sType.isDate()) {
-			out.appendString(serializeDate((Date)o, sType));
+			out.appendString(writeDate((Date)o, sType));
 		} else if (sType.isCalendar()) {
-			out.appendString(serializeCalendar(o, sType));
+			out.appendString(writeCalendar(o, sType));
 		} else if (sType.isTemporal()) {
-			out.appendString(serializeTemporal((TemporalAccessor)o, sType));
+			out.appendString(writeTemporal((TemporalAccessor)o, sType));
 		} else if (sType.isDuration()) {
 			appendDuration(out, (Duration)o);
 		} else if (sType.isPeriod()) {
-			out.appendString(serializePeriod((Period)o));
+			out.appendString(writePeriod((Period)o));
 		} else if (sType.isStreamable()) {
-			serializeCollection(out, toListFromStreamable(o, sType), eType);
+			writeCollection(out, toListFromStreamable(o, sType), eType);
 		} else if (sType.isReader()) {
 			pipe((Reader)o, out, SerializerSession::handleThrown);
 		} else if (sType.isInputStream()) {
@@ -258,7 +258,7 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 		return out;
 	}
 
-	private void serializeBeanMap(CborOutputStream out, BeanMap<?> m, String typeName) throws SerializeException {
+	private void writeBeanMap(CborOutputStream out, BeanMap<?> m, String typeName) throws SerializeException {
 
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
@@ -291,8 +291,8 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 				ClassMeta<?> cMeta = (ClassMeta<?>) x.getBeanInfo();
 				String key = x.getName();
 				Object value = x.getValue();
-				serializeAnything(out, key, null, null, null);
-				serializeAnything(out, value, cMeta, key, pMeta);
+				writeAnything(out, key, null, null, null);
+				writeAnything(out, value, cMeta, key, pMeta);
 			}
 		});
 	}
@@ -301,20 +301,20 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 		"rawtypes",  // Raw types necessary for generic collection handling
 		"unchecked"  // Type erasure requires unchecked operations
 	})
-	private void serializeCollection(CborOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
+	private void writeCollection(CborOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
 		var elementType = type.getElementType();
 		List<Object> l = listOfSize(c.size());
 		c = sort(c);
 		l.addAll(c);
 		out.startArray(l.size());
-		l.forEach(x -> serializeAnything(out, x, elementType, "<iterator>", null));
+		l.forEach(x -> writeAnything(out, x, elementType, "<iterator>", null));
 	}
 
 	@SuppressWarnings({
 		"rawtypes",  // Raw types necessary for generic map handling
 		"unchecked"  // Type erasure requires unchecked operations
 	})
-	private void serializeMap(CborOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
+	private void writeMap(CborOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
 		var valueType = type.getValueType();
@@ -329,8 +329,8 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 		entries.forEach(x -> {
 			Object value = x.value;
 			Object key = generalize(x.key, keyType);
-			serializeAnything(out, key, keyType, null, null);
-			serializeAnything(out, value, valueType, null, null);
+			writeAnything(out, key, keyType, null, null);
+			writeAnything(out, value, valueType, null, null);
 		});
 	}
 
@@ -342,13 +342,13 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 	}
 
 	@Override /* Overridden from SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		serializeAnything(getCborOutputStream(out), o, getExpectedRootType(o), "root", null);
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
+		writeAnything(getCborOutputStream(out), o, getExpectedRootType(o), "root", null);
 	}
 
 	private void appendDuration(CborOutputStream out, Duration value) {
 		var f = getDurationFormat();
-		var s = serializeDuration(value);
+		var s = writeDuration(value);
 		if (f == DurationFormat.NANOS || f == DurationFormat.MILLIS)
 			out.appendNumber(Long.parseLong(s));
 		else if (f == DurationFormat.SECONDS)

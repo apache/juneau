@@ -50,8 +50,8 @@ class Json5lRoundTrip_Test extends TestBase {
 	@Test
 	void a01_strictRoundTrip() throws Exception {
 		var in = list(new Person("Alice", 30), new Person("Bob", 25));
-		var out = Json5lSerializer.DEFAULT.serialize(in);
-		var back = (List<Person>) Json5lParser.DEFAULT.parse(out, List.class, Person.class);
+		var out = Json5lSerializer.DEFAULT.write(in);
+		var back = (List<Person>) Json5lParser.DEFAULT.read(out, List.class, Person.class);
 		assertBean(back, "0{name,age},1{name,age}", "{Alice,30},{Bob,25}");
 	}
 
@@ -59,18 +59,18 @@ class Json5lRoundTrip_Test extends TestBase {
 	void a02_sugarRoundTrip() throws Exception {
 		var s = Json5lSerializer.create().json5Sugar().build();
 		var in = list(new Person("Alice", 30), new Person("Bob", 25));
-		var out = s.serialize(in);
+		var out = s.write(in);
 		// Sugar output is single-quoted / unquoted-key; the parser reads it back fine.
 		assertTrue(out.contains("name:'Alice'"));
-		var back = (List<Person>) Json5lParser.DEFAULT.parse(out, List.class, Person.class);
+		var back = (List<Person>) Json5lParser.DEFAULT.read(out, List.class, Person.class);
 		assertBean(back, "0{name,age},1{name,age}", "{Alice,30},{Bob,25}");
 	}
 
 	@Test
 	void a03_mapRoundTrip() throws Exception {
 		var in = list(JsonMap.of("x", 1), JsonMap.of("y", 2));
-		var out = Json5lSerializer.DEFAULT.serialize(in);
-		var back = (List<JsonMap>) Json5lParser.DEFAULT.parse(out, List.class, JsonMap.class);
+		var out = Json5lSerializer.DEFAULT.write(in);
+		var back = (List<JsonMap>) Json5lParser.DEFAULT.read(out, List.class, JsonMap.class);
 		assertEquals(2, back.size());
 		assertEquals(1, back.get(0).getInt("x"));
 		assertEquals(2, back.get(1).getInt("y"));

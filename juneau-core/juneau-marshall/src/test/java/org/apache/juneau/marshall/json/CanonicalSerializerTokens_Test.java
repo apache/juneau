@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.jcs.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Coverage for the {@code serializeTokens(...)} overrides on the canonical-JSON serializers
+ * Coverage for the {@code writeTokens(...)} overrides on the canonical-JSON serializers
  * (JCS, JSON-Schema), whose token writer emits raw JSON with the POJO {@code object(...)} bridge
  * disabled (canonical output can't be expressed through the generic walker).
  */
@@ -36,7 +36,7 @@ class CanonicalSerializerTokens_Test extends TestBase {
 
 	@Test void a01_jcsSerializeTokensEmitsRawJson() throws Exception {
 		var sb = new StringWriter();
-		try (var w = JcsSerializer.DEFAULT.serializeTokens(sb)) {
+		try (var w = JcsSerializer.DEFAULT.writeTokens(sb)) {
 			w.startObject();
 			w.fieldName("a"); w.number(1L);
 			w.endObject();
@@ -45,14 +45,14 @@ class CanonicalSerializerTokens_Test extends TestBase {
 	}
 
 	@Test void a02_jcsSerializeTokensDisablesObjectBridge() throws Exception {
-		try (var w = JcsSerializer.DEFAULT.serializeTokens(new StringWriter())) {
+		try (var w = JcsSerializer.DEFAULT.writeTokens(new StringWriter())) {
 			assertThrows(UnsupportedOperationException.class, () -> w.object(1));
 		}
 	}
 
 	@Test void a03_jsonSchemaSerializeTokensEmitsRawJson() throws Exception {
 		var sb = new StringWriter();
-		try (var w = JsonSchemaSerializer.DEFAULT.serializeTokens(sb)) {
+		try (var w = JsonSchemaSerializer.DEFAULT.writeTokens(sb)) {
 			w.startArray();
 			w.number(1L);
 			w.number(2L);
@@ -62,7 +62,7 @@ class CanonicalSerializerTokens_Test extends TestBase {
 	}
 
 	@Test void a04_jsonSchemaSerializeTokensDisablesObjectBridge() throws Exception {
-		try (var w = JsonSchemaSerializer.DEFAULT.serializeTokens(new StringWriter())) {
+		try (var w = JsonSchemaSerializer.DEFAULT.writeTokens(new StringWriter())) {
 			assertThrows(UnsupportedOperationException.class, () -> w.object(1));
 		}
 	}

@@ -50,7 +50,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void a01_calendar_contextOverridesDefault() {
 		var s = Json5Serializer.create().calendarFormat(CalendarFormat.ISO_INSTANT).build();
-		assertEquals("{c:'2012-12-21T12:34:56Z'}", s.serialize(new A01()));
+		assertEquals("{c:'2012-12-21T12:34:56Z'}", s.write(new A01()));
 	}
 
 	@Marshalled(calendarFormat = CalendarFormat.MILLIS)
@@ -58,7 +58,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void a02_calendar_classOverridesContext() {
 		var s = Json5Serializer.create().calendarFormat(CalendarFormat.ISO_INSTANT).build();
-		assertEquals("{c:" + T.toEpochMilli() + "}", s.serialize(new A02()));
+		assertEquals("{c:" + T.toEpochMilli() + "}", s.write(new A02()));
 	}
 
 	@Marshalled(calendarFormat = CalendarFormat.ISO_INSTANT)
@@ -69,7 +69,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void a03_calendar_propertyOverridesClass() {
 		var s = Json5Serializer.create().build();
-		assertEquals("{c:" + T.toEpochMilli() + "}", s.serialize(new A03()));
+		assertEquals("{c:" + T.toEpochMilli() + "}", s.write(new A03()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void b01_date_contextOverridesDefault() {
 		var s = Json5Serializer.create().dateFormat(DateFormat.ISO_INSTANT).build();
-		assertEquals("{d:'2012-12-21T12:34:56Z'}", s.serialize(new B01()));
+		assertEquals("{d:'2012-12-21T12:34:56Z'}", s.write(new B01()));
 	}
 
 	@Marshalled(dateFormat = DateFormat.MILLIS)
@@ -88,7 +88,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void b02_date_classOverridesContext() {
 		var s = Json5Serializer.create().dateFormat(DateFormat.ISO_INSTANT).build();
-		assertEquals("{d:" + T.toEpochMilli() + "}", s.serialize(new B02()));
+		assertEquals("{d:" + T.toEpochMilli() + "}", s.write(new B02()));
 	}
 
 	@Marshalled(dateFormat = DateFormat.ISO_INSTANT)
@@ -99,7 +99,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void b03_date_propertyOverridesClass() {
 		var s = Json5Serializer.create().build();
-		assertEquals("{d:" + T.toEpochMilli() + "}", s.serialize(new B03()));
+		assertEquals("{d:" + T.toEpochMilli() + "}", s.write(new B03()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void c01_temporal_contextOverridesDefault() {
 		var s = Json5Serializer.create().temporalFormat(TemporalFormat.ISO_INSTANT).build();
-		assertEquals("{i:'2012-12-21T12:34:56Z'}", s.serialize(new C01()));
+		assertEquals("{i:'2012-12-21T12:34:56Z'}", s.write(new C01()));
 	}
 
 	@Marshalled(temporalFormat = TemporalFormat.MILLIS)
@@ -118,7 +118,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void c02_temporal_classOverridesContext() {
 		var s = Json5Serializer.create().temporalFormat(TemporalFormat.ISO_INSTANT).build();
-		assertEquals("{i:" + T.toEpochMilli() + "}", s.serialize(new C02()));
+		assertEquals("{i:" + T.toEpochMilli() + "}", s.write(new C02()));
 	}
 
 	@Marshalled(temporalFormat = TemporalFormat.ISO_INSTANT)
@@ -129,7 +129,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void c03_temporal_propertyOverridesClass() {
 		var s = Json5Serializer.create().build();
-		assertEquals("{i:" + T.toEpochMilli() + "}", s.serialize(new C03()));
+		assertEquals("{i:" + T.toEpochMilli() + "}", s.write(new C03()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void d01_timeZone_contextOverridesDefault() {
 		var s = Json5Serializer.create().timeZoneFormat(TimeZoneFormat.OFFSET).build();
-		var json = s.serialize(new D01());
+		var json = s.write(new D01());
 		assertTrue(json.startsWith("{z:'") && json.endsWith("'}"), "Unexpected: " + json);
 		assertFalse(json.contains("America/Los_Angeles"), "OFFSET should not emit IANA id: " + json);
 	}
@@ -150,7 +150,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void d02_timeZone_classOverridesContext() {
 		var s = Json5Serializer.create().timeZoneFormat(TimeZoneFormat.ID).build();
-		var json = s.serialize(new D02());
+		var json = s.write(new D02());
 		assertFalse(json.contains("America/Los_Angeles"), "Class-level OFFSET should win: " + json);
 	}
 
@@ -162,7 +162,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void d03_timeZone_propertyOverridesClass() {
 		var s = Json5Serializer.create().build();
-		var json = s.serialize(new D03());
+		var json = s.write(new D03());
 		assertFalse(json.contains("America/Los_Angeles"), "Property-level OFFSET should win: " + json);
 	}
 
@@ -174,7 +174,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void e01_locale_contextOverridesDefault() {
 		var s = Json5Serializer.create().localeFormat(LocaleFormat.UNDERSCORE).build();
-		assertEquals("{l:'en_US'}", s.serialize(new E01()));
+		assertEquals("{l:'en_US'}", s.write(new E01()));
 	}
 
 	@Marshalled(localeFormat = LocaleFormat.UNDERSCORE)
@@ -182,7 +182,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void e02_locale_classOverridesContext() {
 		var s = Json5Serializer.create().localeFormat(LocaleFormat.BCP_47).build();
-		assertEquals("{l:'en_US'}", s.serialize(new E02()));
+		assertEquals("{l:'en_US'}", s.write(new E02()));
 	}
 
 	@Marshalled(localeFormat = LocaleFormat.BCP_47)
@@ -193,7 +193,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void e03_locale_propertyOverridesClass() {
 		var s = Json5Serializer.create().build();
-		assertEquals("{l:'en_US'}", s.serialize(new E03()));
+		assertEquals("{l:'en_US'}", s.write(new E03()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -218,7 +218,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void f01_marshalledConfig_applies() {
 		var s = Json5Serializer.create().applyAnnotations(F01Config.class).build();
-		var json = s.serialize(new F01Bean());
+		var json = s.write(new F01Bean());
 		assertTrue(json.contains("c:" + T.toEpochMilli()), "calendar millis: " + json);
 		assertTrue(json.contains("d:" + T.toEpochMilli()), "date millis: " + json);
 		assertTrue(json.contains("i:'2012-12-21T12:34:56Z'"), "temporal iso instant: " + json);

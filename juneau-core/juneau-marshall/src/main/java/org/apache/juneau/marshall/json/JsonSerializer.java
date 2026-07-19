@@ -93,7 +93,7 @@ import org.apache.juneau.marshall.swap.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someObject</jv>);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
  *
  * 	<jc>// Create a custom serializer for lax syntax using single quote characters</jc>
  * 	JsonSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
@@ -102,7 +102,7 @@ import org.apache.juneau.marshall.swap.*;
  * 	<jv>serializer</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.copy().sq().build();
  *
  * 	<jc>// Serialize a POJO to JSON</jc>
- * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>someObject</jv>);
+ * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jv>someObject</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (Map of name/age):</h5>
@@ -127,7 +127,7 @@ import org.apache.juneau.marshall.swap.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"resource"   // serializeTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
+	"resource"   // writeTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
 })
 public class JsonSerializer extends WriterSerializer implements JsonMetaProvider, TokenWritable, ArrayRecordWritable {
 
@@ -248,7 +248,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces: "{foo:'&lt;\/bar&gt;'"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(JsonMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"&lt;/bar&gt;"</js>);
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(JsonMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"&lt;/bar&gt;"</js>);
 		 * </p>
 		 *
 		 * @return This object.
@@ -403,12 +403,12 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 	/**
 	 * Convenience delegator that opens a {@link JsonTokenWriter} over the output using
-	 * <b>default session arguments</b> (mirrors {@link #serialize(Object, Object)}).
+	 * <b>default session arguments</b> (mirrors {@link #write(Object, Object)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link JsonSerializerSession#serializeTokens(Object)}.
+	 * The real implementation lives on {@link JsonSerializerSession#writeTokens(Object)}.
 	 * Callers that need request-derived configuration should call {@link #createSession()} and
-	 * invoke {@link JsonSerializerSession#serializeTokens(Object)} on the built session instead.
+	 * invoke {@link JsonSerializerSession#writeTokens(Object)} on the built session instead.
 	 *
 	 * @param output The output.  Accepts {@link Writer}, {@link OutputStream}, {@link File}, or
 	 * 	{@link StringBuilder}.
@@ -416,8 +416,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	@Override /* TokenWritable */
-	public TokenWriter serializeTokens(Object output) throws IOException {
-		return getSession().serializeTokens(output);
+	public TokenWriter writeTokens(Object output) throws IOException {
+		return getSession().writeTokens(output);
 	}
 
 	/**
@@ -449,15 +449,15 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 	/**
 	 * Convenience delegator for the streaming array-element {@link RecordWriter} (uses default
-	 * session args; see {@link #serializeTokens(Object)}).  Real impl on
-	 * {@link JsonSerializerSession#serializeArrayRecords(Object)}.
+	 * session args; see {@link #writeTokens(Object)}).  Real impl on
+	 * {@link JsonSerializerSession#writeArrayRecords(Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new element-streamed {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
-		return getSession().serializeArrayRecords(output);
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
+		return getSession().writeArrayRecords(output);
 	}
 }

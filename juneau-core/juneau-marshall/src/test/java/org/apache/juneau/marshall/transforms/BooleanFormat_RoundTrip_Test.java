@@ -382,7 +382,7 @@ class BooleanFormat_RoundTrip_Test extends TestBase {
 		var x = BOXED_TRUE;
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, Boolean.class);
+			var x2 = p.read(out, Boolean.class);
 			assertEquals(x, x2, "fmt=" + fmt);
 		} catch (Exception e) {
 			// Mirror UuidFormat_RoundTrip_Test.a06: some serializers (URL-encoding, CSV-style) don't

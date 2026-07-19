@@ -214,13 +214,13 @@ class ViewProjection_Test extends TestBase {
 		var s = Json5Serializer.DEFAULT.copy().activeView("summary").build();
 
 		// Default from context: summary view.
-		assertEquals("{id:'1',name:'Alice'}", s.serialize(A.create()));
+		assertEquals("{id:'1',name:'Alice'}", s.write(A.create()));
 
 		// Per-call override to detail view.
-		assertEquals("{description:'A person',id:'1'}", s.createSession().activeView("detail").build().serialize(A.create()));
+		assertEquals("{description:'A person',id:'1'}", s.createSession().activeView("detail").build().write(A.create()));
 
 		// Per-call override to null → all properties visible.
-		assertEquals("{description:'A person',id:'1',name:'Alice'}", s.createSession().activeView(null).build().serialize(A.create()));
+		assertEquals("{description:'A person',id:'1',name:'Alice'}", s.createSession().activeView(null).build().write(A.create()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -229,7 +229,7 @@ class ViewProjection_Test extends TestBase {
 
 	@Test void h01_parseSide_summaryView_outOfViewIgnored() {
 		var p = Json5Parser.DEFAULT.copy().activeView("summary").ignoreUnknownBeanProperties().build();
-		var x = p.parse("{id:'2',name:'Bob',description:'ignored'}", A.class);
+		var x = p.read("{id:'2',name:'Bob',description:'ignored'}", A.class);
 		assertEquals("2", x.id);
 		assertEquals("Bob", x.name);
 		assertEquals("A person", x.description); // unchanged — out-of-view during parse
@@ -237,7 +237,7 @@ class ViewProjection_Test extends TestBase {
 
 	@Test void h02_parseSide_outOfViewThrowsWhenIgnoreDisabled() {
 		var p = Json5Parser.DEFAULT.copy().activeView("summary").build();
-		assertThrows(Exception.class, () -> p.parse("{id:'1',description:'x'}", A.class));
+		assertThrows(Exception.class, () -> p.read("{id:'1',description:'x'}", A.class));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -249,9 +249,9 @@ class ViewProjection_Test extends TestBase {
 		var s2 = Json5Serializer.DEFAULT.copy().activeView("detail").build();
 		var s3 = Json5Serializer.DEFAULT.copy().activeView("summary").build();
 		// Same active view → same serialization result.
-		assertEquals(s1.serialize(A.create()), s3.serialize(A.create()));
+		assertEquals(s1.write(A.create()), s3.write(A.create()));
 		// Different active view → different serialization result.
-		assertNotEquals(s1.serialize(A.create()), s2.serialize(A.create()));
+		assertNotEquals(s1.write(A.create()), s2.write(A.create()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

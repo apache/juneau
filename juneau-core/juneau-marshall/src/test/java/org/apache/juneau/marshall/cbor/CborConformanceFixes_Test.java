@@ -48,11 +48,11 @@ import org.junit.jupiter.params.provider.*;
 class CborConformanceFixes_Test extends TestBase {
 
 	private static String enc(Object input) throws Exception {
-		return toSpacedHex(CborSerializer.DEFAULT.serialize(input));
+		return toSpacedHex(CborSerializer.DEFAULT.write(input));
 	}
 
 	private static <T> T rt(Object input, Class<T> type) throws Exception {
-		return CborParser.DEFAULT.parse(CborSerializer.DEFAULT.serialize(input), type);
+		return CborParser.DEFAULT.read(CborSerializer.DEFAULT.write(input), type);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -63,21 +63,21 @@ class CborConformanceFixes_Test extends TestBase {
 	void a01_uint64MaxDecodesToBigInteger() throws Exception {
 		// 1B FF FF FF FF FF FF FF FF == CBOR 18446744073709551615 (uint64 max).
 		var b = fromHex("1BFFFFFFFFFFFFFFFF");
-		assertEquals(new BigInteger("18446744073709551615"), CborParser.DEFAULT.parse(b, BigInteger.class));
+		assertEquals(new BigInteger("18446744073709551615"), CborParser.DEFAULT.read(b, BigInteger.class));
 	}
 
 	@Test
 	void a02_uint64MaxIntoLongKeepsRawBits() throws Exception {
 		// Per the type-driven contract a long field keeps the raw 64-bit bits (uint64 max -> -1).
 		var b = fromHex("1BFFFFFFFFFFFFFFFF");
-		assertEquals(-1L, CborParser.DEFAULT.parse(b, Long.class));
+		assertEquals(-1L, CborParser.DEFAULT.read(b, Long.class));
 	}
 
 	@Test
 	void a03_nintMinDecodesToBigInteger() throws Exception {
 		// 3B FF FF FF FF FF FF FF FF == CBOR -18446744073709551616 (nint min).
 		var b = fromHex("3BFFFFFFFFFFFFFFFF");
-		assertEquals(new BigInteger("-18446744073709551616"), CborParser.DEFAULT.parse(b, BigInteger.class));
+		assertEquals(new BigInteger("-18446744073709551616"), CborParser.DEFAULT.read(b, BigInteger.class));
 	}
 
 	@Test
@@ -148,27 +148,27 @@ class CborConformanceFixes_Test extends TestBase {
 	void c01_indefiniteByteStringDecodes() throws Exception {
 		// 5F 42 01 02 43 03 04 05 FF == indefinite byte string of chunks {01 02} + {03 04 05}.
 		var b = fromHex("5F42010243030405FF");
-		assertArrayEquals(new byte[]{1, 2, 3, 4, 5}, CborParser.DEFAULT.parse(b, byte[].class));
+		assertArrayEquals(new byte[]{1, 2, 3, 4, 5}, CborParser.DEFAULT.read(b, byte[].class));
 	}
 
 	@Test
 	void c02_indefiniteTextStringDecodes() throws Exception {
 		// 7F 61 61 61 62 FF == indefinite text string of chunks "a" + "b".
 		var b = fromHex("7F61616162FF");
-		assertEquals("ab", CborParser.DEFAULT.parse(b, String.class));
+		assertEquals("ab", CborParser.DEFAULT.read(b, String.class));
 	}
 
 	@Test
 	void c03_indefiniteEmptyTextStringDecodes() throws Exception {
 		// 7F FF == indefinite text string with zero chunks -> empty string.
 		var b = fromHex("7FFF");
-		assertEquals("", CborParser.DEFAULT.parse(b, String.class));
+		assertEquals("", CborParser.DEFAULT.read(b, String.class));
 	}
 
 	@Test
 	void c04_indefiniteByteStringViaTokenReader() throws Exception {
 		var b = fromHex("5F42010243030405FF");
-		try (var r = CborParser.DEFAULT.parseTokens(b)) {
+		try (var r = CborParser.DEFAULT.readTokens(b)) {
 			assertEquals(TokenType.VALUE_BINARY, r.next());
 			assertArrayEquals(new byte[]{1, 2, 3, 4, 5}, r.getBinary());
 		}
@@ -179,7 +179,7 @@ class CborConformanceFixes_Test extends TestBase {
 		// 5F 5F FF == a byte-string chunk that is itself indefinite; rejected per §3.2.3 with a clean
 		// IOException rather than a NegativeArraySizeException.
 		var b = fromHex("5F5FFF");
-		try (var r = CborParser.DEFAULT.parseTokens(b)) {
+		try (var r = CborParser.DEFAULT.readTokens(b)) {
 			assertThrowsWithMessage(IOException.class, "Nested indefinite-length string chunk not allowed", r::next);
 		}
 	}
@@ -188,7 +188,7 @@ class CborConformanceFixes_Test extends TestBase {
 	void c06_mismatchedChunkMajorTypeRejectedCleanly() throws Exception {
 		// 5F 61 61 FF == a text-string chunk inside an indefinite byte string; rejected cleanly.
 		var b = fromHex("5F6161FF");
-		try (var r = CborParser.DEFAULT.parseTokens(b)) {
+		try (var r = CborParser.DEFAULT.readTokens(b)) {
 			assertThrowsWithMessage(IOException.class, "Invalid chunk major type", r::next);
 		}
 	}
@@ -197,7 +197,7 @@ class CborConformanceFixes_Test extends TestBase {
 	void c07_truncatedIndefiniteStringRejectedCleanly() throws Exception {
 		// 5F 42 01 02 (no BREAK, EOF mid-stream) must not loop or crash with a runtime exception.
 		var b = fromHex("5F42010 2".replace(" ", ""));
-		try (var r = CborParser.DEFAULT.parseTokens(b)) {
+		try (var r = CborParser.DEFAULT.readTokens(b)) {
 			assertThrowsWithMessage(IOException.class, "Unexpected end of CBOR input in indefinite-length string", r::next);
 		}
 	}
@@ -210,28 +210,28 @@ class CborConformanceFixes_Test extends TestBase {
 	void d01_smallestPositiveSubnormal() throws Exception {
 		// F9 00 01 == smallest positive half subnormal == 2^-24 (~5.96e-8), previously decoded ~0.
 		var b = fromHex("F90001");
-		assertEquals(1.0 / 16777216.0, CborParser.DEFAULT.parse(b, Double.class), 0.0);
+		assertEquals(1.0 / 16777216.0, CborParser.DEFAULT.read(b, Double.class), 0.0);
 	}
 
 	@Test
 	void d02_largestSubnormal() throws Exception {
 		// F9 03 FF == largest half subnormal == 1023 * 2^-24.
 		var b = fromHex("F903FF");
-		assertEquals(1023.0 / 16777216.0, CborParser.DEFAULT.parse(b, Double.class), 0.0);
+		assertEquals(1023.0 / 16777216.0, CborParser.DEFAULT.read(b, Double.class), 0.0);
 	}
 
 	@Test
 	void d03_negativeSubnormalKeepsSign() throws Exception {
 		// F9 80 01 == negative smallest subnormal.
 		var b = fromHex("F98001");
-		assertEquals(-1.0 / 16777216.0, CborParser.DEFAULT.parse(b, Double.class), 0.0);
+		assertEquals(-1.0 / 16777216.0, CborParser.DEFAULT.read(b, Double.class), 0.0);
 	}
 
 	@Test
 	void d04_zeroStillDecodesToZero() throws Exception {
 		// F9 00 00 == +0.0 (mant == 0 branch must still be exact zero).
 		var b = fromHex("F90000");
-		assertEquals(0.0, CborParser.DEFAULT.parse(b, Double.class), 0.0);
+		assertEquals(0.0, CborParser.DEFAULT.read(b, Double.class), 0.0);
 	}
 
 	//------------------------------------------------------------------------------------------------

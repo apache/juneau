@@ -44,7 +44,7 @@ class WriterFluentSetters_Test extends TestBase {
 	@Test void a01_csvSerializer_basic() throws Exception {
 		// Verify CsvSerializer works correctly (uses CsvWriter internally)
 		var s = CsvSerializer.DEFAULT;
-		String result = s.serialize(a("foo", "bar"));
+		String result = s.write(a("foo", "bar"));
 		assertTrue(result.contains("foo") && result.contains("bar"));
 	}
 
@@ -52,7 +52,7 @@ class WriterFluentSetters_Test extends TestBase {
 		// Verify object serialization works
 		var s = CsvSerializer.DEFAULT;
 		var bean = new TestBean("test", 42);
-		String result = s.serialize(bean);
+		String result = s.write(bean);
 		assertTrue(result.contains("test") && result.contains("42"));
 	}
 
@@ -63,7 +63,7 @@ class WriterFluentSetters_Test extends TestBase {
 	@Test void b01_jsonSerializer_basic() throws Exception {
 		// Verify JsonSerializer works correctly (uses JsonWriter internally)
 		var s = JsonSerializer.DEFAULT;
-		String result = s.serialize(a("foo", "bar"));
+		String result = s.write(a("foo", "bar"));
 		assertEquals("[\"foo\",\"bar\"]", result.trim());
 	}
 
@@ -71,7 +71,7 @@ class WriterFluentSetters_Test extends TestBase {
 		// Verify object serialization works
 		var s = JsonSerializer.DEFAULT;
 		var bean = new TestBean("test", 42);
-		String result = s.serialize(bean);
+		String result = s.write(bean);
 		assertTrue(result.contains("\"name\":\"test\"") && result.contains("\"value\":42"));
 	}
 
@@ -82,7 +82,7 @@ class WriterFluentSetters_Test extends TestBase {
 	@Test void c01_uonSerializer_basic() throws Exception {
 		// Verify UonSerializer works correctly (uses UonWriter internally)
 		var s = UonSerializer.DEFAULT;
-		String result = s.serialize(a("foo", "bar"));
+		String result = s.write(a("foo", "bar"));
 		assertEquals("@(foo,bar)", result.trim());
 	}
 
@@ -90,7 +90,7 @@ class WriterFluentSetters_Test extends TestBase {
 		// Verify object serialization works
 		var s = UonSerializer.DEFAULT;
 		var bean = new TestBean("test", 42);
-		String result = s.serialize(bean);
+		String result = s.write(bean);
 		assertTrue(result.contains("name=test") && result.contains("value=42"));
 	}
 
@@ -101,7 +101,7 @@ class WriterFluentSetters_Test extends TestBase {
 	@Test void d01_xmlSerializer_basic() throws Exception {
 		// Verify XmlSerializer works correctly (uses XmlWriter internally)
 		var s = XmlSerializer.DEFAULT;
-		String result = s.serialize(a("foo", "bar"));
+		String result = s.write(a("foo", "bar"));
 		assertTrue(result.contains("<string>foo</string>") && result.contains("<string>bar</string>"));
 	}
 
@@ -109,7 +109,7 @@ class WriterFluentSetters_Test extends TestBase {
 		// Verify object serialization works
 		var s = XmlSerializer.DEFAULT;
 		var bean = new TestBean("test", 42);
-		String result = s.serialize(bean);
+		String result = s.write(bean);
 		assertTrue(result.contains("<name>test</name>") && result.contains("<value>42</value>"));
 	}
 
@@ -120,7 +120,7 @@ class WriterFluentSetters_Test extends TestBase {
 	@Test void e01_htmlSerializer_basic() throws Exception {
 		// Verify HtmlSerializer works correctly (uses HtmlWriter internally)
 		var s = HtmlSerializer.DEFAULT;
-		String result = s.serialize(a("foo", "bar"));
+		String result = s.write(a("foo", "bar"));
 		assertTrue(result.contains("foo") && result.contains("bar"));
 	}
 
@@ -128,7 +128,7 @@ class WriterFluentSetters_Test extends TestBase {
 		// Verify object serialization works
 		var s = HtmlSerializer.DEFAULT;
 		var bean = new TestBean("test", 42);
-		String result = s.serialize(bean);
+		String result = s.write(bean);
 		assertTrue(result.contains("test") && result.contains("42"));
 	}
 

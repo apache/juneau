@@ -40,7 +40,7 @@ class Csv_Test extends TestBase {
 		l.add(new A("b2",2));
 
 		var s = CsvSerializer.DEFAULT;
-		var r = s.serialize(l);
+		var r = s.write(l);
 
 		assertEquals("b,c\nb1,1\nb2,2\n", r);
 	}
@@ -64,7 +64,7 @@ class Csv_Test extends TestBase {
 		l.add(new B("user2", new Date(2000000)));
 
 		var s = CsvSerializer.create().swaps(DateSwap.class).build();
-		var r = s.serialize(l);
+		var r = s.write(l);
 
 		// Swaps should convert dates to yyyy-MM-dd format
 		assertTrue(r.contains("1970-01-01") || r.contains("1969-12-31"), "Should have formatted dates but was: " + r);
@@ -109,7 +109,7 @@ class Csv_Test extends TestBase {
 		l.add(m2);
 
 		var s = CsvSerializer.create().swaps(DateSwap.class).build();
-		var r = s.serialize(l);
+		var r = s.write(l);
 
 		// Swaps should format dates
 		assertTrue(r.contains("user1"));
@@ -127,7 +127,7 @@ class Csv_Test extends TestBase {
 		l.add(new Date(3000000));
 
 		var s = CsvSerializer.create().swaps(DateSwap.class).build();
-		var r = s.serialize(l);
+		var r = s.write(l);
 
 		// Should have value header and formatted dates
 		assertTrue(r.startsWith("value\n"));
@@ -146,7 +146,7 @@ class Csv_Test extends TestBase {
 		l.add(new B("user3", null));
 
 		var s = CsvSerializer.create().swaps(DateSwap.class).build();
-		var r = s.serialize(l);
+		var r = s.write(l);
 
 		// Should have users and null values (null marker defaults to <NULL>)
 		assertTrue(r.contains("user1"));
@@ -165,7 +165,7 @@ class Csv_Test extends TestBase {
 		l.add(new C("Jane", new Address("456 Oak Ave", "Portland", "OR")));
 
 		var s = CsvSerializer.create().swaps(AddressSwap.class).build();
-		var r = s.serialize(l);
+		var r = s.write(l);
 
 		// Should have names and pipe-delimited addresses
 		assertTrue(r.contains("John"));
@@ -217,7 +217,7 @@ class Csv_Test extends TestBase {
 		l.add(new D("user2", new Date(2000000)));
 
 		var s = CsvSerializer.DEFAULT;
-		var r = s.serialize(l);
+		var r = s.write(l);
 
 		// @Swap annotation on field should apply the swap
 		assertTrue(r.contains("user1"));
@@ -247,7 +247,7 @@ class Csv_Test extends TestBase {
 		l.add(new E("Task3", Status.IN_PROGRESS));
 
 		var s = CsvSerializer.DEFAULT;
-		var r = s.serialize(l);
+		var r = s.write(l);
 
 		// Enums should serialize as their string names
 		assertTrue(r.contains("Task1"));
@@ -280,7 +280,7 @@ class Csv_Test extends TestBase {
 		l.add(new F("hello, world", 1));
 		l.add(new F("plain", 2));
 
-		var r = CsvSerializer.DEFAULT.serialize(l);
+		var r = CsvSerializer.DEFAULT.write(l);
 		// Value with comma must be enclosed in double quotes
 		assertTrue(r.contains("\"hello, world\""), "Expected quoted comma value but got: " + r);
 		assertTrue(r.contains("plain"));
@@ -299,7 +299,7 @@ class Csv_Test extends TestBase {
 		var l = new LinkedList<>();
 		l.add(new F("say \"hi\"", 1));
 
-		var r = CsvSerializer.DEFAULT.serialize(l);
+		var r = CsvSerializer.DEFAULT.write(l);
 		// Embedded quotes must be doubled inside a quoted field
 		assertTrue(r.contains("\"say \"\"hi\"\"\""), "Expected RFC 4180 doubled quotes but got: " + r);
 	}
@@ -311,7 +311,7 @@ class Csv_Test extends TestBase {
 		var l = new LinkedList<>();
 		l.add(new F("line1\nline2", 1));
 
-		var r = CsvSerializer.DEFAULT.serialize(l);
+		var r = CsvSerializer.DEFAULT.write(l);
 		assertTrue(r.contains("\"line1\nline2\""), "Expected quoted newline value but got: " + r);
 	}
 
@@ -322,7 +322,7 @@ class Csv_Test extends TestBase {
 		var l = new LinkedList<>();
 		l.add(new G(null, "null"));
 
-		var r = CsvSerializer.DEFAULT.serialize(l);
+		var r = CsvSerializer.DEFAULT.write(l);
 		// Java null → null marker (<NULL> by default); the String "null" → quoted "\"null\""
 		assertTrue(r.contains("<NULL>") && r.contains("null"), "Unexpected output: " + r);
 	}
@@ -339,7 +339,7 @@ class Csv_Test extends TestBase {
 	//====================================================================================================
 	@Test void i05_emptyCollection() throws Exception {
 		var l = new LinkedList<>();
-		var r = CsvSerializer.DEFAULT.serialize(l);
+		var r = CsvSerializer.DEFAULT.write(l);
 		assertEquals("", r);
 	}
 
@@ -347,7 +347,7 @@ class Csv_Test extends TestBase {
 	// Test serializing a single bean (not in a collection)
 	//====================================================================================================
 	@Test void i06_singleBean() throws Exception {
-		var r = CsvSerializer.DEFAULT.serialize(new F("hello", 42));
+		var r = CsvSerializer.DEFAULT.write(new F("hello", 42));
 		assertEquals("b,c\nhello,42\n", r);
 	}
 
@@ -362,7 +362,7 @@ class Csv_Test extends TestBase {
 		var csv = "name,radius,_type\nc1,10,Circle\nc2,20,Circle\n";
 		var p = CsvParser.create().build();
 
-		var parsed = (List<Circle>) p.parse(csv, List.class, Circle.class);
+		var parsed = (List<Circle>) p.read(csv, List.class, Circle.class);
 
 		assertNotNull(parsed);
 		assertEquals(2, parsed.size());
@@ -379,7 +379,7 @@ class Csv_Test extends TestBase {
 		var csv = "name,radius,_type\nc1,10,Circle\n";
 		var p = CsvParser.create().build();
 
-		var parsed = p.parse(csv, Circle.class);
+		var parsed = p.read(csv, Circle.class);
 		assertNotNull(parsed);
 		assertEquals("c1", parsed.name);
 		assertEquals(10, parsed.radius);
@@ -432,10 +432,10 @@ class Csv_Test extends TestBase {
 		var s = CsvSerializer.create().byteArrayFormat(CsvByteArrayCellFormat.BASE64).build();
 		var p = CsvParser.create().byteArrayFormat(CsvByteArrayCellFormat.BASE64).build();
 
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("SGVsbG8gV29ybGQ=") || csv.contains("data"), "Should have base64: " + csv);
 
-		var parsed = (List<I>) p.parse(csv, List.class, I.class);
+		var parsed = (List<I>) p.read(csv, List.class, I.class);
 		assertNotNull(parsed);
 		assertEquals(2, parsed.size());
 		assertArrayEquals(bytes, parsed.get(0).data);
@@ -453,10 +453,10 @@ class Csv_Test extends TestBase {
 		var s = CsvSerializer.create().byteArrayFormat(CsvByteArrayCellFormat.SEMICOLON_DELIMITED).build();
 		var p = CsvParser.create().byteArrayFormat(CsvByteArrayCellFormat.SEMICOLON_DELIMITED).build();
 
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("72;101;108;108;111"), "Should have semicolon format: " + csv);
 
-		var parsed = (List<I>) p.parse(csv, List.class, I.class);
+		var parsed = (List<I>) p.read(csv, List.class, I.class);
 		assertNotNull(parsed);
 		assertArrayEquals(bytes, parsed.get(0).data);
 	}
@@ -483,11 +483,11 @@ class Csv_Test extends TestBase {
 		var s = CsvSerializer.DEFAULT;
 		var p = CsvParser.DEFAULT;
 
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("[1;2;3]"), "Should have int array format: " + csv);
 		assertTrue(csv.contains("[1.5;2.5;3.5]"), "Should have double array format: " + csv);
 
-		var parsed = (List<H>) p.parse(csv, List.class, H.class);
+		var parsed = (List<H>) p.read(csv, List.class, H.class);
 		assertNotNull(parsed);
 		assertEquals(2, parsed.size());
 		assertArrayEquals(new int[]{1, 2, 3}, parsed.get(0).ints);
@@ -520,11 +520,11 @@ class Csv_Test extends TestBase {
 		var s = CsvSerializer.create().allowNestedStructures(true).build();
 		var p = CsvParser.create().allowNestedStructures(true).build();
 
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("[a;b;c]") || csv.contains("tags"), "Should have array notation: " + csv);
 		assertTrue(csv.contains("x:1") || csv.contains("y:2") || csv.contains("meta"), "Should have object notation: " + csv);
 
-		var parsed = (List<J>) p.parse(csv, List.class, J.class);
+		var parsed = (List<J>) p.read(csv, List.class, J.class);
 		assertNotNull(parsed);
 		assertEquals(2, parsed.size());
 		assertEquals(List.of("a", "b", "c"), parsed.get(0).tags);
@@ -558,10 +558,10 @@ class Csv_Test extends TestBase {
 		var s = CsvSerializer.create().nullValue("<NULL>").build();
 		var p = CsvParser.create().nullValue("<NULL>").build();
 
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("<NULL>"), "Should have null marker: " + csv);
 
-		var parsed = (List<G>) p.parse(csv, List.class, G.class);
+		var parsed = (List<G>) p.read(csv, List.class, G.class);
 		assertNotNull(parsed);
 		assertEquals(1, parsed.size());
 		assertNull(parsed.get(0).a);

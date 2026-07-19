@@ -76,9 +76,9 @@ class BsonAnnotation_Test extends org.apache.juneau.TestBase {
 	@Test
 	void g01_bsonConfigAddBeanTypes() throws Exception {
 		var s = BsonSerializer.create().applyAnnotations(G1_Bean.class).keepNullProperties().build();
-		var bytes = s.serialize(new G1_Bean());
+		var bytes = s.write(new G1_Bean());
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		assertTrue(parsed.containsKey("_type") || parsed.containsKey("name"));
 		assertEquals("x", parsed.get("name"));
 	}
@@ -89,9 +89,9 @@ class BsonAnnotation_Test extends org.apache.juneau.TestBase {
 	@Test
 	void g02_writeDatesAsDatetimeFalse() throws Exception {
 		var s = BsonSerializer.create().applyAnnotations(G2_Bean.class).keepNullProperties().build();
-		var bytes = s.serialize(new G2_Bean());
+		var bytes = s.write(new G2_Bean());
 		var p = BsonParser.create().build();
-		var parsed = p.parse(bytes, JsonMap.class);
+		var parsed = p.read(bytes, JsonMap.class);
 		var d = parsed.get("d");
 		assertTrue(d instanceof String, "Date should be string when writeDatesAsDatetime=false, got: " + cn(d));
 	}

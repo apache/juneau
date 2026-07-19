@@ -292,7 +292,7 @@ class CurrencyFormat_RoundTrip_Test extends TestBase {
 		var x = Currency.getInstance("USD");
 		try {
 			var out = t.serialize(x, s);
-			var x2 = p.parse(out, Currency.class);
+			var x2 = p.read(out, Currency.class);
 			// Accept either the lossy-canonical (format applied) or the structural original (format bypassed
 			// by native type handling — matches the BSON-style divergence already documented for DateFormat /
 			// CalendarFormat at top-level).

@@ -87,13 +87,13 @@ class ObjectSwapTest extends TestBase {
 
 		var myPojo = new MyPojo();
 
-		var json = s.getWriterSerializer("text/json").orElseThrow().serialize(myPojo);
+		var json = s.getWriterSerializer("text/json").orElseThrow().write(myPojo);
 		assertEquals("'It\\'s JSON!'", json);
 
-		var xml = s.getWriterSerializer("text/xml").orElseThrow().serialize(myPojo);
+		var xml = s.getWriterSerializer("text/xml").orElseThrow().write(myPojo);
 		assertEquals("<string>It's XML!</string>", xml);
 
-		var html = s.getWriterSerializer("text/html").orElseThrow().serialize(myPojo);
+		var html = s.getWriterSerializer("text/html").orElseThrow().write(myPojo);
 		assertEquals("<string>It's something else!</string>", html);
 	}
 }

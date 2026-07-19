@@ -217,7 +217,7 @@ class MaxIndent_Test extends TestBase {
 
 	private static void testSerialize(String testName, Serializer s, String expected, Input input) throws Exception {
 		try {
-			var r = s.serializeToString(input.in);
+			var r = s.writeToString(input.in);
 
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 			if (expected.equals("xxx")) {

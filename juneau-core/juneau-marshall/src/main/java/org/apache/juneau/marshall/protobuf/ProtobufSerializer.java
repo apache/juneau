@@ -75,7 +75,7 @@ import org.apache.juneau.marshall.serializer.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to protobuf binary bytes using the default serializer</jc>
- * 	<jk>byte</jk>[] <jv>bytes</jv> = ProtobufSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myBean</jv>);
+ * 	<jk>byte</jk>[] <jv>bytes</jv> = ProtobufSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
  * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>

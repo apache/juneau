@@ -130,7 +130,7 @@ public class RequestHttpPart {
 						return o(cc.newInstance(getName(), get()));
 				}
 			}
-			return o(parser.parse(HEADER, schema, orElse(null), type));
+			return o(parser.read(HEADER, schema, orElse(null), type));
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not parse %s parameter '%s'.", partType.toString().toLowerCase(), getName());
 		}

@@ -24,8 +24,8 @@
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
- * 	String ini = IniSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myBean</jv>);
- * 	MyBean bean = IniParser.<jsf>DEFAULT</jsf>.parse(<jv>ini</jv>, MyBean.<jk>class</jk>);
+ * 	String ini = IniSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
+ * 	MyBean bean = IniParser.<jsf>DEFAULT</jsf>.read(<jv>ini</jv>, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Or use the marshaller:</jc>
  * 	String ini = Ini.<jsf>of</jsf>(<jv>myBean</jv>);

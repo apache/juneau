@@ -255,7 +255,7 @@ public class EchoMixin {
 		out.put("truncated", capture.truncated);
 
 		try (var w = res.getDirectWriter("application/json")) {
-			JsonSerializer.DEFAULT_READABLE.serialize(out, w);
+			JsonSerializer.DEFAULT_READABLE.write(out, w);
 		}
 	}
 

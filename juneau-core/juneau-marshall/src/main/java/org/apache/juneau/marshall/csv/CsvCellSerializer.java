@@ -51,22 +51,22 @@ public final class CsvCellSerializer {
 	 * @param session The serializer session (for bean conversion, date formatting, etc.).
 	 * @return The serialized string.
 	 */
-	public String serialize(Object value, CsvSerializerSession session) {
-		return serializeValue(value, session);
+	public String write(Object value, CsvSerializerSession session) {
+		return writeValue(value, session);
 	}
 
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for exhaustive CSV value type dispatch
 	})
-	private String serializeValue(Object value, CsvSerializerSession session) {
+	private String writeValue(Object value, CsvSerializerSession session) {
 		if (value == null)
 			return nullMarker;
 		if (value instanceof Map<?, ?> m)
-			return serializeMap(m, session);
+			return writeMap(m, session);
 		if (value instanceof Collection<?> c)
-			return serializeCollection(c, session);
+			return writeCollection(c, session);
 		if (value instanceof Object[] a)
-			return serializeObjectArray(a, session);
+			return writeObjectArray(a, session);
 		if (value instanceof byte[] b)
 			return byteArrayFormat == CsvByteArrayCellFormat.SEMICOLON_DELIMITED ? formatByteArraySemicolon(b) : base64Encode(b);
 		if (value instanceof int[] a) return formatIntArray(a);
@@ -78,13 +78,13 @@ public final class CsvCellSerializer {
 		if (value instanceof char[] a) return formatCharArray(a);
 		// Bean or simple: use session to convert/format
 		var prepared = session.prepareForInlineValue(value);
-		if (prepared instanceof Map) return serializeMap((Map<?, ?>) prepared, session);
-		if (prepared instanceof Collection) return serializeCollection((Collection<?>) prepared, session);
-		if (prepared instanceof Object[] objectArray) return serializeObjectArray(objectArray, session);
+		if (prepared instanceof Map) return writeMap((Map<?, ?>) prepared, session);
+		if (prepared instanceof Collection) return writeCollection((Collection<?>) prepared, session);
+		if (prepared instanceof Object[] objectArray) return writeObjectArray(objectArray, session);
 		return escapeIfNeeded(prepared.toString());
 	}
 
-	private String serializeMap(Map<?, ?> m, CsvSerializerSession session) {
+	private String writeMap(Map<?, ?> m, CsvSerializerSession session) {
 		var sb = new StringBuilder();
 		sb.append('{');
 		var first = true;
@@ -95,31 +95,31 @@ public final class CsvCellSerializer {
 			var v = e.getValue();
 			sb.append(escapeIfNeeded(k != null ? k.toString() : nullMarker));
 			sb.append(':');
-			sb.append(serializeValue(v, session));
+			sb.append(writeValue(v, session));
 		}
 		sb.append('}');
 		return sb.toString();
 	}
 
-	private String serializeCollection(Collection<?> c, CsvSerializerSession session) {
+	private String writeCollection(Collection<?> c, CsvSerializerSession session) {
 		var sb = new StringBuilder();
 		sb.append('[');
 		var first = true;
 		for (var v : c) {
 			if (!first) sb.append(';');
 			first = false;
-			sb.append(serializeValue(v, session));
+			sb.append(writeValue(v, session));
 		}
 		sb.append(']');
 		return sb.toString();
 	}
 
-	private String serializeObjectArray(Object[] a, CsvSerializerSession session) {
+	private String writeObjectArray(Object[] a, CsvSerializerSession session) {
 		var sb = new StringBuilder();
 		sb.append('[');
 		for (var i = 0; i < a.length; i++) {
 			if (i > 0) sb.append(';');
-			sb.append(serializeValue(a[i], session));
+			sb.append(writeValue(a[i], session));
 		}
 		sb.append(']');
 		return sb.toString();

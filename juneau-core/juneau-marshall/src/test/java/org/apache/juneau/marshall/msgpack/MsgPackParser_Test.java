@@ -43,9 +43,9 @@ class MsgPackParser_Test extends TestBase {
 		var p = MsgPackParser.DEFAULT.copy().autoCloseStreams().build();
 		var is = is("00 01");
 
-		var r = p.parse(is, Object.class);
+		var r = p.read(is, Object.class);
 		assertJson("0", r);
-		assertThrowsWithMessage(Exception.class, "Stream is closed", ()->p.parse(is, Object.class));
+		assertThrowsWithMessage(Exception.class, "Stream is closed", ()->p.read(is, Object.class));
 	}
 
 	//====================================================================================================
@@ -56,72 +56,72 @@ class MsgPackParser_Test extends TestBase {
 		var p = MsgPackParser.DEFAULT;
 		var is = is("00 01");
 
-		var r = p.parse(is, Object.class);
+		var r = p.read(is, Object.class);
 		assertEquals("0", r.toString());
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("1", r);
 
 		is = is("D1 00 80 D1 00 81");
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("128", r);
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("129", r);
 
 		is = is("D2 00 00 80 00 D2 00 00 80 01");
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("32768", r);
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("32769", r);
 
 		is = is("CA 00 00 00 00 CA 3F 80 00 00");
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("0.0", r);
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("1.0", r);
 
 		is = is("CB 3F F0 00 00 00 00 00 00 CB BF F0 00 00 00 00 00 00");
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("1.0", r);
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("-1.0", r);
 
 		is = is("A0 A0");
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertString("", r);
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertString("", r);
 		is = is("BF 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 BF 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62");
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertString("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", r);
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertString("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", r);
 		is = is("D9 20 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 D9 20 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62");
-		r = p.parse(is, Object.class);
-		assertString("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", r);		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
+		assertString("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", r);		r = p.read(is, Object.class);
 
 		assertString("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", r);
 		is = is("90 90");
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertEmpty(r);
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("[]", r);
 
 		is = is("91 01 91 02");
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("[1]", r);
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("[2]", r);
 
 		is = is("80 80");
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("{}", r);
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("{}", r);
 
 		is = is("81 A1 31 01 81 A1 31 02");
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("{'1':1}", r);
-		r = p.parse(is, Object.class);
+		r = p.read(is, Object.class);
 		assertJson("{'1':2}", r);
 	}
 

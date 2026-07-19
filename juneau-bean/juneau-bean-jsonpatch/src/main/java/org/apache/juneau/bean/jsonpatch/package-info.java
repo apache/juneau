@@ -54,8 +54,8 @@
  * 		.append(<jk>new</jk> CopyOp(<js>"/a/b/c"</js>, <js>"/a/b/e"</js>))
  * 		.append(<jk>new</jk> TestOp(<js>"/a/b/c"</js>, <js>"foo"</js>));
  *
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>patch</jv>);
- * 	JsonPatch <jv>back</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, JsonPatch.<jk>class</jk>);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>patch</jv>);
+ * 	JsonPatch <jv>back</jv> = JsonParser.<jsf>DEFAULT</jsf>.read(<jv>json</jv>, JsonPatch.<jk>class</jk>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

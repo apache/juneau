@@ -47,7 +47,7 @@ public class XmlConfigurationExample {
 		 * <id>a</id>
 		 * </object>
 		 */
-		var withWhitespace = XmlSerializer.create().ws().build().serialize(aPojo);
+		var withWhitespace = XmlSerializer.create().ws().build().write(aPojo);
 		// the output will be padded with spaces after format characters.
 		Logger.getLogger(XmlConfigurationExample.class).info(withWhitespace);
 
@@ -56,13 +56,13 @@ public class XmlConfigurationExample {
 
 		//Produces
 		//<object><innerPojo><name>name0</name><id>1.0</id></innerPojo><id>pojo</id></object>
-		var mapescaped = XmlSerializer.create().trimEmptyMaps().build().serialize(pojoc);
+		var mapescaped = XmlSerializer.create().trimEmptyMaps().build().write(pojoc);
 		// the output will have trimmed Empty maps.
 		Logger.getLogger(XmlConfigurationExample.class).info(mapescaped);
 
 		//Produces
 		//<object xmlns="http://www.apache.org/2013/Juneau"><name>&lt;pojo&gt;</name><id>a</id></object>
-		var nspaceToRoot = XmlSerializer.create().ns().addNamespaceUrisToRoot().build().serialize(aPojo);
+		var nspaceToRoot = XmlSerializer.create().ns().addNamespaceUrisToRoot().build().write(aPojo);
 		// the output will add default name space to the xml document root.
 		Logger.getLogger(XmlConfigurationExample.class).info(nspaceToRoot);
 
@@ -70,14 +70,14 @@ public class XmlConfigurationExample {
 
 		//Produces
 		//<object><id>a</id></object>
-		var nullescaped = XmlSerializer.create().build().serialize(nPojo);
+		var nullescaped = XmlSerializer.create().build().write(nPojo);
 		// the output will have trimmed null properties.
 		Logger.getLogger(XmlConfigurationExample.class).info(nullescaped);
 
 		//Produces
 		//<object xmlns="http://www.pierobon.org/iis/review1.htm.html#one"><name>&lt;pojo&gt;</name><id>a</id></object>
 		var dNamsSpace = XmlSerializer.create().enableNamespaces().defaultNamespace(Namespace.create("http://www.pierobon.org" + "/iis/review1.htm.html#one")).addNamespaceUrisToRoot().build()
-			.serialize(aPojo);
+			.write(aPojo);
 		// the output will have new default namespace added.
 		Logger.getLogger(XmlConfigurationExample.class).info(dNamsSpace);
 

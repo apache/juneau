@@ -282,7 +282,7 @@ public class ResponseContent implements HttpEntity {
 						.mediaType(mt)
 						.schema(schema)
 						.build()
-						.parse(in, type);
+						.read(in, type);
 					// @formatter:on
 
 					// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.
@@ -318,7 +318,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Resolves a cursor return type ({@link RecordReader} / {@link TokenReader} or any subtype)
 	 * by negotiating the response Content-Type to a parser and calling its
-	 * {@code parseRecords(...)} / {@code parseTokens(...)} factory.
+	 * {@code readRecords(...)} / {@code readTokens(...)} factory.
 	 *
 	 * <p>
 	 * Implements two-layer resolution: the declared type filters eligible parsers (a concrete
@@ -354,8 +354,8 @@ public class ResponseContent implements HttpEntity {
 
 			Object input = matchedParser.isReaderParser() ? asReader() : asInputStream();
 			Object cursor = isToken
-				? ((TokenReadable) matchedParser).parseTokens(input)
-				: ((RecordReadable) matchedParser).parseRecords(input);
+				? ((TokenReadable) matchedParser).readTokens(input)
+				: ((RecordReadable) matchedParser).readRecords(input);
 
 			if (!type.inner().isInstance(cursor))
 				throw new RestCallException(response, null,

@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
 class CborSerializer_Test extends TestBase {
 
 	private static void test(Object input, String expected) throws Exception {
-		var b = CborSerializer.DEFAULT.serialize(input);
+		var b = CborSerializer.DEFAULT.write(input);
 		assertEquals(expected, toSpacedHex(b));
 	}
 
@@ -70,10 +70,10 @@ class CborSerializer_Test extends TestBase {
 	@Test
 	void a02_simpleBean() throws Exception {
 		var a = new Person();
-		var bytes = CborSerializer.DEFAULT.serialize(a);
+		var bytes = CborSerializer.DEFAULT.write(a);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
-		var parsed = CborParser.DEFAULT.parse(bytes, Person.class);
+		var parsed = CborParser.DEFAULT.read(bytes, Person.class);
 		assertEquals(a.name, parsed.name);
 		assertEquals(a.age, parsed.age);
 	}
@@ -81,8 +81,8 @@ class CborSerializer_Test extends TestBase {
 	@Test
 	void a03_roundTrip() throws Exception {
 		var a = new Person("Alice", 30);
-		var bytes = CborSerializer.DEFAULT.serialize(a);
-		var b = CborParser.DEFAULT.parse(bytes, Person.class);
+		var bytes = CborSerializer.DEFAULT.write(a);
+		var b = CborParser.DEFAULT.read(bytes, Person.class);
 		assertEquals("Alice", b.name);
 		assertEquals(30, b.age);
 	}
@@ -90,8 +90,8 @@ class CborSerializer_Test extends TestBase {
 	@Test
 	void c01_simpleBean() throws Exception {
 		var a = new Bean1("x", 42, true);
-		var bytes = CborSerializer.DEFAULT.serialize(a);
-		var b = CborParser.DEFAULT.parse(bytes, Bean1.class);
+		var bytes = CborSerializer.DEFAULT.write(a);
+		var b = CborParser.DEFAULT.read(bytes, Bean1.class);
 		assertEquals("x", b.s);
 		assertEquals(42, b.i);
 		assertTrue(b.b);
@@ -100,8 +100,8 @@ class CborSerializer_Test extends TestBase {
 	@Test
 	void c02_nestedBean() throws Exception {
 		var a = new Bean2("outer", new Bean1("inner", 1, false));
-		var bytes = CborSerializer.DEFAULT.serialize(a);
-		var b = CborParser.DEFAULT.parse(bytes, Bean2.class);
+		var bytes = CborSerializer.DEFAULT.write(a);
+		var b = CborParser.DEFAULT.read(bytes, Bean2.class);
 		assertEquals("outer", b.name);
 		assertEquals("inner", b.child.s);
 		assertEquals(1, b.child.i);
@@ -111,8 +111,8 @@ class CborSerializer_Test extends TestBase {
 	@Test
 	void c03_collectionOfBeans() throws Exception {
 		var list = list(new Bean1("a", 1, true), new Bean1("b", 2, false));
-		var bytes = CborSerializer.DEFAULT.serialize(list);
-		var parsed = CborParser.DEFAULT.parse(bytes, JsonList.class);
+		var bytes = CborSerializer.DEFAULT.write(list);
+		var parsed = CborParser.DEFAULT.read(bytes, JsonList.class);
 		assertEquals(2, parsed.size());
 		assertEquals("a", parsed.getMap(0).getString("s"));
 		assertEquals("b", parsed.getMap(1).getString("s"));
@@ -121,8 +121,8 @@ class CborSerializer_Test extends TestBase {
 	@Test
 	void c04_mapProperty() throws Exception {
 		var m = JsonMap.of("x", 1, "y", "z");
-		var bytes = CborSerializer.DEFAULT.serialize(m);
-		var parsed = CborParser.DEFAULT.parse(bytes, JsonMap.class);
+		var bytes = CborSerializer.DEFAULT.write(m);
+		var parsed = CborParser.DEFAULT.read(bytes, JsonMap.class);
 		assertEquals(1, parsed.getInt("x"));
 		assertEquals("z", parsed.getString("y"));
 	}
@@ -130,8 +130,8 @@ class CborSerializer_Test extends TestBase {
 	@Test
 	void c05_nullValues() throws Exception {
 		var m = JsonMap.of("a", 1, "b", null, "c", "x");
-		var bytes = CborSerializer.DEFAULT.serialize(m);
-		var parsed = CborParser.DEFAULT.parse(bytes, JsonMap.class);
+		var bytes = CborSerializer.DEFAULT.write(m);
+		var parsed = CborParser.DEFAULT.read(bytes, JsonMap.class);
 		assertEquals(1, parsed.getInt("a"));
 		assertNull(parsed.get("b"));
 		assertEquals("x", parsed.getString("c"));
@@ -167,34 +167,34 @@ class CborSerializer_Test extends TestBase {
 	@Test
 	void c10_binaryValues() throws Exception {
 		var data = new byte[] { 1, 2, 3 };
-		var bytes = CborSerializer.DEFAULT.serialize(data);
+		var bytes = CborSerializer.DEFAULT.write(data);
 		assertEquals("43 01 02 03", toSpacedHex(bytes));
-		var parsed = CborParser.DEFAULT.parse(bytes, byte[].class);
+		var parsed = CborParser.DEFAULT.read(bytes, byte[].class);
 		assertArrayEquals(data, parsed);
 	}
 
 	@Test
 	void c11_enumValues() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(Size.LARGE);
+		var bytes = CborSerializer.DEFAULT.write(Size.LARGE);
 		assertEquals("65 4C 41 52 47 45", toSpacedHex(bytes));
-		var parsed = CborParser.DEFAULT.parse(bytes, Size.class);
+		var parsed = CborParser.DEFAULT.read(bytes, Size.class);
 		assertEquals(Size.LARGE, parsed);
 	}
 
 	@Test
 	void c12_objectSwaps() throws Exception {
 		var s = CborSerializer.create().swaps(LowercaseStringSwap.class).build();
-		var bytes = s.serialize("SWAPPED");
+		var bytes = s.write("SWAPPED");
 		var p = CborParser.create().swaps(LowercaseStringSwap.class).build();
-		var parsed = p.parse(bytes, String.class);
+		var parsed = p.read(bytes, String.class);
 		assertEquals("swapped", parsed);
 	}
 
 	@Test
 	void c13_emptyBean() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(JsonMap.ofString("{}"));
+		var bytes = CborSerializer.DEFAULT.write(JsonMap.ofString("{}"));
 		assertEquals("A0", toSpacedHex(bytes));
-		var parsed = CborParser.DEFAULT.parse(bytes, JsonMap.class);
+		var parsed = CborParser.DEFAULT.read(bytes, JsonMap.class);
 		assertTrue(parsed.isEmpty());
 	}
 
@@ -207,10 +207,10 @@ class CborSerializer_Test extends TestBase {
 	@Test
 	void c15_typeName() throws Exception {
 		var s = CborSerializer.create().addBeanTypesCbor().addRootType().keepNullProperties().build();
-		var bytes = s.serialize(new Bean1("x", 1, true));
+		var bytes = s.write(new Bean1("x", 1, true));
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
-		var parsed = CborParser.DEFAULT.parse(bytes, Bean1.class);
+		var parsed = CborParser.DEFAULT.read(bytes, Bean1.class);
 		assertEquals("x", parsed.s);
 		assertEquals(1, parsed.i);
 	}
@@ -218,8 +218,8 @@ class CborSerializer_Test extends TestBase {
 	@Test
 	void c16_deeplyNestedBean() throws Exception {
 		var a = new NestedBean("a", new NestedBean("b", new NestedBean("c", null)));
-		var bytes = CborSerializer.DEFAULT.serialize(a);
-		var b = CborParser.DEFAULT.parse(bytes, NestedBean.class);
+		var bytes = CborSerializer.DEFAULT.write(a);
+		var b = CborParser.DEFAULT.read(bytes, NestedBean.class);
 		assertEquals("a", b.name);
 		assertEquals("b", b.child.name);
 		assertEquals("c", b.child.child.name);
@@ -234,8 +234,8 @@ class CborSerializer_Test extends TestBase {
 	@Test
 	void c18_collectionOfNumbers() throws Exception {
 		var list = list(1, 2.5, 3);
-		var bytes = CborSerializer.DEFAULT.serialize(list);
-		var parsed = CborParser.DEFAULT.parse(bytes, JsonList.class);
+		var bytes = CborSerializer.DEFAULT.write(list);
+		var parsed = CborParser.DEFAULT.read(bytes, JsonList.class);
 		assertEquals(3, parsed.size());
 		assertEquals(1, parsed.getInt(0));
 		assertEquals(2.5, ((Number)parsed.get(1)).doubleValue(), 0.001);
@@ -244,14 +244,14 @@ class CborSerializer_Test extends TestBase {
 
 	@Test
 	void c19_spacedHexOutput() throws Exception {
-		assertEquals(1, CborParser.DEFAULT_SPACED_HEX.parse(
-			CborSerializer.DEFAULT_SPACED_HEX.serialize(JsonMap.of("a", 1)), JsonMap.class).getInt("a"));
+		assertEquals(1, CborParser.DEFAULT_SPACED_HEX.read(
+			CborSerializer.DEFAULT_SPACED_HEX.write(JsonMap.of("a", 1)), JsonMap.class).getInt("a"));
 	}
 
 	@Test
 	void c20_base64Output() throws Exception {
-		assertEquals(1, CborParser.DEFAULT_BASE64.parse(
-			CborSerializer.DEFAULT_BASE64.serialize(JsonMap.of("a", 1)), JsonMap.class).getInt("a"));
+		assertEquals(1, CborParser.DEFAULT_BASE64.read(
+			CborSerializer.DEFAULT_BASE64.write(JsonMap.of("a", 1)), JsonMap.class).getInt("a"));
 	}
 
 	public static class Bean1 {

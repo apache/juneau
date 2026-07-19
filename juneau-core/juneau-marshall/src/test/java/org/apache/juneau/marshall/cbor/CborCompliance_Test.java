@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 class CborCompliance_Test extends TestBase {
 
 	private static void enc(Object o, String expected) throws Exception {
-		var b = CborSerializer.DEFAULT.serialize(o);
+		var b = CborSerializer.DEFAULT.write(o);
 		assertEquals(expected, toSpacedHex(b));
 	}
 
@@ -72,7 +72,7 @@ class CborCompliance_Test extends TestBase {
 
 	@Test
 	void g13_float_nan() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(Double.NaN);
+		var bytes = CborSerializer.DEFAULT.write(Double.NaN);
 		assertEquals(9, bytes.length);
 		assertEquals(0xFB, bytes[0] & 0xFF);
 	}

@@ -157,8 +157,8 @@ class MarshalledConfigAnnotation_Test extends TestBase {
 		check("text/foo", bs.getMediaType());
 		check("AB1<String,Integer>,AB2<String,Integer>,AB3<String,Integer>", bs.getSwaps());
 		check("GMT", bs.getTimeZone());
-		check("5000", bs.serialize(Duration.ofSeconds(5)));
-		check("\"3\"", bs.serialize(Period.ofDays(3)));
+		check("5000", bs.write(Duration.ofSeconds(5)));
+		check("\"3\"", bs.write(Period.ofDays(3)));
 		check("HEX", bc.getBinaryFormat());
 		check("ISO_INSTANT", bc.getCalendarFormat());
 		check("ISO_INSTANT", bc.getDateFormat());

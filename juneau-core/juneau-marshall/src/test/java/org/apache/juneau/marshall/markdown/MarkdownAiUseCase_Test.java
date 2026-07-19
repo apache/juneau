@@ -43,7 +43,7 @@ class MarkdownAiUseCase_Test {
 		var md = MarkdownDocSerializer.create()
 			.title("Dataset: " + dataset.name)
 			.build()
-			.serialize(dataset);
+			.write(dataset);
 
 		assertTrue(md.contains(dataset.name), "Expected dataset name: " + md);
 		assertTrue(md.contains(dataset.description), "Expected description: " + md);
@@ -73,7 +73,7 @@ class MarkdownAiUseCase_Test {
 			new User(2, "bob")
 		);
 
-		var md = MarkdownSerializer.DEFAULT.serialize(response);
+		var md = MarkdownSerializer.DEFAULT.write(response);
 
 		assertTrue(md.contains("200") || md.contains("status"), "Expected status: " + md);
 		assertTrue(md.contains("Success"), "Expected message: " + md);
@@ -111,7 +111,7 @@ class MarkdownAiUseCase_Test {
 			.title("Configuration Report")
 			.addHorizontalRules(true)
 			.build()
-			.serialize(config);
+			.write(config);
 
 		assertTrue(md.contains("# Configuration Report"), "Expected title: " + md);
 		assertTrue(md.contains("MyApp"), "Expected app name: " + md);
@@ -151,7 +151,7 @@ class MarkdownAiUseCase_Test {
 		var md = MarkdownDocSerializer.create()
 			.title("Error Report")
 			.build()
-			.serialize(error);
+			.write(error);
 
 		assertTrue(md.contains("ERR_CONNECTION_TIMEOUT"), "Expected error code: " + md);
 		assertTrue(md.contains("timed out"), "Expected message: " + md);

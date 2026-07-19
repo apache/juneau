@@ -50,7 +50,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// Value should still be SEMICOLON_DELIMITED.
 		var l = new LinkedList<>();
 		l.add(new BytesBean("a", new byte[]{1, 2, 3}));
-		var csv = ctx.serialize(l);
+		var csv = ctx.write(l);
 		assertTrue(csv.contains("1;2;3"), "Expected semicolon format retained: " + csv);
 	}
 
@@ -59,7 +59,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var s = CsvSerializer.create().nullValue(null).build();
 		var l = new LinkedList<>();
 		l.add(new SimpleBean(null, 1));
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("<NULL>"), "Expected default null marker: " + csv);
 	}
 
@@ -142,7 +142,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// Simple value path -> applySwap(value) -> isDate() branch (line 203).
 		var l = new LinkedList<Date>();
 		l.add(new Date(0));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.startsWith("value\n"), "Expected value header but was: " + csv);
 		assertEquals(2, csv.split("\n").length, "Expected header + 1 row: " + csv);
 	}
@@ -152,7 +152,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var l = new LinkedList<Calendar>();
 		var c = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		l.add(c);
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.startsWith("value\n"), "Expected value header: " + csv);
 	}
 
@@ -160,7 +160,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// applySwap -> isTemporal() branch (line 207).
 		var l = new LinkedList<Instant>();
 		l.add(Instant.ofEpochSecond(0));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.startsWith("value\n"), "Expected value header: " + csv);
 		assertTrue(csv.contains("1970"), "Expected ISO instant: " + csv);
 	}
@@ -169,7 +169,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// applySwap -> isDuration() branch (line 209).
 		var l = new LinkedList<Duration>();
 		l.add(Duration.ofSeconds(60));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.startsWith("value\n"), "Expected value header: " + csv);
 		assertTrue(csv.contains("PT1M") || csv.contains("60"), "Expected duration: " + csv);
 	}
@@ -178,7 +178,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// applySwap -> isPeriod() branch (line 211).
 		var l = new LinkedList<Period>();
 		l.add(Period.ofDays(7));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.startsWith("value\n"), "Expected value header: " + csv);
 		assertTrue(csv.contains("P7D") || csv.contains("7"), "Expected period: " + csv);
 	}
@@ -191,7 +191,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// Bean path: formatIfDateOrDuration on Date property (line 406).
 		var l = new LinkedList<>();
 		l.add(new DateBean("evt1", new Date(0)));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("evt1"));
 		assertTrue(csv.contains("1970") || csv.contains("1969"), "Expected formatted date: " + csv);
 	}
@@ -201,7 +201,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var l = new LinkedList<>();
 		var c = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		l.add(new CalendarBean("evt1", c));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("evt1"));
 	}
 
@@ -209,7 +209,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// formatIfDateOrDuration on Temporal property (line 410).
 		var l = new LinkedList<>();
 		l.add(new InstantBean("evt1", Instant.ofEpochSecond(0)));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("evt1"));
 		assertTrue(csv.contains("1970"), "Expected ISO instant: " + csv);
 	}
@@ -218,7 +218,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// formatIfDateOrDuration on Duration property (line 412).
 		var l = new LinkedList<>();
 		l.add(new DurationBean("evt1", Duration.ofSeconds(60)));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("evt1"));
 		assertTrue(csv.contains("PT1M"), "Expected ISO duration: " + csv);
 	}
@@ -231,7 +231,7 @@ class CsvSerializerSession_Test extends TestBase {
 		gc.setTimeInMillis(0);
 		var xmlGc = dtf.newXMLGregorianCalendar(gc);
 		l.add(new XmlCalBean("evt1", xmlGc));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("evt1"));
 	}
 
@@ -239,7 +239,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// formatIfDateOrDuration value == null branch (line 403-404).
 		var l = new LinkedList<>();
 		l.add(new DateBean("evt1", null));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("<NULL>"), "Expected null marker: " + csv);
 	}
 
@@ -247,7 +247,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// Exercises bean property dispatch for varied scalar types.
 		var l = new LinkedList<>();
 		l.add(new ScalarBean(1, 2L, true, 'c', new BigDecimal("1.23")));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("1"));
 		assertTrue(csv.contains("2"));
 		assertTrue(csv.contains("true"));
@@ -265,7 +265,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var l = new LinkedList<>();
 		l.add(new SimpleBean("x", 1));
 		l.add(new SimpleBean("y", 2));
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		// Header should include _type column.
 		var lines = csv.split("\n");
 		assertTrue(lines[0].contains("_type"), "Expected _type column header: " + csv);
@@ -277,7 +277,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var l = new LinkedList<SimpleBean>();
 		l.add(new SimpleBean("x", 1));
 		l.add(null);
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("_type"), "Expected _type column: " + csv);
 		assertTrue(csv.contains("<NULL>"), "Expected null cells for null row: " + csv);
 	}
@@ -290,7 +290,7 @@ class CsvSerializerSession_Test extends TestBase {
 		m1.put("a", 1);
 		m1.put("b", "x");
 		l.add(m1);
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("_type"), "Expected _type column: " + csv);
 	}
 
@@ -300,7 +300,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var l = new LinkedList<String>();
 		l.add("hello");
 		l.add(null);
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.startsWith("value"), "Expected value header: " + csv);
 		assertTrue(csv.contains("hello"));
 		assertTrue(csv.contains("<NULL>"), "Expected null marker: " + csv);
@@ -312,7 +312,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var l = new LinkedList<Integer>();
 		l.add(1);
 		l.add(2);
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.startsWith("value"), "Expected value header: " + csv);
 	}
 
@@ -322,25 +322,25 @@ class CsvSerializerSession_Test extends TestBase {
 
 	@Test void e01_emptyCollection_returnsEmpty() throws Exception {
 		// Hits ne(l) false (line 247) - empty collection produces empty output.
-		var csv = CsvSerializer.DEFAULT.serialize(new ArrayList<>());
+		var csv = CsvSerializer.DEFAULT.write(new ArrayList<>());
 		assertEquals("", csv);
 	}
 
 	@Test void e02_singletonCollection_singleBean() throws Exception {
-		var csv = CsvSerializer.DEFAULT.serialize(List.of(new SimpleBean("x", 1)));
+		var csv = CsvSerializer.DEFAULT.write(List.of(new SimpleBean("x", 1)));
 		assertEquals("b,c\nx,1\n", csv);
 	}
 
 	@Test void e03_singleBean_directObject() throws Exception {
 		// cm is bean -> wrapped in singleton (line 244).
-		var csv = CsvSerializer.DEFAULT.serialize(new SimpleBean("hello", 42));
+		var csv = CsvSerializer.DEFAULT.write(new SimpleBean("hello", 42));
 		assertEquals("b,c\nhello,42\n", csv);
 	}
 
 	@Test void e04_objectArray() throws Exception {
 		// cm.isArray() && componentType not primitive -> Object[] path (line 237).
 		var arr = new SimpleBean[]{new SimpleBean("x", 1), new SimpleBean("y", 2)};
-		var csv = CsvSerializer.DEFAULT.serialize(arr);
+		var csv = CsvSerializer.DEFAULT.write(arr);
 		assertTrue(csv.startsWith("b,c\n"), "Expected bean header: " + csv);
 		assertTrue(csv.contains("x,1"));
 		assertTrue(csv.contains("y,2"));
@@ -348,7 +348,7 @@ class CsvSerializerSession_Test extends TestBase {
 
 	@Test void e05_primitiveArray_intArray() throws Exception {
 		// cm.isArray() && componentType is primitive -> singletonList (line 235).
-		var csv = CsvSerializer.DEFAULT.serialize(new int[]{1, 2, 3});
+		var csv = CsvSerializer.DEFAULT.write(new int[]{1, 2, 3});
 		assertTrue(csv.startsWith("value\n"), "Expected value header: " + csv);
 		assertTrue(csv.contains("[1;2;3]"), "Expected formatted int array: " + csv);
 	}
@@ -356,7 +356,7 @@ class CsvSerializerSession_Test extends TestBase {
 	@Test void e06_streamable() throws Exception {
 		// cm.isStreamable() -> toListFromStreamable (line 242).
 		var stream = java.util.stream.Stream.of(new SimpleBean("a", 1), new SimpleBean("b", 2));
-		var csv = CsvSerializer.DEFAULT.serialize(stream);
+		var csv = CsvSerializer.DEFAULT.write(stream);
 		assertTrue(csv.startsWith("b,c\n"), "Expected bean header: " + csv);
 	}
 
@@ -365,23 +365,23 @@ class CsvSerializerSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void f01_cellWithComma_isQuoted() throws Exception {
-		var csv = CsvSerializer.DEFAULT.serialize(List.of(new SimpleBean("a,b", 1)));
+		var csv = CsvSerializer.DEFAULT.write(List.of(new SimpleBean("a,b", 1)));
 		assertTrue(csv.contains("\"a,b\""), "Expected quoted comma value: " + csv);
 	}
 
 	@Test void f02_cellWithQuote_isEscapedAndQuoted() throws Exception {
-		var csv = CsvSerializer.DEFAULT.serialize(List.of(new SimpleBean("a\"b", 1)));
+		var csv = CsvSerializer.DEFAULT.write(List.of(new SimpleBean("a\"b", 1)));
 		assertTrue(csv.contains("\"a\"\"b\""), "Expected RFC 4180 doubled quotes: " + csv);
 	}
 
 	@Test void f03_cellWithNewline_isQuoted() throws Exception {
-		var csv = CsvSerializer.DEFAULT.serialize(List.of(new SimpleBean("a\nb", 1)));
+		var csv = CsvSerializer.DEFAULT.write(List.of(new SimpleBean("a\nb", 1)));
 		assertTrue(csv.contains("\"a\nb\""), "Expected newline value quoted: " + csv);
 	}
 
 	@Test void f04_cellWithTab_passes() throws Exception {
 		// Tab is not a CSV special char; should pass through unquoted.
-		var csv = CsvSerializer.DEFAULT.serialize(List.of(new SimpleBean("a\tb", 1)));
+		var csv = CsvSerializer.DEFAULT.write(List.of(new SimpleBean("a\tb", 1)));
 		assertTrue(csv.contains("a\tb"), "Expected tab in value: " + csv);
 	}
 
@@ -393,7 +393,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// Bean property of float[] -> formatForCsvCell float[] branch (line 464).
 		var l = new LinkedList<>();
 		l.add(new FloatArrBean("a", new float[]{1.5f, 2.5f}));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("[1.5;2.5]"), "Expected float[] format: " + csv);
 	}
 
@@ -401,7 +401,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// Bean property of short[] -> formatForCsvCell short[] branch (line 474).
 		var l = new LinkedList<>();
 		l.add(new ShortArrBean("a", new short[]{1, 2, 3}));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("[1;2;3]"), "Expected short[] format: " + csv);
 	}
 
@@ -409,7 +409,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// Bean property of boolean[] -> formatForCsvCell boolean[] branch (line 484).
 		var l = new LinkedList<>();
 		l.add(new BoolArrBean("a", new boolean[]{true, false, true}));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("[true;false;true]"), "Expected boolean[] format: " + csv);
 	}
 
@@ -417,7 +417,7 @@ class CsvSerializerSession_Test extends TestBase {
 		// Bean property of char[] -> formatForCsvCell char[] branch (line 494).
 		var l = new LinkedList<>();
 		l.add(new CharArrBean("a", new char[]{'a', 'b'}));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		// char[] becomes [97;98] (numeric values).
 		assertTrue(csv.contains("[97;98]"), "Expected char[] numeric format: " + csv);
 	}
@@ -425,7 +425,7 @@ class CsvSerializerSession_Test extends TestBase {
 	@Test void g05_longArrayProperty() throws Exception {
 		var l = new LinkedList<>();
 		l.add(new LongArrBean("a", new long[]{10L, 20L}));
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("[10;20]"), "Expected long[] format: " + csv);
 	}
 
@@ -438,7 +438,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var s = CsvSerializer.create().allowNestedStructures(true).build();
 		var l = new LinkedList<>();
 		l.add(new ParentBean("p", new SimpleBean("c", 1)));
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("{") && csv.contains("}"), "Expected nested object syntax: " + csv);
 	}
 
@@ -448,7 +448,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var s = CsvSerializer.create().allowNestedStructures(true).build();
 		var l = new LinkedList<>();
 		l.add(new DateListBean("p", List.of(new Date(0))));
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("["), "Expected list syntax: " + csv);
 	}
 
@@ -458,7 +458,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var c = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		var l = new LinkedList<>();
 		l.add(new CalListBean("p", List.of(c)));
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("["), "Expected list syntax: " + csv);
 	}
 
@@ -467,7 +467,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var s = CsvSerializer.create().allowNestedStructures(true).build();
 		var l = new LinkedList<>();
 		l.add(new InstantListBean("p", List.of(Instant.ofEpochSecond(0))));
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("["), "Expected list syntax: " + csv);
 		assertTrue(csv.contains("1970"), "Expected ISO date: " + csv);
 	}
@@ -477,7 +477,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var s = CsvSerializer.create().allowNestedStructures(true).build();
 		var l = new LinkedList<>();
 		l.add(new DurationListBean("p", List.of(Duration.ofSeconds(60))));
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("["));
 		assertTrue(csv.contains("PT1M"));
 	}
@@ -487,7 +487,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var s = CsvSerializer.create().allowNestedStructures(true).build();
 		var l = new LinkedList<>();
 		l.add(new ParentBean("p", null));
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("<NULL>"), "Expected null marker: " + csv);
 	}
 
@@ -502,7 +502,7 @@ class CsvSerializerSession_Test extends TestBase {
 		m.put(null, "v1");
 		m.put("k", "v2");
 		l.add(m);
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("<NULL>"), "Expected null marker for null key: " + csv);
 		assertTrue(csv.contains("k"));
 	}
@@ -514,7 +514,7 @@ class CsvSerializerSession_Test extends TestBase {
 		m.put("a", null);
 		m.put("b", "x");
 		l.add(m);
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("<NULL>"), "Expected null marker: " + csv);
 		assertTrue(csv.contains("x"));
 	}
@@ -525,7 +525,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var l = new LinkedList<String>();
 		l.add("y");
 		l.add(null);
-		var csv = CsvSerializer.DEFAULT.serialize(l);
+		var csv = CsvSerializer.DEFAULT.write(l);
 		assertTrue(csv.contains("<NULL>"), "Expected null marker: " + csv);
 		assertTrue(csv.contains("y"));
 	}
@@ -536,7 +536,7 @@ class CsvSerializerSession_Test extends TestBase {
 		var l = new LinkedList<String>();
 		l.add("first");
 		l.add(null);
-		var csv = s.serialize(l);
+		var csv = s.write(l);
 		assertTrue(csv.contains("NIL"), "Expected custom null marker: " + csv);
 	}
 

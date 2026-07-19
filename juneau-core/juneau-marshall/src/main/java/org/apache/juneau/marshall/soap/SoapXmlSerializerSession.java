@@ -105,7 +105,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	public String getSoapAction() { return ctx.getSoapAction(); }
 
 	@Override /* Overridden from SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try (XmlWriter w = getXmlWriter(out)) {
 			// @formatter:off
 			w.append("<?xml")
@@ -118,7 +118,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 			w.sTag(1, "soap", "Body").nl(1);
 			indent += 2;
 			w.flush();
-			super.doSerialize(out, o);
+			super.doWrite(out, o);
 			w.ie(1).eTag("soap", "Body").nl(1);
 			w.eTag("soap", "Envelope").nl(0);
 			// @formatter:on

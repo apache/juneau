@@ -27,7 +27,7 @@ package org.apache.juneau.marshall.jena;
  * <p class='bjava'>
  * 	<jc>// Parse Turtle string into a bean.</jc>
  * 	String <jv>turtle</jv> = ...;  <jc>// Turtle content</jc>
- * 	Person <jv>person</jv> = TurtleParser.<jsf>DEFAULT</jsf>.parse(<jv>turtle</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = TurtleParser.<jsf>DEFAULT</jsf>.read(<jv>turtle</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the Turtle marshaller for convenience.</jc>
@@ -35,12 +35,12 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Parse into a list of beans.</jc>
- * 	List&lt;Person&gt; <jv>people</jv> = TurtleParser.<jsf>DEFAULT</jsf>.parse(<jv>turtle</jv>, List.<jk>class</jk>, Person.<jk>class</jk>);
+ * 	List&lt;Person&gt; <jv>people</jv> = TurtleParser.<jsf>DEFAULT</jsf>.read(<jv>turtle</jv>, List.<jk>class</jk>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>
  * 	TurtleParser <jv>p</jv> = TurtleParser.create().swaps(DateSwap.<jk>class</jk>).build();
- * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>turtle</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.read(<jv>turtle</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example input (bean with name/age):</h5>

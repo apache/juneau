@@ -230,7 +230,7 @@ class JsonSchemaRef_Test extends TestBase {
 	@Test void a11_output_basic() throws Exception {
 		var r = new JsonSchemaRef("http://example.com/schema");
 
-		String json = JsonSerializer.DEFAULT.serialize(r);
+		String json = JsonSerializer.DEFAULT.write(r);
 
 		assertTrue(json.contains("\"$ref\""));
 		assertTrue(json.contains("http://example.com/schema"));
@@ -349,7 +349,7 @@ class JsonSchemaRef_Test extends TestBase {
 			.setTitle("User Schema")
 			.setDescription("Schema for user objects");
 
-		String json = JsonSerializer.DEFAULT.serialize(r);
+		String json = JsonSerializer.DEFAULT.write(r);
 
 		assertTrue(json.contains("\"$ref\""));
 		assertTrue(json.contains("http://example.com/schema"));

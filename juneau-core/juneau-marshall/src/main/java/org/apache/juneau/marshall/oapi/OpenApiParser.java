@@ -110,10 +110,10 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		 * 		.build();
 		 *
 		 * 	<jc>// Parse CSV.</jc>
-		 * 	JsonList <jv>list1</jv> = <jv>parser1</jv>.parse(<js>"foo=bar,baz=qux\,true\,123"</js>, JsonList.<jk>class</jk>)
+		 * 	JsonList <jv>list1</jv> = <jv>parser1</jv>.read(<js>"foo=bar,baz=qux\,true\,123"</js>, JsonList.<jk>class</jk>)
 		 *
 		 * 	<jc>// Parse UON.</jc>
-		 * 	JsonList <jv>list2</jv> = <jv>parser2</jv>.parse(<js>"(foo=bar,baz=@(qux,true,123))"</js>, JsonList.<jk>class</jk>)
+		 * 	JsonList <jv>list2</jv> = <jv>parser2</jv>.read(<js>"(foo=bar,baz=@(qux,true,123))"</js>, JsonList.<jk>class</jk>)
 		 * </p>
 		 *
 		 * <ul class='values javatree'>
@@ -161,10 +161,10 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		 * 		.build();
 		 *
 		 * 	<jc>// Parse a plain-text string.</jc>
-		 * 	String <jv>value1</jv> = <jv>parser1</jv>.parse(<js>"foo bar"</js>);
+		 * 	String <jv>value1</jv> = <jv>parser1</jv>.read(<js>"foo bar"</js>);
 		 *
 		 * 	<jc>// Parse a UON string.</jc>
-		 * 	String <jv>value2</jv> = <jv>parser1</jv>.parse(<js>"'foo bar'"</js>);
+		 * 	String <jv>value2</jv> = <jv>parser1</jv>.read(<js>"'foo bar'"</js>);
 		 * </p>
 		 *
 		 * <ul class='values javatree'>

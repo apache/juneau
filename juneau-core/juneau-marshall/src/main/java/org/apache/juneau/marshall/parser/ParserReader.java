@@ -196,7 +196,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * @return The parsed number string.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public String parseNumberString() throws IOException {
+	public String readNumberString() throws IOException {
 		mark();
 		int c = 0;
 		while (true) {

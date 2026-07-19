@@ -48,5 +48,5 @@ public interface HttpPartParserSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
-	<T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException;
+	<T> T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException;
 }

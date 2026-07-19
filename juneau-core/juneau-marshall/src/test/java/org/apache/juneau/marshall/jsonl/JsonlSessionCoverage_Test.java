@@ -31,8 +31,8 @@ import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Coverage for the JSONL databind session paths ({@link JsonlParserSession#doParse} /
- * {@link JsonlSerializerSession#doSerialize}) and the {@link JsonlTokenWriter} structural surface
+ * Coverage for the JSONL databind session paths ({@link JsonlParserSession#doRead} /
+ * {@link JsonlSerializerSession#doWrite}) and the {@link JsonlTokenWriter} structural surface
  * and {@code forOutput} type dispatch not reached by the higher-level round-trip tests.
  */
 @SuppressWarnings({
@@ -48,45 +48,45 @@ class JsonlSessionCoverage_Test extends TestBase {
 	}
 
 	// =================================================================================
-	// A. JsonlParserSession.doParse
+	// A. JsonlParserSession.doRead
 	// =================================================================================
 
 	@Nested class A_parse extends TestBase {
 
 		@Test void a01_singleObject() throws Exception {
-			var b = JsonlParser.DEFAULT.parse("{\"x\":7}", Bean.class);
+			var b = JsonlParser.DEFAULT.read("{\"x\":7}", Bean.class);
 			assertBean(b, "x", "7");
 		}
 
 		@Test void a02_singleObjectSkipsLeadingBlankLines() throws Exception {
-			var b = JsonlParser.DEFAULT.parse("\n   \n{\"x\":9}\n", Bean.class);
+			var b = JsonlParser.DEFAULT.read("\n   \n{\"x\":9}\n", Bean.class);
 			assertBean(b, "x", "9");
 		}
 
 		@Test void a03_nullInputYieldsNull() throws Exception {
-			assertNull(JsonlParser.DEFAULT.parse((String) null, Bean.class));
+			assertNull(JsonlParser.DEFAULT.read((String) null, Bean.class));
 		}
 
 		@Test void a04_blankOnlyInputYieldsNull() throws Exception {
-			assertNull(JsonlParser.DEFAULT.parse("\n   \n", Bean.class));
+			assertNull(JsonlParser.DEFAULT.read("\n   \n", Bean.class));
 		}
 
 		@Test void a05_collectionOfRecords() throws Exception {
-			List<?> l = JsonlParser.DEFAULT.parse("{\"x\":1}\n{\"x\":2}", List.class, Bean.class);
+			List<?> l = JsonlParser.DEFAULT.read("{\"x\":1}\n{\"x\":2}", List.class, Bean.class);
 			assertEquals(2, l.size());
 			assertBean(l.get(0), "x", "1");
 			assertBean(l.get(1), "x", "2");
 		}
 
 		@Test void a06_arrayOfRecords() throws Exception {
-			var a = JsonlParser.DEFAULT.parse("{\"x\":3}\n{\"x\":4}", Bean[].class);
+			var a = JsonlParser.DEFAULT.read("{\"x\":3}\n{\"x\":4}", Bean[].class);
 			assertEquals(2, a.length);
 			assertBean(a[0], "x", "3");
 			assertBean(a[1], "x", "4");
 		}
 
 		@Test void a07_collectionSkipsEmbeddedBlankLines() throws Exception {
-			List<?> l = JsonlParser.DEFAULT.parse("{\"x\":1}\n\n   \n{\"x\":2}\n", List.class, Bean.class);
+			List<?> l = JsonlParser.DEFAULT.read("{\"x\":1}\n\n   \n{\"x\":2}\n", List.class, Bean.class);
 			assertEquals(2, l.size());
 			assertBean(l.get(0), "x", "1");
 			assertBean(l.get(1), "x", "2");
@@ -94,44 +94,44 @@ class JsonlSessionCoverage_Test extends TestBase {
 
 		@Test void a08_malformedSingleObjectPropagatesParseException() {
 			// A parse failure unwinds through the outer parser-reader try-with-resources (exception path).
-			assertThrows(ParseException.class, () -> JsonlParser.DEFAULT.parse("{bad", Bean.class));
+			assertThrows(ParseException.class, () -> JsonlParser.DEFAULT.read("{bad", Bean.class));
 		}
 
 		@Test void a09_malformedCollectionElementPropagatesParseException() {
-			assertThrows(ParseException.class, () -> JsonlParser.DEFAULT.parse("{\"x\":1}\n{bad", List.class, Bean.class));
+			assertThrows(ParseException.class, () -> JsonlParser.DEFAULT.read("{\"x\":1}\n{bad", List.class, Bean.class));
 		}
 	}
 
 	// =================================================================================
-	// B. JsonlSerializerSession.doSerialize
+	// B. JsonlSerializerSession.doWrite
 	// =================================================================================
 
 	@Nested class B_serialize extends TestBase {
 
 		@Test void b01_singleObject() throws Exception {
-			assertEquals("{\"x\":1}\n", JsonlSerializer.DEFAULT.serializeToString(new Bean(1)));
+			assertEquals("{\"x\":1}\n", JsonlSerializer.DEFAULT.writeToString(new Bean(1)));
 		}
 
 		@Test void b02_collection() throws Exception {
-			var out = JsonlSerializer.DEFAULT.serializeToString(List.of(new Bean(1), new Bean(2)));
+			var out = JsonlSerializer.DEFAULT.writeToString(List.of(new Bean(1), new Bean(2)));
 			assertEquals("{\"x\":1}\n{\"x\":2}\n", out);
 		}
 
 		@Test void b03_array() throws Exception {
-			var out = JsonlSerializer.DEFAULT.serializeToString(new Bean[]{new Bean(5), new Bean(6)});
+			var out = JsonlSerializer.DEFAULT.writeToString(new Bean[]{new Bean(5), new Bean(6)});
 			assertEquals("{\"x\":5}\n{\"x\":6}\n", out);
 		}
 
 		@Test void b04_streamable() throws Exception {
 			// A Stream is streamable (not a Collection/array) — exercises the forEachStreamableEntry branch.
 			Stream<Bean> stream = Stream.of(new Bean(7), new Bean(8));
-			var out = JsonlSerializer.DEFAULT.serializeToString(stream);
+			var out = JsonlSerializer.DEFAULT.writeToString(stream);
 			assertEquals("{\"x\":7}\n{\"x\":8}\n", out);
 		}
 
 		@Test void b05_nullValueUsesScalarBranch() throws Exception {
 			// Null has no collection/array/streamable ClassMeta — exercises the else (single-value) branch.
-			assertEquals("null\n", JsonlSerializer.DEFAULT.serializeToString(null));
+			assertEquals("null\n", JsonlSerializer.DEFAULT.writeToString(null));
 		}
 	}
 

@@ -28,7 +28,7 @@ class BsonArrayDebug_Test {
 	@Test
 	void dumpIntArrayBson() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().addBeanTypes().addRootType().build();
-		var bytes = s.serialize(ints(1, 2, 3));
+		var bytes = s.write(ints(1, 2, 3));
 		assertTrue(bytes.length > 0);
 	}
 
@@ -36,7 +36,7 @@ class BsonArrayDebug_Test {
 	void dumpJsonListBson() {
 		var s = BsonSerializer.create().keepNullProperties().addBeanTypes().addRootType().build();
 		var x = new org.apache.juneau.marshall.collections.JsonList("['abc',123]");
-		var bytes = s.serialize(x);
+		var bytes = s.write(x);
 		assertTrue(bytes.length > 0);
 	}
 }

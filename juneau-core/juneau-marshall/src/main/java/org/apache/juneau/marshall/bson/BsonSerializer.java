@@ -83,7 +83,7 @@ import org.apache.juneau.marshall.stream.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Serialize a POJO to BSON</jc>
- * 	byte[] <jv>bson</jv> = BsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someObject</jv>);
+ * 	byte[] <jv>bson</jv> = BsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
  *
  * 	<jc>// Create a serializer that writes dates as ISO 8601 strings instead of BSON datetime</jc>
  * 	BsonSerializer <jv>s</jv> = BsonSerializer.<jsm>create</jsm>().writeDatesAsDatetime(<jk>false</jk>).build();
@@ -347,30 +347,30 @@ public class BsonSerializer extends OutputStreamSerializer implements BsonMetaPr
 	/**
 	 * Convenience delegator for the whole-value {@link RecordWriter} using <b>default session
 	 * arguments</b>.  The real implementation lives on
-	 * {@link BsonSerializerSession#serializeRecords(Object)}.
+	 * {@link BsonSerializerSession#writeRecords(Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
-		return getSession().serializeRecords(output);
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return getSession().writeRecords(output);
 	}
 
 	/**
 	 * Convenience delegator for the buffered array-element {@link RecordWriter} using <b>default
 	 * session arguments</b>.  BSON's wire format requires the entire document byte-length up front
 	 * (length prefix at every nesting level), so streaming without buffering is not possible.  The
-	 * real implementation lives on {@link BsonSerializerSession#serializeArrayRecords(Object)}.
+	 * real implementation lives on {@link BsonSerializerSession#writeArrayRecords(Object)}.
 	 *
 	 * @param output The output.
 	 * @return A buffered {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* ArrayRecordWritable */
-	public RecordWriter serializeArrayRecords(Object output) throws IOException {
-		return getSession().serializeArrayRecords(output);
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
+		return getSession().writeArrayRecords(output);
 	}
 
 	/**

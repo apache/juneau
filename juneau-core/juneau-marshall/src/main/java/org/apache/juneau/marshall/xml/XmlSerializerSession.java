@@ -391,7 +391,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
-	private ContentResult serializeBeanMap(XmlWriter out, BeanMap<?> m, Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws SerializeException {
+	private ContentResult writeBeanMap(XmlWriter out, BeanMap<?> m, Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws SerializeException {
 		boolean hasChildren = false;
 		var bm = m.getMeta();
 
@@ -481,7 +481,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 					}
 
 					var bpXml = getXmlBeanPropertyMeta(pMeta);
-					serializeAnything(out, value, cMeta, key, null, bpXml.getNamespace(), false, bpXml.getXmlFormat(), isMixedOrText, false, pMeta);
+					writeAnything(out, value, cMeta, key, null, bpXml.getNamespace(), false, bpXml.getXmlFormat(), isMixedOrText, false, pMeta);
 				}
 			}
 		}
@@ -509,7 +509,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 					if (previousWasTextNode && currentIsTextNode && nn(textNodeDelimiter) && ! textNodeDelimiter.isEmpty()) {
 						out.append(textNodeDelimiter);
 					}
-					serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
+					writeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 					previousWasTextNode = currentIsTextNode;
 				}
 			} else if (contentType.isArray()) {
@@ -521,11 +521,11 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 					if (previousWasTextNode && currentIsTextNode && nn(textNodeDelimiter) && ! textNodeDelimiter.isEmpty()) {
 						out.append(textNodeDelimiter);
 					}
-					serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
+					writeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 					previousWasTextNode = currentIsTextNode;
 				}
 			} else {
-				serializeAnything(out, content, contentType, null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
+				writeAnything(out, content, contentType, null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 			}
 		} else {
 			if (isAddJsonTags())
@@ -535,7 +535,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		return isMixedOrText ? CR_MIXED : CR_ELEMENTS;
 	}
 
-	private XmlWriter serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws SerializeException {
+	private XmlWriter writeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws SerializeException {
 
 		var eeType = eType.getElementType();
 
@@ -563,14 +563,14 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 				out.append(textNodeDelimiter);
 			}
 
-			serializeAnything(out, x, eeType, null, eName.get(), eNs.get(), false, XmlFormat.DEFAULT, isMixed, false, null);
+			writeAnything(out, x, eeType, null, eName.get(), eNs.get(), false, XmlFormat.DEFAULT, isMixed, false, null);
 			previousWasTextNode.set(currentIsTextNode);
 		});
 
 		return out;
 	}
 
-	private XmlWriter serializeStreamable(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws SerializeException {
+	private XmlWriter writeStreamable(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws SerializeException {
 
 		var eeType = eType.getElementType();
 
@@ -592,14 +592,14 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 				out.append(textNodeDelimiter);
 			}
 
-			serializeAnything(out, x, eeType, null, eName.get(), eNs.get(), false, XmlFormat.DEFAULT, isMixed, false, null);
+			writeAnything(out, x, eeType, null, eName.get(), eNs.get(), false, XmlFormat.DEFAULT, isMixed, false, null);
 			previousWasTextNode.set(currentIsTextNode);
 		});
 
 		return out;
 	}
 
-	private ContentResult serializeMap(XmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws SerializeException {
+	private ContentResult writeMap(XmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws SerializeException {
 
 		var keyType = eKeyType == null ? sType.getKeyType() : eKeyType;
 		var valueType = eValueType == null ? sType.getValueType() : eValueType;
@@ -619,17 +619,17 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 			var value = e.getValue();
 
 			hasChildren.ifNotSet(() -> out.w('>').nlIf(! isMixed, indent)).set();
-			serializeAnything(out, value, valueType, toString(k), null, null, false, XmlFormat.DEFAULT, isMixed, false, null);
+			writeAnything(out, value, valueType, toString(k), null, null, false, XmlFormat.DEFAULT, isMixed, false, null);
 		});
 
 		return hasChildren.isSet() ? CR_ELEMENTS : CR_EMPTY;
 	}
 
 	@Override /* Overridden from Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
 		if (isEnableNamespaces() && isAutoDetectNamespaces())
 			findNsfMappings(o);
-		serializeAnything(getXmlWriter(out), o, getExpectedRootType(o), null, null, null, isEnableNamespaces() && isAddNamespaceUrisToRoot(), XmlFormat.DEFAULT, false, false, null);
+		writeAnything(getXmlWriter(out), o, getExpectedRootType(o), null, null, null, isEnableNamespaces() && isAddNamespaceUrisToRoot(), XmlFormat.DEFAULT, false, false, null);
 	}
 
 	/**
@@ -639,14 +639,14 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	 * Because XML's wire format (attributes, namespaces, mixed content) is non-trivial to expose
 	 * as a fine-grained token writer, this implementation supports only the cursor-level POJO
 	 * bridge &mdash; {@link RecordWriter#write(Object) write(Object)} delegates to
-	 * {@link SerializerSession#serialize(Object, Object)}.
+	 * {@link SerializerSession#write(Object, Object)}.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
 	@Override /* RecordWritable */
-	public RecordWriter serializeRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return RecordAdapter.writer(this, output);
 	}
 
@@ -834,7 +834,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 		"java:S107", // Method has many parameters; acceptable for builder/configuration methods
 	})
-	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
+	protected ContentResult writeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
 		boolean isMixedOrText, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {
 
 		JsonType type = null;              // The type string (e.g. <type> or <x x='type'>
@@ -1020,16 +1020,16 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		// Render the tag contents.
 		if (nn(o)) {
 			if (sType.isBean()) {
-				rc = serializeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixedOrText);
+				rc = writeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixedOrText);
 			} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
 				if (o instanceof BeanMap o2)
-					rc = serializeBeanMap(out, o2, elementNamespace, isCollapsed, isMixedOrText);
+					rc = writeBeanMap(out, o2, elementNamespace, isCollapsed, isMixedOrText);
 				else
-					rc = serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixedOrText);
+					rc = writeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixedOrText);
 			} else if (sType.isCollection() || sType.isArray() || (nn(wType) && (wType.isCollection() || wType.isArray()))) {
 				if (isCollapsed)
 					indent--;
-				serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);
+				writeCollection(out, o, sType, eType, pMeta, isMixedOrText);
 				if (isCollapsed)
 					indent++;
 			} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
@@ -1043,19 +1043,19 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 			} else if (sType.isNumber() || sType.isBoolean()) {
 				out.append(o);
 			} else if (sType.isDate()) {
-				out.text(serializeDate((Date)o, sType));
+				out.text(writeDate((Date)o, sType));
 			} else if (sType.isCalendar()) {
-				out.text(serializeCalendar(o, sType));
+				out.text(writeCalendar(o, sType));
 			} else if (sType.isTemporal()) {
-				out.text(serializeTemporal((TemporalAccessor)o, sType));
+				out.text(writeTemporal((TemporalAccessor)o, sType));
 			} else if (sType.isDuration()) {
-				out.text(serializeDuration((Duration)o));
+				out.text(writeDuration((Duration)o));
 			} else if (sType.isPeriod()) {
-				out.text(serializePeriod((Period)o));
+				out.text(writePeriod((Period)o));
 			} else if (sType.isStreamable()) {
 				if (isCollapsed)
 					indent--;
-				serializeStreamable(out, o, sType, eType, pMeta, isMixedOrText);
+				writeStreamable(out, o, sType, eType, pMeta, isMixedOrText);
 				if (isCollapsed)
 					indent++;
 			} else if (sType.isReader()) {

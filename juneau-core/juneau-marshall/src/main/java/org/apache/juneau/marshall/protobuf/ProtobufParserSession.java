@@ -100,18 +100,18 @@ public class ProtobufParserSession extends InputStreamParserSession {
 	}
 
 	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		var is = new ProtobufReader(pipe.getInputStream());
 		if (! type.isBean())
 			throw new ParseException(this, "Protobuf binary parsing requires a bean target type, but got '%s'", cn(type.inner()));
-		return (T)parseMessage(type, is, getOuter());
+		return (T)readMessage(type, is, getOuter());
 	}
 
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for the tag-loop dispatch
 		"java:S6541"  // Brain method acceptable for the parse workhorse
 	})
-	private Object parseMessage(ClassMeta<?> type, ProtobufReader is, Object outer) throws IOException, ParseException, ExecutableException {
+	private Object readMessage(ClassMeta<?> type, ProtobufReader is, Object outer) throws IOException, ParseException, ExecutableException {
 		var pcm = ctx.getProtobufClassMeta(type);
 		var m = newBeanMap(outer, type.inner());
 
@@ -149,13 +149,13 @@ public class ProtobufParserSession extends InputStreamParserSession {
 					if (elSwap != null)
 						list.add(decodeSwapped(elSwap, elType, is, m.getBean(false)));
 					else if (elType.isBean() || elType.isMap())
-						list.add(parseMessage(elType, new ProtobufReader(is.readLenDelimited()), m.getBean(false)));
+						list.add(readMessage(elType, new ProtobufReader(is.readLenDelimited()), m.getBean(false)));
 					else
 						list.add(decodeScalar(entry.scalarType(), elType, is));
 				}
 				case MAP -> {
 					var map = maps.computeIfAbsent(fn, k -> new LinkedHashMap<>());
-					parseMapEntry(entry.propertyType(), new ProtobufReader(is.readLenDelimited()), map);
+					readMapEntry(entry.propertyType(), new ProtobufReader(is.readLenDelimited()), map);
 				}
 			}
 		}
@@ -201,7 +201,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 		if (swap != null)
 			return decodeSwapped(swap, declaredType, is, outer);
 		if (declaredScalar == ProtobufScalarType.AUTO)
-			return parseMessage(declaredType, new ProtobufReader(is.readLenDelimited()), outer);
+			return readMessage(declaredType, new ProtobufReader(is.readLenDelimited()), outer);
 		return decodeScalar(declaredScalar, declaredType, is);
 	}
 
@@ -220,7 +220,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 		var sType = swap.getSwapClassMeta(this);
 		Object sval;
 		if (sType.isBean() || sType.isMap())
-			sval = parseMessage(sType, new ProtobufReader(is.readLenDelimited()), outer);
+			sval = readMessage(sType, new ProtobufReader(is.readLenDelimited()), outer);
 		else
 			sval = decodeScalar(ProtobufClassMeta.defaultScalarType(sType), sType, is);
 		return unswap(swap, sval, declaredType);
@@ -275,19 +275,19 @@ public class ProtobufParserSession extends InputStreamParserSession {
 
 	private Object decodeString(ClassMeta<?> cm, String s) throws ParseException {
 		if (cm.isDate())
-			return parseDate(s, cm);
+			return readDate(s, cm);
 		if (cm.isCalendar())
-			return parseCalendar(s, cm);
+			return readCalendar(s, cm);
 		if (cm.isTemporal())
-			return parseTemporal(s, cm);
+			return readTemporal(s, cm);
 		if (cm.isDuration())
-			return parseDuration(s);
+			return readDuration(s);
 		if (cm.isPeriod())
-			return parsePeriod(s);
+			return readPeriod(s);
 		return s;
 	}
 
-	private void parseMapEntry(ClassMeta<?> mapType, ProtobufReader is, Map map) throws IOException, ParseException, ExecutableException {
+	private void readMapEntry(ClassMeta<?> mapType, ProtobufReader is, Map map) throws IOException, ParseException, ExecutableException {
 		var keyType = mapType.getKeyType();
 		var valueType = mapType.getValueType();
 		Object key = null;
@@ -311,7 +311,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 		if (swap != null)
 			return decodeSwapped(swap, cm, is, null);
 		if (cm.isBean() || cm.isMap())
-			return parseMessage(cm, new ProtobufReader(is.readLenDelimited()), null);
+			return readMessage(cm, new ProtobufReader(is.readLenDelimited()), null);
 		return decodeScalar(ProtobufClassMeta.defaultScalarType(cm), cm, is);
 	}
 }

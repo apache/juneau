@@ -75,7 +75,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<jv>map</jv> = JsonMap.<jsm>ofString</jsm>(<js>"{foo:'bar'},{baz:[123,true]}"</js>);
  * 	String <jv>json</jv> = <jv>map</jv>.toString();  <jc>// Produces "{foo:'bar'},{baz:[123,true]}"</jc>
  * 	<jv>json</jv> = <jv>map</jv>.toString(JsonSerializer.<jsf>DEFAULT</jsf>);  <jc>// Equivalent</jc>
- * 	<jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);  <jc>// Equivalent</jc>
+ * 	<jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>map</jv>);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Get a map entry as an Integer</jc>
  * 	<jv>map</jv> = JsonMap.<jsm>ofString</jsm>(<js>"{foo:123}"</js>);

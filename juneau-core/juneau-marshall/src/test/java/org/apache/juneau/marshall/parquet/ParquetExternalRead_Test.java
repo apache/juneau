@@ -66,8 +66,8 @@ class ParquetExternalRead_Test extends TestBase {
 	void a01_multiPageRoundTrip() throws Exception {
 		var in = sample(200);
 		var ser = ParquetSerializer.create().pageSize(1024).build();
-		var bytes = ser.serialize(in);
-		var out = (List<Rec>) ParquetParser.DEFAULT.parse(bytes, List.class, Rec.class);
+		var bytes = ser.write(in);
+		var out = (List<Rec>) ParquetParser.DEFAULT.read(bytes, List.class, Rec.class);
 		assertEquals(200, out.size());
 		assertEquals(0, out.get(0).id);
 		assertEquals("name-0", out.get(0).name);
@@ -83,8 +83,8 @@ class ParquetExternalRead_Test extends TestBase {
 	void b01_multiRowGroupRoundTrip() throws Exception {
 		var in = sample(300);
 		var ser = ParquetSerializer.create().rowGroupSize(2048).build();
-		var bytes = ser.serialize(in);
-		var out = (List<Rec>) ParquetParser.DEFAULT.parse(bytes, List.class, Rec.class);
+		var bytes = ser.write(in);
+		var out = (List<Rec>) ParquetParser.DEFAULT.read(bytes, List.class, Rec.class);
 		assertEquals(300, out.size());
 		for (var i = 0; i < 300; i++) {
 			assertEquals(i, out.get(i).id);
@@ -96,8 +96,8 @@ class ParquetExternalRead_Test extends TestBase {
 	void b02_multiPageAndMultiRowGroup() throws Exception {
 		var in = sample(500);
 		var ser = ParquetSerializer.create().pageSize(1024).rowGroupSize(4096).build();
-		var bytes = ser.serialize(in);
-		var out = (List<Rec>) ParquetParser.DEFAULT.parse(bytes, List.class, Rec.class);
+		var bytes = ser.write(in);
+		var out = (List<Rec>) ParquetParser.DEFAULT.read(bytes, List.class, Rec.class);
 		assertEquals(500, out.size());
 		assertEquals(250, out.get(250).id);
 		assertEquals("name-499", out.get(499).name);

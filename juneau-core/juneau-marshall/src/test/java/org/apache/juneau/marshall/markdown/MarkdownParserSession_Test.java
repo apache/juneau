@@ -45,7 +45,7 @@ class MarkdownParserSession_Test extends TestBase {
 	})
 	void a01_bulletListAsterisk() {
 		var md = "* alpha\n* beta\n* gamma";
-		var r = (List<String>) MarkdownParser.DEFAULT.parse(md, List.class, String.class);
+		var r = (List<String>) MarkdownParser.DEFAULT.read(md, List.class, String.class);
 		assertEquals(List.of("alpha", "beta", "gamma"), r);
 	}
 
@@ -55,7 +55,7 @@ class MarkdownParserSession_Test extends TestBase {
 	})
 	void a02_bulletListPlus() {
 		var md = "+ one\n+ two";
-		var r = (List<String>) MarkdownParser.DEFAULT.parse(md, List.class, String.class);
+		var r = (List<String>) MarkdownParser.DEFAULT.read(md, List.class, String.class);
 		assertEquals(List.of("one", "two"), r);
 	}
 
@@ -66,7 +66,7 @@ class MarkdownParserSession_Test extends TestBase {
 	void a03_bulletListEmptyMarkers() {
 		// Bare "-", "*", "+" markers should produce empty-string entries.
 		var md = "- a\n-\n- b";
-		var r = (List<String>) MarkdownParser.DEFAULT.parse(md, List.class, String.class);
+		var r = (List<String>) MarkdownParser.DEFAULT.read(md, List.class, String.class);
 		assertEquals(3, r.size());
 		assertEquals("a", r.get(0));
 		assertEquals("", r.get(1));
@@ -75,16 +75,16 @@ class MarkdownParserSession_Test extends TestBase {
 
 	@Test void a04_bulletListToArray() {
 		var md = "* x\n* y";
-		var r = MarkdownParser.DEFAULT.parse(md, String[].class);
+		var r = MarkdownParser.DEFAULT.read(md, String[].class);
 		assertArrayEquals(new String[]{"x", "y"}, r);
 	}
 
 	@Test void a05_bulletListToCustomCollection() {
-		// Exercise the canCreateNewInstance(outer) branch in parseBulletList for a concrete List type.
+		// Exercise the canCreateNewInstance(outer) branch in readBulletList for a concrete List type.
 		@SuppressWarnings({
 			"unchecked"  // Unchecked cast required for generic test utility.
 		})
-		var r = (LinkedList<String>) MarkdownParser.DEFAULT.parse("- a\n- b", LinkedList.class, String.class);
+		var r = (LinkedList<String>) MarkdownParser.DEFAULT.read("- a\n- b", LinkedList.class, String.class);
 		assertEquals(2, r.size());
 		assertEquals("a", r.getFirst());
 	}
@@ -95,7 +95,7 @@ class MarkdownParserSession_Test extends TestBase {
 	})
 	void a06_bulletListNullValues() {
 		var md = "- foo\n- *null*\n- bar";
-		var r = (List<String>) MarkdownParser.DEFAULT.parse(md, List.class, String.class);
+		var r = (List<String>) MarkdownParser.DEFAULT.read(md, List.class, String.class);
 		assertEquals(3, r.size());
 		assertEquals("foo", r.get(0));
 		assertNull(r.get(1));
@@ -107,27 +107,27 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@ParameterizedTest
-	@MethodSource("b01_parsesToNullProvider")
-	void b01_parsesToNull(String input, Class<?> type) {
-		assertNull(MarkdownParser.DEFAULT.parse(input, type));
+	@MethodSource("b01_readsToNullProvider")
+	void b01_readsToNull(String input, Class<?> type) {
+		assertNull(MarkdownParser.DEFAULT.read(input, type));
 	}
 
-	static Stream<Arguments> b01_parsesToNullProvider() {
+	static Stream<Arguments> b01_readsToNullProvider() {
 		return Stream.of(
 			Arguments.of("\n   \n\t\n", Map.class),                   // b01: blank lines only
 			Arguments.of("*null*", MarkdownParser_Test.A.class),      // b06: "*null*" plain value to non-string type
-			Arguments.of("", MarkdownParser_Test.A.class),            // o01: empty input for non-string type (parseAnything null branch)
+			Arguments.of("", MarkdownParser_Test.A.class),            // o01: empty input for non-string type (readAnything null branch)
 			Arguments.of("   \n  \n  ", MarkdownParser_Test.A.class)  // o03: blank lines only for non-string type
 		);
 	}
 
 	@ParameterizedTest
-	@MethodSource("b02_parseToStringProvider")
-	void b02_parseToString(String input, String expected) {
-		assertEquals(expected, MarkdownParser.DEFAULT.parse(input, String.class));
+	@MethodSource("b02_readToStringProvider")
+	void b02_readToString(String input, String expected) {
+		assertEquals(expected, MarkdownParser.DEFAULT.read(input, String.class));
 	}
 
-	static Stream<Arguments> b02_parseToStringProvider() {
+	static Stream<Arguments> b02_readToStringProvider() {
 		return Stream.of(
 			Arguments.of("", ""),
 			Arguments.of("   \n  ", ""),
@@ -136,7 +136,7 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test void b05_plainTextToInteger() {
-		var r = MarkdownParser.DEFAULT.parse("42", Integer.class);
+		var r = MarkdownParser.DEFAULT.read("42", Integer.class);
 		assertEquals(42, r);
 	}
 
@@ -147,7 +147,7 @@ class MarkdownParserSession_Test extends TestBase {
 	@Test void c01_tableNoDataRows() {
 		// Header + separator only → empty bean (all defaults).
 		var md = "| Property | Value |\n|---|---|";
-		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
+		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.A.class);
 		assertNotNull(r);
 		assertNull(r.name);
 		assertEquals(0, r.age);
@@ -157,14 +157,14 @@ class MarkdownParserSession_Test extends TestBase {
 		// Only a separator with no |-prefixed lines → null result for tables.
 		// Use plain text that does not start with | - Markdown parser should handle it as text.
 		var md = "  ---\n";
-		var r = MarkdownParser.DEFAULT.parse(md, String.class);
+		var r = MarkdownParser.DEFAULT.read(md, String.class);
 		assertEquals("---", r);
 	}
 
 	@Test void c03_keyHeaderVariant() {
 		// "Key"/"Value" headers should also be detected as a key/value table.
 		var md = "| Key | Value |\n|---|---|\n| name | Bob |\n| age | 25 |";
-		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
+		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.A.class);
 		assertEquals("Bob", r.name);
 		assertEquals(25, r.age);
 	}
@@ -172,7 +172,7 @@ class MarkdownParserSession_Test extends TestBase {
 	@Test void c04_tableEmptyHeaderCells() {
 		// A row with empty headers should produce an empty result.
 		var md = "|  |  |\n|---|---|\n| a | b |";
-		var r = MarkdownParser.DEFAULT.parse(md, Map.class);
+		var r = MarkdownParser.DEFAULT.read(md, Map.class);
 		// With empty headers we still get a map keyed by "".
 		assertNotNull(r);
 	}
@@ -184,7 +184,7 @@ class MarkdownParserSession_Test extends TestBase {
 	void c05_multiColumnAllNullRow() {
 		// A row of all *null*/empty cells should yield a null entry in the list.
 		var md = "| name | age |\n|---|---|\n| *null* | *null* |\n| Alice | 30 |";
-		var r = (List<MarkdownParser_Test.B>) MarkdownParser.DEFAULT.parse(md, List.class, MarkdownParser_Test.B.class);
+		var r = (List<MarkdownParser_Test.B>) MarkdownParser.DEFAULT.read(md, List.class, MarkdownParser_Test.B.class);
 		assertEquals(2, r.size());
 		assertNull(r.get(0));
 		assertEquals("Alice", r.get(1).name);
@@ -197,7 +197,7 @@ class MarkdownParserSession_Test extends TestBase {
 	void c06_multiColumnToObject() {
 		// Multi-column with isObject() target → ArrayList of MarshalledMaps.
 		var md = "| name | age |\n|---|---|\n| Alice | 30 |";
-		var r = (List<Map<String,Object>>) MarkdownParser.DEFAULT.parse(md, Object.class);
+		var r = (List<Map<String,Object>>) MarkdownParser.DEFAULT.read(md, Object.class);
 		assertEquals(1, r.size());
 		assertEquals("Alice", r.get(0).get("name"));
 		assertEquals(30, r.get(0).get("age"));
@@ -206,7 +206,7 @@ class MarkdownParserSession_Test extends TestBase {
 	@Test void c07_multiColumnSingleBean() {
 		// Multi-column with a non-list/array bean target → parses just the first row.
 		var md = "| name | age |\n|---|---|\n| Alice | 30 |\n| Bob | 25 |";
-		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.B.class);
+		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.B.class);
 		assertEquals("Alice", r.name);
 		assertEquals(30, r.age);
 	}
@@ -214,7 +214,7 @@ class MarkdownParserSession_Test extends TestBase {
 	@Test void c08_multiColumnSingleBeanNoRows() {
 		// Single-bean target with no data rows → null.
 		var md = "| name | age |\n|---|---|";
-		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.B.class);
+		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.B.class);
 		assertNull(r);
 	}
 
@@ -224,21 +224,21 @@ class MarkdownParserSession_Test extends TestBase {
 
 	@Test void d01_autoDetectLong() {
 		var md = "| Property | Value |\n|---|---|\n| big | 9999999999 |";
-		var r = (Map<?,?>) MarkdownParser.DEFAULT.parse(md, Object.class);
+		var r = (Map<?,?>) MarkdownParser.DEFAULT.read(md, Object.class);
 		assertEquals(9999999999L, r.get("big"));
 		assertInstanceOf(Long.class, r.get("big"));
 	}
 
 	@Test void d02_autoDetectDouble() {
 		var md = "| Property | Value |\n|---|---|\n| pi | 3.14 |";
-		var r = (Map<?,?>) MarkdownParser.DEFAULT.parse(md, Object.class);
+		var r = (Map<?,?>) MarkdownParser.DEFAULT.read(md, Object.class);
 		assertEquals(3.14, r.get("pi"));
 		assertInstanceOf(Double.class, r.get("pi"));
 	}
 
 	@Test void d03_autoDetectFalse() {
 		var md = "| Property | Value |\n|---|---|\n| flag | false |";
-		var r = (Map<?,?>) MarkdownParser.DEFAULT.parse(md, Object.class);
+		var r = (Map<?,?>) MarkdownParser.DEFAULT.read(md, Object.class);
 		assertEquals(Boolean.FALSE, r.get("flag"));
 	}
 
@@ -248,18 +248,18 @@ class MarkdownParserSession_Test extends TestBase {
 		@SuppressWarnings({
 			"unchecked"  // Unchecked cast required for generic test utility.
 		})
-		var r = (List<MarkdownParser_Test.B>) MarkdownParser.DEFAULT.parse(md, List.class, MarkdownParser_Test.B.class);
+		var r = (List<MarkdownParser_Test.B>) MarkdownParser.DEFAULT.read(md, List.class, MarkdownParser_Test.B.class);
 		assertEquals(1, r.size());
 		assertEquals("", r.get(0).name);
 	}
 
 	@ParameterizedTest
-	@MethodSource("d05_parseThrowsProvider")
-	void d05_parseThrows(String md, Class<? extends Throwable> expected, Class<?> type) {
-		assertThrows(expected, () -> MarkdownParser.DEFAULT.parse(md, type));
+	@MethodSource("d05_readThrowsProvider")
+	void d05_readThrows(String md, Class<? extends Throwable> expected, Class<?> type) {
+		assertThrows(expected, () -> MarkdownParser.DEFAULT.read(md, type));
 	}
 
-	static Stream<Arguments> d05_parseThrowsProvider() {
+	static Stream<Arguments> d05_readThrowsProvider() {
 		return Stream.of(
 			// d05: invalid JSON5 inside backticks → ParseException
 			Arguments.of("| Property | Value |\n|---|---|\n| addr | `{this is not json5` |", ParseException.class, MarkdownParser_Test.D.class),
@@ -276,12 +276,12 @@ class MarkdownParserSession_Test extends TestBase {
 	// e - Optional element handling (isOptional branch)
 	//====================================================================================================
 
-	@Test void e01_parseOptionalString() {
+	@Test void e01_readOptionalString() {
 		var md = "hello";
 		@SuppressWarnings({
 			"unchecked"  // Unchecked cast required for generic test utility.
 		})
-		var r = (Optional<String>) MarkdownParser.DEFAULT.parse(md, Optional.class, String.class);
+		var r = (Optional<String>) MarkdownParser.DEFAULT.read(md, Optional.class, String.class);
 		assertNotNull(r);
 		assertTrue(r.isPresent());
 		assertEquals("hello", r.get());
@@ -298,7 +298,7 @@ class MarkdownParserSession_Test extends TestBase {
 	void f01_keyValueToTreeMap() throws Exception {
 		// Concrete Map type that canCreateNewInstance — exercises eType.newInstance() branch.
 		var md = "| Property | Value |\n|---|---|\n| b | 2 |\n| a | 1 |";
-		var r = (TreeMap<String,Integer>) MarkdownParser.DEFAULT.parse(md, TreeMap.class, String.class, Integer.class);
+		var r = (TreeMap<String,Integer>) MarkdownParser.DEFAULT.read(md, TreeMap.class, String.class, Integer.class);
 		assertEquals(2, r.size());
 		assertEquals(1, r.get("a"));
 		assertEquals(2, r.get("b"));
@@ -311,9 +311,9 @@ class MarkdownParserSession_Test extends TestBase {
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
 	void f02_multiColumnToTreeMap() {
-		// Single-row multi-column → Map element. Exercises parseRow's isMap() branch.
+		// Single-row multi-column → Map element. Exercises readRow's isMap() branch.
 		var md = "| k1 | k2 |\n|---|---|\n| v1 | v2 |";
-		var r = (List<Map<String,String>>) MarkdownParser.DEFAULT.parse(md, List.class, TreeMap.class, String.class, String.class);
+		var r = (List<Map<String,String>>) MarkdownParser.DEFAULT.read(md, List.class, TreeMap.class, String.class, String.class);
 		assertEquals(1, r.size());
 		assertEquals("v1", r.get(0).get("k1"));
 		assertEquals("v2", r.get(0).get("k2"));
@@ -327,7 +327,7 @@ class MarkdownParserSession_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("g01_escapedCellValueProvider")
 	void g01_escapedCellValue(String md, String key, String expected) {
-		var r = MarkdownParser.DEFAULT.parse(md, Map.class);
+		var r = MarkdownParser.DEFAULT.read(md, Map.class);
 		assertEquals(expected, r.get(key));
 	}
 
@@ -360,7 +360,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// _type row in a 2-column key/value table should resolve via bean dictionary.
 		var p = MarkdownParser.create().beanDictionary(HA.class, HB.class).build();
 		var md = "| Property | Value |\n|---|---|\n| _type | ha |\n| name | Alice |\n| age | 30 |";
-		var r = p.parse(md, Object.class);
+		var r = p.read(md, Object.class);
 		assertInstanceOf(HA.class, r);
 		assertEquals("Alice", ((HA)r).name);
 		assertEquals(30, ((HA)r).age);
@@ -374,7 +374,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// _type column in multi-column table is recognized and skipped from output map keys.
 		var p = MarkdownParser.create().beanDictionary(HA.class, HB.class).build();
 		var md = "| _type | name | age |\n|---|---|---|\n| ha | Alice | 30 |";
-		var r = (List<Map<String,Object>>) p.parse(md, List.class, Object.class);
+		var r = (List<Map<String,Object>>) p.read(md, List.class, Object.class);
 		assertEquals(1, r.size());
 		// _type column should be filtered out of the resulting map keys.
 		assertFalse(r.get(0).containsKey("_type"));
@@ -410,7 +410,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// Swap forces the JSON5 path through keyValueTableToJson5/cellToJson5.
 		var p = MarkdownParser.create().swaps(UpperCaseSwap.class).build();
 		var md = "| Property | Value |\n|---|---|\n| name | Alice |\n| wrapped | hello |";
-		var r = p.parse(md, IBean.class);
+		var r = p.read(md, IBean.class);
 		assertEquals("Alice", r.name);
 		assertNotNull(r.wrapped);
 		assertEquals("HELLO", r.wrapped.value);
@@ -443,7 +443,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// Top-level type has a swap explicitly registered → needsJson5Path returns true → keyValueTableToJson5 path is hit.
 		var p = MarkdownParser.create().swaps(IBeanMapSwap.class).build();
 		var md = "| Property | Value |\n|---|---|\n| name | Alice |\n| count | 7 |";
-		var r = p.parse(md, IBeanWithSwap.class);
+		var r = p.read(md, IBeanWithSwap.class);
 		assertNotNull(r);
 		assertEquals("Alice", r.name);
 		assertEquals(7, r.count);
@@ -454,10 +454,10 @@ class MarkdownParserSession_Test extends TestBase {
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
 	void i03_topLevelSwapMultiColumnTable() {
-		// Same swap exercised through parseRow's needsJson5Path branch (rowToJson5).
+		// Same swap exercised through readRow's needsJson5Path branch (rowToJson5).
 		var p = MarkdownParser.create().swaps(IBeanMapSwap.class).build();
 		var md = "| name | count |\n|---|---|\n| Alice | 3 |\n| Bob | 5 |";
-		var r = (List<IBeanWithSwap>) p.parse(md, List.class, IBeanWithSwap.class);
+		var r = (List<IBeanWithSwap>) p.read(md, List.class, IBeanWithSwap.class);
 		assertEquals(2, r.size());
 		assertEquals("Alice", r.get(0).name);
 		assertEquals(3, r.get(0).count);
@@ -470,7 +470,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// Swap is explicitly registered so keyValueTableToJson5 path is taken.
 		var p = MarkdownParser.create().swaps(IBeanMapSwap.class).build();
 		var md = "| Property | Value |\n|---|---|\n| name | `'Alice'` |\n| count | 12 |";
-		var r = p.parse(md, IBeanWithSwap.class);
+		var r = p.read(md, IBeanWithSwap.class);
 		assertNotNull(r);
 		assertEquals("Alice", r.name);
 		assertEquals(12, r.count);
@@ -481,7 +481,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// Swap explicitly registered so keyValueTableToJson5 path is taken.
 		var p = MarkdownParser.create().swaps(IBeanMapSwap.class).build();
 		var md = "| Property | Value |\n|---|---|\n| name | *null* |\n| count | 0 |";
-		var r = p.parse(md, IBeanWithSwap.class);
+		var r = p.read(md, IBeanWithSwap.class);
 		assertNotNull(r);
 		assertNull(r.name);
 		assertEquals(0, r.count);
@@ -513,7 +513,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// _type key in keyValueTableToJson5 → _type handling branch (lines 721-722).
 		var p = MarkdownParser.create().swaps(I07BeanSwap.class).beanDictionary(I07Bean.class).build();
 		var md = "| Property | Value |\n|---|---|\n| _type | i07bean |\n| name | Bob |\n| count | 5 |";
-		var r = p.parse(md, I07Bean.class);
+		var r = p.read(md, I07Bean.class);
 		assertNotNull(r);
 		assertEquals("Bob", r.name);
 	}
@@ -523,7 +523,7 @@ class MarkdownParserSession_Test extends TestBase {
 		var p = MarkdownParser.create().swaps(I07BeanSwap.class).beanDictionary(I07Bean.class).build();
 		var md = "| _type | name | count |\n|---|---|---|\n| i07bean | Carol | 9 |";
 		@SuppressWarnings("unchecked")
-		var r = (List<I07Bean>) p.parse(md, List.class, I07Bean.class);
+		var r = (List<I07Bean>) p.read(md, List.class, I07Bean.class);
 		assertNotNull(r);
 		assertFalse(r.isEmpty());
 		assertEquals("Carol", r.get(0).name);
@@ -536,7 +536,7 @@ class MarkdownParserSession_Test extends TestBase {
 		var p = MarkdownParser.create().swaps(IBeanMapSwap.class).build();
 		var md = "| Property | Value |\n|---|---|\n| name | test |\n| count | 9999999999 |";
 		// count will be parsed as Long in cellToJson5 → Long branch hit
-		var r = p.parse(md, IBeanWithSwap.class);
+		var r = p.read(md, IBeanWithSwap.class);
 		assertNotNull(r);
 		assertEquals("test", r.name);
 	}
@@ -545,7 +545,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// Bare "true"/"false" cell in JSON5 path is written without quotes.
 		var p = MarkdownParser.create().swaps(IBeanMapSwapBool.class).build();
 		var md = "| Property | Value |\n|---|---|\n| flag | true |\n| name | x |";
-		var r = p.parse(md, IBeanBool.class);
+		var r = p.read(md, IBeanBool.class);
 		assertNotNull(r);
 		assertTrue(r.flag);
 		assertEquals("x", r.name);
@@ -583,7 +583,7 @@ class MarkdownParserSession_Test extends TestBase {
 	void j01_customNullInBulletList() {
 		var p = MarkdownParser.create().nullValue("NIL").build();
 		var md = "- a\n- NIL\n- b";
-		var r = (List<String>) p.parse(md, List.class, String.class);
+		var r = (List<String>) p.read(md, List.class, String.class);
 		assertEquals(3, r.size());
 		assertEquals("a", r.get(0));
 		assertNull(r.get(1));
@@ -597,20 +597,20 @@ class MarkdownParserSession_Test extends TestBase {
 	@Test void k01_separatorWithSpacesAndColons() {
 		// "| :--- | :---: |" should still be detected as a separator row.
 		var md = "| Property | Value |\n| :--- | :---: |\n| name | Alice |";
-		var r = MarkdownParser.DEFAULT.parse(md, Map.class);
+		var r = MarkdownParser.DEFAULT.read(md, Map.class);
 		assertEquals("Alice", r.get("name"));
 	}
 
 	@Test void k02_lineWithoutPipeIgnored() {
 		// Lines not starting with | should be filtered out of the table-line collection.
 		var md = "| Property | Value |\n|---|---|\n| name | Alice |\nthis is not a row\n| age | 30 |";
-		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
+		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.A.class);
 		assertEquals("Alice", r.name);
 		assertEquals(30, r.age);
 	}
 
 	//====================================================================================================
-	// l - Multi-column simple element type (parseRow simple type fall-through)
+	// l - Multi-column simple element type (readRow simple type fall-through)
 	//====================================================================================================
 
 	@Test
@@ -618,9 +618,9 @@ class MarkdownParserSession_Test extends TestBase {
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
 	void l01_multiColumnToStringList() {
-		// List<String> as multi-column target → parseRow's "simple type" fall-through is hit.
+		// List<String> as multi-column target → readRow's "simple type" fall-through is hit.
 		var md = "| col1 | col2 |\n|---|---|\n| value-a | ignored |\n| value-b | ignored |";
-		var r = (List<String>) MarkdownParser.DEFAULT.parse(md, List.class, String.class);
+		var r = (List<String>) MarkdownParser.DEFAULT.read(md, List.class, String.class);
 		assertEquals(2, r.size());
 		assertEquals("value-a", r.get(0));
 		assertEquals("value-b", r.get(1));
@@ -634,37 +634,37 @@ class MarkdownParserSession_Test extends TestBase {
 		// "``" — length 2 with both backticks — backtick branch is taken with empty inner.
 		// The inline JSON5 parser parses empty string (with name optional) and yields a default-valued bean.
 		var md = "| Property | Value |\n|---|---|\n| name | `` |\n| age | 0 |";
-		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
+		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.A.class);
 		assertNotNull(r);
 		assertEquals(0, r.age);
 	}
 
 	//====================================================================================================
-	// n - parseCellValue edge cases
+	// n - readCellValue edge cases
 	//====================================================================================================
 
 	@Test void n01_trimStrings_trimsCellValue() {
-		// isTrimStrings() = true → cell value is trimmed (line 574 in parseCellValue, line 60 in json5Parser memoizer)
+		// isTrimStrings() = true → cell value is trimmed (line 574 in readCellValue, line 60 in json5Parser memoizer)
 		var p = MarkdownParser.create().trimStrings().build();
 		var md = "| Property | Value |\n|---|---|\n| name |   Alice   |\n| age | 30 |";
-		var r = p.parse(md, MarkdownParser_Test.A.class);
+		var r = p.read(md, MarkdownParser_Test.A.class);
 		assertEquals("Alice", r.name);
 		assertEquals(30, r.age);
 	}
 
 	@Test void n02_emptyCellForIntType() {
-		// Empty cell for int type → parseCellValue returns null/default-zero at line 578
+		// Empty cell for int type → readCellValue returns null/default-zero at line 578
 		var md = "| Property | Value |\n|---|---|\n| name | Alice |\n| age |  |";
-		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
+		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.A.class);
 		assertEquals("Alice", r.name);
 		assertEquals(0, r.age);
 	}
 
 	@Test void n03_customNullValueMatch() {
-		// Cell value matching custom nullValue → parseCellValue returns null at line 572
+		// Cell value matching custom nullValue → readCellValue returns null at line 572
 		var p = MarkdownParser.create().nullValue("N/A").build();
 		var md = "| Property | Value |\n|---|---|\n| name | N/A |\n| age | 30 |";
-		var r = p.parse(md, MarkdownParser_Test.A.class);
+		var r = p.read(md, MarkdownParser_Test.A.class);
 		assertNull(r.name);
 		assertEquals(30, r.age);
 	}
@@ -674,8 +674,8 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void o02_emptyInputForString() {
-		// Empty input string for String type → parseAnything returns "" at line 175
-		var r = MarkdownParser.DEFAULT.parse("", String.class);
+		// Empty input string for String type → readAnything returns "" at line 175
+		var r = MarkdownParser.DEFAULT.read("", String.class);
 		assertEquals("", r);
 	}
 
@@ -694,11 +694,11 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test void p01_beanWithTypeRow_resolvedViaRegistry() {
-		// Key-value table with _type row for bean type → lines 266-270 in parseKeyValueTable
+		// Key-value table with _type row for bean type → lines 266-270 in readKeyValueTable
 		// Registry is non-null and resolves to the child type
 		var p = MarkdownParser.create().beanDictionary(PBase.class, PChild.class).build();
 		var md = "| Property | Value |\n|---|---|\n| _type | pchild |\n| name | Alice |\n| extra | bonus |";
-		var r = p.parse(md, PBase.class);
+		var r = p.read(md, PBase.class);
 		assertNotNull(r);
 		assertEquals("Alice", r.name);
 		assertInstanceOf(PChild.class, r);
@@ -708,7 +708,7 @@ class MarkdownParserSession_Test extends TestBase {
 	@Test void p02_beanWithTypeRow_noRegistry() {
 		// Key-value table with _type row but no registry → resolved == null, actualType unchanged (line 269 false branch)
 		var md = "| Property | Value |\n|---|---|\n| _type | unknown |\n| name | Bob |";
-		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
+		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.A.class);
 		assertNotNull(r);
 		assertEquals("Bob", r.name);
 	}
@@ -722,19 +722,19 @@ class MarkdownParserSession_Test extends TestBase {
 		// Must enable ignoreUnknownBeanProperties to avoid exception
 		var p = MarkdownParser.create().ignoreUnknownBeanProperties().build();
 		var md = "| Property | Value |\n|---|---|\n| name | Alice |\n| unknownProp | someValue |";
-		var r = p.parse(md, MarkdownParser_Test.A.class);
+		var r = p.read(md, MarkdownParser_Test.A.class);
 		assertNotNull(r);
 		assertEquals("Alice", r.name);
 	}
 
 	//====================================================================================================
-	// r - Multi-column table edge cases (parseMultiColumnTable)
+	// r - Multi-column table edge cases (readMultiColumnTable)
 	//====================================================================================================
 
 	@Test void r01_multiColumnTable_asArray() {
-		// Multi-column table parsed as array type → isArray() branch in parseMultiColumnTable at line 366
+		// Multi-column table parsed as array type → isArray() branch in readMultiColumnTable at line 366
 		var md = "| name | age |\n|---|---|\n| Alice | 30 |\n| Bob | 25 |";
-		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A[].class);
+		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.A[].class);
 		assertNotNull(r);
 		assertEquals(2, r.length);
 		assertEquals("Alice", r[0].name);
@@ -743,24 +743,24 @@ class MarkdownParserSession_Test extends TestBase {
 	@Test void r02_multiColumnTable_singleBeanTarget() {
 		// Multi-column table with a single bean target (not a collection/array) → else branch at line 375
 		var md = "| name | age |\n|---|---|\n| Alice | 30 |";
-		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
+		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.A.class);
 		assertNotNull(r);
 		assertEquals("Alice", r.name);
 		assertEquals(30, r.age);
 	}
 
 	//====================================================================================================
-	// s - parseRow: all-null cells and _type column in multi-column table
+	// s - readRow: all-null cells and _type column in multi-column table
 	//====================================================================================================
 
 	@Test
 	@SuppressWarnings({
 		"unchecked"
 	})
-	void s01_parseRow_allNullCells() {
-		// All cells are null/nullValue → allNull=true → parseRow returns null at line 415 (line 371 check)
+	void s01_readRow_allNullCells() {
+		// All cells are null/nullValue → allNull=true → readRow returns null at line 415 (line 371 check)
 		var md = "| name | age |\n|---|---|\n| *null* | *null* |";
-		var r = (List<MarkdownParser_Test.A>) MarkdownParser.DEFAULT.parse(md, List.class, MarkdownParser_Test.A.class);
+		var r = (List<MarkdownParser_Test.A>) MarkdownParser.DEFAULT.read(md, List.class, MarkdownParser_Test.A.class);
 		assertNotNull(r);
 		assertEquals(1, r.size());
 		assertNull(r.get(0));
@@ -770,11 +770,11 @@ class MarkdownParserSession_Test extends TestBase {
 	@SuppressWarnings({
 		"unchecked"
 	})
-	void s02_parseRow_withTypeColumn_resolvesType() {
+	void s02_readRow_withTypeColumn_resolvesType() {
 		// Multi-column table with _type column → typeColIndex resolution (line 422)
 		var p = MarkdownParser.create().beanDictionary(PBase.class, PChild.class).build();
 		var md = "| _type | name | extra |\n|---|---|---|\n| pchild | Alice | bonus |";
-		var r = (List<PBase>) p.parse(md, List.class, PBase.class);
+		var r = (List<PBase>) p.read(md, List.class, PBase.class);
 		assertNotNull(r);
 		assertEquals(1, r.size());
 		assertInstanceOf(PChild.class, r.get(0));
@@ -782,7 +782,7 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// t - Map target in parseKeyValueTable (line 306)
+	// t - Map target in readKeyValueTable (line 306)
 	//====================================================================================================
 
 	@Test
@@ -790,9 +790,9 @@ class MarkdownParserSession_Test extends TestBase {
 		"unchecked"
 	})
 	void t01_keyValueTable_asTypedMap() {
-		// Key-value table with typed Map target → isMap() branch in parseKeyValueTable at line 306
+		// Key-value table with typed Map target → isMap() branch in readKeyValueTable at line 306
 		// Also covers line 311 (keyType != null), 315 (cells.size() < 2)
-		var r = (TreeMap<String, String>) MarkdownParser.DEFAULT.parse(
+		var r = (TreeMap<String, String>) MarkdownParser.DEFAULT.read(
 			"| Key | Value |\n|---|---|\n| k1 | v1 |\n| k2 | v2 |",
 			TreeMap.class, String.class, String.class
 		);
@@ -802,13 +802,13 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// u - parseCellValue backtick edge cases (line 582)
+	// u - readCellValue backtick edge cases (line 582)
 	//====================================================================================================
 
 	@Test void u01_backtick_singleChar() {
 		// Single backtick cell "`" — startsWith("`") and endsWith("`") but length == 1 → NOT inline JSON5
 		var md = "| Property | Value |\n|---|---|\n| name | ` |\n| age | 10 |";
-		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
+		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.A.class);
 		assertNotNull(r);
 	}
 
@@ -830,7 +830,7 @@ class MarkdownParserSession_Test extends TestBase {
 		var md = "| Property | Value |\n|---|---|\n| _type | mytype |\n| value | hello |";
 		assertDoesNotThrow(() -> {
 			try {
-				MarkdownParser.DEFAULT.parse(md, NonBeanType.class);
+				MarkdownParser.DEFAULT.read(md, NonBeanType.class);
 			} catch (Exception e) {
 				// Expected: non-bean type can't be deserialized from JSON5 object
 			}

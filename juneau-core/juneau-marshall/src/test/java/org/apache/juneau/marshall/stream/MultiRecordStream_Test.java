@@ -38,11 +38,11 @@ import org.junit.jupiter.params.provider.*;
  * <p>
  * For these formats:
  * <ul>
- *   <li>{@code serializeRecords(out)} accepts N {@link RecordWriter#write(Object) write(...)} calls
+ *   <li>{@code writeRecords(out)} accepts N {@link RecordWriter#write(Object) write(...)} calls
  *       and emits one record per call.
- *   <li>{@code parseRecords(in)} yields N records via {@link RecordReader#canRead() canRead()} /
+ *   <li>{@code readRecords(in)} yields N records via {@link RecordReader#canRead() canRead()} /
  *       {@link RecordReader#read(Class) read(...)}.
- *   <li>{@code parseArrayRecords/serializeArrayRecords} is NOT defined &mdash; that surface only applies to
+ *   <li>{@code readArrayRecords/writeArrayRecords} is NOT defined &mdash; that surface only applies to
  *       formats that need to unwrap a top-level wire array.
  *   <li>The record-stream output is wire-equivalent to {@code serialize(List.of(records))}.
  * </ul>
@@ -99,13 +99,13 @@ class MultiRecordStream_Test extends TestBase {
 
 		var beans = List.of(new Bean("a", 1), new Bean("b", 2), new Bean("c", 3));
 		var sb = new StringWriter();
-		try (var w = ((RecordWritable) fmt.serializer).serializeRecords(sb)) {
+		try (var w = ((RecordWritable) fmt.serializer).writeRecords(sb)) {
 			for (var b : beans)
 				w.write(b);
 		}
 
 		var got = new ArrayList<Bean>();
-		try (var r = ((RecordReadable) fmt.parser).parseRecords(sb.toString())) {
+		try (var r = ((RecordReadable) fmt.parser).readRecords(sb.toString())) {
 			while (r.canRead())
 				got.add(r.read(Bean.class));
 		}
@@ -130,12 +130,12 @@ class MultiRecordStream_Test extends TestBase {
 		var beans = List.of(new Bean("a", 1), new Bean("b", 2));
 
 		var streamed = new StringWriter();
-		try (var w = ((RecordWritable) fmt.serializer).serializeRecords(streamed)) {
+		try (var w = ((RecordWritable) fmt.serializer).writeRecords(streamed)) {
 			for (var b : beans)
 				w.write(b);
 		}
 
-		var bulk = fmt.serializer.serializeToString(beans);
+		var bulk = fmt.serializer.writeToString(beans);
 
 		assertEquals(bulk, streamed.toString(), "stream-write must match serialize(List) for " + fmt);
 	}
@@ -147,7 +147,7 @@ class MultiRecordStream_Test extends TestBase {
 	@Test
 	void d01_sseMultipleEvents() throws Exception {
 		var sb = new StringWriter();
-		try (var w = SseSerializer.DEFAULT.serializeRecords(sb)) {
+		try (var w = SseSerializer.DEFAULT.writeRecords(sb)) {
 			w.write(new SseEvent().setEvent("a").setData("1"));
 			w.write(new SseEvent().setEvent("b").setData("2"));
 		}
@@ -169,15 +169,15 @@ class MultiRecordStream_Test extends TestBase {
 
 		var beans = List.of(new Bean("a", 1), new Bean("b", 2));
 		var sb = new StringWriter();
-		try (var w = ((RecordWritable) fmt.serializer).serializeRecords(sb)) {
+		try (var w = ((RecordWritable) fmt.serializer).writeRecords(sb)) {
 			for (var b : beans)
 				w.write(b);
 		}
 		var wire = sb.toString();
 
-		var viaParse = fmt.parser.parse(wire, Bean.class);
+		var viaParse = fmt.parser.read(wire, Bean.class);
 		Bean viaRecord;
-		try (var r = ((RecordReadable) fmt.parser).parseRecords(wire)) {
+		try (var r = ((RecordReadable) fmt.parser).readRecords(wire)) {
 			assertTrue(r.canRead());
 			viaRecord = r.read(Bean.class);
 		}

@@ -50,7 +50,7 @@ class JsonSchema_Finiteness_Test {
 		assertNotNull(str);
 		assertFalse(str.isEmpty());
 
-		var json = assertDoesNotThrow(() -> JsonSerializer.DEFAULT.serialize(root));
+		var json = assertDoesNotThrow(() -> JsonSerializer.DEFAULT.write(root));
 		assertNotNull(json);
 		assertTrue(json.length() < 1_000_000, () -> "Output should be finite: length=" + json.length());
 	}
@@ -68,7 +68,7 @@ class JsonSchema_Finiteness_Test {
 		}
 		var root = node;
 
-		var json = assertDoesNotThrow(() -> JsonSerializer.DEFAULT.serialize(root));
+		var json = assertDoesNotThrow(() -> JsonSerializer.DEFAULT.write(root));
 		assertNotNull(json);
 		assertTrue(json.length() < 5_000_000, () -> "Output should be finite: length=" + json.length());
 	}

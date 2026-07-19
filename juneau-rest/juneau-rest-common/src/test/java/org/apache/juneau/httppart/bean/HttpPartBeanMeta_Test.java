@@ -156,7 +156,7 @@ class HttpPartBeanMeta_Test {
 	// Minimal mock to avoid requiring full HttpPartParserSession instantiation
 	private static HttpPartParserSession mock() {
 		return new HttpPartParserSession() {
-			@Override public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) { return null; }
+			@Override public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) { return null; }
 		};
 	}
 }

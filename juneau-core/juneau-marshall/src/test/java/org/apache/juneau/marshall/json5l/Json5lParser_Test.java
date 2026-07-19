@@ -52,14 +52,14 @@ class Json5lParser_Test extends TestBase {
 	// =================================================================================
 
 	@Test
-	void a01_parseStrictJsonlToListOfBeans() throws Exception {
+	void a01_readStrictJsonlToListOfBeans() throws Exception {
 		var in = "{\"name\":\"Alice\",\"age\":30}\n{\"name\":\"Bob\",\"age\":25}";
 		var list = (List<Person>) Json5l.to(in, List.class, Person.class);
 		assertBean(list, "0{name,age},1{name,age}", "{Alice,30},{Bob,25}");
 	}
 
 	@Test
-	void a02_parseStrictSingleLine() throws Exception {
+	void a02_readStrictSingleLine() throws Exception {
 		var p = Json5l.to("{\"name\":\"Alice\",\"age\":30}", Person.class);
 		assertBean(p, "name,age", "Alice,30");
 	}
@@ -133,21 +133,21 @@ class Json5lParser_Test extends TestBase {
 	// =================================================================================
 
 	@Test
-	void d01_parseEmptyInput() throws Exception {
+	void d01_readEmptyInput() throws Exception {
 		var list = (List<?>) Json5l.to("", List.class, Person.class);
 		assertNotNull(list);
 		assertTrue(list.isEmpty());
 	}
 
 	@Test
-	void d02_parseCommentOnlyInputToList() throws Exception {
+	void d02_readCommentOnlyInputToList() throws Exception {
 		var list = (List<?>) Json5l.to("// only a comment\n\n", List.class, Person.class);
 		assertNotNull(list);
 		assertTrue(list.isEmpty());
 	}
 
 	@Test
-	void d03_parseToListOfStrings() throws Exception {
+	void d03_readToListOfStrings() throws Exception {
 		var in = "'foo'\n'bar'\n'baz'";
 		var list = (List<String>) Json5l.to(in, List.class, String.class);
 		assertEquals(list("foo", "bar", "baz"), list);
