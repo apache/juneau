@@ -37,7 +37,7 @@ class MethodInfoUtils {
 	static void assertArgType(MethodInfo m, Class<? extends Annotation> a, Class<?>...c) throws InvalidAnnotationException {
 		var params = m.getParameters();
 		if (params.size() != 1)
-			throw new InvalidAnnotationException("Only one parameter can be passed to method with @%1$s annotation.  Method='%1$s'", cns(a), m);
+			throw new InvalidAnnotationException("Only one parameter can be passed to method with @%s annotation.  Method='%s'", cns(a), m);
 		var rt = params.get(0).getParameterType().inner();
 		for (var cc : c)
 			if (rt == cc)

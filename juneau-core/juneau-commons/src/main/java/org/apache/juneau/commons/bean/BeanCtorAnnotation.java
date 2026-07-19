@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.bean;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.*;
 
@@ -66,7 +66,7 @@ public class BeanCtorAnnotation {
 		/**
 		 * Sets the description property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
@@ -77,7 +77,7 @@ public class BeanCtorAnnotation {
 		/**
 		 * Sets the {@link BeanCtor#properties()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder properties(String value) {
@@ -98,13 +98,13 @@ public class BeanCtorAnnotation {
 
 		Object(BeanCtorAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			properties = b.properties;
 		}
 
 		@Override /* Overridden from BeanCtor */
 		public String[] description() {
-			return copyOf(description);
+			return cp(description);
 		}
 
 		@Override /* Overridden from BeanCtor */

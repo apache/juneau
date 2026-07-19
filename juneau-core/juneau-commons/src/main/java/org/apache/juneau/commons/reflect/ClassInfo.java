@@ -130,8 +130,8 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	/**
 	 * Returns a class info wrapper around the specified class type.
 	 *
-	 * @param inner The class type.
-	 * @param innerType The generic type (if parameterized type).
+	 * @param inner The class type.  Can be <jk>null</jk> if <c>innerType</c> is specified.
+	 * @param innerType The generic type (if parameterized type).  Can be <jk>null</jk> if <c>inner</c> is specified.
 	 * @return The constructed class info.
 	 */
 	public static ClassInfo of(Class<?> inner, Type innerType) {
@@ -170,8 +170,8 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * @return The constructed class info.
 	 */
 	public static ClassInfo of(Type innerType) {
-		if (innerType instanceof Class<?> c)
-			return of(c);
+		if (innerType instanceof Class<?> innerType2)
+			return of(innerType2);
 		return new ClassInfo(toClass(innerType), innerType);
 	}
 
@@ -226,8 +226,8 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	/**
 	 * Constructor.
 	 *
-	 * @param inner The class type.
-	 * @param innerType The generic type (if parameterized type).
+	 * @param inner The class type.  Can be <jk>null</jk> if <c>innerType</c> is specified.
+	 * @param innerType The generic type (if parameterized type).  Can be <jk>null</jk> if <c>inner</c> is specified.
 	 */
 	protected ClassInfo(Class<?> inner, Type innerType) {
 		// @formatter:off
@@ -728,7 +728,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * {@link AnnotationProvider}.
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type to filter by.
+	 * @param type The annotation type to filter by.  Must not be <jk>null</jk>.
 	 * @return A stream of annotation infos of the specified type.
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
@@ -1370,7 +1370,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * Finds the real parameter type of this class.
 	 *
 	 * @param index The zero-based index of the parameter to resolve.
-	 * @param pt The parameterized type class containing the parameterized type to resolve (e.g. <c>HashMap</c>).
+	 * @param pt The parameterized type class containing the parameterized type to resolve (e.g. <c>HashMap</c>).  Must not be <jk>null</jk>.
 	 * @return The resolved real class.
 	 */
 	@SuppressWarnings({
@@ -1479,9 +1479,9 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<br>Returns <jk>false</jk> if either parameter is not a <c>Class</c>.
 	 */
 	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {
-		if (od instanceof Class<?> oc && id instanceof Class<?> ic) {
-			while (nn(ic = ic.getEnclosingClass()))
-				if (ic == oc)
+		if (od instanceof Class<?> od2 && id instanceof Class<?> id2) {
+			while (nn(id2 = id2.getEnclosingClass()))
+				if (id2 == od2)
 					return true;
 		}
 		return false;
@@ -2099,8 +2099,8 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * @return <jk>true</jk> if this class is strictly a child of <c>parent</c>.
 	 */
 	public boolean isChildOf(Type parent) {
-		if (parent instanceof Class<?> c)
-			return isChildOf(c);
+		if (parent instanceof Class<?> parent2)
+			return isChildOf(parent2);
 		return false;
 	}
 
@@ -2121,8 +2121,8 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>parent</c>.
 	 */
 	public boolean isAssignableTo(Type parent) {
-		if (parent instanceof Class<?> c)
-			return isAssignableTo(c);
+		if (parent instanceof Class<?> parent2)
+			return isAssignableTo(parent2);
 		return false;
 	}
 
@@ -2400,8 +2400,8 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * @return <jk>true</jk> if this class is strictly a parent of <c>child</c>.
 	 */
 	public boolean isParentOf(Type child) {
-		if (child instanceof Class<?> c)
-			return isParentOf(c);
+		if (child instanceof Class<?> child2)
+			return isParentOf(child2);
 		return false;
 	}
 
@@ -2432,8 +2432,8 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
 	public boolean isAssignableFrom(Type child) {
-		if (child instanceof Class<?> c)
-			return isAssignableFrom(c);
+		if (child instanceof Class<?> child2)
+			return isAssignableFrom(child2);
 		return false;
 	}
 
@@ -2496,8 +2496,8 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
 	public boolean isParentOfLenient(Type child) {
-		if (child instanceof Class<?> c)
-			return isParentOfLenient(c);
+		if (child instanceof Class<?> child2)
+			return isParentOfLenient(child2);
 		return false;
 	}
 
@@ -2716,8 +2716,8 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 						if (! firstBound)
 							sb.append(" & ");
 						firstBound = false;
-						if (bound instanceof Class<?> boundClass) {
-							of(boundClass).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
+						if (bound instanceof Class<?> bound2) {
+							of(bound2).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
 						} else {
 							sb.append(bound.getTypeName());
 						}
@@ -2925,7 +2925,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * @return <jk>true</jk> if this is Optional&lt;T&gt; or a subclass like MyOptional extends Optional&lt;String&gt;.
 	 */
 	private boolean isParameterizedTypeOf(Class<?> c) {
-		return (innerType instanceof ParameterizedType t2 && t2.getRawType() == c) || (innerType instanceof Class innerType2 && c.isAssignableFrom(innerType2));
+		return (innerType instanceof ParameterizedType innerType3 && innerType3.getRawType() == c) || (innerType instanceof Class innerType2 && c.isAssignableFrom(innerType2));
 	}
 
 	/**

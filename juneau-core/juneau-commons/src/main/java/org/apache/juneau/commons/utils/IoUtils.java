@@ -55,11 +55,11 @@ public class IoUtils {
 	@SuppressWarnings({
 		"java:S5164" // Cleanup method provided: cleanupThreadLocals()
 	})
-	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (Boolean.TRUE.equals(env("juneau.disableIoBufferReuse", false)) ? null : new ThreadLocal<>());
+	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (isTrue(env("juneau.disableIoBufferReuse", false)) ? null : new ThreadLocal<>());
 	@SuppressWarnings({
 		"java:S5164" // Cleanup method provided: cleanupThreadLocals()
 	})
-	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (Boolean.TRUE.equals(env("juneau.disableIoBufferReuse", false)) ? null : new ThreadLocal<>());
+	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (isTrue(env("juneau.disableIoBufferReuse", false)) ? null : new ThreadLocal<>());
 	static final AtomicInteger BYTE_BUFFER_CACHE_HITS = new AtomicInteger();
 
 	static final AtomicInteger BYTE_BUFFER_CACHE_MISSES = new AtomicInteger();
@@ -209,7 +209,7 @@ public class IoUtils {
 	/**
 	 * Counts the number of bytes in the input stream and then closes the stream.
 	 *
-	 * @param is The input stream to read from.
+	 * @param is The input stream to read from.  Can be <jk>null</jk> (returns <c>0</c>).
 	 * @return The number of bytes read.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -230,7 +230,7 @@ public class IoUtils {
 	/**
 	 * Counts the number of characters in the reader and then closes the reader.
 	 *
-	 * @param r The reader to read from.
+	 * @param r The reader to read from.  Can be <jk>null</jk> (returns <c>0</c>).
 	 * @return The number of characters read.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -278,7 +278,7 @@ public class IoUtils {
 	/**
 	 * Loads a text file from either the file system or classpath.
 	 *
-	 * @param name The file name.
+	 * @param name The file name.  Must not be <jk>null</jk>.
 	 * @param paths The paths to search.
 	 * @return The file contents, or <jk>null</jk> if not found.
 	 * @throws IOException Thrown by underlying stream.
@@ -365,7 +365,7 @@ public class IoUtils {
 	 * @param in
 	 * 	The input.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @param charset The character set to use for decoding.
+	 * @param charset The character set to use for decoding.  Must not be <jk>null</jk> when the input is non-<jk>null</jk>.
 	 * @return The new string, or <jk>null</jk> if the input was null.
 	 */
 	public static String read(byte[] in, Charset charset) {
@@ -421,7 +421,7 @@ public class IoUtils {
 	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br>Stream is automatically closed.
 	 * @param cs
-	 * 	The charset of the contents of the input stream.
+	 * 	The charset of the contents of the input stream.  Must not be <jk>null</jk> when the input stream is non-<jk>null</jk>.
 	 * @return
 	 * 	The contents of the reader as a string or <jk>null</jk> if input stream was <jk>null</jk>.
 	 * @throws IOException If a problem occurred trying to read from the input stream.
@@ -442,8 +442,8 @@ public class IoUtils {
 	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br>Stream is automatically closed.
 	 * @param cs
-	 * 	The charset of the contents of the input stream.
-	 * @param onException Consumer of any {@link IOException I/O exceptions}.
+	 * 	The charset of the contents of the input stream.  Must not be <jk>null</jk> when the input stream is non-<jk>null</jk>.
+	 * @param onException Consumer of any {@link IOException I/O exceptions}.  Must not be <jk>null</jk> (invoked on I/O error).
 	 * @return
 	 * 	The contents of the reader as a string or <jk>null</jk> if input stream was <jk>null</jk>.
 	 */
@@ -468,7 +468,7 @@ public class IoUtils {
 	 * 	The input stream.
 	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br>Stream is automatically closed.
-	 * @param onException Consumer of any {@link IOException I/O exceptions}.
+	 * @param onException Consumer of any {@link IOException I/O exceptions}.  Must not be <jk>null</jk> (invoked on I/O error).
 	 * @return
 	 * 	The contents of the reader as a string, or <jk>null</jk> if the input stream was <jk>null</jk>.
 	 */
@@ -506,7 +506,7 @@ public class IoUtils {
 	 * @param maxBytes
 	 * 	The maximum number of bytes to read, or <c>-1</c> to read all bytes.
 	 * @param cs
-	 * 	The charset of the contents of the input stream.
+	 * 	The charset of the contents of the input stream.  Must not be <jk>null</jk> when the input stream is non-<jk>null</jk>.
 	 * @return
 	 * 	The contents of the input stream as a string, or <jk>null</jk> if the input stream was <jk>null</jk>.
 	 * @throws IOException If a problem occurred trying to read from the input stream.
@@ -554,8 +554,9 @@ public class IoUtils {
 	 * 		<li>{@link File}
 	 * 		<li>byte array.
 	 * 	</ul>
-	 * @return The input converted to a string.
+	 * @return The input converted to a string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws IOException If thrown from output stream.
+	 * @throws IllegalArgumentException If the input is non-<jk>null</jk> but not one of the supported types.
 	 */
 	public static String read(Object in) throws IOException {
 		if (in == null)
@@ -618,7 +619,7 @@ public class IoUtils {
 	 * 	The input reader.
 	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br>Stream is automatically closed.
-	 * @param onException Consumer of any {@link IOException I/O exceptions}.
+	 * @param onException Consumer of any {@link IOException I/O exceptions}.  Must not be <jk>null</jk> (invoked on I/O error).
 	 * @return
 	 * 	The contents of the reader as a string, or <jk>null</jk> if the reader was <jk>null</jk>.
 	 */
@@ -662,7 +663,8 @@ public class IoUtils {
 	 *
 	 * @param in
 	 * 	The file to read into a byte array.
-	 * @return The contents of the file as a byte array.
+	 * 	<br>Can be <jk>null</jk> (returns an empty array).
+	 * @return The contents of the file as a byte array.  Never <jk>null</jk>.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static byte[] readBytes(File in) throws IOException {
@@ -674,9 +676,10 @@ public class IoUtils {
 	 *
 	 * @param in
 	 * 	The file to read into a byte array.
+	 * 	<br>Can be <jk>null</jk> (returns an empty array).
 	 * @param maxBytes
 	 * 	The maximum number of bytes to read, or <jk>-1</jk> to read all bytes.
-	 * @return The contents of the file as a byte array.
+	 * @return The contents of the file as a byte array.  Never <jk>null</jk>.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static byte[] readBytes(File in, int maxBytes) throws IOException {
@@ -748,10 +751,10 @@ public class IoUtils {
 	/**
 	 * Wraps the specified reader in a buffered reader.
 	 *
-	 * @param r The reader being wrapped.
+	 * @param r The reader being wrapped.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return
 	 * 	The reader wrapped in a {@link BufferedReader}, or the original {@link Reader} if it's already a buffered
-	 * 	reader.
+	 * 	reader, or <jk>null</jk> if the argument was <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"resource" // Caller takes ownership of the returned Reader
@@ -800,7 +803,7 @@ public class IoUtils {
 	// Canonical-named methods (pipe overloads delegate to these)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/** Pipes bytes to output stream. */
+	/** Pipes bytes to output stream.  <br>Returns <c>0</c> if either <jv>in</jv> or <jv>out</jv> is <jk>null</jk>. */
 	public static long pipe(byte[] in, OutputStream out, int maxBytes) throws IOException {
 		if (in == null || out == null)
 			return 0;
@@ -809,14 +812,14 @@ public class IoUtils {
 		return length;
 	}
 
-	/** Pipes input stream to output stream. */
+	/** Pipes input stream to output stream.  <br>Returns <c>0</c> if either <jv>in</jv> or <jv>out</jv> is <jk>null</jk>. */
 	public static long pipe(InputStream in, OutputStream out) throws IOException {
 		try (var in2 = in) {
 			return pipe(in, out, -1L);
 		}
 	}
 
-	/** Pipes input stream to output stream with exception handler. */
+	/** Pipes input stream to output stream with exception handler.  <br>Returns <c>0</c> if either <jv>in</jv> or <jv>out</jv> is <jk>null</jk>.  <br><jv>onException</jv> must not be <jk>null</jk> (invoked on I/O error). */
 	public static long pipe(InputStream in, OutputStream out, Consumer<IOException> onException) {
 		try {
 			try (var in2 = in) {
@@ -828,7 +831,7 @@ public class IoUtils {
 		}
 	}
 
-	/** Pipes input stream to output stream with max bytes. */
+	/** Pipes input stream to output stream with max bytes.  <br>Returns <c>0</c> if either <jv>in</jv> or <jv>out</jv> is <jk>null</jk>. */
 	public static long pipe(InputStream in, OutputStream out, long maxBytes) throws IOException {
 		if (in == null || out == null)
 			return 0;
@@ -855,14 +858,14 @@ public class IoUtils {
 		return total;
 	}
 
-	/** Pipes input stream to writer. */
+	/** Pipes input stream to writer.  <br>Returns <c>0</c> if either <jv>in</jv> or <jv>out</jv> is <jk>null</jk>. */
 	public static long pipe(InputStream in, Writer out) throws IOException {
 		if (in == null || out == null)
 			return 0;
 		return pipe(new InputStreamReader(in, UTF8), out);
 	}
 
-	/** Pipes input stream to writer with exception handler. */
+	/** Pipes input stream to writer with exception handler.  <br>Returns <c>0</c> if either <jv>in</jv> or <jv>out</jv> is <jk>null</jk>.  <br><jv>onException</jv> must not be <jk>null</jk> (invoked on I/O error). */
 	public static long pipe(InputStream in, Writer out, Consumer<IOException> onException) {
 		try {
 			if (in == null || out == null)
@@ -874,7 +877,7 @@ public class IoUtils {
 		}
 	}
 
-	/** Pipes reader to file. */
+	/** Pipes reader to file.  <br>Returns <c>0</c> if either <jv>in</jv> or <jv>out</jv> is <jk>null</jk>. */
 	public static long pipe(Reader in, File out) throws IOException {
 		if (out == null || in == null)
 			return 0;
@@ -883,7 +886,7 @@ public class IoUtils {
 		}
 	}
 
-	/** Pipes reader to output stream. */
+	/** Pipes reader to output stream.  <br>Returns <c>0</c> if either <jv>in</jv> or <jv>out</jv> is <jk>null</jk>. */
 	public static long pipe(Reader in, OutputStream out) throws IOException {
 		if (in == null || out == null)
 			return 0;
@@ -901,7 +904,7 @@ public class IoUtils {
 		return total;
 	}
 
-	/** Pipes reader to output stream with exception handler. */
+	/** Pipes reader to output stream with exception handler.  <br>Returns <c>0</c> if either <jv>in</jv> or <jv>out</jv> is <jk>null</jk>.  <br><jv>onException</jv> must not be <jk>null</jk> (invoked on I/O error). */
 	public static long pipe(Reader in, OutputStream out, Consumer<IOException> onException) {
 		try {
 			return pipe(in, out);
@@ -911,7 +914,7 @@ public class IoUtils {
 		}
 	}
 
-	/** Pipes reader to writer. */
+	/** Pipes reader to writer.  <br>Returns <c>0</c> if either <jv>in</jv> or <jv>out</jv> is <jk>null</jk>. */
 	public static long pipe(Reader in, Writer out) throws IOException {
 		if (out == null || in == null)
 			return 0;
@@ -928,7 +931,7 @@ public class IoUtils {
 		return total;
 	}
 
-	/** Pipes reader to writer with exception handler. */
+	/** Pipes reader to writer with exception handler.  <br>Returns <c>0</c> if either <jv>in</jv> or <jv>out</jv> is <jk>null</jk>.  <br><jv>onException</jv> must not be <jk>null</jk> (invoked on I/O error). */
 	public static long pipe(Reader in, Writer out, Consumer<IOException> onException) {
 		try {
 			return pipe(in, out);
@@ -941,7 +944,7 @@ public class IoUtils {
 	/**
 	 * Prints all the specified lines to the log with line numbers.
 	 *
-	 * @param lines The lines to print.
+	 * @param lines The lines to print.  Must not be <jk>null</jk> (individual <jk>null</jk> entries render as <js>"null"</js>).
 	 */
 	public static final void printLines(String[] lines) {
 		Logger log = Logger.getLogger(IoUtils.class);

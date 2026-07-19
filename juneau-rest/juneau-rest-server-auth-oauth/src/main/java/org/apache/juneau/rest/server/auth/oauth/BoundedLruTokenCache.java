@@ -61,7 +61,7 @@ public class BoundedLruTokenCache implements TokenCache {
 	 */
 	public static BoundedLruTokenCache create(int maxEntries) {
 		if (maxEntries <= 0)
-			throw new IllegalArgumentException("maxEntries must be positive (was " + maxEntries + ")");
+			throw iaex("maxEntries must be positive (was %s)", maxEntries);
 		return new BoundedLruTokenCache(maxEntries);
 	}
 
@@ -100,7 +100,7 @@ public class BoundedLruTokenCache implements TokenCache {
 		assertArgNotNull("principal", principal);
 		assertArgNotNull("ttl", ttl);
 		if (ttl.isZero() || ttl.isNegative())
-			throw new IllegalArgumentException("ttl must be positive (was " + ttl + ")");
+			throw iaex("ttl must be positive (was %s)", ttl);
 		var expiresAt = Instant.now().plus(ttl);
 		synchronized (lock) {
 			entries.put(key, new CachedPrincipal(principal, expiresAt));
@@ -112,13 +112,13 @@ public class BoundedLruTokenCache implements TokenCache {
 		assertArgNotNullOrBlank("key", key);
 		synchronized (lock) {
 			var v = entries.get(key);
-			if (!(v instanceof CachedPrincipal cp))
+			if (!(v instanceof CachedPrincipal v2))
 				return oe();
-			if (!Instant.now().isBefore(cp.expiresAt())) {
+			if (!Instant.now().isBefore(v2.expiresAt())) {
 				entries.remove(key);
 				return oe();
 			}
-			return o(cp.principal());
+			return o(v2.principal());
 		}
 	}
 
@@ -137,16 +137,16 @@ public class BoundedLruTokenCache implements TokenCache {
 		assertArgNotNull("now", now);
 		assertArgNotNull("skew", skew);
 		if (skew.isNegative())
-			throw new IllegalArgumentException("skew must be non-negative (was " + skew + ")");
+			throw iaex("skew must be non-negative (was %s)", skew);
 		synchronized (lock) {
 			var v = entries.get(key);
-			if (!(v instanceof OAuthToken t))
+			if (!(v instanceof OAuthToken v2))
 				return oe();
-			if (t.isExpired(now, skew)) {
+			if (v2.isExpired(now, skew)) {
 				entries.remove(key);
 				return oe();
 			}
-			return o(t);
+			return o(v2);
 		}
 	}
 

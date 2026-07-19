@@ -133,7 +133,7 @@ public class FileWriterBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param path The file path to write to.
+	 * @param path The file path to write to.  Must not be <jk>null</jk>.
 	 * @return A new builder instance initialized with the specified path.
 	 */
 	public static FileWriterBuilder create(String path) {
@@ -242,7 +242,7 @@ public class FileWriterBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param cs The character encoding to use. The default is {@link Charset#defaultCharset()}.
+	 * @param cs The character encoding to use.  Can be <jk>null</jk> to use the default charset ({@link Charset#defaultCharset()}).
 	 * @return This object for method chaining.
 	 */
 	public FileWriterBuilder charset(Charset cs) {
@@ -304,7 +304,7 @@ public class FileWriterBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param path The file path to write to.
+	 * @param path The file path to write to.  Must not be <jk>null</jk>.
 	 * @return This object for method chaining.
 	 */
 	public FileWriterBuilder file(String path) {

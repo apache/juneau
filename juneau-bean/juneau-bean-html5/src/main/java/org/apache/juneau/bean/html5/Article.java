@@ -131,7 +131,7 @@ public class Article extends HtmlElementMixed {
 	/**
 	 * Creates an {@link Article} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Article(Object...children) {
 		children(children);
@@ -188,7 +188,7 @@ public class Article extends HtmlElementMixed {
 	/**
 	 * Adds a footer node to this element.
 	 *
-	 * @param children The children inside the footer node.
+	 * @param children The children inside the footer node. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Article footer(Object...children) {
@@ -199,7 +199,7 @@ public class Article extends HtmlElementMixed {
 	/**
 	 * Adds a header node to this element.
 	 *
-	 * @param children The children inside the header node.
+	 * @param children The children inside the header node. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Article header(Object...children) {
@@ -228,7 +228,7 @@ public class Article extends HtmlElementMixed {
 	/**
 	 * Adds a link node to this element.
 	 *
-	 * @param value The link node to add to this article.
+	 * @param value The link node to add to this article. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Article link(Link value) {
@@ -539,7 +539,7 @@ public class Article extends HtmlElementMixed {
 	/**
 	 * Adds a section node to this element.
 	 *
-	 * @param value The section node to add to this article.
+	 * @param value The section node to add to this article. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Article section(Section value) {

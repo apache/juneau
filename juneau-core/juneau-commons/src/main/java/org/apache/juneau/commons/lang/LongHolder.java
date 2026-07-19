@@ -86,7 +86,7 @@ public class LongHolder extends Holder<Long> {
 	 * 	<jsm>assertEquals</jsm>(42L, <jv>counter</jv>.get());
 	 * </p>
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 * @return A new long value.
 	 */
 	public static LongHolder of(Long value) {
@@ -96,7 +96,7 @@ public class LongHolder extends Holder<Long> {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 */
 	public LongHolder(Long value) {
 		super(value);
@@ -112,7 +112,7 @@ public class LongHolder extends Holder<Long> {
 	 * 	<jsm>assertEquals</jsm>(15L, <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @param x The value to add.
+	 * @param x The value to add.  Can be <jk>null</jk> (treated as <c>0</c>).
 	 * @return This object.
 	 */
 	public LongHolder add(Long x) {
@@ -131,7 +131,7 @@ public class LongHolder extends Holder<Long> {
 	 * 	<jsm>assertEquals</jsm>(15L, <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @param x The value to add.
+	 * @param x The value to add.  Can be <jk>null</jk> (treated as <c>0</c>).
 	 * @return The new value after addition.
 	 */
 	public Long addAndGet(Long x) {
@@ -246,7 +246,7 @@ public class LongHolder extends Holder<Long> {
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is(43L));
 	 * </p>
 	 *
-	 * @param value The value to compare to.
+	 * @param value The value to compare to.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value is equal to the specified value.
 	 */
 	@Override
@@ -267,7 +267,7 @@ public class LongHolder extends Holder<Long> {
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(1L, 2L));
 	 * </p>
 	 *
-	 * @param values The values to compare to.
+	 * @param values The values to compare to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
 	public boolean isAny(Long...values) {

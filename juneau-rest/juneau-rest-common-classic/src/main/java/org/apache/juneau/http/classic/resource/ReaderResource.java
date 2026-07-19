@@ -52,7 +52,7 @@ public class ReaderResource extends BasicResource {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean being copied.
+	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
 	protected ReaderResource(ReaderResource copyFrom) {
 		super(copyFrom);

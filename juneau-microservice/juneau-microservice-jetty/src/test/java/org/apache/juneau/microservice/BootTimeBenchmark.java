@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.inject.*;
@@ -214,7 +216,7 @@ public class BootTimeBenchmark {
 	}
 
 	private static double median(double[] xs) {
-		var copy = xs.clone();
+		var copy = cp(xs);
 		Arrays.sort(copy);
 		var n = copy.length;
 		return (n % 2 == 1) ? copy[n / 2] : (copy[n / 2 - 1] + copy[n / 2]) / 2.0;

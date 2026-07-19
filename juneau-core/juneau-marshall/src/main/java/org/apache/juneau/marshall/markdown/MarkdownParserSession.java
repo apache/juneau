@@ -120,7 +120,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 */
 	protected MarkdownParserSession(Builder<?> builder) {
 		super(builder);
-		nullValue = builder.nullValue != null ? builder.nullValue : "*null*";
+		nullValue = or(builder.nullValue, "*null*");
 	}
 
 	@Override /* RecordReadable */

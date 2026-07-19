@@ -60,7 +60,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	/**
 	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
 	 *
-	 * @param o The object to check.
+	 * @param o The object to check.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
 	 */
 	public static boolean canCast(Object o) {
@@ -80,8 +80,8 @@ public class BasicPart implements NameValuePair, Headerable {
 	public static NameValuePair cast(Object o) {
 		if (o instanceof NameValuePair o2)
 			return o2;
-		if (o instanceof NameValuePairable o3)
-			return o3.asNameValuePair();
+		if (o instanceof NameValuePairable o2)
+			return o2.asNameValuePair();
 		if (o instanceof Headerable o2) {
 			var x = o2.asHeader();
 			return BasicPart.of(x.getName(), x.getValue());
@@ -106,8 +106,8 @@ public class BasicPart implements NameValuePair, Headerable {
 	/**
 	 * Creates a {@link NameValuePair} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
 	 *
-	 * @param pair The pair string.
-	 * @return A new {@link NameValuePair} object.
+	 * @param pair The pair string.  Can be <jk>null</jk>.
+	 * @return A new {@link NameValuePair} object, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static BasicPart ofPair(String pair) {
 		if (pair == null)
@@ -138,7 +138,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The object to copy.
+	 * @param copyFrom The object to copy.  Must not be <jk>null</jk>.
 	 */
 	protected BasicPart(BasicPart copyFrom) {
 		assertArgNotNull(ARG_copyFrom, copyFrom);

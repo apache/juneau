@@ -42,7 +42,7 @@ public class DotenvVar extends DefaultingVar {
 	/**
 	 * Creates a {@link DotenvVar} bound to a specific dotenv file path.
 	 *
-	 * @param path The dotenv file path.
+	 * @param path The dotenv file path.  Can be <jk>null</jk>, in which case no properties are loaded.
 	 * @return A new {@link DotenvVar} instance.
 	 */
 	public static DotenvVar create(Path path) {

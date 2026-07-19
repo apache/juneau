@@ -132,8 +132,8 @@ public class Template extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Template} element with the specified {@link Template#id(String)} attribute and child nodes.
 	 *
-	 * @param id The {@link Template#id(String)} attribute.
-	 * @param children The child nodes.
+	 * @param id The {@link Template#id(String)} attribute. Can be <jk>null</jk>.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Template(String id, Object...children) {
 		id(id).children(children);

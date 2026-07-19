@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client.apachehttpclient45;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import org.apache.http.impl.client.*;
 
 /**
@@ -58,7 +60,7 @@ public final class ApacheHc45TransportBuilder {
 	 * @return This object.
 	 */
 	public ApacheHc45TransportBuilder httpClient(CloseableHttpClient value) {
-		httpClient = value;
+		httpClient = assertArgNotNull("value", value);
 		return this;
 	}
 

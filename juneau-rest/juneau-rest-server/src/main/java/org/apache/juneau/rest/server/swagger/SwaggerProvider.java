@@ -74,7 +74,7 @@ public interface SwaggerProvider {
 			try {
 				if (impl != null)
 					return impl;
-				var t = implType != null ? implType : BasicSwaggerProvider.class;
+				var t = or(implType, BasicSwaggerProvider.class);
 				return BeanInstantiator.of(SwaggerProvider.class, beanStore)
 					.type(t)
 					.noBuilder()

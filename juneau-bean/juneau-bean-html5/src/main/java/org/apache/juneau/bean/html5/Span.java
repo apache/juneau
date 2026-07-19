@@ -75,7 +75,7 @@ public class Span extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Span} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Span(Object...children) {
 		children(children);

@@ -73,7 +73,7 @@ public class PartBeanMeta<T> {
 	 * Finds the part bean meta for the specified type.
 	 *
 	 * @param <T> The part bean type.
-	 * @param type The part bean type.
+	 * @param type The part bean type.  Must not be <jk>null</jk>.
 	 * @return The metadata, or <jk>null</jk> if a valid constructor could not be found.
 	 */
 	@SuppressWarnings({
@@ -121,6 +121,7 @@ public class PartBeanMeta<T> {
 	 *
 	 * @param value
 	 * 	The part value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return A newly constructed bean.
 	 */
 	public T construct(Object value) {
@@ -136,6 +137,7 @@ public class PartBeanMeta<T> {
 	 * 	{@link Header#value() @Header(value)} annotations.
 	 * @param value
 	 * 	The part value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return A newly constructed bean.
 	 * @throws UnsupportedOperationException If bean could not be constructed (e.g. couldn't find a constructor).
 	 */

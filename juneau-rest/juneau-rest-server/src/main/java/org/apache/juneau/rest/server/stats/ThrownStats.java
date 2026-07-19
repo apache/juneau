@@ -76,7 +76,7 @@ public class ThrownStats {
 		 * @return A new {@link ThrownStats}
 		 */
 		public ThrownStats build() {
-			var t = implType != null ? implType : ThrownStats.class;
+			var t = or(implType, ThrownStats.class);
 			return BeanInstantiator.of(ThrownStats.class, beanStore)
 				.type(t)
 				.noBuilder()
@@ -168,8 +168,8 @@ public class ThrownStats {
 		this.guid = x.guid;
 		this.thrownClass = x.thrownClass;
 		this.firstMessage = x.firstMessage;
-		this.stackTrace = u(copyOf(x.stackTrace));
-		this.causedBy = o(x.causedBy.isPresent() ? ThrownStats.copy(x.causedBy.get()) : null);
+		this.stackTrace = u(cp(x.stackTrace));
+		this.causedBy = o(ThrownStats.copyOrNull(x.causedBy.orElse(null)));
 		this.hash = x.hash;
 		this.count = new AtomicInteger(x.count.get());
 		this.firstOccurrence = new AtomicLong(x.firstOccurrence.get());
@@ -177,13 +177,13 @@ public class ThrownStats {
 	}
 
 	/**
-	 * Creates a copy of this stats object.
+	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param stats The stats object to copy.
-	 * @return A new stats instance with copied values.
+	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ThrownStats copy(ThrownStats stats) {
-		return new ThrownStats(stats);
+	public static ThrownStats copyOrNull(ThrownStats value) {
+		return value == null ? null : new ThrownStats(value);
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class ThrownStats {
 		this.guid = new Random().nextLong();
 		this.thrownClass = builder.throwable.getClass();
 		this.firstMessage = builder.throwable.getMessage();
-		this.stackTrace = u(copyOf(builder.stackTrace));
+		this.stackTrace = u(cp(builder.stackTrace));
 		this.causedBy = o(builder.causedBy);
 		this.hash = builder.hash;
 		this.count = new AtomicInteger(0);

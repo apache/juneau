@@ -116,7 +116,7 @@ public class RequestHeaderFieldsTooLarge extends BasicHttpException {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy.
+	 * @param copyFrom The bean to copy.  Must not be <jk>null</jk>.
 	 */
 	protected RequestHeaderFieldsTooLarge(RequestHeaderFieldsTooLarge copyFrom) {
 		super(copyFrom);

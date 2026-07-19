@@ -963,8 +963,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	private HttpRequest findRestRequest(HttpRequest req) {
 		if (req instanceof RestRequestCreated req2)
 			return req2.getRestRequest();
-		if (req instanceof HttpRequestWrapper req3)
-			return findRestRequest(req3.getOriginal());
+		if (req instanceof HttpRequestWrapper req2)
+			return findRestRequest(req2.getOriginal());
 		return req;
 	}
 

@@ -17,6 +17,7 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.net.*;
@@ -115,7 +116,7 @@ public final class PartList implements HttpBody, Iterable<HttpPart> {
 	public static PartList ofPairs(String... pairs) {
 		assertArgNotNull("pairs", pairs);
 		if (pairs.length % 2 != 0)
-			throw new IllegalArgumentException("pairs length must be even, got: " + pairs.length);
+			throw iaex("pairs length must be even, got: %s", pairs.length);
 		var list = new ArrayList<HttpPart>(pairs.length / 2);
 		for (int i = 0; i < pairs.length; i += 2)
 			list.add(HttpPartBean.of(pairs[i], pairs[i + 1]));

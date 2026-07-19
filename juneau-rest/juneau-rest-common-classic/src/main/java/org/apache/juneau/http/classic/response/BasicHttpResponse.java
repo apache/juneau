@@ -66,7 +66,7 @@ public class BasicHttpResponse implements HttpResponse {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy from.
+	 * @param copyFrom The bean to copy from.  Must not be <jk>null</jk>.
 	 */
 	public BasicHttpResponse(BasicHttpResponse copyFrom) {
 		statusLine = copyFrom.statusLine.copy();
@@ -77,7 +77,7 @@ public class BasicHttpResponse implements HttpResponse {
 	/**
 	 * Constructor.
 	 *
-	 * @param statusLine The HTTP status line.
+	 * @param statusLine The HTTP status line.  Must not be <jk>null</jk>.
 	 */
 	public BasicHttpResponse(BasicStatusLine statusLine) {
 		setStatusLine(statusLine.copy());
@@ -92,6 +92,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 */
 	public BasicHttpResponse(HttpResponse response) {
+		assertArgNotNull(ARG_response, response);
 		setHeaders(response.getAllHeaders());
 		setContent(response.getEntity());
 		setStatusLine(response.getStatusLine());
@@ -190,7 +191,7 @@ public class BasicHttpResponse implements HttpResponse {
 	/**
 	 * Sets the body on this response.
 	 *
-	 * @param value The body on this response.
+	 * @param value The body on this response.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public BasicHttpResponse setContent(HttpEntity value) {
@@ -202,7 +203,7 @@ public class BasicHttpResponse implements HttpResponse {
 	/**
 	 * Sets the body on this response.
 	 *
-	 * @param value The body on this response.
+	 * @param value The body on this response.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpResponse setContent(String value) {
@@ -256,7 +257,7 @@ public class BasicHttpResponse implements HttpResponse {
 	/**
 	 * Sets the specified headers on this response.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpResponse setHeaders(HeaderList value) {
@@ -298,7 +299,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 * <p>
 	 * If not specified, uses {@link Locale#getDefault()}.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpResponse setLocale2(Locale value) {
@@ -309,7 +310,7 @@ public class BasicHttpResponse implements HttpResponse {
 	/**
 	 * Specifies the value for the <c>Location</c> header.
 	 *
-	 * @param value The new header location.
+	 * @param value The new header location.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpResponse setLocation(String value) {
@@ -320,7 +321,7 @@ public class BasicHttpResponse implements HttpResponse {
 	/**
 	 * Specifies the value for the <c>Location</c> header.
 	 *
-	 * @param value The new header location.
+	 * @param value The new header location.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpResponse setLocation(URI value) {
@@ -342,7 +343,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 * <p>
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpResponse setProtocolVersion(ProtocolVersion value) {
@@ -362,7 +363,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 * If not specified, the reason phrase will be retrieved from the reason phrase catalog
 	 * using the locale on this builder.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpResponse setReasonPhrase2(String value) {
@@ -376,7 +377,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 * <p>
 	 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpResponse setReasonPhraseCatalog(ReasonPhraseCatalog value) {
@@ -409,7 +410,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 * <p>
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpResponse setStatusLine(BasicStatusLine value) {
@@ -442,6 +443,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 */
 	public BasicHttpResponse setUnmodifiable() {
 		unmodifiable = true;
+		headers.setUnmodifiable();
 		return this;
 	}
 

@@ -55,8 +55,8 @@ public class ReaderEntity extends BasicHttpEntity {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.
-	 * @param content The entity contents.
+	 * @param contentType The entity content type.  Can be <jk>null</jk>.
+	 * @param content The entity contents.  Can be <jk>null</jk>.
 	 */
 	public ReaderEntity(ContentType contentType, Reader content) {
 		super(contentType, content);
@@ -65,7 +65,7 @@ public class ReaderEntity extends BasicHttpEntity {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean being copied.
+	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
 	protected ReaderEntity(ReaderEntity copyFrom) {
 		super(copyFrom);
@@ -76,7 +76,7 @@ public class ReaderEntity extends BasicHttpEntity {
 		if (isCached() && byteCache == null)
 			byteCache = readBytes(content());
 		if (nn(byteCache))
-			return byteCache;
+			return cp(byteCache);
 		return readBytes(content());
 	}
 

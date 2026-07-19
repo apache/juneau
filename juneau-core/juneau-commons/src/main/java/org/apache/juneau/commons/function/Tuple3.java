@@ -54,9 +54,9 @@ public class Tuple3<A,B,C> {
 	 * @param <A> Object 1 type.
 	 * @param <B> Object 2 type.
 	 * @param <C> Object 3 type.
-	 * @param a Object 1.
-	 * @param b Object 2.
-	 * @param c Object 3.
+	 * @param a Object 1.  Can be <jk>null</jk>.
+	 * @param b Object 2.  Can be <jk>null</jk>.
+	 * @param c Object 3.  Can be <jk>null</jk>.
 	 * @return A new tuple object.
 	 */
 	public static <A,B,C> Tuple3<A,B,C> of(A a, B b, C c) {
@@ -71,9 +71,9 @@ public class Tuple3<A,B,C> {
 	/**
 	 * Constructor.
 	 *
-	 * @param a Object 1.
-	 * @param b Object 2.
-	 * @param c Object 3.
+	 * @param a Object 1.  Can be <jk>null</jk>.
+	 * @param b Object 2.  Can be <jk>null</jk>.
+	 * @param c Object 3.  Can be <jk>null</jk>.
 	 */
 	public Tuple3(A a, B b, C c) {
 		this.a = a;

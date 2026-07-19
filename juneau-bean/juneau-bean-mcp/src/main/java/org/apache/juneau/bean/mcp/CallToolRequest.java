@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -41,7 +43,7 @@ public class CallToolRequest {
 	/**
 	 * Sets the tool name.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public CallToolRequest setName(String value) {
@@ -55,13 +57,13 @@ public class CallToolRequest {
 	 * @return The arguments map, or {@code null} if not set.
 	 */
 	public Map<String, Object> getArguments() {
-		return arguments;
+		return u(arguments);
 	}
 
 	/**
 	 * Sets tool arguments.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public CallToolRequest setArguments(Map<String, Object> value) {

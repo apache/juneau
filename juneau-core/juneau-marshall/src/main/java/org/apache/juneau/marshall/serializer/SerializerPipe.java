@@ -70,7 +70,7 @@ public class SerializerPipe implements Closeable {
 	 */
 	SerializerPipe(Object output, Charset streamCharset) {
 		this.output = output;
-		this.charset = streamCharset != null ? streamCharset : UTF8;
+		this.charset = or(streamCharset, UTF8);
 	}
 
 	/**

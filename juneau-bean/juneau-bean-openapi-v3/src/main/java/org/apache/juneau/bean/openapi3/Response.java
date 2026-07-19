@@ -112,9 +112,9 @@ public class Response extends OpenApiElement {
 		super(copyFrom);
 
 		this.description = copyFrom.description;
-		headers.putAll(copyOf(copyFrom.headers, HeaderInfo::copy));
-		content.putAll(copyOf(copyFrom.content, MediaType::copy));
-		links.putAll(copyOf(copyFrom.links, Link::copy));
+		headers.putAll(cp(copyFrom.headers, HeaderInfo::copy));
+		content.putAll(cp(copyFrom.content, MediaType::copy));
+		links.putAll(cp(copyFrom.links, Link::copy));
 	}
 
 	/**

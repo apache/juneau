@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.utils;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
@@ -666,7 +667,7 @@ public final class Iso8601Utils {
 
 	private static DateTimeFormatter getFormatterForType(Class<?> tc) {
 		var f = DEFAULT_FORMATTERS.get(tc);
-		return f != null ? f : DateTimeFormatter.ISO_INSTANT;
+		return or(f, DateTimeFormatter.ISO_INSTANT);
 	}
 
 	/**

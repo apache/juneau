@@ -134,8 +134,8 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * and should not be called directly. Use the static factory methods {@link #of(Constructor)} or
 	 * obtain ConstructorInfo instances from {@link ClassInfo#getConstructor(Constructor)}.
 	 *
-	 * @param declaringClass The ClassInfo for the class that declares this constructor.
-	 * @param inner The constructor being wrapped.
+	 * @param declaringClass The ClassInfo for the class that declares this constructor. Must not be <jk>null</jk>.
+	 * @param inner The constructor being wrapped. Must not be <jk>null</jk>.
 	 */
 	protected ConstructorInfo(ClassInfo declaringClass, Constructor<?> inner) {
 		super(declaringClass, inner);
@@ -205,7 +205,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof ConstructorInfo other && eq(this, other, (x, y) -> eq(x.inner, y.inner));
+		return obj instanceof ConstructorInfo obj2 && eq(this, obj2, (x, y) -> eq(x.inner, y.inner));
 	}
 
 	/**

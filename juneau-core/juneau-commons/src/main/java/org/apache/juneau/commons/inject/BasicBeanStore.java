@@ -179,7 +179,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * Same as {@link #addBean(Class,Object)} but returns the bean instead of this object for fluent calls.
 	 *
 	 * @param <T> The class to associate this bean with.
-	 * @param beanType The class to associate this bean with.
+	 * @param beanType The class to associate this bean with.  Must not be <jk>null</jk>.
 	 * @param bean The bean.  Can be <jk>null</jk>.
 	 * @return The bean.
 	 */
@@ -193,7 +193,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * Same as {@link #addBean(Class,Object,String)} but returns the bean instead of this object for fluent calls.
 	 *
 	 * @param <T> The class to associate this bean with.
-	 * @param beanType The class to associate this bean with.
+	 * @param beanType The class to associate this bean with.  Must not be <jk>null</jk>.
 	 * @param bean The bean.  Can be <jk>null</jk>.
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return The bean.
@@ -208,7 +208,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * Adds an unnamed bean of the specified type to this store.
 	 *
 	 * @param <T> The class to associate this bean with.
-	 * @param beanType The class to associate this bean with.
+	 * @param beanType The class to associate this bean with.  Must not be <jk>null</jk>.
 	 * @param bean The bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
@@ -221,7 +221,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * Adds a named bean of the specified type to this store.
 	 *
 	 * @param <T> The class to associate this bean with.
-	 * @param beanType The class to associate this bean with.
+	 * @param beanType The class to associate this bean with.  Must not be <jk>null</jk>.
 	 * @param bean The bean.  Can be <jk>null</jk>.
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return This object.
@@ -238,8 +238,8 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * The supplier will be invoked lazily when the bean is first requested.
 	 *
 	 * @param <T> The class to associate this bean with.
-	 * @param beanType The class to associate this bean with.
-	 * @param bean The bean supplier.
+	 * @param beanType The class to associate this bean with.  Must not be <jk>null</jk>.
+	 * @param bean The bean supplier.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	@Override
@@ -254,8 +254,8 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * The supplier will be invoked lazily when the bean is first requested.
 	 *
 	 * @param <T> The class to associate this bean with.
-	 * @param beanType The class to associate this bean with.
-	 * @param bean The bean supplier.
+	 * @param beanType The class to associate this bean with.  Must not be <jk>null</jk>.
+	 * @param bean The bean supplier.  Must not be <jk>null</jk>.
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
@@ -279,8 +279,8 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * {@linkplain #BasicBeanStore(BeanStore,BeanStore) overriding parent} (e.g. Spring).
 	 *
 	 * @param <T> The bean type.
-	 * @param beanType The bean type.
-	 * @param supplier The bean supplier.
+	 * @param beanType The bean type.  Must not be <jk>null</jk>.
+	 * @param supplier The bean supplier.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	@Override
@@ -295,8 +295,8 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * See {@link #addDefaultSupplier(Class,Supplier)} for ordering semantics.
 	 *
 	 * @param <T> The bean type.
-	 * @param beanType The bean type.
-	 * @param supplier The bean supplier.
+	 * @param beanType The bean type.  Must not be <jk>null</jk>.
+	 * @param supplier The bean supplier.  Must not be <jk>null</jk>.
 	 * @param name The bean name.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
@@ -400,7 +400,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * If no unnamed bean is found in this store, searches the parent store recursively.
 	 *
 	 * @param <T> The type of bean to return.
-	 * @param beanType The type of bean to return.
+	 * @param beanType The type of bean to return.  Must not be <jk>null</jk>.
 	 * @return The bean, or {@link Optional#empty()} if not found.
 	 */
 	@Override
@@ -416,7 +416,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * If no bean with the specified name is found in this store, searches the parent store recursively.
 	 *
 	 * @param <T> The type of bean to return.
-	 * @param beanType The type of bean to return.
+	 * @param beanType The type of bean to return.  Must not be <jk>null</jk>.
 	 * @param name The bean name.  Can be <jk>null</jk>.
 	 * @return The bean, or {@link Optional#empty()} if not found.
 	 */
@@ -440,7 +440,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * Results from the parent store are included first, then beans from this store (which override parent beans with the same name).
 	 *
 	 * @param <T> The bean type.
-	 * @param beanType The bean type.
+	 * @param beanType The bean type.  Must not be <jk>null</jk>.
 	 * @return A map of bean names to bean instances.  Never <jk>null</jk>.
 	 */
 	@Override
@@ -479,7 +479,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * <p>
 	 * Parent and overriding-parent stores are <i>not</i> consulted.
 	 *
-	 * @param beanType The bean type to check.
+	 * @param beanType The bean type to check.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if a default supplier for the unnamed bean type is registered on this store.
 	 */
 	@Override
@@ -493,7 +493,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * <p>
 	 * Parent and overriding-parent stores are <i>not</i> consulted.
 	 *
-	 * @param beanType The bean type to check.
+	 * @param beanType The bean type to check.  Must not be <jk>null</jk>.
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return <jk>true</jk> if a default supplier for the bean type and name is registered on this store.
 	 */
@@ -513,7 +513,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * factory.
 	 *
 	 * @param <T> The bean type.
-	 * @param beanType The bean type to look up.
+	 * @param beanType The bean type to look up.  Must not be <jk>null</jk>.
 	 * @return The locally-registered default supplier, or {@link Optional#empty()} if not present.
 	 */
 	public <T> Optional<Supplier<T>> getDefaultSupplier(Class<T> beanType) {
@@ -530,7 +530,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * factory.
 	 *
 	 * @param <T> The bean type.
-	 * @param beanType The bean type to look up.
+	 * @param beanType The bean type to look up.  Must not be <jk>null</jk>.
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The locally-registered default supplier, or {@link Optional#empty()} if not present.
 	 */
@@ -551,7 +551,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * <p>
 	 * If not found in this store, searches the parent store recursively.
 	 *
-	 * @param beanType The bean type to check.
+	 * @param beanType The bean type to check.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if this store contains at least one unnamed bean of the specified type.
 	 */
 	@Override
@@ -565,7 +565,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * <p>
 	 * If not found in this store, searches the parent store recursively.
 	 *
-	 * @param beanType The bean type to check.
+	 * @param beanType The bean type to check.  Must not be <jk>null</jk>.
 	 * @param name The bean name.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if this store contains a bean of the specified type and name.
 	 */
@@ -601,7 +601,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * If no supplier is found in this store, searches the parent store recursively.
 	 *
 	 * @param <T> The bean type.
-	 * @param beanType The bean type.
+	 * @param beanType The bean type.  Must not be <jk>null</jk>.
 	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type exists.
 	 */
 	@Override
@@ -616,7 +616,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * If no supplier with the specified name is found in this store, searches the parent store recursively.
 	 *
 	 * @param <T> The bean type.
-	 * @param beanType The bean type.
+	 * @param beanType The bean type.  Must not be <jk>null</jk>.
 	 * @param name The bean name.  Can be <jk>null</jk>.
 	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.
 	 */
@@ -670,7 +670,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * If no supplier with the specified name is found in this store, searches the parent store recursively.
 	 *
 	 * @param <T> The bean type.
-	 * @param beanType The bean type.
+	 * @param beanType The bean type.  Must not be <jk>null</jk>.
 	 * @param name The bean name.  Can be <jk>null</jk>.
 	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.
 	 */
@@ -712,7 +712,7 @@ public class BasicBeanStore implements WritableBeanStore {
 		assertArgNotNull(ARG_beanType, beanType);
 		assertArgNotNull(ARG_onClassOrObject, onClassOrObject);
 		Object resource = onClassOrObject instanceof Class ? null : onClassOrObject;
-		Class<?> resourceClass = onClassOrObject instanceof Class<?> c ? c : onClassOrObject.getClass();
+		Class<?> resourceClass = onClassOrObject instanceof Class<?> onClassOrObject2 ? onClassOrObject2 : onClassOrObject.getClass();
 		return info(resourceClass)
 			.getPublicMethod(m ->
 				m.isNotDeprecated()
@@ -748,8 +748,8 @@ public class BasicBeanStore implements WritableBeanStore {
 			.a(PROP_name, name))));
 		Object overridingParentValue = null;
 		if (nn(overridingParent)) {
-			if (overridingParent instanceof BasicBeanStore op2)
-				overridingParentValue = op2.properties();
+			if (overridingParent instanceof BasicBeanStore overridingParent2)
+				overridingParentValue = overridingParent2.properties();
 			else
 				overridingParentValue = s(overridingParent);
 		}
@@ -855,7 +855,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	}
 
 	private boolean matchesConditions(java.lang.reflect.AnnotatedElement element) {
-		var classLoader = element instanceof Class<?> c ? c.getClassLoader() : element.getClass().getClassLoader();
+		var classLoader = element instanceof Class<?> element2 ? element2.getClassLoader() : element.getClass().getClassLoader();
 		var ctx = new ConditionContext(this, Settings.get(), classLoader, element);
 		for (var c : element.getAnnotationsByType(Conditional.class)) {
 			if (!BeanInstantiator.of(c.value(), this).run().matches(ctx)) {
@@ -932,7 +932,7 @@ public class BasicBeanStore implements WritableBeanStore {
 		// contributes a primary candidate — only entryMetadata is consulted here.  Parent and
 		// overridingParent stores (including Spring-backed delegates) are similarly excluded because
 		// @Primary metadata only exists on beans this store registered itself.
-		Set<String> primaryNames = new LinkedHashSet<>();
+		Set<String> primaryNames = st();
 		var em = entryMetadata.get(beanType);
 		if (nn(em))
 			em.forEach((name, meta) -> { if (meta.primary) primaryNames.add(name); });

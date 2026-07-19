@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -123,15 +122,15 @@ public class Components extends OpenApiElement {
 	 */
 	public Components(Components copyFrom) {
 		super(copyFrom);
-		this.schemas = copyOf(copyFrom.schemas);
-		this.responses = copyOf(copyFrom.responses);
-		this.parameters = copyOf(copyFrom.parameters);
-		this.examples = copyOf(copyFrom.examples);
-		this.requestBodies = copyOf(copyFrom.requestBodies);
-		this.headers = copyOf(copyFrom.headers);
-		this.securitySchemes = copyOf(copyFrom.securitySchemes);
-		this.links = copyOf(copyFrom.links);
-		this.callbacks = copyOf(copyFrom.callbacks);
+		this.schemas = cp(copyFrom.schemas);
+		this.responses = cp(copyFrom.responses);
+		this.parameters = cp(copyFrom.parameters);
+		this.examples = cp(copyFrom.examples);
+		this.requestBodies = cp(copyFrom.requestBodies);
+		this.headers = cp(copyFrom.headers);
+		this.securitySchemes = cp(copyFrom.securitySchemes);
+		this.links = cp(copyFrom.links);
+		this.callbacks = cp(copyFrom.callbacks);
 	}
 
 	/**
@@ -165,63 +164,63 @@ public class Components extends OpenApiElement {
 	 *
 	 * @return The callbacks map.
 	 */
-	public Map<String,Callback> getCallbacks() { return callbacks; }
+	public Map<String,Callback> getCallbacks() { return u(callbacks); }
 
 	/**
 	 * Returns the examples map.
 	 *
 	 * @return The examples map.
 	 */
-	public Map<String,Example> getExamples() { return examples; }
+	public Map<String,Example> getExamples() { return u(examples); }
 
 	/**
 	 * Returns the headers map.
 	 *
 	 * @return The headers map.
 	 */
-	public Map<String,HeaderInfo> getHeaders() { return headers; }
+	public Map<String,HeaderInfo> getHeaders() { return u(headers); }
 
 	/**
 	 * Returns the links map.
 	 *
 	 * @return The links map.
 	 */
-	public Map<String,Link> getLinks() { return links; }
+	public Map<String,Link> getLinks() { return u(links); }
 
 	/**
 	 * Returns the parameters map.
 	 *
 	 * @return The parameters map.
 	 */
-	public Map<String,Parameter> getParameters() { return parameters; }
+	public Map<String,Parameter> getParameters() { return u(parameters); }
 
 	/**
 	 * Returns the request bodies map.
 	 *
 	 * @return The request bodies map.
 	 */
-	public Map<String,RequestBodyInfo> getRequestBodies() { return requestBodies; }
+	public Map<String,RequestBodyInfo> getRequestBodies() { return u(requestBodies); }
 
 	/**
 	 * Returns the responses map.
 	 *
 	 * @return The responses map.
 	 */
-	public Map<String,Response> getResponses() { return responses; }
+	public Map<String,Response> getResponses() { return u(responses); }
 
 	/**
 	 * Returns the schemas map.
 	 *
 	 * @return The schemas map.
 	 */
-	public Map<String,SchemaInfo> getSchemas() { return schemas; }
+	public Map<String,SchemaInfo> getSchemas() { return u(schemas); }
 
 	/**
 	 * Returns the security schemes map.
 	 *
 	 * @return The security schemes map.
 	 */
-	public Map<String,SecuritySchemeInfo> getSecuritySchemes() { return securitySchemes; }
+	public Map<String,SecuritySchemeInfo> getSecuritySchemes() { return u(securitySchemes); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {

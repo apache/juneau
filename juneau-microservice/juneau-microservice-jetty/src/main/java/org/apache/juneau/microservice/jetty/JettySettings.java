@@ -87,7 +87,7 @@ public class JettySettings {
 		 * @return This object.
 		 */
 		public Builder ports(int...value) {
-			ports = value;
+			ports = cp(value);
 			return this;
 		}
 
@@ -197,7 +197,7 @@ public class JettySettings {
 	 * @return The ports, or <jk>null</jk> if not set.
 	 */
 	public int[] getPorts() {
-		return ports == null ? null : ports.clone();
+		return cp(ports);
 	}
 
 	/**

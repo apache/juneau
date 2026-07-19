@@ -90,7 +90,7 @@ public class Category extends Common {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param term The category term.
+	 * @param term The category term.  Can be <jk>null</jk>.
 	 */
 	public Category(String term) {
 		setTerm(term);

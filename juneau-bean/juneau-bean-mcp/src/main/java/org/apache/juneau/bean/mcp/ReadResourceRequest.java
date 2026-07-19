@@ -38,7 +38,7 @@ public class ReadResourceRequest {
 	/**
 	 * Sets the resource URI.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ReadResourceRequest setUri(String value) {

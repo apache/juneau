@@ -112,7 +112,7 @@ public class Logger extends java.util.logging.Logger {
 	/**
 	 * Protected constructor - wraps an existing logger instance.
 	 *
-	 * @param delegate The underlying logger to delegate to.
+	 * @param delegate The underlying logger to delegate to.  Must not be <jk>null</jk>.
 	 */
 	protected Logger(java.util.logging.Logger delegate) {
 		super(delegate.getName(), null);
@@ -128,7 +128,7 @@ public class Logger extends java.util.logging.Logger {
 	 * Logger instances are cached and automatically created using the underlying
 	 * {@link java.util.logging.Logger#getLogger(String)}.
 	 *
-	 * @param name The logger name.
+	 * @param name The logger name.  Must not be <jk>null</jk>.
 	 * @return A logger instance (cached and reused for the same name).
 	 */
 	public static Logger getLogger(String name) {
@@ -138,7 +138,7 @@ public class Logger extends java.util.logging.Logger {
 	/**
 	 * Creates a logger for the specified class.
 	 *
-	 * @param clazz The class.
+	 * @param clazz The class.  Must not be <jk>null</jk>.
 	 * @return A logger instance.
 	 */
 	public static Logger getLogger(Class<?> clazz) {
@@ -454,7 +454,7 @@ public class Logger extends java.util.logging.Logger {
 	/**
 	 * Logs a message at the specified level with formatted string.
 	 *
-	 * @param level The log level.
+	 * @param level The log level.  Must not be <jk>null</jk>.
 	 * @param pattern The format pattern.
 	 * @param args The format arguments.
 	 */
@@ -465,7 +465,7 @@ public class Logger extends java.util.logging.Logger {
 	/**
 	 * Logs a message at the specified level with formatted string and throwable.
 	 *
-	 * @param level The log level.
+	 * @param level The log level.  Must not be <jk>null</jk>.
 	 * @param pattern The format pattern.
 	 * @param thrown The throwable.
 	 * @param args The format arguments.

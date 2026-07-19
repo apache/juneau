@@ -89,9 +89,10 @@ public class SerializedPart extends BasicPart {
 	 *
 	 * @param name The part name.
 	 * @param value The POJO to serialize to The part value.
-	 * @param type The HTTP part type.
+	 * @param type The HTTP part type.  Can be <jk>null</jk>.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param schema
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
@@ -111,7 +112,7 @@ public class SerializedPart extends BasicPart {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The object to copy.
+	 * @param copyFrom The object to copy.  Must not be <jk>null</jk>.
 	 */
 	protected SerializedPart(SerializedPart copyFrom) {
 		super(copyFrom);
@@ -177,7 +178,7 @@ public class SerializedPart extends BasicPart {
 	/**
 	 * Sets the schema object that defines the format of the output.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SerializedPart schema(HttpPartSchema value) {
@@ -188,7 +189,7 @@ public class SerializedPart extends BasicPart {
 	/**
 	 * Sets the serializer to use for serializing the value to a string value.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> (no-op).
 	 * @return This object.
 	 */
 	public SerializedPart serializer(HttpPartSerializer value) {
@@ -200,7 +201,7 @@ public class SerializedPart extends BasicPart {
 	/**
 	 * Sets the serializer to use for serializing the value to a string value.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SerializedPart serializer(HttpPartSerializerSession value) {
@@ -231,7 +232,7 @@ public class SerializedPart extends BasicPart {
 	/**
 	 * Sets the HTTP part type.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SerializedPart type(HttpPartType value) {

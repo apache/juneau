@@ -183,7 +183,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 	 * Constructs a bidirectional map from the provided builder, automatically filtering
 	 * out any entries with null keys or values.
 	 *
-	 * @param builder The builder containing the initial entries.
+	 * @param builder The builder containing the initial entries. Must not be <jk>null</jk>.
 	 */
 	public BidiMap(Builder<K,V> builder) {
 		var forward2 = builder.map.entrySet().stream().filter(x -> nn(x.getKey()) && nn(x.getValue())).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b, LinkedHashMap::new));
@@ -209,7 +209,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 	/**
 	 * Returns <jk>true</jk> if this map contains a mapping for the specified key.
 	 *
-	 * @param key The key to check for.
+	 * @param key The key to check for. Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if this map contains a mapping for the specified key.
 	 */
 	@Override /* Map */
@@ -223,7 +223,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 	 * <p>
 	 * This implementation uses the reverse map for efficient lookup.
 	 *
-	 * @param value The value to check for.
+	 * @param value The value to check for. Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if this map maps one or more keys to the specified value.
 	 */
 	@Override /* Map */
@@ -244,7 +244,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 	/**
 	 * Returns the value to which the specified key is mapped, or <jk>null</jk> if this map contains no mapping for the key.
 	 *
-	 * @param key The key whose associated value is to be returned.
+	 * @param key The key whose associated value is to be returned. Can be <jk>null</jk>.
 	 * @return The value to which the specified key is mapped, or <jk>null</jk> if this map contains no mapping for the key.
 	 */
 	@Override /* Map */
@@ -264,7 +264,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 	 * 	String <jv>key</jv> = <jv>map</jv>.getKey(2);  <jc>// Returns "two"</jc>
 	 * </p>
 	 *
-	 * @param value The value whose associated key is to be returned.
+	 * @param value The value whose associated key is to be returned. Can be <jk>null</jk>.
 	 * @return The key to which the specified value is mapped, or <jk>null</jk> if this map contains no mapping for the value.
 	 */
 	public K getKey(V value) {
@@ -295,8 +295,8 @@ public class BidiMap<K,V> implements Map<K,V> {
 	 * <p>
 	 * This operation updates both the forward map (key→value) and the reverse map (value→key).
 	 *
-	 * @param key The key with which the specified value is to be associated.
-	 * @param value The value to be associated with the specified key.
+	 * @param key The key with which the specified value is to be associated. Can be <jk>null</jk>.
+	 * @param value The value to be associated with the specified key. Can be <jk>null</jk>.
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping for the key.
 	 * @throws UnsupportedOperationException if the map is unmodifiable.
 	 * @throws IllegalArgumentException if the value already exists mapped to a different key.
@@ -319,7 +319,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 	 * <p>
 	 * This operation updates both the forward and reverse maps.
 	 *
-	 * @param m Mappings to be stored in this map.
+	 * @param m Mappings to be stored in this map. Must not be <jk>null</jk>.
 	 * @throws UnsupportedOperationException if the map is unmodifiable.
 	 * @throws IllegalArgumentException if any value in the map already exists mapped to a different key.
 	 */
@@ -344,7 +344,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 	 * <p>
 	 * This operation removes the entry from both the forward and reverse maps.
 	 *
-	 * @param key The key whose mapping is to be removed from the map.
+	 * @param key The key whose mapping is to be removed from the map. Can be <jk>null</jk>.
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping for the key.
 	 * @throws UnsupportedOperationException if the map is unmodifiable.
 	 */

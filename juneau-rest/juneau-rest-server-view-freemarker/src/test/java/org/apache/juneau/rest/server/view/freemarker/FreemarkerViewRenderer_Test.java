@@ -50,4 +50,28 @@ class FreemarkerViewRenderer_Test extends TestBase {
 	@Test void a04_defaultContentTypeIsHtmlUtf8() {
 		assertEquals("text/html;charset=UTF-8", FreemarkerViewRenderer.DEFAULT_CONTENT_TYPE);
 	}
+
+	/* ---------------------------------------------------------------------------------------- *
+	 * Section B: Typed-View template-name traversal gate
+	 * ---------------------------------------------------------------------------------------- */
+
+	@Test void b01_gateAllowsPlainName() {
+		assertEquals("hello", FreemarkerViewRenderer.gateTemplateName("/", "hello"));
+	}
+
+	@Test void b02_gateAllowsSubdirName() {
+		assertEquals("admin/dashboard", FreemarkerViewRenderer.gateTemplateName("/", "admin/dashboard"));
+	}
+
+	@Test void b03_gateAllowsNameUnderBasePath() {
+		assertEquals("hello.ftlh", FreemarkerViewRenderer.gateTemplateName("/templates/", "hello.ftlh"));
+	}
+
+	@Test void b04_gateRejectsTraversal() {
+		assertThrows(IllegalArgumentException.class, () -> FreemarkerViewRenderer.gateTemplateName("/", "../secret"));
+	}
+
+	@Test void b05_gateRejectsNestedTraversal() {
+		assertThrows(IllegalArgumentException.class, () -> FreemarkerViewRenderer.gateTemplateName("/templates/", "a/b/../../../secret"));
+	}
 }

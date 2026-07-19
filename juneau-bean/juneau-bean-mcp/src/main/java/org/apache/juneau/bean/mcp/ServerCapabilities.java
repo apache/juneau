@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -44,7 +46,7 @@ public class ServerCapabilities {
 	/**
 	 * Sets tools capability.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ServerCapabilities setTools(ToolCapability value) {
@@ -64,7 +66,7 @@ public class ServerCapabilities {
 	/**
 	 * Sets prompts capability.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ServerCapabilities setPrompts(PromptCapability value) {
@@ -84,7 +86,7 @@ public class ServerCapabilities {
 	/**
 	 * Sets resources capability.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ServerCapabilities setResources(ResourceCapability value) {
@@ -104,7 +106,7 @@ public class ServerCapabilities {
 	/**
 	 * Sets logging capability.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ServerCapabilities setLogging(LoggingCapability value) {
@@ -118,13 +120,13 @@ public class ServerCapabilities {
 	 * @return The experimental map, or {@code null} if not set.
 	 */
 	public Map<String, Object> getExperimental() {
-		return experimental;
+		return u(experimental);
 	}
 
 	/**
 	 * Sets experimental extensions.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ServerCapabilities setExperimental(Map<String, Object> value) {

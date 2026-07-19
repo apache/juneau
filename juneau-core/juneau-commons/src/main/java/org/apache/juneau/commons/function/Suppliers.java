@@ -33,7 +33,13 @@ public class Suppliers {
 	/** Constructor — this class is meant to be subclassed. */
 	protected Suppliers() {}
 
-	/** Thread-safe memoizing supplier (computes once, caches). */
+	/**
+	 * Thread-safe memoizing supplier (computes once, caches).
+	 *
+	 * @param <T> The type of value supplied.
+	 * @param supplier The underlying supplier to memoize.  Must not be <jk>null</jk>.
+	 * @return A new memoizing supplier.
+	 */
 	@SuppressWarnings({ "java:S2789" // AtomicReference uses null for "uninitialized"; intentional.
 	})
 	public static <T> NullableSupplier<T> memoize(Supplier<T> supplier) {
@@ -49,7 +55,13 @@ public class Suppliers {
 		};
 	}
 
-	/** Resettable memoizing supplier. */
+	/**
+	 * Resettable memoizing supplier.
+	 *
+	 * @param <T> The type of value supplied.
+	 * @param supplier The underlying supplier to memoize.  Must not be <jk>null</jk>.
+	 * @return A new resettable memoizing supplier.
+	 */
 	public static <T> Memoizer<T> memoizer(Supplier<T> supplier) {
 		assertArgNotNull(ARG_supplier, supplier);
 		return new Memoizer<>(supplier);

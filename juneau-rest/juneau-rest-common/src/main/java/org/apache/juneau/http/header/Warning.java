@@ -178,7 +178,7 @@ public class Warning extends HttpStringHeader {
 			if (a.isEmpty())
 				throw iaex("warn-agent must not be blank");
 			var sb = new StringBuilder();
-			sb.append(String.format("%03d", code)).append(' ').append(a).append(' ').append(q(text));
+			sb.append(String.format(Locale.ROOT, "%03d", code)).append(' ').append(a).append(' ').append(q(text));
 			if (date != null)
 				sb.append(' ').append(q(date));
 			return sb.toString();

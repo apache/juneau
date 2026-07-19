@@ -278,7 +278,7 @@ public class ClassUtils {
 	/**
 	 * Returns the class types for the specified arguments.
 	 *
-	 * @param args The objects we're getting the classes of.
+	 * @param args The objects we're getting the classes of.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> array throws {@link NullPointerException}); individual <jk>null</jk> elements map to <jk>null</jk> classes.
 	 * @return The classes of the arguments.
 	 */
 	public static Class<?>[] getClasses(Object...args) {
@@ -490,7 +490,7 @@ public class ClassUtils {
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
-	 * @param x The constructor.
+	 * @param x The constructor.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link IllegalArgumentException}).
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Constructor<?> x) {
@@ -504,7 +504,7 @@ public class ClassUtils {
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
-	 * @param x The field.
+	 * @param x The field.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link IllegalArgumentException}).
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Field x) {
@@ -518,7 +518,7 @@ public class ClassUtils {
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
-	 * @param x The method.
+	 * @param x The method.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link IllegalArgumentException}).
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Method x) {
@@ -536,12 +536,12 @@ public class ClassUtils {
 	 * If it's already a <c>Class</c>, it just does a cast.
 	 * <br>If it's a <c>ParameterizedType</c>, it returns the raw type.
 	 *
-	 * @param t The type to convert.
+	 * @param t The type to convert.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The type converted to a <c>Class</c>, or <jk>null</jk> if it could not be converted.
 	 */
 	public static Class<?> toClass(Type t) {
-		if (t instanceof Class<?> c)
-			return c;
+		if (t instanceof Class<?> t2)
+			return t2;
 		if (t instanceof ParameterizedType t2) {
 			// The raw type should always be a class (right?)
 			return (Class<?>)t2.getRawType();
@@ -563,8 +563,8 @@ public class ClassUtils {
 	 * Casts the object to the specified type, returning null if not an instance.
 	 *
 	 * @param <T> The type to cast to.
-	 * @param c The type to cast to.
-	 * @param o The object to cast.
+	 * @param c The type to cast to.  Must not be <jk>null</jk> when the object is non-<jk>null</jk> (unguarded {@link NullPointerException} otherwise).
+	 * @param o The object to cast.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The cast object, or null if the object was null or not an instance of c.
 	 */
 	@SuppressWarnings({ "java:S1168" // Intentional null return.

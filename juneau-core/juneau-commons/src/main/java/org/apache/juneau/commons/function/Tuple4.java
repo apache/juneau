@@ -56,10 +56,10 @@ public class Tuple4<A,B,C,D> {
 	 * @param <B> Object 2 type.
 	 * @param <C> Object 3 type.
 	 * @param <D> Object 4 type.
-	 * @param a Object 1.
-	 * @param b Object 2.
-	 * @param c Object 3.
-	 * @param d Object 4.
+	 * @param a Object 1.  Can be <jk>null</jk>.
+	 * @param b Object 2.  Can be <jk>null</jk>.
+	 * @param c Object 3.  Can be <jk>null</jk>.
+	 * @param d Object 4.  Can be <jk>null</jk>.
 	 * @return A new tuple object.
 	 */
 	public static <A,B,C,D> Tuple4<A,B,C,D> of(A a, B b, C c, D d) {
@@ -75,10 +75,10 @@ public class Tuple4<A,B,C,D> {
 	/**
 	 * Constructor.
 	 *
-	 * @param a Object 1.
-	 * @param b Object 2.
-	 * @param c Object 3.
-	 * @param d Object 4.
+	 * @param a Object 1.  Can be <jk>null</jk>.
+	 * @param b Object 2.  Can be <jk>null</jk>.
+	 * @param c Object 3.  Can be <jk>null</jk>.
+	 * @param d Object 4.  Can be <jk>null</jk>.
 	 */
 	public Tuple4(A a, B b, C c, D d) {
 		this.a = a;

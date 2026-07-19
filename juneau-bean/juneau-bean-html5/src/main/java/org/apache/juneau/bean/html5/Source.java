@@ -91,8 +91,8 @@ public class Source extends HtmlElementVoid {
 	 * Creates a {@link Source} element with the specified {@link Source#src(Object)} and {@link Source#type(String)}
 	 * attributes.
 	 *
-	 * @param src The {@link Source#src(Object)} attribute.
-	 * @param type The {@link Source#type(String)} attribute.
+	 * @param src The {@link Source#src(Object)} attribute. Can be <jk>null</jk>.
+	 * @param type The {@link Source#type(String)} attribute. Can be <jk>null</jk>.
 	 */
 	public Source(Object src, String type) {
 		src(src).type(type);
@@ -474,6 +474,7 @@ public class Source extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Source src(Object value) {
@@ -522,7 +523,7 @@ public class Source extends HtmlElementVoid {
 	 * 	<li><js>"audio/wav"</js> - WAV audio</li>
 	 * </ul>
 	 *
-	 * @param value The MIME type of the media resource.
+	 * @param value The MIME type of the media resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Source type(String value) {

@@ -147,12 +147,10 @@ public class HashKey {
 	 * The comparison uses deep equality checking for array elements via {@link Shorts#eq(Object, Object)}.
 	 *
 	 * <p>
-	 * This method does not perform null or type checking - it assumes the caller has verified the object
-	 * is a non-null {@code HashKey} instance. Passing {@code null} or a non-{@code HashKey} object will
-	 * result in a {@code ClassCastException} or {@code NullPointerException}.
+	 * A <jk>null</jk> argument, or an object that is not a {@code HashKey} instance, returns <jk>false</jk>.
 	 *
-	 * @param o The object to compare with (must be a non-null {@code HashKey} instance).
-	 * @return {@code true} if the objects are equal, {@code false} otherwise.
+	 * @param o The object to compare with. Can be <jk>null</jk>.
+	 * @return {@code true} if the objects are equal, {@code false} otherwise (including when <c>o</c> is <jk>null</jk> or not a {@code HashKey}).
 	 */
 	@Override
 	public boolean equals(Object o) {

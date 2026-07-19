@@ -47,7 +47,7 @@ public interface Converter {
 	 * Throws {@link InvalidConversionException} when no conversion path exists.
 	 * Use {@link #canConvert(Class, Class)} to pre-check if uncertain.
 	 *
-	 * @param o The object to convert.
+	 * @param o The object to convert. Can be <jk>null</jk>.
 	 * @param type The type to convert to.
 	 * @param <T> The type to convert to.
 	 * @return The converted object, the primitive zero-value if input is <jk>null</jk> and type is primitive,
@@ -76,7 +76,7 @@ public interface Converter {
 	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jv>converter</jv>.to(<jv>o</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, Integer.<jk>class</jk>);
 	 * </p>
 	 *
-	 * @param o The object to convert.
+	 * @param o The object to convert. Can be <jk>null</jk>.
 	 * @param mainType The main type to convert to.
 	 * @param args The type parameters of the main type.
 	 * @param <T> The type to convert to.
@@ -93,7 +93,7 @@ public interface Converter {
 	 * {@link #to(Object, Class)}.
 	 * Override in subclasses that wish to thread these into {@link Conversion#to(Object, Object, ConverterSession, Class[])}.
 	 *
-	 * @param o The object to convert.
+	 * @param o The object to convert. Can be <jk>null</jk>.
 	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
 	 * @param session The converter session providing contextual objects, or <jk>null</jk>.
 	 * @param type The type to convert to.
@@ -113,7 +113,7 @@ public interface Converter {
 	 * {@link #to(Object, Type, Type[])}.
 	 * Override in subclasses that wish to thread these into {@link Conversion#to(Object, Object, ConverterSession, Class[])}.
 	 *
-	 * @param o The object to convert.
+	 * @param o The object to convert. Can be <jk>null</jk>.
 	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
 	 * @param session The converter session providing contextual objects, or <jk>null</jk>.
 	 * @param mainType The main type to convert to.

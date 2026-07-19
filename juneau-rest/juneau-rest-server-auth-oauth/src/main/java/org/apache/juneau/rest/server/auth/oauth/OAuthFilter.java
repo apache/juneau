@@ -185,20 +185,20 @@ public class OAuthFilter extends AuthFilter {
 	}
 
 	private Set<String> extractRoles(Principal principal) {
-		if (!(principal instanceof ClaimsPrincipal cp))
+		if (!(principal instanceof ClaimsPrincipal principal2))
 			return Collections.emptySet();
-		var v = cp.getClaims().get(rolesClaim);
+		var v = principal2.getClaims().get(rolesClaim);
 		if (v == null)
 			return Collections.emptySet();
 		var out = new HashSet<String>();
-		if (v instanceof String s) {
-			for (var piece : s.split("\\s+"))
+		if (v instanceof String v2) {
+			for (var piece : v2.split("\\s+"))
 				if (!piece.isBlank())
 					out.add(piece);
-		} else if (v instanceof Collection<?> list) {
-			for (var item : list)
-				if (item instanceof String s)
-					out.add(s);
+		} else if (v instanceof Collection<?> v2) {
+			for (var item : v2)
+				if (item instanceof String item2)
+					out.add(item2);
 		}
 		return out;
 	}

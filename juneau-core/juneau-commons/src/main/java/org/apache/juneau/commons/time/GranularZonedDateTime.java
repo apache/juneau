@@ -106,10 +106,11 @@ public class GranularZonedDateTime {
 	 * <p>
 	 * The date is converted to a ZonedDateTime using the system default timezone.
 	 *
-	 * @param date The date to convert.
-	 * @param precision The precision of the time value.
+	 * @param date The date to convert.  Must not be <jk>null</jk> (a <jk>null</jk> value throws {@link NullPointerException}).
+	 * @param precision The precision of the time value.  Not validated — a <jk>null</jk> value is stored as-is and
+	 * 	only surfaces later (e.g. {@link #roll(int)} throws {@link NullPointerException} when precision is <jk>null</jk>).
 	 * @return A new GranularZonedDateTime instance.
-	 * @throws IllegalArgumentException if date or precision is null.
+	 * @throws NullPointerException if date is <jk>null</jk>.
 	 */
 	public static GranularZonedDateTime of(Date date, ChronoField precision) {
 		return of(date, precision, ZoneId.systemDefault());
@@ -121,11 +122,12 @@ public class GranularZonedDateTime {
 	 * <p>
 	 * The date is converted to a ZonedDateTime using the specified timezone.
 	 *
-	 * @param date The date to convert.
-	 * @param precision The precision of the time value.
-	 * @param zoneId The timezone to use.
+	 * @param date The date to convert.  Must not be <jk>null</jk> (a <jk>null</jk> value throws {@link NullPointerException}).
+	 * @param precision The precision of the time value.  Not validated — a <jk>null</jk> value is stored as-is and
+	 * 	only surfaces later (e.g. {@link #roll(int)} throws {@link NullPointerException} when precision is <jk>null</jk>).
+	 * @param zoneId The timezone to use.  Must not be <jk>null</jk> (a <jk>null</jk> value throws {@link NullPointerException}).
 	 * @return A new GranularZonedDateTime instance.
-	 * @throws IllegalArgumentException if date, precision, or zoneId is null.
+	 * @throws NullPointerException if date or zoneId is <jk>null</jk>.
 	 */
 	public static GranularZonedDateTime of(Date date, ChronoField precision, ZoneId zoneId) {
 		return of(date.toInstant().atZone(zoneId), precision);
@@ -713,10 +715,11 @@ public class GranularZonedDateTime {
 	 * This is the most direct way to create a GranularZonedDateTime when you already have
 	 * a ZonedDateTime and want to specify its precision.
 	 *
-	 * @param date The ZonedDateTime value.
-	 * @param precision The precision of the time value.
+	 * @param date The ZonedDateTime value.  Not validated — a <jk>null</jk> value is stored as-is.
+	 * @param precision The precision of the time value.  Not validated — a <jk>null</jk> value is stored as-is.
+	 * 	<br>Neither argument is null-checked here; a <jk>null</jk> value only surfaces later (e.g. {@link #roll(int)}
+	 * 	or {@link #toString()} throw {@link NullPointerException} when the corresponding field is <jk>null</jk>).
 	 * @return A new GranularZonedDateTime instance.
-	 * @throws IllegalArgumentException if date or precision is null.
 	 */
 	public static GranularZonedDateTime of(ZonedDateTime date, ChronoField precision) {
 		return new GranularZonedDateTime(date, precision);

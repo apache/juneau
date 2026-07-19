@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.utils;
 
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -41,7 +43,7 @@ public class SystemUtils {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
-				if (Boolean.FALSE.equals(Settings.get().get("juneau.shutdown.quiet").asBoolean().orElse(false))) // HTT - shutdown hook; true branch tested, false requires JVM shutdown with system property set
+				if (isFalse(Settings.get().get("juneau.shutdown.quiet").asBoolean().orElse(false))) // HTT - shutdown hook; true branch tested, false requires JVM shutdown with system property set
 					SHUTDOWN_MESSAGES.forEach(x -> LOG.info(x.get()));
 			}
 		});
@@ -50,7 +52,7 @@ public class SystemUtils {
 	/**
 	 * Adds a console message to display when the JVM shuts down.
 	 *
-	 * @param message The message to display.
+	 * @param message The message to display.  Must not be <jk>null</jk> (evaluated at JVM shutdown).
 	 */
 	public static void shutdownMessage(Supplier<String> message) {
 		SHUTDOWN_MESSAGES.add(message);
@@ -71,7 +73,7 @@ public class SystemUtils {
 	 *
 	 * @param <T> The type to convert the value to.
 	 * @param name The property name.
-	 * @param def The default value.
+	 * @param def The default value.  Can be <jk>null</jk> (returned as-is when the property is not found).
 	 * @return The found value, or the default.
 	 */
 	public static <T> T env(String name, T def) {

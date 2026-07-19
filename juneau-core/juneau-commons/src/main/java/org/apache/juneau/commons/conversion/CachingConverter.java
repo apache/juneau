@@ -150,7 +150,7 @@ public abstract class CachingConverter implements Converter {
 		var fn = conversions
 			.computeIfAbsent(inType, k -> new ConcurrentHashMap<>())
 			.computeIfAbsent(outType, k -> {
-				var found = findConversion(inType, outType);
+				Conversion<I, O> found = findConversion(inType, outType);
 				return found != null ? found : NO_CONVERSION;
 			});
 		return fn == NO_CONVERSION ? null : (Conversion<I, O>) fn;
@@ -218,9 +218,9 @@ public abstract class CachingConverter implements Converter {
 		"unchecked" // Cast is safe: type parameter is verified at construction.
 	})
 	public <T> T to(Object o, Type mainType, Type... args) {
-		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);
+		var rawType = (Class<T>) (mainType instanceof ParameterizedType mainType2 ? mainType2.getRawType() : (Class<?>) mainType);
 		var argClasses = Stream.of(args)
-			.map(t -> (Class<?>) (t instanceof ParameterizedType pt2 ? pt2.getRawType() : t))
+			.map(t -> (Class<?>) (t instanceof ParameterizedType t2 ? t2.getRawType() : t))
 			.toArray(Class[]::new);
 		if (o == null)
 			return nullDefault(rawType, argClasses);
@@ -284,9 +284,9 @@ public abstract class CachingConverter implements Converter {
 		"unchecked" // Cast is safe: type parameter is verified at construction.
 	})
 	public <T> T to(Object o, Object memberOf, ConverterSession session, Type mainType, Type... args) {
-		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);
+		var rawType = (Class<T>) (mainType instanceof ParameterizedType mainType2 ? mainType2.getRawType() : (Class<?>) mainType);
 		var argClasses = Stream.of(args)
-			.map(t -> (Class<?>) (t instanceof ParameterizedType pt2 ? pt2.getRawType() : t))
+			.map(t -> (Class<?>) (t instanceof ParameterizedType t2 ? t2.getRawType() : t))
 			.toArray(Class[]::new);
 		if (o == null)
 			return nullDefault(rawType, argClasses);

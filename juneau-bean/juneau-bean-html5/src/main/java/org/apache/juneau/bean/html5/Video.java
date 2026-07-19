@@ -104,7 +104,7 @@ public class Video extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Video} element with the specified {@link Video#src(Object)} attribute.
 	 *
-	 * @param src The {@link Video#src(Object)} attribute.
+	 * @param src The {@link Video#src(Object)} attribute. Can be <jk>null</jk>.
 	 */
 	public Video(Object src) {
 		src(src);
@@ -152,6 +152,7 @@ public class Video extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Video autoplay(Object value) {
@@ -195,6 +196,7 @@ public class Video extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Video controls(Object value) {
@@ -216,7 +218,7 @@ public class Video extends HtmlElementMixed {
 	 * 	<li><js>"use-credentials"</js> - Cross-origin requests include credentials</li>
 	 * </ul>
 	 *
-	 * @param value How to handle cross-origin requests.
+	 * @param value How to handle cross-origin requests. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Video crossorigin(String value) {
@@ -240,6 +242,7 @@ public class Video extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Video height(Object value) {
@@ -271,7 +274,7 @@ public class Video extends HtmlElementMixed {
 	 * <p>
 	 * Causes the media to automatically restart from the beginning when it reaches the end.
 	 *
-	 * @param value If <jk>true</jk>, the media will loop continuously.
+	 * @param value If <jk>true</jk>, the media will loop continuously. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Video loop(Object value) {
@@ -290,7 +293,7 @@ public class Video extends HtmlElementMixed {
 	 * <p>
 	 * This is useful for creating synchronized audio/video presentations or multiple camera angles.
 	 *
-	 * @param value The name of the media group to join.
+	 * @param value The name of the media group to join. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Video mediagroup(String value) {
@@ -305,7 +308,7 @@ public class Video extends HtmlElementMixed {
 	 * <p>
 	 * Mutes the audio output by default. Useful for autoplay videos where audio should be disabled initially.
 	 *
-	 * @param value If <jk>true</jk>, the media will be muted by default.
+	 * @param value If <jk>true</jk>, the media will be muted by default. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Video muted(Object value) {
@@ -624,7 +627,7 @@ public class Video extends HtmlElementMixed {
 	 * <p>
 	 * The poster image should be representative of the video content and help users understand what the video contains.
 	 *
-	 * @param value The URL of the poster image to display before video playback.
+	 * @param value The URL of the poster image to display before video playback. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Video poster(String value) {
@@ -647,7 +650,7 @@ public class Video extends HtmlElementMixed {
 	 * 	<li><js>"auto"</js> - Preload the entire media file (default)</li>
 	 * </ul>
 	 *
-	 * @param value How much of the media to preload.
+	 * @param value How much of the media to preload. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Video preload(String value) {
@@ -677,6 +680,7 @@ public class Video extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Video src(Object value) {
@@ -717,6 +721,7 @@ public class Video extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Video width(Object value) {

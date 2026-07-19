@@ -71,7 +71,7 @@ public class Sub extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Sub} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Sub(Object...children) {
 		children(children);

@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
@@ -328,7 +329,7 @@ public enum TemporalFormat {
 
 	private static DateTimeFormatter defaultFormatter(Class<?> tc) {
 		var f = DEFAULT_FORMATTERS.get(tc);
-		return f != null ? f : DateTimeFormatter.ISO_INSTANT;
+		return or(f, DateTimeFormatter.ISO_INSTANT);
 	}
 
 	@SuppressWarnings({

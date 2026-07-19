@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.msgpack;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -83,7 +83,7 @@ public class MsgPackAnnotation {
 
 		Object(MsgPackAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
+			this.description = cp(b.description);
 		}
 
 		@Override /* Overridden from annotation */

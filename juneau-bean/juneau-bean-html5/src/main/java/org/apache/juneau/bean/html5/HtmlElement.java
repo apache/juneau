@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.html5;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.marshall.html.HtmlFormat.*;
@@ -53,7 +54,7 @@ public abstract class HtmlElement {
 	 * Specifies one or more CSS class names for the element, separated by spaces.
 	 * These classes can be used for styling and JavaScript selection.
 	 *
-	 * @param value Space-separated CSS class names (e.g., <js>"btn btn-primary"</js>).
+	 * @param value Space-separated CSS class names (e.g., <js>"btn btn-primary"</js>). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	@SuppressWarnings({
@@ -73,7 +74,7 @@ public abstract class HtmlElement {
 	 * The value should be a single character that, when pressed with a modifier key (usually Alt),
 	 * activates the element.
 	 *
-	 * @param value The keyboard shortcut character (e.g., <js>"a"</js>, <js>"1"</js>).
+	 * @param value The keyboard shortcut character (e.g., <js>"a"</js>, <js>"1"</js>). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement accesskey(String value) {
@@ -85,7 +86,7 @@ public abstract class HtmlElement {
 	 * Adds an arbitrary attribute to this element.
 	 *
 	 * @param key The attribute name.
-	 * @param val The attribute value.
+	 * @param val The attribute value. Can be <jk>null</jk> to remove the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement attr(String key, Object val) {
@@ -116,7 +117,7 @@ public abstract class HtmlElement {
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param key The attribute name.
-	 * @param val The attribute value.
+	 * @param val The attribute value. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HtmlElement attrUri(String key, Object val) {
@@ -141,7 +142,7 @@ public abstract class HtmlElement {
 	 * 	<li><js>"plaintext-only"</js> - Element content is editable, but rich text formatting is disabled</li>
 	 * </ul>
 	 *
-	 * @param value The editability state of the element.
+	 * @param value The editability state of the element. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement contenteditable(Object value) {
@@ -163,7 +164,7 @@ public abstract class HtmlElement {
 	 * 	<li><js>"auto"</js> - Browser determines direction based on content</li>
 	 * </ul>
 	 *
-	 * @param value The text direction for the element.
+	 * @param value The text direction for the element. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement dir(String value) {
@@ -199,7 +200,7 @@ public abstract class HtmlElement {
 	/**
 	 * The attributes of this element.
 	 *
-	 * @return The attributes of this element.
+	 * @return The attributes of this element, or <jk>null</jk> if no attributes are set.
 	 */
 	@Xml(format = ATTRS)
 	@BeanProp("a")
@@ -219,6 +220,7 @@ public abstract class HtmlElement {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement hidden(Object value) {
@@ -233,7 +235,7 @@ public abstract class HtmlElement {
 	 * Specifies a unique identifier for the element. The ID must be unique within the document
 	 * and can be used for CSS styling, JavaScript selection, and anchor links.
 	 *
-	 * @param value A unique identifier for the element (e.g., <js>"header"</js>, <js>"main-content"</js>).
+	 * @param value A unique identifier for the element (e.g., <js>"header"</js>, <js>"main-content"</js>). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement id(String value) {
@@ -248,7 +250,7 @@ public abstract class HtmlElement {
 	 * Specifies the primary language of the element's content using a language tag.
 	 * This helps with accessibility, search engines, and browser features like spell checking.
 	 *
-	 * @param value A language tag (e.g., <js>"en"</js>, <js>"en-US"</js>, <js>"es"</js>, <js>"fr-CA"</js>).
+	 * @param value A language tag (e.g., <js>"en"</js>, <js>"en-US"</js>, <js>"es"</js>, <js>"fr-CA"</js>). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement lang(String value) {
@@ -262,7 +264,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when an operation is aborted (e.g., image loading is cancelled).
 	 *
-	 * @param value JavaScript code to execute when the abort event occurs.
+	 * @param value JavaScript code to execute when the abort event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onabort(String value) {
@@ -286,7 +288,7 @@ public abstract class HtmlElement {
 	 * 	<li>If using double quotes for attributes: <c>onblur(<js>"validate('email')"</js>)</c>
 	 * </ul>
 	 *
-	 * @param value JavaScript code to execute when the element loses focus.
+	 * @param value JavaScript code to execute when the element loses focus. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onblur(String value) {
@@ -300,7 +302,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a dialog is cancelled.
 	 *
-	 * @param value JavaScript code to execute when the cancel event occurs.
+	 * @param value JavaScript code to execute when the cancel event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement oncancel(String value) {
@@ -314,7 +316,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the media can start playing (enough data has been buffered).
 	 *
-	 * @param value JavaScript code to execute when the canplay event occurs.
+	 * @param value JavaScript code to execute when the canplay event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement oncanplay(String value) {
@@ -329,7 +331,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the media can play through to the end without buffering.
 	 *
-	 * @param value JavaScript code to execute when the canplaythrough event occurs.
+	 * @param value JavaScript code to execute when the canplaythrough event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement oncanplaythrough(String value) {
@@ -353,7 +355,7 @@ public abstract class HtmlElement {
 	 * 	<li>If using double quotes for attributes: <c>onchange(<js>"validate('field')"</js>)</c>
 	 * </ul>
 	 *
-	 * @param value JavaScript code to execute when the change event occurs.
+	 * @param value JavaScript code to execute when the change event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onchange(String value) {
@@ -377,7 +379,7 @@ public abstract class HtmlElement {
 	 * 	<li>If using double quotes for attributes: <c>onclick(<js>"alert('Hello')"</js>)</c>
 	 * </ul>
 	 *
-	 * @param value JavaScript code to execute when the click event occurs.
+	 * @param value JavaScript code to execute when the click event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onclick(String value) {
@@ -392,7 +394,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a text track cue changes.
 	 *
-	 * @param value JavaScript code to execute when the cuechange event occurs.
+	 * @param value JavaScript code to execute when the cuechange event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement oncuechange(String value) {
@@ -406,7 +408,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the element is double-clicked.
 	 *
-	 * @param value JavaScript code to execute when the dblclick event occurs.
+	 * @param value JavaScript code to execute when the dblclick event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement ondblclick(String value) {
@@ -421,7 +423,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the duration of the media changes.
 	 *
-	 * @param value JavaScript code to execute when the durationchange event occurs.
+	 * @param value JavaScript code to execute when the durationchange event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement ondurationchange(String value) {
@@ -435,7 +437,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the media element becomes empty (e.g., network error).
 	 *
-	 * @param value JavaScript code to execute when the emptied event occurs.
+	 * @param value JavaScript code to execute when the emptied event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onemptied(String value) {
@@ -449,7 +451,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the media playback reaches the end.
 	 *
-	 * @param value JavaScript code to execute when the ended event occurs.
+	 * @param value JavaScript code to execute when the ended event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onended(String value) {
@@ -463,7 +465,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when an error occurs (e.g., failed resource loading).
 	 *
-	 * @param value JavaScript code to execute when the error event occurs.
+	 * @param value JavaScript code to execute when the error event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onerror(String value) {
@@ -487,7 +489,7 @@ public abstract class HtmlElement {
 	 * 	<li>If using double quotes for attributes: <c>onfocus(<js>"highlight('field')"</js>)</c>
 	 * </ul>
 	 *
-	 * @param value JavaScript code to execute when the focus event occurs.
+	 * @param value JavaScript code to execute when the focus event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onfocus(String value) {
@@ -501,7 +503,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the value of an input element changes (fires on every keystroke).
 	 *
-	 * @param value JavaScript code to execute when the input event occurs.
+	 * @param value JavaScript code to execute when the input event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement oninput(String value) {
@@ -515,7 +517,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when form validation fails.
 	 *
-	 * @param value JavaScript code to execute when the invalid event occurs.
+	 * @param value JavaScript code to execute when the invalid event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement oninvalid(String value) {
@@ -529,7 +531,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a key is pressed down.
 	 *
-	 * @param value JavaScript code to execute when the keydown event occurs.
+	 * @param value JavaScript code to execute when the keydown event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onkeydown(String value) {
@@ -543,7 +545,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a key is pressed (deprecated, use onkeydown instead).
 	 *
-	 * @param value JavaScript code to execute when the keypress event occurs.
+	 * @param value JavaScript code to execute when the keypress event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onkeypress(String value) {
@@ -557,7 +559,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a key is released.
 	 *
-	 * @param value JavaScript code to execute when the keyup event occurs.
+	 * @param value JavaScript code to execute when the keyup event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onkeyup(String value) {
@@ -581,7 +583,7 @@ public abstract class HtmlElement {
 	 * 	<li>If using double quotes for attributes: <c>onload(<js>"init('config')"</js>)</c>
 	 * </ul>
 	 *
-	 * @param value JavaScript code to execute when the load event occurs.
+	 * @param value JavaScript code to execute when the load event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onload(String value) {
@@ -596,7 +598,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the first frame of media has finished loading.
 	 *
-	 * @param value JavaScript code to execute when the loadeddata event occurs.
+	 * @param value JavaScript code to execute when the loadeddata event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onloadeddata(String value) {
@@ -611,7 +613,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when metadata (duration, dimensions, etc.) has been loaded.
 	 *
-	 * @param value JavaScript code to execute when the loadedmetadata event occurs.
+	 * @param value JavaScript code to execute when the loadedmetadata event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onloadedmetadata(String value) {
@@ -626,7 +628,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the browser starts loading the media.
 	 *
-	 * @param value JavaScript code to execute when the loadstart event occurs.
+	 * @param value JavaScript code to execute when the loadstart event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onloadstart(String value) {
@@ -641,7 +643,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a mouse button is pressed down on the element.
 	 *
-	 * @param value JavaScript code to execute when the mousedown event occurs.
+	 * @param value JavaScript code to execute when the mousedown event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onmousedown(String value) {
@@ -655,7 +657,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the mouse pointer enters the element (does not bubble).
 	 *
-	 * @param value JavaScript code to execute when the mouseenter event occurs.
+	 * @param value JavaScript code to execute when the mouseenter event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onmouseenter(String value) {
@@ -670,7 +672,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the mouse pointer leaves the element (does not bubble).
 	 *
-	 * @param value JavaScript code to execute when the mouseleave event occurs.
+	 * @param value JavaScript code to execute when the mouseleave event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onmouseleave(String value) {
@@ -685,7 +687,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the mouse pointer moves over the element.
 	 *
-	 * @param value JavaScript code to execute when the mousemove event occurs.
+	 * @param value JavaScript code to execute when the mousemove event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onmousemove(String value) {
@@ -699,7 +701,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the mouse pointer moves out of the element (bubbles).
 	 *
-	 * @param value JavaScript code to execute when the mouseout event occurs.
+	 * @param value JavaScript code to execute when the mouseout event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onmouseout(String value) {
@@ -724,7 +726,7 @@ public abstract class HtmlElement {
 	 * 	<li>If using double quotes for attributes: <c>onmouseover(<js>"showTooltip('info')"</js>)</c>
 	 * </ul>
 	 *
-	 * @param value JavaScript code to execute when the mouseover event occurs.
+	 * @param value JavaScript code to execute when the mouseover event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onmouseover(String value) {
@@ -738,7 +740,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a mouse button is released over the element.
 	 *
-	 * @param value JavaScript code to execute when the mouseup event occurs.
+	 * @param value JavaScript code to execute when the mouseup event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onmouseup(String value) {
@@ -753,7 +755,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the mouse wheel is rotated over the element (deprecated, use onwheel).
 	 *
-	 * @param value JavaScript code to execute when the mousewheel event occurs.
+	 * @param value JavaScript code to execute when the mousewheel event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onmousewheel(String value) {
@@ -767,7 +769,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when media playback is paused.
 	 *
-	 * @param value JavaScript code to execute when the pause event occurs.
+	 * @param value JavaScript code to execute when the pause event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onpause(String value) {
@@ -781,7 +783,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when media playback starts.
 	 *
-	 * @param value JavaScript code to execute when the play event occurs.
+	 * @param value JavaScript code to execute when the play event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onplay(String value) {
@@ -795,7 +797,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when media playback starts after being paused or delayed.
 	 *
-	 * @param value JavaScript code to execute when the playing event occurs.
+	 * @param value JavaScript code to execute when the playing event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onplaying(String value) {
@@ -809,7 +811,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the browser is downloading media data.
 	 *
-	 * @param value JavaScript code to execute when the progress event occurs.
+	 * @param value JavaScript code to execute when the progress event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onprogress(String value) {
@@ -824,7 +826,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the playback rate of media changes.
 	 *
-	 * @param value JavaScript code to execute when the ratechange event occurs.
+	 * @param value JavaScript code to execute when the ratechange event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onratechange(String value) {
@@ -838,7 +840,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a form is reset.
 	 *
-	 * @param value JavaScript code to execute when the reset event occurs.
+	 * @param value JavaScript code to execute when the reset event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onreset(String value) {
@@ -852,7 +854,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the element is resized.
 	 *
-	 * @param value JavaScript code to execute when the resize event occurs.
+	 * @param value JavaScript code to execute when the resize event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onresize(String value) {
@@ -866,7 +868,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the element's scrollbar is scrolled.
 	 *
-	 * @param value JavaScript code to execute when the scroll event occurs.
+	 * @param value JavaScript code to execute when the scroll event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onscroll(String value) {
@@ -880,7 +882,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a seek operation completes.
 	 *
-	 * @param value JavaScript code to execute when the seeked event occurs.
+	 * @param value JavaScript code to execute when the seeked event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onseeked(String value) {
@@ -894,7 +896,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a seek operation begins.
 	 *
-	 * @param value JavaScript code to execute when the seeking event occurs.
+	 * @param value JavaScript code to execute when the seeking event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onseeking(String value) {
@@ -908,7 +910,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when text is selected in the element.
 	 *
-	 * @param value JavaScript code to execute when the select event occurs.
+	 * @param value JavaScript code to execute when the select event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onselect(String value) {
@@ -922,7 +924,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a context menu is shown.
 	 *
-	 * @param value JavaScript code to execute when the show event occurs.
+	 * @param value JavaScript code to execute when the show event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onshow(String value) {
@@ -936,7 +938,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when media loading is stalled.
 	 *
-	 * @param value JavaScript code to execute when the stalled event occurs.
+	 * @param value JavaScript code to execute when the stalled event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onstalled(String value) {
@@ -960,7 +962,7 @@ public abstract class HtmlElement {
 	 * 	<li>If using double quotes for attributes: <c>onsubmit(<js>"return validate('form')"</js>)</c>
 	 * </ul>
 	 *
-	 * @param value JavaScript code to execute when the submit event occurs.
+	 * @param value JavaScript code to execute when the submit event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onsubmit(String value) {
@@ -974,7 +976,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when media loading is suspended.
 	 *
-	 * @param value JavaScript code to execute when the suspend event occurs.
+	 * @param value JavaScript code to execute when the suspend event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onsuspend(String value) {
@@ -989,7 +991,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the current playback position changes.
 	 *
-	 * @param value JavaScript code to execute when the timeupdate event occurs.
+	 * @param value JavaScript code to execute when the timeupdate event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement ontimeupdate(String value) {
@@ -1003,7 +1005,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a details element is opened or closed.
 	 *
-	 * @param value JavaScript code to execute when the toggle event occurs.
+	 * @param value JavaScript code to execute when the toggle event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement ontoggle(String value) {
@@ -1018,7 +1020,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the volume of media changes.
 	 *
-	 * @param value JavaScript code to execute when the volumechange event occurs.
+	 * @param value JavaScript code to execute when the volumechange event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onvolumechange(String value) {
@@ -1032,7 +1034,7 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when media playback stops to buffer more data.
 	 *
-	 * @param value JavaScript code to execute when the waiting event occurs.
+	 * @param value JavaScript code to execute when the waiting event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement onwaiting(String value) {
@@ -1043,7 +1045,7 @@ public abstract class HtmlElement {
 	/**
 	 * Sets the attributes for this element.
 	 *
-	 * @param value The new attributes for this element.
+	 * @param value The new attributes for this element. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	@BeanProp("a")
@@ -1072,7 +1074,7 @@ public abstract class HtmlElement {
 	 * 	<li><js>"false"</js> - Disable spell checking for this element</li>
 	 * </ul>
 	 *
-	 * @param value Whether spell checking should be enabled.
+	 * @param value Whether spell checking should be enabled. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement spellcheck(Object value) {
@@ -1087,7 +1089,7 @@ public abstract class HtmlElement {
 	 * Specifies inline CSS styles for the element. The value should be valid CSS
 	 * property-value pairs separated by semicolons.
 	 *
-	 * @param value Inline CSS styles (e.g., <js>"color: red; font-size: 14px;"</js>).
+	 * @param value Inline CSS styles (e.g., <js>"color: red; font-size: 14px;"</js>). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement style(String value) {
@@ -1109,7 +1111,7 @@ public abstract class HtmlElement {
 	 * 	<li>Negative integer - Element is not focusable</li>
 	 * </ul>
 	 *
-	 * @param value The tab order value for keyboard navigation.
+	 * @param value The tab order value for keyboard navigation. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement tabindex(Object value) {
@@ -1124,7 +1126,7 @@ public abstract class HtmlElement {
 	 * Specifies additional information about the element, typically displayed as a tooltip
 	 * when the user hovers over the element.
 	 *
-	 * @param value Tooltip text to display on hover (e.g., <js>"Click to submit form"</js>).
+	 * @param value Tooltip text to display on hover (e.g., <js>"Click to submit form"</js>). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement title(String value) {
@@ -1150,7 +1152,7 @@ public abstract class HtmlElement {
 	 * 	<li><js>"no"</js> - Content should not be translated</li>
 	 * </ul>
 	 *
-	 * @param value Whether the element content should be translated.
+	 * @param value Whether the element content should be translated. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public HtmlElement translate(Object value) {
@@ -1161,13 +1163,13 @@ public abstract class HtmlElement {
 	/**
 	 * If the specified attribute is a boolean, it gets converted to the attribute name if <jk>true</jk> or <jk>null</jk> if <jk>false</jk>.
 	 *
-	 * @param value The attribute value.
+	 * @param value The attribute value. Can be <jk>null</jk>.
 	 * @param attr The attribute name.
-	 * @return The deminimized value, or the same value if the value wasn't a boolean.
+	 * @return The deminimized value, or the same value if the value wasn't a boolean, or <jk>null</jk> if the value was a boolean <jk>false</jk>.
 	*/
 	protected Object deminimize(Object value, String attr) {
 		if (value instanceof Boolean value2) {
-			if (Boolean.TRUE.equals(value2))
+			if (isTrue(value2))
 				return attr;
 			return null;
 		}

@@ -19,6 +19,7 @@ package org.apache.juneau.bean.openapi3;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 
 import java.util.*;
 
@@ -104,10 +105,10 @@ public class OAuthFlows extends OpenApiElement {
 	public OAuthFlows(OAuthFlows copyFrom) {
 		super(copyFrom);
 
-		this.implicit = copyFrom.implicit;
-		this.password = copyFrom.password;
-		this.clientCredentials = copyFrom.clientCredentials;
-		this.authorizationCode = copyFrom.authorizationCode;
+		this.implicit = copyOf(copyFrom.implicit);
+		this.password = copyOf(copyFrom.password);
+		this.clientCredentials = copyOf(copyFrom.clientCredentials);
+		this.authorizationCode = copyOf(copyFrom.authorizationCode);
 	}
 
 	/**

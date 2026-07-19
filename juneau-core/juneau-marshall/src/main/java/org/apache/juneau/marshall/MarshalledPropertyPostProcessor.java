@@ -360,7 +360,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 */
 	private static Object coerceLeave(Object resolved, Class<?> propertyClass, ClassMeta<?> propertyMeta) {
 		var empty = emptyOptional(propertyClass, propertyMeta);
-		return empty != null ? empty : resolved;
+		return or(empty, resolved);
 	}
 
 	/**

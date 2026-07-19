@@ -405,7 +405,7 @@ public class Listifiers {
 	 */
 	private static Comparator<Object> flexibleComparator(BeanConverter converter) {
 		// Use default converter if null is passed
-		BeanConverter conv = converter != null ? converter : BasicBeanConverter.DEFAULT;
+		BeanConverter conv = or(converter, BasicBeanConverter.DEFAULT);
 		return (o1, o2) -> {
 			// Try natural ordering using cmp() (handles nulls and Comparable objects)
 			int result = cmp(o1, o2);

@@ -276,7 +276,7 @@ class ResponseInfo_Test extends TestBase {
 			assertMapped(
 				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"description,examples,headers,schema,x5,x6",
-				"String,LinkedHashMap,LinkedHashMap,SchemaInfo,String,<null>"
+				"String,UnmodifiableMap,UnmodifiableMap,SchemaInfo,String,<null>"
 			);
 		}
 

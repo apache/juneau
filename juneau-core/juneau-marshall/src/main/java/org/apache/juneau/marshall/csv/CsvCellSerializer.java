@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.csv;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
@@ -39,8 +40,8 @@ public final class CsvCellSerializer {
 	 * @param nullMarker String to use for null values.
 	 */
 	public CsvCellSerializer(CsvByteArrayCellFormat byteArrayFormat, String nullMarker) {
-		this.byteArrayFormat = byteArrayFormat != null ? byteArrayFormat : CsvByteArrayCellFormat.BASE64;
-		this.nullMarker = nullMarker != null ? nullMarker : "null";
+		this.byteArrayFormat = or(byteArrayFormat, CsvByteArrayCellFormat.BASE64);
+		this.nullMarker = or(nullMarker, "null");
 	}
 
 	/**

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
@@ -100,7 +100,7 @@ public class ExternalDocsAnnotation {
 
 		Object(ExternalDocsAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			url = b.url;
 		}
 

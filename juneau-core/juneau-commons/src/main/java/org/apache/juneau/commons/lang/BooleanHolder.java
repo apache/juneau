@@ -93,7 +93,7 @@ public class BooleanHolder extends Holder<Boolean> {
 	 * 	<jsm>assertEquals</jsm>(<jk>true</jk>, <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 * @return A new boolean value.
 	 */
 	public static BooleanHolder of(Boolean value) {
@@ -103,7 +103,7 @@ public class BooleanHolder extends Holder<Boolean> {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 */
 	public BooleanHolder(Boolean value) {
 		super(value);
@@ -126,7 +126,7 @@ public class BooleanHolder extends Holder<Boolean> {
 	 * 	<jsm>assertTrue</jsm>(<jv>empty</jv>.is(<jk>null</jk>));
 	 * </p>
 	 *
-	 * @param value The value to compare to.
+	 * @param value The value to compare to.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value is equal to the specified value.
 	 */
 	@Override
@@ -147,7 +147,7 @@ public class BooleanHolder extends Holder<Boolean> {
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(<jk>false</jk>));
 	 * </p>
 	 *
-	 * @param values The values to compare to.
+	 * @param values The values to compare to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
 	public boolean isAny(Boolean...values) {
@@ -187,5 +187,5 @@ public class BooleanHolder extends Holder<Boolean> {
 	 *
 	 * @return <c>true</c> if the value is set to <c>true</c>, <c>false</c> otherwise (including when <c>null</c>).
 	 */
-	public boolean isTrue() { return Boolean.TRUE.equals(get()); }
+	public boolean isTrue() { return ObjectUtils.isTrue(get()); }
 }

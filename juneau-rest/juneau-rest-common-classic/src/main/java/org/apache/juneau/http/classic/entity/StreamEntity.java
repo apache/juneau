@@ -54,8 +54,8 @@ public class StreamEntity extends BasicHttpEntity {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.
-	 * @param content The entity contents.
+	 * @param contentType The entity content type.  Can be <jk>null</jk>.
+	 * @param content The entity contents.  Can be <jk>null</jk>.
 	 */
 	public StreamEntity(ContentType contentType, InputStream content) {
 		super(contentType, content);
@@ -64,7 +64,7 @@ public class StreamEntity extends BasicHttpEntity {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean being copied.
+	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
 	protected StreamEntity(StreamEntity copyFrom) {
 		super(copyFrom);
@@ -72,11 +72,16 @@ public class StreamEntity extends BasicHttpEntity {
 
 	@Override /* Overridden from AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
-		if (isCached() && byteCache == null)
-			byteCache = readBytes(content(), getMaxLength());
+		if (isCached() && byteCache == null) {
+			try (InputStream is = content()) {
+				byteCache = readBytes(is, getMaxLength());
+			}
+		}
 		if (nn(byteCache))
-			return byteCache;
-		return readBytes(content(), getMaxLength());
+			return cp(byteCache);
+		try (InputStream is = content()) {
+			return readBytes(is, getMaxLength());
+		}
 	}
 
 	@Override /* Overridden from AbstractHttpEntity */

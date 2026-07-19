@@ -100,10 +100,10 @@ public class Args {
 	}
 
 	private Args(List<String> positional, Map<String,List<String>> options, boolean caseSensitive) {
-		this.positional = Collections.unmodifiableList(positional);
+		this.positional = u(positional);
 		var copy = new LinkedHashMap<String,List<String>>();
-		options.forEach((k,v) -> copy.put(k, Collections.unmodifiableList(v)));
-		this.options = Collections.unmodifiableMap(copy);
+		options.forEach((k,v) -> copy.put(k, u(v)));
+		this.options = u(copy);
 		this.caseSensitive = caseSensitive;
 	}
 
@@ -359,11 +359,11 @@ public class Args {
 						var eq = body.indexOf('=');
 						var key = normalizeKey(body.substring(0, eq));
 						var value = body.substring(eq + 1);
-						options.computeIfAbsent(key, k -> new ArrayList<>()).add(value);
+						options.computeIfAbsent(key, k -> l()).add(value);
 						currentKey = null;
 					} else {
 						currentKey = normalizeKey(body);
-						options.computeIfAbsent(currentKey, k -> new ArrayList<>());
+						options.computeIfAbsent(currentKey, k -> l());
 					}
 				}
 			}
@@ -375,7 +375,7 @@ public class Args {
 			if (customPrefix != null) {
 				p = list(customPrefix);
 			} else {
-				p = new ArrayList<>();
+				p = l();
 				if (allowLongFlags)
 					p.add("--");
 				if (allowShortFlags)

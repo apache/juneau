@@ -24,7 +24,6 @@ import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
 
 import java.lang.reflect.*;
-import java.text.*;
 import java.util.*;
 
 import org.apache.http.*;
@@ -95,10 +94,11 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * <p>
 	 * This is the constructor used when parsing an HTTP response.
 	 *
-	 * @param response The HTTP response being parsed.
+	 * @param response The HTTP response being parsed.  Must not be <jk>null</jk>.
 	 */
 	public BasicHttpException(HttpResponse response) {
 		super((Throwable)null);
+		assertArgNotNull(ARG_response, response);
 		var h = response.getLastHeader("Thrown");
 		if (nn(h)) {
 			var partsOpt = thrown(h.getValue()).asParts();
@@ -125,7 +125,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 *
 	 * @param statusCode The HTTP status code.
 	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param args Optional <c>printf</c>-style (<js>"%s"</js>) arguments in the message.
 	 */
 	public BasicHttpException(int statusCode, String msg, Object...args) {
 		super(msg, args);
@@ -160,11 +160,14 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy.
+	 * @param copyFrom The bean to copy.  Must not be <jk>null</jk>.
 	 */
 	protected BasicHttpException(BasicHttpException copyFrom) {
 		this(0, copyFrom.getCause(), copyFrom.getMessage());
 		setStatusLine(copyFrom.statusLine.copy());
+		setHeaders(copyFrom.headers);
+		if (nn(copyFrom.content))
+			setContent(copyFrom.content);
 	}
 
 	@Override /* Overridden from HttpMessage */
@@ -348,7 +351,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	/**
 	 * Sets the body on this response.
 	 *
-	 * @param value The body on this response.
+	 * @param value The body on this response.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public BasicHttpException setContent(HttpEntity value) {
@@ -359,7 +362,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	/**
 	 * Sets the body on this response.
 	 *
-	 * @param value The body on this response.
+	 * @param value The body on this response.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpException setContent(String value) {
@@ -402,7 +405,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	/**
 	 * Sets the specified headers on this response.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpException setHeaders(HeaderList value) {
@@ -443,7 +446,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * <p>
 	 * If not specified, uses {@link Locale#getDefault()}.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpException setLocale2(Locale value) {
@@ -471,7 +474,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * <p>
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpException setProtocolVersion(ProtocolVersion value) {
@@ -491,7 +494,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * If not specified, the reason phrase will be retrieved from the reason phrase catalog
 	 * using the locale on this builder.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpException setReasonPhrase2(String value) {
@@ -505,7 +508,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * <p>
 	 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpException setReasonPhraseCatalog(ReasonPhraseCatalog value) {
@@ -536,7 +539,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * <p>
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpException setStatusLine(BasicStatusLine value) {
@@ -568,6 +571,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 */
 	public BasicHttpException setUnmodifiable() {
 		statusLine.setUnmodifiable();
+		headers.setUnmodifiable();
 		return this;
 	}
 

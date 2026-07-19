@@ -71,7 +71,7 @@ public class Audio extends HtmlElementMixed {
 	/**
 	 * Creates an {@link Audio} element with the specified {@link Audio#src(Object)} attribute.
 	 *
-	 * @param src The {@link Audio#src(Object)} attribute.
+	 * @param src The {@link Audio#src(Object)} attribute. Can be <jk>null</jk>.
 	 */
 	public Audio(String src) {
 		src(src);
@@ -119,6 +119,7 @@ public class Audio extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Audio autoplay(Object value) {
@@ -162,6 +163,7 @@ public class Audio extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Audio controls(Object value) {
@@ -183,7 +185,7 @@ public class Audio extends HtmlElementMixed {
 	 * 	<li><js>"use-credentials"</js> - Cross-origin requests include credentials</li>
 	 * </ul>
 	 *
-	 * @param value How to handle cross-origin requests.
+	 * @param value How to handle cross-origin requests. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Audio crossorigin(String value) {
@@ -221,7 +223,7 @@ public class Audio extends HtmlElementMixed {
 	 * <p>
 	 * Causes the media to automatically restart from the beginning when it reaches the end.
 	 *
-	 * @param value If <jk>true</jk>, the media will loop continuously.
+	 * @param value If <jk>true</jk>, the media will loop continuously. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Audio loop(Object value) {
@@ -240,7 +242,7 @@ public class Audio extends HtmlElementMixed {
 	 * <p>
 	 * This is useful for creating synchronized audio/video presentations or multiple audio tracks.
 	 *
-	 * @param value The name of the media group to join.
+	 * @param value The name of the media group to join. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Audio mediagroup(String value) {
@@ -255,7 +257,7 @@ public class Audio extends HtmlElementMixed {
 	 * <p>
 	 * Mutes the audio output by default. Useful for autoplay videos where audio should be disabled initially.
 	 *
-	 * @param value If <jk>true</jk>, the media will be muted by default.
+	 * @param value If <jk>true</jk>, the media will be muted by default. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Audio muted(Object value) {
@@ -578,7 +580,7 @@ public class Audio extends HtmlElementMixed {
 	 * 	<li><js>"auto"</js> - Preload the entire media file (default)</li>
 	 * </ul>
 	 *
-	 * @param value How much of the media to preload.
+	 * @param value How much of the media to preload. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Audio preload(Object value) {
@@ -608,6 +610,7 @@ public class Audio extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Audio src(Object value) {

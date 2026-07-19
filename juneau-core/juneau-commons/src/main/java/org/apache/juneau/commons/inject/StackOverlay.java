@@ -143,7 +143,7 @@ public final class StackOverlay implements BeanStore {
 		// Walk the stack bottom-to-top so that higher (later-pushed) frames overwrite lower frames
 		// for entries with the same name.  Iterating an iterator gives top-to-bottom; we reverse
 		// that here by snapshotting and walking the reversed iterator.
-		Map<String,T> result = new LinkedHashMap<>();
+		Map<String,T> result = m();
 		var snapshot = new ArrayList<>(frames);
 		for (var i = snapshot.size() - 1; i >= 0; i--)
 			snapshot.get(i).getBeansOfType(beanType).forEach(result::put);

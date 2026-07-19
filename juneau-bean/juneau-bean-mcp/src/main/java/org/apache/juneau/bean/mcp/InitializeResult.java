@@ -41,7 +41,7 @@ public class InitializeResult {
 	/**
 	 * Sets the negotiated protocol revision.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public InitializeResult setProtocolVersion(String value) {
@@ -61,7 +61,7 @@ public class InitializeResult {
 	/**
 	 * Sets server capabilities.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public InitializeResult setCapabilities(ServerCapabilities value) {
@@ -81,7 +81,7 @@ public class InitializeResult {
 	/**
 	 * Sets server implementation metadata.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public InitializeResult setServerInfo(Implementation value) {
@@ -101,7 +101,7 @@ public class InitializeResult {
 	/**
 	 * Sets optional instructions.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public InitializeResult setInstructions(String value) {

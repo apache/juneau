@@ -105,7 +105,7 @@ public class Server extends OpenApiElement {
 
 		this.url = copyFrom.url;
 		this.description = copyFrom.description;
-		variables.putAll(copyOf(copyFrom.variables, ServerVariable::copy));
+		variables.putAll(cp(copyFrom.variables, ServerVariable::copy));
 	}
 
 	/**

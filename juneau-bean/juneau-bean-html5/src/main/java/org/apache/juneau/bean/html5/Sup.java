@@ -71,7 +71,7 @@ public class Sup extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Sup} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Sup(Object...children) {
 		children(children);

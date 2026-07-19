@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.protobuf;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -112,7 +112,7 @@ public class ProtobufAnnotation {
 			super(b);
 			this.fieldNumber = b.fieldNumber;
 			this.type = b.type;
-			this.description = copyOf(b.description);
+			this.description = cp(b.description);
 		}
 
 		@Override /* Overridden from Protobuf */

@@ -222,12 +222,12 @@ public class SamlAssertionValidator {
 		public Builder algorithms(String... values) {
 			assertArgNotNull("values", values);
 			if (values.length == 0)
-				throw new IllegalArgumentException("algorithms allowlist must be non-empty");
+				throw iaex("algorithms allowlist must be non-empty");
 			var next = new LinkedHashSet<String>();
 			for (var a : values) {
 				assertArgNotNull("algorithm", a);
 				if (a.toLowerCase(Locale.ROOT).contains("sha1"))
-					throw new IllegalArgumentException("SHA-1 algorithms are permanently rejected: " + a);
+					throw iaex("SHA-1 algorithms are permanently rejected: %s", a);
 				next.add(a);
 			}
 			algorithms = next;
@@ -243,9 +243,9 @@ public class SamlAssertionValidator {
 		public Builder clockSkew(Duration value) {
 			assertArgNotNull("value", value);
 			if (value.isNegative())
-				throw new IllegalArgumentException("clockSkew must be non-negative");
+				throw iaex("clockSkew must be non-negative");
 			if (value.compareTo(MAX_CLOCK_SKEW) > 0)
-				throw new IllegalArgumentException("clockSkew must not exceed 5 minutes (was " + value + ")");
+				throw iaex("clockSkew must not exceed 5 minutes (was %s)", value);
 			clockSkew = value;
 			return this;
 		}
@@ -377,10 +377,10 @@ public class SamlAssertionValidator {
 				throw new AuthenticationException("Unknown SAML element: " + root.getNodeName())
 					.wwwAuthenticate("SAML error=\"invalid_response\"");
 			var obj = unmarshaller.unmarshall(root);
-			if (!(obj instanceof Response r))
+			if (!(obj instanceof Response obj2))
 				throw new AuthenticationException("SAML envelope is not a <Response>: " + cns(obj))
 					.wwwAuthenticate("SAML error=\"invalid_response\"");
-			return r;
+			return obj2;
 		} catch (UnmarshallingException | ParserConfigurationException | IOException | org.xml.sax.SAXException e) {
 			throw new AuthenticationException(e, "SAML response could not be parsed")
 				.wwwAuthenticate("SAML error=\"invalid_response\"");

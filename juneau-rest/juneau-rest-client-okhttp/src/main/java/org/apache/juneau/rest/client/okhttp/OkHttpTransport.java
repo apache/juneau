@@ -94,7 +94,13 @@ public final class OkHttpTransport implements HttpTransport {
 		} catch (IOException e) {
 			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}
-		return buildTransportResponse(okResponse);
+		try {
+			return buildTransportResponse(okResponse);
+		} catch (TransportException | RuntimeException e) {
+			// If response-body wiring fails the closeCallback never runs, so close here to avoid leaking the connection.
+			okResponse.close();
+			throw e;
+		}
 	}
 
 	@Override /* Closeable */

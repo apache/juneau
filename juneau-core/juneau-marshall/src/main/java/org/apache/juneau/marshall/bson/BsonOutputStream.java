@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.bson;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.math.*;
 import java.nio.charset.*;
@@ -87,7 +89,7 @@ public class BsonOutputStream extends OutputStream {
 	}
 
 	private OutputStream target() {
-		return buffer != null ? buffer : os;
+		return or(buffer, os);
 	}
 
 	/**

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
@@ -38,8 +37,8 @@ public class EntityTags {
 	/**
 	 * Returns a parsed entity tags header value.
 	 *
-	 * @param value The header value.
-	 * @return A parsed header value.
+	 * @param value The header value. Can be <jk>null</jk>.
+	 * @return A parsed header value, or <jk>null</jk> if <c>value</c> is <jk>null</jk>.
 	 */
 	public static EntityTags of(EntityTag...value) {
 		return value == null ? null : new EntityTags(value);
@@ -48,8 +47,8 @@ public class EntityTags {
 	/**
 	 * Returns a parsed entity tags header value.
 	 *
-	 * @param value The raw header value.
-	 * @return A parsed header value.
+	 * @param value The raw header value. Can be <jk>null</jk> or empty, in which case {@link #EMPTY} is returned.
+	 * @return A parsed header value. Never <jk>null</jk>.
 	 */
 	public static EntityTags of(String value) {
 		return isEmpty(value) ? EMPTY : CACHE.get(value, () -> new EntityTags(value));
@@ -65,13 +64,13 @@ public class EntityTags {
 	 */
 	public EntityTags(EntityTag...value) {
 		this.string = join(value, ", ");
-		this.value = copyOf(value);
+		this.value = cp(value);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param value The header value.
+	 * @param value The header value. Can be <jk>null</jk> (treated as empty).
 	 */
 	public EntityTags(String value) {
 		string = value;
@@ -87,7 +86,7 @@ public class EntityTags {
 	 * @return The entity tags in this object as an array.  Can be <jk>null</jk>.
 	 */
 	public EntityTag[] toArray() {
-		return copyOf(value);
+		return cp(value);
 	}
 
 	/**

@@ -152,7 +152,7 @@ public class ReflectionUtils {
 	 * 	Class&lt;? <jk>extends</jk> Enum&gt; <jv>enumClass</jv> = ReflectionUtils.<jsm>asEnumClass</jsm>(<jv>clazz</jv>);
 	 * </p>
 	 *
-	 * @param clazz The class to convert. Must be an enum class.
+	 * @param clazz The class to convert. Must be an enum class. Must not be <jk>null</jk>.
 	 * @return The enum class as a raw type suitable for use with {@link EnumSet#allOf(Class)}.
 	 * @throws ClassCastException if the class is not an enum class.
 	 */
@@ -186,8 +186,8 @@ public class ReflectionUtils {
 		if (Map.class.isAssignableFrom(inner)) {
 			// Verify it's Map<String,T> by checking the parameterized type
 			Type parameterizedType = targetType.innerType();
-			if (parameterizedType instanceof ParameterizedType pt2) {
-				var typeArgs = pt2.getActualTypeArguments();
+			if (parameterizedType instanceof ParameterizedType parameterizedType2) {
+				var typeArgs = parameterizedType2.getActualTypeArguments();
 				if (typeArgs.length >= 2 && typeArgs[0] == String.class) {
 					return new LinkedHashMap<>(beans);
 				}

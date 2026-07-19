@@ -19,6 +19,7 @@ package org.apache.juneau.bean.openapi3;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 
 import java.util.*;
 
@@ -100,7 +101,7 @@ public class Tag extends OpenApiElement {
 
 		this.name = copyFrom.name;
 		this.description = copyFrom.description;
-		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+		this.externalDocs = copyOf(copyFrom.externalDocs);
 	}
 
 	/**

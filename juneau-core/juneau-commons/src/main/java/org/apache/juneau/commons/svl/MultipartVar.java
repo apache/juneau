@@ -36,7 +36,7 @@ public abstract class MultipartVar extends SimpleVar {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The name of this variable.
+	 * @param name The name of this variable.  Must not be <jk>null</jk>.
 	 */
 	protected MultipartVar(String name) {
 		super(name);

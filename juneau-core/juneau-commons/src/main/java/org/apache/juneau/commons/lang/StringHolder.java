@@ -85,7 +85,7 @@ public class StringHolder extends Holder<String> {
 	 * 	<jsm>assertEquals</jsm>(<js>"Hello"</js>, <jv>name</jv>.get());
 	 * </p>
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 * @return A new string value.
 	 */
 	public static StringHolder of(String value) {
@@ -102,7 +102,7 @@ public class StringHolder extends Holder<String> {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 */
 	public StringHolder(String value) {
 		super(value);
@@ -125,7 +125,7 @@ public class StringHolder extends Holder<String> {
 	 * 	<jsm>assertTrue</jsm>(<jv>empty</jv>.is(<jk>null</jk>));
 	 * </p>
 	 *
-	 * @param value The value to compare to.
+	 * @param value The value to compare to.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value is equal to the specified value.
 	 */
 	@Override
@@ -149,7 +149,7 @@ public class StringHolder extends Holder<String> {
 	 * 	<jsm>assertFalse</jsm>(<jv>name</jv>.isAny());
 	 * </p>
 	 *
-	 * @param values The values to compare to.
+	 * @param values The values to compare to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
 	public boolean isAny(String...values) {

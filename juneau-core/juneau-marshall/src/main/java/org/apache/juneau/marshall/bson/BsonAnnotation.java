@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.bson;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.*;
 
@@ -78,7 +78,7 @@ public class BsonAnnotation {
 
 		Object(BsonAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 		}
 
 		@Override /* Bson */

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.atom;
 
+import static org.apache.juneau.commons.utils.CopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.marshall.xml.XmlFormat.*;
@@ -71,9 +72,9 @@ public class CommonEntry extends Common {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param id The ID of this object.
-	 * @param title The title of this object.
-	 * @param updated The updated timestamp of this object.
+	 * @param id The ID of this object.  Can be <jk>null</jk>.
+	 * @param title The title of this object.  Can be <jk>null</jk>.
+	 * @param updated The updated timestamp of this object.  Can be <jk>null</jk>.
 	 */
 	public CommonEntry(Id id, Text title, Calendar updated) {
 		setId(id).setTitle(title).setUpdated(updated);
@@ -82,9 +83,9 @@ public class CommonEntry extends Common {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param id The ID of this object.
-	 * @param title The title of this object.
-	 * @param updated The updated timestamp of this object.
+	 * @param id The ID of this object.  Can be <jk>null</jk>.
+	 * @param title The title of this object.  Can be <jk>null</jk>.
+	 * @param updated The updated timestamp of this object.  Can be <jk>null</jk>.
 	 */
 	public CommonEntry(String id, String title, String updated) {
 		setId(id).setTitle(title).setUpdated(updated);
@@ -99,7 +100,7 @@ public class CommonEntry extends Common {
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format = COLLAPSED, childName = "author")
-	public Person[] getAuthors() { return authors; }
+	public Person[] getAuthors() { return cp(authors); }
 
 	/**
 	 * Bean property getter:  <property>categories</property>.
@@ -110,7 +111,7 @@ public class CommonEntry extends Common {
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format = COLLAPSED, childName = "category")
-	public Category[] getCategories() { return categories; }
+	public Category[] getCategories() { return cp(categories); }
 
 	/**
 	 * Bean property getter:  <property>contributors</property>.
@@ -121,7 +122,7 @@ public class CommonEntry extends Common {
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format = COLLAPSED, childName = "contributor")
-	public Person[] getContributors() { return contributors; }
+	public Person[] getContributors() { return cp(contributors); }
 
 	/**
 	 * Bean property getter:  <property>id</property>.
@@ -142,7 +143,7 @@ public class CommonEntry extends Common {
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format = COLLAPSED)
-	public Link[] getLinks() { return links; }
+	public Link[] getLinks() { return cp(links); }
 
 	/**
 	 * Bean property getter:  <property>rights</property>.
@@ -172,7 +173,7 @@ public class CommonEntry extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Calendar getUpdated() { return updated; }
+	public Calendar getUpdated() { return cloneOf(updated); }
 
 	/**
 	 * Bean property setter:  <property>authors</property>.
@@ -186,7 +187,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setAuthors(Person...value) {
-		authors = value;
+		authors = cp(value);
 		return this;
 	}
 
@@ -208,7 +209,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setCategories(Category...value) {
-		categories = value;
+		categories = cp(value);
 		return this;
 	}
 
@@ -224,7 +225,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setContributors(Person...value) {
-		contributors = value;
+		contributors = cp(value);
 		return this;
 	}
 
@@ -278,7 +279,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setLinks(Link...value) {
-		links = value;
+		links = cp(value);
 		return this;
 	}
 
@@ -358,7 +359,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setUpdated(Calendar value) {
-		updated = value;
+		updated = cloneOf(value);
 		return this;
 	}
 

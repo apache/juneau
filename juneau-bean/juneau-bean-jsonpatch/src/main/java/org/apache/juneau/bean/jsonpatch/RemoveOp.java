@@ -36,7 +36,7 @@ public class RemoveOp extends JsonPatchOperation {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param path The JSON Pointer target.
+	 * @param path The JSON Pointer target.  Can be <jk>null</jk>.
 	 */
 	public RemoveOp(String path) {
 		super(path);

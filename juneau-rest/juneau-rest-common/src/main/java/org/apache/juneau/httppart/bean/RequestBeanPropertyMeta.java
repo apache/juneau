@@ -104,8 +104,10 @@ public class RequestBeanPropertyMeta {
 	/**
 	 * Returns the parser to use for parsing the bean property value.
 	 *
-	 * @param defaultParser The default parsing to use if not defined on the annotation.
-	 * @return The parsing to use for serializing the bean property value.
+	 * @param defaultParser The default parser to use if not defined on the annotation. Can be <jk>null</jk>.
+	 * @return
+	 * 	The parser to use for parsing the bean property value, or <c>defaultParser</c> (which can be <jk>null</jk>)
+	 * 	if no parser is configured on the annotation.
 	 */
 	public HttpPartParserSession getParser(HttpPartParserSession defaultParser) {
 		return parser == null ? defaultParser : parser.getPartSession();

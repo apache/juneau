@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.html5;
 
 import static org.apache.juneau.marshall.xml.XmlFormat.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -67,6 +68,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * 	The child to add as a child element.
 	 * 	Can be a string or {@link HtmlElement}.
 	 * 	Can also be a container of strings and elements.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HtmlElement child(Object value) {
@@ -86,6 +88,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * 	The children to add as child elements.
 	 * 	Can be a mixture of strings and {@link HtmlElement} objects.
 	 * 	Can also be containers of strings and elements.
+	 * 	Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HtmlElement children(Object...value) {
@@ -162,11 +165,11 @@ public class HtmlElementMixed extends HtmlElement {
 	/**
 	 * The children of this element.
 	 *
-	 * @return The children of this element.
+	 * @return The children of this element, or <jk>null</jk> if no children are set.
 	 */
 	@Xml(format = MIXED)
 	@BeanProp(name="c") @MarshalledProp(dictionary=HtmlBeanDictionary.class)
-	public List<Object> getChildren() { return children; }
+	public List<Object> getChildren() { return u(children); }
 
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementMixed hidden(Object value) {
@@ -489,7 +492,7 @@ public class HtmlElementMixed extends HtmlElement {
 	/**
 	 * Sets the children of this element.
 	 *
-	 * @param children The new children of this element.
+	 * @param children The new children of this element. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	@BeanProp("c")

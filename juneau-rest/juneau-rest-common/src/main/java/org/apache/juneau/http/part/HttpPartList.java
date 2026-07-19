@@ -94,7 +94,7 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	/**
 	 * Creates a new {@link HttpPartList} initialized with the given alternating {@code name}/{@code value} pairs.
 	 *
-	 * @param pairs Alternating name/value strings. Must be an even number.
+	 * @param pairs Alternating name/value strings. Can be <jk>null</jk> (treated as empty). Length must be even.
 	 * @return A new instance. Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If the number of arguments is odd.
 	 */
@@ -174,8 +174,8 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	/**
 	 * Appends a part constructed from the given name and string value.
 	 *
-	 * @param name The part name.
-	 * @param value The part value.
+	 * @param name The part name. Must not be <jk>null</jk>.
+	 * @param value The part value. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HttpPartList append(String name, String value) {
@@ -212,8 +212,8 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	/**
 	 * Sets a default part with the given name and value (first-in-chain wins per name).
 	 *
-	 * @param name The part name.
-	 * @param value The part value.
+	 * @param name The part name. Must not be <jk>null</jk>.
+	 * @param value The part value. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HttpPartList setDefault(String name, String value) {
@@ -250,8 +250,8 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	/**
 	 * Sets a part with the given name and value, replacing any prior entry with the same name.
 	 *
-	 * @param name The part name.
-	 * @param value The part value.
+	 * @param name The part name. Must not be <jk>null</jk>.
+	 * @param value The part value. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HttpPartList set(String name, String value) {
@@ -261,7 +261,7 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	/**
 	 * Removes all parts with the given name.
 	 *
-	 * @param name The part name.
+	 * @param name The part name. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HttpPartList removeAll(String name) {

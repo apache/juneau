@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -123,7 +122,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 */
 	public BasicCsvHeader(String name, String...value) {
 		super(name, join(value, ", "));
-		this.value = copyOf(value);
+		this.value = cp(value);
 		this.supplier = null;
 	}
 
@@ -154,7 +153,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @return The header value as an array wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String[]> asArray() {
-		return o(copyOf(value()));
+		return o(cp(value()));
 	}
 
 	/**
@@ -242,7 +241,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 */
 	public String[] orElse(String[] other) {
 		String[] x = value();
-		return nn(x) ? x : other;
+		return nn(x) ? cp(x) : other;
 	}
 
 	/**
@@ -254,7 +253,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @return The header value as an array.  Can be <jk>null</jk>.
 	 */
 	public String[] toArray() {
-		return copyOf(value());
+		return cp(value());
 	}
 
 	/**

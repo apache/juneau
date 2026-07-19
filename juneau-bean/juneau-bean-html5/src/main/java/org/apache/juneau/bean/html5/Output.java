@@ -82,7 +82,7 @@ public class Output extends HtmlElementMixed {
 	/**
 	 * Creates an {@link Output} element with the specified {@link Output#name(String)} attribute.
 	 *
-	 * @param name The {@link Output#name(String)} attribute.
+	 * @param name The {@link Output#name(String)} attribute. Can be <jk>null</jk>.
 	 */
 	public Output(String name) {
 		name(name);
@@ -104,7 +104,7 @@ public class Output extends HtmlElementMixed {
 	 * <p>
 	 * Multiple IDs can be specified as a space-separated list.
 	 *
-	 * @param value The IDs of the form controls that contribute to this output.
+	 * @param value The IDs of the form controls that contribute to this output. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	@SuppressWarnings({
@@ -167,7 +167,7 @@ public class Output extends HtmlElementMixed {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param value The ID of the form element to associate with this output.
+	 * @param value The ID of the form element to associate with this output. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Output form(String value) {
@@ -203,7 +203,7 @@ public class Output extends HtmlElementMixed {
 	 * <p>
 	 * The name should be unique within the form and should not contain spaces or special characters.
 	 *
-	 * @param value The name of the output element for submission and API access.
+	 * @param value The name of the output element for submission and API access. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Output name(String value) {

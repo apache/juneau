@@ -106,7 +106,7 @@ public class JspViewRenderer implements ViewRenderer {
 		var res = opSession.getResponse();
 
 		var content = res.getContent(Object.class);
-		if (! (content instanceof JspView view))
+		if (! (content instanceof JspView content2))
 			return NEXT;
 
 		// Resolve the base path. Prefer the registered JspMixin bean (which the mixin
@@ -117,10 +117,10 @@ public class JspViewRenderer implements ViewRenderer {
 			.orElse("/");
 
 		// Copy attributes onto the request so the JSP / JSTL EL can resolve them.
-		view.getAttributes().forEach(req::setAttribute);
+		content2.getAttributes().forEach(req::setAttribute);
 
 		// Apply caller-supplied response headers (e.g. Content-Type, Cache-Control).
-		view.getResponseHeaders().forEach(res::setHeader);
+		content2.getResponseHeaders().forEach(res::setHeader);
 
 		// Resolve the dispatch path: basePath + templateName, normalized for a single separator.
 		// A path that escapes basePath (e.g. template names assembled from user input that
@@ -130,10 +130,10 @@ public class JspViewRenderer implements ViewRenderer {
 		// which catches IAE and surfaces it as Forbidden.)
 		String target;
 		try {
-			target = joinPath(basePath, view.getTemplateName());
+			target = joinPath(basePath, content2.getTemplateName());
 		} catch (IllegalArgumentException ex) {
 			throw new InternalServerError(ex, "JSP template name escapes configured base path: '%s'",
-				view.getTemplateName());
+				content2.getTemplateName());
 		}
 
 		// Find the JSP engine via the servlet context. Both forward() failure modes (missing

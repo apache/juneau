@@ -86,7 +86,7 @@ public class Img extends HtmlElementVoid {
 	/**
 	 * Creates an {@link Img} element with the specified {@link Img#src(Object)} attribute.
 	 *
-	 * @param src The {@link Img#src(Object)} attribute.
+	 * @param src The {@link Img#src(Object)} attribute. Can be <jk>null</jk>.
 	 */
 	public Img(Object src) {
 		src(src);
@@ -114,7 +114,7 @@ public class Img extends HtmlElementVoid {
 	 * <p>
 	 * The alt text should be descriptive and convey the same information as the image.
 	 *
-	 * @param value Alternative text for the image.
+	 * @param value Alternative text for the image. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Img alt(String value) {
@@ -154,7 +154,7 @@ public class Img extends HtmlElementVoid {
 	 * 	<li><js>"use-credentials"</js> - Cross-origin requests include credentials</li>
 	 * </ul>
 	 *
-	 * @param value How to handle cross-origin requests.
+	 * @param value How to handle cross-origin requests. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Img crossorigin(String value) {
@@ -178,6 +178,7 @@ public class Img extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Img height(Object value) {
@@ -214,6 +215,7 @@ public class Img extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Img ismap(Object value) {
@@ -549,6 +551,7 @@ public class Img extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Img src(Object value) {
@@ -591,7 +594,7 @@ public class Img extends HtmlElementVoid {
 	 * <p>
 	 * The value should start with "#" followed by the name of the map element.
 	 *
-	 * @param value The name of the image map to use (e.g., "#mymap").
+	 * @param value The name of the image map to use (e.g., "#mymap"). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Img usemap(String value) {
@@ -608,6 +611,7 @@ public class Img extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Img width(Object value) {

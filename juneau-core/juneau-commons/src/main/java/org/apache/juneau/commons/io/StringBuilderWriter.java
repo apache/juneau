@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.io;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -91,7 +92,7 @@ public class StringBuilderWriter extends Writer {
 	private static final String ARG_sb = "sb";
 	private static final String ARG_str = "str";
 
-	private StringBuilder sb;
+	private final StringBuilder sb;
 
 	/**
 	 * Constructor.
@@ -175,7 +176,7 @@ public class StringBuilderWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public StringBuilderWriter append(CharSequence csq, int start, int end) {
-		CharSequence cs = (csq == null ? "null" : csq);
+		CharSequence cs = or(csq, "null");
 		write(cs.subSequence(start, end).toString());
 		return this;
 	}

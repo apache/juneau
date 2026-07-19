@@ -653,7 +653,7 @@ public class OidcRelyingParty {
 		var cookieValue = sessionStore.createSessionCookieValue(session);
 		noStore(res);
 		res.addHeader("Set-Cookie", buildSetCookie(cookieValue, sessionTtl.toSeconds()));
-		res.sendRedirect(pending.redirectTarget() != null ? pending.redirectTarget() : postLoginRedirect);
+		res.sendRedirect(or(pending.redirectTarget(), postLoginRedirect));
 	}
 
 	/**
@@ -987,14 +987,14 @@ public class OidcRelyingParty {
 		if (v == null)
 			return Collections.emptySet();
 		var out = new LinkedHashSet<String>();
-		if (v instanceof String str) {
-			for (var piece : str.split("\\s+"))
+		if (v instanceof String v2) {
+			for (var piece : v2.split("\\s+"))
 				if (! piece.isBlank())
 					out.add(piece);
-		} else if (v instanceof Collection<?> list) {
-			for (var item : list)
-				if (item instanceof String str)
-					out.add(str);
+		} else if (v instanceof Collection<?> v2) {
+			for (var item : v2)
+				if (item instanceof String item2)
+					out.add(item2);
 		}
 		return out;
 	}

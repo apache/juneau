@@ -38,8 +38,8 @@ public class AddOp extends JsonPatchOperation {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param path The JSON Pointer target.
-	 * @param value The value to add.
+	 * @param path The JSON Pointer target.  Can be <jk>null</jk>.
+	 * @param value The value to add.  Can be <jk>null</jk>.
 	 */
 	public AddOp(String path, Object value) {
 		super(path);
@@ -56,7 +56,7 @@ public class AddOp extends JsonPatchOperation {
 	/**
 	 * Bean property setter:  <property>value</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public AddOp setValue(Object value) {

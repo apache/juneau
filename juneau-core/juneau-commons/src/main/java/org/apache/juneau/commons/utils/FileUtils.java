@@ -58,7 +58,7 @@ public class FileUtils {
 	 * <p>
 	 * Throws a {@link RuntimeException} if the file could not be created.
 	 *
-	 * @param f The file to create.
+	 * @param f The file to create.  Must not be <jk>null</jk>.
 	 */
 	public static void create(File f) {
 		if (f.exists())
@@ -76,7 +76,7 @@ public class FileUtils {
 	 * <p>
 	 * {@link File#deleteOnExit()} is called on the resulting file before being returned by this method.
 	 *
-	 * @param name The file name
+	 * @param name The file name.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> name throws {@link NullPointerException}).
 	 * @return A newly-created temporary file.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -100,8 +100,8 @@ public class FileUtils {
 	 * <p>
 	 * {@link File#deleteOnExit()} is called on the resulting file before being returned by this method.
 	 *
-	 * @param name The file name
-	 * @param contents The file contents.
+	 * @param name The file name.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> name throws {@link NullPointerException}).
+	 * @param contents The file contents.  Can be <jk>null</jk> (creates an empty file).
 	 * @return A newly-created temporary file.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -120,7 +120,7 @@ public class FileUtils {
 	/**
 	 * Recursively deletes a file or directory.
 	 *
-	 * @param f The file or directory to delete.
+	 * @param f The file or directory to delete.  Can be <jk>null</jk> (returns <jk>true</jk>).
 	 * @return <jk>true</jk> if file or directory was successfully deleted.
 	 */
 	public static boolean deleteFile(File f) {
@@ -143,8 +143,8 @@ public class FileUtils {
 	/**
 	 * Returns <jk>true</jk> if the specified file exists in the specified directory.
 	 *
-	 * @param dir The directory.
-	 * @param fileName The file name.
+	 * @param dir The directory.  Can be <jk>null</jk> (returns <jk>false</jk>).
+	 * @param fileName The file name.  Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if the specified file exists in the specified directory.
 	 */
 	public static boolean fileExists(File dir, String fileName) {
@@ -186,8 +186,8 @@ public class FileUtils {
 	/**
 	 * Given an arbitrary path, returns the file name portion of that path.
 	 *
-	 * @param path The path to check.
-	 * @return The file name.
+	 * @param path The path to check.  Can be <jk>null</jk> or empty (returns <jk>null</jk>).
+	 * @return The file name, or <jk>null</jk> if the path was <jk>null</jk>, empty, or contained only slashes.
 	 */
 	public static String getFileName(String path) {
 		if (isEmpty(path))
@@ -203,8 +203,8 @@ public class FileUtils {
 	/**
 	 * Returns <jk>true</jk> if the specified file name contains the specified extension.
 	 *
-	 * @param name The file name.
-	 * @param ext The extension.
+	 * @param name The file name.  Can be <jk>null</jk> (returns <jk>false</jk>).
+	 * @param ext The extension.  Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if the specified file name contains the specified extension.
 	 */
 	public static boolean hasExtension(String name, String ext) {
@@ -414,7 +414,7 @@ public class FileUtils {
 	 * <p>
 	 * Method ensures that the timestamp changes even if it's been modified within the past millisecond.
 	 *
-	 * @param f The file to modify the modified timestamp on.
+	 * @param f The file to modify the modified timestamp on.  Must not be <jk>null</jk>.
 	 */
 	public static void modifyTimestamp(File f) {
 		var lm = f.lastModified();

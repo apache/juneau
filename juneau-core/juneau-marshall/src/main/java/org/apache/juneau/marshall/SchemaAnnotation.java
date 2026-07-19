@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.jsonschema.SchemaUtils.*;
 
@@ -1130,19 +1129,19 @@ public class SchemaAnnotation {
 
 		Object(SchemaAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			$ref = b.$ref;
-			default_ = copyOf(b.default_);
-			enum_ = copyOf(b.enum_);
-			allOf = copyOf(b.allOf);
+			default_ = cp(b.default_);
+			enum_ = cp(b.enum_);
+			allOf = cp(b.allOf);
 			aev = b.aev;
 			allowEmptyValue = b.allowEmptyValue;
 			cf = b.cf;
 			collectionFormat = b.collectionFormat;
-			d = copyOf(b.d);
-			df = copyOf(b.df);
+			d = cp(b.d);
+			df = cp(b.df);
 			discriminator = b.discriminator;
-			e = copyOf(b.e);
+			e = cp(b.e);
 			emax = b.emax;
 			emin = b.emin;
 			exclusiveMaximum = b.exclusiveMaximum;
@@ -1185,25 +1184,25 @@ public class SchemaAnnotation {
 			type = b.type;
 			ui = b.ui;
 			uniqueItems = b.uniqueItems;
-			xml = copyOf(b.xml);
+			xml = cp(b.xml);
 			deprecatedProperty = b.deprecatedProperty;
 			$id = b.$id;
 			contentMediaType = b.contentMediaType;
 			contentEncoding = b.contentEncoding;
 			exclusiveMaximumValue = b.exclusiveMaximumValue;
 			exclusiveMinimumValue = b.exclusiveMinimumValue;
-			const_ = copyOf(b.const_);
-			examples = copyOf(b.examples);
-			$comment = copyOf(b.$comment);
-			prefixItems = copyOf(b.prefixItems);
-			unevaluatedItems = copyOf(b.unevaluatedItems);
-			unevaluatedProperties = copyOf(b.unevaluatedProperties);
-			dependentSchemas = copyOf(b.dependentSchemas);
-			dependentRequired = copyOf(b.dependentRequired);
-			if_ = copyOf(b.if_);
-			then_ = copyOf(b.then_);
-			else_ = copyOf(b.else_);
-			$defs = copyOf(b.$defs);
+			const_ = cp(b.const_);
+			examples = cp(b.examples);
+			$comment = cp(b.$comment);
+			prefixItems = cp(b.prefixItems);
+			unevaluatedItems = cp(b.unevaluatedItems);
+			unevaluatedProperties = cp(b.unevaluatedProperties);
+			dependentSchemas = cp(b.dependentSchemas);
+			dependentRequired = cp(b.dependentRequired);
+			if_ = cp(b.if_);
+			then_ = cp(b.then_);
+			else_ = cp(b.else_);
+			$defs = cp(b.$defs);
 		}
 
 		@Override /* Overridden from Schema */

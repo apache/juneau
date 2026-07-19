@@ -136,8 +136,8 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		if (content == null) // HTT: true branch requires a response with no content at all; framework-level null-content suppression makes this unreachable in practice
 			return NEXT;
 
-		if (content instanceof Flow.Publisher<?> pub)
-			return dispatch(opSession, pub);
+		if (content instanceof Flow.Publisher<?> content2)
+			return dispatch(opSession, content2);
 
 		var a = adapters();
 		for (var adapter : a) {
@@ -212,9 +212,13 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 
 		// Synchronous fallback (MockServletRequest et al.): block until the publisher terminates.
 		var done = new CompletableFuture<Void>();
-		pub.subscribe(new StreamingSubscriber(res, writer, encoder, mdc,
-			t -> { if (t == null) done.complete(null); else done.completeExceptionally(t); }));
-		awaitSync(done, syncTimeoutMillis(opSession));
+		var subscriber = new StreamingSubscriber(res, writer, encoder, mdc,
+			t -> { if (t == null) done.complete(null); else done.completeExceptionally(t); });
+		pub.subscribe(subscriber);
+		if (! awaitSync(done, syncTimeoutMillis(opSession)))
+			// Timed out or interrupted before the publisher terminated — cancel the still-live subscription so it
+			// cannot emit late writes against a response we are about to finish.
+			subscriber.cancel();
 		try {
 			writer.flush();
 			res.flushBuffer();
@@ -237,17 +241,29 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		res.setHeader("Content-Encoding", "identity");
 	}
 
+	/**
+	 * Blocks until the synchronous stream completes, times out, or is interrupted.
+	 *
+	 * @return <jk>true</jk> if the publisher terminated (normally or with an error) before the timeout; <jk>false</jk>
+	 * 	if the wait timed out or was interrupted (in which case the caller must cancel the still-live subscription).
+	 */
 	@SuppressWarnings({
 		"java:S2142" // Interrupt flag restored before returning.
 	})
-	private static void awaitSync(CompletableFuture<Void> done, long timeoutMs) {
+	private static boolean awaitSync(CompletableFuture<Void> done, long timeoutMs) {
 		try {
 			done.get(timeoutMs, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
-		} catch (TimeoutException | ExecutionException e) {
+			return false;
+		} catch (TimeoutException e) {
+			LOG.log(Level.FINE, e, () -> "Synchronous reactive stream timed out: " + e.getMessage());
+			return false;
+		} catch (ExecutionException e) {
+			// Publisher terminated with an error — the subscription is already finished, no orphan to cancel.
 			LOG.log(Level.FINE, e, () -> "Synchronous reactive stream did not complete cleanly: " + e.getMessage());
 		}
+		return true;
 	}
 
 	private static void completeAsync(AsyncContext asyncCtx, RestResponse res, Throwable error) { // HTT: only reachable from the async path (real servlet container required)
@@ -281,11 +297,11 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	private static void writeSseFrame(FinishablePrintWriter w, Object element) throws IOException, SerializeException {
 		if (element == null)
 			return;
-		if (element instanceof SseEvent ev) {
-			Sse.DEFAULT.write(ev, w);
+		if (element instanceof SseEvent element2) {
+			Sse.DEFAULT.write(element2, w);
 			return;
 		}
-		var data = element instanceof CharSequence c ? c.toString() : Json.of(element);
+		var data = element instanceof CharSequence element2 ? element2.toString() : Json.of(element);
 		Sse.DEFAULT.write(new SseEvent(null, data), w);
 	}
 
@@ -295,7 +311,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	private static void writeNdjsonFrame(FinishablePrintWriter w, Object element) throws SerializeException {
 		if (element == null)
 			return;
-		var json = element instanceof CharSequence c ? c.toString() : Json.of(element);
+		var json = element instanceof CharSequence element2 ? element2.toString() : Json.of(element);
 		w.write(json);
 		w.write("\n");
 		w.flush();
@@ -390,7 +406,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		private final Consumer<Throwable> onTerminate;
 		private final AtomicBoolean terminated = new AtomicBoolean();
 		private volatile boolean wrote;
-		private Flow.Subscription subscription;
+		private volatile Flow.Subscription subscription;
 
 		StreamingSubscriber(RestResponse res, FinishablePrintWriter writer, FrameEncoder encoder,
 				Map<String,String> mdc, Consumer<Throwable> onTerminate) {
@@ -418,6 +434,21 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 
 		@Override public void onError(Throwable t) { terminate(t); }
 		@Override public void onComplete() { terminate(null); }
+
+		/**
+		 * Cancels the underlying subscription and marks this subscriber terminated so no late frames are written.
+		 *
+		 * <p>
+		 * Invoked by the synchronous fallback path when the wait times out or is interrupted before the publisher
+		 * terminates, preventing an orphaned subscription from emitting writes against a finished response.
+		 */
+		void cancel() {
+			if (! terminated.compareAndSet(false, true))
+				return;
+			var s = subscription;
+			if (s != null)
+				s.cancel();
+		}
 
 		private void writeFrame(Object item) {
 			try {

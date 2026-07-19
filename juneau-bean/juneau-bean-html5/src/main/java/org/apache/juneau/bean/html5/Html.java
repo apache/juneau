@@ -83,7 +83,7 @@ public class Html extends HtmlElementContainer {
 	/**
 	 * Creates an {@link Html} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Html(Object...children) {
 		children(children);
@@ -165,7 +165,7 @@ public class Html extends HtmlElementContainer {
 	 * <p>
 	 * The manifest file should be a text file that lists resources to be cached.
 	 *
-	 * @param value The URL of the application cache manifest file.
+	 * @param value The URL of the application cache manifest file. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Html manifest(String value) {

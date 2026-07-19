@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 import java.util.function.*;
@@ -580,26 +580,26 @@ public class RestOpAnnotation {
 
 		Object(RestOpAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			clientVersion = b.clientVersion;
-			consumes = copyOf(b.consumes);
-			converters = copyOf(b.converters);
+			consumes = cp(b.consumes);
+			converters = cp(b.converters);
 			debug = b.debug;
 			defaultAccept = b.defaultAccept;
 			defaultCharset = b.defaultCharset;
 			defaultContentType = b.defaultContentType;
-			defaultRequestFormData = copyOf(b.defaultRequestFormData);
-			defaultRequestQueryData = copyOf(b.defaultRequestQueryData);
-			defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
-			defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
-			defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
-			encoders = copyOf(b.encoders);
-			guards = copyOf(b.guards);
-			matchers = copyOf(b.matchers);
+			defaultRequestFormData = cp(b.defaultRequestFormData);
+			defaultRequestQueryData = cp(b.defaultRequestQueryData);
+			defaultRequestAttributes = cp(b.defaultRequestAttributes);
+			defaultRequestHeaders = cp(b.defaultRequestHeaders);
+			defaultResponseHeaders = cp(b.defaultResponseHeaders);
+			encoders = cp(b.encoders);
+			guards = cp(b.guards);
+			matchers = cp(b.matchers);
 			maxInput = b.maxInput;
 			method = b.method;
-			parsers = copyOf(b.parsers);
-			path = copyOf(b.path);
+			parsers = cp(b.parsers);
+			path = cp(b.path);
 			observability = b.observability;
 			metricName = b.metricName;
 			metricTags = b.metricTags;
@@ -607,13 +607,13 @@ public class RestOpAnnotation {
 			virtualThreads = b.virtualThreads;
 			asyncTimeoutMillis = b.asyncTimeoutMillis;
 			asyncCompletionExecutor = b.asyncCompletionExecutor;
-			produces = copyOf(b.produces);
-			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
-			allowedParserOptions = copyOf(b.allowedParserOptions);
-			noInherit = copyOf(b.noInherit);
+			produces = cp(b.produces);
+			allowedSerializerOptions = cp(b.allowedSerializerOptions);
+			allowedParserOptions = cp(b.allowedParserOptions);
+			noInherit = cp(b.noInherit);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
-			serializers = copyOf(b.serializers);
+			serializers = cp(b.serializers);
 			summary = b.summary;
 			swagger = b.swagger;
 			value = b.value;

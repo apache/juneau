@@ -103,13 +103,26 @@ public final class JettyHttpTransport implements HttpTransport {
 				: listener.get(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
+			abortQuietly(listener);
 			throw new TransportException("HTTP request interrupted", e);
 		} catch (TimeoutException e) {
+			abortQuietly(listener);
 			throw new TransportException("HTTP request timed out", e);
 		} catch (ExecutionException e) {
+			abortQuietly(listener);
 			throw new TransportException("HTTP transport error: " + e.getCause().getMessage(), e.getCause());
 		}
 		return buildTransportResponse(jettyResponse, listener.getInputStream());
+	}
+
+	// Releases the Jetty response content when the response never reaches the caller (interrupt/timeout/error),
+	// so the connection is not abandoned.  Closing the listener's input stream aborts and releases the exchange.
+	private static void abortQuietly(InputStreamResponseListener listener) {
+		try {
+			listener.getInputStream().close();
+		} catch (IOException e) {
+			// Best-effort cleanup on an already-failing path; nothing more can be done.
+		}
 	}
 
 	@Override /* Closeable */
@@ -156,7 +169,9 @@ public final class JettyHttpTransport implements HttpTransport {
 		var builder = TransportResponse.builder()
 			.statusCode(jettyResponse.getStatus())
 			.reasonPhrase(jettyResponse.getReason())
-			.body(bodyStream);
+			.body(bodyStream)
+			// Release the Jetty response InputStream when the RestResponse is closed; TransportResponse.close() only runs this callback.
+			.closeCallback(bodyStream);
 		jettyResponse.getHeaders().forEach(field -> builder.header(field.getName(), field.getValue()));
 		return builder.build();
 	}

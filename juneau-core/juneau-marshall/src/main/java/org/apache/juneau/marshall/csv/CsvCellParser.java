@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.csv;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.parser.*;
@@ -44,7 +46,7 @@ public final class CsvCellParser {
 
 	private CsvCellParser(String input, String nullMarker) {
 		this.input = input != null ? input.trim() : "";
-		this.nullMarker = nullMarker != null ? nullMarker : "null";
+		this.nullMarker = or(nullMarker, "null");
 		this.length = this.input.length();
 	}
 

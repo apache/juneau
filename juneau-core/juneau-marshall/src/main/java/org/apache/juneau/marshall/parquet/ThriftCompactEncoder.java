@@ -82,14 +82,6 @@ final class ThriftCompactEncoder {
 		out.write(value ? BOOLEAN_TRUE : BOOLEAN_FALSE);
 	}
 
-	void writeByte(int value) throws IOException {
-		out.write(value & 0xFF);
-	}
-
-	void writeI16(short value) throws IOException {
-		writeVarint(toZigzag(value));
-	}
-
 	void writeI32(int value) throws IOException {
 		writeVarint(toZigzag(value));
 	}

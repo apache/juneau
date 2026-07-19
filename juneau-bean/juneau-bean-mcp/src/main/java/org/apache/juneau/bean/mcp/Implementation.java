@@ -39,7 +39,7 @@ public class Implementation {
 	/**
 	 * Sets the implementation name.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Implementation setName(String value) {
@@ -59,7 +59,7 @@ public class Implementation {
 	/**
 	 * Sets the implementation version.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Implementation setVersion(String value) {

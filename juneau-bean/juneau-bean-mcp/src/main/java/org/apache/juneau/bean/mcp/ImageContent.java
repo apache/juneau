@@ -39,7 +39,7 @@ public class ImageContent implements Content {
 	/**
 	 * Sets the base64 payload.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ImageContent setData(String value) {
@@ -59,7 +59,7 @@ public class ImageContent implements Content {
 	/**
 	 * Sets the MIME type.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ImageContent setMimeType(String value) {

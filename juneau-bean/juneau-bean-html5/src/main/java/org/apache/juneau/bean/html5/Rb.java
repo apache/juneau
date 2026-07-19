@@ -87,7 +87,7 @@ public class Rb extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Rb} element with the specified {@link Rb#children(Object[])} nodes.
 	 *
-	 * @param children The {@link Rb#children(Object[])} nodes.
+	 * @param children The {@link Rb#children(Object[])} nodes. Must not be <jk>null</jk>.
 	 */
 	public Rb(Object...children) {
 		children(children);

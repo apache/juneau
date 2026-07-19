@@ -1089,6 +1089,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_itcp = "itcp";
 	private static final String ARG_value = "value";
+	private static final String ARG_interfaceClass = "interfaceClass";
 
 	/**
 	 * Builder class.
@@ -6822,6 +6823,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	})
 	public <T> T getRemote(Class<T> interfaceClass, Object rootUrl, Serializer serializer, Parser parser) {
 
+		assertArgNotNull(ARG_interfaceClass, interfaceClass);
+
 		if (rootUrl == null)
 			rootUrl = this.rootUrl != null ? this.rootUrl.get() : null;
 
@@ -6843,6 +6846,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 					uri = restUrl2 + '/' + uri;
 				if (uri.indexOf("://") == -1)
 					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
+
+				// SSRF guardrail (parity with juneau-rest-client RemoteClient.requireHttpScheme): the resolved
+				// absolute URL must use the http or https scheme; anything else (file, jar, ftp, ...) is rejected.
+				var scheme = uri.substring(0, uri.indexOf("://"));
+				if (! (scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https")))
+					throw new RemoteMetadataException(interfaceClass, "Unsupported URL scheme '" + scheme + "'; only http/https are allowed: " + uri);
 
 				var httpMethod = rom.getHttpMethod();
 				var rc = request(httpMethod, uri, hasContent(httpMethod));
@@ -6977,7 +6986,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 					return executeRemote(interfaceClass, rc, method, rom);
 				} catch (Exception e) {
 					// Check if this is a RuntimeException wrapping a RestCallException with an Error cause
-					if (e instanceof RuntimeException rex && rex.getCause() instanceof RestCallException rce) {
+					if (e instanceof RuntimeException e2 && e2.getCause() instanceof RestCallException rce) {
 						var t = rce.getCause();
 						if (nn(t)) {
 							// Check if the cause matches the method's declared exception types
@@ -7123,7 +7132,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 
 				} catch (Exception e) {
 					// Check if this is a RuntimeException wrapping a RestCallException with an Error cause
-					if (e instanceof RuntimeException rex && rex.getCause() instanceof RestCallException rce) {
+					if (e instanceof RuntimeException e2 && e2.getCause() instanceof RestCallException rce) {
 						var t = rce.getCause();
 						if (nn(t)) {
 							// Check if the cause matches the method's declared exception types
@@ -7139,8 +7148,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 							for (var t2 : method.getExceptionTypes())
 								if (t2.isInstance(t))
 									throw t; // Rethrow the original Throwable (can be Error)
-							if (t instanceof Exception ex)
-								e = ex;
+							if (t instanceof Exception t2)
+								e = t2;
 						}
 					}
 					if (e instanceof RuntimeException e2)
@@ -7968,10 +7977,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			Throwable t = e.getCause();
 			if (t instanceof RuntimeException t2)
 				throw t2;
-			if (t instanceof Exception ex) {
+			if (t instanceof Exception t2) {
 				for (var t3 : method.getExceptionTypes())
-					if (t3.isInstance(ex))
-						throw ex;
+					if (t3.isInstance(t2))
+						throw t2;
 			}
 			// If cause is an Error that matches method's exception types, preserve it in RestCallException
 			// The InvocationHandler will unwrap it and rethrow the original Error

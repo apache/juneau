@@ -53,7 +53,7 @@ public class BasicHeaderIterator implements HeaderIterator {
 	/**
 	 * Creates a new header iterator.
 	 *
-	 * @param headers An array of headers over which to iterate.
+	 * @param headers An array of headers over which to iterate.  Must not be <jk>null</jk>.
 	 * @param name The name of the headers over which to iterate, or <jk>null</jk> for all.
 	 * @param caseSensitive Use case-sensitive matching for part name.
 	 */

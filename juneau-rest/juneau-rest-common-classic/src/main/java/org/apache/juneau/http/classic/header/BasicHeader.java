@@ -61,9 +61,9 @@ public class BasicHeader implements Header, Serializable {
 	/**
 	 * Static creator.
 	 *
-	 * @param o The name value pair that makes up the header name and value.
-	 * 	The parameter value.
-	 * 	<br>Any non-String value will be converted to a String using {@link Object#toString()}.
+	 * @param o
+	 * 	The name value pair that makes up the header name and value.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return A new header bean.
 	 */
 	public static BasicHeader of(NameValuePair o) {
@@ -100,6 +100,7 @@ public class BasicHeader implements Header, Serializable {
 	 * 	The parameter value.
 	 * 	<br>Any non-String value will be converted to a String using {@link Object#toString()}.
 	 * 	<br>Can also be an <l>Object</l> {@link Supplier}.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	@SuppressWarnings({
@@ -136,7 +137,7 @@ public class BasicHeader implements Header, Serializable {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The object to copy.
+	 * @param copyFrom The object to copy.  Must not be <jk>null</jk>.
 	 */
 	protected BasicHeader(BasicHeader copyFrom) {
 		this.name = copyFrom.name;
@@ -144,7 +145,7 @@ public class BasicHeader implements Header, Serializable {
 		this.stringValue = copyFrom.stringValue;
 		this.supplier = copyFrom.supplier;
 		if (copyFrom.elements != null) {
-			this.elements = copyFrom.elements.clone();
+			this.elements = cp(copyFrom.elements);
 		}
 	}
 
@@ -220,9 +221,9 @@ public class BasicHeader implements Header, Serializable {
 			HeaderElement[] x = s == null ? EMPTY_HEADER_ELEMENTS : BasicHeaderValueParser.parseElements(s, null);
 			if (supplier == null)
 				elements = x;
-			return x;
+			return cp(x);
 		}
-		return elements;
+		return cp(elements);
 	}
 
 	@Override /* Overridden from Header */
@@ -237,8 +238,8 @@ public class BasicHeader implements Header, Serializable {
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		// Implemented since we override equals(Object).
-		return super.hashCode();
+		// Must be consistent with equals(Object), which compares name + value (see BUG-03 / 10.0.0 release note).
+		return h(name, getValue());
 	}
 
 	/**

@@ -160,7 +160,7 @@ public class Microservice implements ConfigEventListener {
 			this.manifest = copyFrom.manifest;
 			this.logger = copyFrom.logger;
 			this.configName = copyFrom.configName;
-			this.logConfig = copyFrom.logConfig == null ? null : copyFrom.logConfig.copy();
+			this.logConfig = LogConfig.copyOrNull(copyFrom.logConfig);
 			this.consoleEnabled = copyFrom.consoleEnabled;
 			this.configBuilder = copyFrom.configBuilder;
 			this.varResolver = copyFrom.varResolver;

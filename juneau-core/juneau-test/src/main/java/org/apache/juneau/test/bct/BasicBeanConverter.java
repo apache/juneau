@@ -746,12 +746,12 @@ public class BasicBeanConverter implements BeanConverter {
 	private final ConcurrentHashMap<Class,Optional<Swapper<?>>> swapperMap = new ConcurrentHashMap<>();
 
 	protected BasicBeanConverter(Builder b) {
-		stringifiers = copyOf(b.stringifiers);
-		listifiers = copyOf(b.listifiers);
-		sizers = copyOf(b.sizers);
-		swappers = copyOf(b.swappers);
-		propertyExtractors = copyOf(b.propertyExtractors);
-		settings = copyOf(b.settings);
+		stringifiers = cp(b.stringifiers);
+		listifiers = cp(b.listifiers);
+		sizers = cp(b.sizers);
+		swappers = cp(b.swappers);
+		propertyExtractors = cp(b.propertyExtractors);
+		settings = cp(b.settings);
 		Collections.reverse(stringifiers);
 		Collections.reverse(listifiers);
 		Collections.reverse(swappers);
@@ -879,7 +879,7 @@ public class BasicBeanConverter implements BeanConverter {
 			.filter(m -> m.hasAnyName("size", "length"))
 			.filter(m -> m.getReturnType().isAny(int.class, Integer.class))
 			.findFirst()
-			.map(m -> safe(() -> (int) m.invoke(o2)))
+			.map(m -> safe(() -> (Integer) m.invoke(o2)))
 			.filter(Objects::nonNull);
 		// @formatter:on
 		if (sizeResult.isPresent())

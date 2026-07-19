@@ -81,7 +81,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * Convenience method for wrapping a bean inside a {@link BeanMap}.
 	 *
 	 * @param <T> The bean type.
-	 * @param bean The bean being wrapped.
+	 * @param bean The bean being wrapped.  Must not be <jk>null</jk> (its runtime class is used to build the metadata).
 	 * @return A new {@link BeanMap} instance wrapping the bean.
 	 */
 	@SuppressWarnings({
@@ -100,7 +100,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * {@link BeanMeta#of(Class, BeanConfigContext)}.  No marshalling session is attached.
 	 *
 	 * @param <T> The bean type.
-	 * @param bean The bean being wrapped.
+	 * @param bean The bean being wrapped.  Can be <jk>null</jk> for a read-only bean whose properties are supplied later and instantiated via {@link #getBean()}.
 	 * @param meta The bean metadata.  Must not be <jk>null</jk>.
 	 * @return A new {@link BeanMap} instance wrapping the bean.
 	 */
@@ -131,8 +131,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * The marshalling layer wires the session in via {@link #setBeanSession(BeanSession)}
 	 * immediately after construction.
 	 *
-	 * @param bean The bean to wrap inside this map.
-	 * @param meta The metadata associated with the bean class.
+	 * @param bean The bean to wrap inside this map.  Can be <jk>null</jk> for a read-only bean whose properties are supplied later and instantiated via {@link #getBean()}.
+	 * @param meta The metadata associated with the bean class.  Must not be <jk>null</jk>.
 	 */
 	public BeanMap(T bean, BeanMeta<T> meta) {
 		this.bean = bean;
@@ -151,7 +151,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * operations (type conversion, child collection construction, and parser/serializer-backed
 	 * conversions) after bean-modeling construction.
 	 *
-	 * @param value The bean session that produced this bean map.  Typically a marshalling-session implementation.
+	 * @param value The bean session that produced this bean map.  Typically a marshalling-session implementation.  Can be <jk>null</jk> to detach the session.
 	 */
 	public void setBeanSession(BeanSession value) {
 		session = value;
@@ -165,7 +165,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * called.
 	 *
 	 * @param property Property name or child-element name (if {@code @Xml(childName)} is specified).
-	 * @param value The value to add to the collection or array.
+	 * @param value The value to add to the collection or array.  Can be <jk>null</jk>.
 	 */
 	public void add(String property, Object value) {
 		var p = getPropertyMeta(property);
@@ -713,7 +713,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * </p>
 	 *
 	 * @param property The name of the property to set.
-	 * @param value The value to set the property to.
+	 * @param value The value to set the property to.  Can be <jk>null</jk> to set the property to <jk>null</jk>.
 	 * @return
 	 * 	If the {@code beanMapPutReturnsOldValue} setting is <jk>true</jk> on the session's bean configuration,
 	 * 	then the old value of the property is returned.

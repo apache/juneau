@@ -96,4 +96,28 @@ class ThymeleafViewRenderer_Test extends TestBase {
 		assertTrue(ctx.getVariableNames().isEmpty(),
 			"newContext on an attribute-less view must produce a variable-less Context");
 	}
+
+	/* ---------------------------------------------------------------------------------------- *
+	 * Section C: Typed-View template-name traversal gate
+	 * ---------------------------------------------------------------------------------------- */
+
+	@Test void c01_gateAllowsPlainName() {
+		assertEquals("hello", ThymeleafViewRenderer.gateTemplateName("/", "hello"));
+	}
+
+	@Test void c02_gateAllowsSubdirName() {
+		assertEquals("admin/dashboard", ThymeleafViewRenderer.gateTemplateName("/", "admin/dashboard"));
+	}
+
+	@Test void c03_gateAllowsNameUnderBasePath() {
+		assertEquals("hello", ThymeleafViewRenderer.gateTemplateName("/templates/", "hello"));
+	}
+
+	@Test void c04_gateRejectsTraversal() {
+		assertThrows(IllegalArgumentException.class, () -> ThymeleafViewRenderer.gateTemplateName("/", "../secret"));
+	}
+
+	@Test void c05_gateRejectsNestedTraversal() {
+		assertThrows(IllegalArgumentException.class, () -> ThymeleafViewRenderer.gateTemplateName("/templates/", "a/b/../../../secret"));
+	}
 }

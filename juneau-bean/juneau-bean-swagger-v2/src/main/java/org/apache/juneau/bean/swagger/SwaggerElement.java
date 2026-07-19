@@ -50,7 +50,7 @@ public abstract class SwaggerElement {
 
 	SwaggerElement(SwaggerElement copyFrom) {
 		this.strict = copyFrom.strict;
-		this.extra = copyOf(copyFrom.extra);
+		this.extra = cp(copyFrom.extra);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public abstract class SwaggerElement {
 	 */
 	@BeanProp("*")
 	public Set<String> extraKeys() {
-		return extra == null ? Collections.emptySet() : extra.keySet();
+		return extra == null ? Collections.emptySet() : u(extra.keySet());
 	}
 
 	/**

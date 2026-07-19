@@ -98,7 +98,7 @@ public class Li extends HtmlElementMixed {
 	/**
 	 * Creates an {@link Li} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Li(Object...children) {
 		children(children);

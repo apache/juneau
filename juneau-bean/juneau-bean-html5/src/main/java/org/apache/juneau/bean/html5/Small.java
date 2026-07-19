@@ -65,7 +65,7 @@ public class Small extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Small} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Small(Object...children) {
 		children(children);

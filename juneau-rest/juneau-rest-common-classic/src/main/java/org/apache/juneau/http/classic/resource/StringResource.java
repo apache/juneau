@@ -52,7 +52,7 @@ public class StringResource extends BasicResource {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean being copied.
+	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
 	protected StringResource(StringResource copyFrom) {
 		super(copyFrom);

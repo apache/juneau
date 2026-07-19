@@ -231,7 +231,7 @@ public class JettyServerComponent implements MicroserviceListener {
 				boolean resolveVars2 = isTrue(resolveVars);
 
 				if (jettyXml == null)
-					jettyXml = loadSystemResourceAsString("jetty.xml", ".", "files");
+					jettyXml = loadSystemResourceAsString(jettyConfig, ".", "files");
 				if (jettyXml == null)
 					throw rex("jetty.xml file '%s' was not found on the file system or classpath.", jettyConfig);
 
@@ -517,7 +517,7 @@ public class JettyServerComponent implements MicroserviceListener {
 		var obj = getServer().getAttribute(KEY_SERVLET_CONTEXT_HANDLER);
 		if (obj instanceof ServletContextHandler obj2)
 			return obj2;
-		throw new IllegalStateException("Servlet context handler not found in jetty server or at attribute '" + KEY_SERVLET_CONTEXT_HANDLER + "'");
+		throw isex("Servlet context handler not found in jetty server or at attribute '%s'", KEY_SERVLET_CONTEXT_HANDLER);
 	}
 
 	/**

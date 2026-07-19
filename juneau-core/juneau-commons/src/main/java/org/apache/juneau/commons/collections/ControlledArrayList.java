@@ -154,7 +154,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return this == o || (o instanceof ControlledArrayList<?> other && super.equals(other) && unmodifiable == other.unmodifiable);
+		return this == o || (o instanceof ControlledArrayList<?> o2 && super.equals(o2) && unmodifiable == o2.unmodifiable);
 	}
 
 	@Override /* Overridden from Object */

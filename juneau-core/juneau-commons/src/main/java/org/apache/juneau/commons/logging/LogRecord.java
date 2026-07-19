@@ -92,8 +92,8 @@ public class LogRecord extends java.util.logging.LogRecord {
 	/**
 	 * Constructor.
 	 *
-	 * @param loggerName The logger name.
-	 * @param level The log level.
+	 * @param loggerName The logger name.  Can be <jk>null</jk>.
+	 * @param level The log level.  Must not be <jk>null</jk>.
 	 * @param msg The message pattern (will be used as-is if args is null or empty).
 	 * @param parameters The format arguments, or <jk>null</jk> if none.
 	 * @param throwable The throwable, or <jk>null</jk> if none.

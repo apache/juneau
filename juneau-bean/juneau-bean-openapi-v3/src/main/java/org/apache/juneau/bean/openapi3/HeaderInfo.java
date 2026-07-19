@@ -18,6 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -124,7 +125,7 @@ public class HeaderInfo extends OpenApiElement {
 		this.description = copyFrom.description;
 		this.example = copyFrom.example;
 		this.allowEmptyValue = copyFrom.allowEmptyValue;
-		this.schema = copyFrom.schema;
+		this.schema = copyOf(copyFrom.schema);
 		this.allowReserved = copyFrom.allowReserved;
 		this.required = copyFrom.required;
 		this.ref = copyFrom.ref;

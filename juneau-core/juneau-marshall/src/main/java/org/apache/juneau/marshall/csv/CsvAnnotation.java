@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.csv;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.*;
 
@@ -56,7 +56,7 @@ public class CsvAnnotation {
 
 		Object(CsvAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
+			this.description = cp(b.description);
 		}
 
 		@Override

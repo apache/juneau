@@ -120,7 +120,7 @@ public class RdfParserSession extends ReaderParserSession {
 		var langName = ctx.getLanguage();
 		lang = toLang(langName);
 		if (lang == null)
-			throw new IllegalStateException("Unknown RDF language: " + langName);
+			throw isex("Unknown RDF language: %s", langName);
 	}
 
 	private static Lang toLang(String langName) {

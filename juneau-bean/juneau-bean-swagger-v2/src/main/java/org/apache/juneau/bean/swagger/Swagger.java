@@ -18,6 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.swagger.SwaggerCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -162,9 +163,9 @@ public class Swagger extends SwaggerElement {
 
 		this.basePath = copyFrom.basePath;
 		this.consumes.addAll(copyOf(copyFrom.consumes));
-		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+		this.externalDocs = copyOf(copyFrom.externalDocs);
 		this.host = copyFrom.host;
-		this.info = copyFrom.info == null ? null : copyFrom.info.copy();
+		this.info = copyOf(copyFrom.info);
 		this.produces.addAll(copyOf(copyFrom.produces));
 		this.schemes.addAll(copyOf(copyFrom.schemes));
 		this.swagger = copyFrom.swagger;

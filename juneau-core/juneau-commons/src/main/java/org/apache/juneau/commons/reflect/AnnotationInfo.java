@@ -92,7 +92,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
-	 * @param on The annotatable object where the annotation was found (class, method, field, constructor, parameter, or package).
+	 * @param on The annotatable object where the annotation was found (class, method, field, constructor, parameter, or package). Must not be <jk>null</jk>.
 	 * @param value The annotation instance. Must not be <jk>null</jk>.
 	 * @return A new {@link AnnotationInfo} object wrapping the annotation.
 	 */
@@ -113,9 +113,9 @@ public class AnnotationInfo<T extends Annotation> {
 	private final Annotatable annotatable;
 	final int rank;
 
-	private T a;  // Effectively final
+	private final T a;
 
-	private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(info(a.annotationType()), m)).toList());
+	private final Supplier<List<MethodInfo>> methods;
 	private final Supplier<String> toString;  // String representation with annotation type, location, and values.
 
 	/**
@@ -127,6 +127,7 @@ public class AnnotationInfo<T extends Annotation> {
 	AnnotationInfo(Annotatable on, T a) {
 		this.annotatable = assertArgNotNull(ARG_on, on);
 		this.a = assertArgNotNull(ARG_a, a);
+		this.methods = memoize(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(info(a.annotationType()), m)).toList());
 		this.rank = findRank(a);
 		this.toString = memoize(this::findToString);
 	}
@@ -888,13 +889,13 @@ public class AnnotationInfo<T extends Annotation> {
 				.collect(java.util.stream.Collectors.joining(", "));
 			return "{" + elements + "}";
 		}
-		if (value instanceof Class<?> c) {
+		if (value instanceof Class<?> value2) {
 			var sb = new StringBuilder();
-			ClassInfo.of(c).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
+			ClassInfo.of(value2).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
 			return sb.toString() + ".class";
 		}
-		if (value instanceof Enum<?> e) {
-			return e.getDeclaringClass().getSimpleName() + "." + e.name();
+		if (value instanceof Enum<?> value3) {
+			return value3.getDeclaringClass().getSimpleName() + "." + value3.name();
 		}
 		if (value instanceof Annotation value2) {
 			// For nested annotations, use simple format

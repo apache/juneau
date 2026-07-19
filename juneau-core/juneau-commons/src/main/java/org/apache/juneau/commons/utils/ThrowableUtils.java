@@ -86,8 +86,8 @@ public class ThrowableUtils {
 	 * Casts or wraps the specified throwable to the specified type.
 	 *
 	 * @param <T> The class to cast to.
-	 * @param type The class to cast to.
-	 * @param t The throwable to cast.
+	 * @param type The class to cast to.  Must not be <jk>null</jk>.
+	 * @param t The throwable to cast.  Can be <jk>null</jk> (produces a wrapper with a <jk>null</jk> cause).
 	 * @return Either the same exception if it's already the specified type, or a wrapped exception.
 	 */
 	public static <T> T castException(Class<T> type, Throwable t) {
@@ -98,8 +98,8 @@ public class ThrowableUtils {
 	 * Searches through the cause chain of an exception to find an exception of the specified type.
 	 *
 	 * @param <T> The cause type.
-	 * @param e The exception to search.
-	 * @param cause The cause type to search for.
+	 * @param e The exception to search.  Can be <jk>null</jk> (returns an empty {@link Optional}).
+	 * @param cause The cause type to search for.  Must not be <jk>null</jk>.
 	 * @return An {@link Optional} containing the cause if found, or empty if not found.
 	 */
 	public static <T extends Throwable> Optional<T> findCause(Throwable e, Class<T> cause) {
@@ -114,7 +114,7 @@ public class ThrowableUtils {
 	/**
 	 * Convenience method for getting a stack trace as a string.
 	 *
-	 * @param t The throwable to get the stack trace from.
+	 * @param t The throwable to get the stack trace from.  Must not be <jk>null</jk>.
 	 * @return The same content that would normally be rendered via <c>t.printStackTrace()</c>
 	 */
 	public static String getStackTrace(Throwable t) {
@@ -143,8 +143,8 @@ public class ThrowableUtils {
 	 * 	}
 	 * </p>
 	 *
-	 * @param t The throwable to print the stack trace for.
-	 * @param pw The print writer to write to.
+	 * @param t The throwable to print the stack trace for.  Must not be <jk>null</jk>.
+	 * @param pw The print writer to write to.  Must not be <jk>null</jk>.
 	 * @param maxDepth The maximum number of stack trace elements to print. If <jk>null</jk> or negative, prints all elements.
 	 */
 	public static void printStackTrace(Throwable t, PrintWriter pw, Integer maxDepth) {
@@ -203,9 +203,9 @@ public class ThrowableUtils {
 	/**
 	 * Same as {@link Throwable#getCause()} but searches the throwable chain for an exception of the specified type.
 	 *
-	 * @param c The throwable type to search for.
+	 * @param c The throwable type to search for.  Must not be <jk>null</jk>.
 	 * @param <T> The throwable type to search for.
-	 * @param t The throwable to search.
+	 * @param t The throwable to search.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The exception, or <jk>null</jk> if not found.
 	 */
 	public static <T extends Throwable> T getThrowableCause(Class<T> c, Throwable t) {
@@ -220,8 +220,8 @@ public class ThrowableUtils {
 	/**
 	 * Calculates a 16-bit hash for the specified throwable based on it's stack trace.
 	 *
-	 * @param t The throwable to calculate the stack trace on.
-	 * @param stopClass Optional stop class on which to stop calculation of a stack trace beyond when found.
+	 * @param t The throwable to calculate the stack trace on.  Can be <jk>null</jk> (returns <c>0</c>).
+	 * @param stopClass Optional stop class on which to stop calculation of a stack trace beyond when found.  Can be <jk>null</jk>.
 	 * @return A calculated hash.
 	 */
 	public static int hash(Throwable t, String stopClass) {
@@ -248,11 +248,11 @@ public class ThrowableUtils {
 	 * verbose logging is desired.
 	 *
 	 * @param <T> The throwable type.
-	 * @param exception The throwable to (optionally) log.
+	 * @param exception The throwable to (optionally) log.  Must not be <jk>null</jk> when verbose exceptions are enabled; otherwise returned unchanged (may be <jk>null</jk>).
 	 * @return The same throwable.
 	 */
 	public static <T extends Throwable> T log(T exception) {
-		if (Boolean.TRUE.equals(VERBOSE.orElse(false))) LOG.warning(exception, getStackTrace(exception));
+		if (isTrue(VERBOSE.orElse(false))) LOG.warning(exception, getStackTrace(exception));
 		return exception;
 	}
 
@@ -264,8 +264,8 @@ public class ThrowableUtils {
 	 * when exception messages contain circular references. The format is:
 	 * "first-1000-chars&lt;truncated-#-chars&gt;last-1000-chars"
 	 *
-	 * @param t The throwable.
-	 * @return The localized message of the throwable, truncated if necessary.
+	 * @param t The throwable.  Must not be <jk>null</jk>.
+	 * @return The localized message of the throwable, truncated if necessary, or <jk>null</jk> if the throwable has no localized message.
 	 */
 	public static String localizedMessage(Throwable t) {
 		String msg = t.getLocalizedMessage();
@@ -277,7 +277,7 @@ public class ThrowableUtils {
 		return msg.substring(0, 1000) + "<truncated-" + truncated + "-chars>" + msg.substring(msg.length() - 1000);
 	}
 
-	/** Wraps or casts to RuntimeException. */
+	/** Wraps or casts to RuntimeException.  <br>A <jk>null</jk> argument produces a {@link RuntimeException} with a <jk>null</jk> cause. */
 	public static RuntimeException toRuntimeException(Throwable cause) {
 		return castException(RuntimeException.class, cause);
 	}
@@ -285,7 +285,7 @@ public class ThrowableUtils {
 	/**
 	 * Creates a new {@link RuntimeException} from the specified cause (or returns it if already one).
 	 *
-	 * @param cause The caused-by exception.
+	 * @param cause The caused-by exception.  Can be <jk>null</jk> (produces a {@link RuntimeException} with a <jk>null</jk> cause).
 	 * @return A new {@link RuntimeException}, or the same exception if it's already of that type.
 	 */
 	public static RuntimeException toRex(Throwable cause) {

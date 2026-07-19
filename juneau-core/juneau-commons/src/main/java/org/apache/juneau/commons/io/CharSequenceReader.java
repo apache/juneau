@@ -93,9 +93,9 @@ public class CharSequenceReader extends BufferedReader {
 	private static final String ARG_cbuf = "cbuf";
 
 	private final CharSequence cs;
-	private String s;
-	private StringBuilder sb;
-	private int length;
+	private final String s;
+	private final StringBuilder sb;
+	private final int length;
 	private int next;
 
 	/**
@@ -126,10 +126,8 @@ public class CharSequenceReader extends BufferedReader {
 		if (cs == null)
 			cs = "";
 		this.cs = cs;
-		if (cs instanceof String s2)
-			s = s2;
-		else if (cs instanceof StringBuilder sb4)
-			sb = sb4;
+		this.s = cs instanceof String cs2 ? cs2 : null;
+		this.sb = cs instanceof StringBuilder cs2 ? cs2 : null;
 		this.length = cs.length();
 	}
 

@@ -564,7 +564,7 @@ public class Cache<K,V> {
 	/**
 	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key.
 	 *
-	 * @param key The key to check.
+	 * @param key The key to check. Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the cache contains the key.
 	 */
 	public boolean containsKey(K key) {
@@ -574,7 +574,7 @@ public class Cache<K,V> {
 	/**
 	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
 	 *
-	 * @param value The value to check.
+	 * @param value The value to check. Can be <jk>null</jk>, in which case this method returns <jk>false</jk> (the cache never stores <jk>null</jk> values).
 	 * @return <jk>true</jk> if the cache contains the value.
 	 */
 	public boolean containsValue(V value) {

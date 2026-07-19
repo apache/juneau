@@ -78,7 +78,7 @@ public class BasicHttpEntity implements HttpEntity {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean being copied.
+	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
 	public BasicHttpEntity(BasicHttpEntity copyFrom) {
 		this.cached = copyFrom.cached;
@@ -96,8 +96,8 @@ public class BasicHttpEntity implements HttpEntity {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.
-	 * @param content The entity content.
+	 * @param contentType The entity content type.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 */
 	public BasicHttpEntity(ContentType contentType, Object content) {
 		this.contentType = contentType;

@@ -74,7 +74,7 @@ public class Del extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Del} element with the specified {@link Del#children(Object[])} node.
 	 *
-	 * @param children The {@link Del#children(Object[])} node.
+	 * @param children The {@link Del#children(Object[])} node. Must not be <jk>null</jk>.
 	 */
 	public Del(Object...children) {
 		children(children);
@@ -126,7 +126,7 @@ public class Del extends HtmlElementMixed {
 	 * <p>
 	 * The URL should point to a document that explains why the content was deleted.
 	 *
-	 * @param value The URL explaining the reason for the deletion.
+	 * @param value The URL explaining the reason for the deletion. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Del cite(String value) {
@@ -150,7 +150,7 @@ public class Del extends HtmlElementMixed {
 	 * <p>
 	 * The value should be a valid date-time string in ISO 8601 format.
 	 *
-	 * @param value The date and time when the content was deleted.
+	 * @param value The date and time when the content was deleted. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Del datetime(String value) {

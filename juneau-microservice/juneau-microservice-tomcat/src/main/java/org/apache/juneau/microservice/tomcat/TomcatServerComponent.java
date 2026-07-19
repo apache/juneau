@@ -334,9 +334,9 @@ public class TomcatServerComponent implements MicroserviceListener {
 				return;
 			connector.pause();
 			var executor = connector.getProtocolHandler() == null ? null : connector.getProtocolHandler().getExecutor();
-			if (executor instanceof ThreadPoolExecutor tpe) {
+			if (executor instanceof ThreadPoolExecutor executor2) {
 				var deadline = System.nanoTime() + Math.max(0L, timeout.toNanos());
-				while (tpe.getActiveCount() > 0 && System.nanoTime() < deadline) {
+				while (executor2.getActiveCount() > 0 && System.nanoTime() < deadline) {
 					if (sleepInterruptibly(50L))
 						return;
 				}

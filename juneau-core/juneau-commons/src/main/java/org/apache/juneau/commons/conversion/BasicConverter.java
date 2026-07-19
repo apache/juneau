@@ -251,8 +251,8 @@ public class BasicConverter extends CachingConverter {
 		if (outType == BigDecimal.class) return (in, memberOf, session, args) -> (O) new BigDecimal(in.toString());
 		if (outType == BigInteger.class) return (in, memberOf, session, args) -> {
 			var n = (Number) in;
-			if (n instanceof BigDecimal bd) return (O) bd.toBigInteger();
-			if (n instanceof BigInteger bi) return (O) bi;
+			if (n instanceof BigDecimal n2) return (O) n2.toBigInteger();
+			if (n instanceof BigInteger n2) return (O) n2;
 			return (O) BigInteger.valueOf(n.longValue());
 		};
 		return null;
@@ -346,10 +346,10 @@ public class BasicConverter extends CachingConverter {
 
 	private <I, O> Conversion<I, O> findOptionalConversion() {
 		return (Conversion<I, O>) (Conversion<Object, Optional<?>>) (in, memberOf, session, args) -> {
-			if (in instanceof Optional<?> opt) {
+			if (in instanceof Optional<?> in2) {
 				if (args.length == 0)
-					return opt;
-				return opt.map(x -> to(x, memberOf, session, args[0]));
+					return in2;
+				return in2.map(x -> to(x, memberOf, session, args[0]));
 			}
 			if (args.length == 0)
 				return o(in);
@@ -378,14 +378,14 @@ public class BasicConverter extends CachingConverter {
 			elementType = Double.class;
 		return (Conversion<I, O>) (Conversion<Object, Object>) (in, memberOf, session, args) -> {
 			Object v = in;
-			if (v instanceof Optional<?> opt)
-				v = opt.orElse(null);
-			else if (v instanceof OptionalInt oi)
-				v = oi.isPresent() ? Integer.valueOf(oi.getAsInt()) : null;
-			else if (v instanceof OptionalLong ol)
-				v = ol.isPresent() ? Long.valueOf(ol.getAsLong()) : null;
-			else if (v instanceof OptionalDouble od)
-				v = od.isPresent() ? Double.valueOf(od.getAsDouble()) : null;
+			if (v instanceof Optional<?> v2)
+				v = v2.orElse(null);
+			else if (v instanceof OptionalInt v3)
+				v = v3.isPresent() ? Integer.valueOf(v3.getAsInt()) : null;
+			else if (v instanceof OptionalLong v4)
+				v = v4.isPresent() ? Long.valueOf(v4.getAsLong()) : null;
+			else if (v instanceof OptionalDouble v5)
+				v = v5.isPresent() ? Double.valueOf(v5.getAsDouble()) : null;
 			if (v == null)
 				return emptyPrimitiveOptional(out);
 			var n = (Number) to(v, memberOf, session, elementType);
@@ -437,9 +437,9 @@ public class BasicConverter extends CachingConverter {
 
 	private Collection<Object> newCollection(Class<?> outType) {
 		if (outType == List.class || outType == Collection.class || outType == Iterable.class /* HTT: Iterable is a supertype of Collection so findCollectionConversion never passes Iterable as outType */ || outType == AbstractList.class)
-			return new ArrayList<>();
+			return l();
 		if (outType == Set.class || outType == LinkedHashSet.class || outType == AbstractSet.class)
-			return new LinkedHashSet<>();
+			return st();
 		if (outType == SortedSet.class || outType == NavigableSet.class || outType == TreeSet.class)
 			return new TreeSet<>();
 		if (outType == Queue.class || outType == Deque.class || outType == LinkedList.class)
@@ -472,7 +472,7 @@ public class BasicConverter extends CachingConverter {
 
 	private Map<Object, Object> newMap(Class<?> outType) {
 		if (outType == Map.class || outType == LinkedHashMap.class || outType == AbstractMap.class)
-			return new LinkedHashMap<>();
+			return m();
 		if (outType == SortedMap.class || outType == NavigableMap.class || outType == TreeMap.class)
 			return new TreeMap<>();
 		if (outType == HashMap.class)

@@ -151,8 +151,8 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 * and should not be called directly. Use the static factory methods {@link #of(Field)} or
 	 * obtain FieldInfo instances from {@link ClassInfo#getField(Field)}.
 	 *
-	 * @param declaringClass The ClassInfo for the class that declares this field.
-	 * @param inner The field being wrapped.
+	 * @param declaringClass The ClassInfo for the class that declares this field. Must not be <jk>null</jk>.
+	 * @param inner The field being wrapped. Must not be <jk>null</jk>.
 	 */
 	protected FieldInfo(ClassInfo declaringClass, Field inner) {
 		super(inner, inner.getModifiers());
@@ -334,7 +334,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof FieldInfo other && eq(this, other, (x, y) -> eq(x.inner, y.inner));
+		return obj instanceof FieldInfo obj2 && eq(this, obj2, (x, y) -> eq(x.inner, y.inner));
 	}
 
 	/**
@@ -461,7 +461,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	/**
 	 * Sets the field value on the specified object if the value is <jk>null</jk>.
 	 *
-	 * @param o The object containing the field.
+	 * @param o The object containing the field.  Can be <jk>null</jk> for static fields.
 	 * @param value The new field value.
 	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
 	 */
@@ -614,7 +614,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 			if (fieldType.is(Optional.class)) {
 				// VarResolver substitutes "" for a missing key with no default. Collapse both to
 				// Optional.empty() so @Value("${maybe}") Optional<T> behaves the same as Spring's.
-				set(bean, (resolved == null || (resolved instanceof String s && s.isEmpty()))
+				set(bean, (resolved == null || (resolved instanceof String resolved2 && resolved2.isEmpty()))
 					? oe()
 					: o(resolved));
 			} else {
@@ -645,14 +645,14 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 				var inner2 = o(ptUnwrapped.inner()).orElse(Object.class);
 
 				if (eq(inner2, List.class) || eq(inner2, Set.class)) {
-					if (parameterizedType instanceof ParameterizedType pt2) {
-						var typeArgs = pt2.getActualTypeArguments();
+					if (parameterizedType instanceof ParameterizedType parameterizedType2) {
+						var typeArgs = parameterizedType2.getActualTypeArguments();
 						if (typeArgs.length > 0 && typeArgs[0] instanceof Class<?> elementClass) {
 							elementType = elementClass;
 						}
 					}
-				} else if (eq(inner2, Map.class) && parameterizedType instanceof ParameterizedType pt2) {
-					var typeArgs = pt2.getActualTypeArguments();
+				} else if (eq(inner2, Map.class) && parameterizedType instanceof ParameterizedType parameterizedType2) {
+					var typeArgs = parameterizedType2.getActualTypeArguments();
 					if (typeArgs.length >= 2 && typeArgs[0] == String.class && typeArgs[1] instanceof Class<?> valueClass) {
 						elementType = valueClass;
 					}

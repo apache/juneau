@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.view.thymeleaf;
 
 import java.io.*;
 
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.processor.*;
@@ -89,31 +90,47 @@ public class ThymeleafViewRenderer implements ViewRenderer {
 		Or register a custom @Bean TemplateEngine that picks up your preferred resolvers.
 		See https://juneau.apache.org/docs/topics/ThymeleafViewSupport for the full matrix.""";
 
+	// Lazily-created fallback used when no ThymeleafMixin bean is registered.  Cached (double-checked) so
+	// the bridge-default TemplateEngine and resolver are built once instead of rebuilt per render.  Created
+	// lazily (not eagerly) so a missing Thymeleaf engine still surfaces at render time as
+	// NO_ENGINE_DIAGNOSTIC rather than during RestContext construction.
+	private volatile ThymeleafMixin fallbackMixin;
+
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException, BasicHttpException {
 		var req = opSession.getRequest();
 		var res = opSession.getResponse();
 
 		var content = res.getContent(Object.class);
-		if (! (content instanceof ThymeleafView view))
+		if (! (content instanceof ThymeleafView content2))
 			return NEXT;
 
 		// Resolve the bridge resource (carries TemplateEngine + cached default). Fall back to a
-		// fresh ThymeleafMixin when the renderer is used standalone without the mixin.
+		// cached ThymeleafMixin when the renderer is used standalone without the mixin.
 		var bridge = req.getContext().getBeanStore()
 			.getBean(ThymeleafMixin.class)
-			.orElseGet(ThymeleafMixin::new);
+			.orElseGet(this::fallbackMixin);
 
 		// Apply caller-supplied response headers first so a caller-provided Content-Type wins
 		// over the bridge's default below.
-		view.getResponseHeaders().forEach(res::setHeader);
+		content2.getResponseHeaders().forEach(res::setHeader);
 		if (! res.containsHeader("Content-Type"))
 			res.setHeader("Content-Type", DEFAULT_CONTENT_TYPE);
 
+		// Apply the same traversal gate the raw /thymeleaf/* mount uses so a typed-View template name
+		// assembled from user input (e.g. ThymeleafView.of(userInput)) cannot escape the configured base
+		// path via '../' segments.  Mirrors the JSP bridge's typed-View gate.
+		String safeName;
+		try {
+			safeName = gateTemplateName(bridge.getBasePath(), content2.getTemplateName());
+		} catch (IllegalArgumentException ex) {
+			throw new InternalServerError(ex, "Thymeleaf template name escapes configured base path: '%s'", content2.getTemplateName());
+		}
+
 		try {
 			var engine = bridge.resolveTemplateEngine(req);
-			var ctx = newContext(req, view);
-			engine.process(view.getTemplateName(), ctx, res.getWriter());
+			var ctx = newContext(req, content2);
+			engine.process(safeName, ctx, res.getWriter());
 			return FINISHED;
 		} catch (LinkageError ex) {
 			throw new InternalServerError(ex, NO_ENGINE_DIAGNOSTIC);
@@ -121,7 +138,7 @@ public class ThymeleafViewRenderer implements ViewRenderer {
 			throw ex;
 		} catch (Exception ex) {
 			throw new InternalServerError(ex, "Thymeleaf render failed for '%s'",
-				view.getTemplateName());
+				content2.getTemplateName());
 		}
 	}
 
@@ -141,5 +158,28 @@ public class ThymeleafViewRenderer implements ViewRenderer {
 		var ctx = new Context(req.getLocale());
 		view.getAttributes().forEach(ctx::setVariable);
 		return ctx;
+	}
+
+	// Rejects '../'-style traversal in a typed-View template name using the same virtual-path gate the raw
+	// mount applies, returning the engine-relative template name.  Delegates to the shared
+	// FileUtils.resolveVirtualPathSafely + ThymeleafDispatcher.stripBasePath used by the raw render path.
+	static String gateTemplateName(String basePath, String templateName) {
+		var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);
+		return ThymeleafDispatcher.stripBasePath(basePath, resolved);
+	}
+
+	// Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.
+	private ThymeleafMixin fallbackMixin() {
+		var local = fallbackMixin;
+		if (local == null) {
+			synchronized (this) {
+				local = fallbackMixin;
+				if (local == null) {
+					local = new ThymeleafMixin();
+					fallbackMixin = local;
+				}
+			}
+		}
+		return local;
 	}
 }

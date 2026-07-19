@@ -62,6 +62,12 @@ public class HttpEntityTagHeader extends HttpHeaderBean {
 		return new HttpEntityTagHeader(name, typedValue);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param wireValue Wire value (e.g. {@code "\"abc123\""}). Can be <jk>null</jk>, in which case the parsed value is <jk>null</jk>.
+	 */
 	protected HttpEntityTagHeader(String name, String wireValue) {
 		super(name, wireValue);
 		this.value = wireValue == null ? null : EntityTag.of(wireValue);
@@ -69,6 +75,12 @@ public class HttpEntityTagHeader extends HttpHeaderBean {
 		this.lazyMode = -1;
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param typedValue The entity-tag value. Can be <jk>null</jk>.
+	 */
 	protected HttpEntityTagHeader(String name, EntityTag typedValue) {
 		super(name, s(typedValue));
 		this.value = typedValue;
@@ -76,6 +88,13 @@ public class HttpEntityTagHeader extends HttpHeaderBean {
 		this.lazyMode = -1;
 	}
 
+	/**
+	 * Constructor with lazy value supplier.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param supplier The lazy value supplier. Must not be <jk>null</jk>.
+	 * @param lazyMode Either {@link #LAZY_WIRE_STRING} or {@link #LAZY_ENTITY_TAG}.
+	 */
 	protected HttpEntityTagHeader(String name, Supplier<?> supplier, int lazyMode) {
 		super(name, lazyMode == LAZY_WIRE_STRING
 			? ((Supplier<String>) supplier)::get
@@ -89,16 +108,32 @@ public class HttpEntityTagHeader extends HttpHeaderBean {
 		return o(toEntityTag());
 	}
 
+	/**
+	 * Returns the wire-format value of this header.
+	 *
+	 * @return The wire value, or <jk>null</jk> if the value is unset.
+	 */
 	@Override
 	public String getValue() {
 		return s(toEntityTag());
 	}
 
+	/**
+	 * Returns the parsed value of this header, or the specified default if unset.
+	 *
+	 * @param other The default value. Can be <jk>null</jk>.
+	 * @return The parsed value, or <c>other</c> if the value is unset. Can be <jk>null</jk> if <c>other</c> is <jk>null</jk>.
+	 */
 	public EntityTag orElse(EntityTag other) {
 		var x = toEntityTag();
 		return nn(x) ? x : other;
 	}
 
+	/**
+	 * Returns the parsed value of this header.
+	 *
+	 * @return The parsed value, or <jk>null</jk> if the value is unset.
+	 */
 	public EntityTag toEntityTag() {
 		if (lazyMode == LAZY_ENTITY_TAG)
 			return ((Supplier<EntityTag>) lazySupplier).get();

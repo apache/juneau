@@ -70,7 +70,7 @@ public enum HttpPartDataType {
 	/**
 	 * Create from lowercase string.
 	 *
-	 * @param value The enum name.
+	 * @param value The enum name.  Must not be <jk>null</jk>.
 	 * @return The enum.
 	 */
 	public static HttpPartDataType fromString(String value) {

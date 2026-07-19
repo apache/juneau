@@ -120,6 +120,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 * {@code @Swap(value)} annotation, the value being passed in must be a String
 	 * containing an ISO8601 date-time string value.
 	 *
+	 * @param value The new value for this property.  Can be <jk>null</jk> to set the property to <jk>null</jk>.
 	 * @return  The set value after it's been converted.
 	 */
 	@Override /* Overridden from Map.Entry */
@@ -141,9 +142,9 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!(obj instanceof Map.Entry<?,?> other))
+		if (!(obj instanceof Map.Entry<?,?> obj2))
 			return false;
-		return eq(getKey(), other.getKey()) && eq(getValue(), other.getValue());
+		return eq(getKey(), obj2.getKey()) && eq(getValue(), obj2.getValue());
 	}
 
 	/**

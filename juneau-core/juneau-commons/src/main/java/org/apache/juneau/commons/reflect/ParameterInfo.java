@@ -138,8 +138,8 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 		assertArgNotNull(ARG_inner, inner);
 		var exec = inner.getDeclaringExecutable();
 		ExecutableInfo execInfo;
-		if (exec instanceof Constructor<?> c)
-			execInfo = ConstructorInfo.of(c);
+		if (exec instanceof Constructor<?> exec2)
+			execInfo = ConstructorInfo.of(exec2);
 		else
 			execInfo = MethodInfo.of((Method)exec);
 		return execInfo.getParameters().stream()
@@ -174,8 +174,8 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * and should not be called directly. ParameterInfo instances are typically obtained from
 	 * {@link ExecutableInfo#getParameters()} or {@link #of(Parameter)}.
 	 *
-	 * @param executable The ExecutableInfo (MethodInfo or ConstructorInfo) that contains this parameter.
-	 * @param inner The parameter being wrapped.
+	 * @param executable The ExecutableInfo (MethodInfo or ConstructorInfo) that contains this parameter. Must not be <jk>null</jk>.
+	 * @param inner The parameter being wrapped. Must not be <jk>null</jk>.
 	 * @param index The zero-based index of this parameter in the method/constructor signature.
 	 * @param type The ClassInfo representing the parameter type.
 	 */
@@ -490,7 +490,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof ParameterInfo other && eq(this, other, (x, y) -> eq(x.inner, y.inner));
+		return obj instanceof ParameterInfo obj2 && eq(this, obj2, (x, y) -> eq(x.inner, y.inner));
 	}
 
 	/**
@@ -908,7 +908,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 			// VarResolver substitutes "" for a missing key with no default — collapse both null and ""
 			// to Optional.empty() so @Value("${maybe}") Optional<T> behaves the same as Spring's.
 			if (pt.is(Optional.class))
-				return (resolved == null || (resolved instanceof String s && s.isEmpty()))
+				return (resolved == null || (resolved instanceof String resolved2 && resolved2.isEmpty()))
 					? oe()
 					: o(resolved);
 			return resolved;
@@ -950,11 +950,11 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 			} else {
 				// Get the parameterized type
 				Type parameterizedType = getParameterizedType();
-				if (parameterizedType instanceof ParameterizedType pt2) {
-					var rawType = pt2.getRawType();
+				if (parameterizedType instanceof ParameterizedType parameterizedType2) {
+					var rawType = parameterizedType2.getRawType();
 					// If wrapped in Optional, unwrap it to get the nested type
-					if (rawType instanceof Class<?> rawClass && rawClass == Optional.class) {
-						var typeArgs = pt2.getActualTypeArguments();
+					if (rawType instanceof Class<?> rawType2 && rawType2 == Optional.class) {
+						var typeArgs = parameterizedType2.getActualTypeArguments();
 						if (typeArgs.length > 0 && typeArgs[0] instanceof ParameterizedType typeArgs2) {
 							// Optional<List<T>> -> List<T>
 							parameterizedType = typeArgs2;
@@ -974,15 +974,15 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 				// Handle List<T> or Set<T>
 				var inner2 = o(ptu.inner()).orElse(Object.class);
 				if (eq(inner2, List.class) || eq(inner2, Set.class)) {
-					if (parameterizedType instanceof ParameterizedType pt2) {
-						var typeArgs = pt2.getActualTypeArguments();
+					if (parameterizedType instanceof ParameterizedType parameterizedType2) {
+						var typeArgs = parameterizedType2.getActualTypeArguments();
 						if (typeArgs.length > 0 && typeArgs[0] instanceof Class<?> elementClass) {
 							elementType = elementClass;
 						}
 					}
-				} else if (eq(inner2, Map.class) && parameterizedType instanceof ParameterizedType pt2) {
+				} else if (eq(inner2, Map.class) && parameterizedType instanceof ParameterizedType parameterizedType2) {
 					// Handle Map<String,T> - extract value type (second type argument)
-					var typeArgs = pt2.getActualTypeArguments();
+					var typeArgs = parameterizedType2.getActualTypeArguments();
 					// Verify key type is String and get value type
 					if (typeArgs.length >= 2 && typeArgs[0] == String.class && typeArgs[1] instanceof Class<?> valueClass) {
 						elementType = valueClass;

@@ -3548,7 +3548,7 @@ public class HttpPartSchema {
 	}
 
 	private static <T> Set<T> copy(Set<T> in) {
-		return in == null ? emptySet() : u(copyOf(in));
+		return in == null ? emptySet() : u(cp(in));
 	}
 
 	static final Number toNumber(String...s) {

@@ -48,4 +48,28 @@ class MustacheViewRenderer_Test extends TestBase {
 	@Test void a04_defaultContentTypeIsHtmlUtf8() {
 		assertEquals("text/html;charset=UTF-8", MustacheViewRenderer.DEFAULT_CONTENT_TYPE);
 	}
+
+	/* ---------------------------------------------------------------------------------------- *
+	 * Section B: Typed-View template-name traversal gate
+	 * ---------------------------------------------------------------------------------------- */
+
+	@Test void b01_gateAllowsPlainName() {
+		assertEquals("hello", MustacheViewRenderer.gateTemplateName("/", "hello"));
+	}
+
+	@Test void b02_gateAllowsSubdirName() {
+		assertEquals("admin/dashboard", MustacheViewRenderer.gateTemplateName("/", "admin/dashboard"));
+	}
+
+	@Test void b03_gateAllowsNameUnderBasePath() {
+		assertEquals("hello.mustache", MustacheViewRenderer.gateTemplateName("/templates/", "hello.mustache"));
+	}
+
+	@Test void b04_gateRejectsTraversal() {
+		assertThrows(IllegalArgumentException.class, () -> MustacheViewRenderer.gateTemplateName("/", "../secret"));
+	}
+
+	@Test void b05_gateRejectsNestedTraversal() {
+		assertThrows(IllegalArgumentException.class, () -> MustacheViewRenderer.gateTemplateName("/templates/", "a/b/../../../secret"));
+	}
 }

@@ -52,7 +52,7 @@ public class BasicPartIterator implements PartIterator {
 	/**
 	 * Creates a new part iterator.
 	 *
-	 * @param parts An array of parts over which to iterate.
+	 * @param parts An array of parts over which to iterate.  Must not be <jk>null</jk>.
 	 * @param name The name of the parts over which to iterate, or <jk>null</jk> for all.
 	 * @param caseInsensitive Use case-insensitive matching for part name.
 	 */

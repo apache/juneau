@@ -84,7 +84,7 @@ public class CharHolder extends Holder<Character> {
 	 * 	<jsm>assertEquals</jsm>('A', <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 * @return A new character value.
 	 */
 	public static CharHolder of(Character value) {
@@ -94,7 +94,7 @@ public class CharHolder extends Holder<Character> {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 */
 	public CharHolder(Character value) {
 		super(value);
@@ -110,7 +110,7 @@ public class CharHolder extends Holder<Character> {
 	 * 	<jsm>assertEquals</jsm>('F', <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @param x The value to add.
+	 * @param x The value to add.  Can be <jk>null</jk> (treated as <c>0</c>).
 	 * @return This object.
 	 */
 	public CharHolder add(Character x) {
@@ -129,7 +129,7 @@ public class CharHolder extends Holder<Character> {
 	 * 	<jsm>assertEquals</jsm>('F', <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @param x The value to add.
+	 * @param x The value to add.  Can be <jk>null</jk> (treated as <c>0</c>).
 	 * @return The new value after addition.
 	 */
 	public Character addAndGet(Character x) {
@@ -226,7 +226,7 @@ public class CharHolder extends Holder<Character> {
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is('B'));
 	 * </p>
 	 *
-	 * @param value The character to compare to.
+	 * @param value The character to compare to.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value is equal to the specified character.
 	 */
 	@Override
@@ -247,7 +247,7 @@ public class CharHolder extends Holder<Character> {
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny('X', 'Y'));
 	 * </p>
 	 *
-	 * @param values The characters to compare to.
+	 * @param values The characters to compare to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value matches any of the specified characters.
 	 */
 	public boolean isAny(Character...values) {
@@ -273,7 +273,7 @@ public class CharHolder extends Holder<Character> {
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(<js>""</js>));
 	 * </p>
 	 *
-	 * @param values The string containing characters to compare to.
+	 * @param values The string containing characters to compare to.  Can be <jk>null</jk> or empty.
 	 * @return <jk>true</jk> if the current value matches any character in the string.
 	 */
 	public boolean isAny(String values) {

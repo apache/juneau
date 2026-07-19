@@ -17,7 +17,6 @@
 package org.apache.juneau.microservice.logging;
 
 import static org.apache.juneau.commons.lang.StateEnum.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
@@ -93,7 +92,7 @@ public class LogEntryFormatter extends Formatter {
 	}
 
 	private ConcurrentHashMap<String,AtomicInteger> hashes;
-	private DateFormat df;
+	private final DateFormat df;
 	private String format;
 	private Pattern rePattern;
 
@@ -250,7 +249,7 @@ public class LogEntryFormatter extends Formatter {
 		sre = sre.replace("\\\\%n", "\\\\n");
 
 		rePattern = Pattern.compile(sre);
-		fieldIndexes = copyOf(fieldIndexes);
+		fieldIndexes = cp(fieldIndexes);
 	}
 
 	@SuppressWarnings({
@@ -273,19 +272,32 @@ public class LogEntryFormatter extends Formatter {
 				t = null;
 			}
 		}
-		var s = String.format(format, df.format(new Date(r.getMillis())), r.getSourceClassName(), r.getSourceMethodName(), r.getLoggerName(), r.getLevel(), msg, r.getThreadID(),
+		// SimpleDateFormat is not thread-safe; guard the shared instance so concurrent log records don't corrupt formatting.
+		String date;
+		synchronized (df) {
+			date = df.format(new Date(r.getMillis()));
+		}
+		var s = String.format(Locale.ROOT, format, date, r.getSourceClassName(), r.getSourceMethodName(), r.getLoggerName(), r.getLevel(), msg, r.getThreadID(),
 			r.getThrown() == null ? "" : r.getThrown().getMessage(), TraceContext.currentTraceId(), TraceContext.currentSpanId());
 		if (nn(t))
-			s += String.format("%n%s", getStackTrace(r.getThrown()));
+			s += String.format(Locale.ROOT, "%n%s", getStackTrace(r.getThrown()));
 		return s;
 	}
 
 	/**
 	 * Returns the {@link DateFormat} used for matching dates.
 	 *
-	 * @return The {@link DateFormat} used for matching dates.
+	 * <p>
+	 * Returns a defensive {@link DateFormat#clone() clone} because {@link SimpleDateFormat} is mutable and not
+	 * thread-safe; each caller gets its own instance and cannot corrupt the formatter's shared internal state.
+	 *
+	 * @return A clone of the {@link DateFormat} used for matching dates.
 	 */
-	public DateFormat getDateFormat() { return df; }
+	public DateFormat getDateFormat() {
+		synchronized (df) {
+			return (DateFormat) df.clone();
+		}
+	}
 
 	/**
 	 * Given a matcher that has matched the pattern specified by {@link #getLogEntryPattern()}, returns the field value

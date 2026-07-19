@@ -243,7 +243,7 @@ public class ReflectionMap<V> {
 		 * </p>
 		 *
 		 * @param key
-		 * 	The mapping key pattern(s).
+		 * 	The mapping key pattern(s).  Must not be <jk>null</jk>.
 		 * 	<br>Can be any of the following:
 		 * 	<ul>
 		 * 		<li>Fully qualified class name (e.g., <js>"com.foo.MyClass"</js>)
@@ -538,7 +538,7 @@ public class ReflectionMap<V> {
 	 * </p>
 	 *
 	 * @param <V> The type of values stored in the map.
-	 * @param c The class type of values (used for type safety, not stored).
+	 * @param c The class type of values (used for type safety, not stored). Can be <jk>null</jk>.
 	 * @return A new builder instance.
 	 */
 	@SuppressWarnings({
@@ -652,13 +652,13 @@ public class ReflectionMap<V> {
 	/**
 	 * Constructor.
 	 *
-	 * @param b The builder containing the mappings to initialize this map with.
+	 * @param b The builder containing the mappings to initialize this map with. Must not be <jk>null</jk>.
 	 */
 	protected ReflectionMap(Builder<V> b) {
-		this.classEntries = u(copyOf(b.classEntries));
-		this.methodEntries = u(copyOf(b.methodEntries));
-		this.fieldEntries = u(copyOf(b.fieldEntries));
-		this.constructorEntries = u(copyOf(b.constructorEntries));
+		this.classEntries = u(cp(b.classEntries));
+		this.methodEntries = u(cp(b.methodEntries));
+		this.fieldEntries = u(cp(b.fieldEntries));
+		this.constructorEntries = u(cp(b.constructorEntries));
 	}
 
 	/**

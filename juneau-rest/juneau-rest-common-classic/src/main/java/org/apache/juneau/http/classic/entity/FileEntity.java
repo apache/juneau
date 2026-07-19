@@ -54,8 +54,8 @@ public class FileEntity extends BasicHttpEntity {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.
-	 * @param content The entity contents.
+	 * @param contentType The entity content type.  Can be <jk>null</jk>.
+	 * @param content The entity contents.  Can be <jk>null</jk>.
 	 */
 	public FileEntity(ContentType contentType, File content) {
 		super(contentType, content);
@@ -64,7 +64,7 @@ public class FileEntity extends BasicHttpEntity {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean being copied.
+	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
 	protected FileEntity(FileEntity copyFrom) {
 		super(copyFrom);
@@ -75,7 +75,7 @@ public class FileEntity extends BasicHttpEntity {
 		if (isCached() && byteCache == null)
 			byteCache = readBytes(content(), getMaxLength());
 		if (nn(byteCache))
-			return byteCache;
+			return cp(byteCache);
 		return readBytes(content());
 	}
 
@@ -201,9 +201,9 @@ public class FileEntity extends BasicHttpEntity {
 		var f = contentOrElse((File)null);
 		Objects.requireNonNull(f, "File");
 		if (! f.exists())
-			throw new IllegalStateException("File " + f.getAbsolutePath() + " does not exist.");
+			throw isex("File %s does not exist.", f.getAbsolutePath());
 		if (! f.canRead())
-			throw new IllegalStateException("File " + f.getAbsolutePath() + " is not readable.");
+			throw isex("File %s is not readable.", f.getAbsolutePath());
 		return f;
 	}
 }

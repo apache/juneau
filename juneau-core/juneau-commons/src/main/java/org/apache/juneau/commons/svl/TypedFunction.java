@@ -136,8 +136,8 @@ public abstract class TypedFunction implements VarFunction {
 			return result == null ? "" : result.toString();
 		} catch (InvocationTargetException e) {
 			var cause = e.getTargetException();
-			if (cause instanceof RuntimeException re)
-				throw re;
+			if (cause instanceof RuntimeException cause2)
+				throw cause2;
 			throw iaex("Function '%s' threw %s: %s", name(), cns(cause), cause.getMessage());
 		} catch (IllegalAccessException e) {
 			throw iaex("Function '%s' invoke method must be public: %s", name(), e.getMessage());

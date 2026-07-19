@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth.oauth;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.net.*;
@@ -175,9 +176,9 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		public Builder cacheTtl(Duration value) {
 			assertArgNotNull("value", value);
 			if (value.isZero() || value.isNegative())
-				throw new IllegalArgumentException("cacheTtl must be positive");
+				throw iaex("cacheTtl must be positive");
 			if (value.compareTo(MAX_CACHE_TTL) > 0)
-				throw new IllegalArgumentException("cacheTtl must not exceed 1 hour (was " + value + ")");
+				throw iaex("cacheTtl must not exceed 1 hour (was %s)", value);
 			cacheTtl = value;
 			return this;
 		}

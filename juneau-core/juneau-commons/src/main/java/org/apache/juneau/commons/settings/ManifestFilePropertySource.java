@@ -36,7 +36,7 @@ public class ManifestFilePropertySource implements PropertySource {
 	 * per source instance.  Without this, every {@link #get(String)} call would re-scan the classpath, which is very
 	 * expensive and shows up as a 2x test-suite regression when this source is registered in {@link Settings}.
 	 *
-	 * @param manifestSupplier The supplier for manifest file.
+	 * @param manifestSupplier The supplier for manifest file.  Must not be <jk>null</jk>.
 	 */
 	public ManifestFilePropertySource(Supplier<ManifestFile> manifestSupplier) {
 		this.manifestSupplier = new Memoizer<>(manifestSupplier);

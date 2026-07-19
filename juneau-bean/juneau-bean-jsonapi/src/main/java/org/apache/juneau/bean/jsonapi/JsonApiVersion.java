@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.jsonapi;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -47,7 +49,7 @@ public class JsonApiVersion {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param version The JSON:API protocol version (e.g. {@code "1.1"}).
+	 * @param version The JSON:API protocol version (e.g. {@code "1.1"}).  Can be <jk>null</jk>.
 	 */
 	public JsonApiVersion(String version) {
 		this.version = version;
@@ -63,7 +65,7 @@ public class JsonApiVersion {
 	/**
 	 * Bean property setter:  <property>version</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiVersion setVersion(String value) {
@@ -76,12 +78,12 @@ public class JsonApiVersion {
 	 *
 	 * @return The value of the <property>meta</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getMeta() { return meta; }
+	public Map<String,Object> getMeta() { return u(meta); }
 
 	/**
 	 * Bean property setter:  <property>meta</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiVersion setMeta(Map<String,Object> value) {

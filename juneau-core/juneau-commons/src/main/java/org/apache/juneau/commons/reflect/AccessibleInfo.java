@@ -87,7 +87,7 @@ public abstract sealed class AccessibleInfo extends ElementInfo permits FieldInf
 	/**
 	 * Constructor.
 	 *
-	 * @param inner The {@link AccessibleObject} being wrapped.
+	 * @param inner The {@link AccessibleObject} being wrapped.  Must not be <jk>null</jk>.
 	 */
 	protected AccessibleInfo(AccessibleObject inner, int modifiers) {
 		super(modifiers);

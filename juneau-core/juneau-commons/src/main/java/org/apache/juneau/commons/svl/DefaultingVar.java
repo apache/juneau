@@ -38,7 +38,7 @@ public abstract class DefaultingVar extends SimpleVar {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The name of this variable.
+	 * @param name The name of this variable.  Must not be <jk>null</jk>.
 	 */
 	protected DefaultingVar(String name) {
 		super(name);

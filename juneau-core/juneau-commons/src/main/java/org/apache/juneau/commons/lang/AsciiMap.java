@@ -28,7 +28,7 @@ public class AsciiMap {
 	 * Adds an entry to this map.
 	 *
 	 * @param c The key.
-	 * @param s The value.
+	 * @param s The value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public AsciiMap append(char c, String s) {
@@ -52,7 +52,7 @@ public class AsciiMap {
 	/**
 	 * Returns <jk>true</jk> if the specified string contains at least one character in this set.
 	 *
-	 * @param s The string to test.
+	 * @param s The string to test.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the string is not null and contains at least one character in this set.
 	 */
 	public boolean contains(CharSequence s) {

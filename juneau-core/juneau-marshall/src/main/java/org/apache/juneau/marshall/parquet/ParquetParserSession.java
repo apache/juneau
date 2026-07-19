@@ -530,7 +530,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				pathStack.add(new SchemaStackFrame(name, numChildren));
 			} else if (type != null) {
 				// Leaf element: record it and decrement parent's child count
-				int rep = repetitionType != null ? repetitionType : OPTIONAL;
+				int rep = or(repetitionType, OPTIONAL);
 				result.put(path, rep);
 				// Capture logical-type metadata for native-type decode (GAP-9/10).  Only the DECIMAL and
 				// temporal converted types matter to the decoder; the UUID/string paths are handled separately.

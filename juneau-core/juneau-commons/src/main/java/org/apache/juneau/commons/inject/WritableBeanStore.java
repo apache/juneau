@@ -230,7 +230,7 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	/**
 	 * Registers multiple configuration classes.
 	 *
-	 * @param configTypes The configuration types.
+	 * @param configTypes The configuration types.  Can be <jk>null</jk>, in which case no action is taken.
 	 * @return This object.
 	 */
 	@SuppressWarnings({

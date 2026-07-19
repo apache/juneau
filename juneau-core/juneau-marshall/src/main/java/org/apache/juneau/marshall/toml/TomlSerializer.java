@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.toml;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -257,7 +258,7 @@ public class TomlSerializer extends WriterSerializer implements RecordWritable {
 		inlineTableThreshold = builder.inlineTableThreshold;
 		useInlineTables = builder.useInlineTables;
 		sortKeys = builder.sortKeys;
-		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
+		nullValue = or(builder.nullValue, "<NULL>");
 	}
 
 	/**

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -191,14 +191,14 @@ public class SwaggerAnnotation {
 
 		Object(SwaggerAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			contact = b.contact;
 			externalDocs = b.externalDocs;
 			license = b.license;
-			tags = copyOf(b.tags);
-			termsOfService = copyOf(b.termsOfService);
-			title = copyOf(b.title);
-			value = copyOf(b.value);
+			tags = cp(b.tags);
+			termsOfService = cp(b.termsOfService);
+			title = cp(b.title);
+			value = cp(b.value);
 			version = b.version;
 		}
 

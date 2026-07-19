@@ -39,7 +39,7 @@ public class EnvFileVar extends DefaultingVar {
 	/**
 	 * Creates an {@link EnvFileVar} bound to a specific env file path.
 	 *
-	 * @param path The env file path.
+	 * @param path The env file path.  Can be <jk>null</jk>, in which case no properties are loaded.
 	 * @return A new {@link EnvFileVar} instance.
 	 */
 	public static EnvFileVar create(Path path) {

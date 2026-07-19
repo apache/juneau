@@ -84,7 +84,7 @@ public class IntegerHolder extends Holder<Integer> {
 	 * 	<jsm>assertEquals</jsm>(42, <jv>counter</jv>.get());
 	 * </p>
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk> (treated as <c>0</c>).
 	 * @return A new integer value.
 	 */
 	public static IntegerHolder of(Integer value) {
@@ -101,7 +101,7 @@ public class IntegerHolder extends Holder<Integer> {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk> (treated as <c>0</c>).
 	 */
 	public IntegerHolder(Integer value) {
 		super(value == null ? 0 : value);
@@ -117,7 +117,7 @@ public class IntegerHolder extends Holder<Integer> {
 	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @param x The value to add.
+	 * @param x The value to add.  Can be <jk>null</jk> (treated as <c>0</c>).
 	 * @return This object.
 	 */
 	public IntegerHolder add(Integer x) {
@@ -136,7 +136,7 @@ public class IntegerHolder extends Holder<Integer> {
 	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @param x The value to add.
+	 * @param x The value to add.  Can be <jk>null</jk> (treated as <c>0</c>).
 	 * @return The new value after addition.
 	 */
 	public Integer addAndGet(Integer x) {
@@ -255,7 +255,7 @@ public class IntegerHolder extends Holder<Integer> {
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is(43));
 	 * </p>
 	 *
-	 * @param value The value to compare to.
+	 * @param value The value to compare to.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value is equal to the specified value.
 	 */
 	@Override
@@ -276,7 +276,7 @@ public class IntegerHolder extends Holder<Integer> {
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(1, 2));
 	 * </p>
 	 *
-	 * @param values The values to compare to.
+	 * @param values The values to compare to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
 	public boolean isAny(Integer...values) {

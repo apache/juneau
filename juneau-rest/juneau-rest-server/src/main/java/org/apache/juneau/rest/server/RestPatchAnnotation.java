@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -528,37 +528,37 @@ public class RestPatchAnnotation {
 
 		Object(RestPatchAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			clientVersion = b.clientVersion;
-			consumes = copyOf(b.consumes);
-			converters = copyOf(b.converters);
+			consumes = cp(b.consumes);
+			converters = cp(b.converters);
 			debug = b.debug;
 			defaultAccept = b.defaultAccept;
 			defaultCharset = b.defaultCharset;
 			defaultContentType = b.defaultContentType;
-			defaultRequestFormData = copyOf(b.defaultRequestFormData);
-			defaultRequestQueryData = copyOf(b.defaultRequestQueryData);
-			defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
-			defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
-			defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
-			encoders = copyOf(b.encoders);
-			guards = copyOf(b.guards);
-			matchers = copyOf(b.matchers);
+			defaultRequestFormData = cp(b.defaultRequestFormData);
+			defaultRequestQueryData = cp(b.defaultRequestQueryData);
+			defaultRequestAttributes = cp(b.defaultRequestAttributes);
+			defaultRequestHeaders = cp(b.defaultRequestHeaders);
+			defaultResponseHeaders = cp(b.defaultResponseHeaders);
+			encoders = cp(b.encoders);
+			guards = cp(b.guards);
+			matchers = cp(b.matchers);
 			maxInput = b.maxInput;
-			parsers = copyOf(b.parsers);
-			allowedParserOptions = copyOf(b.allowedParserOptions);
-			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
-			noInherit = copyOf(b.noInherit);
-			path = copyOf(b.path);
+			parsers = cp(b.parsers);
+			allowedParserOptions = cp(b.allowedParserOptions);
+			allowedSerializerOptions = cp(b.allowedSerializerOptions);
+			noInherit = cp(b.noInherit);
+			path = cp(b.path);
 			observability = b.observability;
 			asyncCompletionExecutor = b.asyncCompletionExecutor;
 			metricName = b.metricName;
 			metricTags = b.metricTags;
 			problemDetails = b.problemDetails;
-			produces = copyOf(b.produces);
+			produces = cp(b.produces);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
-			serializers = copyOf(b.serializers);
+			serializers = cp(b.serializers);
 			summary = b.summary;
 			swagger = b.swagger;
 			value = b.value;

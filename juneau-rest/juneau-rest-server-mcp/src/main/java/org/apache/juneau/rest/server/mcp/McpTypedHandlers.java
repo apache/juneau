@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.*;
@@ -49,6 +51,7 @@ public final class McpTypedHandlers {
 	 * @return A raw handler delegating to {@code typed}.
 	 */
 	public static <A, R> McpToolHandler adaptTool(McpTypedToolHandler<A, R> typed) {
+		assertArgNotNull("typed", typed);
 		return new McpToolHandler() {
 			@Override
 			public Tool descriptor() {
@@ -76,6 +79,7 @@ public final class McpTypedHandlers {
 	 * @return A raw handler delegating to {@code typed}.
 	 */
 	public static <A> McpPromptHandler adaptPrompt(McpTypedPromptHandler<A> typed) {
+		assertArgNotNull("typed", typed);
 		return new McpPromptHandler() {
 			@Override
 			public Prompt descriptor() {
@@ -102,13 +106,13 @@ public final class McpTypedHandlers {
 	}
 
 	private static CallToolResult wrapToolResult(Object result) {
-		if (result instanceof CallToolResult ctr)
-			return ctr;
+		if (result instanceof CallToolResult result2)
+			return result2;
 		String text;
 		if (result == null)
 			text = "";
-		else if (result instanceof String s)
-			text = s;
+		else if (result instanceof String result2)
+			text = result2;
 		else {
 			try {
 				text = Json.of(result);

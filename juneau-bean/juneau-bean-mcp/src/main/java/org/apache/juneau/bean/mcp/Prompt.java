@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -42,7 +44,7 @@ public class Prompt {
 	/**
 	 * Sets the prompt name.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Prompt setName(String value) {
@@ -62,7 +64,7 @@ public class Prompt {
 	/**
 	 * Sets the description.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Prompt setDescription(String value) {
@@ -76,13 +78,13 @@ public class Prompt {
 	 * @return The arguments list, or {@code null} if not set.
 	 */
 	public List<PromptArgument> getArguments() {
-		return arguments;
+		return u(arguments);
 	}
 
 	/**
 	 * Sets declared arguments.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Prompt setArguments(List<PromptArgument> value) {

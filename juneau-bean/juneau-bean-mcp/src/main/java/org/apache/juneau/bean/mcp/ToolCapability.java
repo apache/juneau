@@ -38,7 +38,7 @@ public class ToolCapability {
 	/**
 	 * Sets the list-changed flag.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ToolCapability setListChanged(Boolean value) {

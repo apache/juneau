@@ -40,7 +40,6 @@ public class RrpcInterfaceMethodMeta {
 	 * Given a Java method, returns the arguments signature.
 	 *
 	 * @param m The Java method.
-	 * @param full Whether fully-qualified names should be used for arguments.
 	 * @return The arguments signature for the specified method.
 	 */
 	private static String getMethodArgsSignature(Method m) {
@@ -67,8 +66,8 @@ public class RrpcInterfaceMethodMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.
-	 * @param m The Java method.
+	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.  Can be <jk>null</jk>.
+	 * @param m The Java method.  Must not be <jk>null</jk>.
 	 */
 	public RrpcInterfaceMethodMeta(String restUrl, Method m) {
 		this.method = m;

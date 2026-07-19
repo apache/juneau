@@ -96,7 +96,7 @@ public class Tuple1<A> {
 	 * </p>
 	 *
 	 * @param <A> The value type.
-	 * @param a The value to wrap in the tuple.
+	 * @param a The value to wrap in the tuple.  Can be <jk>null</jk>.
 	 * @return A new tuple containing the specified value.
 	 */
 	public static <A> Tuple1<A> of(A a) {
@@ -109,7 +109,7 @@ public class Tuple1<A> {
 	/**
 	 * Constructor.
 	 *
-	 * @param a Object value.
+	 * @param a Object value.  Can be <jk>null</jk>.
 	 */
 	public Tuple1(A a) {
 		this.a = a;

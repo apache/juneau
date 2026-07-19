@@ -460,9 +460,9 @@ public final class BeanConfigContext {
 		private PropertyNamer propertyNamer = new BasicPropertyNamer();
 		private String beanTypePropertyName = "_type";
 
-		private Set<String> notBeanPackageNames = new LinkedHashSet<>();
-		private Set<String> notBeanPackagePrefixes = new LinkedHashSet<>();
-		private Set<Class<?>> notBeanClasses = new LinkedHashSet<>();
+		private Set<String> notBeanPackageNames = st();
+		private Set<String> notBeanPackagePrefixes = st();
+		private Set<Class<?>> notBeanClasses = st();
 
 		private BeanStore beanStore;
 		private AnnotationProvider annotationProvider = AnnotationProvider.INSTANCE;

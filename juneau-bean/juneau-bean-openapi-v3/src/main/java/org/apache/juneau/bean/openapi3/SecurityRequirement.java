@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -60,7 +59,7 @@ public class SecurityRequirement extends OpenApiElement {
 	 */
 	public SecurityRequirement(SecurityRequirement copyFrom) {
 		super(copyFrom);
-		this.requirements = copyOf(copyFrom.requirements);
+		this.requirements = cp(copyFrom.requirements);
 	}
 
 	/**

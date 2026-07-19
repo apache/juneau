@@ -175,8 +175,8 @@ public class HttpParts {
 	public static NameValuePair cast(Object o) {
 		if (o instanceof NameValuePair o2)
 			return o2;
-		if (o instanceof Headerable o3) {
-			Header x = o3.asHeader();
+		if (o instanceof Headerable o2) {
+			Header x = o2.asHeader();
 			return BasicPart.of(x.getName(), x.getValue());
 		}
 		if (o instanceof Map.Entry o4) {

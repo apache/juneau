@@ -105,8 +105,8 @@ public class MimeTypeDetector {
 		/**
 		 * Adds an extension type mapping.
 		 *
-		 * @param ext The file extension.
-		 * @param type The MIME type.
+		 * @param ext The file extension.  Must not be <jk>null</jk> or blank.
+		 * @param type The MIME type.  Must not be <jk>null</jk> or blank.
 		 * @return This builder.
 		 * @throws IllegalArgumentException If ext or type is null or blank.
 		 */
@@ -120,8 +120,8 @@ public class MimeTypeDetector {
 		/**
 		 * Adds a file type mapping.
 		 *
-		 * @param name The file name or path pattern.
-		 * @param type The MIME type.
+		 * @param name The file name or path pattern.  Must not be <jk>null</jk> or blank.
+		 * @param type The MIME type.  Must not be <jk>null</jk> or blank.
 		 * @return This builder.
 		 * @throws IllegalArgumentException If name or type is null or blank.
 		 */
@@ -158,7 +158,7 @@ public class MimeTypeDetector {
 		 * This method supports both individual lines as varargs and entire
 		 * mime.types file contents as a single string (which will be split on newlines).
 		 *
-		 * @param mimeTypesLines The MIME types lines or file contents.
+		 * @param mimeTypesLines The MIME types lines or file contents.  Null and empty entries are ignored.
 		 * @return This builder.
 		 */
 		@SuppressWarnings({
@@ -328,7 +328,7 @@ public class MimeTypeDetector {
 	 * <p>
 	 * Results are cached to improve performance for repeated lookups of the same files.
 	 *
-	 * @param fileName The name or path of the file.
+	 * @param fileName The name or path of the file.  Can be <jk>null</jk> or empty, in which case the default type is returned.
 	 * @return The MIME type of the file, or the default type if unknown.
 	 */
 	public String getContentType(String fileName) {

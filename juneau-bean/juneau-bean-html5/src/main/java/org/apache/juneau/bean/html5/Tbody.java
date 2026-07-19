@@ -98,7 +98,7 @@ public class Tbody extends HtmlElementContainer {
 	/**
 	 * Creates a {@link Tbody} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Tbody(Object...children) {
 		children(children);

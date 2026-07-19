@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -42,7 +44,7 @@ public class ClientCapabilities {
 	/**
 	 * Sets roots capability.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ClientCapabilities setRoots(RootsCapability value) {
@@ -56,13 +58,13 @@ public class ClientCapabilities {
 	 * @return The sampling map, or {@code null} if not set.
 	 */
 	public Map<String, Object> getSampling() {
-		return sampling;
+		return u(sampling);
 	}
 
 	/**
 	 * Sets sampling capability.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ClientCapabilities setSampling(Map<String, Object> value) {
@@ -76,13 +78,13 @@ public class ClientCapabilities {
 	 * @return The experimental map, or {@code null} if not set.
 	 */
 	public Map<String, Object> getExperimental() {
-		return experimental;
+		return u(experimental);
 	}
 
 	/**
 	 * Sets experimental extensions.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ClientCapabilities setExperimental(Map<String, Object> value) {

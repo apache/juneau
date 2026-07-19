@@ -89,7 +89,7 @@ public class Samp extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Samp} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Samp(Object...children) {
 		children(children);

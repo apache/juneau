@@ -66,7 +66,7 @@ public class Accepted extends BasicHttpResponse {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy from.
+	 * @param copyFrom The bean to copy from.  Must not be <jk>null</jk>.
 	 */
 	public Accepted(Accepted copyFrom) {
 		super(copyFrom);

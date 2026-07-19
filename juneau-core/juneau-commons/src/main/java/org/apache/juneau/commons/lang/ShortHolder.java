@@ -86,7 +86,7 @@ public class ShortHolder extends Holder<Short> {
 	 * 	<jsm>assertEquals</jsm>(42, <jv>counter</jv>.get());
 	 * </p>
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 * @return A new short value.
 	 */
 	public static ShortHolder of(Short value) {
@@ -96,7 +96,7 @@ public class ShortHolder extends Holder<Short> {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 */
 	public ShortHolder(Short value) {
 		super(value);
@@ -112,7 +112,7 @@ public class ShortHolder extends Holder<Short> {
 	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @param x The value to add.
+	 * @param x The value to add.  Can be <jk>null</jk> (treated as <c>0</c>).
 	 * @return This object.
 	 */
 	public ShortHolder add(Short x) {
@@ -131,7 +131,7 @@ public class ShortHolder extends Holder<Short> {
 	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @param x The value to add.
+	 * @param x The value to add.  Can be <jk>null</jk> (treated as <c>0</c>).
 	 * @return The new value after addition.
 	 */
 	public Short addAndGet(Short x) {
@@ -246,7 +246,7 @@ public class ShortHolder extends Holder<Short> {
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is((<jk>short</jk>)43));
 	 * </p>
 	 *
-	 * @param value The value to compare to.
+	 * @param value The value to compare to.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value is equal to the specified value.
 	 */
 	@Override
@@ -267,7 +267,7 @@ public class ShortHolder extends Holder<Short> {
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny((<jk>short</jk>)1, (<jk>short</jk>)2));
 	 * </p>
 	 *
-	 * @param values The values to compare to.
+	 * @param values The values to compare to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
 	public boolean isAny(Short...values) {

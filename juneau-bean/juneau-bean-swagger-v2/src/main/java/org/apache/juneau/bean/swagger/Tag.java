@@ -19,6 +19,7 @@ package org.apache.juneau.bean.swagger;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
+import static org.apache.juneau.bean.swagger.SwaggerCopyUtils.*;
 
 import java.util.*;
 
@@ -99,7 +100,7 @@ public class Tag extends SwaggerElement {
 		super(copyFrom);
 
 		this.description = copyFrom.description;
-		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+		this.externalDocs = copyOf(copyFrom.externalDocs);
 		this.name = copyFrom.name;
 	}
 

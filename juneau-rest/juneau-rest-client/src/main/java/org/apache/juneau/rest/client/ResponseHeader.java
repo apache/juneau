@@ -92,7 +92,7 @@ public final class ResponseHeader {
 	 */
 	public String orElse(String defaultValue) {
 		var value = getValue();
-		return value != null ? value : defaultValue;
+		return or(value, defaultValue);
 	}
 
 	/**

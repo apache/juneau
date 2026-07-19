@@ -73,7 +73,7 @@ public class VarList extends ArrayList<Object> {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The list to copy.
+	 * @param copyFrom The list to copy.  Must not be <jk>null</jk>.
 	 */
 	protected VarList(VarList copyFrom) {
 		super(copyFrom);
@@ -145,7 +145,7 @@ public class VarList extends ArrayList<Object> {
 	/**
 	 * Adds a list of variables to this list.
 	 *
-	 * @param vars The variables to append to this list.
+	 * @param vars The variables to append to this list.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public VarList append(VarList vars) {

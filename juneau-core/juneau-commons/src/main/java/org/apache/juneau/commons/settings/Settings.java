@@ -558,8 +558,8 @@ public class Settings {
 	 * </p>
 	 *
 	 * @param <T> The type to convert the value to.
-	 * @param name The property name.
-	 * @param def The default value to return if not found.
+	 * @param name The property name. Must not be <jk>null</jk>.
+	 * @param def The default value to return if not found. Must not be <jk>null</jk>.
 	 * @return The found value (converted to type T), or the default value if not found.
 	 * @see #get(String)
 	 * @see #toType(String, Class)
@@ -589,7 +589,7 @@ public class Settings {
 	 * Setting a value to <c>null</c> will store an empty optional, effectively overriding the system
 	 * property to return empty. Use {@link #unsetGlobal(String)} to completely remove the override.
 	 *
-	 * @param name The property name.
+	 * @param name The property name. Must not be <jk>null</jk>.
 	 * @param value The override value, or <c>null</c> to set an empty override.
 	 * @return This object for method chaining.
 	 * @see #unsetGlobal(String)
@@ -608,7 +608,7 @@ public class Settings {
 	 * After calling this method, the property will fall back to the system property value
 	 * (or per-thread override if one exists).
 	 *
-	 * @param name The property name.
+	 * @param name The property name. Must not be <jk>null</jk>.
 	 * @see #setGlobal(String, String)
 	 * @see #clearGlobal()
 	 */
@@ -629,7 +629,7 @@ public class Settings {
 	 * Setting a value to <c>null</c> will store an empty optional, effectively overriding the property
 	 * to return empty for this thread. Use {@link #unsetLocal(String)} to completely remove the override.
 	 *
-	 * @param name The property name.
+	 * @param name The property name. Must not be <jk>null</jk>.
 	 * @param value The override value, or <c>null</c> to set an empty override.
 	 * @return This object for method chaining.
 	 * @see #unsetLocal(String)
@@ -649,7 +649,7 @@ public class Settings {
 	 * After calling this method, the property will fall back to the global override (if set)
 	 * or the system property value for the current thread.
 	 *
-	 * @param name The property name.
+	 * @param name The property name. Must not be <jk>null</jk>.
 	 * @see #setLocal(String, String)
 	 * @see #clearLocal()
 	 */

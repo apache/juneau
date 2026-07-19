@@ -72,7 +72,7 @@ public class Blockquote extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Blockquote} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Blockquote(Object...children) {
 		children(children);
@@ -125,7 +125,7 @@ public class Blockquote extends HtmlElementMixed {
 	 * <p>
 	 * The URL should point to the original source of the quoted material.
 	 *
-	 * @param value The URL of the source document for the quotation.
+	 * @param value The URL of the source document for the quotation. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Blockquote cite(String value) {

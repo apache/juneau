@@ -47,7 +47,7 @@ public abstract class OpenApiElement {
 
 	OpenApiElement(OpenApiElement copyFrom) {
 		this.strict = copyFrom.strict;
-		this.extra = copyOf(copyFrom.extra);
+		this.extra = cp(copyFrom.extra);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public abstract class OpenApiElement {
 	 */
 	@BeanProp("*")
 	public Set<String> extraKeys() {
-		return extra == null ? Collections.emptySet() : extra.keySet();
+		return extra == null ? Collections.emptySet() : u(extra.keySet());
 	}
 
 	/**

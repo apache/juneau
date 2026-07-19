@@ -88,7 +88,7 @@ public class Style extends HtmlElementRawText {
 	/**
 	 * Creates a {@link Style} element with the specified {@link Style#text(Object)} node.
 	 *
-	 * @param text The {@link Style#text(Object)} node.
+	 * @param text The {@link Style#text(Object)} node. Can be <jk>null</jk>.
 	 */
 	public Style(Object text) {
 		text(text);
@@ -177,7 +177,7 @@ public class Style extends HtmlElementRawText {
 	 * 	<li><js>"tv"</js> - Television</li>
 	 * </ul>
 	 *
-	 * @param value The media types for which the stylesheet applies.
+	 * @param value The media types for which the stylesheet applies. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Style media(String value) {
@@ -527,7 +527,7 @@ public class Style extends HtmlElementRawText {
 	 * <p>
 	 * Type of embedded resource.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Style type(String value) {

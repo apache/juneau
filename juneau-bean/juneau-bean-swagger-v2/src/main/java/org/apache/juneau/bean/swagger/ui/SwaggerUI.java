@@ -270,7 +270,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	private static Div opBlock(Session s, String path, String opName, Operation op) {
 
-		var opClass = op.isDeprecated() ? "deprecated" : opName.toLowerCase();
+		var opClass = op.isDeprecated() ? "deprecated" : lcr(opName);
 		if (! op.isDeprecated() && ! STANDARD_METHODS.contains(opClass)) // HTT - opBlock only called with standard method names from OperationMap; custom method branch unreachable
 			opClass = "other";
 
@@ -285,7 +285,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	private static HtmlElement opBlockSummary(String path, String opName, Operation op) {
 		// @formatter:off
 		return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(
-			span(opName.toUpperCase()).class_("method-button"),
+			span(ucr(opName)).class_("method-button"),
 			span(path).class_("path"),
 			nn(op.getSummary()) ? span(op.getSummary()).class_("summary") : null
 		);

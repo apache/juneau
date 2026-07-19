@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.hocon;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -165,7 +164,7 @@ public abstract sealed class HoconValue permits HoconValue.HoconObject, HoconVal
 		 * @return An unmodifiable copy of the elements list.
 		 */
 		public List<HoconValue> getElements() {
-			return u(copyOf(elements));
+			return u(cp(elements));
 		}
 
 		/**
@@ -357,7 +356,7 @@ public abstract sealed class HoconValue permits HoconValue.HoconObject, HoconVal
 		 * @return The parts list.
 		 */
 		public List<HoconValue> getParts() {
-			return u(copyOf(parts));
+			return u(cp(parts));
 		}
 
 		/**

@@ -66,7 +66,7 @@ public abstract class Var {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The name of this variable.
+	 * @param name The name of this variable.  Must not be <jk>null</jk>.
 	 * @param streamed
 	 * 	Whether this variable is 'streamed', meaning the {@link #resolveTo(VarResolverSession, Writer, String)} method
 	 * 	is implemented.

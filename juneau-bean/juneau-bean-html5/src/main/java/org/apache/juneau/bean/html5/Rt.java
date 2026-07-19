@@ -87,7 +87,7 @@ public class Rt extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Rt} element with the specified {@link Rt#children(Object[])} nodes.
 	 *
-	 * @param children The {@link Rt#children(Object[])} nodes.
+	 * @param children The {@link Rt#children(Object[])} nodes. Must not be <jk>null</jk>.
 	 */
 	public Rt(Object...children) {
 		children(children);

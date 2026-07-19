@@ -1361,7 +1361,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
 	 */
-	public Namespace[] getNamespaces() { return namespaces; }
+	public Namespace[] getNamespaces() { return cp(namespaces); }
 
 	@Override /* Overridden from RdfMetaProvider */
 	public RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
@@ -1411,7 +1411,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
 	 */
-	protected final Map<String,Object> getJenaSettings() { return jenaSettings; }
+	protected final Map<String,Object> getJenaSettings() { return u(jenaSettings); }
 
 	/**
 	 * Default XML namespace for bean properties.

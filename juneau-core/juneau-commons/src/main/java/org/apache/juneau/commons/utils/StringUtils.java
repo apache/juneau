@@ -211,6 +211,7 @@ public class StringUtils {
 	 *
 	 * @param sb The StringBuilder to append to, or <jk>null</jk> to create a new one.
 	 * @param in The string to append.
+	 * 	<br>Can be <jk>null</jk> (appended as <js>"null"</js>), unless <c>sb</c> is also <jk>null</jk> in which case a {@link NullPointerException} is thrown.
 	 * @return The StringBuilder with the string appended.
 	 */
 	public static StringBuilder append(StringBuilder sb, String in) {
@@ -333,7 +334,7 @@ public class StringUtils {
 	 *
 	 * <p>Uses a simple vowel-based rule: 'an' if the word starts with a vowel, 'a' otherwise.
 	 *
-	 * @param subject The word to articlize.
+	 * @param subject The word to articlize.  Must not be <jk>null</jk> or empty (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return The word with 'a' or 'an' prepended.
 	 */
 	public static String articlized(String subject) {
@@ -696,7 +697,7 @@ public class StringUtils {
 	 * 	<jc>// Returns: "Hello World"</jc>
 	 * </p>
 	 *
-	 * @param contents The UTF-8 string to compress.
+	 * @param contents The UTF-8 string to compress.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return The GZIP-compressed byte array.
 	 * @throws IOException If compression fails.
 	 * @see #decompress(byte[])
@@ -1107,7 +1108,7 @@ public class StringUtils {
 	 * 	<jc>// Returns: "Hello World"</jc>
 	 * </p>
 	 *
-	 * @param is The GZIP-compressed byte array to decompress.
+	 * @param is The GZIP-compressed byte array to decompress.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return The decompressed UTF-8 string.
 	 * @throws IOException If decompression fails or the input is not valid GZIP data.
 	 * @see #compress(String)
@@ -1271,7 +1272,7 @@ public class StringUtils {
 	 * @return The string value, or an empty string if the string is <jk>null</jk>.
 	 */
 	public static String emptyIfNull(String str) {
-		return str == null ? "" : str;
+		return coalesce(str, "");
 	}
 
 	/** Returns the string representation of an object, or <jk>""</jk> if the object is <jk>null</jk>. */
@@ -1540,8 +1541,8 @@ public class StringUtils {
 	/**
 	 * Escapes the specified characters in the string.
 	 *
-	 * @param s The string with characters to escape.
-	 * @param escaped The characters to escape.
+	 * @param s The string with characters to escape.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @param escaped The characters to escape.  Must not be <jk>null</jk> when the string is non-empty (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return The string with characters escaped, or the same string if no escapable characters were found.
 	 */
 	public static String escapeChars(String s, AsciiSet escaped) {
@@ -2227,8 +2228,8 @@ public class StringUtils {
 	 * <p>
 	 * <jk>null</jk> values returned by the function are treated as blank strings.
 	 *
-	 * @param s The string containing variables to replace.
-	 * @param resolver The function that resolves variable names to values.
+	 * @param s The string containing variables to replace.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @param resolver The function that resolves variable names to values.  Can be <jk>null</jk> (the string is returned unchanged).
 	 * @return The new string with variables replaced, or the original string if it didn't have variables in it.
 	 */
 	@SuppressWarnings({
@@ -2310,8 +2311,8 @@ public class StringUtils {
 	 * <p>
 	 * <jk>null</jk> values in the map are treated as blank strings.
 	 *
-	 * @param s The string containing variables to replace.
-	 * @param m The map containing the variable values.
+	 * @param s The string containing variables to replace.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @param m The map containing the variable values.  Can be <jk>null</jk> (the string is returned unchanged).
 	 * @return The new string with variables replaced, or the original string if it didn't have variables in it.
 	 */
 	public static String formatNamed(String s, Map<String,Object> m) {
@@ -2337,7 +2338,7 @@ public class StringUtils {
 	/**
 	 * Converts a hexadecimal character string to a byte array.
 	 *
-	 * @param hex The string to convert to a byte array.
+	 * @param hex The string to convert to a byte array.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return A new byte array.
 	 */
 	public static byte[] fromHex(String hex) {
@@ -2351,7 +2352,7 @@ public class StringUtils {
 	/**
 	 * Converts a hexadecimal byte stream (e.g. "34A5BC") into a UTF-8 encoded string.
 	 *
-	 * @param hex The hexadecimal string.
+	 * @param hex The hexadecimal string.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return The UTF-8 string.
 	 */
 	public static String fromHexToUTF8(String hex) {
@@ -2365,7 +2366,7 @@ public class StringUtils {
 	/**
 	 * Same as {@link #fromHex(String)} except expects spaces between the byte strings.
 	 *
-	 * @param hex The string to convert to a byte array.
+	 * @param hex The string to convert to a byte array.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return A new byte array.
 	 */
 	public static byte[] fromSpacedHex(String hex) {
@@ -2379,7 +2380,7 @@ public class StringUtils {
 	/**
 	 * Converts a space-deliminted hexadecimal byte stream (e.g. "34 A5 BC") into a UTF-8 encoded string.
 	 *
-	 * @param hex The hexadecimal string.
+	 * @param hex The hexadecimal string.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return The UTF-8 string.
 	 */
 	public static String fromSpacedHexToUTF8(String hex) {
@@ -2410,7 +2411,7 @@ public class StringUtils {
 	/**
 	 * Given an absolute URI, returns just the authority portion (e.g. <js>"http://hostname:port"</js>)
 	 *
-	 * @param s The URI string.
+	 * @param s The URI string.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return Just the authority portion of the URI.
 	 */
 	@SuppressWarnings({
@@ -2634,8 +2635,8 @@ public class StringUtils {
 	/**
 	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
 	 *
-	 * @param s The string to create a pattern from.
-	 * @return A regular expression pattern.
+	 * @param s The string to create a pattern from.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A regular expression pattern, or <jk>null</jk> if the input string is <jk>null</jk>.
 	 */
 	public static Pattern getMatchPattern(String s) {
 		return getMatchPattern(s, 0);
@@ -2644,9 +2645,9 @@ public class StringUtils {
 	/**
 	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
 	 *
-	 * @param s The string to create a pattern from.
+	 * @param s The string to create a pattern from.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param flags Regular expression flags.
-	 * @return A regular expression pattern.
+	 * @return A regular expression pattern, or <jk>null</jk> if the input string is <jk>null</jk>.
 	 */
 	public static Pattern getMatchPattern(String s, int flags) {
 		if (s == null)
@@ -2669,8 +2670,8 @@ public class StringUtils {
 	/**
 	 * Takes in a string, splits it by lines, and then prepends each line with line numbers.
 	 *
-	 * @param s The string.
-	 * @return The string with line numbers added.
+	 * @param s The string.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return The string with line numbers added, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static String getNumberedLines(String s) {
 		return getNumberedLines(s, 1, Integer.MAX_VALUE);
@@ -2682,10 +2683,10 @@ public class StringUtils {
 	 * <p>
 	 * Out-of-bounds values are allowed and fixed.
 	 *
-	 * @param s The string.
+	 * @param s The string.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param start The starting line (1-indexed).
 	 * @param end The ending line (1-indexed).
-	 * @return The string with line numbers added.
+	 * @return The string with line numbers added, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static String getNumberedLines(String s, int start, int end) {
 		if (s == null)
@@ -2762,9 +2763,9 @@ public class StringUtils {
 	/**
 	 * Same as {@link String#indexOf(int)} except allows you to check for multiple characters.
 	 *
-	 * @param s The string to check.
+	 * @param s The string to check.  Can be <jk>null</jk> (returns <c>-1</c>).
 	 * @param c The characters to check for.
-	 * @return The index into the string that is one of the specified characters.
+	 * @return The index into the string that is one of the specified characters, or <c>-1</c> if none found or the string is <jk>null</jk>.
 	 */
 	public static int indexOf(String s, char...c) {
 		if (s == null)
@@ -2862,8 +2863,8 @@ public class StringUtils {
 	 * 	<jc>// Returns: "Hello John, welcome to New York"</jc>
 	 * </p>
 	 *
-	 * @param template The template string with <js>"${name}"</js> variables.
-	 * @param variables The map containing the variable values.
+	 * @param template The template string with <js>"${name}"</js> variables.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @param variables The map containing the variable values.  Can be <jk>null</jk> (the template is returned unchanged).
 	 * @return The interpolated string with variables replaced, or the original template if variables is null or empty.
 	 */
 	@SuppressWarnings({
@@ -2920,7 +2921,7 @@ public class StringUtils {
 	/**
 	 * Efficiently determines whether a URL is of the pattern "xxx://xxx"
 	 *
-	 * @param s The string to test.
+	 * @param s The string to test.  Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
 	@SuppressWarnings({
@@ -3703,7 +3704,7 @@ public class StringUtils {
 	 * <p>
 	 * Note that this excludes filesystem paths such as <js>"C:/temp"</js>.
 	 *
-	 * @param s The string to test.
+	 * @param s The string to test.  Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
 	@SuppressWarnings({
@@ -4065,7 +4066,7 @@ public class StringUtils {
 	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
-	 * @param sb The string builder to append the response to.
+	 * @param sb The string builder to append the response to.  Must not be <jk>null</jk> when <c>tokens</c> is non-<jk>null</jk>.
 	 * @return The same string builder passed in as <c>sb</c>.
 	 */
 	public static StringBuilder join(Collection<?> tokens, String d, StringBuilder sb) {
@@ -4107,8 +4108,8 @@ public class StringUtils {
 	 * 	join(<jk>new int</jk>[]{}, <js>","</js>);          <jc>// ""</jc>
 	 * </p>
 	 *
-	 * @param array The array to join.
-	 * @param delimiter The delimiter string.
+	 * @param array The array to join.  Can be <jk>null</jk> (returns an empty string).
+	 * @param delimiter The delimiter string.  Can be <jk>null</jk> (treated as empty).
 	 * @return The joined string.
 	 */
 	public static String join(int[] array, String delimiter) {
@@ -4140,7 +4141,7 @@ public class StringUtils {
 	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
-	 * @param sb The string builder to append the response to.
+	 * @param sb The string builder to append the response to.  Must not be <jk>null</jk> when <c>tokens</c> is non-<jk>null</jk>.
 	 * @return The same string builder passed in as <c>sb</c>.
 	 */
 	public static StringBuilder join(Object[] tokens, char d, StringBuilder sb) {
@@ -4206,8 +4207,8 @@ public class StringUtils {
 	/**
 	 * Joins tokens with newlines.
 	 *
-	 * @param tokens The tokens to concatenate.
-	 * @return A string with the specified tokens contatenated with newlines.
+	 * @param tokens The tokens to concatenate.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A string with the specified tokens contatenated with newlines, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static String joinnl(Object[] tokens) {
 		return join(tokens, '\n');
@@ -4350,8 +4351,8 @@ public class StringUtils {
 	 * 	levenshteinDistance(<js>"abc"</js>, <js>""</js>);               <jc>// 3</jc>
 	 * </p>
 	 *
-	 * @param str1 The first string.
-	 * @param str2 The second string.
+	 * @param str1 The first string.  Can be <jk>null</jk> (treated as empty).
+	 * @param str2 The second string.  Can be <jk>null</jk> (treated as empty).
 	 * @return The Levenshtein distance between the two strings.
 	 */
 	public static int levenshteinDistance(String str1, String str2) {
@@ -4749,8 +4750,8 @@ public class StringUtils {
 	 * 	naturalCompare(<js>"file1.txt"</js>, <js>"file1.txt"</js>);    <jc>// 0 (equal)</jc>
 	 * </p>
 	 *
-	 * @param str1 The first string.
-	 * @param str2 The second string.
+	 * @param str1 The first string.  Can be <jk>null</jk> (a <jk>null</jk> str1 sorts before a non-<jk>null</jk> str2).
+	 * @param str2 The second string.  Can be <jk>null</jk> (a non-<jk>null</jk> str1 sorts after a <jk>null</jk> str2).
 	 * @return A negative integer, zero, or a positive integer as the first string is less than, equal to, or greater than the second.
 	 */
 	@SuppressWarnings({
@@ -5103,7 +5104,7 @@ public class StringUtils {
 	/**
 	 * Returns an obfuscated version of the specified string.
 	 *
-	 * @param s The string to obfuscate.
+	 * @param s The string to obfuscate.  Can be <jk>null</jk> (returns <js>"*"</js>).
 	 * @return The obfuscated string with most characters replaced by asterisks.
 	 */
 	public static String obfuscate(String s) {
@@ -5314,8 +5315,9 @@ public class StringUtils {
 	 * 	<li><js>"g"</js> - x 1000*1000*1000
 	 * </ul>
 	 *
-	 * @param s The string to parse.
+	 * @param s The string to parse.  Must not be <jk>null</jk>.
 	 * @return The parsed value.
+	 * @throws IllegalArgumentException If the string is <jk>null</jk>.
 	 */
 	public static int parseIntWithSuffix(String s) {
 		assertArgNotNull(ARG_s, s);
@@ -5407,8 +5409,9 @@ public class StringUtils {
 	 * 	<li><js>"p"</js> - x 1000*1000*1000*1000*1000
 	 * </ul>
 	 *
-	 * @param s The string to parse.
+	 * @param s The string to parse.  Must not be <jk>null</jk>.
 	 * @return The parsed value.
+	 * @throws IllegalArgumentException If the string is <jk>null</jk>.
 	 */
 	public static long parseLongWithSuffix(String s) {
 		assertArgNotNull(ARG_s, s);
@@ -5631,7 +5634,7 @@ public class StringUtils {
 	 * 	pluralize(<js>"city"</js>, <js>2</js>);       <jc>// "cities"</jc>
 	 * </p>
 	 *
-	 * @param word The word to pluralize.
+	 * @param word The word to pluralize.  Can be <jk>null</jk> (returned as-is).
 	 * @param count The count to determine if pluralization is needed.
 	 * @return The pluralized word if count is not 1, otherwise the original word.
 	 */
@@ -6209,7 +6212,7 @@ public class StringUtils {
 	 * Creates a repeated pattern.
 	 *
 	 * @param count The number of times to repeat the pattern.
-	 * @param pattern The pattern to repeat.
+	 * @param pattern The pattern to repeat.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return A new string consisting of the repeated pattern.
 	 */
 	public static String repeat(int count, String pattern) {
@@ -6222,7 +6225,7 @@ public class StringUtils {
 	/**
 	 * Replaces <js>"\\uXXXX"</js> character sequences with their unicode characters.
 	 *
-	 * @param s The string to replace unicode sequences in.
+	 * @param s The string to replace unicode sequences in.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return A string with unicode sequences replaced.
 	 */
 	public static String replaceUnicodeSequences(String s) {
@@ -6323,8 +6326,8 @@ public class StringUtils {
 	 * 	similarity(<js>"abc"</js>, <js>"xyz"</js>);               <jc>// 0.0 (0%)</jc>
 	 * </p>
 	 *
-	 * @param str1 The first string.
-	 * @param str2 The second string.
+	 * @param str1 The first string.  Can be <jk>null</jk> (treated as empty).
+	 * @param str2 The second string.  Can be <jk>null</jk> (treated as empty).
 	 * @return A similarity value between 0.0 and 1.0, where 1.0 means identical.
 	 */
 	public static double similarity(String str1, String str2) {
@@ -6531,9 +6534,9 @@ public class StringUtils {
 	/**
 	 * Same as {@link #splita(String, char)} but consumes the tokens instead of creating an array.
 	 *
-	 * @param s The string to split.
+	 * @param s The string to split.  Can be <jk>null</jk> (no tokens are consumed).
 	 * @param c The character to split on.
-	 * @param consumer The consumer of the tokens.
+	 * @param consumer The consumer of the tokens.  Must not be <jk>null</jk> when the string is non-empty.
 	 */
 	public static void split(String s, char c, Consumer<String> consumer) {
 		var escapeChars = getEscapeSet(c);
@@ -6612,8 +6615,8 @@ public class StringUtils {
 	/**
 	 * Same as {@link #splita(String)} but consumes the tokens instead of creating an array.
 	 *
-	 * @param s The string to split.
-	 * @param consumer The consumer of the tokens.
+	 * @param s The string to split.  Can be <jk>null</jk> (no tokens are consumed).
+	 * @param consumer The consumer of the tokens.  Must not be <jk>null</jk> when the string is non-empty.
 	 */
 	public static void split(String s, Consumer<String> consumer) {
 		StringUtils.split(s, ',', consumer);
@@ -6622,8 +6625,8 @@ public class StringUtils {
 	/**
 	 * Splits a comma-delimited list into an array of strings.
 	 *
-	 * @param s The string to split.
-	 * @return An array of split strings.
+	 * @param s The string to split.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return An array of split strings, or <jk>null</jk> if the string was <jk>null</jk>.
 	 */
 	public static String[] splita(String s) {
 		return splita(s, ',');
@@ -6777,8 +6780,8 @@ public class StringUtils {
 	/**
 	 * Splits the method arguments in the signature of a method.
 	 *
-	 * @param s The arguments to split.
-	 * @return The split arguments, or null if the input string is null.
+	 * @param s The arguments to split.  Can be <jk>null</jk> (returns an empty array).
+	 * @return The split arguments, or an empty array if the input string is <jk>null</jk> or empty.
 	 */
 	public static String[] splitMethodArgs(String s) {
 
@@ -6881,10 +6884,10 @@ public class StringUtils {
 	 *
 	 * Handles escapes and trims whitespace from tokens.
 	 *
-	 * @param s The input string.
+	 * @param s The input string.  Must not be <jk>null</jk> or empty (a <jk>null</jk> or empty argument throws {@link IllegalArgumentException}).
 	 * @return
-	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
-	 * 	<br>An empty string results in an empty array.
+	 * 	The results.
+	 * @throws IllegalArgumentException If the input was <jk>null</jk> or empty.
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for nested inner string splitting
@@ -6951,9 +6954,9 @@ public class StringUtils {
 	 * 	<li><js>"foo 'bar\'baz'"</js> =&gt; <c>["foo","bar'baz"]</c>
 	 * </ul>
 	 *
-	 * @param s The input string.
+	 * @param s The input string.  Can be <jk>null</jk> (returns an empty array).
 	 * @return
-	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	The results, or an empty array if the input was <jk>null</jk>.
 	 * 	<br>An empty string results in an empty array.
 	 */
 	public static String[] splitQuoted(String s) {
@@ -6963,10 +6966,10 @@ public class StringUtils {
 	/**
 	 * Same as {@link StringUtils#splitQuoted(String)} but allows you to optionally keep the quote characters.
 	 *
-	 * @param s The input string.
+	 * @param s The input string.  Can be <jk>null</jk> (returns an empty array).
 	 * @param keepQuotes If <jk>true</jk>, quote characters are kept on the tokens.
 	 * @return
-	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	The results, or an empty array if the input was <jk>null</jk>.
 	 * 	<br>An empty string results in an empty array.
 	 */
 	@SuppressWarnings({
@@ -7084,7 +7087,7 @@ public class StringUtils {
 	 *
 	 * <p>Useful when passing arguments to loggers.
 	 *
-	 * @param s The supplier.
+	 * @param s The supplier.  Must not be <jk>null</jk> (the returned supplier throws {@link NullPointerException} when invoked).
 	 * @return A string supplier that calls {@link #readable(Object)} on the supplied value.
 	 */
 	public static Supplier<String> stringSupplier(Supplier<?> s) {
@@ -7285,8 +7288,8 @@ public class StringUtils {
 	/**
 	 * Converts the specified object to a comma-delimited list.
 	 *
-	 * @param o The object to convert.
-	 * @return The specified object as a comma-delimited list.
+	 * @param o The object to convert.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return The specified object as a comma-delimited list, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static String toCdl(Object o) {
 		if (o == null)
@@ -7300,8 +7303,8 @@ public class StringUtils {
 			}
 			return sb.toString();
 		}
-		if (o instanceof Collection<?> c)
-			return join(c, ", ");
+		if (o instanceof Collection<?> o2)
+			return join(o2, ", ");
 		return o.toString();
 	}
 
@@ -7322,7 +7325,7 @@ public class StringUtils {
 	/**
 	 * Converts a byte array into a simple hexadecimal character string.
 	 *
-	 * @param bytes The bytes to convert to hexadecimal.
+	 * @param bytes The bytes to convert to hexadecimal.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return A new string consisting of hexadecimal characters.
 	 */
 	public static String toHex(byte[] bytes) {
@@ -7408,8 +7411,8 @@ public class StringUtils {
 	/**
 	 * Converts the specified object to an ISO8601 date string.
 	 *
-	 * @param c The object to convert.
-	 * @return The converted object.
+	 * @param c The object to convert.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return The converted object, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static String toIsoDate(Calendar c) {
 		if (c == null) {
@@ -7423,8 +7426,8 @@ public class StringUtils {
 	/**
 	 * Converts the specified object to an ISO8601 date-time string.
 	 *
-	 * @param c The object to convert.
-	 * @return The converted object.
+	 * @param c The object to convert.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return The converted object, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static String toIsoDateTime(Calendar c) {
 		if (c == null) {
@@ -7438,7 +7441,7 @@ public class StringUtils {
 	/**
 	 * Converts the specified bytes into a readable string.
 	 *
-	 * @param b The number to convert to hex.
+	 * @param b The number to convert to hex.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return A <code><jk>char</jk>[2]</code> containing the specified characters.
 	 */
 	public static String toReadableBytes(byte[] b) {
@@ -7454,7 +7457,7 @@ public class StringUtils {
 	/**
 	 * Same as {@link #toHex(byte[])} but puts spaces between the byte strings.
 	 *
-	 * @param bytes The bytes to convert to hexadecimal.
+	 * @param bytes The bytes to convert to hexadecimal.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return A new string consisting of hexadecimal characters.
 	 */
 	public static String toSpacedHex(byte[] bytes) {
@@ -7508,8 +7511,8 @@ public class StringUtils {
 	/**
 	 * Converts the specified object to a URI.
 	 *
-	 * @param o The object to convert to a URI.
-	 * @return A new URI, or the same object if the object was already a URI, or
+	 * @param o The object to convert to a URI.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new URI, the same object if the object was already a URI, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static URI toUri(Object o) {
 		if (o == null || o instanceof URI)
@@ -7707,8 +7710,8 @@ public class StringUtils {
 	/**
 	 * Removes escape characters from the specified characters.
 	 *
-	 * @param s The string to remove escape characters from.
-	 * @param escaped The characters escaped.
+	 * @param s The string to remove escape characters from.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @param escaped The characters escaped.  Must not be <jk>null</jk> when the string is non-empty (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return A new string if characters were removed, or the same string if not or if the input was <jk>null</jk>.
 	 */
 	@SuppressWarnings({
@@ -8539,7 +8542,7 @@ public class StringUtils {
 	 * <p>
 	 * Supports both <js>"/* * /"</js> style block comments and <js>"//"</js> style line comments.
 	 *
-	 * @param r The StringReader positioned at the start of a comment (at the first <js>'/'</js>).
+	 * @param r The StringReader positioned at the start of a comment (at the first <js>'/'</js>).  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @throws IOException If an I/O error occurs.
 	 */
 	@SuppressWarnings({
@@ -8690,7 +8693,7 @@ public class StringUtils {
 	 * @param value The string value.
 	 * @return The value, or "" if null.
 	 */
-	public static String blankIfNull(String value) { return value == null ? "" : value; }
+	public static String blankIfNull(String value) { return coalesce(value, ""); }
 
 	/**
 	 * Creates a new {@link StringBuilder} initialized with the stringified form of the specified value.

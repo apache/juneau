@@ -82,6 +82,9 @@ public final class JsrSupport {
 
 	/**
 	 * Returns <jk>true</jk> if the annotation is an inject marker.
+	 *
+	 * @param annotation The annotation to inspect.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the annotation is an inject marker.
 	 */
 	public static boolean isInjectAnnotation(AnnotationInfo<?> annotation) {
 		var name = annotation.getName();
@@ -90,6 +93,9 @@ public final class JsrSupport {
 
 	/**
 	 * Returns <jk>true</jk> if the annotation is a named qualifier.
+	 *
+	 * @param annotation The annotation to inspect.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the annotation is a named qualifier.
 	 */
 	public static boolean isNamedAnnotation(AnnotationInfo<?> annotation) {
 		var name = annotation.getName();
@@ -98,6 +104,9 @@ public final class JsrSupport {
 
 	/**
 	 * Returns <jk>true</jk> if this annotation type itself is annotated with a qualifier marker.
+	 *
+	 * @param annotation The annotation to inspect.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if this annotation type itself is annotated with a qualifier marker.
 	 */
 	public static boolean isQualifierMeta(AnnotationInfo<?> annotation) {
 		return Arrays.stream(annotation.annotationType().getAnnotations())
@@ -107,6 +116,9 @@ public final class JsrSupport {
 
 	/**
 	 * Returns <jk>true</jk> if the annotation is a singleton marker.
+	 *
+	 * @param annotation The annotation to inspect.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the annotation is a singleton marker.
 	 */
 	public static boolean isSingletonAnnotation(AnnotationInfo<?> annotation) {
 		var name = annotation.getName();
@@ -115,6 +127,9 @@ public final class JsrSupport {
 
 	/**
 	 * Returns <jk>true</jk> if the class is a supported provider interface.
+	 *
+	 * @param type The class to inspect.  Can be <jk>null</jk>, in which case <jk>false</jk> is returned.
+	 * @return <jk>true</jk> if the class is a supported provider interface.
 	 */
 	public static boolean isProviderType(Class<?> type) {
 		return type != null && eqa(type.getName(), JUNEAU_PROVIDER, JAKARTA_PROVIDER, JAVAX_PROVIDER);
@@ -122,6 +137,9 @@ public final class JsrSupport {
 
 	/**
 	 * Returns <jk>true</jk> if the annotation is a post-construct lifecycle marker.
+	 *
+	 * @param annotation The annotation to inspect.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the annotation is a post-construct lifecycle marker.
 	 */
 	public static boolean isPostConstructAnnotation(AnnotationInfo<?> annotation) {
 		var name = annotation.getName();
@@ -130,6 +148,9 @@ public final class JsrSupport {
 
 	/**
 	 * Returns <jk>true</jk> if the annotation is a pre-destroy lifecycle marker.
+	 *
+	 * @param annotation The annotation to inspect.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the annotation is a pre-destroy lifecycle marker.
 	 */
 	public static boolean isPreDestroyAnnotation(AnnotationInfo<?> annotation) {
 		var name = annotation.getName();
@@ -142,6 +163,9 @@ public final class JsrSupport {
 	 * <p>
 	 * For <c>@Named</c>, returns the annotation value directly.  For qualifier-meta annotations,
 	 * this returns the annotation's own <c>value()</c> attribute if present and string-typed.
+	 *
+	 * @param annotation The annotation to inspect.  Must not be <jk>null</jk>.
+	 * @return The qualifier value, or <jk>null</jk> if the annotation carries no qualifier value.
 	 */
 	public static String qualifierValue(AnnotationInfo<?> annotation) {
 		if (isNamedAnnotation(annotation))
@@ -159,7 +183,7 @@ public final class JsrSupport {
 	 * {@code org.springframework.beans.factory.annotation.Value} by FQN — no compile-time Spring
 	 * dependency in {@code juneau-commons}.
 	 *
-	 * @param annotation The annotation to inspect.
+	 * @param annotation The annotation to inspect.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if {@code annotation} is one of the recognized {@code @Value} variants.
 	 */
 	public static boolean isValueAnnotation(AnnotationInfo<?> annotation) {
@@ -175,7 +199,7 @@ public final class JsrSupport {
 	 * Both Juneau's {@code @Value} and Spring's {@code @Value} expose a single {@code String value()}
 	 * attribute, so a uniform {@code getValue()} lookup against the annotation works for either.
 	 *
-	 * @param annotation The annotation to inspect.
+	 * @param annotation The annotation to inspect.  Must not be <jk>null</jk>.
 	 * @return The {@code value()} string, or {@code null} if {@code annotation} is not a {@code @Value}.
 	 */
 	public static String valueExpression(AnnotationInfo<?> annotation) {
@@ -192,7 +216,7 @@ public final class JsrSupport {
 	 * ({@code javax.validation.Valid}), and Spring's {@code @Validated} group-selector by FQN &mdash; no
 	 * compile-time Jakarta Validation or Spring dependency in {@code juneau-commons}.
 	 *
-	 * @param annotation The annotation to inspect.
+	 * @param annotation The annotation to inspect.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if {@code annotation} is one of the recognized validation opt-in markers.
 	 */
 	public static boolean isValidAnnotation(AnnotationInfo<?> annotation) {

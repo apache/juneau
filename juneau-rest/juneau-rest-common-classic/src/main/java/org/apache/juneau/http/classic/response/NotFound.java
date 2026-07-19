@@ -117,7 +117,7 @@ public class NotFound extends BasicHttpException {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy.
+	 * @param copyFrom The bean to copy.  Must not be <jk>null</jk>.
 	 */
 	protected NotFound(NotFound copyFrom) {
 		super(copyFrom);

@@ -20,6 +20,7 @@ import java.io.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.utils.*;
 
 
 /**
@@ -141,7 +142,7 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isFalse() throws AssertionError {
-		if (Boolean.TRUE.equals(value()))
+		if (ObjectUtils.isTrue(value()))
 			throw error(MSG_valueWasTrue);
 		return returns();
 	}
@@ -153,7 +154,7 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isTrue() throws AssertionError {
-		if (Boolean.FALSE.equals(value()))
+		if (ObjectUtils.isFalse(value()))
 			throw error(MSG_valueWasFalse);
 		return returns();
 	}

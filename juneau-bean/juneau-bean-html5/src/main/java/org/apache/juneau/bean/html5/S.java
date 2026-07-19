@@ -88,7 +88,7 @@ public class S extends HtmlElementMixed {
 	/**
 	 * Creates an {@link S} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public S(Object...children) {
 		children(children);

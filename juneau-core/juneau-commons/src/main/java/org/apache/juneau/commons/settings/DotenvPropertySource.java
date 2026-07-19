@@ -46,7 +46,7 @@ public class DotenvPropertySource implements PropertySource {
 	/**
 	 * Constructor.
 	 *
-	 * @param path Dotenv path.
+	 * @param path Dotenv path.  Can be <jk>null</jk>, in which case no properties are loaded.
 	 */
 	public DotenvPropertySource(Path path) {
 		this.path = path;

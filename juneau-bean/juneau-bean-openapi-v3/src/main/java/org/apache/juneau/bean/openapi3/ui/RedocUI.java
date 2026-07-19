@@ -110,9 +110,9 @@ public class RedocUI extends ObjectSwap<OpenApi,Div> {
 	private static void appendOperation(Ul ul, String path, String verb, Operation op) {
 		if (op == null)
 			return;
-		var anchor = "op-" + verb.toLowerCase() + "-" + path.replaceAll("[^A-Za-z0-9]", "_");
+		var anchor = "op-" + lcr(verb) + "-" + path.replaceAll("[^A-Za-z0-9]", "_");
 		var label = nn(op.getSummary()) ? op.getSummary() : verb + " " + path;
-		ul.child(li(span(verb).class_("redoc-method redoc-method-" + verb.toLowerCase()), a("#" + anchor, label)));
+		ul.child(li(span(verb).class_("redoc-method redoc-method-" + lcr(verb)), a("#" + anchor, label)));
 	}
 
 	private static Div content(OpenApi openApi) {
@@ -156,9 +156,9 @@ public class RedocUI extends ObjectSwap<OpenApi,Div> {
 	private static void renderOperation(Div contentDiv, String path, String verb, Operation op) {
 		if (op == null)
 			return;
-		var anchor = "op-" + verb.toLowerCase() + "-" + path.replaceAll("[^A-Za-z0-9]", "_");
+		var anchor = "op-" + lcr(verb) + "-" + path.replaceAll("[^A-Za-z0-9]", "_");
 		contentDiv.child(div(
-			h2(verb + " " + path).id(anchor).class_("redoc-op-title redoc-op-title-" + verb.toLowerCase()),
+			h2(verb + " " + path).id(anchor).class_("redoc-op-title redoc-op-title-" + lcr(verb)),
 			nn(op.getSummary()) ? div(op.getSummary()).class_("redoc-op-summary") : null,
 			nn(op.getDescription()) ? div(op.getDescription()).class_("redoc-op-desc") : null
 		).class_("redoc-op-block"));

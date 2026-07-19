@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.msgpack;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 
@@ -336,7 +338,7 @@ public class MsgPackTokenReader implements TokenReader {
 	public byte[] getBinary() {
 		if (currentToken != TokenType.VALUE_BINARY)
 			throw new IllegalStateException("Current token is not VALUE_BINARY (was " + currentToken + ")");
-		return currentBinary == null ? null : currentBinary.clone();
+		return cp(currentBinary);
 	}
 
 	@Override /* TokenReader */

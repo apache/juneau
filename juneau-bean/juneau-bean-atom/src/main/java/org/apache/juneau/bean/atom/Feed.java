@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.atom;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.xml.XmlFormat.*;
 
 import java.util.*;
@@ -126,9 +127,9 @@ public class Feed extends CommonEntry {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param id The feed identifier.
-	 * @param title The feed title.
-	 * @param updated The feed updated timestamp.
+	 * @param id The feed identifier.  Can be <jk>null</jk>.
+	 * @param title The feed title.  Can be <jk>null</jk>.
+	 * @param updated The feed updated timestamp.  Can be <jk>null</jk>.
 	 */
 	public Feed(Id id, Text title, Calendar updated) {
 		super(id, title, updated);
@@ -137,9 +138,9 @@ public class Feed extends CommonEntry {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param id The feed identifier.
-	 * @param title The feed title.
-	 * @param updated The feed updated timestamp.
+	 * @param id The feed identifier.  Can be <jk>null</jk>.
+	 * @param title The feed title.  Can be <jk>null</jk>.
+	 * @param updated The feed updated timestamp.  Can be <jk>null</jk>.
 	 */
 	public Feed(String id, String title, String updated) {
 		super(id, title, updated);
@@ -159,7 +160,7 @@ public class Feed extends CommonEntry {
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format = COLLAPSED)
-	public Entry[] getEntries() { return entries; }
+	public Entry[] getEntries() { return cp(entries); }
 
 	/**
 	 * Bean property getter:  <property>generator</property>.
@@ -273,7 +274,7 @@ public class Feed extends CommonEntry {
 	 * @return This object.
 	 */
 	public Feed setEntries(Entry...value) {
-		entries = value;
+		entries = cp(value);
 		return this;
 	}
 

@@ -89,18 +89,33 @@ public final class RrpcInterfaceMethodMeta {
 	 */
 	public record Policy(Class<?>[] interceptors, String timeout, int retries, boolean retryNonIdempotent, boolean throwOnError) {
 
+		/**
+		 * Compact constructor.
+		 *
+		 * <p>
+		 * Defensively clones the mutable {@code interceptors} array so callers cannot mutate the cached policy's state.
+		 */
+		public Policy {
+			interceptors = interceptors == null ? new Class<?>[0] : cp(interceptors);
+		}
+
 		/** The empty (no-op) policy used for methods that declare none of the cross-cutting policy members. */
 		public static final Policy NONE = new Policy(new Class<?>[0], "", 0, false, false);
 
 		@Override
+		public Class<?>[] interceptors() {
+			return cp(interceptors);
+		}
+
+		@Override
 		public boolean equals(Object o) {
 			if (this == o) return true;
-			if (!(o instanceof Policy other)) return false;
-			return Arrays.equals(interceptors, other.interceptors)
-				&& timeout.equals(other.timeout)
-				&& retries == other.retries
-				&& retryNonIdempotent == other.retryNonIdempotent
-				&& throwOnError == other.throwOnError;
+			if (!(o instanceof Policy o2)) return false;
+			return Arrays.equals(interceptors, o2.interceptors)
+				&& timeout.equals(o2.timeout)
+				&& retries == o2.retries
+				&& retryNonIdempotent == o2.retryNonIdempotent
+				&& throwOnError == o2.throwOnError;
 		}
 
 		@Override

@@ -447,8 +447,8 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>$defs</property>.
 	 *
-	 * @param name The key in the defs map entry.
-	 * @param value The value in the defs map entry.
+	 * @param name The key in the defs map entry.  Can be <jk>null</jk>.
+	 * @param value The value in the defs map entry.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public JsonSchema addDef(String name, JsonSchema value) {
@@ -462,8 +462,8 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>definitions</property>.
 	 *
-	 * @param name The key in the definitions map entry.
-	 * @param value The value in the definitions map entry.
+	 * @param name The key in the definitions map entry.  Can be <jk>null</jk>.
+	 * @param value The value in the definitions map entry.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public JsonSchema addDefinition(String name, JsonSchema value) {
@@ -477,8 +477,8 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>dependencies</property>.
 	 *
-	 * @param name The key of the entry in the dependencies map.
-	 * @param value The value of the entry in the dependencies map.
+	 * @param name The key of the entry in the dependencies map.  Can be <jk>null</jk>.
+	 * @param value The value of the entry in the dependencies map.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public JsonSchema addDependency(String name, JsonSchema value) {
@@ -492,8 +492,8 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>dependentRequired</property>.
 	 *
-	 * @param name The key of the entry in the dependentRequired map.
-	 * @param value The value of the entry in the dependentRequired map.
+	 * @param name The key of the entry in the dependentRequired map.  Can be <jk>null</jk>.
+	 * @param value The value of the entry in the dependentRequired map.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public JsonSchema addDependentRequired(String name, List<String> value) {
@@ -506,8 +506,8 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>dependentSchemas</property>.
 	 *
-	 * @param name The key of the entry in the dependentSchemas map.
-	 * @param value The value of the entry in the dependentSchemas map.
+	 * @param name The key of the entry in the dependentSchemas map.  Can be <jk>null</jk>.
+	 * @param value The value of the entry in the dependentSchemas map.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public JsonSchema addDependentSchema(String name, JsonSchema value) {
@@ -724,7 +724,7 @@ public class JsonSchema {
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
 	@BeanIgnore
-	public List<JsonSchema> getAdditionalItemsAsSchemaArray() { return additionalItemsSchemaArray; }
+	public List<JsonSchema> getAdditionalItemsAsSchemaArray() { return u(additionalItemsSchemaArray); }
 
 	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
@@ -732,7 +732,7 @@ public class JsonSchema {
 	 * @return
 	 * 	The value of the <property>additionalProperties</property> property on this bean, or <jk>null</jk> if it
 	 * 	is not set.
-	 * 	Can be either a {@link Boolean} or {@link JsonSchemaArray} depending on what value was used to set it.
+	 * 	Can be either a {@link Boolean} or {@link JsonSchema} depending on what value was used to set it.
 	 */
 	@Swap(BooleanOrSchemaSwap.class)
 	public Object getAdditionalProperties() {
@@ -770,14 +770,14 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>allOf</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<JsonSchema> getAllOf() { return allOf; }
+	public List<JsonSchema> getAllOf() { return u(allOf); }
 
 	/**
 	 * Bean property getter:  <property>anyOf</property>.
 	 *
 	 * @return The value of the <property>anyOf</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<JsonSchema> getAnyOf() { return anyOf; }
+	public List<JsonSchema> getAnyOf() { return u(anyOf); }
 
 	/**
 	 * Bean property getter:  <property>const</property>.
@@ -864,7 +864,7 @@ public class JsonSchema {
 	 * @return
 	 * 	The value of the <property>dependencies</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,JsonSchema> getDependencies() { return dependencies; }
+	public Map<String,JsonSchema> getDependencies() { return u(dependencies); }
 
 	/**
 	 * Bean property getter:  <property>format</property>.
@@ -881,7 +881,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>dependentRequired</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,List<String>> getDependentRequired() { return dependentRequired; }
+	public Map<String,List<String>> getDependentRequired() { return u(dependentRequired); }
 
 	/**
 	 * Bean property getter:  <property>dependentSchemas</property>.
@@ -891,7 +891,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>dependentSchemas</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,JsonSchema> getDependentSchemas() { return dependentSchemas; }
+	public Map<String,JsonSchema> getDependentSchemas() { return u(dependentSchemas); }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -916,7 +916,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>enum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() { return enum_; }
+	public List<Object> getEnum() { return u(enum_); }
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
@@ -926,7 +926,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>examples</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getExamples() { return examples; }
+	public List<Object> getExamples() { return u(examples); }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
@@ -1120,7 +1120,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>oneOf</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<JsonSchema> getOneOf() { return oneOf; }
+	public List<JsonSchema> getOneOf() { return u(oneOf); }
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
@@ -1136,7 +1136,7 @@ public class JsonSchema {
 	 * 	The value of the <property>patternProperties</property> property on this bean, or <jk>null</jk> if it is
 	 * 	not set.
 	 */
-	public Map<String,JsonSchema> getPatternProperties() { return patternProperties; }
+	public Map<String,JsonSchema> getPatternProperties() { return u(patternProperties); }
 
 	/**
 	 * Bean property getter:  <property>prefixItems</property>.
@@ -1153,7 +1153,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>properties</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,JsonSchema> getProperties() { return properties; }
+	public Map<String,JsonSchema> getProperties() { return u(properties); }
 
 	/**
 	 * Returns the property with the specified name.
@@ -1161,7 +1161,7 @@ public class JsonSchema {
 	 * <p>
 	 * This is equivalent to calling <property>getProperty(name, <jk>false</jk>)</property>.
 	 *
-	 * @param name The property name.
+	 * @param name The property name.  Can be <jk>null</jk>.
 	 * @return The property with the specified name, or <jk>null</jk> if no property is specified.
 	 */
 	public JsonSchema getProperty(String name) {
@@ -1178,7 +1178,7 @@ public class JsonSchema {
 	 * <property>getProperty(name).resolve()</property>, except it's safe from a potential
 	 * <property>NullPointerException</property>.
 	 *
-	 * @param name The property name.
+	 * @param name The property name.  Can be <jk>null</jk>.
 	 * @param resolve If <jk>true</jk>, calls {@link #resolve()} on object before returning.
 	 * @return The property with the specified name, or <jk>null</jk> if no property is specified.
 	 */
@@ -1216,7 +1216,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>required</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<String> getRequired() { return required; }
+	public List<String> getRequired() { return u(required); }
 
 	/**
 	 * Bean property getter:  <property>$schema</property>.
@@ -1360,6 +1360,7 @@ public class JsonSchema {
 	 * @param value
 	 * 	The new value for the <property>additionalItems</property> property on this bean.
 	 * 	This object must be of type {@link Boolean} or {@link JsonSchemaArray}.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
@@ -1385,6 +1386,7 @@ public class JsonSchema {
 	 * @param value
 	 * 	The new value for the <property>additionalProperties</property> property on this bean.
 	 * 	This object must be of type {@link Boolean} or {@link JsonSchema}.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
@@ -1680,7 +1682,7 @@ public class JsonSchema {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param value The new value for the <property>id</property> property on this bean.
+	 * @param value The new value for the <property>id</property> property on this bean.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 * @deprecated Use {@link #setIdUri(Object)} instead.
 	 */
@@ -1706,7 +1708,7 @@ public class JsonSchema {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param value The new value for the <property>$id</property> property on this bean.
+	 * @param value The new value for the <property>$id</property> property on this bean.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	@BeanProp("$id")
@@ -1737,6 +1739,7 @@ public class JsonSchema {
 	 * @param value
 	 * 	The new value for the <property>items</property> property on this bean.
 	 * 	This object must be of type {@link JsonSchema} or {@link JsonSchemaArray}.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
@@ -1981,7 +1984,7 @@ public class JsonSchema {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param value The new value for the <property>$ref</property> property on this bean.
+	 * @param value The new value for the <property>$ref</property> property on this bean.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	@BeanProp("$ref")
@@ -2024,7 +2027,7 @@ public class JsonSchema {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param value The new value for the <property>schemaVersion</property> property on this bean.
+	 * @param value The new value for the <property>schemaVersion</property> property on this bean.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	@BeanProp("$schema")
@@ -2078,6 +2081,7 @@ public class JsonSchema {
 	 * @param value
 	 * 	The new value for the <property>type</property> property on this bean.
 	 * 	This object must be of type {@link JsonType} or {@link JsonTypeArray}.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */

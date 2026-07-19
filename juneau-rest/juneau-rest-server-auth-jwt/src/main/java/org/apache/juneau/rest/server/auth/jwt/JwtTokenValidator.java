@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth.jwt;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.net.*;
@@ -241,12 +242,12 @@ public class JwtTokenValidator implements TokenValidator {
 		public Builder algorithms(JWSAlgorithm...values) {
 			assertArgNotNull("values", values);
 			if (values.length == 0)
-				throw new IllegalArgumentException("algorithms allowlist must be non-empty");
+				throw iaex("algorithms allowlist must be non-empty");
 			Set<JWSAlgorithm> next = new LinkedHashSet<>();
 			for (var a : values) {
 				assertArgNotNull("algorithm", a);
 				if (Algorithm.NONE.equals(a))
-					throw new IllegalArgumentException("\"none\" algorithm is permanently rejected (RFC 7518 §3.6 unsafe)");
+					throw iaex("\"none\" algorithm is permanently rejected (RFC 7518 §3.6 unsafe)");
 				next.add(a);
 			}
 			algorithms = next;
@@ -262,9 +263,9 @@ public class JwtTokenValidator implements TokenValidator {
 		public Builder clockSkew(Duration value) {
 			assertArgNotNull("value", value);
 			if (value.isNegative())
-				throw new IllegalArgumentException("clockSkew must be non-negative");
+				throw iaex("clockSkew must be non-negative");
 			if (value.compareTo(MAX_CLOCK_SKEW) > 0)
-				throw new IllegalArgumentException("clockSkew must not exceed 5 minutes (was " + value + ")");
+				throw iaex("clockSkew must not exceed 5 minutes (was %s)", value);
 			clockSkew = value;
 			return this;
 		}
@@ -278,7 +279,7 @@ public class JwtTokenValidator implements TokenValidator {
 		public Builder jwksCacheTtl(Duration value) {
 			assertArgNotNull("value", value);
 			if (value.isZero() || value.isNegative())
-				throw new IllegalArgumentException("jwksCacheTtl must be positive");
+				throw iaex("jwksCacheTtl must be positive");
 			jwksCacheTtl = value;
 			return this;
 		}
@@ -324,10 +325,9 @@ public class JwtTokenValidator implements TokenValidator {
 		public Builder jwksEagerRefreshCooldown(Duration value) {
 			assertArgNotNull("value", value);
 			if (value.isZero() || value.isNegative())
-				throw new IllegalArgumentException("jwksEagerRefreshCooldown must be positive");
+				throw iaex("jwksEagerRefreshCooldown must be positive");
 			if (value.compareTo(Duration.ofSeconds(60)) > 0)
-				throw new IllegalArgumentException(
-					"jwksEagerRefreshCooldown must not exceed 60 seconds (was " + value + ")");
+				throw iaex("jwksEagerRefreshCooldown must not exceed 60 seconds (was %s)", value);
 			jwksEagerRefreshCooldown = value;
 			return this;
 		}
@@ -351,17 +351,15 @@ public class JwtTokenValidator implements TokenValidator {
 		 */
 		public JwtTokenValidator build() {
 			if (issuer == null)
-				throw new IllegalStateException("JwtTokenValidator requires an issuer");
+				throw isex("JwtTokenValidator requires an issuer");
 			if (audience == null)
-				throw new IllegalStateException("JwtTokenValidator requires an audience");
+				throw isex("JwtTokenValidator requires an audience");
 			if (jwksUrl == null && jwkSource == null)
-				throw new IllegalStateException("JwtTokenValidator requires either jwksUrl(...) or jwkSource(...)");
+				throw isex("JwtTokenValidator requires either jwksUrl(...) or jwkSource(...)");
 			if (jwksUrl != null && jwkSource != null)
-				throw new IllegalStateException("JwtTokenValidator: jwksUrl(...) and jwkSource(...) are mutually exclusive");
+				throw isex("JwtTokenValidator: jwksUrl(...) and jwkSource(...) are mutually exclusive");
 			if (jwksEagerRefreshCooldown.compareTo(jwksCacheTtl) > 0)
-				throw new IllegalStateException(
-					"jwksEagerRefreshCooldown (" + jwksEagerRefreshCooldown
-					+ ") must not exceed jwksCacheTtl (" + jwksCacheTtl + ")");
+				throw isex("jwksEagerRefreshCooldown (%s) must not exceed jwksCacheTtl (%s)", jwksEagerRefreshCooldown, jwksCacheTtl);
 			return new JwtTokenValidator(this);
 		}
 	}
@@ -428,6 +426,7 @@ public class JwtTokenValidator implements TokenValidator {
 
 	@Override /* Overridden from TokenValidator */
 	public Principal validate(String token) throws AuthenticationException {
+		assertArgNotNull("token", token);
 		JWT jwt;
 		try {
 			jwt = JWTParser.parse(token);
@@ -435,10 +434,10 @@ public class JwtTokenValidator implements TokenValidator {
 			throw new AuthenticationException(e, "JWT could not be parsed")
 				.wwwAuthenticate("Bearer error=\"invalid_token\", error_description=\"malformed JWT\"");
 		}
-		if (! (jwt instanceof SignedJWT signed))
+		if (! (jwt instanceof SignedJWT jwt2))
 			throw new AuthenticationException("JWT must be signed (alg=none and unsigned JWTs are rejected)")
 				.wwwAuthenticate("Bearer error=\"invalid_token\", error_description=\"unsigned JWT\"");
-		var alg = signed.getHeader().getAlgorithm();
+		var alg = jwt2.getHeader().getAlgorithm();
 		if (alg == null || Algorithm.NONE.equals(alg))
 			throw new AuthenticationException("JWT alg \"none\" is not permitted")
 				.wwwAuthenticate("Bearer error=\"invalid_token\", error_description=\"alg=none rejected\"");
@@ -454,7 +453,7 @@ public class JwtTokenValidator implements TokenValidator {
 
 		JWTClaimsSet claims;
 		try {
-			claims = processor.process(signed, null);
+			claims = processor.process(jwt2, null);
 		} catch (BadJOSEException e) {
 			throw new AuthenticationException(e, "JWT validation failed: " + e.getMessage())
 				.wwwAuthenticate("Bearer error=\"invalid_token\", error_description=\"" + sanitize(e.getMessage()) + "\"");

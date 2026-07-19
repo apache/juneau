@@ -46,8 +46,8 @@ public class ReactorReactiveAdapter implements ReactiveStreamsAdapter {
 
 	@Override /* Overridden from ReactiveStreamsAdapter */
 	public Adaptation adapt(Object value) {
-		if (value instanceof Mono<?> m)
-			return Adaptation.single(m.toFuture());
+		if (value instanceof Mono<?> value2)
+			return Adaptation.single(value2.toFuture());
 		var f = (Flux<?>) value;
 		return Adaptation.stream(FlowAdapters.toFlowPublisher(f));
 	}

@@ -18,6 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.swagger.SwaggerCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -208,7 +209,7 @@ public class ParameterInfo extends SwaggerElement {
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
 		this.format = copyFrom.format;
 		this.in = copyFrom.in;
-		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
+		this.items = copyOf(copyFrom.items);
 		this.maximum = copyFrom.maximum;
 		this.maxItems = copyFrom.maxItems;
 		this.maxLength = copyFrom.maxLength;
@@ -219,7 +220,7 @@ public class ParameterInfo extends SwaggerElement {
 		this.name = copyFrom.name;
 		this.pattern = copyFrom.pattern;
 		this.required = copyFrom.required;
-		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
+		this.schema = copyOf(copyFrom.schema);
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
 
@@ -403,7 +404,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Object> getEnum() { return nie(enum_); }
+	public Set<Object> getEnum() { return u(nie(enum_)); }
 
 	/**
 	 * Bean property getter:  <property>example</property>.
@@ -423,7 +424,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,String> getExamples() { return examples; }
+	public Map<String,String> getExamples() { return u(examples); }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.

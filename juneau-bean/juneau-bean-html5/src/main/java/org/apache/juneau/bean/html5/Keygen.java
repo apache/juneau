@@ -110,6 +110,7 @@ public class Keygen extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Keygen autofocus(Object value) {
@@ -127,7 +128,7 @@ public class Keygen extends HtmlElementVoid {
 	 * <p>
 	 * The challenge string is typically provided by the server and used to verify the key generation.
 	 *
-	 * @param value The challenge string to package with the generated key.
+	 * @param value The challenge string to package with the generated key. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Keygen challenge(String value) {
@@ -164,6 +165,7 @@ public class Keygen extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Keygen disabled(Object value) {
@@ -181,7 +183,7 @@ public class Keygen extends HtmlElementVoid {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param value The ID of the form element to associate with this keygen.
+	 * @param value The ID of the form element to associate with this keygen. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Keygen form(String value) {
@@ -215,7 +217,7 @@ public class Keygen extends HtmlElementVoid {
 	 *  	<li><js>"EC"</js> - Elliptic curve key pair</li>
 	 * </ul>
 	 *
-	 * @param value The type of cryptographic key to generate.
+	 * @param value The type of cryptographic key to generate. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Keygen keytype(String value) {
@@ -239,7 +241,7 @@ public class Keygen extends HtmlElementVoid {
 	 * <p>
 	 * The name should be unique within the form and should not contain spaces or special characters.
 	 *
-	 * @param value The name of the keygen element for submission and API access.
+	 * @param value The name of the keygen element for submission and API access. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Keygen name(String value) {

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
@@ -48,7 +50,7 @@ public class JsonSchema {
 	/**
 	 * Sets the schema type keyword.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchema setType(String value) {
@@ -62,13 +64,13 @@ public class JsonSchema {
 	 * @return The properties map, or {@code null} if not set.
 	 */
 	public Map<String, JsonSchema> getProperties() {
-		return properties;
+		return u(properties);
 	}
 
 	/**
 	 * Sets object property schemas.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchema setProperties(Map<String, JsonSchema> value) {
@@ -82,13 +84,13 @@ public class JsonSchema {
 	 * @return The required list, or {@code null} if not set.
 	 */
 	public List<String> getRequired() {
-		return required;
+		return u(required);
 	}
 
 	/**
 	 * Sets required property names.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchema setRequired(List<String> value) {
@@ -108,7 +110,7 @@ public class JsonSchema {
 	/**
 	 * Sets {@code additionalProperties}.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchema setAdditionalProperties(Object value) {
@@ -128,7 +130,7 @@ public class JsonSchema {
 	/**
 	 * Sets array items schema.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchema setItems(JsonSchema value) {
@@ -142,13 +144,13 @@ public class JsonSchema {
 	 * @return The defs map, or {@code null} if not set.
 	 */
 	public Map<String, JsonSchema> getDefs() {
-		return defs;
+		return u(defs);
 	}
 
 	/**
 	 * Sets {@code $defs}.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchema setDefs(Map<String, JsonSchema> value) {

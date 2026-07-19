@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.test.junit;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
@@ -437,6 +438,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * @since 10.0.0
 	 */
 	public static OverrideSet discoverOverrides(Object testInstance) {
+		assertArgNotNull("testInstance", testInstance);
 		var classScoped = buildClassScopeStoreWithMode(testInstance.getClass());
 		var methodScoped = buildMethodScopeStoreWithMode(testInstance, classScoped.store());
 		// Unify the two scopes' modes: an empty scope contributes no constraint; a populated one does.
@@ -603,7 +605,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 		} catch (ReflectiveOperationException e) {
 			throw new ExtensionContextException(
 				"Failed to invoke @TestBean factory method: " + describe(method),
-				e.getCause() != null ? e.getCause() : e);
+				or(e.getCause(), e));
 		}
 		var type = ann.type() == Object.class ? method.getReturnType() : ann.type();
 		registerValue(store, type, value, ann.name(), describe(method));

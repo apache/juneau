@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.commons.svl;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-
 import java.io.*;
 
 /**
@@ -91,16 +89,5 @@ abstract sealed class TemplateSegment permits LiteralSegment, VarRefSegment, Scr
 		if (e instanceof VarResolverException e2)
 			return e2;
 		throw new VarResolverException(e, "Problem occurred resolving variable '%s' in string '%s'", identifier, sourceFragment);
-	}
-
-	/**
-	 * Convert {@link IOException} to {@link RuntimeException} for resolve paths that go
-	 * through writer-based dispatch.
-	 *
-	 * @param e The IOException.
-	 * @return The wrapped runtime exception.
-	 */
-	static RuntimeException wrapIo(IOException e) {
-		return toRex(e);
 	}
 }

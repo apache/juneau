@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.toml;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -174,7 +175,7 @@ public class TomlParser extends ReaderParser implements RecordReadable {
 	 */
 	public TomlParser(Builder builder) {
 		super(builder);
-		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
+		nullValue = or(builder.nullValue, "<NULL>");
 	}
 
 	/**

@@ -71,7 +71,7 @@ public class Map extends HtmlElementContainer {
 	/**
 	 * Creates a {@link Map} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Map(Object...children) {
 		children(children);
@@ -153,7 +153,7 @@ public class Map extends HtmlElementContainer {
 	 * <p>
 	 * The name should be unique within the document and should not contain spaces or special characters.
 	 *
-	 * @param value The name of the image map for referencing from img elements.
+	 * @param value The name of the image map for referencing from img elements. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Map name(String value) {

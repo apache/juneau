@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -97,7 +96,7 @@ public class Callback extends OpenApiElement {
 	 */
 	public Callback(Callback copyFrom) {
 		super(copyFrom);
-		this.callbacks = copyOf(copyFrom.callbacks);
+		this.callbacks = cp(copyFrom.callbacks);
 	}
 
 	/**
@@ -139,7 +138,7 @@ public class Callback extends OpenApiElement {
 	 *
 	 * @return The callbacks map.
 	 */
-	public Map<String,PathItem> getCallbacks() { return callbacks; }
+	public Map<String,PathItem> getCallbacks() { return u(callbacks); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {

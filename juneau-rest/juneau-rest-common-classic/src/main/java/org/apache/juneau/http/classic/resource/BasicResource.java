@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.classic.resource;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -68,7 +69,7 @@ public class BasicResource implements HttpResource {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean bean copied.
+	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
 	public BasicResource(BasicResource copyFrom) {
 		this.entity = copyFrom.entity.copy();
@@ -203,11 +204,12 @@ public class BasicResource implements HttpResource {
 	/**
 	 * Copies the contents of the specified HTTP response to this builder.
 	 *
-	 * @param response The response to copy from.  Must not be null.
+	 * @param response The response to copy from.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 * @throws IOException If content could not be retrieved.
 	 */
 	public BasicResource copyFrom(HttpResponse response) throws IOException {
+		assertArgNotNull("response", response);
 		addHeaders(response.getAllHeaders());
 		setContent(response.getEntity().getContent());
 		return this;
@@ -420,7 +422,7 @@ public class BasicResource implements HttpResource {
 	/**
 	 * Sets the specified headers in this builder.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicResource setHeaders(HeaderList value) {

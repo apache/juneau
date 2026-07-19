@@ -625,8 +625,8 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	public FilteredMap<K,V> addAny(Object...values) {
 		if (values != null) {
 			for (var o : values) {
-				if (o != null && o instanceof Map<?,?> m) {
-					addAll(m);
+				if (o != null && o instanceof Map<?,?> o2) {
+					addAll(o2);
 				}
 			}
 		}

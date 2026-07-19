@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.urlencoding;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -97,7 +97,7 @@ public class UrlEncodingAnnotation {
 
 		Object(UrlEncodingAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			expandedParams = b.expandedParams;
 		}
 

@@ -18,7 +18,7 @@ package org.apache.juneau.marshall;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -153,9 +153,9 @@ public class SwapAnnotation {
 
 		Object(SwapAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			impl = b.impl;
-			mediaTypes = copyOf(b.mediaTypes);
+			mediaTypes = cp(b.mediaTypes);
 			template = b.template;
 			value = b.value;
 		}

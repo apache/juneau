@@ -80,7 +80,7 @@ public class HttpMethod {
 	 * <p>
 	 * By default, anything not in this list can have content:  <c>GET, HEAD, DELETE, CONNECT, OPTIONS, TRACE</c>.
 	 *
-	 * @param name The HTTP method.
+	 * @param name The HTTP method. Can be <jk>null</jk> (treated as an empty string, which returns <jk>true</jk>).
 	 * @return <jk>true</jk> if specified http method has content.
 	 */
 	public static boolean hasContent(String name) {

@@ -44,7 +44,7 @@ public class JsonRpcRequest {
 	/**
 	 * Sets the JSON-RPC protocol version.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonRpcRequest setJsonrpc(String value) {
@@ -64,7 +64,7 @@ public class JsonRpcRequest {
 	/**
 	 * Sets the request id.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonRpcRequest setId(Object value) {
@@ -84,7 +84,7 @@ public class JsonRpcRequest {
 	/**
 	 * Sets the JSON-RPC method name.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonRpcRequest setMethod(String value) {
@@ -104,7 +104,7 @@ public class JsonRpcRequest {
 	/**
 	 * Sets method parameters.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonRpcRequest setParams(Object value) {

@@ -99,7 +99,7 @@ public class Link extends HtmlElementVoid {
 	/**
 	 * Creates a {@link Link} element with the specified {@link Link#href(Object)} attribute.
 	 *
-	 * @param href The {@link Link#href(Object)} attribute.
+	 * @param href The {@link Link#href(Object)} attribute. Can be <jk>null</jk>.
 	 */
 	public Link(Object href) {
 		href(href);
@@ -132,7 +132,7 @@ public class Link extends HtmlElementVoid {
 	 * 	<li><js>"worker"</js> - Web worker script</li>
 	 * </ul>
 	 *
-	 * @param value The type of content being loaded.
+	 * @param value The type of content being loaded. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	@SuppressWarnings({
@@ -181,7 +181,7 @@ public class Link extends HtmlElementVoid {
 	 * 	<li><js>"use-credentials"</js> - Cross-origin requests include credentials</li>
 	 * </ul>
 	 *
-	 * @param value How to handle cross-origin requests.
+	 * @param value How to handle cross-origin requests. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Link crossorigin(String value) {
@@ -217,6 +217,7 @@ public class Link extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Link href(Object value) {
@@ -242,7 +243,7 @@ public class Link extends HtmlElementVoid {
 	 * 	<li><js>"ja"</js> - Japanese</li>
 	 * </ul>
 	 *
-	 * @param value The language code of the linked resource.
+	 * @param value The language code of the linked resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Link hreflang(String value) {
@@ -279,7 +280,7 @@ public class Link extends HtmlElementVoid {
 	 * 	<li><js>"(max-width: 768px)"</js> - Media queries</li>
 	 * </ul>
 	 *
-	 * @param value The media types the linked resource applies to.
+	 * @param value The media types the linked resource applies to. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Link media(String value) {
@@ -607,7 +608,7 @@ public class Link extends HtmlElementVoid {
 	 * 	<li><js>"prev"</js> - Previous page in a sequence</li>
 	 * </ul>
 	 *
-	 * @param value The relationship between the document and linked resource.
+	 * @param value The relationship between the document and linked resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Link rel(String value) {
@@ -632,7 +633,7 @@ public class Link extends HtmlElementVoid {
 	 * 	<li><js>"any"</js> - Any size</li>
 	 * </ul>
 	 *
-	 * @param value The sizes of the linked icon resource.
+	 * @param value The sizes of the linked icon resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Link sizes(String value) {
@@ -688,7 +689,7 @@ public class Link extends HtmlElementVoid {
 	 * 	<li><js>"font/woff2"</js> - Web font</li>
 	 * </ul>
 	 *
-	 * @param value The MIME type of the linked resource.
+	 * @param value The MIME type of the linked resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Link type(String value) {

@@ -66,7 +66,7 @@ public class Base extends HtmlElementVoid {
 	/**
 	 * Creates a {@link Base} element with the specified {@link Base#href(Object)} attribute.
 	 *
-	 * @param value The {@link Base#href(Object)} attribute.
+	 * @param value The {@link Base#href(Object)} attribute. Can be <jk>null</jk>.
 	 */
 	public Base(Object value) {
 		href(value);
@@ -130,6 +130,7 @@ public class Base extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Base href(Object value) {
@@ -484,7 +485,7 @@ public class Base extends HtmlElementVoid {
 	 * 	<li><js>"framename"</js> - Open in a named frame</li>
 	 * </ul>
 	 *
-	 * @param value The default target for links and forms.
+	 * @param value The default target for links and forms. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Base target(String value) {

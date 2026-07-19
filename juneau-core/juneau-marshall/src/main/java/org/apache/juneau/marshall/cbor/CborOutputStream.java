@@ -173,16 +173,6 @@ public class CborOutputStream extends OutputStream {
 	}
 
 	/**
-	 * Appends CBOR undefined (0xF7).
-	 *
-	 * @return This stream.
-	 */
-	CborOutputStream appendUndefined() {
-		write1(0xF7);
-		return this;
-	}
-
-	/**
 	 * Appends a boolean value (0xF4 for false, 0xF5 for true).
 	 *
 	 * @param value The boolean value.

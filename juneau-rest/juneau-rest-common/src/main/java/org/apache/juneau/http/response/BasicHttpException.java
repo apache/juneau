@@ -128,7 +128,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @param copyFrom The instance to copy. Must not be <jk>null</jk>.
 	 */
 	protected BasicHttpException(BasicHttpException copyFrom) {
-		super(copyFrom.getMessage(), copyFrom.getCause());
+		super(assertArgNotNull("copyFrom", copyFrom).getMessage(), copyFrom.getCause());
 		this.statusLine = copyFrom.statusLine;
 		this.headers = copyFrom.headers.copy();
 		this.body = copyFrom.body;
@@ -303,8 +303,8 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	/**
 	 * Appends a header to the end of the header list.
 	 *
-	 * @param name Header name.
-	 * @param value Header value.
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param value Header value. May be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpException addHeader(String name, String value) {

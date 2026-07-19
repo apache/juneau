@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.auth.oauth;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.time.*;
 import java.util.*;
 
@@ -62,6 +64,10 @@ public record OAuthToken(
 	public boolean isExpired(Instant now, Duration skew) {
 		Objects.requireNonNull(now, "now");
 		Objects.requireNonNull(skew, "skew");
+		// Reject a negative skew: it would widen the acceptance window and accept tokens past their expiry
+		// (mirrors BoundedLruTokenCache.getToken).
+		if (skew.isNegative())
+			throw iaex("skew must be non-negative (was %s)", skew);
 		return !now.isBefore(expiresAt.minus(skew));
 	}
 }

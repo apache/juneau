@@ -234,7 +234,7 @@ public class BeanInstantiator<T> {
 	 * Creates a new bean creator builder.
 	 *
 	 * @param <T> The bean type to create.
-	 * @param beanType The bean type to create.
+	 * @param beanType The bean type to create.  Must not be <jk>null</jk>.
 	 * @return A new bean creator builder.
 	 */
 	public static <T> Builder<T> of(Class<T> beanType) {
@@ -245,7 +245,7 @@ public class BeanInstantiator<T> {
 	 * Creates a new bean creator builder with a parent bean store.
 	 *
 	 * @param <T> The bean type to create.
-	 * @param beanType The bean type to create.
+	 * @param beanType The bean type to create.  Must not be <jk>null</jk>.
 	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
 	 * @return A new bean creator builder.
 	 */
@@ -257,7 +257,7 @@ public class BeanInstantiator<T> {
 	 * Creates a new bean creator builder with a parent bean store, name, and enclosing instance.
 	 *
 	 * @param <T> The bean type to create.
-	 * @param beanType The bean type to create.
+	 * @param beanType The bean type to create.  Must not be <jk>null</jk>.
 	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
 	 * @param name The bean name. Can be <jk>null</jk>.
 	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk>.
@@ -481,7 +481,7 @@ public class BeanInstantiator<T> {
 	private Object explicitBuilder = null;
 	private final Object enclosingInstance;
 	private T explicitImplementation = null;
-	private List<Consumer<T>> postCreateHooks = new ArrayList<>();
+	private List<Consumer<T>> postCreateHooks = l();
 	private Set<String> factoryMethodNames = DEFAULT_FACTORY_METHOD_NAMES;
 	private Set<String> builderMethodNames = DEFAULT_BUILDER_METHOD_NAMES;
 	private Set<String> buildMethodNames = DEFAULT_BUILD_METHOD_NAMES;
@@ -493,10 +493,10 @@ public class BeanInstantiator<T> {
 	private boolean preferZeroArgConstructor = false;
 	private boolean silent = false;
 	private String description = null;
-	private List<UnaryOperator<T>> wrappers = new ArrayList<>();
-	private List<Validation<T>> validators = new ArrayList<>();
-	private List<Builder<? extends T>> alternatives = new ArrayList<>();
-	private List<Consumer<Object>> builderInitializers = new ArrayList<>();
+	private List<UnaryOperator<T>> wrappers = l();
+	private List<Validation<T>> validators = l();
+	private List<Builder<? extends T>> alternatives = l();
+	private List<Consumer<Object>> builderInitializers = l();
 	private boolean injectBuilder = false;
 	private boolean autoWireBuilder = false;
 	private boolean autoWireUnwrapSuppliers = true;
@@ -511,7 +511,7 @@ public class BeanInstantiator<T> {
 	/**
 	 * Constructor.
 	 *
-	 * @param beanType The bean type being created.
+	 * @param beanType The bean type being created.  Must not be <jk>null</jk>.
 	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
 	 * @param name The bean name. Can be <jk>null</jk>.
 	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk>.
@@ -529,8 +529,8 @@ public class BeanInstantiator<T> {
 	 * Adds a bean to the internal bean store and returns it.
 	 *
 	 * @param <T2> The bean type.
-	 * @param type The bean type.
-	 * @param bean The bean instance.
+	 * @param type The bean type.  Must not be <jk>null</jk>.
+	 * @param bean The bean instance.  Can be <jk>null</jk>.
 	 * @return The bean that was added.
 	 */
 	public <T2> T2 add(Class<T2> type, T2 bean) {
@@ -543,8 +543,8 @@ public class BeanInstantiator<T> {
 	 * Adds a bean to the internal bean store.
 	 *
 	 * @param <T2> The bean type.
-	 * @param type The bean type.
-	 * @param bean The bean instance.
+	 * @param type The bean type.  Must not be <jk>null</jk>.
+	 * @param bean The bean instance.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public <T2> Builder<T> addBean(Class<T2> type, T2 bean) {
@@ -557,8 +557,8 @@ public class BeanInstantiator<T> {
 	 * Adds a named bean to the internal bean store.
 	 *
 	 * @param <T2> The bean type.
-	 * @param type The bean type.
-	 * @param bean The bean instance.
+	 * @param type The bean type.  Must not be <jk>null</jk>.
+	 * @param bean The bean instance.  Can be <jk>null</jk>.
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return This object.
 	 */
@@ -1340,7 +1340,7 @@ public class BeanInstantiator<T> {
 	 * @return An unmodifiable list of debug log entries.
 	 */
 	public List<String> getDebugLog() {
-		return debug.map(x -> u(copyOf(debug.get()))).orElse(emptyList());
+		return debug.map(x -> u(cp(debug.get()))).orElse(emptyList());
 	}
 
 	/**
@@ -1356,7 +1356,7 @@ public class BeanInstantiator<T> {
 	 * 	<li class='note'>The explicit implementation is preserved even when {@link #reset()} is called, unlike cached results from suppliers.
 	 * </ul>
 	 *
-	 * @param value The bean implementation instance.
+	 * @param value The bean implementation instance.  Can be <jk>null</jk>, in which case no explicit implementation is used.
 	 * @return This object.
 	 */
 	public Builder<T> impl(T value) {
@@ -1631,7 +1631,7 @@ public class BeanInstantiator<T> {
 		c.autoWireBuilder = autoWireBuilder;
 		c.autoWireUnwrapSuppliers = autoWireUnwrapSuppliers;
 		c.noBuilder = noBuilder;
-		debug.ifPresent(x -> c.debug.set(new ArrayList<>()));
+		debug.ifPresent(x -> c.debug.set(l()));
 		return c;
 	}
 

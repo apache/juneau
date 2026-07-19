@@ -37,8 +37,8 @@ public class JsonSchemaPropertySimpleArray extends JsonSchemaProperty {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The name of the schema property.
-	 * @param elementType The JSON type of the elements in the array.
+	 * @param name The name of the schema property.  Can be <jk>null</jk>.
+	 * @param elementType The JSON type of the elements in the array.  Can be <jk>null</jk>.
 	 */
 	public JsonSchemaPropertySimpleArray(String name, JsonType elementType) {
 		setName(name);

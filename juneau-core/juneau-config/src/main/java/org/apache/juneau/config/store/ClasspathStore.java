@@ -131,6 +131,7 @@ public class ClasspathStore extends ConfigStore {
 		try {
 			return ! read(name).isEmpty();
 		} catch (@SuppressWarnings("unused") IOException e) {
+			// A read failure (missing/unreadable classpath resource) means the config is not available, so report it as not existing.
 			return false;
 		}
 	}

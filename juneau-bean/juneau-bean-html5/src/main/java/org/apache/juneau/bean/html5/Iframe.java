@@ -87,7 +87,7 @@ public class Iframe extends HtmlElementMixed {
 	/**
 	 * Creates an {@link Iframe} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Iframe(Object...children) {
 		children(children);
@@ -151,6 +151,7 @@ public class Iframe extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Iframe height(Object value) {
@@ -186,7 +187,7 @@ public class Iframe extends HtmlElementMixed {
 	 * <p>
 	 * The name should be unique within the document.
 	 *
-	 * @param value The name of the iframe for targeting.
+	 * @param value The name of the iframe for targeting. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Iframe name(String value) {
@@ -512,7 +513,7 @@ public class Iframe extends HtmlElementMixed {
 	 * 	<li><js>"allow-top-navigation"</js> - Allow navigation of top-level browsing context</li>
 	 * </ul>
 	 *
-	 * @param value Security restrictions for the iframe content.
+	 * @param value Security restrictions for the iframe content. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Iframe sandbox(String value) {
@@ -542,6 +543,7 @@ public class Iframe extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Iframe src(Object value) {
@@ -560,7 +562,7 @@ public class Iframe extends HtmlElementMixed {
 	 * <p>
 	 * The content should be valid HTML that will be displayed in the iframe.
 	 *
-	 * @param value The HTML content to display in the iframe.
+	 * @param value The HTML content to display in the iframe. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Iframe srcdoc(String value) {
@@ -601,6 +603,7 @@ public class Iframe extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Iframe width(Object value) {

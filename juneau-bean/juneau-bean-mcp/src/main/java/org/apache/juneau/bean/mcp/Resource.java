@@ -43,7 +43,7 @@ public class Resource {
 	/**
 	 * Sets the resource URI.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Resource setUri(String value) {
@@ -63,7 +63,7 @@ public class Resource {
 	/**
 	 * Sets the short name.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Resource setName(String value) {
@@ -83,7 +83,7 @@ public class Resource {
 	/**
 	 * Sets the title.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Resource setTitle(String value) {
@@ -103,7 +103,7 @@ public class Resource {
 	/**
 	 * Sets the description.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Resource setDescription(String value) {
@@ -123,7 +123,7 @@ public class Resource {
 	/**
 	 * Sets the MIME type.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Resource setMimeType(String value) {
@@ -143,7 +143,7 @@ public class Resource {
 	/**
 	 * Sets the size hint.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Resource setSize(Long value) {

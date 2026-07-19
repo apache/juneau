@@ -125,7 +125,7 @@ public class ParserSet {
 		protected Builder(Builder copyFrom) {
 			this.beanStore = copyFrom.beanStore;
 			this.impl = copyFrom.impl;
-			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
+			bcBuilder = MarshallingContext.Builder.copyOrNull(copyFrom.bcBuilder);
 			entries = list();
 			copyFrom.entries.stream().map(this::copyBuilder).forEach(entries::add);
 		}

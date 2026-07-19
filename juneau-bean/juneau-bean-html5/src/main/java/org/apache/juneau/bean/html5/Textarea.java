@@ -95,8 +95,8 @@ public class Textarea extends HtmlElementRawText {
 	 * Creates a {@link Textarea} element with the specified {@link Textarea#name(String)} attribute and
 	 * {@link Textarea#text(Object)} node.
 	 *
-	 * @param name The {@link Textarea#name(String)} attribute.
-	 * @param text The {@link Textarea#text(Object)} node.
+	 * @param name The {@link Textarea#name(String)} attribute. Can be <jk>null</jk>.
+	 * @param text The {@link Textarea#text(Object)} node. Can be <jk>null</jk>.
 	 */
 	public Textarea(String name, String text) {
 		name(name).text(text);
@@ -144,7 +144,7 @@ public class Textarea extends HtmlElementRawText {
 	 * 	<li><js>"new-password"</js> - Autocomplete for new password</li>
 	 * </ul>
 	 *
-	 * @param value Autocomplete behavior for the form field.
+	 * @param value Autocomplete behavior for the form field. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea autocomplete(String value) {
@@ -161,6 +161,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea autofocus(Object value) {
@@ -175,7 +176,7 @@ public class Textarea extends HtmlElementRawText {
 	 * Specifies the visible width of the textarea in characters. This is a hint for the browser
 	 * and may not be exactly followed depending on the font and styling.
 	 *
-	 * @param value The visible width of the textarea in characters.
+	 * @param value The visible width of the textarea in characters. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea cols(Object value) {
@@ -206,7 +207,7 @@ public class Textarea extends HtmlElementRawText {
 	 * This is useful for forms that need to preserve text direction information when submitted.
 	 * The hidden field will contain either "ltr" or "rtl" based on the textarea's direction.
 	 *
-	 * @param value The name of the hidden field for directionality information.
+	 * @param value The name of the hidden field for directionality information. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea dirname(String value) {
@@ -231,6 +232,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea disabled(Object value) {
@@ -248,7 +250,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param value The ID of the form element to associate with this textarea.
+	 * @param value The ID of the form element to associate with this textarea. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea form(String value) {
@@ -287,7 +289,7 @@ public class Textarea extends HtmlElementRawText {
 	 * 	<li><js>"search"</js> - Search keyboard</li>
 	 * </ul>
 	 *
-	 * @param value The type of virtual keyboard to display.
+	 * @param value The type of virtual keyboard to display. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea inputmode(String value) {
@@ -310,6 +312,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea maxlength(Object value) {
@@ -326,6 +329,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea minlength(Object value) {
@@ -343,7 +347,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <p>
 	 * The name should be unique within the form and should not contain spaces or special characters.
 	 *
-	 * @param value The name of the form control for submission and API access.
+	 * @param value The name of the form control for submission and API access. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea name(String value) {
@@ -662,7 +666,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <p>
 	 * The placeholder should be a brief, helpful description of the expected input.
 	 *
-	 * @param value The placeholder text to display when the textarea is empty.
+	 * @param value The placeholder text to display when the textarea is empty. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea placeholder(String value) {
@@ -679,6 +683,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea readonly(Object value) {
@@ -695,6 +700,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea required(Object value) {
@@ -709,7 +715,7 @@ public class Textarea extends HtmlElementRawText {
 	 * Specifies the visible height of the textarea in lines. This is a hint for the browser
 	 * and may not be exactly followed depending on the font and styling.
 	 *
-	 * @param value The visible height of the textarea in lines.
+	 * @param value The visible height of the textarea in lines. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea rows(Number value) {
@@ -767,7 +773,7 @@ public class Textarea extends HtmlElementRawText {
 	 * 	<li><js>"off"</js> - Text is not wrapped</li>
 	 * </ul>
 	 *
-	 * @param value How the text should be wrapped for form submission.
+	 * @param value How the text should be wrapped for form submission. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Textarea wrap(String value) {

@@ -17,6 +17,8 @@
 package org.apache.juneau.rest.server.processor;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -187,7 +189,7 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 			res.setContent(opSession.getRestContext().convertThrowable(ce));
 			return RESTART;
 		} catch (ExecutionException ee) {
-			Throwable cause = ee.getCause() == null ? ee : ee.getCause();
+			Throwable cause = or(ee.getCause(), ee);
 			res.setStatus(SC_INTERNAL_SERVER_ERROR);
 			res.setContent(opSession.getRestContext().convertThrowable(cause));
 			return RESTART;
@@ -333,6 +335,6 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 	public static boolean isAsyncDispatchOwned(HttpServletRequest req) {
 		if (req == null)
 			return false;
-		return Boolean.TRUE.equals(req.getAttribute(ATTR_ASYNC_DISPATCH_OWNED));
+		return isTrue(req.getAttribute(ATTR_ASYNC_DISPATCH_OWNED));
 	}
 }

@@ -84,7 +84,7 @@ public class Icon extends Common {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param uri The URI of the icon.
+	 * @param uri The URI of the icon.  Can be <jk>null</jk>.
 	 */
 	public Icon(Object uri) {
 		setUri(uri);

@@ -217,7 +217,7 @@ class PathItem_Test extends TestBase {
 			assertMapped(
 				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"delete,description,get,head,options,parameters,patch,post,put,servers,summary,trace,x1,x2",
-				"Operation,String,Operation,Operation,Operation,ArrayList,Operation,Operation,Operation,ArrayList,String,Operation,String,<null>"
+				"Operation,String,Operation,Operation,Operation,UnmodifiableRandomAccessList,Operation,Operation,Operation,UnmodifiableRandomAccessList,String,Operation,String,<null>"
 			);
 		}
 

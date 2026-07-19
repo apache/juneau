@@ -18,6 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -202,7 +203,7 @@ public class SchemaInfo extends OpenApiElement {
 		this.deprecated = copyFrom.deprecated;
 		this.pattern = copyFrom.pattern;
 		this.type = copyFrom.type;
-		this.discriminator = copyFrom.discriminator;
+		this.discriminator = copyOf(copyFrom.discriminator);
 		this.multipleOf = copyFrom.multipleOf;
 		this.maximum = copyFrom.maximum;
 		this.minimum = copyFrom.minimum;
@@ -218,17 +219,17 @@ public class SchemaInfo extends OpenApiElement {
 		this.readOnly = copyFrom.readOnly;
 		this.default_ = copyFrom.default_;
 		this.example = copyFrom.example;
-		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
-		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
-		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+		this.items = copyOf(copyFrom.items);
+		this.xml = copyOf(copyFrom.xml);
+		this.externalDocs = copyOf(copyFrom.externalDocs);
 		enum_.addAll(copyFrom.enum_);
 		allOf.addAll(copyFrom.allOf);
 		required.addAll(copyFrom.required);
 		anyOf.addAll(copyFrom.anyOf);
 		oneOf.addAll(copyFrom.oneOf);
 		this.properties = copyOf(copyFrom.properties, SchemaInfo::copy);
-		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
-		this.not = copyFrom.not == null ? null : copyFrom.not.copy();
+		this.additionalProperties = copyOf(copyFrom.additionalProperties);
+		this.not = copyOf(copyFrom.not);
 	}
 
 	/**
@@ -637,7 +638,7 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,SchemaInfo> getProperties() { return properties; }
+	public Map<String,SchemaInfo> getProperties() { return u(properties); }
 
 	/**
 	 * Bean property getter:  <property>readOnly</property>.

@@ -97,8 +97,8 @@ public class Track extends HtmlElementVoid {
 	 * Creates a {@link Track} element with the specified {@link Track#src(Object)} and {@link Track#kind(String)}
 	 * attributes.
 	 *
-	 * @param src The {@link Track#src(Object)} attribute.
-	 * @param kind The {@link Track#kind(String)} attribute.
+	 * @param src The {@link Track#src(Object)} attribute. Can be <jk>null</jk>.
+	 * @param kind The {@link Track#kind(String)} attribute. Can be <jk>null</jk>.
 	 */
 	public Track(Object src, String kind) {
 		src(src).kind(kind);
@@ -126,7 +126,7 @@ public class Track extends HtmlElementVoid {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param value Whether this track should be enabled by default.
+	 * @param value Whether this track should be enabled by default. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	@SuppressWarnings({
@@ -195,7 +195,7 @@ public class Track extends HtmlElementVoid {
 	 * 	<li><js>"metadata"</js> - Metadata for the media</li>
 	 * </ul>
 	 *
-	 * @param value The type of text track.
+	 * @param value The type of text track. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Track kind(String value) {
@@ -214,7 +214,7 @@ public class Track extends HtmlElementVoid {
 	 * The label should be descriptive and help users identify the track (e.g., "English Subtitles",
 	 * "Spanish Captions").
 	 *
-	 * @param value The user-visible label for the text track.
+	 * @param value The user-visible label for the text track. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Track label(String value) {
@@ -550,6 +550,7 @@ public class Track extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Track src(Object value) {
@@ -568,7 +569,7 @@ public class Track extends HtmlElementVoid {
 	 * <p>
 	 * The value should be a valid language code (e.g., "en", "es", "fr", "de").
 	 *
-	 * @param value The language code of the text track.
+	 * @param value The language code of the text track. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Track srclang(String value) {

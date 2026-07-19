@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.test.assertions.*;
 
@@ -183,8 +184,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @return <jk>true</jk> if the header value is <jk>true</jk>.
 	 */
 	public boolean isTrue() {
-		Boolean x = value();
-		return x == null ? value : x;
+		return ObjectUtils.isTrue(value());
 	}
 
 	/**

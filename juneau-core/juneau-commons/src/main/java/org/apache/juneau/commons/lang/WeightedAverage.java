@@ -30,7 +30,7 @@ public class WeightedAverage {
 	 * Add a number with a weight to this average.
 	 *
 	 * @param w The weight of the new value.
-	 * @param v The new value.
+	 * @param v The new value.  Can be <jk>null</jk>, in which case this call is a no-op.
 	 * @return This object.
 	 */
 	public WeightedAverage add(int w, Number v) {

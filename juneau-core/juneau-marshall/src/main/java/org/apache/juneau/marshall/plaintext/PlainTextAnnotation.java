@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.plaintext;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -80,7 +80,7 @@ public class PlainTextAnnotation {
 
 		Object(PlainTextAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
+			this.description = cp(b.description);
 		}
 
 		@Override /* Overridden from annotation */

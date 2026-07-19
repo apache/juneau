@@ -43,7 +43,7 @@ public class BlobResourceContents implements ResourceContents {
 	/**
 	 * Sets the resource URI.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public BlobResourceContents setUri(String value) {
@@ -63,7 +63,7 @@ public class BlobResourceContents implements ResourceContents {
 	/**
 	 * Sets the MIME type.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public BlobResourceContents setMimeType(String value) {
@@ -83,7 +83,7 @@ public class BlobResourceContents implements ResourceContents {
 	/**
 	 * Sets the base64 payload.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public BlobResourceContents setBlob(String value) {

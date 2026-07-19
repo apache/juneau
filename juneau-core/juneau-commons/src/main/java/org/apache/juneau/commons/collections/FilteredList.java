@@ -606,8 +606,8 @@ public class FilteredList<E> extends AbstractList<E> {
 			for (var o : values) {
 				if (o == null)
 					continue;
-				if (o instanceof Collection<?> c) {
-					addAllConverted(c);
+				if (o instanceof Collection<?> o2) {
+					addAllConverted(o2);
 				} else if (o.getClass().isArray()) {
 					for (int i = 0; i < java.lang.reflect.Array.getLength(o); i++) {
 						addConverted(java.lang.reflect.Array.get(o, i));

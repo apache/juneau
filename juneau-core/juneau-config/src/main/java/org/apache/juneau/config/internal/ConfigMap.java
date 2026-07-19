@@ -401,14 +401,17 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public Set<String> getKeys(String section) {
 		checkSectionName(section);
-		var cs = entries.get(section);
-		Set<String> s = imports.isEmpty() && nn(cs) ? cs.entries.keySet() : set();
-		if (! imports.isEmpty()) {
-			imports.forEach(x -> s.addAll(x.getConfigMap().getKeys(section)));
-			if (nn(cs)) // HTT - requires imports where the section doesn't exist locally (cs==null), which needs active import listeners
-				s.addAll(cs.entries.keySet());
+		try (var x = lock.read()) {
+			var cs = entries.get(section);
+			Set<String> s = imports.isEmpty() && nn(cs) ? cs.entries.keySet() : set();
+			if (! imports.isEmpty()) {
+				imports.forEach(y -> s.addAll(y.getConfigMap().getKeys(section)));
+				if (nn(cs)) // HTT - requires imports where the section doesn't exist locally (cs==null), which needs active import listeners
+					s.addAll(cs.entries.keySet());
+			}
+			// Return an order-preserving immutable snapshot so callers can't see the live entries keySet or be hit by concurrent mutation.
+			return u(cp(s));
 		}
-		return u(s);
 	}
 
 	/**
@@ -416,7 +419,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 *
 	 * @return The listeners currently associated with this config map.
 	 */
-	public Set<ConfigEventListener> getListeners() { return u(listeners); }
+	public Set<ConfigEventListener> getListeners() { return u(cp(listeners)); }
 
 	/**
 	 * Returns the pre-lines on the specified section.
@@ -435,7 +438,7 @@ public class ConfigMap implements ConfigStoreListener {
 		checkSectionName(section);
 		try (var x = lock.read()) {
 			var cs = entries.get(section);
-			return cs == null ? null : cs.preLines;
+			return cs == null ? null : u(cp(cs.preLines));
 		}
 	}
 
@@ -446,12 +449,15 @@ public class ConfigMap implements ConfigStoreListener {
 	 * 	An unmodifiable set of keys.
 	 */
 	public Set<String> getSections() {
-		var s = imports.isEmpty() ? entries.keySet() : setOfType(String.class);
-		if (! imports.isEmpty()) {
-			imports.forEach(x -> s.addAll(x.getConfigMap().getSections()));
-			s.addAll(entries.keySet());
+		try (var x = lock.read()) {
+			var s = imports.isEmpty() ? entries.keySet() : setOfType(String.class);
+			if (! imports.isEmpty()) {
+				imports.forEach(y -> s.addAll(y.getConfigMap().getSections()));
+				s.addAll(entries.keySet());
+			}
+			// Return an order-preserving immutable snapshot so callers can't see the live entries keySet or be hit by concurrent mutation.
+			return u(cp(s));
 		}
-		return u(s);
 	}
 
 	/**
@@ -674,7 +680,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public ConfigMap unregister(ConfigEventListener listener) {
 		listeners.remove(listener);
-		imports.forEach(x -> x.register(listener));
+		imports.forEach(x -> x.unregister(listener));
 		return this;
 	}
 
@@ -917,7 +923,7 @@ public class ConfigMap implements ConfigStoreListener {
 			}
 		}
 
-		lines = copyOf(lines);
+		lines = cp(lines);
 		var last = lines.size() - 1;
 
 		// S1: Looking for section.

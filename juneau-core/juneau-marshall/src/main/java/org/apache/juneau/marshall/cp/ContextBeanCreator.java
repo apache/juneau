@@ -67,7 +67,7 @@ public class ContextBeanCreator<T> {
 	protected ContextBeanCreator(ContextBeanCreator<T> copyFrom) {
 		this.type = copyFrom.type;
 		this.impl = copyFrom.impl;
-		this.builder = copyFrom.builder == null ? null : copyFrom.builder.copy();
+		this.builder = Context.Builder.copyOrNull(copyFrom.builder);
 	}
 
 	/**

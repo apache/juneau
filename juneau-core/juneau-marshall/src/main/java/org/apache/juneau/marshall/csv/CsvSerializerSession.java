@@ -173,7 +173,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 		super(builder);
 		byteArrayFormat = builder.byteArrayFormat;
 		allowNestedStructures = builder.allowNestedStructures;
-		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
+		nullValue = or(builder.nullValue, "<NULL>");
 	}
 
 	@Override /* RecordWritable */
@@ -321,12 +321,12 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 								value = formatForCsvCell(value);
 								// Use toString() to respect trimStrings setting on String values
 								if (value instanceof String s) value = toString(s);
-								w.writeEntry(value != null ? value : nullValue);
+								w.writeEntry(or(value, nullValue));
 							});
 							if (addTypeColumn && ine(typeColName)) {
 								var typeName = getBeanTypeName(this, eType, aType, null);
 								w.w(',');
-								w.writeEntry(typeName != null ? typeName : "");
+								w.writeEntry(or(typeName, ""));
 							}
 						}
 						w.w('\n');
@@ -363,12 +363,12 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 							value = formatForCsvCell(value);
 							// Apply trimStrings to map values
 							if (value instanceof String s) value = toString(s);
-							w.writeEntry(value != null ? value : nullValue);
+							w.writeEntry(or(value, nullValue));
 						});
 						if (addTypeColumn && ine(typeColName)) {
 							var typeName = getBeanTypeName(this, eType, aType, null);
 							w.w(',');
-							w.writeEntry(typeName != null ? typeName : "");
+							w.writeEntry(or(typeName, ""));
 						}
 						w.w('\n');
 					});
@@ -390,7 +390,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 								var aType = getClassMetaForObject(x);
 								var typeName = getBeanTypeName(this, eType, aType, null);
 								w.w(',');
-								w.writeEntry(typeName != null ? typeName : "");
+								w.writeEntry(or(typeName, ""));
 							} else {
 								w.w(',');
 								w.writeEntry("");

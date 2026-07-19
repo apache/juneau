@@ -41,7 +41,7 @@ public abstract class MultipartResolvingVar extends SimpleVar {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The name of this variable.
+	 * @param name The name of this variable.  Must not be <jk>null</jk>.
 	 */
 	protected MultipartResolvingVar(String name) {
 		super(name);

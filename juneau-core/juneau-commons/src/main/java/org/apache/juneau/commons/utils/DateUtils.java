@@ -61,7 +61,7 @@ public class DateUtils {
 	/**
 	 * Returns a {@link DateTimeFormatter} using either a pattern or predefined pattern name.
 	 *
-	 * @param pattern The pattern (e.g. <js>"yyyy-MM-dd"</js>) or pattern name (e.g. <js>"ISO_INSTANT"</js>).
+	 * @param pattern The pattern (e.g. <js>"yyyy-MM-dd"</js>) or pattern name (e.g. <js>"ISO_INSTANT"</js>).  Can be <jk>null</jk> or empty, in which case {@link DateTimeFormatter#ISO_INSTANT} is returned.
 	 * @return The formatter.
 	 */
 	public static DateTimeFormatter getDateTimeFormatter(String pattern) {

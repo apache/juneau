@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.http;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
@@ -90,7 +89,7 @@ public class StringRanges {
 	/**
 	 * Returns a parsed string range header value.
 	 *
-	 * @param value The raw header value.
+	 * @param value The raw header value.  Can be <jk>null</jk>.
 	 * @return A parsed header value.
 	 */
 	public static StringRanges of(String value) {
@@ -100,8 +99,8 @@ public class StringRanges {
 	/**
 	 * Returns a parsed string range header value.
 	 *
-	 * @param value The raw header value.
-	 * @return A parsed header value.
+	 * @param value The string ranges.  Can be <jk>null</jk>.
+	 * @return A parsed header value, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static StringRanges of(StringRange...value) {
 		return value == null ? null : new StringRanges(value);
@@ -133,7 +132,7 @@ public class StringRanges {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The string range header value.
+	 * @param value The string range header value.  Must not be <jk>null</jk>.
 	 */
 	public StringRanges(String value) {
 		this(parse(value));
@@ -146,7 +145,7 @@ public class StringRanges {
 	 */
 	public StringRanges(StringRange...value) {
 		this.string = join(value, ", ");
-		this.value = copyOf(value);
+		this.value = cp(value);
 	}
 
 	/**
@@ -188,7 +187,7 @@ public class StringRanges {
 	 * <p>
 	 * See <a class="doclink" href="https://www.w3.org/TR/activitypub/#retrieving-objects">ActivityPub / Retrieving Objects</a>
 	 *
-	 * @param names The names to match against.
+	 * @param names The names to match against.  Must not be <jk>null</jk>.
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int match(List<String> names) {

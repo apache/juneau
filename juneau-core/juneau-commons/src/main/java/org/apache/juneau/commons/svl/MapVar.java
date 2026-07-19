@@ -42,8 +42,8 @@ public abstract class MapVar extends DefaultingVar {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The name of this variable.
-	 * @param m The map to pull values from.
+	 * @param name The name of this variable.  Must not be <jk>null</jk>.
+	 * @param m The map to pull values from.  Must not be <jk>null</jk>.
 	 */
 	protected MapVar(String name, Map m) {
 		super(name);

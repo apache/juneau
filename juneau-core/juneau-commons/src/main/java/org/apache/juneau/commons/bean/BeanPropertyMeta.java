@@ -143,7 +143,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		/**
 		 * Sets the original bean property that this one is overriding.
 		 *
-		 * @param value The original bean property that this one is overriding.
+		 * @param value The original bean property that this one is overriding.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder delegateFor(BeanPropertyMeta value) {
@@ -194,7 +194,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		/**
 		 * Sets the overridden value of this bean property.
 		 *
-		 * @param value The overridden value of this bean property.
+		 * @param value The overridden value of this bean property.  Can be <jk>null</jk>, in which case no override is applied.
 		 * @return This object.
 		 */
 		public Builder overrideValue(Object value) {
@@ -205,7 +205,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		/**
 		 * Sets the raw metadata type for this bean property.
 		 *
-		 * @param value The raw metadata type for this bean property.
+		 * @param value The raw metadata type for this bean property.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder rawMetaType(BeanInfo<?> value) {
@@ -227,7 +227,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * ({@link BeanMeta#of(Class, BeanConfigContext)}), no resolver is available, so
 		 * {@code rawTypeMeta}/{@code typeMeta} are left <jk>null</jk> and the property runs in raw-reflection mode.
 		 *
-		 * @param value The raw metadata type for this bean property.
+		 * @param value The raw metadata type for this bean property.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder rawMetaType(Class<?> value) {
@@ -272,7 +272,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		/**
 		 * Sets the extra keys method for this bean property.
 		 *
-		 * @param value The method info that returns extra keys for this property.
+		 * @param value The method info that returns extra keys for this property.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder setExtraKeys(MethodInfo value) {
@@ -284,7 +284,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		/**
 		 * Sets the field for this bean property.
 		 *
-		 * @param value The field info for this bean property.
+		 * @param value The field info for this bean property.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder setField(FieldInfo value) {
@@ -297,7 +297,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		/**
 		 * Sets the getter method for this bean property.
 		 *
-		 * @param value The getter method info for this bean property.
+		 * @param value The getter method info for this bean property.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder setGetter(MethodInfo value) {
@@ -309,7 +309,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		/**
 		 * Sets the inner field for this bean property from a {@link FieldInfo}.
 		 *
-		 * @param value The field info containing the inner field.
+		 * @param value The field info containing the inner field.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder setInnerField(FieldInfo value) {
@@ -320,7 +320,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		/**
 		 * Sets the setter method for this bean property.
 		 *
-		 * @param value The setter method info for this bean property.
+		 * @param value The setter method info for this bean property.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder setSetter(MethodInfo value) {
@@ -347,8 +347,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 *
 		 * @param bc The bean context.  May be <jk>null</jk> for the commons-side path.
 		 * @param typeVarImpls Type variable implementations.  Ignored when {@code bc} is <jk>null</jk>.
-		 * @param bpro Bean properties read-only set.
-		 * @param bpwo Bean properties write-only set.
+		 * @param bpro Bean properties read-only set.  Must not be <jk>null</jk> (pass an empty set for none).
+		 * @param bpwo Bean properties write-only set.  Must not be <jk>null</jk> (pass an empty set for none).
 		 * @return <jk>true</jk> if this property is valid, <jk>false</jk> otherwise.
 		 * @throws Exception If validation fails.
 		 */
@@ -506,7 +506,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * Creates a builder for {@link #BeanPropertyMeta} objects.
 	 *
-	 * @param beanMeta The metadata on the bean
+	 * @param beanMeta The metadata on the bean.  Must not be <jk>null</jk>.
 	 * @param name The bean property name.
 	 * @return A new builder.
 	 */
@@ -544,7 +544,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * Creates a new BeanPropertyMeta using the contents of the specified builder.
 	 *
-	 * @param b The builder to copy fields from.
+	 * @param b The builder to copy fields from.  Must not be <jk>null</jk>.
 	 */
 	protected BeanPropertyMeta(Builder b) {
 		annotations = memoize(this::findAnnotations);
@@ -568,7 +568,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		setter = b.setter;
 		typeMeta = b.typeMeta;
 		writeOnly = b.writeOnly;
-		views = b.views != null ? Collections.unmodifiableSet(b.views) : null;
+		views = b.views != null ? u(b.views) : null;
 		readTransform = b.readTransform != null ? b.readTransform : (session, o) -> o;
 		writeTransform = b.writeTransform != null ? b.writeTransform : (session, o) -> o;
 
@@ -596,7 +596,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param pName
 	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
 	 * 	<br>Otherwise can be <jk>null</jk>.
-	 * @param value The value to add to the field.
+	 * @param value The value to add to the field.  Can be <jk>null</jk>.
 	 * @throws BeanRuntimeException If field is not a collection or array.
 	 * @throws UnsupportedOperationException If this property was built via the bean-modeling-only path
 	 * 	({@link BeanMeta#of(Class, BeanConfigContext)}).
@@ -612,7 +612,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
 			if (! m.propertyCache.containsKey(name))
-				m.propertyCache.put(name, new ArrayList<>());
+				m.propertyCache.put(name, l());
 			((List)m.propertyCache.get(name)).add(value);
 			return;
 		}
@@ -647,7 +647,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (rawTypeMeta.canCreateNewInstance())
 					c = (Collection)rawTypeMeta.newInstance();
 				else
-					c = new ArrayList<>();
+					c = l();
 
 				if (c2 != null)
 					c.addAll(c2);
@@ -699,7 +699,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
 	 * 	<br>Otherwise can be <jk>null</jk>.
 	 * @param key The key to add to the field.
-	 * @param value The value to add to the field.
+	 * @param value The value to add to the field.  Can be <jk>null</jk>.
 	 * @throws BeanRuntimeException If field is not a map or array.
 	 * @throws UnsupportedOperationException If this property was built via the bean-modeling-only path
 	 * 	({@link BeanMeta#of(Class, BeanConfigContext)}).
@@ -715,7 +715,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
 			if (! m.propertyCache.containsKey(name))
-				m.propertyCache.put(name, new LinkedHashMap<>());
+				m.propertyCache.put(name, m());
 			((Map)m.propertyCache.get(name)).put(key, value);
 			return;
 		}
@@ -744,7 +744,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (rawTypeMeta.canCreateNewInstance())
 					map = (Map)rawTypeMeta.newInstance();
 				else
-					map = new LinkedHashMap<>();
+					map = m();
 
 				map.put(key, v);
 
@@ -834,7 +834,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * </ul>
 	 *
 	 * @param <A> The annotation type to find.
-	 * @param a The annotation class to find.
+	 * @param a The annotation class to find.  Can be <jk>null</jk>, in which case an empty stream is returned.
 	 * @return A stream of annotation infos of the specified type. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> a) {
@@ -1091,7 +1091,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param pName
 	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
 	 * 	<br>Otherwise can be <jk>null</jk>.
-	 * @param value The value to set.
+	 * @param value The value to set.  Can be <jk>null</jk> to set the property to <jk>null</jk>.
 	 * @return The previous property value.
 	 * @throws BeanRuntimeException If property could not be set.
 	 */
@@ -1177,8 +1177,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (isMap && (setter == null || ! pcInfo.isAssignableFrom(vc))) {
 
 				if (! (value1 instanceof Map)) {
-					if (value1 instanceof CharSequence value21)
-						value1 = session.parseToMap(value21);
+					if (value1 instanceof CharSequence value12)
+						value1 = session.parseToMap(value12);
 					else
 						throw brex(beanMeta.getBeanInfo(), "Cannot set property '%s' of type '%s' to object of type '%s'", name, propertyClass.getName(), cn(value1));
 				}
@@ -1241,8 +1241,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			} else if (isCollection && (setter == null || ! pcInfo.isAssignableFrom(vc))) {
 
 				if (! (value1 instanceof Collection)) {
-					if (value1 instanceof CharSequence value2)
-						value1 = session.parseToList(value2);
+					if (value1 instanceof CharSequence value12)
+						value1 = session.parseToList(value12);
 					else
 						throw brex(beanMeta.getBeanInfo(), "Cannot set property '%s' of type '%s' to object of type '%s'", name, propertyClass.getName(), cn(value1));
 				}
@@ -1452,10 +1452,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (SortedSet.class.isAssignableFrom(propertyClass) || NavigableSet.class.isAssignableFrom(propertyClass))
 			return new TreeSet<>();
 		if (Set.class.isAssignableFrom(propertyClass))
-			return new LinkedHashSet<>();
+			return st();
 		if (Deque.class.isAssignableFrom(propertyClass) || Queue.class.isAssignableFrom(propertyClass))
 			return new ArrayDeque<>();
-		return new ArrayList<>();  // List or raw Collection (and any other collection shape).
+		return l();  // List or raw Collection (and any other collection shape).
 	}
 
 	/**

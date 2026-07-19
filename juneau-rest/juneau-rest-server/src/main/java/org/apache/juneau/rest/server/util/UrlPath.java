@@ -88,7 +88,7 @@ public class UrlPath {
 	 *
 	 * @return The path parts.  This is a defensive copy; modifying it does not affect this object's routing state.
 	 */
-	public String[] getParts() { return parts.clone(); }
+	public String[] getParts() { return cp(parts); }
 
 	/**
 	 * Returns the raw path passed into this object.

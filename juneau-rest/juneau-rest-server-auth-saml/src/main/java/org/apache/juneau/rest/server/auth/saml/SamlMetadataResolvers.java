@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.net.*;
 import java.net.http.*;
@@ -123,7 +125,7 @@ public final class SamlMetadataResolvers {
 				.build();
 			var resp = client.send(req, HttpResponse.BodyHandlers.ofByteArray());
 			if (resp.statusCode() < 200 || resp.statusCode() >= 300) // HTT: false branch (2xx success) requires live SAML metadata endpoint; covered by integration tests
-				throw new IOException("Failed to fetch SAML metadata from " + url + " (HTTP " + resp.statusCode() + ")");
+				throw ioex("Failed to fetch SAML metadata from %s (HTTP %s)", url, resp.statusCode());
 
 			var dbf = DocumentBuilderFactory.newInstance();
 			dbf.setNamespaceAware(true);

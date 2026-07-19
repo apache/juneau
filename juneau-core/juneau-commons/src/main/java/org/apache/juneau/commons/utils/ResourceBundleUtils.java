@@ -40,8 +40,8 @@ public class ResourceBundleUtils {
 	/**
 	 * Same as {@link ResourceBundle#getBundle(String, Locale, ClassLoader)} but never throws a {@link MissingResourceException}.
 	 *
-	 * @param baseName The base name of the resource bundle, a fully qualified class name.
-	 * @param locale The locale for which a resource bundle is desired.
+	 * @param baseName The base name of the resource bundle, a fully qualified class name.  Must not be <jk>null</jk>.
+	 * @param locale The locale for which a resource bundle is desired.  Must not be <jk>null</jk>.
 	 * @param loader The class loader from which to load the resource bundle. Must not be <jk>null</jk>.
 	 * @return The matching resource bundle, or <jk>null</jk> if it could not be found.
 	 */

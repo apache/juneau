@@ -69,9 +69,9 @@ public class Area extends HtmlElementVoid {
 	 * Creates an {@link Area} element with the specified {@link Area#shape(String)}, {@link Area#coords(String)},
 	 * and {@link Area#href(Object)} attributes.
 	 *
-	 * @param shape The {@link Area#shape(String)} attribute.
-	 * @param coords The {@link Area#coords(String)} attribute.
-	 * @param href The {@link Area#href(Object)} attribute.
+	 * @param shape The {@link Area#shape(String)} attribute. Can be <jk>null</jk>.
+	 * @param coords The {@link Area#coords(String)} attribute. Can be <jk>null</jk>.
+	 * @param href The {@link Area#href(Object)} attribute. Can be <jk>null</jk>.
 	 */
 	public Area(String shape, String coords, Object href) {
 		shape(shape).coords(coords).href(href);
@@ -99,7 +99,7 @@ public class Area extends HtmlElementVoid {
 	 * <p>
 	 * The alt text should be descriptive and convey the same information as the clickable area.
 	 *
-	 * @param value Alternative text for the area.
+	 * @param value Alternative text for the area. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Area alt(String value) {
@@ -141,7 +141,7 @@ public class Area extends HtmlElementVoid {
 	 * 	<li><js>"default"</js> - No coordinates needed</li>
 	 * </ul>
 	 *
-	 * @param value The coordinates defining the clickable area.
+	 * @param value The coordinates defining the clickable area. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Area coords(String value) {
@@ -164,6 +164,7 @@ public class Area extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Area download(Object value) {
@@ -193,6 +194,7 @@ public class Area extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Area href(Object value) {
@@ -217,7 +219,7 @@ public class Area extends HtmlElementVoid {
 	 * 	<li><js>"ja"</js> - Japanese</li>
 	 * </ul>
 	 *
-	 * @param value The language code of the linked resource.
+	 * @param value The language code of the linked resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Area hreflang(String value) {
@@ -560,7 +562,7 @@ public class Area extends HtmlElementVoid {
 	 *  	<li><js>"tag"</js> - Tag for the current page</li>
 	 * </ul>
 	 *
-	 * @param value The relationship between the document and linked resource.
+	 * @param value The relationship between the document and linked resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Area rel(String value) {
@@ -583,7 +585,7 @@ public class Area extends HtmlElementVoid {
 	 *  	<li><js>"default"</js> - Entire image area</li>
 	 * </ul>
 	 *
-	 * @param value The shape of the clickable area.
+	 * @param value The shape of the clickable area. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Area shape(String value) {
@@ -625,7 +627,7 @@ public class Area extends HtmlElementVoid {
 	 *  	<li><js>"framename"</js> - Open in a named frame</li>
 	 * </ul>
 	 *
-	 * @param value Where to open the linked resource.
+	 * @param value Where to open the linked resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Area target(String value) {
@@ -661,7 +663,7 @@ public class Area extends HtmlElementVoid {
 	 *  	<li><js>"application/zip"</js> - ZIP archive</li>
 	 * </ul>
 	 *
-	 * @param value The MIME type of the linked resource.
+	 * @param value The MIME type of the linked resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Area type(String value) {

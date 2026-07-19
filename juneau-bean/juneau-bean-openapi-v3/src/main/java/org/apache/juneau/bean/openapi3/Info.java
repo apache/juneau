@@ -19,6 +19,7 @@ package org.apache.juneau.bean.openapi3;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 
 import java.util.*;
 
@@ -137,8 +138,8 @@ public class Info extends OpenApiElement {
 		this.description = copyFrom.description;
 		this.termsOfService = copyFrom.termsOfService;
 		this.version = copyFrom.version;
-		this.contact = copyFrom.contact == null ? null : copyFrom.contact.copy();
-		this.license = copyFrom.license == null ? null : copyFrom.license.copy();
+		this.contact = copyOf(copyFrom.contact);
+		this.license = copyOf(copyFrom.license);
 	}
 
 	/**

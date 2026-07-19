@@ -114,7 +114,7 @@ public class Meta extends HtmlElementVoid {
 	 * 	<li><js>"windows-1252"</js> - Windows-1252 encoding</li>
 	 * </ul>
 	 *
-	 * @param value The character encoding for the document.
+	 * @param value The character encoding for the document. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Meta charset(String value) {
@@ -130,7 +130,7 @@ public class Meta extends HtmlElementVoid {
 	 * Specifies the value associated with the name or http-equiv attribute.
 	 * The content varies depending on the type of metadata being defined.
 	 *
-	 * @param value The metadata value (e.g., description text, viewport settings, etc.).
+	 * @param value The metadata value (e.g., description text, viewport settings, etc.). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Meta content(String value) {
@@ -175,7 +175,7 @@ public class Meta extends HtmlElementVoid {
 	 * 	<li><js>"x-ua-compatible"</js> - Browser compatibility mode</li>
 	 * </ul>
 	 *
-	 * @param value The HTTP header name to simulate.
+	 * @param value The HTTP header name to simulate. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Meta httpequiv(String value) {
@@ -211,7 +211,7 @@ public class Meta extends HtmlElementVoid {
 	 * 	<li><js>"robots"</js> - Instructions for search engine crawlers</li>
 	 * </ul>
 	 *
-	 * @param value The name of the metadata property.
+	 * @param value The name of the metadata property. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Meta name(String value) {

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -35,13 +37,13 @@ public class ListToolsResult {
 	 * @return The tools list, or {@code null} if not set.
 	 */
 	public List<Tool> getTools() {
-		return tools;
+		return u(tools);
 	}
 
 	/**
 	 * Sets the tool descriptors.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ListToolsResult setTools(List<Tool> value) {
@@ -61,7 +63,7 @@ public class ListToolsResult {
 	/**
 	 * Sets the next cursor.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ListToolsResult setNextCursor(String value) {

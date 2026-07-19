@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.xml;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -136,7 +136,7 @@ public class XmlAnnotation {
 
 		Object(XmlAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			childName = b.childName;
 			format = b.format;
 			namespace = b.namespace;

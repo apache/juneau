@@ -50,7 +50,7 @@ public final class JsonSchemaPropertyValidatorFactory implements PropertyValidat
 	public PropertyValidator create(Map<String,Object> schemaMap, Class<?> propertyType) {
 		if (ie(schemaMap))
 			return null;
-		var jm = (schemaMap instanceof JsonMap m) ? m : new JsonMap(schemaMap);
+		var jm = (schemaMap instanceof JsonMap schemaMap2) ? schemaMap2 : new JsonMap(schemaMap);
 		var schema = JsonSchemaBeanGenerator.toBean(jm);
 		return JsonSchemaValidator.of(schema);
 	}

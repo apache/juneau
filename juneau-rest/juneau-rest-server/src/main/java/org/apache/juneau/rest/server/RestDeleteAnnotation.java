@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -421,22 +421,22 @@ public class RestDeleteAnnotation {
 
 		Object(RestDeleteAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			clientVersion = b.clientVersion;
 			debug = b.debug;
 			defaultAccept = b.defaultAccept;
 			defaultCharset = b.defaultCharset;
-			defaultRequestQueryData = copyOf(b.defaultRequestQueryData);
-			defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
-			defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
-			defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
-			encoders = copyOf(b.encoders);
-			guards = copyOf(b.guards);
-			matchers = copyOf(b.matchers);
-			allowedParserOptions = copyOf(b.allowedParserOptions);
-			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
-			noInherit = copyOf(b.noInherit);
-			path = copyOf(b.path);
+			defaultRequestQueryData = cp(b.defaultRequestQueryData);
+			defaultRequestAttributes = cp(b.defaultRequestAttributes);
+			defaultRequestHeaders = cp(b.defaultRequestHeaders);
+			defaultResponseHeaders = cp(b.defaultResponseHeaders);
+			encoders = cp(b.encoders);
+			guards = cp(b.guards);
+			matchers = cp(b.matchers);
+			allowedParserOptions = cp(b.allowedParserOptions);
+			allowedSerializerOptions = cp(b.allowedSerializerOptions);
+			noInherit = cp(b.noInherit);
+			path = cp(b.path);
 			observability = b.observability;
 			asyncCompletionExecutor = b.asyncCompletionExecutor;
 			metricName = b.metricName;

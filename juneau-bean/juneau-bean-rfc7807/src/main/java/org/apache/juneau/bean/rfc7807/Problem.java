@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.rfc7807;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.net.*;
 import java.util.*;
 
@@ -124,7 +126,7 @@ public class Problem {
 	 */
 	@BeanIgnore
 	public URI getTypeOrDefault() {
-		return type == null ? DEFAULT_TYPE : type;
+		return or(type, DEFAULT_TYPE);
 	}
 
 	/**
@@ -233,7 +235,7 @@ public class Problem {
 	 */
 	@BeanProp("*")
 	public Set<String> extraKeys() {
-		return extra == null ? Collections.emptySet() : extra.keySet();
+		return extra == null ? Collections.emptySet() : u(extra.keySet());
 	}
 
 	/**
@@ -244,7 +246,7 @@ public class Problem {
 	 * <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807#section-3.2">&sect;3.2</a> extension members
 	 * that flatten into the top-level JSON object.
 	 *
-	 * @param property The property name to retrieve. Must not be <jk>null</jk>.
+	 * @param property The property name to retrieve. Can be <jk>null</jk> (a <jk>null</jk> key simply resolves to no value).
 	 * @return The property value, or <jk>null</jk> if the property does not exist.
 	 */
 	@BeanProp("*")
@@ -260,8 +262,8 @@ public class Problem {
 	 * <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807#section-3.2">&sect;3.2</a> extension members.
 	 * The extension map is lazily initialised on first use.
 	 *
-	 * @param property The property name to set. Must not be <jk>null</jk>.
-	 * @param value The new value for the property.
+	 * @param property The property name to set. Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The new value for the property. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	@BeanProp("*")

@@ -94,7 +94,7 @@ public class Progress extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Progress} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Progress(Object...children) {
 		children(children);
@@ -175,6 +175,7 @@ public class Progress extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Progress max(Object value) {
@@ -521,6 +522,7 @@ public class Progress extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Progress value(Object value) {

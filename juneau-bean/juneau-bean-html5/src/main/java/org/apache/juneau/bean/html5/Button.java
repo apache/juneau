@@ -84,7 +84,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Button} element with the specified {@link Button#type(String)} attribute.
 	 *
-	 * @param type The {@link Button#type(String)} attribute.
+	 * @param type The {@link Button#type(String)} attribute. Can be <jk>null</jk>.
 	 */
 	public Button(String type) {
 		type(type);
@@ -94,8 +94,8 @@ public class Button extends HtmlElementMixed {
 	 * Creates a {@link Button} element with the specified {@link Button#type(String)} attribute and
 	 * {@link Button#children(Object[])} nodes.
 	 *
-	 * @param type The {@link Button#type(String)} attribute.
-	 * @param children The {@link Button#children(Object[])} nodes.
+	 * @param type The {@link Button#type(String)} attribute. Can be <jk>null</jk>.
+	 * @param children The {@link Button#children(Object[])} nodes. Must not be <jk>null</jk>.
 	 */
 	public Button(String type, Object...children) {
 		type(type).children(children);
@@ -134,6 +134,7 @@ public class Button extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Button autofocus(Object value) {
@@ -182,6 +183,7 @@ public class Button extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Button disabled(Object value) {
@@ -199,7 +201,7 @@ public class Button extends HtmlElementMixed {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param value The ID of the form element to associate with this button.
+	 * @param value The ID of the form element to associate with this button. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Button form(String value) {
@@ -221,7 +223,7 @@ public class Button extends HtmlElementMixed {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param value The URL where the form data will be submitted.
+	 * @param value The URL where the form data will be submitted. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Button formaction(String value) {
@@ -243,7 +245,7 @@ public class Button extends HtmlElementMixed {
 	 *  	<li><js>"text/plain"</js> - Plain text encoding</li>
 	 * </ul>
 	 *
-	 * @param value The encoding type for form submission.
+	 * @param value The encoding type for form submission. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Button formenctype(String value) {
@@ -265,7 +267,7 @@ public class Button extends HtmlElementMixed {
 	 *  	<li><js>"dialog"</js> - Used for forms within dialog elements</li>
 	 * </ul>
 	 *
-	 * @param value The HTTP method for form submission.
+	 * @param value The HTTP method for form submission. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Button formmethod(String value) {
@@ -289,7 +291,7 @@ public class Button extends HtmlElementMixed {
 	 *  	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param value Whether to bypass form validation.
+	 * @param value Whether to bypass form validation. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Button formnovalidate(String value) {
@@ -313,7 +315,7 @@ public class Button extends HtmlElementMixed {
 	 *  	<li><js>"framename"</js> - Open in a named frame</li>
 	 * </ul>
 	 *
-	 * @param value Where to display the form response.
+	 * @param value Where to display the form response. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Button formtarget(String value) {
@@ -349,7 +351,7 @@ public class Button extends HtmlElementMixed {
 	 * <p>
 	 * The value should match the ID of a menu element in the same document.
 	 *
-	 * @param value The ID of the menu element to display as a pop-up.
+	 * @param value The ID of the menu element to display as a pop-up. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Button menu(String value) {
@@ -367,7 +369,7 @@ public class Button extends HtmlElementMixed {
 	 * <p>
 	 * The name should be unique within the form and should not contain spaces or special characters.
 	 *
-	 * @param value The name of the button for submission and API access.
+	 * @param value The name of the button for submission and API access. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Button name(String value) {
@@ -719,7 +721,7 @@ public class Button extends HtmlElementMixed {
 	 * 	<li><js>"button"</js> - Generic button with no default behavior</li>
 	 * </ul>
 	 *
-	 * @param value The type of button and its behavior.
+	 * @param value The type of button and its behavior. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Button type(String value) {
@@ -736,6 +738,7 @@ public class Button extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Button value(Object value) {

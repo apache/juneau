@@ -65,7 +65,7 @@ public final class PropertyLookupResult {
 	/**
 	 * Returns a result indicating the key is present with the specified value.
 	 *
-	 * @param value The value.
+	 * @param value The value.  Can be <jk>null</jk>, in which case the result is present with an empty value.
 	 * @return A present result.
 	 */
 	public static PropertyLookupResult present(String value) {

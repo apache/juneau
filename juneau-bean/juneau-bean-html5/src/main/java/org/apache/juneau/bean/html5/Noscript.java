@@ -88,7 +88,7 @@ public class Noscript extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Noscript} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Noscript(Object...children) {
 		children(children);

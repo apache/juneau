@@ -325,7 +325,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 	private HoconValue.HoconObject parseObject(HoconTokenizer t, HoconValue.HoconObject root, String[] pathPrefix)
 			throws IOException, ParseException {
 		var obj = new HoconValue.HoconObject();
-		var effectiveRoot = root != null ? root : obj;
+		var effectiveRoot = or(root, obj);
 		t.skipWhitespaceAndComments();
 		while (t.peek().type() != HoconTokenizer.TokenType.RBRACE && t.peek().type() != HoconTokenizer.TokenType.EOF) {
 			var path = readPath(t);

@@ -62,6 +62,12 @@ public class HttpIntegerHeader extends HttpHeaderBean {
 		return new HttpIntegerHeader(name, typedValue);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param wireValue Wire value. Can be <jk>null</jk> or empty, in which case the parsed value is <jk>null</jk>.
+	 */
 	protected HttpIntegerHeader(String name, String wireValue) {
 		super(name, wireValue);
 		this.value = toInteger(wireValue);
@@ -69,6 +75,12 @@ public class HttpIntegerHeader extends HttpHeaderBean {
 		this.lazyMode = -1;
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param typedValue The integer value. Can be <jk>null</jk>.
+	 */
 	protected HttpIntegerHeader(String name, Integer typedValue) {
 		super(name, s(typedValue));
 		this.value = typedValue;
@@ -76,6 +88,13 @@ public class HttpIntegerHeader extends HttpHeaderBean {
 		this.lazyMode = -1;
 	}
 
+	/**
+	 * Constructor with lazy value supplier.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param supplier The lazy value supplier. Must not be <jk>null</jk>.
+	 * @param lazyMode Either {@link #LAZY_WIRE_STRING} or {@link #LAZY_INTEGER}.
+	 */
 	protected HttpIntegerHeader(String name, Supplier<?> supplier, int lazyMode) {
 		super(name, lazyMode == LAZY_WIRE_STRING
 			? ((Supplier<String>) supplier)::get
@@ -89,15 +108,31 @@ public class HttpIntegerHeader extends HttpHeaderBean {
 		return o(toInteger());
 	}
 
+	/**
+	 * Returns the wire-format value of this header.
+	 *
+	 * @return The wire value, or <jk>null</jk> if the value is unset.
+	 */
 	@Override
 	public String getValue() {
 		return s(toInteger());
 	}
 
+	/**
+	 * Returns the parsed value of this header, or the specified default if unset.
+	 *
+	 * @param other The default value. Can be <jk>null</jk>.
+	 * @return The parsed value, or <c>other</c> if the value is unset. Can be <jk>null</jk> if <c>other</c> is <jk>null</jk>.
+	 */
 	public Integer orElse(Integer other) {
 		return asInteger().orElse(other);
 	}
 
+	/**
+	 * Returns the parsed value of this header.
+	 *
+	 * @return The parsed value, or <jk>null</jk> if the value is unset.
+	 */
 	public Integer toInteger() {
 		if (lazyMode == LAZY_INTEGER)
 			return ((Supplier<Integer>) lazySupplier).get();

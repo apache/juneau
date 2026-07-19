@@ -112,7 +112,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * This constructor is protected and should not be called directly. Use the constructors
 	 * of {@link MethodInfo} or {@link ConstructorInfo} instead.
 	 *
-	 * @param declaringClass The ClassInfo for the class that declares this method or constructor.
+	 * @param declaringClass The ClassInfo for the class that declares this method or constructor. Must not be <jk>null</jk>.
 	 * @param inner The constructor or method that this info represents. Must not be <jk>null</jk>.
 	 */
 	protected ExecutableInfo(ClassInfo declaringClass, Executable inner) {
@@ -264,7 +264,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * Returns the declared annotations of the specified type on this executable.
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type.
+	 * @param type The annotation type. Must not be <jk>null</jk>.
 	 * @return A stream of matching annotations.
 	 */
 	@SuppressWarnings({
@@ -911,8 +911,8 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 						if (! firstBound)
 							sb.append(" & ");
 						firstBound = false;
-						if (bound instanceof Class<?> boundClass) {
-							ClassInfo.of(boundClass).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
+						if (bound instanceof Class<?> bound2) {
+							ClassInfo.of(bound2).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
 						} else {
 							sb.append(bound.getTypeName());
 						}

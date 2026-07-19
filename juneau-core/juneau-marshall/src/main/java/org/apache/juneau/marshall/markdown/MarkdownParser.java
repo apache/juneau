@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.markdown;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -202,7 +203,7 @@ public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider
 	 */
 	public MarkdownParser(Builder<?> builder) {
 		super(builder);
-		nullValue = builder.nullValue != null ? builder.nullValue : CONST_null;
+		nullValue = or(builder.nullValue, CONST_null);
 	}
 
 	/**

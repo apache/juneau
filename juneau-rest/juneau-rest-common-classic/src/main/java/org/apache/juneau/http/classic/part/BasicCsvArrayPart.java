@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.part;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
@@ -125,7 +124,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return The part value as an array wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String[]> asArray() {
-		return o(copyOf(value()));
+		return o(cp(value()));
 	}
 
 	/**
@@ -198,7 +197,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 */
 	public String[] orElse(String[] other) {
 		String[] x = value();
-		return nn(x) ? x : other;
+		return nn(x) ? cp(x) : other;
 	}
 
 	/**
@@ -210,7 +209,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return The part value as an array, or <jk>null</jk> if the value <jk>null</jk>.
 	 */
 	public String[] toArray() {
-		return copyOf(value());
+		return cp(value());
 	}
 
 	/**

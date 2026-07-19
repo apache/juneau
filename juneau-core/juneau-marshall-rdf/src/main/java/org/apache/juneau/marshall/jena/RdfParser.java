@@ -1117,7 +1117,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
 	 */
-	protected final Map<String,Object> getJenaSettings() { return jenaSettings; }
+	protected final Map<String,Object> getJenaSettings() { return u(jenaSettings); }
 
 	/**
 	 * Default XML namespace for bean properties.

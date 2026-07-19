@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.msgpack;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
 
 import java.io.*;
 import java.math.*;
@@ -118,7 +119,7 @@ public class MsgPackTokenWriter implements TokenWriter {
 	@Override /* TokenWriter */
 	public TokenWriter endObject() throws IOException {
 		assertOpen();
-		if (buffers.isEmpty() || !Boolean.TRUE.equals(isMapStack.peek()))
+		if (buffers.isEmpty() || !isTrue(isMapStack.peek()))
 			throw new IllegalStateException("endObject called with no matching startObject");
 		var body = buffers.pop();
 		var count = elementCount.pop();
@@ -145,7 +146,7 @@ public class MsgPackTokenWriter implements TokenWriter {
 	@Override /* TokenWriter */
 	public TokenWriter endArray() throws IOException {
 		assertOpen();
-		if (buffers.isEmpty() || Boolean.TRUE.equals(isMapStack.peek()))
+		if (buffers.isEmpty() || isTrue(isMapStack.peek()))
 			throw new IllegalStateException("endArray called with no matching startArray");
 		var body = buffers.pop();
 		var count = elementCount.pop();
@@ -162,9 +163,9 @@ public class MsgPackTokenWriter implements TokenWriter {
 	public TokenWriter fieldName(String name) throws IOException {
 		assertOpen();
 		assertArgNotNull("name", name);
-		if (isMapStack.isEmpty() || !Boolean.TRUE.equals(isMapStack.peek()))
+		if (isMapStack.isEmpty() || !isTrue(isMapStack.peek()))
 			throw new IllegalStateException("field called outside an object");
-		if (!Boolean.TRUE.equals(awaitingKey.peek()))
+		if (!isTrue(awaitingKey.peek()))
 			throw new IllegalStateException("field called twice without an intervening value");
 		new MsgPackOutputStream(activeOut()).appendString(name);
 		// Replace top of awaitingKey with false (we just wrote the key; expect a value next).
@@ -319,7 +320,7 @@ public class MsgPackTokenWriter implements TokenWriter {
 
 	private void preValueCheck() {
 		// At map-key position, value emits are illegal — caller must call field() first.
-		if (!isMapStack.isEmpty() && Boolean.TRUE.equals(isMapStack.peek()) && Boolean.TRUE.equals(awaitingKey.peek()))
+		if (!isMapStack.isEmpty() && isTrue(isMapStack.peek()) && isTrue(awaitingKey.peek()))
 			throw new IllegalStateException(
 				"Value emitted at map-key position without preceding field(...).");
 	}
@@ -330,7 +331,7 @@ public class MsgPackTokenWriter implements TokenWriter {
 		// After emitting a value:
 		// - In a map, flip awaitingKey back to true (next emit is the next pair's key).
 		// - In an array, increment element count.
-		if (Boolean.TRUE.equals(isMapStack.peek())) {
+		if (isTrue(isMapStack.peek())) {
 			awaitingKey.pop();
 			awaitingKey.push(true);
 		} else {

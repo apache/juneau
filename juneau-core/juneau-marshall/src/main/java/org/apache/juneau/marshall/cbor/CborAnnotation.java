@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.cbor;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -83,7 +83,7 @@ public class CborAnnotation {
 
 		Object(CborAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
+			this.description = cp(b.description);
 		}
 
 		@Override /* Overridden from annotation */

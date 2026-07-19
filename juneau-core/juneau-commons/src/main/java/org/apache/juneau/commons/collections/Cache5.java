@@ -335,11 +335,11 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	/**
 	 * Returns <jk>true</jk> if the cache contains a mapping for the specified five-part key.
 	 *
-	 * @param key1 The first key.
-	 * @param key2 The second key.
-	 * @param key3 The third key.
-	 * @param key4 The fourth key.
-	 * @param key5 The fifth key.
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
+	 * @param key3 The third key. Can be <jk>null</jk>.
+	 * @param key4 The fourth key. Can be <jk>null</jk>.
+	 * @param key5 The fifth key. Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the cache contains the five-part key.
 	 */
 	public boolean containsKey(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5) {
@@ -349,7 +349,7 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	/**
 	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
 	 *
-	 * @param value The value to check.
+	 * @param value The value to check. Can be <jk>null</jk>, in which case this method returns <jk>false</jk> (the cache never stores <jk>null</jk> values).
 	 * @return <jk>true</jk> if the cache contains the value.
 	 */
 	public boolean containsValue(V value) {
@@ -425,11 +425,11 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	/**
 	 * Associates the specified value with the specified five-part key.
 	 *
-	 * @param key1 The first key.
-	 * @param key2 The second key.
-	 * @param key3 The third key.
-	 * @param key4 The fourth key.
-	 * @param key5 The fifth key.
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
+	 * @param key3 The third key. Can be <jk>null</jk>.
+	 * @param key4 The fourth key. Can be <jk>null</jk>.
+	 * @param key5 The fifth key. Can be <jk>null</jk>.
 	 * @param value The value to associate with the five-part key.
 	 * @return The previous value associated with the five-part key, or <jk>null</jk> if there was no mapping.
 	 *
@@ -444,11 +444,11 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	/**
 	 * Removes the entry for the specified five-part key from the cache.
 	 *
-	 * @param key1 The first key.
-	 * @param key2 The second key.
-	 * @param key3 The third key.
-	 * @param key4 The fourth key.
-	 * @param key5 The fifth key.
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
+	 * @param key3 The third key. Can be <jk>null</jk>.
+	 * @param key4 The fourth key. Can be <jk>null</jk>.
+	 * @param key5 The fifth key. Can be <jk>null</jk>.
 	 * @return The previous value associated with the five-part key, or <jk>null</jk> if there was no mapping.
 	 *
 	 */

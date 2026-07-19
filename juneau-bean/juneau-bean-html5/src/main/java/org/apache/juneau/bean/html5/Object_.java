@@ -111,7 +111,7 @@ public class Object_ extends HtmlElementMixed {
 	/**
 	 * Creates an {@link Object_} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Object_(Object...children) {
 		children(children);
@@ -173,7 +173,7 @@ public class Object_ extends HtmlElementMixed {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param value The URL of the resource to be embedded.
+	 * @param value The URL of the resource to be embedded. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Object_ data(String value) {
@@ -193,7 +193,7 @@ public class Object_ extends HtmlElementMixed {
 	 * <p>
 	 * Associates the control with a form element.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Object_ form(String value) {
@@ -211,6 +211,7 @@ public class Object_ extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Object_ height(Object value) {
@@ -242,7 +243,7 @@ public class Object_ extends HtmlElementMixed {
 	 * <p>
 	 * Name of nested browsing context.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Object_ name(String value) {
@@ -586,7 +587,7 @@ public class Object_ extends HtmlElementMixed {
 	 * <p>
 	 * Type of embedded resource.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Object_ type(String value) {
@@ -604,6 +605,7 @@ public class Object_ extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Object_ typemustmatch(Object value) {
@@ -618,7 +620,7 @@ public class Object_ extends HtmlElementMixed {
 	 * <p>
 	 * Name of image map to use.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Object_ usemap(String value) {
@@ -635,6 +637,7 @@ public class Object_ extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Object_ width(Object value) {

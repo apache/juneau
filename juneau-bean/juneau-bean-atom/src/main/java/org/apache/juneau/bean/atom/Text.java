@@ -102,7 +102,7 @@ public class Text extends Common {
 	/**
 	 * Normal content.
 	 *
-	 * @param type The content type of this content.
+	 * @param type The content type of this content.  Can be <jk>null</jk>.
 	 */
 	public Text(String type) {
 		setType(type);

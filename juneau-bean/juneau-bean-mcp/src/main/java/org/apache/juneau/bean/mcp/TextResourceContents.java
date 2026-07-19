@@ -44,7 +44,7 @@ public class TextResourceContents implements ResourceContents {
 	/**
 	 * Sets the resource URI.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public TextResourceContents setUri(String value) {
@@ -64,7 +64,7 @@ public class TextResourceContents implements ResourceContents {
 	/**
 	 * Sets the MIME type.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public TextResourceContents setMimeType(String value) {
@@ -84,7 +84,7 @@ public class TextResourceContents implements ResourceContents {
 	/**
 	 * Sets the text body.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public TextResourceContents setText(String value) {

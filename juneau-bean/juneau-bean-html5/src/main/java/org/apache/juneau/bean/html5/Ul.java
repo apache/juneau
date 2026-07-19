@@ -110,7 +110,7 @@ public class Ul extends HtmlElementContainer {
 	/**
 	 * Creates a {@link Ul} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Ul(Object...children) {
 		children(children);

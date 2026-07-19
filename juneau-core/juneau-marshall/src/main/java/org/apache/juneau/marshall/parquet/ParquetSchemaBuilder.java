@@ -85,7 +85,7 @@ public final class ParquetSchemaBuilder {
 	public ParquetSchemaBuilder(MarshallingContext marshallingContext, boolean writeDatesAsTimestamp, ParquetCycleHandling cycleHandling, int maxRecursionDepth, boolean nativeLogicalTypes) {
 		this.marshallingContext = marshallingContext;
 		this.writeDatesAsTimestamp = writeDatesAsTimestamp;
-		this.cycleHandling = cycleHandling != null ? cycleHandling : ParquetCycleHandling.NULL;
+		this.cycleHandling = or(cycleHandling, ParquetCycleHandling.NULL);
 		this.maxRecursionDepth = Math.max(1, maxRecursionDepth);
 		this.nativeLogicalTypes = nativeLogicalTypes;
 	}

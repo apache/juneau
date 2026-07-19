@@ -64,7 +64,7 @@ public class Strong extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Strong} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Strong(Object...children) {
 		children(children);

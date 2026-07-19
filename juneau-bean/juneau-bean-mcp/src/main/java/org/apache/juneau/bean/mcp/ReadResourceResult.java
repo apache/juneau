@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -34,13 +36,13 @@ public class ReadResourceResult {
 	 * @return The contents list, or {@code null} if not set.
 	 */
 	public List<ResourceContents> getContents() {
-		return contents;
+		return u(contents);
 	}
 
 	/**
 	 * Sets resource bodies.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ReadResourceResult setContents(List<ResourceContents> value) {

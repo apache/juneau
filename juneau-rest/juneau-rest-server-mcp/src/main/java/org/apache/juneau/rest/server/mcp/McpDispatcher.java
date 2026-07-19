@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -70,6 +71,8 @@ public class McpDispatcher {
 	 * @return The response, or {@code null} for notification requests.
 	 */
 	public JsonRpcResponse dispatch(JsonRpcRequest req, McpServerConfig config, BeanStore ctx) {
+		assertArgNotNull("config", config);
+		assertArgNotNull("ctx", ctx);
 		if (req == null)
 			return errorResponse(null, CODE_INVALID_REQUEST, "Request envelope is null", null);
 

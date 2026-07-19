@@ -78,7 +78,7 @@ public class Fieldset extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Fieldset} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Fieldset(Object...children) {
 		children(children);
@@ -149,6 +149,7 @@ public class Fieldset extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Fieldset disabled(Object value) {
@@ -166,7 +167,7 @@ public class Fieldset extends HtmlElementMixed {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param value The ID of the form element to associate with this fieldset.
+	 * @param value The ID of the form element to associate with this fieldset. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Fieldset form(String value) {
@@ -202,7 +203,7 @@ public class Fieldset extends HtmlElementMixed {
 	 * <p>
 	 * The name should be unique within the form and should not contain spaces or special characters.
 	 *
-	 * @param value The name of the fieldset for API access and submission.
+	 * @param value The name of the fieldset for API access and submission. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Fieldset name(String value) {

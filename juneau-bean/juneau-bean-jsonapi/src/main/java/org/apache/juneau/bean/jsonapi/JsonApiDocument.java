@@ -92,7 +92,7 @@ public class JsonApiDocument {
 	/**
 	 * Typed setter for single-resource primary data.
 	 *
-	 * @param value The resource.
+	 * @param value The resource.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiDocument setData(JsonApiResource value) {
@@ -103,7 +103,7 @@ public class JsonApiDocument {
 	/**
 	 * Typed setter for to-many primary data.
 	 *
-	 * @param value The list of resources.
+	 * @param value The list of resources.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiDocument setData(List<JsonApiResource> value) {
@@ -116,12 +116,12 @@ public class JsonApiDocument {
 	 *
 	 * @return The value of the <property>errors</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public List<JsonApiError> getErrors() { return errors; }
+	public List<JsonApiError> getErrors() { return u(errors); }
 
 	/**
 	 * Bean property setter:  <property>errors</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiDocument setErrors(List<JsonApiError> value) {
@@ -147,12 +147,12 @@ public class JsonApiDocument {
 	 *
 	 * @return The value of the <property>meta</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getMeta() { return meta; }
+	public Map<String,Object> getMeta() { return u(meta); }
 
 	/**
 	 * Bean property setter:  <property>meta</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiDocument setMeta(Map<String,Object> value) {
@@ -170,7 +170,7 @@ public class JsonApiDocument {
 	/**
 	 * Bean property setter:  <property>jsonapi</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiDocument setJsonapi(JsonApiVersion value) {
@@ -188,12 +188,12 @@ public class JsonApiDocument {
 	 */
 	@BeanProp(value="links")
 	@Swap(JsonApiLinkOrStringSwap.class)
-	public Map<String,Object> getLinks() { return links; }
+	public Map<String,Object> getLinks() { return u(links); }
 
 	/**
 	 * Bean property setter:  <property>links</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	@BeanProp(value="links")
@@ -208,12 +208,12 @@ public class JsonApiDocument {
 	 *
 	 * @return The value of the <property>included</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public List<JsonApiResource> getIncluded() { return included; }
+	public List<JsonApiResource> getIncluded() { return u(included); }
 
 	/**
 	 * Bean property setter:  <property>included</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiDocument setIncluded(List<JsonApiResource> value) {

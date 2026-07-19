@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -122,7 +122,7 @@ public class ContactAnnotation {
 
 		Instance(ContactAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			email = b.email;
 			name = b.name;
 			url = b.url;
@@ -145,7 +145,7 @@ public class ContactAnnotation {
 
 		@Override /* Overridden from annotation */
 		public String[] description() {
-			return description;
+			return cp(description);
 		}
 	}
 

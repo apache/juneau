@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.config;
 
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+
 import org.apache.juneau.commons.settings.*;
 
 /**
@@ -129,7 +131,7 @@ public class ConfigPropertySourceProvider implements PropertySourceProvider {
 			// Re-entrant guard: Config.findSystemDefault() walks Settings.get("juneau.configFile"),
 			// which round-trips through every source including this one. Short-circuit on
 			// re-entry so the outer Config.getSystemDefault() can make progress.
-			if (Boolean.TRUE.equals(RESOLVING.get()))
+			if (isTrue(RESOLVING.get()))
 				return PropertyLookupResult.missing();
 
 			// Bootstrap guard: if we're being called from inside a <clinit> frame (e.g. another

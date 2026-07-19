@@ -77,12 +77,10 @@ public class JuneauServletRegistrations {
 	 */
 	public static <T extends Servlet> ServletRegistrationBean<T> forServlet(T servlet, BeanStore beanStore) {
 		if (servlet == null)
-			throw new IllegalArgumentException("Argument 'servlet' must not be null");
+			throw iaex("Argument 'servlet' must not be null");
 		var resolved = RestContext.resolveTopLevelPaths(servlet.getClass(), servlet, beanStore);
 		if (resolved.length == 0)
-			throw new IllegalArgumentException("Servlet "
-				+ cn(servlet)
-				+ " resolves to no top-level paths; declare @Rest(paths=...) or override getPaths().");
+			throw iaex("Servlet %s resolves to no top-level paths; declare @Rest(paths=...) or override getPaths().", cn(servlet));
 		var mappings = new String[resolved.length];
 		for (var i = 0; i < resolved.length; i++)
 			mappings[i] = toUrlMapping(resolved[i]);

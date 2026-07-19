@@ -111,7 +111,7 @@ public class IniWriter extends SerializerWriter {
 			w(" ").w(kvSeparator).w(" ");
 		else
 			w(kvSeparator);
-		w(value != null ? value : "null");
+		w(or(value, "null"));
 		w('\n');
 		return this;
 	}

@@ -146,7 +146,7 @@ public final class HttpBodies {
 	/**
 	 * Creates a URL-encoded form body from alternating name/value string pairs.
 	 *
-	 * @param pairs Alternating name/value strings. Length must be even.
+	 * @param pairs Alternating name/value strings. Must not be <jk>null</jk>. Length must be even.
 	 * @return A new body. Never <jk>null</jk>.
 	 */
 	public static PartList formBodyOfPairs(String... pairs) {

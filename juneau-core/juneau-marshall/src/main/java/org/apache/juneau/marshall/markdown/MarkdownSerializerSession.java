@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.markdown;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -118,7 +119,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 	 */
 	protected MarkdownSerializerSession(Builder<?> builder) {
 		super(builder);
-		nullValue = builder.nullValue != null ? builder.nullValue : "*null*";
+		nullValue = or(builder.nullValue, "*null*");
 		showHeaders = builder.showHeaders;
 	}
 
@@ -332,7 +333,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 						// Nested collection: use standard logic
 						typeName = getBeanTypeName(this, elementType, swappedCm, null);
 					}
-					row[0] = typeName != null ? typeName : "";
+					row[0] = or(typeName, "");
 				}
 
 				if (swappedCm.isBean()) {

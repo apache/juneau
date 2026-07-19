@@ -37,8 +37,8 @@ public interface PropertyNamer {
 	/**
 	 * Convert the specified default property name to some other value.
 	 *
-	 * @param name The original bean property name.
-	 * @return The converted property name.
+	 * @param name The original bean property name.  Can be <jk>null</jk>.
+	 * @return The converted property name, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	String getPropertyName(String name);
 }

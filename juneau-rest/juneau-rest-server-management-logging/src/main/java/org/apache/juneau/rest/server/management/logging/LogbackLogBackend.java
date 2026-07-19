@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.management.logging;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.rest.server.management.*;
@@ -59,11 +61,9 @@ public class LogbackLogBackend implements LogBackend {
 	 */
 	public LogbackLogBackend() {
 		var factory = LoggerFactory.getILoggerFactory();
-		if (! (factory instanceof LoggerContext lc))
-			throw new IllegalStateException(
-				"The bound SLF4J backend is not Logback (ILoggerFactory=" + factory.getClass().getName()
-				+ ").  /loggers drives the concrete backend, not the SLF4J facade.");
-		this.context = lc;
+		if (! (factory instanceof LoggerContext factory2))
+			throw isex("The bound SLF4J backend is not Logback (ILoggerFactory=%s).  /loggers drives the concrete backend, not the SLF4J facade.", factory.getClass().getName());
+		this.context = factory2;
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class LogbackLogBackend implements LogBackend {
 		// match the JUL backend's IllegalArgumentException contract.
 		var l = Level.toLevel(level, null);
 		if (l == null)
-			throw new IllegalArgumentException("Not a valid Logback level: '" + level + "'.");
+			throw iaex("Not a valid Logback level: '%s'.", level);
 		return l;
 	}
 

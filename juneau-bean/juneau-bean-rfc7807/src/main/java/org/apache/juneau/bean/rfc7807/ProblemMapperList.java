@@ -64,7 +64,7 @@ public class ProblemMapperList {
 	/**
 	 * Creates a list populated with the supplied mappers in argument order.
 	 *
-	 * @param mappers The mappers to add. Each must be non-{@code null}; duplicates are allowed and preserved.
+	 * @param mappers The mappers to add. Can be <jk>null</jk>, and <jk>null</jk> entries are skipped; duplicates are allowed and preserved.
 	 * @return A new {@link ProblemMapperList} containing the supplied mappers.
 	 */
 	public static ProblemMapperList of(ProblemMapper<?>... mappers) {
@@ -79,7 +79,7 @@ public class ProblemMapperList {
 	/**
 	 * Appends a mapper to the end of the list.
 	 *
-	 * @param mapper The mapper to add. Must not be <jk>null</jk>.
+	 * @param mapper The mapper to add. Can be <jk>null</jk> (no-op).
 	 * @return This object for fluent chaining.
 	 */
 	public ProblemMapperList append(ProblemMapper<?> mapper) {
@@ -91,7 +91,7 @@ public class ProblemMapperList {
 	/**
 	 * Appends a collection of mappers to the end of the list, in iteration order.
 	 *
-	 * @param values The mappers to add. {@code null} entries are skipped.
+	 * @param values The mappers to add. Can be <jk>null</jk>, and <jk>null</jk> entries are skipped.
 	 * @return This object for fluent chaining.
 	 */
 	public ProblemMapperList append(Collection<? extends ProblemMapper<?>> values) {

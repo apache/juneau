@@ -90,7 +90,7 @@ public class Col extends HtmlElementVoid {
 	/**
 	 * Creates a {@link Col} element with the specified {@link Col#span(Object)} attribute.
 	 *
-	 * @param span The {@link Col#span(Object)} attribute.
+	 * @param span The {@link Col#span(Object)} attribute. Can be <jk>null</jk>.
 	 */
 	public Col(Number span) {
 		span(span);
@@ -459,6 +459,7 @@ public class Col extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Col span(Object value) {

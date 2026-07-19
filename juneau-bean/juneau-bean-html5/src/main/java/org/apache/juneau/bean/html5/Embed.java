@@ -81,7 +81,7 @@ public class Embed extends HtmlElementVoid {
 	/**
 	 * Creates an {@link Embed} element with the specified {@link Embed#src(Object)} attribute.
 	 *
-	 * @param src The {@link Embed#src(Object)} attribute.
+	 * @param src The {@link Embed#src(Object)} attribute. Can be <jk>null</jk>.
 	 */
 	public Embed(Object src) {
 		src(src);
@@ -133,6 +133,7 @@ public class Embed extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Embed height(Object value) {
@@ -480,6 +481,7 @@ public class Embed extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Embed src(Object value) {
@@ -527,7 +529,7 @@ public class Embed extends HtmlElementVoid {
 	 * 	<li><js>"audio/mp3"</js> - MP3 audio</li>
 	 * </ul>
 	 *
-	 * @param value The MIME type of the embedded resource.
+	 * @param value The MIME type of the embedded resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Embed type(String value) {
@@ -544,6 +546,7 @@ public class Embed extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Embed width(Object value) {

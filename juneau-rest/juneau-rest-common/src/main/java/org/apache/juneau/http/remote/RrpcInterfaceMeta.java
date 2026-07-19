@@ -93,7 +93,7 @@ public final class RrpcInterfaceMeta {
 		"java:S1172" // 'uri' is part of the public constructor signature retained for API parity with the classic RrpcInterfaceMeta; intentionally ignored
 	})
 	public RrpcInterfaceMeta(Class<?> iface, String uri) {
-		this(iface, true);
+		this(assertArgNotNull("iface", iface), true);
 	}
 
 	private RrpcInterfaceMeta(Class<?> iface, boolean includeUnannotated) {
@@ -388,7 +388,7 @@ public final class RrpcInterfaceMeta {
 	 * @return The interceptor classes. Never <jk>null</jk>, but may be empty.
 	 */
 	public Class<?>[] getInterceptorClasses() {
-		return interceptorClasses;
+		return cp(interceptorClasses);
 	}
 
 	/**
@@ -439,7 +439,7 @@ public final class RrpcInterfaceMeta {
 	/**
 	 * Returns the metadata for the given method, or {@code null} if the method has no remote annotation.
 	 *
-	 * @param method The method. Must not be <jk>null</jk>.
+	 * @param method The method. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The metadata, or <jk>null</jk>.
 	 */
 	public RrpcInterfaceMethodMeta getMethodMeta(Method method) {

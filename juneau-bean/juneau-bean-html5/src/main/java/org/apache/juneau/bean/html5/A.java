@@ -70,8 +70,8 @@ public class A extends HtmlElementMixed {
 	 * Creates an {@link A} element with the specified {@link A#href(Object)} attribute and {@link A#children(Object[])}
 	 * nodes.
 	 *
-	 * @param href The {@link A#href(Object)} attribute.
-	 * @param children The {@link A#children(Object[])} nodes.
+	 * @param href The {@link A#href(Object)} attribute. Can be <jk>null</jk>.
+	 * @param children The {@link A#children(Object[])} nodes. Must not be <jk>null</jk>.
 	 */
 	public A(Object href, Object[] children) {
 		href(href).children(children);
@@ -134,6 +134,7 @@ public class A extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public A download(Object value) {
@@ -163,6 +164,7 @@ public class A extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public A href(Object value) {
@@ -187,7 +189,7 @@ public class A extends HtmlElementMixed {
 	 * 	<li><js>"ja"</js> - Japanese</li>
 	 * </ul>
 	 *
-	 * @param value The language code of the linked resource.
+	 * @param value The language code of the linked resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public A hreflang(String value) {
@@ -530,7 +532,7 @@ public class A extends HtmlElementMixed {
 	 * 	<li><js>"tag"</js> - Tag for the current page</li>
 	 * </ul>
 	 *
-	 * @param value The relationship between the document and linked resource.
+	 * @param value The relationship between the document and linked resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public A rel(String value) {
@@ -572,7 +574,7 @@ public class A extends HtmlElementMixed {
 	 * 	<li><js>"framename"</js> - Open in a named frame</li>
 	 * </ul>
 	 *
-	 * @param value Where to open the linked resource.
+	 * @param value Where to open the linked resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public A target(String value) {
@@ -608,7 +610,7 @@ public class A extends HtmlElementMixed {
 	 * 	<li><js>"application/zip"</js> - ZIP archive</li>
 	 * </ul>
 	 *
-	 * @param value The MIME type of the linked resource.
+	 * @param value The MIME type of the linked resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public A type(String value) {

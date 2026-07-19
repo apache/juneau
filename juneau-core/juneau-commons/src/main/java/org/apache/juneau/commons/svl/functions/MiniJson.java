@@ -211,9 +211,9 @@ final class MiniJson {
 	})
 	static String render(Object value) {
 		if (value == null) return "";
-		if (value instanceof String s) return s;
-		if (value instanceof Map<?, ?> m) return renderMap((Map<String, Object>) m);
-		if (value instanceof List<?> l) return renderList((List<Object>) l);
+		if (value instanceof String value2) return value2;
+		if (value instanceof Map<?, ?> value3) return renderMap((Map<String, Object>) value3);
+		if (value instanceof List<?> value4) return renderList((List<Object>) value4);
 		return String.valueOf(value);
 	}
 
@@ -248,10 +248,10 @@ final class MiniJson {
 	})
 	private static void renderInto(StringBuilder sb, Object v) {
 		if (v == null) { sb.append("null"); return; }
-		if (v instanceof String s) { appendString(sb, s); return; }
+		if (v instanceof String v2) { appendString(sb, v2); return; }
 		if (v instanceof Boolean || v instanceof Number) { sb.append(v); return; }
-		if (v instanceof Map<?, ?> m) { sb.append(renderMap((Map<String, Object>) m)); return; }
-		if (v instanceof List<?> l) { sb.append(renderList((List<Object>) l)); return; }
+		if (v instanceof Map<?, ?> v3) { sb.append(renderMap((Map<String, Object>) v3)); return; }
+		if (v instanceof List<?> v4) { sb.append(renderList((List<Object>) v4)); return; }
 		appendString(sb, String.valueOf(v));
 	}
 

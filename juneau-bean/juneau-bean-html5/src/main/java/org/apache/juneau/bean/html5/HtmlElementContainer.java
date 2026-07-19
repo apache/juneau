@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.html5;
 
 import static org.apache.juneau.marshall.xml.XmlFormat.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -63,7 +64,7 @@ public class HtmlElementContainer extends HtmlElement {
 	/**
 	 * Adds a child element to this element.
 	 *
-	 * @param value The child to add as a child element.
+	 * @param value The child to add as a child element. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HtmlElement child(Object value) {
@@ -76,7 +77,7 @@ public class HtmlElementContainer extends HtmlElement {
 	/**
 	 * Adds one or more child elements to this element.
 	 *
-	 * @param value The children to add as child elements.
+	 * @param value The children to add as child elements. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HtmlElement children(Object...value) {
@@ -156,11 +157,11 @@ public class HtmlElementContainer extends HtmlElement {
 	/**
 	 * The children of this element.
 	 *
-	 * @return The children of this element.
+	 * @return The children of this element, or <jk>null</jk> if no children are set.
 	 */
 	@Xml(format = ELEMENTS)
 	@BeanProp(name="c") @MarshalledProp(dictionary=HtmlBeanDictionary.class)
-	public List<Object> getChildren() { return children; }
+	public List<Object> getChildren() { return u(children); }
 
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementContainer hidden(Object value) {
@@ -483,7 +484,7 @@ public class HtmlElementContainer extends HtmlElement {
 	/**
 	 * Sets the children for this container.
 	 *
-	 * @param children The new children for this container.
+	 * @param children The new children for this container. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	@BeanProp("c")

@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.jsonapi;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -65,8 +66,8 @@ public class JsonApiResource {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param type The entity-type name.
-	 * @param id The identifier value.
+	 * @param type The entity-type name.  Can be <jk>null</jk>.
+	 * @param id The identifier value.  Can be <jk>null</jk>.
 	 */
 	public JsonApiResource(String type, String id) {
 		this.type = type;
@@ -87,7 +88,7 @@ public class JsonApiResource {
 	/**
 	 * Bean property setter:  <property>type</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiResource setType(String value) {
@@ -105,7 +106,7 @@ public class JsonApiResource {
 	/**
 	 * Bean property setter:  <property>id</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiResource setId(String value) {
@@ -122,12 +123,12 @@ public class JsonApiResource {
 	 *
 	 * @return The value of the <property>attributes</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getAttributes() { return attributes; }
+	public Map<String,Object> getAttributes() { return u(attributes); }
 
 	/**
 	 * Bean property setter:  <property>attributes</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiResource setAttributes(Map<String,Object> value) {
@@ -138,8 +139,8 @@ public class JsonApiResource {
 	/**
 	 * Convenience method to add a single attribute.
 	 *
-	 * @param name The attribute name.
-	 * @param value The attribute value.
+	 * @param name The attribute name.  Can be <jk>null</jk>.
+	 * @param value The attribute value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public JsonApiResource putAttribute(String name, Object value) {
@@ -154,12 +155,12 @@ public class JsonApiResource {
 	 *
 	 * @return The value of the <property>relationships</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,JsonApiRelationship> getRelationships() { return relationships; }
+	public Map<String,JsonApiRelationship> getRelationships() { return u(relationships); }
 
 	/**
 	 * Bean property setter:  <property>relationships</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiResource setRelationships(Map<String,JsonApiRelationship> value) {
@@ -170,8 +171,8 @@ public class JsonApiResource {
 	/**
 	 * Convenience method to add a single named relationship.
 	 *
-	 * @param name The relationship name.
-	 * @param value The relationship object.
+	 * @param name The relationship name.  Can be <jk>null</jk>.
+	 * @param value The relationship object.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public JsonApiResource putRelationship(String name, JsonApiRelationship value) {
@@ -191,12 +192,12 @@ public class JsonApiResource {
 	 */
 	@BeanProp(value="links")
 	@Swap(JsonApiLinkOrStringSwap.class)
-	public Map<String,Object> getLinks() { return links; }
+	public Map<String,Object> getLinks() { return u(links); }
 
 	/**
 	 * Bean property setter:  <property>links</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	@BeanProp(value="links")
@@ -211,12 +212,12 @@ public class JsonApiResource {
 	 *
 	 * @return The value of the <property>meta</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getMeta() { return meta; }
+	public Map<String,Object> getMeta() { return u(meta); }
 
 	/**
 	 * Bean property setter:  <property>meta</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiResource setMeta(Map<String,Object> value) {

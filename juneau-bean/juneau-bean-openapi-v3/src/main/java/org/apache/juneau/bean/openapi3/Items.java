@@ -18,6 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.contains;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -160,7 +161,7 @@ public class Items extends OpenApiElement {
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
 		this.uniqueItems = copyFrom.uniqueItems;
-		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
+		this.items = copyOf(copyFrom.items);
 		this.default_ = copyFrom.default_;
 		this.enum_.addAll(copyOf(copyFrom.enum_));
 		this.ref = copyFrom.ref;
@@ -778,8 +779,8 @@ public class Items extends OpenApiElement {
 
 	/* Resolve references in extra attributes */
 	private Object resolveRefs(Object o, OpenApi openApi, Deque<String> refStack, int maxDepth) {
-		if (o instanceof MarshalledMap mm) {
-			var ref2 = mm.get("$ref");
+		if (o instanceof MarshalledMap o2) {
+			var ref2 = o2.get("$ref");
 			if (ref2 instanceof CharSequence) {
 				var sref = ref2.toString();
 				if (refStack.contains(sref) || refStack.size() >= maxDepth)
@@ -790,11 +791,11 @@ public class Items extends OpenApiElement {
 				refStack.removeLast();
 				return o3;
 			}
-			for (var e : mm.entrySet())
+			for (var e : o2.entrySet())
 				e.setValue(resolveRefs(e.getValue(), openApi, refStack, maxDepth));
 		}
-		if (o instanceof MarshalledList ml)
-			for (var li = ml.listIterator(); li.hasNext();)
+		if (o instanceof MarshalledList o2)
+			for (var li = o2.listIterator(); li.hasNext();)
 				li.set(resolveRefs(li.next(), openApi, refStack, maxDepth));
 		return o;
 	}

@@ -215,7 +215,7 @@ class Components_Test extends TestBase {
 			assertMapped(
 				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"callbacks,examples,headers,links,parameters,requestBodies,responses,schemas,securitySchemes,x1,x2",
-				"FilteredMap,FilteredMap,FilteredMap,FilteredMap,FilteredMap,FilteredMap,FilteredMap,FilteredMap,FilteredMap,String,<null>"
+				"UnmodifiableMap,UnmodifiableMap,UnmodifiableMap,UnmodifiableMap,UnmodifiableMap,UnmodifiableMap,UnmodifiableMap,UnmodifiableMap,UnmodifiableMap,String,<null>"
 			);
 		}
 

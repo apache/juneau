@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.*;
 	 * Constructor.
 	 *
 	 * @param code JSON-RPC error code.
-	 * @param message Error message.
+	 * @param message Error message.  Can be <jk>null</jk>.
 	 */
 	public McpException(int code, String message) {
 		super(message);
@@ -46,8 +46,8 @@ import org.apache.juneau.marshall.*;
 	 * Constructor.
 	 *
 	 * @param code JSON-RPC error code.
-	 * @param message Error message.
-	 * @param data Optional structured error data.
+	 * @param message Error message.  Can be <jk>null</jk>.
+	 * @param data Optional structured error data.  Can be <jk>null</jk>.
 	 */
 	public McpException(int code, String message, Object data) {
 		super(message);
@@ -87,7 +87,7 @@ import org.apache.juneau.marshall.*;
 	/**
 	 * Sets optional structured error data.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public McpException setData(Object value) {

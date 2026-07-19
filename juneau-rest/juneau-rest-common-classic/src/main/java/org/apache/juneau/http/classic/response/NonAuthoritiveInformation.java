@@ -79,7 +79,7 @@ public class NonAuthoritiveInformation extends BasicHttpResponse {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy from.
+	 * @param copyFrom The bean to copy from.  Must not be <jk>null</jk>.
 	 */
 	public NonAuthoritiveInformation(NonAuthoritiveInformation copyFrom) {
 		super(copyFrom);

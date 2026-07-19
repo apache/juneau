@@ -187,6 +187,9 @@ final class JwksCache implements JWKSource<SecurityContext> {
 			Thread.currentThread().interrupt();
 			return Collections.emptyList();
 		} catch (ExecutionException | TimeoutException e) {
+			// Fail closed: the in-flight refresh errored or timed out, so this loser thread selects nothing
+			// (the winner logs the underlying cause at WARNING).  A key miss surfaces as an auth failure upstream.
+			LOG.log(Level.FINE, e, () -> "JWKS in-flight refresh did not complete for this waiter: " + e.getMessage());
 			return Collections.emptyList();
 		}
 	}

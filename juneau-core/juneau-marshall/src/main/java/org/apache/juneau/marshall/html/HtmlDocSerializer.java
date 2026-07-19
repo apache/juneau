@@ -111,7 +111,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
 
 		private static <T> List<T> copy(List<T> s) {
-			return s == null || s.isEmpty() ? null : copyOf(s);
+			return s == null || s.isEmpty() ? null : cp(s);
 		}
 
 		private static <T> List<T> copy(T[] s) {
@@ -958,7 +958,7 @@ final AsideFloat asideFloat;
 		style = nn(builder.style) ? toArray(builder.style) : EMPTY_ARRAY;
 		stylesheet = nn(builder.stylesheet) ? toArray(builder.stylesheet) : EMPTY_ARRAY;
 		template = builder.template;
-		widgets = builder.widgets == null ? Collections.emptyList() : copyOf(builder.widgets);
+		widgets = builder.widgets == null ? Collections.emptyList() : cp(builder.widgets);
 
 		templateBean = newInstance(template);
 		widgetMap = new HtmlWidgetMap();

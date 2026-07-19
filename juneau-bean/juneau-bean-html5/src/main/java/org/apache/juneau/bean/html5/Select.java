@@ -96,8 +96,8 @@ public class Select extends HtmlElementContainer {
 	/**
 	 * Creates a {@link Select} element with the specified {@link Select#name(String)} attribute and child nodes.
 	 *
-	 * @param name The {@link Select#name(String)} attribute.
-	 * @param children The child nodes.
+	 * @param name The {@link Select#name(String)} attribute. Can be <jk>null</jk>.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Select(String name, Object...children) {
 		name(name).children(children);
@@ -136,6 +136,7 @@ public class Select extends HtmlElementContainer {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Select autofocus(Object value) {
@@ -158,7 +159,7 @@ public class Select extends HtmlElementContainer {
 	/**
 	 * Convenience method for selecting a child {@link Option} after the options have already been populated.
 	 *
-	 * @param optionValue The option value.
+	 * @param optionValue The option value. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Select choose(Object optionValue) {
@@ -200,6 +201,7 @@ public class Select extends HtmlElementContainer {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Select disabled(Object value) {
@@ -217,7 +219,7 @@ public class Select extends HtmlElementContainer {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param value The ID of the form element to associate with this select.
+	 * @param value The ID of the form element to associate with this select. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Select form(String value) {
@@ -260,6 +262,7 @@ public class Select extends HtmlElementContainer {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Select multiple(Object value) {
@@ -277,7 +280,7 @@ public class Select extends HtmlElementContainer {
 	 * <p>
 	 * The name should be unique within the form and should not contain spaces or special characters.
 	 *
-	 * @param value The name of the select element for submission and API access.
+	 * @param value The name of the select element for submission and API access. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Select name(String value) {
@@ -594,6 +597,7 @@ public class Select extends HtmlElementContainer {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Select required(Object value) {
@@ -614,7 +618,7 @@ public class Select extends HtmlElementContainer {
 	 * Specifies the number of visible options in a select element. If greater than 1,
 	 * the select becomes a scrollable list instead of a dropdown.
 	 *
-	 * @param value The number of visible options (1 for dropdown, >1 for list).
+	 * @param value The number of visible options (1 for dropdown, >1 for list). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Select size(Object value) {

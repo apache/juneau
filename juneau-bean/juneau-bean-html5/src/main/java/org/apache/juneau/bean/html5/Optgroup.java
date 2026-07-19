@@ -85,7 +85,7 @@ public class Optgroup extends HtmlElementContainer {
 	/**
 	 * Creates an {@link Optgroup} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Optgroup(Object...children) {
 		children(children);
@@ -156,6 +156,7 @@ public class Optgroup extends HtmlElementContainer {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Optgroup disabled(Object value) {
@@ -185,7 +186,7 @@ public class Optgroup extends HtmlElementContainer {
 	 * <p>
 	 * The label should be descriptive and help users understand the grouping of options.
 	 *
-	 * @param value The user-visible label for the option group.
+	 * @param value The user-visible label for the option group. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Optgroup label(String value) {

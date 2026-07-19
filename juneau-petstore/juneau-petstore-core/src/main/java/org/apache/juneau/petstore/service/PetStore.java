@@ -113,7 +113,8 @@ public class PetStore {
 	 * @return All pets, in arbitrary order.  Never <jk>null</jk>.
 	 */
 	public Collection<Pet> getPets() {
-		return pets.values();
+		// Return an immutable snapshot so callers can't mutate the backing store through the returned collection.
+		return List.copyOf(pets.values());
 	}
 
 	/**
@@ -181,7 +182,7 @@ public class PetStore {
 	 * @return All orders, in arbitrary order.  Never <jk>null</jk>.
 	 */
 	public Collection<Order> getOrders() {
-		return orders.values();
+		return List.copyOf(orders.values());
 	}
 
 	/**
@@ -249,7 +250,7 @@ public class PetStore {
 	 * @return All users, in arbitrary order.  Never <jk>null</jk>.
 	 */
 	public Collection<User> getUsers() {
-		return users.values();
+		return List.copyOf(users.values());
 	}
 
 	/**
@@ -289,6 +290,8 @@ public class PetStore {
 	public User updateUser(User user) {
 		if (user == null)
 			throw iaex("User must not be null");
+		if (user.getUsername() == null)
+			throw iaex("User username must not be null");
 		if (! users.containsKey(user.getUsername()))
 			throw new PetstoreNotFoundException("User not found: username=" + user.getUsername());
 		users.put(user.getUsername(), user);

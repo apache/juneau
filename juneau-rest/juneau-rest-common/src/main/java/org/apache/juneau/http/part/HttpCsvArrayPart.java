@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -83,7 +82,7 @@ public class HttpCsvArrayPart extends HttpPartBean {
 	 */
 	public HttpCsvArrayPart(String name, String...value) {
 		super(name, value == null ? null : join(value, ','));
-		this.typedValue = value;
+		this.typedValue = cp(value);
 		this.typedSupplier = null;
 	}
 
@@ -174,7 +173,7 @@ public class HttpCsvArrayPart extends HttpPartBean {
 	 * @return The array, possibly {@code null}.
 	 */
 	public String[] toArray() {
-		return copyOf(value());
+		return cp(value());
 	}
 
 	/**
@@ -194,7 +193,7 @@ public class HttpCsvArrayPart extends HttpPartBean {
 	 */
 	public String[] orElse(String[] other) {
 		var x = value();
-		return nn(x) ? x : other;
+		return nn(x) ? cp(x) : other;
 	}
 
 	private String[] value() {

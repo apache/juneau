@@ -51,9 +51,9 @@ public class SerializedEntity extends BasicHttpEntity {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.
-	 * @param content The entity content.
-	 * @param serializer The entity serializer.
+	 * @param contentType The entity content type.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param serializer The entity serializer.  Can be <jk>null</jk>.
 	 * @param schema The entity schema.  Can be <jk>null</jk>.
 	 */
 	public SerializedEntity(ContentType contentType, Object content, Serializer serializer, HttpPartSchema schema) {
@@ -65,7 +65,7 @@ public class SerializedEntity extends BasicHttpEntity {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean being copied.
+	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
 	public SerializedEntity(SerializedEntity copyFrom) {
 		super(copyFrom);
@@ -245,7 +245,7 @@ public class SerializedEntity extends BasicHttpEntity {
 			Object o = contentOrElse(null);
 			if (serializer == null) {
 				try (Writer w = new OutputStreamWriter(os, UTF8)) {
-					w.write(o.toString());
+					w.write(o == null ? "" : o.toString());
 				}
 			} else {
 				SerializerSession session = serializer.createSession().schema(schema).build();

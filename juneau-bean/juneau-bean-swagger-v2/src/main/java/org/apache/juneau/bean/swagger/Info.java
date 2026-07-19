@@ -19,6 +19,7 @@ package org.apache.juneau.bean.swagger;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
+import static org.apache.juneau.bean.swagger.SwaggerCopyUtils.*;
 
 import java.util.*;
 
@@ -126,9 +127,9 @@ public class Info extends SwaggerElement {
 	public Info(Info copyFrom) {
 		super(copyFrom);
 
-		this.contact = copyFrom.contact == null ? null : copyFrom.contact.copy();
+		this.contact = copyOf(copyFrom.contact);
 		this.description = copyFrom.description;
-		this.license = copyFrom.license == null ? null : copyFrom.license.copy();
+		this.license = copyOf(copyFrom.license);
 		this.siteName = copyFrom.siteName;
 		this.termsOfService = copyFrom.termsOfService;
 		this.title = copyFrom.title;

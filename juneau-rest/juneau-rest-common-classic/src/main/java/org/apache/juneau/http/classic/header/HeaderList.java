@@ -94,6 +94,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 *
 	 * @param headers
 	 * 	The headers to add to the list.
+	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
@@ -330,8 +331,8 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * </p>
 	 *
 	 * @param <T> The return type.
-	 * @param type The header implementation class.
-	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
+	 * @param type The header implementation class.  Must not be <jk>null</jk>.
+	 * @return A header with a condensed value, or {@link Optional#empty()} if no headers by the given name are present.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		assertArgNotNull(ARG_type, type);
@@ -408,7 +409,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param <T> The header implementation class.
 	 * @param name The header name.
 	 * @param type The header implementation class.
-	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
+	 * @return A header with a condensed value, or {@link Optional#empty()} if no headers by the given name are present.
 	 */
 	public <T> Optional<T> get(String name, Class<T> type) {
 
@@ -718,7 +719,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * 	<li class='jm'>{@link #set(String, Supplier) set(String,Supplier&lt;?&gt;)}
 	 * </ul>
 	 *
-	 * @param varResolver The variable resolver to use for resolving variables.
+	 * @param varResolver The variable resolver to use for resolving variables.  Can be <jk>null</jk> to disable variable resolution.
 	 * @return This object.
 	 */
 	public HeaderList resolving(VarResolver varResolver) {

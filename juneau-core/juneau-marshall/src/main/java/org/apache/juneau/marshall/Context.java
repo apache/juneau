@@ -154,7 +154,7 @@ public abstract class Context {
 		 */
 		protected Builder(Builder<?> copyFrom) {
 			assertArgNotNull(ARG_copyFrom, copyFrom);
-			annotations = copyOf(copyFrom.annotations);
+			annotations = cp(copyFrom.annotations);
 			debug = copyFrom.debug;
 			type = copyFrom.type;
 			registerBuilders(this);
@@ -168,7 +168,7 @@ public abstract class Context {
 		 */
 		protected Builder(Context copyFrom) {
 			assertArgNotNull(ARG_copyFrom, copyFrom);
-			annotations = copyOf(copyFrom.annotations);
+			annotations = cp(copyFrom.annotations);
 			debug = copyFrom.debug;
 			type = copyFrom.getClass();
 			registerBuilders(this);
@@ -631,6 +631,16 @@ public abstract class Context {
 		public abstract SELF copy();
 
 		/**
+		 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
+		 *
+		 * @param value The value to copy.  Can be <jk>null</jk>.
+		 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
+		 */
+		public static Builder<?> copyOrNull(Builder<?> value) {
+			return value == null ? null : value.copy();
+		}
+
+		/**
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Debug mode.
 		 *
 		 * <p>
@@ -932,7 +942,7 @@ public abstract class Context {
 	protected Context(Builder builder) {
 		assertArgNotNull(ARG_builder, builder);
 		init(builder);
-		annotations = copyOf(builder.annotations);
+		annotations = cp(builder.annotations);
 		annotationProvider = AnnotationProvider.create().addRuntimeAnnotations(annotations).build();
 		debug = builder.debug;
 	}
@@ -944,7 +954,7 @@ public abstract class Context {
 	 */
 	protected Context(Context copyFrom) {
 		annotationProvider = copyFrom.annotationProvider;
-		annotations = copyOf(copyFrom.annotations);
+		annotations = cp(copyFrom.annotations);
 		debug = copyFrom.debug;
 	}
 

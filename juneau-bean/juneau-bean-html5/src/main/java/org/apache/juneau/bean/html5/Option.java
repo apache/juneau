@@ -80,7 +80,7 @@ public class Option extends HtmlElementText {
 	/**
 	 * Creates an {@link Option} element with the specified {@link Option#text(Object)} attribute.
 	 *
-	 * @param text The {@link Option#text(Object)} attribute.
+	 * @param text The {@link Option#text(Object)} attribute. Can be <jk>null</jk>.
 	 */
 	public Option(Object text) {
 		text(text);
@@ -90,8 +90,8 @@ public class Option extends HtmlElementText {
 	 * Creates an {@link Option} element with the specified {@link Option#value(Object)} attribute and
 	 * {@link Option#text(Object)} node.
 	 *
-	 * @param value The {@link Option#value(Object)} attribute.
-	 * @param text The {@link Option#text(Object)} node.
+	 * @param value The {@link Option#value(Object)} attribute. Can be <jk>null</jk>.
+	 * @param text The {@link Option#text(Object)} node. Can be <jk>null</jk>.
 	 */
 	public Option(Object value, Object text) {
 		value(value).text(text);
@@ -150,6 +150,7 @@ public class Option extends HtmlElementText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Option disabled(Object value) {
@@ -179,7 +180,7 @@ public class Option extends HtmlElementText {
 	 * <p>
 	 * The label should be user-friendly and descriptive of what the option represents.
 	 *
-	 * @param value The user-visible label for the option.
+	 * @param value The user-visible label for the option. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Option label(String value) {
@@ -510,6 +511,7 @@ public class Option extends HtmlElementText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Option selected(Object value) {
@@ -562,6 +564,7 @@ public class Option extends HtmlElementText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Option value(Object value) {

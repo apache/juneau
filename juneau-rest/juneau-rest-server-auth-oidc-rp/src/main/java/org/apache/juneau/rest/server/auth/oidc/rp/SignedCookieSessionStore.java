@@ -107,7 +107,7 @@ public class SignedCookieSessionStore implements SessionStore {
 		public Builder signingKey(byte[] value) {
 			assertArgNotNull("value", value);
 			assertArg(value.length >= 32, "signingKey must be at least 32 bytes (256 bits) for HS256; was %s", value.length);
-			signingKey = value.clone();
+			signingKey = cp(value);
 			return this;
 		}
 
@@ -178,8 +178,7 @@ public class SignedCookieSessionStore implements SessionStore {
 			jwt.sign(new MACSigner(signingKey));
 			var serialized = jwt.serialize();
 			if (serialized.getBytes(StandardCharsets.UTF_8).length > maxCookieBytes)
-				throw new IllegalStateException("Signed session cookie exceeds maxCookieBytes (" + maxCookieBytes
-					+ "); reduce the claim set or switch to a server-side SessionStore.");
+				throw isex("Signed session cookie exceeds maxCookieBytes (%s); reduce the claim set or switch to a server-side SessionStore.", maxCookieBytes);
 			return serialized;
 		} catch (JOSEException e) {
 			throw new IllegalStateException("Failed to sign session cookie", e);

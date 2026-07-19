@@ -63,7 +63,7 @@ public enum Visibility {
 	/**
 	 * Shortcut for <c>isVisible(x.getModifiers());</c>
 	 *
-	 * @param x The class to check.
+	 * @param x The class to check. Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the class is at least as visible as this object.
 	 */
 	public boolean isVisible(Class<?> x) {
@@ -73,7 +73,7 @@ public enum Visibility {
 	/**
 	 * Shortcut for <c>isVisible(x.getModifiers());</c>
 	 *
-	 * @param x The constructor to check.
+	 * @param x The constructor to check. Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the constructor is at least as visible as this object.
 	 */
 	public boolean isVisible(Executable x) {
@@ -83,7 +83,7 @@ public enum Visibility {
 	/**
 	 * Shortcut for <c>isVisible(x.getModifiers());</c>
 	 *
-	 * @param x The field to check.
+	 * @param x The field to check. Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the field is at least as visible as this object.
 	 */
 	public boolean isVisible(Field x) {

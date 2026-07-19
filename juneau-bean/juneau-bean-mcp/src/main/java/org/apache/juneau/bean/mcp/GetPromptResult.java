@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -41,7 +43,7 @@ public class GetPromptResult {
 	/**
 	 * Sets the prompt description.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public GetPromptResult setDescription(String value) {
@@ -55,13 +57,13 @@ public class GetPromptResult {
 	 * @return The messages list, or {@code null} if not set.
 	 */
 	public List<PromptMessage> getMessages() {
-		return messages;
+		return u(messages);
 	}
 
 	/**
 	 * Sets rendered messages.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public GetPromptResult setMessages(List<PromptMessage> value) {

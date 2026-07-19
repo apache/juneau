@@ -54,8 +54,8 @@ public class StringEntity extends BasicHttpEntity {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.
-	 * @param content The entity contents.
+	 * @param contentType The entity content type.  Can be <jk>null</jk>.
+	 * @param content The entity contents.  Can be <jk>null</jk>.
 	 */
 	public StringEntity(ContentType contentType, String content) {
 		super(contentType, content);
@@ -64,7 +64,7 @@ public class StringEntity extends BasicHttpEntity {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean being copied.
+	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
 	protected StringEntity(StringEntity copyFrom) {
 		super(copyFrom);
@@ -75,7 +75,7 @@ public class StringEntity extends BasicHttpEntity {
 		if (isCached() && byteCache == null)
 			byteCache = content().getBytes(getCharset());
 		if (nn(byteCache))
-			return byteCache;
+			return cp(byteCache);
 		return content().getBytes(getCharset());
 	}
 

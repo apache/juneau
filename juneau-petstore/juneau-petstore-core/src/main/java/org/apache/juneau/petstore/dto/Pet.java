@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.petstore.dto;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 /**
@@ -124,7 +126,7 @@ public class Pet {
 	 * @return The tags associated with the pet.  Can be <jk>null</jk>.
 	 */
 	public List<String> getTags() {
-		return tags;
+		return u(tags);
 	}
 
 	/**
@@ -134,7 +136,7 @@ public class Pet {
 	 * @return This object.
 	 */
 	public Pet setTags(List<String> value) {
-		tags = value;
+		tags = cp(value);
 		return this;
 	}
 

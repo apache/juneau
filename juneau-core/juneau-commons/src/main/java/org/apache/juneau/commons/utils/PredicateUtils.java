@@ -31,9 +31,9 @@ public final class PredicateUtils {
 	 * Consumes the specified value if the predicate is <jk>null</jk> or matches the specified value.
 	 *
 	 * @param <T> The type being consumed.
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
-	 * @param value The value.
+	 * @param predicate The predicate.  Can be <jk>null</jk> (treated as an always-match).
+	 * @param consumer The consumer.  Must not be <jk>null</jk> when the predicate matches.
+	 * @param value The value.  Can be <jk>null</jk>.
 	 */
 	public static <T> void consumeIf(Predicate<T> predicate, Consumer<T> consumer, T value) {
 		if (test(predicate, value))
@@ -57,8 +57,8 @@ public final class PredicateUtils {
 	 * Returns a function that prints the input value to stderr using a custom formatter and returns it unchanged.
 	 *
 	 * @param <T> The type of value.
-	 * @param message A format string using {@code {0}} as placeholder for the formatted value.
-	 * @param formatter A function to extract/format the value for display.
+	 * @param message A format string using {@code {0}} as placeholder for the formatted value.  Must not be <jk>null</jk>.
+	 * @param formatter A function to extract/format the value for display.  Must not be <jk>null</jk>.
 	 * @return A function that prints and returns the value.
 	 */
 	public static <T> Function<T,T> peek(String message, Function<T,?> formatter) {
@@ -72,8 +72,8 @@ public final class PredicateUtils {
 	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
 	 *
 	 * @param <T> The type being tested.
-	 * @param predicate The predicate.
-	 * @param value The value to test.
+	 * @param predicate The predicate.  Can be <jk>null</jk> (returns <jk>true</jk>).
+	 * @param value The value to test.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
 	 */
 	public static <T> boolean test(Predicate<T> predicate, T value) {
@@ -95,7 +95,7 @@ public final class PredicateUtils {
 	 * </p>
 	 *
 	 * @param <T> The element type.
-	 * @param keyExtractor A function that extracts the key from each element.
+	 * @param keyExtractor A function that extracts the key from each element.  Must not be <jk>null</jk>.
 	 * @return A predicate that returns <jk>true</jk> for the first occurrence of each unique key,
 	 * 	and <jk>false</jk> for subsequent occurrences with the same key.
 	 */

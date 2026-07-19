@@ -1,6 +1,5 @@
 package org.apache.juneau.commons.utils;
 
-import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Exceptions.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
@@ -212,8 +211,8 @@ public class CollectionUtils {
 	 * Creates a new set if the value is <jk>null</jk>.
 	 *
 	 * @param <E> The element type.
-	 * @param value The collection to add to.
-	 * @param entries The entries to add.
+	 * @param value The collection to add to.  Can be <jk>null</jk> (a new list is created and returned).
+	 * @param entries The entries to add.  Can be <jk>null</jk> (treated as a no-op — the value is returned unchanged).
 	 * @return The set.
 	 */
 	@SafeVarargs
@@ -232,14 +231,14 @@ public class CollectionUtils {
 	 * Creates a new set if the value is <jk>null</jk>.
 	 *
 	 * @param <E> The element type.
-	 * @param value The collection to add to.
-	 * @param entries The entries to add.
+	 * @param value The collection to add to.  Can be <jk>null</jk> (a new list is created and returned).
+	 * @param entries The entries to add.  Can be <jk>null</jk> (treated as a no-op — the value is returned unchanged).
 	 * @return The set.
 	 */
 	public static <E> List<E> addAll(List<E> value, List<E> entries) {
 		if (isNotNull(entries)) {
 			if (value == null)
-				value = copyOf(entries);
+				value = new ArrayList<>(entries);
 			else
 				value.addAll(entries);
 		}
@@ -251,8 +250,8 @@ public class CollectionUtils {
 	 * Creates a new set if the value is <jk>null</jk>.
 	 *
 	 * @param <E> The element type.
-	 * @param value The collection to add to.
-	 * @param entries The entries to add.
+	 * @param value The collection to add to.  Can be <jk>null</jk> (a new set is created and returned).
+	 * @param entries The entries to add.  Can be <jk>null</jk> (treated as a no-op — the value is returned unchanged).
 	 * @return The set.
 	 */
 	@SafeVarargs
@@ -271,8 +270,8 @@ public class CollectionUtils {
 	 * Creates a new set if the value is <jk>null</jk>.
 	 *
 	 * @param <E> The element type.
-	 * @param value The collection to add to.
-	 * @param entries The entries to add.
+	 * @param value The collection to add to.  Can be <jk>null</jk> (a new sorted set is created and returned).
+	 * @param entries The entries to add.  Can be <jk>null</jk> (treated as a no-op — the value is returned unchanged).
 	 * @return The set.
 	 */
 	@SafeVarargs
@@ -290,8 +289,8 @@ public class CollectionUtils {
 	 * Appends one or more elements to an array.
 	 *
 	 * @param <T> The element type.
-	 * @param array The array to append to.
-	 * @param newElements The new elements to append to the array.
+	 * @param array The array to append to.  Can be <jk>null</jk> (the new elements are returned as-is).
+	 * @param newElements The new elements to append to the array.  Must not be <jk>null</jk>; if empty, the original array is returned.
 	 * @return A new array with the specified elements appended.
 	 */
 	@SuppressWarnings({
@@ -312,7 +311,7 @@ public class CollectionUtils {
 	 * Creates an array of the specified component type and length.
 	 *
 	 * @param <E> The component type of the array.
-	 * @param componentType The component type of the array.
+	 * @param componentType The component type of the array.  Must not be <jk>null</jk>.
 	 * @param length The length of the array.
 	 * @return A new array of the specified type and length. Never <jk>null</jk>.
 	 */
@@ -327,8 +326,8 @@ public class CollectionUtils {
 	 * Converts the specified collection to an array.
 	 *
 	 * @param <E> The element type.
-	 * @param value The collection to convert.
-	 * @param componentType The component type of the array.
+	 * @param value The collection to convert.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link IllegalArgumentException}).
+	 * @param componentType The component type of the array.  Must not be <jk>null</jk>.
 	 * @return A new array.
 	 */
 	@SuppressWarnings({
@@ -343,10 +342,9 @@ public class CollectionUtils {
 	/**
 	 * Converts any array (including primitive arrays) to a List.
 	 *
-	 * @param array The array to convert. Can be any array type including primitives.
-	 * @return A List containing the array elements. Primitive values are auto-boxed.
-	 *         Returns null if the input is null.
-	 * @throws IllegalArgumentException if the input is not an array.
+	 * @param array The array to convert. Can be any array type including primitives.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link IllegalArgumentException}).
+	 * @return A List containing the array elements. Primitive values are auto-boxed.  Never <jk>null</jk>.
+	 * @throws IllegalArgumentException if the input is <jk>null</jk> or is not an array.
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for array conversion
@@ -416,7 +414,7 @@ public class CollectionUtils {
 	 * Combine an arbitrary number of arrays into a single array.
 	 *
 	 * @param <E> The element type.
-	 * @param arrays Collection of arrays to combine.
+	 * @param arrays Collection of arrays to combine.  Must not be <jk>null</jk> (a <jk>null</jk> array argument throws {@link IllegalArgumentException}); individual <jk>null</jk> array entries are skipped.
 	 * @return A new combined array, or an empty array if all arrays are <jk>null</jk>.
 	 */
 	@SuppressWarnings({
@@ -462,8 +460,8 @@ public class CollectionUtils {
 	 * <p>
 	 * Works on both object and primitive arrays.
 	 *
-	 * @param array The array to copy into a list.
-	 * @param list The list to copy the values into.
+	 * @param array The array to copy into a list.  Can be <jk>null</jk> (nothing is copied).
+	 * @param list The list to copy the values into.  Must not be <jk>null</jk> when the array is non-<jk>null</jk>.
 	 * @return The same list passed in.
 	 */
 	@SuppressWarnings({
@@ -477,139 +475,6 @@ public class CollectionUtils {
 				list.add(Array.get(array, i));
 		}
 		return list;
-	}
-
-	/**
-	 * Creates a new collection from the specified collection.
-	 *
-	 * @param <E> The element type.
-	 * @param val The value to copy from.
-	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
-	 */
-	public static <E> Collection<E> copyOf(Collection<E> val) {
-		return val == null ? null : new LinkedHashSet<>(val);
-	}
-
-	/**
-	 * Convenience method for copying a list.
-	 *
-	 * @param <E> The element type.
-	 * @param value The list to copy.
-	 * @return A new modifiable list.
-	 */
-	public static <E> List<E> copyOf(List<E> value) {
-		return value == null ? null : new ArrayList<>(value);
-	}
-
-	/**
-	 * Makes a deep copy of the specified list.
-	 *
-	 * @param l The list to copy.
-	 * @param valueMapper The function to apply to each value in the list.
-	 * @param <E> The entry type.
-	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.
-	 */
-	public static <E> List<E> copyOf(List<E> l, Function<? super E,? extends E> valueMapper) {
-		return copyOf(l, valueMapper, LinkedList::new);
-	}
-
-	/**
-	 * Makes a deep copy of the specified list.
-	 *
-	 * @param l The list to copy.
-	 * @param valueMapper The function to apply to each value in the list.
-	 * @param <E> The entry type.
-	 * @param listFactory The factory for creating the list.
-	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.
-	 */
-	public static <E> List<E> copyOf(List<E> l, Function<? super E,? extends E> valueMapper, Supplier<List<E>> listFactory) {
-		return l == null ? null : l.stream().map(valueMapper).collect(toCollection(listFactory));
-	}
-
-	/**
-	 * Creates a new map from the specified map.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param val The value to copy from.
-	 * @return A new {@link LinkedHashMap}, or <jk>null</jk> if the input was null.
-	 */
-	public static <K,V> Map<K,V> copyOf(Map<K,V> val) {
-		return val == null ? null : new LinkedHashMap<>(val);
-	}
-
-	/**
-	 * Makes a deep copy of the specified map.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param m The map to copy.
-	 * @param valueMapper The function to apply to each value in the map.
-	 * @return A new map with the same keys as the specified map, but with values transformed by the specified function.  Null if the map being copied was null.
-	 */
-	public static <K,V> Map<K,V> copyOf(Map<K,V> m, Function<? super V,? extends V> valueMapper) {
-		return copyOf(m, valueMapper, LinkedHashMap::new);
-	}
-
-	/**
-	 * Makes a deep copy of the specified map.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param m The map to copy.
-	 * @param valueMapper The function to apply to each value in the map.
-	 * @param mapFactory The factory for creating the map.
-	 * @return A new map with the same keys as the specified map, but with values transformed by the specified function.  Null if the map being copied was null.
-	 */
-	public static <K,V> Map<K,V> copyOf(Map<K,V> m, Function<? super V,? extends V> valueMapper, Supplier<Map<K,V>> mapFactory) {
-		return m == null ? null : m.entrySet().stream().collect(toMap(Map.Entry::getKey, e -> valueMapper.apply(e.getValue()), (a, b) -> b, mapFactory));
-	}
-
-	/**
-	 * Creates a new set from the specified collection.
-	 *
-	 * @param <E> The element type.
-	 * @param val The value to copy from.
-	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
-	 */
-	public static <E> Set<E> copyOf(Set<E> val) {
-		return val == null ? null : new LinkedHashSet<>(val);
-	}
-
-	/**
-	 * Makes a deep copy of the specified list.
-	 *
-	 * @param l The list to copy.
-	 * @param valueMapper The function to apply to each value in the list.
-	 * @param <E> The entry type.
-	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.
-	 */
-	public static <E> Set<E> copyOf(Set<E> l, Function<? super E,? extends E> valueMapper) {
-		return copyOf(l, valueMapper, LinkedHashSet::new);
-	}
-
-	/**
-	 * Makes a deep copy of the specified list.
-	 *
-	 * @param l The list to copy.
-	 * @param valueMapper The function to apply to each value in the list.
-	 * @param <E> The entry type.
-	 * @param setFactory The factory for creating sets.
-	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.
-	 */
-	public static <E> Set<E> copyOf(Set<E> l, Function<? super E,? extends E> valueMapper, Supplier<Set<E>> setFactory) {
-		return l == null ? null : l.stream().map(valueMapper).collect(toCollection(setFactory));
-	}
-
-	/**
-	 * Makes a copy of the specified array.
-	 *
-	 * @param array The array to copy.
-	 * @param <T> The element type.
-	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.s
-	 */
-	public static <T> T[] copyOf(T[] array) {
-		return array == null ? null : Arrays.copyOf(array, array.length);
 	}
 
 	/**
@@ -674,8 +539,8 @@ public class CollectionUtils {
 	 * Iterates the specified array in reverse order.
 	 *
 	 * @param <E> The element type.
-	 * @param value The array to iterate.
-	 * @param action The action to perform.
+	 * @param value The array to iterate.  Must not be <jk>null</jk>.
+	 * @param action The action to perform.  Must not be <jk>null</jk>.
 	 */
 	public static <E> void forEachReverse(E[] value, Consumer<E> action) {
 		for (var i = value.length - 1; i >= 0; i--)
@@ -686,8 +551,8 @@ public class CollectionUtils {
 	 * Iterates the specified list in reverse order.
 	 *
 	 * @param <E> The element type.
-	 * @param value The list to iterate.
-	 * @param action The action to perform.
+	 * @param value The list to iterate.  Must not be <jk>null</jk>.
+	 * @param action The action to perform.  Must not be <jk>null</jk>.
 	 */
 	public static <E> void forEachReverse(List<E> value, Consumer<E> action) {
 		if (value instanceof ArrayList) {
@@ -869,8 +734,8 @@ public class CollectionUtils {
 	 *
 	 * @param <E> The element type.
 	 * @param elementType The element type.
-	 * @param values The values to initialize the list with.
-	 * @return A new modifiable list.
+	 * @param values The values to initialize the list with.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new modifiable list, or <jk>null</jk> if the values array itself is <jk>null</jk>.
 	 */
 	@SafeVarargs
 	public static <E> List<E> listOfType(Class<E> elementType, E...values) {
@@ -1610,8 +1475,8 @@ public class CollectionUtils {
 	 * Creates a new set if the value is <jk>null</jk>.
 	 *
 	 * @param <E> The element type.
-	 * @param value The collection to add to.
-	 * @param entries The entries to add.
+	 * @param value The collection to add to.  Can be <jk>null</jk> (a new list is created and returned).
+	 * @param entries The entries to add.  Can be <jk>null</jk> (treated as a no-op — the value is returned unchanged).
 	 * @return The set.
 	 */
 	@SafeVarargs
@@ -1629,7 +1494,7 @@ public class CollectionUtils {
 	 * Reverses the elements in the specified array in-place.
 	 *
 	 * @param <E> The element type.
-	 * @param array The array to reverse.
+	 * @param array The array to reverse.  Must not be <jk>null</jk>.
 	 * @return The same array, reversed.
 	 */
 	public static <E> E[] reverse(E[] array) {
@@ -1648,7 +1513,7 @@ public class CollectionUtils {
 	 * The returned list is a live view that reflects changes to the original list.
 	 *
 	 * @param <E> The element type.
-	 * @param list The list to reverse.
+	 * @param list The list to reverse.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link IllegalArgumentException}).
 	 * @return A reversed view of the list.
 	 */
 	public static <E> List<E> reverse(List<E> list) {
@@ -1763,7 +1628,7 @@ public class CollectionUtils {
 	 *
 	 * @param <E> The element type.
 	 * @param elementType The element type.
-	 * @param values The values to initialize the set with.
+	 * @param values The values to initialize the set with.  Must not be <jk>null</jk> (a <jk>null</jk> array throws {@link IllegalArgumentException}).
 	 * @return A new modifiable set.
 	 */
 	@SafeVarargs
@@ -1775,8 +1640,8 @@ public class CollectionUtils {
 	 * Convenience method for creating an {@link ArrayList} and sorting it.
 	 *
 	 * @param <E> The element type.
-	 * @param comparator The comparator to use to sort the list.
-	 * @param value The values to initialize the list with.
+	 * @param comparator The comparator to use to sort the list.  Can be <jk>null</jk> (natural ordering is used).
+	 * @param value The values to initialize the list with.  Can be <jk>null</jk> (returns an empty list).
 	 * @return A new modifiable list.
 	 */
 	public static <E> List<E> sortedList(Comparator<E> comparator, Collection<E> value) {
@@ -1789,8 +1654,8 @@ public class CollectionUtils {
 	 * Convenience method for creating an {@link ArrayList} and sorting it.
 	 *
 	 * @param <E> The element type.
-	 * @param comparator The comparator to use to sort the list.
-	 * @param values The values to initialize the list with.
+	 * @param comparator The comparator to use to sort the list.  Can be <jk>null</jk> (natural ordering is used).
+	 * @param values The values to initialize the list with.  Must not be <jk>null</jk>.
 	 * @return A new modifiable list.
 	 */
 	public static <E> List<E> sortedList(Comparator<E> comparator, E[] values) {
@@ -1803,7 +1668,7 @@ public class CollectionUtils {
 	 * Convenience method for creating an {@link ArrayList} and sorting it.
 	 *
 	 * @param <E> The element type.
-	 * @param values The values to initialize the list with.
+	 * @param values The values to initialize the list with.  Must not be <jk>null</jk>.
 	 * @return A new modifiable list.
 	 */
 	@SuppressWarnings({
@@ -1837,6 +1702,7 @@ public class CollectionUtils {
 	 *
 	 * @param <E> The element type.
 	 * @param values The values to initialize the set with.
+	 * 	<br>Must not be <jk>null</jk> (a <jk>null</jk> array throws {@link IllegalArgumentException}).
 	 * 	<br>Can contain <jk>null</jk> values (they will be filtered out).
 	 * @return A new modifiable set.
 	 */
@@ -1876,11 +1742,11 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Wraps the specified list in {@link Collections#unmodifiableList(List)}.
+	 * Wraps the specified list in a synchronized (thread-safe) view via {@link Collections#synchronizedList(List)}.
 	 *
 	 * @param <E> The element type.
-	 * @param value The list to wrap.
-	 * @return The wrapped list.
+	 * @param value The list to wrap.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A synchronized view of the list, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"java:S1168"     // Pass-through null by design. Consider empty list.
@@ -1890,12 +1756,12 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Wraps the specified map in {@link Collections#unmodifiableMap(Map)}.
+	 * Wraps the specified map in a synchronized (thread-safe) view via {@link Collections#synchronizedMap(Map)}.
 	 *
 	 * @param <K> The key type.
 	 * @param <V> The value type.
-	 * @param value The map to wrap.
-	 * @return The wrapped map.
+	 * @param value The map to wrap.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A synchronized view of the map, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"java:S1168"     // Pass-through null by design. Consider empty map.
@@ -1905,11 +1771,11 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Wraps the specified set in {@link Collections#unmodifiableSet(Set)}.
+	 * Wraps the specified set in a synchronized (thread-safe) view via {@link Collections#synchronizedSet(Set)}.
 	 *
 	 * @param <E> The element type.
-	 * @param value The set to wrap.
-	 * @return The wrapped set.
+	 * @param value The set to wrap.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A synchronized view of the set, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"java:S1168"     // Pass-through null by design. Consider empty set.
@@ -1925,8 +1791,8 @@ public class CollectionUtils {
 	 * Works on both object and primitive arrays.
 	 *
 	 * @param <E> The element type.
-	 * @param c The collection to convert to an array.
-	 * @param elementType The component type of the collection.
+	 * @param c The collection to convert to an array.  Must not be <jk>null</jk>.
+	 * @param elementType The component type of the collection.  Must not be <jk>null</jk>.
 	 * @return A new array.
 	 */
 	public static <E> Object toArray(Collection<?> c, Class<E> elementType) {
@@ -1942,7 +1808,7 @@ public class CollectionUtils {
 	 * Creates an {@link ArrayList} copy from a collection.
 	 *
 	 * @param <E> The element type.
-	 * @param value The collection to copy from.
+	 * @param value The collection to copy from.  Can be <jk>null</jk> (returns an empty list).
 	 * @return A new modifiable list.
 	 */
 	public static <E> List<E> toList(Collection<E> value) {
@@ -1953,7 +1819,7 @@ public class CollectionUtils {
 	 * Creates an {@link ArrayList} copy from a collection.
 	 *
 	 * @param <E> The element type.
-	 * @param value The collection to copy from.
+	 * @param value The collection to copy from.  Can be <jk>null</jk>.
 	 * @param nullIfEmpty If <jk>true</jk> will return <jk>null</jk> if the collection is empty or null.
 	 * @return A new modifiable list, or an empty list if the input was <jk>null</jk> (when nullIfEmpty is false), or <jk>null</jk> if nullIfEmpty and the input was null or empty.
 	 */
@@ -2053,7 +1919,7 @@ public class CollectionUtils {
 	 * Converts the specified array to an <c>ArrayList</c>
 	 *
 	 * @param <E> The element type.
-	 * @param array The array to convert.
+	 * @param array The array to convert.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @param elementType
 	 * 	The type of objects in the array.
 	 * 	It must match the actual component type in the array.
@@ -2073,7 +1939,7 @@ public class CollectionUtils {
 	/**
 	 * Recursively converts the specified array into a list of objects.
 	 *
-	 * @param array The array to convert.
+	 * @param array The array to convert.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return A new {@link ArrayList}
 	 */
 	public static List<Object> toObjectList(Object array) {
@@ -2105,7 +1971,7 @@ public class CollectionUtils {
 	 * The order of the entries in the set are the same as the array.
 	 *
 	 * @param <T> The entry type of the array.
-	 * @param array The array being wrapped in a <c>Set</c> interface.
+	 * @param array The array being wrapped in a <c>Set</c> interface.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link IllegalArgumentException}).
 	 * @return The new set.
 	 */
 	public static <T> Set<T> toSet(T[] array) {
@@ -2198,7 +2064,7 @@ public class CollectionUtils {
 
 	/**
 	 * Converts an array to a stream of objects.
-	 * @param array The array to convert.
+	 * @param array The array to convert.  Must not be <jk>null</jk> (a <jk>null</jk> or non-array argument throws {@link IllegalArgumentException}).
 	 * @return A new stream.
 	 */
 	public static Stream<Object> toStream(Object array) {
@@ -2214,7 +2080,7 @@ public class CollectionUtils {
 	 * Entries are converted to strings using {@link #toString()}.
 	 * <jk>null</jk> values remain <jk>null</jk>.
 	 *
-	 * @param c The collection to convert.
+	 * @param c The collection to convert.  Must not be <jk>null</jk>.
 	 * @return The collection as a string array.
 	 */
 	public static String[] toStringArray(Collection<?> c) {
@@ -2239,8 +2105,8 @@ public class CollectionUtils {
 	 * </ul>
 	 *
 	 * @param <T> The element type.
-	 * @param o The object to traverse.
-	 * @param c The consumer of the leaf elements.
+	 * @param o The object to traverse.  Can be <jk>null</jk> (the consumer is not called).
+	 * @param c The consumer of the leaf elements.  Must not be <jk>null</jk>.
 	 */
 	public static <T> void traverse(Object o, Consumer<T> c) {
 		CollectionUtils.<T>traverseToStream(o).forEach(c);
@@ -2282,7 +2148,7 @@ public class CollectionUtils {
 	 * Creates an array of objects (varargs form).
 	 *
 	 * @param <T> The component type of the array.
-	 * @param x The objects to place in the array.
+	 * @param x The objects to place in the array.  Can be <jk>null</jk> (returned as-is).
 	 * @return A new array containing the specified objects.
 	 */
 	@SafeVarargs
@@ -2294,7 +2160,7 @@ public class CollectionUtils {
 	 * Creates a 2-dimensional array.
 	 *
 	 * @param <E> The element type of the inner arrays.
-	 * @param value The 1D arrays that will become rows in the 2D array.
+	 * @param value The 1D arrays that will become rows in the 2D array.  Can be <jk>null</jk> (returned as-is).
 	 * @return A 2D array containing the specified rows.
 	 */
 	@SafeVarargs
@@ -2305,7 +2171,7 @@ public class CollectionUtils {
 	/**
 	 * Creates an Object array.
 	 *
-	 * @param value The objects to place in the array.
+	 * @param value The objects to place in the array.  Can be <jk>null</jk> (returned as-is).
 	 * @return A new {@code Object[]} containing the specified objects.
 	 */
 	public static Object[] objectArray(Object...value) {
@@ -2333,7 +2199,7 @@ public class CollectionUtils {
 	 * Creates a LinkedList from the specified values.
 	 *
 	 * @param <T> The element type.
-	 * @param values The values to add to the list.
+	 * @param values The values to add to the list.  Must not be <jk>null</jk> (a <jk>null</jk> array throws {@link NullPointerException}).
 	 * @return A new modifiable LinkedList containing the specified values.
 	 */
 	@SafeVarargs
@@ -2345,7 +2211,7 @@ public class CollectionUtils {
 	 * Creates a HashSet from the specified values.
 	 *
 	 * @param <T> The element type.
-	 * @param values The values to add to the set.
+	 * @param values The values to add to the set.  Must not be <jk>null</jk> (a <jk>null</jk> array throws {@link NullPointerException}).
 	 * @return A new modifiable HashSet containing the specified values.
 	 */
 	@SafeVarargs
@@ -2490,7 +2356,7 @@ public class CollectionUtils {
 	 * Creates a new modifiable LinkedHashSet.
 	 *
 	 * @param <T> The element type.
-	 * @param values The values to add to the set.
+	 * @param values The values to add to the set.  Must not be <jk>null</jk> (a <jk>null</jk> array throws {@link IllegalArgumentException}).
 	 * @return A modifiable LinkedHashSet containing the specified values.
 	 */
 	@SafeVarargs

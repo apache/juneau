@@ -28,7 +28,7 @@ public class ClassInfoTyped<T> extends ClassInfo {
 	/**
 	 * Constructor.
 	 *
-	 * @param inner The class type.
+	 * @param inner The class type.  Must not be <jk>null</jk>.
 	 */
 	protected ClassInfoTyped(Class<T> inner) {
 		super(inner, inner);
@@ -37,8 +37,8 @@ public class ClassInfoTyped<T> extends ClassInfo {
 	/**
 	 * Constructor.
 	 *
-	 * @param inner The class type.
-	 * @param innerType The generic type (if parameterized type).
+	 * @param inner The class type.  Can be <jk>null</jk> if <c>innerType</c> is specified.
+	 * @param innerType The generic type (if parameterized type).  Can be <jk>null</jk> if <c>inner</c> is specified.
 	 */
 	protected ClassInfoTyped(Class<T> inner, Type innerType) {
 		super(inner, innerType);

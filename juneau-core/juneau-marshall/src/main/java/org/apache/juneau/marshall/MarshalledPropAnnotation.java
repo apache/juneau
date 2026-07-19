@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -343,10 +343,10 @@ public class MarshalledPropAnnotation {
 
 		Object(MarshalledPropAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
-			dictionary = copyOf(b.dictionary);
+			description = cp(b.description);
+			dictionary = cp(b.dictionary);
 			format = b.format;
-			view = copyOf(b.view);
+			view = cp(b.view);
 			durationFormat = b.durationFormat;
 			periodFormat = b.periodFormat;
 			calendarFormat = b.calendarFormat;

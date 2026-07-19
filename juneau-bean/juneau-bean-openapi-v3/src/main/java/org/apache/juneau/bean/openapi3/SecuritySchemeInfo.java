@@ -18,6 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.contains;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -136,7 +137,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 		this.scheme = copyFrom.scheme;
 		this.bearerFormat = copyFrom.bearerFormat;
 		this.openIdConnectUrl = copyFrom.openIdConnectUrl;
-		this.flows = copyFrom.flows;
+		this.flows = copyOf(copyFrom.flows);
 	}
 
 	/**

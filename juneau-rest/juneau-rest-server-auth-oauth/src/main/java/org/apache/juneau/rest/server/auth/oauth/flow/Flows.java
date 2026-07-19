@@ -88,8 +88,8 @@ final class Flows {
 		var custom = success.getCustomParameters();
 		if (custom != null) { // HTT: null branch unreachable; Nimbus returns an empty map (never null) for standard responses
 			var v = custom.get("id_token");
-			if (v instanceof String s)
-				idToken = o(s);
+			if (v instanceof String v2)
+				idToken = o(v2);
 		}
 		return new OAuthToken(access.getValue(), tokenType, expiresAt, refreshToken, scope, idToken);
 	}
@@ -108,6 +108,6 @@ final class Flows {
 	 * @return The cast token, or {@code null}.
 	 */
 	static BearerAccessToken asBearer(com.nimbusds.oauth2.sdk.token.AccessToken token) {
-		return token instanceof BearerAccessToken b ? b : null; // HTT: null return unreachable in current callers; all token-endpoint responses produce BearerAccessToken
+		return token instanceof BearerAccessToken token2 ? token2 : null; // HTT: null return unreachable in current callers; all token-endpoint responses produce BearerAccessToken
 	}
 }

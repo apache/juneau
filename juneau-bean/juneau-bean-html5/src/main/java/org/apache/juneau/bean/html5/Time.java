@@ -84,7 +84,7 @@ public class Time extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Time} element with the specified {@link Time#children(Object[])} nodes.
 	 *
-	 * @param children The {@link Time#children(Object[])} nodes.
+	 * @param children The {@link Time#children(Object[])} nodes. Must not be <jk>null</jk>.
 	 */
 	public Time(Object...children) {
 		children(children);
@@ -143,7 +143,7 @@ public class Time extends HtmlElementMixed {
 	 * <p>
 	 * The value should be a valid date-time string in ISO 8601 format.
 	 *
-	 * @param value The machine-readable date and time value.
+	 * @param value The machine-readable date and time value. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Time datetime(String value) {

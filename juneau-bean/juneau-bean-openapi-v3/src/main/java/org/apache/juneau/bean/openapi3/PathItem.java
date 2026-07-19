@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -129,14 +129,14 @@ public class PathItem extends OpenApiElement {
 		super(copyFrom);
 		this.summary = copyFrom.summary;
 		this.description = copyFrom.description;
-		this.get = copyFrom.get;
-		this.put = copyFrom.put;
-		this.post = copyFrom.post;
-		this.delete = copyFrom.delete;
-		this.options = copyFrom.options;
-		this.head = copyFrom.head;
-		this.patch = copyFrom.patch;
-		this.trace = copyFrom.trace;
+		this.get = copyOf(copyFrom.get);
+		this.put = copyOf(copyFrom.put);
+		this.post = copyOf(copyFrom.post);
+		this.delete = copyOf(copyFrom.delete);
+		this.options = copyOf(copyFrom.options);
+		this.head = copyOf(copyFrom.head);
+		this.patch = copyOf(copyFrom.patch);
+		this.trace = copyOf(copyFrom.trace);
 		this.servers = copyOf(copyFrom.servers);
 		this.parameters = copyOf(copyFrom.parameters);
 	}
@@ -210,7 +210,7 @@ public class PathItem extends OpenApiElement {
 	 *
 	 * @return The parameters list.
 	 */
-	public List<Parameter> getParameters() { return parameters; }
+	public List<Parameter> getParameters() { return u(parameters); }
 
 	/**
 	 * Returns the PATCH operation.
@@ -238,7 +238,7 @@ public class PathItem extends OpenApiElement {
 	 *
 	 * @return The servers list.
 	 */
-	public List<Server> getServers() { return servers; }
+	public List<Server> getServers() { return u(servers); }
 
 	/**
 	 * Returns the summary.

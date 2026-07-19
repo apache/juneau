@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.guard;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
@@ -195,7 +196,7 @@ public class RateLimitGuard extends RestGuard {
 			}
 		}
 		var k = keyResolver.apply(req);
-		return k != null ? k : "";
+		return or(k, "");
 	}
 
 	private static TooManyRequests tooManyRequests(RateLimitInfo info) {

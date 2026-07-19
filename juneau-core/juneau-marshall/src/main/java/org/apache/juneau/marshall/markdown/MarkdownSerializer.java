@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.markdown;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -229,7 +230,7 @@ public class MarkdownSerializer extends WriterSerializer implements MarkdownMeta
 	 */
 	public MarkdownSerializer(Builder<?> builder) {
 		super(builder);
-		nullValue = builder.nullValue != null ? builder.nullValue : CONST_null;
+		nullValue = or(builder.nullValue, CONST_null);
 		showHeaders = builder.showHeaders;
 	}
 

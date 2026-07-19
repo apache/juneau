@@ -18,6 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -104,7 +105,7 @@ public class Link extends OpenApiElement {
 		this.description = copyFrom.description;
 		this.operationId = copyFrom.operationId;
 		this.requestBody = copyFrom.requestBody;
-		this.server = copyFrom.server == null ? null : copyFrom.server.copy();
+		this.server = copyOf(copyFrom.server);
 		parameters.putAll(copyFrom.parameters);
 	}
 

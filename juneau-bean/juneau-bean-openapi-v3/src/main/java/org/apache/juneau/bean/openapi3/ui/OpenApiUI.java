@@ -254,7 +254,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	private static Div opBlock(Session s, String path, String opName, Operation op) {
 
 		boolean deprecated = isTrue(op.getDeprecated());
-		var opClass = deprecated ? "deprecated" : opName.toLowerCase();
+		var opClass = deprecated ? "deprecated" : lcr(opName);
 		if (! deprecated && ! STANDARD_METHODS.contains(opClass)) // HTT - opBlock only called with standard method names; custom method branch unreachable
 			opClass = "other";
 
@@ -262,7 +262,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	private static HtmlElement opBlockSummary(String path, String opName, Operation op) {
-		return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(span(opName.toUpperCase()).class_("method-button"), span(path).class_("path"),
+		return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(span(ucr(opName)).class_("method-button"), span(path).class_("path"),
 			nn(op.getSummary()) ? span(op.getSummary()).class_("summary") : null);
 	}
 

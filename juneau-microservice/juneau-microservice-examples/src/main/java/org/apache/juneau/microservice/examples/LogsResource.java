@@ -128,7 +128,7 @@ public class LogsResource extends BasicRestServlet {
 		public FileResource(File f, String path, boolean allowDeletes, boolean includeChildren) {
 			this.f = f;
 			this.path = path;
-			this.uri = "servlet:/" + (path == null ? "" : path);
+			this.uri = "servlet:/" + or(path, "");
 			this.includeChildren = includeChildren;
 			this.allowDeletes = allowDeletes;
 		}
@@ -379,7 +379,7 @@ public class LogsResource extends BasicRestServlet {
 					w.append("<span style='color:gray'>[EMPTY]</span>");
 				else
 					for (var le : lp) {
-						var s = le.severity.charAt(0);
+						var s = ie(le.severity) ? ' ' : le.severity.charAt(0);
 						String color = "black";
 						//SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST
 						if (s == 'I')

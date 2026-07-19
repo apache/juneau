@@ -130,7 +130,7 @@ public class MediaRange extends MediaType {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof MediaRange other && eq(this, other, (x, y) -> eq(x.string, y.string));
+		return o instanceof MediaRange o2 && eq(this, o2, (x, y) -> eq(x.string, y.string));
 	}
 
 	@Override /* Overridden from Object */

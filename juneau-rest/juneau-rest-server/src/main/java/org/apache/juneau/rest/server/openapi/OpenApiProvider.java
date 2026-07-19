@@ -78,7 +78,7 @@ public interface OpenApiProvider {
 			try {
 				if (impl != null)
 					return impl;
-				var t = implType != null ? implType : BasicOpenApiProvider.class;
+				var t = or(implType, BasicOpenApiProvider.class);
 				return BeanInstantiator.of(OpenApiProvider.class, beanStore)
 					.type(t)
 					.noBuilder()

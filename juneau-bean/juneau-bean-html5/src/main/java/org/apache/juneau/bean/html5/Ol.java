@@ -93,7 +93,7 @@ public class Ol extends HtmlElementContainer {
 	/**
 	 * Creates an {@link Ol} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Ol(Object...children) {
 		children(children);
@@ -483,6 +483,7 @@ public class Ol extends HtmlElementContainer {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Ol reversed(Object value) {
@@ -511,6 +512,7 @@ public class Ol extends HtmlElementContainer {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Ol start(Object value) {
@@ -558,7 +560,7 @@ public class Ol extends HtmlElementContainer {
 	 * 	<li><js>"I"</js> - Uppercase Roman numerals (I, II, III, ...)</li>
 	 * </ul>
 	 *
-	 * @param value The type of numbering for the ordered list.
+	 * @param value The type of numbering for the ordered list. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Ol type(String value) {

@@ -61,7 +61,7 @@ public class ManifestFile {
 	 * If the class isn't packaged inside a Jar (e.g. running from an exploded classpath), the resulting
 	 * instance has no main attributes and no sections.
 	 *
-	 * @param c The anchor class.
+	 * @param c The anchor class.  Must not be <jk>null</jk>.
 	 * @throws IOException If the manifest could not be read.
 	 */
 	public ManifestFile(Class<?> c) throws IOException {
@@ -83,7 +83,7 @@ public class ManifestFile {
 	/**
 	 * Loads a manifest from a file on disk.
 	 *
-	 * @param f The manifest file.
+	 * @param f The manifest file.  Must not be <jk>null</jk>.
 	 * @throws IOException If the manifest could not be read.
 	 */
 	public ManifestFile(File f) throws IOException {
@@ -104,7 +104,7 @@ public class ManifestFile {
 	 * <p>
 	 * The stream must end in a newline to pick up the last line.
 	 *
-	 * @param in The manifest stream.
+	 * @param in The manifest stream.  Must not be <jk>null</jk>.
 	 * @throws IOException If the manifest could not be read.
 	 */
 	public ManifestFile(InputStream in) throws IOException {
@@ -116,7 +116,7 @@ public class ManifestFile {
 	/**
 	 * Wraps an existing {@link Manifest}.
 	 *
-	 * @param mf The manifest.
+	 * @param mf The manifest.  Can be <jk>null</jk>, in which case the manifest is treated as having no attributes or sections.
 	 */
 	public ManifestFile(Manifest mf) {
 		this.mainAttributes = readMain(mf);
@@ -126,7 +126,7 @@ public class ManifestFile {
 	/**
 	 * Loads a manifest from a path.
 	 *
-	 * @param path The manifest path.
+	 * @param path The manifest path.  Must not be <jk>null</jk>.
 	 * @throws IOException If the manifest could not be read.
 	 */
 	public ManifestFile(Path path) throws IOException {
@@ -147,7 +147,7 @@ public class ManifestFile {
 	 * <p>
 	 * The reader's contents must end in a newline to pick up the last line.
 	 *
-	 * @param r The manifest reader.
+	 * @param r The manifest reader.  Must not be <jk>null</jk>.
 	 * @throws IOException If the manifest could not be read.
 	 */
 	public ManifestFile(Reader r) throws IOException {
@@ -161,7 +161,7 @@ public class ManifestFile {
 			return Collections.emptyMap();
 		var out = new LinkedHashMap<String,String>();
 		mf.getMainAttributes().forEach((k,v) -> out.put(k.toString(), v.toString()));
-		return Collections.unmodifiableMap(out);
+		return u(out);
 	}
 
 	private static Map<String,Map<String,String>> readSections(Manifest mf) {
@@ -171,15 +171,15 @@ public class ManifestFile {
 		mf.getEntries().forEach((sectionName, attrs) -> {
 			var section = new LinkedHashMap<String,String>();
 			attrs.forEach((k,v) -> section.put(k.toString(), v.toString()));
-			out.put(sectionName, Collections.unmodifiableMap(section));
+			out.put(sectionName, u(section));
 		});
-		return Collections.unmodifiableMap(out);
+		return u(out);
 	}
 
 	/**
 	 * Returns the value of a main-attribute key.
 	 *
-	 * @param key The main-attribute key.
+	 * @param key The main-attribute key.  Can be <jk>null</jk>, in which case an empty value is returned.
 	 * @return The value, or empty if the key is unset.
 	 */
 	public Optional<String> get(String key) {
@@ -189,8 +189,8 @@ public class ManifestFile {
 	/**
 	 * Returns the value of a key inside the named section.
 	 *
-	 * @param section The section name.
-	 * @param key The attribute key.
+	 * @param section The section name.  Can be <jk>null</jk>, in which case an empty value is returned.
+	 * @param key The attribute key.  Can be <jk>null</jk>, in which case an empty value is returned.
 	 * @return The value, or empty if the section or key is unset.
 	 */
 	public Optional<String> get(String section, String key) {
@@ -219,7 +219,7 @@ public class ManifestFile {
 	/**
 	 * Returns the attributes of the named section as an unmodifiable map.
 	 *
-	 * @param section The section name.
+	 * @param section The section name.  Can be <jk>null</jk>, in which case an empty map is returned.
 	 * @return The section's attribute map, or an empty map if the section is unknown.
 	 */
 	public Map<String,String> asMap(String section) {

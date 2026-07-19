@@ -42,7 +42,7 @@ public abstract class StreamedVar extends Var {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The variable name (e.g. <js>"C"</js> for variables of the form <js>"$C{...}"</js>)
+	 * @param name The variable name (e.g. <js>"C"</js> for variables of the form <js>"$C{...}"</js>).  Must not be <jk>null</jk>.
 	 */
 	protected StreamedVar(String name) {
 		super(name, true);

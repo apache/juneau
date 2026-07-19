@@ -81,7 +81,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * 	The parts to add to the list.
 	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br><jk>null</jk> entries are ignored.
-	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 * @return A new instance, never <jk>null</jk>.
 	 */
 	public static PartList of(List<NameValuePair> parts) {
 		return new PartList().append(parts);
@@ -93,7 +93,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param parts
 	 * 	The parts to add to the list.
 	 * 	<br><jk>null</jk> entries are ignored.
-	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 * @return A new instance, never <jk>null</jk>.
 	 */
 	public static PartList of(NameValuePair...parts) {
 		return new PartList().append(parts);
@@ -136,7 +136,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy.
+	 * @param copyFrom The bean to copy.  Must not be <jk>null</jk>.
 	 */
 	protected PartList(PartList copyFrom) {
 		super(false, copyFrom);
@@ -313,7 +313,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * </p>
 	 *
 	 * @param <T> The part implementation class.
-	 * @param type The part implementation class.
+	 * @param type The part implementation class.  Must not be <jk>null</jk>.
 	 * @return A part with a condensed value or <jk>null</jk> if no parts by the given name are present
 	 */
 	public <T> Optional<T> get(Class<T> type) {

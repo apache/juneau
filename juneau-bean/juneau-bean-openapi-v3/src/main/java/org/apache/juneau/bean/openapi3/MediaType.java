@@ -18,6 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -104,7 +105,7 @@ public class MediaType extends OpenApiElement {
 	public MediaType(MediaType copyFrom) {
 		super(copyFrom);
 
-		this.schema = copyFrom.schema;
+		this.schema = copyOf(copyFrom.schema);
 		this.example = copyFrom.example;
 		examples.putAll(copyOf(copyFrom.examples, Example::copy));
 		encoding.putAll(copyOf(copyFrom.encoding, Encoding::copy));

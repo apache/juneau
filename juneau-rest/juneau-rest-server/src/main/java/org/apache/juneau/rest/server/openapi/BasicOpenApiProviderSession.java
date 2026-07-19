@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.openapi;
 
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -410,7 +411,7 @@ public class BasicOpenApiProviderSession {
 					if (! name.isEmpty()) {
 						var props = (Json5Map) formSchema.get(K_properties);
 						props.put(name, extractInlineSchema(pmap));
-						if (Boolean.TRUE.equals(pmap.get(K_required)))
+						if (isTrue(pmap.get(K_required)))
 							formRequired.add(name);
 					}
 				} else {
@@ -457,7 +458,7 @@ public class BasicOpenApiProviderSession {
 		var rb = new Json5Map();
 		if (p.containsKey(K_description))
 			rb.put(K_description, p.get(K_description));
-		if (Boolean.TRUE.equals(p.get(K_required)))
+		if (isTrue(p.get(K_required)))
 			rb.put(K_required, Boolean.TRUE);
 		var schema = p.get(K_schema);
 		if (schema == null && p.containsKey(K_type))

@@ -514,8 +514,9 @@ public class HttpHeaders {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 * */
+	 * @return A new header bean.  Never <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
 	public static final BasicHeader basicHeader(String name, Supplier<?> value) {
 		return new BasicHeader(name, value);
 	}
@@ -616,12 +617,12 @@ public class HttpHeaders {
 	public static Header cast(Object o) {
 		if (o instanceof Header o2)
 			return o2;
-		if (o instanceof Headerable o3)
-			return o3.asHeader();
-		if (o instanceof NameValuePair o4)
-			return BasicHeader.of(o4);
-		if (o instanceof NameValuePairable o5)
-			return BasicHeader.of(o5.asNameValuePair());
+		if (o instanceof Headerable o2)
+			return o2.asHeader();
+		if (o instanceof NameValuePair o2)
+			return BasicHeader.of(o2);
+		if (o instanceof NameValuePairable o2)
+			return BasicHeader.of(o2.asNameValuePair());
 		if (o instanceof Map.Entry e) {
 			return BasicHeader.of(s(e.getKey()), s(e.getValue()));
 		}
@@ -1385,8 +1386,8 @@ public class HttpHeaders {
 	 * 	{@link org.apache.juneau.http.Header#value() @Header(value)} annotations.
 	 *
 	 * @param <T> The header implementation class.
-	 * @param type The header implementation class.
-	 * @param value The header value.
+	 * @param type The header implementation class.  Must not be <jk>null</jk>.
+	 * @param value The header value.  Can be <jk>null</jk>.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
 	public static final <T extends Header> T header(Class<T> type, Object value) {
@@ -1406,9 +1407,9 @@ public class HttpHeaders {
 	 * </ul>
 	 *
 	 * @param <T> The header implementation class.
-	 * @param type The header implementation class.
-	 * @param name The header name.
-	 * @param value The header value.
+	 * @param type The header implementation class.  Must not be <jk>null</jk>.
+	 * @param name The header name.  Can be <jk>null</jk> to use the name from the {@link org.apache.juneau.http.Header @Header} annotation.
+	 * @param value The header value.  Can be <jk>null</jk>.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
 	public static final <T extends Header> T header(Class<T> type, String name, Object value) {
@@ -1427,7 +1428,7 @@ public class HttpHeaders {
 	/**
 	 * Creates a new {@link HeaderList} initialized with the specified headers.
 	 *
-	 * @param headers The headers to add to the list.  <jk>null</jk> entries are ignored.
+	 * @param headers The headers to add to the list.  Can be <jk>null</jk>.  <jk>null</jk> entries are ignored.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
 	public static final HeaderList headerList(Header...headers) {
@@ -2267,7 +2268,8 @@ public class HttpHeaders {
 	 * @param value
 	 * 	The POJO to serialize as the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
+	 * @return A new header bean.  Never <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static final SerializedHeader serializedHeader(String name, Object value) {
 		return SerializedHeader.of(name, value);
@@ -2288,7 +2290,8 @@ public class HttpHeaders {
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	<br>Can also be a {@link Supplier}.
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
+	 * @return A new header bean.  Never <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader serializedHeader(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		return SerializedHeader.of(name, value, serializer, schema, skipIfEmpty);
@@ -2304,7 +2307,8 @@ public class HttpHeaders {
 	 * @param value
 	 * 	The supplier of the POJO to serialize as the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
+	 * @return A new header bean.  Never <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static final SerializedHeader serializedHeader(String name, Supplier<?> value) {
 		return SerializedHeader.of(name, value);
@@ -2328,7 +2332,8 @@ public class HttpHeaders {
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	<br>Can also be a {@link Supplier}.
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
+	 * @return A new header bean.  Never <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader serializedHeader(String name, Supplier<?> value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		return SerializedHeader.of(name, value, serializer, schema, skipIfEmpty);

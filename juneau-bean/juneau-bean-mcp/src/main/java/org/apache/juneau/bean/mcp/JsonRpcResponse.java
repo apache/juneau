@@ -44,7 +44,7 @@ public class JsonRpcResponse {
 	/**
 	 * Sets the JSON-RPC protocol version.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonRpcResponse setJsonrpc(String value) {
@@ -64,7 +64,7 @@ public class JsonRpcResponse {
 	/**
 	 * Sets the response id.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonRpcResponse setId(Object value) {
@@ -84,7 +84,7 @@ public class JsonRpcResponse {
 	/**
 	 * Sets the result payload.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonRpcResponse setResult(Object value) {
@@ -104,7 +104,7 @@ public class JsonRpcResponse {
 	/**
 	 * Sets the error payload.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonRpcResponse setError(JsonRpcError value) {

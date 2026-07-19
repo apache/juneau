@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -183,6 +185,7 @@ public final class MockHttpTransport implements HttpTransport {
 		 * @return This object.
 		 */
 		public Builder on(String method, String path, RequestHandler handler) {
+			assertArgNotNull("handler", handler);
 			routes.add(new Route(method, path, handler));
 			return this;
 		}
@@ -193,7 +196,9 @@ public final class MockHttpTransport implements HttpTransport {
 		 * <p>
 		 * Without a fallback, unmatched requests receive a {@code 404} response.
 		 *
-		 * @param value The fallback handler. Must not be <jk>null</jk>.
+		 * @param value
+		 * 	The fallback handler.
+		 * 	<br>Can be <jk>null</jk> — a <jk>null</jk> fallback is the intentional default (unmatched requests get a {@code 404}).
 		 * @return This object.
 		 */
 		public Builder fallback(RequestHandler value) {

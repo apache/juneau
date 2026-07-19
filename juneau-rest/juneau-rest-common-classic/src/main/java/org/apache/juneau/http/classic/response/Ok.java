@@ -84,7 +84,7 @@ public class Ok extends BasicHttpResponse {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy from.
+	 * @param copyFrom The bean to copy from.  Must not be <jk>null</jk>.
 	 */
 	public Ok(Ok copyFrom) {
 		super(copyFrom);

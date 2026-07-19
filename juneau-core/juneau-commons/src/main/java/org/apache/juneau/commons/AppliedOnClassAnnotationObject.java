@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * An implementation of an annotation that can be dynamically applied to classes, methods, fields, and constructors,
@@ -95,11 +95,11 @@ public class AppliedOnClassAnnotationObject extends AppliedAnnotationObject {
 	/**
 	 * Constructor.
 	 *
-	 * @param b The builder used to instantiate the fields of this class.
+	 * @param b The builder used to instantiate the fields of this class.  Must not be <jk>null</jk>.
 	 */
 	public AppliedOnClassAnnotationObject(BuilderT b) {
 		super(b);
-		this.onClass = copyOf(b.onClass);
+		this.onClass = cp(b.onClass);
 	}
 
 	/**
@@ -108,6 +108,6 @@ public class AppliedOnClassAnnotationObject extends AppliedAnnotationObject {
 	 * @return The targets this annotation applies to.
 	 */
 	public Class<?>[] onClass() {
-		return copyOf(onClass);
+		return cp(onClass);
 	}
 }

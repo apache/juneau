@@ -17,6 +17,7 @@
 package org.apache.juneau.http.classic.entity;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -50,8 +51,8 @@ public class ByteArrayEntity extends BasicHttpEntity {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.
-	 * @param contents The entity contents.
+	 * @param contentType The entity content type.  Can be <jk>null</jk>.
+	 * @param contents The entity contents.  Can be <jk>null</jk>.
 	 */
 	public ByteArrayEntity(ContentType contentType, byte[] contents) {
 		super(contentType, contents);
@@ -60,7 +61,7 @@ public class ByteArrayEntity extends BasicHttpEntity {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean being copied.
+	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
 	protected ByteArrayEntity(ByteArrayEntity copyFrom) {
 		super(copyFrom);
@@ -68,7 +69,7 @@ public class ByteArrayEntity extends BasicHttpEntity {
 
 	@Override /* Overridden from AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
-		return content();
+		return cp(content());
 	}
 
 	@Override /* Overridden from AbstractHttpEntity */

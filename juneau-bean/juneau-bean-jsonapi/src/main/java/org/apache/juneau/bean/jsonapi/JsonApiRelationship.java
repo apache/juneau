@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.jsonapi;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
@@ -77,7 +79,7 @@ public class JsonApiRelationship {
 	/**
 	 * Typed setter for single-identifier linkage.
 	 *
-	 * @param value The identifier.
+	 * @param value The identifier.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiRelationship setData(JsonApiResourceIdentifier value) {
@@ -88,7 +90,7 @@ public class JsonApiRelationship {
 	/**
 	 * Typed setter for to-many linkage.
 	 *
-	 * @param value The list of identifiers.
+	 * @param value The list of identifiers.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiRelationship setData(List<JsonApiResourceIdentifier> value) {
@@ -106,12 +108,12 @@ public class JsonApiRelationship {
 	 */
 	@BeanProp(value="links")
 	@Swap(JsonApiLinkOrStringSwap.class)
-	public Map<String,Object> getLinks() { return links; }
+	public Map<String,Object> getLinks() { return u(links); }
 
 	/**
 	 * Bean property setter:  <property>links</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	@BeanProp(value="links")
@@ -126,12 +128,12 @@ public class JsonApiRelationship {
 	 *
 	 * @return The value of the <property>meta</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getMeta() { return meta; }
+	public Map<String,Object> getMeta() { return u(meta); }
 
 	/**
 	 * Bean property setter:  <property>meta</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiRelationship setMeta(Map<String,Object> value) {

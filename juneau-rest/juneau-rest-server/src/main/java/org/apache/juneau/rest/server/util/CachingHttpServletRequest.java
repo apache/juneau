@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.util;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -63,7 +64,7 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The content of the request.  This is a defensive copy; modifying it does not affect the cached request body.
 	 */
-	public byte[] getContent() { return content.clone(); }
+	public byte[] getContent() { return cp(content); }
 
 	@Override
 	public ServletInputStream getInputStream() { return new BoundedServletInputStream(content); }

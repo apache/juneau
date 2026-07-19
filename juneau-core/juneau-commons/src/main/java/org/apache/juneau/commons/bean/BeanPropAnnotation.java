@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.bean;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.function.*;
@@ -85,7 +85,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the description property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
@@ -96,7 +96,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#elementType()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder elementType(Class<?> value) {
@@ -107,7 +107,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#factory()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder factory(Class<? extends BeanFactory> value) {
@@ -118,7 +118,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#name()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder name(String value) {
@@ -129,7 +129,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#params()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder params(Class<?>...value) {
@@ -140,7 +140,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#ro()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder ro(String value) {
@@ -151,7 +151,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#summary()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 * @since 10.0.0
 		 */
@@ -163,7 +163,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#type()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder type(Class<?> value) {
@@ -174,7 +174,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#value()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder value(String value) {
@@ -185,7 +185,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#wo()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder wo(String value) {
@@ -214,11 +214,11 @@ public class BeanPropAnnotation {
 
 		Object(BeanPropAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			elementType = b.elementType;
 			factory = b.factory;
 			name = b.name;
-			params = copyOf(b.params);
+			params = cp(b.params);
 			ro = b.ro;
 			summary = b.summary;
 			type = b.type;
@@ -228,7 +228,7 @@ public class BeanPropAnnotation {
 
 		@Override /* Overridden from BeanProp */
 		public String[] description() {
-			return copyOf(description);
+			return cp(description);
 		}
 
 		@Override /* Overridden from BeanProp */
@@ -248,7 +248,7 @@ public class BeanPropAnnotation {
 
 		@Override /* Overridden from BeanProp */
 		public Class<?>[] params() {
-			return copyOf(params);
+			return cp(params);
 		}
 
 		@Override /* Overridden from BeanProp */

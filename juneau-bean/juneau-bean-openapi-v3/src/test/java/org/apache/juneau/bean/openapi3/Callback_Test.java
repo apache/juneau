@@ -221,7 +221,7 @@ class Callback_Test extends TestBase {
 			assertMapped(
 				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"callbacks,x1,x2",
-				"FilteredMap,String,<null>"
+				"UnmodifiableMap,String,<null>"
 			);
 		}
 

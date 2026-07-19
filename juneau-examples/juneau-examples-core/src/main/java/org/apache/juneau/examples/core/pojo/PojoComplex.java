@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.core.pojo;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
@@ -63,5 +65,5 @@ public class PojoComplex {
 	 *
 	 * @return The value of the <property>values</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,List<Pojo>> getValues() { return values; }
+	public Map<String,List<Pojo>> getValues() { return u(values); }
 }

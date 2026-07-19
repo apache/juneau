@@ -17,6 +17,8 @@
 package org.apache.juneau.http.header;
 
 
+import java.util.function.*;
+
 /**
  * Represents an HTTP <c>No-Trace</c> header.
  *
@@ -24,11 +26,6 @@ package org.apache.juneau.http.header;
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
  * ({@code org.apache.juneau.marshall.ng.*}).
  *
- * @since 9.2.1
- */
-import java.util.function.*;
-
-/**
  * @since 9.2.1
  */
 public class NoTrace extends HttpBooleanHeader {

@@ -157,8 +157,8 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 			name = x.getName();
 			if (x instanceof SerializedHeader x2) {
 				value = x2.copyWith(getPartSerializerSession(), null).getValue();
-			} else if (x instanceof SerializedPart x3) {
-				value = x3.copyWith(getPartSerializerSession(), null).getValue();
+			} else if (x instanceof SerializedPart x2) {
+				value = x2.copyWith(getPartSerializerSession(), null).getValue();
 			} else {
 				var v = x.getValue();
 				value = (ie(v) && skipIfEmpty) ? null : v;
@@ -2069,7 +2069,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				var value = x.value;
 				var pathVar = "{" + name + "}";
 				if (path.indexOf(pathVar) == -1 && ! name.equals("/*"))
-					throw new IllegalStateException("Path variable {" + name + "} was not found in path.");
+					throw isex("Path variable {%s} was not found in path.", name);
 				if (name.equals("/*"))
 					path = path.replaceAll("\\/\\*$", URI_PATH_SEPARATOR + value);
 				else
@@ -2132,8 +2132,8 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 					entity = readerEntity(input3, getRequestContentType(TEXT_PLAIN));
 				else if (input2 instanceof InputStream input3)
 					entity = streamEntity(input3, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
-				else if (input2 instanceof RecordStreamBody body)
-					entity = streamBodyEntity(body, serializer2);
+				else if (input2 instanceof RecordStreamBody input3)
+					entity = streamBodyEntity(input3, serializer2);
 				else if (nn(serializer2))
 					entity = serializedEntity(input2, serializer2, contentSchema).setContentType(contentType);
 				else {
@@ -2194,8 +2194,8 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 							}
 						}
 						if (nn(thrownInstance)) {
-							if (thrownInstance instanceof Exception ex)
-								throw ex;
+							if (thrownInstance instanceof Exception thrownInstance2)
+								throw thrownInstance2;
 							throw new RestCallException(response, thrownInstance, "Server threw non-Exception: %s", className);
 						}
 					}
@@ -2865,8 +2865,8 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				((Consumer) consumer).accept(w);
 				w.flush();
 			}
-			if (output instanceof Writer ow)
-				ow.flush();
+			if (output instanceof Writer output2)
+				output2.flush();
 
 			// Use the serializer's primary produces() media type if no explicit Content-Type set.
 			var ct = serializer.getPrimaryMediaType();

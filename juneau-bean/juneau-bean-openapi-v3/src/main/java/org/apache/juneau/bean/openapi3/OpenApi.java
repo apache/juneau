@@ -18,6 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -126,13 +127,13 @@ public class OpenApi extends OpenApiElement {
 	public OpenApi(OpenApi copyFrom) {
 		super(copyFrom);
 		this.openapi = copyFrom.openapi;
-		this.info = copyFrom.info;
+		this.info = copyOf(copyFrom.info);
 		this.servers.addAll(copyOf(copyFrom.servers, Server::copy));
 		this.paths = copyOf(copyFrom.paths);
-		this.components = copyFrom.components;
+		this.components = copyOf(copyFrom.components);
 		this.security.addAll(copyOf(copyFrom.security, SecurityRequirement::copy));
 		this.tags.addAll(copyOf(copyFrom.tags, Tag::copy));
-		this.externalDocs = copyFrom.externalDocs;
+		this.externalDocs = copyOf(copyFrom.externalDocs);
 	}
 
 	/**
@@ -147,7 +148,7 @@ public class OpenApi extends OpenApiElement {
 		assertArgNotNull(ARG_pathItem, pathItem);
 		if (paths == null)
 			paths = new TreeMap<>(PATH_COMPARATOR);
-		getPaths().put(path, pathItem);
+		paths.put(path, pathItem);
 		return this;
 	}
 
@@ -332,7 +333,7 @@ public class OpenApi extends OpenApiElement {
 	 *
 	 * @return The paths map.
 	 */
-	public Map<String,PathItem> getPaths() { return paths; }
+	public Map<String,PathItem> getPaths() { return u(paths); }
 
 	/**
 	 * Returns the security requirements list.

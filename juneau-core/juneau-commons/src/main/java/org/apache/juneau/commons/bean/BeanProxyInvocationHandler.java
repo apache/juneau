@@ -80,7 +80,7 @@ import java.util.*;
 public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 
 	private final BeanMeta<T> meta;						// The BeanMeta for this instance
-	private Map<String,Object> beanProps;		// The map of property names to bean property values.
+	private final Map<String,Object> beanProps;		// The map of property names to bean property values.
 
 	/**
 	 * Constructor.

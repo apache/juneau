@@ -79,7 +79,7 @@ public class FloatHolder extends Holder<Float> {
 	 * 	<jsm>assertEquals</jsm>(3.14f, <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 * @return A new float value.
 	 */
 	public static FloatHolder of(Float value) {
@@ -89,7 +89,7 @@ public class FloatHolder extends Holder<Float> {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 */
 	public FloatHolder(Float value) {
 		super(value);
@@ -152,7 +152,7 @@ public class FloatHolder extends Holder<Float> {
 	 * </p>
 	 *
 	 * @param precision The maximum allowed difference for equality. Must be non-negative and is the first parameter.
-	 * @param values The values to compare to.
+	 * @param values The values to compare to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value matches any of the specified values within the precision.
 	 * @throws IllegalArgumentException if precision is negative.
 	 */

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -111,7 +111,7 @@ public class TagAnnotation {
 
 		Instance(TagAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			externalDocs = b.externalDocs;
 			name = b.name;
 		}
@@ -128,7 +128,7 @@ public class TagAnnotation {
 
 		@Override /* Overridden from annotation */
 		public String[] description() {
-			return description;
+			return cp(description);
 		}
 	}
 

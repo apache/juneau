@@ -123,9 +123,9 @@ public class Entry extends CommonEntry {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param id The ID of this entry.
-	 * @param title The title of this entry.
-	 * @param updated The updated timestamp of this entry.
+	 * @param id The ID of this entry.  Can be <jk>null</jk>.
+	 * @param title The title of this entry.  Can be <jk>null</jk>.
+	 * @param updated The updated timestamp of this entry.  Can be <jk>null</jk>.
 	 */
 	public Entry(Id id, Text title, Calendar updated) {
 		super(id, title, updated);
@@ -134,9 +134,9 @@ public class Entry extends CommonEntry {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param id The ID of this entry.
-	 * @param title The title of this entry.
-	 * @param updated The updated timestamp of this entry.
+	 * @param id The ID of this entry.  Can be <jk>null</jk>.
+	 * @param title The title of this entry.  Can be <jk>null</jk>.
+	 * @param updated The updated timestamp of this entry.  Can be <jk>null</jk>.
 	 */
 	public Entry(String id, String title, String updated) {
 		super(id, title, updated);

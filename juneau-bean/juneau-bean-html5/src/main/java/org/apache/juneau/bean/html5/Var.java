@@ -101,7 +101,7 @@ public class Var extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Var} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Var(Object...children) {
 		children(children);

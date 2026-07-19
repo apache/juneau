@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.parquet;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
@@ -126,7 +127,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		 * @return This object.
 		 */
 		public Builder compressionCodec(CompressionCodec value) {
-			compressionCodec = value != null ? value : CompressionCodec.UNCOMPRESSED;
+			compressionCodec = or(value, CompressionCodec.UNCOMPRESSED);
 			return this;
 		}
 
@@ -224,7 +225,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		 * @return This object.
 		 */
 		public Builder cycleHandling(ParquetCycleHandling value) {
-			cycleHandling = value != null ? value : ParquetCycleHandling.NULL;
+			cycleHandling = or(value, ParquetCycleHandling.NULL);
 			return this;
 		}
 

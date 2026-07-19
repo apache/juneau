@@ -144,7 +144,7 @@ public enum StateEnum {
 	/**
 	 * Returns <jk>true</jk> if the state is any one of the specified states.
 	 *
-	 * @param states The states to check.
+	 * @param states The states to check.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the state is any one of the specified states.
 	 */
 	public boolean isAny(StateEnum...states) {

@@ -157,7 +157,7 @@ public class AnnotationObject implements Annotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param annotationType The annotation type of the annotation implementation class.
+		 * @param annotationType The annotation type of the annotation implementation class.  Must not be <jk>null</jk>.
 		 */
 		public Builder(Class<? extends Annotation> annotationType) {
 			this.annotationType = assertArgNotNull(ARG_annotationType, annotationType);
@@ -181,7 +181,7 @@ public class AnnotationObject implements Annotation {
 	/**
 	 * Constructor.
 	 *
-	 * @param b The builder used to instantiate the fields of this class.
+	 * @param b The builder used to instantiate the fields of this class.  Must not be <jk>null</jk>.
 	 */
 	public AnnotationObject(Builder b) {
 		assertArgNotNull(ARG_b, b);

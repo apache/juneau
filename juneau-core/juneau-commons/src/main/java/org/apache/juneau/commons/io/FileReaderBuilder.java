@@ -114,7 +114,7 @@ public class FileReaderBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param file The file to read from.
+	 * @param file The file to read from.  Can be <jk>null</jk>.
 	 * @return A new builder instance initialized with the specified file.
 	 */
 	public static FileReaderBuilder create(File file) {
@@ -203,7 +203,7 @@ public class FileReaderBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param cs The character encoding to use. The default is {@link Charset#defaultCharset()}.
+	 * @param cs The character encoding to use.  Can be <jk>null</jk> to use the default charset ({@link Charset#defaultCharset()}).
 	 * @return This object for method chaining.
 	 */
 	public FileReaderBuilder charset(Charset cs) {
@@ -247,7 +247,7 @@ public class FileReaderBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param value The file to read from.
+	 * @param value The file to read from.  Can be <jk>null</jk>.
 	 * @return This object for method chaining.
 	 */
 	public FileReaderBuilder file(File value) {
@@ -265,7 +265,7 @@ public class FileReaderBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param path The file path to read from.
+	 * @param path The file path to read from.  Must not be <jk>null</jk>.
 	 * @return This object for method chaining.
 	 */
 	public FileReaderBuilder file(String path) {

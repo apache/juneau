@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -59,7 +61,7 @@ public class TypeVariables {
 	 * @return A new empty TypeVariables instance.
 	 */
 	public static TypeVariables empty() {
-		return new TypeVariables(new LinkedHashMap<>());
+		return new TypeVariables(m());
 	}
 
 	/**
@@ -96,11 +98,11 @@ public class TypeVariables {
 	 * When called on {@code BeanC}, the type variable will be resolved as {@code Number}, not {@code Integer}.
 	 * This limitation exists because the intermediate type parameter bound information is lost during type resolution
 	 *
-	 * @param type The type to analyze.
-	 * @return A new TypeVariables instance.
+	 * @param type The type to analyze.  Can be <jk>null</jk>.
+	 * @return A new TypeVariables instance.  An empty instance is returned if the type is <jk>null</jk>.
 	 */
 	public static TypeVariables of(Type type) {
-		Map<Class<?>, List<Class<?>>> m = new LinkedHashMap<>();
+		Map<Class<?>, List<Class<?>>> m = m();
 		findTypeVarImpls(type, m);
 		return fromMap(m);
 	}
@@ -115,9 +117,9 @@ public class TypeVariables {
 		"java:S3776" // Cognitive complexity acceptable for type variable implementation discovery
 	})
 	private static void findTypeVarImpls(Type t, Map<Class<?>, List<Class<?>>> m) {
-		if (t instanceof Class<?> c) {
-			findTypeVarImpls(c.getGenericSuperclass(), m);
-			for (var ci : c.getGenericInterfaces())
+		if (t instanceof Class<?> t2) {
+			findTypeVarImpls(t2.getGenericSuperclass(), m);
+			for (var ci : t2.getGenericInterfaces())
 				findTypeVarImpls(ci, m);
 		} else if (t instanceof ParameterizedType t2) {
 			var rt = t2.getRawType();
@@ -125,10 +127,10 @@ public class TypeVariables {
 				var gImpls = t2.getActualTypeArguments();
 				var gTypes = new ArrayList<Class<?>>(gImpls.length);
 				for (var gt : gImpls) {
-					if (gt instanceof Class<?> c)
-						gTypes.add(c);
-					else if (gt instanceof TypeVariable<?> tv) {
-						for (var upperBound : tv.getBounds())
+					if (gt instanceof Class<?> gt2)
+						gTypes.add(gt2);
+					else if (gt instanceof TypeVariable<?> gt2) {
+						for (var upperBound : gt2.getBounds())
 							if (upperBound instanceof Class upperBound2) {
 								gTypes.add(upperBound2);
 								break;
@@ -166,7 +168,7 @@ public class TypeVariables {
 	/**
 	 * Returns <jk>true</jk> if this instance contains type variable implementations for the specified class.
 	 *
-	 * @param clazz The class to check.
+	 * @param clazz The class to check.  Can be <jk>null</jk>, in which case <jk>false</jk> is returned.
 	 * @return <jk>true</jk> if type variable implementations exist for the class.
 	 */
 	public boolean containsKey(Class<?> clazz) {
@@ -176,7 +178,7 @@ public class TypeVariables {
 	/**
 	 * Returns the list of type variable implementations for the specified class.
 	 *
-	 * @param clazz The class to get type variable implementations for.
+	 * @param clazz The class to get type variable implementations for.  Can be <jk>null</jk>.
 	 * @return The list of type variable implementations, or <jk>null</jk> if not found.
 	 */
 	public List<Class<?>> get(Class<?> clazz) {
@@ -186,7 +188,7 @@ public class TypeVariables {
 	/**
 	 * Returns the type variable implementation at the specified index for the given class.
 	 *
-	 * @param clazz The class to get the type variable implementation for.
+	 * @param clazz The class to get the type variable implementation for.  Can be <jk>null</jk>.
 	 * @param index The zero-based index of the type variable.
 	 * @return The type variable implementation, or <jk>null</jk> if not found or index is out of bounds.
 	 */
@@ -230,23 +232,23 @@ public class TypeVariables {
 	 * 	<li><b>TypeVariable</b> - Resolves using type variable implementations, or returns <jk>null</jk> if not found
 	 * </ul>
 	 *
-	 * @param t The type to resolve.
+	 * @param t The type to resolve.  Can be <jk>null</jk>, in which case <jk>null</jk> is returned.
 	 * @return The resolved class, or <jk>null</jk> if the type cannot be resolved to a class.
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for type resolution logic
 	})
 	public Class<?> resolve(Type t) {
-		if (t instanceof Class<?> c)
-			return c;
+		if (t instanceof Class<?> t2)
+			return t2;
 
-		if (t instanceof ParameterizedType pt)
+		if (t instanceof ParameterizedType t2)
 			// A parameter (e.g. <String>.
-			return (Class<?>)pt.getRawType();
+			return (Class<?>)t2.getRawType();
 
-		if (t instanceof GenericArrayType gat) {
+		if (t instanceof GenericArrayType t2) {
 			// An array parameter (e.g. <byte[]>).
-			var gatct = gat.getGenericComponentType();
+			var gatct = t2.getGenericComponentType();
 
 			if (gatct instanceof Class<?> gatct2)
 				return Array.newInstance(gatct2, 0).getClass();
@@ -261,10 +263,10 @@ public class TypeVariables {
 
 			return null;
 
-		} else if (t instanceof TypeVariable<?> tv) {
-			String varName = tv.getName();
+		} else if (t instanceof TypeVariable<?> t2) {
+			String varName = t2.getName();
 			int varIndex = -1;
-			var gc = (Class<?>)tv.getGenericDeclaration();
+			var gc = (Class<?>)t2.getGenericDeclaration();
 			TypeVariable<?>[] tvv = gc.getTypeParameters();
 			for (var i = 0; i < tvv.length; i++) {
 				if (tvv[i].getName().equals(varName)) {
@@ -290,19 +292,19 @@ public class TypeVariables {
 	 * (e.g., {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}).
 	 * For {@link TypeVariable} types, {@code typeVars} must not be <jk>null</jk>.
 	 *
-	 * @param type The type to resolve.
+	 * @param type The type to resolve.  Can be <jk>null</jk>, in which case <jk>null</jk> is returned.
 	 * @param typeVars The type variable implementations, or <jk>null</jk>.
 	 * @return The resolved class, or <jk>null</jk> if the type cannot be resolved.
 	 */
 	public static Class<?> resolve(Type type, TypeVariables typeVars) {
-		if (type instanceof Class<?> c)
-			return c;
+		if (type instanceof Class<?> type2)
+			return type2;
 
-		if (type instanceof ParameterizedType pt)
-			return (Class<?>)pt.getRawType();
+		if (type instanceof ParameterizedType type2)
+			return (Class<?>)type2.getRawType();
 
-		if (type instanceof GenericArrayType gat) {
-			var gatct = gat.getGenericComponentType();
+		if (type instanceof GenericArrayType type2) {
+			var gatct = type2.getGenericComponentType();
 
 			if (gatct instanceof Class<?> gatct2)
 				return Array.newInstance(gatct2, 0).getClass();
@@ -318,10 +320,10 @@ public class TypeVariables {
 			return null;
 		}
 
-		if (type instanceof TypeVariable<?> tv) {
+		if (type instanceof TypeVariable<?> type2) {
 			if (typeVars == null)
 				return null;
-			return typeVars.resolve(tv);
+			return typeVars.resolve(type2);
 		}
 
 		return null;

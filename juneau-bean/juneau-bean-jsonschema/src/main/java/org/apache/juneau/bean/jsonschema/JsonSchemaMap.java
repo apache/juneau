@@ -81,7 +81,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param uri The URI of the schema to retrieve.
+	 * @param uri The URI of the schema to retrieve.  Must not be <jk>null</jk>.
 	 * @return The JsonSchema, or <jk>null</jk> if schema was not located and could not be loaded.
 	 */
 	@Override /* Overridden from Map */
@@ -111,7 +111,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 * The default implementation returns <jk>null</jk>.
 	 *
 	 * @param uri The URI to connect to and retrieve the contents.
-	 * @return The reader from reading the specified URI.
+	 * @return The reader from reading the specified URI, or <jk>null</jk> if the document is unreachable (the default implementation always returns <jk>null</jk>).
 	 */
 	public Reader getReader(URI uri) {
 		return null;
@@ -129,7 +129,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 * unreachable document.
 	 *
 	 * @param uri The URI to load the schema from.
-	 * @return The parsed schema.
+	 * @return The parsed schema, or <jk>null</jk> if the document is unreachable.
 	 */
 	public JsonSchema load(URI uri) {
 		try (var r = getReader(uri)) {

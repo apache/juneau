@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -138,21 +138,21 @@ public class ResponseAnnotation {
 
 		Instance(ResponseAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
-			examples = copyOf(b.examples);
-			headers = copyOf(b.headers);
+			description = cp(b.description);
+			examples = cp(b.examples);
+			headers = cp(b.headers);
 			schema = b.schema;
 			summary = b.summary;
 		}
 
 		@Override /* Overridden from Response */
 		public String[] examples() {
-			return examples;
+			return cp(examples);
 		}
 
 		@Override /* Overridden from Response */
 		public Header[] headers() {
-			return headers;
+			return cp(headers);
 		}
 
 		@Override /* Overridden from Response */
@@ -167,7 +167,7 @@ public class ResponseAnnotation {
 
 		@Override /* Overridden from annotation */
 		public String[] description() {
-			return description;
+			return cp(description);
 		}
 	}
 

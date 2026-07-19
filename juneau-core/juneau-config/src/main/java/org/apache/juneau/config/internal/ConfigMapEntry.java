@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.config.internal;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -73,7 +72,7 @@ public class ConfigMapEntry {
 
 		this.value = replaceUnicodeSequences(line.trim());
 
-		this.preLines = u(copyOf(preLines));
+		this.preLines = u(cp(preLines));
 	}
 
 	ConfigMapEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
@@ -82,7 +81,7 @@ public class ConfigMapEntry {
 		this.value = value;
 		this.comment = comment;
 		this.modifiers = modifiers;
-		this.preLines = preLines == null ? Collections.emptyList() : u(copyOf(preLines));
+		this.preLines = preLines == null ? Collections.emptyList() : u(cp(preLines));
 	}
 
 	/**

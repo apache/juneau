@@ -79,7 +79,7 @@ public class Th extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Th} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Th(Object...children) {
 		children(children);
@@ -101,7 +101,7 @@ public class Th extends HtmlElementMixed {
 	 * <p>
 	 * The abbreviation should be shorter than the full header text but still meaningful.
 	 *
-	 * @param value The abbreviated label for the header cell.
+	 * @param value The abbreviated label for the header cell. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Th abbr(String value) {
@@ -148,6 +148,7 @@ public class Th extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Th colspan(Object value) {
@@ -177,7 +178,7 @@ public class Th extends HtmlElementMixed {
 	 * <p>
 	 * Multiple IDs can be specified as a space-separated list.
 	 *
-	 * @param value The IDs of header cells that apply to this cell.
+	 * @param value The IDs of header cells that apply to this cell. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Th headers(String value) {
@@ -512,6 +513,7 @@ public class Th extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Th rowspan(Object value) {
@@ -535,7 +537,7 @@ public class Th extends HtmlElementMixed {
 	 *  	<li><js>"colgroup"</js> - Header applies to all cells in the same column group</li>
 	 * </ul>
 	 *
-	 * @param value Which cells the header cell applies to.
+	 * @param value Which cells the header cell applies to. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Th scope(String value) {
@@ -559,7 +561,7 @@ public class Th extends HtmlElementMixed {
 	 *  	<li><js>"desc 1"</js> - Column is the primary sort key in descending order</li>
 	 * </ul>
 	 *
-	 * @param value The sort direction and ordinality of the column.
+	 * @param value The sort direction and ordinality of the column. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Th sorted(String value) {

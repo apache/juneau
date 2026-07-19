@@ -79,7 +79,7 @@ public class Person extends Common {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param name The name of the person.
+	 * @param name The name of the person.  Can be <jk>null</jk>.
 	 */
 	public Person(String name) {
 		setName(name);

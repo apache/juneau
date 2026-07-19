@@ -88,7 +88,7 @@ public class AnnotationUtils {
 	 * 		.forEach(<jv>a</jv> -&gt; System.<jsf>out</jsf>.println(<jv>a</jv>));
 	 * </p>
 	 *
-	 * @param a The annotation to split.
+	 * @param a The annotation to split.  Must not be <jk>null</jk>.
 	 * @return A stream of nested annotations, or a singleton stream with the same annotation if it's not repeated.
 	 * 	Never <jk>null</jk>.
 	 */

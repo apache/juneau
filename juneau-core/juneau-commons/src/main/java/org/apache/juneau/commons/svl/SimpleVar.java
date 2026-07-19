@@ -43,7 +43,7 @@ public abstract class SimpleVar extends Var {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The variable name (e.g. <js>"C"</js> for variables of the form <js>"$C{...}"</js>)
+	 * @param name The variable name (e.g. <js>"C"</js> for variables of the form <js>"$C{...}"</js>).  Must not be <jk>null</jk>.
 	 */
 	protected SimpleVar(String name) {
 		super(name, false);

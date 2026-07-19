@@ -90,13 +90,13 @@ public class VarResolver {
 			this.beanStore = new BasicBeanStore();
 			vars = VarList.create();
 			userBeans = new LinkedHashMap<>();
-			functions = new ArrayList<>();
+			functions = l();
 		}
 
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
+		 * @param copyFrom The bean to copy from.  Must not be {@code null}.
 		 */
 		protected Builder(VarResolver copyFrom) {
 			this.beanStore = copyFrom.beanStore;
@@ -430,7 +430,7 @@ public class VarResolver {
 	/**
 	 * Same as {@link #createSession()} except allows you to specify a bean store for resolving beans.
 	 *
-	 * @param beanStore The bean store to associate with this session.
+	 * @param beanStore The bean store to associate with this session.  May be {@code null}.
 	 * @return A new resolver session.
 	 */
 	public VarResolverSession createSession(WritableBeanStore beanStore) {
@@ -445,8 +445,8 @@ public class VarResolver {
 	 * <br>This method can only be used if the string doesn't contain variables that rely on the existence of session
 	 * variables.
 	 *
-	 * @param s The input string.
-	 * @return The string with variables resolved, or the same string if it doesn't contain any variables to resolve.
+	 * @param s The input string.  May be {@code null}.
+	 * @return The string with variables resolved, or the same string if it doesn't contain any variables to resolve.  Returns {@code null} if the input was {@code null}.
 	 */
 	public String resolve(String s) {
 		return createSession(null).resolve(s);
@@ -529,8 +529,8 @@ public class VarResolver {
 	 * <br>This method can only be used if the string doesn't contain variables that rely on the existence of session
 	 * variables.
 	 *
-	 * @param s The input string.
-	 * @param w The writer to send the result to.
+	 * @param s The input string.  May be {@code null}, in which case the writer is left unchanged.
+	 * @param w The writer to send the result to.  Must not be {@code null}.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public void resolveTo(String s, Writer w) throws IOException {

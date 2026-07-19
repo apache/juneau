@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.html;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -178,7 +178,7 @@ public class HtmlAnnotation {
 
 		Object(HtmlAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			anchorText = b.anchorText;
 			format = b.format;
 			link = b.link;

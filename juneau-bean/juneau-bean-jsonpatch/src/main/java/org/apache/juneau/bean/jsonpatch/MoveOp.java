@@ -38,8 +38,8 @@ public class MoveOp extends JsonPatchOperation {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param path The JSON Pointer destination.
-	 * @param from The JSON Pointer source.
+	 * @param path The JSON Pointer destination.  Can be <jk>null</jk>.
+	 * @param from The JSON Pointer source.  Can be <jk>null</jk>.
 	 */
 	public MoveOp(String path, String from) {
 		super(path);
@@ -56,7 +56,7 @@ public class MoveOp extends JsonPatchOperation {
 	/**
 	 * Bean property setter:  <property>from</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public MoveOp setFrom(String value) {

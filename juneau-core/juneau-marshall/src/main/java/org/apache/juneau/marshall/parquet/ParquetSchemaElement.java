@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.parquet;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 
 /**
@@ -175,7 +177,7 @@ public final class ParquetSchemaElement {
 		this.logicalType = logicalType;
 		this.scale = scale;
 		this.precision = precision;
-		this.path = path != null ? path : name;
+		this.path = or(path, name);
 	}
 
 	/**

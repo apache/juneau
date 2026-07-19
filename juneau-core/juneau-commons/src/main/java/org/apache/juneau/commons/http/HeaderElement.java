@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.http;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 /**
  * Represents a parsed element from an HTTP header value.
  *
@@ -55,6 +57,6 @@ public class HeaderElement {
 	 * @return The parameters array, never <jk>null</jk>.
 	 */
 	public NameValuePair[] getParameters() {
-		return parameters.clone();
+		return cp(parameters);
 	}
 }

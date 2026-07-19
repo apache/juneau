@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -242,19 +242,19 @@ public class OpSwaggerAnnotation {
 
 		Object(OpSwaggerAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
-			consumes = copyOf(b.consumes);
+			description = cp(b.description);
+			consumes = cp(b.consumes);
 			deprecated = b.deprecated;
 			externalDocs = b.externalDocs;
 			ignore = b.ignore;
 			operationId = b.operationId;
-			parameters = copyOf(b.parameters);
-			produces = copyOf(b.produces);
-			responses = copyOf(b.responses);
-			schemes = copyOf(b.schemes);
-			summary = copyOf(b.summary);
-			tags = copyOf(b.tags);
-			value = copyOf(b.value);
+			parameters = cp(b.parameters);
+			produces = cp(b.produces);
+			responses = cp(b.responses);
+			schemes = cp(b.schemes);
+			summary = cp(b.summary);
+			tags = cp(b.tags);
+			value = cp(b.value);
 		}
 
 		@Override /* Overridden from OpSwagger */

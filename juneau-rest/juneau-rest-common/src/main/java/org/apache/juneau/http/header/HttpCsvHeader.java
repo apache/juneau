@@ -17,7 +17,6 @@
 package org.apache.juneau.http.header;
 
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -64,6 +63,12 @@ public class HttpCsvHeader extends HttpHeaderBean {
 		return new HttpCsvHeader(name, typedValues);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param value Wire value. Can be <jk>null</jk> or empty.
+	 */
 	protected HttpCsvHeader(String name, String value) {
 		super(name, value);
 		this.eagerTokens = null;
@@ -71,13 +76,26 @@ public class HttpCsvHeader extends HttpHeaderBean {
 		this.lazyMode = -1;
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param values The token values. Can be <jk>null</jk>.
+	 */
 	protected HttpCsvHeader(String name, String... values) {
 		super(name, values == null || values.length == 0 ? null : join(values, ", "));
-		this.eagerTokens = values == null ? null : copyOf(values);
+		this.eagerTokens = values == null ? null : cp(values);
 		this.lazySupplier = null;
 		this.lazyMode = -1;
 	}
 
+	/**
+	 * Constructor with lazy value supplier.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param supplier The lazy value supplier. Must not be <jk>null</jk>.
+	 * @param lazyMode Either {@link #LAZY_WIRE_STRING} or {@link #LAZY_TOKENS}.
+	 */
 	protected HttpCsvHeader(String name, Supplier<?> supplier, int lazyMode) {
 		super(name, lazyMode == LAZY_WIRE_STRING
 			? ((Supplier<String>) supplier)::get
@@ -93,7 +111,7 @@ public class HttpCsvHeader extends HttpHeaderBean {
 	}
 
 	public Optional<String[]> asArray() {
-		return o(copyOf(csvTokens()));
+		return o(cp(csvTokens()));
 	}
 
 	public Optional<List<String>> asList() {
@@ -120,19 +138,35 @@ public class HttpCsvHeader extends HttpHeaderBean {
 		return false;
 	}
 
+	/**
+	 * Returns the comma-delimited wire-format value of this header.
+	 *
+	 * @return The wire value, or <jk>null</jk> if the value is unset.
+	 */
 	@Override
 	public String getValue() {
 		var t = csvTokens();
 		return t == null ? null : join(t, ", ");
 	}
 
+	/**
+	 * Returns the parsed tokens of this header, or the specified default if unset.
+	 *
+	 * @param other The default value. Can be <jk>null</jk>.
+	 * @return The parsed tokens, or <c>other</c> if the value is unset. Can be <jk>null</jk> if <c>other</c> is <jk>null</jk>.
+	 */
 	public String[] orElse(String[] other) {
 		var x = csvTokens();
-		return nn(x) ? x : other;
+		return nn(x) ? cp(x) : other;
 	}
 
+	/**
+	 * Returns the parsed tokens of this header.
+	 *
+	 * @return The parsed tokens, or <jk>null</jk> if the value is unset.
+	 */
 	public String[] toArray() {
-		return copyOf(csvTokens());
+		return cp(csvTokens());
 	}
 
 	public List<String> toList() {

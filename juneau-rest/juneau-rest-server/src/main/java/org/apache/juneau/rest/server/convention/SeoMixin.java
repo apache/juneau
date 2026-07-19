@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.convention;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.time.*;
 import java.time.format.*;
@@ -351,8 +353,8 @@ public class SeoMixin extends RestMixin {
 			this.userAgent = userAgent;
 			this.allow = allow;
 			// paths arrives via varargs from robotsAllow/robotsDisallow → never null in practice;
-			// clone to insulate downstream mutation.
-			this.paths = paths.clone();
+			// copy to insulate downstream mutation.
+			this.paths = cp(paths);
 		}
 	}
 }

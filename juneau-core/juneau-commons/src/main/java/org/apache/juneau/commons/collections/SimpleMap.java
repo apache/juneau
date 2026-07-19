@@ -259,7 +259,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@Override /* Map */
 	public Set<Map.Entry<K,V>> entrySet() {
-		return Collections.unmodifiableSet(toSet(entries));
+		return u(toSet(entries));
 	}
 
 	/**
@@ -281,7 +281,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 * 	Integer <jv>height</jv> = <jv>map</jv>.get(<js>"height"</js>); <jc>// Returns: null (key not found)</jc>
 	 * </p>
 	 *
-	 * @param key The key whose associated value is to be returned.
+	 * @param key The key whose associated value is to be returned. Can be <jk>null</jk>.
 	 * @return The value associated with the specified key, or <jk>null</jk> if the key is not found
 	 *         (or if the key is mapped to <jk>null</jk>).
 	 */
@@ -313,7 +313,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@Override /* Map */
 	public Set<K> keySet() {
-		return Collections.unmodifiableSet(toSet(keys));
+		return u(toSet(keys));
 	}
 
 	/**

@@ -67,7 +67,7 @@ public class Label extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Label} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Label(Object...children) {
 		children(children);
@@ -89,7 +89,7 @@ public class Label extends HtmlElementMixed {
 	 * <p>
 	 * The value should match the ID of a form control element in the same document.
 	 *
-	 * @param value The ID of the form control to associate with this label.
+	 * @param value The ID of the form control to associate with this label. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	@SuppressWarnings({
@@ -152,7 +152,7 @@ public class Label extends HtmlElementMixed {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param value The ID of the form element to associate with this label.
+	 * @param value The ID of the form element to associate with this label. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Label form(String value) {

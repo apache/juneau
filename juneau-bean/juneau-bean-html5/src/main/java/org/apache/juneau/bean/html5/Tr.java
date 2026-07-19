@@ -102,7 +102,7 @@ public class Tr extends HtmlElementContainer {
 	/**
 	 * Creates a {@link Tr} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Tr(Object...children) {
 		children(children);

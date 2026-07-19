@@ -405,4 +405,28 @@ class ConfigImportsTest extends TestBase {
 		assertEquals("1", cb.get("A/a1").get());
 		assertEquals("2", cb.get("B/b1").get());
 	}
+
+	@Test void a07_unregisterRemovesListenerFromImports() {
+		var ms = MemoryStore.create().build();
+
+		ms.write("A", "", "x=1\n[A]\na1=1");
+		ms.write("B", "", "<A>\n[B]\nb1=2");
+
+		var cb = Config.create("B").store(ms).build();
+		var cmB = cb.getConfigMap();
+
+		var l = new TestListener();
+		cmB.register(l);
+
+		// Sanity: while registered, a change to the imported config A propagates to the listener.
+		ms.write("A", "x=1\n[A]\na1=1", "x=1\n[A]\na1=2");
+		assertTrue(l.isTriggered());
+
+		l.reset();
+		cmB.unregister(l);
+
+		// Regression: unregister must remove the listener from the import, not re-register it.
+		ms.write("A", "x=1\n[A]\na1=2", "x=1\n[A]\na1=3");
+		assertFalse(l.isTriggered());
+	}
 }

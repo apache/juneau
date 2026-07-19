@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.validation;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -104,6 +104,6 @@ public class ValidationException extends BadRequest {
 	 * @return A new mutable copy. Never <jk>null</jk>.
 	 */
 	public List<ValidationViolation> copyViolations() {
-		return copyOf(violations);
+		return cp(violations);
 	}
 }

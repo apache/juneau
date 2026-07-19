@@ -94,7 +94,7 @@ public class Tfoot extends HtmlElementContainer {
 	/**
 	 * Creates a {@link Tfoot} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Tfoot(Object...children) {
 		children(children);

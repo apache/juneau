@@ -112,7 +112,7 @@ public class HashCode {
 	 * 	<li><b>Other objects:</b> Uses the object's {@link Object#hashCode()} method.
 	 * </ul>
 	 *
-	 * @param o The object whose hashcode will be hashed with this object.
+	 * @param o The object whose hashcode will be hashed with this object.  Can be <jk>null</jk> (adds <c>0</c> to the hash code).
 	 * @return This object.
 	 * @see AnnotationUtils#hash(Annotation)
 	 * @see Arrays#hashCode(Object[])
@@ -121,8 +121,8 @@ public class HashCode {
 		o = unswap(o);
 		if (o == null) {
 			add(0);
-		} else if (o instanceof Annotation a) {
-			add(AnnotationUtils.hash(a));
+		} else if (o instanceof Annotation o2) {
+			add(AnnotationUtils.hash(o2));
 		} else if (o.getClass().isArray()) {
 			// Use content-based hashcode for arrays
 			if (o instanceof Object[] o2)
@@ -168,7 +168,7 @@ public class HashCode {
 	 * <p>
 	 * Default implementation does nothing.
 	 *
-	 * @param o The object to normalize before getting it's hashcode.
+	 * @param o The object to normalize before getting it's hashcode.  Can be <jk>null</jk>.
 	 * @return The normalized object.
 	 */
 	protected Object unswap(Object o) {

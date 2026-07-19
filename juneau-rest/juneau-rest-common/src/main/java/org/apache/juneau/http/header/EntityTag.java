@@ -64,7 +64,7 @@ public class EntityTag {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The validator string value.
+	 * @param value The validator string value. Must not be <jk>null</jk>.
 	 * @throws IllegalArgumentException If attempting to set an invalid entity tag value.
 	 */
 	public EntityTag(String value) {

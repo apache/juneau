@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -229,8 +230,7 @@ public final class ResponseBody {
 		var isToken = TokenReader.class.isAssignableFrom(type);
 		var supported = isToken ? parser instanceof TokenReadable : parser instanceof RecordReadable;
 		if (! supported)
-			throw new IOException("Parser '" + parser.getClass().getName() + "' does not support the "
-				+ (isToken ? "token-reader" : "record-reader") + " surface.");
+			throw ioex("Parser '%s' does not support the %s surface.", parser.getClass().getName(), isToken ? "token-reader" : "record-reader");
 
 		var stream = response.getBodyStream();
 		if (stream == null)
@@ -242,9 +242,7 @@ public final class ResponseBody {
 			: ((RecordReadable) parser).parseRecords(input);
 
 		if (! type.isInstance(cursor))
-			throw new IOException("Parser '" + parser.getClass().getName() + "' produced cursor type '"
-				+ (cursor == null ? "null" : cursor.getClass().getName())
-				+ "' which is not assignable to the declared type '" + type.getName() + "'.");
+			throw ioex("Parser '%s' produced cursor type '%s' which is not assignable to the declared type '%s'.", parser.getClass().getName(), cursor == null ? "null" : cursor.getClass().getName(), type.getName());
 
 		return (T) cursor;
 	}

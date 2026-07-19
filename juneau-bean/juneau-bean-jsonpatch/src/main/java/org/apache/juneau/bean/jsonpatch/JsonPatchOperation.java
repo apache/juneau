@@ -54,7 +54,7 @@ public abstract class JsonPatchOperation {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param path The JSON Pointer target of the operation.
+	 * @param path The JSON Pointer target of the operation.  Can be <jk>null</jk>.
 	 */
 	protected JsonPatchOperation(String path) {
 		this.path = path;
@@ -73,7 +73,7 @@ public abstract class JsonPatchOperation {
 	/**
 	 * Bean property setter:  <property>path</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonPatchOperation setPath(String value) {

@@ -18,6 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.swagger.SwaggerCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -149,7 +150,7 @@ public class Items extends SwaggerElement {
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
 		this.format = copyFrom.format;
-		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
+		this.items = copyOf(copyFrom.items);
 		this.maximum = copyFrom.maximum;
 		this.maxItems = copyFrom.maxItems;
 		this.maxLength = copyFrom.maxLength;

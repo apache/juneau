@@ -482,7 +482,7 @@ public class Cache2<K1,K2,V> {
 	/**
 	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
 	 *
-	 * @param value The value to check.
+	 * @param value The value to check. Can be <jk>null</jk>, in which case this method returns <jk>false</jk> (the cache never stores <jk>null</jk> values).
 	 * @return <jk>true</jk> if the cache contains the value.
 	 */
 	public boolean containsValue(V value) {

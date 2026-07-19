@@ -52,7 +52,7 @@ public class StreamResource extends BasicResource {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean being copied.
+	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
 	protected StreamResource(StreamResource copyFrom) {
 		super(copyFrom);

@@ -136,7 +136,7 @@ public class ConfigEvent {
 		this.key = key;
 		this.value = value;
 		this.comment = comment;
-		this.preLines = preLines;
+		this.preLines = u(cp(preLines));
 		this.modifiers = modifiers;
 	}
 
@@ -166,14 +166,14 @@ public class ConfigEvent {
 	 *
 	 * @return
 	 * 	The modifier characters.
-	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> if the event has no modifiers (e.g. remove/section events, or entries set without modifiers).
 	 */
 	public String getModifiers() { return modifiers; }
 
 	/**
 	 * Returns the section or entry lines.
 	 *
-	 * @return The section or entry lines.
+	 * @return An unmodifiable list of the section or entry lines, or <jk>null</jk> if none were supplied.
 	 */
 	public List<String> getPreLines() { return preLines; }
 

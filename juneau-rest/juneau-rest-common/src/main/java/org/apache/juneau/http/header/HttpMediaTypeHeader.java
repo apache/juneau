@@ -45,6 +45,12 @@ public class HttpMediaTypeHeader extends HttpHeaderBean {
 	private final Supplier<?> lazySupplier;
 	private final int lazyMode;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param value Wire value. Can be <jk>null</jk>, in which case the parsed value is <jk>null</jk>.
+	 */
 	protected HttpMediaTypeHeader(String name, String value) {
 		super(name, value);
 		this.cachedForStringOrDirect = parseMediaType(value);
@@ -52,6 +58,12 @@ public class HttpMediaTypeHeader extends HttpHeaderBean {
 		this.lazyMode = -1;
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param value The media type value. Can be <jk>null</jk>.
+	 */
 	protected HttpMediaTypeHeader(String name, MediaType value) {
 		super(name, value == null ? null : value.toString());
 		this.cachedForStringOrDirect = value;
@@ -59,6 +71,13 @@ public class HttpMediaTypeHeader extends HttpHeaderBean {
 		this.lazyMode = -1;
 	}
 
+	/**
+	 * Constructor with lazy value supplier.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param supplier The lazy value supplier. Must not be <jk>null</jk>.
+	 * @param lazyMode Either {@link #LAZY_WIRE_STRING} or {@link #LAZY_MEDIA_TYPE}.
+	 */
 	protected HttpMediaTypeHeader(String name, Supplier<?> supplier, int lazyMode) {
 		super(name, lazyMode == LAZY_WIRE_STRING
 			? ((Supplier<String>) supplier)::get
@@ -105,6 +124,12 @@ public class HttpMediaTypeHeader extends HttpHeaderBean {
 		return orElse(MediaType.EMPTY).isMetaSubtype();
 	}
 
+	/**
+	 * Returns the index of the best-matching media type in the specified list.
+	 *
+	 * @param mediaTypes The media types to match against. Must not be <jk>null</jk>.
+	 * @return The index of the best match, or <c>-1</c> if no suitable match was found.
+	 */
 	public int match(List<MediaType> mediaTypes) {
 		var matchQuant = 0;
 		var matchIndex = -1;
@@ -123,11 +148,22 @@ public class HttpMediaTypeHeader extends HttpHeaderBean {
 		return orElse(MediaType.EMPTY).match(o, allowExtraSubTypes);
 	}
 
+	/**
+	 * Returns the parsed value of this header, or the specified default if unset.
+	 *
+	 * @param other The default value. Can be <jk>null</jk>.
+	 * @return The parsed value, or <c>other</c> if the value is unset. Can be <jk>null</jk> if <c>other</c> is <jk>null</jk>.
+	 */
 	public MediaType orElse(MediaType other) {
 		var x = toMediaType();
 		return nn(x) ? x : other;
 	}
 
+	/**
+	 * Returns the parsed value of this header.
+	 *
+	 * @return The parsed value, or <jk>null</jk> if the value is unset.
+	 */
 	public MediaType toMediaType() {
 		if (lazyMode == LAZY_MEDIA_TYPE)
 			return ((Supplier<MediaType>) lazySupplier).get();

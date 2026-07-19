@@ -72,6 +72,7 @@ public class Version implements Comparable<Version> {
 	 * 		<li><js>".1"</js>
 	 * 	</ul>
 	 * 	Any parts that are not numeric are interpreted as {@link Integer#MAX_VALUE}
+	 * 	<br>Can be <jk>null</jk> or empty (treated as version <js>"0"</js>).
 	 */
 	public Version(String value) {
 		if (isEmpty(value))
@@ -151,7 +152,7 @@ public class Version implements Comparable<Version> {
 	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.0"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1.2.3"</js>)));
 	 * </p>
 	 *
-	 * @param v The version to compare to.
+	 * @param v The version to compare to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the specified version is at least this version.
 	 */
 	public boolean isAtLeast(Version v) {
@@ -167,7 +168,7 @@ public class Version implements Comparable<Version> {
 	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>true</jk>)));
 	 * </p>
 	 *
-	 * @param v The version to compare to.
+	 * @param v The version to compare to.  Must not be <jk>null</jk>.
 	 * @param exclusive Match down-to-version but not including.
 	 * @return <jk>true</jk> if the specified version is at least this version.
 	 */
@@ -201,7 +202,7 @@ public class Version implements Comparable<Version> {
 	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1.2.0"</js>)));
 	 * </p>
 	 *
-	 * @param v The version to compare to.
+	 * @param v The version to compare to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the specified version is at most this version.
 	 */
 	public boolean isAtMost(Version v) {
@@ -217,7 +218,7 @@ public class Version implements Comparable<Version> {
 	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>true</jk>)));
 	 * </p>
 	 *
-	 * @param v The version to compare to.
+	 * @param v The version to compare to.  Must not be <jk>null</jk>.
 	 * @param exclusive Match up-to-version but not including.
 	 * @return <jk>true</jk> if the specified version is at most this version.
 	 */
@@ -254,7 +255,7 @@ public class Version implements Comparable<Version> {
 	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).matches(Version.<jsm>of</jsm>(<js>"1.2.4"</js>)));
 	 * </p>
 	 *
-	 * @param v The version to compare to.
+	 * @param v The version to compare to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if this version matches the specified version on their common parts.
 	 */
 	public boolean matches(Version v) {

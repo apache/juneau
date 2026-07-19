@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -537,14 +537,14 @@ public class ItemsAnnotation {
 
 		Object(ItemsAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			$ref = b.$ref;
-			default_ = copyOf(b.default_);
-			enum_ = copyOf(b.enum_);
+			default_ = cp(b.default_);
+			enum_ = cp(b.enum_);
 			cf = b.cf;
 			collectionFormat = b.collectionFormat;
-			df = copyOf(b.df);
-			e = copyOf(b.e);
+			df = cp(b.df);
+			e = cp(b.e);
 			emax = b.emax;
 			emin = b.emin;
 			exclusiveMaximum = b.exclusiveMaximum;

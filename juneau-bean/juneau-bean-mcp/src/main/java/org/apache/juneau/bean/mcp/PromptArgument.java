@@ -40,7 +40,7 @@ public class PromptArgument {
 	/**
 	 * Sets the argument name.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public PromptArgument setName(String value) {
@@ -60,7 +60,7 @@ public class PromptArgument {
 	/**
 	 * Sets the description.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public PromptArgument setDescription(String value) {
@@ -80,7 +80,7 @@ public class PromptArgument {
 	/**
 	 * Sets the required flag.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public PromptArgument setRequired(Boolean value) {

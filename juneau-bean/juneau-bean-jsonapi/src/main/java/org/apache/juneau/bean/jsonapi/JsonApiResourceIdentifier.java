@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.jsonapi;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -49,8 +51,8 @@ public class JsonApiResourceIdentifier {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param type The entity-type name.
-	 * @param id The identifier value.
+	 * @param type The entity-type name.  Can be <jk>null</jk>.
+	 * @param id The identifier value.  Can be <jk>null</jk>.
 	 */
 	public JsonApiResourceIdentifier(String type, String id) {
 		this.type = type;
@@ -67,7 +69,7 @@ public class JsonApiResourceIdentifier {
 	/**
 	 * Bean property setter:  <property>type</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiResourceIdentifier setType(String value) {
@@ -85,7 +87,7 @@ public class JsonApiResourceIdentifier {
 	/**
 	 * Bean property setter:  <property>id</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiResourceIdentifier setId(String value) {
@@ -98,12 +100,12 @@ public class JsonApiResourceIdentifier {
 	 *
 	 * @return The value of the <property>meta</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getMeta() { return meta; }
+	public Map<String,Object> getMeta() { return u(meta); }
 
 	/**
 	 * Bean property setter:  <property>meta</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiResourceIdentifier setMeta(Map<String,Object> value) {

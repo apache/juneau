@@ -40,7 +40,7 @@ public class VersionRange {
 	/**
 	 * Constructor.
 	 *
-	 * @param range The range string to parse.
+	 * @param range The range string to parse.  Must not be <jk>null</jk>.
 	 */
 	public VersionRange(String range) {
 		range = range.trim();
@@ -69,7 +69,7 @@ public class VersionRange {
 	/**
 	 * Returns <jk>true</jk> if the specified version string matches this version range.
 	 *
-	 * @param v The version string (e.g. <js>"1.2.3"</js>)
+	 * @param v The version string (e.g. <js>"1.2.3"</js>).  Can be <jk>null</jk> or empty.
 	 * @return <jk>true</jk> if the specified version string matches this version range.
 	 */
 	public boolean matches(String v) {

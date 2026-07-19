@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.jsonapi;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -56,7 +58,7 @@ public class JsonApiLink {
 	/**
 	 * Convenience constructor with the required {@code href} field.
 	 *
-	 * @param href The link target URI.
+	 * @param href The link target URI.  Can be <jk>null</jk>.
 	 */
 	public JsonApiLink(String href) {
 		this.href = href;
@@ -72,7 +74,7 @@ public class JsonApiLink {
 	/**
 	 * Bean property setter:  <property>href</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiLink setHref(String value) {
@@ -90,7 +92,7 @@ public class JsonApiLink {
 	/**
 	 * Bean property setter:  <property>rel</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiLink setRel(String value) {
@@ -108,7 +110,7 @@ public class JsonApiLink {
 	/**
 	 * Bean property setter:  <property>describedby</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiLink setDescribedby(String value) {
@@ -126,7 +128,7 @@ public class JsonApiLink {
 	/**
 	 * Bean property setter:  <property>title</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiLink setTitle(String value) {
@@ -147,7 +149,7 @@ public class JsonApiLink {
 	/**
 	 * Bean property setter:  <property>type</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiLink setType(String value) {
@@ -165,7 +167,7 @@ public class JsonApiLink {
 	/**
 	 * Bean property setter:  <property>hreflang</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiLink setHreflang(String value) {
@@ -178,12 +180,12 @@ public class JsonApiLink {
 	 *
 	 * @return The value of the <property>meta</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getMeta() { return meta; }
+	public Map<String,Object> getMeta() { return u(meta); }
 
 	/**
 	 * Bean property setter:  <property>meta</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiLink setMeta(Map<String,Object> value) {

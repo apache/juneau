@@ -42,6 +42,14 @@ public class FunctionalPropertyStore implements PropertyStore {
 	private final Consumer<String> unsetter;
 	private final Snippet clearer;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param reader The function used to read property values by name.  Must not be <jk>null</jk>.
+	 * @param writer The function used to write property values.  Must not be <jk>null</jk>.
+	 * @param unsetter The function used to remove a property by name.  Must not be <jk>null</jk>.
+	 * @param clearer The function used to clear all properties.  Must not be <jk>null</jk>.
+	 */
 	public FunctionalPropertyStore(
 		UnaryOperator<String> reader,
 		BiConsumer<String, String> writer,
@@ -79,6 +87,15 @@ public class FunctionalPropertyStore implements PropertyStore {
 		safe(clearer::run);
 	}
 
+	/**
+	 * Creates a new store from the specified functions.
+	 *
+	 * @param reader The function used to read property values by name.  Must not be <jk>null</jk>.
+	 * @param writer The function used to write property values.  Must not be <jk>null</jk>.
+	 * @param unsetter The function used to remove a property by name.  Must not be <jk>null</jk>.
+	 * @param clearer The function used to clear all properties.  Must not be <jk>null</jk>.
+	 * @return A new store.
+	 */
 	public static FunctionalPropertyStore of(
 		UnaryOperator<String> reader,
 		BiConsumer<String, String> writer,

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -854,67 +854,67 @@ public class RestAnnotation {
 
 		Object(RestAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			disableContentParam = b.disableContentParam;
 			allowedHeaderParams = b.allowedHeaderParams;
 			allowedMethodHeaders = b.allowedMethodHeaders;
 			allowedMethodParams = b.allowedMethodParams;
 			callLogger = b.callLogger;
 			authenticator = b.authenticator;
-			children = copyOf(b.children);
-			mixins = copyOf(b.mixins);
-			mixinDefs = copyOf(b.mixinDefs);
+			children = cp(b.children);
+			mixins = cp(b.mixins);
+			mixinDefs = cp(b.mixinDefs);
 			clientVersionHeader = b.clientVersionHeader;
 			config = b.config;
 			eagerInit = b.eagerInit;
 			lazyChildren = b.lazyChildren;
-			allowedParserOptions = copyOf(b.allowedParserOptions);
-			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
-			noInherit = copyOf(b.noInherit);
-			consumes = copyOf(b.consumes);
-			converters = copyOf(b.converters);
+			allowedParserOptions = cp(b.allowedParserOptions);
+			allowedSerializerOptions = cp(b.allowedSerializerOptions);
+			noInherit = cp(b.noInherit);
+			consumes = cp(b.consumes);
+			converters = cp(b.converters);
 			debug = b.debug;
 			defaultAccept = b.defaultAccept;
 			defaultCharset = b.defaultCharset;
 			defaultContentType = b.defaultContentType;
-			defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
-			defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
-			defaultResponserHeaders = copyOf(b.defaultResponseHeaders);
-			encoders = copyOf(b.encoders);
-			guards = copyOf(b.guards);
+			defaultRequestAttributes = cp(b.defaultRequestAttributes);
+			defaultRequestHeaders = cp(b.defaultRequestHeaders);
+			defaultResponserHeaders = cp(b.defaultResponseHeaders);
+			encoders = cp(b.encoders);
+			guards = cp(b.guards);
 			maxInput = b.maxInput;
 			messages = b.messages;
-			parsers = copyOf(b.parsers);
+			parsers = cp(b.parsers);
 			partParser = b.partParser;
 			partSerializer = b.partSerializer;
 			path = b.path;
-			paths = copyOf(b.paths);
+			paths = cp(b.paths);
 			observability = b.observability;
 			problemDetails = b.problemDetails;
 			virtualThreads = b.virtualThreads;
 			asyncTimeoutMillis = b.asyncTimeoutMillis;
 			asyncCompletionExecutor = b.asyncCompletionExecutor;
-			produces = copyOf(b.produces);
+			produces = cp(b.produces);
 			renderResponseStackTraces = b.renderResponseStackTraces;
-			responseProcessors = copyOf(b.responseProcessors);
-			restOpArgs = copyOf(b.restOpArgs);
+			responseProcessors = cp(b.responseProcessors);
+			restOpArgs = cp(b.restOpArgs);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
-			serializers = copyOf(b.serializers);
+			serializers = cp(b.serializers);
 			siteName = b.siteName;
 			staticFiles = b.staticFiles;
 			swagger = b.swagger;
 			swaggerProvider = b.swaggerProvider;
 			openApiProvider = b.openApiProvider;
-			title = copyOf(b.title);
+			title = cp(b.title);
 			uriAuthority = b.uriAuthority;
 			uriContext = b.uriContext;
 			uriRelativity = b.uriRelativity;
 			uriResolution = b.uriResolution;
-			queryParams = copyOf(b.queryParams);
-			headerParams = copyOf(b.headerParams);
-			pathParams = copyOf(b.pathParams);
-			formDataParams = copyOf(b.formDataParams);
+			queryParams = cp(b.queryParams);
+			headerParams = cp(b.headerParams);
+			pathParams = cp(b.pathParams);
+			formDataParams = cp(b.formDataParams);
 		}
 
 		@Override /* Overridden from Rest */

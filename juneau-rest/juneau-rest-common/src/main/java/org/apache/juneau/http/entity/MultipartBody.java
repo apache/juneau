@@ -157,6 +157,14 @@ public final class MultipartBody implements HttpBody {
 	public record MultipartPart(String name, String filename, String contentType, HttpBody body) {
 
 		/**
+		 * Compact constructor enforcing the documented non-null contract on {@code name} and {@code body}.
+		 */
+		public MultipartPart {
+			assertArgNotNull("name", name);
+			assertArgNotNull("body", body);
+		}
+
+		/**
 		 * Creates a text field part with no filename and {@code text/plain; charset=UTF-8} content type.
 		 *
 		 * @param name The field name. Must not be <jk>null</jk>.
@@ -176,6 +184,7 @@ public final class MultipartBody implements HttpBody {
 		 * @return A new instance. Never <jk>null</jk>.
 		 */
 		public static MultipartPart file(String name, File file, String contentType) {
+			assertArgNotNull("file", file);
 			return new MultipartPart(name, file.getName(), contentType, FileBody.of(file, contentType));
 		}
 
@@ -215,7 +224,7 @@ public final class MultipartBody implements HttpBody {
 		 * @return This object.
 		 */
 		public Builder boundary(String value) {
-			boundary = assertArgNotNull("value", value);
+			boundary = assertArgNotNullOrBlank("value", value);
 			return this;
 		}
 

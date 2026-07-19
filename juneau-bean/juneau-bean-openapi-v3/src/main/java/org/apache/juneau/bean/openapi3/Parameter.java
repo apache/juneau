@@ -18,6 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -136,7 +137,7 @@ public class Parameter extends OpenApiElement {
 		this.allowEmptyValue = copyFrom.allowEmptyValue;
 		this.explode = copyFrom.explode;
 		this.allowReserved = copyFrom.allowReserved;
-		this.schema = copyFrom.schema;
+		this.schema = copyOf(copyFrom.schema);
 		this.example = copyFrom.example;
 		this.examples = copyOf(copyFrom.examples);
 	}
@@ -210,7 +211,7 @@ public class Parameter extends OpenApiElement {
 	 *
 	 * @return The examples map.
 	 */
-	public Map<String,Example> getExamples() { return examples; }
+	public Map<String,Example> getExamples() { return u(examples); }
 
 	/**
 	 * Returns the explode flag.

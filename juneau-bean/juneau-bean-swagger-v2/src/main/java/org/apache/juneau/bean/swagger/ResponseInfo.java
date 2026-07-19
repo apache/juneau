@@ -18,6 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.swagger.SwaggerCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -117,7 +118,7 @@ public class ResponseInfo extends SwaggerElement {
 		super(copyFrom);
 
 		this.description = copyFrom.description;
-		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
+		this.schema = copyOf(copyFrom.schema);
 		examples.putAll(copyOf(copyFrom.examples));
 		headers.putAll(copyOf(copyFrom.headers, HeaderInfo::copy));
 	}
@@ -212,7 +213,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getExamples() { return nie(examples); }
+	public Map<String,Object> getExamples() { return u(nie(examples)); }
 
 	/**
 	 * Returns the header information with the specified name.
@@ -233,7 +234,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,HeaderInfo> getHeaders() { return nie(headers); }
+	public Map<String,HeaderInfo> getHeaders() { return u(nie(headers)); }
 
 	/**
 	 * Bean property getter:  <property>schema</property>.

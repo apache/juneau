@@ -55,7 +55,7 @@ public class HalLink {
 	/**
 	 * Convenience constructor with the required {@code href} field.
 	 *
-	 * @param href The link URI or URI template.
+	 * @param href The link URI or URI template.  Can be <jk>null</jk>.
 	 */
 	public HalLink(String href) {
 		this.href = href;
@@ -74,7 +74,7 @@ public class HalLink {
 	/**
 	 * Bean property setter:  <property>href</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public HalLink setHref(String value) {
@@ -95,7 +95,7 @@ public class HalLink {
 	/**
 	 * Bean property setter:  <property>templated</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public HalLink setTemplated(Boolean value) {
@@ -116,7 +116,7 @@ public class HalLink {
 	/**
 	 * Bean property setter:  <property>type</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public HalLink setType(String value) {
@@ -137,7 +137,7 @@ public class HalLink {
 	/**
 	 * Bean property setter:  <property>deprecation</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public HalLink setDeprecation(String value) {
@@ -158,7 +158,7 @@ public class HalLink {
 	/**
 	 * Bean property setter:  <property>name</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public HalLink setName(String value) {
@@ -179,7 +179,7 @@ public class HalLink {
 	/**
 	 * Bean property setter:  <property>profile</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public HalLink setProfile(String value) {
@@ -200,7 +200,7 @@ public class HalLink {
 	/**
 	 * Bean property setter:  <property>title</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public HalLink setTitle(String value) {
@@ -221,7 +221,7 @@ public class HalLink {
 	/**
 	 * Bean property setter:  <property>hreflang</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public HalLink setHreflang(String value) {

@@ -97,7 +97,7 @@ public class Legend extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Legend} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Legend(Object...children) {
 		children(children);

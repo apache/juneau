@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.jsonapi;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
@@ -57,7 +59,7 @@ public class JsonApiError {
 	/**
 	 * Bean property setter:  <property>id</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiError setId(String value) {
@@ -75,12 +77,12 @@ public class JsonApiError {
 	 */
 	@BeanProp(value="links")
 	@Swap(JsonApiLinkOrStringSwap.class)
-	public Map<String,Object> getLinks() { return links; }
+	public Map<String,Object> getLinks() { return u(links); }
 
 	/**
 	 * Bean property setter:  <property>links</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	@BeanProp(value="links")
@@ -103,7 +105,7 @@ public class JsonApiError {
 	/**
 	 * Bean property setter:  <property>status</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiError setStatus(String value) {
@@ -124,7 +126,7 @@ public class JsonApiError {
 	/**
 	 * Bean property setter:  <property>code</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiError setCode(String value) {
@@ -142,7 +144,7 @@ public class JsonApiError {
 	/**
 	 * Bean property setter:  <property>title</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiError setTitle(String value) {
@@ -160,7 +162,7 @@ public class JsonApiError {
 	/**
 	 * Bean property setter:  <property>detail</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiError setDetail(String value) {
@@ -178,7 +180,7 @@ public class JsonApiError {
 	/**
 	 * Bean property setter:  <property>source</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiError setSource(JsonApiErrorSource value) {
@@ -191,12 +193,12 @@ public class JsonApiError {
 	 *
 	 * @return The value of the <property>meta</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getMeta() { return meta; }
+	public Map<String,Object> getMeta() { return u(meta); }
 
 	/**
 	 * Bean property setter:  <property>meta</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiError setMeta(Map<String,Object> value) {

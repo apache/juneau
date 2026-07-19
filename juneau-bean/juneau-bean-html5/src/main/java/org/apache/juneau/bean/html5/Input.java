@@ -91,7 +91,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * Creates an {@link Input} element with the specified {@link Input#type(String)} attribute.
 	 *
-	 * @param type The {@link Input#type(String)} attribute.
+	 * @param type The {@link Input#type(String)} attribute. Can be <jk>null</jk>.
 	 */
 	public Input(String type) {
 		type(type);
@@ -117,7 +117,7 @@ public class Input extends HtmlElementVoid {
 	 * 	<li><js>"image/png,image/jpeg"</js> - Accept specific MIME types</li>
 	 * </ul>
 	 *
-	 * @param value File type restrictions for file uploads.
+	 * @param value File type restrictions for file uploads. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input accept(String value) {
@@ -138,7 +138,7 @@ public class Input extends HtmlElementVoid {
 	 * Alternative text for image submit buttons. Used with <c>type="image"</c> to provide
 	 * accessible text when the image cannot be displayed.
 	 *
-	 * @param value Alternative text for image submit buttons.
+	 * @param value Alternative text for image submit buttons. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input alt(String value) {
@@ -181,7 +181,7 @@ public class Input extends HtmlElementVoid {
 	 * 	<li><js>"postal-code"</js> - Postal code</li>
 	 * </ul>
 	 *
-	 * @param value Autocomplete hint for the input field.
+	 * @param value Autocomplete hint for the input field. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input autocomplete(String value) {
@@ -199,6 +199,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input autofocus(Object value) {
@@ -223,6 +224,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input checked(Object value) {
@@ -253,7 +255,7 @@ public class Input extends HtmlElementVoid {
 	 * This is useful for forms that need to preserve text direction information when submitted.
 	 * The hidden field will contain either "ltr" or "rtl" based on the input's direction.
 	 *
-	 * @param value The name of the hidden field for directionality information.
+	 * @param value The name of the hidden field for directionality information. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input dirname(String value) {
@@ -278,6 +280,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input disabled(Object value) {
@@ -295,7 +298,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param value The ID of the form element to associate with this input.
+	 * @param value The ID of the form element to associate with this input. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input form(String value) {
@@ -309,7 +312,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * URL to use for form submission.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Input formaction(String value) {
@@ -323,7 +326,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Form data set encoding type to use for form submission.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Input formenctype(String value) {
@@ -337,7 +340,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * HTTP method to use for form submission.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Input formmethod(String value) {
@@ -352,7 +355,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Bypass form control validation for form submission.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Input formnovalidate(String value) {
@@ -366,7 +369,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Browsing context for form submission.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Input formtarget(String value) {
@@ -384,6 +387,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input height(Object value) {
@@ -423,7 +427,7 @@ public class Input extends HtmlElementVoid {
 	 * 	<li><js>"search"</js> - Keyboard optimized for search</li>
 	 * </ul>
 	 *
-	 * @param value The input modality hint for mobile keyboards.
+	 * @param value The input modality hint for mobile keyboards. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input inputmode(String value) {
@@ -444,7 +448,7 @@ public class Input extends HtmlElementVoid {
 	 * References a <c>&lt;datalist&gt;</c> element that provides predefined options
 	 * for the input field. Creates a dropdown with autocomplete suggestions.
 	 *
-	 * @param value The ID of a datalist element (without the # prefix).
+	 * @param value The ID of a datalist element (without the # prefix). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input list(String value) {
@@ -461,6 +465,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input max(Object value) {
@@ -472,7 +477,7 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-maxlength">maxlength</a> attribute.
 	 * Maximum length of value.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
@@ -490,6 +495,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input min(Object value) {
@@ -506,6 +512,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input minlength(Object value) {
@@ -530,6 +537,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input multiple(Object value) {
@@ -543,7 +551,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Input name(String value) {
@@ -858,7 +866,7 @@ public class Input extends HtmlElementVoid {
 	 * Specifies a regular expression that the input's value must match for the form to be valid.
 	 * Works with the <c>title</c> attribute to provide user feedback.
 	 *
-	 * @param value A regular expression pattern (e.g., <js>"[0-9]{3}-[0-9]{3}-[0-9]{4}"</js> for phone numbers).
+	 * @param value A regular expression pattern (e.g., <js>"[0-9]{3}-[0-9]{3}-[0-9]{4}"</js> for phone numbers). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input pattern(String value) {
@@ -873,7 +881,7 @@ public class Input extends HtmlElementVoid {
 	 * Provides a hint to the user about what to enter in the input field.
 	 * The placeholder text appears when the field is empty and disappears when the user starts typing.
 	 *
-	 * @param value Hint text to display in the empty input field.
+	 * @param value Hint text to display in the empty input field. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input placeholder(String value) {
@@ -887,7 +895,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Whether to allow the value to be edited by the user.
 	 *
-	 * @param value If <jk>true</jk>, adds <c>readonly="readonly"</c>.
+	 * @param value If <jk>true</jk>, adds <c>readonly="readonly"</c>. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input readonly(boolean value) {
@@ -903,7 +911,7 @@ public class Input extends HtmlElementVoid {
 	 * Makes the input field read-only, preventing user modification while still allowing
 	 * the value to be submitted with the form.
 	 *
-	 * @param value If <jk>true</jk>, makes the input read-only.
+	 * @param value If <jk>true</jk>, makes the input read-only. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input readonly(Object value) {
@@ -918,7 +926,7 @@ public class Input extends HtmlElementVoid {
 	 * Indicates that the input field must be filled out before the form can be submitted.
 	 * Browsers will show validation messages for empty required fields.
 	 *
-	 * @param value If <jk>true</jk>, makes the input required for form submission.
+	 * @param value If <jk>true</jk>, makes the input required for form submission. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input required(Object value) {
@@ -935,6 +943,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input size(Object value) {
@@ -957,6 +966,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Input src(Object value) {
@@ -970,7 +980,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Granularity to be matched by the form control's value.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Input step(String value) {
@@ -1030,7 +1040,7 @@ public class Input extends HtmlElementVoid {
 	 * 	<li><js>"hidden"</js> - Hidden input field</li>
 	 * </ul>
 	 *
-	 * @param value The input type for the form control.
+	 * @param value The input type for the form control. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input type(String value) {
@@ -1047,6 +1057,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input value(Object value) {
@@ -1063,6 +1074,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input width(Object value) {

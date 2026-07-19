@@ -426,7 +426,7 @@ public class HtmlElementText extends HtmlElement {
 	/**
 	 * Sets the text node on this element.
 	 *
-	 * @param value The text node to add to this element.
+	 * @param value The text node to add to this element. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HtmlElement text(Object value) {

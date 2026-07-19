@@ -24,6 +24,7 @@ import java.util.logging.*;
 import java.util.logging.Logger;
 
 import org.slf4j.*;
+import org.slf4j.helpers.*;
 import org.slf4j.spi.*;
 
 /**
@@ -40,7 +41,7 @@ import org.slf4j.spi.*;
  * 	<cs>[SystemProperties]</cs>
  *
  * 	<cc># Configure Jetty to log using java-util logging</cc>
- * 	<ck>org.eclipse.jetty.util.log.class</ck> = org.apache.juneau.marshall.microservice.jetty.JettyLogger
+ * 	<ck>org.eclipse.jetty.util.log.class</ck> = org.apache.juneau.microservice.jetty.JettyLogger
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -53,12 +54,16 @@ public class JettyLogger implements LocationAwareLogger {
 	/**
 	 * Formats a log message by replacing "{}" placeholders with the provided arguments.
 	 *
+	 * <p>
+	 * Uses SLF4J's {@link MessageFormatter} so the SLF4J-style <c>{}</c> anchors used by Jetty's logging calls are
+	 * expanded (a printf-style formatter would leave the <c>{}</c> literal and silently drop the arguments).
+	 *
 	 * @param msg The message template with "{}" placeholders.
 	 * @param args The arguments to substitute into the message.
 	 * @return The formatted message string.
 	 */
 	private static String format(String msg, Object...args) {
-		return f(msg, args);
+		return MessageFormatter.arrayFormat(msg, args).getMessage();
 	}
 
 	/**

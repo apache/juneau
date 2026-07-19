@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.stream;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -103,7 +104,7 @@ public final class PojoWalker {
 
 		/** Returns the bound context, or {@link MarshallingContext#DEFAULT} when none was supplied. */
 		MarshallingContext contextOrDefault() {
-			return context != null ? context : MarshallingContext.DEFAULT;
+			return or(context, MarshallingContext.DEFAULT);
 		}
 	}
 

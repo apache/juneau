@@ -92,7 +92,7 @@ public final class ValueResolver {
 	 * or {@code null} if no {@code @Value} (Juneau or Spring) is present.
 	 *
 	 * @param annotations The annotation list (from {@link FieldInfo#getAnnotations()},
-	 * 	{@link ParameterInfo#getAnnotations()}, etc.).
+	 * 	{@link ParameterInfo#getAnnotations()}, etc.). May be {@code null} or empty, in which case {@code null} is returned.
 	 * @return The expression, or {@code null} if not a {@code @Value} site.
 	 */
 	public static String findValueExpression(List<? extends AnnotationInfo<?>> annotations) {
@@ -108,7 +108,7 @@ public final class ValueResolver {
 	/**
 	 * Returns {@code true} if any annotation in the list is a {@code @Value} marker.
 	 *
-	 * @param annotations The annotation list.
+	 * @param annotations The annotation list.  May be {@code null} or empty, in which case {@code false} is returned.
 	 * @return {@code true} if at least one annotation matches {@link JsrSupport#isValueAnnotation(AnnotationInfo)}.
 	 */
 	public static boolean hasValueAnnotation(List<? extends AnnotationInfo<?>> annotations) {
@@ -125,7 +125,7 @@ public final class ValueResolver {
 	 * {@code @Value} resolves strings/primitives; {@code @Inject} resolves beans. Combining them on
 	 * the same site is ambiguous — fail fast with a clear message.
 	 *
-	 * @param annotations The annotation list.
+	 * @param annotations The annotation list.  May be {@code null} or empty, in which case this method returns without action.
 	 * @param siteDescription A human-readable description of the site (used in the error message).
 	 */
 	public static void checkInjectConflict(List<? extends AnnotationInfo<?>> annotations, String siteDescription) {
@@ -155,8 +155,8 @@ public final class ValueResolver {
 	 * 		resolved string, and the target type.
 	 * </ul>
 	 *
-	 * @param expression The {@code @Value} expression (typically {@code "${key}"} or {@code "${key:default}"}).
-	 * @param targetType The target Java type. May be a primitive.
+	 * @param expression The {@code @Value} expression (typically {@code "${key}"} or {@code "${key:default}"}). May be {@code null}, in which case {@code null} is returned for reference types (and a {@link BeanCreationException} is thrown for primitive target types).
+	 * @param targetType The target Java type. May be a primitive. Must not be {@code null}.
 	 * @param siteDescription A human-readable description of the site (used in error messages).
 	 * @return The coerced value.
 	 */
@@ -176,8 +176,8 @@ public final class ValueResolver {
 	 * {@code PropertySource}-typed beans) is byte-for-byte equivalent to the zero-argument
 	 * overload &mdash; no extra allocation and no behavior change.
 	 *
-	 * @param expression The {@code @Value} expression.
-	 * @param targetType The target Java type. May be a primitive.
+	 * @param expression The {@code @Value} expression. May be {@code null}, in which case {@code null} is returned for reference types (and a {@link BeanCreationException} is thrown for primitive target types).
+	 * @param targetType The target Java type. May be a primitive. Must not be {@code null}.
 	 * @param siteDescription A human-readable description of the site (used in error messages).
 	 * @param beanStore Caller-scoped {@link BeanStore} consulted for {@link PropertySource} beans.
 	 * 	May be {@code null}.
@@ -221,7 +221,7 @@ public final class ValueResolver {
 	 * </ul>
 	 *
 	 * @param expression The {@code @Value} expression. May be {@code null}.
-	 * @param targetType The erased target class (e.g. {@code String.class} or {@code Supplier.class}).
+	 * @param targetType The erased target class (e.g. {@code String.class} or {@code Supplier.class}). Must not be {@code null}.
 	 * @param genericTargetType The declared generic type (e.g. {@code Supplier<Integer>}). May be
 	 * 	{@code null}, in which case Supplier-detection is skipped.
 	 * @param siteDescription Human-readable site description for error messages.
@@ -241,7 +241,7 @@ public final class ValueResolver {
 	 * so re-evaluating reads always see the current state of {@code beanStore.getBeansOfType(PropertySource.class)}.
 	 *
 	 * @param expression The {@code @Value} expression. May be {@code null}.
-	 * @param targetType The erased target class.
+	 * @param targetType The erased target class. Must not be {@code null}.
 	 * @param genericTargetType The declared generic type. May be {@code null}.
 	 * @param siteDescription Human-readable site description for error messages.
 	 * @param beanStore Caller-scoped {@link BeanStore} consulted for {@link PropertySource} beans.
@@ -343,11 +343,11 @@ public final class ValueResolver {
 	private static Class<?> supplierElementType(Class<?> targetType, Type genericTargetType) {
 		if (targetType != Supplier.class)
 			return null;
-		if (!(genericTargetType instanceof ParameterizedType pt))
+		if (!(genericTargetType instanceof ParameterizedType genericTargetType2))
 			return null;
-		if (pt.getRawType() != Supplier.class)
+		if (genericTargetType2.getRawType() != Supplier.class)
 			return null;
-		var args = pt.getActualTypeArguments();
+		var args = genericTargetType2.getActualTypeArguments();
 		if (args.length != 1)
 			return null;
 		return args[0] instanceof Class<?> c ? c : null;

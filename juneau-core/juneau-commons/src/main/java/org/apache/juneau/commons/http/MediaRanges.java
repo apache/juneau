@@ -86,7 +86,7 @@ public class MediaRanges {
 	/**
 	 * Returns a parsed <c>Accept</c> header value.
 	 *
-	 * @param value The raw <c>Accept</c> header value.
+	 * @param value The raw <c>Accept</c> header value.  Can be <jk>null</jk>.
 	 * @return A parsed <c>Accept</c> header value.
 	 */
 	public static MediaRanges of(String value) {
@@ -119,7 +119,7 @@ public class MediaRanges {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The <c>Accept</c> header value.
+	 * @param value The <c>Accept</c> header value.  Can be <jk>null</jk>.
 	 */
 	public MediaRanges(String value) {
 		this(parse(value));
@@ -184,7 +184,7 @@ public class MediaRanges {
 	 * <p>
 	 * See <a class="doclink" href="https://www.w3.org/TR/activitypub/#retrieving-objects">ActivityPub / Retrieving Objects</a>
 	 *
-	 * @param mediaTypes The media types to match against.
+	 * @param mediaTypes The media types to match against.  Can be <jk>null</jk>.
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int match(List<? extends MediaType> mediaTypes) {
@@ -229,7 +229,7 @@ public class MediaRanges {
 
 	@Override
 	public boolean equals(Object o) {
-		return o instanceof MediaRanges other && eq(this, other, (x, y) -> eq(x.string, y.string));
+		return o instanceof MediaRanges o2 && eq(this, o2, (x, y) -> eq(x.string, y.string));
 	}
 
 	@Override

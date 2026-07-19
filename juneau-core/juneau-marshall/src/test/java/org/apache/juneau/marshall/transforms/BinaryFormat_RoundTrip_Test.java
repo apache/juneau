@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.transforms;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -263,7 +264,7 @@ class BinaryFormat_RoundTrip_Test extends TestBase {
 	@MethodSource("combos")
 	void a01_byteArrayProperty_basic(RoundTrip_Tester t, BinaryFormat fmt) throws Exception {
 		var x = new A01Bean();
-		x.b = SHORT_MIXED.clone();
+		x.b = cp(SHORT_MIXED);
 
 		x = t.roundTrip(x);
 		assertBytesEquals(SHORT_MIXED, x.b, "fmt=" + fmt);
@@ -283,9 +284,9 @@ class BinaryFormat_RoundTrip_Test extends TestBase {
 	@MethodSource("combos")
 	void a02_byteArrayProperty_multipleFields(RoundTrip_Tester t, BinaryFormat fmt) throws Exception {
 		var x = new A02Bean();
-		x.aligned4 = ALIGNED_4.clone();
-		x.aligned3 = ALIGNED_3.clone();
-		x.aligned1 = ALIGNED_1.clone();
+		x.aligned4 = cp(ALIGNED_4);
+		x.aligned3 = cp(ALIGNED_3);
+		x.aligned1 = cp(ALIGNED_1);
 
 		x = t.roundTrip(x);
 		assertBytesEquals(ALIGNED_4, x.aligned4, "fmt=" + fmt + " field=aligned4");
@@ -314,10 +315,10 @@ class BinaryFormat_RoundTrip_Test extends TestBase {
 	@MethodSource("combos")
 	void a03_byteArrayProperty_edgeCases(RoundTrip_Tester t, BinaryFormat fmt) throws Exception {
 		var x = new A03Bean();
-		x.empty = EMPTY.clone();
-		x.aligned4 = ALIGNED_4.clone();
-		x.aligned3 = ALIGNED_3.clone();
-		x.aligned1 = ALIGNED_1.clone();
+		x.empty = cp(EMPTY);
+		x.aligned4 = cp(ALIGNED_4);
+		x.aligned3 = cp(ALIGNED_3);
+		x.aligned1 = cp(ALIGNED_1);
 
 		x = t.roundTrip(x);
 		assertBytesEquals(EMPTY, x.empty, "fmt=" + fmt + " field=empty");
@@ -347,9 +348,9 @@ class BinaryFormat_RoundTrip_Test extends TestBase {
 	void a04_byteArrayProperty_inList(RoundTrip_Tester t, BinaryFormat fmt) throws Exception {
 		var x = new A04Bean();
 		x.list = new ArrayList<>();
-		x.list.add(SHORT_MIXED.clone());
-		x.list.add(ALIGNED_3.clone());
-		x.list.add(ALIGNED_1.clone());
+		x.list.add(cp(SHORT_MIXED));
+		x.list.add(cp(ALIGNED_3));
+		x.list.add(cp(ALIGNED_1));
 
 		x = t.roundTrip(x);
 		assertNotNull(x.list, "fmt=" + fmt);
@@ -389,7 +390,7 @@ class BinaryFormat_RoundTrip_Test extends TestBase {
 		if (p == null)
 			return;
 
-		var x = SHORT_MIXED.clone();
+		var x = cp(SHORT_MIXED);
 		try {
 			var out = t.serialize(x, s);
 			var x2 = p.parse(out, byte[].class);

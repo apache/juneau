@@ -79,7 +79,7 @@ public class DoubleHolder extends Holder<Double> {
 	 * 	<jsm>assertEquals</jsm>(3.14159, <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 * @return A new double value.
 	 */
 	public static DoubleHolder of(Double value) {
@@ -89,7 +89,7 @@ public class DoubleHolder extends Holder<Double> {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The initial value.
+	 * @param value The initial value.  Can be <jk>null</jk>.
 	 */
 	public DoubleHolder(Double value) {
 		super(value);
@@ -151,7 +151,7 @@ public class DoubleHolder extends Holder<Double> {
 	 * </p>
 	 *
 	 * @param precision The maximum allowed difference for equality. Must be non-negative and is the first parameter.
-	 * @param values The values to compare to.
+	 * @param values The values to compare to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the current value matches any of the specified values within the precision.
 	 * @throws IllegalArgumentException if precision is negative.
 	 */

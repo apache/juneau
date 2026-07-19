@@ -86,7 +86,7 @@ public class Rp extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Rp} element with the specified {@link Rp#children(Object[])} nodes.
 	 *
-	 * @param children The {@link Rp#children(Object[])} nodes.
+	 * @param children The {@link Rp#children(Object[])} nodes. Must not be <jk>null</jk>.
 	 */
 	public Rp(Object...children) {
 		children(children);

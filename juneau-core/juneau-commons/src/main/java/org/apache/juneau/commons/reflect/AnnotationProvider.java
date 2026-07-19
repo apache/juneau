@@ -381,7 +381,7 @@ public class AnnotationProvider {
 			if (! Annotation.class.isAssignableFrom(rt) || rt.isArray())
 				return a;
 			var inner = (Annotation) mi.accessible().invoke(a);
-			return inner != null ? inner : a;
+			return or(inner, a);
 		}
 
 		/**
@@ -539,8 +539,8 @@ public class AnnotationProvider {
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param c The class to search.
+	 * @param type The annotation type to search for.  Must not be <jk>null</jk>.
+	 * @param c The class to search.  Must not be <jk>null</jk>.
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
@@ -564,8 +564,8 @@ public class AnnotationProvider {
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param c The constructor to search.
+	 * @param type The annotation type to search for.  Must not be <jk>null</jk>.
+	 * @param c The constructor to search.  Must not be <jk>null</jk>.
 	 * @param traversals The traversal options.
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
@@ -589,8 +589,8 @@ public class AnnotationProvider {
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param f The field to search.
+	 * @param type The annotation type to search for.  Must not be <jk>null</jk>.
+	 * @param f The field to search.  Must not be <jk>null</jk>.
 	 * @param traversals The traversal options.
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
@@ -618,8 +618,8 @@ public class AnnotationProvider {
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param m The method to search.
+	 * @param type The annotation type to search for.  Must not be <jk>null</jk>.
+	 * @param m The method to search.  Must not be <jk>null</jk>.
 	 * @param traversals The traversal options.
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
@@ -661,8 +661,8 @@ public class AnnotationProvider {
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param p The parameter to search.
+	 * @param type The annotation type to search for.  Must not be <jk>null</jk>.
+	 * @param p The parameter to search.  Must not be <jk>null</jk>.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
@@ -692,7 +692,7 @@ public class AnnotationProvider {
 	 * 		find(<jv>ci</jv>, SELF, PARENTS);
 	 * </p>
 	 *
-	 * @param c The class to search.
+	 * @param c The class to search.  Must not be <jk>null</jk>.
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
@@ -715,7 +715,7 @@ public class AnnotationProvider {
 	 * 		find(<jv>ci</jv>, SELF);
 	 * </p>
 	 *
-	 * @param c The constructor to search.
+	 * @param c The constructor to search.  Must not be <jk>null</jk>.
 	 * @param traversals The traversal options.
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
@@ -738,7 +738,7 @@ public class AnnotationProvider {
 	 * 		find(<jv>fi</jv>, SELF);
 	 * </p>
 	 *
-	 * @param f The field to search.
+	 * @param f The field to search.  Must not be <jk>null</jk>.
 	 * @param traversals The traversal options.
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
@@ -765,7 +765,7 @@ public class AnnotationProvider {
 	 * 		find(<jv>mi</jv>, SELF, MATCHING_METHODS, RETURN_TYPE);
 	 * </p>
 	 *
-	 * @param m The method to search.
+	 * @param m The method to search.  Must not be <jk>null</jk>.
 	 * @param traversals The traversal options.
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
@@ -802,7 +802,7 @@ public class AnnotationProvider {
 	 * 		find(<jv>pi</jv>, SELF);
 	 * </p>
 	 *
-	 * @param p The parameter to search.
+	 * @param p The parameter to search.  Must not be <jk>null</jk>.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
@@ -843,8 +843,8 @@ public class AnnotationProvider {
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param c The class to search.
+	 * @param type The annotation type to search for.  Must not be <jk>null</jk>.
+	 * @param c The class to search.  Must not be <jk>null</jk>.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF, PARENTS, PACKAGE}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#PARENTS PARENTS}, {@link AnnotationTraversal#PACKAGE PACKAGE}
@@ -878,8 +878,8 @@ public class AnnotationProvider {
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param c The constructor to search.
+	 * @param type The annotation type to search for.  Must not be <jk>null</jk>.
+	 * @param c The constructor to search.  Must not be <jk>null</jk>.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}
@@ -913,8 +913,8 @@ public class AnnotationProvider {
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param f The field to search.
+	 * @param type The annotation type to search for.  Must not be <jk>null</jk>.
+	 * @param f The field to search.  Must not be <jk>null</jk>.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}
@@ -954,8 +954,8 @@ public class AnnotationProvider {
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param m The method to search.
+	 * @param type The annotation type to search for.  Must not be <jk>null</jk>.
+	 * @param m The method to search.  Must not be <jk>null</jk>.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS}, {@link AnnotationTraversal#RETURN_TYPE RETURN_TYPE}, {@link AnnotationTraversal#PACKAGE PACKAGE}
@@ -994,8 +994,8 @@ public class AnnotationProvider {
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param p The parameter to search.
+	 * @param type The annotation type to search for.  Must not be <jk>null</jk>.
+	 * @param p The parameter to search.  Must not be <jk>null</jk>.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}

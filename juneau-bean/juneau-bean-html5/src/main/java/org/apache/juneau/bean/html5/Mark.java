@@ -87,7 +87,7 @@ public class Mark extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Mark} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Mark(Object...children) {
 		children(children);

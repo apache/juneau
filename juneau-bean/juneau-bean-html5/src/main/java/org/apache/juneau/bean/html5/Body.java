@@ -77,7 +77,7 @@ public class Body extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Body} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Body(Object...children) {
 		children(children);
@@ -162,7 +162,7 @@ public class Body extends HtmlElementMixed {
 	 * <p>
 	 * Event handler for when the document has finished printing.
 	 *
-	 * @param value JavaScript code to execute when the afterprint event occurs.
+	 * @param value JavaScript code to execute when the afterprint event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Body onafterprint(String value) {
@@ -177,7 +177,7 @@ public class Body extends HtmlElementMixed {
 	 * <p>
 	 * Event handler for when the document is about to be unloaded (page refresh, navigation, etc.).
 	 *
-	 * @param value JavaScript code to execute when the beforeunload event occurs.
+	 * @param value JavaScript code to execute when the beforeunload event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Body onbeforeunload(String value) {
@@ -324,7 +324,7 @@ public class Body extends HtmlElementMixed {
 	 * <p>
 	 * Event handler for when a message is received from another window or worker.
 	 *
-	 * @param value JavaScript code to execute when the message event occurs.
+	 * @param value JavaScript code to execute when the message event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Body onmessage(String value) {
@@ -387,7 +387,7 @@ public class Body extends HtmlElementMixed {
 	 * <p>
 	 * Event handler for when the browser has gone online.
 	 *
-	 * @param value JavaScript code to execute when the online event occurs.
+	 * @param value JavaScript code to execute when the online event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Body ononline(String value) {
@@ -402,7 +402,7 @@ public class Body extends HtmlElementMixed {
 	 * <p>
 	 * Event handler for when the page is displayed (including when returning from back/forward cache).
 	 *
-	 * @param value JavaScript code to execute when the pageshow event occurs.
+	 * @param value JavaScript code to execute when the pageshow event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Body onpageshow(String value) {
@@ -495,7 +495,7 @@ public class Body extends HtmlElementMixed {
 	 * <p>
 	 * Event handler for when the storage area (localStorage or sessionStorage) is modified.
 	 *
-	 * @param value JavaScript code to execute when the storage event occurs.
+	 * @param value JavaScript code to execute when the storage event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Body onstorage(String value) {

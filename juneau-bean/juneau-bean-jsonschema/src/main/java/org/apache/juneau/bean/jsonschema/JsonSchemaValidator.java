@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.jsonschema;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
@@ -168,18 +169,18 @@ public final class JsonSchemaValidator implements PropertyValidator {
 
 		validateType(s, value);
 
-		if (value instanceof CharSequence cs) {
-			validateString(s, cs.toString(), patternOverride);
-		} else if (value instanceof Character ch) {
-			validateString(s, ch.toString(), patternOverride);
-		} else if (value instanceof Number n) {
-			validateNumber(s, n);
-		} else if (value instanceof Collection<?> c) {
-			validateArray(s, c);
+		if (value instanceof CharSequence value2) {
+			validateString(s, value2.toString(), patternOverride);
+		} else if (value instanceof Character value2) {
+			validateString(s, value2.toString(), patternOverride);
+		} else if (value instanceof Number value2) {
+			validateNumber(s, value2);
+		} else if (value instanceof Collection<?> value2) {
+			validateArray(s, value2);
 		} else if (value.getClass().isArray()) {
 			validateArray(s, arrayAsList(value));
-		} else if (value instanceof Map<?,?> m) {
-			validateObject(s, m);
+		} else if (value instanceof Map<?,?> value2) {
+			validateObject(s, value2);
 		}
 		// Java beans: per-property @Schema validators are installed independently on the bean side.
 	}
@@ -253,9 +254,9 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	private static boolean isIntegralValue(Object value) {
 		if (value instanceof Byte || value instanceof Short || value instanceof Integer || value instanceof Long || value instanceof BigInteger)
 			return true;
-		if (value instanceof Number n) {
+		if (value instanceof Number value2) {
 			try {
-				var bd = toBigDecimal(n);
+				var bd = toBigDecimal(value2);
 				return bd.stripTrailingZeros().scale() <= 0;
 			} catch (@SuppressWarnings("unused") NumberFormatException e) {
 				return false;
@@ -337,7 +338,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 			throw new SchemaValidationException("Array size %s is less than minItems %s.", size, min);
 		if (nn(max) && size > max)
 			throw new SchemaValidationException("Array size %s exceeds maxItems %s.", size, max);
-		if (Boolean.TRUE.equals(s.getUniqueItems()) && hasDuplicates(value))
+		if (isTrue(s.getUniqueItems()) && hasDuplicates(value))
 			throw new SchemaValidationException("Array contains duplicate items but uniqueItems is true.");
 		var items = s.getItemsAsSchema();
 		if (nn(items)) {
@@ -406,10 +407,10 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	// =================================================================================================================
 
 	private static BigDecimal toBigDecimal(Number n) {
-		if (n instanceof BigDecimal bd)
-			return bd;
-		if (n instanceof BigInteger bi)
-			return new BigDecimal(bi);
+		if (n instanceof BigDecimal n2)
+			return n2;
+		if (n instanceof BigInteger n2)
+			return new BigDecimal(n2);
 		if (n instanceof Long || n instanceof Integer || n instanceof Short || n instanceof Byte)
 			return BigDecimal.valueOf(n.longValue());
 		return new BigDecimal(n.toString());
@@ -423,18 +424,18 @@ public final class JsonSchemaValidator implements PropertyValidator {
 			return true;
 		if (a == null || b == null)
 			return false;
-		if (a instanceof Number an && b instanceof Number bn)
-			return toBigDecimal(an).compareTo(toBigDecimal(bn)) == 0;
-		if (a instanceof Number an && b instanceof CharSequence cs) {
-			var bd = tryAsBigDecimal(cs.toString());
-			return nn(bd) && toBigDecimal(an).compareTo(bd) == 0;
+		if (a instanceof Number a2 && b instanceof Number b2)
+			return toBigDecimal(a2).compareTo(toBigDecimal(b2)) == 0;
+		if (a instanceof Number a2 && b instanceof CharSequence b2) {
+			var bd = tryAsBigDecimal(b2.toString());
+			return nn(bd) && toBigDecimal(a2).compareTo(bd) == 0;
 		}
-		if (b instanceof Number bn && a instanceof CharSequence cs) {
-			var bd = tryAsBigDecimal(cs.toString());
-			return nn(bd) && toBigDecimal(bn).compareTo(bd) == 0;
+		if (b instanceof Number b2 && a instanceof CharSequence a2) {
+			var bd = tryAsBigDecimal(a2.toString());
+			return nn(bd) && toBigDecimal(b2).compareTo(bd) == 0;
 		}
-		if (a instanceof CharSequence csa && b instanceof CharSequence csb)
-			return csa.toString().equals(csb.toString());
+		if (a instanceof CharSequence a2 && b instanceof CharSequence b2)
+			return a2.toString().equals(b2.toString());
 		if (a.equals(b))
 			return true;
 		try {

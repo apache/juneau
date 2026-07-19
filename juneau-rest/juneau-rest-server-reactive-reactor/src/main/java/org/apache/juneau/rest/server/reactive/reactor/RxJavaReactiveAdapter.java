@@ -50,14 +50,14 @@ public class RxJavaReactiveAdapter implements ReactiveStreamsAdapter {
 
 	@Override /* Overridden from ReactiveStreamsAdapter */
 	public Adaptation adapt(Object value) {
-		if (value instanceof Single<?> s)
-			return Adaptation.single(s.toCompletionStage());
-		if (value instanceof Maybe<?> m)
-			return Adaptation.single(m.toCompletionStage(null));
-		if (value instanceof Completable c)
-			return Adaptation.single(c.toCompletionStage(null));
-		if (value instanceof Flowable<?> f)
-			return Adaptation.stream(FlowAdapters.toFlowPublisher(f));
+		if (value instanceof Single<?> value2)
+			return Adaptation.single(value2.toCompletionStage());
+		if (value instanceof Maybe<?> value2)
+			return Adaptation.single(value2.toCompletionStage(null));
+		if (value instanceof Completable value2)
+			return Adaptation.single(value2.toCompletionStage(null));
+		if (value instanceof Flowable<?> value2)
+			return Adaptation.stream(FlowAdapters.toFlowPublisher(value2));
 		var o = (Observable<?>) value;
 		return Adaptation.stream(FlowAdapters.toFlowPublisher(o.toFlowable(BackpressureStrategy.BUFFER)));
 	}

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client.jetty;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import org.eclipse.jetty.client.*;
 
 /**
@@ -60,7 +62,7 @@ public final class JettyHttpTransportBuilder {
 	 * @return This object.
 	 */
 	public JettyHttpTransportBuilder httpClient(HttpClient value) {
-		httpClient = value;
+		httpClient = assertArgNotNull("value", value);
 		return this;
 	}
 

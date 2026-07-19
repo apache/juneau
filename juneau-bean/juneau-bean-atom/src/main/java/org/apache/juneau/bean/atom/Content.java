@@ -125,7 +125,7 @@ public class Content extends Text {
 	/**
 	 * Normal content.
 	 *
-	 * @param type The content type of this content.
+	 * @param type The content type of this content.  Can be <jk>null</jk>.
 	 */
 	public Content(String type) {
 		super(type);

@@ -219,11 +219,12 @@ public class SamlAuthFilter extends AuthFilter {
 	private String decodeSamlResponse(String raw) throws AuthenticationException {
 		try {
 			byte[] decoded = Base64.getMimeDecoder().decode(raw);
-			if (binding == SamlBinding.REDIRECT) {
+			return switch (binding) {
 				// Per SAML 2.0 Redirect binding: deflate using raw DEFLATE (no zlib wrapper).
-				return inflate(decoded);
-			}
-			return new String(decoded, StandardCharsets.UTF_8);
+				case REDIRECT -> inflate(decoded);
+				// Per SAML 2.0 POST binding: the base64-decoded bytes are the raw XML document.
+				case POST -> new String(decoded, StandardCharsets.UTF_8);
+			};
 		} catch (IllegalArgumentException e) {
 			throw new AuthenticationException(e, "SAMLResponse parameter is not valid base64")
 				.wwwAuthenticate(challenge);
@@ -277,13 +278,13 @@ public class SamlAuthFilter extends AuthFilter {
 		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
 	})
 	private Set<String> extractRoles(Principal principal) {
-		if (principal instanceof ClaimsPrincipal cp) {
-			var v = cp.getClaims().get(rolesClaim);
-			if (v instanceof List<?> list) {
+		if (principal instanceof ClaimsPrincipal principal2) {
+			var v = principal2.getClaims().get(rolesClaim);
+			if (v instanceof List<?> v2) {
 				var roles = new HashSet<String>();
-				for (var item : (List<Object>) list)
-					if (item instanceof String s)
-						roles.add(s);
+				for (var item : (List<Object>) v2)
+					if (item instanceof String item2)
+						roles.add(item2);
 				return roles;
 			}
 		}

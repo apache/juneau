@@ -18,6 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.swagger.SwaggerCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -216,7 +217,7 @@ public class Operation extends SwaggerElement {
 		this.consumes.addAll(copyOf(copyFrom.consumes));
 		this.deprecated = copyFrom.deprecated;
 		this.description = copyFrom.description;
-		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+		this.externalDocs = copyOf(copyFrom.externalDocs);
 		this.operationId = copyFrom.operationId;
 		this.produces.addAll(copyOf(copyFrom.produces));
 		this.schemes.addAll(copyOf(copyFrom.schemes));

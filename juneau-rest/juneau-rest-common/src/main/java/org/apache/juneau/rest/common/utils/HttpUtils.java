@@ -37,10 +37,10 @@ public class HttpUtils {
 	/**
 	 * Given a method name, infers the REST method name.
 	 *
-	 * @param m The Java method.
+	 * @param m The Java method. Must not be <jk>null</jk>.
 	 * @param detectMethod Whether we should auto-detect the HTTP method name from the Java method name.
-	 * @param def The default HTTP method if not detected.
-	 * @return The REST method name, or the default value if not found.
+	 * @param def The default HTTP method if not detected. Can be <jk>null</jk>.
+	 * @return The REST method name, or <c>def</c> (which can be <jk>null</jk>) if not detected.
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for HTTP method detection
@@ -64,9 +64,9 @@ public class HttpUtils {
 	/**
 	 * Given a Java method, infers the REST path.
 	 *
-	 * @param m The Java method.
-	 * @param method The HTTP method name if it's known.
-	 * @return The REST path or <jk>null</jk> if not detected.
+	 * @param m The Java method. Must not be <jk>null</jk>.
+	 * @param method The HTTP method name if it's known. Can be <jk>null</jk>.
+	 * @return The REST path. Never <jk>null</jk> (falls back to <c>'/' + methodName</c> when no convention matches).
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for HTTP path detection

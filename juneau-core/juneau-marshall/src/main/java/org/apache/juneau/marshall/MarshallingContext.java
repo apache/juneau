@@ -373,7 +373,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			super(copyFrom);
 			beanClassVisibility = copyFrom.beanClassVisibility;
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
-			beanDictionary = copyOf(copyFrom.beanDictionary);
+			beanDictionary = cp(copyFrom.beanDictionary);
 			beanFieldVisibility = copyFrom.beanFieldVisibility;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 			beanMethodVisibility = copyFrom.beanMethodVisibility;
@@ -396,7 +396,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			notBeanPackages = toSortedSet(copyFrom.notBeanPackages, false);
 			propertyNamer = copyFrom.propertyNamer;
 			unsortedProperties = copyFrom.unsortedProperties;
-			swaps = copyOf(copyFrom.swaps);
+			swaps = cp(copyFrom.swaps);
 			timeZone = copyFrom.timeZone;
 			durationFormat = copyFrom.durationFormat;
 			periodFormat = copyFrom.periodFormat;
@@ -432,7 +432,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			super(copyFrom);
 			beanClassVisibility = copyFrom.beanClassVisibility;
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
-			beanDictionary = copyOf(copyFrom.beanDictionary);
+			beanDictionary = cp(copyFrom.beanDictionary);
 			beanFieldVisibility = copyFrom.beanFieldVisibility;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 			beanMethodVisibility = copyFrom.beanMethodVisibility;
@@ -455,7 +455,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			notBeanPackages = toSortedSet(copyFrom.notBeanPackages);
 			propertyNamer = copyFrom.propertyNamer;
 			unsortedProperties = copyFrom.unsortedProperties;
-			swaps = copyOf(copyFrom.swaps);
+			swaps = cp(copyFrom.swaps);
 			timeZone = copyFrom.timeZone;
 			durationFormat = copyFrom.durationFormat;
 			periodFormat = copyFrom.periodFormat;
@@ -1839,6 +1839,16 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
+		}
+
+		/**
+		 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
+		 *
+		 * @param value The value to copy.  Can be <jk>null</jk>.
+		 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
+		 */
+		public static Builder copyOrNull(Builder value) {
+			return value == null ? null : value.copy();
 		}
 
 		/**
@@ -4092,7 +4102,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 
 		beanClassVisibility = builder.beanClassVisibility;
 		beanConstructorVisibility = builder.beanConstructorVisibility;
-		beanDictionary = u(copyOf(builder.beanDictionary));
+		beanDictionary = u(cp(builder.beanDictionary));
 		beanFieldVisibility = builder.beanFieldVisibility;
 		beanMapPutReturnsOldValue = builder.beanMapPutReturnsOldValue;
 		beanMethodVisibility = builder.beanMethodVisibility;
@@ -4114,7 +4124,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		notBeanPackages = u(new ArrayList<>(builder.notBeanPackages));
 		propertyNamer = nn(builder.propertyNamer) ? builder.propertyNamer : BasicPropertyNamer.class;
 		unsortedProperties = builder.unsortedProperties;
-		swaps = u(copyOf(builder.swaps));
+		swaps = u(cp(builder.swaps));
 		timeZone = builder.timeZone;
 		durationFormat = builder.durationFormat;
 		periodFormat = builder.periodFormat;
@@ -4355,7 +4365,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 					try {
 						var bs = marshallingSession(session);
 						var resolvedSwap = bs != null ? toMeta.getSwap(bs) : null;
-						var activeSwap = (ObjectSwap<Object,Object>) (resolvedSwap != null ? resolvedSwap : swap);
+						var activeSwap = (ObjectSwap<Object,Object>) or(resolvedSwap, swap);
 						var swapClass = activeSwap.getSwapClass().inner();
 						// Direct match
 						if (swapClass.isInstance(in))

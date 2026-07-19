@@ -163,7 +163,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Constructor.
 		 *
-		 * @param annotationType The annotation type of the annotation implementation class.
+		 * @param annotationType The annotation type of the annotation implementation class.  Must not be <jk>null</jk>.
 		 */
 		public Builder(Class<? extends Annotation> annotationType) {
 			super(annotationType);
@@ -172,7 +172,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * The targets this annotation applies to.
 		 *
-		 * @param values The targets this annotation applies to.
+		 * @param values The targets this annotation applies to.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public Builder on(String...values) {
@@ -209,7 +209,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Constructor.
 		 *
-		 * @param annotationType The annotation type of the annotation implementation class.
+		 * @param annotationType The annotation type of the annotation implementation class.  Must not be <jk>null</jk>.
 		 */
 		public BuilderC(Class<? extends Annotation> annotationType) {
 			super(annotationType);
@@ -218,7 +218,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the constructors that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderC on(Constructor<?>...value) {
@@ -231,7 +231,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the constructors that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderC on(ConstructorInfo...value) {
@@ -269,7 +269,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Constructor.
 		 *
-		 * @param annotationType The annotation type of the annotation implementation class.
+		 * @param annotationType The annotation type of the annotation implementation class.  Must not be <jk>null</jk>.
 		 */
 		public BuilderM(Class<? extends Annotation> annotationType) {
 			super(annotationType);
@@ -278,7 +278,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the methods that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderM on(Method...value) {
@@ -291,7 +291,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the methods that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderM on(MethodInfo...value) {
@@ -332,7 +332,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Constructor.
 		 *
-		 * @param annotationType The annotation type of the annotation implementation class.
+		 * @param annotationType The annotation type of the annotation implementation class.  Must not be <jk>null</jk>.
 		 */
 		public BuilderMF(Class<? extends Annotation> annotationType) {
 			super(annotationType);
@@ -341,7 +341,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the fields that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderMF on(Field...value) {
@@ -354,7 +354,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the fields that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderMF on(FieldInfo...value) {
@@ -367,7 +367,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the methods that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderMF on(Method...value) {
@@ -380,7 +380,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the methods that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderMF on(MethodInfo...value) {
@@ -427,7 +427,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Constructor.
 		 *
-		 * @param annotationType The annotation type of the annotation implementation class.
+		 * @param annotationType The annotation type of the annotation implementation class.  Must not be <jk>null</jk>.
 		 */
 		public BuilderT(Class<? extends Annotation> annotationType) {
 			super(annotationType);
@@ -436,7 +436,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the classes that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderT on(Class<?>...value) {
@@ -449,7 +449,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the classes that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderT on(ClassInfo...value) {
@@ -462,7 +462,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the classes that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderT onClass(Class<?>...value) {
@@ -475,7 +475,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the classes that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderT onClass(ClassInfo...value) {
@@ -507,7 +507,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Constructor.
 		 *
-		 * @param annotationType The annotation type of the annotation implementation class.
+		 * @param annotationType The annotation type of the annotation implementation class.  Must not be <jk>null</jk>.
 		 */
 		public BuilderTM(Class<? extends Annotation> annotationType) {
 			super(annotationType);
@@ -516,7 +516,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the methods that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderTM on(Method...value) {
@@ -529,7 +529,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the methods that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderTM on(MethodInfo...value) {
@@ -575,7 +575,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Constructor.
 		 *
-		 * @param annotationType The annotation type of the annotation implementation class.
+		 * @param annotationType The annotation type of the annotation implementation class.  Must not be <jk>null</jk>.
 		 */
 		public BuilderTMF(Class<? extends Annotation> annotationType) {
 			super(annotationType);
@@ -584,7 +584,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the fields that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderTMF on(Field...value) {
@@ -597,7 +597,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the fields that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderTMF on(FieldInfo...value) {
@@ -610,7 +610,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the methods that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderTMF on(Method...value) {
@@ -623,7 +623,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the methods that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderTMF on(MethodInfo...value) {
@@ -658,7 +658,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Constructor.
 		 *
-		 * @param annotationType The annotation type of the annotation implementation class.
+		 * @param annotationType The annotation type of the annotation implementation class.  Must not be <jk>null</jk>.
 		 */
 		public BuilderTMFC(Class<? extends Annotation> annotationType) {
 			super(annotationType);
@@ -667,7 +667,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the constructors that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderTMFC on(Constructor<?>...value) {
@@ -680,7 +680,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		/**
 		 * Appends the constructors that this annotation applies to.
 		 *
-		 * @param value The values to append.
+		 * @param value The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 		 * @return This object.
 		 */
 		public BuilderTMFC on(ConstructorInfo...value) {
@@ -700,11 +700,11 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	/**
 	 * Constructor.
 	 *
-	 * @param b The builder used to instantiate the fields of this class.
+	 * @param b The builder used to instantiate the fields of this class.  Must not be <jk>null</jk>.
 	 */
 	public AppliedAnnotationObject(Builder b) {
 		super(b);
-		this.on = copyOf(b.on);
+		this.on = cp(b.on);
 	}
 
 	/**
@@ -713,6 +713,6 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 * @return The targets this annotation applies to.
 	 */
 	public String[] on() {
-		return copyOf(on);
+		return cp(on);
 	}
 }

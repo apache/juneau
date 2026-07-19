@@ -100,8 +100,8 @@ public class Tuple2<A,B> {
 	 *
 	 * @param <A> The type of the first value.
 	 * @param <B> The type of the second value.
-	 * @param a The first value.
-	 * @param b The second value.
+	 * @param a The first value.  Can be <jk>null</jk>.
+	 * @param b The second value.  Can be <jk>null</jk>.
 	 * @return A new tuple containing the specified values.
 	 */
 	public static <A,B> Tuple2<A,B> of(A a, B b) {
@@ -115,8 +115,8 @@ public class Tuple2<A,B> {
 	/**
 	 * Constructor.
 	 *
-	 * @param a Object 1.
-	 * @param b Object 2.
+	 * @param a Object 1.  Can be <jk>null</jk>.
+	 * @param b Object 2.  Can be <jk>null</jk>.
 	 */
 	public Tuple2(A a, B b) {
 		this.a = a;

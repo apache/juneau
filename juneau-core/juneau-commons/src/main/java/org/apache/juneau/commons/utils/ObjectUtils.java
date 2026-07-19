@@ -75,7 +75,7 @@ public class ObjectUtils {
 		return Objects.equals(o1, o2);
 	}
 
-	/** String equality with optional case-insensitivity. */
+	/** String equality with optional case-insensitivity (<jk>null</jk>-safe; two <jk>null</jk> values are equal). */
 	public static boolean equal(boolean caseInsensitive, String s1, String s2) {
 		return caseInsensitive ? equalIgnoreCase(s1, s2) : equal(s1, s2);
 	}
@@ -88,7 +88,7 @@ public class ObjectUtils {
 		return test.test(o1, o2);
 	}
 
-	/** Returns <jk>true</jk> if the first argument equals any of the varargs. */
+	/** Returns <jk>true</jk> if the first argument equals any of the varargs.  <br>Returns <jk>false</jk> if the varargs array is <jk>null</jk> or empty. */
 	@SafeVarargs
 	public static <T> boolean equalsAny(T o1, T...o2) {
 		if (o2 == null || o2.length == 0) return false;
@@ -96,7 +96,7 @@ public class ObjectUtils {
 		return false;
 	}
 
-	/** Case-insensitive equality of two objects' string forms. */
+	/** Case-insensitive equality of two objects' string forms (<jk>null</jk>-safe; two <jk>null</jk> values are equal, one <jk>null</jk> is not). */
 	public static boolean equalIgnoreCase(Object o1, Object o2) { return StringUtils.equalsIgnoreCase(o1, o2); }
 
 	/** Inverse of {@link #equal(Object,Object)}. */
@@ -127,9 +127,9 @@ public class ObjectUtils {
 	 * Returns <jk>true</jk> if o1 is less than o2.
 	 *
 	 * @param <T> The comparable type.
-	 * @param o1 Object 1.
-	 * @param o2 Object 2.
-	 * @return <jk>true</jk> if o1 is less than o2.
+	 * @param o1 Object 1.  Can be <jk>null</jk>.
+	 * @param o2 Object 2.  Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if o1 is less than o2.  A <jk>null</jk> value is considered less than any non-<jk>null</jk> value.
 	 */
 	public static <T extends Comparable<T>> boolean lessThan(T o1, T o2) {
 		if (o1 == null) return o2 != null;
@@ -141,9 +141,9 @@ public class ObjectUtils {
 	 * Returns <jk>true</jk> if o1 is less than or equal to o2.
 	 *
 	 * @param <T> The comparable type.
-	 * @param o1 Object 1.
-	 * @param o2 Object 2.
-	 * @return <jk>true</jk> if o1 is less than or equal to o2.
+	 * @param o1 Object 1.  Can be <jk>null</jk>.
+	 * @param o2 Object 2.  Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if o1 is less than or equal to o2.  A <jk>null</jk> o1 is considered less than or equal to any value.
 	 */
 	public static <T extends Comparable<T>> boolean lessThanOrEqual(T o1, T o2) {
 		if (o1 == null) return true;
@@ -155,9 +155,9 @@ public class ObjectUtils {
 	 * Returns <jk>true</jk> if o1 is greater than o2.
 	 *
 	 * @param <T> The comparable type.
-	 * @param o1 Object 1.
-	 * @param o2 Object 2.
-	 * @return <jk>true</jk> if o1 is greater than o2.
+	 * @param o1 Object 1.  Can be <jk>null</jk>.
+	 * @param o2 Object 2.  Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if o1 is greater than o2.  A <jk>null</jk> o1 is never considered greater than o2; a non-<jk>null</jk> o1 is considered greater than a <jk>null</jk> o2.
 	 */
 	public static <T extends Comparable<T>> boolean greaterThan(T o1, T o2) {
 		if (o1 == null) return false;
@@ -169,9 +169,9 @@ public class ObjectUtils {
 	 * Returns <jk>true</jk> if o1 is greater than or equal to o2.
 	 *
 	 * @param <T> The comparable type.
-	 * @param o1 Object 1.
-	 * @param o2 Object 2.
-	 * @return <jk>true</jk> if o1 is greater than or equal to o2.
+	 * @param o1 Object 1.  Can be <jk>null</jk>.
+	 * @param o2 Object 2.  Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if o1 is greater than or equal to o2.  A non-<jk>null</jk> o1 is considered greater than or equal to a <jk>null</jk> o2; a <jk>null</jk> o1 is greater than or equal only to a <jk>null</jk> o2.
 	 */
 	public static <T extends Comparable<T>> boolean greaterThanOrEqual(T o1, T o2) {
 		if (o1 == null) return o2 == null;
@@ -183,9 +183,9 @@ public class ObjectUtils {
 	 * Returns the minimum of two comparable values.
 	 *
 	 * @param <T> The comparable type.
-	 * @param o1 Value 1.
-	 * @param o2 Value 2.
-	 * @return The minimum value.
+	 * @param o1 Value 1.  Can be <jk>null</jk>.
+	 * @param o2 Value 2.  Can be <jk>null</jk>.
+	 * @return The minimum value.  If one argument is <jk>null</jk>, the other is returned (which may itself be <jk>null</jk> if both are <jk>null</jk>).
 	 */
 	public static <T extends Comparable<T>> T min(T o1, T o2) {
 		if (o1 == null) return o2;
@@ -197,9 +197,9 @@ public class ObjectUtils {
 	 * Returns the maximum of two comparable values.
 	 *
 	 * @param <T> The comparable type.
-	 * @param o1 Value 1.
-	 * @param o2 Value 2.
-	 * @return The maximum value.
+	 * @param o1 Value 1.  Can be <jk>null</jk>.
+	 * @param o2 Value 2.  Can be <jk>null</jk>.
+	 * @return The maximum value.  If one argument is <jk>null</jk>, the other is returned (which may itself be <jk>null</jk> if both are <jk>null</jk>).
 	 */
 	public static <T extends Comparable<T>> T max(T o1, T o2) {
 		if (o1 == null) return o2;
@@ -248,14 +248,14 @@ public class ObjectUtils {
 	/** Null-safe toString (returns <jk>null</jk> for <jk>null</jk>). */
 	public static String stringify(Object val) { return val == null ? null : val.toString(); }
 
-	/** "SimpleQualifiedName@identityHashCode" for the object (unwrapping Optionals). */
+	/** "SimpleQualifiedName@identityHashCode" for the object (unwrapping Optionals).  <br>Returns <jk>null</jk> if the argument is <jk>null</jk> (or an empty Optional). */
 	public static String identity(Object o) {
-		if (o instanceof Optional<?> opt) o = opt.orElse(null);
+		if (o instanceof Optional<?> o2) o = o2.orElse(null);
 		if (o == null) return null;
 		return ClassUtils.classNameSimpleQualified(o) + "@" + System.identityHashCode(o);
 	}
 
-	/** Unwraps a Supplier/Holder/Optional to its inner value. */
+	/** Unwraps a Supplier/Holder/Optional to its inner value.  <br>Returns <jk>null</jk> if the argument is <jk>null</jk> or unwraps to <jk>null</jk>. */
 	public static Object unwrap(Object o) {
 		if (o instanceof Supplier<?> o2) o = unwrap(o2.get());
 		if (o instanceof Holder<?> o2) o = unwrap(o2.get());
@@ -263,7 +263,7 @@ public class ObjectUtils {
 		return o;
 	}
 
-	/** Absolute value across Number subtypes. */
+	/** Absolute value across Number subtypes.  <br>Returns <jk>null</jk> if the argument is <jk>null</jk>. */
 	@SuppressWarnings({ "unchecked" // Type erasure requires unchecked cast for Number types.
 	})
 	public static <T extends Number> T abs(T value) {
@@ -283,7 +283,7 @@ public class ObjectUtils {
 	/** True if the number is non-null and not -1. */
 	public static <T extends Number> boolean isNotMinusOne(T value) { return isNotNull(value) && value.intValue() != -1; }
 
-	/** Content/annotation/array-aware hash. */
+	/** Content/annotation/array-aware hash.  <br>Throws {@link IllegalArgumentException} if the array is <jk>null</jk>. */
 	public static int hash(Object...values) {
 		assertArgNotNull(ARG_values, values);
 		return HashCode.of(values);

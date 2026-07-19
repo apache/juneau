@@ -75,6 +75,7 @@ public final class HttpBodyBean implements HttpBody {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public static HttpBodyBean of(HttpBody body) {
+		assertArgNotNull("body", body);
 		return new HttpBodyBean(body, body.getContentType());
 	}
 

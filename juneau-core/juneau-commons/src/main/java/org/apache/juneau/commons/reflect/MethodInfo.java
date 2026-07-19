@@ -164,8 +164,8 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * and should not be called directly. Use the static factory methods {@link #of(Method)} or
 	 * obtain MethodInfo instances from {@link ClassInfo#getMethod(Method)}.
 	 *
-	 * @param declaringClass The ClassInfo for the class that declares this method.
-	 * @param inner The method being wrapped.
+	 * @param declaringClass The ClassInfo for the class that declares this method. Must not be <jk>null</jk>.
+	 * @param inner The method being wrapped. Must not be <jk>null</jk>.
 	 */
 	protected MethodInfo(ClassInfo declaringClass, Method inner) {
 		super(declaringClass, inner);
@@ -284,7 +284,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
-	 * @param type The annotation type to filter by.
+	 * @param type The annotation type to filter by. Must not be <jk>null</jk>.
 	 * @return
 	 * 	A stream of matching annotation infos in child-to-parent order.
 	 * 	<br>Repeatable annotations are expanded into individual instances.
@@ -632,7 +632,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof MethodInfo other && eq(this, other, (x, y) -> eq(x.inner, y.inner) && eq(x.declaringClass, y.declaringClass));
+		return obj instanceof MethodInfo obj2 && eq(this, obj2, (x, y) -> eq(x.inner, y.inner) && eq(x.declaringClass, y.declaringClass));
 	}
 
 	/**

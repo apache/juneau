@@ -45,7 +45,7 @@ public class SerializedHeader extends BasicHeader {
 	 * @param value
 	 * 	The POJO to serialize as the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @return A new header bean.  Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Object value) {
@@ -60,6 +60,7 @@ public class SerializedHeader extends BasicHeader {
 	 * 	The POJO to serialize as the header value.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param schema
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
@@ -67,7 +68,7 @@ public class SerializedHeader extends BasicHeader {
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	<br>Can also be a {@link Supplier}.
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @return A new header bean.  Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
@@ -84,7 +85,7 @@ public class SerializedHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the POJO to serialize as the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @return A new header bean.  Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Supplier<?> value) {
@@ -102,6 +103,7 @@ public class SerializedHeader extends BasicHeader {
 	 * 	The supplier of the POJO to serialize as the header value.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param schema
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
@@ -109,7 +111,7 @@ public class SerializedHeader extends BasicHeader {
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	<br>Can also be a {@link Supplier}.
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @return A new header bean.  Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Supplier<?> value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
@@ -126,9 +128,10 @@ public class SerializedHeader extends BasicHeader {
 	 * Constructor.
 	 *
 	 * @param name The HTTP header name name.
-	 * @param value The POJO to serialize to the parameter value.
+	 * @param value The POJO to serialize to the parameter value.  Can be <jk>null</jk>.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param schema
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
@@ -157,9 +160,10 @@ public class SerializedHeader extends BasicHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param name The HTTP header name name.
-	 * @param value The supplier of the POJO to serialize to the parameter value.
+	 * @param value The supplier of the POJO to serialize to the parameter value.  Can be <jk>null</jk>.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param schema
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
@@ -181,7 +185,7 @@ public class SerializedHeader extends BasicHeader {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The object to copy.
+	 * @param copyFrom The object to copy.  Must not be <jk>null</jk>.
 	 */
 	protected SerializedHeader(SerializedHeader copyFrom) {
 		super(copyFrom);
@@ -245,7 +249,7 @@ public class SerializedHeader extends BasicHeader {
 	/**
 	 * Sets the schema object that defines the format of the output.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public SerializedHeader schema(HttpPartSchema value) {
@@ -256,7 +260,7 @@ public class SerializedHeader extends BasicHeader {
 	/**
 	 * Sets the serializer to use for serializing the value to a string value.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> (no-op).
 	 * @return This object.
 	 */
 	public SerializedHeader serializer(HttpPartSerializer value) {
@@ -268,7 +272,7 @@ public class SerializedHeader extends BasicHeader {
 	/**
 	 * Sets the serializer to use for serializing the value to a string value.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public SerializedHeader serializer(HttpPartSerializerSession value) {

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.matcher;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -124,12 +125,12 @@ public class RestMatcherList {
 	 *
 	 * @return An unmodifiable list of entries in this list that are specified as optional.
 	 */
-	public RestMatcher[] getOptionalEntries() { return copyOf(optionalEntries); }
+	public RestMatcher[] getOptionalEntries() { return cp(optionalEntries); }
 
 	/**
 	 * Returns the entries in this list that are specified as required.
 	 *
 	 * @return An unmodifiable list of entries in this list that are specified as required.
 	 */
-	public RestMatcher[] getRequiredEntries() { return copyOf(requiredEntries); }
+	public RestMatcher[] getRequiredEntries() { return cp(requiredEntries); }
 }

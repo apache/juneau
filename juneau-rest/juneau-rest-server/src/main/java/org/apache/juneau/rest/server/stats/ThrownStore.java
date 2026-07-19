@@ -227,7 +227,7 @@ public class ThrownStore {
 	 *
 	 * @return The list of all stack traces in this database, cloned and sorted by count descending.
 	 */
-	public List<ThrownStats> getStats() { return db.values().stream().map(ThrownStats::copy).sorted(comparingInt(ThrownStats::getCount).reversed()).toList(); }
+	public List<ThrownStats> getStats() { return db.values().stream().map(ThrownStats::copyOrNull).sorted(comparingInt(ThrownStats::getCount).reversed()).toList(); }
 
 	/**
 	 * Retrieves the stack trace information for the exception with the specified hash as calculated by {@link #hash(Throwable)}.
@@ -237,7 +237,7 @@ public class ThrownStore {
 	 */
 	public Optional<ThrownStats> getStats(long hash) {
 		ThrownStats s = db.get(hash);
-		return o(s == null ? null : ThrownStats.copy(s));
+		return o(ThrownStats.copyOrNull(s));
 	}
 
 	/**

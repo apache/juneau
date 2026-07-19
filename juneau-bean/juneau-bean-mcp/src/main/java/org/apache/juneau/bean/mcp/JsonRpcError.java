@@ -60,7 +60,7 @@ public class JsonRpcError {
 	/**
 	 * Sets the error message.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonRpcError setMessage(String value) {
@@ -80,7 +80,7 @@ public class JsonRpcError {
 	/**
 	 * Sets optional structured error data.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public JsonRpcError setData(Object value) {

@@ -43,7 +43,7 @@ public class AsciiSet {
 		/**
 		 * Adds a set of characters to this set.
 		 *
-		 * @param value The characters to keep in this store.
+		 * @param value The characters to keep in this store.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder chars(char...value) {
@@ -56,7 +56,7 @@ public class AsciiSet {
 		/**
 		 * Adds a set of characters to this set.
 		 *
-		 * @param value The characters to keep in this store.
+		 * @param value The characters to keep in this store.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public AsciiSet.Builder chars(String value) {
@@ -85,7 +85,7 @@ public class AsciiSet {
 		/**
 		 * Shortcut for calling multiple ranges.
 		 *
-		 * @param value Strings of the form "A-Z" where A and Z represent the first and last characters in the range.
+		 * @param value Strings of the form "A-Z" where A and Z represent the first and last characters in the range.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public AsciiSet.Builder ranges(String...value) {
@@ -110,7 +110,7 @@ public class AsciiSet {
 	/**
 	 * Creates an ASCII set with the specified characters.
 	 *
-	 * @param value The characters to keep in this store.
+	 * @param value The characters to keep in this store.  Must not be <jk>null</jk>.
 	 * @return A new object.
 	 */
 	public static AsciiSet of(String value) {
@@ -138,7 +138,7 @@ public class AsciiSet {
 	/**
 	 * Returns <jk>true</jk> if the specified string contains at least one character in this set.
 	 *
-	 * @param value The string to test.
+	 * @param value The string to test.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the string is not null and contains at least one character in this set.
 	 */
 	public boolean contains(CharSequence value) {
@@ -165,7 +165,7 @@ public class AsciiSet {
 	/**
 	 * Returns <jk>true</jk> if the specified string contains only characters in this set.
 	 *
-	 * @param value The string to test.
+	 * @param value The string to test.  Can be <jk>null</jk>.
 	 * @return
 	 * 	<jk>true</jk> if the string contains only characters in this set.
 	 * 	<br>Nulls always return <jk>false</jk>.

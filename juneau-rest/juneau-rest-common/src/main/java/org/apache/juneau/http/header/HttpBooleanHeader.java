@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.commons.utils.*;
+
 /**
  * Base for boolean headers.
  *
@@ -60,6 +62,12 @@ public class HttpBooleanHeader extends HttpHeaderBean {
 		return new HttpBooleanHeader(name, typedValue);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param wireValue Wire value (e.g. {@code "true"}). Can be <jk>null</jk> or empty, in which case the parsed value is <jk>null</jk>.
+	 */
 	protected HttpBooleanHeader(String name, String wireValue) {
 		super(name, wireValue);
 		this.value = ie(wireValue) ? null : Boolean.valueOf(b(wireValue));
@@ -67,6 +75,12 @@ public class HttpBooleanHeader extends HttpHeaderBean {
 		this.lazyMode = -1;
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param typedValue The boolean value. Can be <jk>null</jk>.
+	 */
 	protected HttpBooleanHeader(String name, Boolean typedValue) {
 		super(name, s(typedValue));
 		this.value = typedValue;
@@ -74,6 +88,13 @@ public class HttpBooleanHeader extends HttpHeaderBean {
 		this.lazyMode = -1;
 	}
 
+	/**
+	 * Constructor with lazy value supplier.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param supplier The lazy value supplier. Must not be <jk>null</jk>.
+	 * @param lazyMode Either {@link #LAZY_WIRE_STRING} or {@link #LAZY_BOOLEAN}.
+	 */
 	protected HttpBooleanHeader(String name, Supplier<?> supplier, int lazyMode) {
 		super(name, lazyMode == LAZY_WIRE_STRING
 			? ((Supplier<String>) supplier)::get
@@ -87,20 +108,41 @@ public class HttpBooleanHeader extends HttpHeaderBean {
 		return o(toBoolean());
 	}
 
+	/**
+	 * Returns the wire-format value of this header.
+	 *
+	 * @return The wire value, or <jk>null</jk> if the value is unset.
+	 */
 	@Override
 	public String getValue() {
 		return s(toBoolean());
 	}
 
+	/**
+	 * Returns <jk>true</jk> if the parsed value is <jk>true</jk>.
+	 *
+	 * @return <jk>true</jk> if the parsed value is <jk>true</jk>; <jk>false</jk> if it is <jk>false</jk> or unset.
+	 */
 	public boolean isTrue() {
-		return Boolean.TRUE.equals(toBoolean());
+		return ObjectUtils.isTrue(toBoolean());
 	}
 
+	/**
+	 * Returns the parsed value of this header, or the specified default if unset.
+	 *
+	 * @param other The default value. Can be <jk>null</jk>.
+	 * @return The parsed value, or <c>other</c> if the value is unset. Can be <jk>null</jk> if <c>other</c> is <jk>null</jk>.
+	 */
 	public Boolean orElse(Boolean other) {
 		var x = toBoolean();
 		return nn(x) ? x : other;
 	}
 
+	/**
+	 * Returns the parsed value of this header.
+	 *
+	 * @return The parsed value, or <jk>null</jk> if the value is unset.
+	 */
 	public Boolean toBoolean() {
 		if (lazyMode == LAZY_BOOLEAN)
 			return ((Supplier<Boolean>) lazySupplier).get();

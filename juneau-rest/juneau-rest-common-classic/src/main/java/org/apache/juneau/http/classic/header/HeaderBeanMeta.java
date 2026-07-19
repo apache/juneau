@@ -73,8 +73,8 @@ public class HeaderBeanMeta<T> {
 	 * Finds the header bean meta for the specified type.
 	 *
 	 * @param <T> The header bean type.
-	 * @param type The header bean type.
-	 * @return The metadata, or <jk>null</jk> if a valid constructor could not be found.
+	 * @param type The header bean type.  Must not be <jk>null</jk>.
+	 * @return The metadata.  Never <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast for HeaderBeanMeta creation
@@ -114,6 +114,7 @@ public class HeaderBeanMeta<T> {
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return A newly constructed bean.
 	 */
 	public T construct(Object value) {
@@ -129,6 +130,7 @@ public class HeaderBeanMeta<T> {
 	 * 	{@link org.apache.juneau.http.Header#value() @Header(value)} annotations.
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return A newly constructed bean.
 	 * @throws UnsupportedOperationException If bean could not be constructed (e.g. couldn't find a constructor).
 	 */

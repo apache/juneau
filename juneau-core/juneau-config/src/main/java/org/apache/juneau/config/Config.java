@@ -144,7 +144,7 @@ public class Config extends Context implements ConfigEventListener {
 			super(copyFrom);
 			binaryFormat = copyFrom.binaryFormat;
 			binaryLineLength = copyFrom.binaryLineLength;
-			mods = copyOf(copyFrom.mods);
+			mods = cp(copyFrom.mods);
 			multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
 			name = copyFrom.name;
 			format = copyFrom.format;
@@ -165,7 +165,7 @@ public class Config extends Context implements ConfigEventListener {
 			super(copyFrom);
 			binaryFormat = copyFrom.binaryFormat;
 			binaryLineLength = copyFrom.binaryLineLength;
-			mods = copyOf(copyFrom.mods);
+			mods = cp(copyFrom.mods);
 			multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
 			name = copyFrom.name;
 			format = copyFrom.format;
@@ -636,7 +636,7 @@ public class Config extends Context implements ConfigEventListener {
 
 		binaryFormat = builder.binaryFormat;
 		binaryLineLength = builder.binaryLineLength;
-		mods = u(copyOf(builder.mods));
+		mods = u(cp(builder.mods));
 		multiLineValuesOnSeparateLines = builder.multiLineValuesOnSeparateLines;
 		name = builder.name;
 		format = builder.format == null ? detectFormat(name) : builder.format;

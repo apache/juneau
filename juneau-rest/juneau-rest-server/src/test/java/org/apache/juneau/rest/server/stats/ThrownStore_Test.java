@@ -289,7 +289,7 @@ class ThrownStore_Test extends TestBase {
 		assertContains("org.apache.juneau.rest.server.stats", r(stats.getStackTrace()));
 		assertContains("bar", stats);
 
-		stats = ThrownStats.copy(stats);
+		stats = ThrownStats.copyOrNull(stats);
 		assertNotEquals(0L, stats.getHash());
 		assertNotEquals(0L, stats.getGuid());
 		assertNotEquals(0L, stats.getFirstOccurrence());

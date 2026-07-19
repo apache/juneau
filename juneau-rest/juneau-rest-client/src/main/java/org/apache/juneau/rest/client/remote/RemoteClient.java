@@ -180,7 +180,7 @@ public final class RemoteClient {
 
 			var methodMeta = meta.getMethodMeta(method);
 			if (methodMeta == null)
-				throw new UnsupportedOperationException("Method '" + method.getName() + "' has no @Remote* annotation");
+				throw uoex("Method '%s' has no @Remote* annotation", method.getName());
 
 			// Build the full path: basePath + methodPath
 			var basePath = meta.getBasePath();
@@ -212,7 +212,7 @@ public final class RemoteClient {
 				case "PUT" -> client.put(path);
 				case "PATCH" -> client.patch(path);
 				case "DELETE" -> client.delete(path);
-				default -> throw new IllegalArgumentException("Unsupported HTTP method: " + httpMethod); // HTT
+				default -> throw iaex("Unsupported HTTP method: %s", httpMethod); // HTT
 			};
 
 			// Resolve the effective content-negotiation overrides (method-level over interface-level).
@@ -279,7 +279,7 @@ public final class RemoteClient {
 			if (isEmpty(contentType))
 				return BodyFormat.NONE;
 			var serializer = client.getSerializerForMediaType(contentType).or(client::getDefaultSerializer).orElseThrow(() ->
-				new IllegalStateException("No serializer matched Content-Type '" + contentType + "' and no default serializer is configured on the client.  Configure one via RestClient.Builder.defaultSerializer(...)."));
+				isex("No serializer matched Content-Type '%s' and no default serializer is configured on the client.  Configure one via RestClient.Builder.defaultSerializer(...).", contentType));
 			return new BodyFormat(serializer, contentType);
 		}
 
@@ -626,8 +626,8 @@ public final class RemoteClient {
 		private static boolean isEmptyArg(Object arg) {
 			if (arg == null)
 				return true;
-			if (arg instanceof CharSequence cs)
-				return cs.isEmpty();
+			if (arg instanceof CharSequence arg2)
+				return arg2.isEmpty();
 			if (arg instanceof Map<?,?> m)
 				return m.isEmpty();
 			if (arg instanceof Collection<?> c)
@@ -648,12 +648,12 @@ public final class RemoteClient {
 		private static void expandPairs(HttpPartType partType, Object arg, HttpPartSerializer serializer, BiConsumer<String,String> adder) {
 			if (arg instanceof Map<?,?> m) {
 				m.forEach((k, v) -> { if (k != null && v != null) adder.accept(String.valueOf(k), serializePart(partType, null, v, serializer)); });
-			} else if (arg instanceof PartList pl) {
-				for (var p : pl)
+			} else if (arg instanceof PartList arg2) {
+				for (var p : arg2)
 					if (p.getValue() != null)
 						adder.accept(p.getName(), p.getValue());
-			} else if (arg instanceof HttpHeaderList hl) {
-				for (var h : hl)
+			} else if (arg instanceof HttpHeaderList arg2) {
+				for (var h : arg2)
 					if (h.getValue() != null)
 						adder.accept(h.getName(), h.getValue());
 			} else {
@@ -1094,15 +1094,15 @@ public final class RemoteClient {
 		private static Class<?> rawClass(Type t) {
 			if (t instanceof Class<?> c)
 				return c;
-			if (t instanceof ParameterizedType p)
-				return (Class<?>) p.getRawType();
+			if (t instanceof ParameterizedType t2)
+				return (Class<?>) t2.getRawType();
 			return Object.class;
 		}
 
 		/** Returns the first type argument of a parameterized wrapper (e.g. {@code Optional<T>} &rarr; {@code T}). */
 		private static Type innerType(Type t) {
-			if (t instanceof ParameterizedType p) {
-				var args = p.getActualTypeArguments();
+			if (t instanceof ParameterizedType t2) {
+				var args = t2.getActualTypeArguments();
 				if (args.length > 0)
 					return args[0];
 			}
@@ -1110,13 +1110,13 @@ public final class RemoteClient {
 		}
 
 		private static RestRequest withContentBody(RestRequest req, Object arg, BodyFormat bodyFormat) throws IOException {
-			if (arg instanceof HttpBody b)
-				return req.body(b);
-			if (arg instanceof String s)
-				return req.bodyString(s);
+			if (arg instanceof HttpBody arg2)
+				return req.body(arg2);
+			if (arg instanceof String arg2)
+				return req.bodyString(arg2);
 			// Stream the Reader straight to the wire instead of draining it into a String first.
-			if (arg instanceof Reader r)
-				return req.body(ReaderBody.of(r));
+			if (arg instanceof Reader arg2)
+				return req.body(ReaderBody.of(arg2));
 			// When a contentType attribute is in effect, serialize the POJO with the selected serializer
 			// and send the overridden Content-Type label (replacing the serializer's default — exactly one header).
 			if (bodyFormat.isSet())
@@ -1161,16 +1161,16 @@ public final class RemoteClient {
 		 * any other object (a bean) is streamed through the client's default {@link Serializer}.
 		 */
 		private HttpBody toPartBody(Object arg, String contentType) {
-			if (arg instanceof HttpBody b)
-				return b;
+			if (arg instanceof HttpBody arg2)
+				return arg2;
 			if (arg instanceof byte[] bytes)
 				return ByteArrayBody.of(bytes, firstNonEmpty(contentType, MEDIA_OCTET_STREAM));
-			if (arg instanceof File f)
-				return FileBody.of(f, firstNonEmpty(contentType, MEDIA_OCTET_STREAM));
-			if (arg instanceof InputStream in)
-				return StreamBody.of(in, firstNonEmpty(contentType, MEDIA_OCTET_STREAM));
-			if (arg instanceof Reader r)
-				return ReaderBody.of(r, firstNonEmpty(contentType, "text/plain; charset=UTF-8"));
+			if (arg instanceof File arg2)
+				return FileBody.of(arg2, firstNonEmpty(contentType, MEDIA_OCTET_STREAM));
+			if (arg instanceof InputStream arg2)
+				return StreamBody.of(arg2, firstNonEmpty(contentType, MEDIA_OCTET_STREAM));
+			if (arg instanceof Reader arg2)
+				return ReaderBody.of(arg2, firstNonEmpty(contentType, "text/plain; charset=UTF-8"));
 			if (isScalarPart(arg))
 				return StringBody.of(arg.toString(), firstNonEmpty(contentType, "text/plain; charset=UTF-8"));
 			// Bean part: stream it through the client's default serializer (no full in-memory materialization).

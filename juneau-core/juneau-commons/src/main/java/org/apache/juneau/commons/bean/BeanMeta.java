@@ -206,7 +206,7 @@ public class BeanMeta<T> {
 	 * </p>
 	 *
 	 * @param <T> The class type.
-	 * @param cm The bean type info for the class to create bean metadata for.
+	 * @param cm The bean type info for the class to create bean metadata for.  Must not be <jk>null</jk>.
 	 * @param implClass Optional implementation class info to use when looking for a no-arg constructor.  Can be <jk>null</jk>.
 	 * @return A {@link BeanMetaValue} containing the bean metadata (if successful) or a reason why it's not a bean.
 	 */
@@ -394,7 +394,7 @@ public class BeanMeta<T> {
 	 * 	<li>Validating and filtering properties based on bean filter settings
 	 * </ul>
 	 *
-	 * @param cm The class metadata for the bean class.
+	 * @param cm The class metadata for the bean class.  Must not be <jk>null</jk>.
 	 * @param bf Optional bean filter to apply. Can be <jk>null</jk>.
 	 * @param pNames Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
 	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk>.
@@ -819,7 +819,7 @@ public class BeanMeta<T> {
 	/**
 	 * Returns metadata about the specified property.
 	 *
-	 * @param name The name of the property on this bean.
+	 * @param name The name of the property on this bean.  Can be <jk>null</jk> to return the dynamic (<js>"*"</js>) property.
 	 * @return The metadata about the property, or <jk>null</jk> if no such property exists on this bean.
 	 */
 	public BeanPropertyMeta getPropertyMeta(String name) {
@@ -1051,7 +1051,7 @@ public class BeanMeta<T> {
 	/**
 	 * Creates a new instance of this bean.
 	 *
-	 * @param outer The outer object if bean class is a non-static inner member class.
+	 * @param outer The outer object if bean class is a non-static inner member class.  Can be <jk>null</jk> if not applicable.
 	 * @return A new instance of this bean if possible, or <jk>null</jk> if not.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */

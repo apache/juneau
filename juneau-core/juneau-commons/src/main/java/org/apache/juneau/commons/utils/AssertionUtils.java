@@ -280,10 +280,10 @@ public class AssertionUtils {
 	 * </p>
 	 *
 	 * @param <T> The expected type.
-	 * @param type The expected class type.
-	 * @param o The object to check.
+	 * @param type The expected class type.  Must not be <jk>null</jk> (a <jk>null</jk> type throws {@link IllegalArgumentException}).
+	 * @param o The object to check.  Must not be <jk>null</jk> (a <jk>null</jk> object throws {@link IllegalArgumentException}).
 	 * @return The object cast to the specified type.
-	 * @throws IllegalArgumentException Thrown if the object is not an instance of the specified type.
+	 * @throws IllegalArgumentException Thrown if the object is not an instance of the specified type, or if either argument is <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type safety ensured by instanceof check
@@ -311,9 +311,9 @@ public class AssertionUtils {
 	 * </p>
 	 *
 	 * @param <T> The expected type.
-	 * @param type The expected class type.
-	 * @param o The object to check.
-	 * @param exceptionSupplier The supplier that provides the exception to throw if validation fails.
+	 * @param type The expected class type.  Must not be <jk>null</jk> (a <jk>null</jk> type throws {@link IllegalArgumentException}).
+	 * @param o The object to check.  Must not be <jk>null</jk> (a <jk>null</jk> object throws {@link IllegalArgumentException}).
+	 * @param exceptionSupplier The supplier that provides the exception to throw if validation fails.  Must not be <jk>null</jk>.
 	 * @return The object cast to the specified type.
 	 * @throws RuntimeException Thrown if the object is not an instance of the specified type (the exception is provided by the supplier).
 	 */
@@ -334,8 +334,8 @@ public class AssertionUtils {
 	 *
 	 * @param <E> The element type.
 	 * @param name The argument name.
-	 * @param type The expected parent class.
-	 * @param value The array value being checked.
+	 * @param type The expected parent class.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> type throws {@link NullPointerException}).
+	 * @param value The array value being checked.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> array throws {@link NullPointerException}).
 	 * @return The value cast to the specified array type.
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
@@ -353,8 +353,8 @@ public class AssertionUtils {
 	 * Throws an {@link AssertionError} if the specified actual value is not one of the expected values.
 	 *
 	 * @param <T> The value type.
-	 * @param actual The actual value.
-	 * @param expected The expected values.
+	 * @param actual The actual value.  Can be <jk>null</jk> (matches a <jk>null</jk> entry in the expected values).
+	 * @param expected The expected values.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> array throws {@link NullPointerException}).
 	 * @return The actual value if it matches one of the expected values.
 	 * @throws AssertionError if the value is not one of the expected values.
 	 */

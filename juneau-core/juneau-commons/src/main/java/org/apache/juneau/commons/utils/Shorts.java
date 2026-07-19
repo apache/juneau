@@ -287,8 +287,8 @@ public class Shorts {
 	/**
 	 * Returns the system identity string of the specified object.
 	 *
-	 * @param o The object.
-	 * @return The identity string (class name + identity hashcode).
+	 * @param o The object.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return The identity string (class name + identity hashcode), or <jk>null</jk> if the object is <jk>null</jk>.
 	 * @see ObjectUtils#identity(Object)
 	 */
 	public static String id(Object o) { return ObjectUtils.identity(o); }
@@ -317,7 +317,7 @@ public class Shorts {
 	/**
 	 * Computes a hash code over the specified values.
 	 *
-	 * @param v The values to hash.
+	 * @param v The values to hash.  Must not be <jk>null</jk> (a <jk>null</jk> array throws {@link IllegalArgumentException}).
 	 * @return The combined hash code.
 	 * @see ObjectUtils#hash(Object...)
 	 */
@@ -471,8 +471,8 @@ public class Shorts {
 	/**
 	 * Returns a human-readable string representation of the specified object.
 	 *
-	 * @param o The object.
-	 * @return The readable representation.
+	 * @param o The object.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return The readable representation, or <jk>null</jk> if the object is <jk>null</jk>.
 	 * @see StringUtils#readable(Object)
 	 */
 	public static String r(Object o) { return StringUtils.readable(o); }
@@ -715,8 +715,8 @@ public class Shorts {
 	 * Creates an array from the specified elements.
 	 *
 	 * @param <T> The element type.
-	 * @param x The elements.
-	 * @return A new array.
+	 * @param x The elements.  Can be <jk>null</jk> (returned as-is).
+	 * @return A new array, or <jk>null</jk> if the array was <jk>null</jk>.
 	 * @see CollectionUtils#array(Object...)
 	 */
 	@SafeVarargs
@@ -726,8 +726,8 @@ public class Shorts {
 	 * Creates a modifiable {@link ArrayList} from the specified elements.
 	 *
 	 * @param <T> The element type.
-	 * @param x The elements.
-	 * @return A new modifiable list.
+	 * @param x The elements.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new modifiable list, or <jk>null</jk> if the array was <jk>null</jk>.
 	 * @see CollectionUtils#list(Object...)
 	 */
 	@SafeVarargs
@@ -902,11 +902,13 @@ public class Shorts {
 	public static <E> E at(List<E> l, int i) { return CollectionUtils.elementAt(l, i); }
 
 	/**
-	 * Creates an empty (zero-length) array of the specified component type.
+	 * Returns <jk>null</jk> typed as an array of the specified component type.
+	 *
+	 * <p>Intentional <jk>null</jk> return (e.g. for assertion testing).
 	 *
 	 * @param <T> The component type.
 	 * @param t The component class.
-	 * @return An empty typed array.
+	 * @return <jk>null</jk>.
 	 * @see CollectionUtils#nullArray(Class)
 	 */
 	public static <T> T[] na(Class<T> t) { return CollectionUtils.nullArray(t); }
@@ -1046,8 +1048,8 @@ public class Shorts {
 	 * Returns an unmodifiable view of the specified list.
 	 *
 	 * @param <T> The element type.
-	 * @param v The list.
-	 * @return An unmodifiable list.
+	 * @param v The list.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return An unmodifiable list, or <jk>null</jk> if the argument was <jk>null</jk>.
 	 * @see CollectionUtils#unmodifiable(List)
 	 */
 	public static <T> List<T> u(List<? extends T> v) { return CollectionUtils.unmodifiable(v); }
@@ -1057,8 +1059,8 @@ public class Shorts {
 	 *
 	 * @param <K> The key type.
 	 * @param <V> The value type.
-	 * @param v The map.
-	 * @return An unmodifiable map.
+	 * @param v The map.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return An unmodifiable map, or <jk>null</jk> if the argument was <jk>null</jk>.
 	 * @see CollectionUtils#unmodifiable(Map)
 	 */
 	public static <K,V> Map<K,V> u(Map<? extends K,? extends V> v) { return CollectionUtils.unmodifiable(v); }
@@ -1067,8 +1069,8 @@ public class Shorts {
 	 * Returns an unmodifiable view of the specified set.
 	 *
 	 * @param <T> The element type.
-	 * @param v The set.
-	 * @return An unmodifiable set.
+	 * @param v The set.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return An unmodifiable set, or <jk>null</jk> if the argument was <jk>null</jk>.
 	 * @see CollectionUtils#unmodifiable(Set)
 	 */
 	public static <T> Set<T> u(Set<? extends T> v) { return CollectionUtils.unmodifiable(v); }
@@ -1077,8 +1079,8 @@ public class Shorts {
 	 * Returns an unmodifiable view of the specified sorted set.
 	 *
 	 * @param <T> The element type.
-	 * @param v The sorted set.
-	 * @return An unmodifiable sorted set.
+	 * @param v The sorted set.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return An unmodifiable sorted set, or <jk>null</jk> if the argument was <jk>null</jk>.
 	 * @see CollectionUtils#unmodifiable(SortedSet)
 	 */
 	public static <T> SortedSet<T> u(SortedSet<T> v) { return CollectionUtils.unmodifiable(v); }
@@ -1093,22 +1095,12 @@ public class Shorts {
 	public static int len(Object v) { return CollectionUtils.length(v); }
 
 	/**
-	 * Returns a mutable copy of the specified list.
-	 *
-	 * @param <E> The element type.
-	 * @param v The list to copy.
-	 * @return A new list containing the same elements.
-	 * @see CollectionUtils#copyOf(List)
-	 */
-	public static <E> List<E> cp(List<E> v) { return CollectionUtils.copyOf(v); }
-
-	/**
 	 * Adds the specified elements to the given list and returns it.
 	 *
 	 * @param <E> The element type.
-	 * @param v The list to add to.
-	 * @param e The elements to add.
-	 * @return The same list.
+	 * @param v The list to add to.  Can be <jk>null</jk> (a new list is created and returned).
+	 * @param e The elements to add.  Can be <jk>null</jk> (treated as a no-op — the value is returned unchanged).
+	 * @return The same list (or a newly-created list if <jv>v</jv> was <jk>null</jk>).
 	 * @see CollectionUtils#addAll(List,Object...)
 	 */
 	@SafeVarargs
@@ -1228,6 +1220,202 @@ public class Shorts {
 	 */
 	public static <E> Sets<E> stb(Class<E> type) { return CollectionUtils.setBuilder(type); }
 
+	// ---- CopyUtils ----
+
+	/**
+	 * Creates a new collection from the specified collection.
+	 *
+	 * @param <E> The element type.
+	 * @param v The value to copy from.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
+	 * @see CopyUtils#copyOf(Collection)
+	 */
+	public static <E> Collection<E> cp(Collection<E> v) { return CopyUtils.copyOf(v); }
+
+	/**
+	 * Returns a mutable copy of the specified list.
+	 *
+	 * @param <E> The element type.
+	 * @param v The list to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new list containing the same elements, or <jk>null</jk> if the list was <jk>null</jk>.
+	 * @see CopyUtils#copyOf(List)
+	 */
+	public static <E> List<E> cp(List<E> v) { return CopyUtils.copyOf(v); }
+
+	/**
+	 * Makes a deep copy of the specified list, transforming each value.
+	 *
+	 * @param <E> The element type.
+	 * @param v The list to copy.
+	 * @param valueMapper The function to apply to each value in the list.
+	 * @return A new transformed list, or <jk>null</jk> if the list being copied was null.
+	 * @see CopyUtils#copyOf(List,Function)
+	 */
+	public static <E> List<E> cp(List<E> v, Function<? super E,? extends E> valueMapper) { return CopyUtils.copyOf(v, valueMapper); }
+
+	/**
+	 * Makes a deep copy of the specified list, transforming each value using the specified list factory.
+	 *
+	 * @param <E> The element type.
+	 * @param v The list to copy.
+	 * @param valueMapper The function to apply to each value in the list.
+	 * @param listFactory The factory for creating the list.
+	 * @return A new transformed list, or <jk>null</jk> if the list being copied was null.
+	 * @see CopyUtils#copyOf(List,Function,Supplier)
+	 */
+	public static <E> List<E> cp(List<E> v, Function<? super E,? extends E> valueMapper, Supplier<List<E>> listFactory) { return CopyUtils.copyOf(v, valueMapper, listFactory); }
+
+	/**
+	 * Creates a new map from the specified map.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param v The value to copy from.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new {@link LinkedHashMap}, or <jk>null</jk> if the input was null.
+	 * @see CopyUtils#copyOf(Map)
+	 */
+	public static <K,V> Map<K,V> cp(Map<K,V> v) { return CopyUtils.copyOf(v); }
+
+	/**
+	 * Makes a deep copy of the specified map, transforming each value.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param v The map to copy.
+	 * @param valueMapper The function to apply to each value in the map.
+	 * @return A new transformed map, or <jk>null</jk> if the map being copied was null.
+	 * @see CopyUtils#copyOf(Map,Function)
+	 */
+	public static <K,V> Map<K,V> cp(Map<K,V> v, Function<? super V,? extends V> valueMapper) { return CopyUtils.copyOf(v, valueMapper); }
+
+	/**
+	 * Makes a deep copy of the specified map, transforming each value using the specified map factory.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param v The map to copy.
+	 * @param valueMapper The function to apply to each value in the map.
+	 * @param mapFactory The factory for creating the map.
+	 * @return A new transformed map, or <jk>null</jk> if the map being copied was null.
+	 * @see CopyUtils#copyOf(Map,Function,Supplier)
+	 */
+	public static <K,V> Map<K,V> cp(Map<K,V> v, Function<? super V,? extends V> valueMapper, Supplier<Map<K,V>> mapFactory) { return CopyUtils.copyOf(v, valueMapper, mapFactory); }
+
+	/**
+	 * Creates a new set from the specified set.
+	 *
+	 * @param <E> The element type.
+	 * @param v The value to copy from.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
+	 * @see CopyUtils#copyOf(Set)
+	 */
+	public static <E> Set<E> cp(Set<E> v) { return CopyUtils.copyOf(v); }
+
+	/**
+	 * Makes a deep copy of the specified set, transforming each value.
+	 *
+	 * @param <E> The element type.
+	 * @param v The set to copy.
+	 * @param valueMapper The function to apply to each value in the set.
+	 * @return A new transformed set, or <jk>null</jk> if the set being copied was null.
+	 * @see CopyUtils#copyOf(Set,Function)
+	 */
+	public static <E> Set<E> cp(Set<E> v, Function<? super E,? extends E> valueMapper) { return CopyUtils.copyOf(v, valueMapper); }
+
+	/**
+	 * Makes a deep copy of the specified set, transforming each value using the specified set factory.
+	 *
+	 * @param <E> The element type.
+	 * @param v The set to copy.
+	 * @param valueMapper The function to apply to each value in the set.
+	 * @param setFactory The factory for creating sets.
+	 * @return A new transformed set, or <jk>null</jk> if the set being copied was null.
+	 * @see CopyUtils#copyOf(Set,Function,Supplier)
+	 */
+	public static <E> Set<E> cp(Set<E> v, Function<? super E,? extends E> valueMapper, Supplier<Set<E>> setFactory) { return CopyUtils.copyOf(v, valueMapper, setFactory); }
+
+	/**
+	 * Makes a copy of the specified array.
+	 *
+	 * @param <T> The element type.
+	 * @param v The array to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @see CopyUtils#copyOf(Object[])
+	 */
+	public static <T> T[] cp(T[] v) { return CopyUtils.copyOf(v); }
+
+	/**
+	 * Makes a copy of the specified array.
+	 *
+	 * @param v The array to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @see CopyUtils#copyOf(byte[])
+	 */
+	public static byte[] cp(byte[] v) { return CopyUtils.copyOf(v); }
+
+	/**
+	 * Makes a copy of the specified array.
+	 *
+	 * @param v The array to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @see CopyUtils#copyOf(char[])
+	 */
+	public static char[] cp(char[] v) { return CopyUtils.copyOf(v); }
+
+	/**
+	 * Makes a copy of the specified array.
+	 *
+	 * @param v The array to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @see CopyUtils#copyOf(int[])
+	 */
+	public static int[] cp(int[] v) { return CopyUtils.copyOf(v); }
+
+	/**
+	 * Makes a copy of the specified array.
+	 *
+	 * @param v The array to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @see CopyUtils#copyOf(long[])
+	 */
+	public static long[] cp(long[] v) { return CopyUtils.copyOf(v); }
+
+	/**
+	 * Makes a copy of the specified array.
+	 *
+	 * @param v The array to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @see CopyUtils#copyOf(short[])
+	 */
+	public static short[] cp(short[] v) { return CopyUtils.copyOf(v); }
+
+	/**
+	 * Makes a copy of the specified array.
+	 *
+	 * @param v The array to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @see CopyUtils#copyOf(boolean[])
+	 */
+	public static boolean[] cp(boolean[] v) { return CopyUtils.copyOf(v); }
+
+	/**
+	 * Makes a copy of the specified array.
+	 *
+	 * @param v The array to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @see CopyUtils#copyOf(double[])
+	 */
+	public static double[] cp(double[] v) { return CopyUtils.copyOf(v); }
+
+	/**
+	 * Makes a copy of the specified array.
+	 *
+	 * @param v The array to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @see CopyUtils#copyOf(float[])
+	 */
+	public static float[] cp(float[] v) { return CopyUtils.copyOf(v); }
+
 	// ---- ClassUtils ----
 
 	/**
@@ -1244,7 +1432,7 @@ public class Shorts {
 	/**
 	 * Makes the specified method accessible.
 	 *
-	 * @param m The method.
+	 * @param m The method.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link IllegalArgumentException}).
 	 * @return <jk>true</jk> if the method was made accessible.
 	 * @see ClassUtils#setAccessible(Method)
 	 */
@@ -1253,7 +1441,7 @@ public class Shorts {
 	/**
 	 * Makes the specified field accessible.
 	 *
-	 * @param f The field.
+	 * @param f The field.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link IllegalArgumentException}).
 	 * @return <jk>true</jk> if the field was made accessible.
 	 * @see ClassUtils#setAccessible(Field)
 	 */
@@ -1262,7 +1450,7 @@ public class Shorts {
 	/**
 	 * Makes the specified constructor accessible.
 	 *
-	 * @param c The constructor.
+	 * @param c The constructor.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link IllegalArgumentException}).
 	 * @return <jk>true</jk> if the constructor was made accessible.
 	 * @see ClassUtils#setAccessible(Constructor)
 	 */
@@ -1350,7 +1538,7 @@ public class Shorts {
 	/**
 	 * Returns the stack trace of the specified throwable as a string.
 	 *
-	 * @param t The throwable.
+	 * @param t The throwable.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 * @return The stack trace string.
 	 * @see ThrowableUtils#getStackTrace(Throwable)
 	 */
@@ -1360,8 +1548,8 @@ public class Shorts {
 	 * Casts the specified throwable to the specified type, wrapping if necessary.
 	 *
 	 * @param <T> The target type.
-	 * @param c The target class.
-	 * @param t The throwable.
+	 * @param c The target class.  Must not be <jk>null</jk>.
+	 * @param t The throwable.  Can be <jk>null</jk> (produces a wrapper with a <jk>null</jk> cause).
 	 * @return The cast (or wrapped) throwable.
 	 * @see ThrowableUtils#castException(Class,Throwable)
 	 */
@@ -1371,8 +1559,8 @@ public class Shorts {
 	 * Searches the causal chain of the specified throwable for a cause of the specified type.
 	 *
 	 * @param <T> The cause type.
-	 * @param e The throwable to search.
-	 * @param c The cause class to look for.
+	 * @param e The throwable to search.  Can be <jk>null</jk> (returns an empty {@link Optional}).
+	 * @param c The cause class to look for.  Must not be <jk>null</jk>.
 	 * @return An optional containing the matching cause, if found.
 	 * @see ThrowableUtils#findCause(Throwable,Class)
 	 */
@@ -1382,18 +1570,18 @@ public class Shorts {
 	 * Returns the first cause of the specified type from the throwable's causal chain.
 	 *
 	 * @param <T> The cause type.
-	 * @param c The cause class to look for.
-	 * @param t The throwable to search.
+	 * @param c The cause class to look for.  Must not be <jk>null</jk>.
+	 * @param t The throwable to search.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The matching cause, or null if not found.
 	 * @see ThrowableUtils#getThrowableCause(Class,Throwable)
 	 */
 	public static <T extends Throwable> T gtc(Class<T> c, Throwable t) { return ThrowableUtils.getThrowableCause(c, t); }
 
 	/**
-	 * Returns the localized message of the specified throwable (null-safe).
+	 * Returns the localized message of the specified throwable.
 	 *
-	 * @param t The throwable.
-	 * @return The localized message, or null if the throwable is null.
+	 * @param t The throwable.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
+	 * @return The localized message, or <jk>null</jk> if the throwable has no localized message.
 	 * @see ThrowableUtils#localizedMessage(Throwable)
 	 */
 	public static String lm(Throwable t) { return ThrowableUtils.localizedMessage(t); }
@@ -1412,9 +1600,9 @@ public class Shorts {
 	 * Tests the specified value against the given predicate (null-safe).
 	 *
 	 * @param <T> The value type.
-	 * @param p The predicate.
-	 * @param v The value to test.
-	 * @return The result of the predicate, or <jk>false</jk> if the predicate is null.
+	 * @param p The predicate.  Can be <jk>null</jk> (returns <jk>true</jk>).
+	 * @param v The value to test.  Can be <jk>null</jk>.
+	 * @return The result of the predicate, or <jk>true</jk> if the predicate is <jk>null</jk>.
 	 * @see PredicateUtils#test(Predicate,Object)
 	 */
 	public static <T> boolean t(Predicate<T> p, T v) { return PredicateUtils.test(p, v); }

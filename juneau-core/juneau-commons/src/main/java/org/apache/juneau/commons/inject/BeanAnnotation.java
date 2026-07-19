@@ -18,7 +18,7 @@ package org.apache.juneau.commons.inject;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -87,7 +87,7 @@ public class BeanAnnotation {
 		/**
 		 * Sets the description property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>, in which case an empty array is used.
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
@@ -98,7 +98,7 @@ public class BeanAnnotation {
 		/**
 		 * Sets the {@link Bean#methodScope()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>, in which case an empty array is used.
 		 * @return This object.
 		 */
 		public Builder methodScope(String...value) {
@@ -109,7 +109,7 @@ public class BeanAnnotation {
 		/**
 		 * Sets the {@link Bean#name()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>, in which case an empty string is used.
 		 * @return This object.
 		 */
 		public Builder name(String value) {
@@ -120,7 +120,7 @@ public class BeanAnnotation {
 		/**
 		 * Sets the {@link Bean#value()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>, in which case an empty string is used.
 		 * @return This object.
 		 */
 		public Builder value(String value) {
@@ -165,15 +165,15 @@ public class BeanAnnotation {
 			super(b);
 			// Mirror the compile-time defaults declared on @Bean (empty strings / empty arrays) so
 			// callers iterating the runtime instance see annotation-equivalent values instead of nulls.
-			description = b.description != null ? copyOf(b.description) : EMPTY_STRINGS;
+			description = b.description != null ? cp(b.description) : EMPTY_STRINGS;
 			name = b.name != null ? b.name : "";
 			value = b.value != null ? b.value : "";
-			methodScope = b.methodScope != null ? copyOf(b.methodScope) : EMPTY_STRINGS;
+			methodScope = b.methodScope != null ? cp(b.methodScope) : EMPTY_STRINGS;
 		}
 
 		@Override /* Overridden from Bean */
 		public String[] methodScope() {
-			return copyOf(methodScope);
+			return cp(methodScope);
 		}
 
 		@Override /* Overridden from Bean */
@@ -188,7 +188,7 @@ public class BeanAnnotation {
 
 		@Override /* Overridden from annotation */
 		public String[] description() {
-			return copyOf(description);
+			return cp(description);
 		}
 
 		@Override /* Overridden from Bean */

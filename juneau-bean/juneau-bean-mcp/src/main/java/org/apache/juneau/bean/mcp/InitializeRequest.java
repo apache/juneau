@@ -40,7 +40,7 @@ public class InitializeRequest {
 	/**
 	 * Sets the client protocol revision.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public InitializeRequest setProtocolVersion(String value) {
@@ -60,7 +60,7 @@ public class InitializeRequest {
 	/**
 	 * Sets client capabilities.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public InitializeRequest setCapabilities(ClientCapabilities value) {
@@ -80,7 +80,7 @@ public class InitializeRequest {
 	/**
 	 * Sets client implementation metadata.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public InitializeRequest setClientInfo(Implementation value) {

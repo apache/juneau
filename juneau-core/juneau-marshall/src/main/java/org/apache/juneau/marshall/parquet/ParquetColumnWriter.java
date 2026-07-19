@@ -120,10 +120,6 @@ final class ParquetColumnWriter {
 		return valueCount;
 	}
 
-	long getUncompressedSize() {
-		return out.size();
-	}
-
 	/**
 	 * Finalizes the current page and returns the raw (uncompressed) value bytes.
 	 * Resets the writer for the next page.

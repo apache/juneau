@@ -74,7 +74,7 @@ public class Td extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Td} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Td(Object...children) {
 		children(children);
@@ -125,6 +125,7 @@ public class Td extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Td colspan(Object value) {
@@ -154,7 +155,7 @@ public class Td extends HtmlElementMixed {
 	 * <p>
 	 * Multiple IDs can be specified as a space-separated list.
 	 *
-	 * @param value The IDs of header cells that apply to this cell.
+	 * @param value The IDs of header cells that apply to this cell. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Td headers(String value) {
@@ -489,6 +490,7 @@ public class Td extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Td rowspan(Object value) {

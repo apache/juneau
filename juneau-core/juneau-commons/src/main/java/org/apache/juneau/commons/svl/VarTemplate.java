@@ -148,7 +148,9 @@ public final class VarTemplate {
 	 * 	not required to belong to the same {@link VarResolver} this template was compiled
 	 * 	against, but cached {@link Var} references will only honor that resolver's registry —
 	 * 	see the "compile-binding contract" note in the class javadoc.
-	 * @return The resolved string. Never {@code null}.
+	 * @return The resolved string, or {@code null} if this template was compiled from a {@code null} source
+	 * 	(mirroring {@link VarResolverSession#resolve(String)} returning {@code null} for {@code null} input).
+	 * 	Otherwise never {@code null}.
 	 */
 	public String resolve(VarResolverSession session) {
 		if (literal)
@@ -168,8 +170,8 @@ public final class VarTemplate {
 	 * intermediate {@code String}. Used by {@link VarResolver#resolveTo(String, Writer)} so
 	 * downstream serializers can stream large content efficiently.
 	 *
-	 * @param session The session to resolve against.
-	 * @param out The writer to append to.
+	 * @param session The session to resolve against.  Must not be {@code null}.
+	 * @param out The writer to append to.  Must not be {@code null}.
 	 * @return {@code out}, for fluent-API chaining.
 	 * @throws IOException Thrown by the underlying stream.
 	 */
@@ -282,14 +284,6 @@ public final class VarTemplate {
 	}
 
 	/**
-	 * @return Number of compiled segments — useful for tests asserting structural shape of the
-	 *	 compiled output.
-	 */
-	int segmentCount() {
-		return segments.length;
-	}
-
-	/**
 	 * Inspects the segment array to determine whether this template is purely literal.
 	 *
 	 * <p>
@@ -329,8 +323,8 @@ public final class VarTemplate {
 	 * but don't want to handle {@link IOException}. Wraps any thrown {@link IOException} in a
 	 * {@link RuntimeException} via the standard {@code ThrowableUtils.toRex} helper.
 	 *
-	 * @param session The session to resolve against.
-	 * @param out The writer to append to.
+	 * @param session The session to resolve against.  Must not be {@code null}.
+	 * @param out The writer to append to.  Must not be {@code null}.
 	 * @return {@code out}.
 	 */
 	public Writer resolveToUnchecked(VarResolverSession session, Writer out) {

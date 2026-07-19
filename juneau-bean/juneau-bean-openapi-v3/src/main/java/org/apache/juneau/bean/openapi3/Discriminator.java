@@ -103,7 +103,7 @@ public class Discriminator extends OpenApiElement {
 		super(copyFrom);
 
 		this.propertyName = copyFrom.propertyName;
-		this.mapping = copyOf(copyFrom.mapping);
+		this.mapping = cp(copyFrom.mapping);
 	}
 
 	/**

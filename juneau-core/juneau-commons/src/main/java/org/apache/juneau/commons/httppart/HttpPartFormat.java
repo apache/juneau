@@ -216,7 +216,7 @@ public enum HttpPartFormat {
 	/**
 	 * Create from lowercase dashed name.
 	 *
-	 * @param value The enum name.
+	 * @param value The enum name.  Must not be <jk>null</jk>.
 	 * @return The enum.
 	 */
 	public static HttpPartFormat fromString(String value) {

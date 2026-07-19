@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -110,7 +110,7 @@ public class LicenseAnnotation {
 
 		Instance(LicenseAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			name = b.name;
 			url = b.url;
 		}
@@ -127,7 +127,7 @@ public class LicenseAnnotation {
 
 		@Override /* Overridden from annotation */
 		public String[] description() {
-			return description;
+			return cp(description);
 		}
 	}
 

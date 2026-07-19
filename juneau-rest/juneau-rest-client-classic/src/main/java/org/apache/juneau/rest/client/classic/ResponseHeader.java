@@ -266,8 +266,8 @@ public class ResponseHeader extends BasicHeader {
 				return cc.newInstance(getName(), getValue());
 		} catch (ExecutableException e) {
 			var cause = e.getCause();
-			if (cause instanceof Exception ex)
-				throw toRex(ex);
+			if (cause instanceof Exception cause2)
+				throw toRex(cause2);
 			throw toRex(cause);
 		} catch (Exception e) {
 			throw toRex(e);
@@ -522,7 +522,7 @@ public class ResponseHeader extends BasicHeader {
 	 * @throws org.apache.http.ParseException In case of a parsing error.
 	 */
 	@Override /* Overridden from Header */
-	public HeaderElement[] getElements() throws org.apache.http.ParseException { return elements; }
+	public HeaderElement[] getElements() throws org.apache.http.ParseException { return cp(elements); }
 
 	/**
 	 * Specifies the part parser to use for this header.
@@ -536,7 +536,7 @@ public class ResponseHeader extends BasicHeader {
 	 * @return This object.
 	 */
 	public ResponseHeader parser(HttpPartParserSession value) {
-		this.parser = value == null ? SimplePartParser.DEFAULT_SESSION : value;
+		this.parser = or(value, SimplePartParser.DEFAULT_SESSION);
 		return this;
 	}
 

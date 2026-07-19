@@ -67,7 +67,7 @@ public class BeanRuntimeException extends RuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param c The class name of the bean that caused the exception.
+	 * @param c The class name of the bean that caused the exception.  Can be <jk>null</jk>, in which case it is omitted from the message.
 	 * @param message The error message.
 	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
@@ -107,7 +107,7 @@ public class BeanRuntimeException extends RuntimeException {
 	 * Constructor.
 	 *
 	 * @param cause The cause of this exception.
-	 * @param c The class name of the bean that caused the exception.
+	 * @param c The class name of the bean that caused the exception.  Can be <jk>null</jk>, in which case it is omitted from the message.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */

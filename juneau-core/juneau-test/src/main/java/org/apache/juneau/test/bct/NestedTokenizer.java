@@ -83,6 +83,11 @@ class NestedTokenizer {
 	 */
 	public static class Token {
 
+		// Internal — never serialized / acyclic by construction: the tokenizer only ever builds strictly
+		// downward-nesting token trees from a finite input string (each nested list is populated once, from
+		// content strictly inside the current token's braces), so the recursive toString() below is finite and
+		// no cycle can be formed.
+
 		/** The main value of this token */
 		private final String value;
 

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -35,13 +37,13 @@ public class ListPromptsResult {
 	 * @return The prompts list, or {@code null} if not set.
 	 */
 	public List<Prompt> getPrompts() {
-		return prompts;
+		return u(prompts);
 	}
 
 	/**
 	 * Sets the prompt descriptors.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ListPromptsResult setPrompts(List<Prompt> value) {
@@ -61,7 +63,7 @@ public class ListPromptsResult {
 	/**
 	 * Sets the next cursor.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ListPromptsResult setNextCursor(String value) {

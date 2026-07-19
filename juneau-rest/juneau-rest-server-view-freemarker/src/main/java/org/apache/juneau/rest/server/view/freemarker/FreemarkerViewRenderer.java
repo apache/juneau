@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.view.freemarker;
 
 import java.io.*;
 
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.processor.*;
@@ -93,33 +94,49 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 		encodings / output formats you need.
 		See https://juneau.apache.org/docs/topics/FreemarkerViewSupport for the full matrix.""";
 
+	// Lazily-created fallback used when no FreemarkerMixin bean is registered.  Cached (double-checked) so
+	// the bridge-default Configuration and its template cache are built once instead of rebuilt per render.
+	// Created lazily (not eagerly) so a missing FreeMarker engine still surfaces at render time as
+	// NO_ENGINE_DIAGNOSTIC rather than during RestContext construction.
+	private volatile FreemarkerMixin fallbackMixin;
+
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException, BasicHttpException {
 		var req = opSession.getRequest();
 		var res = opSession.getResponse();
 
 		var content = res.getContent(Object.class);
-		if (! (content instanceof FreemarkerView view))
+		if (! (content instanceof FreemarkerView content2))
 			return NEXT;
 
 		// Resolve the bridge resource (carries Configuration + cached default + templateSuffix).
-		// Fall back to a fresh FreemarkerMixin when the renderer is used standalone
+		// Fall back to a cached FreemarkerMixin when the renderer is used standalone
 		// without the mixin.
 		var bridge = req.getContext().getBeanStore()
 			.getBean(FreemarkerMixin.class)
-			.orElseGet(FreemarkerMixin::new);
+			.orElseGet(this::fallbackMixin);
 
 		// Apply caller-supplied response headers first so a caller-provided Content-Type wins
 		// over the bridge's default below.
-		view.getResponseHeaders().forEach(res::setHeader);
+		content2.getResponseHeaders().forEach(res::setHeader);
 		if (! res.containsHeader("Content-Type"))
 			res.setHeader("Content-Type", DEFAULT_CONTENT_TYPE);
 
-		var templateName = bridge.applyTemplateSuffix(view.getTemplateName());
+		// Apply the same traversal gate the raw /freemarker/* mount uses so a typed-View template name
+		// assembled from user input (e.g. FreemarkerView.of(userInput)) cannot escape the configured base
+		// path via '../' segments.  Mirrors the JSP bridge's typed-View gate.
+		String safeName;
+		try {
+			safeName = gateTemplateName(bridge.getBasePath(), content2.getTemplateName());
+		} catch (IllegalArgumentException ex) {
+			throw new InternalServerError(ex, "FreeMarker template name escapes configured base path: '%s'", content2.getTemplateName());
+		}
+
+		var templateName = bridge.applyTemplateSuffix(safeName);
 		try {
 			var cfg = bridge.resolveConfiguration(req);
 			var template = cfg.getTemplate(templateName);
-			template.process(view.getAttributes(), res.getWriter());
+			template.process(content2.getAttributes(), res.getWriter());
 			res.getWriter().flush();
 			return FINISHED;
 		} catch (LinkageError ex) {
@@ -129,5 +146,28 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 		} catch (TemplateException | RuntimeException ex) {
 			throw new InternalServerError(ex, "FreeMarker render failed for '%s'", templateName);
 		}
+	}
+
+	// Rejects '../'-style traversal in a typed-View template name using the same virtual-path gate the raw
+	// mount applies, returning the configuration-relative template name.  Delegates to the shared
+	// FileUtils.resolveVirtualPathSafely + FreemarkerDispatcher.stripBasePath used by the raw render path.
+	static String gateTemplateName(String basePath, String templateName) {
+		var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);
+		return FreemarkerDispatcher.stripBasePath(basePath, resolved);
+	}
+
+	// Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.
+	private FreemarkerMixin fallbackMixin() {
+		var local = fallbackMixin;
+		if (local == null) {
+			synchronized (this) {
+				local = fallbackMixin;
+				if (local == null) {
+					local = new FreemarkerMixin();
+					fallbackMixin = local;
+				}
+			}
+		}
+		return local;
 	}
 }

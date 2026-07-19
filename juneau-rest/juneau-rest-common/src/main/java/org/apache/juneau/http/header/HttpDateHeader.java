@@ -65,6 +65,12 @@ public class HttpDateHeader extends HttpHeaderBean {
 		return new HttpDateHeader(name, typedValue);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param value Wire value. Can be <jk>null</jk> or empty, in which case the parsed value is <jk>null</jk>.
+	 */
 	protected HttpDateHeader(String name, String value) {
 		super(name, (String)null);
 		this.cachedZdt = ie(value) ? null : parseHttpDate(value);
@@ -72,6 +78,12 @@ public class HttpDateHeader extends HttpHeaderBean {
 		this.lazyMode = -1;
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param value The date value. Can be <jk>null</jk>.
+	 */
 	protected HttpDateHeader(String name, ZonedDateTime value) {
 		super(name, (String)null);
 		this.cachedZdt = value;
@@ -79,6 +91,13 @@ public class HttpDateHeader extends HttpHeaderBean {
 		this.lazyMode = -1;
 	}
 
+	/**
+	 * Constructor with lazy value supplier.
+	 *
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param supplier The lazy value supplier. Must not be <jk>null</jk>.
+	 * @param lazyMode Either {@link #LAZY_WIRE_STRING} or {@link #LAZY_ZONED_DATE_TIME}.
+	 */
 	protected HttpDateHeader(String name, Supplier<?> supplier, int lazyMode) {
 		super(name, lazyMode == LAZY_WIRE_STRING
 			? ((Supplier<String>) supplier)::get
@@ -97,6 +116,11 @@ public class HttpDateHeader extends HttpHeaderBean {
 		return o(toZonedDateTime());
 	}
 
+	/**
+	 * Returns the RFC-1123 wire-format value of this header.
+	 *
+	 * @return The wire value, or <jk>null</jk> if the value is unset.
+	 */
 	@Override
 	public String getValue() {
 		if (lazyMode == LAZY_ZONED_DATE_TIME) {
@@ -108,11 +132,22 @@ public class HttpDateHeader extends HttpHeaderBean {
 		return super.getValue();
 	}
 
+	/**
+	 * Returns the parsed value of this header, or the specified default if unset.
+	 *
+	 * @param other The default value. Can be <jk>null</jk>.
+	 * @return The parsed value, or <c>other</c> if the value is unset. Can be <jk>null</jk> if <c>other</c> is <jk>null</jk>.
+	 */
 	public ZonedDateTime orElse(ZonedDateTime other) {
 		var x = toZonedDateTime();
 		return nn(x) ? x : other;
 	}
 
+	/**
+	 * Returns the parsed value of this header.
+	 *
+	 * @return The parsed value, or <jk>null</jk> if the value is unset.
+	 */
 	public ZonedDateTime toZonedDateTime() {
 		if (lazyMode == LAZY_ZONED_DATE_TIME)
 			return ((Supplier<ZonedDateTime>) lazySupplier).get();

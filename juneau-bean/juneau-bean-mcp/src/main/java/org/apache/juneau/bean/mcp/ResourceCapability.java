@@ -39,7 +39,7 @@ public class ResourceCapability {
 	/**
 	 * Sets the list-changed flag.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ResourceCapability setListChanged(Boolean value) {
@@ -59,7 +59,7 @@ public class ResourceCapability {
 	/**
 	 * Sets the subscribe flag.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public ResourceCapability setSubscribe(Boolean value) {

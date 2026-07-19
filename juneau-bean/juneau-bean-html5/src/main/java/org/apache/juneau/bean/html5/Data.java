@@ -94,8 +94,8 @@ public class Data extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Data} element with the specified {@link Data#value(Object)} attribute and child node.
 	 *
-	 * @param value The {@link Data#value(Object)} attribute.
-	 * @param child The child node.
+	 * @param value The {@link Data#value(Object)} attribute. Can be <jk>null</jk>.
+	 * @param child The child node. Can be <jk>null</jk>.
 	 */
 	public Data(String value, Object child) {
 		value(value).child(child);
@@ -507,6 +507,7 @@ public class Data extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Data value(Object value) {

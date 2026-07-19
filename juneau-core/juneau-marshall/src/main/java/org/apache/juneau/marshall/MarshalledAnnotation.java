@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -396,8 +396,8 @@ public class MarshalledAnnotation {
 		Object(MarshalledAnnotation.Builder b) {
 			super(b);
 			as = b.as;
-			description = copyOf(b.description);
-			dictionary = copyOf(b.dictionary);
+			description = cp(b.description);
+			dictionary = cp(b.dictionary);
 			example = b.example;
 			implClass = b.implClass;
 			interceptor = b.interceptor;

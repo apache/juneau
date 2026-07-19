@@ -40,7 +40,7 @@ public class Tool {
 	/**
 	 * Sets the tool name.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Tool setName(String value) {
@@ -60,7 +60,7 @@ public class Tool {
 	/**
 	 * Sets the description.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Tool setDescription(String value) {
@@ -80,7 +80,7 @@ public class Tool {
 	/**
 	 * Sets the input schema.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public Tool setInputSchema(JsonSchema value) {

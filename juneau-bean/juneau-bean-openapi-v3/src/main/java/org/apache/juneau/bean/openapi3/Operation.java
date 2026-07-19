@@ -18,6 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -146,9 +147,9 @@ public class Operation extends OpenApiElement {
 		this.summary = copyFrom.summary;
 		this.description = copyFrom.description;
 		this.operationId = copyFrom.operationId;
-		this.externalDocs = copyFrom.externalDocs;
+		this.externalDocs = copyOf(copyFrom.externalDocs);
 		parameters.addAll(copyOf(copyFrom.parameters, Parameter::copy));
-		this.requestBody = copyFrom.requestBody;
+		this.requestBody = copyOf(copyFrom.requestBody);
 		responses.putAll(copyFrom.responses);
 		callbacks.putAll(copyFrom.callbacks);
 		this.deprecated = copyFrom.deprecated;

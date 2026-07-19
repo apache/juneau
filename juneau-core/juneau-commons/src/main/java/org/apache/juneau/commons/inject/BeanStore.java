@@ -137,7 +137,7 @@ public interface BeanStore {
 	 * </p>
 	 *
 	 * @param <T> The bean type.
-	 * @param type The bean type to instantiate.
+	 * @param type The bean type to instantiate.  Must not be <jk>null</jk>.
 	 * @return The instantiated bean.
 	 */
 	default <T> T instantiate(Class<T> type) {
@@ -270,7 +270,7 @@ public interface BeanStore {
 	 * 	<li>Parameters typed as {@link Optional} (always considered satisfied).
 	 * </ul>
 	 *
-	 * @param executable The constructor or method to inspect.
+	 * @param executable The constructor or method to inspect.  Must not be <jk>null</jk>.
 	 * @param outer The outer object to use for inner-class param resolution.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if every required parameter can be resolved from this store.
 	 */
@@ -296,7 +296,7 @@ public interface BeanStore {
 	 * others the bean instance (or <jk>null</jk> when missing) is returned.  See {@link #hasAllParams}
 	 * for the full skip rules.
 	 *
-	 * @param executable The constructor or method to resolve parameters for.
+	 * @param executable The constructor or method to resolve parameters for.  Must not be <jk>null</jk>.
 	 * @param outer The outer object to use for inner-class param resolution.  Can be <jk>null</jk>.
 	 * @return An array of resolved parameter values, one per parameter of <c>executable</c>.
 	 */
@@ -324,7 +324,7 @@ public interface BeanStore {
 	 * Intended for diagnostic error messages — see {@link #hasAllParams} for the exact match rules.
 	 * Skipped parameters (outer-instance match, {@link Optional}) never appear in the result.
 	 *
-	 * @param executable The constructor or method to inspect.
+	 * @param executable The constructor or method to inspect.  Must not be <jk>null</jk>.
 	 * @param outer The outer object to use for inner-class param resolution.  Can be <jk>null</jk>.
 	 * @return A comma-delimited list of missing parameter type names, or <jk>null</jk> when none are missing.
 	 */

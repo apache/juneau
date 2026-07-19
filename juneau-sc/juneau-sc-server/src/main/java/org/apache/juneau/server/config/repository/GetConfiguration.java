@@ -67,20 +67,26 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 
 		var git = config.get("GitServer/gitRemote").orElse(null);
 
-		var gitControl = new GitControl(pathStr, git);
+		// Fail fast with a clear message when the operator has not configured the local checkout directory,
+		// rather than surfacing an opaque NullPointerException from new File(null) below.
+		if (pathStr == null)
+			throw new IllegalStateException("Required configuration 'GitServer/pathLocal' is not set.");
 
 		// Trusted operator-configured local git checkout directory (GitServer/pathLocal).
 		// Serves as the confinement root for the project/application config file lookups below.
 		var root = new File(pathStr);
 
-		if (root.isDirectory()) {
-			gitControl.pullFromRepo();
-		} else {
-			gitControl.cloneRepo();
-		}
+		try (var gitControl = new GitControl(pathStr, git)) {
 
-		gitControl.branch(branch);
-		gitControl.pullFromRepo();
+			if (root.isDirectory()) {
+				gitControl.pullFromRepo();
+			} else {
+				gitControl.cloneRepo();
+			}
+
+			gitControl.branch(branch);
+			gitControl.pullFromRepo();
+		}
 
 		var fileDefaultStr = lcr(APPLICATION).concat(EXT);
 		var fileProjectStr = this.project.concat(EXT);
@@ -103,6 +109,6 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 	/** {@inheritDoc} */
 	@Override
 	public Map<String,ConfigItem> get() {
-		return configs;
+		return Map.copyOf(configs);
 	}
 }

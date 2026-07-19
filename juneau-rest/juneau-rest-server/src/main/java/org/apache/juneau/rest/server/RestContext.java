@@ -651,7 +651,7 @@ public class RestContext extends Context {
 		// Rung 1: programmatic override (Builder.paths / Args.paths).
 		var programmatic = builder.paths;
 		if (programmatic != null)
-			return programmatic.clone();
+			return cp(programmatic);
 		return resolvePathsCore(annotations, resource, vr, beanStore);
 	}
 
@@ -4003,7 +4003,7 @@ public class RestContext extends Context {
 	 * @return The resolved mount paths (never {@code null}; possibly empty).
 	 * @since 10.0.0
 	 */
-	public String[] getPaths() { return copyOf(paths); }
+	public String[] getPaths() { return cp(paths); }
 
 	/**
 	 * Returns the path matcher for this context.
@@ -4081,7 +4081,7 @@ public class RestContext extends Context {
 	 * 	The REST-op-arg classes for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Class<? extends RestOpArg>[] getRestOpArgs() { return copyOf(restOpArgs.get()); }
+	public Class<? extends RestOpArg>[] getRestOpArgs() { return cp(restOpArgs.get()); }
 
 	/**
 	 * Returns the child resources associated with this servlet.
@@ -4984,24 +4984,6 @@ public class RestContext extends Context {
 			return true;
 		} catch (Exception ex) {
 			return false;
-		}
-	}
-
-	/**
-	 * Handle the case where a matching method was not found.
-	 *
-	 * <p>
-	 * Subclasses can override this method to provide a 2nd-chance for specifying a response.
-	 * The default implementation will simply throw an exception with an appropriate message.
-	 *
-	 * @param session The HTTP call.
-	 * @throws Exception Any exception can be thrown.
-	 */
-	void invokeRestInitMethod(MethodInfo m, Supplier<?> resource, BeanStore beanStore) throws ServletException {
-		try {
-			m.inject(beanStore, resource.get());
-		} catch (Exception e) {
-			throw servletException(e, "Exception thrown from @RestInit method %s.%s.", cns(m.getDeclaringClass()), m.getSignature());
 		}
 	}
 

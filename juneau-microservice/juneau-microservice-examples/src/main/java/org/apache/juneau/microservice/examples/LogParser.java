@@ -141,8 +141,8 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 
 		boolean matches() {
 			return isRecord
-				&& !(nn(start) && date.before(start))
-				&& !(nn(end) && date.after(end))
+				&& !(nn(start) && nn(date) && date.before(start))
+				&& !(nn(end) && nn(date) && date.after(end))
 				&& !(nn(threadFilter) && ! threadFilter.equals(thread))
 				&& !(nn(loggerFilter) && ! loggerFilter.contains(logger))
 				&& !(nn(severityFilter) && ! severityFilter.contains(severity));
@@ -179,36 +179,40 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public LogParser(LogEntryFormatter formatter, File f, Date start, Date end, String thread, String[] loggers, String[] severity) throws IOException {
-		br = new BufferedReader(new InputStreamReader(new FileInputStream(f), Charset.defaultCharset()));
 		this.formatter = formatter;
 		this.start = start;
 		this.end = end;
 		this.threadFilter = thread;
 		if (nn(loggers))
-			this.loggerFilter = new LinkedHashSet<>(l(loggers));
+			this.loggerFilter = st(loggers);
 		if (nn(severity))
-			this.severityFilter = new LinkedHashSet<>(l(severity));
+			this.severityFilter = st(severity);
 
 		// Buffer all matching entries to support multiple traversal.
-		List<Entry> allEntries = new ArrayList<>();
-		Entry prev = null;
-		String line;
-		while (nn(line = br.readLine())) {
-			var e = new Entry(line);
-			if (e.isRecord) {
-				if (nn(prev))
-					allEntries.add(prev);
-				prev = e.matches() ? e : null;
-			} else {
-				if (prev != null)
-					prev.addText(e.line);
+		// Close the reader in a finally so a parse failure mid-loop doesn't leak the file descriptor.
+		br = new BufferedReader(new InputStreamReader(new FileInputStream(f), Charset.defaultCharset()));
+		try {
+			List<Entry> allEntries = new ArrayList<>();
+			Entry prev = null;
+			String line;
+			while (nn(line = br.readLine())) {
+				var e = new Entry(line);
+				if (e.isRecord) {
+					if (nn(prev))
+						allEntries.add(prev);
+					prev = e.matches() ? e : null;
+				} else {
+					if (prev != null)
+						prev.addText(e.line);
+				}
 			}
+			if (nn(prev))
+				allEntries.add(prev);
+			this.entries = allEntries;
+		} finally {
+			br.close();
+			br = null;
 		}
-		if (nn(prev))
-			allEntries.add(prev);
-		this.entries = allEntries;
-		br.close();
-		br = null;
 	}
 
 	@Override /* Overridden from Closeable */

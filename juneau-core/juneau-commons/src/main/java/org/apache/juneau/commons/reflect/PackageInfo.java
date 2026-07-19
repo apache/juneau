@@ -88,7 +88,7 @@ public class PackageInfo implements Annotatable {
 	/**
 	 * Returns a package info wrapper around the package of the specified class.
 	 *
-	 * @param childClass The class whose package to retrieve.
+	 * @param childClass The class whose package to retrieve.  Must not be <jk>null</jk>.
 	 * @return A package info wrapper.
 	 */
 	public static PackageInfo of(Class<?> childClass) {
@@ -98,7 +98,7 @@ public class PackageInfo implements Annotatable {
 	/**
 	 * Returns a package info wrapper around the package of the specified class info.
 	 *
-	 * @param childClass The class info whose package to retrieve.
+	 * @param childClass The class info whose package to retrieve.  Must not be <jk>null</jk>.
 	 * @return A package info wrapper.
 	 */
 	public static PackageInfo of(ClassInfo childClass) {
@@ -108,7 +108,7 @@ public class PackageInfo implements Annotatable {
 	/**
 	 * Returns a package info wrapper around the specified package object.
 	 *
-	 * @param inner The package object.
+	 * @param inner The package object.  Must not be <jk>null</jk>.
 	 * @return A package info wrapper.
 	 */
 	public static PackageInfo of(Package inner) {
@@ -125,7 +125,7 @@ public class PackageInfo implements Annotatable {
 	/**
 	 * Constructor.
 	 *
-	 * @param inner The package object.
+	 * @param inner The package object.  Must not be <jk>null</jk>.
 	 */
 	protected PackageInfo(Package inner) {
 		assertArgNotNull(ARG_inner, inner);

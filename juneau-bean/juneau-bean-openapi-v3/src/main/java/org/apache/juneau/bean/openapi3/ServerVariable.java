@@ -99,7 +99,7 @@ public class ServerVariable extends OpenApiElement {
 	public ServerVariable(ServerVariable copyFrom) {
 		super(copyFrom);
 
-		this.enum_.addAll(copyOf(copyFrom.enum_));
+		this.enum_.addAll(cp(copyFrom.enum_));
 		this.default_ = copyFrom.default_;
 		this.description = copyFrom.description;
 	}

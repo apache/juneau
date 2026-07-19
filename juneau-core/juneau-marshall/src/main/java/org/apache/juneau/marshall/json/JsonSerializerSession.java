@@ -456,10 +456,11 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	}
 
 	/**
-	 * Method that can be called from subclasses to serialize an object to JSON.
+	 * Serializes an object to a JSON string using this session's configuration.
 	 *
 	 * <p>
-	 * Used by {@link JsonSchemaSerializerSession} for serializing examples to JSON.
+	 * Protected extension hook that subclasses can call or override when they need to serialize a
+	 * value to JSON (e.g. for embedding a nested JSON fragment).
 	 *
 	 * @param o The object to serialize.
 	 * @return The serialized object.

@@ -95,7 +95,7 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	/**
 	 * Creates a new {@link HttpHeaderList} initialized with the given alternating {@code name}/{@code value} pairs.
 	 *
-	 * @param pairs Alternating name/value strings. Must be an even number.
+	 * @param pairs Alternating name/value strings. Can be <jk>null</jk> (treated as empty). Length must be even.
 	 * @return A new instance. Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If the number of arguments is odd.
 	 */
@@ -175,8 +175,8 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	/**
 	 * Appends a header constructed from the given name and string value.
 	 *
-	 * @param name The header name.
-	 * @param value The header value.
+	 * @param name The header name. Must not be <jk>null</jk>.
+	 * @param value The header value. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HttpHeaderList append(String name, String value) {
@@ -186,8 +186,8 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	/**
 	 * Appends a header constructed from the given name and lazy value supplier.
 	 *
-	 * @param name The header name.
-	 * @param value Supplier of the header value.
+	 * @param name The header name. Must not be <jk>null</jk>.
+	 * @param value Supplier of the header value. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HttpHeaderList append(String name, Supplier<String> value) {
@@ -224,8 +224,8 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	/**
 	 * Sets a default header with the given name and value (first-in-chain wins per name).
 	 *
-	 * @param name The header name.
-	 * @param value The header value.
+	 * @param name The header name. Must not be <jk>null</jk>.
+	 * @param value The header value. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HttpHeaderList setDefault(String name, String value) {
@@ -262,8 +262,8 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	/**
 	 * Sets a header with the given name and value, replacing any prior entry with the same name.
 	 *
-	 * @param name The header name.
-	 * @param value The header value.
+	 * @param name The header name. Must not be <jk>null</jk>.
+	 * @param value The header value. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HttpHeaderList set(String name, String value) {
@@ -273,7 +273,7 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	/**
 	 * Removes all headers with the given name.
 	 *
-	 * @param name The header name.
+	 * @param name The header name. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HttpHeaderList removeAll(String name) {

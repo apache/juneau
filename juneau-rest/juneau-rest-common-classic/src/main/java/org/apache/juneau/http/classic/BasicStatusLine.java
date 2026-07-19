@@ -47,7 +47,7 @@ public class BasicStatusLine implements StatusLine {
 	 * Instantiates a new instance of this bean.
 	 *
 	 * @param statusCode The initial status code.
-	 * @param reasonPhrase The initial reason phrase.
+	 * @param reasonPhrase The initial reason phrase.  Can be <jk>null</jk>.
 	 * @return A new bean.
 	 */
 	public static BasicStatusLine create(int statusCode, String reasonPhrase) {
@@ -71,7 +71,7 @@ public class BasicStatusLine implements StatusLine {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The status line being copied.
+	 * @param copyFrom The status line being copied.  Must not be <jk>null</jk>.
 	 */
 	protected BasicStatusLine(BasicStatusLine copyFrom) {
 		this.protocolVersion = copyFrom.protocolVersion;
@@ -148,7 +148,7 @@ public class BasicStatusLine implements StatusLine {
 	 * If not specified, the reason phrase will be retrieved from the reason phrase catalog
 	 * using the locale on this bean.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public BasicStatusLine setReasonPhrase(String value) {
@@ -163,7 +163,7 @@ public class BasicStatusLine implements StatusLine {
 	 * <p>
 	 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public BasicStatusLine setReasonPhraseCatalog(ReasonPhraseCatalog value) {

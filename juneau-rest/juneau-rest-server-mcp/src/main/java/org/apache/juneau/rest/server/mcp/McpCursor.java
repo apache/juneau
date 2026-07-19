@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.util.*;
 
@@ -67,7 +68,7 @@ public interface McpCursor {
 	 */
 	static McpCursor fixedSize(int pageSize) {
 		if (pageSize <= 0)
-			throw new IllegalArgumentException("pageSize must be positive: " + pageSize);
+			throw iaex("pageSize must be positive: %s", pageSize);
 		return new McpCursor() {
 			@Override
 			public <T> McpPage<T> page(List<T> all, String cursor, BeanStore ctx) {

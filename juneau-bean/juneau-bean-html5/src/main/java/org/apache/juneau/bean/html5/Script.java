@@ -89,8 +89,8 @@ public class Script extends HtmlElementRawText {
 	 * Creates a {@link Script} element with the specified {@link Script#type(String)} attribute and
 	 * {@link Script#text(Object)} node.
 	 *
-	 * @param type The {@link Script#type(String)} attribute.
-	 * @param text The child text node.
+	 * @param type The {@link Script#type(String)} attribute. Can be <jk>null</jk>.
+	 * @param text The child text node. Can be <jk>null</jk>.
 	 */
 	public Script(String type, String...text) {
 		type(type).text(joinnl(text));
@@ -125,6 +125,7 @@ public class Script extends HtmlElementRawText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Script async(Object value) {
@@ -159,7 +160,7 @@ public class Script extends HtmlElementRawText {
 	 * 	<li><js>"windows-1252"</js> - Windows-1252 encoding</li>
 	 * </ul>
 	 *
-	 * @param value The character encoding of the external script resource.
+	 * @param value The character encoding of the external script resource. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Script charset(String value) {
@@ -180,7 +181,7 @@ public class Script extends HtmlElementRawText {
 	 * <p>
 	 * How the element handles cross-origin requests.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Script crossorigin(String value) {
@@ -205,6 +206,7 @@ public class Script extends HtmlElementRawText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Script defer(Object value) {
@@ -558,6 +560,7 @@ public class Script extends HtmlElementRawText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
+	 * 	Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Script src(Object value) {
@@ -601,7 +604,7 @@ public class Script extends HtmlElementRawText {
 	 * <p>
 	 * Type of embedded resource.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Script type(String value) {

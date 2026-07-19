@@ -112,7 +112,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 		super(builder);
 		byteArrayFormat = builder.byteArrayFormat;
 		allowNestedStructures = builder.allowNestedStructures;
-		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
+		nullValue = or(builder.nullValue, "<NULL>");
 	}
 
 	@Override /* RecordReadable */

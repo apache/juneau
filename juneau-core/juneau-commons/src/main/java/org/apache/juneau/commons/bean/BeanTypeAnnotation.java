@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.bean;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.function.*;
@@ -90,7 +90,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the description property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
@@ -101,7 +101,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the {@link BeanType#excludeProperties()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder excludeProperties(String value) {
@@ -112,7 +112,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the {@link BeanType#factory()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder factory(Class<? extends BeanFactory> value) {
@@ -134,7 +134,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the {@link BeanType#interfaceClass()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder interfaceClass(Class<?> value) {
@@ -145,7 +145,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the {@link BeanType#p()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder p(String value) {
@@ -156,7 +156,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the {@link BeanType#properties()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder properties(String value) {
@@ -167,7 +167,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the {@link BeanType#propertyNamer()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
@@ -178,7 +178,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the {@link BeanType#readOnlyProperties()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder readOnlyProperties(String value) {
@@ -189,7 +189,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the {@link BeanType#ro()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder ro(String value) {
@@ -200,7 +200,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the {@link BeanType#stopClass()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder stopClass(Class<?> value) {
@@ -222,7 +222,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the {@link BeanType#wo()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder wo(String value) {
@@ -233,7 +233,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the {@link BeanType#writeOnlyProperties()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder writeOnlyProperties(String value) {
@@ -244,7 +244,7 @@ public class BeanTypeAnnotation {
 		/**
 		 * Sets the {@link BeanType#xp()} property on this annotation.
 		 *
-		 * @param value The new value for this property.
+		 * @param value The new value for this property.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder xp(String value) {
@@ -277,7 +277,7 @@ public class BeanTypeAnnotation {
 
 		Object(BeanTypeAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			excludeProperties = b.excludeProperties;
 			factory = b.factory;
 			findFluentSetters = b.findFluentSetters;
@@ -296,7 +296,7 @@ public class BeanTypeAnnotation {
 
 		@Override /* Overridden from BeanType */
 		public String[] description() {
-			return copyOf(description);
+			return cp(description);
 		}
 
 		@Override /* Overridden from BeanType */

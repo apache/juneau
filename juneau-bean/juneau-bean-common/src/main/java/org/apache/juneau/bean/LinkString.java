@@ -51,8 +51,8 @@ public class LinkString implements Comparable<LinkString> {
 	/**
 	 * Constructor.
 	 *
-	 * @param name Corresponds to the text inside of the <xt>&lt;A&gt;</xt> element.
-	 * @param uri Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
+	 * @param name Corresponds to the text inside of the <xt>&lt;A&gt;</xt> element.  Can be <jk>null</jk>.
+	 * @param uri Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.  Must not be <jk>null</jk>.
 	 * @param uriArgs Optional printf-style ({@link String#format(String, Object...)}) arguments in the href.
 	 */
 	public LinkString(String name, String uri, Object...uriArgs) {

@@ -98,7 +98,7 @@ public class Ins extends HtmlElementMixed {
 	/**
 	 * Creates an {@link Ins} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Ins(Object...children) {
 		children(children);
@@ -146,7 +146,7 @@ public class Ins extends HtmlElementMixed {
 	 * <p>
 	 * Link to the source of the quotation or more information about the edit.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Ins cite(String value) {
@@ -166,7 +166,7 @@ public class Ins extends HtmlElementMixed {
 	 * <p>
 	 * Date and (optionally) time of the change.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Ins datetime(String value) {

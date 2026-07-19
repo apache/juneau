@@ -39,7 +39,7 @@ public class PromptMessage {
 	/**
 	 * Sets the message role.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public PromptMessage setRole(Role value) {
@@ -59,7 +59,7 @@ public class PromptMessage {
 	/**
 	 * Sets the message content.
 	 *
-	 * @param value The new value.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
 	public PromptMessage setContent(Content value) {

@@ -197,7 +197,10 @@ public class SqlStore extends ConfigStore {
 
 	@Override /* ConfigStore */
 	public synchronized SqlStore update(String name, String newContents) {
-		cache.put(name, newContents);
+		if (newContents == null)
+			cache.remove(name);
+		else
+			cache.put(name, newContents);
 		super.update(name, newContents);  // Trigger any listeners.
 		return this;
 	}

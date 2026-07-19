@@ -17,6 +17,7 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.util.*;
@@ -59,7 +60,10 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param statusLine The status line. Must not be <jk>null</jk>.
 	 */
 	public BasicHttpResponse(HttpStatusLine statusLine) {
-		this(statusLine, List.of(), StringBody.of(statusLine.getReasonPhrase()));
+		// Reason phrase is documented-nullable; StringBody.of asserts non-null, so guard against a valid status line
+		// that carries a null reason phrase (would otherwise NPE on a legitimate input).
+		this(statusLine, l(),
+			statusLine != null && statusLine.getReasonPhrase() != null ? StringBody.of(statusLine.getReasonPhrase()) : null);
 	}
 
 	/**
@@ -69,7 +73,7 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param body The response body. May be <jk>null</jk>.
 	 */
 	public BasicHttpResponse(HttpStatusLine statusLine, HttpBody body) {
-		this(statusLine, List.of(), body);
+		this(statusLine, l(), body);
 	}
 
 	/**
@@ -79,14 +83,14 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param body The response body as a plain-text string. May be <jk>null</jk>.
 	 */
 	public BasicHttpResponse(HttpStatusLine statusLine, String body) {
-		this(statusLine, List.of(), body != null ? StringBody.of(body) : null);
+		this(statusLine, l(), body != null ? StringBody.of(body) : null);
 	}
 
 	/**
 	 * Constructor with headers and an optional body.
 	 *
 	 * @param statusLine The status line. Must not be <jk>null</jk>.
-	 * @param headers The response headers. Must not be <jk>null</jk>.
+	 * @param headers The response headers. Can be <jk>null</jk> (treated as an empty list).
 	 * @param body The response body. May be <jk>null</jk>.
 	 */
 	public BasicHttpResponse(HttpStatusLine statusLine, List<HttpHeader> headers, HttpBody body) {
@@ -101,6 +105,7 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param copyFrom The instance to copy. Must not be <jk>null</jk>.
 	 */
 	protected BasicHttpResponse(BasicHttpResponse copyFrom) {
+		assertArgNotNull("copyFrom", copyFrom);
 		this.statusLine = copyFrom.statusLine;
 		this.headers = copyFrom.headers.copy();
 		this.body = copyFrom.body;
@@ -265,8 +270,8 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	/**
 	 * Appends a header to the end of the header list.
 	 *
-	 * @param name Header name.
-	 * @param value Header value.
+	 * @param name Header name. Must not be <jk>null</jk>.
+	 * @param value Header value. May be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpResponse addHeader(String name, String value) {

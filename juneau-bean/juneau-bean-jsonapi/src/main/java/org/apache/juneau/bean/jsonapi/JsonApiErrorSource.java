@@ -49,7 +49,7 @@ public class JsonApiErrorSource {
 	/**
 	 * Bean property setter:  <property>pointer</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiErrorSource setPointer(String value) {
@@ -67,7 +67,7 @@ public class JsonApiErrorSource {
 	/**
 	 * Bean property setter:  <property>parameter</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiErrorSource setParameter(String value) {
@@ -85,7 +85,7 @@ public class JsonApiErrorSource {
 	/**
 	 * Bean property setter:  <property>header</property>.
 	 *
-	 * @param value The new value for this property.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public JsonApiErrorSource setHeader(String value) {

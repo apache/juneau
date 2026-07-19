@@ -71,7 +71,7 @@ public class YamlConfigFormat implements ConfigFormat {
 
 			var colonIndex = trim.indexOf(':');
 			if (colonIndex <= 0)
-				throw new IOException("Invalid YAML config line: " + line);
+				throw ioex("Invalid YAML config line: %s", line);
 
 			var key = trim.substring(0, colonIndex).trim();
 			var rest = trim.substring(colonIndex + 1).trim();

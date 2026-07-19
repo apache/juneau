@@ -49,8 +49,8 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	 *
 	 * @param pMeta The bean property metadata.
 	 * @param name The bean property name.
-	 * @param value The bean property value.
-	 * @param thrown The exception thrown by calling the property getter.
+	 * @param value The bean property value.  Can be <jk>null</jk>.
+	 * @param thrown The exception thrown by calling the property getter.  Can be <jk>null</jk> if no exception was thrown.
 	 */
 	public BeanPropertyValue(BeanPropertyMeta pMeta, String name, Object value, Throwable thrown) {
 		this.pMeta = pMeta;
@@ -66,7 +66,7 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof BeanPropertyValue other && compareTo(other) == 0;
+		return o instanceof BeanPropertyValue o2 && compareTo(o2) == 0;
 	}
 
 	@Override /* Overridden from Object */

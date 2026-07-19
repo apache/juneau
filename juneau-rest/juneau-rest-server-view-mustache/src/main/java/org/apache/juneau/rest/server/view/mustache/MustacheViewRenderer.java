@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.view.mustache;
 
 import java.io.*;
 
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.processor.*;
@@ -93,33 +94,49 @@ public class MustacheViewRenderer implements ViewRenderer {
 		ResponseProcessor instead of MustacheViewRenderer.
 		See https://juneau.apache.org/docs/topics/MustacheViewSupport for the full matrix.""";
 
+	// Lazily-created fallback used when no MustacheMixin bean is registered.  Cached (double-checked) so
+	// the bridge-default MustacheFactory is built once instead of rebuilt per render.  Created lazily (not
+	// eagerly) so a missing Mustache engine still surfaces at render time as NO_ENGINE_DIAGNOSTIC rather
+	// than during RestContext construction.
+	private volatile MustacheMixin fallbackMixin;
+
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException, BasicHttpException {
 		var req = opSession.getRequest();
 		var res = opSession.getResponse();
 
 		var content = res.getContent(Object.class);
-		if (! (content instanceof MustacheView view))
+		if (! (content instanceof MustacheView content2))
 			return NEXT;
 
 		// Resolve the bridge resource (carries MustacheFactory + cached default + templateSuffix).
-		// Fall back to a fresh MustacheMixin when the renderer is used standalone without
+		// Fall back to a cached MustacheMixin when the renderer is used standalone without
 		// the mixin.
 		var bridge = req.getContext().getBeanStore()
 			.getBean(MustacheMixin.class)
-			.orElseGet(MustacheMixin::new);
+			.orElseGet(this::fallbackMixin);
 
 		// Apply caller-supplied response headers first so a caller-provided Content-Type wins
 		// over the bridge's default below.
-		view.getResponseHeaders().forEach(res::setHeader);
+		content2.getResponseHeaders().forEach(res::setHeader);
 		if (! res.containsHeader("Content-Type"))
 			res.setHeader("Content-Type", DEFAULT_CONTENT_TYPE);
 
-		var templateName = bridge.applyTemplateSuffix(view.getTemplateName());
+		// Apply the same traversal gate the raw /mustache/* mount uses so a typed-View template name
+		// assembled from user input (e.g. MustacheView.of(userInput)) cannot escape the configured base
+		// path via '../' segments.  Mirrors the JSP bridge's typed-View gate.
+		String safeName;
+		try {
+			safeName = gateTemplateName(bridge.getBasePath(), content2.getTemplateName());
+		} catch (IllegalArgumentException ex) {
+			throw new InternalServerError(ex, "Mustache template name escapes configured base path: '%s'", content2.getTemplateName());
+		}
+
+		var templateName = bridge.applyTemplateSuffix(safeName);
 		try {
 			var factory = bridge.resolveMustacheFactory(req);
 			var mustache = factory.compile(templateName);
-			mustache.execute(res.getWriter(), view.getAttributes()).flush();
+			mustache.execute(res.getWriter(), content2.getAttributes()).flush();
 			return FINISHED;
 		} catch (LinkageError ex) {
 			throw new InternalServerError(ex, NO_ENGINE_DIAGNOSTIC);
@@ -128,5 +145,28 @@ public class MustacheViewRenderer implements ViewRenderer {
 		} catch (Exception ex) {
 			throw new InternalServerError(ex, "Mustache render failed for '%s'", templateName);
 		}
+	}
+
+	// Rejects '../'-style traversal in a typed-View template name using the same virtual-path gate the raw
+	// mount applies, returning the configuration-relative template name.  Delegates to the shared
+	// FileUtils.resolveVirtualPathSafely + MustacheDispatcher.stripBasePath used by the raw render path.
+	static String gateTemplateName(String basePath, String templateName) {
+		var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);
+		return MustacheDispatcher.stripBasePath(basePath, resolved);
+	}
+
+	// Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.
+	private MustacheMixin fallbackMixin() {
+		var local = fallbackMixin;
+		if (local == null) {
+			synchronized (this) {
+				local = fallbackMixin;
+				if (local == null) {
+					local = new MustacheMixin();
+					fallbackMixin = local;
+				}
+			}
+		}
+		return local;
 	}
 }

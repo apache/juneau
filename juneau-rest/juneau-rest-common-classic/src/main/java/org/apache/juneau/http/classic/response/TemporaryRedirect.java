@@ -81,7 +81,7 @@ public class TemporaryRedirect extends BasicHttpResponse {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy from.
+	 * @param copyFrom The bean to copy from.  Must not be <jk>null</jk>.
 	 */
 	public TemporaryRedirect(TemporaryRedirect copyFrom) {
 		super(copyFrom);

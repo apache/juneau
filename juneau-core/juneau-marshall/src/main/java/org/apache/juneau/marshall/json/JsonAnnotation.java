@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.json;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 
@@ -98,7 +98,7 @@ public class JsonAnnotation {
 
 		Object(JsonAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
+			description = cp(b.description);
 			wrapperAttr = b.wrapperAttr;
 		}
 

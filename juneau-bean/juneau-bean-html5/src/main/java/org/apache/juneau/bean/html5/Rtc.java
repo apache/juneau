@@ -102,7 +102,7 @@ public class Rtc extends HtmlElementMixed {
 	/**
 	 * Creates an {@link Rtc} element with the specified child nodes.
 	 *
-	 * @param children The child nodes.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Rtc(Object...children) {
 		children(children);

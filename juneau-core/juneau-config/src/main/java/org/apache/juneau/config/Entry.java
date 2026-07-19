@@ -475,37 +475,37 @@ public class Entry {
 	/**
 	 * Returns the same-line comment of this entry.
 	 *
-	 * @return The same-line comment of this entry.
+	 * @return The same-line comment of this entry, or <jk>null</jk> if this entry does not exist in the config.
 	 */
-	public String getComment() { return configEntry.getComment(); }
+	public String getComment() { return configEntry == null ? null : configEntry.getComment(); }
 
 	/**
 	 * Returns the name of this entry.
 	 *
-	 * @return The name of this entry.
+	 * @return The name of this entry, or <jk>null</jk> if this entry does not exist in the config.
 	 */
-	public String getKey() { return configEntry.getKey(); }
+	public String getKey() { return configEntry == null ? null : configEntry.getKey(); }
 
 	/**
 	 * Returns the modifiers for this entry.
 	 *
-	 * @return The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
+	 * @return The modifiers for this entry, or <jk>null</jk> if it has no modifiers or this entry does not exist in the config.
 	 */
-	public String getModifiers() { return configEntry.getModifiers(); }
+	public String getModifiers() { return configEntry == null ? null : configEntry.getModifiers(); }
 
 	/**
 	 * Returns the pre-lines of this entry.
 	 *
-	 * @return The pre-lines of this entry as an unmodifiable list.
+	 * @return The pre-lines of this entry as an unmodifiable list, or <jk>null</jk> if this entry does not exist in the config.
 	 */
-	public List<String> getPreLines() { return configEntry.getPreLines(); }
+	public List<String> getPreLines() { return configEntry == null ? null : configEntry.getPreLines(); }
 
 	/**
 	 * Returns the raw value of this entry.
 	 *
-	 * @return The raw value of this entry.
+	 * @return The raw value of this entry, or <jk>null</jk> if this entry does not exist in the config.
 	 */
-	public String getValue() { return configEntry.getValue(); }
+	public String getValue() { return configEntry == null ? null : configEntry.getValue(); }
 
 	/**
 	 * Returns <jk>true</jk> if this entry exists in the config and is not empty.

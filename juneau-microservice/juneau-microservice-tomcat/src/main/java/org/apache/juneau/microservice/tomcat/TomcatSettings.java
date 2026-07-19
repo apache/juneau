@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.microservice.tomcat;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.time.*;
 
 /**
@@ -81,7 +83,7 @@ public class TomcatSettings {
 		 * @return This object.
 		 */
 		public Builder ports(int...value) {
-			ports = value;
+			ports = cp(value);
 			return this;
 		}
 
@@ -167,7 +169,7 @@ public class TomcatSettings {
 	 * @return The ports, or <jk>null</jk> if not set.
 	 */
 	public int[] getPorts() {
-		return ports == null ? null : ports.clone();
+		return cp(ports);
 	}
 
 	/**

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.management.logging;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.rest.server.management.*;
@@ -116,7 +118,7 @@ public class Log4j2LogBackend implements LogBackend {
 		// to match the JUL backend's IllegalArgumentException contract.
 		var l = Level.getLevel(level.toUpperCase(Locale.ROOT));
 		if (l == null)
-			throw new IllegalArgumentException("Not a valid Log4j2 level: '" + level + "'.");
+			throw iaex("Not a valid Log4j2 level: '%s'.", level);
 		return l;
 	}
 

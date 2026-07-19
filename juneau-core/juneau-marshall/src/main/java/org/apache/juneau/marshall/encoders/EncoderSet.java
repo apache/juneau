@@ -94,8 +94,6 @@ public class EncoderSet {
 
 		List<Object> entries;
 
-		Builder inheritFrom;
-
 		/**
 		 * Constructor.
 		 *
@@ -114,7 +112,7 @@ public class EncoderSet {
 		protected Builder(Builder copyFrom) {
 			this.beanStore = copyFrom.beanStore;
 			this.impl = copyFrom.impl;
-			entries = copyOf(copyFrom.entries);
+			entries = cp(copyFrom.entries);
 		}
 
 		/**

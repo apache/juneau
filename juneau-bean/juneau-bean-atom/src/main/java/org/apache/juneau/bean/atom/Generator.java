@@ -82,7 +82,7 @@ public class Generator extends Common {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param text The generator statement content.
+	 * @param text The generator statement content.  Can be <jk>null</jk>.
 	 */
 	public Generator(String text) {
 		this.text = text;

@@ -91,7 +91,21 @@ public final class ApacheHc5Transport implements HttpTransport {
 		} catch (IOException e) {
 			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}
-		return buildTransportResponse(hcResponse);
+		try {
+			return buildTransportResponse(hcResponse);
+		} catch (TransportException | RuntimeException e) {
+			// If response wiring fails the closeCallback never runs, so close here to release the leased connection.
+			closeQuietly(hcResponse);
+			throw e;
+		}
+	}
+
+	private static void closeQuietly(ClassicHttpResponse hcResponse) {
+		try {
+			hcResponse.close();
+		} catch (IOException e) {
+			// Best-effort cleanup on an already-failing path; nothing more can be done.
+		}
 	}
 
 	@Override /* Closeable */

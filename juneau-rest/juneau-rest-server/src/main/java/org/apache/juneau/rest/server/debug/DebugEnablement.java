@@ -88,7 +88,7 @@ public abstract class DebugEnablement {
 			try {
 				if (impl != null)
 					return impl;
-				var t = implType != null ? implType : BasicDebugEnablement.class;
+				var t = or(implType, BasicDebugEnablement.class);
 				return BeanInstantiator.of(DebugEnablement.class, beanStore)
 					.type(t)
 					.noBuilder()

@@ -66,9 +66,9 @@ public record HttpProtocolVersion(String protocol, int major, int minor) {
 	public HttpProtocolVersion {
 		assertArgNotNull("protocol", protocol);
 		if (major < 0)
-			throw new IllegalArgumentException("Major version must be >= 0, got " + major);
+			throw iaex("Major version must be >= 0, got %s", major);
 		if (minor < 0)
-			throw new IllegalArgumentException("Minor version must be >= 0, got " + minor);
+			throw iaex("Minor version must be >= 0, got %s", minor);
 	}
 
 	/**

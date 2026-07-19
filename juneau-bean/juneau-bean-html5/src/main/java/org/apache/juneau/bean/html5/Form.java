@@ -90,7 +90,7 @@ public class Form extends HtmlElementMixed {
 	/**
 	 * Creates a {@link Form} element with the specified {@link Form#action(String)} attribute.
 	 *
-	 * @param action The {@link Form#action(String)} attribute.
+	 * @param action The {@link Form#action(String)} attribute. Can be <jk>null</jk>.
 	 */
 	public Form(String action) {
 		action(action);
@@ -99,8 +99,8 @@ public class Form extends HtmlElementMixed {
 	/**
 	 * Creates an {@link Form} element with the specified {@link Form#action(String)} attribute and child nodes.
 	 *
-	 * @param action The {@link Form#action(String)} attribute.
-	 * @param children The child nodes.
+	 * @param action The {@link Form#action(String)} attribute. Can be <jk>null</jk>.
+	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Form(String action, Object...children) {
 		action(action).children(children);
@@ -128,7 +128,7 @@ public class Form extends HtmlElementMixed {
 	 * 	<li><js>"UTF-8 ISO-8859-1"</js> - Multiple encodings</li>
 	 * </ul>
 	 *
-	 * @param value The character encodings accepted for form submission.
+	 * @param value The character encodings accepted for form submission. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Form acceptcharset(String value) {
@@ -155,7 +155,7 @@ public class Form extends HtmlElementMixed {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param value The new value for this attribute.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Form action(String value) {
@@ -190,7 +190,7 @@ public class Form extends HtmlElementMixed {
 	 * 	<li><js>"off"</js> - Disable autocomplete</li>
 	 * </ul>
 	 *
-	 * @param value The default autocomplete behavior for form controls.
+	 * @param value The default autocomplete behavior for form controls. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Form autocomplete(String value) {
@@ -236,7 +236,7 @@ public class Form extends HtmlElementMixed {
 	 * 	<li><js>"text/plain"</js> - Plain text encoding</li>
 	 * </ul>
 	 *
-	 * @param value The encoding type for form data submission.
+	 * @param value The encoding type for form data submission. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Form enctype(String value) {
@@ -276,7 +276,7 @@ public class Form extends HtmlElementMixed {
 	 * 	<li><js>"dialog"</js> - Used for forms within dialog elements</li>
 	 * </ul>
 	 *
-	 * @param value The HTTP method for form submission.
+	 * @param value The HTTP method for form submission. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Form method(String value) {
@@ -294,7 +294,7 @@ public class Form extends HtmlElementMixed {
 	 * <p>
 	 * The name should be unique within the document and should not contain spaces or special characters.
 	 *
-	 * @param value The name of the form for API access and submission.
+	 * @param value The name of the form for API access and submission. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Form name(String value) {
@@ -308,7 +308,7 @@ public class Form extends HtmlElementMixed {
 	 * <p>
 	 * Disables form validation, allowing the form to be submitted even if validation fails.
 	 *
-	 * @param value If <jk>true</jk>, disables form validation.
+	 * @param value If <jk>true</jk>, disables form validation. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Form novalidate(Boolean value) {
@@ -650,7 +650,7 @@ public class Form extends HtmlElementMixed {
 	 * 	<li>Frame name - Load in the named frame</li>
 	 * </ul>
 	 *
-	 * @param value Where to display the form submission response.
+	 * @param value Where to display the form submission response. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Form target(String value) {

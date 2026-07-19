@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.csv;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -213,9 +214,9 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 	 */
 	public CsvSerializer(Builder builder) {
 		super(builder);
-		byteArrayFormat = builder.byteArrayFormat != null ? builder.byteArrayFormat : CsvByteArrayCellFormat.BASE64;
+		byteArrayFormat = or(builder.byteArrayFormat, CsvByteArrayCellFormat.BASE64);
 		allowNestedStructures = builder.allowNestedStructures;
-		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
+		nullValue = or(builder.nullValue, "<NULL>");
 	}
 
 	/**

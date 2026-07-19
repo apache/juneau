@@ -18,6 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.bean.swagger.SwaggerCopyUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
@@ -185,7 +186,7 @@ public class SchemaInfo extends SwaggerElement {
 	public SchemaInfo(SchemaInfo copyFrom) {
 		super(copyFrom);
 
-		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
+		this.additionalProperties = copyOf(copyFrom.additionalProperties);
 		this.allOf.addAll(copyOf(copyFrom.allOf, SchemaInfo::copy));
 		this.default_ = copyFrom.default_;
 		this.description = copyFrom.description;
@@ -194,9 +195,9 @@ public class SchemaInfo extends SwaggerElement {
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
-		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+		this.externalDocs = copyOf(copyFrom.externalDocs);
 		this.format = copyFrom.format;
-		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
+		this.items = copyOf(copyFrom.items);
 		this.maximum = copyFrom.maximum;
 		this.maxItems = copyFrom.maxItems;
 		this.maxLength = copyFrom.maxLength;
@@ -214,7 +215,7 @@ public class SchemaInfo extends SwaggerElement {
 		this.title = copyFrom.title;
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
-		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
+		this.xml = copyOf(copyFrom.xml);
 		properties.putAll(copyOf(copyFrom.properties, SchemaInfo::copy));
 	}
 

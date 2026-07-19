@@ -44,6 +44,7 @@ public class ConfigPropertySource implements PropertySource {
 			var value = config.getString(name);
 			return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(o(value));
 		} catch (@SuppressWarnings("unused") Exception unused) {
+			// A lookup failure (bad key, unreadable config) is treated as an absent property so the property-source chain can fall through to the next source.
 			return PropertyLookupResult.missing();
 		}
 	}
