@@ -120,7 +120,7 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 	 * @param input The input.  Must be a collection or array of objects.
 	 * @param pos The zero-index position to start from.
 	 * @param limit The max number of entries to retrieve.
-	 * @return A sublist of representing the entries from the position with the specified limit.
+	 * @return A sublist representing the entries from the position with the specified limit.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast to R for list elements

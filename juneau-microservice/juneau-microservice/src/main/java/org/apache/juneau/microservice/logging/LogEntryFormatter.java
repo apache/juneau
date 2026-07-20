@@ -116,8 +116,10 @@ public class LogEntryFormatter extends Formatter {
 	 * 		<li><js>"{traceId}"</js> - The active OpenTelemetry trace ID (empty when OTel is absent or no span is active).
 	 * 		<li><js>"{spanId}"</js> - The active OpenTelemetry span ID (empty when OTel is absent or no span is active).
 	 * 	</ol>
+	 * 	Must not be <jk>null</jk>.
 	 * @param dateFormat
 	 * 	The {@link SimpleDateFormat} format to use for dates.  e.g. <js>"yyyy.MM.dd hh:mm:ss"</js>.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param useStackTraceHashes
 	 * 	If <jk>true</jk>, only print unique stack traces once and then refer to them by a simple 8 character hash
 	 * 	identifier.
@@ -318,7 +320,7 @@ public class LogEntryFormatter extends Formatter {
 	 * 		<li><js>"traceId"</js>
 	 * 		<li><js>"spanId"</js>
 	 * 	</ul>
-	 * @param m The matcher.
+	 * @param m The matcher.  Must not be <jk>null</jk>.
 	 * @return The field value, or <jk>null</jk> if the specified field does not exist.
 	 */
 	public String getField(String fieldName, Matcher m) {

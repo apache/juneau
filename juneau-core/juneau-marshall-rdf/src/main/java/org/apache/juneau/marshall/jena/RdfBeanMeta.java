@@ -39,7 +39,9 @@ public class RdfBeanMeta extends ExtendedBeanMeta {
 	 * Constructor.
 	 *
 	 * @param beanMeta The metadata on the bean that this metadata applies to.
+	 * 	Must not be <jk>null</jk>.
 	 * @param mp RDF metadata provider (for finding information about other artifacts).
+	 * 	Must not be <jk>null</jk>.
 	 */
 	public RdfBeanMeta(BeanMeta<?> beanMeta, RdfMetaProvider mp) {
 		super(beanMeta);

@@ -77,7 +77,7 @@ public abstract class DebugEnablement {
 
 		/**
 		 * Creates a new {@link DebugEnablement} object from this builder.
-		 *s
+		 *
 		 * <p>
 		 * Instantiates an instance of the {@link #type(Class) implementation class} or
 		 * else {@link BasicDebugEnablement} if implementation class was not specified.
@@ -109,7 +109,9 @@ public abstract class DebugEnablement {
 		 * <p>
 		 * The default value for this setting is <c>(<jv>x</jv>)-&gt;<js>"true"</js>.equalsIgnoreCase(<jv>x</jv>.getHeader(<js>"Debug"</js>))</c>.
 		 *
-		 * @param value The predicate.
+		 * @param value
+		 * 	The predicate.
+		 * 	<br>Can be <jk>null</jk> (reverts to the default <js>"Debug"</js> header predicate).
 		 * @return This object.
 		 */
 		public Builder conditional(Predicate<HttpServletRequest> value) {
@@ -123,7 +125,9 @@ public abstract class DebugEnablement {
 		 * <p>
 		 * The default value for this setting is {@link Enablement#NEVER NEVER}.
 		 *
-		 * @param value The default debug enablement setting if not overridden per class/method.
+		 * @param value
+		 * 	The default debug enablement setting if not overridden per class/method.
+		 * 	<br>Can be <jk>null</jk> (reverts to {@link Enablement#NEVER NEVER}).
 		 * @return This object.
 		 */
 		public Builder defaultEnable(Enablement value) {
@@ -147,6 +151,7 @@ public abstract class DebugEnablement {
 		 * 	</ul>
 		 * @param classes
 		 * 	The classes to set the debug enablement setting on.
+		 * 	<br>Must not be <jk>null</jk> (nor contain <jk>null</jk> values).
 		 * @return This object.
 		 */
 		public Builder enable(Enablement enablement, Class<?>...classes) {
@@ -180,6 +185,7 @@ public abstract class DebugEnablement {
 		 * 		<li>Simple method name (e.g. <js>"MyClass.myMethod"</js>).
 		 * 		<li>A comma-delimited list of anything on this list.
 		 * 	</ul>
+		 * 	<br>Must not be <jk>null</jk> (nor contain <jk>null</jk> values).
 		 * @return This object.
 		 */
 		public Builder enable(Enablement enablement, String...keys) {
@@ -191,7 +197,9 @@ public abstract class DebugEnablement {
 		/**
 		 * Specifies an already-instantiated bean for the {@link #build()} method to return.
 		 *
-		 * @param value The setting value.
+		 * @param value
+		 * 	The setting value.
+		 * 	<br>Can be <jk>null</jk> (no pre-instantiated bean is used).
 		 * @return This object.
 		 */
 		public Builder impl(DebugEnablement value) {
@@ -202,7 +210,9 @@ public abstract class DebugEnablement {
 		/**
 		 * Specifies a subclass of {@link DebugEnablement} to create when the {@link #build()} method is called.
 		 *
-		 * @param value The new value for this setting.
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>Can be <jk>null</jk> (reverts to {@link BasicDebugEnablement}).
 		 * @return  This object.
 		 */
 		public Builder type(Class<? extends DebugEnablement> value) {
@@ -251,7 +261,7 @@ public abstract class DebugEnablement {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder for this enablement.
+	 * @param builder The builder for this enablement.  Must not be <jk>null</jk>.
 	 */
 	protected DebugEnablement(Builder builder) {
 		this.defaultEnablement = coalesce(builder.defaultEnablement, NEVER);
@@ -267,7 +277,7 @@ public abstract class DebugEnablement {
 	 * This enables debug mode on requests once the matched class is found and before the
 	 * Java method is found.
 	 *
-	 * @param context The context of the {@link Rest}-annotated class.
+	 * @param context The context of the {@link Rest}-annotated class.  Must not be <jk>null</jk>.
 	 * @param req The HTTP request.
 	 * @return <jk>true</jk> if debug is enabled on the specified method and request.
 	 */
@@ -284,7 +294,7 @@ public abstract class DebugEnablement {
 	 * This enables debug mode after the Java method is found and allows you to enable
 	 * debug on individual Java methods instead of the entire class.
 	 *
-	 * @param context The context of the {@link RestOp}-annotated method.
+	 * @param context The context of the {@link RestOp}-annotated method.  Must not be <jk>null</jk>.
 	 * @param req The HTTP request.
 	 * @return <jk>true</jk> if debug is enabled on the specified method and request.
 	 */

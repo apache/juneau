@@ -120,7 +120,7 @@ import jakarta.servlet.http.*;
  * 		<jc>// Log the result of the request.</jc>
  * 		<ja>@RestPostCall</ja>
  * 		<jk>public void</jk> onPostCall(RestResponse <jv>res</jv>, Logger <jv>logger</jv>) {
- * 			<jv>logger</jv>.fine(<js>"Output %s was set on the response."</js>, <jv>res</jv>.getOutput());
+ * 			<jv>logger</jv>.fine(<js>"Output %s was set on the response."</js>, <jv>res</jv>.getContent());
  * 		}
  * 	}
  * </p>

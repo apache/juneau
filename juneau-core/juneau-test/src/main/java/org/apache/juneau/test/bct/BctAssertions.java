@@ -207,8 +207,7 @@ public class BctAssertions {
 	 * @param actual The bean object to test. Must not be null.
 	 * @param fields Comma-delimited list of property names to test. Supports nested syntax with {}.
 	 * @param expected Comma-delimited list of expected values. Must match the order of fields.
-	 * @throws NullPointerException if the bean is null
-	 * @throws AssertionError if any property values don't match expected values
+	 * @throws AssertionError if the bean is null or any property values don't match expected values
 	 * @see #assertBean(Supplier, Object, String, String)
 	 */
 	public static void assertBean(Object actual, String fields, String expected) {
@@ -390,8 +389,7 @@ public class BctAssertions {
 	 * @param actual The bean object to test. Must not be null.
 	 * @param fields Comma-delimited list of property names to test. Supports nested syntax with {}.
 	 * @param expected Comma-delimited list of expected values. Must match the order of fields.
-	 * @throws NullPointerException if the bean is null
-	 * @throws AssertionError if any property values don't match expected values
+	 * @throws AssertionError if the bean is null or any property values don't match expected values
 	 * @see BeanConverter
 	 * @see BasicBeanConverter
 	 * @see BctConfiguration#set(BeanConverter)

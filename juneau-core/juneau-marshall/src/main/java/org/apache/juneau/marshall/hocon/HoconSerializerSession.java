@@ -65,6 +65,7 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 	 * Creates a session builder.
 	 *
 	 * @param ctx The serializer context.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The builder.
 	 */
 	public static Builder create(HoconSerializer ctx) {

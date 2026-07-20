@@ -213,6 +213,7 @@ public class WriterSerializerSession extends SerializerSession {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected WriterSerializerSession(Builder<?> builder) {
 		super(builder);
@@ -283,7 +284,7 @@ public class WriterSerializerSession extends SerializerSession {
 	 *
 	 * @see WriterSerializer.Builder#useWhitespace()
 	 * @return
-	 * 	The character used for quoting attributes and values.
+	 * 	<jk>true</jk> if whitespace is added to the output to improve readability.
 	 */
 	protected final boolean isUseWhitespace() { return useWhitespace; }
 

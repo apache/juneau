@@ -85,6 +85,7 @@ public class RdfThriftParser extends RdfStreamParser {
 	 * Constructor.
 	 *
 	 * @param builder The builder.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public RdfThriftParser(RdfStreamParser.Builder<?> builder) {
 		super(builder);

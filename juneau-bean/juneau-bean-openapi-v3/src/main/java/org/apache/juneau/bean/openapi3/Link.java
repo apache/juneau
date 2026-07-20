@@ -110,10 +110,10 @@ public class Link extends OpenApiElement {
 	}
 
 	/**
-	 * Adds a single value to the <property>examples</property> property.
+	 * Adds a single value to the <property>parameters</property> property.
 	 *
-	 * @param mimeType The mime-type string.  Must not be <jk>null</jk>.
-	 * @param parameter The example.  Must not be <jk>null</jk>.
+	 * @param mimeType The parameter name.  Must not be <jk>null</jk>.
+	 * @param parameter The parameter value.  Must not be <jk>null</jk>.
 	 * @return This object
 	 */
 	public Link addParameter(String mimeType, Object parameter) {
@@ -150,17 +150,17 @@ public class Link extends OpenApiElement {
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
-	 * The URL pointing to the contact information.
+	 * A description of the link.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() { return description; }
 
 	/**
-	 * Bean property getter:  <property>externalValue</property>.
+	 * Bean property getter:  <property>operationId</property>.
 	 *
 	 * <p>
-	 * The email address of the contact person/organization.
+	 * The name of an existing, resolvable OAS operation.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -170,38 +170,34 @@ public class Link extends OpenApiElement {
 	 * Bean property getter:  <property>operationRef</property>.
 	 *
 	 * <p>
-	 * The identifying name of the contact person/organization.
+	 * A relative or absolute reference to an OAS operation.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getOperationRef() { return operationRef; }
 
 	/**
-	 * Bean property getter:  <property>examples</property>.
+	 * Bean property getter:  <property>parameters</property>.
 	 *
 	 * <p>
-	 * An example of the response message.
+	 * A map representing parameters to pass to an operation.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,Object> getParameters() { return nie(parameters); }
 
 	/**
-	 * Bean property getter:  <property>default</property>.
+	 * Bean property getter:  <property>requestBody</property>.
 	 *
 	 * <p>
-	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
-	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
-	 *
-	 * (Note: <js>"value"</js> has no meaning for required parameters.)
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 * A literal value or expression to use as a request body when calling the target operation.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Object getRequestBody() { return requestBody; }
 
 	/**
-	 * Bean property getter:  <property>additionalProperties</property>.
+	 * Bean property getter:  <property>server</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -252,14 +248,13 @@ public class Link extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>externalValue</property>.
+	 * Bean property setter:  <property>operationId</property>.
 	 *
 	 * <p>
-	 * The email address of the contact person/organization.
+	 * The name of an existing, resolvable OAS operation.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -272,7 +267,7 @@ public class Link extends OpenApiElement {
 	 * Bean property setter:  <property>operationRef</property>.
 	 *
 	 * <p>
-	 * The identifying name of the contact person/organization.
+	 * A relative or absolute reference to an OAS operation.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -285,14 +280,13 @@ public class Link extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>examples</property>.
+	 * Bean property setter:  <property>parameters</property>.
 	 *
 	 * <p>
-	 * An example of the response message.
+	 * A map representing parameters to pass to an operation.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Keys must be MIME-type strings.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -304,13 +298,10 @@ public class Link extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>value</property>.
+	 * Bean property setter:  <property>requestBody</property>.
 	 *
 	 * <p>
-	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
-	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
-	 * (Note: <js>"default"</js> has no meaning for required parameters.)
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 * A literal value or expression to use as a request body when calling the target operation.
 	 *
 	 * @param val The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -322,7 +313,7 @@ public class Link extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>additionalProperties</property>.
+	 * Bean property setter:  <property>server</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.

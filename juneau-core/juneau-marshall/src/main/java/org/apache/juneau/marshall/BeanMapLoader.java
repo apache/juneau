@@ -44,8 +44,8 @@ public final class BeanMapLoader {
 	 * Equivalent to the legacy {@code BeanMap.load(String)} method.
 	 *
 	 * @param <T> The bean type.
-	 * @param m The bean map to populate.
-	 * @param input The text that will get parsed into a map and then added to {@code m}.
+	 * @param m The bean map to populate. Must not be <jk>null</jk>.
+	 * @param input The text that will get parsed into a map and then added to {@code m}. Can be <jk>null</jk> (nothing is added).
 	 * @return The supplied bean map for fluent chaining.
 	 * @throws ParseException Malformed input encountered.
 	 */
@@ -61,8 +61,8 @@ public final class BeanMapLoader {
 	 * Equivalent to the legacy {@code BeanMap.load(Reader, ReaderParser)} method.
 	 *
 	 * @param <T> The bean type.
-	 * @param m The bean map to populate.
-	 * @param r The reader containing serialized text.
+	 * @param m The bean map to populate. Must not be <jk>null</jk>.
+	 * @param r The reader containing serialized text. Can be <jk>null</jk> (nothing is added).
 	 * @param p The parser to use to parse the text.
 	 * @return The supplied bean map for fluent chaining.
 	 * @throws ParseException Malformed input encountered.

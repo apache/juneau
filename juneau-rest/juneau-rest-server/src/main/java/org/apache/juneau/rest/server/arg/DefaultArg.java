@@ -45,7 +45,7 @@ public class DefaultArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new {@link DefaultArg}, never <jk>null</jk>.
 	 */
 	public static DefaultArg create(ParameterInfo paramInfo) {
@@ -60,7 +60,7 @@ public class DefaultArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 */
 	protected DefaultArg(ParameterInfo paramInfo) {
 		this.type = paramInfo.getParameterType().inner();

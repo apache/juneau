@@ -52,7 +52,7 @@ public class ContentArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new {@link ContentArg}, or <jk>null</jk> if the parameter is not annotated with {@link Content}.
 	 */
 	public static ContentArg create(ParameterInfo paramInfo) {
@@ -76,7 +76,7 @@ public class ContentArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 */
 	protected ContentArg(ParameterInfo paramInfo) {
 		this.type = paramInfo.getParameterType().innerType();

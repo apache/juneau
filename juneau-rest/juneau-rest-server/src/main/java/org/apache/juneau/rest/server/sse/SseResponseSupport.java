@@ -49,7 +49,7 @@ public class SseResponseSupport implements AutoCloseable {
 	/**
 	 * Constructor.
 	 *
-	 * @param response The REST response.
+	 * @param response The REST response. Must not be <jk>null</jk>.
 	 * @throws IOException If the writer could not be created.
 	 */
 	@SuppressWarnings({
@@ -95,8 +95,8 @@ public class SseResponseSupport implements AutoCloseable {
 	/**
 	 * Sends an SSE event from name+data values.
 	 *
-	 * @param name The event name.
-	 * @param data The event data.
+	 * @param name The event name. Can be <jk>null</jk> (dispatches as the default event type).
+	 * @param data The event data. Can be <jk>null</jk> (no data lines emitted).
 	 * @return This object.
 	 * @throws IOException If an I/O error occurred.
 	 */
@@ -110,7 +110,7 @@ public class SseResponseSupport implements AutoCloseable {
 	/**
 	 * Sends a heartbeat/comment line.
 	 *
-	 * @param value The comment value.
+	 * @param value The comment value. Can be <jk>null</jk> (treated as an empty comment).
 	 * @return This object.
 	 * @throws IOException If an I/O error occurred.
 	 */
@@ -134,7 +134,7 @@ public class SseResponseSupport implements AutoCloseable {
 	/**
 	 * Drains a subscription until disconnect or interruption.
 	 *
-	 * @param subscription The subscription.
+	 * @param subscription The subscription. Must not be <jk>null</jk>.
 	 * @return This object.
 	 * @throws IOException If an I/O error occurred.
 	 */

@@ -375,35 +375,35 @@ public class Operation extends OpenApiElement {
 	/**
 	 * Returns the callbacks map.
 	 *
-	 * @return The callbacks map.
+	 * @return The callbacks map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,Callback> getCallbacks() { return nie(callbacks); }
 
 	/**
 	 * Returns the deprecated flag.
 	 *
-	 * @return The deprecated flag.
+	 * @return The deprecated flag, or <jk>null</jk> if not set.
 	 */
 	public Boolean getDeprecated() { return deprecated; }
 
 	/**
 	 * Returns the description.
 	 *
-	 * @return The description.
+	 * @return The description, or <jk>null</jk> if not set.
 	 */
 	public String getDescription() { return description; }
 
 	/**
 	 * Returns the external documentation.
 	 *
-	 * @return The external documentation.
+	 * @return The external documentation, or <jk>null</jk> if not set.
 	 */
 	public ExternalDocumentation getExternalDocs() { return externalDocs; }
 
 	/**
 	 * Returns the operation ID.
 	 *
-	 * @return The operation ID.
+	 * @return The operation ID, or <jk>null</jk> if not set.
 	 */
 	public String getOperationId() { return operationId; }
 
@@ -426,14 +426,14 @@ public class Operation extends OpenApiElement {
 	/**
 	 * Returns the parameters list.
 	 *
-	 * @return The parameters list.
+	 * @return The parameters list, or <jk>null</jk> if not set.
 	 */
 	public List<Parameter> getParameters() { return nie(parameters); }
 
 	/**
 	 * Returns the request body.
 	 *
-	 * @return The request body.
+	 * @return The request body, or <jk>null</jk> if not set.
 	 */
 	public RequestBodyInfo getRequestBody() { return requestBody; }
 
@@ -461,35 +461,35 @@ public class Operation extends OpenApiElement {
 	/**
 	 * Returns the responses map.
 	 *
-	 * @return The responses map.
+	 * @return The responses map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,Response> getResponses() { return nie(responses); }
 
 	/**
 	 * Returns the security requirements list.
 	 *
-	 * @return The security requirements list.
+	 * @return The security requirements list, or <jk>null</jk> if not set.
 	 */
 	public List<SecurityRequirement> getSecurity() { return nie(security); }
 
 	/**
 	 * Returns the servers list.
 	 *
-	 * @return The servers list.
+	 * @return The servers list, or <jk>null</jk> if not set.
 	 */
 	public List<Server> getServers() { return nie(servers); }
 
 	/**
 	 * Returns the summary.
 	 *
-	 * @return The summary.
+	 * @return The summary, or <jk>null</jk> if not set.
 	 */
 	public String getSummary() { return summary; }
 
 	/**
 	 * Returns the tags list.
 	 *
-	 * @return The tags list.
+	 * @return The tags list, or <jk>null</jk> if not set.
 	 */
 	public List<String> getTags() { return nie(tags); }
 

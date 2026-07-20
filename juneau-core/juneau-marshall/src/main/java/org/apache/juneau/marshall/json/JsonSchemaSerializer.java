@@ -80,6 +80,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
@@ -90,6 +91,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonSchemaSerializer copyFrom) {
 			super(copyFrom);

@@ -68,6 +68,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(BsonParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
@@ -85,6 +86,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 	 * Creates a new builder for a {@link BsonParserSession}.
 	 *
 	 * @param ctx The BSON parser context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(BsonParser ctx) {

@@ -43,6 +43,7 @@ public class MsgPackConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(MsgPackConfig.class, MsgPackParser.Builder.class, vr);
@@ -63,6 +64,7 @@ public class MsgPackConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(MsgPackConfig.class, MsgPackSerializer.Builder.class, vr);

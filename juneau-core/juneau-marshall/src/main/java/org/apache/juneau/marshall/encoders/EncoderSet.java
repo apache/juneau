@@ -372,7 +372,7 @@ public class EncoderSet {
 	}
 
 	/**
-	 * Returns the coding string for the matching encoder that can handle the specified <c>Accept-Encoding</c>
+	 * Returns the encoder match for the encoder that can handle the specified <c>Accept-Encoding</c>
 	 * or <c>Content-Encoding</c> header value.
 	 *
 	 * <p>
@@ -382,7 +382,7 @@ public class EncoderSet {
 	 * This method is fully compliant with the RFC2616/14.3 and 14.11 specifications.
 	 *
 	 * @param acceptEncoding The <c>Accept-Encoding</c> or <c>Content-Encoding</c> value.
-	 * @return The coding value (e.g. <js>"gzip"</js>).
+	 * @return The matching encoder, or <jk>null</jk> if no encoders can handle the specified value.
 	 */
 	public EncoderMatch getEncoderMatch(String acceptEncoding) {
 		EncoderMatch em = cache.get(acceptEncoding);

@@ -314,7 +314,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 *
 	 * @param <T> The part implementation class.
 	 * @param type The part implementation class.  Must not be <jk>null</jk>.
-	 * @return A part with a condensed value or <jk>null</jk> if no parts by the given name are present
+	 * @return A part with a condensed value, or an empty {@link Optional} if no parts by the given name are present.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		assertArgNotNull(ARG_type, type);
@@ -391,7 +391,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param <T> The part implementation class.
 	 * @param name The part name.
 	 * @param type The part implementation class.
-	 * @return A part with a condensed value or <jk>null</jk> if no parts by the given name are present
+	 * @return A part with a condensed value, or an empty {@link Optional} if no parts by the given name are present.
 	 */
 	public <T> Optional<T> get(String name, Class<T> type) {
 
@@ -691,7 +691,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * 	<li class='jm'>{@link #set(String, Supplier) set(String,Supplier&lt;?&gt;)}
 	 * </ul>
 	 *
-	 * @param varResolver The variable resolver to use for resolving variables.
+	 * @param varResolver The variable resolver to use for resolving variables.  Can be <jk>null</jk> (disables variable resolution).
 	 * @return This object.
 	 */
 	public PartList resolving(VarResolver varResolver) {

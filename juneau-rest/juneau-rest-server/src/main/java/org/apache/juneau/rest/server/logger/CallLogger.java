@@ -477,7 +477,7 @@ public class CallLogger {
 	 * <p>
 	 * Subclasses typically override the {@link #init(BeanStore)} method when using this constructor.
 	 *
-	 * @param beanStore The bean store containing injectable beans for this logger.
+	 * @param beanStore The bean store containing injectable beans for this logger. Must not be <jk>null</jk>.
 	 */
 	public CallLogger(BeanStore beanStore) {
 		var builder = init(beanStore);
@@ -495,7 +495,7 @@ public class CallLogger {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder for this logger.
+	 * @param builder The builder for this logger. Must not be <jk>null</jk>.
 	 */
 	public CallLogger(Builder builder) {
 		this.logger = builder.logger;
@@ -715,7 +715,7 @@ public class CallLogger {
 	 * <p>
 	 * Subclasses should override this method to make modifications to the builder used to create this logger.
 	 *
-	 * @param beanStore The bean store containing injectable beans for this logger.
+	 * @param beanStore The bean store containing injectable beans for this logger. Must not be <jk>null</jk>.
 	 * @return A new builder object.
 	 */
 	protected Builder init(BeanStore beanStore) {

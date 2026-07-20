@@ -68,6 +68,7 @@ public class RdfParserSession extends ReaderParserSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RdfParser ctx) {
 			super(ctx);
@@ -85,6 +86,7 @@ public class RdfParserSession extends ReaderParserSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(RdfParser ctx) {
@@ -104,6 +106,7 @@ public class RdfParserSession extends ReaderParserSession {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected RdfParserSession(Builder builder) {
 		super(builder);

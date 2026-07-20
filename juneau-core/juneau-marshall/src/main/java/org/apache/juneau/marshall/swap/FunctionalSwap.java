@@ -60,7 +60,9 @@ public class FunctionalSwap<T,S> extends ObjectSwap<T,S> {
 	 * @param normalClass The normal class.
 	 * @param swappedClass The swapped class.
 	 * @param swapFunction The function for converting from normal to swapped.
-	 * @param unswapFunction The function for converting swapped to normal.
+	 * @param unswapFunction
+	 * 	The function for converting swapped to normal.
+	 * 	Can be <jk>null</jk> if this swap is serialize-only (calling {@link #unswap(MarshallingSession, Object, ClassMeta, String)} then throws a {@link org.apache.juneau.marshall.parser.ParseException}).
 	 */
 	public FunctionalSwap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 		super(normalClass, swappedClass);

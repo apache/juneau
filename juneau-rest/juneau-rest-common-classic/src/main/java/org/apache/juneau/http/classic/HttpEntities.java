@@ -156,7 +156,7 @@ public class HttpEntities {
 	 * 	The serializer to use to serialize the POJO.
 	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
 	 * @param schema
-	 * 	Optional HTTP-part schema for providing instructionst to the serializer on the format of the entity.
+	 * 	Optional HTTP-part schema for providing instructions to the serializer on the format of the entity.
 	 * @return A new {@link SerializedEntity} object.
 	 */
 	public static final SerializedEntity serializedEntity(Object content, Serializer serializer, HttpPartSchema schema) {
@@ -188,7 +188,7 @@ public class HttpEntities {
 	 * 	The serializer to use to serialize the POJO.
 	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
 	 * @param schema
-	 * 	Optional HTTP-part schema for providing instructionst to the serializer on the format of the entity.
+	 * 	Optional HTTP-part schema for providing instructions to the serializer on the format of the entity.
 	 * @return A new {@link SerializedEntity} object.
 	 */
 	public static final SerializedEntity serializedEntity(Supplier<?> content, Serializer serializer, HttpPartSchema schema) {

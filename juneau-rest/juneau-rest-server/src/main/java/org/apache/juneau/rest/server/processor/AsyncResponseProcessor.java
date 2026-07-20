@@ -316,6 +316,7 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 	 * response itself.
 	 *
 	 * @param opSession The session to check.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return {@code true} if {@link #ATTR_ASYNC_DISPATCH_OWNED} has been set.
 	 */
 	public static boolean isAsyncDispatchOwned(RestOpSession opSession) {
@@ -330,6 +331,7 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 	 * {@link RestOpSession} may not be available.
 	 *
 	 * @param req The servlet request.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return {@code true} if {@link #ATTR_ASYNC_DISPATCH_OWNED} has been set.
 	 */
 	public static boolean isAsyncDispatchOwned(HttpServletRequest req) {

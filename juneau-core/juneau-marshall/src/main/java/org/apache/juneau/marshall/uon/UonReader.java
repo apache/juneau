@@ -67,6 +67,7 @@ public class UonReader extends ParserReader {
 	 * Constructor.
 	 *
 	 * @param pipe The parser input.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param decodeChars Whether the input is URL-encoded.
 	 * @throws IOException Thrown by underlying stream.
 	 */

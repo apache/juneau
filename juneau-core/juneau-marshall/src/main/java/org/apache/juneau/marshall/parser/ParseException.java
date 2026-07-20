@@ -51,7 +51,8 @@ public class ParseException extends BasicRuntimeException {
 	 * Otherwise we create a new {@link ParseException}.
 	 *
 	 * @param e The exception being wrapped or unwrapped.
-	 * @return A new {@link SerializeException}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The specified throwable wrapped or unwrapped as a {@link ParseException} (may be the same instance if it already was one).
 	 */
 	public static ParseException create(Throwable e) {
 		if (e instanceof InvocationTargetException e2)
@@ -96,7 +97,9 @@ public class ParseException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param session The parser session.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param causedBy The inner exception.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public ParseException(ParserSession session, Exception causedBy) {
 		super(causedBy, getMessage(session, causedBy.getMessage()));
@@ -106,6 +109,7 @@ public class ParseException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param session The parser session.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -117,7 +121,9 @@ public class ParseException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param session The parser session.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param causedBy The cause of this exception.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -139,6 +145,7 @@ public class ParseException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param causedBy The cause of this exception.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ParseException(Throwable causedBy) {
 		super(causedBy);
@@ -148,6 +155,7 @@ public class ParseException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param causedBy The cause of this exception.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */

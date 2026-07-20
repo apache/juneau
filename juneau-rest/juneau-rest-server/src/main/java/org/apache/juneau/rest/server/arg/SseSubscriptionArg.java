@@ -34,7 +34,7 @@ public class SseSubscriptionArg extends SimpleRestOperationArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new arg, or {@code null} if not applicable.
 	 */
 	public static SseSubscriptionArg create(ParameterInfo paramInfo) {

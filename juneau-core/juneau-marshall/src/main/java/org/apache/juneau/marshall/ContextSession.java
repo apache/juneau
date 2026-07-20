@@ -89,8 +89,9 @@ public abstract class ContextSession {
 		 *
 		 * @param <T> The target type.
 		 * @param value The value to convert.
+		 * 	<br>Can be <jk>null</jk>.
 		 * @param type The target class.
-		 * @return The converted value.
+		 * @return The converted value, or <jk>null</jk> if the input value was <jk>null</jk>.
 		 */
 		protected static <T> T cvt(Object value, Class<T> type) {
 			return BasicConverter.INSTANCE.to(value, null, null, type);
@@ -250,7 +251,7 @@ public abstract class ContextSession {
 	 * @param msg The warning message.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param args Optional {@link MessageFormat}-style arguments.
-	 * 	<br>Cannot contain <jk>null</jk> values.
+	 * 	<br>Cannot be <jk>null</jk> (individual values may be <jk>null</jk>).
 	 */
 	public void addWarning(String msg, Object...args) {
 		assertArgsNotNull(ARG_msg, msg, ARG_args, args);
@@ -286,7 +287,7 @@ public abstract class ContextSession {
 	/**
 	 * Returns the warnings that occurred in this session.
 	 *
-	 * @return The warnings that occurred in this session, or <jk>null</jk> if no warnings occurred.
+	 * @return The warnings that occurred in this session, or an empty list if no warnings occurred.
 	 */
 	public final List<String> getWarnings() { return warnings == null ? emptyList() : warnings; }
 

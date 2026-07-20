@@ -136,7 +136,7 @@ public class OAuthFlows extends OpenApiElement {
 	 * Bean property getter:  <property>authorizationCode</property>.
 	 *
 	 * <p>
-	 * Describes the type of items in the array.
+	 * Configuration for the OAuth Authorization Code flow.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -146,7 +146,7 @@ public class OAuthFlows extends OpenApiElement {
 	 * Bean property getter:  <property>clientCredentials</property>.
 	 *
 	 * <p>
-	 * Describes the type of items in the array.
+	 * Configuration for the OAuth Client Credentials flow.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -156,7 +156,7 @@ public class OAuthFlows extends OpenApiElement {
 	 * Bean property getter:  <property>implicit</property>.
 	 *
 	 * <p>
-	 * Describes the type of items in the array.
+	 * Configuration for the OAuth Implicit flow.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -166,7 +166,7 @@ public class OAuthFlows extends OpenApiElement {
 	 * Bean property getter:  <property>password</property>.
 	 *
 	 * <p>
-	 * Describes the type of items in the array.
+	 * Configuration for the OAuth Resource Owner Password flow.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -204,11 +204,10 @@ public class OAuthFlows extends OpenApiElement {
 	 * Bean property setter:  <property>authorizationCode</property>.
 	 *
 	 * <p>
-	 * Describes the type of items in the array.
+	 * Configuration for the OAuth Authorization Code flow.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -218,14 +217,13 @@ public class OAuthFlows extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>items</property>.
+	 * Bean property setter:  <property>clientCredentials</property>.
 	 *
 	 * <p>
-	 * Describes the type of items in the array.
+	 * Configuration for the OAuth Client Credentials flow.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -235,14 +233,13 @@ public class OAuthFlows extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>items</property>.
+	 * Bean property setter:  <property>implicit</property>.
 	 *
 	 * <p>
-	 * Describes the type of items in the array.
+	 * Configuration for the OAuth Implicit flow.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -252,14 +249,13 @@ public class OAuthFlows extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>items</property>.
+	 * Bean property setter:  <property>password</property>.
 	 *
 	 * <p>
-	 * Describes the type of items in the array.
+	 * Configuration for the OAuth Resource Owner Password flow.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */

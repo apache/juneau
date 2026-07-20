@@ -73,7 +73,7 @@ public class BasicStaticFiles implements StaticFiles {
 	/**
 	 * Constructor.
 	 *
-	 * @param beanStore The bean store containing injectable beans for this logger.
+	 * @param beanStore The bean store containing injectable beans for this static files object. Must not be <jk>null</jk>.
 	 */
 	public BasicStaticFiles(BeanStore beanStore) {
 		// @formatter:off
@@ -93,7 +93,7 @@ public class BasicStaticFiles implements StaticFiles {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder object.
+	 * @param builder The builder object. Must not be <jk>null</jk>.
 	 */
 	public BasicStaticFiles(StaticFiles.Builder builder) {
 		this.headers = builder.headers.toArray(new HttpHeader[builder.headers.size()]);
@@ -143,7 +143,7 @@ public class BasicStaticFiles implements StaticFiles {
 	 *
 	 * @param path The path to resolve to a static file.
 	 * @param locale Optional locale.
-	 * @return The resource, or <jk>null</jk> if not found.
+	 * @return The resource, or an empty {@link Optional} if not found.
 	 */
 	@Override /* Overridden from StaticFiles */
 	public Optional<HttpResource> resolve(String path, Locale locale) {

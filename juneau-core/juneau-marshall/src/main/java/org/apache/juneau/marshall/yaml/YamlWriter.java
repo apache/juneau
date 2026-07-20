@@ -83,6 +83,7 @@ public class YamlWriter extends SerializerWriter {
 	 * A colon-space separator is always appended after the key.
 	 *
 	 * @param s The key name.
+	 * 	<br>Can be <jk>null</jk> (written as the literal <c>null</c>).
 	 * @return This object.
 	 */
 	public YamlWriter key(String s) {
@@ -95,6 +96,7 @@ public class YamlWriter extends SerializerWriter {
 	 * Writes just the key name portion (with quoting if necessary) but without any separator.
 	 *
 	 * @param s The key name.
+	 * 	<br>Can be <jk>null</jk> (written as the literal <c>null</c>).
 	 * @return This object.
 	 */
 	public YamlWriter keyName(String s) {
@@ -120,6 +122,7 @@ public class YamlWriter extends SerializerWriter {
 	 * or contains newlines), it will be double-quoted with proper YAML escaping.
 	 *
 	 * @param s The string value.
+	 * 	<br>Can be <jk>null</jk> (written as the literal <c>null</c>).
 	 * @return This object.
 	 */
 	@SuppressWarnings({
@@ -146,6 +149,7 @@ public class YamlWriter extends SerializerWriter {
 	 * Resolves the URI and writes it as a double-quoted YAML string.
 	 *
 	 * @param uri The URI to append to the output.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public YamlWriter uriValue(Object uri) {

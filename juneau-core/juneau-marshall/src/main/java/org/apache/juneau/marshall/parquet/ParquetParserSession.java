@@ -89,6 +89,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		 * Constructor.
 		 *
 		 * @param ctx The parser context.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ParquetParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
@@ -105,6 +106,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * Creates a new session builder.
 	 *
 	 * @param ctx The parser context.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(ParquetParser ctx) {

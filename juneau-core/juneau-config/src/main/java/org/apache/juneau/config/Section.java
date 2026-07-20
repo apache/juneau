@@ -60,7 +60,9 @@ public class Section {
 	 * Shortcut for calling <code>asBean(sectionName, c, <jk>false</jk>)</code>.
 	 *
 	 * @param <T> The bean class to create.
-	 * @param c The bean class to create.
+	 * @param c
+	 * 	The bean class to create.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return A new bean instance, or {@link Optional#empty()} if this section does not exist.
 	 * @throws ParseException Malformed input encountered.
 	 */
@@ -100,11 +102,13 @@ public class Section {
 	 * </p>
 	 *
 	 * @param <T> The bean class to create.
-	 * @param c The bean class to create.
+	 * @param c
+	 * 	The bean class to create.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param ignoreUnknownProperties
 	 * 	If <jk>false</jk>, throws a {@link ParseException} if the section contains an entry that isn't a bean property
 	 * 	name.
-	 * @return A new bean instance, or <jk>null</jk> if this section doesn't exist.
+	 * @return A new bean instance, or an empty {@link Optional} if this section doesn't exist.
 	 * @throws ParseException Unknown property was encountered in section.
 	 */
 	public <T> Optional<T> asBean(Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
@@ -186,8 +190,11 @@ public class Section {
 	 * </ul>
 	 *
 	 * @param <T> The proxy interface class.
-	 * @param c The proxy interface class.
+	 * @param c
+	 * 	The proxy interface class.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The proxy interface.
+	 * @throws IllegalArgumentException If the class is not an interface.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast to T for interface proxy
@@ -239,13 +246,14 @@ public class Section {
 	/**
 	 * Copies the entries in this section to the specified bean by calling the public setters on that bean.
 	 *
-	 * @param bean The bean to set the properties on.
+	 * @param bean
+	 * 	The bean to set the properties on.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param ignoreUnknownProperties
 	 * 	If <jk>true</jk>, don't throw an {@link IllegalArgumentException} if this section contains a key that doesn't
 	 * 	correspond to a setter method.
-	 * @return An object map of the changes made to the bean.
+	 * @return This object.
 	 * @throws ParseException If parser was not set on this config file or invalid properties were found in the section.
-	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Section writeToBean(Object bean, boolean ignoreUnknownProperties) throws ParseException {
 		assertArgNotNull(ARG_bean, bean);

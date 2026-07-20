@@ -1587,7 +1587,7 @@ public class SchemaAnnotation {
 	 * Converts the specified <ja>@Schema</ja> annotation into a generic map.
 	 *
 	 * @param a The annotation instance.  Can be <jk>null</jk>.
-	 * @return The schema converted to a map, or and empty map if the annotation was null.
+	 * @return The schema converted to a map, or an empty map if the annotation was null.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	@SuppressWarnings({
@@ -1690,7 +1690,7 @@ public class SchemaAnnotation {
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
-	 * @param a The annotation to check.
+	 * @param a The annotation to check. Can be <jk>null</jk> (returns <jk>true</jk>).
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(Schema a) {

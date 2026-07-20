@@ -156,7 +156,7 @@ public class Server extends OpenApiElement {
 	 * Bean property getter:  <property>url</property>.
 	 *
 	 * <p>
-	 * The URL pointing to the contact information.
+	 * A URL to the target host.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */

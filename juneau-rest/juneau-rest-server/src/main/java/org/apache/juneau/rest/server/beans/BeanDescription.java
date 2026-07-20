@@ -58,6 +58,7 @@ public class BeanDescription {
 		 *
 		 * @param name The bean property name.
 		 * @param type The bean property class type.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public BeanPropertyDescription(String name, ClassMeta<?> type) {
 			this.name = name;
@@ -69,6 +70,7 @@ public class BeanDescription {
 	 * Static creator.
 	 *
 	 * @param c The bean being described.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return A new bean description.
 	 */
 	public static BeanDescription of(Class<?> c) {
@@ -85,6 +87,7 @@ public class BeanDescription {
 	 * Constructor
 	 *
 	 * @param c The bean class type.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public BeanDescription(Class<?> c) {
 		type = c.getName();

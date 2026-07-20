@@ -177,9 +177,9 @@ public class Thrown extends BasicCsvHeader {
 	}
 
 	/**
-	 * Returns the class name portion of the header.
+	 * Returns the parts in this header.
 	 *
-	 * @return The class name portion of the header, or <jk>null</jk> if not there.
+	 * @return The parts in this header, or an empty {@link Optional} if the header value was <jk>null</jk>.
 	 */
 	public Optional<List<Part>> asParts() {
 		return o(value);

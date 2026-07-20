@@ -711,7 +711,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * <p>
 	 * See {@link org.apache.juneau.rest.mock.classic.MockRestClient.Builder#pathVars(Map)} for an example.
 	 *
-	 * @param pathVars The
+	 * @param pathVars The parent path variables to add. Can be <jk>null</jk>.
 	 * @return This object.
 	 * @see org.apache.juneau.rest.mock.classic.MockRestClient.Builder#pathVars(Map)
 	 */
@@ -840,7 +840,7 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	/**
-	 * Adds the specified role on this request.
+	 * Sets the specified role on this request.
 	 *
 	 * @param role The role to add to this request (e.g. <js>"ROLE_ADMIN"</js>).
 	 * @return This object.
@@ -851,7 +851,7 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	/**
-	 * Adds the specified roles on this request.
+	 * Sets the specified roles on this request.
 	 *
 	 * @param roles The roles to add to this request (e.g. <js>"ROLE_ADMIN"</js>).
 	 * @return This object.

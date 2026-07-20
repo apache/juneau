@@ -41,7 +41,7 @@ public class MarshalledConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param vr The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations. Must not be <jk>null</jk>.
 		 */
 		public Applier(VarResolverSession vr) {
 			super(MarshalledConfig.class, MarshallingContext.Builder.class, vr);

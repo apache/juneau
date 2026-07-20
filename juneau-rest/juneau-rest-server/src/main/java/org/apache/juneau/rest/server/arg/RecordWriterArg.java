@@ -66,7 +66,7 @@ public class RecordWriterArg extends SimpleRestOperationArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new {@link RecordWriterArg}, or <jk>null</jk> if the parameter type is not
 	 * 	{@link RecordWriter} or a subtype (other than {@link TokenWriter} &mdash; that case is
 	 * 	handled by {@link TokenWriterArg}).

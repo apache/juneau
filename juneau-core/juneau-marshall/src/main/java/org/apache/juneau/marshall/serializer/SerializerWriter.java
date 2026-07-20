@@ -67,6 +67,7 @@ public class SerializerWriter extends Writer {
 	 * Copy Constructor
 	 *
 	 * @param w Writer being copied.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public SerializerWriter(SerializerWriter w) {
 		this.out = w.out;
@@ -79,6 +80,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * @param out The writer being wrapped.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param useWhitespace
 	 * 	If <jk>true</jk>, calling {@link #cr(int)} will create an indentation and calling {@link #s()} will write a
 	 * 	space character.
@@ -110,6 +112,7 @@ public class SerializerWriter extends Writer {
 	 * Appends the specified characters to this writer.
 	 *
 	 * @param value The characters to append to this writer.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SerializerWriter append(char[] value) {
@@ -141,9 +144,10 @@ public class SerializerWriter extends Writer {
 	}
 
 	/**
-	 * Writes the specified text to the writer if it isn't <jk>null</jk>.
+	 * Writes the string representation of the specified object to the writer.
 	 *
-	 * @param value The text to write.
+	 * @param value The object to write.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SerializerWriter append(Object value) {
@@ -155,6 +159,7 @@ public class SerializerWriter extends Writer {
 	 * Writes the specified text to the writer if it isn't <jk>null</jk>.
 	 *
 	 * @param value The text to write.
+	 * 	<br>Can be <jk>null</jk> (ignored).
 	 * @return This object.
 	 */
 	public SerializerWriter append(String value) {
@@ -224,6 +229,7 @@ public class SerializerWriter extends Writer {
 	 * session.
 	 *
 	 * @param value The URI to serialize.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SerializerWriter appendUri(Object value) {
@@ -378,6 +384,7 @@ public class SerializerWriter extends Writer {
 	 * Writes the specified string to the writer.
 	 *
 	 * @param value The string to write.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SerializerWriter w(String value) {

@@ -41,7 +41,7 @@ public class UrlPath {
 	/**
 	 * Creates a new parsed {@link UrlPath} object from the specified string.
 	 *
-	 * @param path The path to create.  Must be <jk>null</jk> or or start with '/' per HttpServletRequest.getPathInfo().
+	 * @param path The path to create.  Must be <jk>null</jk> or start with '/' per HttpServletRequest.getPathInfo().
 	 * @return A new {@link UrlPath} object.
 	 */
 	public static UrlPath of(String path) {
@@ -72,7 +72,7 @@ public class UrlPath {
 	 * <p>
 	 * For example, given the path <js>"/foo/bar.txt"</js>, this returns <js>"bar.txt"</js>.
 	 *
-	 * @return The filename portion of the path, or <jk>null</jk> if the path doesn't match a file name.
+	 * @return The filename portion of the path, or an empty {@link Optional} if the path doesn't match a file name.
 	 */
 	public Optional<String> getFileName() {
 		if (parts.length == 0)
@@ -93,7 +93,7 @@ public class UrlPath {
 	/**
 	 * Returns the raw path passed into this object.
 	 *
-	 * @return The raw path passed into this object.
+	 * @return The raw path passed into this object, or <jk>null</jk> if the path was <jk>null</jk>.
 	 */
 	public String getPath() { return path; }
 

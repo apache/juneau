@@ -45,7 +45,7 @@ public class ParserConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param vr The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations. Must not be <jk>null</jk>.
 		 */
 		public InputStreamParserApply(VarResolverSession vr) {
 			super(ParserConfig.class, InputStreamParser.Builder.class, vr);
@@ -71,7 +71,7 @@ public class ParserConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param vr The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations. Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(ParserConfig.class, Parser.Builder.class, vr);
@@ -101,7 +101,7 @@ public class ParserConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param vr The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations. Must not be <jk>null</jk>.
 		 */
 		public ReaderParserApply(VarResolverSession vr) {
 			super(ParserConfig.class, ReaderParser.Builder.class, vr);

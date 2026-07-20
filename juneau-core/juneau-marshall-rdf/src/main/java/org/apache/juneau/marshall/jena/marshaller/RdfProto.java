@@ -116,7 +116,9 @@ public class RdfProto extends StreamMarshaller {
 	 * Constructor with serializer and parser.
 	 *
 	 * @param s The serializer to use.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param p The parser to use.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public RdfProto(RdfProtoSerializer s, RdfProtoParser p) {
 		super(s, p);

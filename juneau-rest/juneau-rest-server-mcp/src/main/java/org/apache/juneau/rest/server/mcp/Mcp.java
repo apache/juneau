@@ -47,9 +47,9 @@ public final class Mcp {
 	/**
 	 * Dispatches a JSON-RPC request through the shared {@link McpDispatcher} instance.
 	 *
-	 * @param req JSON-RPC request envelope.
-	 * @param config Server config.
-	 * @param ctx Per-request bean store.
+	 * @param req JSON-RPC request envelope. May be {@code null} (treated as an invalid request).
+	 * @param config Server config. Never {@code null}.
+	 * @param ctx Per-request bean store. Never {@code null}.
 	 * @return The response, or {@code null} for notification requests.
 	 */
 	public static JsonRpcResponse handle(JsonRpcRequest req, McpServerConfig config, BeanStore ctx) {

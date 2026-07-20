@@ -126,7 +126,9 @@ public class RdfJson extends CharMarshaller {
 	 * Constructor with serializer and parser.
 	 *
 	 * @param s The serializer to use.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param p The parser to use.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public RdfJson(RdfJsonSerializer s, RdfJsonParser p) {
 		super(s, p);

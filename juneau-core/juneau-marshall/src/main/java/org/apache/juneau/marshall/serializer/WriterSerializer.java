@@ -403,6 +403,7 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 	 *
 	 * @param builder
 	 * 	The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected WriterSerializer(Builder<?> builder) {
 		super(builder);
@@ -528,7 +529,7 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 	protected final Charset getStreamCharset() { return streamCharset; }
 
 	/**
-	 * Trim strings.
+	 * Use whitespace.
 	 *
 	 * @see Builder#useWhitespace()
 	 * @return

@@ -308,6 +308,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	 * Converts the specified output target object to an {@link XmlWriter}.
 	 *
 	 * @param out The output target object.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The output target object wrapped in an {@link XmlWriter}.
 	 */
 	public final XmlWriter getXmlWriter(SerializerPipe out) {
@@ -814,17 +815,25 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	 * Workhorse method.
 	 *
 	 * @param out The writer to send the output to.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param o The object to serialize.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param eType The expected type if this is a bean property value being serialized.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param keyName The property name or map key name.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param elementName The root element name.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param elementNamespace The namespace of the element.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param addNamespaceUris Flag indicating that namespace URIs need to be added.
 	 * @param format The format to serialize the output to.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param isMixedOrText We're serializing mixed content, so don't use whitespace.
 	 * @param preserveWhitespace
 	 * 	<jk>true</jk> if we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
 	 * @param pMeta The bean property metadata if this is a bean property being serialized.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The same writer passed in so that calls to the writer can be chained.
 	 * @throws SerializeException General serialization error occurred.
 	 */

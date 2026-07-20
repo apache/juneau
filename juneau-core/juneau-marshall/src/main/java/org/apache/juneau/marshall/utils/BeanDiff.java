@@ -185,8 +185,8 @@ public class BeanDiff {
 	 *
 	 * @param <T> The bean types.
 	 * @param bc The bean context to use for comparing beans.
-	 * @param first The first bean to compare.
-	 * @param second The second bean to compare.
+	 * @param first The first bean to compare.  Can be <jk>null</jk>.
+	 * @param second The second bean to compare.  Can be <jk>null</jk>.
 	 * @param include
 	 * 	Optional properties to include in the comparison.
 	 * 	<br>If <jk>null</jk>, all properties are included.

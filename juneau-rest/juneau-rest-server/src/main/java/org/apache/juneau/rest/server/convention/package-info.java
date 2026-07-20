@@ -33,7 +33,7 @@
  * 		{@code /robots.txt} (deny-all by default) and {@code /sitemap.xml} (empty
  * 		{@code <urlset>} by default); both builder-driven.
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.convention.VersionMixin} —
- * 		{@code /version}, {@code /info}, and {@code /about} returning the same JSON metadata
+ * 		{@code /version} (SVL-configurable) returning a JSON metadata
  * 		map; defaults read {@code MANIFEST.MF} + {@code git.properties} from the classpath.
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.convention.WellKnownMixin} —
  * 		{@code /.well-known/security.txt} per RFC 9116; 404 unless explicitly configured.

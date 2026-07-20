@@ -54,7 +54,7 @@ public class BeanConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param vr The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations. Must not be <jk>null</jk>.
 		 */
 		public Applier(VarResolverSession vr) {
 			super(BeanConfig.class, MarshallingContext.Builder.class, vr);

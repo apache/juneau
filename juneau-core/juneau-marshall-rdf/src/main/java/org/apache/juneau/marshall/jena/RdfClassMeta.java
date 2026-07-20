@@ -44,6 +44,7 @@ public class RdfClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
+	 * 	Must not be <jk>null</jk>.
 	 * @param mp RDF metadata provider (for finding information about other artifacts).
 	 */
 	public RdfClassMeta(ClassMeta<?> cm, RdfMetaProvider mp) {
@@ -60,7 +61,7 @@ public class RdfClassMeta extends ExtendedClassMeta {
 	/**
 	 * Returns the {@link Rdf#collectionFormat() @Rdf(collectionFormat)} annotation defined on the class.
 	 *
-	 * @return The value of the annotation, or <jk>null</jk> if annotation is not
+	 * @return The value of the annotation, or {@link RdfCollectionFormat#DEFAULT} if the annotation is not
 	 * specified.
 	 */
 	protected RdfCollectionFormat getCollectionFormat() { return collectionFormat; }

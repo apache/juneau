@@ -52,9 +52,15 @@ public final class ProfileMerge {
 	 *
 	 * @param store The store the throwaway parse maps are associated with (used only for parse context; never written).
 	 * @param baseName The base config name (for parse diagnostics).
-	 * @param baseContents The raw base config contents (format-native).
-	 * @param profiles Ordered profile overlays (activation order); each is a raw format-native contents string.  May be empty.
-	 * @param format The config format used to parse every input.
+	 * @param baseContents
+	 * 	The raw base config contents (format-native).
+	 * 	<br>Can be <jk>null</jk> (treated as empty contents).
+	 * @param profiles
+	 * 	Ordered profile overlays (activation order); each is a raw format-native contents string.
+	 * 	<br>May be empty, but must not be <jk>null</jk>.
+	 * @param format
+	 * 	The config format used to parse every input.
+	 * 	<br>Can be <jk>null</jk> (defaults to {@link IniConfigFormat}).
 	 * @return The merged contents as an internal-INI string.
 	 * @throws IOException If any input fails to parse.
 	 */

@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.*;
  * Content stores require two methods to be implemented:
  * <ul class='javatree'>
  * 	<li class='jm'>{@link #read(String)} - Retrieve a config file.
- * 	<li class='jm'>{@link #write(String,String,String)} - ConfigStore a config file.
+ * 	<li class='jm'>{@link #write(String,String,String)} - Store a config file.
  * </ul>
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -93,6 +93,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected ConfigStore(Builder builder) {
 		super(builder);
@@ -123,7 +124,9 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * Returns a map file containing the parsed contents of a configuration.
 	 *
 	 * @param name The configuration name.
-	 * @param format The configuration format.
+	 * @param format
+	 * 	The configuration format.
+	 * 	<br>Can be <jk>null</jk> (defaults to {@link IniConfigFormat}).
 	 * @return The parsed configuration.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -178,7 +181,9 @@ public abstract class ConfigStore extends Context implements Closeable {
 	/**
 	 * Registers a new listener on this store.
 	 *
-	 * @param name The configuration name to listen for.
+	 * @param name
+	 * 	The configuration name to listen for.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param l The new listener.
 	 * @return This object.
 	 */
@@ -192,7 +197,9 @@ public abstract class ConfigStore extends Context implements Closeable {
 	/**
 	 * Unregisters a listener from this store.
 	 *
-	 * @param name The configuration name to listen for.
+	 * @param name
+	 * 	The configuration name to listen for.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param l The listener to unregister.
 	 * @return This object.
 	 */
@@ -210,7 +217,9 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * <p>
 	 * Triggers calls to {@link ConfigStoreListener#onChange(String)} on all registered listeners.
 	 *
-	 * @param name The config name (e.g. the filename without the extension).
+	 * @param name
+	 * 	The config name (e.g. the filename without the extension).
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param contents The new contents.
 	 * @return This object.
 	 */
@@ -225,7 +234,9 @@ public abstract class ConfigStore extends Context implements Closeable {
 	/**
 	 * Convenience method for updating the contents of a file with lines.
 	 *
-	 * @param name The config name (e.g. the filename without the extension).
+	 * @param name
+	 * 	The config name (e.g. the filename without the extension).
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param contentLines The new contents.
 	 * @return This object.
 	 */

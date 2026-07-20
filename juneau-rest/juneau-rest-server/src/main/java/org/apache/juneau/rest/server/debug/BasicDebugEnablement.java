@@ -52,7 +52,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 	/**
 	 * Constructor.
 	 *
-	 * @param beanStore The bean store containing injectable beans for this enablement.
+	 * @param beanStore The bean store containing injectable beans for this enablement.  Must not be <jk>null</jk>.
 	 */
 	public BasicDebugEnablement(BeanStore beanStore) {
 		super(beanStore);

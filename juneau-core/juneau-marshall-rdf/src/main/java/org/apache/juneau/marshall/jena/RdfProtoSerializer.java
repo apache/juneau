@@ -80,6 +80,7 @@ public class RdfProtoSerializer extends RdfStreamSerializer {
 	 * Constructor.
 	 *
 	 * @param builder The builder.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public RdfProtoSerializer(RdfStreamSerializer.Builder<?> builder) {
 		super(builder);

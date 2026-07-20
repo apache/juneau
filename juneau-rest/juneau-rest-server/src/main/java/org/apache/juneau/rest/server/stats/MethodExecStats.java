@@ -85,7 +85,7 @@ public class MethodExecStats {
 		/**
 		 * Overrides the bean returned by the {@link #build()} method with a pre-instantiated instance.
 		 *
-		 * @param value The setting value.
+		 * @param value The setting value. Can be <jk>null</jk> (the {@link #build()} method instantiates the {@link #type(Class) type} instead).
 		 * @return This object.
 		 */
 		public Builder impl(Object value) {
@@ -118,7 +118,7 @@ public class MethodExecStats {
 		/**
 		 * Overrides the bean type produced by the {@link #build()} method.
 		 *
-		 * @param value The setting value.
+		 * @param value The setting value. Can be <jk>null</jk> (defaults to {@link MethodExecStats}).
 		 * @return This object.
 		 */
 		@SuppressWarnings({
@@ -173,7 +173,7 @@ public class MethodExecStats {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder for this object.
+	 * @param builder The builder for this object. Must not be <jk>null</jk>.
 	 */
 	protected MethodExecStats(Builder builder) {
 		this.guid = new Random().nextLong();
@@ -245,7 +245,7 @@ public class MethodExecStats {
 	/**
 	 * Returns the max execution time.
 	 *
-	 * @return The average execution time in milliseconds.
+	 * @return The max execution time in milliseconds.
 	 */
 	public int getMaxTime() { return maxTime.get(); }
 
@@ -257,9 +257,9 @@ public class MethodExecStats {
 	public Method getMethod() { return method; }
 
 	/**
-	 * Returns the max execution time.
+	 * Returns the minimum execution time.
 	 *
-	 * @return The average execution time in milliseconds.
+	 * @return The minimum execution time in milliseconds.
 	 */
 	public int getMinTime() { 
 		int value = minTime.get();

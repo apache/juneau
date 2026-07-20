@@ -86,7 +86,7 @@ public class LogConfig {
 	/**
 	 * The default logging level for the console.
 	 *
-	 * @param consoleLevel The logging level.
+	 * @param consoleLevel The logging level.  Can be <jk>null</jk> (uses the <js>"Logging/consoleLevel"</js> configuration value).
 	 * @return This object (for method chaining).
 	 */
 	public LogConfig consoleLevel(Level consoleLevel) {
@@ -127,7 +127,7 @@ public class LogConfig {
 	/**
 	 * The default logging level for the log file.
 	 *
-	 * @param fileLevel The logging level.
+	 * @param fileLevel The logging level.  Can be <jk>null</jk> (uses the <js>"Logging/fileLevel"</js> configuration value).
 	 * @return This object (for method chaining).
 	 */
 	public LogConfig fileLevel(Level fileLevel) {
@@ -147,7 +147,7 @@ public class LogConfig {
 	 * </ul>
 	 *
 	 *
-	 * @param formatter The log entry formatter.
+	 * @param formatter The log entry formatter.  Can be <jk>null</jk> (a {@link LogEntryFormatter} is built from the configuration).
 	 * @return This object (for method chaining).
 	 * @see LogEntryFormatter
 	 */
@@ -171,7 +171,7 @@ public class LogConfig {
 	/**
 	 * Default logging levels for loggers.
 	 *
-	 * @param levels A map of logger names to logger levels.
+	 * @param levels A map of logger names to logger levels.  Must not be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public LogConfig levels(Map<String,Level> levels) {
@@ -197,7 +197,7 @@ public class LogConfig {
 	 * This overrides the configuration value <js>"Logging/logDir"</js>.
 	 * If not specified, uses the JVM working directory.
 	 *
-	 * @param logDir The log directory location as a path relative to the working directory.
+	 * @param logDir The log directory location as a path relative to the working directory.  Can be <jk>null</jk> (uses the <js>"Logging/logDir"</js> configuration value).
 	 * @return This object (for method chaining).
 	 */
 	public LogConfig logDir(String logDir) {
@@ -212,7 +212,7 @@ public class LogConfig {
 	 * This overrides the configuration value <js>"Logging/logFile"</js>.
 	 * If not specified, no file system logging will be used.
 	 *
-	 * @param logFile The log file.
+	 * @param logFile The log file.  Can be <jk>null</jk> (uses the <js>"Logging/logFile"</js> configuration value; if unset, no file logging is used).
 	 * @return This object (for method chaining).
 	 */
 	public LogConfig logFile(String logFile) {

@@ -42,8 +42,8 @@ public class ByteArrayResource extends BasicResource {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.
-	 * @param contents The entity contents.
+	 * @param contentType The entity content type.  Can be <jk>null</jk>.
+	 * @param contents The entity contents.  Can be <jk>null</jk>.
 	 */
 	public ByteArrayResource(ContentType contentType, byte[] contents) {
 		super(new ByteArrayEntity(contentType, contents));

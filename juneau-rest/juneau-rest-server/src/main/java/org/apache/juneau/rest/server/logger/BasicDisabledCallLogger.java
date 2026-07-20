@@ -30,7 +30,7 @@ public class BasicDisabledCallLogger extends CallLogger {
 	/**
 	 * Constructor.
 	 *
-	 * @param beanStore The bean store containing injectable beans for this logger.
+	 * @param beanStore The bean store containing injectable beans for this logger. Must not be <jk>null</jk>.
 	 */
 	public BasicDisabledCallLogger(BeanStore beanStore) {
 		super(beanStore);

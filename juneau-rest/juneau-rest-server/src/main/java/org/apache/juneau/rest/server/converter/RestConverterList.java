@@ -62,6 +62,7 @@ public class RestConverterList {
 		 * Appends the specified rest converter classes to the list.
 		 *
 		 * @param values The values to add.
+		 * 	<br>Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		@SuppressWarnings({
@@ -77,6 +78,7 @@ public class RestConverterList {
 		 * Appends the specified rest converter objects to the list.
 		 *
 		 * @param values The values to add.
+		 * 	<br>Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder append(RestConverter...values) {
@@ -111,6 +113,7 @@ public class RestConverterList {
 	 * Constructor.
 	 *
 	 * @param builder The builder containing the contents for this list.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	protected RestConverterList(Builder builder) {
 		// @formatter:off

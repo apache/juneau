@@ -109,8 +109,8 @@ public class RestUtils {
 	/**
 	 * Identical to {@link HttpServletRequest#getPathInfo()} but doesn't decode encoded characters.
 	 *
-	 * @param req The HTTP request
-	 * @return The un-decoded path info.
+	 * @param req The HTTP request. Must not be <jk>null</jk>.
+	 * @return The un-decoded path info, or <jk>null</jk> if there is no extra path information.
 	 */
 	public static String getPathInfoUndecoded(HttpServletRequest req) {
 		var requestURI = req.getRequestURI();
@@ -163,21 +163,21 @@ public class RestUtils {
 	 * Parses a URL query string or form-data content from a string.
 	 *
 	 * <p>
-	 * Parses key-value pairs from a query string format (e.g., <c>key1=value1&key2=value2</c>).
+	 * Parses key-value pairs from a query string format (e.g., <c>key1=value1&amp;key2=value2</c>).
 	 * Supports multiple values for the same key, which are collected into a <jk>List</jk>.
 	 *
 	 * <p>
 	 * Special cases:
 	 * <ul>
 	 * 	<li>Empty or <jk>null</jk> strings return an empty map</li>
-	 * 	<li>Keys without values (e.g., <c>key1&key2</c>) are stored with <jk>null</jk> values</li>
+	 * 	<li>Keys without values (e.g., <c>key1&amp;key2</c>) are stored with <jk>null</jk> values</li>
 	 * 	<li>Keys with empty values (e.g., <c>key=</c>) are stored with empty strings</li>
 	 * 	<li>Multiple occurrences of the same key append values to the list</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Map&lt;String,List&lt;String&gt;&gt; <jv>params</jv> = parseQuery(<js>"f1=v1&f2=v2&f1=v3"</js>);
+	 * 	Map&lt;String,List&lt;String&gt;&gt; <jv>params</jv> = parseQuery(<js>"f1=v1&amp;f2=v2&amp;f1=v3"</js>);
 	 * 	<jv>params</jv>.get(<js>"f1"</js>);  <jc>// Returns [v1, v3]</jc>
 	 * 	<jv>params</jv>.get(<js>"f2"</js>);  <jc>// Returns [v2]</jc>
 	 * </p>
@@ -194,14 +194,14 @@ public class RestUtils {
 	 * Parses a URL query string or form-data content from a reader.
 	 *
 	 * <p>
-	 * Parses key-value pairs from a query string format (e.g., <c>key1=value1&key2=value2</c>).
+	 * Parses key-value pairs from a query string format (e.g., <c>key1=value1&amp;key2=value2</c>).
 	 * Supports multiple values for the same key, which are collected into a <jk>List</jk>.
 	 *
 	 * <p>
 	 * Special cases:
 	 * <ul>
 	 * 	<li><jk>null</jk> readers return an empty map</li>
-	 * 	<li>Keys without values (e.g., <c>key1&key2</c>) are stored with <jk>null</jk> values</li>
+	 * 	<li>Keys without values (e.g., <c>key1&amp;key2</c>) are stored with <jk>null</jk> values</li>
 	 * 	<li>Keys with empty values (e.g., <c>key=</c>) are stored with empty strings</li>
 	 * 	<li>Multiple occurrences of the same key append values to the list</li>
 	 * </ul>
@@ -209,7 +209,7 @@ public class RestUtils {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Parse from a reader</jc>
-	 * 	Reader <jv>reader</jv> = <jk>new</jk> StringReader(<js>"f1=v1&f2=v2"</js>);
+	 * 	Reader <jv>reader</jv> = <jk>new</jk> StringReader(<js>"f1=v1&amp;f2=v2"</js>);
 	 * 	Map&lt;String,List&lt;String&gt;&gt; <jv>params</jv> = parseQuery(<jv>reader</jv>);
 	 * 	<jv>params</jv>.get(<js>"f1"</js>);  <jc>// Returns [v1]</jc>
 	 * </p>
@@ -296,7 +296,7 @@ public class RestUtils {
 	 * 	<li>Leading slash is added if needed.
 	 * </ul>
 	 *
-	 * @param s The value to convert.
+	 * @param s The value to convert. Can be <jk>null</jk>.
 	 * @return The converted path.
 	 */
 	public static String toValidContextPath(String s) {
@@ -323,7 +323,7 @@ public class RestUtils {
 	 * <p>
 	 * The path-info follows the servlet path but precedes the query string.
 	 *
-	 * @param value The value to validate.
+	 * @param value The value to validate. Can be <jk>null</jk>.
 	 * @return The validated value (may be <jk>null</jk>).
 	 * @throws RuntimeException If the value is not a valid path-info path.
 	 */

@@ -120,6 +120,7 @@ public class SerializerSet {
 		 * Serializer builders will be cloned during this process.
 		 *
 		 * @param copyFrom The serializer group that we're copying settings and serializers from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
 			this.beanStore = copyFrom.beanStore;
@@ -133,6 +134,7 @@ public class SerializerSet {
 		 * Clone an existing serializer group.
 		 *
 		 * @param copyFrom The serializer group that we're copying settings and serializers from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(SerializerSet copyFrom) {
 			this.beanStore = BasicBeanStore.INSTANCE;
@@ -235,7 +237,8 @@ public class SerializerSet {
 		/**
 		 * Associates an existing bean context builder with all serializer builders in this group.
 		 *
-		 * @param value The bean contest builder to associate.
+		 * @param value The bean context builder to associate.
+		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder marshallingContext(MarshallingContext.Builder value) {
@@ -348,6 +351,7 @@ public class SerializerSet {
 		 * Overrides the bean returned by the {@link #build()} method with a pre-built instance.
 		 *
 		 * @param value The pre-built instance.
+		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder impl(Object value) {
@@ -530,6 +534,7 @@ public class SerializerSet {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this bean.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected SerializerSet(Builder builder) {
 
@@ -567,6 +572,7 @@ public class SerializerSet {
 	 * Same as {@link #getSerializerMatch(MediaType)} but returns just the matched serializer.
 	 *
 	 * @param mediaType The HTTP media type.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The serializer that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<Serializer> getSerializer(MediaType mediaType) {
@@ -577,6 +583,7 @@ public class SerializerSet {
 	 * Same as {@link #getSerializerMatch(String)} but returns just the matched serializer.
 	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The serializer that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<Serializer> getSerializer(String acceptHeader) {
@@ -614,6 +621,7 @@ public class SerializerSet {
 	 * The returned object includes both the serializer and media type that matched.
 	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The serializer and media type that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<SerializerMatch> getSerializerMatch(String acceptHeader) {
@@ -644,6 +652,7 @@ public class SerializerSet {
 	 * Same as {@link #getSerializer(MediaType)}, but casts it to a {@link OutputStreamSerializer}.
 	 *
 	 * @param mediaType The HTTP media type.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The serializer that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<OutputStreamSerializer> getStreamSerializer(MediaType mediaType) {
@@ -654,6 +663,7 @@ public class SerializerSet {
 	 * Same as {@link #getSerializer(String)}, but casts it to an {@link OutputStreamSerializer}.
 	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The serializer that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<OutputStreamSerializer> getStreamSerializer(String acceptHeader) {
@@ -674,6 +684,7 @@ public class SerializerSet {
 	 * Same as {@link #getSerializer(MediaType)}, but casts it to a {@link WriterSerializer}.
 	 *
 	 * @param mediaType The HTTP media type.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The serializer that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<WriterSerializer> getWriterSerializer(MediaType mediaType) {
@@ -684,6 +695,7 @@ public class SerializerSet {
 	 * Same as {@link #getSerializer(String)}, but casts it to a {@link WriterSerializer}.
 	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The serializer that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<WriterSerializer> getWriterSerializer(String acceptHeader) {

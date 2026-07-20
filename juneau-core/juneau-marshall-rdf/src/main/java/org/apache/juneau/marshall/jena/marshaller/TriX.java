@@ -137,7 +137,9 @@ public class TriX extends CharMarshaller {
 	 * Constructor with serializer and parser.
 	 *
 	 * @param s The serializer to use.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param p The parser to use.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public TriX(TriXSerializer s, TriXParser p) {
 		super(s, p);

@@ -143,7 +143,7 @@ public class Discriminator extends OpenApiElement {
 	 * Bean property getter:  <property>mapping</property>.
 	 *
 	 * <p>
-	 * The URL for the target documentation.
+	 * An object to hold mappings between payload values and schema names or references.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -153,7 +153,7 @@ public class Discriminator extends OpenApiElement {
 	 * Bean property getter:  <property>propertyName</property>.
 	 *
 	 * <p>
-	 * A short description of the target documentation.
+	 * The name of the property in the payload that will hold the discriminator value.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -187,7 +187,7 @@ public class Discriminator extends OpenApiElement {
 	 * Bean property setter:  <property>mapping</property>.
 	 *
 	 * <p>
-	 * The URL for the target documentation.
+	 * An object to hold mappings between payload values and schema names or references.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -207,7 +207,7 @@ public class Discriminator extends OpenApiElement {
 	 * Bean property setter:  <property>propertyName</property>.
 	 *
 	 * <p>
-	 * A short description of the target documentation.
+	 * The name of the property in the payload that will hold the discriminator value.
 	 *
 	 * @param value
 	 * 	The new value for this property.

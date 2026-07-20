@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.*;
  * The format for this var is <js>"$RS{key1[,key2...]}"</js>.
  *
  * <p>
- * Used to resolve values returned by {@link RestRequest#getSwagger()}..
+ * Used to resolve values returned by {@link RestRequest#getSwagger()}.
  * <br>When multiple keys are used, returns the first non-null/empty value.
  *
  * <p>

@@ -1783,7 +1783,7 @@ public @interface Rest {
 	 * Specifies how relative URIs should be interpreted by serializers.
 	 *
 	 * <p>
-	 * See {@link UriResolution} for possible values.
+	 * See {@link UriRelativity} for possible values.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>

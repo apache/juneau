@@ -109,6 +109,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected RdfStreamParserSession(Builder builder) {
 		super(builder);

@@ -173,84 +173,84 @@ public class PathItem extends OpenApiElement {
 	/**
 	 * Returns the DELETE operation.
 	 *
-	 * @return The DELETE operation.
+	 * @return The DELETE operation, or <jk>null</jk> if not set.
 	 */
 	public Operation getDelete() { return delete; }
 
 	/**
 	 * Returns the description.
 	 *
-	 * @return The description.
+	 * @return The description, or <jk>null</jk> if not set.
 	 */
 	public String getDescription() { return description; }
 
 	/**
 	 * Returns the GET operation.
 	 *
-	 * @return The GET operation.
+	 * @return The GET operation, or <jk>null</jk> if not set.
 	 */
 	public Operation getGet() { return get; }
 
 	/**
 	 * Returns the HEAD operation.
 	 *
-	 * @return The HEAD operation.
+	 * @return The HEAD operation, or <jk>null</jk> if not set.
 	 */
 	public Operation getHead() { return head; }
 
 	/**
 	 * Returns the OPTIONS operation.
 	 *
-	 * @return The OPTIONS operation.
+	 * @return The OPTIONS operation, or <jk>null</jk> if not set.
 	 */
 	public Operation getOptions() { return options; }
 
 	/**
 	 * Returns the parameters list.
 	 *
-	 * @return The parameters list.
+	 * @return The parameters list, or <jk>null</jk> if not set.
 	 */
 	public List<Parameter> getParameters() { return u(parameters); }
 
 	/**
 	 * Returns the PATCH operation.
 	 *
-	 * @return The PATCH operation.
+	 * @return The PATCH operation, or <jk>null</jk> if not set.
 	 */
 	public Operation getPatch() { return patch; }
 
 	/**
 	 * Returns the POST operation.
 	 *
-	 * @return The POST operation.
+	 * @return The POST operation, or <jk>null</jk> if not set.
 	 */
 	public Operation getPost() { return post; }
 
 	/**
 	 * Returns the PUT operation.
 	 *
-	 * @return The PUT operation.
+	 * @return The PUT operation, or <jk>null</jk> if not set.
 	 */
 	public Operation getPut() { return put; }
 
 	/**
 	 * Returns the servers list.
 	 *
-	 * @return The servers list.
+	 * @return The servers list, or <jk>null</jk> if not set.
 	 */
 	public List<Server> getServers() { return u(servers); }
 
 	/**
 	 * Returns the summary.
 	 *
-	 * @return The summary.
+	 * @return The summary, or <jk>null</jk> if not set.
 	 */
 	public String getSummary() { return summary; }
 
 	/**
 	 * Returns the TRACE operation.
 	 *
-	 * @return The TRACE operation.
+	 * @return The TRACE operation, or <jk>null</jk> if not set.
 	 */
 	public Operation getTrace() { return trace; }
 

@@ -303,21 +303,21 @@ public class OpenApi extends OpenApiElement {
 	/**
 	 * Returns the components object.
 	 *
-	 * @return The components object.
+	 * @return The components object, or <jk>null</jk> if not set.
 	 */
 	public Components getComponents() { return components; }
 
 	/**
 	 * Returns the external documentation.
 	 *
-	 * @return The external documentation.
+	 * @return The external documentation, or <jk>null</jk> if not set.
 	 */
 	public ExternalDocumentation getExternalDocs() { return externalDocs; }
 
 	/**
 	 * Returns the info object.
 	 *
-	 * @return The info object.
+	 * @return The info object, or <jk>null</jk> if not set.
 	 */
 	public Info getInfo() { return info; }
 
@@ -331,28 +331,28 @@ public class OpenApi extends OpenApiElement {
 	/**
 	 * Returns the paths map.
 	 *
-	 * @return The paths map.
+	 * @return The paths map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,PathItem> getPaths() { return u(paths); }
 
 	/**
 	 * Returns the security requirements list.
 	 *
-	 * @return The security requirements list.
+	 * @return The security requirements list, or <jk>null</jk> if not set.
 	 */
 	public List<SecurityRequirement> getSecurity() { return nie(security); }
 
 	/**
 	 * Returns the servers list.
 	 *
-	 * @return The servers list.
+	 * @return The servers list, or <jk>null</jk> if not set.
 	 */
 	public List<Server> getServers() { return nie(servers); }
 
 	/**
 	 * Returns the tags list.
 	 *
-	 * @return The tags list.
+	 * @return The tags list, or <jk>null</jk> if not set.
 	 */
 	public List<Tag> getTags() { return nie(tags); }
 

@@ -36,6 +36,7 @@ public class TomlConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(TomlConfig.class, TomlParser.Builder.class, vr);
@@ -56,6 +57,7 @@ public class TomlConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(TomlConfig.class, TomlSerializer.Builder.class, vr);

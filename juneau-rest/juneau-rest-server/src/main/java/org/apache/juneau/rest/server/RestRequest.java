@@ -814,10 +814,10 @@ public class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <c>getFormData().getString(name)</c>.
+	 * Shortcut for calling <c>getFormParams().get(name)</c>.
 	 *
 	 * @param name The form data parameter name.
-	 * @return The form data parameter value, or <jk>null</jk> if not found.
+	 * @return The form data parameter, never <jk>null</jk>.
 	 */
 	public RequestFormParam getFormParam(String name) {
 		return getFormParams().get(name);
@@ -1125,9 +1125,9 @@ public class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the part serializer associated with this request.
+	 * Returns the part parser session associated with this request.
 	 *
-	 * @return The part serializer associated with this request.
+	 * @return The part parser session associated with this request.
 	 */
 	public HttpPartParserSession getPartParserSession() { return partParserSession; }
 
@@ -1147,7 +1147,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @param <T> The bean type to create.
 	 * @param type The bean type to create.
-	 * @return The parsed form-data parameter on the request, never <jk>null</jk>.
+	 * @return The parsed path parameter on the request, never <jk>null</jk>.
 	 */
 	public <T> Optional<T> getPathParam(Class<T> type) {
 		return pathParams.get(type);
@@ -1345,6 +1345,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @param <T> The request bean interface to instantiate.
 	 * @param rbm The metadata about the request bean interface to create.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return A new request bean proxy for this REST request.
 	 */
 	@SuppressWarnings({
@@ -1481,6 +1482,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @param includeQuery If <jk>true</jk> include the query parameters on the request.
 	 * @param addQueryParams Augment the request URI with the specified query parameters.
+	 * 	<br>Can be <jk>null</jk> (no additional parameters are added).
 	 * @return A new URI.
 	 */
 	public URI getUri(boolean includeQuery, Map<String,Object> addQueryParams) {
@@ -1623,6 +1625,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		 * Enables debug with a capturing format marker.
 		 *
 		 * @param formatType The format type.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link BasicTextFormat}).
 		 * @return This object.
 		 * @throws IOException If debug could not be enabled.
 		 */
@@ -1916,7 +1919,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Sets the charset to expect on the request content.
 	 *
-	 * @param value The new value to use for the request content.
+	 * @param value The new charset to use for the request content.
+	 * 	<br>Can be <jk>null</jk> (resets to the negotiated/default charset on the next {@link #getCharset()} call).
 	 */
 	public void setCharset(Charset value) { this.charset = value; }
 

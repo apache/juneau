@@ -70,6 +70,7 @@ public class ResponseProcessorList {
 		 * in the list, the duplicate is silently skipped.
 		 *
 		 * @param values The values to add.
+		 * 	<br>Must not be <jk>null</jk>.
 		 * @return This object.
 		 * @throws IllegalArgumentException if any class does not extend from {@link ResponseProcessor}.
 		 */
@@ -88,6 +89,7 @@ public class ResponseProcessorList {
 		 * in the list, the duplicate is silently skipped.
 		 *
 		 * @param values The values to add.
+		 * 	<br>Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder add(ResponseProcessor...values) {
@@ -154,6 +156,7 @@ public class ResponseProcessorList {
 	 * no {@link CatchAllResponseProcessor} is present, the chain is left unchanged.
 	 *
 	 * @param builder The builder containing the contents for this list.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for response-processor list construction and ordering logic

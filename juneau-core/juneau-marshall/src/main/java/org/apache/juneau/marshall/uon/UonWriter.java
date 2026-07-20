@@ -151,6 +151,7 @@ public class UonWriter extends SerializerWriter {
 	 * Serializes the specified simple object as a UON string value.
 	 *
 	 * @param o The object being serialized.
+	 * 	<br>Can be <jk>null</jk> (emitted as the literal <js>"null"</js>).
 	 * @param isTopAttrName If this is a top-level attribute name we're serializing.
 	 * @return This object.
 	 */

@@ -94,6 +94,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 	 * Converts a number to ECMAScript-compatible JSON string per RFC 8785.
 	 *
 	 * @param n The number.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The serialized string.
 	 * @throws SerializeException If the number is NaN or Infinity.
 	 */

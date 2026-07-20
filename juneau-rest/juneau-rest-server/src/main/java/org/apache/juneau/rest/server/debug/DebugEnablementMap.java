@@ -56,7 +56,7 @@ public class DebugEnablementMap extends ReflectionMap<Enablement> {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder.
+	 * @param builder The builder.  Must not be <jk>null</jk>.
 	 */
 	protected DebugEnablementMap(Builder builder) {
 		super(builder);

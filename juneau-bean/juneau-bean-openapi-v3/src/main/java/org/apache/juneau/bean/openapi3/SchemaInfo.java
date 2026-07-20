@@ -264,7 +264,7 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Adds one or more values to the <property>allOf</property> property.
+	 * Adds one or more values to the <property>anyOf</property> property.
 	 *
 	 * @param values
 	 * 	The values to add to this property.
@@ -275,12 +275,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
-	 * 	allOf(<js>"['foo','bar']"</js>);
+	 * 	anyOf(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
-	 * 	allOf(<js>"foo"</js>, <js>"bar"</js>);
+	 * 	anyOf(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -326,7 +326,7 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Adds one or more values to the <property>allOf</property> property.
+	 * Adds one or more values to the <property>oneOf</property> property.
 	 *
 	 * @param values
 	 * 	The values to add to this property.
@@ -337,12 +337,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
-	 * 	allOf(<js>"['foo','bar']"</js>);
+	 * 	oneOf(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
-	 * 	allOf(<js>"foo"</js>, <js>"bar"</js>);
+	 * 	oneOf(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -456,7 +456,7 @@ public class SchemaInfo extends OpenApiElement {
 	public List<Object> getAllOf() { return nie(allOf); }
 
 	/**
-	 * Bean property getter:  <property>allOf</property>.
+	 * Bean property getter:  <property>anyOf</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -613,14 +613,14 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo getNot() { return not; }
 
 	/**
-	 * Bean property getter:  <property>uniqueItems</property>.
+	 * Bean property getter:  <property>nullable</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getNullable() { return nullable; }
 
 	/**
-	 * Bean property getter:  <property>allOf</property>.
+	 * Bean property getter:  <property>oneOf</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -687,7 +687,7 @@ public class SchemaInfo extends OpenApiElement {
 	public Boolean getUniqueItems() { return uniqueItems; }
 
 	/**
-	 * Bean property getter:  <property>WriteOnly</property>.
+	 * Bean property getter:  <property>writeOnly</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -864,7 +864,7 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>allOf</property>.
+	 * Bean property setter:  <property>anyOf</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -1182,7 +1182,7 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>allOf</property>.
+	 * Bean property setter:  <property>oneOf</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -1260,13 +1260,6 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"http"</js>
-	 * 		<li><js>"https"</js>
-	 * 		<li><js>"ws"</js>
-	 * 		<li><js>"wss"</js>
-	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -1327,7 +1320,7 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>WriteOnly</property>.
+	 * Bean property setter:  <property>writeOnly</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.

@@ -1046,6 +1046,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public RdfParser(Builder<?> builder) {
 		super(builder.consumes(getConsumes(builder)));

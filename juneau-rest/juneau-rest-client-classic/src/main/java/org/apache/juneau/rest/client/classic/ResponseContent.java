@@ -477,7 +477,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Returns the HTTP response message body as a byte array.
 	 *
-	 * 	The HTTP response message body reader, never <jk>null</jk>.
+	 * 	The HTTP response message body as a byte array, never <jk>null</jk>.
 	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty array.
 	 *
 	 * @return The HTTP response body as a byte array.
@@ -1065,7 +1065,7 @@ public class ResponseContent implements HttpEntity {
 	 * This is the header that should be used when sending the entity, or the one that was received with the entity.
 	 * <br>Wrapping entities that modify the content encoding should adjust this header accordingly.
 	 *
-	 * @return The <c>Content-Encoding</c> header for this entity, or <jk>null</jk> if the content encoding is unknown.
+	 * @return The <c>Content-Encoding</c> header for this entity.  Never <jk>null</jk>, but wraps a <jk>null</jk> value if the content encoding is unknown.
 	 */
 	@Override /* Overridden from HttpEntity */
 	public ResponseHeader getContentEncoding() { return new ResponseHeader("Content-Encoding", request, response, entity.getContentEncoding()); }
@@ -1087,7 +1087,7 @@ public class ResponseContent implements HttpEntity {
 	 * This is the header that should be used when sending the entity, or the one that was received with the entity.
 	 * It can include a charset attribute.
 	 *
-	 * @return The <c>Content-Type</c> header for this entity, or <jk>null</jk> if the content type is unknown.
+	 * @return The <c>Content-Type</c> header for this entity.  Never <jk>null</jk>, but wraps a <jk>null</jk> value if the content type is unknown.
 	 */
 	@Override /* Overridden from HttpEntity */
 	public ResponseHeader getContentType() { return new ResponseHeader(HEADER_ContentType, request, response, entity.getContentType()); }
@@ -1142,7 +1142,7 @@ public class ResponseContent implements HttpEntity {
 	 * If not specified, uses the parser defined on the client set via {@link RestClient.Builder#parser(Class)}.
 	 *
 	 * @param value
-	 * 	The new part parser to use for this body.
+	 * 	The new parser to use for this body.
 	 * @return This object.
 	 */
 	public ResponseContent parser(Parser value) {

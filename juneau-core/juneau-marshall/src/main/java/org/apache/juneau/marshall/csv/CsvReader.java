@@ -54,6 +54,7 @@ public class CsvReader implements Closeable {
 	 * Constructor.
 	 *
 	 * @param r The parser reader to wrap.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param delimiter The field delimiter character (typically <js>','</js>).
 	 * @param quoteChar The quote character (typically <js>'"'</js>).
 	 * @param trimStrings If <jk>true</jk>, field values are trimmed of surrounding whitespace.
@@ -69,6 +70,7 @@ public class CsvReader implements Closeable {
 	 * Creates a {@link CsvReader} from a {@link ParserPipe}.
 	 *
 	 * @param pipe The parser pipe.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param delimiter The delimiter character.
 	 * @param quoteChar The quote character.
 	 * @param trimStrings Whether to trim strings.

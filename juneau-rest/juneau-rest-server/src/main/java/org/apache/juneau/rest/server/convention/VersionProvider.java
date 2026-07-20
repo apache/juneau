@@ -98,7 +98,7 @@ public class VersionProvider {
 	 * builder method has been called &mdash; ensuring that a freshly-created builder always produces
 	 * a non-empty payload.
 	 *
-	 * @param builder The builder.
+	 * @param builder The builder. Must not be <jk>null</jk>.
 	 */
 	protected VersionProvider(Builder builder) {
 		if (! builder.explicit)
@@ -114,7 +114,7 @@ public class VersionProvider {
 	 * the endpoint serves JSON even on a vanilla {@link org.apache.juneau.rest.server.servlet.RestServlet} host that hasn't wired up JSON
 	 * serializers explicitly.
 	 *
-	 * @param res The current REST response.
+	 * @param res The current REST response. Must not be <jk>null</jk>.
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	public void serve(RestResponse res) throws IOException {
@@ -172,7 +172,7 @@ public class VersionProvider {
 		/**
 		 * Bulk-set entries from a map.
 		 *
-		 * @param values Entries to add. <jk>null</jk> values are recorded as {@link VersionProvider#UNKNOWN}.
+		 * @param values Entries to add. Can be <jk>null</jk> (no-op).  Individual <jk>null</jk> values are recorded as {@link VersionProvider#UNKNOWN}.
 		 * @return This object.
 		 */
 		public Builder entries(Map<String,String> values) {
@@ -205,7 +205,7 @@ public class VersionProvider {
 		 * its own classloader but not the framework's. Missing keys are recorded as
 		 * {@link VersionProvider#UNKNOWN}; a missing {@code MANIFEST.MF} resource is silently skipped.
 		 *
-		 * @param classLoader The classloader to walk.
+		 * @param classLoader The classloader to walk. Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder fromManifest(ClassLoader classLoader) {
@@ -253,7 +253,7 @@ public class VersionProvider {
 		/**
 		 * Reads {@code git.properties} from the supplied classloader.
 		 *
-		 * @param classLoader The classloader to walk.
+		 * @param classLoader The classloader to walk. Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder fromGitProperties(ClassLoader classLoader) {

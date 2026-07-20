@@ -112,7 +112,9 @@ public class ProfileConfigStore extends ConfigStore {
 		/**
 		 * Sets the active profiles, in activation order (last-active-profile wins).
 		 *
-		 * @param value The active profile names.
+		 * @param value
+		 * 	The active profile names.
+		 * 	<br>Can be <jk>null</jk> (treated as no active profiles).
 		 * @return This object.
 		 */
 		public Builder profiles(List<String> value) { profiles = value == null ? new ArrayList<>() : new ArrayList<>(value); return this; }
@@ -120,7 +122,9 @@ public class ProfileConfigStore extends ConfigStore {
 		/**
 		 * Sets the config format used to parse the base + profile files.
 		 *
-		 * @param value The format.
+		 * @param value
+		 * 	The format.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link IniConfigFormat}).
 		 * @return This object.
 		 */
 		public Builder format(ConfigFormat value) { format = value == null ? IniConfigFormat.INSTANCE : value; return this; }
@@ -155,6 +159,7 @@ public class ProfileConfigStore extends ConfigStore {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public ProfileConfigStore(Builder builder) {
 		super(builder);

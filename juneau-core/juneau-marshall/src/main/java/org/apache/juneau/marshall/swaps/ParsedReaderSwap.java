@@ -119,7 +119,11 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 	private ReaderParser parser;
 
 	/**
-	 * @param parser The parser to use to convert the contents of the reader to Java objects.
+	 * Constructor.
+	 *
+	 * @param parser
+	 * 	The parser to use to convert the contents of the reader to Java objects.
+	 * 	<br>Can be <jk>null</jk>, in which case the reader contents are read as plain text.
 	 */
 	public ParsedReaderSwap(ReaderParser parser) {
 		this.parser = parser;

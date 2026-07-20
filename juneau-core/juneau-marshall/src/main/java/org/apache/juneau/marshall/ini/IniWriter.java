@@ -70,6 +70,7 @@ public class IniWriter extends SerializerWriter {
 	 * Writes a section header with optional preceding blank line.
 	 *
 	 * @param name The section name or path (e.g. "address" or "employment/company").
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public IniWriter section(String name) {
@@ -82,6 +83,7 @@ public class IniWriter extends SerializerWriter {
 	 * Writes a comment line.
 	 *
 	 * @param text The comment text.
+	 * 	<br>Can be <jk>null</jk> (writes an empty comment).
 	 * @return This object.
 	 */
 	public IniWriter comment(String text) {
@@ -102,7 +104,9 @@ public class IniWriter extends SerializerWriter {
 	 * Writes a key-value pair.
 	 *
 	 * @param key The key name.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The value (already formatted as string).
+	 * 	<br>Can be <jk>null</jk> (written as the literal <js>"null"</js>).
 	 * @return This object.
 	 */
 	public IniWriter keyValue(String key, String value) {
@@ -123,6 +127,7 @@ public class IniWriter extends SerializerWriter {
 	 * Single quotes within the value are escaped as <c>''</c>.
 	 *
 	 * @param value The raw string value.
+	 * 	<br>Can be <jk>null</jk> (emitted as the literal <js>"null"</js>).
 	 * @return This object.
 	 */
 	public IniWriter quotedString(String value) {

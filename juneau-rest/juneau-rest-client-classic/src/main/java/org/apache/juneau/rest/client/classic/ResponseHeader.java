@@ -94,7 +94,7 @@ public class ResponseHeader extends BasicHeader {
 	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
-	 * @return The converted type, or <jk>null</jk> if header is not present.
+	 * @return The converted type, or an empty {@link Optional} if the header is not present.
 	 */
 	public <T> Optional<T> as(Class<T> type) {
 		return as(request.getClassMeta(type));
@@ -105,7 +105,7 @@ public class ResponseHeader extends BasicHeader {
 	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
-	 * @return The converted type, or <jk>null</jk> if header is not present.
+	 * @return The converted type, or an empty {@link Optional} if the header is not present.
 	 */
 	public <T> Optional<T> as(ClassMeta<T> type) {
 		try {
@@ -124,7 +124,7 @@ public class ResponseHeader extends BasicHeader {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
-	 * @return The converted type, or <jk>null</jk> if header is not present.
+	 * @return The converted type, or an empty {@link Optional} if the header is not present.
 	 */
 	public <T> Optional<T> as(Type type, Type...args) {
 		return as(request.getClassMeta(type, args));
@@ -532,7 +532,7 @@ public class ResponseHeader extends BasicHeader {
 	 *
 	 * @param value
 	 * 	The new part parser to use for this header.
-	 * 	<br>If <jk>null</jk>, {@link SimplePartParser#DEFAULT} will be used.
+	 * 	<br>If <jk>null</jk>, {@link SimplePartParser#DEFAULT_SESSION} will be used.
 	 * @return This object.
 	 */
 	public ResponseHeader parser(HttpPartParserSession value) {

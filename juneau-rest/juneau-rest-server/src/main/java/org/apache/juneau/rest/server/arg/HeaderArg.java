@@ -103,7 +103,7 @@ public class HeaderArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link HeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
@@ -181,7 +181,7 @@ public class HeaderArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param pi The Java method parameter being resolved.
+	 * @param pi The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected HeaderArg(ParameterInfo pi, AnnotationWorkList annotations) {

@@ -63,8 +63,8 @@ public class BasicNamedAttribute implements NamedAttribute {
 	/**
 	 * Creates a {@link BasicNamedAttribute} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
 	 *
-	 * @param pair The pair string.
-	 * @return A new {@link BasicNamedAttribute} object.
+	 * @param pair The pair string.  Can be <jk>null</jk>.
+	 * @return A new {@link BasicNamedAttribute} object, or <jk>null</jk> if the pair string was <jk>null</jk>.
 	 */
 	public static BasicNamedAttribute ofPair(String pair) {
 		if (pair == null)

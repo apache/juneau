@@ -253,9 +253,6 @@ public final class RestRequest {
 	 * @return This object.
 	 * @throws IOException If a converter fails or the default serializer fails.
 	 * @throws IllegalStateException If no converter matches and no default serializer is configured on the client.
-	 * @throws IllegalArgumentException If the default serializer produces output that is neither text nor {@code byte[]}.
-	 * 	Binary ({@code byte[]}) serializer output is sent as a binary body using the serializer's media type
-	 * 	(falling back to {@code application/octet-stream} when the media type is <jk>null</jk>).
 	 */
 	public RestRequest body(Object value) throws IOException {
 		if (value == null) {

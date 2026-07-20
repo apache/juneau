@@ -45,7 +45,7 @@ public class SerializerConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param vr The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations. Must not be <jk>null</jk>.
 		 */
 		public OutputStreamSerializerApply(VarResolverSession vr) {
 			super(SerializerConfig.class, OutputStreamSerializer.Builder.class, vr);
@@ -71,7 +71,7 @@ public class SerializerConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param vr The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations. Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(SerializerConfig.class, Serializer.Builder.class, vr);
@@ -112,7 +112,7 @@ public class SerializerConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param vr The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations. Must not be <jk>null</jk>.
 		 */
 		public WriterSerializerApply(VarResolverSession vr) {
 			super(SerializerConfig.class, WriterSerializer.Builder.class, vr);

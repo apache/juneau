@@ -162,63 +162,63 @@ public class Components extends OpenApiElement {
 	/**
 	 * Returns the callbacks map.
 	 *
-	 * @return The callbacks map.
+	 * @return The callbacks map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,Callback> getCallbacks() { return u(callbacks); }
 
 	/**
 	 * Returns the examples map.
 	 *
-	 * @return The examples map.
+	 * @return The examples map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,Example> getExamples() { return u(examples); }
 
 	/**
 	 * Returns the headers map.
 	 *
-	 * @return The headers map.
+	 * @return The headers map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,HeaderInfo> getHeaders() { return u(headers); }
 
 	/**
 	 * Returns the links map.
 	 *
-	 * @return The links map.
+	 * @return The links map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,Link> getLinks() { return u(links); }
 
 	/**
 	 * Returns the parameters map.
 	 *
-	 * @return The parameters map.
+	 * @return The parameters map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,Parameter> getParameters() { return u(parameters); }
 
 	/**
 	 * Returns the request bodies map.
 	 *
-	 * @return The request bodies map.
+	 * @return The request bodies map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,RequestBodyInfo> getRequestBodies() { return u(requestBodies); }
 
 	/**
 	 * Returns the responses map.
 	 *
-	 * @return The responses map.
+	 * @return The responses map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,Response> getResponses() { return u(responses); }
 
 	/**
 	 * Returns the schemas map.
 	 *
-	 * @return The schemas map.
+	 * @return The schemas map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,SchemaInfo> getSchemas() { return u(schemas); }
 
 	/**
 	 * Returns the security schemes map.
 	 *
-	 * @return The security schemes map.
+	 * @return The security schemes map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,SecuritySchemeInfo> getSecuritySchemes() { return u(securitySchemes); }
 

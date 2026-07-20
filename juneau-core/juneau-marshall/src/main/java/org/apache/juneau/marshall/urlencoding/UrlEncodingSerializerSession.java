@@ -66,6 +66,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(UrlEncodingSerializer ctx) {
 			super(ctx);
@@ -107,6 +108,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(UrlEncodingSerializer ctx) {

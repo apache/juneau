@@ -42,6 +42,7 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 * Static creator.
 	 *
 	 * @param req The HTTP servlet request.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return A new {@link ChildResourceDescriptions} bean.
 	 */
 	public static ChildResourceDescriptions of(RestRequest req) {
@@ -57,6 +58,7 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 * Constructor.
 	 *
 	 * @param context The servlet context that this bean describes.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param req The HTTP servlet request.
 	 */
 	public ChildResourceDescriptions(RestContext context, RestRequest req) {
@@ -67,6 +69,7 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 * Constructor.
 	 *
 	 * @param context The servlet context that this bean describes.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param req The HTTP servlet request.
 	 * @param sort
 	 * 	If <jk>true</jk>, list will be ordered by name alphabetically.
@@ -90,6 +93,7 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 * Constructor.
 	 *
 	 * @param req The HTTP servlet request.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public ChildResourceDescriptions(RestRequest req) {
 		this(req.getContext(), req, false);

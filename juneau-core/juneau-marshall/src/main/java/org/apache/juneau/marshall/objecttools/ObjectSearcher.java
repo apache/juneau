@@ -219,9 +219,9 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	 * 	The matcher factories to use.
 	 * 	<br>If not specified, uses the following:
 	 * 	<ul>
-	 * 		<li>{@link StringMatcherFactory#DEFAULT}
 	 * 		<li>{@link NumberMatcherFactory#DEFAULT}
 	 * 		<li>{@link TimeMatcherFactory#DEFAULT}
+	 * 		<li>{@link StringMatcherFactory#DEFAULT}
 	 * 	</ul>
 	 * @return A new {@link ObjectSearcher} object.
 	 */
@@ -287,7 +287,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	 * @param <R> The return type.
 	 * @param input The input.
 	 * @param searchArgs The search arguments.  See {@link SearchArgs} for format.
-	 * @return A list of maps/beans matching the
+	 * @return A list of the matching maps/beans, or <jk>null</jk> if the result is not a list, collection, or array.
 	 */
 	@SuppressWarnings({
 		"java:S1168",    // Intentional null when result is not a list/collection/array; callers branch on null (not an empty list).

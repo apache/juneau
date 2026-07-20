@@ -41,7 +41,7 @@ import org.apache.juneau.rest.server.httppart.*;
  * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getResponse() getResponse}()
- * 		.{@link RestResponse#setHeader(String,String) setOutput}(<jv>name</jv>,<jv>value</jv>);
+ * 		.{@link RestResponse#setHeader(String,String) setHeader}(<jv>name</jv>,<jv>value</jv>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -55,7 +55,7 @@ public class ResponseHeaderArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link ResponseHeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
@@ -84,7 +84,7 @@ public class ResponseHeaderArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param pi The Java method parameter being resolved.
+	 * @param pi The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected ResponseHeaderArg(ParameterInfo pi, AnnotationWorkList annotations) {

@@ -87,7 +87,7 @@ public final class Iso8601Utils {
 	 * {@link #formatDate}, {@link #formatCalendar}, {@link #formatTemporal},
 	 * {@link #formatDuration}, {@link #formatPeriod}.
 	 *
-	 * @param value The value to format.
+	 * @param value The value to format.  Must not be <jk>null</jk> (unlike the per-type helpers, this dispatcher does not null-guard).
 	 * @param type The class metadata for the value (used for selecting the appropriate formatter for Temporal types).
 	 * @param timeZone The session time zone (used when the value lacks zone info).
 	 * @return The ISO 8601 string representation.
@@ -208,7 +208,7 @@ public final class Iso8601Utils {
 	/**
 	 * Formats a date/time value as an ISO date (date-only, for OpenAPI 'date' format).
 	 *
-	 * @param value The value to format.
+	 * @param value The value to format.  Must not be <jk>null</jk>.
 	 * @param type The class metadata.
 	 * @param timeZone The session time zone.
 	 * @return The ISO date string.
@@ -232,7 +232,7 @@ public final class Iso8601Utils {
 	/**
 	 * Formats a date/time value as an ISO date-time (for OpenAPI 'date-time' format).
 	 *
-	 * @param value The value to format.
+	 * @param value The value to format.  Must not be <jk>null</jk>.
 	 * @param type The class metadata.
 	 * @param timeZone The session time zone.
 	 * @return The ISO date-time string.
@@ -693,7 +693,7 @@ public final class Iso8601Utils {
 	 * @param epochMillis The epoch milliseconds value.
 	 * @param targetType The target class metadata.
 	 * @param timeZone The session time zone.
-	 * @return The converted date/time object.
+	 * @return The converted date/time object, or <jk>null</jk> if the target type is not a recognized date/time type.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast for date/time type conversion

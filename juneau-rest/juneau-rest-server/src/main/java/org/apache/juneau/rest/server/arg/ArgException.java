@@ -39,7 +39,7 @@ public class ArgException extends InternalServerError {
 	/**
 	 * Constructor.
 	 *
-	 * @param pi The parameter with the issue.
+	 * @param pi The parameter with the issue. Must not be <jk>null</jk>.
 	 * @param msg The message.
 	 * @param args The message args.
 	 */

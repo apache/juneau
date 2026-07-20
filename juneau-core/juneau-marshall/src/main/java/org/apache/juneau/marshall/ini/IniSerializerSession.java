@@ -70,6 +70,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 	 * Creates a session builder.
 	 *
 	 * @param ctx The serializer context.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The builder.
 	 */
 	public static Builder create(IniSerializer ctx) {

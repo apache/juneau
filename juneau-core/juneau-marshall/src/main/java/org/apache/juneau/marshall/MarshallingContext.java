@@ -3538,6 +3538,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Duration wire format.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link DurationFormat#ISO_8601_WITH_DAYS}).
 		 * @return This object.
 		 */
 		public Builder durationFormat(DurationFormat value) {
@@ -3549,6 +3550,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Period wire format.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link PeriodFormat#ISO_8601}).
 		 * @return This object.
 		 */
 		public Builder periodFormat(PeriodFormat value) {
@@ -3560,6 +3562,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Calendar wire format.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link CalendarFormat#ISO_OFFSET_DATE_TIME}).
 		 * @return This object.
 		 */
 		public Builder calendarFormat(CalendarFormat value) {
@@ -3571,6 +3574,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Date wire format.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link DateFormat#ISO_LOCAL_DATE_TIME}).
 		 * @return This object.
 		 */
 		public Builder dateFormat(DateFormat value) {
@@ -3582,6 +3586,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Temporal wire format.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link TemporalFormat#DEFAULT}).
 		 * @return This object.
 		 */
 		public Builder temporalFormat(TemporalFormat value) {
@@ -3593,6 +3598,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Time-zone wire format.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link TimeZoneFormat#ID}).
 		 * @return This object.
 		 */
 		public Builder timeZoneFormat(TimeZoneFormat value) {
@@ -3604,6 +3610,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Locale wire format.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link LocaleFormat#BCP_47}).
 		 * @return This object.
 		 */
 		public Builder localeFormat(LocaleFormat value) {
@@ -3620,6 +3627,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * converting their byte output to a string.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link BinaryFormat#NOT_SET}).
 		 * @return This object.
 		 */
 		public Builder binaryFormat(BinaryFormat value) {
@@ -3631,6 +3639,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Enum wire format.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link EnumFormat#TO_STRING}).
 		 * @return This object.
 		 */
 		public Builder enumFormat(EnumFormat value) {
@@ -3646,6 +3655,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * serializers (BSON / CBOR / MsgPack / Prototext) emit native 16-byte binary regardless of this setting.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link UuidFormat#STANDARD}).
 		 * @return This object.
 		 */
 		public Builder uuidFormat(UuidFormat value) {
@@ -3660,6 +3670,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Controls how {@link BitSet} values are written to text-based wire formats.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link BitSetFormat#INDICES}).
 		 * @return This object.
 		 */
 		public Builder bitSetFormat(BitSetFormat value) {
@@ -3676,6 +3687,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * {@code ±(2^53 − 1)} would silently lose precision.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link BigNumberFormat#NUMBER}).
 		 * @return This object.
 		 */
 		public Builder bigNumberFormat(BigNumberFormat value) {
@@ -3692,6 +3704,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * boolean wire type regardless of this setting.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link BooleanFormat#TRUE_FALSE}).
 		 * @return This object.
 		 */
 		public Builder booleanFormat(BooleanFormat value) {
@@ -3708,6 +3721,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * JSON-spec-compliant. Binary serializers emit native IEEE-754 floats regardless of this setting.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link FloatFormat#NaN_AS_NULL}).
 		 * @return This object.
 		 */
 		public Builder floatFormat(FloatFormat value) {
@@ -3725,6 +3739,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * best-effort on the parse side.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link CurrencyFormat#ISO_CODE}).
 		 * @return This object.
 		 */
 		public Builder currencyFormat(CurrencyFormat value) {
@@ -3742,6 +3757,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * {@link UnsupportedOperationException}.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link ClassFormat#FQCN}).
 		 * @return This object.
 		 */
 		public Builder classFormat(ClassFormat value) {
@@ -4096,6 +4112,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public MarshallingContext(Builder builder) {
 		super(builder);
@@ -4235,7 +4252,9 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to convert.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param type The class type to convert the value to.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 * @see MarshallingSession#convertToType(Object, Class)
@@ -4817,6 +4836,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 *
 	 * @param <T> The class type being wrapped.
 	 * @param type The class to resolve.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return
 	 * 	If the class is not an array, returns a cached {@link ClassMeta} object.
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
@@ -4862,11 +4882,12 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @param type
 	 * 	The class to resolve.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link ClassInfo}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link ClassInfo}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return The resolved class meta.
+	 * @return The resolved class meta, or <jk>null</jk> if the type was <jk>null</jk>.
 	 */
 	public final <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
 		if (type == null)
@@ -4918,6 +4939,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @see MarshallingContext.Builder#mediaType(MediaType)
 	 * @return
 	 * 	The default media type value for serializer and parser sessions.
+	 * 	<br>Can be <jk>null</jk> if no default media type has been configured.
 	 */
 	public final MediaType getDefaultMediaType() { return mediaType; }
 
@@ -4927,6 +4949,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @see MarshallingContext.Builder#timeZone(TimeZone)
 	 * @return
 	 * 	The default timezone for serializer and parser sessions.
+	 * 	<br>Can be <jk>null</jk> if no default time zone has been configured.
 	 */
 	public final TimeZone getDefaultTimeZone() { return timeZone; }
 
@@ -5152,7 +5175,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @param <T> The class of the object being wrapped.
 	 * @param c The name of the class to create a new instance of.
 	 * 	<br>Cannot be <jk>null</jk>.
-	 * @return A new instance of the class.
+	 * @return A new instance of the class, or <jk>null</jk> if the class is not a bean.
 	 * @see MarshallingSession#newBeanMap(Class)
 	 */
 	public <T> BeanMap<T> newBeanMap(Class<T> c) {
@@ -5251,7 +5274,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Media type.
 	 *
-	 * @return The media type.
+	 * @return The media type, or <jk>null</jk> if no default media type has been configured.
 	 */
 	protected final MediaType getMediaType() { return mediaType; }
 
@@ -5269,7 +5292,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Time zone.
 	 *
-	 * @return The time zone.
+	 * @return The time zone, or <jk>null</jk> if no default time zone has been configured.
 	 */
 	protected final TimeZone getTimeZone() { return timeZone; }
 
@@ -5515,6 +5538,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 *
 	 * @param <T> The class type we're wrapping.
 	 * @param p The property annotation info on the type if there is one.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param ci The class info for the type.
 	 * @param typeVarImpls
 	 * 	Contains known resolved type parameters on the specified class so that we can result

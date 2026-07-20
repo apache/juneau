@@ -403,7 +403,7 @@ public final class RestClient implements Closeable {
 		 * sibling transport module is on the classpath, the built-in {@link JavaHttpTransport} (backed by the JDK's
 		 * {@link java.net.http.HttpClient}) is used as the default.
 		 *
-		 * @param value The transport. Must not be <jk>null</jk>.
+		 * @param value The transport. Can be <jk>null</jk> (a transport is auto-discovered via {@link ServiceLoader}).
 		 * @return This object.
 		 */
 		public Builder transport(HttpTransport value) {

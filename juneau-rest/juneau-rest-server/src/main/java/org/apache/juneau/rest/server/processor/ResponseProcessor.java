@@ -60,8 +60,8 @@ import jakarta.servlet.http.*;
  * 			<ja>@Override</ja>
  * 			<jk>public int</jk> process(RestOpSession <jv>opSession</jv>) {
  *
- * 				RestResponse <jv>res</jv> = <jv>opSession</jv>.getRestResponse();
- * 				Foo <jv>foo</jv> = <jv>res</jv>.getOutput(Foo.<jk>class</jk>);
+ * 				RestResponse <jv>res</jv> = <jv>opSession</jv>.getResponse();
+ * 				Foo <jv>foo</jv> = <jv>res</jv>.getContent(Foo.<jk>class</jk>);
  *
  * 				<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
  * 					<jk>return</jk> <jsf>NEXT</jsf>;  <jc>// Let the next processor handle it.</jc>

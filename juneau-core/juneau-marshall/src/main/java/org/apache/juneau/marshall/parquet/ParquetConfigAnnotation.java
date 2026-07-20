@@ -41,6 +41,7 @@ public class ParquetConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(ParquetConfig.class, ParquetSerializer.Builder.class, vr);
@@ -72,6 +73,7 @@ public class ParquetConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(ParquetConfig.class, ParquetParser.Builder.class, vr);

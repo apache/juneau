@@ -82,6 +82,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
@@ -92,6 +93,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(UrlEncodingParser copyFrom) {
 			super(copyFrom);
@@ -226,7 +228,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	}
 
 	/**
-	 * Parser bean property collections/arrays as separate key/value pairs.
+	 * Parse bean property collections/arrays as separate key/value pairs.
 	 *
 	 * @see Builder#expandedParams()
 	 * @return

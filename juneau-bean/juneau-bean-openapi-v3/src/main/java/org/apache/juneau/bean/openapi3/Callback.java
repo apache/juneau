@@ -136,7 +136,7 @@ public class Callback extends OpenApiElement {
 	/**
 	 * Returns the callbacks map.
 	 *
-	 * @return The callbacks map.
+	 * @return The callbacks map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,PathItem> getCallbacks() { return u(callbacks); }
 

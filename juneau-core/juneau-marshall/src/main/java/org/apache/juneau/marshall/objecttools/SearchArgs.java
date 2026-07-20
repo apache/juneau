@@ -35,8 +35,8 @@ public class SearchArgs {
 	/**
 	 * Static creator.
 	 *
-	 * @param args List of search arguments.
-	 * @return A new {@link SearchArgs} object.
+	 * @param args List of search arguments.  Can be <jk>null</jk>.
+	 * @return A new {@link SearchArgs} object, or <jk>null</jk> if <c>args</c> is <jk>null</jk>.
 	 */
 	public static SearchArgs create(List<String> args) {
 		if (args == null)
@@ -47,8 +47,8 @@ public class SearchArgs {
 	/**
 	 * Static creator.
 	 *
-	 * @param args Comma-delimited list of search arguments.
-	 * @return A new {@link SearchArgs} object.
+	 * @param args Comma-delimited list of search arguments.  Can be <jk>null</jk>.
+	 * @return A new {@link SearchArgs} object, or <jk>null</jk> if <c>args</c> is <jk>null</jk>.
 	 */
 	public static SearchArgs create(String args) {
 		if (args == null)

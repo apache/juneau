@@ -57,7 +57,7 @@ public class ProtobufReader {
 	/**
 	 * Constructor.
 	 *
-	 * @param is The input stream being wrapped.
+	 * @param is The input stream being wrapped.  Must not be <jk>null</jk>.
 	 */
 	public ProtobufReader(InputStream is) {
 		this.is = is;
@@ -66,7 +66,7 @@ public class ProtobufReader {
 	/**
 	 * Constructor over an in-memory byte block (used for embedded messages and packed fields).
 	 *
-	 * @param bytes The bytes to read.
+	 * @param bytes The bytes to read.  Must not be <jk>null</jk>.
 	 */
 	public ProtobufReader(byte[] bytes) {
 		this(new ByteArrayInputStream(bytes));

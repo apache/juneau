@@ -56,6 +56,7 @@ public class MarkdownWriter extends SerializerWriter {
 	 *
 	 * @param level The heading level (1-6).
 	 * @param text The heading text.
+	 * 	<br>Can be <jk>null</jk> (written as an empty string).
 	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -73,6 +74,7 @@ public class MarkdownWriter extends SerializerWriter {
 	 * Writes a Markdown table header row.
 	 *
 	 * @param columns The column names.
+	 * 	<br>Individual column names can be <jk>null</jk> (written as an empty cell).
 	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -106,6 +108,7 @@ public class MarkdownWriter extends SerializerWriter {
 	 * Writes a Markdown table data row.
 	 *
 	 * @param values The cell values.
+	 * 	<br>Individual values can be <jk>null</jk> (written as an empty cell).
 	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -125,6 +128,7 @@ public class MarkdownWriter extends SerializerWriter {
 	 *
 	 * @param depth The indentation depth (0 = no indent).
 	 * @param text The item text.
+	 * 	<br>Can be <jk>null</jk> (written as an empty string).
 	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -164,6 +168,7 @@ public class MarkdownWriter extends SerializerWriter {
 	 * Writes plain text with Markdown escaping.
 	 *
 	 * @param text The text to write.
+	 * 	<br>Can be <jk>null</jk> (written as an empty string).
 	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -176,6 +181,7 @@ public class MarkdownWriter extends SerializerWriter {
 	 * Writes text wrapped in backticks (inline code).
 	 *
 	 * @param text The text to render as code.
+	 * 	<br>Can be <jk>null</jk> (written as an empty string).
 	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -190,6 +196,7 @@ public class MarkdownWriter extends SerializerWriter {
 	 * Writes bold text.
 	 *
 	 * @param text The text to render bold.
+	 * 	<br>Can be <jk>null</jk> (written as an empty string).
 	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -204,6 +211,7 @@ public class MarkdownWriter extends SerializerWriter {
 	 * Writes italic text.
 	 *
 	 * @param text The text to render italic.
+	 * 	<br>Can be <jk>null</jk> (written as an empty string).
 	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -221,7 +229,8 @@ public class MarkdownWriter extends SerializerWriter {
 	 * Escapes pipe characters and backslashes. Replaces newlines with {@code <br>}.
 	 *
 	 * @param text The raw text.
-	 * @return The escaped text suitable for a table cell.
+	 * 	<br>Can be <jk>null</jk> (returns an empty string).
+	 * @return The escaped text suitable for a table cell.  Never <jk>null</jk>.
 	 */
 	public static String escapeCell(String text) {
 		if (text == null)
@@ -247,7 +256,8 @@ public class MarkdownWriter extends SerializerWriter {
 	 * Escapes backslashes and leading Markdown special characters.
 	 *
 	 * @param text The raw text.
-	 * @return The escaped text.
+	 * 	<br>Can be <jk>null</jk> (returns an empty string).
+	 * @return The escaped text.  Never <jk>null</jk>.
 	 */
 	public static String escapeText(String text) {
 		if (text == null)

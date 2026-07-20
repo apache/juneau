@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.microservice.*;
 
 /**
- * Implements the 'restart' console command to gracefully shut down and restart the microservice.
+ * Implements the 'help' console command to provide help on other commands.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice Basics</a>

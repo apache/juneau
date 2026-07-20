@@ -188,7 +188,7 @@ public final class BasicRestLogger implements RestLogger {
 		 * Only entries for which the predicate returns {@code true} will be logged.
 		 * By default, all entries are logged.
 		 *
-		 * @param value The filter predicate. Must not be <jk>null</jk>.
+		 * @param value The filter predicate. Can be <jk>null</jk> (no filtering \u2014 all entries are logged).
 		 * @return This object.
 		 */
 		public Builder filter(Predicate<RestLogEntry> value) {

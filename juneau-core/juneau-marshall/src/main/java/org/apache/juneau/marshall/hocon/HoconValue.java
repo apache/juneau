@@ -91,6 +91,7 @@ public abstract sealed class HoconValue permits HoconValue.HoconObject, HoconVal
 		 * Merges another object into this one (HOCON object merging).
 		 *
 		 * @param other The other object to merge.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public void merge(HoconObject other) {
 			for (var e : other.members.entrySet()) {
@@ -108,6 +109,7 @@ public abstract sealed class HoconValue permits HoconValue.HoconObject, HoconVal
 		 * Sets a value at a dotted path (e.g., a.b.c).
 		 *
 		 * @param path Path components.
+		 * 	<br>Can be <jk>null</jk> or empty (no-op).
 		 * @param value The value.
 		 */
 		public void setPath(String[] path, HoconValue value) {
@@ -133,6 +135,7 @@ public abstract sealed class HoconValue permits HoconValue.HoconObject, HoconVal
 		 * Gets a value at a dotted path.
 		 *
 		 * @param path Path components.
+		 * 	<br>Can be <jk>null</jk> or empty (returns <jk>null</jk>).
 		 * @return The value, or <jk>null</jk>.
 		 */
 		public HoconValue getPath(String[] path) {
@@ -191,6 +194,7 @@ public abstract sealed class HoconValue permits HoconValue.HoconObject, HoconVal
 		 * Concatenates another array (HOCON array concatenation).
 		 *
 		 * @param other The other array.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public void concat(HoconArray other) {
 			elements.addAll(other.elements);
@@ -372,6 +376,7 @@ public abstract sealed class HoconValue permits HoconValue.HoconObject, HoconVal
 		 * Returns whether this concat contains a substitution for the given path.
 		 *
 		 * @param path The dotted path (e.g., "path" or "a.b.c").
+		 * 	<br>Can be <jk>null</jk> or empty (returns <jk>false</jk>).
 		 * @return <jk>true</jk> if any part is a substitution for that path.
 		 */
 		public boolean referencesPath(String path) {

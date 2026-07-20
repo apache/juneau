@@ -47,6 +47,7 @@ public class SeeOtherRoot extends SeeOther {
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The object to copy.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public SeeOtherRoot(SeeOtherRoot copyFrom) {
 		super(copyFrom);
@@ -58,6 +59,7 @@ public class SeeOtherRoot extends SeeOther {
 	 * Used for end-to-end interfaces.
 	 *
 	 * @param content Message to send as the response.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public SeeOtherRoot(String content) {
 		super(content);

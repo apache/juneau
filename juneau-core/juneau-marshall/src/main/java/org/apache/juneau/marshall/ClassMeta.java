@@ -172,9 +172,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 *
 	 * @param innerClass The class being wrapped.
 	 * @param marshallingContext The bean context that created this object.
-	 * @param delayedInit
-	 * 	Don't call init() in constructor.
-	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for ClassMeta initialization with category detection
@@ -450,7 +447,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * Returns the argument metadata at the specified index if this is an args metadata object.
 	 *
 	 * @param index The argument index.
-	 * @return The The argument metadata.  Never <jk>null</jk>.
+	 * @return The argument metadata.  Never <jk>null</jk>.
 	 * @throws BeanRuntimeException If this metadata object is not a list of arguments, or the index is out of range.
 	 */
 	public ClassMeta<?> getArg(int index) {
@@ -473,7 +470,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * Covariantly overrides {@link BeanInfo#getMarshallingContext()} to narrow the return type from
 	 * {@link Object} (commons SPI) back to {@link MarshallingContext} (marshalling-side concrete type).
 	 *
-	 * @return The bean context.
+	 * @return The bean context, or <jk>null</jk> if this is an arguments-array metadata object (see {@link #isArgs()}).
 	 */
 	@Override
 	public MarshallingContext getMarshallingContext() { return marshallingContext; }
@@ -561,7 +558,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * 	The bean session.
 	 * 	<br>Required because the example method may take it in as a parameter.
 	 * @param jpSession The JSON parser for parsing examples into POJOs.
-	 * @return The serialized class type, or this object if no swap is associated with the class.
+	 * @return An example instance of this class, or <jk>null</jk> if no example is defined or one could not be created.
 	 */
 	@SuppressWarnings({
 		"unchecked", // Type erasure requires unchecked casts
@@ -912,7 +909,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * class is already a supertype of the source) return <jk>false</jk> — those are assignability, not explicit
 	 * transforms.
 	 *
-	 * @param c The class type to convert from.
+	 * @param c The class type to convert from.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if an explicit conversion from {@code c} to this type exists.
 	 */
 	public boolean hasMutaterFrom(Class<?> c) {
@@ -936,7 +933,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	/**
 	 * Returns <jk>true</jk> if this class can be instantiated from the specified type via an explicit conversion.
 	 *
-	 * @param c The class type to convert from.
+	 * @param c The class type to convert from.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if an explicit conversion from {@code c} to this type exists.
 	 */
 	public boolean hasMutaterFrom(ClassMeta<?> c) {
@@ -950,7 +947,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * Same-type conversions (identity) always return <jk>true</jk>. Cases where the target is already a strict
 	 * supertype of this class return <jk>false</jk> — those are assignability, not explicit transforms.
 	 *
-	 * @param c The class type to convert to.
+	 * @param c The class type to convert to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if an explicit conversion from this type to {@code c} exists.
 	 */
 	public boolean hasMutaterTo(Class<?> c) {
@@ -974,7 +971,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	/**
 	 * Returns <jk>true</jk> if this class can be transformed to the specified type via an explicit conversion.
 	 *
-	 * @param c The class type to convert to.
+	 * @param c The class type to convert to.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if an explicit conversion from this type to {@code c} exists.
 	 */
 	public boolean hasMutaterTo(ClassMeta<?> c) {
@@ -1333,7 +1330,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 *
 	 * @param <O> The output class.
 	 * @param o The object to convert.
-	 * @param c The target class meta.
+	 * @param c The target class meta.  Must not be <jk>null</jk>.
 	 * @return The converted object, or <jk>null</jk> if no conversion is available.
 	 */
 	public static <O> O mutateTo(Object o, ClassMeta<O> c) {
@@ -1450,7 +1447,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	/**
 	 * Converts the specified object to a string.
 	 *
-	 * @param t The object to convert.
+	 * @param t The object to convert.  Can be <jk>null</jk>.
 	 * @return The object converted to a string, or <jk>null</jk> if the object was null.
 	 */
 	public String toString(Object t) {
@@ -1971,7 +1968,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	/**
 	 * Appends this object as a readable string to the specified string builder.
 	 *
-	 * @param sb The string builder to append this object to.
+	 * @param sb The string builder to append this object to.  Must not be <jk>null</jk>.
 	 * @param simple Print simple class names only (no package).
 	 * @return The passed-in string builder.
 	 */

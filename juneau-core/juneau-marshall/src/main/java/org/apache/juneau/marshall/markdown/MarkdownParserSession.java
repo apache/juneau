@@ -104,6 +104,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	@SuppressWarnings({
@@ -793,6 +794,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * Reads all lines from the given reader.
 	 *
 	 * @param r The reader.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return All lines.
 	 * @throws IOException Thrown by underlying stream.
 	 */
@@ -808,7 +810,8 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * Unescapes Markdown table cell escape sequences.
 	 *
 	 * @param s The escaped cell value.
-	 * @return The unescaped value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The unescaped value.  Returns <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	protected String unescapeCell(String s) {
 		if (s == null || !s.contains("\\"))

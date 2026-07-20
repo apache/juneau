@@ -57,7 +57,7 @@ public class DebugConfig {
 		/**
 		 * Constructor.
 		 *
-		 * @param beanStore The bean store.
+		 * @param beanStore The bean store.  Must not be <jk>null</jk>.
 		 */
 		protected Builder(BeanStore beanStore) {
 			this.beanStore = beanStore;
@@ -67,8 +67,8 @@ public class DebugConfig {
 		/**
 		 * Adds a rule.
 		 *
-		 * @param target The target key.
-		 * @param value The rule spec.
+		 * @param target The target key.  Must not be <jk>null</jk>.
+		 * @param value The rule spec.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder rule(String target, Consumer<DebugRule.Builder> value) {
@@ -135,7 +135,7 @@ public class DebugConfig {
 	/**
 	 * Creates a builder.
 	 *
-	 * @param beanStore The bean store.
+	 * @param beanStore The bean store.  Must not be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(BeanStore beanStore) {
@@ -152,7 +152,7 @@ public class DebugConfig {
 	/**
 	 * Constructor.
 	 *
-	 * @param beanStore The bean store.
+	 * @param beanStore The bean store.  Must not be <jk>null</jk>.
 	 */
 	public DebugConfig(BeanStore beanStore) {
 		this(create(beanStore));
@@ -161,7 +161,7 @@ public class DebugConfig {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder.
+	 * @param builder The builder.  Must not be <jk>null</jk>.
 	 */
 	protected DebugConfig(Builder builder) {
 		beanStore = builder.beanStore;
@@ -175,8 +175,8 @@ public class DebugConfig {
 	/**
 	 * Resolves debug for resource-level requests.
 	 *
-	 * @param context The context.
-	 * @param req The request.
+	 * @param context The context.  Can be <jk>null</jk>.
+	 * @param req The request.  Can be <jk>null</jk> (debug resolves to disabled).
 	 * @return A debug result.
 	 */
 	public DebugResult resolve(RestContext context, HttpServletRequest req) {
@@ -186,8 +186,8 @@ public class DebugConfig {
 	/**
 	 * Resolves debug for operation-level requests.
 	 *
-	 * @param context The context.
-	 * @param req The request.
+	 * @param context The context.  Must not be <jk>null</jk>.
+	 * @param req The request.  Can be <jk>null</jk> (debug resolves to disabled).
 	 * @return A debug result.
 	 */
 	public DebugResult resolve(RestOpContext context, HttpServletRequest req) {

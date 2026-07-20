@@ -113,7 +113,7 @@ public class GitControl implements AutoCloseable {
 	/**
 	 * Checks out the specified branch from origin.
 	 *
-	 * @param name Branch name.
+	 * @param name Branch name.  Must not be <jk>null</jk>.
 	 * @throws GitAPIException If checkout fails.
 	 */
 	public void branch(String name) throws GitAPIException {

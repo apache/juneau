@@ -36,6 +36,7 @@ public class HoconConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(HoconConfig.class, HoconParser.Builder.class, vr);
@@ -57,6 +58,7 @@ public class HoconConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(HoconConfig.class, HoconSerializer.Builder.class, vr);

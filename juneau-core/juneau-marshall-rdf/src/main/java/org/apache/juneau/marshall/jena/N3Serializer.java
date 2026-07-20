@@ -86,6 +86,7 @@ public class N3Serializer extends RdfSerializer {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public N3Serializer(RdfSerializer.Builder<?> builder) {
 		super(builder.n3());

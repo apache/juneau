@@ -57,10 +57,10 @@ public abstract class Encoder {
 	public abstract InputStream getInputStream(InputStream is) throws IOException;
 
 	/**
-	 * Converts the specified uncompressed output stream into an uncompressed stream.
+	 * Converts the specified uncompressed output stream into a compressed stream.
 	 *
 	 * @param os The uncompressed stream.
-	 * @return The compressed stream stream.
+	 * @return The compressed stream.
 	 * @throws IOException If any errors occur.
 	 */
 	public abstract OutputStream getOutputStream(OutputStream os) throws IOException;

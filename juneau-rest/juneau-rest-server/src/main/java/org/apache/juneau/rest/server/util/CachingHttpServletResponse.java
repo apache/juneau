@@ -33,8 +33,8 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 	/**
 	 * Wraps the specified response inside a {@link CachingHttpServletResponse} if it isn't already.
 	 *
-	 * @param res The response to wrap.
-	 * @return The wrapped request.
+	 * @param res The response to wrap. Must not be <jk>null</jk>.
+	 * @return The wrapped response.
 	 * @throws IOException Thrown by underlying content stream.
 	 */
 	public static CachingHttpServletResponse wrap(HttpServletResponse res) throws IOException {
@@ -50,7 +50,7 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 	/**
 	 * Constructor.
 	 *
-	 * @param res The wrapped servlet response.
+	 * @param res The wrapped servlet response. Must not be <jk>null</jk>.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected CachingHttpServletResponse(HttpServletResponse res) throws IOException {

@@ -207,6 +207,7 @@ public class RoleMatcher {
 	 * Constructor.
 	 *
 	 * @param expression The string expression.
+	 * 	<br>Can be <jk>null</jk> or empty/blank (never matches).
 	 * @throws ParseException If the expression is malformed.
 	 */
 	public RoleMatcher(String expression) throws ParseException {
@@ -228,9 +229,10 @@ public class RoleMatcher {
 	 * Returns <jk>true</jk> if the specified string matches this expression.
 	 *
 	 * @param roles The user roles.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return
 	 * 	<jk>true</jk> if the specified string matches this expression.
-	 * 	<br>Always <jk>false</jk> if the string is <jk>null</jk>.
+	 * 	<br>Always <jk>false</jk> if the set is <jk>null</jk>.
 	 */
 	public boolean matches(Set<String> roles) {
 		return nn(roles) && exp.matches(roles);

@@ -84,7 +84,7 @@ public class AdminProvider {
 	/**
 	 * Builder constructor.
 	 *
-	 * @param builder The builder.
+	 * @param builder The builder. Must not be {@code null}.
 	 */
 	protected AdminProvider(Builder builder) {
 		cacheFlushHooks = Collections.unmodifiableMap(new LinkedHashMap<>(builder.cacheFlushHooks));
@@ -94,7 +94,7 @@ public class AdminProvider {
 	/**
 	 * Serves the thread dump as a JSON list of currently-live threads.
 	 *
-	 * @param res The current REST response.
+	 * @param res The current REST response. Must not be {@code null}.
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	@SuppressWarnings({
@@ -125,7 +125,7 @@ public class AdminProvider {
 	/**
 	 * Serves JVM heap and non-heap memory statistics.
 	 *
-	 * @param res The current REST response.
+	 * @param res The current REST response. Must not be {@code null}.
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	public void serveHeap(RestResponse res) throws IOException {
@@ -159,8 +159,8 @@ public class AdminProvider {
 	 * silently ignored (404-on-unknown would leak the registered hook set). Hook execution is
 	 * synchronous; long-running hooks block the request thread.
 	 *
-	 * @param req The current REST request &mdash; {@code names} query parameter is read off it.
-	 * @param res The current REST response.
+	 * @param req The current REST request &mdash; {@code names} query parameter is read off it. Must not be {@code null}.
+	 * @param res The current REST response. Must not be {@code null}.
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	public void serveCacheFlush(RestRequest req, RestResponse res) throws IOException {
@@ -191,8 +191,8 @@ public class AdminProvider {
 	 * <p>
 	 * Returns {@code 404 Not Found} when no {@code RateLimitGuard} bean is registered.
 	 *
-	 * @param req The current REST request &mdash; supplies the bean store for guard lookup.
-	 * @param res The current REST response.
+	 * @param req The current REST request &mdash; supplies the bean store for guard lookup. Must not be {@code null}.
+	 * @param res The current REST response. Must not be {@code null}.
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 * @throws NotFound If no {@link RateLimitGuard} bean is registered on the importer's bean store.
 	 */
@@ -303,7 +303,7 @@ public class AdminProvider {
 		/**
 		 * Registers multiple cache-flush hooks at once.
 		 *
-		 * @param hooks The hooks, keyed by registration name.
+		 * @param hooks The hooks, keyed by registration name. Can be {@code null} (no-op).
 		 * @return This object.
 		 */
 		public Builder cacheFlushAll(Map<String,Runnable> hooks) {
@@ -320,7 +320,8 @@ public class AdminProvider {
 		 * omitted from the {@code /admin/threads} output. Pass an empty array to disable
 		 * filtering entirely.
 		 *
-		 * @param values The thread-name prefixes to exclude. Must not be {@code null}.
+		 * @param values The thread-name prefixes to exclude. Can be {@code null} (equivalent to an empty
+		 * 	array &mdash; disables filtering); {@code null} or empty elements are skipped.
 		 * @return This object.
 		 */
 		public Builder threadNamePrefixExclude(String...values) {

@@ -105,7 +105,7 @@ public class JettyLogger implements LocationAwareLogger {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param name The logger name.
+	 * @param name The logger name.  Must not be <jk>null</jk>.
 	 */
 	public JettyLogger(String name) {
 		logger = Logger.getLogger(name);
@@ -246,7 +246,7 @@ public class JettyLogger implements LocationAwareLogger {
 	/**
 	 * Creates a child logger with the specified name.
 	 *
-	 * @param name The logger name.
+	 * @param name The logger name.  Must not be <jk>null</jk>.
 	 * @return A new JettyLogger instance for the specified name.
 	 */
 	public JettyLogger getLogger(String name) {

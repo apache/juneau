@@ -86,6 +86,7 @@ public class TriGParser extends RdfParser {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public TriGParser(RdfParser.Builder<?> builder) {
 		super(builder.triG().consumes("application/trig"));

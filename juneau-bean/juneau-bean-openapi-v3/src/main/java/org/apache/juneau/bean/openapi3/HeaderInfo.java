@@ -179,7 +179,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * Bean property getter:  <property>allowEmptyValue</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * Sets the ability to pass empty-valued headers.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -189,7 +189,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * Bean property getter:  <property>allowReserved</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * Determines whether the header value should allow reserved characters.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -199,7 +199,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * Bean property getter:  <property>deprecated</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * Specifies that a header is deprecated.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -227,17 +227,17 @@ public class HeaderInfo extends OpenApiElement {
 	 * Bean property getter:  <property>examples</property>.
 	 *
 	 * <p>
-	 * The list of possible responses as they are returned from executing this operation.
+	 * Examples of the header's potential value.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,Example> getExamples() { return nie(examples); }
 
 	/**
-	 * Bean property getter:  <property>required</property>.
+	 * Bean property getter:  <property>explode</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * When true, header values of type array or object generate separate headers for each value.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -255,7 +255,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * Bean property getter:  <property>required</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * Determines whether this header is mandatory.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -339,7 +339,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * Bean property setter:  <property>allowEmptyValue</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * Sets the ability to pass empty-valued headers.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -355,7 +355,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * Bean property setter:  <property>allowReserved</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * Determines whether the header value should allow reserved characters.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -371,7 +371,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * Bean property setter:  <property>deprecated</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * Specifies that a header is deprecated.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -414,10 +414,10 @@ public class HeaderInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>headers</property>.
+	 * Bean property setter:  <property>examples</property>.
 	 *
 	 * <p>
-	 * A list of examples that are sent with the response.
+	 * Examples of the header's potential value.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -435,7 +435,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * Bean property setter:  <property>explode</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * When true, header values of type array or object generate separate headers for each value.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -465,19 +465,10 @@ public class HeaderInfo extends OpenApiElement {
 	 * Bean property setter:  <property>required</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * Determines whether this header is mandatory.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */

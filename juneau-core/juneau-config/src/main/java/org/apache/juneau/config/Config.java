@@ -139,6 +139,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
@@ -160,6 +161,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Config copyFrom) {
 			super(copyFrom);
@@ -326,7 +328,10 @@ public class Config extends Context implements ConfigEventListener {
 		 * Defaults to the comma-separated value of {@code juneau.profiles.active} (system property, environment variable
 		 * &mdash; with relaxed binding &mdash; or config key).  Pass no arguments / an empty array to disable profiles.
 		 *
-		 * @param value The active profile names, in activation order.  May be empty.
+		 * @param value
+		 * 	The active profile names, in activation order.
+		 * 	<br>May be empty.
+		 * 	<br>Can be <jk>null</jk> (treated as no active profiles).
 		 * @return This object.
 		 * @since 10.0.0
 		 */
@@ -474,7 +479,9 @@ public class Config extends Context implements ConfigEventListener {
 	/**
 	 * Same as {@link #create()} but initializes the builder with the specified config name.
 	 *
-	 * @param name The configuration name.
+	 * @param name
+	 * 	The configuration name.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(String name) {
@@ -629,6 +636,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public Config(Builder builder) throws IOException {
@@ -748,7 +756,9 @@ public class Config extends Context implements ConfigEventListener {
 	/**
 	 * Returns <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
 	 *
-	 * @param key The key.
+	 * @param key
+	 * 	The key.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
 	 */
 	public boolean exists(String key) {
@@ -770,7 +780,9 @@ public class Config extends Context implements ConfigEventListener {
 	 * <p>
 	 * If entry does not exist, returns an empty {@link Entry} object.
 	 *
-	 * @param key The key.
+	 * @param key
+	 * 	The key.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The entry bean, never <jk>null</jk>.
 	 */
 	public Entry get(String key) {
@@ -837,7 +849,9 @@ public class Config extends Context implements ConfigEventListener {
 	 * 	<li class='note'>This method is equivalent to calling <c>get(<jv>key</jv>).orElse(<jk>null</jk>);</c>.
 	 * </ul>
 	 *
-	 * @param key The key.
+	 * @param key
+	 * 	The key.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The entry value, or <jk>null</jk> if it doesn't exist.
 	 */
 	public String getString(String key) {
@@ -847,7 +861,9 @@ public class Config extends Context implements ConfigEventListener {
 	/**
 	 * Loads the contents of the specified map of maps into this config.
 	 *
-	 * @param m The maps to load.
+	 * @param m
+	 * 	The maps to load.
+	 * 	<br>Can be <jk>null</jk> (no-op).
 	 * @return This object.
 	 * @throws SerializeException Value could not be serialized.
 	 */
@@ -899,8 +915,10 @@ public class Config extends Context implements ConfigEventListener {
 	/**
 	 * Removes an entry with the specified key.
 	 *
-	 * @param key The key.
-	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @param key
+	 * 	The key.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return This object.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config remove(String key) {
@@ -986,9 +1004,11 @@ public class Config extends Context implements ConfigEventListener {
 	 * <p>
 	 * Equivalent to calling <c>put(key, value, isEncoded(key))</c>.
 	 *
-	 * @param key The key.
+	 * @param key
+	 * 	The key.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The new value POJO.
-	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @return This object.
 	 * @throws SerializeException
 	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
 	 * @throws UnsupportedOperationException If configuration is read only.
@@ -1001,12 +1021,14 @@ public class Config extends Context implements ConfigEventListener {
 	 * Same as {@link #set(String, Object)} but allows you to specify the serializer to use to serialize the
 	 * value.
 	 *
-	 * @param key The key.
+	 * @param key
+	 * 	The key.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The new value.
 	 * @param serializer
 	 * 	The serializer to use for serializing the object.
 	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
-	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @return This object.
 	 * @throws SerializeException
 	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
 	 * @throws UnsupportedOperationException If configuration is read only.
@@ -1018,7 +1040,9 @@ public class Config extends Context implements ConfigEventListener {
 	/**
 	 * Same as {@link #set(String, Object)} but allows you to specify all aspects of a value.
 	 *
-	 * @param key The key.
+	 * @param key
+	 * 	The key.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The new value.
 	 * @param serializer
 	 * 	The serializer to use for serializing the object.
@@ -1032,7 +1056,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * @param preLines
 	 * 	Optional comment or blank lines to add before this entry.
 	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
-	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @return This object.
 	 * @throws SerializeException
 	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
 	 * @throws UnsupportedOperationException If configuration is read only.
@@ -1053,8 +1077,12 @@ public class Config extends Context implements ConfigEventListener {
 	/**
 	 * Sets a value in this config.
 	 *
-	 * @param key The key.
-	 * @param value The value.
+	 * @param key
+	 * 	The key.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param value
+	 * 	The value.
+	 * 	<br>Can be <jk>null</jk> (no-op if the entry does not already exist).
 	 * @return This object.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
@@ -1087,7 +1115,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * @param preLines
 	 * 	Optional comment and blank lines to add immediately before the import statement.
 	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
-	 * @return The appended or existing import statement.
+	 * @return This object.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config setImport(String sectionName, String importName, List<String> preLines) {
@@ -1109,7 +1137,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * @param preLines
 	 * 	Optional comment and blank lines to add immediately before the section.
 	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
-	 * @return The appended or existing section.
+	 * @return This object.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config setSection(String name, List<String> preLines) {
@@ -1133,7 +1161,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * @param contents
 	 * 	Values to set in the new section.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return The appended or existing section.
+	 * @return This object.
 	 * @throws SerializeException Contents could not be serialized.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
@@ -1201,11 +1229,11 @@ public class Config extends Context implements ConfigEventListener {
 	/**
 	 * Saves this config file to the specified writer as an INI file.
 	 *
-	 * <p>
-	 * The writer will automatically be closed.
-	 *
-	 * @param w The writer to send the output to.
-	 * @return This object.
+	 * @param w
+	 * 	The writer to send the output to.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>The writer is not closed by this method.
+	 * @return The same writer passed in.
 	 * @throws IOException If a problem occurred trying to send contents to the writer.
 	 */
 	public Writer writeTo(Writer w) throws IOException {

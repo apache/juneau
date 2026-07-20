@@ -97,6 +97,7 @@ public class RrpcRestOpSession extends RestOpSession {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected RrpcRestOpSession(Builder builder) {
 		super(builder);

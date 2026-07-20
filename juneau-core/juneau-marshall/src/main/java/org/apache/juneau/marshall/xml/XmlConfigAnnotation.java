@@ -47,6 +47,7 @@ public class XmlConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(XmlConfig.class, XmlParser.Builder.class, vr);
@@ -76,6 +77,7 @@ public class XmlConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(XmlConfig.class, XmlSerializer.Builder.class, vr);

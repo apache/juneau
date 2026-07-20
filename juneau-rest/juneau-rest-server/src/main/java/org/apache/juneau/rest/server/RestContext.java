@@ -3708,9 +3708,9 @@ public class RestContext extends Context {
 	public AnnotationWorkList getAnnotations() { return annotationWork; }
 
 	/**
-	 * Returns the bean context associated with this context.
+	 * Returns the marshalling context associated with this context.
 	 *
-	 * @return The bean store associated with this context.
+	 * @return The marshalling context associated with this context.
 	 */
 	public MarshallingContext getMarshallingContext() { return beanStore.getBean(MarshallingContext.class).orElse(null); }
 
@@ -3728,7 +3728,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * The bean store is used for instantiating child resource classes.
 	 *
-	 * @return The resource resolver associated with this context.
+	 * @return The bean store associated with this context.
 	 */
 	public WritableBeanStore getBeanStore() { return beanStore; }
 
@@ -3888,7 +3888,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the HTTP call for the current request.
 	 *
-	 * @return The HTTP call for the current request, never <jk>null</jk>?
+	 * @return The HTTP call for the current request, never <jk>null</jk>.
 	 * @throws InternalServerError If no active request exists on the current thread.
 	 */
 	public RestSession getLocalSession() {
@@ -4150,7 +4150,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the swagger for the REST resource.
 	 *
-	 * @param locale The locale of the swagger to return.
+	 * @param locale The locale of the swagger to return.  Must not be <jk>null</jk>.
 	 * @return The swagger as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Swagger> getSwagger(Locale locale) {
@@ -4179,14 +4179,14 @@ public class RestContext extends Context {
 	 *
 	 * @return
 	 * 	The information provider for this resource.
-	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>May be <jk>null</jk>.
 	 */
 	public SwaggerProvider getSwaggerProvider() { return beanStore.getBean(SwaggerProvider.class).orElse(null); }
 
 	/**
 	 * Returns the OpenAPI 3.1 document for the REST resource.
 	 *
-	 * @param locale The locale of the document to return.
+	 * @param locale The locale of the document to return.  Must not be <jk>null</jk>.
 	 * @return The OpenAPI document as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<OpenApi> getOpenApi(Locale locale) {

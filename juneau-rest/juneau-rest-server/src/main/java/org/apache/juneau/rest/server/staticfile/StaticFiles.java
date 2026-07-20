@@ -203,7 +203,7 @@ public interface StaticFiles extends FileFinder {
 	 *
 	 * @param path The path to resolve to a static file.
 	 * @param locale Optional locale.
-	 * @return The resource, or <jk>null</jk> if not found.
+	 * @return The resource, or an empty {@link Optional} if not found.
 	 */
 	Optional<HttpResource> resolve(String path, Locale locale);
 }

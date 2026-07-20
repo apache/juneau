@@ -199,7 +199,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder to read configuration from.
+	 * @param builder The builder to read configuration from. Must not be <jk>null</jk>.
 	 */
 	protected ApiKeyAuthFilter(Builder builder) {
 		this.store = builder.store;

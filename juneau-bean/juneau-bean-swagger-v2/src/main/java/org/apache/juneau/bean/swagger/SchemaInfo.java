@@ -1131,13 +1131,6 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"http"</js>
-	 * 		<li><js>"https"</js>
-	 * 		<li><js>"ws"</js>
-	 * 		<li><js>"wss"</js>
-	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */

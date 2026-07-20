@@ -117,8 +117,8 @@ public abstract class AuthFilter implements Filter, Authenticator {
 	/**
 	 * Writes a 401 response with the {@code WWW-Authenticate} challenge from the exception.
 	 *
-	 * @param resp The HTTP response.
-	 * @param e The authentication failure.
+	 * @param resp The HTTP response. Must not be <jk>null</jk>.
+	 * @param e The authentication failure. Must not be <jk>null</jk>.
 	 * @throws IOException If writing to the response fails.
 	 */
 	@SuppressWarnings({

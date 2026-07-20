@@ -135,7 +135,9 @@ public class JsonLd extends CharMarshaller {
 	 * Constructor.
 	 *
 	 * @param s The serializer to use for serializing output.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param p The parser to use for parsing input.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public JsonLd(JsonLdSerializer s, JsonLdParser p) {
 		super(s, p);

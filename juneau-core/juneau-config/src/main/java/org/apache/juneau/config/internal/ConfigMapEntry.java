@@ -87,7 +87,7 @@ public class ConfigMapEntry {
 	/**
 	 * Returns the same-line comment of this entry.
 	 *
-	 * @return The same-line comment of this entry.
+	 * @return The same-line comment of this entry, or <jk>null</jk> if it has no comment.
 	 */
 	public String getComment() { return comment; }
 

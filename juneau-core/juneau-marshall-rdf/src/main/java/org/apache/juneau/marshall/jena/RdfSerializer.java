@@ -1325,6 +1325,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	 *
 	 * @param builder
 	 * 	The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public RdfSerializer(Builder<?> builder) {
 		super(builder.produces(getProduces(builder)).accept(getAccept(builder)));

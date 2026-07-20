@@ -248,6 +248,7 @@ public class ParserSession extends MarshallingSession {
 	 * Convenience method for calling the {@link NameProperty @NameProperty} method on the specified object if it exists.
 	 *
 	 * @param cm The class type of the object.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param o The object.
 	 * @param name The name to set.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
@@ -265,6 +266,7 @@ public class ParserSession extends MarshallingSession {
 	 * exists.
 	 *
 	 * @param cm The class type of the object.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param o The object.
 	 * @param parent The parent to set.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
@@ -294,6 +296,7 @@ public class ParserSession extends MarshallingSession {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected ParserSession(Builder<?> builder) {
 		super(builder);
@@ -871,8 +874,11 @@ public class ParserSession extends MarshallingSession {
 	 * Converts the specified {@link MarshalledMap} into a bean identified by the <js>"_type"</js> property in the map.
 	 *
 	 * @param m The map to convert to a bean.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param pMeta The current bean property being parsed.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param eType The current expected type being parsed.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return
 	 * 	The converted bean, or the same map if the <js>"_type"</js> entry wasn't found or didn't resolve to a bean.
 	 */
@@ -911,9 +917,12 @@ public class ParserSession extends MarshallingSession {
 	 * @param outer
 	 * 	The outer object if we're converting to an inner object that needs to be created within the context
 	 * 	of an outer object.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param s The string to convert.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param type The class type to convert the string to.
-	 * @return The string converted as an object of the specified type.
+	 * 	<br>Can be <jk>null</jk> (defaults to <c>Object</c>).
+	 * @return The string converted as an object of the specified type, or <jk>null</jk> if the input string was <jk>null</jk>.
 	 * @param <T> The class type to convert the string to.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
@@ -1062,7 +1071,9 @@ public class ParserSession extends MarshallingSession {
 	 *
 	 * @param typeName The dictionary name to resolve.
 	 * @param pMeta The bean property we're currently parsing.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param eType The expected type we're currently parsing.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The resolved class, or <jk>null</jk> if the type name could not be resolved.
 	 */
 	@SuppressWarnings({
@@ -1106,7 +1117,7 @@ public class ParserSession extends MarshallingSession {
 	 * When using the REST API, this is the Java method invoked by the REST call.
 	 * Can be used to access annotations defined on the method or class.
 	 *
-	 * @return The Java method that invoked this parser.
+	 * @return The Java method that invoked this parser, or <jk>null</jk> if not set.
 	*/
 	protected final Method getJavaMethod() { return javaMethod; }
 
@@ -1115,7 +1126,7 @@ public class ParserSession extends MarshallingSession {
 	 *
 	 * @see Parser.Builder#listener(Class)
 	 * @return
-	 * 	Class used to listen for errors and warnings that occur during parsing.
+	 * 	Class used to listen for errors and warnings that occur during parsing, or <jk>null</jk> if none was configured.
 	 */
 	protected final Class<? extends ParserListener> getListenerClass() { return ctx.getListener(); }
 
@@ -1125,7 +1136,7 @@ public class ParserSession extends MarshallingSession {
 	 * <p>
 	 * When using the REST API, this is the servlet object.
 	 *
-	 * @return The outer object.
+	 * @return The outer object, or <jk>null</jk> if none was specified.
 	*/
 	protected final Object getOuter() { return outer; }
 
@@ -1314,6 +1325,7 @@ public class ParserSession extends MarshallingSession {
 	 * Specialized warning when an exception is thrown while executing a bean setter.
 	 *
 	 * @param p The bean map entry representing the bean property.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param t The throwable that the bean setter threw.
 	 */
 	protected final void onBeanSetterException(BeanPropertyMeta p, Throwable t) {
@@ -1327,8 +1339,11 @@ public class ParserSession extends MarshallingSession {
 	 * Method that gets called when an unknown bean property name is encountered.
 	 *
 	 * @param propertyName The unknown bean property name.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param beanMap The bean that doesn't have the expected property.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The parsed value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @throws ParseException
 	 * 	Automatically thrown if {@link MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is
 	 * 	<jk>false</jk>
@@ -1430,6 +1445,7 @@ public class ParserSession extends MarshallingSession {
 	 * Invokes the specified swap on the specified object.
 	 *
 	 * @param swap The swap to invoke.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param o The input object.
 	 * @param eType The expected type.
 	 * @return The swapped object.

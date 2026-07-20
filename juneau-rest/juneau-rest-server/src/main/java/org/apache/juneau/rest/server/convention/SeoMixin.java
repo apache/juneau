@@ -31,7 +31,7 @@ import org.apache.juneau.rest.server.servlet.*;
  *
  * <p>
  * Sibling of {@link FaviconMixin} ({@code /favicon.ico}),
- * {@link VersionMixin} ({@code /version} / {@code /info} / {@code /about}), and
+ * {@link VersionMixin} ({@code /version}), and
  * {@link WellKnownMixin} ({@code /.well-known/*}). All four classes live in the
  * {@code org.apache.juneau.rest.server.convention} convention-endpoints mixin pack.
  *
@@ -138,7 +138,7 @@ public class SeoMixin extends RestMixin {
 	 * overrides such as {@code path}) via {@code super(builder)} so those values take precedence over this
 	 * mixin's own {@link Rest @Rest} annotation.
 	 *
-	 * @param builder The builder.
+	 * @param builder The builder. Must not be <jk>null</jk>.
 	 */
 	protected SeoMixin(Builder builder) {
 		super(builder);

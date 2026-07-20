@@ -70,6 +70,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	 * Creates a new session builder.
 	 *
 	 * @param ctx The serializer context.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(ParquetSerializer ctx) {

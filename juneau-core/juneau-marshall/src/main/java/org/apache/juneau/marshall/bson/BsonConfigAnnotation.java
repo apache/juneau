@@ -43,6 +43,7 @@ public class BsonConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(BsonConfig.class, BsonParser.Builder.class, vr);
@@ -65,6 +66,7 @@ public class BsonConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(BsonConfig.class, BsonSerializer.Builder.class, vr);

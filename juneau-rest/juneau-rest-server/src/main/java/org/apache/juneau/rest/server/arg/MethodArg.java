@@ -44,7 +44,7 @@ public class MethodArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new {@link MethodArg}, or <jk>null</jk> if the parameter isn't annotated with {@link Method}.
 	 */
 	public static MethodArg create(ParameterInfo paramInfo) {

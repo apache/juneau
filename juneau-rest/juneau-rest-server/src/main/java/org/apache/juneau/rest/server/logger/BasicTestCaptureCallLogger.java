@@ -90,7 +90,7 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	/**
 	 * Constructor using specific settings.
 	 *
-	 * @param beanStore The bean store containing injectable beans for this logger.
+	 * @param beanStore The bean store containing injectable beans for this logger. Must not be <jk>null</jk>.
 	 */
 	public BasicTestCaptureCallLogger(BeanStore beanStore) {
 		super(beanStore);
@@ -115,9 +115,9 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	}
 
 	/**
-	 * Returns the last logged message level.
+	 * Returns an assertion of the last logged throwable.
 	 *
-	 * @return The last logged message level, or <jk>null</jk> if nothing was logged.
+	 * @return The last logged throwable as an assertion object.  Never <jk>null</jk>.
 	 */
 	public ThrowableAssertion<Throwable> assertThrown() {
 		return new ThrowableAssertion<>(getThrown());
@@ -146,7 +146,7 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	/**
 	 * Returns the last logged message and then deletes it internally.
 	 *
-	 * @return The last logged message.
+	 * @return The last logged message, or <jk>null</jk> if nothing was logged.
 	 */
 	public String getMessageAndReset() {
 		var msg = getMessage();
@@ -155,9 +155,9 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	}
 
 	/**
-	 * Returns the last logged message level.
+	 * Returns the last logged throwable.
 	 *
-	 * @return The last logged message level, or <jk>null</jk> if nothing was logged.
+	 * @return The last logged throwable, or <jk>null</jk> if nothing was logged.
 	 */
 	public Throwable getThrown() {
 		LogRecord r = lastRecord.get();

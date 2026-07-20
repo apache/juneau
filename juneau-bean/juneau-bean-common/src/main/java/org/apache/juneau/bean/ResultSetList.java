@@ -72,7 +72,7 @@ public class ResultSetList extends LinkedList<Map<String,Object>> {
 	/**
 	 * Constructor.
 	 *
-	 * @param rs The result set to load into this DTO.
+	 * @param rs The result set to load into this DTO.  Must not be <jk>null</jk>.
 	 * @param pos The start position (zero-indexed).
 	 * @param limit The maximum number of rows to retrieve.
 	 * @param includeRowNums Make the first column be the row number.

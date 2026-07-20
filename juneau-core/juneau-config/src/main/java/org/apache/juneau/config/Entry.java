@@ -335,7 +335,9 @@ public class Entry {
 	 * <p>
 	 * If the parser is a JSON parser, the starting/trailing <js>"["</js>/<js>"]"</js> in the value are optional.
 	 *
-	 * @param parser The parser to use to parse the value, or {@link Optional#empty()} to use the parser defined on the config.
+	 * @param parser
+	 * 	The parser to use to parse the value.
+	 * 	<br>Can be <jk>null</jk> to use the parser defined on the config.
 	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
 	 * @throws ParseException If value could not be parsed.
 	 */
@@ -409,8 +411,10 @@ public class Entry {
 	 * <p>
 	 * If the parser is a JSON parser, the starting/trailing <js>"{"</js>/<js>"}"</js> in the value are optional.
 	 *
-	 * @param parser The parser to use to parse the value, or {@link Optional#empty()} to use the parser defined on the config.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 * @param parser
+	 * 	The parser to use to parse the value.
+	 * 	<br>Can be <jk>null</jk> to use the parser defined on the config.
+	 * @return The value, or an empty {@link Optional} if the section or key does not exist.
 	 * @throws ParseException If value could not be parsed.
 	 */
 	public Optional<JsonMap> asMap(Parser parser) throws ParseException {
@@ -463,7 +467,7 @@ public class Entry {
 	/**
 	 * Returns this entry as a string.
 	 *
-	 * @return <jk>true</jk> if this entry exists in the config and is not empty.
+	 * @return This entry as a string.
 	 * @throws NullPointerException if value was <jk>null</jk>.
 	 */
 	public String get() {

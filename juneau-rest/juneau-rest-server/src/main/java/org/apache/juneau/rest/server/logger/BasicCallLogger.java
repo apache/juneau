@@ -50,7 +50,7 @@ public class BasicCallLogger extends CallLogger {
 	/**
 	 * Constructor using specific settings.
 	 *
-	 * @param beanStore The bean store containing injectable beans for this logger.
+	 * @param beanStore The bean store containing injectable beans for this logger. Must not be <jk>null</jk>.
 	 */
 	public BasicCallLogger(BeanStore beanStore) {
 		super(beanStore);

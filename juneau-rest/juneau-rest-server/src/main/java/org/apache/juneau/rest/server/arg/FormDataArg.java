@@ -63,7 +63,7 @@ public class FormDataArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link FormDataArg}, or <jk>null</jk> if the parameter is not annotated with {@link FormData}.
 	 */
@@ -126,7 +126,7 @@ public class FormDataArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param pi The Java method parameter being resolved.
+	 * @param pi The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected FormDataArg(ParameterInfo pi, AnnotationWorkList annotations) {

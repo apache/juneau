@@ -86,7 +86,7 @@ public class DefaultSwaps {
 	/**
 	 * Find the default ObjectSwap for the specified class.
 	 *
-	 * @param ci The class to find the swap for.
+	 * @param ci The class to find the swap for. Must not be <jk>null</jk>.
 	 * @return The matched swap, or <jk>null</jk> if it couldn't be found.
 	 */
 	@SuppressWarnings({

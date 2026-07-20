@@ -55,7 +55,7 @@ import org.apache.juneau.marshall.stream.*;
  * whether it's a stream or character based serializer.
  *
  * <p>
- * Subclasses must implement parsing via one of the following methods:
+ * Subclasses must implement serialization via one of the following methods:
  * <ul class='javatree'>
  * 	<li class='jmp'>{@link #doWrite(SerializerSession, SerializerPipe, Object)}
  * 	<li class='jmp'>{@link SerializerSession#doWrite(SerializerPipe, Object)}
@@ -1012,7 +1012,8 @@ public class Serializer extends MarshallingTraverseContext {
 	 * Looks for a public static method called <c>create</c> that returns an object that can be passed into a public
 	 * or protected constructor of the class.
 	 *
-	 * @param c The builder to create.
+	 * @param c The serializer class to create a builder for.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder createSerializerBuilder(Class<? extends Serializer> c) {
@@ -1041,7 +1042,8 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * Constructor
 	 *
-	 * @param builder The builder this object.
+	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected Serializer(Builder<?> builder) {
 		super(builder);
@@ -1084,6 +1086,7 @@ public class Serializer extends MarshallingTraverseContext {
 	 * The order of the media types are the same as those in the <c>accept</c> parameter.
 	 *
 	 * @param action The action to perform on the media types.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public final Serializer forEachAcceptMediaType(Consumer<MediaType> action) {

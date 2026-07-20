@@ -157,7 +157,7 @@ public class BasicFileFinder implements FileFinder {
 	 * @param locale
 	 * 	The locale of the resource to retrieve.
 	 * 	<br>If <jk>null</jk>, won't look for localized file names.
-	 * @return The resolved resource contents, or <jk>null</jk> if the resource was not found.
+	 * @return The resolved resource contents, or an empty {@link Optional} if the resource was not found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	@SuppressWarnings({

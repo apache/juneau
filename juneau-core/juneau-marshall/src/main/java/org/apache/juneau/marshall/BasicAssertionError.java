@@ -40,7 +40,7 @@ public class BasicAssertionError extends AssertionError {
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause of this exception.
+	 * @param cause The cause of this exception.  Can be <jk>null</jk>.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */

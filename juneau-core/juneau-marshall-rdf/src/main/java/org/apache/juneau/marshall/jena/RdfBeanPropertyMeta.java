@@ -48,6 +48,7 @@ public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
+	 * 	Must not be <jk>null</jk>.
 	 * @param mp RDF metadata provider (for finding information about other artifacts).
 	 */
 	public RdfBeanPropertyMeta(BeanPropertyMeta bpm, RdfMetaProvider mp) {

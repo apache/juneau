@@ -114,7 +114,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder for this object.
+	 * @param builder The builder for this object.  Cannot be <jk>null</jk>.
 	 */
 	protected JsonSchemaGeneratorSession(Builder builder) {
 		super(builder);
@@ -140,7 +140,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	/**
 	 * Returns the definition ID for the specified class.
 	 *
-	 * @param cm The class to get the definition ID of.
+	 * @param cm The class to get the definition ID of.  Must not be <jk>null</jk>.
 	 * @return The definition ID for the specified class.
 	 */
 	public String getBeanDefId(ClassMeta<?> cm) {
@@ -161,7 +161,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	/**
 	 * Returns the definition URI for the specified class.
 	 *
-	 * @param cm The class to get the definition URI of.
+	 * @param cm The class to get the definition URI of.  Must not be <jk>null</jk>.
 	 * @return The definition URI for the specified class.
 	 */
 	public java.net.URI getBeanDefUri(ClassMeta<?> cm) {
@@ -181,7 +181,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	/**
 	 * Returns the language-specific metadata on the specified bean property.
 	 *
-	 * @param bpm The bean property to return the metadata on.
+	 * @param bpm The bean property to return the metadata on.  Must not be <jk>null</jk>.
 	 * @return The metadata.
 	 */
 	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
@@ -191,7 +191,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	/**
 	 * Returns the language-specific metadata on the specified class.
 	 *
-	 * @param cm The class to return the metadata on.
+	 * @param cm The class to return the metadata on.  Must not be <jk>null</jk>.
 	 * @return The metadata.
 	 */
 	public JsonSchemaClassMeta getJsonSchemaClassMeta(ClassMeta<?> cm) {
@@ -202,7 +202,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	 * Returns the JSON-schema for the specified type.
 	 *
 	 * @param cm The object type.
-	 * @return The schema for the type.
+	 * @return The schema for the type, or <jk>null</jk> if the type is ignored (see {@link JsonSchemaGenerator.Builder#ignoreTypes(String...)}).
 	 * @throws MarshallingRecursionException Bean recursion occurred.
 	 * @throws SerializeException Error occurred.
 	 */
@@ -216,7 +216,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	 * @param o
 	 * 	The object.
 	 * 	<br>Can either be a POJO or a <c>Class</c>/<c>Type</c>.
-	 * @return The schema for the type.
+	 * @return The schema for the type, or <jk>null</jk> if the type is ignored (see {@link JsonSchemaGenerator.Builder#ignoreTypes(String...)}).
 	 * @throws MarshallingRecursionException Bean recursion occurred.
 	 * @throws SerializeException Error occurred.
 	 */
@@ -228,7 +228,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	 * Returns the JSON-schema for the specified type.
 	 *
 	 * @param type The object type.
-	 * @return The schema for the type.
+	 * @return The schema for the type, or <jk>null</jk> if the type is ignored (see {@link JsonSchemaGenerator.Builder#ignoreTypes(String...)}).
 	 * @throws MarshallingRecursionException Bean recursion occurred.
 	 * @throws SerializeException Error occurred.
 	 */

@@ -42,8 +42,8 @@ public class StringResource extends BasicResource {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.
-	 * @param contents The entity contents.
+	 * @param contentType The entity content type.  Can be <jk>null</jk>.
+	 * @param contents The entity contents.  Can be <jk>null</jk>.
 	 */
 	public StringResource(ContentType contentType, String contents) {
 		super(new StringEntity(contentType, contents));

@@ -40,6 +40,7 @@ public class JcsConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(JcsConfig.class, JcsSerializer.Builder.class, vr);

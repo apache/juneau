@@ -112,7 +112,7 @@ public class MediaType extends OpenApiElement {
 	}
 
 	/**
-	 * Adds one or more values to the <property>variables</property> property.
+	 * Adds one or more values to the <property>encoding</property> property.
 	 *
 	 * @param key The mapping key.  Must not be <jk>null</jk>.
 	 * @param value
@@ -163,7 +163,7 @@ public class MediaType extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>variables</property>.
+	 * Bean property getter:  <property>encoding</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -181,7 +181,7 @@ public class MediaType extends OpenApiElement {
 	 * Bean property getter:  <property>examples</property>.
 	 *
 	 * <p>
-	 * The list of possible responses as they are returned from executing this operation.
+	 * Examples of the media type.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -223,7 +223,7 @@ public class MediaType extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>variables</property>.
+	 * Bean property setter:  <property>encoding</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -238,7 +238,7 @@ public class MediaType extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>examples</property>.
+	 * Bean property setter:  <property>x-example</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -252,10 +252,10 @@ public class MediaType extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>headers</property>.
+	 * Bean property setter:  <property>examples</property>.
 	 *
 	 * <p>
-	 * A list of examples that are sent with the response.
+	 * Examples of the media type.
 	 *
 	 * @param value
 	 * 	The new value for this property.

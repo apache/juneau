@@ -112,7 +112,7 @@ public class RequestAttributes {
 	/**
 	 * Constructor.
 	 *
-	 * @param req The request creating this bean.
+	 * @param req The request creating this bean.  Must not be <jk>null</jk>.
 	 */
 	public RequestAttributes(RestRequest req) {
 		this.req = req;
@@ -224,7 +224,7 @@ public class RequestAttributes {
 	 * Returns the request attribute with the specified name.
 	 *
 	 * @param name The attribute name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
+	 * @return The request attribute, never <jk>null</jk>.
 	 */
 	public RequestAttribute get(String name) {
 		return new RequestAttribute(req, name, sreq.getAttribute(name));

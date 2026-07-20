@@ -109,6 +109,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected OutputStreamSerializerSession(Builder<?> builder) {
 		super(builder);

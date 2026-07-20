@@ -44,8 +44,8 @@ public class DefaultingTemporalAccessor implements TemporalAccessor {
 	/**
 	 * Constructor.
 	 *
-	 * @param inner The temporal accessor being wrapped.
-	 * @param zoneId The default zone ID if it's not specified in the accessor.
+	 * @param inner The temporal accessor being wrapped. Must not be <jk>null</jk>.
+	 * @param zoneId The default zone ID if it's not specified in the accessor. Must not be <jk>null</jk>.
 	 */
 	public DefaultingTemporalAccessor(TemporalAccessor inner, ZoneId zoneId) {
 		this.inner = inner;

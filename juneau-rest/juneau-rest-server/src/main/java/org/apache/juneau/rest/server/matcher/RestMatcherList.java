@@ -63,6 +63,7 @@ public class RestMatcherList {
 		 * Appends the specified rest matcher classes to the list.
 		 *
 		 * @param values The values to add.
+		 * 	<br>Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		@SuppressWarnings({
@@ -78,6 +79,7 @@ public class RestMatcherList {
 		 * Appends the specified rest matcher objects to the list.
 		 *
 		 * @param values The values to add.
+		 * 	<br>Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder append(RestMatcher...values) {
@@ -113,6 +115,7 @@ public class RestMatcherList {
 	 * Constructor.
 	 *
 	 * @param builder The builder containing the contents for this list.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	protected RestMatcherList(Builder builder) {
 		List<RestMatcher> l = builder.entries.stream().map(BeanInstantiator.Builder::run).toList();

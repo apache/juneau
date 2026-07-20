@@ -43,6 +43,7 @@ public class UrlEncodingConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(UrlEncodingConfig.class, UrlEncodingParser.Builder.class, vr);
@@ -65,6 +66,7 @@ public class UrlEncodingConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(UrlEncodingConfig.class, UrlEncodingSerializer.Builder.class, vr);

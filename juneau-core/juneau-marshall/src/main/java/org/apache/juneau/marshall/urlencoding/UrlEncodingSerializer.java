@@ -158,6 +158,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
@@ -168,6 +169,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(UrlEncodingSerializer copyFrom) {
 			super(copyFrom);

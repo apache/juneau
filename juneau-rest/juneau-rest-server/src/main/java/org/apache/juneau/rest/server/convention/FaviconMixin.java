@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.servlet.*;
  *
  * <p>
  * Sibling of {@link SeoMixin} (robots.txt / sitemap.xml), {@link VersionMixin}
- * ({@code /version} / {@code /info} / {@code /about}), and {@link WellKnownMixin}
+ * ({@code /version}), and {@link WellKnownMixin}
  * ({@code /.well-known/*}). All four classes live in the {@code org.apache.juneau.rest.server.convention}
  * convention-endpoints mixin pack.
  *

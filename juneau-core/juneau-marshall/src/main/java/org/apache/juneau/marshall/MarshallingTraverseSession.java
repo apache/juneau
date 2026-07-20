@@ -154,7 +154,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder for this object.
+	 * @param builder The builder for this object.  Cannot be <jk>null</jk>.
 	 */
 	protected MarshallingTraverseSession(Builder<?> builder) {
 		super(builder);
@@ -226,7 +226,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	/**
 	 * Returns the inner type of an {@link Optional}.
 	 *
-	 * @param cm The meta to check.
+	 * @param cm The meta to check.  Must not be <jk>null</jk>.
 	 * @return The inner type of an {@link Optional}.
 	 */
 	protected final ClassMeta<?> getOptionalType(ClassMeta<?> cm) {
@@ -238,7 +238,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	/**
 	 * If the specified object is an {@link Optional}, returns the inner object.
 	 *
-	 * @param o The object to check.
+	 * @param o The object to check.  Can be <jk>null</jk>.
 	 * @return The inner object if it's an {@link Optional}, <jk>null</jk> if it's <jk>null</jk>, or else the same object.
 	 */
 	protected final Object getOptionalValue(Object o) {
@@ -282,7 +282,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	/**
 	 * Same as {@link ClassMeta#isOptional()} but gracefully handles a null {@link ClassMeta}.
 	 *
-	 * @param cm The meta to check.
+	 * @param cm The meta to check.  Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if the specified meta is an {@link Optional}.
 	 */
 	protected static final boolean isOptional(ClassMeta<?> cm) {
@@ -343,9 +343,9 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	 * {@link MarshallingTraverseContext.Builder#detectRecursions() detectRecursions}; to omit repeated nodes as
 	 * <jk>null</jk>, enable {@link MarshallingTraverseContext.Builder#ignoreRecursions() ignoreRecursions}.
 	 *
-	 * @param attrName The attribute name.
-	 * @param o The current object being traversed.
-	 * @param eType The expected class type.
+	 * @param attrName The attribute name.  Can be <jk>null</jk>.
+	 * @param o The current object being traversed.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @param eType The expected class type.  Can be <jk>null</jk>.
 	 * @return
 	 * 	The {@link ClassMeta} of the object so that <c>instanceof</c> operations only need to be performed
 	 * 	once (since they can be expensive).

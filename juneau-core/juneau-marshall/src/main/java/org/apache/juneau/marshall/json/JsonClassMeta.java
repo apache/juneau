@@ -38,6 +38,7 @@ public class JsonClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param mp JSON metadata provider (for finding information about other artifacts).
 	 */
 	public JsonClassMeta(ClassMeta<?> cm, JsonMetaProvider mp) {

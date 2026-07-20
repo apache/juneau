@@ -43,7 +43,7 @@ public class RestResponseArgs extends SimpleRestOperationArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
 	public static RestResponseArgs create(ParameterInfo paramInfo) {

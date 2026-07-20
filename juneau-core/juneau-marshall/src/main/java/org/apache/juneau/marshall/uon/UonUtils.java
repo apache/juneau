@@ -44,6 +44,7 @@ public class UonUtils {
 	 * For example, strings that start with '(' or '@' or look like boolean or numeric values need to be quoted.
 	 *
 	 * @param s The string to test.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the specified string needs to be quoted per UON notation.
 	 */
 	public static boolean needsQuotes(String s) {

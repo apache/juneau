@@ -39,6 +39,8 @@ import org.apache.juneau.rest.server.*;
  * 	<li><js>"pathInfo"</js> - Value returned by {@link RestRequest#getPathInfo()}
  * 	<li><js>"requestParentURI"</js> - Value returned by {@link UriContext#getRootRelativePathInfoParent()}
  * 	<li><js>"requestURI"</js> - Value returned by {@link RestRequest#getRequestURI()}
+ * 	<li><js>"servletClass"</js> - The fully-qualified name of the resource class (see {@link RestContext#getResourceClass()})
+ * 	<li><js>"servletClassSimple"</js> - The simple name of the resource class (see {@link RestContext#getResourceClass()})
  * 	<li><js>"servletParentURI"</js> - Value returned by {@link UriContext#getRootRelativeServletPathParent()}
  * 	<li><js>"servletPath"</js> - See {@link RestRequest#getServletPath()}
  * 	<li><js>"servletURI"</js> - See {@link UriContext#getRootRelativeServletPath()}

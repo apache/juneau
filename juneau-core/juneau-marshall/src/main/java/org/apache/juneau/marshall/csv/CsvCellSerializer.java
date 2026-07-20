@@ -37,7 +37,9 @@ public final class CsvCellSerializer {
 	 * Creates a new serializer.
 	 *
 	 * @param byteArrayFormat Format for byte[] values.
+	 * 	<br>Can be <jk>null</jk> (defaults to {@link CsvByteArrayCellFormat#BASE64}).
 	 * @param nullMarker String to use for null values.
+	 * 	<br>Can be <jk>null</jk> (defaults to {@code null}).
 	 */
 	public CsvCellSerializer(CsvByteArrayCellFormat byteArrayFormat, String nullMarker) {
 		this.byteArrayFormat = or(byteArrayFormat, CsvByteArrayCellFormat.BASE64);
@@ -48,7 +50,9 @@ public final class CsvCellSerializer {
 	 * Serializes a value to inline notation.
 	 *
 	 * @param value The value to serialize.
+	 * 	<br>Can be <jk>null</jk> (serialized as the null marker).
 	 * @param session The serializer session (for bean conversion, date formatting, etc.).
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The serialized string.
 	 */
 	public String write(Object value, CsvSerializerSession session) {

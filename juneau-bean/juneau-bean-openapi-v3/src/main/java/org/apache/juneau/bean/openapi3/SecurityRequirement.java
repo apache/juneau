@@ -99,7 +99,7 @@ public class SecurityRequirement extends OpenApiElement {
 	/**
 	 * Returns the security requirements map.
 	 *
-	 * @return The security requirements map.
+	 * @return The security requirements map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,List<String>> getRequirements() { return requirements; }
 

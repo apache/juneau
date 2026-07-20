@@ -51,6 +51,7 @@ public class BasicOpenApiProvider implements OpenApiProvider {
 	 * Constructor.
 	 *
 	 * @param beanStore The bean store containing injectable beans for this provider.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public BasicOpenApiProvider(BeanStore beanStore) {
 		// @formatter:off
@@ -69,6 +70,7 @@ public class BasicOpenApiProvider implements OpenApiProvider {
 	 * Constructor.
 	 *
 	 * @param builder The builder containing the settings for this OpenAPI provider.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public BasicOpenApiProvider(OpenApiProvider.Builder builder) {
 		this.beanStore = builder.beanStore;

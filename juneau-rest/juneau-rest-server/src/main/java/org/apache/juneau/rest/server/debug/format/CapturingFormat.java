@@ -30,7 +30,7 @@ public class CapturingFormat extends BasicTextFormat {
 	/**
 	 * Returns and clears the last message.
 	 *
-	 * @return The captured message.
+	 * @return The captured message, or <jk>null</jk> if no message has been captured since the last reset.
 	 */
 	public static String getAndReset() {
 		return LAST_MESSAGE.getAndSet(null);

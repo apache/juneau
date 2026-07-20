@@ -144,6 +144,7 @@ public class ReaderParserSession extends ParserSession {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected ReaderParserSession(Builder<?> builder) {
 		super(builder);

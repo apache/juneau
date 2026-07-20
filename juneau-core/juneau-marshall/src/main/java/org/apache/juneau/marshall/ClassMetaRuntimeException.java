@@ -44,7 +44,7 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 	/**
 	 * Shortcut for calling <code><jk>new</jk> ClassMetaRuntimeException(String.format(c.getName() + <js>": "</js> + message, args));</code>
 	 *
-	 * @param c The class name of the bean that caused the exception.
+	 * @param c The class name of the bean that caused the exception.  Can be <jk>null</jk> (omits the class-name prefix).
 	 * @param message The error message.
 	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
@@ -74,7 +74,7 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The initial cause of the exception.
+	 * @param cause The initial cause of the exception.  Can be <jk>null</jk>.
 	 */
 	public ClassMetaRuntimeException(Throwable cause) {
 		this(cause, null, null);
@@ -83,8 +83,8 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause of this exception.
-	 * @param c The class name of the bean that caused the exception.
+	 * @param cause The cause of this exception.  Can be <jk>null</jk>.
+	 * @param c The class name of the bean that caused the exception.  Can be <jk>null</jk> (omits the class-name prefix).
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */

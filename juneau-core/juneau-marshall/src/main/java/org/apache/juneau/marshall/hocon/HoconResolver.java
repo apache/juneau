@@ -44,6 +44,7 @@ public class HoconResolver {
 	 * Constructor.
 	 *
 	 * @param root The root HOCON object (after parsing, before resolution).
+	 * 	<br>Must not be <jk>null</jk> ({@link #resolve()} dereferences it).
 	 */
 	public HoconResolver(HoconValue.HoconObject root) {
 		this.root = root;
@@ -144,6 +145,7 @@ public class HoconResolver {
 	 * Looks up a dotted path in the root object.
 	 *
 	 * @param path The path (e.g., "database.host").
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The value at that path, or <jk>null</jk>.
 	 */
 	public HoconValue lookup(String path) {
@@ -159,7 +161,9 @@ public class HoconResolver {
 	 * This allows <code>path = ${path}"/bin"</code> to append to the previous value.
 	 *
 	 * @param concat The concatenation to resolve.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param lookup Custom lookup; for path X returns the value to use (e.g. previous value for self-ref).
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The resolved string value.
 	 */
 	public HoconValue resolveConcatWithLookup(HoconValue.HoconConcat concat, Function<String, HoconValue> lookup) {

@@ -70,7 +70,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
+		 * @param copyFrom The bean to copy from.  Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MarshallingTraverseContext copyFrom) {
 			super(copyFrom);
@@ -83,7 +83,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder to copy from.
+		 * @param copyFrom The builder to copy from.  Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
 			super(copyFrom);
@@ -302,7 +302,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 	/**
 	 * Constructor
 	 *
-	 * @param builder The builder for this object.
+	 * @param builder The builder for this object.  Cannot be <jk>null</jk>.
 	 */
 	protected MarshallingTraverseContext(Builder builder) {
 		super(builder);

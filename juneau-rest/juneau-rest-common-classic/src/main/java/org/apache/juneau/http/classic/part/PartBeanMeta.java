@@ -74,7 +74,7 @@ public class PartBeanMeta<T> {
 	 *
 	 * @param <T> The part bean type.
 	 * @param type The part bean type.  Must not be <jk>null</jk>.
-	 * @return The metadata, or <jk>null</jk> if a valid constructor could not be found.
+	 * @return The metadata for the specified type.  Never <jk>null</jk> (a bean with no usable constructor causes {@link #construct(String,Object)} to throw instead).
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast for PartBeanMeta creation
@@ -123,6 +123,7 @@ public class PartBeanMeta<T> {
 	 * 	The part value.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A newly constructed bean.
+	 * @throws UnsupportedOperationException If bean could not be constructed (e.g. couldn't find a constructor).
 	 */
 	public T construct(Object value) {
 		return construct(null, value);

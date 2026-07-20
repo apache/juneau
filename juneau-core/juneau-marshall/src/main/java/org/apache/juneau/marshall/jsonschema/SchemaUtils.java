@@ -44,7 +44,7 @@ public class SchemaUtils {
 	/**
 	 * Joins an array of strings with newlines.
 	 *
-	 * @param s The array to join.
+	 * @param s The arrays to join.  Must not be <jk>null</jk>.
 	 * @return A new joined string.
 	 */
 	public static String joinnl(String[]...s) {
@@ -58,7 +58,7 @@ public class SchemaUtils {
 	/**
 	 * Parses a generic object as JSON and converts it to an {@link JsonMap}.
 	 *
-	 * @param o The object to convert.
+	 * @param o The object to convert.  Can be <jk>null</jk>.
 	 * @return
 	 * 	The parsed contents (a new empty {@link JsonMap} if {@code o} is <jk>null</jk> or an empty string),
 	 * 	never <jk>null</jk>.
@@ -89,7 +89,7 @@ public class SchemaUtils {
 	/**
 	 * Concatenates and parses a string array as a JSON object.
 	 *
-	 * @param ss The array to concatenate and parse.
+	 * @param ss The array to concatenate and parse.  Must not be <jk>null</jk>.
 	 * @return
 	 * 	The parsed contents (a new empty {@link JsonMap} if the array is empty or joins to an empty string),
 	 * 	never <jk>null</jk>.
@@ -109,7 +109,7 @@ public class SchemaUtils {
 	/**
 	 * Concatenates and parses a string array as JSON array or comma-delimited list.
 	 *
-	 * @param ss The array to concatenate and parse.
+	 * @param ss The array to concatenate and parse.  Must not be <jk>null</jk>.
 	 * @return
 	 * 	The parsed contents (a new empty mutable {@link Set} if the array is empty or joins to an empty string),
 	 * 	never <jk>null</jk>.

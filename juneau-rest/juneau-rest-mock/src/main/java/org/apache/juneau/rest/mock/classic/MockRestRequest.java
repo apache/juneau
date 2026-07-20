@@ -450,9 +450,9 @@ public class MockRestRequest extends RestRequest {
 	public String getRemoteUser() { return remoteUser; }
 
 	/**
-	 * Returns the request dispatcher to set on the underlying {@link HttpServletRequest} obhject.
+	 * Returns the request dispatcher to set on the underlying {@link HttpServletRequest} object.
 	 *
-	 * @return The value of the <property>requestDispatcherMap</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The request dispatcher map. Never <jk>null</jk>.
 	 */
 	public Map<String,RequestDispatcher> getRequestDispatcherMap() { return requestDispatcherMap; }
 

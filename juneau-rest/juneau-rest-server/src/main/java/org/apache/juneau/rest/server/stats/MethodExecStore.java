@@ -69,7 +69,7 @@ public class MethodExecStore {
 		/**
 		 * Overrides the bean returned by the {@link #build()} method with a pre-instantiated instance.
 		 *
-		 * @param value The setting value.
+		 * @param value The setting value. Can be <jk>null</jk> (the {@link #build()} method instantiates the {@link #type(Class) type} instead).
 		 * @return This object.
 		 */
 		public Builder impl(Object value) {
@@ -120,7 +120,7 @@ public class MethodExecStore {
 		/**
 		 * Overrides the bean type produced by the {@link #build()} method.
 		 *
-		 * @param value The setting value.
+		 * @param value The setting value. Can be <jk>null</jk> (defaults to {@link MethodExecStore}).
 		 * @return This object.
 		 */
 		@SuppressWarnings({
@@ -176,7 +176,7 @@ public class MethodExecStore {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The store to use for storing thrown exception statistics.
+	 * @param builder The builder for this object. Must not be <jk>null</jk>.
 	 */
 	protected MethodExecStore(Builder builder) {
 		this.beanStore = builder.beanStore();
@@ -187,7 +187,7 @@ public class MethodExecStore {
 	/**
 	 * Returns the timing information returned by {@link #getStatsByTotalTime()} in a readable format.
 	 *
-	 * @return A report of all method execution times ordered by .
+	 * @return A report of all method execution times ordered by total time descending.
 	 */
 	public String getReport() {
 		// @formatter:off
@@ -216,7 +216,7 @@ public class MethodExecStore {
 	 * <p>
 	 * Creates a new stats object if one has not already been created.
 	 *
-	 * @param m The method to return the statistics for.
+	 * @param m The method to return the statistics for. Must not be <jk>null</jk>.
 	 * @return The statistics for the specified method.  Never <jk>null</jk>.
 	 */
 	public MethodExecStats getStats(Method m) {

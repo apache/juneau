@@ -45,8 +45,8 @@ public enum CallLoggingDetail {
 	/**
 	 * Retrieves this enum using case-insensitive matching.
 	 *
-	 * @param s The enum name to resolve.
-	 * @return The resolved value.
+	 * @param s The enum name to resolve. Can be <jk>null</jk>.
+	 * @return The resolved value, or <jk>null</jk> if the string is <jk>null</jk>, empty, or not a valid enum name.
 	 */
 	public static CallLoggingDetail fromString(String s) {
 		if (ine(s)) {

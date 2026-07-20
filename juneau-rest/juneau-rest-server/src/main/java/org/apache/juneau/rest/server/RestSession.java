@@ -91,9 +91,9 @@ public class RestSession extends ContextSession {
 		}
 
 		/**
-		 * Returns the request path info as a {@link UrlPath} bean.
+		 * Returns the undecoded request servlet path info.
 		 *
-		 * @return The request path info as a {@link UrlPath} bean.
+		 * @return The undecoded request servlet path info, or <jk>null</jk> if there is no extra path information.
 		 */
 		public String getPathInfoUndecoded() {
 			if (pathInfoUndecoded == null)
@@ -237,6 +237,7 @@ public class RestSession extends ContextSession {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public RestSession(Builder builder) {
 		super(builder);
@@ -324,7 +325,7 @@ public class RestSession extends ContextSession {
 	/**
 	 * Returns the exception that occurred during this call.
 	 *
-	 * @return The exception that occurred during this call.
+	 * @return The exception that occurred during this call, or <jk>null</jk> if no exception occurred.
 	 */
 	public Throwable getException() { return (Throwable)req.getAttribute("Exception"); }
 
@@ -334,7 +335,7 @@ public class RestSession extends ContextSession {
 	 * Returns the HTTP method name.
 	 *
 	 * @return The HTTP method name, always uppercased.
-	 * @throws NotFound If the method parameter contains invalid/malformed characters.
+	 * @throws MethodNotAllowed If the method parameter contains invalid/malformed characters.
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for REST method resolution/mapping
@@ -411,7 +412,7 @@ public class RestSession extends ContextSession {
 	/**
 	 * Same as {@link #getPathInfo()} but doesn't decode encoded characters.
 	 *
-	 * @return The undecoded request servlet path info.
+	 * @return The undecoded request servlet path info, or <jk>null</jk> if there is no extra path information.
 	 */
 	public String getPathInfoUndecoded() {
 		if (pathInfoUndecoded == null)
@@ -467,7 +468,7 @@ public class RestSession extends ContextSession {
 	/**
 	 * Returns the REST object.
 	 *
-	 * @return The rest object.
+	 * @return The rest object, or <jk>null</jk> if no resource bean was specified.
 	 */
 	public Object getResource() { return resource; }
 
@@ -506,7 +507,7 @@ public class RestSession extends ContextSession {
 	/**
 	 * Returns the URL path pattern match on this call.
 	 *
-	 * @return The URL path pattern match on this call.
+	 * @return The URL path pattern match on this call, or <jk>null</jk> if not set.
 	 */
 	public UrlPathMatch getUrlPathMatch() { return urlPathMatch; }
 

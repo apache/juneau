@@ -81,6 +81,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 	 * Creates a session builder.
 	 *
 	 * @param ctx The parser context.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The builder.
 	 */
 	public static Builder create(TomlParser ctx) {

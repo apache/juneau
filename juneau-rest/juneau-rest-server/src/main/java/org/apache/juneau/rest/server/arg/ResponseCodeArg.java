@@ -37,7 +37,7 @@ public class ResponseCodeArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new {@link ResponseCodeArg}, or <jk>null</jk> if the parameter is not annotated with {@link StatusCode}.
 	 */
 	public static ResponseCodeArg create(ParameterInfo paramInfo) {
@@ -51,7 +51,7 @@ public class ResponseCodeArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 */
 	protected ResponseCodeArg(ParameterInfo paramInfo) {
 		this.type = paramInfo.getParameterType().innerType();

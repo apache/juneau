@@ -51,7 +51,7 @@ public class HasFormDataArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new {@link HasFormDataArg}, or <jk>null</jk> if the parameter is not annotated with {@link HasFormData}.
 	 */
 	public static HasFormDataArg create(ParameterInfo paramInfo) {
@@ -74,7 +74,7 @@ public class HasFormDataArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param pi The Java method parameter being resolved.
+	 * @param pi The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 */
 	protected HasFormDataArg(ParameterInfo pi) {
 		// @formatter:off

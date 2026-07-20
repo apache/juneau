@@ -325,11 +325,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Main serialization routine.
 	 *
-	 * @param session The serialization context object.
 	 * @param o The object being serialized.
 	 * @param w The writer to serialize to.
 	 * @return The same writer passed in.
-	 * @throws IOException If a problem occurred trying to send output to the writer.
+	 * @throws SerializeException If a problem occurred trying to send output to the writer.
 	 */
 	private XmlWriter doSerialize(Object o, XmlWriter w) throws SerializeException {
 		writeAnything(w, o, getExpectedRootType(o), null, null, getInitialDepth() - 1, true, false);
@@ -771,8 +770,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * Converts the specified output target object to an {@link HtmlWriter}.
 	 *
 	 * @param out The output target object.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The output target object wrapped in an {@link HtmlWriter}.
-	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected final HtmlWriter getHtmlWriter(SerializerPipe out) {
 		Object output = out.getRawOutput();

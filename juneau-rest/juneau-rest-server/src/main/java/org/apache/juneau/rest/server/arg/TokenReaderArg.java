@@ -71,7 +71,7 @@ public class TokenReaderArg extends SimpleRestOperationArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new {@link TokenReaderArg}, or <jk>null</jk> if the parameter type is not
 	 * 	{@link TokenReader} or a subtype.
 	 */

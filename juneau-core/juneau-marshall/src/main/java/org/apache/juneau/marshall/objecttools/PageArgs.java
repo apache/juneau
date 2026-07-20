@@ -30,10 +30,10 @@ public class PageArgs {
 	/**
 	 * Static creator.
 	 *
-	 * @param position The zero-indexed position to start the page on.
-	 * @param limit The number of rows to return.
+	 * @param position The zero-indexed position to start the page on.  Can be <jk>null</jk> (defaults to <c>0</c>).
+	 * @param limit The number of rows to return.  Can be <jk>null</jk> (defaults to <c>-1</c>).
 	 *
-	 * @return A new {@link PageArgs} object.
+	 * @return A new {@link PageArgs} object, or <jk>null</jk> if both <c>position</c> and <c>limit</c> are <jk>null</jk>.
 	 */
 	public static PageArgs create(Integer position, Integer limit) {
 		if (position == null && limit == null)

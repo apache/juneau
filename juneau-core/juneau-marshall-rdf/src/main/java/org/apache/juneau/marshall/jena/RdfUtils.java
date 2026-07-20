@@ -41,7 +41,9 @@ public class RdfUtils {
 	 * The annotations should be a child-to-parent ordering of annotations found on a class or method.
 	 *
 	 * @param rdfs The <c>@Rdf</c> annotations to search.
+	 * 	Must not be <jk>null</jk>.
 	 * @param schemas The list of known RDF schemas.
+	 * 	Must not be <jk>null</jk>.
 	 * @return The resolved namespace, or <jk>null</jk> if the namespace could not be resolved.
 	 */
 	public static Namespace findNamespace(List<Rdf> rdfs, List<RdfSchema> schemas) {

@@ -130,6 +130,7 @@ public class RestOpSession extends ContextSession {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected RestOpSession(Builder builder) {
 		super(builder);

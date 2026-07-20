@@ -113,6 +113,7 @@ public interface OpenApiProvider {
 		 * Specifies an already-instantiated bean for the {@link #build()} method to return.
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Can be <jk>null</jk> (the {@link #build()} method instantiates the {@link #type(Class) type} instead).
 		 * @return  This object.
 		 */
 		public Builder impl(OpenApiProvider value) {
@@ -164,6 +165,7 @@ public interface OpenApiProvider {
 		 * Specifies a subclass of {@link OpenApiProvider} to create when the {@link #build()} method is called.
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link BasicOpenApiProvider}).
 		 * @return  This object.
 		 */
 		public Builder type(Class<? extends OpenApiProvider> value) {

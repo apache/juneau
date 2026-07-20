@@ -166,10 +166,10 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>format</property>.
+	 * Bean property getter:  <property>bearerFormat</property>.
 	 *
 	 * <p>
-	 * The extending format for the previously mentioned type.
+	 * A hint to the client to identify how the bearer token is formatted.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -179,18 +179,17 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
-	 * A brief description of the parameter.
-	 * <br>This could contain examples of use.
+	 * A short description for the security scheme.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() { return description; }
 
 	/**
-	 * Bean property getter:  <property>items</property>.
+	 * Bean property getter:  <property>flows</property>.
 	 *
 	 * <p>
-	 * Describes the type of items in the array.
+	 * An object containing configuration information for the flow types supported.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -200,7 +199,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * Bean property getter:  <property>in</property>.
 	 *
 	 * <p>
-	 * The location of the parameter.
+	 * The location of the API key.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -210,38 +209,27 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * Bean property getter:  <property>name</property>.
 	 *
 	 * <p>
-	 * The name of the parameter.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Parameter names are case sensitive.
-	 * 	<li>
-	 * 		If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment
-	 * 		from the <code>path</code> field in the paths object.
-	 * 	<li>
-	 * 		For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
-	 * </ul>
+	 * The name of the header, query or cookie parameter to be used.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() { return name; }
 
 	/**
-	 * Bean property getter:  <property>collectionFormat</property>.
+	 * Bean property getter:  <property>openIdConnectUrl</property>.
 	 *
 	 * <p>
-	 * Determines the format of the array if type array is used.
+	 * OpenId Connect URL to discover OAuth2 configuration values.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getOpenIdConnectUrl() { return openIdConnectUrl; }
 
 	/**
-	 * Bean property getter:  <property>schema</property>.
+	 * Bean property getter:  <property>scheme</property>.
 	 *
 	 * <p>
-	 * The schema defining the type used for the body parameter.
+	 * The name of the HTTP Authorization scheme to be used in the Authorization header.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -251,7 +239,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * Bean property getter:  <property>type</property>.
 	 *
 	 * <p>
-	 * The type of the parameter.
+	 * The type of the security scheme.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -294,10 +282,10 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>format</property>.
+	 * Bean property setter:  <property>bearerFormat</property>.
 	 *
 	 * <p>
-	 * The extending format for the previously mentioned type.
+	 * A hint to the client to identify how the bearer token is formatted.
 	 *
 	 * @param value The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -312,8 +300,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * Bean property setter:  <property>description</property>.
 	 *
 	 * <p>
-	 * A brief description of the parameter.
-	 * <br>This could contain examples of use.
+	 * A short description for the security scheme.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -326,14 +313,13 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>items</property>.
+	 * Bean property setter:  <property>flows</property>.
 	 *
 	 * <p>
-	 * Describes the type of items in the array.
+	 * An object containing configuration information for the flow types supported.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -346,7 +332,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * Bean property setter:  <property>in</property>.
 	 *
 	 * <p>
-	 * The location of the parameter.
+	 * The location of the API key.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -354,11 +340,8 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * 	<ul>
 	 * 		<li><js>"query"</js>
 	 * 		<li><js>"header"</js>
-	 * 		<li><js>"path"</js>
-	 * 		<li><js>"formData"</js>
-	 * 		<li><js>"body"</js>
+	 * 		<li><js>"cookie"</js>
 	 * 	</ul>
-	 * 	<br>Property value is required.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -373,22 +356,10 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * Bean property setter:  <property>name</property>.
 	 *
 	 * <p>
-	 * The name of the parameter.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Parameter names are case sensitive.
-	 * 	<li>
-	 * 		If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment
-	 * 		from the <code>path</code> field in the paths object.
-	 * 	<li>
-	 * 		For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
-	 * </ul>
+	 * The name of the header, query or cookie parameter to be used.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -398,10 +369,10 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>collectionFormat</property>.
+	 * Bean property setter:  <property>openIdConnectUrl</property>.
 	 *
 	 * <p>
-	 * Determines the format of the array if type array is used.
+	 * OpenId Connect URL to discover OAuth2 configuration values.
 	 *
 	 * @param value The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -413,14 +384,13 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>schema</property>.
+	 * Bean property setter:  <property>scheme</property>.
 	 *
 	 * <p>
-	 * The schema defining the type used for the body parameter.
+	 * The name of the HTTP Authorization scheme to be used in the Authorization header.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -433,22 +403,17 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * Bean property setter:  <property>type</property>.
 	 *
 	 * <p>
-	 * The type of the parameter.
+	 * The type of the security scheme.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
 	 * 	<ul>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 		<li><js>"file"</js>
+	 * 		<li><js>"apiKey"</js>
+	 * 		<li><js>"http"</js>
+	 * 		<li><js>"oauth2"</js>
+	 * 		<li><js>"openIdConnect"</js>
 	 * 	</ul>
-	 * 	<br>If type is <js>"file"</js>, the <code>consumes</code> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
-	 * 		or both and the parameter MUST be <code>in</code> <js>"formData"</js>.
-	 * 	<br>Property value is required.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */

@@ -158,6 +158,7 @@ public class HoconTokenizer {
 	 * Constructor.
 	 *
 	 * @param reader The reader to tokenize.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public HoconTokenizer(Reader reader) {
 		var in = reader instanceof BufferedReader br ? br : new BufferedReader(reader);

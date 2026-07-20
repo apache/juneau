@@ -146,6 +146,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 	 * Converts the specified output target object to a {@link YamlWriter}.
 	 *
 	 * @param out The output target object.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The output target object wrapped in a {@link YamlWriter}.
 	 */
 	protected final YamlWriter getYamlWriter(SerializerPipe out) {

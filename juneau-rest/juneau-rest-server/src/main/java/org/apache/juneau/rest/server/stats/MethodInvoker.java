@@ -74,7 +74,7 @@ public class MethodInvoker {
 	/**
 	 * Invokes the wrapped method using parameters from the specified bean store.
 	 *
-	 * @param beanStore The bean store to use to resolve parameters.
+	 * @param beanStore The bean store to use to resolve parameters. Must not be <jk>null</jk>.
 	 * @param o The object to invoke the method on.
 	 * @return The result of invoking the method.
 	 * @throws IllegalAccessException If method cannot be accessed.

@@ -628,7 +628,7 @@ public @interface RestOp {
 	 * </p>
 	 *
 	 * <p>
-	 * If you also do not specify the {@link #method()} and the Java method name starts with <js>"get"</js>, <js>"put"</js>, <js>"post"</js>, or <js>"deleted"</js>,
+	 * If you also do not specify the {@link #method()} and the Java method name starts with <js>"get"</js>, <js>"put"</js>, <js>"post"</js>, or <js>"delete"</js>,
 	 * then the HTTP method name is stripped from the inferred path.
 	 *
 	 * <h5 class='figure'>Examples:</h5>

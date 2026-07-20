@@ -48,7 +48,7 @@ public class RequestBeanArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link RequestBeanArg}, or <jk>null</jk> if the parameter is not annotated with {@link Request}.
 	 */
@@ -69,7 +69,7 @@ public class RequestBeanArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected RequestBeanArg(ParameterInfo paramInfo, AnnotationWorkList annotations) {

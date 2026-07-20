@@ -33,6 +33,7 @@ public class UonClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param mp Uon metadata provider (for finding information about other artifacts).
 	 */
 	public UonClassMeta(ClassMeta<?> cm, UonMetaProvider mp) {

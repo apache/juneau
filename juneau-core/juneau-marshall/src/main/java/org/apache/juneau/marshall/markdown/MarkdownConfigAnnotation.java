@@ -39,6 +39,7 @@ public class MarkdownConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(MarkdownConfig.class, MarkdownParser.Builder.class, vr);
@@ -62,6 +63,7 @@ public class MarkdownConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(MarkdownConfig.class, MarkdownSerializer.Builder.class, vr);

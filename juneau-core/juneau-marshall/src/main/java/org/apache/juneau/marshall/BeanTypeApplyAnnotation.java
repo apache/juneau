@@ -54,7 +54,7 @@ public class BeanTypeApplyAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param vr The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations. Must not be <jk>null</jk>.
 		 */
 		public Applier(VarResolverSession vr) {
 			super(BeanTypeApply.class, Context.Builder.class, vr);
@@ -215,7 +215,7 @@ public class BeanTypeApplyAnnotation {
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
-	 * @param a The annotation to check.
+	 * @param a The annotation to check. Can be <jk>null</jk> (returns <jk>true</jk>).
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(BeanTypeApply a) {

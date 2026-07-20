@@ -53,9 +53,11 @@ public class RrpcInterfaceMeta {
 	 * @param c
 	 * 	The interface class annotated with a {@link Remote @Remote} annotation.
 	 * 	<br>Note that the annotations are optional.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param uri
 	 * 	The absolute URL of the remote REST interface that implements this proxy interface.
 	 * 	<br>This is only used on the client side.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public RrpcInterfaceMeta(Class<?> c, String uri) {
 		this.c = c;

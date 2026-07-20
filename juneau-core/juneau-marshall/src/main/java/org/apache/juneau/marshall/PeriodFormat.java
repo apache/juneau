@@ -30,8 +30,8 @@ public enum PeriodFormat {
 	/**
 	 * Formats the specified period using this format.
 	 *
-	 * @param value The value to format.
-	 * @return The formatted value.
+	 * @param value The value to format.  Can be <jk>null</jk>.
+	 * @return The formatted value, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
 	public String format(Period value) {
 		if (value == null)
@@ -45,8 +45,8 @@ public enum PeriodFormat {
 	/**
 	 * Parses the specified wire value using this format.
 	 *
-	 * @param value The value to parse.
-	 * @return The parsed period.
+	 * @param value The value to parse.  Can be <jk>null</jk> or blank.
+	 * @return The parsed period, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 */
 	public Period parse(String value) {
 		if (value == null)

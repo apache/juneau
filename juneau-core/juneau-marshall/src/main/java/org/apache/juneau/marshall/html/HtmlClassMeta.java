@@ -46,6 +46,7 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param mp HTML metadata provider (for finding information about other artifacts).
 	 */
 	public HtmlClassMeta(ClassMeta<?> cm, HtmlMetaProvider mp) {
@@ -82,7 +83,7 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	/**
 	 * Returns the {@link Html#render() @Html(render)} annotation defined on the class.
 	 *
-	 * @return The value of the annotation.
+	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	public HtmlRender<?> getRender() { return render; }
 

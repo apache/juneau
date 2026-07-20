@@ -65,7 +65,7 @@ public class UriResolver {
 	 *
 	 * @param resolution Rule on how URIs should be resolved.
 	 * @param relativity Rule on what relative URIs are relative to.
-	 * @param uriContext Current URI context (i.e. the current URI 'location').
+	 * @param uriContext Current URI context (i.e. the current URI 'location'). Must not be <jk>null</jk>.
 	 * @return A new {@link UriResolver} object.
 	 */
 	public static UriResolver of(UriResolution resolution, UriRelativity relativity, UriContext uriContext) {
@@ -114,7 +114,7 @@ public class UriResolver {
 	 *
 	 * @param resolution Rule on how URIs should be resolved.
 	 * @param relativity Rule on what relative URIs are relative to.
-	 * @param uriContext Current URI context (i.e. the current URI 'location').
+	 * @param uriContext Current URI context (i.e. the current URI 'location'). Must not be <jk>null</jk>.
 	 */
 	public UriResolver(UriResolution resolution, UriRelativity relativity, UriContext uriContext) {
 		this.resolution = resolution;
@@ -129,8 +129,8 @@ public class UriResolver {
 	/**
 	 * Same as {@link #resolve(Object)} except appends result to the specified appendable.
 	 *
-	 * @param a The appendable to append the URL to.
-	 * @param o The URI to convert to absolute form.
+	 * @param a The appendable to append the URL to. Must not be <jk>null</jk>.
+	 * @param o The URI to convert to absolute form. Can be <jk>null</jk>.
 	 * @return The same appendable passed in.
 	 */
 	@SuppressWarnings({
@@ -282,8 +282,8 @@ public class UriResolver {
 	 * 	String <jv>relativeUri</jv> = <jv>resolver</jv>.relativize(<js>"servlet:/"</js>, <js>"/context/servlet/path/foo"</js>);
 	 * </p>
 	 *
-	 * @param relativeTo The URI to relativize against.
-	 * @param uri The URI to relativize.
+	 * @param relativeTo The URI to relativize against. Can be <jk>null</jk>.
+	 * @param uri The URI to relativize. Can be <jk>null</jk>.
 	 * @return The relativized URI.
 	 */
 	public String relativize(Object relativeTo, Object uri) {
@@ -297,6 +297,7 @@ public class UriResolver {
 	 *
 	 * @param uri
 	 * 	The URI to convert to absolute form.
+	 * 	Can be <jk>null</jk>.
 	 * 	Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link URI}

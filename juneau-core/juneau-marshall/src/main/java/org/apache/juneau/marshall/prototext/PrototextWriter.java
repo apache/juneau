@@ -61,6 +61,7 @@ public class PrototextWriter extends SerializerWriter {
 	 * Writes a field name (bare identifier, bare integer field-tag, or quoted key).
 	 *
 	 * @param name The field name.
+	 * 	<br>Can be <jk>null</jk> (written as an empty quoted string).
 	 * @return This object.
 	 */
 	public PrototextWriter fieldName(String name) {
@@ -78,6 +79,7 @@ public class PrototextWriter extends SerializerWriter {
 	 * Callers append the value using {@link #stringValue}, {@link #integerValue}, etc., then add newline.
 	 *
 	 * @param name The field name.
+	 * 	<br>Can be <jk>null</jk> (written as an empty quoted string).
 	 * @return This object.
 	 */
 	public PrototextWriter scalarField(String name) {
@@ -90,6 +92,7 @@ public class PrototextWriter extends SerializerWriter {
 	 * Writes the start of a message field: <c>name {</c> or <c>name: {</c>.
 	 *
 	 * @param name The field name.
+	 * 	<br>Can be <jk>null</jk> (written as an empty quoted string).
 	 * @param useColon If <jk>true</jk>, include colon before brace.
 	 * @return This object.
 	 */
@@ -118,6 +121,7 @@ public class PrototextWriter extends SerializerWriter {
 	 * Writes a string value with C-style escaping.
 	 *
 	 * @param value The string value.
+	 * 	<br>Can be <jk>null</jk> (written as an empty quoted string).
 	 * @return This object.
 	 */
 	public PrototextWriter stringValue(String value) {
@@ -175,6 +179,7 @@ public class PrototextWriter extends SerializerWriter {
 	 * Writes an enum value as an unquoted identifier.
 	 *
 	 * @param name The enum constant name.
+	 * 	<br>Can be <jk>null</jk> (written as an empty string).
 	 * @return This object.
 	 */
 	public PrototextWriter enumValue(String name) {
@@ -186,6 +191,7 @@ public class PrototextWriter extends SerializerWriter {
 	 * Writes a byte array as a quoted hex-escaped string.
 	 *
 	 * @param data The byte array.
+	 * 	<br>Can be <jk>null</jk> (nothing is written).
 	 * @return This object.
 	 */
 	public PrototextWriter bytesValue(byte[] data) {
@@ -227,6 +233,7 @@ public class PrototextWriter extends SerializerWriter {
 	 * Writes a comment: <c># text</c> followed by newline.
 	 *
 	 * @param text The comment text.
+	 * 	<br>Can be <jk>null</jk> or empty (nothing is written).
 	 * @return This object.
 	 */
 	public PrototextWriter comment(String text) {
@@ -242,6 +249,7 @@ public class PrototextWriter extends SerializerWriter {
 	 * Protobuf identifiers: letter or underscore followed by letters, digits, or underscores.
 	 *
 	 * @param name The name to check.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if it can be written as a bare identifier.
 	 */
 	public boolean isBareIdentifier(String name) {
@@ -270,6 +278,7 @@ public class PrototextWriter extends SerializerWriter {
 	 * unambiguous.
 	 *
 	 * @param name The name to check.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if it can be written as a bare integer field tag.
 	 */
 	public boolean isBareIntegerTag(String name) {
@@ -290,7 +299,8 @@ public class PrototextWriter extends SerializerWriter {
 	 * Handles: <c>\"</c> <c>\\</c> <c>\n</c> <c>\t</c> <c>\r</c> <c>\b</c> <c>\f</c> <c>\'</c>
 	 *
 	 * @param text The text to escape.
-	 * @return The escaped string.
+	 * 	<br>Can be <jk>null</jk> (returns an empty string).
+	 * @return The escaped string.  Never <jk>null</jk>.
 	 */
 	public String escapeString(String text) {
 		if (text == null)

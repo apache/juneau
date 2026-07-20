@@ -127,6 +127,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
@@ -138,6 +139,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(BsonParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));

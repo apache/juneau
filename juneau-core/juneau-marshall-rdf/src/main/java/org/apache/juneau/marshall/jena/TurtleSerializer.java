@@ -87,6 +87,7 @@ public class TurtleSerializer extends RdfSerializer {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public TurtleSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.turtle());

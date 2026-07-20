@@ -116,6 +116,7 @@ public class HeaderBeanMeta<T> {
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A newly constructed bean.
+	 * @throws UnsupportedOperationException If bean could not be constructed (e.g. couldn't find a constructor).
 	 */
 	public T construct(Object value) {
 		return construct(null, value);

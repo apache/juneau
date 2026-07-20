@@ -45,6 +45,7 @@ public class ParserInputStream extends InputStream implements Positionable {
 	 * Constructor.
 	 *
 	 * @param pipe The parser input.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected ParserInputStream(ParserPipe pipe) throws IOException {

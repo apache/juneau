@@ -170,6 +170,7 @@ public class HjsonWriter extends SerializerWriter {
 	 * Returns whether the key needs quoting.
 	 *
 	 * @param key The key to check.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>true</jk>).
 	 * @return <jk>true</jk> if the key must be quoted.
 	 */
 	public boolean needsQuoting(String key) {
@@ -188,6 +189,7 @@ public class HjsonWriter extends SerializerWriter {
 	 * Returns whether the value can be written as quoteless.
 	 *
 	 * @param value The value to check.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if the value can be quoteless.
 	 */
 	public boolean isSimpleValue(String value) {
@@ -238,6 +240,7 @@ public class HjsonWriter extends SerializerWriter {
 	 * Writes a quoteless string value.
 	 *
 	 * @param value The value to write.
+	 * 	<br>Can be <jk>null</jk> (nothing is written).
 	 * @return This object.
 	 */
 	public HjsonWriter quotelessString(String value) {
@@ -250,6 +253,7 @@ public class HjsonWriter extends SerializerWriter {
 	 * Writes a quoted string with JSON escaping.
 	 *
 	 * @param value The value to write.
+	 * 	<br>Can be <jk>null</jk> (emitted as the literal <js>"null"</js>).
 	 * @return This object.
 	 */
 	public HjsonWriter quotedString(String value) {
@@ -284,6 +288,7 @@ public class HjsonWriter extends SerializerWriter {
 	 * Writes a multiline string using ''' syntax.
 	 *
 	 * @param value The value to write.
+	 * 	<br>Can be <jk>null</jk> (emitted as the literal <js>"null"</js>).
 	 * @return This object.
 	 */
 	public HjsonWriter multilineString(String value) {

@@ -48,7 +48,9 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param mp XML metadata provider (for finding information about other artifacts).
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public XmlBeanPropertyMeta(BeanPropertyMeta bpm, XmlMetaProvider mp) {
 		super(bpm);

@@ -16,6 +16,6 @@
  */
 
 /**
- * Juneau {@link org.apache.juneau.marshall.Bean @Marshalled} types for the Model Context Protocol (MCP) wire format.
+ * Juneau {@link org.apache.juneau.marshall.Marshalled @Marshalled} types for the Model Context Protocol (MCP) wire format.
  */
 package org.apache.juneau.bean.mcp;

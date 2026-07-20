@@ -489,6 +489,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 	 * or {@code null} if it should be rendered as a bulleted list.
 	 *
 	 * @param c The collection to inspect.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The column header names, or {@code null} for list rendering.
 	 * @throws SerializeException If inspection fails.
 	 */
@@ -541,6 +542,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 	 * Gets or creates a {@link MarkdownWriter} from the given pipe.
 	 *
 	 * @param out The serializer pipe.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The writer.
 	 */
 	protected MarkdownWriter getMarkdownWriter(SerializerPipe out) {

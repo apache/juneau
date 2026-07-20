@@ -33,9 +33,9 @@ public class SseHeartbeat implements Runnable, AutoCloseable {
 	/**
 	 * Starts a heartbeat.
 	 *
-	 * @param scheduler The scheduler.
-	 * @param writer The writer.
-	 * @param interval The heartbeat interval.
+	 * @param scheduler The scheduler. Must not be <jk>null</jk>.
+	 * @param writer The writer. Must not be <jk>null</jk>.
+	 * @param interval The heartbeat interval. Must not be <jk>null</jk>.
 	 * @return The heartbeat handle.
 	 */
 	@SuppressWarnings({
@@ -59,7 +59,7 @@ public class SseHeartbeat implements Runnable, AutoCloseable {
 	/**
 	 * Constructor.
 	 *
-	 * @param writer The writer.
+	 * @param writer The writer. Must not be <jk>null</jk>.
 	 */
 	public SseHeartbeat(Writer writer) {
 		this.writer = assertArgNotNull("writer", writer);

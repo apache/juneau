@@ -21,11 +21,9 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
-import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.marshall.*;
 
 /**
  * Describes a single response from an API operation.
@@ -199,10 +197,10 @@ public class Response extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>Description</property>.
+	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
-	 * The URL pointing to the contact information.
+	 * A short description of the response.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -288,14 +286,10 @@ public class Response extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>Description</property>.
+	 * Bean property setter:  <property>description</property>.
 	 *
 	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * <br>Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
+	 * A short description of the response.
 	 *
 	 * @param value
 	 * 	The new value for this property.

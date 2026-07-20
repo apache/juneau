@@ -156,10 +156,10 @@ public class Encoding extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>required</property>.
+	 * Bean property getter:  <property>allowReserved</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * Determines whether the parameter value should allow reserved characters.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -169,24 +169,24 @@ public class Encoding extends OpenApiElement {
 	 * Bean property getter:  <property>contentType</property>.
 	 *
 	 * <p>
-	 * The URL pointing to the contact information.
+	 * The Content-Type for encoding a specific property.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getContentType() { return contentType; }
 
 	/**
-	 * Bean property getter:  <property>required</property>.
+	 * Bean property getter:  <property>explode</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * When this is true, property values of type array or object generate separate parameters for each value.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getExplode() { return explode; }
 
 	/**
-	 * Bean property getter:  <property>variables</property>.
+	 * Bean property getter:  <property>headers</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -230,14 +230,13 @@ public class Encoding extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>explode</property>.
+	 * Bean property setter:  <property>allowReserved</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * Determines whether the parameter value should allow reserved characters.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -247,14 +246,10 @@ public class Encoding extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>url</property>.
+	 * Bean property setter:  <property>contentType</property>.
 	 *
 	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * <br>Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
+	 * The Content-Type for encoding a specific property.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -270,11 +265,10 @@ public class Encoding extends OpenApiElement {
 	 * Bean property setter:  <property>explode</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * When this is true, property values of type array or object generate separate parameters for each value.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -284,7 +278,7 @@ public class Encoding extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>variables</property>.
+	 * Bean property setter:  <property>headers</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -299,7 +293,7 @@ public class Encoding extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>description</property>.
+	 * Bean property setter:  <property>style</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.

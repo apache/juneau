@@ -78,6 +78,7 @@ public class UriContext {
 	 * @param s
 	 * 	The input string.
 	 * 	<br>Example: <js>{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}</js>
+	 * 	<br>Can be <jk>null</jk> (equivalent to the default context).
 	 * @return A new {@link UriContext} object.
 	 */
 	public static UriContext of(String s) {
@@ -93,12 +94,16 @@ public class UriContext {
 	 *
 	 * @param authority
 	 * 	The authority portion of URL (e.g. <js>"http://hostname:port"</js>)
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param contextRoot
 	 * 	The context root of the application (e.g. <js>"/context-root"</js>, or <js>"context-root"</js>)
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param servletPath
 	 * 	The servlet path (e.g. <js>"/servlet-path"</js>, or <js>"servlet-path"</js>)
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param pathInfo
 	 * 	The path info (e.g. <js>"/path-info"</js>, or <js>"path-info"</js>)
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new {@link UriContext} object.
 	 */
 	public static UriContext of(String authority, String contextRoot, String servletPath, String pathInfo) {
@@ -155,6 +160,7 @@ public class UriContext {
 	 * @param s
 	 * 	The input string.
 	 * 	<br>Example: <js>{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}</js>
+	 * 	<br>Can be <jk>null</jk> (equivalent to the default context).
 	 * @throws ParseException
 	 * 	If input string is not a valid JSON object.
 	 */

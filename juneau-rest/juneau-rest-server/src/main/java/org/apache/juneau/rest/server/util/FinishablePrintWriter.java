@@ -33,8 +33,8 @@ public class FinishablePrintWriter extends PrintWriter implements Finishable {
 	/**
 	 * Constructor.
 	 *
-	 * @param out The wrapped output stream.
-	 * @param characterEncoding The character encoding of the output stream.
+	 * @param out The wrapped output stream. Must not be <jk>null</jk>.
+	 * @param characterEncoding The character encoding of the output stream. Must not be <jk>null</jk>.
 	 * @param autoFlush Automatically flush after every println.
 	 * @throws IOException Thrown by underlying stream.
 	 */

@@ -102,7 +102,7 @@ public class MockPathResolver {
 	/**
 	 * Returns any parsing errors.
 	 *
-	 * @return Any parsing errors.
+	 * @return Any parsing errors, or <jk>null</jk> if parsing was successful.
 	 */
 	public String getError() { return error; }
 

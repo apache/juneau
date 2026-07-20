@@ -68,7 +68,7 @@ public class BeanTester<T> {
 	/**
 	 * Sets the bean instance to be tested.
 	 *
-	 * @param value The bean instance to test.
+	 * @param value The bean instance to test. Must not be <jk>null</jk>.
 	 * @return This object for method chaining.
 	 */
 	public BeanTester<T> bean(T value) { bean = value; c = (Class<T>) bean.getClass(); return this; }

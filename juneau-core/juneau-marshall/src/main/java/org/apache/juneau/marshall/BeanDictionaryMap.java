@@ -105,7 +105,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param typeName The dictionary name of the class.
 	 * @param collectionClass The collection implementation class.
-	 * @param entryClass The entry class.
+	 * @param entryClass The entry class. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	protected BeanDictionaryMap append(String typeName, Class<? extends Collection> collectionClass, Object entryClass) {
@@ -119,8 +119,8 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param typeName The dictionary name of the class.
 	 * @param mapClass The map implementation class.
-	 * @param keyClass The key class.
-	 * @param valueClass The value class.
+	 * @param keyClass The key class. Must not be <jk>null</jk>.
+	 * @param valueClass The value class. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	protected BeanDictionaryMap append(String typeName, Class<? extends Map> mapClass, Object keyClass, Object valueClass) {

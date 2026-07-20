@@ -45,7 +45,7 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param bpm The metadata of the bean property of this additional metadata.
+	 * @param bpm The metadata of the bean property of this additional metadata.  Must not be <jk>null</jk>.
 	 * @param mp JSON-schema metadata provider (for finding information about other artifacts).
 	 */
 	public JsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm, JsonSchemaMetaProvider mp) {

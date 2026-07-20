@@ -33,7 +33,7 @@ public class StringFormatSwap extends StringSwap<Object> {
 	/**
 	 * Constructor.
 	 *
-	 * @param format The string format string.
+	 * @param format The {@link java.util.Formatter} format string. Must not be <jk>null</jk>.
 	 */
 	public StringFormatSwap(String format) {
 		this.format = format;

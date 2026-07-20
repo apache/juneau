@@ -765,7 +765,7 @@ public class ItemsAnnotation {
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
-	 * @param a The annotation to check.
+	 * @param a The annotation to check. Can be <jk>null</jk> (returns <jk>true</jk>).
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(Items a) {

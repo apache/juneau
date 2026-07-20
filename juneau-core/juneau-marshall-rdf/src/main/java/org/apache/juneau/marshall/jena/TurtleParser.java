@@ -90,6 +90,7 @@ public class TurtleParser extends RdfParser {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public TurtleParser(RdfParser.Builder<?> builder) {
 		super(builder.turtle().consumes("text/turtle"));

@@ -201,7 +201,9 @@ public class RequestContent {
 	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * </ul>
 	 *
-	 * @param type The class type to instantiate.
+	 * @param type
+	 * 	The class type to instantiate.
+	 * 	<br>Can be <jk>null</jk> or <code>Object.<jk>class</jk></code> to auto-detect the type based on the input.
 	 * @param <T> The class type to instantiate.
 	 * @return The input parsed to a POJO.
 	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
@@ -260,14 +262,14 @@ public class RequestContent {
 	}
 
 	/**
-	 * Returns the HTTP content content as a plain string.
+	 * Returns the HTTP content as a byte array.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * </ul>
 	 *
-	 * @return The incoming input from the connection as a plain string.
+	 * @return The incoming input from the connection as a byte array.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public byte[] asBytes() throws IOException {

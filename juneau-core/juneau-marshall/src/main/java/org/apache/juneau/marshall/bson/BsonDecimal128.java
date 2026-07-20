@@ -70,6 +70,7 @@ public final class BsonDecimal128 {
 	 * Creates a Decimal128 from the given BigDecimal.
 	 *
 	 * @param value The decimal value.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The Decimal128 instance.
 	 * @throws NumberFormatException If the value is out of Decimal128 range.
 	 */

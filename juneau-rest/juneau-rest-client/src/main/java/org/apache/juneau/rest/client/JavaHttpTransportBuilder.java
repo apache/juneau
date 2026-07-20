@@ -45,7 +45,7 @@ public final class JavaHttpTransportBuilder {
 	 * <p>
 	 * If not set, a default client is created via {@link HttpClient#newHttpClient()}.
 	 *
-	 * @param value The client to use. Must not be <jk>null</jk>.
+	 * @param value The client to use. Can be <jk>null</jk> (a default client is created via {@link HttpClient#newHttpClient()}).
 	 * @return This object.
 	 */
 	public JavaHttpTransportBuilder httpClient(HttpClient value) {

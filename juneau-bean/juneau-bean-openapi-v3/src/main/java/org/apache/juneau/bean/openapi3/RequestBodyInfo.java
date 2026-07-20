@@ -147,10 +147,10 @@ public class RequestBodyInfo extends OpenApiElement {
 	public Map<String,MediaType> getContent() { return nie(content); }
 
 	/**
-	 * Bean property getter:  <property>contentType</property>.
+	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
-	 * The URL pointing to the contact information.
+	 * A brief description of the request body.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -160,7 +160,7 @@ public class RequestBodyInfo extends OpenApiElement {
 	 * Bean property getter:  <property>required</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * Determines if the request body is required in the request.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -208,14 +208,10 @@ public class RequestBodyInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>url</property>.
+	 * Bean property setter:  <property>description</property>.
 	 *
 	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * <br>Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
+	 * A brief description of the request body.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -228,14 +224,13 @@ public class RequestBodyInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>explode</property>.
+	 * Bean property setter:  <property>required</property>.
 	 *
 	 * <p>
-	 * The type of the object.
+	 * Determines if the request body is required in the request.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */

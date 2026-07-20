@@ -205,13 +205,13 @@ public class OpenApi extends CharMarshaller {
 	}
 
 	/**
-	 * Serializes a Java object to an OpenApi output.
+	 * Serializes a Java object to an OpenApi output using the specified part schema.
 	 *
 	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>output</jv>)</c>.
+	 * A shortcut for serializing a value with the specified part schema using the {@link #DEFAULT} serializer.
 	 * @param schema The part schema.  Can be <jk>null</jk>.
 	 * @param object The object to serialize.
-	 * @return The output object.
+	 * @return The serialized object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String of(HttpPartSchema schema, Object object) throws SerializeException {
@@ -219,10 +219,10 @@ public class OpenApi extends CharMarshaller {
 	}
 
 	/**
-	 * Parses an OpenApi input object to the specified Java type.
+	 * Parses an OpenApi input object to the specified Java type using the specified part schema.
 	 *
 	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
+	 * A shortcut for parsing the input with the specified part schema using the {@link #DEFAULT} parser.
 	 *
 	 * @param <T> The class type of the object being created.
 	 * @param schema The part type schema.  Can be <jk>null</jk>.

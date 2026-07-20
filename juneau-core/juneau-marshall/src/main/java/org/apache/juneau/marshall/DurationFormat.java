@@ -38,8 +38,8 @@ public enum DurationFormat {
 	/**
 	 * Formats the specified duration using this format.
 	 *
-	 * @param value The value to format.
-	 * @return The formatted value.
+	 * @param value The value to format.  Can be <jk>null</jk>.
+	 * @return The formatted value, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
 	public String format(Duration value) {
 		if (value == null)
@@ -61,8 +61,8 @@ public enum DurationFormat {
 	/**
 	 * Parses the specified wire value using this format.
 	 *
-	 * @param value The value to parse.
-	 * @return The parsed duration.
+	 * @param value The value to parse.  Can be <jk>null</jk> or blank.
+	 * @return The parsed duration, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 */
 	public Duration parse(String value) {
 		if (value == null)

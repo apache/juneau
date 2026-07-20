@@ -63,7 +63,7 @@ public class PathRemainderArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link PathRemainderArg}, or <jk>null</jk> if the parameter is not annotated with {@link PathRemainder}.
 	 */
@@ -93,7 +93,7 @@ public class PathRemainderArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected PathRemainderArg(ParameterInfo paramInfo, AnnotationWorkList annotations) {

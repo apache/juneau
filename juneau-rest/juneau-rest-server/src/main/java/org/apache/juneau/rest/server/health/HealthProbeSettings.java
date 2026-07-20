@@ -56,7 +56,7 @@ public class HealthProbeSettings {
 		/**
 		 * Sets per-indicator timeout.
 		 *
-		 * @param value Timeout value.
+		 * @param value Timeout value. Can be <jk>null</jk> (defaults to 1 second).
 		 * @return This object.
 		 */
 		public Builder timeout(Duration value) {

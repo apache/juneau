@@ -114,7 +114,7 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 	/**
 	 * Returns the uri on this label.
 	 *
-	 * @return The name.
+	 * @return The uri, or the name if no uri was specified.
 	 */
 	public String getUri() { return uri == null ? name : uri; }
 

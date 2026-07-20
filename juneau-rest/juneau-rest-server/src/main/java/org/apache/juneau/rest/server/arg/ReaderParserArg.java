@@ -43,7 +43,7 @@ public class ReaderParserArg extends SimpleRestOperationArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new {@link ReaderParserArg}, or <jk>null</jk> if the parameter type is not {@link ReaderParser}.
 	 */
 	public static ReaderParserArg create(ParameterInfo paramInfo) {

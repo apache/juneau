@@ -38,7 +38,7 @@ public class ParserListener {
 	/**
 	 * Called when an exception is thrown when trying to call a bean setter method.
 	 *
-	 * @param session The serializer session.
+	 * @param session The parser session.
 	 * @param t The throwable that was thrown by the setter method.
 	 * @param p The bean property we had an issue on.
 	 */

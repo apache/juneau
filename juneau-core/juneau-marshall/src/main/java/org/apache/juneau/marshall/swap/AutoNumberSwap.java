@@ -113,8 +113,8 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.
 	 *
-	 * @param bc The bean context to use for looking up annotations.
-	 * @param ci The class to try to constructor a dynamic swap on.
+	 * @param bc The bean context to use for looking up annotations. Must not be <jk>null</jk>.
+	 * @param ci The class to try to constructor a dynamic swap on. Must not be <jk>null</jk>.
 	 * @return An object swap instance, or <jk>null</jk> if one could not be created.
 	 */
 	@SuppressWarnings({

@@ -70,7 +70,7 @@ import org.apache.juneau.marshall.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#form() form()}
- * 		<li class='jm'>{@link HtmlBuilder#form(String, Object...) form(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#form(String, Object...) form(String, Object...)}
  * 	</ul>
  * </ul>
  * </p>

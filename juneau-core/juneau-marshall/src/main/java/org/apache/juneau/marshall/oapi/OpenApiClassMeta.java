@@ -33,6 +33,7 @@ public class OpenApiClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param mp OpenApi metadata provider (for finding information about other artifacts).
 	 */
 	public OpenApiClassMeta(ClassMeta<?> cm, OpenApiMetaProvider mp) {

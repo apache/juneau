@@ -106,6 +106,7 @@ public class HoconWriter extends SerializerWriter {
 	 * Writes the key (unquoted or quoted).
 	 *
 	 * @param key The key to write.
+	 * 	<br>Can be <jk>null</jk> (treated as an empty string).
 	 * @return This object.
 	 */
 	public HoconWriter key(String key) {
@@ -195,6 +196,7 @@ public class HoconWriter extends SerializerWriter {
 	 * Returns whether the key needs quoting.
 	 *
 	 * @param key The key to check.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>true</jk>).
 	 * @return <jk>true</jk> if the key must be quoted.
 	 */
 	public boolean needsQuoting(String key) {
@@ -213,6 +215,7 @@ public class HoconWriter extends SerializerWriter {
 	 * Returns whether the value can be written as unquoted.
 	 *
 	 * @param value The value to check.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if the value can be unquoted.
 	 */
 	public boolean isSimpleValue(String value) {
@@ -263,6 +266,7 @@ public class HoconWriter extends SerializerWriter {
 	 * Writes an unquoted string value.
 	 *
 	 * @param value The value to write.
+	 * 	<br>Can be <jk>null</jk> (nothing is written).
 	 * @return This object.
 	 */
 	public HoconWriter unquotedString(String value) {
@@ -275,6 +279,7 @@ public class HoconWriter extends SerializerWriter {
 	 * Writes a quoted string with JSON escaping.
 	 *
 	 * @param value The value to write.
+	 * 	<br>Can be <jk>null</jk> (emitted as the literal <js>"null"</js>).
 	 * @return This object.
 	 */
 	public HoconWriter quotedString(String value) {
@@ -309,6 +314,7 @@ public class HoconWriter extends SerializerWriter {
 	 * Writes a triple-quoted string using """ syntax.
 	 *
 	 * @param value The value to write.
+	 * 	<br>Can be <jk>null</jk> (emitted as the literal <js>"null"</js>).
 	 * @return This object.
 	 */
 	public HoconWriter tripleQuotedString(String value) {

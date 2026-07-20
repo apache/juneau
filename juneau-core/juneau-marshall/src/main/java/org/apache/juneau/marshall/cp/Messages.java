@@ -241,7 +241,7 @@ public class Messages extends ResourceBundle {
 		/**
 		 * Builds the messages bundle.
 		 *
-		 * @return A new {@link Messages}, or <jk>null</jk> if no locations are configured.
+		 * @return A new {@link Messages} bundle.
 		 */
 		@SuppressWarnings({
 			"unchecked", // Type erasure requires unchecked casts for message bundle access
@@ -301,7 +301,7 @@ public class Messages extends ResourceBundle {
 	}
 
 	/**
-	 * Constructor.
+	 * Creates a new message bundle for the specified class.
 	 *
 	 * @param forClass
 	 * 	The class we're creating this object for.
@@ -312,7 +312,7 @@ public class Messages extends ResourceBundle {
 	}
 
 	/**
-	 * Constructor.
+	 * Creates a new message bundle for the specified class using the specified bundle name.
 	 *
 	 * @param forClass
 	 * 	The class we're creating this object for.
@@ -447,7 +447,7 @@ public class Messages extends ResourceBundle {
 	/**
 	 * Returns this message bundle for the specified locale.
 	 *
-	 * @param locale The locale to get the messages for.
+	 * @param locale The locale to get the messages for.  Can be <jk>null</jk> (the default locale is used).
 	 * @return A new {@link Messages} object.  Never <jk>null</jk>.
 	 */
 	public Messages forLocale(Locale locale) {

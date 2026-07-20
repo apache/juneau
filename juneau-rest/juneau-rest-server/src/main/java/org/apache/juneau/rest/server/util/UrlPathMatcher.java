@@ -182,7 +182,7 @@ public abstract sealed class UrlPathMatcher implements Comparable<UrlPathMatcher
 	/**
 	 * Constructs a matcher from the specified pattern string.
 	 *
-	 * @param pattern The pattern string.
+	 * @param pattern The pattern string. Can be <jk>null</jk> (treated as an empty pattern).
 	 * @return A new matcher.
 	 */
 	public static UrlPathMatcher of(String pattern) {

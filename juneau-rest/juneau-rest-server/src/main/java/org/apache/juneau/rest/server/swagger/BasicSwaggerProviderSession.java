@@ -196,6 +196,7 @@ public class BasicSwaggerProviderSession {
 	 * Constructor.
 	 *
 	 * @param context The context of the REST object we're generating Swagger about.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param locale The language of the swagger we're asking for.
 	 * @param ff The file finder to use for finding JSON files.
 	 * @param messages The messages to use for finding localized strings.

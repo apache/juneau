@@ -148,7 +148,7 @@ public class BearerTokenAuthFilter extends AuthFilter {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder to read configuration from.
+	 * @param builder The builder to read configuration from. Must not be <jk>null</jk>.
 	 */
 	protected BearerTokenAuthFilter(Builder builder) {
 		this.validator = builder.validator;

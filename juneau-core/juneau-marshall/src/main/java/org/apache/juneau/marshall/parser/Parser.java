@@ -185,6 +185,7 @@ public class Parser extends MarshallingContextable {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
 			super(copyFrom);
@@ -201,6 +202,7 @@ public class Parser extends MarshallingContextable {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Parser copyFrom) {
 			super(copyFrom);
@@ -317,7 +319,7 @@ public class Parser extends MarshallingContextable {
 		/**
 		 * Returns the current value for the 'consumes' property.
 		 *
-		 * @return The current value for the 'consumes' property.
+		 * @return The current value for the 'consumes' property, or <jk>null</jk> if not specified.
 		 */
 		public String getConsumes() { return consumes; }
 
@@ -587,6 +589,7 @@ public class Parser extends MarshallingContextable {
 	 * or protected constructor of the class.
 	 *
 	 * @param c The builder to create.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder createParserBuilder(Class<? extends Parser> c) {
@@ -605,7 +608,8 @@ public class Parser extends MarshallingContextable {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder this object.
+	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected Parser(Builder<?> builder) {
 		super(builder);
@@ -630,6 +634,7 @@ public class Parser extends MarshallingContextable {
 	 * Returns <jk>true</jk> if this parser can handle the specified content type.
 	 *
 	 * @param contentType The content type to test.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if this parser can handle the specified content type.
 	 */
 	public boolean canHandle(String contentType) {
@@ -683,7 +688,7 @@ public class Parser extends MarshallingContextable {
 	/**
 	 * Returns the first media type handled based on the values passed to the <c>consumes</c> constructor parameter.
 	 *
-	 * @return The media type.
+	 * @return The media type, or <jk>null</jk> if no media types are handled by this parser.
 	 */
 	public final MediaType getPrimaryMediaType() { return first(consumesArray).orElse(null); }
 
@@ -998,7 +1003,7 @@ public class Parser extends MarshallingContextable {
 	 *
 	 * @see Parser.Builder#listener(Class)
 	 * @return
-	 * 	Class used to listen for errors and warnings that occur during parsing.
+	 * 	Class used to listen for errors and warnings that occur during parsing, or <jk>null</jk> if none was configured.
 	 */
 	protected final Class<? extends ParserListener> getListener() { return listener; }
 

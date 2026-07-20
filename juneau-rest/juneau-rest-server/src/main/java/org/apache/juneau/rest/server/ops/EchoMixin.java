@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.*;
  *
  * <p>
  * Sibling of {@link AdminMixin} ({@code /admin/*}) and {@link RouteIndexMixin}
- * ({@code /options}, {@code /routes}). All three classes live in the
+ * ({@code /options}). All three classes live in the
  * {@code org.apache.juneau.rest.server.ops} ops/introspection mixin pack.
  *
  * <p>
@@ -188,7 +188,7 @@ public class EchoMixin {
 	/**
 	 * Builder constructor.
 	 *
-	 * @param builder The builder.
+	 * @param builder The builder. Must not be {@code null}.
 	 */
 	protected EchoMixin(Builder builder) {
 		bodyLimit = builder.bodyLimit;
@@ -355,7 +355,8 @@ public class EchoMixin {
 		 * Header names are matched case-insensitively. Pass an empty array to disable redaction
 		 * (not recommended outside of integration tests).
 		 *
-		 * @param values The header names to redact.
+		 * @param values The header names to redact. Can be {@code null} (equivalent to an empty array
+		 * 	&mdash; disables redaction); {@code null} or blank elements are skipped.
 		 * @return This object.
 		 */
 		public Builder redactedHeaders(String...values) {

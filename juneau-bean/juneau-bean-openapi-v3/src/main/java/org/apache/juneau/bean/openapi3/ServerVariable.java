@@ -176,15 +176,7 @@ public class ServerVariable extends OpenApiElement {
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
-	 * Declares the value of the item that the server will use if none is provided.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"description"</js> has no meaning for required items.
-	 * 	<li>
-	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
-	 * </ul>
+	 * An optional description for the server variable.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -251,15 +243,7 @@ public class ServerVariable extends OpenApiElement {
 	 * Bean property setter:  <property>description</property>.
 	 *
 	 * <p>
-	 * Declares the value of the item that the server will use if none is provided.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"description"</js> has no meaning for required items.
-	 * 	<li>
-	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
-	 * </ul>
+	 * An optional description for the server variable.
 	 *
 	 * @param value
 	 * 	The new value for this property.

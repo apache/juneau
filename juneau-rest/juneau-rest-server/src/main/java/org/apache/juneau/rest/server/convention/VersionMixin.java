@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.servlet.*;
  *
  * <p>
  * Compose into a host resource via
- * {@link Rest#mixins() @Rest(mixins=VersionMixin.class)}; the three URLs become available
+ * {@link Rest#mixins() @Rest(mixins=VersionMixin.class)}; the {@code /version} URL becomes available
  * alongside the host's own endpoints with no further wiring.
  *
  * <h5 class='section'>Configurable mount path:</h5>
@@ -108,7 +108,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * <h5 class='section'>Output:</h5>
  *
  * <p>
- * All three URLs return the same JSON map &mdash; e.g.:
+ * The endpoint returns a JSON map &mdash; e.g.:
  * <p class='bjson'>
  * 	{
  * 		<jok>"name"</jok>: <jov>"my-app"</jov>,
@@ -280,7 +280,7 @@ public class VersionMixin extends RestMixin {
 		/**
 		 * Bulk-set entries from a map.
 		 *
-		 * @param values Entries to add. <jk>null</jk> values are recorded as
+		 * @param values Entries to add. Can be <jk>null</jk> (no-op).  Individual <jk>null</jk> values are recorded as
 		 * 	{@link VersionMixin#UNKNOWN}.
 		 * @return This object.
 		 */
@@ -304,7 +304,7 @@ public class VersionMixin extends RestMixin {
 		/**
 		 * Reads manifest attributes from {@code /META-INF/MANIFEST.MF} on the supplied classloader.
 		 *
-		 * @param classLoader The classloader to walk.
+		 * @param classLoader The classloader to walk. Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder fromManifest(ClassLoader classLoader) {
@@ -338,7 +338,7 @@ public class VersionMixin extends RestMixin {
 		/**
 		 * Reads {@code git.properties} from the supplied classloader.
 		 *
-		 * @param classLoader The classloader to walk.
+		 * @param classLoader The classloader to walk. Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder fromGitProperties(ClassLoader classLoader) {

@@ -89,6 +89,7 @@ public class TriXParser extends RdfParser {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public TriXParser(RdfParser.Builder<?> builder) {
 		super(builder.triX().consumes("application/trix+xml"));

@@ -46,7 +46,7 @@ public class AttributeArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new {@link AttributeArg}, or <jk>null</jk> if the parameter is not annotated with {@link Attr}.
 	 */
 	public static AttributeArg create(ParameterInfo paramInfo) {
@@ -62,7 +62,7 @@ public class AttributeArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 */
 	protected AttributeArg(ParameterInfo paramInfo) {
 		this.name = getName(paramInfo);

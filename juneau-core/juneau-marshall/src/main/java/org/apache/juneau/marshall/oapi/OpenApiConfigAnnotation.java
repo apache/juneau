@@ -44,6 +44,7 @@ public class OpenApiConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(OpenApiConfig.class, OpenApiParser.Builder.class, vr);
@@ -67,6 +68,7 @@ public class OpenApiConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(OpenApiConfig.class, OpenApiSerializer.Builder.class, vr);

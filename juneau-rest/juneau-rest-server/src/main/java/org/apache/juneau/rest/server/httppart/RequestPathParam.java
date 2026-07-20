@@ -50,7 +50,7 @@ import org.apache.juneau.rest.server.*;
  * 			<li class='jm'>{@link RequestPathParam#asBoolean() asBoolean()}
  * 			<li class='jm'>{@link RequestPathParam#asBooleanPart() asBooleanPart()}
  * 			<li class='jm'>{@link RequestPathParam#asCsvArray() asCsvArray()}
- * 			<li class='jm'>{@link RequestPathParam#asCsvArrayPart() asCsvArrayPart)}
+ * 			<li class='jm'>{@link RequestPathParam#asCsvArrayPart() asCsvArrayPart()}
  * 			<li class='jm'>{@link RequestPathParam#asDate() asDate()}
  * 			<li class='jm'>{@link RequestPathParam#asDatePart() asDatePart()}
  * 			<li class='jm'>{@link RequestPathParam#asInteger() asInteger()}

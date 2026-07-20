@@ -136,7 +136,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * <p>
  * Breaking apart the fluent call, we can see the classes being used:
  * <p class='bjava'>
- * 	RestClient.Builder<?> <jv>builder</jv> = RestClient.<jsm>create</jsm>().json5();
+ * 	RestClient.Builder&lt;?&gt; <jv>builder</jv> = RestClient.<jsm>create</jsm>().json5();
  * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
  * 	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
  * 	RestResponse <jv>res</jv> = <jv>req</jv>.run();
@@ -1017,13 +1017,13 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
  *
  * 		<jc>// Must provide this constructor!</jc>
- * 		<jk>public</jk> MyRestClient(RestClient.Builder<?> <jv>builder</jv>) {
+ * 		<jk>public</jk> MyRestClient(RestClient.Builder&lt;?&gt; <jv>builder</jv>) {
  * 			<jk>super</jk>(<jv>builder</jv>);
  * 		}
  *
  * 		<jd>/** Optionally override to customize builder settings before initialization. </jd>
  * 		<ja>@Override</ja>
- * 		<jk>protected void</jk> init(RestClient.Builder<?>) {...}
+ * 		<jk>protected void</jk> init(RestClient.Builder&lt;?&gt;) {...}
  *
  * 		<jd>/** Optionally override to provide post-initialization (e.g. setting up SAML handshakes, etc...). </jd>
  * 		<ja>@Override</ja>
@@ -2047,7 +2047,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that adds a "foo=bar" form-data parameter on every request.</jc>
-		 * 	RestClient.Builder<?> <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	RestClient.Builder&lt;?&gt; <jv>builder</jv> = RestClient.<jsm>create</jsm>();
 		 * 	<jv>builder</jv>.formData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
 		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		 * </p>
@@ -2182,7 +2182,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Returns the root URI defined for this client.
 		 *
 		 * <p>
-		 * Returns <jk>null</jk> in leu of an empty string.
+		 * Returns <jk>null</jk> in lieu of an empty string.
 		 * Trailing slashes are trimmed.
 		 *
 		 * @return The root URI defined for this client.
@@ -2258,7 +2258,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that adds a "Foo: bar" header on every request.</jc>
-		 * 	RestClient.Builder<?> <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	RestClient.Builder&lt;?&gt; <jv>builder</jv> = RestClient.<jsm>create</jsm>();
 		 * 	<jv>builder</jv>.headerData().setDefault(<js>"Foo"</js>, <js>"bar"</js>));
 		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		 * </p>
@@ -4029,7 +4029,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses "bar" for the "{foo}" path variable on every request.</jc>
-		 * 	RestClient.Builder<?> <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	RestClient.Builder&lt;?&gt; <jv>builder</jv> = RestClient.<jsm>create</jsm>();
 		 * 	<jv>builder</jv>.pathData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
 		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		 * </p>
@@ -4283,7 +4283,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that adds a "foo=bar" query parameter on every request.</jc>
-		 * 	RestClient.Builder<?> <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	RestClient.Builder&lt;?&gt; <jv>builder</jv> = RestClient.<jsm>create</jsm>();
 		 * 	<jv>builder</jv>.queryData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
 		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		 * </p>
@@ -5812,7 +5812,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	RestClient <jv>client</jv> = <jk>new</jk> MyBuilder().build();
 		 * </p>
 		 *
-		 * @return The HTTP client builder to use to create the HTTP client.
+		 * @return The connection manager to use.
 		 */
 		protected HttpClientConnectionManager createConnectionManager() {
 			return (pooled ? new PoolingHttpClientConnectionManager() : new BasicHttpClientConnectionManager());
@@ -5827,7 +5827,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * The default behavior creates an empty builder.
 		 *
-		 * @return The query data list builder.
+		 * @return The form data list builder.
 		 * @see #formData()
 		 */
 		protected PartList createFormData() {
@@ -5951,7 +5951,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * The default behavior creates an empty builder.
 		 *
-		 * @return The query data list builder.
+		 * @return The path data list builder.
 		 * @see #pathData()
 		 */
 		protected PartList createPathData() {

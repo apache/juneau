@@ -96,6 +96,7 @@ public class TriXSerializer extends RdfSerializer {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public TriXSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.triX());

@@ -81,7 +81,9 @@ public class DebugRule {
 		/**
 		 * Shortcut for conditional enablement.
 		 *
-		 * @param value The enablement test.
+		 * @param value
+		 * 	The enablement test.
+		 * 	<br>Can be <jk>null</jk> (equivalent to never enabled).
 		 * @return This object.
 		 */
 		public Builder conditional(Predicate<HttpServletRequest> value) {
@@ -142,7 +144,7 @@ public class DebugRule {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder.
+	 * @param builder The builder.  Must not be <jk>null</jk>.
 	 */
 	protected DebugRule(Builder builder) {
 		enabled = builder.enabled;

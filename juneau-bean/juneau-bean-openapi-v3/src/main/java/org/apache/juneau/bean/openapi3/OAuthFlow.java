@@ -116,10 +116,10 @@ public class OAuthFlow extends OpenApiElement {
 	}
 
 	/**
-	 * Adds a single value to the <property>examples</property> property.
+	 * Adds a single value to the <property>scopes</property> property.
 	 *
-	 * @param name The mime-type string.  Must not be <jk>null</jk>.
-	 * @param description The example.  Must not be <jk>null</jk>.
+	 * @param name The scope name.  Must not be <jk>null</jk>.
+	 * @param description A short description for the scope.  Must not be <jk>null</jk>.
 	 * @return This object
 	 */
 	public OAuthFlow addScope(String name, String description) {
@@ -151,40 +151,40 @@ public class OAuthFlow extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>operationRef</property>.
+	 * Bean property getter:  <property>authorizationUrl</property>.
 	 *
 	 * <p>
-	 * The identifying name of the contact person/organization.
+	 * The authorization URL to be used for this flow.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getAuthorizationUrl() { return authorizationUrl; }
 
 	/**
-	 * Bean property getter:  <property>externalValue</property>.
+	 * Bean property getter:  <property>refreshUrl</property>.
 	 *
 	 * <p>
-	 * The email address of the contact person/organization.
+	 * The URL to be used for obtaining refresh tokens.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getRefreshUrl() { return refreshUrl; }
 
 	/**
-	 * Bean property getter:  <property>examples</property>.
+	 * Bean property getter:  <property>scopes</property>.
 	 *
 	 * <p>
-	 * An example of the response message.
+	 * The available scopes for the OAuth2 security scheme.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,String> getScopes() { return nie(scopes); }
 
 	/**
-	 * Bean property getter:  <property>description</property>.
+	 * Bean property getter:  <property>tokenUrl</property>.
 	 *
 	 * <p>
-	 * The URL pointing to the contact information.
+	 * The token URL to be used for this flow.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -219,10 +219,10 @@ public class OAuthFlow extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>operationRef</property>.
+	 * Bean property setter:  <property>authorizationUrl</property>.
 	 *
 	 * <p>
-	 * The identifying name of the contact person/organization.
+	 * The authorization URL to be used for this flow.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -235,14 +235,13 @@ public class OAuthFlow extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>externalValue</property>.
+	 * Bean property setter:  <property>refreshUrl</property>.
 	 *
 	 * <p>
-	 * The email address of the contact person/organization.
+	 * The URL to be used for obtaining refresh tokens.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -252,14 +251,13 @@ public class OAuthFlow extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>examples</property>.
+	 * Bean property setter:  <property>scopes</property>.
 	 *
 	 * <p>
-	 * An example of the response message.
+	 * The available scopes for the OAuth2 security scheme.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Keys must be MIME-type strings.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -271,7 +269,7 @@ public class OAuthFlow extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>description</property>.
+	 * Bean property setter:  <property>tokenUrl</property>.
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.

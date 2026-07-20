@@ -471,7 +471,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @param impl
 	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
+	 * @return A new client.
 	 */
 	public static MockRestClient build(Object impl) {
 		return create(impl).build();
@@ -489,7 +489,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @param impl
 	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
+	 * @return A new client.
 	 */
 	public static MockRestClient buildJson(Object impl) {
 		return create(impl).json().build();
@@ -507,7 +507,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @param impl
 	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
+	 * @return A new client.
 	 */
 	public static MockRestClient buildJson5(Object impl) {
 		return create(impl).json5().build();
@@ -528,7 +528,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @param impl
 	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
+	 * @return A new client.
 	 */
 	public static MockRestClient buildJson5Lax(Object impl) {
 		return create(impl).json5().ignoreErrors().noTrace().build();
@@ -549,7 +549,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @param impl
 	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
+	 * @return A new client.
 	 */
 	public static MockRestClient buildJsonLax(Object impl) {
 		return create(impl).json().ignoreErrors().noTrace().build();
@@ -570,7 +570,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @param impl
 	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
+	 * @return A new client.
 	 */
 	public static MockRestClient buildLax(Object impl) {
 		return create(impl).ignoreErrors().noTrace().build();

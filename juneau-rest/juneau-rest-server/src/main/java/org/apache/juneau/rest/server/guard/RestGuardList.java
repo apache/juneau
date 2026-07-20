@@ -62,6 +62,7 @@ public class RestGuardList {
 		 * Appends the specified rest guard classes to the list.
 		 *
 		 * @param values The values to add.
+		 * 	<br>Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		@SuppressWarnings({
@@ -77,6 +78,7 @@ public class RestGuardList {
 		 * Appends the specified rest guard objects to the list.
 		 *
 		 * @param values The values to add.
+		 * 	<br>Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder append(RestGuard...values) {
@@ -111,6 +113,7 @@ public class RestGuardList {
 	 * Constructor.
 	 *
 	 * @param builder The builder containing the contents for this list.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	protected RestGuardList(Builder builder) {
 		entries = builder.entries.stream().map(BeanInstantiator.Builder::run).toArray(RestGuard[]::new);

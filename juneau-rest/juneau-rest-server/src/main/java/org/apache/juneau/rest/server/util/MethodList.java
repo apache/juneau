@@ -31,7 +31,7 @@ public class MethodList extends ArrayList<Method> {
 	/**
 	 * Creator.
 	 *
-	 * @param methods The methods to add to this list.
+	 * @param methods The methods to add to this list. Must not be <jk>null</jk>.
 	 * @return A new list of methods.
 	 */
 	public static MethodList of(Collection<Method> methods) {
@@ -46,7 +46,7 @@ public class MethodList extends ArrayList<Method> {
 	/**
 	 * Constructor.
 	 *
-	 * @param methods The methods to add to this list.
+	 * @param methods The methods to add to this list. Must not be <jk>null</jk>.
 	 */
 	public MethodList(Collection<Method> methods) {
 		super(methods);

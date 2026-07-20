@@ -139,8 +139,8 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 	/**
 	 * Constructor.
 	 *
-	 * @param req The request creating this bean.
-	 * @param query The raw parsed query parameter values.
+	 * @param req The request creating this bean.  Must not be <jk>null</jk>.
+	 * @param query The raw parsed query parameter values.  Must not be <jk>null</jk>.
 	 * @param caseSensitive Whether case-sensitive name matching is enabled.
 	 */
 	public RequestQueryParamList(RestRequest req, Map<String,String[]> query, boolean caseSensitive) {
@@ -348,7 +348,7 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 	 *
 	 * @param <T> The bean type to create.
 	 * @param type The bean type to create.
-	 * @return The bean, never <jk>null</jk>.
+	 * @return The bean, or {@link Optional#empty()} if the parameter is not present.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		var cm = req.getMarshallingSession().getClassMeta(type);

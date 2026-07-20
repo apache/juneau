@@ -450,7 +450,7 @@ public class HttpPartSchema {
 		/**
 		 * Apply the specified annotation to this schema.
 		 *
-		 * @param a The annotation to apply.
+		 * @param a The annotation to apply.  Must not be <jk>null</jk>.
 		 * @return This object.
 		*/
 		public Builder apply(Annotation a) {
@@ -3065,7 +3065,8 @@ public class HttpPartSchema {
 	 *
 	 * @param a
 	 * 	The annotation to find the schema information on..
-	 * @return The schema information found on the annotation.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return The schema information found on the annotation.  Never <jk>null</jk>.
 	 */
 	public static HttpPartSchema create(Annotation a) {
 		return create().apply(a).build();
@@ -3076,8 +3077,9 @@ public class HttpPartSchema {
 	 *
 	 * @param a
 	 * 	The annotation to find the schema information on..
-	 * @param defaultName The default part name if not specified on the annotation.
-	 * @return The schema information found on the annotation.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param defaultName The default part name if not specified on the annotation.  Can be <jk>null</jk>.
+	 * @return The schema information found on the annotation.  Never <jk>null</jk>.
 	 */
 	public static HttpPartSchema create(Annotation a, String defaultName) {
 		return create().name(defaultName).apply(a).build();
@@ -3104,7 +3106,8 @@ public class HttpPartSchema {
 	 * 	</ul>
 	 * @param t
 	 * 	The class containing the parameter.
-	 * @return The schema information about the parameter.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The schema information about the parameter.  Never <jk>null</jk>.
 	 */
 	public static HttpPartSchema create(Class<? extends Annotation> c, Type t) {
 		return create().applyAll(c, t).build();
@@ -3136,7 +3139,8 @@ public class HttpPartSchema {
 	 * 	</ul>
 	 * @param m
 	 * 	The Java method with the return type being checked.
-	 * @return The schema information about the parameter.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return The schema information about the parameter.  Never <jk>null</jk>.
 	 */
 	public static HttpPartSchema create(Class<? extends Annotation> c, Method m) {
 		return create().applyAll(c, m).build();
@@ -3166,8 +3170,8 @@ public class HttpPartSchema {
 	 * 		<li><ja>@HasQuery</ja>
 	 * 		<li><ja>@HasFormData</ja>
 	 * 	</ul>
-	 * @param mpi The Java method parameter.
-	 * @return The schema information about the parameter.
+	 * @param mpi The Java method parameter.  Must not be <jk>null</jk>.
+	 * @return The schema information about the parameter.  Never <jk>null</jk>.
 	 */
 	public static HttpPartSchema create(Class<? extends Annotation> c, ParameterInfo mpi) {
 		return create().applyAll(c, mpi).build();
@@ -3860,7 +3864,7 @@ public class HttpPartSchema {
 	/**
 	 * Returns the <c>collectionFormat</c> field of this schema.
 	 *
-	 * @return The <c>collectionFormat</c> field of this schema, or <jk>null</jk> if not specified.
+	 * @return The <c>collectionFormat</c> field of this schema.  Defaults to {@link HttpPartCollectionFormat#NO_COLLECTION_FORMAT} if not specified.
 	 * @see HttpPartSchema.Builder#collectionFormat(String)
 	 */
 	public HttpPartCollectionFormat getCollectionFormat() { return collectionFormat; }
@@ -3876,7 +3880,7 @@ public class HttpPartSchema {
 	/**
 	 * Returns the <c>enum</c> field of this schema.
 	 *
-	 * @return The <c>enum</c> field of this schema, or <jk>null</jk> if not specified.
+	 * @return The <c>enum</c> field of this schema.  Never <jk>null</jk> - returns an empty set if not specified.
 	 * @see HttpPartSchema.Builder#enum_(Set)
 	 */
 	public Set<String> getEnum() { return enum_; }
@@ -3885,7 +3889,7 @@ public class HttpPartSchema {
 	 * Returns the <c>format</c> field of this schema.
 	 *
 	 * @see HttpPartSchema.Builder#format(String)
-	 * @return The <c>format</c> field of this schema, or <jk>null</jk> if not specified.
+	 * @return The <c>format</c> field of this schema.  Defaults to {@link HttpPartFormat#NO_FORMAT} if not specified.
 	 */
 	public HttpPartFormat getFormat() { return format; }
 
@@ -3895,7 +3899,8 @@ public class HttpPartSchema {
 	 * @param cm
 	 * 	The class info of the object.
 	 * 	<br>Used to auto-detect the format if the format was not specified.
-	 * @return The <c>format</c> field of this schema, or <jk>null</jk> if not specified.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return The <c>format</c> field of this schema, or the format auto-detected from the class info, or {@link HttpPartFormat#NO_FORMAT} if not specified and not auto-detectable.
 	 * @see HttpPartSchema.Builder#format(String)
 	 */
 	public HttpPartFormat getFormat(ClassInfo cm) {
@@ -3915,7 +3920,7 @@ public class HttpPartSchema {
 	}
 
 	/**
-	 * Returns the <c>maximum</c> field of this schema.
+	 * Returns the <c>items</c> field of this schema.
 	 *
 	 * @return The schema for child items of the object represented by this schema, or <jk>null</jk> if not defined.
 	 * @see HttpPartSchema.Builder#items(HttpPartSchema.Builder)
@@ -3931,25 +3936,25 @@ public class HttpPartSchema {
 	public Number getMaximum() { return maximum; }
 
 	/**
-	 * Returns the <c>xxx</c> field of this schema.
+	 * Returns the <c>maxItems</c> field of this schema.
 	 *
-	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
+	 * @return The <c>maxItems</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#maxItems(Long)
 	 */
 	public Long getMaxItems() { return maxItems; }
 
 	/**
-	 * Returns the <c>xxx</c> field of this schema.
+	 * Returns the <c>maxLength</c> field of this schema.
 	 *
-	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
+	 * @return The <c>maxLength</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#maxLength(Long)
 	 */
 	public Long getMaxLength() { return maxLength; }
 
 	/**
-	 * Returns the <c>xxx</c> field of this schema.
+	 * Returns the <c>maxProperties</c> field of this schema.
 	 *
-	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
+	 * @return The <c>maxProperties</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#maxProperties(Long)
 	 */
 	public Long getMaxProperties() { return maxProperties; }
@@ -3963,33 +3968,33 @@ public class HttpPartSchema {
 	public Number getMinimum() { return minimum; }
 
 	/**
-	 * Returns the <c>xxx</c> field of this schema.
+	 * Returns the <c>minItems</c> field of this schema.
 	 *
-	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
+	 * @return The <c>minItems</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#minItems(Long)
 	 */
 	public Long getMinItems() { return minItems; }
 
 	/**
-	 * Returns the <c>xxx</c> field of this schema.
+	 * Returns the <c>minLength</c> field of this schema.
 	 *
-	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
+	 * @return The <c>minLength</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#minLength(Long)
 	 */
 	public Long getMinLength() { return minLength; }
 
 	/**
-	 * Returns the <c>xxx</c> field of this schema.
+	 * Returns the <c>minProperties</c> field of this schema.
 	 *
-	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
+	 * @return The <c>minProperties</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#minProperties(Long)
 	 */
 	public Long getMinProperties() { return minProperties; }
 
 	/**
-	 * Returns the <c>xxx</c> field of this schema.
+	 * Returns the <c>multipleOf</c> field of this schema.
 	 *
-	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
+	 * @return The <c>multipleOf</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#multipleOf(Number)
 	 */
 	public Number getMultipleOf() { return multipleOf; }
@@ -4018,9 +4023,9 @@ public class HttpPartSchema {
 	public Class<?> getParser() { return parser; }
 
 	/**
-	 * Returns the <c>xxx</c> field of this schema.
+	 * Returns the <c>pattern</c> field of this schema.
 	 *
-	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
+	 * @return The <c>pattern</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#pattern(String)
 	 */
 	public Pattern getPattern() { return pattern; }
@@ -4028,8 +4033,8 @@ public class HttpPartSchema {
 	/**
 	 * Returns the schema information for the specified property.
 	 *
-	 * @param name The property name.
-	 * @return The schema information for the specified property, or <jk>null</jk> if properties are not defined on this schema.
+	 * @param name The property name.  Can be <jk>null</jk>.
+	 * @return The schema information for the specified property, or the <c>additionalProperties</c> schema if no matching property is defined, or <jk>null</jk> if neither is defined.
 	 */
 	public HttpPartSchema getProperty(String name) {
 		if (nn(properties)) {
@@ -4051,7 +4056,7 @@ public class HttpPartSchema {
 	/**
 	 * Returns the <c>type</c> field of this schema.
 	 *
-	 * @return The <c>type</c> field of this schema, or <jk>null</jk> if not specified.
+	 * @return The <c>type</c> field of this schema.  Defaults to {@link HttpPartDataType#NO_TYPE} if not specified.
 	 * @see HttpPartSchema.Builder#type(String)
 	 */
 	public HttpPartDataType getType() { return type; }
@@ -4062,8 +4067,9 @@ public class HttpPartSchema {
 	 * @param cm
 	 * 	The class info of the object.
 	 * 	<br>Used to auto-detect the type if the type was not specified.
-	 * @return The format field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchema.Builder#format(String)
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return The <c>type</c> field of this schema, or the type auto-detected from the class info if not specified.
+	 * @see HttpPartSchema.Builder#type(String)
 	 */
 	public HttpPartDataType getType(ClassInfo cm) {
 		if (type != HttpPartDataType.NO_TYPE)
@@ -4102,8 +4108,8 @@ public class HttpPartSchema {
 	/**
 	 * Returns the <c>allowEmptyValue</c> field of this schema.
 	 *
-	 * @return The <c>skipIfEmpty</c> field of this schema.
-	 * @see HttpPartSchema.Builder#skipIfEmpty(Boolean)
+	 * @return The <c>allowEmptyValue</c> field of this schema.
+	 * @see HttpPartSchema.Builder#allowEmptyValue(Boolean)
 	 */
 	public boolean isAllowEmptyValue() { return allowEmptyValue; }
 
@@ -4189,9 +4195,9 @@ public class HttpPartSchema {
 	}
 
 	/**
-	 * Throws a {@link ParseException} if the specified pre-parsed input does not validate against this schema.
+	 * Throws a {@link SchemaValidationException} if the specified pre-parsed input does not validate against this schema.
 	 *
-	 * @param in The input.
+	 * @param in The input.  Can be <jk>null</jk>.
 	 * @return The same object passed in.
 	 * @throws SchemaValidationException if the specified pre-parsed input does not validate against this schema.
 	 */
@@ -4224,7 +4230,7 @@ public class HttpPartSchema {
 	 * Validates the specified parsed output against this schema.
 	 *
 	 * @param <T> The return type.
-	 * @param o The parsed output.
+	 * @param o The parsed output.  Can be <jk>null</jk>.
 	 * @return The same object passed in.
 	 * @throws SchemaValidationException if the specified parsed output does not validate against this schema.
 	 */

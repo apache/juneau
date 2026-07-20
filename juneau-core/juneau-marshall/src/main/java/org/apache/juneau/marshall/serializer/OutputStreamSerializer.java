@@ -125,6 +125,7 @@ public class OutputStreamSerializer extends Serializer implements ThrowingFuncti
 	 *
 	 * @param builder
 	 * 	The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected OutputStreamSerializer(Builder<?> builder) {
 		super(builder);

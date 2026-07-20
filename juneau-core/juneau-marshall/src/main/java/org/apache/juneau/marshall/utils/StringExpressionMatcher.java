@@ -196,7 +196,7 @@ public class StringExpressionMatcher {
 	/**
 	 * Constructor.
 	 *
-	 * @param expression The string expression.
+	 * @param expression The string expression.  Can be <jk>null</jk> or empty, in which case the matcher never matches.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public StringExpressionMatcher(String expression) throws ParseException {

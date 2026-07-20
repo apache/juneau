@@ -365,7 +365,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * <p>
 	 * This method is effectively a no-op if {@link #init(ServletConfig)} has already been called.
 	 *
-	 * @param context Sets the context object on this servlet.
+	 * @param context Sets the context object on this servlet.  Must not be <jk>null</jk>.
 	 * @throws ServletException If error occurred during initialization.
 	 */
 	protected synchronized void setContext(RestContext context) throws ServletException {

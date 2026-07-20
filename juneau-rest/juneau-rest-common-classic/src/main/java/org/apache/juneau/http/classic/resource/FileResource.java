@@ -42,8 +42,8 @@ public class FileResource extends BasicResource {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.
-	 * @param contents The entity contents.
+	 * @param contentType The entity content type.  Can be <jk>null</jk>.
+	 * @param contents The entity contents.  Can be <jk>null</jk>.
 	 */
 	public FileResource(ContentType contentType, File contents) {
 		super(new FileEntity(contentType, contents));

@@ -63,7 +63,7 @@ import org.apache.juneau.marshall.yaml.*;
  * Base class for all Context beans.
  *
  * <p>
- * Context beans follow the convention of havinTg the following parts:
+ * Context beans follow the convention of having the following parts:
  * <ul>
  * 	<li>A {@link Builder} class for configuring the context bean.
  * 	<ul>
@@ -917,6 +917,7 @@ public abstract class Context {
 	 * or protected constructor of the class.
 	 *
 	 * @param type The builder to create.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder createBuilder(Class<? extends Context> type) {
@@ -951,6 +952,7 @@ public abstract class Context {
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The context to copy from.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected Context(Context copyFrom) {
 		annotationProvider = copyFrom.annotationProvider;

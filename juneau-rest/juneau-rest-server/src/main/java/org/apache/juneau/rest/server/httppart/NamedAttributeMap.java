@@ -40,8 +40,8 @@ public class NamedAttributeMap extends LinkedHashMap<String,NamedAttribute> {
 	/**
 	 * Static creator.
 	 *
-	 * @param values The initial contents of this list.
-	 * @return An empty list.
+	 * @param values The initial contents of this list.  Must not be <jk>null</jk>.
+	 * @return A new list containing the specified attributes.
 	 */
 	public static NamedAttributeMap of(NamedAttribute...values) {
 		return create().add(values);
@@ -62,9 +62,9 @@ public class NamedAttributeMap extends LinkedHashMap<String,NamedAttribute> {
 	}
 
 	/**
-	 * Appends the specified rest matcher classes to the list.
+	 * Appends the specified named attributes to the list.
 	 *
-	 * @param values The values to add.
+	 * @param values The values to add.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public NamedAttributeMap add(NamedAttribute...values) {

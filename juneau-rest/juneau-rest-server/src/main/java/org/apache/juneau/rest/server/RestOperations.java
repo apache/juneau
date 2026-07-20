@@ -61,8 +61,8 @@ public class RestOperations {
 		/**
 		 * Adds a method context to this builder.
 		 *
-		 * @param value The REST method context to add.
-		 * @return Adds a method context to this builder.
+		 * @param value The REST method context to add. Must not be <jk>null</jk>.
+		 * @return This object.
 		 */
 		public Builder add(RestOpContext value) {
 			return add(value.getHttpMethod(), value);
@@ -71,9 +71,9 @@ public class RestOperations {
 		/**
 		 * Adds a method context to this builder.
 		 *
-		 * @param httpMethodName The HTTP method name.
-		 * @param value The REST method context to add.
-		 * @return Adds a method context to this builder.
+		 * @param httpMethodName The HTTP method name. Must not be <jk>null</jk>.
+		 * @param value The REST method context to add. Must not be <jk>null</jk>.
+		 * @return This object.
 		 */
 		public Builder add(String httpMethodName, RestOpContext value) {
 			httpMethodName = ucr(httpMethodName);
@@ -108,7 +108,7 @@ public class RestOperations {
 		/**
 		 * Constructor.
 		 *
-		 * @param builder The builder.
+		 * @param builder The builder. Must not be <jk>null</jk>.
 		 * @throws Exception If initialization fails.
 		 */
 		public Void(Builder builder) throws Exception {
@@ -132,7 +132,7 @@ public class RestOperations {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder containing the settings for this object.
+	 * @param builder The builder containing the settings for this object. Must not be <jk>null</jk>.
 	 */
 	public RestOperations(Builder builder) {
 		Map<String,List<RestOpContext>> m = map();
@@ -145,7 +145,7 @@ public class RestOperations {
 	/**
 	 * Finds the method that should handle the specified call.
 	 *
-	 * @param session The HTTP call.
+	 * @param session The HTTP call. Must not be <jk>null</jk>.
 	 * @return The method that should handle the specified call.
 	 * @throws MethodNotAllowed If no methods implement the requested HTTP method.
 	 * @throws PreconditionFailed At least one method was found but it didn't match one or more matchers.

@@ -55,7 +55,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	/**
 	 * Static creator.
 	 *
-	 * @param vrs The variable resolver.
+	 * @param vrs The variable resolver. Must not be <jk>null</jk>.
 	 * @return A new list.
 	 */
 	public static AnnotationWorkList create(VarResolverSession vrs) {
@@ -65,7 +65,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	/**
 	 * Static creator.
 	 *
-	 * @param annotations The annotations to create work from.
+	 * @param annotations The annotations to create work from. Must not be <jk>null</jk>.
 	 * @return A new list.
 	 */
 	public static AnnotationWorkList of(Stream<AnnotationInfo<? extends Annotation>> annotations) {
@@ -75,8 +75,8 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	/**
 	 * Static creator.
 	 *
-	 * @param vrs The variable resolver.
-	 * @param annotations The annotations to create work from.
+	 * @param vrs The variable resolver. Must not be <jk>null</jk>.
+	 * @param annotations The annotations to create work from. Must not be <jk>null</jk>.
 	 * @return A new list.
 	 */
 	public static AnnotationWorkList of(VarResolverSession vrs, Stream<AnnotationInfo<? extends Annotation>> annotations) {
@@ -114,7 +114,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	/**
 	 * Adds entries for the specified annotations to this work list.
 	 *
-	 * @param annotations The annotations to create work from.
+	 * @param annotations The annotations to create work from. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public AnnotationWorkList add(Stream<AnnotationInfo<? extends Annotation>> annotations) {

@@ -82,7 +82,9 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param ap The annotation provider.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param mp HTML metadata provider (for finding information about other artifacts).
 	 */
 	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm, AnnotationProvider ap, HtmlMetaProvider mp) {
@@ -142,7 +144,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * <p>
 	 * This value is specified via the {@link Html#render() @Html(render)} annotation.
 	 *
-	 * @return The render class, never <jk>null</jk>.
+	 * @return The render class, or <jk>null</jk> if not specified.
 	 */
 	public HtmlRender getRender() { return render; }
 

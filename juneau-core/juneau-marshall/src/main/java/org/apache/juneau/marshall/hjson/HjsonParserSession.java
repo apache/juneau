@@ -64,6 +64,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	 * Creates a session builder.
 	 *
 	 * @param ctx The parser context.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The builder.
 	 */
 	public static Builder create(HjsonParser ctx) {

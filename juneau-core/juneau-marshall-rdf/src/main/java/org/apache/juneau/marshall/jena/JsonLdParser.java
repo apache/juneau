@@ -90,6 +90,7 @@ public class JsonLdParser extends RdfParser {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public JsonLdParser(RdfParser.Builder<?> builder) {
 		super(builder.jsonLd().consumes("application/ld+json"));

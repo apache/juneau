@@ -1492,9 +1492,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
-	 * Returns the bean context associated with this context.
+	 * Returns the marshalling context associated with this context.
 	 *
-	 * @return The bean context associated with this context.
+	 * @return The marshalling context associated with this context.
 	 */
 	public MarshallingContext getMarshallingContext() { return marshallingContext.get(); }
 
@@ -1733,7 +1733,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/**
 	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.
 	 *
-	 * @param o The response POJO.
+	 * @param o The response POJO.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Response @Response}.
 	 */
 	public ResponseBeanMeta getResponseBeanMeta(Object o) {
@@ -1755,7 +1755,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/**
 	 * Returns metadata about the specified response object if it's annotated with {@link Header @Header}.
 	 *
-	 * @param o The response POJO.
+	 * @param o The response POJO.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Header @Header}.
 	 */
 	public ResponsePartMeta getResponseHeaderMeta(Object o) {

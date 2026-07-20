@@ -35,6 +35,7 @@ public class HtmlWidgetMap extends LinkedHashMap<String,HtmlWidget> {
 	 * Adds the specified widgets to this map.
 	 *
 	 * @param w The widgets to add to this map.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public HtmlWidgetMap append(HtmlWidget...w) {

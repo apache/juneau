@@ -86,6 +86,7 @@ public class TriGSerializer extends RdfSerializer {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public TriGSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.triG());

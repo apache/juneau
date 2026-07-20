@@ -151,7 +151,7 @@ public class JsonPointer {
 	/**
 	 * Removes the member or element addressed by this pointer.
 	 *
-	 * @param root The root document.
+	 * @param root The root document.  Can be <jk>null</jk>.
 	 * @return The removed value, or <jk>null</jk> if the addressed member/element was absent (or the pointer is the root pointer).
 	 */
 	public Object remove(Object root) {

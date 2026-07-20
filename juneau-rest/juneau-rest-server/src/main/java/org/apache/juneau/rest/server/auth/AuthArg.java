@@ -60,7 +60,7 @@ public class AuthArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new {@link AuthArg}, or <jk>null</jk> if the parameter is not eligible.
 	 */
 	public static AuthArg create(ParameterInfo paramInfo) {
@@ -76,7 +76,7 @@ public class AuthArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 */
 	protected AuthArg(ParameterInfo paramInfo) {
 		this.type = paramInfo.getParameterType().inner();

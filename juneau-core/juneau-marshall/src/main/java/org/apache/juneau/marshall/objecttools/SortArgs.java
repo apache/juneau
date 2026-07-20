@@ -44,7 +44,8 @@ public class SortArgs {
 	 * 		<li><js>"column+"</js> - Sort column ascending.
 	 * 		<li><js>"column-"</js> - Sort column descending.
 	 * 	</ul>
-	 * @return A new {@link SortArgs} object.
+	 * 	Can be <jk>null</jk>.
+	 * @return A new {@link SortArgs} object, or <jk>null</jk> if <c>args</c> is <jk>null</jk>.
 	 */
 	public static SortArgs create(List<String> args) {
 		if (args == null)
@@ -63,7 +64,8 @@ public class SortArgs {
 	 * 		<li><js>"column+"</js> - Sort column ascending.
 	 * 		<li><js>"column-"</js> - Sort column descending.
 	 * 	</ul>
-	 * @return A new {@link SortArgs} object.
+	 * 	Can be <jk>null</jk>.
+	 * @return A new {@link SortArgs} object, or <jk>null</jk> if <c>args</c> is <jk>null</jk>.
 	 */
 	public static SortArgs create(String args) {
 		if (args == null)

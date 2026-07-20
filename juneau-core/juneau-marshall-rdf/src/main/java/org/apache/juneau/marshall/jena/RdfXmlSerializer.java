@@ -97,6 +97,7 @@ public class RdfXmlSerializer extends RdfSerializer {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public RdfXmlSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.xml());

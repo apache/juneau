@@ -96,6 +96,7 @@ public class RdfXmlAbbrevSerializer extends RdfSerializer {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public RdfXmlAbbrevSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.xmlabbrev());

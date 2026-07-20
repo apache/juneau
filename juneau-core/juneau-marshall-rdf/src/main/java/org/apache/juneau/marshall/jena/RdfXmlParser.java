@@ -101,6 +101,7 @@ public class RdfXmlParser extends RdfParser {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public RdfXmlParser(RdfParser.Builder<?> builder) {
 		super(builder.xml().consumes("text/xml+rdf"));

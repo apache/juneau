@@ -73,6 +73,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	 * Creates a session builder.
 	 *
 	 * @param ctx The parser context.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The builder.
 	 */
 	public static Builder create(IniParser ctx) {
@@ -117,6 +118,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	 * Parses INI content into section -> (key -> raw value) structure.
 	 *
 	 * @param r The reader.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return Map of section name to key-value map. Default section uses "".
 	 */
 	protected Map<String, Map<String, String>> readIniContent(Reader r) throws IOException {

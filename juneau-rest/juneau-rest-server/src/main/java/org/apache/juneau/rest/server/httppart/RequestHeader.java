@@ -51,10 +51,10 @@ import org.apache.juneau.rest.server.*;
  * 			<li class='jm'>{@link RequestHeader#asBoolean() asBoolean()}
  * 			<li class='jm'>{@link RequestHeader#asBooleanHeader() asBooleanHeader()}
  * 			<li class='jm'>{@link RequestHeader#asCsvArray() asCsvArray()}
- * 			<li class='jm'>{@link RequestHeader#asCsvHeader() asCsvArrayHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asCsvHeader() asCsvHeader()}
  * 			<li class='jm'>{@link RequestHeader#asDate() asDate()}
  * 			<li class='jm'>{@link RequestHeader#asDateHeader() asDateHeader()}
- * 			<li class='jm'>{@link RequestHeader#asEntityTagsHeader() asEntityTagArrayHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asEntityTagsHeader() asEntityTagsHeader()}
  * 			<li class='jm'>{@link RequestHeader#asEntityTagHeader() asEntityTagHeader()}
  * 			<li class='jm'>{@link RequestHeader#asInteger() asInteger()}
  * 			<li class='jm'>{@link RequestHeader#asIntegerHeader() asIntegerHeader()}
@@ -64,7 +64,7 @@ import org.apache.juneau.rest.server.*;
  * 			<li class='jm'>{@link RequestHeader#asMatcher(String) asMatcher(String)}
  * 			<li class='jm'>{@link RequestHeader#asMatcher(String,int) asMatcher(String,int)}
  * 			<li class='jm'>{@link RequestHeader#asStringHeader() asStringHeader()}
- * 			<li class='jm'>{@link RequestHeader#asStringRangesHeader() asStringRangeArrayHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asStringRangesHeader() asStringRangesHeader()}
  * 			<li class='jm'>{@link RequestHeader#asUriHeader() asUriHeader()}
  * 		</ul>
  * 		<li>Methods for retrieving as custom types:

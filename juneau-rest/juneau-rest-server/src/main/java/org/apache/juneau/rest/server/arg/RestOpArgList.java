@@ -62,7 +62,7 @@ public class RestOpArgList {
 		/**
 		 * Prepends the specified rest op arg classes to the list.
 		 *
-		 * @param values The values to add.
+		 * @param values The values to add. Must not be <jk>null</jk>.
 		 * @return This object.
 		 * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.
 		 */
@@ -96,7 +96,7 @@ public class RestOpArgList {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder containing the contents for this list.
+	 * @param builder The builder containing the contents for this list. Must not be <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast for builder list

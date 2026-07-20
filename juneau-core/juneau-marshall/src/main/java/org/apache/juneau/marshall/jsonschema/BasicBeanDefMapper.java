@@ -49,7 +49,7 @@ public class BasicBeanDefMapper implements MarshallingDefMapper {
 	/**
 	 * Constructor that allows you to override the URI pattern.
 	 *
-	 * @param uriPattern The URI pattern using {@link MessageFormat}-style arguments.
+	 * @param uriPattern The URI pattern using {@link MessageFormat}-style arguments.  Must not be <jk>null</jk>.
 	 */
 	protected BasicBeanDefMapper(String uriPattern) {
 		format = new MessageFormat(uriPattern);

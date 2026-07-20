@@ -68,7 +68,7 @@ public class BasicTestCallLogger extends CallLogger {
 	/**
 	 * Constructor.
 	 *
-	 * @param beanStore The bean store containing injectable beans for this logger.
+	 * @param beanStore The bean store containing injectable beans for this logger. Must not be <jk>null</jk>.
 	 */
 	public BasicTestCallLogger(BeanStore beanStore) {
 		super(beanStore);

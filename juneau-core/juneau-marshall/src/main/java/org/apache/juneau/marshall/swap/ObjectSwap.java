@@ -181,7 +181,7 @@ public abstract class ObjectSwap<T,S> {
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/PerMediaTypeSwaps">Per-media-type Swaps</a>
 	 * </ul>
 	 *
-	 * @param mediaTypes The media types that this swap is associated with.
+	 * @param mediaTypes The media types that this swap is associated with. Can be <jk>null</jk> to make this swap applicable to all media types.
 	 * @return This object.
 	 */
 	public ObjectSwap<T,?> forMediaTypes(MediaType[] mediaTypes) {
@@ -216,6 +216,7 @@ public abstract class ObjectSwap<T,S> {
 	 * @param session
 	 * 	The bean context to use to get the class meta.
 	 * 	This is always going to be the same bean context that created this swap.
+	 * 	Must not be <jk>null</jk> on the first (uncached) call.
 	 * @return The {@link ClassMeta} of the transformed class type.
 	 */
 	public ClassMeta<?> getSwapClassMeta(MarshallingSession session) {
@@ -227,10 +228,10 @@ public abstract class ObjectSwap<T,S> {
 	/**
 	 * Checks if the specified object is an instance of the normal class defined on this swap.
 	 *
-	 * @param o The object to check.
+	 * @param o The object to check. Can be <jk>null</jk>.
 	 * @return
 	 * 	<jk>true</jk> if the specified object is a subclass of the normal class defined on this transform.
-	 * 	<jk>null</jk> always return <jk>false</jk>.
+	 * 	A <jk>null</jk> value always returns <jk>false</jk>.
 	 */
 	public boolean isNormalObject(Object o) {
 		if (o == null)
@@ -241,10 +242,10 @@ public abstract class ObjectSwap<T,S> {
 	/**
 	 * Checks if the specified object is an instance of the swap class defined on this swap.
 	 *
-	 * @param o The object to check.
+	 * @param o The object to check. Can be <jk>null</jk>.
 	 * @return
 	 * 	<jk>true</jk> if the specified object is a subclass of the transformed class defined on this transform.
-	 * 	<jk>null</jk> always return <jk>false</jk>.
+	 * 	A <jk>null</jk> value always returns <jk>false</jk>.
 	 */
 	public boolean isSwappedObject(Object o) {
 		if (o == null)
@@ -271,7 +272,7 @@ public abstract class ObjectSwap<T,S> {
 	 * 	<li><js>"text/xml"</js> = <c>0</c>
 	 * </ul>
 	 *
-	 * @param session The bean session.
+	 * @param session The bean session. Can be <jk>null</jk>.
 	 * @return Zero if swap doesn't match the session, or a positive number if it does.
 	 */
 	public int match(MarshallingSession session) {
@@ -419,7 +420,7 @@ public abstract class ObjectSwap<T,S> {
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps">Templated Swaps</a>
 	 * </ul>
 	 *
-	 * @param template The template string on this swap.
+	 * @param template The template string on this swap. Can be <jk>null</jk> to unset the template.
 	 * @return This object.
 	 */
 	public ObjectSwap<T,?> withTemplate(String template) {

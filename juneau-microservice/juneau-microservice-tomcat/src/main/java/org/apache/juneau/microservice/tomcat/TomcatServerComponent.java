@@ -505,7 +505,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 	 * Returns the underlying Tomcat server.
 	 *
 	 * @return The underlying Tomcat server.
-	 * @throws IllegalStateException If the server has not been created yet.
+	 * @throws NullPointerException If the server has not been created yet.
 	 */
 	public Tomcat getServer() {
 		return Objects.requireNonNull(tomcat.get(), "Tomcat not found.  Microservice has not been started yet.");

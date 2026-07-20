@@ -122,7 +122,9 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	 * Constructor.
 	 *
 	 * @param beanMeta The metadata on the bean that this metadata applies to.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param mp XML metadata provider (for finding information about other artifacts).
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for XML bean metadata initialization

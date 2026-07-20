@@ -121,6 +121,7 @@ public class ParserSet {
 		 * Parser builders will be cloned during this process.
 		 *
 		 * @param copyFrom The parser group that we're copying settings and parsers from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
 			this.beanStore = copyFrom.beanStore;
@@ -134,6 +135,7 @@ public class ParserSet {
 		 * Clone an existing parser group.
 		 *
 		 * @param copyFrom The parser group that we're copying settings and parsers from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ParserSet copyFrom) {
 			this.beanStore = BasicBeanStore.INSTANCE;
@@ -239,7 +241,8 @@ public class ParserSet {
 		/**
 		 * Associates an existing bean context builder with all parser builders in this group.
 		 *
-		 * @param value The bean contest builder to associate.
+		 * @param value The bean context builder to associate.
+		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder marshallingContext(MarshallingContext.Builder value) {
@@ -352,6 +355,7 @@ public class ParserSet {
 		 * Overrides the bean returned by the {@link #build()} method with a pre-built instance.
 		 *
 		 * @param value The pre-built instance.
+		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder impl(Object value) {
@@ -530,6 +534,7 @@ public class ParserSet {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this bean.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public ParserSet(Builder builder) {
 
@@ -570,7 +575,7 @@ public class ParserSet {
 	/**
 	 * Same as {@link #getParserMatch(String)} but returns just the matched parser.
 	 *
-	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header string.
+	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header string.  Can be <jk>null</jk>.
 	 * @return The parser that matched the content type header, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<Parser> getParser(String contentTypeHeader) {

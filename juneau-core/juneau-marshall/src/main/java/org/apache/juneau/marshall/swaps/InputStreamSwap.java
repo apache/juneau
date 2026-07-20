@@ -121,8 +121,12 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 	 * Convert the specified byte array into an input stream.
 	 *
 	 * @param b The byte array.
-	 * @param hint Contains a hint about what subtype is being requested.
-	 * @return The byte array.
+	 * @param hint
+	 * 	Contains a hint about what subtype is being requested.
+	 * 	<br>Can be <jk>null</jk>, in which case {@link InputStream} is assumed.
+	 * @return
+	 * 	The contents of the byte array as an input stream, or <jk>null</jk> if the hint requests a
+	 * 	stream subtype other than {@link InputStream} or {@link ByteArrayInputStream}.
 	 */
 	protected InputStream toStream(byte[] b, ClassMeta<?> hint) {
 		var c = hint == null ? InputStream.class : hint.inner();

@@ -68,9 +68,9 @@ public class RestOpInvoker extends MethodInvoker {
 	}
 
 	/**
-	 * Invokes this method from the specified {@link RestSession}.
+	 * Invokes this method from the specified {@link RestOpSession}.
 	 *
-	 * @param opSession The REST call.
+	 * @param opSession The REST call. Must not be <jk>null</jk>.
 	 * @throws Exception If an error occurred during either parameter resolution or method invocation.
 	 */
 	public void invoke(RestOpSession opSession) throws Exception {
@@ -103,7 +103,7 @@ public class RestOpInvoker extends MethodInvoker {
 	 * future's {@code whenComplete} callback so metrics and traces capture the actual completion time
 	 * and outcome — not the synchronous "future returned" moment.
 	 *
-	 * @param opSession The REST call.
+	 * @param opSession The REST call. Must not be <jk>null</jk>.
 	 * @throws Exception If an error occurred during either parameter resolution or method invocation.
 	 */
 	@SuppressWarnings({

@@ -180,6 +180,7 @@ public class Microservice implements ConfigEventListener {
 		 *
 		 * @param args
 		 * 	The command-line arguments passed into the Java command as a pre-parsed {@link Args} object.
+		 * 	<br>Can be <jk>null</jk> (an empty {@link Args} is used).
 		 * @return This object.
 		 */
 		public Builder args(Args args) {
@@ -221,7 +222,7 @@ public class Microservice implements ConfigEventListener {
 		 * <p>
 		 * Calling this method overrides the default configuration controlled by the {@link #configName(String)} and {@link #configStore(ConfigStore)} methods.
 		 *
-		 * @param config The configuration.
+		 * @param config The configuration.  Can be <jk>null</jk> (the configuration is auto-resolved).
 		 * @return This object.
 		 */
 		public Builder config(Config config) {
@@ -255,7 +256,7 @@ public class Microservice implements ConfigEventListener {
 		 * <p>
 		 * If no configuration file is found, and empty in-memory configuration is used.
 		 *
-		 * @param configName The configuration name.
+		 * @param configName The configuration name.  Can be <jk>null</jk> (the configuration name is auto-resolved).
 		 * @return This object.
 		 */
 		public Builder configName(String configName) {
@@ -269,7 +270,7 @@ public class Microservice implements ConfigEventListener {
 		 * <p>
 		 * By default, we use a {@link FileStore} store for configuration files.
 		 *
-		 * @param configStore The configuration name.
+		 * @param configStore The configuration store.  Can be <jk>null</jk> (a default {@link FileStore} is used).
 		 * @return This object.
 		 */
 		public Builder configStore(ConfigStore configStore) {
@@ -287,8 +288,8 @@ public class Microservice implements ConfigEventListener {
 		 * <p>
 		 * Note that these are ignored if the console is not enabled via {@link #consoleEnabled(boolean)}.
 		 *
-		 * @param consoleReader The console input.
-		 * @param consoleWriter The console output.
+		 * @param consoleReader The console input.  Can be <jk>null</jk> (the default console input is used).
+		 * @param consoleWriter The console output.  Can be <jk>null</jk> (the default console output is used).
 		 * @return This object.
 		 */
 		public Builder console(Scanner consoleReader, PrintWriter consoleWriter) {
@@ -370,7 +371,7 @@ public class Microservice implements ConfigEventListener {
 		/**
 		 * Registers an event listener for this microservice.
 		 *
-		 * @param listener An event listener for this microservice.
+		 * @param listener An event listener for this microservice.  Can be <jk>null</jk> (no listener is registered).
 		 * @return This object.
 		 */
 		public Builder listener(MicroserviceListener listener) {
@@ -387,7 +388,7 @@ public class Microservice implements ConfigEventListener {
 		 * <p>
 		 * This method is ignored if {@link #logger(Logger)} is used to set the microservice logger.
 		 *
-		 * @param logConfig The log configuration.
+		 * @param logConfig The log configuration.  Can be <jk>null</jk> (a default {@link LogConfig} is used).
 		 * @return This object.
 		 */
 		public Builder logConfig(LogConfig logConfig) {
@@ -401,7 +402,7 @@ public class Microservice implements ConfigEventListener {
 		 * <p>
 		 * Calling this method overrides the default logging mechanism controlled by the {@link #logConfig(LogConfig)} method.
 		 *
-		 * @param logger The logger to use for logging microservice messages.
+		 * @param logger The logger to use for logging microservice messages.  Can be <jk>null</jk> (a default logger is created).
 		 * @return This object.
 		 */
 		public Builder logger(Logger logger) {
@@ -439,6 +440,7 @@ public class Microservice implements ConfigEventListener {
 		 * 		<li>{@link String} - Path to file containing the raw contents of the manifest.
 		 * 		<li>{@link Class} - Finds and loads the manifest file of the jar file that the specified class is contained within.
 		 * 	</ul>
+		 * 	<br>Can be <jk>null</jk> (the manifest is auto-resolved).
 		 * @return This object.
 		 * @throws IOException Thrown by underlying stream.
 		 */
@@ -516,7 +518,7 @@ public class Microservice implements ConfigEventListener {
 		/**
 		 * Specifies the directory to use to resolve the config file and other paths defined with the config file.
 		 *
-		 * @param workingDir The working directory, or <jk>null</jk> to use the underlying working directory.
+		 * @param workingDir The working directory.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder workingDir(String workingDir) {
@@ -620,7 +622,7 @@ public class Microservice implements ConfigEventListener {
 		 * <p>
 		 * If the working directory has been explicitly specified, relative paths are resolved relative to that.
 		 *
-		 * @param path The path to resolve.
+		 * @param path The path to resolve.  Must not be <jk>null</jk>.
 		 * @return The resolved file.
 		 */
 		protected File resolveFile(String path) {
@@ -886,7 +888,7 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * Ignored if <js>"Console/enabled"</js> is <jk>false</jk>.
 	 *
-	 * @param mb The message bundle containing the message.
+	 * @param mb The message bundle containing the message.  Must not be <jk>null</jk>.
 	 * @param messageKey The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -901,10 +903,10 @@ public class Microservice implements ConfigEventListener {
 	 * Executes a console command.
 	 *
 	 * @param args
-	 * 	The command arguments.
+	 * 	The command arguments.  Must not be <jk>null</jk>.
 	 * 	<br>The first entry in the arguments is always the command name.
 	 * @param in Console input.
-	 * @param out Console output.
+	 * @param out Console output.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the command returned <jk>true</jk> meaning the console thread should exit.
 	 */
 	public boolean executeCommand(Args args, Scanner in, PrintWriter out) {
@@ -1067,14 +1069,14 @@ public class Microservice implements ConfigEventListener {
 	 * 	String <jv>firstArg</jv> = <jv>config</jv>.getString(<js>"MySection/firstArg"</js>);
 	 * </p>
 	 *
-	 * @return The config file for this application, or <jk>null</jk> if no config file is configured.
+	 * @return The config file for this application.  Never <jk>null</jk> (an empty config is returned if none is configured).
 	 */
 	public Config getConfig() { return config; }
 
 	/**
 	 * Returns the console commands associated with this microservice.
 	 *
-	 * @return The console commands associated with this microservice as an unmodifiable map.
+	 * @return The console commands associated with this microservice.  Never <jk>null</jk>.
 	 */
 	public final Map<String,ConsoleCommand> getConsoleCommands() { return consoleCommandMap; }
 
@@ -1127,7 +1129,7 @@ public class Microservice implements ConfigEventListener {
 	 * 	String[] <jv>restResources</jv> = Microservice.<jsm>getManifest</jsm>().getStringArray(<js>"Rest-Resources"</js>);
 	 * </p>
 	 *
-	 * @return The manifest file from the main jar, or <jk>null</jk> if the manifest file could not be retrieved.
+	 * @return The manifest file from the main jar.  Never <jk>null</jk> (an empty manifest is returned if none could be retrieved).
 	 */
 	public ManifestFile getManifest() { return manifest; }
 
@@ -1141,7 +1143,7 @@ public class Microservice implements ConfigEventListener {
 	 * 	<li class='jm'>{@link Builder#varBean(Class,Object)}
 	 * </ul>
 	 *
-	 * @return The VarResolver used by this Microservice, or <jk>null</jk> if it was never created.
+	 * @return The VarResolver used by this Microservice.  Never <jk>null</jk>.
 	 */
 	public VarResolver getVarResolver() { return varResolver; }
 
@@ -1262,7 +1264,7 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * Ignored if <js>"Console/enabled"</js> is <jk>false</jk>.
 	 *
-	 * @param mb The message bundle containing the message.
+	 * @param mb The message bundle containing the message.  Must not be <jk>null</jk>.
 	 * @param messageKey The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -1407,7 +1409,7 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * Subclasses can override this method to provide their own console input.
 	 *
-	 * @return The console reader.  Never <jk>null</jk>.
+	 * @return The console reader, or <jk>null</jk> if the console is not enabled.
 	 */
 	protected Scanner getConsoleReader() { return consoleReader; }
 
@@ -1417,7 +1419,7 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * Subclasses can override this method to provide their own console output.
 	 *
-	 * @return The console writer.  Never <jk>null</jk>.
+	 * @return The console writer, or <jk>null</jk> if the console is not enabled.
 	 */
 	protected PrintWriter getConsoleWriter() { return consoleWriter; }
 
@@ -1471,7 +1473,7 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * If the working directory has been explicitly specified, relative paths are resolved relative to that.
 	 *
-	 * @param path The path to resolve.
+	 * @param path The path to resolve.  Must not be <jk>null</jk>.
 	 * @return The resolved path.
 	 */
 	protected File resolveFile(String path) {

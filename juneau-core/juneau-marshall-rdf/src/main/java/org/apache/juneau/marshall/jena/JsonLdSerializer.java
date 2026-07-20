@@ -86,6 +86,7 @@ public class JsonLdSerializer extends RdfSerializer {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public JsonLdSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.jsonLd());

@@ -29,8 +29,8 @@ import org.apache.juneau.rest.server.guard.RateLimitGuard.*;
  * heap statistics, configurable cache-flush hooks, and rate-limit-bucket inspection.
  *
  * <p>
- * Sibling of {@link EchoMixin} ({@code /echo/*} / {@code /debug/echo/*}) and
- * {@link RouteIndexMixin} ({@code /options} / {@code /routes}). All three classes live in
+ * Sibling of {@link EchoMixin} ({@code /echo/*}) and
+ * {@link RouteIndexMixin} ({@code /options}). All three classes live in
  * the {@code org.apache.juneau.rest.server.ops} ops/introspection mixin pack.
  *
  * <h5 class='section'>Default-deny security posture:</h5>
@@ -300,7 +300,7 @@ public class AdminMixin {
 		/**
 		 * Registers multiple cache-flush hooks at once.
 		 *
-		 * @param hooks The hooks, keyed by registration name.
+		 * @param hooks The hooks, keyed by registration name. Can be {@code null} (no-op).
 		 * @return This object.
 		 */
 		public Builder cacheFlushAll(Map<String,Runnable> hooks) {
@@ -316,7 +316,8 @@ public class AdminMixin {
 		 * omitted from the {@code /admin/threads} output. Pass an empty array to disable
 		 * filtering entirely.
 		 *
-		 * @param values The thread-name prefixes to exclude. Must not be {@code null}.
+		 * @param values The thread-name prefixes to exclude. Can be {@code null} (equivalent to an empty
+		 * 	array &mdash; disables filtering); {@code null} or empty elements are skipped.
 		 * @return This object.
 		 */
 		public Builder threadNamePrefixExclude(String...values) {

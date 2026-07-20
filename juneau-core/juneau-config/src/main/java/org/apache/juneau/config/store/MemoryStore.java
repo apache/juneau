@@ -103,6 +103,7 @@ public class MemoryStore extends ConfigStore {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public MemoryStore(Builder builder) {
 		super(builder);

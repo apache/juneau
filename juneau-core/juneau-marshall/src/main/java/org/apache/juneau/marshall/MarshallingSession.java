@@ -163,7 +163,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+		 * 	<br>If <jk>null</jk>, then the media type defined on the context is used.
 		 * @return This object.
 		 */
 		public SELF mediaTypeDefault(MediaType value) {
@@ -248,7 +248,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+		 * 	<br>If <jk>null</jk>, then the time zone defined on the context is used.
 		 * @return This object.
 		 */
 		public SELF timeZoneDefault(TimeZone value) {
@@ -299,7 +299,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder for this object.
+	 * @param builder The builder for this object.  Cannot be <jk>null</jk>.
 	 */
 	protected MarshallingSession(Builder<?> builder) {
 		super(builder);
@@ -355,7 +355,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * See {@link #convertToType(Object, ClassMeta)} for the list of valid conversions.
 	 *
 	 * @param <T> The class type to convert the value to.
-	 * @param value The value to convert.
+	 * @param value The value to convert.  Can be <jk>null</jk>.
 	 * @param type The class type to convert the value to.
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
@@ -497,8 +497,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * </table>
 	 *
 	 * @param <T> The class type to convert the value to.
-	 * @param value The value to be converted.
-	 * @param type The target object type.
+	 * @param value The value to be converted.  Can be <jk>null</jk>.
+	 * @param type The target object type.  Can be <jk>null</jk> (treated as the {@code Object} type).
 	 * @return The converted type.
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 */
@@ -581,7 +581,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * Returns the {@link BeanMeta} class for the specified class.
 	 *
 	 * @param <T> The class type to get the meta-data on.
-	 * @param c The class to get the meta-data on.
+	 * @param c The class to get the meta-data on.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return
 	 * 	The {@link BeanMeta} for the specified class, or <jk>null</jk> if the class
 	 * 	is not a bean per the settings on this context.
@@ -696,7 +696,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * Shortcut for calling {@code getClassMeta(o.getClass())}.
 	 *
 	 * @param <T> The class of the object being passed in.
-	 * @param o The class to find the class type for.
+	 * @param o The class to find the class type for.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The ClassMeta object, or <jk>null</jk> if {@code o} is <jk>null</jk>.
 	 */
 	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
@@ -1022,7 +1022,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 *
 	 * @param <T> The class type of the bean being created.
 	 * @param c The class type of the bean being created.
-	 * @return A new bean object.
+	 * @return A new bean object, or <jk>null</jk> if the class is not a bean.
 	 * @throws BeanRuntimeException If the specified class is not a valid bean.
 	 */
 	public final <T> T newBean(Class<T> c) throws BeanRuntimeException {
@@ -1038,7 +1038,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @param outer
 	 * 	If class is a member class, this is the instance of the containing class.
 	 * 	Should be <jk>null</jk> if not a member class.
-	 * @return A new bean object.
+	 * @return A new bean object, or <jk>null</jk> if the class is not a bean.
 	 * @throws BeanRuntimeException If the specified class is not a valid bean.
 	 */
 	public final <T> T newBean(Object outer, Class<T> c) throws BeanRuntimeException {
@@ -1074,7 +1074,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 *
 	 * @param <T> The class of the object being wrapped.
 	 * @param c The name of the class to create a new instance of.
-	 * @return A new instance of the class.
+	 * @return A new instance of the class, or <jk>null</jk> if the class is not a bean.
 	 */
 	public final <T> BeanMap<T> newBeanMap(Class<T> c) {
 		return newBeanMap(null, c);
@@ -1089,7 +1089,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @param outer
 	 * 	If class is a member class, this is the instance of the containing class.
 	 * 	Should be <jk>null</jk> if not a member class.
-	 * @return A new instance of the class.
+	 * @return A new instance of the class, or <jk>null</jk> if the class is not a bean.
 	 */
 	@SuppressWarnings({
 		"java:S1168",   // null when BeanMeta not found. Consider empty BeanMap.
@@ -1186,9 +1186,9 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @param <T> The class of the object being wrapped.
 	 * @param o The object to wrap in a bean interface.  Must not be null.
 	 * @param c The superclass to narrow the bean properties to.  Must not be null.
-	 * @return The bean representation, or <jk>null</jk> if the object is not a true bean.
-	 * @throws NullPointerException If either parameter is null.
-	 * @throws IllegalArgumentException If the specified object is not an an instance of the specified class.
+	 * @return The bean representation.
+	 * @throws IllegalArgumentException
+	 * 	If either parameter is <jk>null</jk>, or if the specified object is not an instance of the specified class.
 	 * @throws
 	 * 	BeanRuntimeException If specified object is not a bean according to the bean rules specified in this context
 	 * class.
@@ -1240,8 +1240,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @param outer
 	 * 	If class is a member class, this is the instance of the containing class.
 	 * 	Should be <jk>null</jk> if not a member class.
-	 * @param value The value to convert.
-	 * @param to The class type to convert the value to.
+	 * @param value The value to convert.  Can be <jk>null</jk>.
+	 * @param to The class type to convert the value to.  Can be <jk>null</jk> (treated as the {@code Object} type).
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
@@ -1268,7 +1268,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * <p>
 	 * Constructs a new meta on each call.
 	 *
-	 * @param classes The array of classes to get class metas for.
+	 * @param classes The array of classes to get class metas for.  Must not be <jk>null</jk>.
 	 * @return The args {@link ClassMeta} object corresponding to the classes.  Never <jk>null</jk>.
 	 */
 	protected final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
@@ -1279,8 +1279,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Shortcut for calling {@code getClassMeta(o.getClass())} but returns a default value if object is <jk>null</jk>.
 	 *
-	 * @param o The class to find the class type for.
-	 * @param def The default {@link ClassMeta} if the object is null.
+	 * @param o The class to find the class type for.  Can be <jk>null</jk> (returns {@code def}).
+	 * @param def The default {@link ClassMeta} if the object is null.  Can be <jk>null</jk>.
 	 * @return The ClassMeta object, or the default value if {@code o} is <jk>null</jk>.
 	 */
 	protected final ClassMeta<?> getClassMetaForObject(Object o, ClassMeta<?> def) {
@@ -1300,7 +1300,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * Per-marshaller parser sessions override {@link #newGenericMap()} (not this method) to return their flavored
 	 * {@code XMap} variant.
 	 *
-	 * @param mapMeta The metadata of the map to create.
+	 * @param mapMeta The metadata of the map to create.  Must not be <jk>null</jk>.
 	 * @return A new map.
 	 */
 	protected Map newGenericMap(ClassMeta mapMeta) {
@@ -1358,9 +1358,9 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * i.e. if {@code type} is <code><jk>int</jk>[][]</code> then {@code list} must have entries of type
 	 * <code><jk>int</jk>[]</code>.
 	 *
-	 * @param type The type to convert to.  Must be an array type.
-	 * @param list The contents to populate the array with.
-	 * @return A new object or primitive array.
+	 * @param type The type to convert to.  Must be an array type.  Must not be <jk>null</jk>.
+	 * @param list The contents to populate the array with.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new object or primitive array, or <jk>null</jk> if the list was <jk>null</jk>.
 	 */
 	protected final Object toArray(ClassMeta<?> type, Collection<?> list) {
 		if (list == null)
@@ -1397,7 +1397,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * conversion without referencing the marshalling-side {@link ClassMeta} concrete type.
 	 *
 	 * @param value The value to convert.  May be <jk>null</jk>.
-	 * @param targetType A {@link ClassMeta} or {@link Class} describing the target type.  Must not be <jk>null</jk>.
+	 * @param targetType A {@link ClassMeta} or {@link Class} describing the target type.  Can be <jk>null</jk> (treated as the {@code Object} type).
 	 * @return The converted value.
 	 * @throws IllegalArgumentException If {@code targetType} is neither a {@link ClassMeta} nor a {@link Class}.
 	 */
@@ -1419,7 +1419,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 *
 	 * @param outer The outer-class instance for non-static inner classes.  May be <jk>null</jk>.
 	 * @param value The value to convert.  May be <jk>null</jk>.
-	 * @param targetType A {@link ClassMeta} or {@link Class} describing the target type.  Must not be <jk>null</jk>.
+	 * @param targetType A {@link ClassMeta} or {@link Class} describing the target type.  Can be <jk>null</jk> (treated as the {@code Object} type).
 	 * @return The converted value.
 	 * @throws IllegalArgumentException If {@code targetType} is neither a {@link ClassMeta} nor a {@link Class}.
 	 */
@@ -1448,7 +1448,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * values written as <c>{a:'b'}</c>) continue to parse — the strict-JSON {@link JsonMap} retargeting in v10.0
 	 * would otherwise break those call sites.
 	 *
-	 * @param value The JSON-formatted character sequence to parse.
+	 * @param value The JSON-formatted character sequence to parse.  Can be <jk>null</jk> (returns an empty map).
 	 * @return The parsed {@link Json5Map} (empty if {@code value} is <jk>null</jk>), never <jk>null</jk>.
 	 */
 	@Override /* BeanSession */

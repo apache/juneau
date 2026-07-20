@@ -404,7 +404,7 @@ public class PathTraversal {
 	 * Returns the class type of the object at the specified URL.
 	 *
 	 * @param url The URL.
-	 * @return The class type.
+	 * @return The class type, or <jk>null</jk> if the addressed element does not exist in the tree.
 	 */
 	public ClassMeta getClassMeta(String url) {
 		var n = getNode(normalizeUrl(url), root);
@@ -712,7 +712,7 @@ public class PathTraversal {
 	 * 	The URL of the element being added to.
 	 * 	If <jk>null</jk> or blank, the root itself (assuming it's one of the types specified above) is added to.
 	 * @param val The value being added.
-	 * @return The URL of the element that was added.
+	 * @return The URL of the element that was added, or <jk>null</jk> if the value was added to a non-indexable (non-{@link List}) collection.
 	 */
 	public String post(String url, Object val) {
 		return (String)service(POST, url, val);
@@ -728,7 +728,7 @@ public class PathTraversal {
 	 * 	The URL of the element to create.
 	 * 	If <jk>null</jk> or blank, the root itself is replaced with the specified value.
 	 * @param val The value being set.  Value can be of any type.
-	 * @return The previously addressed element, or <jk>null</jk> the element did not previously exist.
+	 * @return The previously addressed element, or <jk>null</jk> if the element did not previously exist.
 	 */
 	public Object put(String url, Object val) {
 		return service(PUT, url, val);

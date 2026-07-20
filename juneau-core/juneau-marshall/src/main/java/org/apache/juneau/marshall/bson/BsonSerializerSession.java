@@ -65,6 +65,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(BsonSerializer ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
@@ -81,6 +82,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(BsonSerializer ctx) {

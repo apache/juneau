@@ -36,7 +36,7 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 	/**
 	 * Wraps the specified request inside a {@link CachingHttpServletRequest} if it isn't already.
 	 *
-	 * @param req The request to wrap.
+	 * @param req The request to wrap. Must not be <jk>null</jk>.
 	 * @return The wrapped request.
 	 * @throws IOException Thrown by underlying content stream.
 	 */
@@ -51,7 +51,7 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 	/**
 	 * Constructor.
 	 *
-	 * @param req The request being wrapped.
+	 * @param req The request being wrapped. Must not be <jk>null</jk>.
 	 * @throws IOException If content could not be loaded into memory.
 	 */
 	protected CachingHttpServletRequest(HttpServletRequest req) throws IOException {

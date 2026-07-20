@@ -67,6 +67,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 	 * Creates a new builder.
 	 *
 	 * @param ctx The parser context.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(PrototextParser ctx) {

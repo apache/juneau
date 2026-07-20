@@ -127,7 +127,9 @@ public class NQuads extends CharMarshaller {
 	 * Constructor with serializer and parser.
 	 *
 	 * @param s The serializer to use.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param p The parser to use.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public NQuads(NQuadsSerializer s, NQuadsParser p) {
 		super(s, p);

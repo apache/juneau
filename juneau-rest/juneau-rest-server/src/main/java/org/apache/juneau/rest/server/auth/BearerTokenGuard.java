@@ -155,7 +155,7 @@ public class BearerTokenGuard extends RestGuard {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder to read configuration from.
+	 * @param builder The builder to read configuration from. Must not be <jk>null</jk>.
 	 */
 	protected BearerTokenGuard(Builder builder) {
 		this.validator = builder.validator;

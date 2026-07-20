@@ -774,7 +774,7 @@ public class SubItemsAnnotation {
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
-	 * @param a The annotation to check.
+	 * @param a The annotation to check. Can be <jk>null</jk> (returns <jk>true</jk>).
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(SubItems a) {
@@ -784,9 +784,9 @@ public class SubItemsAnnotation {
 	/**
 	 * Merges the contents of the specified annotation into the specified generic map.
 	 *
-	 * @param om The map to copy the contents to.
-	 * @param a The annotation to apply.
-	 * @return The same map with the annotation contents applied.
+	 * @param om The map to copy the contents to. Can be <jk>null</jk> (a new map is created).
+	 * @param a The annotation to apply. Can be <jk>null</jk> (returns the map unchanged).
+	 * @return The same map (or a new map if <c>om</c> was <jk>null</jk>) with the annotation contents applied.
 	 * @throws ParseException Invalid JSON found in value.
 	 */
 	public static JsonMap merge(JsonMap om, SubItems a) throws ParseException {

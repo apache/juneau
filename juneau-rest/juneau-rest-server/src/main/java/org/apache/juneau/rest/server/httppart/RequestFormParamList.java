@@ -134,7 +134,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	/**
 	 * Constructor.
 	 *
-	 * @param req The request creating this bean.
+	 * @param req The request creating this bean.  Must not be <jk>null</jk>.
 	 * @param caseSensitive Whether case-sensitive name matching is enabled.
 	 * @throws Exception Any exception can be thrown.
 	 */
@@ -388,7 +388,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 *
 	 * @param <T> The bean type to create.
 	 * @param type The bean type to create.
-	 * @return The bean, never <jk>null</jk>.
+	 * @return The bean, or {@link Optional#empty()} if the parameter is not present.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		var cm = req.getMarshallingSession().getClassMeta(type);
@@ -397,13 +397,13 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	}
 
 	/**
-	 * Returns the last parameter with the specified name.
+	 * Returns the condensed parameter with the specified name.
 	 *
 	 * <p>
-	 * This is equivalent to {@link #getLast(String)}.
+	 * If multiple parameters are present, they will be combined into a single comma-delimited list.
 	 *
 	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
+	 * @return The parameter, never <jk>null</jk>.
 	 */
 	public RequestFormParam get(String name) {
 		List<RequestFormParam> l = getAll(name);

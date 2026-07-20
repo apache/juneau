@@ -86,6 +86,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
@@ -105,6 +106,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The serializer to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ParquetSerializer copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));

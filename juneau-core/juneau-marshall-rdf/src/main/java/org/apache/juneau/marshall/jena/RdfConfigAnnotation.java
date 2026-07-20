@@ -47,6 +47,7 @@ public class RdfConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(RdfConfig.class, RdfParser.Builder.class, vr);
@@ -99,6 +100,7 @@ public class RdfConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(RdfConfig.class, RdfSerializer.Builder.class, vr);

@@ -175,6 +175,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 	 * Creates a new builder for this session.
 	 *
 	 * @param ctx The serializer creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(RdfStreamSerializer ctx) {

@@ -107,6 +107,7 @@ public class JettySettings {
 		 * 		<li>{@link InputStream} - Raw contents as a <c>UTF-8</c> encoded stream.
 		 * 		<li>{@link Reader} - Raw contents.
 		 * 	</ul>
+		 * 	<br>Can be <jk>null</jk> (defers to config / manifest / classpath resolution).
 		 * @param resolveVars If <jk>true</jk>, SVL variables in the file will automatically be resolved.
 		 * @return This object.
 		 * @throws IOException Thrown by underlying stream.

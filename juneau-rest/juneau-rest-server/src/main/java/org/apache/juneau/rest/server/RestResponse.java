@@ -104,7 +104,7 @@ import jakarta.servlet.http.*;
  * 			<li class='jm'>{@link RestResponse#sendPlainText(String) sendPlainText(String)}
  * 			<li class='jm'>{@link RestResponse#sendRedirect(String) sendRedirect(String)}
  * 			<li class='jm'>{@link RestResponse#setContentSchema(HttpPartSchema) setContentSchema(HttpPartSchema)}
- * 			<li class='jm'>{@link RestResponse#setContent(Object) setOutput(Object)}
+ * 			<li class='jm'>{@link RestResponse#setContent(Object) setContent(Object)}
  * 			<li class='jm'>{@link RestResponse#setSerializer(Serializer) setSerializer(Serializer)}
  * 			<li class='jm'>{@link RestResponse#setResponseBeanMeta(ResponseBeanMeta) setResponseBeanMeta(ResponseBeanMeta)}
  * 			<li class='jm'>{@link RestResponse#setException(Throwable) setException(Throwable)}
@@ -221,6 +221,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * only headers defined as comma-delimited lists [i.e., #(values)] should be defined as multiple message header fields.
 	 *
 	 * @param header The header.
+	 * 	<br>Can be <jk>null</jk> (ignored).
 	 * @return This object.
 	 */
 	public RestResponse addHeader(HttpHeader header) {
@@ -291,7 +292,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Wrapper around {@link #getCharacterEncoding()} that converts the value to a {@link Charset}.
 	 *
-	 * @return The request character encoding converted to a {@link Charset}.
+	 * @return The request character encoding converted to a {@link Charset}, or <jk>null</jk> if no character encoding is set.
 	 */
 	public Charset getCharset() {
 		var s = getCharacterEncoding();
@@ -315,6 +316,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @param <T> The class to cast to.
 	 * @param c The class to cast to.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This value cast to the specified class, or <jk>null</jk> if the object doesn't exist or isn't the specified type.
 	 */
 	@SuppressWarnings({
@@ -375,9 +377,9 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Returns the wrapped servlet request.
+	 * Returns the wrapped servlet response.
 	 *
-	 * @return The wrapped servlet request.
+	 * @return The wrapped servlet response.
 	 */
 	public HttpServletResponse getHttpServletResponse() { return inner; }
 
@@ -477,7 +479,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return
 	 * 	The metadata about this response.
-	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> if the response method has no {@link Response @Response} metadata (or was explicitly cleared).
 	 */
 	public ResponseBeanMeta getResponseBeanMeta() { return responseBeanMeta; }
 
@@ -530,6 +532,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * Returns <jk>true</jk> if this response object is of the specified type.
 	 *
 	 * @param c The type to check against.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if this response object is of the specified type.
 	 */
 	public boolean isContentOfType(Class<?> c) {
@@ -540,6 +543,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * Sets the output to a plain-text message regardless of the content type.
 	 *
 	 * @param text The output text to send.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
@@ -603,7 +607,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * 	<ja>@RestGet</ja>(<js>"/example2/{personId}"</js>)
 	 * 	<jk>public void</jk> doGet(RestResponse <jv>res</jv>, <ja>@Path</ja> UUID <jv>personId</jv>) {
 	 * 		Person <jv>person</jv> = getPersonById(<jv>personId</jv>);
-	 * 		<jv>res</jv>.setOutput(<jv>person</jv>);
+	 * 		<jv>res</jv>.setContent(<jv>person</jv>);
 	 * 	}
 	 * </p>
 	 *
@@ -634,6 +638,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * Used by schema-aware serializers such as {@link OpenApiSerializer}.  Ignored by other serializers.
 	 *
 	 * @param schema The content schema
+	 * 	<br>Can be <jk>null</jk> (clears any previously-set schema).
 	 * @return This object.
 	 */
 	public RestResponse setContentSchema(HttpPartSchema schema) {
@@ -718,6 +723,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * Value is added at the end of the headers.
 	 *
 	 * @param header The header.
+	 * 	<br>Can be <jk>null</jk> (ignored).
 	 * @return This object.
 	 */
 	public RestResponse setHeader(HttpHeader header) {
@@ -980,6 +986,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * Sets metadata about this response.
 	 *
 	 * @param rbm The metadata about this response.
+	 * 	<br>Can be <jk>null</jk> (clears the metadata).
 	 * @return This object.
 	 */
 	public RestResponse setResponseBeanMeta(ResponseBeanMeta rbm) {

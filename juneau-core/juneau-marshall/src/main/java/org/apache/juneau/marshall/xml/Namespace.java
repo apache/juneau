@@ -54,7 +54,8 @@ public class Namespace {
 	 * </ul>
 	 *
 	 * @param o The input.
-	 * @return The namespace object, or <jk>null</jk> if the input was <jk>null</jk> or an empty JSON object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The namespace object, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static Namespace create(Object o) {
 		if (o == null)
@@ -78,7 +79,8 @@ public class Namespace {
 	 * </ul>
 	 *
 	 * @param o The input.
-	 * @return The namespace objects, or <jk>null</jk> if the input was <jk>null</jk> or an empty JSON object.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return The namespace objects.
 	 */
 	public static Namespace[] createArray(Object o) {
 
@@ -121,6 +123,7 @@ public class Namespace {
 	 * Create a {@link Namespace} from a <js>"name:uri"</js> string pair.
 	 *
 	 * @param key The key/pair string.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The namespace object.
 	 */
 	public static Namespace of(String key) {
@@ -142,7 +145,9 @@ public class Namespace {
 	 * Previously-encountered name/uri pairs return a cached copy.
 	 *
 	 * @param name The namespace name.  See {@link Namespace#getName()}.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param uri The namespace URI.  See {@link Namespace#getUri()}.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The namespace object.
 	 */
 	public static Namespace of(String name, String uri) {
@@ -175,14 +180,14 @@ public class Namespace {
 	/**
 	 * Returns the namespace name.
 	 *
-	 * @return The namespace name.
+	 * @return The namespace name, or <jk>null</jk> if it was not specified.
 	 */
 	public String getName() { return name; }
 
 	/**
 	 * Returns the namespace URI.
 	 *
-	 * @return The namespace URI.
+	 * @return The namespace URI, or <jk>null</jk> if it was not specified.
 	 */
 	public String getUri() { return uri; }
 

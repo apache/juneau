@@ -133,7 +133,7 @@ public class Example extends OpenApiElement {
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
-	 * The URL pointing to the contact information.
+	 * Long description for the example.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -143,7 +143,7 @@ public class Example extends OpenApiElement {
 	 * Bean property getter:  <property>externalValue</property>.
 	 *
 	 * <p>
-	 * The email address of the contact person/organization.
+	 * A URI that points to the literal example.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -153,21 +153,17 @@ public class Example extends OpenApiElement {
 	 * Bean property getter:  <property>summary</property>.
 	 *
 	 * <p>
-	 * The identifying name of the contact person/organization.
+	 * Short description for the example.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getSummary() { return summary; }
 
 	/**
-	 * Bean property getter:  <property>default</property>.
+	 * Bean property getter:  <property>value</property>.
 	 *
 	 * <p>
-	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
-	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
-	 *
-	 * (Note: <js>"value"</js> has no meaning for required parameters.)
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 * Embedded literal example.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -217,11 +213,10 @@ public class Example extends OpenApiElement {
 	 * Bean property setter:  <property>externalValue</property>.
 	 *
 	 * <p>
-	 * The email address of the contact person/organization.
+	 * A URI that points to the literal example.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -234,7 +229,7 @@ public class Example extends OpenApiElement {
 	 * Bean property setter:  <property>summary</property>.
 	 *
 	 * <p>
-	 * The identifying name of the contact person/organization.
+	 * Short description for the example.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -250,10 +245,7 @@ public class Example extends OpenApiElement {
 	 * Bean property setter:  <property>value</property>.
 	 *
 	 * <p>
-	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
-	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
-	 * (Note: <js>"default"</js> has no meaning for required parameters.)
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 * Embedded literal example.
 	 *
 	 * @param val The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.

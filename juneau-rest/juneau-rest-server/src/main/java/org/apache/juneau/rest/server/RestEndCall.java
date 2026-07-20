@@ -52,7 +52,7 @@ import jakarta.servlet.http.*;
  * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
  *
  * 		<jc>// Log the time it took to execute the request.</jc>
- * 		<ja>@RestEndCall
+ * 		<ja>@RestEndCall</ja>
  * 		<jk>public void</jk> onEndCall(HttpServletRequest <jv>req</jv>, Logger <jv>logger</jv>) {
  * 			Exception <jv>exception</jv> = (Exception)<jv>req</jv>.getAttribute(<js>"Exception"</js>);
  * 			Long <jv>execTime</jv> = (Long)<jv>req</jv>.getAttribute(<js>"ExecTime"</js>);
@@ -72,9 +72,9 @@ import jakarta.servlet.http.*;
  * 	<li class='note'>
  * 		Static methods can be used.
  * 	<li class='note'>
- * 		Multiple END_CALL methods can be defined on a class.
- * 		<br>END_CALL methods on parent classes are invoked before END_CALL methods on child classes.
- * 		<br>The order of END_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+ * 		Multiple end-call methods can be defined on a class.
+ * 		<br>End-call methods on parent classes are invoked before end-call methods on child classes.
+ * 		<br>The order of end-call method invocations within a class is alphabetical, then by parameter count, then by parameter types.
  * 	<li class='note'>
  * 		The method can throw any exception, although at this point it is too late to set an HTTP error status code.
  * 	<li class='note'>

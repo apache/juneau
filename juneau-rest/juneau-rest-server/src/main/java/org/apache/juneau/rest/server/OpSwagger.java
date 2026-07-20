@@ -208,7 +208,7 @@ public @interface OpSwagger {
 	String[] parameters() default {};
 
 	/**
-	 * Defines the swagger field <c>/paths/{path}/{method}/consumes</c>.
+	 * Defines the swagger field <c>/paths/{path}/{method}/produces</c>.
 	 *
 	 * <p>
 	 * Use this value to override the supported <c>Accept</c> media types defined by the serializers defined via {@link RestOp#serializers()}.
@@ -248,7 +248,7 @@ public @interface OpSwagger {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> objc consisting of the concatenated individual strings.
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object consisting of the concatenated individual strings.
 	 * 		<br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).

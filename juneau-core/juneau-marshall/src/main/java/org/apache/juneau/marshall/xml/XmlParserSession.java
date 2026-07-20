@@ -80,6 +80,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(XmlParser ctx) {
 			super(ctx);
@@ -153,6 +154,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	@SuppressWarnings({
@@ -586,7 +588,8 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
 	 *
 	 * @param s The string to be decoded.
-	 * @return The decoded string.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The decoded string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	protected final String decodeString(String s) {
 		if (s == null)
@@ -755,6 +758,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * Leading and trailing whitespace (unencoded) will be trimmed from the result.
 	 *
 	 * @param r The reader to read the element text from.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
 	 * @throws XMLStreamException Thrown by underlying reader.
 	 * @throws IOException Thrown by underlying stream.
@@ -825,6 +829,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * Wrap the specified reader in a STAX reader based on settings in this context.
 	 *
 	 * @param pipe The parser input.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The new STAX reader.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws XMLStreamException Unexpected XML processing error.
@@ -871,12 +876,17 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 *
 	 * @param <T> The expected type of object.
 	 * @param eType The expected type of object.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param currAttr The current bean property name.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param r The reader.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param outer The outer object.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param isRoot If <jk>true</jk>, then we're serializing a root element in the document.
 	 * @param pMeta The bean property metadata.
-	 * @return The parsed object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The parsed object, or <jk>null</jk> if the element represents a <jk>null</jk> value.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
@@ -1026,6 +1036,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * Parses the current element as text.
 	 *
 	 * @param r The input reader.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The parsed text.
 	 * @throws XMLStreamException Thrown by underlying reader.
 	 * @throws IOException Thrown by underlying stream.

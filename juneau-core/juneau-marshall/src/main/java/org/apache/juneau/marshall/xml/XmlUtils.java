@@ -73,6 +73,7 @@ public class XmlUtils {
 	 * Given a list of Strings and other Objects, combines Strings that are next to each other in the list.
 	 *
 	 * @param value The list of text nodes to collapse.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The same list.
 	 */
 	public static List<Object> collapseTextNodes(List<Object> value) {
@@ -101,8 +102,10 @@ public class XmlUtils {
 	 * Translates any _x####_ sequences (introduced by the various encode methods) back into their original characters.
 	 *
 	 * @param value The string being decoded.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param sb The string builder to use as a scratch pad.
-	 * @return The decoded string.
+	 * 	<br>Can be <jk>null</jk> (a new one is created).
+	 * @return The decoded string, or <jk>null</jk> if the input was <jk>null</jk> or represented a <jk>null</jk> value.
 	 */
 	@SuppressWarnings({
 		"java:S127" // Loop counter advances to skip _xXXXX_ escape sequences
@@ -140,7 +143,9 @@ public class XmlUtils {
 	 * Serializes and encodes the specified object as valid XML attribute name.
 	 *
 	 * @param w The writer to send the output to.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The object being serialized.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
@@ -188,7 +193,9 @@ public class XmlUtils {
 	 * <br>Encodes invalid XML text characters to <c>_x####_</c> sequences.
 	 *
 	 * @param w The writer to send the output to.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The object being encoded.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param trim
 	 * 	Trim the text before serializing it.
 	 * 	If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
@@ -236,6 +243,7 @@ public class XmlUtils {
 	 * Encodes any invalid XML element name characters to <c>_x####_</c> sequences.
 	 *
 	 * @param value The object being encoded.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The encoded element name string.
 	 */
 	public static String encodeElementName(Object value) {
@@ -261,7 +269,9 @@ public class XmlUtils {
 	 * Encodes any invalid XML element name characters to <c>_x####_</c> sequences.
 	 *
 	 * @param w The writer to send the output to.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The object being encoded.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The same writer passed in.
 	 */
 	public static Writer encodeElementName(Writer w, Object value) {
@@ -288,7 +298,9 @@ public class XmlUtils {
 	 * <br>Encodes invalid XML text characters to <c>_x####_</c> sequences.
 	 *
 	 * @param w The writer to send the output to.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The object being encoded.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param trim Trim the text before serializing it.
 	 * @param preserveWhitespace
 	 * 	Specifies whether we're in preserve-whitespace mode.
@@ -339,6 +351,7 @@ public class XmlUtils {
 	 * Escapes invalid XML text characters to <c>_x####_</c> sequences.
 	 *
 	 * @param value The object being encoded.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The encoded string.
 	 */
 	public static String escapeText(Object value) {
@@ -375,7 +388,9 @@ public class XmlUtils {
 	 * The annotations should be a parent-to-child ordering of annotations found on a class or method.
 	 *
 	 * @param xmls The list of <ja>@Xml</ja> annotations.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param schemas The list of <ja>@XmlSchema</ja> annotations.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The namespace, or <jk>null</jk> if it couldn't be found.
 	 */
 	public static Namespace findNamespace(List<Xml> xmls, List<XmlSchema> schemas) {
@@ -401,6 +416,7 @@ public class XmlUtils {
 	 * Utility method that converts the current event on the XML stream to something human-readable for debug purposes.
 	 *
 	 * @param r The XML stream reader whose current event is to be converted to a readable string.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The event in human-readable form.
 	 */
 	public static String toReadableEvent(XMLStreamReader r) {

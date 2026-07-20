@@ -48,6 +48,7 @@ public class HtmlLinkApplyAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public Applier(VarResolverSession vr) {
 			super(HtmlLinkApply.class, Context.Builder.class, vr);
@@ -185,6 +186,7 @@ public class HtmlLinkApplyAnnotation {
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
 	 * @param a The annotation to check.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>true</jk>).
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(HtmlLinkApply a) {

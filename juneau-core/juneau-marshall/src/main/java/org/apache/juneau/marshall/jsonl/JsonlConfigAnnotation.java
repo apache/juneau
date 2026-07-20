@@ -40,6 +40,7 @@ public class JsonlConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(JsonlConfig.class, JsonParser.Builder.class, vr);
@@ -63,6 +64,7 @@ public class JsonlConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(JsonlConfig.class, JsonSerializer.Builder.class, vr);

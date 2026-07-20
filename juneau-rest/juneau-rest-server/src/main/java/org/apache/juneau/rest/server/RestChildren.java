@@ -274,7 +274,7 @@ public class RestChildren {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder containing the settings for this object.
+	 * @param builder The builder containing the settings for this object. Must not be <jk>null</jk>.
 	 */
 	public RestChildren(Builder builder) {
 		this.parent = builder.parent;
@@ -328,7 +328,7 @@ public class RestChildren {
 	 * triggers {@link LazyChildEntry#materialize()} which builds the full {@link RestContext} on first call
 	 * (blocking concurrent first-requests until construction completes) and caches the result.
 	 *
-	 * @param builder The HTTP call builder.
+	 * @param builder The HTTP call builder. Must not be <jk>null</jk>.
 	 * @return The child that best matches the call, or an empty {@link Optional} if a match could not be made.
 	 * @throws ServletException If a lazy child fails to materialize.
 	 */
@@ -411,7 +411,7 @@ public class RestChildren {
 	 * The new child's {@link RestContext#postInit()} and {@link RestContext#postInitChildFirst()} lifecycle hooks
 	 * are invoked before this method returns, mirroring the eager-init behavior of {@code @Rest(children = ...)}.
 	 *
-	 * @param resourceClass The {@code @Rest}-annotated resource class.
+	 * @param resourceClass The {@code @Rest}-annotated resource class. Must not be <jk>null</jk>.
 	 * @return The newly-built child {@link RestContext}.
 	 * @throws ServletException If construction or lifecycle initialization of the child fails.
 	 * @throws IllegalStateException If a child is already registered at the resolved path.
@@ -427,7 +427,7 @@ public class RestChildren {
 	 * The path under which the child is registered is determined by the {@link Rest#path() @Rest(path)} annotation
 	 * on the resource's class composed against the parent's full path.
 	 *
-	 * @param resource The {@code @Rest}-annotated resource instance.
+	 * @param resource The {@code @Rest}-annotated resource instance. Must not be <jk>null</jk>.
 	 * @return The newly-built child {@link RestContext}.
 	 * @throws ServletException If construction or lifecycle initialization of the child fails.
 	 * @throws IllegalStateException If a child is already registered at the resolved path.
@@ -440,7 +440,7 @@ public class RestChildren {
 	 * Dynamically registers a pre-instantiated child REST resource, optionally replacing any existing child at the
 	 * same resolved path.
 	 *
-	 * @param resource The {@code @Rest}-annotated resource instance.
+	 * @param resource The {@code @Rest}-annotated resource instance. Must not be <jk>null</jk>.
 	 * @param replace If {@code true}, an existing child at the same path is destroyed and removed before the new
 	 * 	child is added. If {@code false}, an existing child causes an {@link IllegalStateException}.
 	 * @return The newly-built child {@link RestContext}.
@@ -458,7 +458,7 @@ public class RestChildren {
 	 * for mounting the same servlet class at multiple paths, or for test fixtures that compose paths programmatically.
 	 *
 	 * @param path The path segment under the parent at which to mount this child. Leading slashes are trimmed.
-	 * @param resource The {@code @Rest}-annotated resource instance.
+	 * @param resource The {@code @Rest}-annotated resource instance. Must not be <jk>null</jk>.
 	 * @return The newly-built child {@link RestContext}.
 	 * @throws ServletException If construction or lifecycle initialization of the child fails.
 	 * @throws IllegalStateException If a child is already registered at the resolved path.
@@ -472,7 +472,7 @@ public class RestChildren {
 	 * existing child at the same path.
 	 *
 	 * @param path The path segment under the parent at which to mount this child. Leading slashes are trimmed.
-	 * @param resource The {@code @Rest}-annotated resource instance.
+	 * @param resource The {@code @Rest}-annotated resource instance. Must not be <jk>null</jk>.
 	 * @param replace If {@code true}, an existing child at the same path is destroyed and removed before the new
 	 * 	child is added. If {@code false}, an existing child causes an {@link IllegalStateException}.
 	 * @return The newly-built child {@link RestContext}.

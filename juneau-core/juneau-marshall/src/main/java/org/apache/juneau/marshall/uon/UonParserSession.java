@@ -254,11 +254,14 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @param <T> The class type being parsed, or <jk>null</jk> if unknown.
 	 * @param eType The class type being parsed, or <jk>null</jk> if unknown.
 	 * @param r The reader being parsed.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param outer The outer object (for constructing nested inner classes).
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param isUrlParamValue
 	 * 	If <jk>true</jk>, then we're parsing a top-level URL-encoded value which is treated a bit different than the
 	 * 	default case.
 	 * @param pMeta The current bean property being parsed.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The parsed object.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws ParseException Malformed input encountered.
@@ -833,8 +836,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * Convenience method for parsing an attribute from the specified parser.
 	 *
 	 * @param r The reader.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param encoded Whether the attribute is encoded.
-	 * @return The parsed object
+	 * @return The parsed object, or <jk>null</jk> if the attribute was the literal <js>"null"</js>.
 	 * @throws IOException Exception thrown by underlying stream.
 	 * @throws ParseException Attribute was malformed.
 	 */
@@ -846,8 +850,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * Parses an attribute name from the specified reader.
 	 *
 	 * @param r The reader.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param encoded Whether the attribute is encoded.
-	 * @return The parsed attribute name.
+	 * @return The parsed attribute name, or <jk>null</jk> if the attribute name was the literal <js>"null"</js>.
 	 * @throws IOException Exception thrown by underlying stream.
 	 * @throws ParseException Attribute name was malformed.
 	 */
@@ -899,8 +904,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * Parses a string value from the specified reader.
 	 *
 	 * @param r The input reader.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param isUrlParamValue Whether this is a URL parameter.
-	 * @return The parsed string.
+	 * @return The parsed string, or <jk>null</jk> if the value was the literal <js>"null"</js>.
 	 * @throws IOException Exception thrown by underlying stream.
 	 * @throws ParseException Malformed input found.
 	 */

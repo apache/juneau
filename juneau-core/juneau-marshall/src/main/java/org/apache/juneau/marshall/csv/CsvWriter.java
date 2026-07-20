@@ -193,6 +193,7 @@ public class CsvWriter extends SerializerWriter {
 	 * </ul>
 	 *
 	 * @param value The value to write.
+	 * 	<br>Can be <jk>null</jk> (written as the literal <js>"null"</js>).
 	 */
 	public void writeEntry(Object value) {
 		if (value == null) {

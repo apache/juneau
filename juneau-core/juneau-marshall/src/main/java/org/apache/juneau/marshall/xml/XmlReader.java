@@ -50,11 +50,15 @@ public class XmlReader implements XMLStreamReader, Positionable {
 	 * Constructor.
 	 *
 	 * @param pipe The parser input.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param validating The value for the {@link XMLInputFactory#IS_VALIDATING} setting.
 	 * @param reporter The value for the {@link XMLInputFactory#REPORTER} setting.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param resolver The value for the {@link XMLInputFactory#RESOLVER} setting.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param eventAllocator The value for the {@link XMLInputFactory#ALLOCATOR} setting.
-	 * @throws IOException Thrown by underling
+	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IOException Thrown by underlying I/O.
 	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 */
 	protected XmlReader(ParserPipe pipe, boolean validating, XMLReporter reporter, XMLResolver resolver, XMLEventAllocator eventAllocator) throws IOException, XMLStreamException {

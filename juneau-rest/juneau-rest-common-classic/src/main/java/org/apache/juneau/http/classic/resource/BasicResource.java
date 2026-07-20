@@ -60,7 +60,7 @@ public class BasicResource implements HttpResource {
 	/**
 	 * Constructor.
 	 *
-	 * @param entity The entity that makes up this resource content.
+	 * @param entity The entity that makes up this resource content.  Must not be <jk>null</jk>.
 	 */
 	public BasicResource(BasicHttpEntity entity) {
 		this.entity = entity;

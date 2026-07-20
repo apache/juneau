@@ -54,7 +54,7 @@ public class ProtobufWriter extends OutputStream {
 	/**
 	 * Constructor.
 	 *
-	 * @param os The output stream being wrapped.
+	 * @param os The output stream being wrapped.  Must not be <jk>null</jk>.
 	 */
 	public ProtobufWriter(OutputStream os) {
 		this.os = os;

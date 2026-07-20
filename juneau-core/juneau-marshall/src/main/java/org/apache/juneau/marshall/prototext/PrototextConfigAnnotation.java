@@ -43,6 +43,7 @@ public class PrototextConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public ParserApply(VarResolverSession vr) {
 			super(PrototextConfig.class, PrototextParser.Builder.class, vr);
@@ -63,6 +64,7 @@ public class PrototextConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
 		 */
 		public SerializerApply(VarResolverSession vr) {
 			super(PrototextConfig.class, PrototextSerializer.Builder.class, vr);

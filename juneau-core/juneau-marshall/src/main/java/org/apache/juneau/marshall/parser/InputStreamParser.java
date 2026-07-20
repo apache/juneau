@@ -25,10 +25,10 @@ import org.apache.juneau.marshall.*;
  *
  * <h5 class='topic'>Description</h5>
  * <p>
- * This class is typically the parent class of all character-based parsers.
+ * This class is typically the parent class of all byte-based parsers.
  * It has 1 abstract method to implement on the session object...
  * <ul>
- * 	<li><c>parse(ParserSession, ClassMeta)</c>
+ * 	<li>{@link ParserSession#doRead(ParserPipe, ClassMeta)}
  * </ul>
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -128,6 +128,7 @@ public class InputStreamParser extends Parser {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected InputStreamParser(Builder<?> builder) {
 		super(builder);

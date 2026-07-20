@@ -85,6 +85,7 @@ public class RdfProtoParser extends RdfStreamParser {
 	 * Constructor.
 	 *
 	 * @param builder The builder.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public RdfProtoParser(RdfStreamParser.Builder<?> builder) {
 		super(builder);

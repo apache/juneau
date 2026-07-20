@@ -71,6 +71,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
@@ -82,6 +83,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RdfStreamSerializer copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
@@ -173,6 +175,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 	 * Constructor.
 	 *
 	 * @param builder The builder.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public RdfStreamSerializer(Builder<?> builder) {
 		super(assertArgNotNull(ARG_builder, builder).produces(getProduces(builder)).accept(getAccept(builder)));

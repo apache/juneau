@@ -90,6 +90,7 @@ public class NTripleParser extends RdfParser {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public NTripleParser(RdfParser.Builder<?> builder) {
 		super(builder.ntriple().consumes("text/n-triple"));

@@ -97,7 +97,7 @@ public class HttpMediaRangesHeader extends HttpHeaderBean {
 	}
 
 	/**
-	 * @return Parsed {@link MediaRanges}, or {@code null} if the wire value is absent.
+	 * @return Parsed {@link MediaRanges}, or an empty {@link Optional} if the wire value is absent.
 	 */
 	public Optional<MediaRanges> asMediaRanges() {
 		return o(toMediaRanges());

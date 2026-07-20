@@ -42,7 +42,7 @@ public final class Health {
 	/**
 	 * Creates an {@link HealthStatus#UP} builder.
 	 *
-	 * @param name Component name.
+	 * @param name Component name. Must not be <jk>null</jk> or empty.
 	 * @return A new builder.
 	 */
 	public static Builder up(String name) {
@@ -52,8 +52,8 @@ public final class Health {
 	/**
 	 * Creates an {@link HealthStatus#DOWN} builder.
 	 *
-	 * @param name Component name.
-	 * @param error Optional error causing the down state.
+	 * @param name Component name. Must not be <jk>null</jk> or empty.
+	 * @param error Optional error causing the down state. Can be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder down(String name, Throwable error) {
@@ -63,7 +63,7 @@ public final class Health {
 	/**
 	 * Creates an {@link HealthStatus#UNKNOWN} builder.
 	 *
-	 * @param name Component name.
+	 * @param name Component name. Must not be <jk>null</jk> or empty.
 	 * @return A new builder.
 	 */
 	public static Builder unknown(String name) {
@@ -100,8 +100,8 @@ public final class Health {
 		/**
 		 * Adds a structured detail.
 		 *
-		 * @param key Detail key.
-		 * @param value Detail value.
+		 * @param key Detail key. Must not be <jk>null</jk> or empty.
+		 * @param value Detail value. Can be <jk>null</jk>.
 		 * @return This builder.
 		 */
 		public Builder detail(String key, Object value) {
@@ -115,7 +115,7 @@ public final class Health {
 		/**
 		 * Overrides the error attached to this result.
 		 *
-		 * @param value The throwable.
+		 * @param value The throwable. Can be <jk>null</jk> (clears the error).
 		 * @return This builder.
 		 */
 		public Builder error(Throwable value) {

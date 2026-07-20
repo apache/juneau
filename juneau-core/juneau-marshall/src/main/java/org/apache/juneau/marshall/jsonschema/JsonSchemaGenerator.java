@@ -423,7 +423,7 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder for this object.
+	 * @param builder The builder for this object.  Cannot be <jk>null</jk>.
 	 */
 	public JsonSchemaGenerator(Builder builder) {
 		super(builder.detectRecursions().ignoreRecursions());
@@ -491,7 +491,7 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 	 * The type is ignored if it's specified in the {@link Builder#ignoreTypes(String...)} setting.
 	 * <br>Ignored types return <jk>null</jk> on the call to {@link JsonSchemaGeneratorSession#getSchema(ClassMeta)}.
 	 *
-	 * @param cm The type to check.
+	 * @param cm The type to check.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the specified type is ignored.
 	 */
 	public boolean isIgnoredType(ClassMeta<?> cm) {

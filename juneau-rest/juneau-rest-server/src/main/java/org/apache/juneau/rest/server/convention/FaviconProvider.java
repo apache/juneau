@@ -78,7 +78,7 @@ public class FaviconProvider {
 	/**
 	 * Builder constructor.
 	 *
-	 * @param builder The builder.
+	 * @param builder The builder. Must not be <jk>null</jk>.
 	 */
 	protected FaviconProvider(Builder builder) {
 		bytes = builder.resolveBytes();

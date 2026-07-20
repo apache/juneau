@@ -579,7 +579,6 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getUniqueItems() { return uniqueItems; }

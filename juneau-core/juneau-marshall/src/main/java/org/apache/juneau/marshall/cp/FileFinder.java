@@ -146,7 +146,7 @@ public interface FileFinder {
 		 * Adds a class subpackage to the lookup paths.
 		 *
 		 * @param c The class whose package will be added to the lookup paths.  Must not be <jk>null</jk>.
-		 * @param path The absolute or relative subpath.
+		 * @param path The absolute or relative subpath.  Can be <jk>null</jk>.
 		 * @param recursive If <jk>true</jk>, also recursively adds all the paths of the parent classes as well.
 		 * @return This object.
 		 */
@@ -165,7 +165,7 @@ public interface FileFinder {
 		/**
 		 * Adds a file system directory to the lookup paths.
 		 *
-		 * @param value The path relative to the working directory.  Must not be <jk>null</jk>
+		 * @param value The path relative to the working directory.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder dir(String value) {
@@ -251,7 +251,7 @@ public interface FileFinder {
 	 * @param locale
 	 * 	The locale of the resource to retrieve.
 	 * 	<br>If <jk>null</jk>, won't look for localized file names.
-	 * @return The resolved resource contents, or <jk>null</jk> if the resource was not found.
+	 * @return The resolved resource contents, or an empty {@link Optional} if the resource was not found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	Optional<InputStream> getStream(String name, Locale locale) throws IOException;

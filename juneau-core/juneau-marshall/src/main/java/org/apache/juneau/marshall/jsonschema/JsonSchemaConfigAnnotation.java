@@ -42,7 +42,7 @@ public class JsonSchemaConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param vr The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.  Must not be <jk>null</jk>.
 		 */
 		public Apply(VarResolverSession vr) {
 			super(JsonSchemaConfig.class, JsonSchemaGenerator.Builder.class, vr);

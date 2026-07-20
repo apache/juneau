@@ -198,7 +198,7 @@ public class ApiKeyGuard extends RestGuard {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder to read configuration from.
+	 * @param builder The builder to read configuration from. Must not be <jk>null</jk>.
 	 */
 	protected ApiKeyGuard(Builder builder) {
 		this.store = builder.store;

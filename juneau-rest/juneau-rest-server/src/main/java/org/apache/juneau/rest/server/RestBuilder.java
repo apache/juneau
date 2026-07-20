@@ -581,7 +581,7 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * Use this escape hatch for members not yet exposed as a dedicated fluent method.  Keys reuse the existing
 	 * {@code @Rest} member names.
 	 *
-	 * @param key The {@code @Rest} property name.
+	 * @param key The {@code @Rest} property name. Must not be <jk>null</jk>.
 	 * @param value The override value.
 	 * @return This object.
 	 */

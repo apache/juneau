@@ -46,7 +46,7 @@ public class BuilderSwap<T,B> {
 	/**
 	 * Creates a BuilderSwap from the specified builder class if it qualifies as one.
 	 *
-	 * @param builderClass The potential builder class.
+	 * @param builderClass The potential builder class. Must not be <jk>null</jk>.
 	 * @param cVis Minimum constructor visibility.
 	 * @param mVis Minimum method visibility.
 	 * @return A new swap instance, or <jk>null</jk> if class wasn't a builder class.
@@ -92,8 +92,8 @@ public class BuilderSwap<T,B> {
 	/**
 	 * Creates a BuilderSwap from the specified object class if it has one.
 	 *
-	 * @param bc The bean context to use to look up annotations.
-	 * @param objectClass The object class to check.
+	 * @param bc The bean context to use to look up annotations. Must not be <jk>null</jk>.
+	 * @param objectClass The object class to check. Must not be <jk>null</jk>.
 	 * @param cVis Minimum constructor visibility.
 	 * @param mVis Minimum method visibility.
 	 * @return A new swap instance, or <jk>null</jk> if class didn't have a builder class.
@@ -201,10 +201,18 @@ public class BuilderSwap<T,B> {
 	 *
 	 * @param objectClass The object class created by the builder class.
 	 * @param builderClass The builder class.
-	 * @param objectConstructor The object constructor that takes in a builder as a parameter.
-	 * @param builderConstructor The builder no-arg constructor.
-	 * @param createBuilderMethod The static create() method on the object class.
-	 * @param createObjectMethod The build() method on the builder class.
+	 * @param objectConstructor
+	 * 	The object constructor that takes in a builder as a parameter.
+	 * 	Can be <jk>null</jk> if the object is created via {@code createObjectMethod} instead.
+	 * @param builderConstructor
+	 * 	The builder no-arg constructor.
+	 * 	Can be <jk>null</jk> if the builder is created via {@code createBuilderMethod} instead.
+	 * @param createBuilderMethod
+	 * 	The static create() method on the object class.
+	 * 	Can be <jk>null</jk> if the builder is created via {@code builderConstructor} instead.
+	 * @param createObjectMethod
+	 * 	The build() method on the builder class.
+	 * 	Can be <jk>null</jk> if the object is created via {@code objectConstructor} instead.
 	 */
 	protected BuilderSwap(Class<T> objectClass, Class<B> builderClass, Constructor<T> objectConstructor, Constructor<B> builderConstructor, MethodInfo createBuilderMethod,
 		MethodInfo createObjectMethod) {
@@ -269,6 +277,7 @@ public class BuilderSwap<T,B> {
 	 * @param session
 	 * 	The bean context to use to get the class meta.
 	 * 	This is always going to be the same bean context that created this swap.
+	 * 	Must not be <jk>null</jk> on the first (uncached) call.
 	 * @return The {@link ClassMeta} of the transformed class type.
 	 */
 	@SuppressWarnings({

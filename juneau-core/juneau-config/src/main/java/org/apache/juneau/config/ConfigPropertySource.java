@@ -30,7 +30,9 @@ public class ConfigPropertySource implements PropertySource {
 	/**
 	 * Constructor.
 	 *
-	 * @param config The wrapped config.
+	 * @param config
+	 * 	The wrapped config.
+	 * 	<br>Can be <jk>null</jk> (all lookups return {@link PropertyLookupResult#missing()}).
 	 */
 	public ConfigPropertySource(Config config) {
 		this.config = config;

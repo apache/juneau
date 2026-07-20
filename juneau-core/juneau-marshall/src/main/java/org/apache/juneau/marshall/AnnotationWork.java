@@ -40,7 +40,7 @@ public class AnnotationWork {
 	 * Constructor.
 	 *
 	 * @param annotation The annotation being applied.
-	 * @param applier The applier for that annotation.
+	 * @param applier The applier for that annotation. Must not be <jk>null</jk>.
 	 */
 	public AnnotationWork(AnnotationInfo annotation, AnnotationApplier applier) {
 		this.annotation = annotation;

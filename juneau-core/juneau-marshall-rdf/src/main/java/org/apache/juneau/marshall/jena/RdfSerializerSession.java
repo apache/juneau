@@ -130,6 +130,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected RdfSerializerSession(Builder builder) {
 		super(builder);

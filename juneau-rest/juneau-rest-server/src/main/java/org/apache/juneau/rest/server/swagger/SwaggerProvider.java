@@ -109,6 +109,7 @@ public interface SwaggerProvider {
 		 * Specifies an already-instantiated bean for the {@link #build()} method too return.
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Can be <jk>null</jk> (the {@link #build()} method instantiates the {@link #type(Class) type} instead).
 		 * @return  This object.
 		 */
 		public Builder impl(SwaggerProvider value) {
@@ -160,6 +161,7 @@ public interface SwaggerProvider {
 		 * Specifies a subclass of {@link SwaggerProvider} to create when the {@link #build()} method is called.
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link BasicSwaggerProvider}).
 		 * @return  This object.
 		 */
 		public Builder type(Class<? extends SwaggerProvider> value) {

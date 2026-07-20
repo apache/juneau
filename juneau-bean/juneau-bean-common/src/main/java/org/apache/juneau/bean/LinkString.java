@@ -135,7 +135,7 @@ public class LinkString implements Comparable<LinkString> {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>Must not be <jk>null</jk> (passed to {@link java.net.URI#create(String)}).
 	 * @return This object.
 	 */
 	@SuppressWarnings({
@@ -154,7 +154,7 @@ public class LinkString implements Comparable<LinkString> {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>Must not be <jk>null</jk> (passed to {@link java.net.URI#create(String)}).
 	 * @param args Optional printf-style ({@link String#format(String, Object...)}) arguments in the URL.
 	 * @return This object.
 	 */

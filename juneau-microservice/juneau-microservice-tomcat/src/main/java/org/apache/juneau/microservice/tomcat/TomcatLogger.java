@@ -59,7 +59,7 @@ public class TomcatLogger implements Log {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param name The logger name.
+	 * @param name The logger name.  Must not be <jk>null</jk>.
 	 */
 	public TomcatLogger(String name) {
 		logger = Logger.getLogger(name);

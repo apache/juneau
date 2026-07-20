@@ -68,6 +68,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 	 * Creates a session builder.
 	 *
 	 * @param ctx The serializer context.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The builder.
 	 */
 	public static Builder create(TomlSerializer ctx) {

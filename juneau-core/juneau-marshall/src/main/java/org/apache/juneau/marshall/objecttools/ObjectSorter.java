@@ -184,7 +184,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 	 * @param <R> The return type.
 	 * @param input The input.
 	 * @param sortArgs The sort arguments.  See {@link SortArgs} for format.
-	 * @return A list of maps/beans matching the
+	 * @return A list of the sorted maps/beans, or <jk>null</jk> if the result is not a list, collection, or array.
 	 */
 	@SuppressWarnings({
 		"java:S1168"     // Intentional null when result is not a list/collection/array; callers branch on null (not an empty list).

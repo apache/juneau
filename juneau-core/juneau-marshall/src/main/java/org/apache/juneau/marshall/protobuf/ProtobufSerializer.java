@@ -123,6 +123,7 @@ public class ProtobufSerializer extends OutputStreamSerializer implements Protob
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
@@ -134,6 +135,7 @@ public class ProtobufSerializer extends OutputStreamSerializer implements Protob
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The serializer to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ProtobufSerializer copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));

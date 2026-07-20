@@ -99,6 +99,7 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
@@ -109,6 +110,7 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The parser to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ProtobufParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));

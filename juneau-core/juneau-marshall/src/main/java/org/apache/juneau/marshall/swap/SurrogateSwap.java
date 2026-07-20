@@ -47,9 +47,9 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	 * A transform is returned for each public 1-arg constructor found.
 	 * Returns an empty list if no public 1-arg constructors are found.
 	 *
-	 * @param c The surrogate class.
-	 * @param bc The bean context to use for looking up annotations.
-	 * @return The list of object swaps that apply to this class.
+	 * @param c The surrogate class. Must not be <jk>null</jk>.
+	 * @param bc The bean context to use for looking up annotations. Must not be <jk>null</jk>.
+	 * @return The list of object swaps that apply to this class. Never <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"unchecked", // Type erasure requires unchecked casts
@@ -78,8 +78,10 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	 * Constructor.
 	 *
 	 * @param forClass The normal class.
-	 * @param constructor The constructor on the surrogate class that takes the normal class as a parameter.
-	 * @param unswapMethod The static method that converts surrogate objects into normal objects.
+	 * @param constructor The constructor on the surrogate class that takes the normal class as a parameter. Must not be <jk>null</jk>.
+	 * @param unswapMethod
+	 * 	The method on the surrogate class that converts surrogate objects back into normal objects.
+	 * 	Can be <jk>null</jk> if the surrogate is serialize-only (calling {@link #unswap(MarshallingSession, Object, ClassMeta)} then throws a {@link ParseException}).
 	 */
 	protected SurrogateSwap(Class<T> forClass, Constructor<F> constructor, Method unswapMethod) {
 		super(forClass, constructor.getDeclaringClass());

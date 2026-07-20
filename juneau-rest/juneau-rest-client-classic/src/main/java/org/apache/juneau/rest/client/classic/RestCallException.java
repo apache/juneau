@@ -117,7 +117,7 @@ public class RestCallException extends HttpException {
 	/**
 	 * Returns the value of the <js>"Thrown"</js> header on the response.
 	 *
-	 * @return The value of the <js>"Thrown"</js> header on the response, never <jk>null</jk>.
+	 * @return The value of the <js>"Thrown"</js> header on the response, or <jk>null</jk> if not present.
 	 */
 	public Thrown getThrown() { return thrown; }
 }

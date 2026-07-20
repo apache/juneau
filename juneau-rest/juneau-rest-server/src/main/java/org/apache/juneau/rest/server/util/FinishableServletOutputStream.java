@@ -40,7 +40,7 @@ public class FinishableServletOutputStream extends ServletOutputStream implement
 	/**
 	 * Constructor.
 	 *
-	 * @param os The wrapped output stream.
+	 * @param os The wrapped output stream. Must not be <jk>null</jk>.
 	 */
 	public FinishableServletOutputStream(OutputStream os) {
 		this.os = os;

@@ -560,6 +560,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * 	The import name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
+	 * @throws UnsupportedOperationException Always - this operation is not implemented.
 	 */
 	public ConfigMap removeImport(String section, String importName) {
 		throw uoex();
@@ -643,6 +644,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * 	Optional comment and blank lines to add immediately before the import statement.
 	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
 	 * @return This object.
+	 * @throws UnsupportedOperationException Always - this operation is not implemented.
 	 */
 	public ConfigMap setImport(String section, String importName, List<String> preLines) {
 		throw uoex();
@@ -687,7 +689,9 @@ public class ConfigMap implements ConfigStoreListener {
 	/**
 	 * Serializes this map to the specified writer.
 	 *
-	 * @param w The writer to serialize to.
+	 * @param w
+	 * 	The writer to serialize to.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The same writer passed in.
 	 * @throws IOException Thrown by underlying stream.
 	 */

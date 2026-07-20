@@ -83,6 +83,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 	 * Creates a new builder.
 	 *
 	 * @param ctx The serializer context.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(PrototextSerializer ctx) {

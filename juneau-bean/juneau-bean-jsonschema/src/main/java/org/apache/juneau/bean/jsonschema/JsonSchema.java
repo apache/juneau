@@ -385,8 +385,8 @@ public class JsonSchema {
 	/**
 	 * Generates a {@link JsonSchema} bean from the specified type using {@link JsonSchemaBeanGenerator#DEFAULT}.
 	 *
-	 * @param type The type to generate a schema for.
-	 * @return The generated schema bean.
+	 * @param type The type to generate a schema for.  Must not be <jk>null</jk>.
+	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the type.
 	 */
 	public static JsonSchema of(Type type) {
 		return JsonSchemaBeanGenerator.DEFAULT.generate(type);
@@ -395,8 +395,8 @@ public class JsonSchema {
 	/**
 	 * Generates a {@link JsonSchema} bean from the specified class using {@link JsonSchemaBeanGenerator#DEFAULT}.
 	 *
-	 * @param type The class to generate a schema for.
-	 * @return The generated schema bean.
+	 * @param type The class to generate a schema for.  Must not be <jk>null</jk>.
+	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the class.
 	 */
 	public static JsonSchema of(Class<?> type) {
 		return JsonSchemaBeanGenerator.DEFAULT.generate(type);

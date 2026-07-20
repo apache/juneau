@@ -132,7 +132,7 @@ public abstract class Widget implements HtmlWidget {
 	/**
 	 * Returns the file finder to use for finding files on the file system.
 	 *
-	 * @param req The HTTP request object.
+	 * @param req The HTTP request object. Must not be <jk>null</jk>.
 	 * @return The file finder to used for finding files on the file system.
 	 */
 	protected FileFinder getFileFinder(RestRequest req) {
@@ -145,7 +145,7 @@ public abstract class Widget implements HtmlWidget {
 	 * <p>
 	 * Comment are assumed to be <js>"&lt;!-- --&gt;"</js> code blocks.
 	 *
-	 * @param req The HTTP request object.
+	 * @param req The HTTP request object. Must not be <jk>null</jk>.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 */
@@ -168,7 +168,7 @@ public abstract class Widget implements HtmlWidget {
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
-	 * @param req The current HTTP request.
+	 * @param req The current HTTP request. Must not be <jk>null</jk>.
 	 * @param res The current HTTP response.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
@@ -184,7 +184,7 @@ public abstract class Widget implements HtmlWidget {
 	 * <p>
 	 * Comments are assumed to be Java-style block comments: <js>"/*"</js>.
 	 *
-	 * @param req The HTTP request object.
+	 * @param req The HTTP request object. Must not be <jk>null</jk>.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 */
@@ -207,7 +207,7 @@ public abstract class Widget implements HtmlWidget {
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
-	 * @param req The current HTTP request.
+	 * @param req The current HTTP request. Must not be <jk>null</jk>.
 	 * @param res The current HTTP response.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
@@ -223,7 +223,7 @@ public abstract class Widget implements HtmlWidget {
 	 * <p>
 	 * Comments are assumed to be Java-style block comments: <js>"/*"</js>.
 	 *
-	 * @param req The HTTP request object.
+	 * @param req The HTTP request object. Must not be <jk>null</jk>.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 */
@@ -246,7 +246,7 @@ public abstract class Widget implements HtmlWidget {
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
-	 * @param req The current HTTP request.
+	 * @param req The current HTTP request. Must not be <jk>null</jk>.
 	 * @param res The current HTTP response.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.

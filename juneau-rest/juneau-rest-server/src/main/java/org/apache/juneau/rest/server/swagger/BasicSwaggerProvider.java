@@ -45,7 +45,8 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	/**
 	 * Constructor.
 	 *
-	 * @param beanStore The bean store containing injectable beans for this logger.
+	 * @param beanStore The bean store containing injectable beans for this Swagger provider.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public BasicSwaggerProvider(BeanStore beanStore) {
 		// @formatter:off
@@ -64,6 +65,7 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	 * Constructor.
 	 *
 	 * @param builder The builder containing the settings for this Swagger provider.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public BasicSwaggerProvider(SwaggerProvider.Builder builder) {
 		this.beanStore = builder.beanStore;

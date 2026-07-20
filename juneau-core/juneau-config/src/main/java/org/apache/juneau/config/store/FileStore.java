@@ -386,6 +386,7 @@ public class FileStore extends ConfigStore {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public FileStore(Builder builder) {
 		super(builder);

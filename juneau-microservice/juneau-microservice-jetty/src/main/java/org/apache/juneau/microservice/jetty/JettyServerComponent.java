@@ -501,7 +501,7 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * Returns the underlying Jetty server.
 	 *
 	 * @return The underlying Jetty server.
-	 * @throws IllegalStateException If the server has not been created yet.
+	 * @throws NullPointerException If the server has not been created yet.
 	 */
 	public Server getServer() {
 		return Objects.requireNonNull(server.get(), "Server not found.  Microservice has not been started yet.");

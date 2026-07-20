@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.*;
  * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getResponse() getResponse}()
- * 		.{@link RestResponse#setContent(Object) setOutput}(<jv>value</jv>);
+ * 		.{@link RestResponse#setContent(Object) setContent}(<jv>value</jv>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -47,7 +47,7 @@ public class ResponseBeanArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link ResponseBeanArg}, or <jk>null</jk> if the parameter is not annotated with {@link Response}.
 	 */
@@ -64,7 +64,7 @@ public class ResponseBeanArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected ResponseBeanArg(ParameterInfo paramInfo, AnnotationWorkList annotations) {

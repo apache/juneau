@@ -59,8 +59,8 @@ public final class StreamingArrayRecord {
 	 * consumes the opening {@link TokenType#START_ARRAY} on construction and the closing
 	 * {@link TokenType#END_ARRAY} on {@link RecordReader#close() close()}.
 	 *
-	 * @param cursor The token reader to wrap.  Owned by the returned RecordReader; closing the
-	 * 	RecordReader closes the cursor.
+	 * @param cursor The token reader to wrap.  Must not be <jk>null</jk>.  Owned by the returned
+	 * 	RecordReader; closing the RecordReader closes the cursor.
 	 * @return A streaming array-element {@link RecordReader}.
 	 * @throws IOException If a problem occurred reading the underlying input.
 	 * @throws ParseException If the input is not a JSON-style array.
@@ -100,8 +100,8 @@ public final class StreamingArrayRecord {
 	 * {@link TokenWriter#object(Object)}.  {@link RecordWriter#close() close()} emits the
 	 * closing array bracket and closes the underlying cursor.
 	 *
-	 * @param cursor The token writer to wrap.  Owned by the returned RecordWriter; closing the
-	 * 	RecordWriter closes the cursor.
+	 * @param cursor The token writer to wrap.  Must not be <jk>null</jk>.  Owned by the returned
+	 * 	RecordWriter; closing the RecordWriter closes the cursor.
 	 * @return A streaming array-element {@link RecordWriter}.
 	 * @throws IOException If a problem occurred writing to the underlying output.
 	 */

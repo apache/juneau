@@ -108,6 +108,7 @@ public class ClasspathStore extends ConfigStore {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public ClasspathStore(Builder builder) {
 		super(builder);

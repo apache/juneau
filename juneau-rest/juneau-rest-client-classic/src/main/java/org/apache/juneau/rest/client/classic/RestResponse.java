@@ -550,7 +550,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * <p>
 	 * This is equivalent to calling <c>getHeader(<js>"Content-Type"</js>).as(ContentType.<jk>class</jk>)</c>.
 	 *
-	 * @return The response charset.
+	 * @return The response content type, or an empty {@link Optional} if the <l>Content-Type</l> header is not present.
 	 * @throws RestCallException If REST call failed.
 	 */
 	public Optional<ContentType> getContentType() throws RestCallException { return getHeader("Content-Type").as(ContentType.class); }
@@ -693,7 +693,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * The status line can be set using one of the setStatusLine methods, or it can be initialized in a constructor.
 	 *
-	 * @return The status line, or <jk>null</jk> if not yet set.
+	 * @return The status line.  Never <jk>null</jk>.
 	 */
 	@Override /* Overridden from HttpResponse */
 	public ResponseStatusLine getStatusLine() { return new ResponseStatusLine(this, response.getStatusLine()); }

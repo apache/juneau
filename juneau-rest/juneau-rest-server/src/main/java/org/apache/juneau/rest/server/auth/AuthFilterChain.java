@@ -192,7 +192,7 @@ public class AuthFilterChain implements Filter, Authenticator {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder containing the filter entries.
+	 * @param builder The builder containing the filter entries. Must not be <jk>null</jk>.
 	 */
 	protected AuthFilterChain(Builder builder) {
 		this.entries = builder.entries.toArray(new Entry[0]);

@@ -459,7 +459,7 @@ public class RequestHttpPart {
 	/**
 	 * Returns the value of this part.
 	 *
-	 * @return The value of this part.
+	 * @return The value of this part, or <jk>null</jk> if the part is not present.
 	 */
 	public String getValue() { return value; }
 

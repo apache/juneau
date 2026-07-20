@@ -101,9 +101,9 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	/**
 	 * Constructor.
 	 *
-	 * @param annotationClass The annotation class.
-	 * @param builderClass The builder class.
-	 * @param varResolverSession The string resolver to use for resolving strings.
+	 * @param annotationClass The annotation class. Must not be <jk>null</jk>.
+	 * @param builderClass The builder class. Must not be <jk>null</jk>.
+	 * @param varResolverSession The string resolver to use for resolving strings. Must not be <jk>null</jk>.
 	 */
 	protected AnnotationApplier(Class<A> annotationClass, Class<B> builderClass, VarResolverSession varResolverSession) {
 		ca = assertArgNotNull(ARG_annotationClass, annotationClass);
@@ -149,7 +149,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * Resolves the specified string as a comma-delimited list of strings.
 	 *
 	 * @param in The CDL string containing variables to resolve.
-	 * @return An array with resolved strings.
+	 * @return A stream of resolved strings.
 	 */
 	protected Stream<String> cdl(String in) {
 		return Arrays.stream(splita(vr.resolve(in))).filter(Shorts::ine);
@@ -205,10 +205,10 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	}
 
 	/**
-	 * Resolves the specified string as a comma-delimited list of strings.
+	 * Resolves each string in the specified array.
 	 *
-	 * @param in The CDL string containing variables to resolve.
-	 * @return An array with resolved strings.
+	 * @param in The array of strings containing variables to resolve.
+	 * @return A stream of resolved strings.
 	 */
 	protected Stream<String> stream(String[] in) {
 		return Arrays.stream(in).map(vr::resolve).filter(Shorts::ine);

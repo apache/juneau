@@ -59,7 +59,7 @@ public class SseBroadcaster {
 	/**
 	 * Creates or replaces a subscriber.
 	 *
-	 * @param id The subscriber identifier.
+	 * @param id The subscriber identifier. Must not be <jk>null</jk> or empty.
 	 * @return A new subscription.
 	 */
 	@SuppressWarnings({
@@ -78,7 +78,7 @@ public class SseBroadcaster {
 	/**
 	 * Publishes an event to all active subscribers.
 	 *
-	 * @param event The event to publish.
+	 * @param event The event to publish. Can be <jk>null</jk> (ignored).
 	 */
 	public void publish(SseEvent event) {
 		if (event == null)

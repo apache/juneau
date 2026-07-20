@@ -68,6 +68,8 @@ import org.apache.juneau.rest.server.servlet.*;
  * 					<li class='jc'>{@link TriGSerializer}
  * 					<li class='jc'>{@link TriXSerializer}
  * 					<li class='jc'>{@link RdfJsonSerializer}
+ * 					<li class='jc'>{@link RdfThriftSerializer}
+ * 					<li class='jc'>{@link RdfProtoSerializer}
  * 				</ul>
  * 			</li>
  * 			<li class='jma'>{@link Rest#parsers() parsers}:
@@ -90,6 +92,8 @@ import org.apache.juneau.rest.server.servlet.*;
  * 					<li class='jc'>{@link TriGParser}
  * 					<li class='jc'>{@link TriXParser}
  * 					<li class='jc'>{@link RdfJsonParser}
+ * 					<li class='jc'>{@link RdfThriftParser}
+ * 					<li class='jc'>{@link RdfProtoParser}
  * 				</ul>
  * 			</li>
  * 			<li class='jma'>{@link Rest#config() config}:  <js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>

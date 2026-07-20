@@ -131,7 +131,7 @@ public class ThrownStats {
 		/**
 		 * Specifies a subclass of {@link ThrownStats} to create when the {@link #build()} method is called.
 		 *
-		 * @param value The new value for this setting.
+		 * @param value The new value for this setting. Can be <jk>null</jk> (defaults to {@link ThrownStats}).
 		 * @return This object.
 		 */
 		public Builder type(Class<? extends ThrownStats> value) {
@@ -189,7 +189,7 @@ public class ThrownStats {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder for this object.
+	 * @param builder The builder for this object. Must not be <jk>null</jk>.
 	 */
 	protected ThrownStats(Builder builder) {
 		this.guid = new Random().nextLong();
@@ -222,7 +222,7 @@ public class ThrownStats {
 	/**
 	 * Returns the message of the first exception at a specific location in code.
 	 *
-	 * @return The message of the first exception at a specific location in code.
+	 * @return The message of the first exception at a specific location in code, or <jk>null</jk> if the exception had no message.
 	 */
 	public String getFirstMessage() { return firstMessage; }
 

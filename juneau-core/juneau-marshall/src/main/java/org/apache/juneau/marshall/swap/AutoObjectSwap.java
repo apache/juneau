@@ -92,8 +92,8 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 	/**
 	 * Inspects the specified class and returns a swap of this type if possible.
 	 *
-	 * @param bc The bean context to use for looking up annotations.
-	 * @param ci The class to return a swap on.
+	 * @param bc The bean context to use for looking up annotations. Must not be <jk>null</jk>.
+	 * @param ci The class to return a swap on. Must not be <jk>null</jk>.
 	 * @return An object swap instance, or <jk>null</jk> if one could not be created.
 	 */
 	@SuppressWarnings({

@@ -54,7 +54,9 @@ public final class CsvCellParser {
 	 * Parses a cell value string into a Map, List, or scalar.
 	 *
 	 * @param cell The cell string (e.g. {@code {a:1;b:2}} or {@code [1;2;3]}).
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param nullMarker The string that denotes null (e.g. {@code <NULL>} or {@code null}).
+	 * 	<br>Can be <jk>null</jk> (defaults to {@code null}).
 	 * @return Parsed object: Map, List, String, Number, Boolean, or null.
 	 * @throws ParseException If the input is invalid.
 	 */

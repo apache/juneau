@@ -99,6 +99,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MarshallingContextable copyFrom) {
 			super(copyFrom);
@@ -110,6 +111,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder<?> copyFrom) {
 			super(copyFrom);
@@ -2854,6 +2856,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Duration wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link DurationFormat#ISO_8601_WITH_DAYS}).
 		 * @return This object.
 		 */
 		public SELF durationFormat(DurationFormat value) {
@@ -2865,6 +2868,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Period wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link PeriodFormat#ISO_8601}).
 		 * @return This object.
 		 */
 		public SELF periodFormat(PeriodFormat value) {
@@ -2876,6 +2880,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Calendar wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link CalendarFormat#ISO_OFFSET_DATE_TIME}).
 		 * @return This object.
 		 */
 		public SELF calendarFormat(CalendarFormat value) {
@@ -2887,6 +2892,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Date wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link DateFormat#ISO_LOCAL_DATE_TIME}).
 		 * @return This object.
 		 */
 		public SELF dateFormat(DateFormat value) {
@@ -2898,6 +2904,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Temporal wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link TemporalFormat#DEFAULT}).
 		 * @return This object.
 		 */
 		public SELF temporalFormat(TemporalFormat value) {
@@ -2909,6 +2916,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Time-zone wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link TimeZoneFormat#ID}).
 		 * @return This object.
 		 */
 		public SELF timeZoneFormat(TimeZoneFormat value) {
@@ -2920,6 +2928,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Locale wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link LocaleFormat#BCP_47}).
 		 * @return This object.
 		 */
 		public SELF localeFormat(LocaleFormat value) {
@@ -2931,6 +2940,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Binary wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link BinaryFormat#NOT_SET}).
 		 * @return This object.
 		 */
 		public SELF binaryFormat(BinaryFormat value) {
@@ -2942,6 +2952,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Enum wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link EnumFormat#TO_STRING}).
 		 * @return This object.
 		 */
 		public SELF enumFormat(EnumFormat value) {
@@ -2953,6 +2964,7 @@ public abstract class MarshallingContextable extends Context {
 		 * UUID wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link UuidFormat#STANDARD}).
 		 * @return This object.
 		 */
 		public SELF uuidFormat(UuidFormat value) {
@@ -2964,6 +2976,7 @@ public abstract class MarshallingContextable extends Context {
 		 * BitSet wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link BitSetFormat#INDICES}).
 		 * @return This object.
 		 */
 		public SELF bitSetFormat(BitSetFormat value) {
@@ -2975,6 +2988,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Big-number wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link BigNumberFormat#NUMBER}).
 		 * @return This object.
 		 */
 		public SELF bigNumberFormat(BigNumberFormat value) {
@@ -2986,6 +3000,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Boolean wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link BooleanFormat#TRUE_FALSE}).
 		 * @return This object.
 		 */
 		public SELF booleanFormat(BooleanFormat value) {
@@ -2997,6 +3012,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Float / Double non-finite wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link FloatFormat#NaN_AS_NULL}).
 		 * @return This object.
 		 */
 		public SELF floatFormat(FloatFormat value) {
@@ -3008,6 +3024,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Currency wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link CurrencyFormat#ISO_CODE}).
 		 * @return This object.
 		 */
 		public SELF currencyFormat(CurrencyFormat value) {
@@ -3019,6 +3036,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Class wire format.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to {@link ClassFormat#FQCN}).
 		 * @return This object.
 		 */
 		public SELF classFormat(ClassFormat value) {
@@ -3030,6 +3048,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Session classloader.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (resets to the thread-context classloader fallback).
 		 * @return This object.
 		 */
 		public SELF classLoader(ClassLoader value) {
@@ -3223,6 +3242,7 @@ public abstract class MarshallingContextable extends Context {
 	 * Constructor.
 	 *
 	 * @param b The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected MarshallingContextable(Builder b) {
 		super(b);

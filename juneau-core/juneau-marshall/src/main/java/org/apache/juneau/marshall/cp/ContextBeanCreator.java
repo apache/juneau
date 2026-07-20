@@ -135,7 +135,7 @@ public class ContextBeanCreator<T> {
 	/**
 	 * Returns the built bean.
 	 *
-	 * @return The built bean.
+	 * @return The built bean, or <jk>null</jk> if neither an implementation nor a builder has been set on this creator.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast to T

@@ -70,6 +70,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(UrlEncodingParser ctx) {
 			super(ctx);
@@ -111,6 +112,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(UrlEncodingParser ctx) {
@@ -533,7 +535,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	}
 
 	/**
-	 * Parser bean property collections/arrays as separate key/value pairs.
+	 * Parse bean property collections/arrays as separate key/value pairs.
 	 *
 	 * @see UrlEncodingParser.Builder#expandedParams()
 	 * @return

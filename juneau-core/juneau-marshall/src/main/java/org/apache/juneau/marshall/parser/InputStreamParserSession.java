@@ -100,6 +100,7 @@ public class InputStreamParserSession extends ParserSession {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected InputStreamParserSession(Builder<?> builder) {
 		super(builder);

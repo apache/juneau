@@ -38,7 +38,7 @@ public class BoundedServletInputStream extends ServletInputStream {
 	/**
 	 * Wraps the specified byte array.
 	 *
-	 * @param b The byte contents of the stream.
+	 * @param b The byte contents of the stream. Must not be <jk>null</jk>.
 	 */
 	public BoundedServletInputStream(byte[] b) {
 		this(new ByteArrayInputStream(b), Long.MAX_VALUE);
@@ -47,7 +47,7 @@ public class BoundedServletInputStream extends ServletInputStream {
 	/**
 	 * Wraps the specified input stream.
 	 *
-	 * @param is The input stream to wrap.
+	 * @param is The input stream to wrap. Must not be <jk>null</jk>.
 	 * @param max The maximum number of bytes to read from the stream.
 	 */
 	public BoundedServletInputStream(InputStream is, long max) {
@@ -59,7 +59,7 @@ public class BoundedServletInputStream extends ServletInputStream {
 	/**
 	 * Wraps the specified input stream.
 	 *
-	 * @param sis The input stream to wrap.
+	 * @param sis The input stream to wrap. Must not be <jk>null</jk>.
 	 * @param max The maximum number of bytes to read from the stream.
 	 */
 	public BoundedServletInputStream(ServletInputStream sis, long max) {

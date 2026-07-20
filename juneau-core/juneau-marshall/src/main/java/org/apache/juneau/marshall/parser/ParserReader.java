@@ -81,6 +81,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * Constructor.
 	 *
 	 * @param pipe The parser input.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public ParserReader(ParserPipe pipe) throws IOException {

@@ -86,6 +86,7 @@ public class NQuadsSerializer extends RdfSerializer {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public NQuadsSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.nQuads());

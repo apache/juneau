@@ -41,7 +41,7 @@ public class JsonSchemaClassMeta extends ExtendedClassMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param cm The class that this annotation is defined on.
+	 * @param cm The class that this annotation is defined on.  Must not be <jk>null</jk>.
 	 * @param mp JSON-schema metadata provider (for finding information about other artifacts).
 	 */
 	public JsonSchemaClassMeta(ClassMeta<?> cm, JsonSchemaMetaProvider mp) {
@@ -59,7 +59,7 @@ public class JsonSchemaClassMeta extends ExtendedClassMeta {
 	/**
 	 * Returns the {@link Schema @Schema} annotation defined on the class.
 	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
+	 * @return The value of the annotation as a generic map.  Never <jk>null</jk> - returns an empty map if not specified.
 	 */
 	protected JsonMap getSchema() { return schema; }
 }

@@ -44,7 +44,7 @@ public class ContextRuntimeException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The initial cause of the exception.
+	 * @param cause The initial cause of the exception.  Can be <jk>null</jk>.
 	 */
 	public ContextRuntimeException(Throwable cause) {
 		super(cause);
@@ -53,7 +53,7 @@ public class ContextRuntimeException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause of this exception.
+	 * @param cause The cause of this exception.  Can be <jk>null</jk>.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */

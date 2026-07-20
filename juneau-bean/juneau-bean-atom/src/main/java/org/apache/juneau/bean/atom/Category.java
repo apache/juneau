@@ -136,7 +136,7 @@ public class Category extends Common {
 	}
 
 	/**
-	 * Bean property setter:  <property>scheme</property>.
+	 * Bean property setter:  <property>label</property>.
 	 *
 	 * <p>
 	 * The category label.

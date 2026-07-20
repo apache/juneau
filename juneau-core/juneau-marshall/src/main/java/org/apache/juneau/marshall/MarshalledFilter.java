@@ -115,7 +115,7 @@ public class MarshalledFilter implements BeanFilter {
 		/**
 		 * Applies the information in the specified list of {@link Marshalled @Marshalled} annotations to this filter.
 		 *
-		 * @param annotations The annotations to apply.
+		 * @param annotations The annotations to apply.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder applyAnnotations(List<Marshalled> annotations) {
@@ -142,7 +142,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * Carries the bean-modeling attributes (property lists, ordering, fluent setters, stop class, etc.)
 		 * that used to live on {@link Marshalled @Marshalled} before the bean-layer split.
 		 *
-		 * @param annotations The annotations to apply.
+		 * @param annotations The annotations to apply.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		@SuppressWarnings({
@@ -277,7 +277,7 @@ public class MarshalledFilter implements BeanFilter {
 		/**
 		 * Bean implementation class.
 		 *
-		 * @param value The new value for this setting.
+		 * @param value The new value for this setting.  Can be <jk>null</jk> to clear any previously-set implementation class.
 		 * @return This object.
 		 */
 		public Builder implClass(Class<?> value) {
@@ -348,7 +348,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * 	<li class='ja'>{@link BeanType#interfaceClass()}
 		 * </ul>
 		 *
-		 * @param value The new value for this setting.
+		 * @param value The new value for this setting.  Can be <jk>null</jk> to clear any previously-set interface class.
 		 * @return This object.
 		 */
 		public Builder interfaceClass(Class<?> value) {
@@ -501,7 +501,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * 	<li class='ja'>{@link BeanType#stopClass()}
 		 * </ul>
 		 *
-		 * @param value The new value for this setting.
+		 * @param value The new value for this setting.  Can be <jk>null</jk> to clear any previously-set stop class.
 		 * @return This object.
 		 */
 		public Builder stopClass(Class<?> value) {
@@ -670,7 +670,7 @@ public class MarshalledFilter implements BeanFilter {
 	 * Returns the set and order of names of properties associated with a bean class.
 	 *
 	 * @return
-	 * 	The names of the properties associated with a bean class, or and empty set if all bean properties should
+	 * 	The names of the properties associated with a bean class, or an empty set if all bean properties should
 	 * 	be used.
 	 */
 	@Override
@@ -728,7 +728,7 @@ public class MarshalledFilter implements BeanFilter {
 	 * Returns <jk>true</jk> if the properties defined on this bean class should be ordered alphabetically.
 	 *
 	 * <p>
-	 * This method is only used when the {@link #getProperties()} method returns <jk>null</jk>.
+	 * This method is only used when the {@link #getProperties()} method returns an empty set.
 	 * Otherwise, the ordering of the properties in the returned value is used.
 	 *
 	 * @return <jk>true</jk> if this bean opts out of alphabetical property sorting.

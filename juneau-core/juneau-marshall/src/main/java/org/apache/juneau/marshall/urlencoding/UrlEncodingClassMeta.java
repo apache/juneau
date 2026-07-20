@@ -34,6 +34,7 @@ public class UrlEncodingClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param mp URL-encoding metadata provider (for finding information about other artifacts).
 	 */
 	public UrlEncodingClassMeta(ClassMeta<?> cm, UrlEncodingMetaProvider mp) {

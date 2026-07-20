@@ -85,7 +85,7 @@ public class DumpsManager {
 	 * Invoked reflectively to avoid a compile-time dependency on {@code com.sun.management}.  The target file
 	 * <b>must not already exist</b> (a {@code dumpHeap} requirement).
 	 *
-	 * @param target The hprof output file (must not pre-exist).
+	 * @param target The hprof output file.  Must not be <jk>null</jk> (and must not pre-exist).
 	 * @param live If <jk>true</jk>, dump only live (reachable) objects.
 	 * @return <jk>true</jk> if the dump was written; <jk>false</jk> if this JVM has no HotSpot heap-dump support
 	 * 	(the endpoints surface that as HTTP 501).

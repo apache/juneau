@@ -257,7 +257,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+		 * 	<br>Can be <jk>null</jk> (value will not be set).
 		 * @return This object.
 		 */
 		public SELF schemaDefault(HttpPartSchema value) {
@@ -415,7 +415,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * Create a "_type" property that contains the dictionary name of the bean.
 	 *
 	 * @param m The bean map to create a class property on.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param typeName The type name of the bean.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new bean property value.
 	 */
 	protected static final BeanPropertyValue createBeanTypeNameProperty(BeanMap<?> m, String typeName) {
@@ -428,6 +430,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 *
 	 * @param <T> The throwable type.
 	 * @param causedBy The exception to cast or wrap.
+	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	protected static <T extends Throwable> void handleThrown(T causedBy) {
 		if (causedBy instanceof StackOverflowError)
@@ -454,7 +457,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * <code><jk>int</jk>[]</code>.
 	 *
 	 * @param type The type of array.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param array The array being converted.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The array as a list.
 	 */
 	protected static final List<Object> toList(Class<?> type, Object array) {
@@ -489,6 +494,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected SerializerSession(Builder<?> builder) {
 		super(builder);
@@ -534,8 +540,10 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * instead throws a {@link SerializeException}.
 	 *
 	 * @param cm The class type of the object being serialized.
+	 * 	<br>Can be <jk>null</jk> (treated as the {@code Object} type).
 	 * @param attrName The bean attribute name, or <jk>null</jk> if this isn't a bean attribute.
 	 * @param value The object being serialized.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the specified value should not be serialized.
 	 * @throws SerializeException If recursion occurred.
 	 */
@@ -597,6 +605,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param pMeta The bean property meta for the value being considered.  Must not be <jk>null</jk>.
 	 * @param attrName The bean attribute name.  Must not be <jk>null</jk>.
 	 * @param value The current property value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the property should be omitted from the output.
 	 * @throws SerializeException If recursion occurred.
 	 * @since 10.0.0
@@ -1019,7 +1028,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 *
 	 * @param <E> The element type.
 	 * @param c The collection being sorted.
-	 * @return A new sorted {@link TreeSet}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The sorted collection, or the input collection unchanged if sorting is disabled or the collection isn't sortable.
 	 */
 	public final <E> Collection<E> sort(Collection<E> c) {
 		if (isEmpty(c) || c instanceof SortedSet)
@@ -1034,7 +1044,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 *
 	 * @param <E> The element type.
 	 * @param c The collection being sorted.
-	 * @return A new sorted {@link TreeSet}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The sorted list, or the input list unchanged if sorting is disabled or the list isn't sortable.
 	 */
 	public final <E> List<E> sort(List<E> c) {
 		if (isEmpty(c))
@@ -1050,7 +1061,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param <K> The key type.
 	 * @param <V> The value type.
 	 * @param m The map being sorted.
-	 * @return A new sorted {@link TreeMap}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new sorted {@link TreeMap}, or the input map unchanged if sorting is disabled or the keys aren't sortable.
 	 */
 	public final <K,V> Map<K,V> sort(Map<K,V> m) {
 		if (isEmpty(m) || m instanceof SortedMap)
@@ -1199,8 +1211,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 	}
 
 	/**
-	 * Wraps the specified input object into a {@link ParserPipe} object so that it can be easily converted into
-	 * a stream or reader.
+	 * Wraps the specified output object into a {@link SerializerPipe} object so that it can be easily converted into
+	 * a stream or writer.
 	 *
 	 * @param output
 	 * 	The output location.
@@ -1211,7 +1223,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	</ul>
 	 * 	<br>For byte-based serializers, this must be an {@link OutputStream}.
 	 * @return
-	 * 	A new {@link ParserPipe} wrapper around the specified input object.
+	 * 	A new {@link SerializerPipe} wrapper around the specified output object.
 	 */
 	protected SerializerPipe createPipe(Object output) {
 		return new SerializerPipe(output);
@@ -1239,7 +1251,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * Generalize the specified object if a POJO swap is associated with it.
 	 *
 	 * @param o The object to generalize.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param type The type of object.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The generalized object, or <jk>null</jk> if the object is <jk>null</jk>.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
@@ -1265,6 +1279,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param eType The expected type of the bean property.
 	 * @param aType The actual type of the bean property.
 	 * @param pMeta The current bean property being serialized.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The bean dictionary name, or <jk>null</jk> if a name could not be found.
 	 */
 	@SuppressWarnings({
@@ -1320,7 +1335,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * no reason to add <js>"_type"</js> attributes to the root-level object.
 	 *
 	 * @param o The object to get the expected type on.
-	 * @return The expected type.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The expected type, or <jk>null</jk> if the object was <jk>null</jk> and root typing is disabled.
 	 */
 	@SuppressWarnings({
 		"java:S1452"  // Wildcard required - ClassMeta<?> for root type metadata
@@ -1341,7 +1357,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * When using the REST API, this is the Java method invoked by the REST call.
 	 * Can be used to access annotations defined on the method or class.
 	 *
-	 * @return The Java method that invoked this serializer.
+	 * @return The Java method that invoked this serializer, or <jk>null</jk> if not specified.
 	*/
 	protected final Method getJavaMethod() { return javaMethod; }
 
@@ -1515,11 +1531,12 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * Specialized warning when an exception is thrown while executing a bean getter.
 	 *
 	 * @param p The bean map entry representing the bean property.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param t The throwable that the bean getter threw.
 	 * @throws SerializeException Thrown if ignoreInvocationExceptionOnGetters is false.
 	 */
 	protected final void onBeanGetterException(BeanPropertyMeta p, Throwable t) throws SerializeException {
-		// If it's a StackOverflowError, let it propagate so it can be caught by serialize() method
+		// If it's a StackOverflowError, let it propagate so it can be caught by the write() method
 		// and converted to a proper SerializeException with recursion detection message
 		if (t instanceof StackOverflowError t2)
 			throw t2;
@@ -1557,8 +1574,11 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * Same as {@link #push(String, Object, ClassMeta)} but wraps {@link MarshallingRecursionException} inside {@link SerializeException}.
 	 *
 	 * @param attrName The attribute name.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param o The current object being traversed.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param eType The expected class type.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return
 	 * 	The {@link ClassMeta} of the object so that <c>instanceof</c> operations only need to be performed
 	 * 	once (since they can be expensive).

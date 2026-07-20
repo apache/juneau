@@ -174,84 +174,84 @@ public class Parameter extends OpenApiElement {
 	/**
 	 * Returns the allow empty value flag.
 	 *
-	 * @return The allow empty value flag.
+	 * @return The allow empty value flag, or <jk>null</jk> if not set.
 	 */
 	public Boolean getAllowEmptyValue() { return allowEmptyValue; }
 
 	/**
 	 * Returns the allow reserved flag.
 	 *
-	 * @return The allow reserved flag.
+	 * @return The allow reserved flag, or <jk>null</jk> if not set.
 	 */
 	public Boolean getAllowReserved() { return allowReserved; }
 
 	/**
 	 * Returns the deprecated flag.
 	 *
-	 * @return The deprecated flag.
+	 * @return The deprecated flag, or <jk>null</jk> if not set.
 	 */
 	public Boolean getDeprecated() { return deprecated; }
 
 	/**
 	 * Returns the description.
 	 *
-	 * @return The description.
+	 * @return The description, or <jk>null</jk> if not set.
 	 */
 	public String getDescription() { return description; }
 
 	/**
 	 * Returns the example.
 	 *
-	 * @return The example.
+	 * @return The example, or <jk>null</jk> if not set.
 	 */
 	public Object getExample() { return example; }
 
 	/**
 	 * Returns the examples map.
 	 *
-	 * @return The examples map.
+	 * @return The examples map, or <jk>null</jk> if not set.
 	 */
 	public Map<String,Example> getExamples() { return u(examples); }
 
 	/**
 	 * Returns the explode flag.
 	 *
-	 * @return The explode flag.
+	 * @return The explode flag, or <jk>null</jk> if not set.
 	 */
 	public Boolean getExplode() { return explode; }
 
 	/**
 	 * Returns the parameter location.
 	 *
-	 * @return The parameter location.
+	 * @return The parameter location, or <jk>null</jk> if not set.
 	 */
 	public String getIn() { return in; }
 
 	/**
 	 * Returns the parameter name.
 	 *
-	 * @return The parameter name.
+	 * @return The parameter name, or <jk>null</jk> if not set.
 	 */
 	public String getName() { return name; }
 
 	/**
 	 * Returns the required flag.
 	 *
-	 * @return The required flag.
+	 * @return The required flag, or <jk>null</jk> if not set.
 	 */
 	public Boolean getRequired() { return required; }
 
 	/**
 	 * Returns the schema.
 	 *
-	 * @return The schema.
+	 * @return The schema, or <jk>null</jk> if not set.
 	 */
 	public SchemaInfo getSchema() { return schema; }
 
 	/**
 	 * Returns the style.
 	 *
-	 * @return The style.
+	 * @return The style, or <jk>null</jk> if not set.
 	 */
 	public String getStyle() { return style; }
 

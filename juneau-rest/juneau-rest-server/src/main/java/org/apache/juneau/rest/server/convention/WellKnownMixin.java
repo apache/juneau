@@ -129,7 +129,7 @@ public class WellKnownMixin extends RestMixin {
 	 * overrides such as {@code path}) via {@code super(builder)} so those values take precedence over this
 	 * mixin's own {@link Rest @Rest} annotation.
 	 *
-	 * @param builder The builder.
+	 * @param builder The builder. Must not be <jk>null</jk>.
 	 */
 	protected WellKnownMixin(Builder builder) {
 		super(builder);

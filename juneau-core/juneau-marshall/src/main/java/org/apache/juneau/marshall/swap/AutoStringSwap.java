@@ -35,7 +35,7 @@ public class AutoStringSwap<T> extends StringSwap<T> {
 	/**
 	 * Constructor.
 	 *
-	 * @param classMeta The class meta for the normal class.
+	 * @param classMeta The class meta for the normal class. Must not be <jk>null</jk>.
 	 */
 	public AutoStringSwap(ClassMeta<T> classMeta) {
 		super(classMeta.inner());

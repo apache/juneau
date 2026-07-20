@@ -128,8 +128,8 @@ public class RequestHeaderList extends ArrayList<RequestHeader> {
 	/**
 	 * Constructor.
 	 *
-	 * @param req The request creating this bean.
-	 * @param query The query parameters on the request (used for overloaded header values).
+	 * @param req The request creating this bean.  Must not be <jk>null</jk>.
+	 * @param query The query parameters on the request (used for overloaded header values).  Must not be <jk>null</jk>.
 	 * @param caseSensitive Whether case-sensitive name matching is enabled.
 	 */
 	public RequestHeaderList(RestRequest req, RequestQueryParamList query, boolean caseSensitive) {
@@ -313,7 +313,7 @@ public class RequestHeaderList extends ArrayList<RequestHeader> {
 	 *
 	 * @param <T> The bean type to create.
 	 * @param type The bean type to create.
-	 * @return The bean, never <jk>null</jk>.
+	 * @return The bean, or {@link Optional#empty()} if the header is not present.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		var cm = req.getMarshallingSession().getClassMeta(type);

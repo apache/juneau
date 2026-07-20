@@ -63,7 +63,7 @@ public class ObjectIntrospector {
 	/**
 	 * Static creator.
 	 * @param o The object on which Java methods will be invoked.
-	 * @param parser The parser to use to parse the method arguments.
+	 * @param parser The parser to use to parse the method arguments.  If <jk>null</jk>, {@link Json5Parser#DEFAULT} is used.
 	 * @return A new {@link ObjectIntrospector} object.
 	 */
 	public static ObjectIntrospector create(Object o, ReaderParser parser) {
@@ -85,9 +85,9 @@ public class ObjectIntrospector {
 	/**
 	 * Constructor.
 	 *
-	 * @param object The object on which Java methods will be invoked.
+	 * @param object The object on which Java methods will be invoked.  Can be <jk>null</jk>.
 	 * @param parser The parser to use to parse the method arguments.
-	 * If <jk>null</jk>, {@link JsonParser#DEFAULT} is used.
+	 * If <jk>null</jk>, {@link Json5Parser#DEFAULT} is used.
 	 */
 	public ObjectIntrospector(Object object, ReaderParser parser) {
 		if (parser == null)

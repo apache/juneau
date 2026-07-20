@@ -87,7 +87,7 @@ public class ThrownStore {
 		/**
 		 * Overrides the bean returned by the {@link #build()} method with a pre-instantiated instance.
 		 *
-		 * @param value The setting value.
+		 * @param value The setting value. Can be <jk>null</jk> (the {@link #build()} method instantiates the {@link #type(Class) type} instead).
 		 * @return This object.
 		 */
 		public Builder impl(Object value) {
@@ -124,7 +124,7 @@ public class ThrownStore {
 		/**
 		 * Overrides the bean type produced by the {@link #build()} method.
 		 *
-		 * @param value The setting value.
+		 * @param value The setting value. Can be <jk>null</jk> (defaults to {@link ThrownStore}).
 		 * @return This object.
 		 */
 		@SuppressWarnings({
@@ -191,7 +191,7 @@ public class ThrownStore {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder for this object.
+	 * @param builder The builder for this object. Must not be <jk>null</jk>.
 	 */
 	public ThrownStore(Builder builder) {
 		this.parent = o(builder.parent);
@@ -243,7 +243,7 @@ public class ThrownStore {
 	/**
 	 * Retrieves the stats for the specified thrown exception.
 	 *
-	 * @param e The exception.
+	 * @param e The exception. Must not be <jk>null</jk>.
 	 * @return A clone of the stats, never <jk>null</jk>.
 	 */
 	public Optional<ThrownStats> getStats(Throwable e) {
@@ -292,7 +292,7 @@ public class ThrownStore {
 	 * them to simple strings.
 	 *
 	 *
-	 * @param t The throwable to create the stack trace for.
+	 * @param t The throwable to create the stack trace for. Must not be <jk>null</jk>.
 	 * @return A modifiable list of strings.
 	 */
 	protected List<String> createStackTrace(Throwable t) {
@@ -305,7 +305,7 @@ public class ThrownStore {
 	 * <p>
 	 * Subclasses can override this method to provide their own implementation.
 	 *
-	 * @param t The throwable to calculate the stack trace on.
+	 * @param t The throwable to calculate the stack trace on. Must not be <jk>null</jk>.
 	 * @return A calculated hash.
 	 */
 	protected long hash(Throwable t) {
@@ -335,7 +335,7 @@ public class ThrownStore {
 	 * The default implementation simply replaces <js>"\\$.*"</js> with <js>"..."</js> which should take care of stuff like stack
 	 * trace elements of lambda expressions.
 	 *
-	 * @param e The stack trace element to convert.
+	 * @param e The stack trace element to convert. Must not be <jk>null</jk>.
 	 * @return The converted stack trace element.
 	 */
 	protected String normalize(StackTraceElement e) {

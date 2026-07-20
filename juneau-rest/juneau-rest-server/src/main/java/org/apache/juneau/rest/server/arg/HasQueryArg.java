@@ -51,7 +51,7 @@ public class HasQueryArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @return A new {@link HasQueryArg}, or <jk>null</jk> if the parameter is not annotated with {@link HasQuery}.
 	 */
 	public static HasQueryArg create(ParameterInfo paramInfo) {
@@ -75,7 +75,7 @@ public class HasQueryArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param pi The Java method parameter being resolved.
+	 * @param pi The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 */
 	protected HasQueryArg(ParameterInfo pi) {
 		// @formatter:off

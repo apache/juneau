@@ -59,9 +59,9 @@ public class PathArg implements RestOpArg {
 	/**
 	 * Static creator.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
-	 * @param pathMatcher Path matcher for the specified method.
+	 * @param pathMatcher Path matcher for the specified method. Can be <jk>null</jk> (the name must then be specified on the {@link Path} annotation).
 	 * @return A new {@link PathArg}, or <jk>null</jk> if the parameter is not annotated with {@link Path}.
 	 */
 	public static PathArg create(ParameterInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
@@ -116,9 +116,9 @@ public class PathArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param paramInfo The Java method parameter being resolved. Must not be <jk>null</jk>.
 	 * @param annotations The annotations to apply to any new part parsers.
-	 * @param pathMatcher Path matcher for the specified method.
+	 * @param pathMatcher Path matcher for the specified method. Can be <jk>null</jk> (the name must then be specified on the {@link Path} annotation).
 	 */
 	protected PathArg(ParameterInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
 		this.name = getName(paramInfo, pathMatcher);

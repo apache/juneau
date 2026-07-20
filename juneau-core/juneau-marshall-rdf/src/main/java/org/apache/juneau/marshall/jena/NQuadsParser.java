@@ -86,6 +86,7 @@ public class NQuadsParser extends RdfParser {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public NQuadsParser(RdfParser.Builder<?> builder) {
 		super(builder.nQuads().consumes("application/n-quads"));

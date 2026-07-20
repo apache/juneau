@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.swagger.*;
 
 /**
- * Shared abstract base for the {@link RestBuilder}flavor builders ({@code RestServlet.Builder},
+ * Shared abstract base for the {@link RestBuilder} flavor builders ({@code RestServlet.Builder},
  * {@code RestResource.Builder}, {@code RestMixin.Builder}).
  *
  * <p>

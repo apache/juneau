@@ -210,6 +210,7 @@ public class MarkdownApplyAnnotation {
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
 	 * @param a The annotation to check.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(MarkdownApply a) {

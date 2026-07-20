@@ -44,7 +44,8 @@ public class ClientVersionMatcher extends RestMatcher {
 	 * @param clientVersionHeader
 	 * 	The HTTP request header name containing the client version.
 	 * 	If <jk>null</jk> or an empty string, uses <js>"Client-Version"</js>
-	 * @param mi The version string that the client version must match.
+	 * @param mi The Java method info that this matcher is being applied to (used to resolve the
+	 * 	{@code @RestOp(clientVersion)} annotation value).
 	 */
 	public ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {
 		this.clientVersionHeader = isEmpty(clientVersionHeader) ? "Client-Version" : clientVersionHeader;
