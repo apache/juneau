@@ -18,8 +18,6 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.text.*;
-
 /**
  * Exception that indicates that a recursion was detected while traversing a POJO model.
  *
@@ -33,8 +31,8 @@ public class MarshallingRecursionException extends Exception {
 	/**
 	 * Constructor.
 	 *
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public MarshallingRecursionException(String message, Object...args) {
 		super(f(message, args));

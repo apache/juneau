@@ -30,7 +30,6 @@ import static org.apache.juneau.rest.client.classic.RestOperation.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
-import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -1372,7 +1371,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 *
 	 * @param level The log level.
 	 * 	<br>Cannot be <jk>null</jk>.
-	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * @param msg The message with {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param args The arguments.
 	 * 	<br>Can contain <jk>null</jk> values.
@@ -1390,7 +1389,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param t The throwable cause.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * @param msg The message with {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param args The arguments.
 	 * 	<br>Can contain <jk>null</jk> values.

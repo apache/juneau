@@ -18,7 +18,6 @@ package org.apache.juneau.http.classic.response;
 
 import static org.apache.juneau.http.classic.response.Gone.*;
 
-import java.text.*;
 import java.util.*;
 
 import org.apache.http.*;
@@ -90,7 +89,7 @@ public class Gone extends BasicHttpException {
 	 * Constructor.
 	 *
 	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments in the message.
 	 */
 	public Gone(String msg, Object...args) {
 		this((Throwable)null, msg, args);

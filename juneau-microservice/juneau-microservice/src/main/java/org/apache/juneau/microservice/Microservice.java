@@ -1460,7 +1460,7 @@ public class Microservice implements ConfigEventListener {
 	 *
 	 * @param level The log level.
 	 * @param message The message text.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	protected void log(Level level, String message, Object...args) {
 		var msg = args.length == 0 ? message : f(message, args);

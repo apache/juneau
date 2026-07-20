@@ -52,10 +52,10 @@ public class MethodNotAllowed extends BasicHttpException {
 	}
 
 	/**
-	 * Constructor with a {@link java.text.MessageFormat}- or {@link String#format(String, Object...) String.format}-style message.
+	 * Constructor with a {@link String#format(String, Object...) String.format}-style message.
 	 *
 	 * @param msg The detail message. May be <jk>null</jk>.
-	 *    Treated as a format pattern when {@code args} is non-empty. Supports both {@link java.text.MessageFormat} ({@code {0}}) and {@link String#format(String, Object...) String.format} ({@code %s}) placeholders.
+	 *    Treated as a {@link String#format(String, Object...) String.format}-style format string (<c>%s</c> placeholders) when {@code args} is non-empty.
 	 * @param args Optional message arguments.
 	 */
 	public MethodNotAllowed(String msg, Object...args) {
@@ -72,11 +72,11 @@ public class MethodNotAllowed extends BasicHttpException {
 	}
 
 	/**
-	 * Constructor with a cause and a {@link java.text.MessageFormat}- or {@link String#format(String, Object...) String.format}-style message.
+	 * Constructor with a cause and a {@link String#format(String, Object...) String.format}-style message.
 	 *
 	 * @param cause The cause. May be <jk>null</jk>.
 	 * @param msg The detail message. May be <jk>null</jk>.
-	 *    Treated as a format pattern when {@code args} is non-empty. Supports both {@link java.text.MessageFormat} ({@code {0}}) and {@link String#format(String, Object...) String.format} ({@code %s}) placeholders.
+	 *    Treated as a {@link String#format(String, Object...) String.format}-style format string (<c>%s</c> placeholders) when {@code args} is non-empty.
 	 * @param args Optional message arguments.
 	 */
 	public MethodNotAllowed(Throwable cause, String msg, Object...args) {

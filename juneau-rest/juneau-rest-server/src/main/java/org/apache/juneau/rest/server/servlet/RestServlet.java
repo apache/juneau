@@ -23,7 +23,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
-import java.text.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
@@ -296,7 +295,7 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @param level The log level.
 	 * @param msg The message to log.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public void log(Level level, String msg, Object...args) {
 		doLog(level, null, fs(msg, args));
@@ -311,7 +310,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param level The log level.
 	 * @param cause The cause.
 	 * @param msg The message to log.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public void log(Level level, Throwable cause, String msg, Object...args) {
 		doLog(level, cause, fs(msg, args));

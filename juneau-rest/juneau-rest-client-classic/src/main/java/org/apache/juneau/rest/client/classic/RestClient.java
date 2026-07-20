@@ -39,7 +39,6 @@ import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
 import java.net.*;
 import java.nio.charset.*;
-import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -7738,7 +7737,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * Logs a message.
 	 *
 	 * @param level The log level.
-	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * @param msg The message with {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
 	 * @param args The arguments.
 	 */
 	protected void log(Level level, String msg, Object...args) {

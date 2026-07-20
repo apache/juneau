@@ -18,8 +18,6 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.text.*;
-
 /**
  * General class metadata runtime operation exception.
  *
@@ -85,8 +83,8 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 	 *
 	 * @param cause The cause of this exception.  Can be <jk>null</jk>.
 	 * @param c The class name of the bean that caused the exception.  Can be <jk>null</jk> (omits the class-name prefix).
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public ClassMetaRuntimeException(Throwable cause, Class<?> c, String message, Object...args) {
 		super(cause, getMessage(cause, c, message), args);

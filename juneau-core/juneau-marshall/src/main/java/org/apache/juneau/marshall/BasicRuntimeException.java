@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.marshall;
 
-import java.text.*;
-
 /**
  * Subclass of runtime exceptions that take in a message and zero or more arguments.
  *
@@ -36,8 +34,8 @@ public class BasicRuntimeException extends org.apache.juneau.commons.BasicRuntim
 	/**
 	 * Constructor.
 	 *
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public BasicRuntimeException(String message, Object...args) {
 		super(message, args);
@@ -56,8 +54,8 @@ public class BasicRuntimeException extends org.apache.juneau.commons.BasicRuntim
 	 * Constructor.
 	 *
 	 * @param cause The cause of this exception.  Can be <jk>null</jk>.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public BasicRuntimeException(Throwable cause, String message, Object...args) {
 		super(cause, message, args);

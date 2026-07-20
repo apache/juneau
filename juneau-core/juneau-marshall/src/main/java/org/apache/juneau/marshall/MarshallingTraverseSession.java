@@ -20,7 +20,6 @@ import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.text.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -304,7 +303,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	 *
 	 * @param t The throwable that was thrown (if there was one).
 	 * @param msg The warning message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	protected void onError(Throwable t, String msg, Object...args) {
 		super.addWarning(msg, args);

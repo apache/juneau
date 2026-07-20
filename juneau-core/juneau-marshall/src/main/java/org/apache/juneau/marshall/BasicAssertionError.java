@@ -18,8 +18,6 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.text.*;
-
 /**
  * An extension of {@link AssertionError} with helper constructors for messages with message-style arguments.
  */
@@ -30,8 +28,8 @@ public class BasicAssertionError extends AssertionError {
 	/**
 	 * Constructor.
 	 *
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public BasicAssertionError(String message, Object...args) {
 		super(f(message, args));
@@ -41,8 +39,8 @@ public class BasicAssertionError extends AssertionError {
 	 * Constructor.
 	 *
 	 * @param cause The cause of this exception.  Can be <jk>null</jk>.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public BasicAssertionError(Throwable cause, String message, Object...args) {
 		super(f(message, args), cause);

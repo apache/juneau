@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.management;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.logging.*;
 
 /**
@@ -34,8 +35,14 @@ import java.util.logging.*;
 @SuppressWarnings("java:S6548")
 public class JulLogBackend implements LogBackend {
 
-	/** Process-wide shared instance (stateless). */
+	/** Process-wide shared instance. */
 	public static final JulLogBackend INSTANCE = new JulLogBackend();
+
+	// Strong references to loggers whose levels we've explicitly set.  The JUL LogManager holds only weak
+	// references to loggers, so a logger with no other strong referent can be garbage-collected between a
+	// set and a subsequent read — silently dropping the runtime-configured level (the endpoint's set is
+	// documented as process-lifetime-only) and causing reads to 404.  Pinning here keeps set levels effective.
+	private final Set<Logger> pinned = ConcurrentHashMap.newKeySet();
 
 	private JulLogBackend() {}
 
@@ -68,6 +75,7 @@ public class JulLogBackend implements LogBackend {
 	public void setLevel(String name, String level) {
 		var logger = Logger.getLogger(resolveName(name));
 		logger.setLevel(level == null || level.isBlank() ? null : Level.parse(level.trim()));
+		pinned.add(logger);
 	}
 
 	private static String resolveName(String name) {

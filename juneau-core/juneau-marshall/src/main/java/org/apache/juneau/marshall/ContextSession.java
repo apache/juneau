@@ -23,7 +23,6 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
-import java.text.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -250,7 +249,7 @@ public abstract class ContextSession {
 	 *
 	 * @param msg The warning message.
 	 * 	<br>Cannot be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 * 	<br>Cannot be <jk>null</jk> (individual values may be <jk>null</jk>).
 	 */
 	public void addWarning(String msg, Object...args) {

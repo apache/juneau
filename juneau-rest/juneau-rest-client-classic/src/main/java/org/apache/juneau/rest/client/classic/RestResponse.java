@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
-import java.text.*;
 import java.util.*;
 import java.util.logging.*;
 
@@ -733,7 +732,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * Logs a message.
 	 *
 	 * @param level The log level.
-	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * @param msg The message with {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
 	 * @param args The arguments.
 	 * @return This object.
 	 */
@@ -747,7 +746,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @param level The log level.
 	 * @param t The throwable cause.
-	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * @param msg The message with {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
 	 * @param args The arguments.
 	 * @return This object.
 	 */

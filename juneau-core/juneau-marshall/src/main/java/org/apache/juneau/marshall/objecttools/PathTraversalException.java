@@ -17,8 +17,6 @@
 package org.apache.juneau.marshall.objecttools;
 
 import java.net.*;
-import java.text.*;
-
 import org.apache.juneau.marshall.*;
 
 /**
@@ -59,7 +57,7 @@ public class PathTraversalException extends BasicRuntimeException {
 	 *
 	 * @param status The HTTP-equivalent status code.
 	 * @param message The detailed message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public PathTraversalException(int status, String message, Object...args) {
 		this(null, status, message, args);
@@ -70,8 +68,8 @@ public class PathTraversalException extends BasicRuntimeException {
 	 *
 	 * @param cause The cause of this exception.  Can be <jk>null</jk>.
 	 * @param status HTTP status code.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public PathTraversalException(Throwable cause, int status, String message, Object...args) {
 		super(cause, message, args);

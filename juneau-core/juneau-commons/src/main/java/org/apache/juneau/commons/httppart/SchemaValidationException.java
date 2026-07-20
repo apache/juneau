@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.commons.httppart;
 
-import java.text.*;
-
 import org.apache.juneau.commons.*;
 
 /**
@@ -35,8 +33,8 @@ public class SchemaValidationException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public SchemaValidationException(String message, Object...args) {
 		super(message, args);

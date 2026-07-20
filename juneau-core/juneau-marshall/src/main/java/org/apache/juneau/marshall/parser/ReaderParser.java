@@ -23,6 +23,7 @@ import static org.apache.juneau.commons.utils.SystemUtils.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Subclass of {@link Parser} for character-based parsers.

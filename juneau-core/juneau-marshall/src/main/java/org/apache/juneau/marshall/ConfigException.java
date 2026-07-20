@@ -18,8 +18,6 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.text.*;
-
 /**
  * An exception that typically occurs when trying to perform an invalid operation on a configuration property.
  *
@@ -35,7 +33,7 @@ public class ConfigException extends BasicRuntimeException {
 	 * Constructor
 	 *
 	 * @param message The error message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public ConfigException(String message, Object...args) {
 		this(null, message, args);
@@ -45,8 +43,8 @@ public class ConfigException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param cause The cause of this exception.  Can be <jk>null</jk>.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public ConfigException(Throwable cause, String message, Object...args) {
 		super(cause, message, args);

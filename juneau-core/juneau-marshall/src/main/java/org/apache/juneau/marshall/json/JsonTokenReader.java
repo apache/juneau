@@ -935,11 +935,11 @@ public class JsonTokenReader implements TokenReader {
 	}
 
 	/**
-	 * Builds a {@link ParseException} with the given message + {@link java.text.MessageFormat}-style
-	 * arguments.  Used by all dispatch methods to surface input-malformed errors with consistent
+	 * Builds a {@link ParseException} with the given message + {@link String#format(String, Object...) String.format}-style
+	 * (<c>%s</c>) arguments.  Used by all dispatch methods to surface input-malformed errors with consistent
 	 * formatting.
 	 *
-	 * @param message The exception message format string ({0}, {1}, ...).
+	 * @param message The exception message format string (<c>%s</c>, <c>%d</c>, ...).
 	 * @param args The format arguments.
 	 * @return A new {@link ParseException} ready to throw.
 	 */

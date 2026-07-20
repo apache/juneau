@@ -19,8 +19,6 @@ package org.apache.juneau.rest.client.classic.remote;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
-import java.text.*;
-
 import org.apache.juneau.marshall.*;
 
 /**
@@ -52,8 +50,8 @@ public class RemoteMetadataException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param c The interface class that has an invalid definition.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public RemoteMetadataException(Class<?> c, String message, Object...args) {
 		this((Throwable)null, getMessage(c, null, message), args);
@@ -63,8 +61,8 @@ public class RemoteMetadataException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param m The interface method that has an invalid definition.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public RemoteMetadataException(Method m, String message, Object...args) {
 		this((Throwable)null, getMessage(m.getDeclaringClass(), m, message), args);
@@ -74,8 +72,8 @@ public class RemoteMetadataException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param cause The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public RemoteMetadataException(Throwable cause, String message, Object...args) {
 		super(cause, message, args);

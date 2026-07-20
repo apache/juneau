@@ -84,12 +84,12 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	}
 
 	/**
-	 * Constructor with a {@link java.text.MessageFormat}- or {@link String#format(String, Object...) String.format}-style message body.
+	 * Constructor with a {@link String#format(String, Object...) String.format}-style message body.
 	 *
 	 * @param statusCode The HTTP status code.
 	 * @param reasonPhrase The reason phrase. May be <jk>null</jk>.
 	 * @param msg The exception message and response body. May be <jk>null</jk>.
-	 *    Treated as a format pattern when {@code args} is non-empty. Supports both {@link java.text.MessageFormat} ({@code {0}}) and {@link String#format(String, Object...) String.format} ({@code %s}) placeholders.
+	 *    Treated as a {@link String#format(String, Object...) String.format}-style format string (<c>%s</c> placeholders) when {@code args} is non-empty.
 	 * @param args Optional message arguments.
 	 */
 	public BasicHttpException(int statusCode, String reasonPhrase, String msg, Object...args) {
@@ -97,13 +97,13 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	}
 
 	/**
-	 * Constructor with a cause and a {@link java.text.MessageFormat}- or {@link String#format(String, Object...) String.format}-style message body.
+	 * Constructor with a cause and a {@link String#format(String, Object...) String.format}-style message body.
 	 *
 	 * @param statusCode The HTTP status code.
 	 * @param reasonPhrase The reason phrase. May be <jk>null</jk>.
 	 * @param cause The cause. May be <jk>null</jk>.
 	 * @param msg The exception message. May be <jk>null</jk>.
-	 *    Treated as a format pattern when {@code args} is non-empty. Supports both {@link java.text.MessageFormat} ({@code {0}}) and {@link String#format(String, Object...) String.format} ({@code %s}) placeholders.
+	 *    Treated as a {@link String#format(String, Object...) String.format}-style format string (<c>%s</c> placeholders) when {@code args} is non-empty.
 	 * @param args Optional message arguments.
 	 */
 	public BasicHttpException(int statusCode, String reasonPhrase, Throwable cause, String msg, Object...args) {

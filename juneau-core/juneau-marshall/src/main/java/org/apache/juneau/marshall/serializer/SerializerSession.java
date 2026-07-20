@@ -27,7 +27,6 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.math.*;
 import java.net.*;
-import java.text.*;
 import java.time.*;
 import java.time.Duration;
 import java.time.temporal.*;
@@ -46,7 +45,6 @@ import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.DateFormat;
 import org.apache.juneau.marshall.httppart.*;
-import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.soap.*;
 import org.apache.juneau.marshall.swap.*;
 import org.apache.juneau.marshall.utils.*;
@@ -1555,7 +1553,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 *
 	 * @param t The throwable that was thrown (if there was one).
 	 * @param msg The warning message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	@Override
 	protected void onError(Throwable t, String msg, Object...args) {

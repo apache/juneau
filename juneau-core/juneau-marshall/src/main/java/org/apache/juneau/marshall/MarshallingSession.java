@@ -22,7 +22,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.text.*;
 import java.time.*;
 import java.util.*;
 import java.util.logging.*;
@@ -322,7 +321,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * Logs a warning message.
 	 *
 	 * @param msg The warning message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	@Override
 	public void addWarning(String msg, Object...args) {

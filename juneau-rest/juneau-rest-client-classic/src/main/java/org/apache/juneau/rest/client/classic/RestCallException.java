@@ -20,8 +20,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
-import java.text.*;
-
 import org.apache.http.*;
 import org.apache.juneau.http.classic.header.*;
 
@@ -75,8 +73,8 @@ public class RestCallException extends HttpException {
 	 * @param statusCode The HTTP response status code.  Use <c>0</c> if no connection could be made.
 	 * @param thrown The value of the <js>"Thrown"</js> header on the response.  Can be <jk>null</jk>.
 	 * @param cause The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public RestCallException(int statusCode, Thrown thrown, Throwable cause, String message, Object...args) {
 		super(format(message, args), cause);
@@ -89,8 +87,8 @@ public class RestCallException extends HttpException {
 	 *
 	 * @param response The HTTP response.  Can be <jk>null</jk>.
 	 * @param cause The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public RestCallException(RestResponse response, Throwable cause, String message, Object...args) {
 		this((response == null ? 0 : response.getStatusCode()), (response == null ? Thrown.EMPTY : response.getHeader("Thrown").as(Thrown.class).orElse(null)), cause, message, args);

@@ -19,7 +19,6 @@ package org.apache.juneau.commons.reflect;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
-import java.text.*;
 
 /**
  * A {@link RuntimeException} wrapper around common reflection exceptions.
@@ -108,8 +107,8 @@ public class BeanRuntimeException extends RuntimeException {
 	 *
 	 * @param cause The cause of this exception.
 	 * @param c The class name of the bean that caused the exception.  Can be <jk>null</jk>, in which case it is omitted from the message.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public BeanRuntimeException(Throwable cause, Class<?> c, String message, Object...args) {
 		super(getMessage(cause, c, message, args), cause);

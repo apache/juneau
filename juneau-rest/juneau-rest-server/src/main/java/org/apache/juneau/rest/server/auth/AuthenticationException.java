@@ -65,7 +65,7 @@ public class AuthenticationException extends Unauthorized {
 	}
 
 	/**
-	 * Constructor with a {@link java.text.MessageFormat}- or {@link String#format(String, Object...) String.format}-style message.
+	 * Constructor with a {@link String#format(String, Object...) String.format}-style message.
 	 *
 	 * @param msg The detail message. May be <jk>null</jk>.
 	 *    Treated as a format pattern when {@code args} is non-empty.
@@ -85,7 +85,7 @@ public class AuthenticationException extends Unauthorized {
 	}
 
 	/**
-	 * Constructor with a cause and a {@link java.text.MessageFormat}- or {@link String#format(String, Object...) String.format}-style message.
+	 * Constructor with a cause and a {@link String#format(String, Object...) String.format}-style message.
 	 *
 	 * @param cause The cause. May be <jk>null</jk>.
 	 * @param msg The detail message. May be <jk>null</jk>.

@@ -20,10 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.lang.reflect.*;
-import java.text.*;
-
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Exception that indicates invalid syntax encountered during parsing.
@@ -110,8 +107,8 @@ public class ParseException extends BasicRuntimeException {
 	 *
 	 * @param session The parser session.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @param message The exception message containing {@link MessageFormat}-style arguments.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The exception message containing {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public ParseException(ParserSession session, String message, Object...args) {
 		super(getMessage(session, message, args));
@@ -124,8 +121,8 @@ public class ParseException extends BasicRuntimeException {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @param causedBy The cause of this exception.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @param message The exception message containing {@link MessageFormat}-style arguments.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The exception message containing {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public ParseException(ParserSession session, Throwable causedBy, String message, Object...args) {
 		super(causedBy, getMessage(session, message, args));
@@ -134,8 +131,8 @@ public class ParseException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public ParseException(String message, Object...args) {
 		super(message, args);
@@ -156,8 +153,8 @@ public class ParseException extends BasicRuntimeException {
 	 *
 	 * @param causedBy The cause of this exception.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public ParseException(Throwable causedBy, String message, Object...args) {
 		super(causedBy, message, args);

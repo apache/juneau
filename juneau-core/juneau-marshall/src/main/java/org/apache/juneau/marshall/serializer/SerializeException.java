@@ -19,7 +19,6 @@ package org.apache.juneau.marshall.serializer;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
-import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
@@ -89,8 +88,8 @@ public class SerializeException extends BasicRuntimeException {
 	 *
 	 * @param session The serializer session to extract information from.
 	 * 	Can be <jk>null</jk>.
-	 * @param message The exception message containing {@link MessageFormat}-style arguments.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The exception message containing {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public SerializeException(SerializerSession session, String message, Object...args) {
 		super(getMessage(session, message, args));
@@ -99,8 +98,8 @@ public class SerializeException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param message The exception message containing {@link MessageFormat}-style arguments.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The exception message containing {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public SerializeException(String message, Object...args) {
 		super(getMessage(null, message, args));

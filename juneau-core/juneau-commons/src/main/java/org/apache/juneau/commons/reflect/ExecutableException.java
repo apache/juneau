@@ -19,7 +19,6 @@ package org.apache.juneau.commons.reflect;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
-import java.text.*;
 
 /**
  * General exception that occurs when trying to execute a constructor, method, or field using reflection.
@@ -34,8 +33,8 @@ public class ExecutableException extends RuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public ExecutableException(String message, Object...args) {
 		super(f(message, args));
@@ -54,8 +53,8 @@ public class ExecutableException extends RuntimeException {
 	 * Constructor.
 	 *
 	 * @param causedBy The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public ExecutableException(Throwable causedBy, String message, Object...args) {
 		super(f(message, args), causedBy);

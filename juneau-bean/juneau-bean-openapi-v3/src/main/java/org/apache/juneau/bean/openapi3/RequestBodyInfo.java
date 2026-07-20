@@ -21,11 +21,9 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
-import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.marshall.*;
 
 /**
  * Describes a single request body.

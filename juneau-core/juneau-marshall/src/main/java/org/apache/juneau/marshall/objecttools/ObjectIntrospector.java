@@ -22,7 +22,6 @@ import java.io.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.parser.*;
 

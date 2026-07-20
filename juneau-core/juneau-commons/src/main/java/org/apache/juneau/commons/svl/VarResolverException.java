@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.commons.svl;
 
-import java.text.*;
-
 import org.apache.juneau.commons.*;
 
 /**
@@ -35,8 +33,8 @@ public class VarResolverException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public VarResolverException(String message, Object...args) {
 		this(null, message, args);
@@ -46,8 +44,8 @@ public class VarResolverException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param cause The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
+	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	public VarResolverException(Throwable cause, String message, Object...args) {
 		super(cause, message, args);
