@@ -29,4 +29,23 @@ class ResourceDescription_Test extends TestBase {
 		assertEquals("<table><tr><td>name</td><td><a href=\"/b?c=d&amp;e=f\">a</a></td></tr><tr><td>description</td><td>g</td></tr></table>", Html.of(rd));
 		assertEquals("{name:'a',description:'g'}", Json5.of(rd));
 	}
+
+	// Regression: hashCode()/compareTo() dereferenced getName() unguarded, so an unpopulated ResourceDescription
+	// (public no-arg ctor leaves 'name' null) NPE'd when hashed, sorted, or added to a TreeSet — inconsistent with
+	// the already-null-safe equals().
+	@Test void a02_nullNameIsHashableAndComparable() {
+		var empty = new ResourceDescription();
+		assertEquals(0, empty.hashCode());
+		assertEquals(0, empty.compareTo(new ResourceDescription()));
+
+		var named = new ResourceDescription().name("a");
+		assertTrue(empty.compareTo(named) < 0);
+		assertTrue(named.compareTo(empty) > 0);
+
+		// Can be used as a TreeSet element without NPE.
+		var set = new java.util.TreeSet<ResourceDescription>();
+		set.add(empty);
+		set.add(named);
+		assertEquals(2, set.size());
+	}
 }

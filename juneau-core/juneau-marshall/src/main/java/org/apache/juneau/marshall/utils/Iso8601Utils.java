@@ -87,15 +87,17 @@ public final class Iso8601Utils {
 	 * {@link #formatDate}, {@link #formatCalendar}, {@link #formatTemporal},
 	 * {@link #formatDuration}, {@link #formatPeriod}.
 	 *
-	 * @param value The value to format.  Must not be <jk>null</jk> (unlike the per-type helpers, this dispatcher does not null-guard).
+	 * @param value The value to format.  <jk>null</jk> returns <jk>null</jk> (consistent with the per-type helpers).
 	 * @param type The class metadata for the value (used for selecting the appropriate formatter for Temporal types).
 	 * @param timeZone The session time zone (used when the value lacks zone info).
-	 * @return The ISO 8601 string representation.
+	 * @return The ISO 8601 string representation, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"java:S1172" // type kept for API compatibility; future callers may use it for per-type dispatch hints
 	})
 	public static String format(Object value, ClassMeta<?> type, TimeZone timeZone) {
+		if (value == null)
+			return null;
 		if (value instanceof Duration d)
 			return formatDuration(d, DurationFormat.ISO_8601_WITH_DAYS);
 		if (value instanceof Period p)
@@ -208,15 +210,17 @@ public final class Iso8601Utils {
 	/**
 	 * Formats a date/time value as an ISO date (date-only, for OpenAPI 'date' format).
 	 *
-	 * @param value The value to format.  Must not be <jk>null</jk>.
+	 * @param value The value to format.  <jk>null</jk> returns <jk>null</jk>.
 	 * @param type The class metadata.
 	 * @param timeZone The session time zone.
-	 * @return The ISO date string.
+	 * @return The ISO date string, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"java:S1172" // type kept for API compatibility; callers pass ClassMeta context for potential future use
 	})
 	public static String formatAsDate(Object value, ClassMeta<?> type, TimeZone timeZone) {
+		if (value == null)
+			return null;
 		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
 		if (value instanceof Calendar c) {
 			ZonedDateTime zdt = (c instanceof GregorianCalendar gc) ? gc.toZonedDateTime() : c.toInstant().atZone(c.getTimeZone().toZoneId());
@@ -232,15 +236,17 @@ public final class Iso8601Utils {
 	/**
 	 * Formats a date/time value as an ISO date-time (for OpenAPI 'date-time' format).
 	 *
-	 * @param value The value to format.  Must not be <jk>null</jk>.
+	 * @param value The value to format.  <jk>null</jk> returns <jk>null</jk>.
 	 * @param type The class metadata.
 	 * @param timeZone The session time zone.
-	 * @return The ISO date-time string.
+	 * @return The ISO date-time string, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"java:S1172" // type kept for API compatibility; callers pass ClassMeta context for potential future use
 	})
 	public static String formatAsDateTime(Object value, ClassMeta<?> type, TimeZone timeZone) {
+		if (value == null)
+			return null;
 		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
 		if (value instanceof Calendar c) {
 			ZonedDateTime zdt = (c instanceof GregorianCalendar gc) ? gc.toZonedDateTime() : c.toInstant().atZone(c.getTimeZone().toZoneId());

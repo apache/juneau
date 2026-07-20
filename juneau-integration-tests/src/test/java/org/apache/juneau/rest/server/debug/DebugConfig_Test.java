@@ -190,6 +190,8 @@ class DebugConfig_Test extends TestBase {
 		assertNotNull(rule, "rule must be retrievable via getRuleFor");
 		assertEquals(Level.FINE, rule.getLevel());
 		assertNull(cfg.getRuleFor("com.example.Bar"), "no rule should be returned for unconfigured target");
+		// Regression: getRuleFor(null) NPE'd on the null-hostile Map.copyOf(...) map despite the "or null" @return.
+		assertNull(cfg.getRuleFor(null), "null target must return null, not NPE");
 	}
 
 	@Test void b09_chainedBuilder_allFluent() {

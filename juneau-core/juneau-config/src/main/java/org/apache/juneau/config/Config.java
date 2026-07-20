@@ -944,7 +944,7 @@ public class Config extends Context implements ConfigEventListener {
 	 */
 	public Config removeImport(String sectionName, String importName) {
 		checkWrite();
-		configMap.removeImport(sectionName, importName);
+		configMap.removeImport(section(sectionName), importName);
 		return this;
 	}
 
@@ -1120,7 +1120,7 @@ public class Config extends Context implements ConfigEventListener {
 	 */
 	public Config setImport(String sectionName, String importName, List<String> preLines) {
 		checkWrite();
-		configMap.setImport(section(name), importName, preLines);
+		configMap.setImport(section(sectionName), importName, preLines);
 		return this;
 	}
 

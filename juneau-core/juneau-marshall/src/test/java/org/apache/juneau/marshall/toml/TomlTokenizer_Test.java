@@ -873,4 +873,22 @@ class TomlTokenizer_Test extends TestBase {
 		assertTrue(ex.getMessage().contains("line"));
 		assertTrue(ex.getMessage().contains("column"));
 	}
+
+	@Test
+	void p02_parseExceptionLiteralPercentNotFormatted() {
+		// A literal '%' in the message must survive verbatim (no printf re-interpretation).
+		var tok = t("");
+		var ex = tok.parseException("bad token: 100%");
+		assertTrue(ex.getMessage().startsWith("bad token: 100% at line "));
+	}
+
+	@Test
+	void p03_parseDateTimeStringPercentPreservesMessageAndCause() {
+		// Previously new ParseException("Invalid offset date-time: " + s, e) bound to (String, Object...):
+		// the cause 'e' was dropped and a stray '%' in the scanned value was re-interpreted as a printf
+		// directive (throwing a formatting exception).  The fix passes 'e' as the cause and 's' as a %s arg.
+		var ex = assertThrows(ParseException.class, () -> TomlTokenizer.parseDateTimeString("1979-05-27T07:32:00%Z"));
+		assertTrue(ex.getMessage().contains("1979-05-27T07:32:00%Z"));
+		assertNotNull(ex.getCause());
+	}
 }

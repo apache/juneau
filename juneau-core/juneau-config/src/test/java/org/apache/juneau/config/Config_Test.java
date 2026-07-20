@@ -1882,12 +1882,26 @@ class Config_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Config.setImport(String, String, List) - throws UnsupportedOperationException (not supported)
+	// Config.setImport(String, String, List) - attaches an imported config so its entries resolve.
 	//====================================================================================================
 
-	@Test void a53_setImport() {
-		var c = init();
-		assertThrows(UnsupportedOperationException.class, () -> c.setImport("", "other.cfg", null));
+	@Test void a53_setImport() throws Exception {
+		var ms = MemoryStore.create().build();
+		ms.write("A53a", "", "importedKey=1");
+		ms.write("A53b", "", "");
+		var c = Config.create("A53b").store(ms).build();
+		assertNull(c.get("importedKey").orElse(null));
+
+		c.setImport("", "A53a", null);
+		assertEquals("1", c.get("importedKey").get());
+
+		// setImport is idempotent for an already-registered import.
+		c.setImport("", "A53a", null);
+		assertEquals("1", c.get("importedKey").get());
+
+		// Read-only configs still reject the write.
+		var ro = Config.create("A53b").store(ms).readOnly().build();
+		assertThrows(UnsupportedOperationException.class, () -> ro.setImport("", "A53a", null));
 	}
 
 	//====================================================================================================
@@ -1943,8 +1957,21 @@ class Config_Test extends TestBase {
 	}
 
 	@Test void a61_removeImport() throws Exception {
-		var c = init();
-		assertThrows(UnsupportedOperationException.class, () -> c.removeImport("", "nonexistent.cfg"));
+		var ms = MemoryStore.create().build();
+		ms.write("A61a", "", "importedKey=1");
+		ms.write("A61b", "", "<A61a>");
+		var c = Config.create("A61b").store(ms).build();
+		assertEquals("1", c.get("importedKey").get());
+
+		c.removeImport("", "A61a");
+		assertNull(c.get("importedKey").orElse(null));
+
+		// Removing a non-existent import is a no-op (does not throw).
+		c.removeImport("", "nonexistent");
+
+		// Read-only configs still reject the write.
+		var ro = Config.create("A61b").store(ms).readOnly().build();
+		assertThrows(UnsupportedOperationException.class, () -> ro.removeImport("", "A61a"));
 	}
 
 	@Test void a62_set_nullValueNonExistentKey() throws Exception {

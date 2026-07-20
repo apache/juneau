@@ -253,11 +253,8 @@ public class Json5List extends MarshalledList {
 	 * @return A new list (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings({
-		"java:S1172" // Parameter reserved for future parser context support
-	})
 	public static Json5List ofString(Reader in, Parser p) throws ParseException {
-		return in == null ? new Json5List() : new Json5List(in);
+		return in == null ? new Json5List() : new Json5List(in, p);
 	}
 
 	/**

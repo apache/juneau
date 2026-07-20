@@ -219,6 +219,6 @@ public class DebugConfig {
 	 * @return The configured rule, or <jk>null</jk>.
 	 */
 	public DebugRule getRuleFor(String target) {
-		return rules.get(target);
+		return target == null ? null : rules.get(target);
 	}
 }

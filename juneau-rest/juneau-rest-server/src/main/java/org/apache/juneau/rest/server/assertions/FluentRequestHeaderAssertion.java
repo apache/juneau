@@ -143,7 +143,7 @@ public class FluentRequestHeaderAssertion<R> extends FluentStringAssertion<R> {
 	 * used on the same assertion.
 	 */
 	public FluentRequestHeaderAssertion(Assertion creator, RequestHeader value, R returns) {
-		super(null, value.asString().orElse(null), returns);
+		super(creator, value.asString().orElse(null), returns);
 		this.value = value;
 		setThrowable(BadRequest.class);
 	}

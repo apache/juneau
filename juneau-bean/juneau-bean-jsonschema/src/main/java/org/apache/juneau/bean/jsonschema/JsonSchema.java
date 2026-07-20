@@ -737,7 +737,7 @@ public class JsonSchema {
 	@Swap(BooleanOrSchemaSwap.class)
 	public Object getAdditionalProperties() {
 		if (nn(additionalPropertiesBoolean))
-			return additionalItemsBoolean;
+			return additionalPropertiesBoolean;
 		return additionalPropertiesSchema;
 	}
 

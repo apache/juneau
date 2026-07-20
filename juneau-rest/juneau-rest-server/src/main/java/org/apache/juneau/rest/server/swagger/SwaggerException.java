@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.server.swagger;
 
-import static org.apache.juneau.commons.utils.Shorts.*;
-
 import org.apache.juneau.marshall.parser.*;
 
 @SuppressWarnings({
@@ -27,6 +25,8 @@ class SwaggerException extends ParseException {
 	private static final long serialVersionUID = 1L;
 
 	SwaggerException(Exception e, String location, Object...locationArgs) {
-		super(e, "Swagger exception:  at " + f(location, locationArgs));
+		// Format exactly once (via the parent ctor) so a literal '%' surviving from location/locationArgs
+		// can't be re-interpreted as a printf directive on a second pass.
+		super(e, "Swagger exception:  at " + location, locationArgs);
 	}
 }

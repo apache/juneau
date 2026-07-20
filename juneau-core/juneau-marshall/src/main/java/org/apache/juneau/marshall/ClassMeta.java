@@ -499,6 +499,27 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	}
 
 	/**
+	 * Same as {@link #getBeanMeta()} but derives property names using the supplied {@link PropertyNamer} instead of
+	 * the one configured on the owning context.
+	 *
+	 * <p>
+	 * Unlike {@link #getBeanMeta()}, the returned {@link BeanMeta} is built fresh on each call and is <b>not</b>
+	 * cached — the shared, {@code Class}-keyed default {@link BeanMeta} (which uses the context's default namer) is
+	 * left untouched.  This keeps the cache safe when callers request an alternate property-naming strategy (e.g.
+	 * {@code MarshallingSession#toBeanMap(Object, PropertyNamer)}).
+	 *
+	 * @param propertyNamer The property namer to use for deriving property names.  Must not be <jk>null</jk>.
+	 * @return
+	 * 	A newly-built {@link BeanMeta} whose property names reflect the supplied namer, or <jk>null</jk> if there is
+	 * 	no bean meta associated with this class.
+	 */
+	public BeanMeta<T> getBeanMeta(PropertyNamer propertyNamer) {
+		if (! cat.isUnknown())
+			return null;
+		return BeanMeta.create(this, implClass.get(), propertyNamer).beanMeta();
+	}
+
+	/**
 	 * Returns the bean registry for this class.
 	 *
 	 * <p>
@@ -1420,10 +1441,12 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * Similar to {@link #equals(Object)} except primitive and Object types that are similar are considered the same.
 	 * (e.g. <jk>boolean</jk> == <c>Boolean</c>).
 	 *
-	 * @param cm The class meta to compare to.
+	 * @param cm The class meta to compare to. Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the specified class-meta is equivalent to this one.
 	 */
 	public boolean same(ClassMeta<?> cm) {
+		if (cm == null)
+			return false;
 		if (equals(cm))
 			return true;
 		return (isPrimitive() && cat.same(cm.cat));

@@ -347,7 +347,7 @@ public final class RrpcInterfaceMethodMeta {
 	 * @return The default value, or <jk>null</jk>.
 	 */
 	public String getHeaderDefault(String name) {
-		return headerDefaults.get(name);
+		return name == null ? null : headerDefaults.get(name);
 	}
 
 	/**
@@ -357,7 +357,7 @@ public final class RrpcInterfaceMethodMeta {
 	 * @return The default value, or <jk>null</jk>.
 	 */
 	public String getQueryDefault(String name) {
-		return queryDefaults.get(name);
+		return name == null ? null : queryDefaults.get(name);
 	}
 
 	/**
@@ -367,7 +367,7 @@ public final class RrpcInterfaceMethodMeta {
 	 * @return The default value, or <jk>null</jk>.
 	 */
 	public String getFormDataDefault(String name) {
-		return formDataDefaults.get(name);
+		return name == null ? null : formDataDefaults.get(name);
 	}
 
 	/**
@@ -377,7 +377,7 @@ public final class RrpcInterfaceMethodMeta {
 	 * @return The default value, or <jk>null</jk>.
 	 */
 	public String getPathDefault(String name) {
-		return pathDefaults.get(name);
+		return name == null ? null : pathDefaults.get(name);
 	}
 
 	/**

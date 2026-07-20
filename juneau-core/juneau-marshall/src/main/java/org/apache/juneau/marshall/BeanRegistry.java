@@ -110,11 +110,11 @@ public class BeanRegistry implements BeanRegistryLookup {
 	/**
 	 * Given the specified class, return the dictionary name for it.
 	 *
-	 * @param c The class to lookup in this registry.
+	 * @param c The class to lookup in this registry. Can be <jk>null</jk>.
 	 * @return The dictionary name for the specified class in this registry, or <jk>null</jk> if not found.
 	 */
 	public String getTypeName(ClassMeta<?> c) {
-		return isEmpty ? null : reverseMap.get(c.inner());
+		return isEmpty || c == null ? null : reverseMap.get(c.inner());
 	}
 
 	/**

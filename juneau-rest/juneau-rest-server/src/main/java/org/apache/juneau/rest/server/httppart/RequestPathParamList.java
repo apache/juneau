@@ -224,6 +224,8 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * @return This object.
 	 */
 	public RequestPathParamList addDefault(List<HttpPart> pairs) {
+		if (pairs == null)
+			return this;
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);

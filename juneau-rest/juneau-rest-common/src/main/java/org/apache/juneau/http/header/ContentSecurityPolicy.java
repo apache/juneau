@@ -491,7 +491,7 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 		 * Replaces any previously-registered source list for the same directive while preserving its original position.
 		 *
 		 * @param name The directive name (e.g. <js>"worker-src"</js>). Must not be <jk>null</jk> or blank.
-		 * @param sources The source expressions. May be empty (renders the bare directive name).
+		 * @param sources The source expressions. May be empty or <jk>null</jk> (renders the bare directive name).
 		 * @return This object.
 		 * @throws IllegalArgumentException If {@code name} is <jk>null</jk> or blank.
 		 */
@@ -500,7 +500,7 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 			var n = name.trim();
 			if (n.isEmpty())
 				throw iaex("directive name must not be blank");
-			directives.put(n, new ArrayList<>(Arrays.asList(sources)));
+			directives.put(n, sources == null ? new ArrayList<>() : new ArrayList<>(Arrays.asList(sources)));
 			return this;
 		}
 

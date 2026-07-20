@@ -1422,4 +1422,22 @@ class HttpPartSchema_Validation_Test extends TestBase {
 		}
 		assertTrue(levels >= depth, "Expected the nested schema to be reachable to full depth");
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Enum-setter null parity
+	// Regression: type(HttpPartDataType)/format(HttpPartFormat)/collectionFormat(HttpPartCollectionFormat) had no
+	// null guard (unlike their ine()-guarded String overloads), so with noValidate() an explicit null overwrote the
+	// non-null default and the getter returned null.  A null enum must now be ignored (default preserved).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void u01_enumSetters_nullIgnored() {
+		var s = HttpPartSchema.create().noValidate()
+			.type((HttpPartDataType)null)
+			.format((HttpPartFormat)null)
+			.collectionFormat((HttpPartCollectionFormat)null)
+			.build();
+		assertEquals(HttpPartDataType.NO_TYPE, s.getType());
+		assertEquals(HttpPartFormat.NO_FORMAT, s.getFormat());
+		assertEquals(HttpPartCollectionFormat.NO_COLLECTION_FORMAT, s.getCollectionFormat());
+	}
 }

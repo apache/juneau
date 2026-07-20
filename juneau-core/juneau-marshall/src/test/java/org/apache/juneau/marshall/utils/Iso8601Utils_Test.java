@@ -83,6 +83,14 @@ class Iso8601Utils_Test extends TestBase {
 		assertEquals("some-string", r);
 	}
 
+	@Test void a07_format_nullValue() {
+		// Regression: the three dispatchers deref'd value unguarded (NPE on null), unlike the per-type helpers
+		// that all return null.  Aligned per Q4 — null value now returns null.
+		assertNull(Iso8601Utils.format(null, BC.getClassMeta(String.class), UTC));
+		assertNull(Iso8601Utils.formatAsDate(null, BC.getClassMeta(Date.class), UTC));
+		assertNull(Iso8601Utils.formatAsDateTime(null, BC.getClassMeta(Date.class), UTC));
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// formatDuration — null format defaults to ISO_8601_WITH_DAYS (line 122), null value (line 120)
 	//------------------------------------------------------------------------------------------------------------------

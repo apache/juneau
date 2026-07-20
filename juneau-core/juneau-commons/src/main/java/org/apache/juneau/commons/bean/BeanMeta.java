@@ -211,6 +211,26 @@ public class BeanMeta<T> {
 	 * @return A {@link BeanMetaValue} containing the bean metadata (if successful) or a reason why it's not a bean.
 	 */
 	public static <T> BeanMetaValue<T> create(BeanInfo<T> cm, ClassInfo implClass) {
+		return create(cm, implClass, null);
+	}
+
+	/**
+	 * Same as {@link #create(BeanInfo, ClassInfo)} but allows an explicit {@link PropertyNamer} to override the one
+	 * that would otherwise be derived from the bean filter or {@link BeanConfigContext#getPropertyNamer()}.
+	 *
+	 * <p>
+	 * The returned {@link BeanMeta} is <b>not</b> cached anywhere — callers that need a namer-specific view (for
+	 * example, {@code MarshallingSession#toBeanMap(Object, PropertyNamer)}) build one on demand so the shared,
+	 * {@code Class}-keyed default {@link BeanMeta} cache is never polluted with alternate-namer property keys.
+	 *
+	 * @param <T> The class type.
+	 * @param cm The bean type info for the class to create bean metadata for.  Must not be <jk>null</jk>.
+	 * @param implClass Optional implementation class info to use when looking for a no-arg constructor.  Can be <jk>null</jk>.
+	 * @param propertyNamer Optional property namer to use for deriving property names.  If <jk>null</jk>, the namer is
+	 * 	resolved the normal way (bean filter, then {@link BeanConfigContext#getPropertyNamer()}).
+	 * @return A {@link BeanMetaValue} containing the bean metadata (if successful) or a reason why it's not a bean.
+	 */
+	public static <T> BeanMetaValue<T> create(BeanInfo<T> cm, ClassInfo implClass, PropertyNamer propertyNamer) {
 		try {
 			var cfg = cm.getBeanConfigContext();
 			var ap = cfg.getAnnotationProvider();
@@ -229,7 +249,7 @@ public class BeanMeta<T> {
 		if ((! cfg.getBeanClassVisibility().isVisible(cm.getModifiers()) || cm.isAnonymousClass()) && ! bmi.hasBeanRegistrationAnnotation(cfg, cm))
 			return notABean("Class is not public");
 
-			var bm = new BeanMeta<>(cm, bmi.buildBeanFilter(cm), null, implClass);
+			var bm = new BeanMeta<>(cm, bmi.buildBeanFilter(cm), null, implClass, propertyNamer);
 
 			if (nn(bm.notABeanReason))
 				return notABean(bm.notABeanReason);
@@ -238,6 +258,21 @@ public class BeanMeta<T> {
 		} catch (RuntimeException e) {
 			return new BeanMetaValue<>(null, e.getMessage());
 		}
+	}
+
+	/*
+	 * Returns the property namer that should be used to derive property names for this bean.
+	 *
+	 * <p>
+	 * Precedence: an explicit per-instance {@link #propertyNamerOverride} (used by the
+	 * {@code toBeanMap(Object, PropertyNamer)} path) wins over everything; otherwise the bean filter's namer, then the
+	 * {@link BeanConfigContext#getPropertyNamer() configured default}.  Preserving this fallback order keeps the
+	 * default-cache construction path behaviorally identical to before the override was introduced.
+	 */
+	private PropertyNamer effectivePropertyNamer() {
+		if (nn(propertyNamerOverride))
+			return propertyNamerOverride;
+		return o(beanFilter).map(x -> x.getPropertyNamer()).orElse(config.getPropertyNamer());
 	}
 
 	/*
@@ -335,6 +370,7 @@ public class BeanMeta<T> {
 	private final Map<String,BeanPropertyMeta> properties;                     // The properties on the target class.
 	private final Map<Method,String> setterProps;                              // The setter properties on the target class.
 	private final boolean unsortedProperties;                                  // Whether properties should use natural JVM-dependent order.
+	private final PropertyNamer propertyNamerOverride;                         // Optional per-instance namer override.  Null means resolve the normal way (bean filter, then config).  Non-null takes precedence over both.
 	private final ClassInfo stopClass;                                         // The stop class for hierarchy traversal.
 	private final BeanPropertyMeta typeProperty;                               // "_type" mock bean property.
 	private final String typePropertyName;                                     // "_type" property actual name.
@@ -400,7 +436,22 @@ public class BeanMeta<T> {
 	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk>.
 	 */
 	protected BeanMeta(BeanInfo<T> cm, BeanFilter bf, String[] pNames, ClassInfo implClass) {
-		this(cm, cm, cm.getBeanConfigContext(), cm.getMarshallingContext(), bf, pNames, implClass);
+		this(cm, cm, cm.getBeanConfigContext(), cm.getMarshallingContext(), bf, pNames, implClass, null);
+	}
+
+	/**
+	 * Same as {@link #BeanMeta(BeanInfo, BeanFilter, String[], ClassInfo)} but allows an explicit
+	 * {@link PropertyNamer} override.
+	 *
+	 * @param cm The class metadata for the bean class.  Must not be <jk>null</jk>.
+	 * @param bf Optional bean filter to apply. Can be <jk>null</jk>.
+	 * @param pNames Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
+	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk>.
+	 * @param propertyNamerOverride Optional namer that, when non-<jk>null</jk>, takes precedence over the bean filter
+	 * 	and {@link BeanConfigContext#getPropertyNamer()} for deriving property names.
+	 */
+	protected BeanMeta(BeanInfo<T> cm, BeanFilter bf, String[] pNames, ClassInfo implClass, PropertyNamer propertyNamerOverride) {
+		this(cm, cm, cm.getBeanConfigContext(), cm.getMarshallingContext(), bf, pNames, implClass, propertyNamerOverride);
 	}
 
 	/**
@@ -416,19 +467,20 @@ public class BeanMeta<T> {
 	 * @param config The bean-modeling configuration.  Must not be <jk>null</jk>.
 	 */
 	protected BeanMeta(Class<T> beanClass, BeanConfigContext config) {
-		this(null, info(assertArgNotNull("beanClass", beanClass)), assertArgNotNull("config", config), null, null, null, null);
+		this(null, info(assertArgNotNull("beanClass", beanClass)), assertArgNotNull("config", config), null, null, null, null, null);
 	}
 
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for bean metadata initialization
-		"java:S107"   // 7 parameters needed to support both construction paths
+		"java:S107"   // 8 parameters needed to support both construction paths plus the optional namer override
 	})
-	private BeanMeta(BeanInfo<T> cm, ClassInfo ci0, BeanConfigContext config, Object mc, BeanFilter bf, String[] pNames, ClassInfo implClass) {
+	private BeanMeta(BeanInfo<T> cm, ClassInfo ci0, BeanConfigContext config, Object mc, BeanFilter bf, String[] pNames, ClassInfo implClass, PropertyNamer propertyNamerOverride) {
 		classMeta = cm;
 		classInfo = ci0;
 		this.config = config;
 		marshallingContext = mc;
 		beanFilter = bf;
+		this.propertyNamerOverride = propertyNamerOverride;
 		implClassConstructor = o(implClass).map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null);
 		fluentSetters = config.isFindFluentSetters() || (nn(bf) && bf.isFluentSetters());
 		stopClass = o(bf).map(x -> x.getStopClass()).orElse(info(Object.class));
@@ -449,7 +501,7 @@ public class BeanMeta<T> {
 		var propertyBeanRegistriesTemp = CollectionUtils.<BeanPropertyMeta,BeanRegistryLookup>map();  // Per-property BeanRegistry side-map.
 		var unsortedPropertiesTemp = false;
 		var btList = ap.find(BeanType.class, classInfo);
-		var propertyNamer = o(bf).map(x -> x.getPropertyNamer()).orElse(config.getPropertyNamer());
+		var propertyNamer = effectivePropertyNamer();
 
 		// resolveTypePropertyName may return null on the commons-side NOOP path; fall back to the configured default.
 		var resolvedTypePropertyName = config.getBeanMetaInitializer().resolveTypePropertyName(config, classInfo);
@@ -1295,7 +1347,7 @@ public class BeanMeta<T> {
 		var ap = config.getAnnotationProvider();
 		var ci = classInfo;
 		var v = config.getBeanMethodVisibility();
-		var pn = o(beanFilter).map(x -> x.getPropertyNamer()).orElse(config.getPropertyNamer());
+		var pn = effectivePropertyNamer();
 		var suppressedFromBeanIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(pn);
 
 		classHierarchy.get().forEach(c2 -> {

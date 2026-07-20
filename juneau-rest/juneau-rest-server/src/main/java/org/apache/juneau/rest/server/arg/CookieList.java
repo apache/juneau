@@ -38,7 +38,9 @@ public class CookieList extends ArrayList<Cookie> {
 	/**
 	 * Static creator.
 	 *
-	 * @param values The values to set in the cookie list. Must not be <jk>null</jk>.
+	 * @param values
+	 * 	The values to set in the cookie list.
+	 * 	<br>Can be <jk>null</jk> (e.g. from {@link jakarta.servlet.http.HttpServletRequest#getCookies()} on a cookie-less request), treated as an empty list.
 	 * @return A new cookie list.
 	 */
 	public static CookieList of(Cookie[] values) {
@@ -48,9 +50,11 @@ public class CookieList extends ArrayList<Cookie> {
 	/**
 	 * Constructor.
 	 *
-	 * @param values The values to set in the cookie list. Must not be <jk>null</jk>.
+	 * @param values
+	 * 	The values to set in the cookie list.
+	 * 	<br>Can be <jk>null</jk> (e.g. from {@link jakarta.servlet.http.HttpServletRequest#getCookies()} on a cookie-less request), treated as an empty list.
 	 */
 	public CookieList(Cookie[] values) {
-		super(l(values));
+		super(values == null ? l() : l(values));
 	}
 }

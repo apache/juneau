@@ -550,20 +550,30 @@ public class ConfigMap implements ConfigStoreListener {
 	}
 
 	/**
-	 * Not implemented.
+	 * Removes the import statement with the specified name.
+	 *
+	 * <p>
+	 * The imported config is detached from this map: its entries are no longer visible through this map and its
+	 * change-propagation listeners are unregistered.  No-op if no matching import exists.
 	 *
 	 * @param section
-	 * 	The section name where to place the import statement.
+	 * 	The section name where the import statement was placed.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Use blank for the default section.
 	 * @param importName
 	 * 	The import name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
-	 * @throws UnsupportedOperationException Always - this operation is not implemented.
 	 */
 	public ConfigMap removeImport(String section, String importName) {
-		throw uoex();
+		checkSectionName(section);
+		try (var x = lock.write()) {
+			imports.stream().filter(y -> y.getConfigName().equals(importName)).findFirst().ifPresent(y -> {
+				y.unregisterAll();
+				imports.remove(y);
+			});
+		}
+		return this;
 	}
 
 	/**
@@ -631,7 +641,12 @@ public class ConfigMap implements ConfigStoreListener {
 	}
 
 	/**
-	 * Not implemented.
+	 * Creates the specified import statement if it doesn't already exist.
+	 *
+	 * <p>
+	 * The named config is resolved through this map's {@link ConfigStore store} and attached to this map so that its
+	 * entries become visible through this map and subsequent changes to it are propagated to this map's listeners.
+	 * No-op if an import with the same name already exists.
 	 *
 	 * @param section
 	 * 	The section name where to place the import statement.
@@ -644,10 +659,18 @@ public class ConfigMap implements ConfigStoreListener {
 	 * 	Optional comment and blank lines to add immediately before the import statement.
 	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
 	 * @return This object.
-	 * @throws UnsupportedOperationException Always - this operation is not implemented.
 	 */
 	public ConfigMap setImport(String section, String importName, List<String> preLines) {
-		throw uoex();
+		checkSectionName(section);
+		if (! isValidConfigName(importName))
+			throw iaex("Invalid import config name: '%s'", importName);
+		try (var x = lock.write()) {
+			if (imports.stream().noneMatch(y -> y.getConfigName().equals(importName)))
+				imports.add(new Import(store.getMap(importName, format)).register(listeners));
+		} catch (IOException e) {
+			throw toRex(e);
+		}
+		return this;
 	}
 
 	/**

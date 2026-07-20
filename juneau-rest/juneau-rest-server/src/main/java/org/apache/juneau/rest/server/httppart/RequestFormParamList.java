@@ -279,6 +279,8 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParamList addDefault(List<? extends HttpPart> pairs) {
+		if (pairs == null)
+			return this;
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);

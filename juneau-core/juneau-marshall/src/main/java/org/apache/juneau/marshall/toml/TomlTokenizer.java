@@ -149,7 +149,8 @@ class TomlTokenizer {
 	}
 
 	ParseException parseException(String message) {
-		return new ParseException(message + " at line " + line + ", column " + column);
+		// Pass the raw message as a %s arg so any literal '%' in echoed input can't be interpreted as a printf directive.
+		return new ParseException("%s at line %s, column %s", message, line, column);
 	}
 
 	String readBareKey() throws IOException, ParseException {
@@ -557,30 +558,30 @@ class TomlTokenizer {
 			try {
 				return java.time.OffsetDateTime.parse(s.replace(" ", "T"));
 			} catch (Exception e) {
-				throw new ParseException("Invalid offset date-time: " + s, e);
+				throw new ParseException(e, "Invalid offset date-time: %s", s);
 			}
 		}
 		if (s.contains("T") || s.contains(" ")) {
 			try {
 				return java.time.LocalDateTime.parse(s.replace(" ", "T"));
 			} catch (Exception e) {
-				throw new ParseException("Invalid local date-time: " + s, e);
+				throw new ParseException(e, "Invalid local date-time: %s", s);
 			}
 		}
 		if (s.contains("-") && s.length() == 10) {
 			try {
 				return java.time.LocalDate.parse(s);
 			} catch (Exception e) {
-				throw new ParseException("Invalid local date: " + s, e);
+				throw new ParseException(e, "Invalid local date: %s", s);
 			}
 		}
 		if (s.contains(":")) {
 			try {
 				return java.time.LocalTime.parse(s);
 			} catch (Exception e) {
-				throw new ParseException("Invalid local time: " + s, e);
+				throw new ParseException(e, "Invalid local time: %s", s);
 			}
 		}
-		throw new ParseException("Invalid date-time: " + s);
+		throw new ParseException("Invalid date-time: %s", s);
 	}
 }

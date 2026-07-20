@@ -129,6 +129,8 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes addDefault(List<NamedAttribute> pairs) {
+		if (pairs == null)
+			return this;
 		for (var p : pairs)
 			if (sreq.getAttribute(p.getName()) == null) {
 				Object o = p.getValue();
@@ -158,6 +160,8 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes addDefault(NamedAttributeMap pairs) {
+		if (pairs == null)
+			return this;
 		for (var p : pairs.values())
 			if (sreq.getAttribute(p.getName()) == null) {
 				Object o = p.getValue();

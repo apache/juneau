@@ -158,6 +158,15 @@ class RequestAttributes_Test extends TestBase {
 			var s = attrs.toString();
 			return "len=" + (!s.isEmpty()) + ",hasTs=" + s.contains("ts");
 		}
+
+		// Regression: addDefault(null) NPE'd for all three "Can be null" overloads.
+		@RestGet(path="/addDefaultNullIsNoOp")
+		public String addDefaultNullIsNoOp(RequestAttributes attrs) {
+			attrs.addDefault((NamedAttribute[])null);
+			attrs.addDefault((java.util.List<NamedAttribute>)null);
+			attrs.addDefault((NamedAttributeMap)null);
+			return "ok";
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -212,5 +221,9 @@ class RequestAttributes_Test extends TestBase {
 
 	@Test void a11_toString_isInformative() throws Exception {
 		client().get("/toString").run().assertContent("len=true,hasTs=true");
+	}
+
+	@Test void a12_addDefault_nullIsNoOp() throws Exception {
+		client().get("/addDefaultNullIsNoOp").run().assertContent("ok");
 	}
 }

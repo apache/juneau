@@ -1219,16 +1219,39 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person(), PropertyNamerDLC.<jsf>INSTANCE</jsf>);
 	 * </p>
 	 *
+	 * <p>
+	 * The supplied {@code propertyNamer} controls the names of the properties exposed by the returned
+	 * {@link BeanMap}.  For example, passing {@link PropertyNamerDLC#INSTANCE} renames a <c>fooBar</c> property to
+	 * <c>foo-bar</c>.
+	 *
+	 * <p>
+	 * When {@code propertyNamer} is <jk>null</jk> or equal to this session's {@link #getPropertyNamer() default
+	 * namer}, the shared, {@code Class}-keyed {@link BeanMeta} cache is used exactly as by {@link #toBeanMap(Object)}.
+	 * Otherwise a fresh, non-cached {@link BeanMeta} is built with the supplied namer so the default cache is never
+	 * polluted with alternate-namer property keys.
+	 *
 	 * @param <T> The class of the object being wrapped.
 	 * @param o The object to wrap in a map interface.  Must not be null.
-	 * @param propertyNamer The property namer to use.
+	 * @param propertyNamer The property namer to use.  Can be <jk>null</jk> to use the session's default namer.
 	 * @return The wrapped object.
 	 */
-	@SuppressWarnings({
-		"java:S1172" // Parameter reserved for future property naming strategy support
-	})
 	public final <T> BeanMap<T> toBeanMap(T o, PropertyNamer propertyNamer) {
-		return this.toBeanMap(o, (Class<T>)o.getClass());
+		assertArgNotNull(ARG_o, o);
+		if (o instanceof BeanMap o2)
+			return o2;
+
+		// Preserve the cached default-namer path when no override (or the override matches the default) is supplied.
+		if (propertyNamer == null || propertyNamer.equals(getPropertyNamer()))
+			return this.toBeanMap(o, (Class<T>)o.getClass());
+
+		var c = (Class<T>)o.getClass();
+		var cm = getClassMeta(c);
+		var m = cm.getBeanMeta(propertyNamer);
+		if (m == null)
+			throw brex(c, "Class is not a bean.  Reason='%s'", cm.getNotABeanReason());
+		var bm = new BeanMap<>(o, m);
+		bm.setBeanSession(this);
+		return bm;
 	}
 
 	/**

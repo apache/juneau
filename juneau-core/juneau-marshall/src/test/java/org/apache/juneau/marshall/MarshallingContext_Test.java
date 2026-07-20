@@ -713,4 +713,26 @@ class BeanContext_Test extends TestBase {
 		var cm = bc.getClassMeta(List.class, String.class);
 		assertNotNull(cm);
 	}
+
+	//====================================================================================================
+	// Functional swap(...) builder overloads.
+	// Regression: the 3-arg serialize-only swap(nc,sc,swapFunction) overload used to delegate through
+	// the 4-arg overload's assertArgNotNull(unswapFunction) and therefore threw on EVERY call, so a
+	// serialize-only swap could never be registered.
+	//====================================================================================================
+
+	public static class PSwapBean {
+		public String value;
+		public PSwapBean(String value) { this.value = value; }
+	}
+
+	@Test void p01_functionalSwap_serializeOnly() throws Exception {
+		var s = Json5Serializer.create().swap(PSwapBean.class, String.class, x -> x.value).build();
+		assertEquals("'foo'", s.write(new PSwapBean("foo")));
+	}
+
+	@Test void p02_functionalSwap_twoWay() throws Exception {
+		var s = Json5Serializer.create().swap(PSwapBean.class, String.class, x -> x.value, PSwapBean::new).build();
+		assertEquals("'foo'", s.write(new PSwapBean("foo")));
+	}
 }

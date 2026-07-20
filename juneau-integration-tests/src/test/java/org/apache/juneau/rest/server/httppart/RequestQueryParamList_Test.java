@@ -451,6 +451,14 @@ class RequestQueryParamList_Test extends TestBase {
 				return "iae:" + e.getMessage().contains("name");
 			}
 		}
+		// Regression: addDefault(null) NPE'd — "Can be null" pairs must be tolerated as an empty default set.
+		@RestGet(path="/addDefaultNullIsNoOp")
+		public String addDefaultNullIsNoOp(RequestQueryParamList q) {
+			var before = q.size();
+			q.addDefault((HttpPart[])null);
+			q.addDefault((java.util.List<? extends HttpPart>)null);
+			return "size=" + before + "->" + q.size();
+		}
 	}
 
 	@Test
@@ -464,5 +472,11 @@ class RequestQueryParamList_Test extends TestBase {
 		c.get("/removeNullThrows").run().assertContent("iae:true");
 		c.get("/getFirstNullThrows").run().assertContent("iae:true");
 		c.get("/getLastNullThrows").run().assertContent("iae:true");
+	}
+
+	@Test
+	void b02_addDefaultNullIsNoOp() throws Exception {
+		var c = MockRestClient.build(B.class);
+		c.get("/addDefaultNullIsNoOp?x=1").run().assertContent("size=1->1");
 	}
 }

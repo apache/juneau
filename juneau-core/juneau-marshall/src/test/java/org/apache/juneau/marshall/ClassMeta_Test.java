@@ -320,4 +320,15 @@ class ClassMeta_Test extends TestBase {
 		c3.forEachAnnotation(A.class, x -> x.value() == 5, x -> l4.add(x.value()));
 		assertList(l4, "5");
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// same(null)
+	// Regression: same(null) returned false for non-primitive types but NPE'd for primitive types
+	// (the primitive branch dereferenced the null arg via cat.same(cm.cat)).  Both must return false now.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void same_nullArg() {
+		assertFalse(bc.getClassMeta(String.class).same(null));
+		assertFalse(bc.getClassMeta(int.class).same(null));
+	}
 }

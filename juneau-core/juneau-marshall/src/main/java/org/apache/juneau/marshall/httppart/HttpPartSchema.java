@@ -653,7 +653,9 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder collectionFormat(HttpPartCollectionFormat value) {
-			collectionFormat = value;
+			// Guard null for parity with the String overload (which ine()-guards); a null must not overwrite the field.
+			if (value != null)
+				collectionFormat = value;
 			return this;
 		}
 
@@ -1176,7 +1178,9 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder format(HttpPartFormat value) {
-			format = value;
+			// Guard null for parity with the String overload (which ine()-guards); a null must not overwrite the field.
+			if (value != null)
+				format = value;
 			return this;
 		}
 
@@ -2393,7 +2397,9 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder type(HttpPartDataType value) {
-			type = value;
+			// Guard null for parity with the String overload (which ine()-guards); a null must not overwrite the field.
+			if (value != null)
+				type = value;
 			return this;
 		}
 

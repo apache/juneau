@@ -239,6 +239,8 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 	 * @return This object.
 	 */
 	public RequestQueryParamList addDefault(List<? extends HttpPart> pairs) {
+		if (pairs == null)
+			return this;
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);

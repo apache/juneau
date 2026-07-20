@@ -3336,7 +3336,11 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			return swap(normalClass, swappedClass, swapFunction, null);
+			assertArgNotNull(ARG_normalClass, normalClass);
+			assertArgNotNull(ARG_swappedClass, swappedClass);
+			assertArgNotNull(ARG_swapFunction, swapFunction);
+			swaps().add(0, new FunctionalSwap<>(normalClass, swappedClass, swapFunction, null));
+			return this;
 		}
 
 		/**

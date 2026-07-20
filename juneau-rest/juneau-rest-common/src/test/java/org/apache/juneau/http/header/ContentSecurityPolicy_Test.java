@@ -146,6 +146,13 @@ class ContentSecurityPolicy_Test extends TestBase {
 		@Test void b10_blankDirectiveNameThrows() {
 			assertThrowsWithMessage(IllegalArgumentException.class, "directive name must not be blank", () -> create().directive("  ", SELF));
 		}
+
+		@Test void b11_nullSourcesRendersBareDirective() {
+			// Regression: directive(name, (String[])null) NPE'd on Arrays.asList((String[])null); a null sources
+			// array must be treated the same as empty (renders the bare directive name).
+			var x = create().directive("upgrade-insecure-requests", (String[])null).build();
+			assertEquals("upgrade-insecure-requests", x);
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

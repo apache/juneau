@@ -19,6 +19,7 @@ package org.apache.juneau.marshall;
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -306,7 +307,11 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
 	protected void onError(Throwable t, String msg, Object...args) {
-		super.addWarning(msg, args);
+		// Honor the throwable per the @param contract: fold its localized message into the recorded warning when present.
+		if (t == null)
+			super.addWarning(msg, args);
+		else
+			super.addWarning("%s%n\tCaused by: %s", f(msg, args), localizedMessage(t));
 	}
 
 	/**

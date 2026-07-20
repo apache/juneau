@@ -65,7 +65,7 @@ public class McpServerConfig {
 	/**
 	 * MCP protocol revision returned by {@code initialize}.
 	 *
-	 * @return The protocol version.
+	 * @return The protocol version, or <jk>null</jk> if not set.
 	 */
 	public String getProtocolVersion() {
 		return protocolVersion;
@@ -74,7 +74,7 @@ public class McpServerConfig {
 	/**
 	 * Sets the protocol revision.
 	 *
-	 * @param protocolVersion The new value.
+	 * @param protocolVersion The new value. Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public McpServerConfig setProtocolVersion(String protocolVersion) {

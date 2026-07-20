@@ -477,6 +477,15 @@ public class JsonSchema_Test extends TestBase {
 		assertThrows(RuntimeException.class, () -> x.setAdditionalProperties("invalid"));
 	}
 
+	@Test void b23e2_getAdditionalPropertiesAsBooleanFromGetter() {
+		// Regression: getAdditionalProperties() used to return the additionalItems backing field, so a
+		// boolean additionalProperties could never be read back and could be masked by additionalItems.
+		var x = new JsonSchema()
+			.setAdditionalItems(Boolean.FALSE)
+			.setAdditionalProperties(Boolean.TRUE);
+		assertEquals(Boolean.TRUE, x.getAdditionalProperties());
+	}
+
 	@Test void b23f_setItems_jsonSchemaArray_path() {
 		var x = new JsonSchema().setItems(new JsonSchemaArray(new JsonSchemaRef("http://a")));
 		assertNotNull(x.getItemsAsSchemaArray());

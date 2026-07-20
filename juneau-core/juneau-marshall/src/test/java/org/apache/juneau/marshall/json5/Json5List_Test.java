@@ -23,6 +23,8 @@ import java.io.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -122,6 +124,17 @@ class Json5List_Test extends TestBase {
 	@Test void a06_ctorCharSequenceUsesJson5Parser() throws Exception {
 		var l = new Json5List("[1,2,3]");
 		assertEquals(3, l.size());
+	}
+
+	@Test void a07b_ofStringReaderHonorsParser() throws Exception {
+		// Regression: ofString(Reader, Parser) ignored its Parser p and always used Json5Parser.DEFAULT.
+		// Json5Parser allows JS comments; the strict JsonParser rejects them ("Javascript comment detected"),
+		// so honoring p makes the strict parser throw where the ignored-parser path silently succeeded.
+		var json5WithComment = "[1,/*c*/2,3]";
+		assertEquals(3, Json5List.ofString(new StringReader(json5WithComment), Json5Parser.DEFAULT).size());
+		assertThrows(ParseException.class, () -> Json5List.ofString(new StringReader(json5WithComment), JsonParser.DEFAULT));
+		// The CharSequence overload already honored p — the Reader overload now matches it.
+		assertThrows(ParseException.class, () -> Json5List.ofString(json5WithComment, JsonParser.DEFAULT));
 	}
 
 	@Test void a07_ctorReaderUsesJson5Parser() throws Exception {

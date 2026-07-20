@@ -38,7 +38,7 @@ import org.apache.juneau.rest.server.*;
  * <ul>
  * 	<li class='ja'>{@link Rest#debug()}
  * 	<li class='ja'>{@link RestOp#debug()}
- * 	<li class='ja'>{@link Rest#debug()}
+ * 	<li class='jm'>{@link Debug#on()}
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>

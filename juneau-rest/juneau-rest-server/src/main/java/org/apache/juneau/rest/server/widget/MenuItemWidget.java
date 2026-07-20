@@ -60,7 +60,7 @@ public abstract class MenuItemWidget extends Widget {
 	 *
 	 * <p class='bjava'>
 	 * 	<ja>@Override</ja>
-	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest <jv>req</jv>) {
+	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
 	 * 		<jk>return</jk> <js>""</js>
 	 * 			+ <js>"\n	var xhr = new XMLHttpRequest();"</js>
 	 * 			+ <js>"\n	xhr.open('GET', '/petstore/pet?s=status=AVAILABLE&amp;v=id,name', true);"</js>
@@ -88,8 +88,8 @@ public abstract class MenuItemWidget extends Widget {
 	 *
 	 * <p class='bjava'>
 	 * 	<ja>@Override</ja>
-	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
-	 * 		<jk>return</jk> loadScript(<js>"AddOrderMenuItem_beforeShow.js"</js>);
+	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
+	 * 		<jk>return</jk> loadScript(<jv>req</jv>, <js>"AddOrderMenuItem_beforeShow.js"</js>);
 	 * 	}
 	 * </p>
 	 *

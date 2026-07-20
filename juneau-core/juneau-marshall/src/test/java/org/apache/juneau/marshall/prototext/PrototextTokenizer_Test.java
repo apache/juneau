@@ -613,4 +613,22 @@ class PrototextTokenizer_Test {
 		assertThrows(ParseException.class, () ->
 			PrototextParser.DEFAULT.read("n: 0777777777777777777777777", JsonMap.class));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// parseException printf-injection safety.
+	// A literal '%' echoed from an offending token must survive verbatim and must not be interpreted as a
+	// printf directive (which would previously mangle the message or throw).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void c01_parseExceptionLiteralPercentNotFormatted() {
+		var t = tok("");
+		var ex = t.parseException("Unexpected character: %");
+		assertTrue(ex.getMessage().startsWith("Unexpected character: % at line "));
+	}
+
+	@Test void c02_parseExceptionUnexpectedCharPercent() {
+		// Drives an actual parse error whose echoed character is a literal '%'.
+		var ex = assertThrows(ParseException.class, () -> tok("%").peek());
+		assertTrue(ex.getMessage().contains("Unexpected character: %"));
+	}
 }

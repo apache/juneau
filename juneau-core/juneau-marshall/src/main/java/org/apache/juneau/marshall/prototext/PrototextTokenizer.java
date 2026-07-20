@@ -545,7 +545,8 @@ class PrototextTokenizer {
 	}
 
 	ParseException parseException(String message) {
-		return new ParseException(message + " at line " + line + ", column " + column);
+		// Pass the raw message as a %s arg so any literal '%' in echoed input can't be interpreted as a printf directive.
+		return new ParseException("%s at line %s, column %s", message, line, column);
 	}
 
 	private static boolean isLetterOrUnderscore(int c) {

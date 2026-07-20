@@ -117,7 +117,7 @@ public class RemoteOperationArg {
 	/**
 	 * Returns the HTTP part serializer to use for serializing this part.
 	 *
-	 * @return The HTTP part serializer, or the default if not specified.
+	 * @return The HTTP part serializer, or an empty {@link Optional} if not specified.
 	 */
 	public Optional<HttpPartSerializer> getSerializer() { return serializer; }
 

@@ -77,7 +77,8 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 
 	@Override /* Overridden from Comparable */
 	public int compareTo(ResourceDescription o) {
-		return getName().compareTo(o.getName());
+		// Null-safe: the no-arg ctor and null-accepting ctors leave 'name' null (consistent with the null-safe equals()).
+		return cmp(getName(), o.getName());
 	}
 
 	/**
@@ -120,7 +121,8 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		return getName().hashCode();
+		// Null-safe: the no-arg ctor and null-accepting ctors leave 'name' null (consistent with the null-safe equals()).
+		return getName() == null ? 0 : getName().hashCode();
 	}
 
 	/**
