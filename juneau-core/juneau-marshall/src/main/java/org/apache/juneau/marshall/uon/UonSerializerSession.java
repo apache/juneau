@@ -206,7 +206,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return new UonWriter(this, out, isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
 	}
 
-	private SerializerWriter writeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+	private SerializerWriter<?> writeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 
 		if (! plainTextParams)
 			out.append('(');
@@ -248,7 +248,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		"rawtypes", // Raw types necessary for generic collection/map serialization
 		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
 	})
-	private SerializerWriter writeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter<?> writeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 
 		var elementType = type.getElementType();
 
@@ -269,7 +269,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return out;
 	}
 
-	private SerializerWriter writeStreamable(UonWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter<?> writeStreamable(UonWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
 
 		var elementType = type.getElementType();
 
@@ -294,7 +294,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		"rawtypes", // Raw types necessary for generic collection/map serialization
 		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
 	})
-	private SerializerWriter writeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter<?> writeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
 		var valueType = type.getValueType();
@@ -385,7 +385,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		"rawtypes", // Raw types necessary for generic type handling
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 	})
-	protected SerializerWriter writeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
+	protected SerializerWriter<?> writeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null) {
 			out.appendObject(null, false);

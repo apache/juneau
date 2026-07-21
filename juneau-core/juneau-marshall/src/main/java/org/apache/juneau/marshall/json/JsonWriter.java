@@ -39,9 +39,10 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource" // Writer resource managed by calling code
+	"resource", // Writer resource managed by calling code
+	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 })
-public class JsonWriter extends SerializerWriter {
+public abstract class JsonWriter<SELF extends JsonWriter<SELF>> extends SerializerWriter<SELF> {
 
 	// Characters that trigger special handling of serializing attribute values.
 	// @formatter:off
@@ -109,74 +110,8 @@ public class JsonWriter extends SerializerWriter {
 	@SuppressWarnings({
 		"java:S107" // Factory method mirrors the constructor; all 8 parameters are distinct JSON writer configuration settings
 	})
-	public static JsonWriter create(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean simpleAttrs, boolean trimStrings, UriResolver uriResolver) {
-		return new JsonWriter(out, useWhitespace, maxIndent, escapeSolidus, quoteChar, simpleAttrs, trimStrings, uriResolver);
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter append(char c) {
-		super.append(c);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter append(char[] value) {
-		super.append(value);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter append(int indent, char c) {
-		super.append(indent, c);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter append(int indent, String text) {
-		super.append(indent, text);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter append(Object text) {
-		super.append(text);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter append(String text) {
-		super.append(text);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter appendIf(boolean b, char c) {
-		super.appendIf(b, c);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter appendIf(boolean b, String text) {
-		super.appendIf(b, text);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter appendln(int indent, String text) {
-		super.appendln(indent, text);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter appendln(String text) {
-		super.appendln(text);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter appendUri(Object value) {
-		super.appendUri(value);
-		return this;
+	public static JsonWriter<?> create(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean simpleAttrs, boolean trimStrings, UriResolver uriResolver) {
+		return new BasicJsonWriter(out, useWhitespace, maxIndent, escapeSolidus, quoteChar, simpleAttrs, trimStrings, uriResolver);
 	}
 
 	/**
@@ -189,7 +124,7 @@ public class JsonWriter extends SerializerWriter {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for JSON attribute writing with encoding
 	})
-	public JsonWriter attr(String s) {
+	public SELF attr(String s) {
 
 		if (trimStrings)
 			s = trim(s);
@@ -227,55 +162,7 @@ public class JsonWriter extends SerializerWriter {
 		else
 			w(s);
 
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter cr(int depth) {
-		super.cr(depth);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter cre(int depth) {
-		super.cre(depth);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter i(int indent) {
-		super.i(indent);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter ie(int indent) {
-		super.ie(indent);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter nl(int indent) {
-		super.nl(indent);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter nlIf(boolean flag, int indent) {
-		super.nlIf(flag, indent);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter q() {
-		super.q();
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter s() {
-		super.s();
-		return this;
+		return self();
 	}
 
 	/**
@@ -284,16 +171,10 @@ public class JsonWriter extends SerializerWriter {
 	 * @param indent The number of spaces to indent.
 	 * @return This object.
 	 */
-	public JsonWriter s(int indent) {
+	public SELF s(int indent) {
 		if (indent <= maxIndent)
 			super.s();
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter sIf(boolean flag) {
-		super.sIf(flag);
-		return this;
+		return self();
 	}
 
 	/**
@@ -302,10 +183,10 @@ public class JsonWriter extends SerializerWriter {
 	 * @param depth The current indentation depth.
 	 * @return This object.
 	 */
-	public JsonWriter smi(int depth) {
+	public SELF smi(int depth) {
 		if (depth > maxIndent)
 			super.s();
-		return this;
+		return self();
 	}
 
 	/**
@@ -318,9 +199,9 @@ public class JsonWriter extends SerializerWriter {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for JSON string value writing with escaping
 	})
-	public JsonWriter stringValue(String s) {
+	public SELF stringValue(String s) {
 		if (s == null)
-			return this;
+			return self();
 		boolean doConvert = false;
 		for (var i = 0; i < s.length() && ! doConvert; i++) {
 			var c = s.charAt(i);
@@ -355,7 +236,7 @@ public class JsonWriter extends SerializerWriter {
 			}
 		}
 		q();
-		return this;
+		return self();
 	}
 
 	/**
@@ -364,19 +245,7 @@ public class JsonWriter extends SerializerWriter {
 	 * @param uri The URI to append to the output.
 	 * @return This object.
 	 */
-	public SerializerWriter uriValue(Object uri) {
+	public SELF uriValue(Object uri) {
 		return stringValue(uriResolver.resolve(uri));
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter w(char value) {
-		super.w(value);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter w(String value) {
-		super.w(value);
-		return this;
 	}
 }

@@ -102,11 +102,11 @@ public class Json5lSerializerSession extends JsonlSerializerSession {
 	}
 
 	@Override /* Overridden from JsonSerializerSession */
-	protected JsonWriter getJsonWriter(SerializerPipe out) {
+	protected JsonWriter<?> getJsonWriter(SerializerPipe out) {
 		if (! json5Sugar)
 			return super.getJsonWriter(out);
 		var output = out.getRawOutput();
-		if (output instanceof JsonWriter output2)
+		if (output instanceof JsonWriter<?> output2)
 			return output2;
 		var w = JsonWriter.create(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), SUGAR_QUOTE, true, isTrimStrings(), getUriResolver());
 		out.setWriter(w);

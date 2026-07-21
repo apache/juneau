@@ -311,11 +311,11 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The output target object wrapped in an {@link XmlWriter}.
 	 */
-	public final XmlWriter getXmlWriter(SerializerPipe out) {
+	public final XmlWriter<?> getXmlWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
-		if (output instanceof XmlWriter output2)
+		if (output instanceof XmlWriter<?> output2)
 			return output2;
-		var w = new XmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver(), isEnableNamespaces(), defaultNamespace);
+		var w = new BasicXmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver(), isEnableNamespaces(), defaultNamespace);
 		out.setWriter(w);
 		return w;
 	}
@@ -392,7 +392,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
-	private ContentResult writeBeanMap(XmlWriter out, BeanMap<?> m, Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws SerializeException {
+	private ContentResult writeBeanMap(XmlWriter<?> out, BeanMap<?> m, Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws SerializeException {
 		boolean hasChildren = false;
 		var bm = m.getMeta();
 
@@ -536,7 +536,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		return isMixedOrText ? CR_MIXED : CR_ELEMENTS;
 	}
 
-	private XmlWriter writeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws SerializeException {
+	private XmlWriter<?> writeCollection(XmlWriter<?> out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws SerializeException {
 
 		var eeType = eType.getElementType();
 
@@ -571,7 +571,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		return out;
 	}
 
-	private XmlWriter writeStreamable(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws SerializeException {
+	private XmlWriter<?> writeStreamable(XmlWriter<?> out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws SerializeException {
 
 		var eeType = eType.getElementType();
 
@@ -600,7 +600,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		return out;
 	}
 
-	private ContentResult writeMap(XmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws SerializeException {
+	private ContentResult writeMap(XmlWriter<?> out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws SerializeException {
 
 		var keyType = eKeyType == null ? sType.getKeyType() : eKeyType;
 		var valueType = eValueType == null ? sType.getValueType() : eValueType;
@@ -843,7 +843,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 		"java:S107", // Method has many parameters; acceptable for builder/configuration methods
 	})
-	protected ContentResult writeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
+	protected ContentResult writeAnything(XmlWriter<?> out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
 		boolean isMixedOrText, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {
 
 		JsonType type = null;              // The type string (e.g. <type> or <x x='type'>

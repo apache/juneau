@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S135",  // Multiple break/continue necessary for isNumber char validation loop
 	"resource"    // Writer resource managed by calling code
 })
-public class HoconWriter extends SerializerWriter {
+public class HoconWriter extends SerializerWriter<HoconWriter> {
 
 	private static final AsciiSet QUOTE_KEY_CHARS = AsciiSet.of(" \t\n\r{},:[]=\"'#/");
 	// HOCON parser-meaningful chars that must be quoted in a value to avoid mis-tokenization:
@@ -327,28 +327,4 @@ public class HoconWriter extends SerializerWriter {
 		w("\"\"\"");
 		return this;
 	}
-
-	// Override return types for chaining
-	@Override public HoconWriter append(char c) { super.append(c); return this; }
-	@Override public HoconWriter append(char[] value) { super.append(value); return this; }
-	@Override public HoconWriter append(int indent, char c) { super.append(indent, c); return this; }
-	@Override public HoconWriter append(int indent, String text) { super.append(indent, text); return this; }
-	@Override public HoconWriter append(Object text) { super.append(text); return this; }
-	@Override public HoconWriter append(String text) { super.append(text); return this; }
-	@Override public HoconWriter appendIf(boolean b, char c) { super.appendIf(b, c); return this; }
-	@Override public HoconWriter appendIf(boolean b, String text) { super.appendIf(b, text); return this; }
-	@Override public HoconWriter appendln(int indent, String text) { super.appendln(indent, text); return this; }
-	@Override public HoconWriter appendln(String text) { super.appendln(text); return this; }
-	@Override public HoconWriter appendUri(Object value) { super.appendUri(value); return this; }
-	@Override public HoconWriter cr(int depth) { super.cr(depth); return this; }
-	@Override public HoconWriter cre(int depth) { super.cre(depth); return this; }
-	@Override public HoconWriter i(int indent) { super.i(indent); return this; }
-	@Override public HoconWriter ie(int indent) { super.ie(indent); return this; }
-	@Override public HoconWriter nl(int indent) { super.nl(indent); return this; }
-	@Override public HoconWriter nlIf(boolean flag, int indent) { super.nlIf(flag, indent); return this; }
-	@Override public HoconWriter q() { super.q(); return this; }
-	@Override public HoconWriter s() { super.s(); return this; }
-	@Override public HoconWriter sIf(boolean flag) { super.sIf(flag); return this; }
-	@Override public HoconWriter w(char value) { super.w(value); return this; }
-	@Override public HoconWriter w(String value) { super.w(value); return this; }
 }

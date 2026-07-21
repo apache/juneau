@@ -38,9 +38,10 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource" // Writer resource managed by calling code
+	"resource", // Writer resource managed by calling code
+	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 })
-public class XmlWriter extends SerializerWriter {
+public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends SerializerWriter<SELF> {
 
 	private String defaultNsPrefix;
 	private boolean enableNs;
@@ -71,80 +72,10 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param w Writer being copied.
 	 */
-	public XmlWriter(XmlWriter w) {
+	public XmlWriter(XmlWriter<?> w) {
 		super(w);
 		this.enableNs = w.enableNs;
 		this.defaultNsPrefix = w.defaultNsPrefix;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter append(char c) {
-		try {
-			out.write(c);
-		} catch (IOException e) {
-			throw new SerializeException(e);
-		}
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter append(char[] value) {
-		super.append(value);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter append(int indent, char c) {
-		super.append(indent, c);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter append(int indent, String text) {
-		super.append(indent, text);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter append(Object text) {
-		super.append(text);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter append(String text) {
-		super.append(text);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter appendIf(boolean flag, char value) {
-		super.appendIf(flag, value);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter appendIf(boolean flag, String value) {
-		super.appendIf(flag, value);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter appendln(int indent, String text) {
-		super.appendln(indent, text);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter appendln(String text) {
-		super.appendln(text);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter appendUri(Object value) {
-		super.appendUri(value);
-		return this;
 	}
 
 	/**
@@ -155,7 +86,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param value The attribute value.
 	 * @return This object.
 	 */
-	public XmlWriter attr(Namespace ns, String name, Object value) {
+	public SELF attr(Namespace ns, String name, Object value) {
 		return oAttr(ns == null ? null : ns.name, name).q().attrValue(value, false).q();
 	}
 
@@ -166,7 +97,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param value The attribute value.
 	 * @return This object.
 	 */
-	public XmlWriter attr(String name, Object value) {
+	public SELF attr(String name, Object value) {
 		return attr((String)null, name, value);
 	}
 
@@ -178,7 +109,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter attr(String name, Object value, boolean valNeedsEncoding) {
+	public SELF attr(String name, Object value, boolean valNeedsEncoding) {
 		return attr(null, name, value, valNeedsEncoding);
 	}
 
@@ -190,7 +121,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param value The attribute value.
 	 * @return This object.
 	 */
-	public XmlWriter attr(String ns, String name, Object value) {
+	public SELF attr(String ns, String name, Object value) {
 		return oAttr(ns, name).q().attrValue(value, false).q();
 	}
 
@@ -203,7 +134,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter attr(String ns, String name, Object value, boolean valNeedsEncoding) {
+	public SELF attr(String ns, String name, Object value, boolean valNeedsEncoding) {
 		return oAttr(ns, name).q().attrValue(value, valNeedsEncoding).q();
 	}
 
@@ -215,7 +146,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
 	 * @return This object.
 	 */
-	public XmlWriter attrUri(Namespace ns, String name, Object value) {
+	public SELF attrUri(Namespace ns, String name, Object value) {
 		return attr(ns, name, uriResolver.resolve(value));
 	}
 
@@ -226,7 +157,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param value The attribute value.  Can be any object whose <c>toString()</c> method returns a URI.
 	 * @return This object.
 	 */
-	public XmlWriter attrUri(String name, Object value) {
+	public SELF attrUri(String name, Object value) {
 		return attrUri((String)null, name, value);
 	}
 
@@ -238,7 +169,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
 	 * @return This object.
 	 */
-	public XmlWriter attrUri(String ns, String name, Object value) {
+	public SELF attrUri(String ns, String name, Object value) {
 		return attr(ns, name, uriResolver.resolve(value), true);
 	}
 
@@ -250,21 +181,9 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @return This object.
 	 */
-	public XmlWriter ceTag() {
+	public SELF ceTag() {
 		w('/').w('>');
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter cr(int depth) {
-		super.cr(depth);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter cre(int depth) {
-		super.cre(depth);
-		return this;
+		return self();
 	}
 
 	/**
@@ -275,9 +194,9 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @return This object.
 	 */
-	public XmlWriter cTag() {
+	public SELF cTag() {
 		w('>');
-		return this;
+		return self();
 	}
 
 	/**
@@ -287,7 +206,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter eTag(int indent, String name) {
+	public SELF eTag(int indent, String name) {
 		return i(indent).eTag(name);
 	}
 
@@ -299,7 +218,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter eTag(int indent, String ns, String name) {
+	public SELF eTag(int indent, String ns, String name) {
 		return i(indent).eTag(ns, name, false);
 	}
 
@@ -312,7 +231,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter eTag(int indent, String ns, String name, boolean needsEncoding) {
+	public SELF eTag(int indent, String ns, String name, boolean needsEncoding) {
 		return i(indent).eTag(ns, name, needsEncoding);
 	}
 
@@ -322,7 +241,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter eTag(String name) {
+	public SELF eTag(String name) {
 		return eTag(null, name);
 	}
 
@@ -333,7 +252,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter eTag(String ns, String name) {
+	public SELF eTag(String ns, String name) {
 		return eTag(ns, name, false);
 	}
 
@@ -345,7 +264,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter eTag(String ns, String name, boolean needsEncoding) {
+	public SELF eTag(String ns, String name, boolean needsEncoding) {
 		w('<').w('/');
 		if (enableNs && nn(ns) && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
 			w(ns).w(':');
@@ -354,31 +273,7 @@ public class XmlWriter extends SerializerWriter {
 		else
 			append(name);
 		w('>');
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter i(int indent) {
-		super.i(indent);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter ie(int indent) {
-		super.ie(indent);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter nl(int indent) {
-		super.nl(indent);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter nlIf(boolean flag, int indent) {
-		super.nlIf(flag, indent);
-		return this;
+		return self();
 	}
 
 	/**
@@ -388,7 +283,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The attribute name.
 	 * @return This object.
 	 */
-	public XmlWriter oAttr(Namespace ns, String name) {
+	public SELF oAttr(Namespace ns, String name) {
 		return oAttr(ns == null ? null : ns.name, name);
 	}
 
@@ -399,12 +294,12 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The attribute name.
 	 * @return This object.
 	 */
-	public XmlWriter oAttr(String ns, String name) {
+	public SELF oAttr(String ns, String name) {
 		w(' ');
 		if (enableNs && nn(ns) && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
 			w(ns).w(':');
 		w(name).w('=');
-		return this;
+		return self();
 	}
 
 	/**
@@ -414,7 +309,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter oTag(int indent, String name) {
+	public SELF oTag(int indent, String name) {
 		return i(indent).oTag(null, name, false);
 	}
 
@@ -426,7 +321,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter oTag(int indent, String ns, String name) {
+	public SELF oTag(int indent, String ns, String name) {
 		return i(indent).oTag(ns, name, false);
 	}
 
@@ -439,7 +334,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter oTag(int indent, String ns, String name, boolean needsEncoding) {
+	public SELF oTag(int indent, String ns, String name, boolean needsEncoding) {
 		return i(indent).oTag(ns, name, needsEncoding);
 	}
 
@@ -449,7 +344,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter oTag(String name) {
+	public SELF oTag(String name) {
 		return oTag(null, name, false);
 	}
 
@@ -460,7 +355,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter oTag(String ns, String name) {
+	public SELF oTag(String ns, String name) {
 		return oTag(ns, name, false);
 	}
 
@@ -472,7 +367,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter oTag(String ns, String name, boolean needsEncoding) {
+	public SELF oTag(String ns, String name, boolean needsEncoding) {
 		w('<');
 		if (enableNs && nn(ns) && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
 			w(ns).w(':');
@@ -480,25 +375,7 @@ public class XmlWriter extends SerializerWriter {
 			XmlUtils.encodeElementName(out, name);
 		else
 			append(name);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter q() {
-		super.q();
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter s() {
-		super.s();
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter sIf(boolean flag) {
-		super.sIf(flag);
-		return this;
+		return self();
 	}
 
 	/**
@@ -508,7 +385,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter sTag(int indent, String name) {
+	public SELF sTag(int indent, String name) {
 		return i(indent).sTag(null, name, false);
 	}
 
@@ -520,7 +397,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter sTag(int indent, String ns, String name) {
+	public SELF sTag(int indent, String ns, String name) {
 		return i(indent).sTag(ns, name, false);
 	}
 
@@ -533,7 +410,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter sTag(int indent, String ns, String name, boolean needsEncoding) {
+	public SELF sTag(int indent, String ns, String name, boolean needsEncoding) {
 		return i(indent).sTag(ns, name, needsEncoding);
 	}
 
@@ -543,7 +420,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter sTag(String name) {
+	public SELF sTag(String name) {
 		return sTag(null, name);
 	}
 
@@ -554,7 +431,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter sTag(String ns, String name) {
+	public SELF sTag(String ns, String name) {
 		return sTag(ns, name, false);
 	}
 
@@ -566,9 +443,9 @@ public class XmlWriter extends SerializerWriter {
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter sTag(String ns, String name, boolean needsEncoding) {
+	public SELF sTag(String ns, String name, boolean needsEncoding) {
 		oTag(ns, name, needsEncoding).w('>');
-		return this;
+		return self();
 	}
 
 	/**
@@ -578,7 +455,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter tag(int indent, String name) {
+	public SELF tag(int indent, String name) {
 		return i(indent).tag(name);
 	}
 
@@ -590,7 +467,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter tag(int indent, String ns, String name) {
+	public SELF tag(int indent, String ns, String name) {
 		return i(indent).tag(ns, name);
 	}
 
@@ -603,7 +480,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter tag(int indent, String ns, String name, boolean needsEncoding) {
+	public SELF tag(int indent, String ns, String name, boolean needsEncoding) {
 		return i(indent).tag(ns, name, needsEncoding);
 	}
 
@@ -613,7 +490,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter tag(String name) {
+	public SELF tag(String name) {
 		return tag(null, name, false);
 	}
 
@@ -624,7 +501,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter tag(String ns, String name) {
+	public SELF tag(String ns, String name) {
 		return tag(ns, name, false);
 	}
 
@@ -636,7 +513,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter tag(String ns, String name, boolean needsEncoding) {
+	public SELF tag(String ns, String name, boolean needsEncoding) {
 		w('<');
 		if (enableNs && nn(ns) && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
 			w(ns).w(':');
@@ -645,7 +522,7 @@ public class XmlWriter extends SerializerWriter {
 		else
 			w(name);
 		w('/').w('>');
-		return this;
+		return self();
 	}
 
 	/**
@@ -654,9 +531,9 @@ public class XmlWriter extends SerializerWriter {
 	 * @param value The object being serialized.
 	 * @return This object.
 	 */
-	public XmlWriter text(Object value) {
+	public SELF text(Object value) {
 		text(value, false);
-		return this;
+		return self();
 	}
 
 	/**
@@ -667,9 +544,9 @@ public class XmlWriter extends SerializerWriter {
 	 * 	If <jk>true</jk>, then we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS} content.
 	 * @return This object.
 	 */
-	public XmlWriter text(Object value, boolean preserveWhitespace) {
+	public SELF text(Object value, boolean preserveWhitespace) {
 		XmlUtils.encodeText(this, value, trimStrings, preserveWhitespace);
-		return this;
+		return self();
 	}
 
 	/**
@@ -678,9 +555,9 @@ public class XmlWriter extends SerializerWriter {
 	 * @param value The object being serialized.
 	 * @return This object.
 	 */
-	public XmlWriter textUri(Object value) {
+	public SELF textUri(Object value) {
 		text(uriResolver.resolve(value), false);
-		return this;
+		return self();
 	}
 
 	@Override /* Overridden from Object */
@@ -688,25 +565,13 @@ public class XmlWriter extends SerializerWriter {
 		return out.toString();
 	}
 
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter w(char c) {
-		super.w(c);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter w(String s) {
-		super.w(s);
-		return this;
-	}
-
-	private XmlWriter attrValue(Object value, boolean needsEncoding) {
+	protected SELF attrValue(Object value, boolean needsEncoding) {
 		if (needsEncoding)
 			XmlUtils.encodeAttrValue(out, value, this.trimStrings);
 		else if (value instanceof URI || value instanceof URL)
 			append(uriResolver.resolve(value));
 		else
 			append(value);
-		return this;
+		return self();
 	}
 }

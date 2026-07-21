@@ -43,7 +43,7 @@ import org.apache.juneau.marshall.serializer.*;
 @SuppressWarnings({
 	"resource" // Writer resource managed by calling code
 })
-public class TomlWriter extends SerializerWriter {
+public class TomlWriter extends SerializerWriter<TomlWriter> {
 
 	/**
 	 * Constructor.
@@ -246,28 +246,4 @@ public class TomlWriter extends SerializerWriter {
 		}
 		return true;
 	}
-
-	// Override return types for chaining
-	@Override public TomlWriter append(char c) { super.append(c); return this; }
-	@Override public TomlWriter append(char[] value) { super.append(value); return this; }
-	@Override public TomlWriter append(int indent, char c) { super.append(indent, c); return this; }
-	@Override public TomlWriter append(int indent, String text) { super.append(indent, text); return this; }
-	@Override public TomlWriter append(Object text) { super.append(text); return this; }
-	@Override public TomlWriter append(String text) { super.append(text); return this; }
-	@Override public TomlWriter appendIf(boolean b, char c) { super.appendIf(b, c); return this; }
-	@Override public TomlWriter appendIf(boolean b, String text) { super.appendIf(b, text); return this; }
-	@Override public TomlWriter appendln(int indent, String text) { super.appendln(indent, text); return this; }
-	@Override public TomlWriter appendln(String text) { super.appendln(text); return this; }
-	@Override public TomlWriter appendUri(Object value) { super.appendUri(value); return this; }
-	@Override public TomlWriter cr(int depth) { super.cr(depth); return this; }
-	@Override public TomlWriter cre(int depth) { super.cre(depth); return this; }
-	@Override public TomlWriter i(int indent) { super.i(indent); return this; }
-	@Override public TomlWriter ie(int indent) { super.ie(indent); return this; }
-	@Override public TomlWriter nl(int indent) { super.nl(indent); return this; }
-	@Override public TomlWriter nlIf(boolean flag, int indent) { super.nlIf(flag, indent); return this; }
-	@Override public TomlWriter q() { super.q(); return this; }
-	@Override public TomlWriter s() { super.s(); return this; }
-	@Override public TomlWriter sIf(boolean flag) { super.sIf(flag); return this; }
-	@Override public TomlWriter w(char value) { super.w(value); return this; }
-	@Override public TomlWriter w(String value) { super.w(value); return this; }
 }

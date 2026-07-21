@@ -106,7 +106,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 
 	@Override /* Overridden from SerializerSession */
 	protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {
-		try (XmlWriter w = getXmlWriter(out)) {
+		try (XmlWriter<?> w = getXmlWriter(out)) {
 			// @formatter:off
 			w.append("<?xml")
 				.attr("version", "1.0")

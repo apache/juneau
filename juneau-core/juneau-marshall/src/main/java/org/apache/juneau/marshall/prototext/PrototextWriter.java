@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S3776", // Cognitive complexity acceptable for protobuf formatting methods
 	"resource" // Writer resource managed by calling code
 })
-public class PrototextWriter extends SerializerWriter {
+public class PrototextWriter extends SerializerWriter<PrototextWriter> {
 
 	/**
 	 * Constructor.
@@ -322,28 +322,4 @@ public class PrototextWriter extends SerializerWriter {
 		}
 		return sb.toString();
 	}
-
-	// Override return types for chaining
-	@Override public PrototextWriter append(char c) { super.append(c); return this; }
-	@Override public PrototextWriter append(char[] value) { super.append(value); return this; }
-	@Override public PrototextWriter append(int indent, char c) { super.append(indent, c); return this; }
-	@Override public PrototextWriter append(int indent, String text) { super.append(indent, text); return this; }
-	@Override public PrototextWriter append(Object text) { super.append(text); return this; }
-	@Override public PrototextWriter append(String text) { super.append(text); return this; }
-	@Override public PrototextWriter appendIf(boolean b, char c) { super.appendIf(b, c); return this; }
-	@Override public PrototextWriter appendIf(boolean b, String text) { super.appendIf(b, text); return this; }
-	@Override public PrototextWriter appendln(int indent, String text) { super.appendln(indent, text); return this; }
-	@Override public PrototextWriter appendln(String text) { super.appendln(text); return this; }
-	@Override public PrototextWriter appendUri(Object value) { super.appendUri(value); return this; }
-	@Override public PrototextWriter cr(int depth) { super.cr(depth); return this; }
-	@Override public PrototextWriter cre(int depth) { super.cre(depth); return this; }
-	@Override public PrototextWriter i(int indent) { super.i(indent); return this; }
-	@Override public PrototextWriter ie(int indent) { super.ie(indent); return this; }
-	@Override public PrototextWriter nl(int indent) { super.nl(indent); return this; }
-	@Override public PrototextWriter nlIf(boolean flag, int indent) { super.nlIf(flag, indent); return this; }
-	@Override public PrototextWriter q() { super.q(); return this; }
-	@Override public PrototextWriter s() { super.s(); return this; }
-	@Override public PrototextWriter sIf(boolean flag) { super.sIf(flag); return this; }
-	@Override public PrototextWriter w(char value) { super.w(value); return this; }
-	@Override public PrototextWriter w(String value) { super.w(value); return this; }
 }

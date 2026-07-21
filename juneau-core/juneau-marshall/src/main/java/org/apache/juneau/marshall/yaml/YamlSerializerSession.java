@@ -261,7 +261,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 		return false;
 	}
 
-	private SerializerWriter writeBeanMap(YamlWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+	private SerializerWriter<?> writeBeanMap(YamlWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		int i = indent - 1;
 
 		var addAtt = Flag.create();
@@ -308,7 +308,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 		"rawtypes", // Raw types necessary for generic collection/map serialization
 		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
 	})
-	private SerializerWriter writeMap(YamlWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter<?> writeMap(YamlWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 		int i = indent - 1;
 
 		var keyType = type.getKeyType();
@@ -347,7 +347,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 		"rawtypes", // Raw types necessary for generic collection/map serialization
 		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
 	})
-	private SerializerWriter writeCollection(YamlWriter out, Collection c, ClassMeta<?> type, boolean asField) throws SerializeException {
+	private SerializerWriter<?> writeCollection(YamlWriter out, Collection c, ClassMeta<?> type, boolean asField) throws SerializeException {
 		int i = indent - 1;
 
 		if (c.isEmpty()) {

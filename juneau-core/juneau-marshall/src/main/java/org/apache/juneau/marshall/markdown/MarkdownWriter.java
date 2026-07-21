@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S110", // Inheritance depth acceptable for serializer writer hierarchy
 	"resource"   // Writer lifecycle managed by caller
 })
-public class MarkdownWriter extends SerializerWriter {
+public class MarkdownWriter extends SerializerWriter<MarkdownWriter> {
 
 	/**
 	 * Constructor.

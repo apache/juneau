@@ -41,7 +41,7 @@ import org.apache.juneau.marshall.serializer.*;
 @SuppressWarnings({
 	"resource" // Writer resource managed by calling code
 })
-public class IniWriter extends SerializerWriter {
+public class IniWriter extends SerializerWriter<IniWriter> {
 
 	/** Key-value separator character. */
 	protected final char kvSeparator;
@@ -148,28 +148,4 @@ public class IniWriter extends SerializerWriter {
 		w('\n');
 		return this;
 	}
-
-	// Override return types for chaining
-	@Override public IniWriter append(char c) { super.append(c); return this; }
-	@Override public IniWriter append(char[] value) { super.append(value); return this; }
-	@Override public IniWriter append(int indent, char c) { super.append(indent, c); return this; }
-	@Override public IniWriter append(int indent, String text) { super.append(indent, text); return this; }
-	@Override public IniWriter append(Object text) { super.append(text); return this; }
-	@Override public IniWriter append(String text) { super.append(text); return this; }
-	@Override public IniWriter appendIf(boolean b, char c) { super.appendIf(b, c); return this; }
-	@Override public IniWriter appendIf(boolean b, String text) { super.appendIf(b, text); return this; }
-	@Override public IniWriter appendln(int indent, String text) { super.appendln(indent, text); return this; }
-	@Override public IniWriter appendln(String text) { super.appendln(text); return this; }
-	@Override public IniWriter appendUri(Object value) { super.appendUri(value); return this; }
-	@Override public IniWriter cr(int depth) { super.cr(depth); return this; }
-	@Override public IniWriter cre(int depth) { super.cre(depth); return this; }
-	@Override public IniWriter i(int indent) { super.i(indent); return this; }
-	@Override public IniWriter ie(int indent) { super.ie(indent); return this; }
-	@Override public IniWriter nl(int indent) { super.nl(indent); return this; }
-	@Override public IniWriter nlIf(boolean flag, int indent) { super.nlIf(flag, indent); return this; }
-	@Override public IniWriter q() { super.q(); return this; }
-	@Override public IniWriter s() { super.s(); return this; }
-	@Override public IniWriter sIf(boolean flag) { super.sIf(flag); return this; }
-	@Override public IniWriter w(char value) { super.w(value); return this; }
-	@Override public IniWriter w(String value) { super.w(value); return this; }
 }

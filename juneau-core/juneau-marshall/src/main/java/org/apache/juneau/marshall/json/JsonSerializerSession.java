@@ -150,7 +150,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 		escapeSolidus = builder.escapeSolidus;
 	}
 
-	protected SerializerWriter writeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+	protected SerializerWriter<?> writeBeanMap(JsonWriter<?> out, BeanMap<?> m, String typeName) throws SerializeException {
 		int i = indent;
 		out.w('{');
 
@@ -183,7 +183,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	}
 
 	
-	private SerializerWriter writeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter<?> writeCollection(JsonWriter<?> out, Collection c, ClassMeta<?> type) throws SerializeException {
 
 		var elementType = type.getElementType();
 
@@ -199,7 +199,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 		return out;
 	}
 
-	private SerializerWriter writeStreamable(JsonWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter<?> writeStreamable(JsonWriter<?> out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
 		var elementType = type.getElementType();
 
 		out.w('[');
@@ -215,7 +215,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	}
 
 	
-	protected SerializerWriter writeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+	protected SerializerWriter<?> writeMap(JsonWriter<?> out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
 		var valueType = type.getValueType();
@@ -259,11 +259,11 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The output target object wrapped in an {@link JsonWriter}.
 	 */
-	protected JsonWriter getJsonWriter(SerializerPipe out) {
+	protected JsonWriter<?> getJsonWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
-		if (output instanceof JsonWriter output2)
+		if (output instanceof JsonWriter<?> output2)
 			return output2;
-		var w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), false, isTrimStrings(), getUriResolver());
+		var w = new BasicJsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), false, isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}
@@ -357,7 +357,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 	})
-	protected JsonWriter writeAnything(JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
+	protected JsonWriter<?> writeAnything(JsonWriter<?> out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null) {
 			out.append("null");

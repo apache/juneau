@@ -330,7 +330,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return The same writer passed in.
 	 * @throws SerializeException If a problem occurred trying to send output to the writer.
 	 */
-	private XmlWriter doSerialize(Object o, XmlWriter w) throws SerializeException {
+	private XmlWriter<?> doSerialize(Object o, XmlWriter<?> w) throws SerializeException {
 		writeAnything(w, o, getExpectedRootType(o), null, null, getInitialDepth() - 1, true, false);
 		return w;
 	}
@@ -443,7 +443,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for bean map serialization
 	})
-	private void writeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws SerializeException {
+	private void writeBeanMap(XmlWriter<?> out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		var mcm = (ClassMeta<?>) m.getBeanInfo();
 		HtmlClassMeta cHtml = getHtmlClassMeta(mcm);
@@ -519,7 +519,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
-	private void writeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws SerializeException {
+	private void writeCollection(XmlWriter<?> out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(sType);
 		HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(ppMeta);
@@ -677,7 +677,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	
-	private void writeMap(XmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws SerializeException {
+	private void writeMap(XmlWriter<?> out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		var keyType = eKeyType == null ? string() : eKeyType;
 		var valueType = eValueType == null ? object() : eValueType;
@@ -705,7 +705,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag(TAG_table).nl(i);
 	}
 
-	private void writeMapEntry(XmlWriter out, Map.Entry e, ClassMeta<?> keyType, ClassMeta<?> valueType, int i, BeanPropertyMeta ppMeta) throws SerializeException {
+	private void writeMapEntry(XmlWriter<?> out, Map.Entry e, ClassMeta<?> keyType, ClassMeta<?> valueType, int i, BeanPropertyMeta ppMeta) throws SerializeException {
 		Object key = generalize(e.getKey(), keyType);
 		Object value = null;
 		try {
@@ -773,11 +773,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The output target object wrapped in an {@link HtmlWriter}.
 	 */
-	protected final HtmlWriter getHtmlWriter(SerializerPipe out) {
+	protected final HtmlWriter<?> getHtmlWriter(SerializerPipe out) {
 		Object output = out.getRawOutput();
-		if (output instanceof HtmlWriter output2)
+		if (output instanceof HtmlWriter<?> output2)
 			return output2;
-		var w = new HtmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver());
+		var w = new BasicHtmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}
@@ -853,7 +853,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S107", // Method has many parameters; acceptable for builder/configuration methods
 	})
-	protected ContentResult writeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement)
+	protected ContentResult writeAnything(XmlWriter<?> out, Object o, ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement)
 		throws SerializeException {
 
 		ClassMeta<?> aType = null;       // The actual type
@@ -1068,7 +1068,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@Override /* Overridden from XmlSerializerSession */
-	protected ContentResult writeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
+	protected ContentResult writeAnything(XmlWriter<?> out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
 		boolean isMixed, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {
 
 		// If this is a bean, then we want to serialize it as HTML unless it's @Html(format=XML).

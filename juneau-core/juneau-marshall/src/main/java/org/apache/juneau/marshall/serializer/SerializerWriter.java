@@ -41,9 +41,15 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource" // SerializerWriter manages Closeable resources
+	"resource", // SerializerWriter manages Closeable resources
+	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 })
-public class SerializerWriter extends Writer {
+public abstract class SerializerWriter<SELF extends SerializerWriter<SELF>> extends Writer {
+
+	@SuppressWarnings("unchecked")
+	protected final SELF self() {
+		return (SELF) this;
+	}
 
 	/** The underlying writer. */
 	protected final Writer out;
@@ -69,7 +75,7 @@ public class SerializerWriter extends Writer {
 	 * @param w Writer being copied.
 	 * 	<br>Must not be <jk>null</jk>.
 	 */
-	public SerializerWriter(SerializerWriter w) {
+	public SerializerWriter(SerializerWriter<?> w) {
 		this.out = w.out;
 		this.useWhitespace = w.useWhitespace;
 		this.maxIndent = w.maxIndent;
@@ -99,13 +105,13 @@ public class SerializerWriter extends Writer {
 	}
 
 	@Override /* Overridden from Writer */
-	public SerializerWriter append(char c) {
+	public SELF append(char c) {
 		try {
 			out.write(c);
 		} catch (IOException e) {
 			throw new SerializeException(e);
 		}
-		return this;
+		return self();
 	}
 
 	/**
@@ -115,10 +121,10 @@ public class SerializerWriter extends Writer {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public SerializerWriter append(char[] value) {
+	public SELF append(char[] value) {
 		for (var c : value)
 			w(c);
-		return this;
+		return self();
 	}
 
 	/**
@@ -128,7 +134,7 @@ public class SerializerWriter extends Writer {
 	 * @param value The character to write.
 	 * @return This object.
 	 */
-	public SerializerWriter append(int indent, char value) {
+	public SELF append(int indent, char value) {
 		return i(indent).w(value);
 	}
 
@@ -139,7 +145,7 @@ public class SerializerWriter extends Writer {
 	 * @param value The text to write.
 	 * @return This object.
 	 */
-	public SerializerWriter append(int indent, String value) {
+	public SELF append(int indent, String value) {
 		return append(indent, false, value);
 	}
 
@@ -150,9 +156,9 @@ public class SerializerWriter extends Writer {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public SerializerWriter append(Object value) {
+	public SELF append(Object value) {
 		w(value == null ? null : value.toString());
-		return this;
+		return self();
 	}
 
 	/**
@@ -162,10 +168,10 @@ public class SerializerWriter extends Writer {
 	 * 	<br>Can be <jk>null</jk> (ignored).
 	 * @return This object.
 	 */
-	public SerializerWriter append(String value) {
+	public SELF append(String value) {
 		if (nn(value))
 			w(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -175,10 +181,10 @@ public class SerializerWriter extends Writer {
 	 * @param value The text to write.
 	 * @return This object.
 	 */
-	public SerializerWriter appendIf(boolean flag, char value) {
+	public SELF appendIf(boolean flag, char value) {
 		if (flag)
 			w(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -188,10 +194,10 @@ public class SerializerWriter extends Writer {
 	 * @param value The text to write.
 	 * @return This object.
 	 */
-	public SerializerWriter appendIf(boolean flag, String value) {
+	public SELF appendIf(boolean flag, String value) {
 		if (flag)
 			w(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -202,7 +208,7 @@ public class SerializerWriter extends Writer {
 	 * @param value The text to write.
 	 * @return This object.
 	 */
-	public SerializerWriter appendln(int indent, String value) {
+	public SELF appendln(int indent, String value) {
 		return append(indent, true, value);
 	}
 
@@ -212,7 +218,7 @@ public class SerializerWriter extends Writer {
 	 * @param value The text to write.
 	 * @return This object.
 	 */
-	public SerializerWriter appendln(String value) {
+	public SELF appendln(String value) {
 		return append(0, true, value);
 	}
 
@@ -232,9 +238,9 @@ public class SerializerWriter extends Writer {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public SerializerWriter appendUri(Object value) {
+	public SELF appendUri(Object value) {
 		uriResolver.append(this, value);
-		return this;
+		return self();
 	}
 
 	@Override /* Overridden from Writer */
@@ -251,10 +257,10 @@ public class SerializerWriter extends Writer {
 	 * @param depth The indentation.
 	 * @return This object.
 	 */
-	public SerializerWriter cr(int depth) {
+	public SELF cr(int depth) {
 		if (useWhitespace && depth <= maxIndent)
 			return nl(depth).i(depth);
-		return this;
+		return self();
 	}
 
 	/**
@@ -266,10 +272,10 @@ public class SerializerWriter extends Writer {
 	 * @param depth The indentation.
 	 * @return This object.
 	 */
-	public SerializerWriter cre(int depth) {
+	public SELF cre(int depth) {
 		if (useWhitespace && depth <= maxIndent - 1)
 			return nl(depth).i(depth);
-		return this;
+		return self();
 	}
 
 	@Override /* Overridden from Writer */
@@ -283,11 +289,11 @@ public class SerializerWriter extends Writer {
 	 * @param indent The number of tabs to indent.
 	 * @return This object.
 	 */
-	public SerializerWriter i(int indent) {
+	public SELF i(int indent) {
 		if (useWhitespace && indent <= maxIndent)
 			for (var i = 0; i < indent; i++)
 				w('\t');
-		return this;
+		return self();
 	}
 
 	/**
@@ -296,11 +302,11 @@ public class SerializerWriter extends Writer {
 	 * @param indent The number of tabs to indent.
 	 * @return This object.
 	 */
-	public SerializerWriter ie(int indent) {
+	public SELF ie(int indent) {
 		if (useWhitespace && indent <= maxIndent - 1)
 			for (var i = 0; i < indent; i++)
 				w('\t');
-		return this;
+		return self();
 	}
 
 	/**
@@ -309,10 +315,10 @@ public class SerializerWriter extends Writer {
 	 * @param indent The current indentation level.
 	 * @return This object.
 	 */
-	public SerializerWriter nl(int indent) {
+	public SELF nl(int indent) {
 		if (useWhitespace && indent <= maxIndent)
 			w('\n');
-		return this;
+		return self();
 	}
 
 	/**
@@ -322,10 +328,10 @@ public class SerializerWriter extends Writer {
 	 * @param indent The current indentation level.
 	 * @return This object.
 	 */
-	public SerializerWriter nlIf(boolean flag, int indent) {
+	public SELF nlIf(boolean flag, int indent) {
 		if (flag && useWhitespace && indent <= maxIndent)
 			w('\n');
-		return this;
+		return self();
 	}
 
 	/**
@@ -333,9 +339,9 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @return This object.
 	 */
-	public SerializerWriter q() {
+	public SELF q() {
 		w(quoteChar);
-		return this;
+		return self();
 	}
 
 	/**
@@ -343,10 +349,10 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @return This object.
 	 */
-	public SerializerWriter s() {
+	public SELF s() {
 		if (useWhitespace)
 			w(' ');
-		return this;
+		return self();
 	}
 
 	/**
@@ -359,10 +365,10 @@ public class SerializerWriter extends Writer {
 	 * @param flag The boolean flag.
 	 * @return This object.
 	 */
-	public SerializerWriter sIf(boolean flag) {
+	public SELF sIf(boolean flag) {
 		if (flag && ! useWhitespace)
 			w(' ');
-		return this;
+		return self();
 	}
 
 	/**
@@ -371,13 +377,13 @@ public class SerializerWriter extends Writer {
 	 * @param value The character to write.
 	 * @return This object.
 	 */
-	public SerializerWriter w(char value) {
+	public SELF w(char value) {
 		try {
 			out.write(value);
 		} catch (IOException e) {
 			throw new SerializeException(e);
 		}
-		return this;
+		return self();
 	}
 
 	/**
@@ -387,13 +393,13 @@ public class SerializerWriter extends Writer {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public SerializerWriter w(String value) {
+	public SELF w(String value) {
 		try {
 			out.write(value);
 		} catch (IOException e) {
 			throw new SerializeException(e);
 		}
-		return this;
+		return self();
 	}
 
 	@Override /* Overridden from Writer */
@@ -415,10 +421,10 @@ public class SerializerWriter extends Writer {
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object.
 	 */
-	private SerializerWriter append(int indent, boolean newline, String value) {
+	private SELF append(int indent, boolean newline, String value) {
 
 		if (value == null)
-			return this;
+			return self();
 
 		// If text contains newlines, we break it up into lines and indent them separately.
 		if (value.indexOf('\n') != -1 && useWhitespace && indent <= maxIndent) {
@@ -431,6 +437,6 @@ public class SerializerWriter extends Writer {
 		if (newline)
 			nl(indent);
 
-		return this;
+		return self();
 	}
 }

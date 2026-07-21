@@ -155,7 +155,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for URL encoding serialization routing
 	})
-	private SerializerWriter writeAnything(UonWriter out, Object o) throws IOException, SerializeException {
+	private SerializerWriter<?> writeAnything(UonWriter out, Object o) throws IOException, SerializeException {
 
 		ClassMeta<?> aType = null;			// The actual type
 		ClassMeta<?> sType = null;			// The serialized type
@@ -215,7 +215,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		"java:S3776", // Cognitive complexity acceptable for expanded-params bean map serialization
 		"java:S2177", // Intentional: UrlEncodingSerializerSession provides its own private writeBeanMap() with expanded-params logic
 	})
-	private SerializerWriter writeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+	private SerializerWriter<?> writeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		var addAmp = Flag.create();
 
 		if (nn(typeName)) {
@@ -279,7 +279,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	private SerializerWriter writeCollectionMap(UonWriter out, Map<?,?> m, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter<?> writeCollectionMap(UonWriter out, Map<?,?> m, ClassMeta<?> type) throws SerializeException {
 
 		var valueType = type.getValueType();
 
@@ -294,7 +294,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	private SerializerWriter writeStreamableAsCollectionMap(UonWriter out, Object o, ClassMeta<?> sType) throws SerializeException {
+	private SerializerWriter<?> writeStreamableAsCollectionMap(UonWriter out, Object o, ClassMeta<?> sType) throws SerializeException {
 		var addAmp = Flag.create();
 		var i = IntegerHolder.create();
 		forEachStreamableEntry(o, sType, v -> {
@@ -308,7 +308,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	@SuppressWarnings({
 		"java:S2177" // Intentional: UrlEncodingSerializerSession provides its own private writeMap() with expanded-params logic
 	})
-	private SerializerWriter writeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter<?> writeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
 		var valueType = type.getValueType();

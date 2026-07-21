@@ -86,9 +86,9 @@ public class Json5SerializerSession extends JsonSerializerSession {
 	protected boolean isSimpleAttrs() { return true; }
 
 	@Override
-	protected JsonWriter getJsonWriter(SerializerPipe out) {
+	protected JsonWriter<?> getJsonWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
-		if (output instanceof JsonWriter output2)
+		if (output instanceof JsonWriter<?> output2)
 			return output2;
 		var w = JsonWriter.create(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), true, isTrimStrings(), getUriResolver());
 		out.setWriter(w);

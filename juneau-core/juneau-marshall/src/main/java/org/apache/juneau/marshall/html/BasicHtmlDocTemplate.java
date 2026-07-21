@@ -63,7 +63,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	private static final List<String> MARSHALL_URI_NAVLINK_SCHEMES = List.of("request", "servlet", "context");
 
 	@Override /* Overridden from HtmlDocTemplate */
-	public void writeTo(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	public void writeTo(HtmlDocSerializerSession session, HtmlWriter<?> w, Object o) throws Exception {
 		w.sTag("html").nl(0);
 		w.sTag(1, "head").nl(1);
 		head(session, w, o);
@@ -82,7 +82,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void article(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	protected void article(HtmlDocSerializerSession session, HtmlWriter<?> w, Object o) throws Exception {
 		// To allow for page formatting using CSS, we encapsulate the data inside two div tags:
 		// <div class='outerdata'><div class='data' id='data'>...</div></div>
 		w.oTag(4, "div").attr("class", "outerdata").append('>').nl(4);
@@ -98,9 +98,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 			session.indent = 6;
 			w.flush();
 			if (session.isResolveBodyVars()) {
-				w = new HtmlWriter(w) {
+				w = new BasicHtmlWriter(w) {
 					@Override
-					public HtmlWriter text(Object value, boolean preserveWhitespace) {
+					public BasicHtmlWriter text(Object value, boolean preserveWhitespace) {
 						return super.text(session.resolve(Shorts.s(value)), preserveWhitespace);
 					}
 				};
@@ -120,7 +120,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void aside(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	protected void aside(HtmlDocSerializerSession session, HtmlWriter<?> w, Object o) throws Exception {
 		var aside = session.getAside();
 		for (var i = 0; i < aside.length; i++)
 			w.sIf(i > 0).appendln(4, session.resolve(aside[i]));
@@ -134,7 +134,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void body(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	protected void body(HtmlDocSerializerSession session, HtmlWriter<?> w, Object o) throws Exception {
 
 		AsideFloat asideFloat = session.getAsideFloat();
 		boolean hasAside = hasAside(session);
@@ -202,7 +202,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void footer(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	protected void footer(HtmlDocSerializerSession session, HtmlWriter<?> w, Object o) throws Exception {
 		var footer = session.getFooter();
 		for (var i = 0; i < footer.length; i++)
 			w.sIf(i > 0).appendln(3, session.resolve(footer[i]));
@@ -280,7 +280,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void head(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	protected void head(HtmlDocSerializerSession session, HtmlWriter<?> w, Object o) throws Exception {
 
 		var head = session.getHead();
 		for (var i = 0; i < head.length; i++)
@@ -313,7 +313,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void header(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	protected void header(HtmlDocSerializerSession session, HtmlWriter<?> w, Object o) throws Exception {
 		// Write the title of the page.
 		var header = session.getHeader();
 		for (var i = 0; i < header.length; i++)
@@ -331,7 +331,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for navigation link rendering with conditional logic
 	})
-	protected void nav(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	protected void nav(HtmlDocSerializerSession session, HtmlWriter<?> w, Object o) throws Exception {
 		String[] links = session.getNavLinks();
 		if (links.length > 0 && ! contains("NONE", links)) {
 			w.sTag(3, "ol").nl(3);
@@ -381,7 +381,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	protected void script(HtmlDocSerializerSession session, HtmlWriter<?> w, Object o) throws Exception {
 		var addSpace = Flag.create();
 		for (var s : session.getScript())
 			w.sIf(addSpace.getAndSet()).append(3, session.resolve(s)).append('\n'); // Must always append a newline even if whitespace disabled!
@@ -396,7 +396,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	protected void style(HtmlDocSerializerSession session, HtmlWriter<?> w, Object o) throws Exception {
 		var addSpace = Flag.create();
 		for (var s : session.getStylesheet())
 			w.sIf(addSpace.getAndSet()).append(3, "@import ").q().append(session.resolveUri(session.resolve(s))).q().appendln(";");

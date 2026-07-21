@@ -37,7 +37,7 @@ import org.apache.juneau.marshall.json.*;
 @SuppressWarnings({
 	"resource" // Writer resource managed by calling code
 })
-public class JcsWriter extends JsonWriter {
+public class JcsWriter extends JsonWriter<JcsWriter> {
 
 	/**
 	 * Constructor.

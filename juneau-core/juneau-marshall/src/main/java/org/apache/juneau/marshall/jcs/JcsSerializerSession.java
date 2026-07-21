@@ -272,7 +272,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 	public boolean isRecordStreaming() { return false; }
 
 	@Override /* Overridden from JsonSerializerSession */
-	protected JsonWriter getJsonWriter(SerializerPipe out) {
+	protected JsonWriter<?> getJsonWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
 		if (output instanceof JcsWriter w)
 			return w;
@@ -286,7 +286,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
 	})
 	@Override /* Overridden from JsonSerializerSession - package visibility, override by making accessible */
-	protected SerializerWriter writeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+	protected SerializerWriter<?> writeMap(JsonWriter<?> out, Map m, ClassMeta<?> type) throws SerializeException {
 		var keyType = type.getKeyType();
 		var valueType = type.getValueType();
 
@@ -331,7 +331,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 	}
 
 	@Override /* Overridden from JsonSerializerSession */
-	protected SerializerWriter writeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+	protected SerializerWriter<?> writeBeanMap(JsonWriter<?> out, BeanMap<?> m, String typeName) throws SerializeException {
 		var entries = new ArrayList<BeanProp>();
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
