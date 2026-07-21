@@ -25,9 +25,11 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"removal",  // Tests deprecated getId() / setId() for backward compatibility
+	"removal",   // Tests deprecated getId() / setId() for backward compatibility
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
-	"resource"  // Reader fixtures returned by getReader() overrides are test stubs (null / throwing); no resource to close.
+	"resource",  // Reader fixtures returned by getReader() overrides are test stubs (null / throwing); no resource to close.
+	"rawtypes",  // JsonSchema/JsonSchemaProperty are self-typed CRTP roots; direct instantiation is intentionally raw (accepted 10.0.0 tradeoff).
+	"unchecked"  // See rawtypes rationale above.
 })
 class JsonSchemaMap_Test extends TestBase {
 

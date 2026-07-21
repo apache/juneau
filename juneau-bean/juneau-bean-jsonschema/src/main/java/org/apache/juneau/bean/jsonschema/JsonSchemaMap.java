@@ -41,7 +41,7 @@ import org.apache.juneau.marshall.marshaller.*;
  *
  * @serial exclude
  */
-public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
+public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema<?>> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -58,7 +58,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	@SuppressWarnings({
 		"removal", // Uses deprecated API for compatibility
 	})
-	public JsonSchemaMap add(JsonSchema...schemas) {
+	public JsonSchemaMap add(JsonSchema<?>...schemas) {
 		for (var schema : schemas) {
 			if (schema.getId() == null)
 				throw iaex("Schema with no ID passed to JsonSchemaMap.add(Schema...)");
@@ -85,7 +85,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 * @return The JsonSchema, or <jk>null</jk> if schema was not located and could not be loaded.
 	 */
 	@Override /* Overridden from Map */
-	public JsonSchema get(Object uri) {
+	public JsonSchema<?> get(Object uri) {
 		var u = toUri(uri);
 		var s = super.get(u);
 		if (nn(s))
@@ -131,7 +131,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 * @param uri The URI to load the schema from.
 	 * @return The parsed schema, or <jk>null</jk> if the document is unreachable.
 	 */
-	public JsonSchema load(URI uri) {
+	public JsonSchema<?> load(URI uri) {
 		try (var r = getReader(uri)) {
 			if (r == null)
 				return null;

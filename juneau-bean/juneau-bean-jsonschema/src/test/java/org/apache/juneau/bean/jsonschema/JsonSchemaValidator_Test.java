@@ -30,7 +30,9 @@ import org.junit.jupiter.api.*;
  * Tests {@link JsonSchemaValidator} in isolation against {@link JsonSchema} beans.
  */
 @SuppressWarnings({
-	"java:S5778" // assertThrows lambdas intentionally build the schema/validator and supply the value inline; the throwing call is unambiguous (validate) and hoisting validator+argument locals across ~40 tests would bloat the file without clarity gain.
+	"java:S5778", // assertThrows lambdas intentionally build the schema/validator and supply the value inline; the throwing call is unambiguous (validate) and hoisting validator+argument locals across ~40 tests would bloat the file without clarity gain.
+	"rawtypes",   // JsonSchema/JsonSchemaProperty are self-typed CRTP roots; direct instantiation is intentionally raw (accepted 10.0.0 tradeoff).
+	"unchecked"   // See rawtypes rationale above.
 })
 class JsonSchemaValidator_Test extends TestBase {
 

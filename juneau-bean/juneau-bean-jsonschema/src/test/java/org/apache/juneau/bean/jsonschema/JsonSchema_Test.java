@@ -25,7 +25,9 @@ import org.apache.juneau.marshall.json5.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"removal" // Tests deprecated API for backward compatibility
+	"removal",   // Tests deprecated API for backward compatibility
+	"rawtypes",  // JsonSchema/JsonSchemaProperty are self-typed CRTP roots; direct instantiation is intentionally raw (accepted 10.0.0 tradeoff).
+	"unchecked"  // See rawtypes rationale above.
 })
 public class JsonSchema_Test extends TestBase {
 

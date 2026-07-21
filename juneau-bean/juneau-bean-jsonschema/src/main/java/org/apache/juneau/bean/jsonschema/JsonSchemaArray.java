@@ -23,7 +23,7 @@ import java.util.*;
  *
  * @serial exclude
  */
-public class JsonSchemaArray extends LinkedList<JsonSchema> {
+public class JsonSchemaArray extends LinkedList<JsonSchema<?>> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,7 +37,7 @@ public class JsonSchemaArray extends LinkedList<JsonSchema> {
 	 *
 	 * @param value The list of schemas in this array.
 	 */
-	public JsonSchemaArray(JsonSchema...value) {
+	public JsonSchemaArray(JsonSchema<?>...value) {
 		addAll(value);
 	}
 
@@ -47,7 +47,7 @@ public class JsonSchemaArray extends LinkedList<JsonSchema> {
 	 * @param value The {@link JsonSchema} objects to add to this array.
 	 * @return This object.
 	 */
-	public JsonSchemaArray addAll(JsonSchema...value) {
+	public JsonSchemaArray addAll(JsonSchema<?>...value) {
 		Collections.addAll(this, value);
 		return this;
 	}

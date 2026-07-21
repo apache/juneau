@@ -24,13 +24,17 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for JsonSchemaProperty fluent setter overrides.
  */
+@SuppressWarnings({
+	"rawtypes",  // JsonSchema/JsonSchemaProperty are self-typed CRTP roots; direct instantiation is intentionally raw (accepted 10.0.0 tradeoff).
+	"unchecked"  // See rawtypes rationale above.
+})
 class JsonSchemaProperty_Test extends TestBase {
 
 	@Test void a01_fluentChaining_basicSetters() {
 		var p = new JsonSchemaProperty();
 
 		// Test that fluent methods return JsonSchemaProperty (not JsonSchema)
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.setName("myProperty");
 		assertSame(p, result);
@@ -45,7 +49,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		result = p.setType(JsonType.STRING);
 		assertSame(p, result);
 
-		result = p.setId("http://example.com/schema");
+		result = p.setIdUri("http://example.com/schema"); // Non-deprecated replacement for setId(); this test only exercises fluent chaining.
 		assertSame(p, result);
 	}
 
@@ -53,7 +57,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test numeric constraint methods
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.setMultipleOf(5);
 		assertSame(p, result);
@@ -76,7 +80,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test string constraint methods
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.setMaxLength(50);
 		assertSame(p, result);
@@ -99,7 +103,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test array constraint methods
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.setMaxItems(10);
 		assertSame(p, result);
@@ -122,7 +126,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test object constraint methods
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.setMaxProperties(20);
 		assertSame(p, result);
@@ -131,7 +135,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		result = p.setMinProperties(1);
 		assertSame(p, result);
 
-		var props = new HashMap<String, JsonSchema>();
+		var props = new HashMap<String, JsonSchema<?>>();
 		result = p.setProperties(props);
 		assertSame(p, result);
 
@@ -143,7 +147,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test required and enum methods
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.addRequired("field1", "field2");
 		assertSame(p, result);
@@ -163,7 +167,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test schema composition methods
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.addAllOf(new JsonSchema());
 		assertSame(p, result);
@@ -192,7 +196,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test metadata methods
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.setReadOnly(true);
 		assertSame(p, result);
@@ -253,7 +257,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test definition methods
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.addDefinition("def1", new JsonSchema());
 		assertSame(p, result);
@@ -270,7 +274,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test dependency methods
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.addDependency("dep1", new JsonSchema());
 		assertSame(p, result);
@@ -296,7 +300,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test pattern property methods
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.addPatternProperties(new JsonSchemaProperty("pattern1"));
 		assertSame(p, result);
@@ -310,7 +314,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test prefix items methods
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.addPrefixItems(new JsonSchema());
 		assertSame(p, result);
@@ -324,7 +328,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test unevaluated methods
-		JsonSchemaProperty result;
+		JsonSchema<?> result;
 
 		result = p.setUnevaluatedItems(new JsonSchema());
 		assertSame(p, result);
@@ -338,7 +342,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		var p = new JsonSchemaProperty();
 
 		// Test addTypes method
-		JsonSchemaProperty result = p.addTypes(JsonType.STRING, JsonType.NULL);
+		JsonSchema<?> result = p.addTypes(JsonType.STRING, JsonType.NULL);
 
 		assertSame(p, result);
 		assertInstanceOf(JsonSchemaProperty.class, result);
@@ -362,12 +366,12 @@ class JsonSchemaProperty_Test extends TestBase {
 
 		// addRequired(JsonSchemaProperty...)
 		var child = new JsonSchemaProperty("childField");
-		JsonSchemaProperty r1 = p.addRequired(child);
+		JsonSchema<?> r1 = p.addRequired(child);
 		assertSame(p, r1);
 		assertInstanceOf(JsonSchemaProperty.class, r1);
 
 		// addRequired(List<String>)
-		JsonSchemaProperty r2 = p.addRequired(l("field1", "field2"));
+		JsonSchema<?> r2 = p.addRequired(l("field1", "field2"));
 		assertSame(p, r2);
 		assertInstanceOf(JsonSchemaProperty.class, r2);
 	}
@@ -375,7 +379,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	@Test void a21_setSchemaMap() {
 		var p = new JsonSchemaProperty("prop");
 		var map = new JsonSchemaMap() {};
-		JsonSchemaProperty r = p.setSchemaMap(map);
+		JsonSchema<?> r = p.setSchemaMap(map);
 		assertSame(p, r);
 		assertInstanceOf(JsonSchemaProperty.class, r);
 	}

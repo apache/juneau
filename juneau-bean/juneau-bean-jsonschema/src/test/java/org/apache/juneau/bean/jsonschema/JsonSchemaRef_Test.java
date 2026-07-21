@@ -24,6 +24,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for JsonSchemaRef fluent setter overrides.
  */
+@SuppressWarnings({
+	"rawtypes"
+})
 class JsonSchemaRef_Test extends TestBase {
 
 	@Test void a01_fluentChaining_basicSetters() {
@@ -45,7 +48,7 @@ class JsonSchemaRef_Test extends TestBase {
 		result = r.setType(JsonType.STRING);
 		assertSame(r, result);
 
-		result = r.setId("http://example.com/id");
+		result = r.setIdUri("http://example.com/id"); // Non-deprecated replacement for setId(); this test only exercises fluent chaining.
 		assertSame(r, result);
 	}
 
@@ -131,7 +134,7 @@ class JsonSchemaRef_Test extends TestBase {
 		result = r.setMinProperties(1);
 		assertSame(r, result);
 
-		var props = new HashMap<String, JsonSchema>();
+		var props = new HashMap<String, JsonSchema<?>>();
 		result = r.setProperties(props);
 		assertSame(r, result);
 

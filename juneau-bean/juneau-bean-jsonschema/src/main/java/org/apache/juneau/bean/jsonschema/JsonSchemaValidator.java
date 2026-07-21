@@ -109,7 +109,7 @@ import org.apache.juneau.marshall.marshaller.*;
  */
 public final class JsonSchemaValidator implements PropertyValidator {
 
-	private final JsonSchema schema;
+	private final JsonSchema<?> schema;
 	private final Pattern patternCache;
 
 	/**
@@ -118,7 +118,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	 * @param schema The schema to validate against.  Must not be <jk>null</jk>.
 	 * @return A new validator.
 	 */
-	public static JsonSchemaValidator of(JsonSchema schema) {
+	public static JsonSchemaValidator of(JsonSchema<?> schema) {
 		assertArgNotNull("schema", schema);
 		return new JsonSchemaValidator(schema);
 	}
@@ -137,7 +137,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 		return of(JsonSchemaBeanGenerator.toBean(schemaMap));
 	}
 
-	private JsonSchemaValidator(JsonSchema schema) {
+	private JsonSchemaValidator(JsonSchema<?> schema) {
 		this.schema = schema;
 		var p = schema.getPattern();
 		this.patternCache = p == null ? null : Pattern.compile(p);
@@ -148,7 +148,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	 *
 	 * @return The schema.
 	 */
-	public JsonSchema getSchema() {
+	public JsonSchema<?> getSchema() {
 		return schema;
 	}
 
@@ -160,7 +160,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	@SuppressWarnings({
 		"java:S3776"  // Cognitive complexity — dispatch table over the JSON Schema keyword set.
 	})
-	private static void validateAgainst(JsonSchema s, Object value, Pattern patternOverride) {
+	private static void validateAgainst(JsonSchema<?> s, Object value, Pattern patternOverride) {
 		validateEnum(s, value);
 		validateConst(s, value);
 
@@ -189,7 +189,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	// Type / enum / const
 	// =================================================================================================================
 
-	private static void validateEnum(JsonSchema s, Object value) {
+	private static void validateEnum(JsonSchema<?> s, Object value) {
 		var enums = s.getEnum();
 		if (ie(enums))
 			return;
@@ -200,7 +200,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 		throw new SchemaValidationException("Value '%s' does not match one of the allowed enum values.", value);
 	}
 
-	private static void validateConst(JsonSchema s, Object value) {
+	private static void validateConst(JsonSchema<?> s, Object value) {
 		var c = s.getConst();
 		if (c == null)
 			return;  // const=null is indistinguishable from "not set" in the bean; treat as unset.
@@ -208,7 +208,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 			throw new SchemaValidationException("Value '%s' does not match required const '%s'.", value, c);
 	}
 
-	private static void validateType(JsonSchema s, Object value) {
+	private static void validateType(JsonSchema<?> s, Object value) {
 		var single = s.getTypeAsJsonType();
 		if (nn(single)) {
 			if (! matchesType(single, value))
@@ -281,7 +281,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	// String
 	// =================================================================================================================
 
-	private static void validateString(JsonSchema s, String value, Pattern patternOverride) {
+	private static void validateString(JsonSchema<?> s, String value, Pattern patternOverride) {
 		var minL = s.getMinLength();
 		var maxL = s.getMaxLength();
 		var len = value.codePointCount(0, value.length());
@@ -303,7 +303,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	@SuppressWarnings({
 		"java:S3776"  // Numeric keyword fan-out is intentionally flat; each branch maps to one Draft 2020-12 keyword.
 	})
-	private static void validateNumber(JsonSchema s, Number value) {
+	private static void validateNumber(JsonSchema<?> s, Number value) {
 		BigDecimal bd;
 		try {
 			bd = toBigDecimal(value);
@@ -330,7 +330,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	// Array
 	// =================================================================================================================
 
-	private static void validateArray(JsonSchema s, Collection<?> value) {
+	private static void validateArray(JsonSchema<?> s, Collection<?> value) {
 		var min = s.getMinItems();
 		var max = s.getMaxItems();
 		var size = value.size();
@@ -376,7 +376,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	@SuppressWarnings({
 		"java:S3776"  // Cognitive complexity — flat fan-out over the Draft 2020-12 object keywords (min/maxProperties, required, properties).
 	})
-	private static void validateObject(JsonSchema s, Map<?,?> value) {
+	private static void validateObject(JsonSchema<?> s, Map<?,?> value) {
 		var minP = s.getMinProperties();
 		var maxP = s.getMaxProperties();
 		var size = value.size();

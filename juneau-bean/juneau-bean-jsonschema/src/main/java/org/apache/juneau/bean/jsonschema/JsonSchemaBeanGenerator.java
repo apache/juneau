@@ -69,7 +69,7 @@ public final class JsonSchemaBeanGenerator {
 	 * @param type The Java type.  Must not be <jk>null</jk>.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the type.
 	 */
-	public JsonSchema generate(Type type) {
+	public JsonSchema<?> generate(Type type) {
 		assertArgNotNull("type", type);
 		try {
 			var session = generator.getSession();
@@ -91,7 +91,7 @@ public final class JsonSchemaBeanGenerator {
 	 * @param type The Java class.  Must not be <jk>null</jk>.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the class.
 	 */
-	public JsonSchema generate(Class<?> type) {
+	public JsonSchema<?> generate(Class<?> type) {
 		return generate((Type)type);
 	}
 
@@ -104,7 +104,7 @@ public final class JsonSchemaBeanGenerator {
 	 * @param o The value to infer a schema from.  Must not be <jk>null</jk>.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the value.
 	 */
-	public JsonSchema generate(Object o) {
+	public JsonSchema<?> generate(Object o) {
 		assertArgNotNull("o", o);
 		try {
 			var session = generator.getSession();
@@ -129,7 +129,7 @@ public final class JsonSchemaBeanGenerator {
 	 * @param schemaMap The generated schema map.  Must not be <jk>null</jk>.
 	 * @return The typed schema bean.
 	 */
-	public static JsonSchema toBean(JsonMap schemaMap) {
+	public static JsonSchema<?> toBean(JsonMap schemaMap) {
 		assertArgNotNull("schemaMap", schemaMap);
 		try {
 			var json = Json.of(schemaMap);
