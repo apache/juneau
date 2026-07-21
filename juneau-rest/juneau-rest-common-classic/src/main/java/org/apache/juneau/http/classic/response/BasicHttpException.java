@@ -29,6 +29,7 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.impl.*;
 import org.apache.http.params.*;
+import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.marshall.*;
@@ -41,7 +42,16 @@ import org.apache.juneau.marshall.*;
  * going to be more efficient to set the status/headers/content of this bean through the builder.
  *
  * <p>
- * If the <c>unmodifiable</c> flag is set on this bean, calls to the setters will throw {@link UnsupportedOperationException} exceptions.
+ * Immutability is expressed with the "funnel + nested {@code Unmodifiable} snapshot" paradigm: every mutator (fluent
+ * setter and {@code void} interface mutator) routes through the single protected {@link #modify(Runnable)} choke-point,
+ * and each concrete leaf gets a nested {@code X.Unmodifiable} whose only behavioral override is a throwing
+ * {@code modify(...)}.  A leaf's {@link #unmodifiable()} factory returns a point-in-time snapshot of type
+ * {@code X.Unmodifiable}; any attempt to set a property on it throws an {@link UnsupportedOperationException}.
+ *
+ * <p>
+ * This is a {@link Throwable}-rooted hierarchy, so (unlike {@link BasicHttpResponse}) it cannot be a self-typed (CRTP)
+ * root — JLS &sect;8.1.2 forbids a generic {@code Throwable}.  The funnel therefore returns the base type and each leaf
+ * keeps its covariant setter overrides.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>Beans are not thread safe unless they're marked as unmodifiable.
@@ -160,24 +170,28 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	/**
 	 * Copy constructor.
 	 *
+	 * <p>
+	 * The mutable sub-beans are deep-copied by <b>direct field assignment</b>, never through a funneled setter.  This is
+	 * the snapshot path used by {@link #unmodifiable()}: the constructor runs inside an {@code Unmodifiable} instance
+	 * whose {@link #modify(Runnable)} already throws, so a setter-based copy would blow up during construction.
+	 *
 	 * @param copyFrom The bean to copy.  Must not be <jk>null</jk>.
 	 */
 	protected BasicHttpException(BasicHttpException copyFrom) {
-		this(0, copyFrom.getCause(), copyFrom.getMessage());
-		setStatusLine(copyFrom.statusLine.copy());
-		setHeaders(copyFrom.headers);
-		if (nn(copyFrom.content))
-			setContent(copyFrom.content);
+		super(copyFrom.getCause(), "%s", copyFrom.getMessage());
+		statusLine = copyFrom.statusLine.copy();
+		headers = copyFrom.headers.copy();
+		content = copyFrom.content;
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void addHeader(Header value) {
-		headers.append(value);
+		modify(() -> headers.append(value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void addHeader(String name, String value) {
-		headers.append(name, value);
+		modify(() -> headers.append(name, value));
 	}
 
 	@Override /* Overridden from HttpMessage */
@@ -303,29 +317,16 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return this == o || (o instanceof BasicHttpException other && eq(this, other, (x, y) -> {
-			Throwable t1 = x;
-			Throwable t2 = y;
-			while (nn(t1) && nn(t2)) {
-				if (!Arrays.equals(t1.getStackTrace(), t2.getStackTrace()))
-					return false;
-				t1 = t1.getCause();
-				t2 = t2.getCause();
-			}
-			return t1 == null && t2 == null;
-		}));
+		// D3 content equality.  The 'content' HttpEntity is deliberately excluded: it is a wrapper without value
+		// semantics (two StringEntity instances of the same text are not equal), and it is derived from the message
+		// (getEntity() lazily builds stringEntity(getMessage())), which is already compared here.
+		return o instanceof BasicHttpException other && eq(this, other, (x, y) ->
+			eq(x.statusLine, y.statusLine) && eq(x.headers, y.headers) && eq(x.getMessage(), y.getMessage()));
 	}
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		int i = 0;
-		Throwable t = this;
-		while (nn(t)) {
-			for (var e : t.getStackTrace())
-				i ^= e.hashCode();
-			t = t.getCause();
-		}
-		return i;
+		return h(statusLine, headers, getMessage());
 	}
 
 	@Override /* Overridden from HttpMessage */
@@ -338,14 +339,21 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return headers.headerIterator(name);
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this bean is unmodifiable.
+	 *
+	 * @return <jk>true</jk> if this bean is an {@link UnmodifiableBean} snapshot.
+	 */
+	public boolean isUnmodifiable() { return this instanceof UnmodifiableBean; }
+
 	@Override /* Overridden from HttpMessage */
 	public void removeHeader(Header value) {
-		headers.remove(value);
+		modify(() -> headers.remove(value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void removeHeaders(String name) {
-		headers.remove(name);
+		modify(() -> headers.remove(name));
 	}
 
 	/**
@@ -355,8 +363,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setContent(HttpEntity value) {
-		content = value;
-		return this;
+		return modify(() -> content = value);
 	}
 
 	/**
@@ -366,23 +373,22 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setContent(String value) {
-		setContent(stringEntity(value));
-		return this;
+		return modify(() -> content = stringEntity(value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setEntity(HttpEntity entity) {
-		this.content = entity;
+		modify(() -> content = entity);
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setHeader(Header value) {
-		headers.set(value);
+		modify(() -> headers.set(value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setHeader(String name, String value) {
-		headers.set(name, value);
+		modify(() -> headers.set(name, value));
 	}
 
 	/**
@@ -393,13 +399,12 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setHeader2(String name, Object value) {
-		headers.set(name, value);
-		return this;
+		return modify(() -> headers.set(name, value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setHeaders(Header[] values) {
-		headers.removeAll().append(values);
+		modify(() -> headers.removeAll().append(values));
 	}
 
 	/**
@@ -409,8 +414,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setHeaders(HeaderList value) {
-		headers = value.copy();
-		return this;
+		return modify(() -> headers = value.copy());
 	}
 
 	/**
@@ -420,8 +424,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setHeaders(List<Header> values) {
-		headers.set(values);
-		return this;
+		return modify(() -> headers.set(values));
 	}
 
 	/**
@@ -431,13 +434,12 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setHeaders2(Header...values) {
-		headers.set(values);
-		return this;
+		return modify(() -> headers.set(values));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setLocale(Locale loc) {
-		statusLine.setLocale(loc);
+		modify(() -> statusLine.setLocale(loc));
 	}
 
 	/**
@@ -450,14 +452,12 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setLocale2(Locale value) {
-		statusLine.setLocale(value);
-		return this;
+		return modify(() -> statusLine.setLocale(value));
 	}
 
 	@Override /* Overridden from BasicRuntimeException */
 	public BasicHttpException setMessage(String message, Object...args) {
-		super.setMessage(message, args);
-		return this;
+		return modify(() -> super.setMessage(message, args));
 	}
 
 	@SuppressWarnings({
@@ -465,7 +465,8 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	})
 	@Override /* Overridden from HttpMessage */
 	public void setParams(HttpParams params) {
-		// No-op: Intentional empty implementation for deprecated optional interface method
+		// Deprecated optional interface method; routed through the funnel so it is frozen on unmodifiable snapshots.
+		modify(() -> { /* No-op */ });
 	}
 
 	/**
@@ -478,13 +479,12 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setProtocolVersion(ProtocolVersion value) {
-		statusLine.setProtocolVersion(value);
-		return this;
+		return modify(() -> statusLine.setProtocolVersion(value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setReasonPhrase(String reason) throws IllegalStateException {
-		statusLine.setReasonPhrase(reason);
+		modify(() -> statusLine.setReasonPhrase(reason));
 	}
 
 	/**
@@ -498,8 +498,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setReasonPhrase2(String value) {
-		statusLine.setReasonPhrase(value);
-		return this;
+		return modify(() -> statusLine.setReasonPhrase(value));
 	}
 
 	/**
@@ -512,13 +511,12 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		statusLine.setReasonPhraseCatalog(value);
-		return this;
+		return modify(() -> statusLine.setReasonPhraseCatalog(value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setStatusCode(int code) throws IllegalStateException {
-		statusLine.setStatusCode(code);
+		modify(() -> statusLine.setStatusCode(code));
 	}
 
 	/**
@@ -529,8 +527,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @throws IllegalStateException If status code could not be set.
 	 */
 	public BasicHttpException setStatusCode2(int code) throws IllegalStateException {
-		setStatusCode(code);
-		return this;
+		return modify(() -> statusLine.setStatusCode(code));
 	}
 
 	/**
@@ -543,36 +540,37 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setStatusLine(BasicStatusLine value) {
-		statusLine = value.copy();
-		return this;
+		return modify(() -> statusLine = value.copy());
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code) {
-		statusLine.setProtocolVersion(ver).setStatusCode(code);
+		modify(() -> statusLine.setProtocolVersion(ver).setStatusCode(code));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
-		statusLine.setProtocolVersion(ver).setReasonPhrase(reason).setStatusCode(code);
+		modify(() -> statusLine.setProtocolVersion(ver).setReasonPhrase(reason).setStatusCode(code));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(StatusLine value) {
-		setStatusLine(value.getProtocolVersion(), value.getStatusCode(), value.getReasonPhrase());
+		modify(() -> statusLine.setProtocolVersion(value.getProtocolVersion()).setReasonPhrase(value.getReasonPhrase()).setStatusCode(value.getStatusCode()));
 	}
 
 	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 * Returns an unmodifiable snapshot of this bean.
 	 *
-	 * @return This object.
+	 * <p>
+	 * The returned instance is a point-in-time copy of the leaf's nested {@code Unmodifiable} type; any attempt to set a
+	 * property on it throws an {@link UnsupportedOperationException}.  This method is idempotent: if this bean is already
+	 * unmodifiable it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still
+	 * modifiable unless it was already unmodifiable).
+	 *
+	 * @return An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.
 	 */
-	public BasicHttpException setUnmodifiable() {
-		statusLine.setUnmodifiable();
-		headers.setUnmodifiable();
-		return this;
+	public BasicHttpException unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
 	}
 
 	@Override /* Overridden from Object */
@@ -591,5 +589,65 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		int expected = getStatusLine().getStatusCode();
 		int actual = response.getStatusLine().getStatusCode();
 		assertInteger(actual).setMsg("Unexpected status code.  Expected:[%s], Actual:[%s]", expected, actual).is(expected);
+	}
+
+	/**
+	 * Single mutation funnel — the only choke-point through which all state changes on this bean flow.
+	 *
+	 * <p>
+	 * Every mutator (fluent setter and {@code void} interface mutator) routes through this method.  The nested
+	 * {@code Unmodifiable} snapshot overrides only this method to throw, which freezes the entire mutation surface with
+	 * a single override.  Because this is a {@link Throwable}-rooted hierarchy (no CRTP self-type), the funnel returns
+	 * the base type.
+	 *
+	 * @param mutation The state change to apply.
+	 * @return This object.
+	 */
+	protected BasicHttpException modify(Runnable mutation) {
+		mutation.run();
+		return this;
+	}
+
+	/**
+	 * Deep-freeze hook invoked from the nested {@code Unmodifiable} constructor after the snapshot copy completes.
+	 *
+	 * <p>
+	 * The mutable sub-beans are frozen here by <b>direct field assignment</b> (never via a setter, which would route
+	 * through the throwing {@link #modify(Runnable)} and blow up during construction).  A leaf that adds its own mutable
+	 * sub-bean overrides this method (calling {@code super.freeze()} first).
+	 */
+	protected void freeze() {
+		statusLine = statusLine.unmodifiable();   // DIRECT field write — must NOT use setStatusLine(...)
+		headers = headers.unmodifiable();         // DIRECT field write — snapshot the copied HeaderList.
+	}
+
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link BasicHttpException}.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends BasicHttpException implements UnmodifiableBean {
+
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The exception to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(BasicHttpException copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicHttpException */
+		protected BasicHttpException modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

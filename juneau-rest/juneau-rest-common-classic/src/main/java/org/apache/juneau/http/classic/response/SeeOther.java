@@ -16,17 +16,13 @@
  */
 package org.apache.juneau.http.classic.response;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.http.classic.response.SeeOther.*;
 
-import java.net.*;
-import java.util.*;
-
 import org.apache.http.*;
-import org.apache.http.Header;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.*;
-import org.apache.juneau.http.classic.header.*;
 
 /**
  * Represents an <c>HTTP 303 See Other</c> response.
@@ -42,7 +38,7 @@ import org.apache.juneau.http.classic.header.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description = REASON_PHRASE)
-public class SeeOther extends BasicHttpResponse {
+public class SeeOther extends BasicHttpResponse<SeeOther> {
 
 	/** HTTP status code */
 	public static final int STATUS_CODE = 303;
@@ -54,7 +50,7 @@ public class SeeOther extends BasicHttpResponse {
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Default unmodifiable instance */
-	public static final SeeOther INSTANCE = new SeeOther().setUnmodifiable();
+	public static final SeeOther INSTANCE = new SeeOther().unmodifiable();
 
 	/**
 	 * Constructor.
@@ -96,98 +92,35 @@ public class SeeOther extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
+	public SeeOther unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
 	}
 
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link SeeOther} response.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends SeeOther implements UnmodifiableBean {
 
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setHeader2(Header value) {
-		super.setHeader2(value);
-		return this;
-	}
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The response to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(SeeOther copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
 
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setHeader2(String name, String value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setLocation(String value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setLocation(URI value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setStatusCode2(int value) {
-		super.setStatusCode2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+		@Override /* Overridden from BasicHttpResponse */
+		protected SeeOther modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

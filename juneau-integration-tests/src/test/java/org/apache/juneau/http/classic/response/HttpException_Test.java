@@ -154,8 +154,10 @@ class HttpException_Test extends TestBase {
 		// Same instance
 		assertEquals(x1, x1);
 
-		// Different instance same content - stack traces differ so not equal
-		assertNotEquals(x1, x2);
+		// Different instances, same content - equality is content-based (statusLine + headers + message);
+		// stack traces are intentionally NOT part of equality.
+		assertEquals(x1, x2);
+		assertEquals(x1.hashCode(), x2.hashCode());
 
 		// Non-BasicHttpException
 		assertNotEquals("foo", x1);

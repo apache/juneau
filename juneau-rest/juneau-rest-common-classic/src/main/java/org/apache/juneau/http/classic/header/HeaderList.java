@@ -29,10 +29,10 @@ import java.util.stream.*;
 import org.apache.http.*;
 import org.apache.http.Header;
 import org.apache.http.util.*;
-import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.HttpHeaders;
+import org.apache.juneau.http.UnmodifiableBean;
 
 /**
  * A simple list of HTTP headers with various convenience methods.
@@ -66,9 +66,9 @@ import org.apache.juneau.http.HttpHeaders;
 @SuppressWarnings({
 	"java:S110",  // Inheritance depth acceptable for this class hierarchy
 	"java:S115",  // Constants use UPPER_snakeCase naming convention
-	"java:S2160"  // equals() inherited from AbstractList; list equality is element-based, which is correct for header lists
+	"java:S2160"  // equals() inherited from ArrayList; list equality is element-based, which is correct for header lists
 })
-public class HeaderList extends ControlledArrayList<Header> {
+public class HeaderList extends ArrayList<Header> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_type = "type";
@@ -146,7 +146,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * Constructor.
 	 */
 	public HeaderList() {
-		super(false);
+		super();
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param copyFrom The bean to copy.
 	 */
 	protected HeaderList(HeaderList copyFrom) {
-		super(false, copyFrom);
+		super(copyFrom);
 		caseSensitive = copyFrom.caseSensitive;
 	}
 
@@ -238,7 +238,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList caseSensitive(boolean value) {
-		assertModifiable();
 		caseSensitive = value;
 		return this;
 	}
@@ -723,7 +722,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList resolving(VarResolver varResolver) {
-		assertModifiable();
 		this.varResolver = varResolver;
 		return this;
 	}
@@ -891,10 +889,25 @@ public class HeaderList extends ControlledArrayList<Header> {
 		return setDefault(createPart(name, value));
 	}
 
-	@Override /* Overridden from ControlledArrayList */
-	public HeaderList setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+	/**
+	 * Returns an unmodifiable snapshot of this list.
+	 *
+	 * <p>
+	 * D1 idempotency: if this list is already an {@link Unmodifiable} snapshot, it is returned as-is.
+	 *
+	 * @return An unmodifiable snapshot of this list, or this list if it is already unmodifiable.
+	 */
+	public HeaderList unmodifiable() {
+		return this instanceof Unmodifiable ? this : new Unmodifiable(this);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this list is an unmodifiable snapshot.
+	 *
+	 * @return <jk>true</jk> if this list is an {@link Unmodifiable} snapshot.
+	 */
+	public boolean isUnmodifiable() {
+		return this instanceof UnmodifiableBean;
 	}
 
 	/**
@@ -944,4 +957,108 @@ public class HeaderList extends ControlledArrayList<Header> {
 			o = s.get();
 		return o;
 	}
+
+	/**
+	 * An unmodifiable snapshot of a {@link HeaderList}.
+	 *
+	 * <p>
+	 * This is the D4 "collection-mutator-override" variant of the immutability paradigm.  Because {@link HeaderList}
+	 * extends {@link ArrayList}, a single {@code modify()} funnel cannot intercept the inherited {@code ArrayList}
+	 * mutators, so this subclass snapshot-copies the elements in its constructor and overrides the entire
+	 * collection-mutator surface — its own fluent mutators plus the inherited {@code ArrayList} mutators (including the
+	 * {@code iterator()} / {@code listIterator()} mutators) — to throw {@link UnsupportedOperationException}.  Read
+	 * operations and non-mutating iteration continue to work.
+	 */
+	@SuppressWarnings({
+		"java:S110",  // Inheritance depth acceptable for this class hierarchy
+		"java:S2160"  // equals() inherited from ArrayList; list equality is element-based, which is correct for header lists
+	})
+	public static class Unmodifiable extends HeaderList implements UnmodifiableBean {
+
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The list to snapshot-copy.  Must not be <jk>null</jk>.
+		 */
+		Unmodifiable(HeaderList copyFrom) {
+			super(copyFrom);
+		}
+
+		// --- Fluent mutators -----------------------------------------------------------------------------------------
+
+		@Override public HeaderList append(Header value) { throw uoex(RO); }
+		@Override public HeaderList append(Header...values) { throw uoex(RO); }
+		@Override public HeaderList append(List<Header> values) { throw uoex(RO); }
+		@Override public HeaderList append(String name, Object value) { throw uoex(RO); }
+		@Override public HeaderList append(String name, Supplier<?> value) { throw uoex(RO); }
+		@Override public HeaderList caseSensitive(boolean value) { throw uoex(RO); }
+		@Override public HeaderList prepend(Header value) { throw uoex(RO); }
+		@Override public HeaderList prepend(Header...values) { throw uoex(RO); }
+		@Override public HeaderList prepend(List<Header> values) { throw uoex(RO); }
+		@Override public HeaderList prepend(String name, Object value) { throw uoex(RO); }
+		@Override public HeaderList prepend(String name, Supplier<?> value) { throw uoex(RO); }
+		@Override public HeaderList remove(Header value) { throw uoex(RO); }
+		@Override public HeaderList remove(Header...values) { throw uoex(RO); }
+		@Override public HeaderList remove(List<Header> values) { throw uoex(RO); }
+		@Override public HeaderList remove(String name) { throw uoex(RO); }
+		@Override public HeaderList remove(String...names) { throw uoex(RO); }
+		@Override public HeaderList removeAll() { throw uoex(RO); }
+		@Override public HeaderList resolving() { throw uoex(RO); }
+		@Override public HeaderList resolving(VarResolver varResolver) { throw uoex(RO); }
+		@Override public HeaderList set(Header value) { throw uoex(RO); }
+		@Override public HeaderList set(Header...values) { throw uoex(RO); }
+		@Override public HeaderList set(List<Header> values) { throw uoex(RO); }
+		@Override public HeaderList set(String name, Object value) { throw uoex(RO); }
+		@Override public HeaderList set(String name, Supplier<?> value) { throw uoex(RO); }
+		@Override public HeaderList setDefault(Header...headers) { throw uoex(RO); }
+		@Override public HeaderList setDefault(List<Header> headers) { throw uoex(RO); }
+		@Override public HeaderList setDefault(String name, Object value) { throw uoex(RO); }
+		@Override public HeaderList setDefault(String name, Supplier<?> value) { throw uoex(RO); }
+
+		// --- Inherited ArrayList collection mutators -----------------------------------------------------------------
+
+		@Override public boolean add(Header e) { throw uoex(RO); }
+		@Override public void add(int index, Header element) { throw uoex(RO); }
+		@Override public boolean addAll(Collection<? extends Header> c) { throw uoex(RO); }
+		@Override public boolean addAll(int index, Collection<? extends Header> c) { throw uoex(RO); }
+		@Override public void clear() { throw uoex(RO); }
+		@Override public boolean remove(Object o) { throw uoex(RO); }
+		@Override public Header remove(int index) { throw uoex(RO); }
+		@Override public boolean removeAll(Collection<?> c) { throw uoex(RO); }
+		@Override public boolean removeIf(Predicate<? super Header> filter) { throw uoex(RO); }
+		@Override public void replaceAll(UnaryOperator<Header> operator) { throw uoex(RO); }
+		@Override public boolean retainAll(Collection<?> c) { throw uoex(RO); }
+		@Override public Header set(int index, Header element) { throw uoex(RO); }
+		@Override public void sort(Comparator<? super Header> c) { throw uoex(RO); }
+
+		@Override public Iterator<Header> iterator() {
+			var i = super.iterator();
+			return new Iterator<>() {
+				@Override public boolean hasNext() { return i.hasNext(); }
+				@Override public Header next() { return i.next(); }
+				@Override public void remove() { throw uoex(RO); }
+			};
+		}
+
+		@Override public ListIterator<Header> listIterator() { return listIterator(0); }
+
+		@Override public ListIterator<Header> listIterator(int index) {
+			var i = super.listIterator(index);
+			return new ListIterator<>() {
+				@Override public boolean hasNext() { return i.hasNext(); }
+				@Override public Header next() { return i.next(); }
+				@Override public boolean hasPrevious() { return i.hasPrevious(); }
+				@Override public Header previous() { return i.previous(); }
+				@Override public int nextIndex() { return i.nextIndex(); }
+				@Override public int previousIndex() { return i.previousIndex(); }
+				@Override public void add(Header e) { throw uoex(RO); }
+				@Override public void set(Header e) { throw uoex(RO); }
+				@Override public void remove() { throw uoex(RO); }
+			};
+		}
+	}
+
+	private static final String RO = "Bean is unmodifiable.";
 }

@@ -16,17 +16,13 @@
  */
 package org.apache.juneau.http.classic.response;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.http.classic.response.Processing.*;
 
-import java.net.*;
-import java.util.*;
-
 import org.apache.http.*;
-import org.apache.http.Header;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.*;
-import org.apache.juneau.http.classic.header.*;
 
 /**
  * Represents an <c>HTTP 102 Processing</c> response.
@@ -43,7 +39,7 @@ import org.apache.juneau.http.classic.header.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description = REASON_PHRASE)
-public class Processing extends BasicHttpResponse {
+public class Processing extends BasicHttpResponse<Processing> {
 
 	/** HTTP status code */
 	public static final int STATUS_CODE = 102;
@@ -55,7 +51,7 @@ public class Processing extends BasicHttpResponse {
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Default unmodifiable instance */
-	public static final Processing INSTANCE = new Processing().setUnmodifiable();
+	public static final Processing INSTANCE = new Processing().unmodifiable();
 
 	/**
 	 * Constructor.
@@ -97,98 +93,35 @@ public class Processing extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Processing setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
+	public Processing unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
 	}
 
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link Processing} response.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends Processing implements UnmodifiableBean {
 
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setHeader2(Header value) {
-		super.setHeader2(value);
-		return this;
-	}
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The response to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(Processing copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
 
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setHeader2(String name, String value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setLocation(String value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setLocation(URI value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setStatusCode2(int value) {
-		super.setStatusCode2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Processing setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+		@Override /* Overridden from BasicHttpResponse */
+		protected Processing modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

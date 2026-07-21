@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.classic.response;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.http.classic.response.InsufficientStorage.*;
 
 import java.util.*;
@@ -58,7 +59,7 @@ public class InsufficientStorage extends BasicHttpException {
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
-	public static final InsufficientStorage INSTANCE = new InsufficientStorage().setUnmodifiable();
+	public static final InsufficientStorage INSTANCE = new InsufficientStorage().unmodifiable();
 
 	/**
 	 * Constructor.
@@ -208,9 +209,38 @@ public class InsufficientStorage extends BasicHttpException {
 		return this;
 	}
 
-	@Override /* Overridden from BasicRuntimeException */
-	public InsufficientStorage setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+	@Override /* Overridden from BasicHttpException */
+	public InsufficientStorage unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
+	}
+
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link InsufficientStorage} exception.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends InsufficientStorage implements UnmodifiableBean {
+
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The exception to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(InsufficientStorage copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicHttpException */
+		protected BasicHttpException modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

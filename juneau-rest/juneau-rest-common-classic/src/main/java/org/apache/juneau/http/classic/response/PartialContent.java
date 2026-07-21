@@ -16,17 +16,13 @@
  */
 package org.apache.juneau.http.classic.response;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.http.classic.response.PartialContent.*;
 
-import java.net.*;
-import java.util.*;
-
 import org.apache.http.*;
-import org.apache.http.Header;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.*;
-import org.apache.juneau.http.classic.header.*;
 
 /**
  * Represents an <c>HTTP 206 Partial Content</c> response.
@@ -42,7 +38,7 @@ import org.apache.juneau.http.classic.header.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description = REASON_PHRASE)
-public class PartialContent extends BasicHttpResponse {
+public class PartialContent extends BasicHttpResponse<PartialContent> {
 
 	/** HTTP status code */
 	public static final int STATUS_CODE = 206;
@@ -54,7 +50,7 @@ public class PartialContent extends BasicHttpResponse {
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Default unmodifiable instance */
-	public static final PartialContent INSTANCE = new PartialContent().setUnmodifiable();
+	public static final PartialContent INSTANCE = new PartialContent().unmodifiable();
 
 	/**
 	 * Constructor.
@@ -96,98 +92,35 @@ public class PartialContent extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
+	public PartialContent unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
 	}
 
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link PartialContent} response.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends PartialContent implements UnmodifiableBean {
 
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setHeader2(Header value) {
-		super.setHeader2(value);
-		return this;
-	}
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The response to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(PartialContent copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
 
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setHeader2(String name, String value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setLocation(String value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setLocation(URI value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setStatusCode2(int value) {
-		super.setStatusCode2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+		@Override /* Overridden from BasicHttpResponse */
+		protected PartialContent modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

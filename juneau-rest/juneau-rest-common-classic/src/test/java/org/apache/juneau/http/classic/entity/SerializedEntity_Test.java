@@ -172,8 +172,8 @@ class SerializedEntity_Test extends TestBase {
 		assertEquals("\"hello\"", x.asString());
 	}
 
-	@Test void a26_setUnmodifiable() {
-		var x = serializedEntity("hello", null).setUnmodifiable();
+	@Test void a26_unmodifiable() {
+		var x = serializedEntity("hello", null).unmodifiable();
 		assertThrows(UnsupportedOperationException.class, () -> x.setChunked(true));
 	}
 

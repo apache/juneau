@@ -524,6 +524,94 @@ class PartList_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// Unmodifiable (D4 collection-mutator-override variant)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_unmodifiable_isUnmodifiable() {
+		var x = PartList.create().append("a", "1");
+		assertFalse(x.isUnmodifiable());
+		assertTrue(x.unmodifiable().isUnmodifiable());
+	}
+
+	@Test void e02_unmodifiable_idempotent() {
+		var u = PartList.create().append("a", "1").unmodifiable();
+		assertSame(u, u.unmodifiable()); // D1: already unmodifiable -> returned as-is.
+	}
+
+	@Test void e03_unmodifiable_readsStillWork() {
+		var u = PartList.create().append("a", "1").append("b", "2").unmodifiable();
+		assertEquals(2, u.size());
+		assertEquals("1", u.get(0).getValue());
+		assertEquals("b", u.get(1).getName());
+		var count = new AtomicInteger();
+		u.forEach(p -> count.incrementAndGet());
+		assertEquals(2, count.get());
+	}
+
+	@Test void e04_unmodifiable_arrayListMutatorsThrow() {
+		var u = PartList.create().append("a", "1").unmodifiable();
+		var p = part("b", "2");
+		assertThrows(UnsupportedOperationException.class, () -> u.add(p));
+		assertThrows(UnsupportedOperationException.class, () -> u.add(0, p));
+		assertThrows(UnsupportedOperationException.class, () -> u.addAll(l(p)));
+		assertThrows(UnsupportedOperationException.class, () -> u.addAll(0, l(p)));
+		assertThrows(UnsupportedOperationException.class, () -> u.set(0, p));
+		assertThrows(UnsupportedOperationException.class, () -> u.remove(0));
+		assertThrows(UnsupportedOperationException.class, () -> u.remove((Object)u.get(0)));
+		assertThrows(UnsupportedOperationException.class, u::clear);
+		assertThrows(UnsupportedOperationException.class, () -> u.removeAll(l(u.get(0))));
+		assertThrows(UnsupportedOperationException.class, () -> u.retainAll(l()));
+		assertThrows(UnsupportedOperationException.class, () -> u.removeIf(x -> true));
+		assertThrows(UnsupportedOperationException.class, () -> u.replaceAll(x -> x));
+		assertThrows(UnsupportedOperationException.class, () -> u.sort((a, b) -> 0));
+	}
+
+	@Test void e05_unmodifiable_fluentMutatorsThrow() {
+		var u = PartList.create().append("a", "1").unmodifiable();
+		var p = part("b", "2");
+		assertThrows(UnsupportedOperationException.class, () -> u.append(p));
+		assertThrows(UnsupportedOperationException.class, () -> u.prepend(p));
+		assertThrows(UnsupportedOperationException.class, () -> u.append("c", "3"));
+		assertThrows(UnsupportedOperationException.class, () -> u.set(p));
+		assertThrows(UnsupportedOperationException.class, () -> u.setDefault(p));
+		assertThrows(UnsupportedOperationException.class, () -> u.remove("a"));
+		assertThrows(UnsupportedOperationException.class, () -> u.caseInsensitive(true));
+		assertThrows(UnsupportedOperationException.class, u::resolving);
+	}
+
+	@Test void e06_unmodifiable_iteratorMutatorsThrow() {
+		var u = PartList.create().append("a", "1").append("b", "2").unmodifiable();
+		var i = u.iterator();
+		assertTrue(i.hasNext());
+		assertNotNull(i.next());
+		assertThrows(UnsupportedOperationException.class, i::remove);
+
+		var li = u.listIterator();
+		assertTrue(li.hasNext());
+		assertNotNull(li.next());
+		assertThrows(UnsupportedOperationException.class, li::remove);
+		assertThrows(UnsupportedOperationException.class, () -> li.set(part("c", "3")));
+		assertThrows(UnsupportedOperationException.class, () -> li.add(part("c", "3")));
+	}
+
+	@Test void e07_unmodifiable_contentEquality() {
+		var x = PartList.create().append("a", "1").append("b", "2");
+		var u = x.unmodifiable();
+		// D3 content-only equality: a modifiable list equals its frozen snapshot (and vice versa).
+		assertEquals(x, u);
+		assertEquals(u, x);
+		assertEquals(x.hashCode(), u.hashCode());
+	}
+
+	@Test void e08_unmodifiable_snapshotIndependence() {
+		var x = PartList.create().append("a", "1");
+		var u = x.unmodifiable();
+		x.append("b", "2"); // Mutate original after snapshotting.
+		assertEquals(1, u.size());
+		assertEquals("a", u.get(0).getName());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
 

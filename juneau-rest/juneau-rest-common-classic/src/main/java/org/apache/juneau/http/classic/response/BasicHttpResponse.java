@@ -25,8 +25,10 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.http.impl.*;
 import org.apache.http.params.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.marshall.*;
@@ -39,7 +41,15 @@ import org.apache.juneau.marshall.*;
  * going to be more efficient to set the status/headers/content of this bean through the builder.
  *
  * <p>
- * If the <c>unmodifiable</c> flag is set on this bean, calls to the setters will throw {@link UnsupportedOperationException} exceptions.
+ * Immutability is expressed with the "funnel + nested {@code Unmodifiable} snapshot" paradigm: every mutator (fluent
+ * setter and {@code void} interface mutator) routes through the single protected {@link #modify(Runnable)} choke-point,
+ * and each concrete leaf gets a nested {@code X.Unmodifiable} whose only behavioral override is a throwing
+ * {@code modify(...)}.  A leaf's {@link #unmodifiable()} factory returns a point-in-time snapshot of type
+ * {@code X.Unmodifiable}; any attempt to set a property on it throws an {@link UnsupportedOperationException}.
+ *
+ * <p>
+ * This is a self-typed (CRTP) root: a leaf declares <c>class Ok <jk>extends</jk> BasicHttpResponse&lt;Ok&gt;</c> and
+ * inherits leaf-typed fluent setters with no covariant overrides.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>Beans are not thread safe unless they're marked as unmodifiable.
@@ -48,12 +58,15 @@ import org.apache.juneau.marshall.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
+ *
+ * @param <SELF> The self type for fluent setters.
  */
 @Marshalled(as=MarshalledAs.STRING)
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_status)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_status)
+	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 })
-public class BasicHttpResponse implements HttpResponse {
+public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> implements HttpResponse {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_response = "response";
@@ -61,14 +74,13 @@ public class BasicHttpResponse implements HttpResponse {
 	BasicStatusLine statusLine = new BasicStatusLine();
 	HeaderList headers = HeaderList.create();
 	HttpEntity content;
-	boolean unmodifiable;
 
 	/**
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The bean to copy from.  Must not be <jk>null</jk>.
 	 */
-	public BasicHttpResponse(BasicHttpResponse copyFrom) {
+	protected BasicHttpResponse(BasicHttpResponse<?> copyFrom) {
 		statusLine = copyFrom.statusLine.copy();
 		headers = copyFrom.headers.copy();
 		content = copyFrom.content;
@@ -100,12 +112,12 @@ public class BasicHttpResponse implements HttpResponse {
 
 	@Override /* Overridden from HttpMessage */
 	public void addHeader(Header value) {
-		headers.append(value);
+		modify(() -> headers.append(value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void addHeader(String name, String value) {
-		headers.append(name, value);
+		modify(() -> headers.append(name, value));
 	}
 
 	@Override /* Overridden from HttpMessage */
@@ -174,18 +186,18 @@ public class BasicHttpResponse implements HttpResponse {
 	/**
 	 * Returns <jk>true</jk> if this bean is unmodifiable.
 	 *
-	 * @return <jk>true</jk> if this bean is unmodifiable.
+	 * @return <jk>true</jk> if this bean is an {@link UnmodifiableBean} snapshot.
 	 */
-	public boolean isUnmodifiable() { return unmodifiable; }
+	public boolean isUnmodifiable() { return this instanceof UnmodifiableBean; }
 
 	@Override /* Overridden from HttpMessage */
 	public void removeHeader(Header value) {
-		headers.remove(value);
+		modify(() -> headers.remove(value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void removeHeaders(String name) {
-		headers.remove(name);
+		modify(() -> headers.remove(name));
 	}
 
 	/**
@@ -194,10 +206,8 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The body on this response.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setContent(HttpEntity value) {
-		assertModifiable();
-		content = value;
-		return this;
+	public SELF setContent(HttpEntity value) {
+		return modify(() -> content = value);
 	}
 
 	/**
@@ -206,24 +216,23 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The body on this response.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setContent(String value) {
-		return setContent(stringEntity(value));
+	public SELF setContent(String value) {
+		return modify(() -> content = stringEntity(value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setEntity(HttpEntity entity) {
-		assertModifiable();
-		this.content = entity;
+		modify(() -> content = entity);
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setHeader(Header value) {
-		headers.set(value);
+		modify(() -> headers.set(value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setHeader(String name, String value) {
-		headers.set(name, value);
+		modify(() -> headers.set(name, value));
 	}
 
 	/**
@@ -232,9 +241,8 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The header to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setHeader2(Header value) {
-		headers.set(value);
-		return this;
+	public SELF setHeader2(Header value) {
+		return modify(() -> headers.set(value));
 	}
 
 	/**
@@ -244,14 +252,13 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The header value.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setHeader2(String name, String value) {
-		headers.set(name, value);
-		return this;
+	public SELF setHeader2(String name, String value) {
+		return modify(() -> headers.set(name, value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setHeaders(Header[] values) {
-		headers.removeAll().append(values);
+		modify(() -> headers.removeAll().append(values));
 	}
 
 	/**
@@ -260,10 +267,8 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setHeaders(HeaderList value) {
-		assertModifiable();
-		headers = value.copy();
-		return this;
+	public SELF setHeaders(HeaderList value) {
+		return modify(() -> headers = value.copy());
 	}
 
 	/**
@@ -272,9 +277,8 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setHeaders(List<Header> values) {
-		headers.set(values);
-		return this;
+	public SELF setHeaders(List<Header> values) {
+		return modify(() -> headers.set(values));
 	}
 
 	/**
@@ -283,14 +287,13 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setHeaders2(Header...values) {
-		headers.set(values);
-		return this;
+	public SELF setHeaders2(Header...values) {
+		return modify(() -> headers.set(values));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setLocale(Locale loc) {
-		statusLine.setLocale(loc);
+		modify(() -> statusLine.setLocale(loc));
 	}
 
 	/**
@@ -302,9 +305,8 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setLocale2(Locale value) {
-		statusLine.setLocale(value);
-		return this;
+	public SELF setLocale2(Locale value) {
+		return modify(() -> statusLine.setLocale(value));
 	}
 
 	/**
@@ -313,9 +315,8 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new header location.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setLocation(String value) {
-		headers.set(Location.of(value));
-		return this;
+	public SELF setLocation(String value) {
+		return modify(() -> headers.set(Location.of(value)));
 	}
 
 	/**
@@ -324,9 +325,8 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new header location.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setLocation(URI value) {
-		headers.set(Location.of(value));
-		return this;
+	public SELF setLocation(URI value) {
+		return modify(() -> headers.set(Location.of(value)));
 	}
 
 	@SuppressWarnings({
@@ -334,7 +334,8 @@ public class BasicHttpResponse implements HttpResponse {
 	})
 	@Override /* Overridden from HttpMessage */
 	public void setParams(HttpParams params) {
-		// No-op: Intentional empty implementation for deprecated optional interface method
+		// Deprecated optional interface method; routed through the funnel so it is frozen on unmodifiable snapshots.
+		modify(() -> { /* No-op */ });
 	}
 
 	/**
@@ -346,14 +347,13 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setProtocolVersion(ProtocolVersion value) {
-		statusLine.setProtocolVersion(value);
-		return this;
+	public SELF setProtocolVersion(ProtocolVersion value) {
+		return modify(() -> statusLine.setProtocolVersion(value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setReasonPhrase(String reason) throws IllegalStateException {
-		statusLine.setReasonPhrase(reason);
+		modify(() -> statusLine.setReasonPhrase(reason));
 	}
 
 	/**
@@ -366,9 +366,8 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setReasonPhrase2(String value) {
-		statusLine.setReasonPhrase(value);
-		return this;
+	public SELF setReasonPhrase2(String value) {
+		return modify(() -> statusLine.setReasonPhrase(value));
 	}
 
 	/**
@@ -380,14 +379,13 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		statusLine.setReasonPhraseCatalog(value);
-		return this;
+	public SELF setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		return modify(() -> statusLine.setReasonPhraseCatalog(value));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setStatusCode(int code) throws IllegalStateException {
-		statusLine.setStatusCode(code);
+		modify(() -> statusLine.setStatusCode(code));
 	}
 
 	/**
@@ -399,9 +397,8 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setStatusCode2(int value) {
-		statusLine.setStatusCode(value);
-		return this;
+	public SELF setStatusCode2(int value) {
+		return modify(() -> statusLine.setStatusCode(value));
 	}
 
 	/**
@@ -413,39 +410,37 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setStatusLine(BasicStatusLine value) {
-		assertModifiable();
-		statusLine = value.copy();
-		return this;
+	public SELF setStatusLine(BasicStatusLine value) {
+		return modify(() -> statusLine = value.copy());
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code) {
-		statusLine.setProtocolVersion(ver).setStatusCode(code);
+		modify(() -> statusLine.setProtocolVersion(ver).setStatusCode(code));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
-		statusLine.setProtocolVersion(ver).setReasonPhrase(reason).setStatusCode(code);
+		modify(() -> statusLine.setProtocolVersion(ver).setReasonPhrase(reason).setStatusCode(code));
 	}
 
 	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(StatusLine value) {
-		setStatusLine(value.getProtocolVersion(), value.getStatusCode(), value.getReasonPhrase());
+		modify(() -> statusLine.setProtocolVersion(value.getProtocolVersion()).setReasonPhrase(value.getReasonPhrase()).setStatusCode(value.getStatusCode()));
 	}
 
 	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 * Returns an unmodifiable snapshot of this bean.
 	 *
-	 * @return This object.
+	 * <p>
+	 * The returned instance is a point-in-time copy of the leaf's nested {@code Unmodifiable} type; any attempt to set a
+	 * property on it throws an {@link UnsupportedOperationException}.  This method is idempotent: if this bean is already
+	 * unmodifiable it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still
+	 * modifiable unless it was already unmodifiable).
+	 *
+	 * @return An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.
 	 */
-	public BasicHttpResponse setUnmodifiable() {
-		unmodifiable = true;
-		headers.setUnmodifiable();
-		return this;
-	}
+	public abstract SELF unmodifiable();
 
 	@Override /* Overridden from Object */
 	public String toString() {
@@ -455,12 +450,54 @@ public class BasicHttpResponse implements HttpResponse {
 		return sb.toString();
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return o instanceof BasicHttpResponse<?> other && eq(this, other, (x, y) ->
+			eq(x.statusLine, y.statusLine) && eq(x.headers, y.headers) && eq(x.content, y.content));
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return h(statusLine, headers, content);
+	}
+
 	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 * Returns this object cast to the self type.
+	 *
+	 * @return This object.
 	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw uoex("Bean is read-only");
+	@SuppressWarnings({
+		"unchecked" // CRTP self-type cast is safe: SELF is bound to the concrete leaf type.
+	})
+	protected final SELF self() { return (SELF) this; }
+
+	/**
+	 * Single mutation funnel — the only choke-point through which all state changes on this bean flow.
+	 *
+	 * <p>
+	 * Every mutator (fluent setter and {@code void} interface mutator) routes through this method.  The nested
+	 * {@code Unmodifiable} snapshot overrides only this method to throw, which freezes the entire mutation surface with
+	 * a single override.
+	 *
+	 * @param mutation The state change to apply.
+	 * @return This object.
+	 */
+	protected SELF modify(Runnable mutation) {
+		mutation.run();
+		return self();
+	}
+
+	/**
+	 * Deep-freeze hook invoked from the nested {@code Unmodifiable} constructor after the snapshot copy completes.
+	 *
+	 * <p>
+	 * The mutable sub-beans are frozen here by <b>direct field assignment</b> (never via a setter, which would route
+	 * through the throwing {@link #modify(Runnable)} and blow up during construction).  A leaf that adds its own mutable
+	 * sub-bean overrides this method (calling {@code super.freeze()} first).
+	 */
+	protected void freeze() {
+		statusLine = statusLine.unmodifiable();   // DIRECT field write — must NOT use setStatusLine(...)
+		headers = headers.unmodifiable();         // DIRECT field write — snapshot the copied HeaderList.
 	}
 
 	/**

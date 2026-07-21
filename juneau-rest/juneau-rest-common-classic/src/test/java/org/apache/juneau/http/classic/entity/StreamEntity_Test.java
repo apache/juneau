@@ -192,8 +192,8 @@ class StreamEntity_Test extends TestBase {
 		assertEquals("text/html", x.getContentType().getValue());
 	}
 
-	@Test void a27_setUnmodifiable() {
-		var x = new StreamEntity().setContent(stream()).setUnmodifiable();
+	@Test void a27_unmodifiable() {
+		var x = new StreamEntity().setContent(stream()).unmodifiable();
 		assertThrows(UnsupportedOperationException.class, () -> x.setChunked(true));
 	}
 

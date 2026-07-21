@@ -22,11 +22,10 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 
 import java.io.*;
-import java.nio.charset.*;
-import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.commons.io.*;
+import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.serializer.*;
@@ -39,7 +38,7 @@ import org.apache.juneau.marshall.serializer.*;
 
  * </ul>
  */
-public class SerializedEntity extends BasicHttpEntity {
+public class SerializedEntity extends BasicHttpEntity<SerializedEntity> {
 	Serializer serializer;
 	HttpPartSchema schema;
 
@@ -81,7 +80,7 @@ public class SerializedEntity extends BasicHttpEntity {
 	 *
 	 * @return A new builder bean.
 	 */
-	@Override
+	@Override /* Overridden from BasicHttpEntity */
 	public SerializedEntity copy() {
 		return new SerializedEntity(this);
 	}
@@ -133,78 +132,6 @@ public class SerializedEntity extends BasicHttpEntity {
 	@Override /* Overridden from BasicHttpEntity */
 	public boolean isRepeatable() { return true; }
 
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setCached() throws IOException {
-		super.setCached();
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setCharset(Charset value) {
-		super.setCharset(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setChunked() {
-		super.setChunked();
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setChunked(boolean value) {
-		super.setChunked(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContent(Object value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContent(Supplier<?> value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContentEncoding(ContentEncoding value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContentEncoding(String value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContentLength(long value) {
-		super.setContentLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContentType(ContentType value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContentType(String value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setMaxLength(int value) {
-		super.setMaxLength(value);
-		return this;
-	}
-
 	/**
 	 * Sets the schema on this entity bean.
 	 *
@@ -215,9 +142,7 @@ public class SerializedEntity extends BasicHttpEntity {
 	 * @return This object.
 	 */
 	public SerializedEntity setSchema(HttpPartSchema value) {
-		assertModifiable();
-		schema = value;
-		return this;
+		return modify(() -> schema = value);
 	}
 
 	/**
@@ -227,15 +152,12 @@ public class SerializedEntity extends BasicHttpEntity {
 	 * @return This object.
 	 */
 	public SerializedEntity setSerializer(Serializer value) {
-		assertModifiable();
-		serializer = value;
-		return this;
+		return modify(() -> serializer = value);
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+	public SerializedEntity unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -255,6 +177,34 @@ public class SerializedEntity extends BasicHttpEntity {
 			}
 		} catch (SerializeException e) {
 			throw rex(e, "Serialization error on request body.");
+		}
+	}
+
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link SerializedEntity}.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends SerializedEntity implements UnmodifiableBean {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The entity to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(SerializedEntity copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicHttpEntity */
+		protected SerializedEntity modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
 		}
 	}
 }

@@ -18,6 +18,7 @@ package org.apache.juneau.http.classic;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.http.*;
@@ -99,8 +100,8 @@ class BasicStatusLine_Test extends TestBase {
 		assertEquals("Not Found", copy.getReasonPhrase());
 	}
 
-	@Test void a12_setUnmodifiable_blocksModification() {
-		var sl = BasicStatusLine.create().setStatusCode(200).setUnmodifiable();
+	@Test void a12_unmodifiable_blocksModification() {
+		var sl = BasicStatusLine.create().setStatusCode(200).unmodifiable();
 		assertThrows(UnsupportedOperationException.class, () -> sl.setStatusCode(404));
 		assertThrows(UnsupportedOperationException.class, () -> sl.setReasonPhrase("Foo"));
 		assertThrows(UnsupportedOperationException.class, () -> sl.setProtocolVersion(null));
@@ -155,5 +156,59 @@ class BasicStatusLine_Test extends TestBase {
 		var sl1 = BasicStatusLine.create(200, "OK");
 		var sl2 = BasicStatusLine.create(200, "OK");
 		assertEquals(sl1.hashCode(), sl2.hashCode());
+	}
+
+	@Test void b01_unmodifiable_returnsUnmodifiableType() {
+		var sl = BasicStatusLine.create(200, "OK");
+		assertFalse(sl.isUnmodifiable());
+		var u = sl.unmodifiable();
+		assertTrue(u.isUnmodifiable());
+		assertInstanceOf(BasicStatusLine.Unmodifiable.class, u);
+	}
+
+	@Test void b02_reflectiveGuard_everyPublicMutatorThrows() throws Exception {
+		var u = BasicStatusLine.create(200, "OK").unmodifiable();
+		var mutators = 0;
+		for (var m : BasicStatusLine.class.getMethods()) {
+			if (! m.getName().startsWith("set") || Modifier.isStatic(m.getModifiers()))
+				continue;
+			mutators++;
+			var args = new Object[m.getParameterCount()];
+			var types = m.getParameterTypes();
+			for (var i = 0; i < types.length; i++)
+				args[i] = types[i] == int.class ? Integer.valueOf(0) : null;
+			var ex = assertThrows(InvocationTargetException.class, () -> m.invoke(u, args), m::getName);
+			assertInstanceOf(UnsupportedOperationException.class, ex.getCause(), m::getName);
+		}
+		assertTrue(mutators >= 5, "Expected at least 5 public mutators, found " + mutators);
+	}
+
+	@Test void b03_idempotency_alreadyUnmodifiableReturnsThis() {
+		var u = BasicStatusLine.create(200, "OK").unmodifiable();
+		assertSame(u, u.unmodifiable());
+	}
+
+	@Test void b04_contentEquality_beanEqualsSnapshot() {
+		var sl = BasicStatusLine.create(200, "OK").setLocale(Locale.ENGLISH);
+		var u = sl.unmodifiable();
+		assertEquals(sl, u);
+		assertEquals(u, sl);
+		assertEquals(sl.hashCode(), u.hashCode());
+	}
+
+	@Test void b05_snapshotIndependence_mutatingOriginalDoesNotAffectSnapshot() {
+		var sl = BasicStatusLine.create(200, "OK");
+		var u = sl.unmodifiable();
+		sl.setStatusCode(404).setReasonPhrase("Not Found");
+		assertEquals(200, u.getStatusCode());
+		assertEquals("OK", u.getReasonPhrase());
+	}
+
+	@Test void b06_snapshotConstruction_freezeDoesNotThrow() {
+		// Regression: constructing the snapshot must not route the freeze through the throwing modify().
+		var sl = BasicStatusLine.create(200, "OK")
+			.setLocale(Locale.ENGLISH)
+			.setReasonPhraseCatalog(org.apache.http.impl.EnglishReasonPhraseCatalog.INSTANCE);
+		assertDoesNotThrow(sl::unmodifiable);
 	}
 }

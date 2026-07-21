@@ -21,10 +21,9 @@ import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
-import java.nio.charset.*;
 import java.util.*;
-import java.util.function.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.header.*;
 
 /**
@@ -38,7 +37,7 @@ import org.apache.juneau.http.classic.header.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"resource", // Resource management handled externally
 })
-public class FileEntity extends BasicHttpEntity {
+public class FileEntity extends BasicHttpEntity<FileEntity> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_out = "out";
@@ -88,7 +87,7 @@ public class FileEntity extends BasicHttpEntity {
 		return read(new InputStreamReader(new FileInputStream(content()), getCharset()), getMaxLength());
 	}
 
-	@Override
+	@Override /* Overridden from BasicHttpEntity */
 	public FileEntity copy() {
 		return new FileEntity(this);
 	}
@@ -107,81 +106,8 @@ public class FileEntity extends BasicHttpEntity {
 	public boolean isRepeatable() { return true; }
 
 	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setCached() throws IOException {
-		super.setCached();
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setCharset(Charset value) {
-		super.setCharset(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setChunked() {
-		super.setChunked();
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setChunked(boolean value) {
-		super.setChunked(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setContent(Object value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setContent(Supplier<?> value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setContentEncoding(ContentEncoding value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setContentEncoding(String value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setContentLength(long value) {
-		super.setContentLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setContentType(ContentType value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setContentType(String value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setMaxLength(int value) {
-		super.setMaxLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+	public FileEntity unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -205,5 +131,33 @@ public class FileEntity extends BasicHttpEntity {
 		if (! f.canRead())
 			throw isex("File %s is not readable.", f.getAbsolutePath());
 		return f;
+	}
+
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link FileEntity}.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends FileEntity implements UnmodifiableBean {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The entity to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(FileEntity copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicHttpEntity */
+		protected FileEntity modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

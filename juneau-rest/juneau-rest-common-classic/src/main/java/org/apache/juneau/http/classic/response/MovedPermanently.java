@@ -16,17 +16,13 @@
  */
 package org.apache.juneau.http.classic.response;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.http.classic.response.MovedPermanently.*;
 
-import java.net.*;
-import java.util.*;
-
 import org.apache.http.*;
-import org.apache.http.Header;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.*;
-import org.apache.juneau.http.classic.header.*;
 
 /**
  * Represents an <c>HTTP 301 Moved Permanently</c> response.
@@ -41,7 +37,7 @@ import org.apache.juneau.http.classic.header.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description = REASON_PHRASE)
-public class MovedPermanently extends BasicHttpResponse {
+public class MovedPermanently extends BasicHttpResponse<MovedPermanently> {
 
 	/** HTTP status code */
 	public static final int STATUS_CODE = 301;
@@ -53,7 +49,7 @@ public class MovedPermanently extends BasicHttpResponse {
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Default unmodifiable instance */
-	public static final MovedPermanently INSTANCE = new MovedPermanently().setUnmodifiable();
+	public static final MovedPermanently INSTANCE = new MovedPermanently().unmodifiable();
 
 	/**
 	 * Constructor.
@@ -95,98 +91,35 @@ public class MovedPermanently extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
+	public MovedPermanently unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
 	}
 
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link MovedPermanently} response.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends MovedPermanently implements UnmodifiableBean {
 
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setHeader2(Header value) {
-		super.setHeader2(value);
-		return this;
-	}
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The response to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(MovedPermanently copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
 
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setHeader2(String name, String value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setLocation(String value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setLocation(URI value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setStatusCode2(int value) {
-		super.setStatusCode2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+		@Override /* Overridden from BasicHttpResponse */
+		protected MovedPermanently modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

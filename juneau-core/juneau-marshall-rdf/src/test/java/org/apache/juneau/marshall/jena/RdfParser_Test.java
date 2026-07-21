@@ -173,10 +173,11 @@ class RdfParser_Test extends TestBase {
 		}
 
 		@Test void a25_swap_twoFunction() {
-			// The 3-param swap always throws since unswapFunction is required
-			assertThrows(IllegalArgumentException.class, () ->
-				RdfParser.create().swap(Integer.class, String.class, String::valueOf).build()
-			);
+			// The 3-param swap registers a serialize-only swap (no unswap function required).
+			var x = RdfParser.create()
+				.swap(Integer.class, String.class, String::valueOf)
+				.build();
+			assertNotNull(x);
 		}
 
 		@Test void a26_swap_fourFunction() {

@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.function.*;
+
+import org.apache.juneau.http.*;
 
 /**
  * Represents an HTTP <c>Thrown</c> header.
@@ -77,7 +78,7 @@ public class Thrown extends HttpCsvHeader {
 				if (!first)
 					sb.append(", ");
 				first = false;
-				sb.append(urlEncode(cn(v))).append(';');
+				sb.append(urlEncode(UnmodifiableBean.logicalType(v).getName())).append(';');
 				if (v.getMessage() != null)
 					sb.append(urlEncode(v.getMessage()));
 			}

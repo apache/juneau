@@ -16,10 +16,13 @@
  */
 package org.apache.juneau.http.classic.resource;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
 
@@ -154,8 +157,31 @@ public class StringResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public StringResource setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+	public StringResource unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
+	}
+
+	/**
+	 * An unmodifiable snapshot of a {@link StringResource}.
+	 */
+	public static class Unmodifiable extends StringResource implements UnmodifiableBean {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The bean to snapshot-copy.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(StringResource copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicResource */
+		protected BasicResource modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

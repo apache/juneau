@@ -118,9 +118,14 @@ class ByteArrayEntity_Test extends TestBase {
 		assertSame(x, x.setMaxLength(100));
 	}
 
-	@Test void a16_fluent_setUnmodifiable() throws Exception {
+	@Test void a16_unmodifiable() throws Exception {
 		var x = new ByteArrayEntity().setContent(BYTES);
-		assertSame(x, x.setUnmodifiable());
+		var u = x.unmodifiable();
+		assertTrue(u.isUnmodifiable());
+		assertInstanceOf(ByteArrayEntity.Unmodifiable.class, u);
+		assertThrows(UnsupportedOperationException.class, () -> u.setChunked(true));
+		// D1 idempotency — already-unmodifiable returns itself.
+		assertSame(u, u.unmodifiable());
 	}
 
 	@Test void a17_fluent_setCached() throws Exception {

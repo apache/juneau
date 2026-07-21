@@ -177,8 +177,8 @@ class FileEntity_Test extends TestBase {
 		assertEquals("text/html", x.getContentType().getValue());
 	}
 
-	@Test void a23_setUnmodifiable() {
-		var x = new FileEntity().setContent(tempFile).setUnmodifiable();
+	@Test void a23_unmodifiable() {
+		var x = new FileEntity().setContent(tempFile).unmodifiable();
 		assertThrows(UnsupportedOperationException.class, () -> x.setChunked(true));
 	}
 

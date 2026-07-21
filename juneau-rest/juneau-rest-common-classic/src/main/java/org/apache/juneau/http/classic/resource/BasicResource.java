@@ -24,6 +24,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.test.assertions.*;
@@ -53,16 +54,15 @@ import org.apache.juneau.test.assertions.*;
 	"java:S1206", // equals/hashCode not overridden; value equality not practical for this class
 })
 public class BasicResource implements HttpResource {
-	BasicHttpEntity entity;
+	BasicHttpEntity<?> entity;
 	HeaderList headers = HeaderList.create();
-	boolean unmodifiable;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param entity The entity that makes up this resource content.  Must not be <jk>null</jk>.
 	 */
-	public BasicResource(BasicHttpEntity entity) {
+	public BasicResource(BasicHttpEntity<?> entity) {
 		this.entity = entity;
 	}
 
@@ -251,7 +251,7 @@ public class BasicResource implements HttpResource {
 	 *
 	 * @return <jk>true</jk> if this bean is unmodifiable.
 	 */
-	public boolean isUnmodifiable() { return unmodifiable; }
+	public boolean isUnmodifiable() { return this instanceof UnmodifiableBean; }
 
 	/**
 	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
@@ -426,22 +426,19 @@ public class BasicResource implements HttpResource {
 	 * @return This object.
 	 */
 	public BasicResource setHeaders(HeaderList value) {
-		headers = value.copy();
-		return this;
+		return modify(() -> headers = value.copy());
 	}
 
 	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 * Returns an unmodifiable snapshot of this bean.
 	 *
-	 * @return This object.
+	 * <p>
+	 * D1 idempotency: if this bean is already an unmodifiable snapshot, it is returned as-is.
+	 *
+	 * @return An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.
 	 */
-	public BasicResource setUnmodifiable() {
-		unmodifiable = true;
-		entity.setUnmodifiable();
-		headers.setUnmodifiable();
-		return this;
+	public BasicResource unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -450,10 +447,59 @@ public class BasicResource implements HttpResource {
 	}
 
 	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 * Single mutation funnel for direct-field state changes on this bean.
+	 *
+	 * <p>
+	 * The nested {@link Unmodifiable} snapshot overrides this method to throw.  Mutators that delegate to the entity or
+	 * header sub-beans are frozen by the {@link #freeze()} deep-freeze of those sub-beans; this funnel additionally
+	 * covers the direct-field {@link #setHeaders(HeaderList)} reassignment.
+	 *
+	 * @param mutation The state change to apply.
+	 * @return This object.
 	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw uoex("Bean is read-only");
+	protected BasicResource modify(Runnable mutation) {
+		mutation.run();
+		return this;
+	}
+
+	/**
+	 * Deep-freeze hook invoked from the nested {@link Unmodifiable} constructor after the snapshot copy completes.
+	 *
+	 * <p>
+	 * The mutable sub-beans are frozen here by <b>direct field assignment</b> (never via a setter, which would route
+	 * through the throwing {@link #modify(Runnable)} / frozen sub-beans and blow up during construction).
+	 */
+	protected void freeze() {
+		entity = entity.unmodifiable();   // DIRECT field write — snapshot the copied entity.
+		headers = headers.unmodifiable(); // DIRECT field write — snapshot the copied HeaderList.
+	}
+
+	/**
+	 * An unmodifiable snapshot of a {@link BasicResource}.
+	 *
+	 * <p>
+	 * Its behavioral override is a throwing {@link #modify(Runnable)}, and its constructor deep-freezes the entity and
+	 * header sub-beans via {@link #freeze()}.  Together these freeze the entire mutation surface: direct-field mutators
+	 * throw through {@code modify(...)}, and sub-bean-delegating mutators throw through the frozen entity/headers.
+	 */
+	public static class Unmodifiable extends BasicResource implements UnmodifiableBean {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The bean to snapshot-copy.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(BasicResource copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicResource */
+		protected BasicResource modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

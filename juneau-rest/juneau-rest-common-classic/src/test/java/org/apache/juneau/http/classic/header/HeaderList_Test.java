@@ -461,6 +461,95 @@ class HeaderList_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// Unmodifiable (D4 collection-mutator-override variant)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_unmodifiable_isUnmodifiable() {
+		var x = HeaderList.create().append("X-A", "a");
+		assertFalse(x.isUnmodifiable());
+		assertTrue(x.unmodifiable().isUnmodifiable());
+	}
+
+	@Test void e02_unmodifiable_idempotent() {
+		var u = HeaderList.create().append("X-A", "a").unmodifiable();
+		assertSame(u, u.unmodifiable()); // D1: already unmodifiable -> returned as-is.
+	}
+
+	@Test void e03_unmodifiable_readsStillWork() {
+		var u = HeaderList.create().append("X-A", "a").append("X-B", "b").unmodifiable();
+		assertEquals(2, u.size());
+		assertList(u, "X-A: a", "X-B: b");
+		assertEquals("a", u.get(0).getValue());
+		var count = new AtomicInteger();
+		u.forEach(h -> count.incrementAndGet());
+		assertEquals(2, count.get());
+	}
+
+	@Test void e04_unmodifiable_arrayListMutatorsThrow() {
+		var u = HeaderList.create().append("X-A", "a").unmodifiable();
+		var h = header("X-B", "b");
+		assertThrows(UnsupportedOperationException.class, () -> u.add(h));
+		assertThrows(UnsupportedOperationException.class, () -> u.add(0, h));
+		assertThrows(UnsupportedOperationException.class, () -> u.addAll(l(h)));
+		assertThrows(UnsupportedOperationException.class, () -> u.addAll(0, l(h)));
+		assertThrows(UnsupportedOperationException.class, () -> u.set(0, h));
+		assertThrows(UnsupportedOperationException.class, () -> u.remove(0));
+		assertThrows(UnsupportedOperationException.class, () -> u.remove((Object)u.get(0)));
+		assertThrows(UnsupportedOperationException.class, u::clear);
+		assertThrows(UnsupportedOperationException.class, () -> u.removeAll(l(u.get(0))));
+		assertThrows(UnsupportedOperationException.class, () -> u.retainAll(l()));
+		assertThrows(UnsupportedOperationException.class, () -> u.removeIf(x -> true));
+		assertThrows(UnsupportedOperationException.class, () -> u.replaceAll(x -> x));
+		assertThrows(UnsupportedOperationException.class, () -> u.sort((a, b) -> 0));
+	}
+
+	@Test void e05_unmodifiable_fluentMutatorsThrow() {
+		var u = HeaderList.create().append("X-A", "a").unmodifiable();
+		var h = header("X-B", "b");
+		assertThrows(UnsupportedOperationException.class, () -> u.append(h));
+		assertThrows(UnsupportedOperationException.class, () -> u.prepend(h));
+		assertThrows(UnsupportedOperationException.class, () -> u.append("X-C", "c"));
+		assertThrows(UnsupportedOperationException.class, () -> u.set(h));
+		assertThrows(UnsupportedOperationException.class, () -> u.setDefault(h));
+		assertThrows(UnsupportedOperationException.class, () -> u.remove("X-A"));
+		assertThrows(UnsupportedOperationException.class, u::removeAll);
+		assertThrows(UnsupportedOperationException.class, () -> u.caseSensitive(true));
+		assertThrows(UnsupportedOperationException.class, u::resolving);
+	}
+
+	@Test void e06_unmodifiable_iteratorMutatorsThrow() {
+		var u = HeaderList.create().append("X-A", "a").append("X-B", "b").unmodifiable();
+		var i = u.iterator();
+		assertTrue(i.hasNext());
+		assertNotNull(i.next());
+		assertThrows(UnsupportedOperationException.class, i::remove);
+
+		var li = u.listIterator();
+		assertTrue(li.hasNext());
+		assertNotNull(li.next());
+		assertThrows(UnsupportedOperationException.class, li::remove);
+		assertThrows(UnsupportedOperationException.class, () -> li.set(header("X-C", "c")));
+		assertThrows(UnsupportedOperationException.class, () -> li.add(header("X-C", "c")));
+	}
+
+	@Test void e07_unmodifiable_contentEquality() {
+		var x = HeaderList.create().append("X-A", "a").append("X-B", "b");
+		var u = x.unmodifiable();
+		// D3 content-only equality: a modifiable list equals its frozen snapshot (and vice versa).
+		assertEquals(x, u);
+		assertEquals(u, x);
+		assertEquals(x.hashCode(), u.hashCode());
+	}
+
+	@Test void e08_unmodifiable_snapshotIndependence() {
+		var x = HeaderList.create().append("X-A", "a");
+		var u = x.unmodifiable();
+		x.append("X-B", "b"); // Mutate original after snapshotting.
+		assertEquals(1, u.size());
+		assertList(u, "X-A: a");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
 

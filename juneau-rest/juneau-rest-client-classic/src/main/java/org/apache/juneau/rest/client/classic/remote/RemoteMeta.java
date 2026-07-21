@@ -98,7 +98,7 @@ public class RemoteMeta {
 		ci.getPublicMethods().forEach(x -> operations2.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET")));
 
 		this.operations = u(operations2);
-		this.headers = headers2.setUnmodifiable();
+		this.headers = headers2.unmodifiable();
 	}
 
 	/**

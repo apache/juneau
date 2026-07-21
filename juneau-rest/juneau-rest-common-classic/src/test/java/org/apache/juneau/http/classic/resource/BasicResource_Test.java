@@ -240,19 +240,33 @@ class BasicResource_Test extends TestBase {
 		assertFalse(x.isUnmodifiable());
 	}
 
-	@Test void e02_setUnmodifiable_flagsAndAssertion() {
+	@Test void e02_unmodifiable_returnsFrozenSnapshot() {
 		var x = new BasicResource(new StringEntity(null, "foo"));
-		assertSame(x, x.setUnmodifiable());
-		assertTrue(x.isUnmodifiable());
-		// Underlying entity and headers should now be unmodifiable too.
-		assertThrows(UnsupportedOperationException.class, () -> x.setContent("other"));
+		var u = x.unmodifiable();
+		assertFalse(x.isUnmodifiable());
+		assertTrue(u.isUnmodifiable());
+		// The snapshot's direct-field mutator (setHeaders(HeaderList)) throws through the modify() funnel...
+		assertThrows(UnsupportedOperationException.class, () -> u.setHeaders(HeaderList.create().append("X", "y")));
+		// ...and the sub-bean-delegating mutators throw through the frozen entity/headers.
+		assertThrows(UnsupportedOperationException.class, () -> u.setContent("other"));
+		assertThrows(UnsupportedOperationException.class, () -> u.addHeader("X", "y"));
+		assertThrows(UnsupportedOperationException.class, () -> u.setHeader("X", "y"));
+		assertThrows(UnsupportedOperationException.class, () -> u.setChunked(true));
+		assertThrows(UnsupportedOperationException.class, () -> u.getHeaders().append("X", "y"));
 	}
 
-	@Test void e03_assertModifiable_viaSubclass() {
-		var x = new ModifiableProbe(new StringEntity(null, "foo"));
-		x.callAssertModifiable(); // No throw initially.
-		x.setUnmodifiable();
-		assertThrows(UnsupportedOperationException.class, x::callAssertModifiable);
+	@Test void e03_unmodifiable_idempotent() {
+		var u = new BasicResource(new StringEntity(null, "foo")).unmodifiable();
+		// D1 idempotency: unmodifiable() on an already-unmodifiable snapshot returns the same instance.
+		assertSame(u, u.unmodifiable());
+	}
+
+	@Test void e04_unmodifiable_snapshotIndependence() {
+		var x = new BasicResource(new StringEntity(null, "foo")).addHeader("X-A", "a");
+		var u = x.unmodifiable();
+		var before = u.getHeaders().size();
+		x.addHeader("X-B", "b"); // Mutate original after snapshotting.
+		assertEquals(before, u.getHeaders().size());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -283,15 +297,5 @@ class BasicResource_Test extends TestBase {
 
 	private static Header header(String name, Object val) {
 		return org.apache.juneau.http.classic.header.BasicHeader.of(name, val);
-	}
-
-	/** Subclass that exposes the protected assertModifiable method for testing. */
-	private static final class ModifiableProbe extends BasicResource {
-		ModifiableProbe(BasicHttpEntity entity) {
-			super(entity);
-		}
-		void callAssertModifiable() {
-			assertModifiable();
-		}
 	}
 }

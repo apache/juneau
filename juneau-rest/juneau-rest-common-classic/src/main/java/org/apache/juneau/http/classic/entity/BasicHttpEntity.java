@@ -25,6 +25,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.test.assertions.*;
 
@@ -43,25 +44,42 @@ import org.apache.juneau.test.assertions.*;
  * 		Externally-supplied/dynamic content.
  * </ul>
  *
+ * <p>
+ * Immutability is expressed with the "funnel + nested {@code Unmodifiable} snapshot" paradigm: every fluent setter
+ * routes through the single protected {@link #modify(Runnable)} choke-point, and each concrete leaf gets a nested
+ * {@code X.Unmodifiable} whose only behavioral override is a throwing {@code modify(...)}.  A leaf's
+ * {@link #unmodifiable()} factory returns a point-in-time snapshot of type {@code X.Unmodifiable}; any attempt to set a
+ * property on it throws an {@link UnsupportedOperationException}.
+ *
+ * <p>
+ * This is a self-typed (CRTP) root: a leaf declares <c>class StringEntity <jk>extends</jk> BasicHttpEntity&lt;StringEntity&gt;</c>
+ * and inherits leaf-typed fluent setters with no covariant overrides.
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='warn'>Beans are not thread safe unless they're marked as unmodifiable.
+ * </ul>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
+ *
+ * @param <SELF> The self type for fluent setters.
  */
 @BeanIgnore
 
 @SuppressWarnings({
-	"resource", // Content may be streams; value equality not practical
-	"java:S1206", // equals/hashCode not overridden; value equality not practical for this class
+	"resource", // Content may be streams; only reference equality is used for the content field.
+	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 })
-public class BasicHttpEntity implements HttpEntity {
+public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implements HttpEntity {
 
 	/**
 	 * An empty HttpEntity.
 	 */
-	public static final BasicHttpEntity EMPTY = new BasicHttpEntity().setUnmodifiable();
+	public static final BasicHttpEntity<?> EMPTY = new ByteArrayEntity().unmodifiable();
+
 	private boolean cached;
 	private boolean chunked;
-	private boolean unmodifiable;
 	private Object content;
 	private Supplier<?> contentSupplier;
 	private ContentType contentType;
@@ -80,7 +98,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 *
 	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
-	public BasicHttpEntity(BasicHttpEntity copyFrom) {
+	protected BasicHttpEntity(BasicHttpEntity<?> copyFrom) {
 		this.cached = copyFrom.cached;
 		this.chunked = copyFrom.chunked;
 		this.content = copyFrom.content;
@@ -90,7 +108,6 @@ public class BasicHttpEntity implements HttpEntity {
 		this.contentLength = copyFrom.contentLength;
 		this.charset = copyFrom.charset;
 		this.maxLength = copyFrom.maxLength;
-		this.unmodifiable = false;
 	}
 
 	/**
@@ -126,7 +143,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @return A new fluent assertion.
 	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
-	public FluentByteArrayAssertion<BasicHttpEntity> assertBytes() throws IOException {
+	public FluentByteArrayAssertion<BasicHttpEntity<?>> assertBytes() throws IOException {
 		return new FluentByteArrayAssertion<>(asBytes(), this);
 	}
 
@@ -139,7 +156,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @return A new fluent assertion.
 	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
-	public FluentStringAssertion<BasicHttpEntity> assertString() throws IOException {
+	public FluentStringAssertion<BasicHttpEntity<?>> assertString() throws IOException {
 		return new FluentStringAssertion<>(asString(), this);
 	}
 
@@ -169,9 +186,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 *
 	 * @return A new builder bean.
 	 */
-	public BasicHttpEntity copy() {
-		return new BasicHttpEntity(this);
-	}
+	public abstract SELF copy();
 
 	/**
 	 * Returns the charset to use when converting to and from stream-based resources.
@@ -218,9 +233,9 @@ public class BasicHttpEntity implements HttpEntity {
 	/**
 	 * Returns <jk>true</jk> if this bean is unmodifiable.
 	 *
-	 * @return <jk>true</jk> if this bean is unmodifiable.
+	 * @return <jk>true</jk> if this bean is an {@link UnmodifiableBean} snapshot.
 	 */
-	public boolean isUnmodifiable() { return unmodifiable; }
+	public boolean isUnmodifiable() { return this instanceof UnmodifiableBean; }
 
 	/**
 	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
@@ -229,10 +244,8 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @return This object.
 	 * @throws IOException If entity could not be read into memory.
 	 */
-	public BasicHttpEntity setCached() throws IOException {
-		assertModifiable();
-		cached = true;
-		return this;
+	public SELF setCached() throws IOException {
+		return modify(() -> cached = true);
 	}
 
 	/**
@@ -241,10 +254,8 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new value.  If <jk>null</jk>, <c>UTF-8</c> is assumed.
 	 * @return This object.
 	 */
-	public BasicHttpEntity setCharset(Charset value) {
-		assertModifiable();
-		charset = value;
-		return this;
+	public SELF setCharset(Charset value) {
+		return modify(() -> charset = value);
 	}
 
 	/**
@@ -257,7 +268,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 *
 	 * @return This object.
 	 */
-	public BasicHttpEntity setChunked() {
+	public SELF setChunked() {
 		return setChunked(true);
 	}
 
@@ -272,10 +283,8 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new value for this flag.
 	 * @return This object.
 	 */
-	public BasicHttpEntity setChunked(boolean value) {
-		assertModifiable();
-		chunked = value;
-		return this;
+	public SELF setChunked(boolean value) {
+		return modify(() -> chunked = value);
 	}
 
 	/**
@@ -284,10 +293,8 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The entity content, can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpEntity setContent(Object value) {
-		assertModifiable();
-		content = value;
-		return this;
+	public SELF setContent(Object value) {
+		return modify(() -> content = value);
 	}
 
 	/**
@@ -300,10 +307,8 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The entity content, can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpEntity setContent(Supplier<?> value) {
-		assertModifiable();
-		this.contentSupplier = value == null ? () -> null : value;
-		return this;
+	public SELF setContent(Supplier<?> value) {
+		return modify(() -> contentSupplier = value == null ? () -> null : value);
 	}
 
 	/**
@@ -312,10 +317,8 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	public BasicHttpEntity setContentEncoding(ContentEncoding value) {
-		assertModifiable();
-		contentEncoding = value;
-		return this;
+	public SELF setContentEncoding(ContentEncoding value) {
+		return modify(() -> contentEncoding = value);
 	}
 
 	/**
@@ -324,7 +327,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	public BasicHttpEntity setContentEncoding(String value) {
+	public SELF setContentEncoding(String value) {
 		return setContentEncoding(ContentEncoding.of(value));
 	}
 
@@ -334,10 +337,8 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new <c>Content-Length</c> header value, or <c>-1</c> to unset.
 	 * @return This object.
 	 */
-	public BasicHttpEntity setContentLength(long value) {
-		assertModifiable();
-		contentLength = value;
-		return this;
+	public SELF setContentLength(long value) {
+		return modify(() -> contentLength = value);
 	}
 
 	/**
@@ -346,10 +347,8 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	public BasicHttpEntity setContentType(ContentType value) {
-		assertModifiable();
-		contentType = value;
-		return this;
+	public SELF setContentType(ContentType value) {
+		return modify(() -> contentType = value);
 	}
 
 	/**
@@ -358,7 +357,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	public BasicHttpEntity setContentType(String value) {
+	public SELF setContentType(String value) {
 		return setContentType(ContentType.of(value));
 	}
 
@@ -371,27 +370,40 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new value.  The default is <c>-1</c> which means read everything.
 	 * @return This object.
 	 */
-	public BasicHttpEntity setMaxLength(int value) {
-		assertModifiable();
-		maxLength = value;
-		return this;
+	public SELF setMaxLength(int value) {
+		return modify(() -> maxLength = value);
 	}
 
 	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 * Returns an unmodifiable snapshot of this bean.
 	 *
-	 * @return This object.
+	 * <p>
+	 * The returned instance is a point-in-time copy of the leaf's nested {@code Unmodifiable} type; any attempt to set a
+	 * property on it throws an {@link UnsupportedOperationException}.  This method is idempotent: if this bean is already
+	 * unmodifiable it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still
+	 * modifiable unless it was already unmodifiable).
+	 *
+	 * @return An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.
 	 */
-	public BasicHttpEntity setUnmodifiable() {
-		unmodifiable = true;
-		return this;
-	}
+	public abstract SELF unmodifiable();
 
 	@Override /* Overridden from HttpEntity */
 	public void writeTo(OutputStream outStream) throws IOException {
 		// No-op: Intentional empty implementation for optional interface method
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return o instanceof BasicHttpEntity<?> other && eq(this, other, (x, y) ->
+			eq(x.cached, y.cached) && eq(x.chunked, y.chunked) && eq(x.content, y.content)
+			&& eq(x.contentSupplier, y.contentSupplier) && eq(x.contentType, y.contentType)
+			&& eq(x.contentEncoding, y.contentEncoding) && eq(x.charset, y.charset)
+			&& eq(x.contentLength, y.contentLength) && eq(x.maxLength, y.maxLength));
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return h(cached, chunked, content, contentSupplier, contentType, contentEncoding, charset, contentLength, maxLength);
 	}
 
 	/**
@@ -405,14 +417,6 @@ public class BasicHttpEntity implements HttpEntity {
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
-	}
-
-	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
-	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw uoex("Bean is read-only");
 	}
 
 	/**
@@ -442,4 +446,43 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @return <jk>true</jk> if the contents of this entity are provided through an external supplier.
 	 */
 	protected boolean isSupplied() { return nn(contentSupplier); }
+
+	/**
+	 * Returns this object cast to the self type.
+	 *
+	 * @return This object.
+	 */
+	@SuppressWarnings({
+		"unchecked" // CRTP self-type cast is safe: SELF is bound to the concrete leaf type.
+	})
+	protected final SELF self() { return (SELF) this; }
+
+	/**
+	 * Single mutation funnel — the only choke-point through which all state changes on this bean flow.
+	 *
+	 * <p>
+	 * Every fluent setter routes through this method.  The nested {@code Unmodifiable} snapshot overrides only this
+	 * method to throw, which freezes the entire mutation surface with a single override.
+	 *
+	 * @param mutation The state change to apply.
+	 * @return This object.
+	 */
+	protected SELF modify(Runnable mutation) {
+		mutation.run();
+		return self();
+	}
+
+	/**
+	 * Deep-freeze hook invoked from the nested {@code Unmodifiable} constructor after the snapshot copy completes.
+	 *
+	 * <p>
+	 * Entities hold no mutable sub-beans (the content-type / content-encoding headers are immutable value objects, and
+	 * the content buffer follows the copy-constructor's reference-copy behavior), so this is a documented no-op — the
+	 * single throwing {@link #modify(Runnable)} override on the nested {@code Unmodifiable} already freezes the entire
+	 * mutation surface.  A leaf that adds its own mutable sub-bean would override this method (calling
+	 * {@code super.freeze()} first).
+	 */
+	protected void freeze() {
+		// No-op: entities have no mutable sub-beans to deep-freeze.
+	}
 }

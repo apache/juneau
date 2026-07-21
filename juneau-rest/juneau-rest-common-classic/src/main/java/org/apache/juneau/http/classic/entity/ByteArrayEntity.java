@@ -20,9 +20,8 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
-import java.nio.charset.*;
-import java.util.function.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.header.*;
 
 /**
@@ -36,7 +35,7 @@ import org.apache.juneau.http.classic.header.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"resource", // Resource management handled externally
 })
-public class ByteArrayEntity extends BasicHttpEntity {
+public class ByteArrayEntity extends BasicHttpEntity<ByteArrayEntity> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_out = "out";
@@ -77,7 +76,7 @@ public class ByteArrayEntity extends BasicHttpEntity {
 		return new String(content(), getCharset());
 	}
 
-	@Override
+	@Override /* Overridden from BasicHttpEntity */
 	public ByteArrayEntity copy() {
 		return new ByteArrayEntity(this);
 	}
@@ -92,81 +91,8 @@ public class ByteArrayEntity extends BasicHttpEntity {
 	public boolean isRepeatable() { return true; }
 
 	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setCached() throws IOException {
-		super.setCached();
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setCharset(Charset value) {
-		super.setCharset(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setChunked() {
-		super.setChunked();
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setChunked(boolean value) {
-		super.setChunked(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setContent(Object value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setContent(Supplier<?> value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setContentEncoding(ContentEncoding value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setContentEncoding(String value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setContentLength(long value) {
-		super.setContentLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setContentType(ContentType value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setContentType(String value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setMaxLength(int value) {
-		super.setMaxLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+	public ByteArrayEntity unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -177,5 +103,33 @@ public class ByteArrayEntity extends BasicHttpEntity {
 
 	private byte[] content() {
 		return contentOrElse(EMPTY);
+	}
+
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link ByteArrayEntity}.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends ByteArrayEntity implements UnmodifiableBean {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The entity to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(ByteArrayEntity copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicHttpEntity */
+		protected ByteArrayEntity modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

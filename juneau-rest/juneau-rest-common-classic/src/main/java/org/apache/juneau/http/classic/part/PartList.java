@@ -28,7 +28,6 @@ import java.util.stream.*;
 
 import org.apache.http.*;
 import org.apache.http.util.*;
-import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
@@ -51,9 +50,9 @@ import org.apache.juneau.http.*;
 @SuppressWarnings({
 	"java:S110",  // Inheritance depth acceptable for this class hierarchy
 	"java:S115",  // Constants use UPPER_snakeCase naming convention
-	"java:S2160"  // equals() inherited from AbstractList; list equality is element-based, which is correct for part lists
+	"java:S2160"  // equals() inherited from ArrayList; list equality is element-based, which is correct for part lists
 })
-public class PartList extends ControlledArrayList<NameValuePair> {
+public class PartList extends ArrayList<NameValuePair> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_type = "type";
@@ -130,7 +129,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * Constructor.
 	 */
 	public PartList() {
-		super(false);
+		super();
 	}
 
 	/**
@@ -139,7 +138,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param copyFrom The bean to copy.  Must not be <jk>null</jk>.
 	 */
 	protected PartList(PartList copyFrom) {
-		super(false, copyFrom);
+		super(copyFrom);
 		caseInsensitive = copyFrom.caseInsensitive;
 	}
 
@@ -221,7 +220,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList caseInsensitive(boolean value) {
-		assertModifiable();
 		caseInsensitive = value;
 		return this;
 	}
@@ -695,7 +693,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList resolving(VarResolver varResolver) {
-		assertModifiable();
 		this.varResolver = varResolver;
 		return this;
 	}
@@ -862,10 +859,25 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		return setDefault(createPart(name, value));
 	}
 
-	@Override /* Overridden from ControlledArrayList */
-	public PartList setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+	/**
+	 * Returns an unmodifiable snapshot of this list.
+	 *
+	 * <p>
+	 * D1 idempotency: if this list is already an {@link Unmodifiable} snapshot, it is returned as-is.
+	 *
+	 * @return An unmodifiable snapshot of this list, or this list if it is already unmodifiable.
+	 */
+	public PartList unmodifiable() {
+		return this instanceof Unmodifiable ? this : new Unmodifiable(this);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this list is an unmodifiable snapshot.
+	 *
+	 * @return <jk>true</jk> if this list is an {@link Unmodifiable} snapshot.
+	 */
+	public boolean isUnmodifiable() {
+		return this instanceof UnmodifiableBean;
 	}
 
 	/**
@@ -922,4 +934,107 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 			o = s.get();
 		return o;
 	}
+
+	/**
+	 * An unmodifiable snapshot of a {@link PartList}.
+	 *
+	 * <p>
+	 * This is the D4 "collection-mutator-override" variant of the immutability paradigm.  Because {@link PartList}
+	 * extends {@link ArrayList}, a single {@code modify()} funnel cannot intercept the inherited {@code ArrayList}
+	 * mutators, so this subclass snapshot-copies the elements in its constructor and overrides the entire
+	 * collection-mutator surface — its own fluent mutators plus the inherited {@code ArrayList} mutators (including the
+	 * {@code iterator()} / {@code listIterator()} mutators) — to throw {@link UnsupportedOperationException}.  Read
+	 * operations and non-mutating iteration continue to work.
+	 */
+	@SuppressWarnings({
+		"java:S110",  // Inheritance depth acceptable for this class hierarchy
+		"java:S2160"  // equals() inherited from ArrayList; list equality is element-based, which is correct for part lists
+	})
+	public static class Unmodifiable extends PartList implements UnmodifiableBean {
+
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The list to snapshot-copy.  Must not be <jk>null</jk>.
+		 */
+		Unmodifiable(PartList copyFrom) {
+			super(copyFrom);
+		}
+
+		// --- Fluent mutators -----------------------------------------------------------------------------------------
+
+		@Override public PartList append(List<NameValuePair> values) { throw uoex(RO); }
+		@Override public PartList append(NameValuePair value) { throw uoex(RO); }
+		@Override public PartList append(NameValuePair...values) { throw uoex(RO); }
+		@Override public PartList append(String name, Object value) { throw uoex(RO); }
+		@Override public PartList append(String name, Supplier<?> value) { throw uoex(RO); }
+		@Override public PartList caseInsensitive(boolean value) { throw uoex(RO); }
+		@Override public PartList prepend(List<NameValuePair> values) { throw uoex(RO); }
+		@Override public PartList prepend(NameValuePair value) { throw uoex(RO); }
+		@Override public PartList prepend(NameValuePair...values) { throw uoex(RO); }
+		@Override public PartList prepend(String name, Object value) { throw uoex(RO); }
+		@Override public PartList prepend(String name, Supplier<?> value) { throw uoex(RO); }
+		@Override public PartList remove(List<NameValuePair> values) { throw uoex(RO); }
+		@Override public PartList remove(NameValuePair value) { throw uoex(RO); }
+		@Override public PartList remove(NameValuePair...values) { throw uoex(RO); }
+		@Override public PartList remove(String name) { throw uoex(RO); }
+		@Override public PartList remove(String...names) { throw uoex(RO); }
+		@Override public PartList resolving() { throw uoex(RO); }
+		@Override public PartList resolving(VarResolver varResolver) { throw uoex(RO); }
+		@Override public PartList set(List<NameValuePair> values) { throw uoex(RO); }
+		@Override public PartList set(NameValuePair value) { throw uoex(RO); }
+		@Override public PartList set(NameValuePair...values) { throw uoex(RO); }
+		@Override public PartList set(String name, Object value) { throw uoex(RO); }
+		@Override public PartList set(String name, Supplier<?> value) { throw uoex(RO); }
+		@Override public PartList setDefault(List<NameValuePair> parts) { throw uoex(RO); }
+		@Override public PartList setDefault(NameValuePair...parts) { throw uoex(RO); }
+		@Override public PartList setDefault(String name, Object value) { throw uoex(RO); }
+		@Override public PartList setDefault(String name, Supplier<?> value) { throw uoex(RO); }
+
+		// --- Inherited ArrayList collection mutators -----------------------------------------------------------------
+
+		@Override public boolean add(NameValuePair e) { throw uoex(RO); }
+		@Override public void add(int index, NameValuePair element) { throw uoex(RO); }
+		@Override public boolean addAll(Collection<? extends NameValuePair> c) { throw uoex(RO); }
+		@Override public boolean addAll(int index, Collection<? extends NameValuePair> c) { throw uoex(RO); }
+		@Override public void clear() { throw uoex(RO); }
+		@Override public boolean remove(Object o) { throw uoex(RO); }
+		@Override public NameValuePair remove(int index) { throw uoex(RO); }
+		@Override public boolean removeAll(Collection<?> c) { throw uoex(RO); }
+		@Override public boolean removeIf(Predicate<? super NameValuePair> filter) { throw uoex(RO); }
+		@Override public void replaceAll(UnaryOperator<NameValuePair> operator) { throw uoex(RO); }
+		@Override public boolean retainAll(Collection<?> c) { throw uoex(RO); }
+		@Override public NameValuePair set(int index, NameValuePair element) { throw uoex(RO); }
+		@Override public void sort(Comparator<? super NameValuePair> c) { throw uoex(RO); }
+
+		@Override public Iterator<NameValuePair> iterator() {
+			var i = super.iterator();
+			return new Iterator<>() {
+				@Override public boolean hasNext() { return i.hasNext(); }
+				@Override public NameValuePair next() { return i.next(); }
+				@Override public void remove() { throw uoex(RO); }
+			};
+		}
+
+		@Override public ListIterator<NameValuePair> listIterator() { return listIterator(0); }
+
+		@Override public ListIterator<NameValuePair> listIterator(int index) {
+			var i = super.listIterator(index);
+			return new ListIterator<>() {
+				@Override public boolean hasNext() { return i.hasNext(); }
+				@Override public NameValuePair next() { return i.next(); }
+				@Override public boolean hasPrevious() { return i.hasPrevious(); }
+				@Override public NameValuePair previous() { return i.previous(); }
+				@Override public int nextIndex() { return i.nextIndex(); }
+				@Override public int previousIndex() { return i.previousIndex(); }
+				@Override public void add(NameValuePair e) { throw uoex(RO); }
+				@Override public void set(NameValuePair e) { throw uoex(RO); }
+				@Override public void remove() { throw uoex(RO); }
+			};
+		}
+	}
+
+	private static final String RO = "Bean is unmodifiable.";
 }

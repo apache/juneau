@@ -60,7 +60,7 @@ class ClassicResponse_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource
-	void a01_responseClasses(Class<? extends BasicHttpResponse> type, int expectedCode, String expectedPhrase) throws Exception {
+	void a01_responseClasses(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
 		var statusLine = ((HttpResponse)instance).getStatusLine();
 		assertEquals(expectedCode, statusLine.getStatusCode());
@@ -72,7 +72,7 @@ class ClassicResponse_Test extends TestBase {
 	@SuppressWarnings({
 		"unused" // Parameters required to match @MethodSource argument arity; not every parameterized test uses every column.
 	})
-	void a02_responseSetContent(Class<? extends BasicHttpResponse> type, int expectedCode, String expectedPhrase) throws Exception {
+	void a02_responseSetContent(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
 		instance.setContent("test-body");
 		assertNotNull(instance.getEntity());
@@ -83,7 +83,7 @@ class ClassicResponse_Test extends TestBase {
 	@SuppressWarnings({
 		"unused" // Parameters required to match @MethodSource argument arity; not every parameterized test uses every column.
 	})
-	void a03_responseSetHeader(Class<? extends BasicHttpResponse> type, int expectedCode, String expectedPhrase) throws Exception {
+	void a03_responseSetHeader(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
 		instance.setHeader2("X-Test", "value1");
 		var header = ((HttpResponse)instance).getFirstHeader("X-Test");
@@ -93,9 +93,9 @@ class ClassicResponse_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("a01_responseClasses")
-	void a04_responseCopyConstructor(Class<? extends BasicHttpResponse> type, int expectedCode, String expectedPhrase) throws Exception {
+	void a04_responseCopyConstructor(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
-		var copy = (BasicHttpResponse) type.getMethod("copy").invoke(instance);
+		var copy = (BasicHttpResponse<?>) type.getMethod("copy").invoke(instance);
 		var statusLine = ((HttpResponse)copy).getStatusLine();
 		assertEquals(expectedCode, statusLine.getStatusCode());
 		assertEquals(expectedPhrase, statusLine.getReasonPhrase());
@@ -106,11 +106,12 @@ class ClassicResponse_Test extends TestBase {
 	@SuppressWarnings({
 		"unused" // Parameters required to match @MethodSource argument arity; not every parameterized test uses every column.
 	})
-	void a05_responseUnmodifiable(Class<? extends BasicHttpResponse> type, int expectedCode, String expectedPhrase) throws Exception {
+	void a05_responseUnmodifiable(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
 		var instance = type.getDeclaredConstructor().newInstance();
-		instance.setUnmodifiable();
-		assertTrue(instance.isUnmodifiable());
-		assertThrows(UnsupportedOperationException.class, () -> instance.setContent("fail"));
+		assertFalse(instance.isUnmodifiable());
+		var umod = instance.unmodifiable();
+		assertTrue(umod.isUnmodifiable());
+		assertThrows(UnsupportedOperationException.class, () -> umod.setContent("fail"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

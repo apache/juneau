@@ -21,10 +21,9 @@ import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
-import java.nio.charset.*;
 import java.util.*;
-import java.util.function.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.header.*;
 
 /**
@@ -38,7 +37,7 @@ import org.apache.juneau.http.classic.header.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"resource", // Resource management handled externally
 })
-public class StreamEntity extends BasicHttpEntity {
+public class StreamEntity extends BasicHttpEntity<StreamEntity> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_out = "out";
@@ -93,7 +92,7 @@ public class StreamEntity extends BasicHttpEntity {
 		return read(content());
 	}
 
-	@Override
+	@Override /* Overridden from BasicHttpEntity */
 	public StreamEntity copy() {
 		return new StreamEntity(this);
 	}
@@ -119,81 +118,8 @@ public class StreamEntity extends BasicHttpEntity {
 	public boolean isStreaming() { return ! isCached(); }
 
 	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setCached() throws IOException {
-		super.setCached();
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setCharset(Charset value) {
-		super.setCharset(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setChunked() {
-		super.setChunked();
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setChunked(boolean value) {
-		super.setChunked(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setContent(Object value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setContent(Supplier<?> value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setContentEncoding(ContentEncoding value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setContentEncoding(String value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setContentLength(long value) {
-		super.setContentLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setContentType(ContentType value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setContentType(String value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setMaxLength(int value) {
-		super.setMaxLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+	public StreamEntity unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
 	}
 
 	/**
@@ -217,5 +143,33 @@ public class StreamEntity extends BasicHttpEntity {
 
 	private InputStream content() {
 		return Objects.requireNonNull(contentOrElse((InputStream)null), "Input stream is null.");
+	}
+
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link StreamEntity}.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends StreamEntity implements UnmodifiableBean {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The entity to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(StreamEntity copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicHttpEntity */
+		protected StreamEntity modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

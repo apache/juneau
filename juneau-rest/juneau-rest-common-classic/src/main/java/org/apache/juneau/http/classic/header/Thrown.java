@@ -92,7 +92,7 @@ public class Thrown extends BasicCsvHeader {
 		 * @param value The throwable to create the header part value from.
 		 */
 		public Part(Throwable value) {
-			this.className = cn(value);
+			this.className = UnmodifiableBean.logicalType(value).getName();
 			this.message = value.getMessage();
 			this.value = urlEncode(className) + ';' + urlEncode(value.getMessage());
 		}

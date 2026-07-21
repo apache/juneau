@@ -486,7 +486,7 @@ public class ResponseContent implements HttpEntity {
 	public byte[] asBytes() throws RestCallException {
 		if (body == null) {
 			try {
-				if (entity instanceof BasicHttpEntity entity2) {
+				if (entity instanceof BasicHttpEntity<?> entity2) {
 					body = entity2.asBytes();
 				} else {
 					body = readBytes(entity.getContent());

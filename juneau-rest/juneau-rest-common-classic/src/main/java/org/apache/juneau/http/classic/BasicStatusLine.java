@@ -24,9 +24,15 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.impl.*;
 import org.apache.http.message.*;
+import org.apache.juneau.http.*;
 
 /**
  * A basic implementation of the {@link StatusLine} interface.
+ *
+ * <p>
+ * Immutability is expressed with the "funnel + nested {@code Unmodifiable} snapshot" paradigm: every mutator routes
+ * through the single protected {@link #modify(Runnable)} choke-point, and {@link #unmodifiable()} returns a
+ * point-in-time snapshot of type {@link Unmodifiable} whose {@code modify(...)} override throws.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
@@ -61,7 +67,6 @@ public class BasicStatusLine implements StatusLine {
 	private String reasonPhrase;
 	private ReasonPhraseCatalog reasonPhraseCatalog;
 	private Locale locale = Locale.getDefault();
-	private boolean unmodifiable;
 
 	/**
 	 * Constructor.
@@ -77,6 +82,7 @@ public class BasicStatusLine implements StatusLine {
 		this.protocolVersion = copyFrom.protocolVersion;
 		this.statusCode = copyFrom.statusCode;
 		this.reasonPhrase = copyFrom.reasonPhrase;
+		this.reasonPhraseCatalog = copyFrom.reasonPhraseCatalog;
 		this.locale = copyFrom.locale;
 	}
 
@@ -121,9 +127,7 @@ public class BasicStatusLine implements StatusLine {
 	 * @return This object.
 	 */
 	public BasicStatusLine setLocale(Locale value) {
-		assertModifiable();
-		locale = value;
-		return this;
+		return modify(() -> locale = value);
 	}
 
 	/**
@@ -136,9 +140,7 @@ public class BasicStatusLine implements StatusLine {
 	 * @return This object.
 	 */
 	public BasicStatusLine setProtocolVersion(ProtocolVersion value) {
-		assertModifiable();
-		protocolVersion = value;
-		return this;
+		return modify(() -> protocolVersion = value);
 	}
 
 	/**
@@ -152,9 +154,7 @@ public class BasicStatusLine implements StatusLine {
 	 * @return This object.
 	 */
 	public BasicStatusLine setReasonPhrase(String value) {
-		assertModifiable();
-		reasonPhrase = value;
-		return this;
+		return modify(() -> reasonPhrase = value);
 	}
 
 	/**
@@ -167,9 +167,7 @@ public class BasicStatusLine implements StatusLine {
 	 * @return This object.
 	 */
 	public BasicStatusLine setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		assertModifiable();
-		reasonPhraseCatalog = value;
-		return this;
+		return modify(() -> reasonPhraseCatalog = value);
 	}
 
 	/**
@@ -182,21 +180,31 @@ public class BasicStatusLine implements StatusLine {
 	 * @return This object.
 	 */
 	public BasicStatusLine setStatusCode(int value) {
-		assertModifiable();
-		statusCode = value;
-		return this;
+		return modify(() -> statusCode = value);
 	}
 
 	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 * Returns an unmodifiable snapshot of this bean.
 	 *
-	 * @return This object.
+	 * <p>
+	 * The returned instance is a point-in-time copy of type {@link Unmodifiable}; any attempt to set a property on it
+	 * throws an {@link UnsupportedOperationException}.  This method is idempotent: if this bean is already unmodifiable
+	 * it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still modifiable
+	 * unless it was already an {@link Unmodifiable}).
+	 *
+	 * @return An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.
 	 */
-	public BasicStatusLine setUnmodifiable() {
-		unmodifiable = true;
-		return this;
+	public BasicStatusLine unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
+	}
+
+	/**
+	 * Returns whether this bean is unmodifiable.
+	 *
+	 * @return <jk>true</jk> if this bean is an {@link Unmodifiable} snapshot.
+	 */
+	public boolean isUnmodifiable() {
+		return this instanceof UnmodifiableBean;
 	}
 
 	@Override /* Overridden from Object */
@@ -217,10 +225,58 @@ public class BasicStatusLine implements StatusLine {
 	}
 
 	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 * Single mutation funnel — the only choke-point through which all state changes on this bean flow.
+	 *
+	 * <p>
+	 * Every mutator routes through this method.  The {@link Unmodifiable} snapshot overrides only this method to
+	 * throw, which freezes the entire mutation surface with a single override.
+	 *
+	 * @param mutation The state change to apply.
+	 * @return This object.
 	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw uoex("Bean is read-only");
+	protected BasicStatusLine modify(Runnable mutation) {
+		mutation.run();
+		return this;
+	}
+
+	/**
+	 * Deep-freeze hook invoked from the {@link Unmodifiable} constructor after the snapshot copy completes.
+	 *
+	 * <p>
+	 * This is a no-op for {@link BasicStatusLine}: all of its fields are immutable value types (protocol version,
+	 * status code, reason phrase, locale, reason-phrase catalog) with no mutable sub-beans to deep-freeze.  It exists
+	 * as the paradigm's override point for families whose beans hold mutable sub-beans, which must be frozen here by
+	 * <b>direct field assignment</b> (never via a setter, which would route through the throwing {@link #modify(Runnable)}).
+	 */
+	protected void freeze() {
+		// No mutable sub-beans to freeze.
+	}
+
+	/**
+	 * An unmodifiable point-in-time snapshot of a {@link BasicStatusLine}.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled
+	 * through {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends BasicStatusLine implements UnmodifiableBean {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The status line to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(BasicStatusLine copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicStatusLine */
+		protected BasicStatusLine modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

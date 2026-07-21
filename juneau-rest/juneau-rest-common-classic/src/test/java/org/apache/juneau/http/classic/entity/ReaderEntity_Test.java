@@ -191,8 +191,8 @@ class ReaderEntity_Test extends TestBase {
 		assertEquals("text/html", x.getContentType().getValue());
 	}
 
-	@Test void a27_setUnmodifiable() {
-		var x = new ReaderEntity().setContent(reader()).setUnmodifiable();
+	@Test void a27_unmodifiable() {
+		var x = new ReaderEntity().setContent(reader()).unmodifiable();
 		assertThrows(UnsupportedOperationException.class, () -> x.setChunked(true));
 	}
 

@@ -21,10 +21,9 @@ import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
-import java.nio.charset.*;
-import java.util.function.*;
 
 import org.apache.juneau.commons.io.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.header.*;
 
 /**
@@ -38,7 +37,7 @@ import org.apache.juneau.http.classic.header.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"resource", // Resource management handled externally
 })
-public class StringEntity extends BasicHttpEntity {
+public class StringEntity extends BasicHttpEntity<StringEntity> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_out = "out";
@@ -84,7 +83,7 @@ public class StringEntity extends BasicHttpEntity {
 		return content();
 	}
 
-	@Override
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity copy() {
 		return new StringEntity(this);
 	}
@@ -118,81 +117,8 @@ public class StringEntity extends BasicHttpEntity {
 	public boolean isStreaming() { return false; }
 
 	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setCached() throws IOException {
-		super.setCached();
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setCharset(Charset value) {
-		super.setCharset(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setChunked() {
-		super.setChunked();
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setChunked(boolean value) {
-		super.setChunked(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setContent(Object value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setContent(Supplier<?> value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setContentEncoding(ContentEncoding value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setContentEncoding(String value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setContentLength(long value) {
-		super.setContentLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setContentType(ContentType value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setContentType(String value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setMaxLength(int value) {
-		super.setMaxLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+	public StringEntity unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -209,5 +135,33 @@ public class StringEntity extends BasicHttpEntity {
 
 	private String content() {
 		return contentOrElse(EMPTY);
+	}
+
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link StringEntity}.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends StringEntity implements UnmodifiableBean {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The entity to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(StringEntity copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicHttpEntity */
+		protected StringEntity modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }
