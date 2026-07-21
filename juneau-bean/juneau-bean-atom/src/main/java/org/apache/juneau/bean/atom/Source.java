@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.bean.atom;
 
-import java.util.*;
-
 /**
  * Represents metadata from the source feed when an entry is copied from one feed to another.
  *
@@ -90,7 +88,7 @@ import java.util.*;
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
-public class Source extends CommonEntry {
+public class Source extends CommonEntry<Source> {
 
 	private Generator generator;
 	private Icon icon;
@@ -137,30 +135,6 @@ public class Source extends CommonEntry {
 	 */
 	public Text getSubtitle() { return subtitle; }
 
-	@Override /* Overridden from CommonEntry */
-	public Source setAuthors(Person...value) {
-		super.setAuthors(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Source setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setCategories(Category...value) {
-		super.setCategories(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setContributors(Person...value) {
-		super.setContributors(value);
-		return this;
-	}
-
 	/**
 	 * Bean property setter:  <property>generator</property>.
 	 *
@@ -193,30 +167,6 @@ public class Source extends CommonEntry {
 		return this;
 	}
 
-	@Override /* Overridden from CommonEntry */
-	public Source setId(Id value) {
-		super.setId(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setId(String value) {
-		super.setId(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Source setLang(String value) {
-		super.setLang(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setLinks(Link...value) {
-		super.setLinks(value);
-		return this;
-	}
-
 	/**
 	 * Bean property setter:  <property>logo</property>.
 	 *
@@ -230,18 +180,6 @@ public class Source extends CommonEntry {
 	 */
 	public Source setLogo(Logo value) {
 		logo = value;
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setRights(String value) {
-		super.setRights(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setRights(Text value) {
-		super.setRights(value);
 		return this;
 	}
 
@@ -274,30 +212,6 @@ public class Source extends CommonEntry {
 	 */
 	public Source setSubtitle(Text value) {
 		subtitle = value;
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setTitle(String value) {
-		super.setTitle(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setTitle(Text value) {
-		super.setTitle(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setUpdated(Calendar value) {
-		super.setUpdated(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setUpdated(String value) {
-		super.setUpdated(value);
 		return this;
 	}
 }

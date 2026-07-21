@@ -54,8 +54,11 @@ import org.apache.juneau.marshall.xml.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
+ *
+ * @param <SELF> The self type for fluent setters.
  */
-public class CommonEntry extends Common {
+@SuppressWarnings("java:S119")  // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+public class CommonEntry<SELF extends CommonEntry<SELF>> extends Common {
 
 	private Person[] authors;
 	private Category[] categories;
@@ -68,6 +71,11 @@ public class CommonEntry extends Common {
 
 	/** Bean constructor. */
 	public CommonEntry() {}
+
+	@SuppressWarnings("unchecked")
+	private SELF self() {
+		return (SELF) this;
+	}
 
 	/**
 	 * Normal constructor.
@@ -186,15 +194,15 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public CommonEntry setAuthors(Person...value) {
+	public SELF setAuthors(Person...value) {
 		authors = cp(value);
-		return this;
+		return self();
 	}
 
 	@Override /* Overridden from Common */
-	public CommonEntry setBase(Object value) {
+	public SELF setBase(Object value) {
 		super.setBase(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -208,9 +216,9 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public CommonEntry setCategories(Category...value) {
+	public SELF setCategories(Category...value) {
 		categories = cp(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -224,9 +232,9 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public CommonEntry setContributors(Person...value) {
+	public SELF setContributors(Person...value) {
 		contributors = cp(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -240,9 +248,9 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public CommonEntry setId(Id value) {
+	public SELF setId(Id value) {
 		id = value;
-		return this;
+		return self();
 	}
 
 	/**
@@ -256,15 +264,15 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public CommonEntry setId(String value) {
+	public SELF setId(String value) {
 		setId(new Id(value));
-		return this;
+		return self();
 	}
 
 	@Override /* Overridden from Common */
-	public CommonEntry setLang(String value) {
+	public SELF setLang(String value) {
 		super.setLang(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -278,9 +286,9 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public CommonEntry setLinks(Link...value) {
+	public SELF setLinks(Link...value) {
 		links = cp(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -294,9 +302,9 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public CommonEntry setRights(String value) {
+	public SELF setRights(String value) {
 		setRights(new Text().setText(value));
-		return this;
+		return self();
 	}
 
 	/**
@@ -310,9 +318,9 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public CommonEntry setRights(Text value) {
+	public SELF setRights(Text value) {
 		rights = value;
-		return this;
+		return self();
 	}
 
 	/**
@@ -326,9 +334,9 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public CommonEntry setTitle(String value) {
+	public SELF setTitle(String value) {
 		setTitle(new Text().setText(value));
-		return this;
+		return self();
 	}
 
 	/**
@@ -342,9 +350,9 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public CommonEntry setTitle(Text value) {
+	public SELF setTitle(Text value) {
 		title = value;
-		return this;
+		return self();
 	}
 
 	/**
@@ -358,9 +366,9 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public CommonEntry setUpdated(Calendar value) {
+	public SELF setUpdated(Calendar value) {
 		updated = cloneOf(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -374,8 +382,8 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public CommonEntry setUpdated(String value) {
+	public SELF setUpdated(String value) {
 		setUpdated(o(value).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(value).getZonedDateTime()).map(GregorianCalendar::from).orElse(null));
-		return this;
+		return self();
 	}
 }

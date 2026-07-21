@@ -111,7 +111,7 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  */
 @Marshalled(typeName = "feed")
-public class Feed extends CommonEntry {
+public class Feed extends CommonEntry<Feed> {
 
 	// @formatter:off
 	private Generator generator;  // atomGenerator?
@@ -217,30 +217,6 @@ public class Feed extends CommonEntry {
 	 */
 	public Text getSubtitle() { return subtitle; }
 
-	@Override /* Overridden from CommonEntry */
-	public Feed setAuthors(Person...value) {
-		super.setAuthors(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Feed setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setCategories(Category...value) {
-		super.setCategories(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setContributors(Person...value) {
-		super.setContributors(value);
-		return this;
-	}
-
 	/**
 	 * Bean property setter:  <property>entries</property>.
 	 *
@@ -326,30 +302,6 @@ public class Feed extends CommonEntry {
 		return this;
 	}
 
-	@Override /* Overridden from CommonEntry */
-	public Feed setId(Id value) {
-		super.setId(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setId(String value) {
-		super.setId(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Feed setLang(String value) {
-		super.setLang(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setLinks(Link...value) {
-		super.setLinks(value);
-		return this;
-	}
-
 	/**
 	 * Bean property setter:  <property>logo</property>.
 	 *
@@ -369,18 +321,6 @@ public class Feed extends CommonEntry {
 	 */
 	public Feed setLogo(Logo value) {
 		logo = value;
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setRights(String value) {
-		super.setRights(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setRights(Text value) {
-		super.setRights(value);
 		return this;
 	}
 
@@ -422,30 +362,6 @@ public class Feed extends CommonEntry {
 	 */
 	public Feed setSubtitle(Text value) {
 		subtitle = value;
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setTitle(String value) {
-		super.setTitle(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setTitle(Text value) {
-		super.setTitle(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setUpdated(Calendar value) {
-		super.setUpdated(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setUpdated(String value) {
-		super.setUpdated(value);
 		return this;
 	}
 }
