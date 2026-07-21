@@ -73,7 +73,9 @@ class ArgException_Test extends TestBase {
 
 		assertSame(x, x.setContent("test content"));
 
-		assertSame(x, x.setUnmodifiable());
+		var u = x.unmodifiable();
+		assertTrue(u.isUnmodifiable());
+		assertThrows(UnsupportedOperationException.class, () -> u.setStatusCode(500));
 	}
 
 	@Test void a04_fluentChaining() {

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.response;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.http.*;
 
 /**
@@ -36,7 +38,7 @@ import org.apache.juneau.http.*;
  *
  * @since 9.2.1
  */
-public class MultiStatus extends BasicHttpResponse {
+public class MultiStatus extends BasicHttpResponse<MultiStatus> {
 
 	/** HTTP status code */
 	public static final int STATUS_CODE = 207;
@@ -48,7 +50,7 @@ public class MultiStatus extends BasicHttpResponse {
 	private static final HttpStatusLine STATUS_LINE = HttpStatusLineBean.of(STATUS_CODE, REASON_PHRASE);
 
 	/** Default unmodifiable instance */
-	public static final MultiStatus INSTANCE = new MultiStatus();
+	public static final MultiStatus INSTANCE = new MultiStatus().unmodifiable();
 
 	/**
 	 * Constructor.
@@ -82,5 +84,38 @@ public class MultiStatus extends BasicHttpResponse {
 	 */
 	public MultiStatus(MultiStatus copyFrom) {
 		super(copyFrom);
+	}
+
+	@Override /* Overridden from BasicHttpResponse */
+	public MultiStatus unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
+	}
+
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link MultiStatus} response.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends MultiStatus implements UnmodifiableBean {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The response to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(MultiStatus copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicHttpResponse */
+		protected MultiStatus modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

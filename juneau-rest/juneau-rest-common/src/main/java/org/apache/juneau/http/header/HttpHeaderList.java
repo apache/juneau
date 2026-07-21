@@ -362,6 +362,27 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	}
 
 	/**
+	 * Returns an unmodifiable snapshot of this list.
+	 *
+	 * <p>
+	 * D1 idempotency: if this list is already an {@link Unmodifiable} snapshot, it is returned as-is.
+	 *
+	 * @return An unmodifiable snapshot of this list, or this list if it is already unmodifiable.
+	 */
+	public HttpHeaderList unmodifiable() {
+		return this instanceof Unmodifiable ? this : new Unmodifiable(this);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this list is an unmodifiable snapshot.
+	 *
+	 * @return <jk>true</jk> if this list is an {@link UnmodifiableBean} snapshot.
+	 */
+	public boolean isUnmodifiable() {
+		return this instanceof UnmodifiableBean;
+	}
+
+	/**
 	 * Returns the headers in this list as a typed array.
 	 *
 	 * @return A new array. Never <jk>null</jk>.
@@ -373,4 +394,92 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	private boolean nameMatches(HttpHeader h, String name) {
 		return caseSensitive ? eq(h.getName(), name) : eqic(h.getName(), name);
 	}
+
+	/**
+	 * An unmodifiable snapshot of a {@link HttpHeaderList}.
+	 *
+	 * <p>
+	 * This is the D4 "collection-mutator-override" variant of the immutability paradigm.  Because {@link HttpHeaderList}
+	 * extends {@link ArrayList}, a single funnel cannot intercept the inherited {@code ArrayList} mutators, so this
+	 * subclass snapshot-copies the elements in its constructor and overrides the entire collection-mutator surface — its
+	 * own fluent mutators plus the inherited {@code ArrayList} mutators (including the {@code iterator()} /
+	 * {@code listIterator()} mutators) — to throw {@link UnsupportedOperationException}.  Read operations and
+	 * non-mutating iteration continue to work.
+	 */
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from ArrayList; list equality is element-based which is correct
+	})
+	public static class Unmodifiable extends HttpHeaderList implements UnmodifiableBean {
+
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The list to snapshot-copy. Must not be <jk>null</jk>.
+		 */
+		Unmodifiable(HttpHeaderList copyFrom) {
+			super(copyFrom);
+		}
+
+		// --- Fluent mutators -----------------------------------------------------------------------------------------
+
+		@Override public HttpHeaderList append(HttpHeader value) { throw uoex(RO); }
+		@Override public HttpHeaderList append(HttpHeader...values) { throw uoex(RO); }
+		@Override public HttpHeaderList append(List<HttpHeader> values) { throw uoex(RO); }
+		@Override public HttpHeaderList append(String name, String value) { throw uoex(RO); }
+		@Override public HttpHeaderList append(String name, Supplier<String> value) { throw uoex(RO); }
+		@Override public HttpHeaderList caseSensitive(boolean value) { throw uoex(RO); }
+		@Override public HttpHeaderList removeAll(String name) { throw uoex(RO); }
+		@Override public HttpHeaderList set(HttpHeader value) { throw uoex(RO); }
+		@Override public HttpHeaderList set(HttpHeader...values) { throw uoex(RO); }
+		@Override public HttpHeaderList set(String name, String value) { throw uoex(RO); }
+		@Override public HttpHeaderList setDefault(HttpHeader value) { throw uoex(RO); }
+		@Override public HttpHeaderList setDefault(HttpHeader...values) { throw uoex(RO); }
+		@Override public HttpHeaderList setDefault(String name, String value) { throw uoex(RO); }
+
+		// --- Inherited ArrayList collection mutators -----------------------------------------------------------------
+
+		@Override public boolean add(HttpHeader e) { throw uoex(RO); }
+		@Override public void add(int index, HttpHeader element) { throw uoex(RO); }
+		@Override public boolean addAll(Collection<? extends HttpHeader> c) { throw uoex(RO); }
+		@Override public boolean addAll(int index, Collection<? extends HttpHeader> c) { throw uoex(RO); }
+		@Override public void clear() { throw uoex(RO); }
+		@Override public boolean remove(Object o) { throw uoex(RO); }
+		@Override public HttpHeader remove(int index) { throw uoex(RO); }
+		@Override public boolean removeAll(Collection<?> c) { throw uoex(RO); }
+		@Override public boolean removeIf(Predicate<? super HttpHeader> filter) { throw uoex(RO); }
+		@Override public void replaceAll(UnaryOperator<HttpHeader> operator) { throw uoex(RO); }
+		@Override public boolean retainAll(Collection<?> c) { throw uoex(RO); }
+		@Override public HttpHeader set(int index, HttpHeader element) { throw uoex(RO); }
+		@Override public void sort(Comparator<? super HttpHeader> c) { throw uoex(RO); }
+
+		@Override public Iterator<HttpHeader> iterator() {
+			var i = super.iterator();
+			return new Iterator<>() {
+				@Override public boolean hasNext() { return i.hasNext(); }
+				@Override public HttpHeader next() { return i.next(); }
+				@Override public void remove() { throw uoex(RO); }
+			};
+		}
+
+		@Override public ListIterator<HttpHeader> listIterator() { return listIterator(0); }
+
+		@Override public ListIterator<HttpHeader> listIterator(int index) {
+			var i = super.listIterator(index);
+			return new ListIterator<>() {
+				@Override public boolean hasNext() { return i.hasNext(); }
+				@Override public HttpHeader next() { return i.next(); }
+				@Override public boolean hasPrevious() { return i.hasPrevious(); }
+				@Override public HttpHeader previous() { return i.previous(); }
+				@Override public int nextIndex() { return i.nextIndex(); }
+				@Override public int previousIndex() { return i.previousIndex(); }
+				@Override public void add(HttpHeader e) { throw uoex(RO); }
+				@Override public void set(HttpHeader e) { throw uoex(RO); }
+				@Override public void remove() { throw uoex(RO); }
+			};
+		}
+	}
+
+	private static final String RO = "Bean is unmodifiable.";
 }

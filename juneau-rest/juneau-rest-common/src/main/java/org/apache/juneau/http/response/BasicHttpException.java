@@ -32,8 +32,19 @@ import org.apache.juneau.http.header.*;
  * <p>
  * Extends {@link RuntimeException} while also implementing {@link HttpResponseMessage}, so that HTTP
  * error responses can be both thrown as exceptions and used as response objects. Provides classic-style
- * fluent setters that mutate state and return {@code this}, plus an {@link #setUnmodifiable()} latch
- * that locks the instance against further changes.
+ * fluent setters that mutate state and return {@code this}.
+ *
+ * <p>
+ * Immutability is expressed with the "funnel + nested {@code Unmodifiable} snapshot" paradigm: every mutator routes
+ * through the single protected {@link #modify(Runnable)} choke-point, and each concrete leaf gets a nested
+ * {@code X.Unmodifiable} whose only behavioral override is a throwing {@code modify(...)}.  A leaf's
+ * {@link #unmodifiable()} factory returns a point-in-time snapshot; any attempt to set a property on it throws an
+ * {@link UnsupportedOperationException}.
+ *
+ * <p>
+ * This is a {@link Throwable}-rooted hierarchy, so (unlike {@link BasicHttpResponse}) it cannot be a self-typed (CRTP)
+ * root — JLS &sect;8.1.2 forbids a generic {@code Throwable}.  The funnel therefore returns the base type and each leaf
+ * keeps its covariant setter overrides.
  *
  * <p>
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
@@ -57,10 +68,9 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	private static final long serialVersionUID = 1L;
 
 	private HttpStatusLine statusLine;
-	private final HttpHeaderList headers;
+	private HttpHeaderList headers;
 	private HttpBody body;
 	private Locale locale;
-	private boolean unmodifiable;
 
 	/**
 	 * Constructor with no message body.
@@ -124,6 +134,11 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 
 	/**
 	 * Copy constructor.
+	 *
+	 * <p>
+	 * The mutable sub-beans are deep-copied by <b>direct field assignment</b>, never through a funneled setter.  This is
+	 * the snapshot path used by {@link #unmodifiable()}: the constructor runs inside an {@code Unmodifiable} instance
+	 * whose {@link #modify(Runnable)} already throws, so a setter-based copy would blow up during construction.
 	 *
 	 * @param copyFrom The instance to copy. Must not be <jk>null</jk>.
 	 */
@@ -193,9 +208,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException setStatusLine(HttpStatusLine value) {
-		assertModifiable();
-		this.statusLine = assertArgNotNull("value", value);
-		return this;
+		return modify(() -> statusLine = assertArgNotNull("value", value));
 	}
 
 	/**
@@ -205,9 +218,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException setStatusCode(int value) {
-		assertModifiable();
-		this.statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), value, statusLine.getReasonPhrase());
-		return this;
+		return modify(() -> statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), value, statusLine.getReasonPhrase()));
 	}
 
 	/**
@@ -217,9 +228,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException setReasonPhrase(String value) {
-		assertModifiable();
-		this.statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), statusLine.getStatusCode(), value);
-		return this;
+		return modify(() -> statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), statusLine.getStatusCode(), value));
 	}
 
 	/**
@@ -229,10 +238,10 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException setProtocolVersion(HttpProtocolVersion value) {
-		assertModifiable();
-		assertArgNotNull("value", value);
-		this.statusLine = HttpStatusLineBean.of(value, statusLine.getStatusCode(), statusLine.getReasonPhrase());
-		return this;
+		return modify(() -> {
+			assertArgNotNull("value", value);
+			statusLine = HttpStatusLineBean.of(value, statusLine.getStatusCode(), statusLine.getReasonPhrase());
+		});
 	}
 
 	/**
@@ -242,11 +251,11 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException setHeaders(List<HttpHeader> values) {
-		assertModifiable();
-		this.headers.clear();
-		if (values != null)
-			this.headers.append(values);
-		return this;
+		return modify(() -> {
+			headers.clear();
+			if (values != null)
+				headers.append(values);
+		});
 	}
 
 	/**
@@ -256,11 +265,11 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException setHeaders(HttpHeader...values) {
-		assertModifiable();
-		this.headers.clear();
-		if (values != null)
-			this.headers.append(values);
-		return this;
+		return modify(() -> {
+			headers.clear();
+			if (values != null)
+				headers.append(values);
+		});
 	}
 
 	/**
@@ -270,9 +279,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException setHeader(HttpHeader value) {
-		assertModifiable();
-		this.headers.set(value);
-		return this;
+		return modify(() -> headers.set(value));
 	}
 
 	/**
@@ -283,9 +290,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException setHeader(String name, String value) {
-		assertModifiable();
-		this.headers.set(name, value);
-		return this;
+		return modify(() -> headers.set(name, value));
 	}
 
 	/**
@@ -295,9 +300,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException addHeader(HttpHeader value) {
-		assertModifiable();
-		this.headers.append(value);
-		return this;
+		return modify(() -> headers.append(value));
 	}
 
 	/**
@@ -308,9 +311,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException addHeader(String name, String value) {
-		assertModifiable();
-		this.headers.append(name, value);
-		return this;
+		return modify(() -> headers.append(name, value));
 	}
 
 	/**
@@ -320,9 +321,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException setBody(HttpBody value) {
-		assertModifiable();
-		this.body = value;
-		return this;
+		return modify(() -> body = value);
 	}
 
 	/**
@@ -352,36 +351,31 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 * @return This object.
 	 */
 	public BasicHttpException setLocale(Locale value) {
-		assertModifiable();
-		this.locale = value;
-		return this;
+		return modify(() -> locale = value);
 	}
 
 	/**
-	 * Latches this instance so that subsequent calls to mutating setters throw {@link IllegalStateException}.
+	 * Returns whether this instance is an unmodifiable snapshot.
 	 *
-	 * @return This object.
-	 */
-	public BasicHttpException setUnmodifiable() {
-		this.unmodifiable = true;
-		return this;
-	}
-
-	/**
-	 * Returns whether this instance is locked against modification.
-	 *
-	 * @return {@code true} if {@link #setUnmodifiable()} has been called.
+	 * @return <jk>true</jk> if this bean is an {@link UnmodifiableBean} snapshot.
 	 */
 	public boolean isUnmodifiable() {
-		return unmodifiable;
+		return this instanceof UnmodifiableBean;
 	}
 
 	/**
-	 * Throws an {@link IllegalStateException} if this instance has been marked unmodifiable.
+	 * Returns an unmodifiable snapshot of this bean.
+	 *
+	 * <p>
+	 * The returned instance is a point-in-time copy of the leaf's nested {@code Unmodifiable} type; any attempt to set a
+	 * property on it throws an {@link UnsupportedOperationException}.  This method is idempotent: if this bean is already
+	 * unmodifiable it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still
+	 * modifiable unless it was already unmodifiable).
+	 *
+	 * @return An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.
 	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw new IllegalStateException("Instance is unmodifiable");
+	public BasicHttpException unmodifiable() {
+		return this instanceof Unmodifiable ? this : new Unmodifiable(this);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------
@@ -440,8 +434,83 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 		return sb.toString();
 	}
 
+	// ------------------------------------------------------------------------------------------------------------------
+	// Immutability paradigm plumbing
+	// ------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Single mutation funnel — the only choke-point through which all state changes on this bean flow.
+	 *
+	 * <p>
+	 * Every fluent setter routes through this method.  The nested {@code Unmodifiable} snapshot overrides only this
+	 * method to throw, which freezes the entire mutation surface with a single override.  Because this is a
+	 * {@link Throwable}-rooted hierarchy (no CRTP self-type), the funnel returns the base type.
+	 *
+	 * @param mutation The state change to apply.
+	 * @return This object.
+	 */
+	protected BasicHttpException modify(Runnable mutation) {
+		mutation.run();
+		return this;
+	}
+
+	/**
+	 * Deep-freeze hook invoked from the nested {@code Unmodifiable} constructor after the snapshot copy completes.
+	 *
+	 * <p>
+	 * The mutable sub-beans are frozen here by <b>direct field assignment</b> (never via a setter, which would route
+	 * through the throwing {@link #modify(Runnable)} and blow up during construction).  A leaf that adds its own mutable
+	 * sub-bean overrides this method (calling {@code super.freeze()} first).
+	 */
+	protected void freeze() {
+		headers = headers.unmodifiable();   // DIRECT field write — snapshot the copied HttpHeaderList.
+	}
+
+	@Override /* Object */
+	public boolean equals(Object o) {
+		// D3 content equality.  The 'body' HttpBody is deliberately excluded: it is a wrapper without value semantics
+		// and is derived from the message (getMessage()), which is already compared here.
+		return o instanceof BasicHttpException other && eq(this, other, (x, y) ->
+			eq(x.statusLine, y.statusLine) && eq(x.headers, y.headers) && eq(x.getMessage(), y.getMessage()));
+	}
+
+	@Override /* Object */
+	public int hashCode() {
+		return h(statusLine, headers, getMessage());
+	}
+
 	@Override /* Object */
 	public String toString() {
 		return statusLine.toString();
+	}
+
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link BasicHttpException}.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends BasicHttpException implements UnmodifiableBean {
+
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The exception to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(BasicHttpException copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicHttpException */
+		protected BasicHttpException modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

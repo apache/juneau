@@ -63,7 +63,9 @@ class SeeOtherRoot_Test extends TestBase {
 
 		assertSame(x, x.setStatusCode(303));
 
-		assertSame(x, x.setUnmodifiable());
+		var u = x.unmodifiable();
+		assertTrue(u.isUnmodifiable());
+		assertThrows(UnsupportedOperationException.class, () -> u.setStatusCode(200));
 	}
 
 	@Test void a04_fluentChaining() {

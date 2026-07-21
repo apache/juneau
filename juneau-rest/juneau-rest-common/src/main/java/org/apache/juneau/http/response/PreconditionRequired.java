@@ -16,6 +16,10 @@
  */
 package org.apache.juneau.http.response;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
+import org.apache.juneau.http.*;
+
 /**
  * Represents an <c>HTTP 428 Precondition Required</c> error response.
  *
@@ -90,5 +94,40 @@ public class PreconditionRequired extends BasicHttpException {
 	 */
 	public PreconditionRequired(PreconditionRequired copyFrom) {
 		super(copyFrom);
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public PreconditionRequired unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
+	}
+
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link PreconditionRequired} exception.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends PreconditionRequired implements UnmodifiableBean {
+
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The exception to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(PreconditionRequired copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicHttpException */
+		protected BasicHttpException modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

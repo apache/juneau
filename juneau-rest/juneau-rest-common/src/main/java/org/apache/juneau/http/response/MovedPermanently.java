@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.response;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.http.*;
 
 /**
@@ -36,7 +38,7 @@ import org.apache.juneau.http.*;
  *
  * @since 9.2.1
  */
-public class MovedPermanently extends BasicHttpResponse {
+public class MovedPermanently extends BasicHttpResponse<MovedPermanently> {
 
 	/** HTTP status code */
 	public static final int STATUS_CODE = 301;
@@ -48,7 +50,7 @@ public class MovedPermanently extends BasicHttpResponse {
 	private static final HttpStatusLine STATUS_LINE = HttpStatusLineBean.of(STATUS_CODE, REASON_PHRASE);
 
 	/** Default unmodifiable instance */
-	public static final MovedPermanently INSTANCE = new MovedPermanently();
+	public static final MovedPermanently INSTANCE = new MovedPermanently().unmodifiable();
 
 	/**
 	 * Constructor.
@@ -82,5 +84,38 @@ public class MovedPermanently extends BasicHttpResponse {
 	 */
 	public MovedPermanently(MovedPermanently copyFrom) {
 		super(copyFrom);
+	}
+
+	@Override /* Overridden from BasicHttpResponse */
+	public MovedPermanently unmodifiable() {
+		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
+	}
+
+	/**
+	 * Unmodifiable point-in-time snapshot of the enclosing {@link MovedPermanently} response.
+	 *
+	 * <p>
+	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through
+	 * {@code modify(...)}, this single override freezes the entire mutation surface.
+	 */
+	public static class Unmodifiable extends MovedPermanently implements UnmodifiableBean {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The response to snapshot.  Must not be <jk>null</jk>.
+		 */
+		@SuppressWarnings({
+			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
+		})
+		protected Unmodifiable(MovedPermanently copyFrom) {
+			super(copyFrom);
+			freeze();
+		}
+
+		@Override /* Overridden from BasicHttpResponse */
+		protected MovedPermanently modify(Runnable mutation) {
+			throw uoex("Bean is unmodifiable.");
+		}
 	}
 }

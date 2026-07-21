@@ -31,8 +31,18 @@ import org.apache.juneau.http.header.*;
  *
  * <p>
  * Holds a status line, an optional body, and an ordered list of headers. Provides classic-style
- * fluent setters that mutate state and return {@code this}, plus an {@link #setUnmodifiable()} latch
- * that locks the instance against further changes.
+ * fluent setters that mutate state and return {@code this}.
+ *
+ * <p>
+ * Immutability is expressed with the "funnel + nested {@code Unmodifiable} snapshot" paradigm: every mutator routes
+ * through the single protected {@link #modify(Runnable)} choke-point, and each concrete leaf gets a nested
+ * {@code X.Unmodifiable} whose only behavioral override is a throwing {@code modify(...)}.  A leaf's
+ * {@link #unmodifiable()} factory returns a point-in-time snapshot of type {@code X.Unmodifiable}; any attempt to set a
+ * property on it throws an {@link UnsupportedOperationException}.
+ *
+ * <p>
+ * This is a self-typed (CRTP) root: a leaf declares <c>class Ok <jk>extends</jk> BasicHttpResponse&lt;Ok&gt;</c> and
+ * inherits leaf-typed fluent setters with no covariant overrides.
  *
  * <p>
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
@@ -44,22 +54,25 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
  * </ul>
  *
+ * @param <SELF> The self type for fluent setters.
  * @since 9.2.1
  */
-public class BasicHttpResponse implements HttpResponseMessage {
+@SuppressWarnings({
+	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+})
+public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> implements HttpResponseMessage {
 
 	private HttpStatusLine statusLine;
-	private final HttpHeaderList headers;
+	private HttpHeaderList headers;
 	private HttpBody body;
 	private Locale locale;
-	private boolean unmodifiable;
 
 	/**
 	 * Constructor with no body.
 	 *
 	 * @param statusLine The status line. Must not be <jk>null</jk>.
 	 */
-	public BasicHttpResponse(HttpStatusLine statusLine) {
+	protected BasicHttpResponse(HttpStatusLine statusLine) {
 		// Reason phrase is documented-nullable; StringBody.of asserts non-null, so guard against a valid status line
 		// that carries a null reason phrase (would otherwise NPE on a legitimate input).
 		this(statusLine, l(),
@@ -72,7 +85,7 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param statusLine The status line. Must not be <jk>null</jk>.
 	 * @param body The response body. May be <jk>null</jk>.
 	 */
-	public BasicHttpResponse(HttpStatusLine statusLine, HttpBody body) {
+	protected BasicHttpResponse(HttpStatusLine statusLine, HttpBody body) {
 		this(statusLine, l(), body);
 	}
 
@@ -82,7 +95,7 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param statusLine The status line. Must not be <jk>null</jk>.
 	 * @param body The response body as a plain-text string. May be <jk>null</jk>.
 	 */
-	public BasicHttpResponse(HttpStatusLine statusLine, String body) {
+	protected BasicHttpResponse(HttpStatusLine statusLine, String body) {
 		this(statusLine, l(), body != null ? StringBody.of(body) : null);
 	}
 
@@ -93,7 +106,7 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param headers The response headers. Can be <jk>null</jk> (treated as an empty list).
 	 * @param body The response body. May be <jk>null</jk>.
 	 */
-	public BasicHttpResponse(HttpStatusLine statusLine, List<HttpHeader> headers, HttpBody body) {
+	protected BasicHttpResponse(HttpStatusLine statusLine, List<HttpHeader> headers, HttpBody body) {
 		this.statusLine = assertArgNotNull("statusLine", statusLine);
 		this.headers = HttpHeaderList.of(headers);
 		this.body = body;
@@ -104,7 +117,7 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 *
 	 * @param copyFrom The instance to copy. Must not be <jk>null</jk>.
 	 */
-	protected BasicHttpResponse(BasicHttpResponse copyFrom) {
+	protected BasicHttpResponse(BasicHttpResponse<?> copyFrom) {
 		assertArgNotNull("copyFrom", copyFrom);
 		this.statusLine = copyFrom.statusLine;
 		this.headers = copyFrom.headers.copy();
@@ -159,10 +172,8 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value New status line. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setStatusLine(HttpStatusLine value) {
-		assertModifiable();
-		this.statusLine = assertArgNotNull("value", value);
-		return this;
+	public SELF setStatusLine(HttpStatusLine value) {
+		return modify(() -> statusLine = assertArgNotNull("value", value));
 	}
 
 	/**
@@ -171,10 +182,8 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value New status code.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setStatusCode(int value) {
-		assertModifiable();
-		this.statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), value, statusLine.getReasonPhrase());
-		return this;
+	public SELF setStatusCode(int value) {
+		return modify(() -> statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), value, statusLine.getReasonPhrase()));
 	}
 
 	/**
@@ -183,10 +192,8 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value New reason phrase. May be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setReasonPhrase(String value) {
-		assertModifiable();
-		this.statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), statusLine.getStatusCode(), value);
-		return this;
+	public SELF setReasonPhrase(String value) {
+		return modify(() -> statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), statusLine.getStatusCode(), value));
 	}
 
 	/**
@@ -195,11 +202,11 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value New protocol version. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setProtocolVersion(HttpProtocolVersion value) {
-		assertModifiable();
-		assertArgNotNull("value", value);
-		this.statusLine = HttpStatusLineBean.of(value, statusLine.getStatusCode(), statusLine.getReasonPhrase());
-		return this;
+	public SELF setProtocolVersion(HttpProtocolVersion value) {
+		return modify(() -> {
+			assertArgNotNull("value", value);
+			statusLine = HttpStatusLineBean.of(value, statusLine.getStatusCode(), statusLine.getReasonPhrase());
+		});
 	}
 
 	/**
@@ -208,12 +215,12 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param values New headers. {@code null} is treated as an empty list.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setHeaders(List<HttpHeader> values) {
-		assertModifiable();
-		this.headers.clear();
-		if (values != null)
-			this.headers.append(values);
-		return this;
+	public SELF setHeaders(List<HttpHeader> values) {
+		return modify(() -> {
+			headers.clear();
+			if (values != null)
+				headers.append(values);
+		});
 	}
 
 	/**
@@ -222,12 +229,12 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param values New headers. {@code null} is treated as an empty array.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setHeaders(HttpHeader...values) {
-		assertModifiable();
-		this.headers.clear();
-		if (values != null)
-			this.headers.append(values);
-		return this;
+	public SELF setHeaders(HttpHeader...values) {
+		return modify(() -> {
+			headers.clear();
+			if (values != null)
+				headers.append(values);
+		});
 	}
 
 	/**
@@ -236,10 +243,8 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value The header to set. {@code null} is ignored.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setHeader(HttpHeader value) {
-		assertModifiable();
-		this.headers.set(value);
-		return this;
+	public SELF setHeader(HttpHeader value) {
+		return modify(() -> headers.set(value));
 	}
 
 	/**
@@ -249,10 +254,8 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value Header value. May be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setHeader(String name, String value) {
-		assertModifiable();
-		this.headers.set(name, value);
-		return this;
+	public SELF setHeader(String name, String value) {
+		return modify(() -> headers.set(name, value));
 	}
 
 	/**
@@ -261,10 +264,8 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value The header to add. {@code null} is ignored.
 	 * @return This object.
 	 */
-	public BasicHttpResponse addHeader(HttpHeader value) {
-		assertModifiable();
-		this.headers.append(value);
-		return this;
+	public SELF addHeader(HttpHeader value) {
+		return modify(() -> headers.append(value));
 	}
 
 	/**
@@ -274,10 +275,8 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value Header value. May be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse addHeader(String name, String value) {
-		assertModifiable();
-		this.headers.append(name, value);
-		return this;
+	public SELF addHeader(String name, String value) {
+		return modify(() -> headers.append(name, value));
 	}
 
 	/**
@@ -286,10 +285,8 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value New body. May be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setBody(HttpBody value) {
-		assertModifiable();
-		this.body = value;
-		return this;
+	public SELF setBody(HttpBody value) {
+		return modify(() -> body = value);
 	}
 
 	/**
@@ -298,7 +295,7 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value Body text. May be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setContent(String value) {
+	public SELF setContent(String value) {
 		return setBody(value != null ? StringBody.of(value) : null);
 	}
 
@@ -308,7 +305,7 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value New body. May be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setContent(HttpBody value) {
+	public SELF setContent(HttpBody value) {
 		return setBody(value);
 	}
 
@@ -318,10 +315,8 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value New locale. May be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setLocale(Locale value) {
-		assertModifiable();
-		this.locale = value;
-		return this;
+	public SELF setLocale(Locale value) {
+		return modify(() -> locale = value);
 	}
 
 	/**
@@ -330,7 +325,7 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value The new location value. May be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setLocation(String value) {
+	public SELF setLocation(String value) {
 		return setHeader(Location.NAME, value);
 	}
 
@@ -340,84 +335,129 @@ public class BasicHttpResponse implements HttpResponseMessage {
 	 * @param value The new location value. May be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setLocation(URI value) {
+	public SELF setLocation(URI value) {
 		return setHeader(Location.NAME, value != null ? value.toString() : null);
 	}
 
 	/**
-	 * Latches this instance so that subsequent calls to mutating setters throw {@link IllegalStateException}.
+	 * Returns whether this instance is an unmodifiable snapshot.
 	 *
-	 * @return This object.
-	 */
-	public BasicHttpResponse setUnmodifiable() {
-		this.unmodifiable = true;
-		return this;
-	}
-
-	/**
-	 * Returns whether this instance is locked against modification.
-	 *
-	 * @return {@code true} if {@link #setUnmodifiable()} has been called.
+	 * @return <jk>true</jk> if this bean is an {@link UnmodifiableBean} snapshot.
 	 */
 	public boolean isUnmodifiable() {
-		return unmodifiable;
+		return this instanceof UnmodifiableBean;
 	}
 
 	/**
-	 * Throws an {@link IllegalStateException} if this instance has been marked unmodifiable.
+	 * Returns an unmodifiable snapshot of this bean.
+	 *
+	 * <p>
+	 * The returned instance is a point-in-time copy of the leaf's nested {@code Unmodifiable} type; any attempt to set a
+	 * property on it throws an {@link UnsupportedOperationException}.  This method is idempotent: if this bean is already
+	 * unmodifiable it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still
+	 * modifiable unless it was already unmodifiable).
+	 *
+	 * @return An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.
 	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw new IllegalStateException("Instance is unmodifiable");
-	}
+	public abstract SELF unmodifiable();
 
 	// ------------------------------------------------------------------------------------------------------------------
-	// Immutable "with" helpers (return new instances; preserved for callers that prefer immutability)
+	// Fluent "with" helpers (mutate this instance and return the leaf type)
 	// ------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns a new instance with the given body replacing the current body.
+	 * Sets the body on this response.
 	 *
 	 * @param value The new body. May be <jk>null</jk>.
-	 * @return A new instance. Never <jk>null</jk>.
+	 * @return This object.
 	 */
-	public BasicHttpResponse withBody(HttpBody value) {
-		var c = new BasicHttpResponse(this);
-		c.body = value;
-		return c;
+	public SELF withBody(HttpBody value) {
+		return modify(() -> body = value);
 	}
 
 	/**
-	 * Returns a new instance with the given string body replacing the current body.
+	 * Sets the body on this response as a plain-text string.
 	 *
 	 * @param value The new body as a plain-text string. May be <jk>null</jk>.
-	 * @return A new instance. Never <jk>null</jk>.
+	 * @return This object.
 	 */
-	public BasicHttpResponse withBody(String value) {
+	public SELF withBody(String value) {
 		return withBody(value != null ? StringBody.of(value) : null);
 	}
 
 	/**
-	 * Returns a new instance with the given header added.
+	 * Appends a header to this response.
 	 *
 	 * @param header The header to add. Must not be <jk>null</jk>.
-	 * @return A new instance. Never <jk>null</jk>.
+	 * @return This object.
 	 */
-	public BasicHttpResponse withHeader(HttpHeader header) {
-		var c = new BasicHttpResponse(this);
-		c.headers.append(header);
-		return c;
+	public SELF withHeader(HttpHeader header) {
+		return modify(() -> headers.append(assertArgNotNull("header", header)));
 	}
 
 	/**
-	 * Returns a new instance with the given header name and value added.
+	 * Appends a header to this response.
 	 *
 	 * @param name The header name. Must not be <jk>null</jk>.
 	 * @param value The header value. May be <jk>null</jk>.
-	 * @return A new instance. Never <jk>null</jk>.
+	 * @return This object.
 	 */
-	public BasicHttpResponse withHeader(String name, String value) {
+	public SELF withHeader(String name, String value) {
 		return withHeader(HttpHeaderBean.of(name, value));
+	}
+
+	// ------------------------------------------------------------------------------------------------------------------
+	// Immutability paradigm plumbing
+	// ------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns this object cast to the self type.
+	 *
+	 * @return This object.
+	 */
+	@SuppressWarnings({
+		"unchecked" // CRTP self-type cast is safe: SELF is bound to the concrete leaf type.
+	})
+	protected final SELF self() {
+		return (SELF) this;
+	}
+
+	/**
+	 * Single mutation funnel — the only choke-point through which all state changes on this bean flow.
+	 *
+	 * <p>
+	 * Every fluent setter routes through this method.  The nested {@code Unmodifiable} snapshot overrides only this
+	 * method to throw, which freezes the entire mutation surface with a single override.
+	 *
+	 * @param mutation The state change to apply.
+	 * @return This object.
+	 */
+	protected SELF modify(Runnable mutation) {
+		mutation.run();
+		return self();
+	}
+
+	/**
+	 * Deep-freeze hook invoked from the nested {@code Unmodifiable} constructor after the snapshot copy completes.
+	 *
+	 * <p>
+	 * The mutable sub-beans are frozen here by <b>direct field assignment</b> (never via a setter, which would route
+	 * through the throwing {@link #modify(Runnable)} and blow up during construction).  A leaf that adds its own mutable
+	 * sub-bean overrides this method (calling {@code super.freeze()} first).
+	 */
+	protected void freeze() {
+		headers = headers.unmodifiable();   // DIRECT field write — snapshot the copied HttpHeaderList.
+	}
+
+	@Override /* Object */
+	public boolean equals(Object o) {
+		return o instanceof BasicHttpResponse<?> other && eq(this, other, (x, y) ->
+			eq(x.statusLine, y.statusLine) && eq(x.headers, y.headers) && eq(x.body, y.body));
+	}
+
+	@Override /* Object */
+	public int hashCode() {
+		return h(statusLine, headers, body);
 	}
 
 	@Override /* Object */

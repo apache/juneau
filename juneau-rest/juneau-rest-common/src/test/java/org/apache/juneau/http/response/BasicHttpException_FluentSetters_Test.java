@@ -62,11 +62,11 @@ class BasicHttpException_FluentSetters_Test extends TestBase {
 		assertEquals("body", e.getBody().toString());
 	}
 
-	@Test void a07_setUnmodifiable() {
-		var e = new BasicHttpException(500, "x").setUnmodifiable();
+	@Test void a07_unmodifiable() {
+		var e = new BasicHttpException(500, "x").unmodifiable();
 		assertTrue(e.isUnmodifiable());
-		assertThrows(IllegalStateException.class, () -> e.setStatusCode(503));
-		assertThrows(IllegalStateException.class, () -> e.addHeader("A", "1"));
+		assertThrows(UnsupportedOperationException.class, () -> e.setStatusCode(503));
+		assertThrows(UnsupportedOperationException.class, () -> e.addHeader("A", "1"));
 	}
 
 	@Test void a08_throwsAsRuntimeException() {

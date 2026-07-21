@@ -28,8 +28,8 @@ import org.junit.jupiter.api.*;
 
 class BasicHttpResponse_FluentSetters_Test extends TestBase {
 
-	private BasicHttpResponse newOk() {
-		return new BasicHttpResponse(HttpStatusLineBean.of(200, "OK"));
+	private Ok newOk() {
+		return new Ok();
 	}
 
 	@Test void a01_setStatusCode_preservesRest() {
@@ -100,18 +100,18 @@ class BasicHttpResponse_FluentSetters_Test extends TestBase {
 		assertEquals(Locale.GERMAN, r.getLocale());
 	}
 
-	@Test void a13_setUnmodifiable_locksMutations() {
-		var r = newOk().addHeader("X-Trace", "1").setUnmodifiable();
+	@Test void a13_unmodifiable_locksMutations() {
+		var r = newOk().addHeader("X-Trace", "1").unmodifiable();
 		assertTrue(r.isUnmodifiable());
-		assertThrows(IllegalStateException.class, () -> r.addHeader("X-More", "v"));
-		assertThrows(IllegalStateException.class, () -> r.setHeader("X-Trace", "v"));
-		assertThrows(IllegalStateException.class, () -> r.setStatusCode(404));
-		assertThrows(IllegalStateException.class, () -> r.setContent("x"));
-		assertThrows(IllegalStateException.class, () -> r.setLocale(Locale.ENGLISH));
+		assertThrows(UnsupportedOperationException.class, () -> r.addHeader("X-More", "v"));
+		assertThrows(UnsupportedOperationException.class, () -> r.setHeader("X-Trace", "v"));
+		assertThrows(UnsupportedOperationException.class, () -> r.setStatusCode(404));
+		assertThrows(UnsupportedOperationException.class, () -> r.setContent("x"));
+		assertThrows(UnsupportedOperationException.class, () -> r.setLocale(Locale.ENGLISH));
 	}
 
-	@Test void a14_setUnmodifiable_doesNotBlockReread() {
-		var r = newOk().addHeader("X-Trace", "1").setUnmodifiable();
+	@Test void a14_unmodifiable_doesNotBlockReread() {
+		var r = newOk().addHeader("X-Trace", "1").unmodifiable();
 		assertEquals(1, r.getHeaders().size());
 		assertEquals(200, r.getStatusCode());
 	}

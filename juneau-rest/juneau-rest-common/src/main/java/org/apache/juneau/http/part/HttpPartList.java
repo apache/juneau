@@ -347,6 +347,27 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	}
 
 	/**
+	 * Returns an unmodifiable snapshot of this list.
+	 *
+	 * <p>
+	 * D1 idempotency: if this list is already an {@link Unmodifiable} snapshot, it is returned as-is.
+	 *
+	 * @return An unmodifiable snapshot of this list, or this list if it is already unmodifiable.
+	 */
+	public HttpPartList unmodifiable() {
+		return this instanceof Unmodifiable ? this : new Unmodifiable(this);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this list is an unmodifiable snapshot.
+	 *
+	 * @return <jk>true</jk> if this list is an {@link UnmodifiableBean} snapshot.
+	 */
+	public boolean isUnmodifiable() {
+		return this instanceof UnmodifiableBean;
+	}
+
+	/**
 	 * Returns the parts in this list as a typed array.
 	 *
 	 * @return A new array. Never <jk>null</jk>.
@@ -358,4 +379,91 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	private boolean nameMatches(HttpPart p, String name) {
 		return caseInsensitive ? eqic(p.getName(), name) : eq(p.getName(), name);
 	}
+
+	/**
+	 * An unmodifiable snapshot of a {@link HttpPartList}.
+	 *
+	 * <p>
+	 * This is the D4 "collection-mutator-override" variant of the immutability paradigm.  Because {@link HttpPartList}
+	 * extends {@link ArrayList}, a single funnel cannot intercept the inherited {@code ArrayList} mutators, so this
+	 * subclass snapshot-copies the elements in its constructor and overrides the entire collection-mutator surface — its
+	 * own fluent mutators plus the inherited {@code ArrayList} mutators (including the {@code iterator()} /
+	 * {@code listIterator()} mutators) — to throw {@link UnsupportedOperationException}.  Read operations and
+	 * non-mutating iteration continue to work.
+	 */
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from ArrayList; list equality is element-based which is correct
+	})
+	public static class Unmodifiable extends HttpPartList implements UnmodifiableBean {
+
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param copyFrom The list to snapshot-copy. Must not be <jk>null</jk>.
+		 */
+		Unmodifiable(HttpPartList copyFrom) {
+			super(copyFrom);
+		}
+
+		// --- Fluent mutators -----------------------------------------------------------------------------------------
+
+		@Override public HttpPartList append(HttpPart value) { throw uoex(RO); }
+		@Override public HttpPartList append(HttpPart...values) { throw uoex(RO); }
+		@Override public HttpPartList append(List<HttpPart> values) { throw uoex(RO); }
+		@Override public HttpPartList append(String name, String value) { throw uoex(RO); }
+		@Override public HttpPartList caseInsensitive(boolean value) { throw uoex(RO); }
+		@Override public HttpPartList removeAll(String name) { throw uoex(RO); }
+		@Override public HttpPartList set(HttpPart value) { throw uoex(RO); }
+		@Override public HttpPartList set(HttpPart...values) { throw uoex(RO); }
+		@Override public HttpPartList set(String name, String value) { throw uoex(RO); }
+		@Override public HttpPartList setDefault(HttpPart value) { throw uoex(RO); }
+		@Override public HttpPartList setDefault(HttpPart...values) { throw uoex(RO); }
+		@Override public HttpPartList setDefault(String name, String value) { throw uoex(RO); }
+
+		// --- Inherited ArrayList collection mutators -----------------------------------------------------------------
+
+		@Override public boolean add(HttpPart e) { throw uoex(RO); }
+		@Override public void add(int index, HttpPart element) { throw uoex(RO); }
+		@Override public boolean addAll(Collection<? extends HttpPart> c) { throw uoex(RO); }
+		@Override public boolean addAll(int index, Collection<? extends HttpPart> c) { throw uoex(RO); }
+		@Override public void clear() { throw uoex(RO); }
+		@Override public boolean remove(Object o) { throw uoex(RO); }
+		@Override public HttpPart remove(int index) { throw uoex(RO); }
+		@Override public boolean removeAll(Collection<?> c) { throw uoex(RO); }
+		@Override public boolean removeIf(Predicate<? super HttpPart> filter) { throw uoex(RO); }
+		@Override public void replaceAll(UnaryOperator<HttpPart> operator) { throw uoex(RO); }
+		@Override public boolean retainAll(Collection<?> c) { throw uoex(RO); }
+		@Override public HttpPart set(int index, HttpPart element) { throw uoex(RO); }
+		@Override public void sort(Comparator<? super HttpPart> c) { throw uoex(RO); }
+
+		@Override public Iterator<HttpPart> iterator() {
+			var i = super.iterator();
+			return new Iterator<>() {
+				@Override public boolean hasNext() { return i.hasNext(); }
+				@Override public HttpPart next() { return i.next(); }
+				@Override public void remove() { throw uoex(RO); }
+			};
+		}
+
+		@Override public ListIterator<HttpPart> listIterator() { return listIterator(0); }
+
+		@Override public ListIterator<HttpPart> listIterator(int index) {
+			var i = super.listIterator(index);
+			return new ListIterator<>() {
+				@Override public boolean hasNext() { return i.hasNext(); }
+				@Override public HttpPart next() { return i.next(); }
+				@Override public boolean hasPrevious() { return i.hasPrevious(); }
+				@Override public HttpPart previous() { return i.previous(); }
+				@Override public int nextIndex() { return i.nextIndex(); }
+				@Override public int previousIndex() { return i.previousIndex(); }
+				@Override public void add(HttpPart e) { throw uoex(RO); }
+				@Override public void set(HttpPart e) { throw uoex(RO); }
+				@Override public void remove() { throw uoex(RO); }
+			};
+		}
+	}
+
+	private static final String RO = "Bean is unmodifiable.";
 }
