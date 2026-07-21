@@ -32,34 +32,13 @@ import org.apache.juneau.marshall.xml.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
+ *
+ * @param <SELF> The self type for fluent setters.
  */
-public class HtmlElementContainer extends HtmlElement {
+@SuppressWarnings("java:S119")  // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+public abstract class HtmlElementContainer<SELF extends HtmlElementContainer<SELF>> extends HtmlElement<SELF> {
 
 	private List<Object> children;
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer class_(String value) {
-		super.class_(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer attrUri(String key, Object val) {
-		super.attrUri(key, val);
-		return this;
-	}
 
 	/**
 	 * Adds a child element to this element.
@@ -67,11 +46,11 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @param value The child to add as a child element. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public HtmlElement child(Object value) {
+	public SELF child(Object value) {
 		if (this.children == null)
 			this.children = new LinkedList<>();
 		this.children.add(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -80,26 +59,14 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @param value The children to add as child elements. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public HtmlElement children(Object...value) {
+	public SELF children(Object...value) {
 		if (value.length > 0) {
 			if (this.children == null)
 				this.children = new LinkedList<>();
 			for (var c : value)
 				this.children.add(c);
 		}
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer dir(String value) {
-		super.dir(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -144,9 +111,9 @@ public class HtmlElementContainer extends HtmlElement {
 			return getChild(index[0]);
 		Object c = this;
 		for (var element : index) {
-			if (c instanceof HtmlElementMixed c2)
+			if (c instanceof HtmlElementMixed<?> c2)
 				c = c2.getChild(element);
-			else if (c instanceof HtmlElementContainer c2)
+			else if (c instanceof HtmlElementContainer<?> c2)
 				c = c2.getChild(element);
 			else
 				return null;
@@ -163,324 +130,6 @@ public class HtmlElementContainer extends HtmlElement {
 	@BeanProp(name="c") @MarshalledProp(dictionary=HtmlBeanDictionary.class)
 	public List<Object> getChildren() { return u(children); }
 
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer id(String value) {
-		super.id(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer lang(String value) {
-		super.lang(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onabort(String value) {
-		super.onabort(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onblur(String value) {
-		super.onblur(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer oncancel(String value) {
-		super.oncancel(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer oncanplay(String value) {
-		super.oncanplay(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer oncanplaythrough(String value) {
-		super.oncanplaythrough(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onchange(String value) {
-		super.onchange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onclick(String value) {
-		super.onclick(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer oncuechange(String value) {
-		super.oncuechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer ondblclick(String value) {
-		super.ondblclick(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer ondurationchange(String value) {
-		super.ondurationchange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onemptied(String value) {
-		super.onemptied(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onended(String value) {
-		super.onended(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onerror(String value) {
-		super.onerror(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onfocus(String value) {
-		super.onfocus(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer oninput(String value) {
-		super.oninput(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer oninvalid(String value) {
-		super.oninvalid(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onkeydown(String value) {
-		super.onkeydown(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onkeypress(String value) {
-		super.onkeypress(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onkeyup(String value) {
-		super.onkeyup(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onload(String value) {
-		super.onload(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onloadeddata(String value) {
-		super.onloadeddata(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onloadedmetadata(String value) {
-		super.onloadedmetadata(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onloadstart(String value) {
-		super.onloadstart(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onmousedown(String value) {
-		super.onmousedown(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onmouseenter(String value) {
-		super.onmouseenter(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onmouseleave(String value) {
-		super.onmouseleave(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onmousemove(String value) {
-		super.onmousemove(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onmouseout(String value) {
-		super.onmouseout(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onmouseover(String value) {
-		super.onmouseover(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onmouseup(String value) {
-		super.onmouseup(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onmousewheel(String value) {
-		super.onmousewheel(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onpause(String value) {
-		super.onpause(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onplay(String value) {
-		super.onplay(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onplaying(String value) {
-		super.onplaying(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onprogress(String value) {
-		super.onprogress(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onratechange(String value) {
-		super.onratechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onreset(String value) {
-		super.onreset(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onresize(String value) {
-		super.onresize(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onscroll(String value) {
-		super.onscroll(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onseeked(String value) {
-		super.onseeked(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onseeking(String value) {
-		super.onseeking(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onselect(String value) {
-		super.onselect(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onshow(String value) {
-		super.onshow(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onstalled(String value) {
-		super.onstalled(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onsubmit(String value) {
-		super.onsubmit(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onsuspend(String value) {
-		super.onsuspend(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer ontimeupdate(String value) {
-		super.ontimeupdate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer ontoggle(String value) {
-		super.ontoggle(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onvolumechange(String value) {
-		super.onvolumechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer onwaiting(String value) {
-		super.onwaiting(value);
-		return this;
-	}
-
 	/**
 	 * Sets the children for this container.
 	 *
@@ -488,38 +137,8 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @return This object.
 	 */
 	@BeanProp("c")
-	public HtmlElementContainer setChildren(List<Object> children) {
+	public SELF setChildren(List<Object> children) {
 		this.children = children;
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer spellcheck(Object value) {
-		super.spellcheck(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer style(String value) {
-		super.style(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer tabindex(Object value) {
-		super.tabindex(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer title(String value) {
-		super.title(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer translate(Object value) {
-		super.translate(value);
-		return this;
+		return self();
 	}
 }

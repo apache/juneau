@@ -41,11 +41,19 @@ import org.apache.juneau.marshall.xml.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
 
  * </ul>
+ *
+ * @param <SELF> The self type for fluent setters.
  */
 @org.apache.juneau.marshall.html.Html(format = XML)
-public abstract class HtmlElement {
+@SuppressWarnings("java:S119")  // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 
 	private java.util.Map<String,Object> attrs;
+
+	@SuppressWarnings("unchecked")
+	protected final SELF self() {
+		return (SELF) this;
+	}
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#classes">class</a> attribute.
@@ -60,9 +68,9 @@ public abstract class HtmlElement {
 	@SuppressWarnings({
 		"java:S100" // Method name uses underscore prefix to match HTML attribute name
 	})
-	public HtmlElement class_(String value) {
+	public SELF class_(String value) {
 		attr("class", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -77,9 +85,9 @@ public abstract class HtmlElement {
 	 * @param value The keyboard shortcut character (e.g., <js>"a"</js>, <js>"1"</js>). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement accesskey(String value) {
+	public SELF accesskey(String value) {
 		attr("accesskey", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -89,7 +97,7 @@ public abstract class HtmlElement {
 	 * @param val The attribute value. Can be <jk>null</jk> to remove the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement attr(String key, Object val) {
+	public SELF attr(String key, Object val) {
 		if (attrs == null)
 			attrs = map();
 		if (val == null)
@@ -99,7 +107,7 @@ public abstract class HtmlElement {
 				val = toUri(val);
 			attrs.put(key, val);
 		}
-		return this;
+		return self();
 	}
 
 	/**
@@ -120,11 +128,11 @@ public abstract class HtmlElement {
 	 * @param val The attribute value. Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public HtmlElement attrUri(String key, Object val) {
+	public SELF attrUri(String key, Object val) {
 		if (attrs == null)
 			attrs = map();
 		attrs.put(key, toUri(val));
-		return this;
+		return self();
 	}
 
 	/**
@@ -145,9 +153,9 @@ public abstract class HtmlElement {
 	 * @param value The editability state of the element. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement contenteditable(Object value) {
+	public SELF contenteditable(Object value) {
 		attr("contenteditable", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -167,9 +175,9 @@ public abstract class HtmlElement {
 	 * @param value The text direction for the element. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement dir(String value) {
+	public SELF dir(String value) {
 		attr("dir", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -223,9 +231,9 @@ public abstract class HtmlElement {
 	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement hidden(Object value) {
+	public SELF hidden(Object value) {
 		attr("hidden", deminimize(value, "hidden"));
-		return this;
+		return self();
 	}
 
 	/**
@@ -238,9 +246,9 @@ public abstract class HtmlElement {
 	 * @param value A unique identifier for the element (e.g., <js>"header"</js>, <js>"main-content"</js>). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement id(String value) {
+	public SELF id(String value) {
 		attr("id", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -253,9 +261,9 @@ public abstract class HtmlElement {
 	 * @param value A language tag (e.g., <js>"en"</js>, <js>"en-US"</js>, <js>"es"</js>, <js>"fr-CA"</js>). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement lang(String value) {
+	public SELF lang(String value) {
 		attr("lang", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -267,9 +275,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the abort event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onabort(String value) {
+	public SELF onabort(String value) {
 		attr("onabort", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -291,9 +299,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the element loses focus. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onblur(String value) {
+	public SELF onblur(String value) {
 		attr("onblur", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -305,9 +313,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the cancel event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement oncancel(String value) {
+	public SELF oncancel(String value) {
 		attr("oncancel", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -319,9 +327,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the canplay event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement oncanplay(String value) {
+	public SELF oncanplay(String value) {
 		attr("oncanplay", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -334,9 +342,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the canplaythrough event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement oncanplaythrough(String value) {
+	public SELF oncanplaythrough(String value) {
 		attr("oncanplaythrough", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -358,9 +366,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the change event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onchange(String value) {
+	public SELF onchange(String value) {
 		attr("onchange", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -382,9 +390,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the click event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onclick(String value) {
+	public SELF onclick(String value) {
 		attr("onclick", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -397,9 +405,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the cuechange event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement oncuechange(String value) {
+	public SELF oncuechange(String value) {
 		attr("oncuechange", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -411,9 +419,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the dblclick event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement ondblclick(String value) {
+	public SELF ondblclick(String value) {
 		attr("ondblclick", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -426,9 +434,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the durationchange event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement ondurationchange(String value) {
+	public SELF ondurationchange(String value) {
 		attr("ondurationchange", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -440,9 +448,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the emptied event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onemptied(String value) {
+	public SELF onemptied(String value) {
 		attr("onemptied", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -454,9 +462,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the ended event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onended(String value) {
+	public SELF onended(String value) {
 		attr("onended", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -468,9 +476,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the error event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onerror(String value) {
+	public SELF onerror(String value) {
 		attr("onerror", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -492,9 +500,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the focus event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onfocus(String value) {
+	public SELF onfocus(String value) {
 		attr("onfocus", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -506,9 +514,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the input event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement oninput(String value) {
+	public SELF oninput(String value) {
 		attr("oninput", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -520,9 +528,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the invalid event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement oninvalid(String value) {
+	public SELF oninvalid(String value) {
 		attr("oninvalid", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -534,9 +542,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the keydown event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onkeydown(String value) {
+	public SELF onkeydown(String value) {
 		attr("onkeydown", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -548,9 +556,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the keypress event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onkeypress(String value) {
+	public SELF onkeypress(String value) {
 		attr("onkeypress", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -562,9 +570,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the keyup event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onkeyup(String value) {
+	public SELF onkeyup(String value) {
 		attr("onkeyup", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -586,9 +594,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the load event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onload(String value) {
+	public SELF onload(String value) {
 		attr("onload", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -601,9 +609,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the loadeddata event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onloadeddata(String value) {
+	public SELF onloadeddata(String value) {
 		attr("onloadeddata", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -616,9 +624,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the loadedmetadata event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onloadedmetadata(String value) {
+	public SELF onloadedmetadata(String value) {
 		attr("onloadedmetadata", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -631,9 +639,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the loadstart event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onloadstart(String value) {
+	public SELF onloadstart(String value) {
 		attr("onloadstart", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -646,9 +654,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the mousedown event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onmousedown(String value) {
+	public SELF onmousedown(String value) {
 		attr("onmousedown", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -660,9 +668,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the mouseenter event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onmouseenter(String value) {
+	public SELF onmouseenter(String value) {
 		attr("onmouseenter", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -675,9 +683,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the mouseleave event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onmouseleave(String value) {
+	public SELF onmouseleave(String value) {
 		attr("onmouseleave", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -690,9 +698,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the mousemove event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onmousemove(String value) {
+	public SELF onmousemove(String value) {
 		attr("onmousemove", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -704,9 +712,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the mouseout event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onmouseout(String value) {
+	public SELF onmouseout(String value) {
 		attr("onmouseout", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -729,9 +737,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the mouseover event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onmouseover(String value) {
+	public SELF onmouseover(String value) {
 		attr("onmouseover", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -743,9 +751,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the mouseup event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onmouseup(String value) {
+	public SELF onmouseup(String value) {
 		attr("onmouseup", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -758,9 +766,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the mousewheel event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onmousewheel(String value) {
+	public SELF onmousewheel(String value) {
 		attr("onmousewheel", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -772,9 +780,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the pause event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onpause(String value) {
+	public SELF onpause(String value) {
 		attr("onpause", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -786,9 +794,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the play event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onplay(String value) {
+	public SELF onplay(String value) {
 		attr("onplay", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -800,9 +808,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the playing event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onplaying(String value) {
+	public SELF onplaying(String value) {
 		attr("onplaying", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -814,9 +822,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the progress event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onprogress(String value) {
+	public SELF onprogress(String value) {
 		attr("onprogress", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -829,9 +837,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the ratechange event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onratechange(String value) {
+	public SELF onratechange(String value) {
 		attr("onratechange", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -843,9 +851,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the reset event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onreset(String value) {
+	public SELF onreset(String value) {
 		attr("onreset", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -857,9 +865,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the resize event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onresize(String value) {
+	public SELF onresize(String value) {
 		attr("onresize", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -871,9 +879,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the scroll event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onscroll(String value) {
+	public SELF onscroll(String value) {
 		attr("onscroll", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -885,9 +893,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the seeked event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onseeked(String value) {
+	public SELF onseeked(String value) {
 		attr("onseeked", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -899,9 +907,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the seeking event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onseeking(String value) {
+	public SELF onseeking(String value) {
 		attr("onseeking", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -913,9 +921,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the select event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onselect(String value) {
+	public SELF onselect(String value) {
 		attr("onselect", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -927,9 +935,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the show event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onshow(String value) {
+	public SELF onshow(String value) {
 		attr("onshow", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -941,9 +949,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the stalled event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onstalled(String value) {
+	public SELF onstalled(String value) {
 		attr("onstalled", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -965,9 +973,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the submit event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onsubmit(String value) {
+	public SELF onsubmit(String value) {
 		attr("onsubmit", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -979,9 +987,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the suspend event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onsuspend(String value) {
+	public SELF onsuspend(String value) {
 		attr("onsuspend", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -994,9 +1002,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the timeupdate event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement ontimeupdate(String value) {
+	public SELF ontimeupdate(String value) {
 		attr("ontimeupdate", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -1008,9 +1016,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the toggle event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement ontoggle(String value) {
+	public SELF ontoggle(String value) {
 		attr("ontoggle", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -1023,9 +1031,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the volumechange event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onvolumechange(String value) {
+	public SELF onvolumechange(String value) {
 		attr("onvolumechange", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -1037,9 +1045,9 @@ public abstract class HtmlElement {
 	 * @param value JavaScript code to execute when the waiting event occurs. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement onwaiting(String value) {
+	public SELF onwaiting(String value) {
 		attr("onwaiting", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -1049,7 +1057,7 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@BeanProp("a")
-	public HtmlElement setAttrs(java.util.Map<String,Object> value) {
+	public SELF setAttrs(java.util.Map<String,Object> value) {
 		if (nn(value)) {
 			value.entrySet().forEach(x -> {
 				var key = x.getKey();
@@ -1058,7 +1066,7 @@ public abstract class HtmlElement {
 			});
 		}
 		attrs = value;
-		return this;
+		return self();
 	}
 
 	/**
@@ -1077,9 +1085,9 @@ public abstract class HtmlElement {
 	 * @param value Whether spell checking should be enabled. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement spellcheck(Object value) {
+	public SELF spellcheck(Object value) {
 		attr("spellcheck", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -1092,9 +1100,9 @@ public abstract class HtmlElement {
 	 * @param value Inline CSS styles (e.g., <js>"color: red; font-size: 14px;"</js>). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement style(String value) {
+	public SELF style(String value) {
 		attr("style", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -1114,9 +1122,9 @@ public abstract class HtmlElement {
 	 * @param value The tab order value for keyboard navigation. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement tabindex(Object value) {
+	public SELF tabindex(Object value) {
 		attr("tabindex", value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -1129,9 +1137,9 @@ public abstract class HtmlElement {
 	 * @param value Tooltip text to display on hover (e.g., <js>"Click to submit form"</js>). Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement title(String value) {
+	public SELF title(String value) {
 		attr("title", value);
-		return this;
+		return self();
 	}
 
 	@Override /* Overridden from Object */
@@ -1155,9 +1163,9 @@ public abstract class HtmlElement {
 	 * @param value Whether the element content should be translated. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
-	public HtmlElement translate(Object value) {
+	public SELF translate(Object value) {
 		attr("translate", value);
-		return this;
+		return self();
 	}
 
 	/**

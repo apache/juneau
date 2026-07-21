@@ -232,7 +232,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		return div().class_("op-block op-block-closed model").children(modelBlockSummary(modelName, model), div(model).class_("op-block-contents"));
 	}
 
-	private static HtmlElement modelBlockSummary(String modelName, SchemaInfo model) {
+	private static Div modelBlockSummary(String modelName, SchemaInfo model) {
 		return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(span(modelName).class_("method-button"),
 			nn(model.getDescription()) ? span(toBRL(model.getDescription())).class_("summary") : null);
 	}
@@ -247,7 +247,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	// Creates the "Model" header.
-	private static HtmlElement modelsBlockSummary() {
+	private static Div modelsBlockSummary() {
 		return div().class_("tag-block-summary").onclick("toggleTagBlock(this)").children(span("Models").class_("name"));
 	}
 
@@ -261,7 +261,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		return div().class_("op-block op-block-closed " + opClass).children(opBlockSummary(path, opName, op), div(tableContainer(s, op)).class_("op-block-contents"));
 	}
 
-	private static HtmlElement opBlockSummary(String path, String opName, Operation op) {
+	private static Div opBlockSummary(String path, String opName, Operation op) {
 		return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(span(ucr(opName)).class_("method-button"), span(path).class_("path"),
 			nn(op.getSummary()) ? span(op.getSummary()).class_("summary") : null);
 	}
@@ -343,7 +343,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	// Creates the "pet  Everything about your Pets  ext-link" header.
-	private static HtmlElement tagBlockSummary(Tag t) {
+	private static Div tagBlockSummary(Tag t) {
 		var ed = t.getExternalDocs();
 
 		String content;

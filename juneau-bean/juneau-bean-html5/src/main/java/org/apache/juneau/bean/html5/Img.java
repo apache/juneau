@@ -76,7 +76,7 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @Marshalled(typeName = "img")
-public class Img extends HtmlElementVoid {
+public class Img extends HtmlElementVoid<Img> {
 
 	/**
 	 * Creates an empty {@link Img} element.
@@ -90,18 +90,6 @@ public class Img extends HtmlElementVoid {
 	 */
 	public Img(Object src) {
 		src(src);
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img class_(String value) {
-		super.class_(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img accesskey(String value) {
-		super.accesskey(value);
-		return this;
 	}
 
 	/**
@@ -119,24 +107,6 @@ public class Img extends HtmlElementVoid {
 	 */
 	public Img alt(String value) {
 		attr("alt", value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img attrUri(String key, Object val) {
-		super.attrUri(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img contenteditable(Object value) {
-		super.contenteditable(value);
 		return this;
 	}
 
@@ -162,12 +132,6 @@ public class Img extends HtmlElementVoid {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Img dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
 	 * attribute.
@@ -183,18 +147,6 @@ public class Img extends HtmlElementVoid {
 	 */
 	public Img height(Object value) {
 		attr("height", value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img id(String value) {
-		super.id(value);
 		return this;
 	}
 
@@ -223,318 +175,6 @@ public class Img extends HtmlElementVoid {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Img lang(String value) {
-		super.lang(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onabort(String value) {
-		super.onabort(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onblur(String value) {
-		super.onblur(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img oncancel(String value) {
-		super.oncancel(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img oncanplay(String value) {
-		super.oncanplay(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img oncanplaythrough(String value) {
-		super.oncanplaythrough(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onchange(String value) {
-		super.onchange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onclick(String value) {
-		super.onclick(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img oncuechange(String value) {
-		super.oncuechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img ondblclick(String value) {
-		super.ondblclick(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img ondurationchange(String value) {
-		super.ondurationchange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onemptied(String value) {
-		super.onemptied(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onended(String value) {
-		super.onended(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onerror(String value) {
-		super.onerror(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onfocus(String value) {
-		super.onfocus(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img oninput(String value) {
-		super.oninput(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img oninvalid(String value) {
-		super.oninvalid(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onkeydown(String value) {
-		super.onkeydown(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onkeypress(String value) {
-		super.onkeypress(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onkeyup(String value) {
-		super.onkeyup(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onload(String value) {
-		super.onload(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onloadeddata(String value) {
-		super.onloadeddata(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onloadedmetadata(String value) {
-		super.onloadedmetadata(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onloadstart(String value) {
-		super.onloadstart(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onmousedown(String value) {
-		super.onmousedown(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onmouseenter(String value) {
-		super.onmouseenter(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onmouseleave(String value) {
-		super.onmouseleave(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onmousemove(String value) {
-		super.onmousemove(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onmouseout(String value) {
-		super.onmouseout(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onmouseover(String value) {
-		super.onmouseover(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onmouseup(String value) {
-		super.onmouseup(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onmousewheel(String value) {
-		super.onmousewheel(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onpause(String value) {
-		super.onpause(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onplay(String value) {
-		super.onplay(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onplaying(String value) {
-		super.onplaying(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onprogress(String value) {
-		super.onprogress(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onratechange(String value) {
-		super.onratechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onreset(String value) {
-		super.onreset(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onresize(String value) {
-		super.onresize(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onscroll(String value) {
-		super.onscroll(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onseeked(String value) {
-		super.onseeked(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onseeking(String value) {
-		super.onseeking(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onselect(String value) {
-		super.onselect(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onshow(String value) {
-		super.onshow(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onstalled(String value) {
-		super.onstalled(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onsubmit(String value) {
-		super.onsubmit(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onsuspend(String value) {
-		super.onsuspend(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img ontimeupdate(String value) {
-		super.ontimeupdate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img ontoggle(String value) {
-		super.ontoggle(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onvolumechange(String value) {
-		super.onvolumechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img onwaiting(String value) {
-		super.onwaiting(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img spellcheck(Object value) {
-		super.spellcheck(value);
-		return this;
-	}
-
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-src">src</a> attribute.
 	 *
@@ -556,30 +196,6 @@ public class Img extends HtmlElementVoid {
 	 */
 	public Img src(Object value) {
 		attrUri("src", value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img style(String value) {
-		super.style(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img tabindex(Object value) {
-		super.tabindex(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img title(String value) {
-		super.title(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img translate(Object value) {
-		super.translate(value);
 		return this;
 	}
 

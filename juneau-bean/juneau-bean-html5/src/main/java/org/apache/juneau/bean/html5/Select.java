@@ -18,8 +18,6 @@ package org.apache.juneau.bean.html5;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.util.*;
-
 import org.apache.juneau.marshall.*;
 
 /**
@@ -86,7 +84,7 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @Marshalled(typeName = "select")
-public class Select extends HtmlElementContainer {
+public class Select extends HtmlElementContainer<Select> {
 
 	/**
 	 * Creates an empty {@link Select} element.
@@ -101,30 +99,6 @@ public class Select extends HtmlElementContainer {
 	 */
 	public Select(String name, Object...children) {
 		name(name).children(children);
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select class_(String value) {
-		super.class_(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select attrUri(String key, Object val) {
-		super.attrUri(key, val);
-		return this;
 	}
 
 	/**
@@ -144,18 +118,6 @@ public class Select extends HtmlElementContainer {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementContainer */
-	public Select child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Select children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
 	/**
 	 * Convenience method for selecting a child {@link Option} after the options have already been populated.
 	 *
@@ -169,18 +131,6 @@ public class Select extends HtmlElementContainer {
 					o.selected(true);
 			});
 		}
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select dir(String value) {
-		super.dir(value);
 		return this;
 	}
 
@@ -227,24 +177,6 @@ public class Select extends HtmlElementContainer {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Select hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select id(String value) {
-		super.id(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select lang(String value) {
-		super.lang(value);
-		return this;
-	}
-
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-select-multiple">multiple</a> attribute.
 	 *
@@ -288,306 +220,6 @@ public class Select extends HtmlElementContainer {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Select onabort(String value) {
-		super.onabort(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onblur(String value) {
-		super.onblur(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select oncancel(String value) {
-		super.oncancel(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select oncanplay(String value) {
-		super.oncanplay(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select oncanplaythrough(String value) {
-		super.oncanplaythrough(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onchange(String value) {
-		super.onchange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onclick(String value) {
-		super.onclick(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select oncuechange(String value) {
-		super.oncuechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select ondblclick(String value) {
-		super.ondblclick(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select ondurationchange(String value) {
-		super.ondurationchange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onemptied(String value) {
-		super.onemptied(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onended(String value) {
-		super.onended(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onerror(String value) {
-		super.onerror(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onfocus(String value) {
-		super.onfocus(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select oninput(String value) {
-		super.oninput(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select oninvalid(String value) {
-		super.oninvalid(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onkeydown(String value) {
-		super.onkeydown(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onkeypress(String value) {
-		super.onkeypress(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onkeyup(String value) {
-		super.onkeyup(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onload(String value) {
-		super.onload(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onloadeddata(String value) {
-		super.onloadeddata(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onloadedmetadata(String value) {
-		super.onloadedmetadata(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onloadstart(String value) {
-		super.onloadstart(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onmousedown(String value) {
-		super.onmousedown(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onmouseenter(String value) {
-		super.onmouseenter(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onmouseleave(String value) {
-		super.onmouseleave(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onmousemove(String value) {
-		super.onmousemove(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onmouseout(String value) {
-		super.onmouseout(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onmouseover(String value) {
-		super.onmouseover(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onmouseup(String value) {
-		super.onmouseup(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onmousewheel(String value) {
-		super.onmousewheel(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onpause(String value) {
-		super.onpause(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onplay(String value) {
-		super.onplay(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onplaying(String value) {
-		super.onplaying(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onprogress(String value) {
-		super.onprogress(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onratechange(String value) {
-		super.onratechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onreset(String value) {
-		super.onreset(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onresize(String value) {
-		super.onresize(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onscroll(String value) {
-		super.onscroll(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onseeked(String value) {
-		super.onseeked(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onseeking(String value) {
-		super.onseeking(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onselect(String value) {
-		super.onselect(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onshow(String value) {
-		super.onshow(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onstalled(String value) {
-		super.onstalled(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onsubmit(String value) {
-		super.onsubmit(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onsuspend(String value) {
-		super.onsuspend(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select ontimeupdate(String value) {
-		super.ontimeupdate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select ontoggle(String value) {
-		super.ontoggle(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onvolumechange(String value) {
-		super.onvolumechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select onwaiting(String value) {
-		super.onwaiting(value);
-		return this;
-	}
-
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-select-required">required</a> attribute.
 	 *
@@ -602,12 +234,6 @@ public class Select extends HtmlElementContainer {
 	 */
 	public Select required(Object value) {
 		attr("required", value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Select setChildren(List<Object> children) {
-		super.setChildren(children);
 		return this;
 	}
 
@@ -626,33 +252,4 @@ public class Select extends HtmlElementContainer {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Select spellcheck(Object value) {
-		super.spellcheck(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select style(String value) {
-		super.style(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select tabindex(Object value) {
-		super.tabindex(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select title(String value) {
-		super.title(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select translate(Object value) {
-		super.translate(value);
-		return this;
-	}
 }

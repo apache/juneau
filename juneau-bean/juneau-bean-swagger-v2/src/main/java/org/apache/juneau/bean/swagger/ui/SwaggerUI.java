@@ -247,7 +247,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		// @formatter:on
 	}
 
-	private static HtmlElement modelBlockSummary(String modelName, JsonMap model) {
+	private static Div modelBlockSummary(String modelName, JsonMap model) {
 		// @formatter:off
 		return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(
 			span(modelName).class_("method-button"),
@@ -264,7 +264,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	// Creates the "Model" header.
-	private static HtmlElement modelsBlockSummary() {
+	private static Div modelsBlockSummary() {
 		return div().class_("tag-block-summary").onclick("toggleTagBlock(this)").children(span("Models").class_("name"));
 	}
 
@@ -282,7 +282,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		// @formatter:on
 	}
 
-	private static HtmlElement opBlockSummary(String path, String opName, Operation op) {
+	private static Div opBlockSummary(String path, String opName, Operation op) {
 		// @formatter:off
 		return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(
 			span(ucr(opName)).class_("method-button"),
@@ -371,10 +371,10 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	// Creates the "pet  Everything about your Pets  ext-link" header.
-	private static HtmlElement tagBlockSummary(Tag t) {
+	private static Div tagBlockSummary(Tag t) {
 		var ed = t.getExternalDocs();
 
-		var children = new ArrayList<HtmlElement>();
+		var children = new ArrayList<HtmlElement<?>>();
 		children.add(span(t.getName()).class_("name"));
 		children.add(span(toBRL(t.getDescription())).class_("description"));
 

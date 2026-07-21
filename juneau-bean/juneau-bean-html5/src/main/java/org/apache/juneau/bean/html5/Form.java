@@ -80,7 +80,7 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @Marshalled(typeName = "form")
-public class Form extends HtmlElementMixed {
+public class Form extends HtmlElementMixed<Form> {
 
 	/**
 	 * Creates an empty {@link Form} element.
@@ -104,12 +104,6 @@ public class Form extends HtmlElementMixed {
 	 */
 	public Form(String action, Object...children) {
 		action(action).children(children);
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form class_(String value) {
-		super.class_(value);
-		return this;
 	}
 
 	/**
@@ -136,12 +130,6 @@ public class Form extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Form accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-action">action</a> attribute.
 	 *
@@ -160,18 +148,6 @@ public class Form extends HtmlElementMixed {
 	 */
 	public Form action(String value) {
 		attrUri("action", value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 
@@ -198,30 +174,6 @@ public class Form extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementMixed */
-	public Form child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Form children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-enctype">enctype</a> attribute.
 	 *
@@ -241,24 +193,6 @@ public class Form extends HtmlElementMixed {
 	 */
 	public Form enctype(String value) {
 		attr("enctype", value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form id(String value) {
-		super.id(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form lang(String value) {
-		super.lang(value);
 		return this;
 	}
 
@@ -316,324 +250,6 @@ public class Form extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Form onabort(String value) {
-		super.onabort(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onblur(String value) {
-		super.onblur(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form oncancel(String value) {
-		super.oncancel(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form oncanplay(String value) {
-		super.oncanplay(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form oncanplaythrough(String value) {
-		super.oncanplaythrough(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onchange(String value) {
-		super.onchange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onclick(String value) {
-		super.onclick(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form oncuechange(String value) {
-		super.oncuechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form ondblclick(String value) {
-		super.ondblclick(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form ondurationchange(String value) {
-		super.ondurationchange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onemptied(String value) {
-		super.onemptied(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onended(String value) {
-		super.onended(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onerror(String value) {
-		super.onerror(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onfocus(String value) {
-		super.onfocus(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form oninput(String value) {
-		super.oninput(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form oninvalid(String value) {
-		super.oninvalid(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onkeydown(String value) {
-		super.onkeydown(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onkeypress(String value) {
-		super.onkeypress(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onkeyup(String value) {
-		super.onkeyup(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onload(String value) {
-		super.onload(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onloadeddata(String value) {
-		super.onloadeddata(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onloadedmetadata(String value) {
-		super.onloadedmetadata(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onloadstart(String value) {
-		super.onloadstart(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onmousedown(String value) {
-		super.onmousedown(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onmouseenter(String value) {
-		super.onmouseenter(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onmouseleave(String value) {
-		super.onmouseleave(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onmousemove(String value) {
-		super.onmousemove(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onmouseout(String value) {
-		super.onmouseout(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onmouseover(String value) {
-		super.onmouseover(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onmouseup(String value) {
-		super.onmouseup(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onmousewheel(String value) {
-		super.onmousewheel(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onpause(String value) {
-		super.onpause(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onplay(String value) {
-		super.onplay(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onplaying(String value) {
-		super.onplaying(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onprogress(String value) {
-		super.onprogress(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onratechange(String value) {
-		super.onratechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onreset(String value) {
-		super.onreset(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onresize(String value) {
-		super.onresize(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onscroll(String value) {
-		super.onscroll(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onseeked(String value) {
-		super.onseeked(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onseeking(String value) {
-		super.onseeking(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onselect(String value) {
-		super.onselect(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onshow(String value) {
-		super.onshow(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onstalled(String value) {
-		super.onstalled(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onsubmit(String value) {
-		super.onsubmit(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onsuspend(String value) {
-		super.onsuspend(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form ontimeupdate(String value) {
-		super.ontimeupdate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form ontoggle(String value) {
-		super.ontoggle(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onvolumechange(String value) {
-		super.onvolumechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form onwaiting(String value) {
-		super.onwaiting(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form spellcheck(Object value) {
-		super.spellcheck(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form style(String value) {
-		super.style(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form tabindex(Object value) {
-		super.tabindex(value);
-		return this;
-	}
-
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-target">target</a> attribute.
 	 *
@@ -658,15 +274,4 @@ public class Form extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Form title(String value) {
-		super.title(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form translate(Object value) {
-		super.translate(value);
-		return this;
-	}
 }

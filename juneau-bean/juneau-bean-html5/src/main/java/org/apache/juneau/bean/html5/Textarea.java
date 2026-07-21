@@ -84,7 +84,7 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @Marshalled(typeName = "textarea")
-public class Textarea extends HtmlElementRawText {
+public class Textarea extends HtmlElementRawText<Textarea> {
 
 	/**
 	 * Creates an empty {@link Textarea} element.
@@ -100,30 +100,6 @@ public class Textarea extends HtmlElementRawText {
 	 */
 	public Textarea(String name, String text) {
 		name(name).text(text);
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea class_(String value) {
-		super.class_(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea attrUri(String key, Object val) {
-		super.attrUri(key, val);
-		return this;
 	}
 
 	/**
@@ -181,18 +157,6 @@ public class Textarea extends HtmlElementRawText {
 	 */
 	public Textarea cols(Object value) {
 		attr("cols", value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea dir(String value) {
-		super.dir(value);
 		return this;
 	}
 
@@ -258,18 +222,6 @@ public class Textarea extends HtmlElementRawText {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Textarea hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea id(String value) {
-		super.id(value);
-		return this;
-	}
-
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#inputmode">inputmode</a> attribute.
 	 *
@@ -294,12 +246,6 @@ public class Textarea extends HtmlElementRawText {
 	 */
 	public Textarea inputmode(String value) {
 		attr("inputmode", value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea lang(String value) {
-		super.lang(value);
 		return this;
 	}
 
@@ -352,306 +298,6 @@ public class Textarea extends HtmlElementRawText {
 	 */
 	public Textarea name(String value) {
 		attr("name", value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onabort(String value) {
-		super.onabort(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onblur(String value) {
-		super.onblur(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea oncancel(String value) {
-		super.oncancel(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea oncanplay(String value) {
-		super.oncanplay(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea oncanplaythrough(String value) {
-		super.oncanplaythrough(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onchange(String value) {
-		super.onchange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onclick(String value) {
-		super.onclick(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea oncuechange(String value) {
-		super.oncuechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea ondblclick(String value) {
-		super.ondblclick(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea ondurationchange(String value) {
-		super.ondurationchange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onemptied(String value) {
-		super.onemptied(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onended(String value) {
-		super.onended(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onerror(String value) {
-		super.onerror(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onfocus(String value) {
-		super.onfocus(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea oninput(String value) {
-		super.oninput(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea oninvalid(String value) {
-		super.oninvalid(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onkeydown(String value) {
-		super.onkeydown(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onkeypress(String value) {
-		super.onkeypress(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onkeyup(String value) {
-		super.onkeyup(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onload(String value) {
-		super.onload(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onloadeddata(String value) {
-		super.onloadeddata(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onloadedmetadata(String value) {
-		super.onloadedmetadata(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onloadstart(String value) {
-		super.onloadstart(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onmousedown(String value) {
-		super.onmousedown(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onmouseenter(String value) {
-		super.onmouseenter(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onmouseleave(String value) {
-		super.onmouseleave(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onmousemove(String value) {
-		super.onmousemove(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onmouseout(String value) {
-		super.onmouseout(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onmouseover(String value) {
-		super.onmouseover(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onmouseup(String value) {
-		super.onmouseup(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onmousewheel(String value) {
-		super.onmousewheel(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onpause(String value) {
-		super.onpause(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onplay(String value) {
-		super.onplay(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onplaying(String value) {
-		super.onplaying(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onprogress(String value) {
-		super.onprogress(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onratechange(String value) {
-		super.onratechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onreset(String value) {
-		super.onreset(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onresize(String value) {
-		super.onresize(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onscroll(String value) {
-		super.onscroll(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onseeked(String value) {
-		super.onseeked(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onseeking(String value) {
-		super.onseeking(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onselect(String value) {
-		super.onselect(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onshow(String value) {
-		super.onshow(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onstalled(String value) {
-		super.onstalled(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onsubmit(String value) {
-		super.onsubmit(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onsuspend(String value) {
-		super.onsuspend(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea ontimeupdate(String value) {
-		super.ontimeupdate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea ontoggle(String value) {
-		super.ontoggle(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onvolumechange(String value) {
-		super.onvolumechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea onwaiting(String value) {
-		super.onwaiting(value);
 		return this;
 	}
 
@@ -720,42 +366,6 @@ public class Textarea extends HtmlElementRawText {
 	 */
 	public Textarea rows(Number value) {
 		attr("rows", value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea spellcheck(Object value) {
-		super.spellcheck(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea style(String value) {
-		super.style(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea tabindex(Object value) {
-		super.tabindex(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementRawText */
-	public Textarea text(Object value) {
-		super.text(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea title(String value) {
-		super.title(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea translate(Object value) {
-		super.translate(value);
 		return this;
 	}
 

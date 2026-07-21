@@ -94,7 +94,7 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @Marshalled(typeName = "video")
-public class Video extends HtmlElementMixed {
+public class Video extends HtmlElementMixed<Video> {
 
 	/**
 	 * Creates an empty {@link Video} element.
@@ -108,30 +108,6 @@ public class Video extends HtmlElementMixed {
 	 */
 	public Video(Object src) {
 		src(src);
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video class_(String value) {
-		super.class_(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video attrUri(String key, Object val) {
-		super.attrUri(key, val);
-		return this;
 	}
 
 	/**
@@ -157,24 +133,6 @@ public class Video extends HtmlElementMixed {
 	 */
 	public Video autoplay(Object value) {
 		attr("autoplay", deminimize(value, "autoplay"));
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Video child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Video children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video contenteditable(Object value) {
-		super.contenteditable(value);
 		return this;
 	}
 
@@ -226,12 +184,6 @@ public class Video extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Video dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
 	 * attribute.
@@ -247,24 +199,6 @@ public class Video extends HtmlElementMixed {
 	 */
 	public Video height(Object value) {
 		attr("height", value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video id(String value) {
-		super.id(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video lang(String value) {
-		super.lang(value);
 		return this;
 	}
 
@@ -316,306 +250,6 @@ public class Video extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Video onabort(String value) {
-		super.onabort(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onblur(String value) {
-		super.onblur(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video oncancel(String value) {
-		super.oncancel(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video oncanplay(String value) {
-		super.oncanplay(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video oncanplaythrough(String value) {
-		super.oncanplaythrough(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onchange(String value) {
-		super.onchange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onclick(String value) {
-		super.onclick(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video oncuechange(String value) {
-		super.oncuechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video ondblclick(String value) {
-		super.ondblclick(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video ondurationchange(String value) {
-		super.ondurationchange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onemptied(String value) {
-		super.onemptied(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onended(String value) {
-		super.onended(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onerror(String value) {
-		super.onerror(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onfocus(String value) {
-		super.onfocus(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video oninput(String value) {
-		super.oninput(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video oninvalid(String value) {
-		super.oninvalid(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onkeydown(String value) {
-		super.onkeydown(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onkeypress(String value) {
-		super.onkeypress(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onkeyup(String value) {
-		super.onkeyup(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onload(String value) {
-		super.onload(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onloadeddata(String value) {
-		super.onloadeddata(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onloadedmetadata(String value) {
-		super.onloadedmetadata(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onloadstart(String value) {
-		super.onloadstart(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onmousedown(String value) {
-		super.onmousedown(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onmouseenter(String value) {
-		super.onmouseenter(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onmouseleave(String value) {
-		super.onmouseleave(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onmousemove(String value) {
-		super.onmousemove(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onmouseout(String value) {
-		super.onmouseout(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onmouseover(String value) {
-		super.onmouseover(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onmouseup(String value) {
-		super.onmouseup(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onmousewheel(String value) {
-		super.onmousewheel(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onpause(String value) {
-		super.onpause(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onplay(String value) {
-		super.onplay(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onplaying(String value) {
-		super.onplaying(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onprogress(String value) {
-		super.onprogress(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onratechange(String value) {
-		super.onratechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onreset(String value) {
-		super.onreset(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onresize(String value) {
-		super.onresize(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onscroll(String value) {
-		super.onscroll(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onseeked(String value) {
-		super.onseeked(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onseeking(String value) {
-		super.onseeking(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onselect(String value) {
-		super.onselect(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onshow(String value) {
-		super.onshow(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onstalled(String value) {
-		super.onstalled(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onsubmit(String value) {
-		super.onsubmit(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onsuspend(String value) {
-		super.onsuspend(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video ontimeupdate(String value) {
-		super.ontimeupdate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video ontoggle(String value) {
-		super.ontoggle(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onvolumechange(String value) {
-		super.onvolumechange(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video onwaiting(String value) {
-		super.onwaiting(value);
-		return this;
-	}
-
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-video-poster">poster</a>
 	 * attribute.
@@ -658,12 +292,6 @@ public class Video extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Video spellcheck(Object value) {
-		super.spellcheck(value);
-		return this;
-	}
-
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src">src</a> attribute.
 	 *
@@ -685,30 +313,6 @@ public class Video extends HtmlElementMixed {
 	 */
 	public Video src(Object value) {
 		attrUri("src", value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video style(String value) {
-		super.style(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video tabindex(Object value) {
-		super.tabindex(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video title(String value) {
-		super.title(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video translate(Object value) {
-		super.translate(value);
 		return this;
 	}
 
