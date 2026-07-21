@@ -19,9 +19,6 @@ package org.apache.juneau.http.classic.resource;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
-import java.util.function.*;
-
-import org.apache.http.*;
 import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
@@ -33,7 +30,7 @@ import org.apache.juneau.http.classic.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
-public class FileResource extends BasicResource {
+public class FileResource extends BasicResource<FileResource> {
 
 	/**
 	 * Constructor.
@@ -62,98 +59,8 @@ public class FileResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public FileResource addHeader(String name, String value) {
-		super.addHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource addHeaders(Header...values) {
-		super.addHeaders(values);
-		return this;
-	}
-
-	@Override
 	public FileResource copy() {
 		return new FileResource(this);
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setCached() throws IOException {
-		super.setCached();
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setChunked() {
-		super.setChunked();
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setChunked(boolean value) {
-		super.setChunked(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setContent(Object value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setContent(Supplier<?> value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setContentEncoding(ContentEncoding value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setContentEncoding(String value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setContentLength(long value) {
-		super.setContentLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setContentType(ContentType value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setContentType(String value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setHeader(String name, String value) {
-		super.setHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setHeaders(Header...values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
 	}
 
 	@Override /* Overridden from BasicResource */
@@ -180,7 +87,7 @@ public class FileResource extends BasicResource {
 		}
 
 		@Override /* Overridden from BasicResource */
-		protected BasicResource modify(Runnable mutation) {
+		protected FileResource modify(Runnable mutation) {
 			throw uoex("Bean is unmodifiable.");
 		}
 	}

@@ -19,8 +19,6 @@ package org.apache.juneau.http.classic.resource;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
-import java.util.function.*;
-
 import org.apache.http.*;
 import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.entity.*;
@@ -33,7 +31,7 @@ import org.apache.juneau.http.classic.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
-public class StreamResource extends BasicResource {
+public class StreamResource extends BasicResource<StreamResource> {
 
 	/**
 	 * Constructor.
@@ -61,99 +59,22 @@ public class StreamResource extends BasicResource {
 		super(copyFrom);
 	}
 
-	@Override /* Overridden from BasicResource */
-	public StreamResource addHeader(String name, String value) {
-		super.addHeader(name, value);
-		return this;
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when converting an HTTP response into a resource.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws IOException Rethrown from {@link HttpEntity#getContent()}.
+	 */
+	public StreamResource(HttpResponse response) throws IOException {
+		super(response);
 	}
 
 	@Override /* Overridden from BasicResource */
-	public StreamResource addHeaders(Header...values) {
-		super.addHeaders(values);
-		return this;
-	}
-
-	@Override
 	public StreamResource copy() {
 		return new StreamResource(this);
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setCached() throws IOException {
-		super.setCached();
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setChunked() {
-		super.setChunked();
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setChunked(boolean value) {
-		super.setChunked(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setContent(Object value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setContent(Supplier<?> value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setContentEncoding(ContentEncoding value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setContentEncoding(String value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setContentLength(long value) {
-		super.setContentLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setContentType(ContentType value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setContentType(String value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setHeader(String name, String value) {
-		super.setHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setHeaders(Header...values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
 	}
 
 	@Override /* Overridden from BasicResource */
@@ -180,7 +101,7 @@ public class StreamResource extends BasicResource {
 		}
 
 		@Override /* Overridden from BasicResource */
-		protected BasicResource modify(Runnable mutation) {
+		protected StreamResource modify(Runnable mutation) {
 			throw uoex("Bean is unmodifiable.");
 		}
 	}

@@ -18,10 +18,6 @@ package org.apache.juneau.http.classic.resource;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.io.*;
-import java.util.function.*;
-
-import org.apache.http.*;
 import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
@@ -33,7 +29,7 @@ import org.apache.juneau.http.classic.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
-public class ByteArrayResource extends BasicResource {
+public class ByteArrayResource extends BasicResource<ByteArrayResource> {
 
 	/**
 	 * Constructor.
@@ -62,98 +58,8 @@ public class ByteArrayResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public ByteArrayResource addHeader(String name, String value) {
-		super.addHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource addHeaders(Header...values) {
-		super.addHeaders(values);
-		return this;
-	}
-
-	@Override
 	public ByteArrayResource copy() {
 		return new ByteArrayResource(this);
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setCached() throws IOException {
-		super.setCached();
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setChunked() {
-		super.setChunked();
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setChunked(boolean value) {
-		super.setChunked(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setContent(Object value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setContent(Supplier<?> value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setContentEncoding(ContentEncoding value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setContentEncoding(String value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setContentLength(long value) {
-		super.setContentLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setContentType(ContentType value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setContentType(String value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setHeader(String name, String value) {
-		super.setHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setHeaders(Header...values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
 	}
 
 	@Override /* Overridden from BasicResource */
@@ -180,7 +86,7 @@ public class ByteArrayResource extends BasicResource {
 		}
 
 		@Override /* Overridden from BasicResource */
-		protected BasicResource modify(Runnable mutation) {
+		protected ByteArrayResource modify(Runnable mutation) {
 			throw uoex("Bean is unmodifiable.");
 		}
 	}

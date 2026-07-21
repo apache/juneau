@@ -162,7 +162,7 @@ public class ResponseContent implements HttpEntity {
 	 * 			<li>{@link ResponseContent}/{@link HttpEntity} - Returns access to this object.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
-	 * 			<li>{@link HttpResource} - Response will be converted to an {@link BasicResource}.
+	 * 			<li>{@link HttpResource} - Response will be converted to a {@link StreamResource}.
 	 * 			<li>Any type that takes in an {@link HttpResponse} object.
 	 * 		</ul>
 	 * 	<li class='note'>
@@ -254,8 +254,8 @@ public class ResponseContent implements HttpEntity {
 			if (type.is(HttpResponse.class))
 				return (T)response;
 
-			if (type.is(HttpResource.class))
-				type = (ClassMeta<T>)getClassMeta(BasicResource.class);
+			if (type.is(HttpResource.class) || type.is(BasicResource.class))
+				type = (ClassMeta<T>)getClassMeta(StreamResource.class);
 
 			var result = type.getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class)).map(ci -> safe(() -> (T)ci.newInstance(response)));
 			if (result.isPresent())
@@ -429,7 +429,7 @@ public class ResponseContent implements HttpEntity {
 	 * 			<li>{@link ResponseContent}/{@link HttpEntity} - Returns access to this object.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
-	 * 			<li>{@link HttpResource} - Response will be converted to an {@link BasicResource}.
+	 * 			<li>{@link HttpResource} - Response will be converted to a {@link StreamResource}.
 	 * 			<li>Any type that takes in an {@link HttpResponse} object.
 	 * 		</ul>
 	 * 	<li class='note'>

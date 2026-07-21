@@ -44,16 +44,23 @@ import org.apache.juneau.test.assertions.*;
  * 		Externally-supplied/dynamic content.
  * </ul>
  *
+ * <p>
+ * This is a self-typed (CRTP) root: a leaf declares <c>class StringResource <jk>extends</jk> BasicResource&lt;StringResource&gt;</c>
+ * and inherits leaf-typed fluent setters with no covariant overrides.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
+ *
+ * @param <SELF> The self type for fluent setters.
  */
 @BeanIgnore /* Use toString() to serialize */
 @SuppressWarnings({
 	"resource", // Depends on entity (streams); value equality not practical
 	"java:S1206", // equals/hashCode not overridden; value equality not practical for this class
+	"java:S119", // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 })
-public class BasicResource implements HttpResource {
+public abstract class BasicResource<SELF extends BasicResource<SELF>> implements HttpResource {
 	BasicHttpEntity<?> entity;
 	HeaderList headers = HeaderList.create();
 
@@ -71,7 +78,7 @@ public class BasicResource implements HttpResource {
 	 *
 	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
-	public BasicResource(BasicResource copyFrom) {
+	public BasicResource(BasicResource<?> copyFrom) {
 		this.entity = copyFrom.entity.copy();
 		this.headers = copyFrom.headers.copy();
 	}
@@ -100,10 +107,10 @@ public class BasicResource implements HttpResource {
 	 * @param value The header value.
 	 * @return This object.
 	 */
-	public BasicResource addHeader(String name, String value) {
+	public SELF addHeader(String name, String value) {
 		if (nn(name) && nn(value))
 			headers.append(name, value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -112,7 +119,7 @@ public class BasicResource implements HttpResource {
 	 * @param values The headers to set.  <jk>null</jk> headers and headers with <jk>null</jk> names or values are ignored.
 	 * @return This object.
 	 */
-	public BasicResource addHeaders(Header...values) {
+	public SELF addHeaders(Header...values) {
 		for (var h : values) {
 			if (nn(h)) {
 				var n = h.getName();
@@ -129,7 +136,7 @@ public class BasicResource implements HttpResource {
 				}
 			}
 		}
-		return this;
+		return self();
 	}
 
 	/**
@@ -154,7 +161,7 @@ public class BasicResource implements HttpResource {
 	 * @return A new fluent assertion.
 	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
-	public FluentByteArrayAssertion<BasicResource> assertBytes() throws IOException {
+	public FluentByteArrayAssertion<BasicResource<?>> assertBytes() throws IOException {
 		return new FluentByteArrayAssertion<>(asBytes(), this);
 	}
 
@@ -167,7 +174,7 @@ public class BasicResource implements HttpResource {
 	 * @return A new fluent assertion.
 	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
-	public FluentStringAssertion<BasicResource> assertString() throws IOException {
+	public FluentStringAssertion<BasicResource<?>> assertString() throws IOException {
 		return new FluentStringAssertion<>(asString(), this);
 	}
 
@@ -197,9 +204,7 @@ public class BasicResource implements HttpResource {
 	 *
 	 * @return A new builder bean.
 	 */
-	public BasicResource copy() {
-		return new BasicResource(this);
-	}
+	public abstract SELF copy();
 
 	/**
 	 * Copies the contents of the specified HTTP response to this builder.
@@ -208,11 +213,11 @@ public class BasicResource implements HttpResource {
 	 * @return This object.
 	 * @throws IOException If content could not be retrieved.
 	 */
-	public BasicResource copyFrom(HttpResponse response) throws IOException {
+	public SELF copyFrom(HttpResponse response) throws IOException {
 		assertArgNotNull("response", response);
 		addHeaders(response.getAllHeaders());
 		setContent(response.getEntity().getContent());
-		return this;
+		return self();
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -260,9 +265,9 @@ public class BasicResource implements HttpResource {
 	 * @return This object.
 	 * @throws IOException If entity could not be read into memory.
 	 */
-	public BasicResource setCached() throws IOException {
+	public SELF setCached() throws IOException {
 		entity.setCached();
-		return this;
+		return self();
 	}
 
 	/**
@@ -275,9 +280,9 @@ public class BasicResource implements HttpResource {
 	 *
 	 * @return This object.
 	 */
-	public BasicResource setChunked() {
+	public SELF setChunked() {
 		entity.setChunked();
-		return this;
+		return self();
 	}
 
 	/**
@@ -291,9 +296,9 @@ public class BasicResource implements HttpResource {
 	 * @param value The new value for this flag.
 	 * @return This object.
 	 */
-	public BasicResource setChunked(boolean value) {
+	public SELF setChunked(boolean value) {
 		entity.setChunked(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -302,9 +307,9 @@ public class BasicResource implements HttpResource {
 	 * @param value The entity content, can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicResource setContent(Object value) {
+	public SELF setContent(Object value) {
 		entity.setContent(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -317,9 +322,9 @@ public class BasicResource implements HttpResource {
 	 * @param value The entity content, can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicResource setContent(Supplier<?> value) {
+	public SELF setContent(Supplier<?> value) {
 		entity.setContent(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -328,9 +333,9 @@ public class BasicResource implements HttpResource {
 	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	public BasicResource setContentEncoding(ContentEncoding value) {
+	public SELF setContentEncoding(ContentEncoding value) {
 		entity.setContentEncoding(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -339,9 +344,9 @@ public class BasicResource implements HttpResource {
 	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	public BasicResource setContentEncoding(String value) {
+	public SELF setContentEncoding(String value) {
 		entity.setContentEncoding(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -350,9 +355,9 @@ public class BasicResource implements HttpResource {
 	 * @param value The new <c>Content-Length</c> header value, or <c>-1</c> to unset.
 	 * @return This object.
 	 */
-	public BasicResource setContentLength(long value) {
+	public SELF setContentLength(long value) {
 		entity.setContentLength(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -361,9 +366,9 @@ public class BasicResource implements HttpResource {
 	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	public BasicResource setContentType(ContentType value) {
+	public SELF setContentType(ContentType value) {
 		entity.setContentType(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -372,9 +377,9 @@ public class BasicResource implements HttpResource {
 	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	public BasicResource setContentType(String value) {
+	public SELF setContentType(String value) {
 		entity.setContentType(value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -387,10 +392,10 @@ public class BasicResource implements HttpResource {
 	 * @param value The header value.
 	 * @return This object.
 	 */
-	public BasicResource setHeader(String name, String value) {
+	public SELF setHeader(String name, String value) {
 		if (nn(name) && nn(value))
 			headers.set(name, value);
-		return this;
+		return self();
 	}
 
 	/**
@@ -399,7 +404,7 @@ public class BasicResource implements HttpResource {
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	public BasicResource setHeaders(Header...values) {
+	public SELF setHeaders(Header...values) {
 		for (var h : values) {
 			if (nn(h)) {
 				var n = h.getName();
@@ -416,7 +421,7 @@ public class BasicResource implements HttpResource {
 				}
 			}
 		}
-		return this;
+		return self();
 	}
 
 	/**
@@ -425,7 +430,7 @@ public class BasicResource implements HttpResource {
 	 * @param value The new value.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicResource setHeaders(HeaderList value) {
+	public SELF setHeaders(HeaderList value) {
 		return modify(() -> headers = value.copy());
 	}
 
@@ -437,9 +442,7 @@ public class BasicResource implements HttpResource {
 	 *
 	 * @return An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.
 	 */
-	public BasicResource unmodifiable() {
-		return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);
-	}
+	public abstract SELF unmodifiable();
 
 	@Override /* Overridden from HttpEntity */
 	public void writeTo(OutputStream outStream) throws IOException {
@@ -447,23 +450,33 @@ public class BasicResource implements HttpResource {
 	}
 
 	/**
+	 * Returns this object cast to the self type.
+	 *
+	 * @return This object.
+	 */
+	@SuppressWarnings({
+		"unchecked" // CRTP self-type cast is safe: SELF is bound to the concrete leaf type.
+	})
+	protected final SELF self() { return (SELF) this; }
+
+	/**
 	 * Single mutation funnel for direct-field state changes on this bean.
 	 *
 	 * <p>
-	 * The nested {@link Unmodifiable} snapshot overrides this method to throw.  Mutators that delegate to the entity or
-	 * header sub-beans are frozen by the {@link #freeze()} deep-freeze of those sub-beans; this funnel additionally
-	 * covers the direct-field {@link #setHeaders(HeaderList)} reassignment.
+	 * Each leaf's nested {@code Unmodifiable} snapshot overrides this method to throw.  Mutators that delegate to the
+	 * entity or header sub-beans are frozen by the {@link #freeze()} deep-freeze of those sub-beans; this funnel
+	 * additionally covers the direct-field {@link #setHeaders(HeaderList)} reassignment.
 	 *
 	 * @param mutation The state change to apply.
 	 * @return This object.
 	 */
-	protected BasicResource modify(Runnable mutation) {
+	protected SELF modify(Runnable mutation) {
 		mutation.run();
-		return this;
+		return self();
 	}
 
 	/**
-	 * Deep-freeze hook invoked from the nested {@link Unmodifiable} constructor after the snapshot copy completes.
+	 * Deep-freeze hook invoked from a leaf's nested {@code Unmodifiable} constructor after the snapshot copy completes.
 	 *
 	 * <p>
 	 * The mutable sub-beans are frozen here by <b>direct field assignment</b> (never via a setter, which would route
@@ -472,34 +485,5 @@ public class BasicResource implements HttpResource {
 	protected void freeze() {
 		entity = entity.unmodifiable();   // DIRECT field write — snapshot the copied entity.
 		headers = headers.unmodifiable(); // DIRECT field write — snapshot the copied HeaderList.
-	}
-
-	/**
-	 * An unmodifiable snapshot of a {@link BasicResource}.
-	 *
-	 * <p>
-	 * Its behavioral override is a throwing {@link #modify(Runnable)}, and its constructor deep-freezes the entity and
-	 * header sub-beans via {@link #freeze()}.  Together these freeze the entire mutation surface: direct-field mutators
-	 * throw through {@code modify(...)}, and sub-bean-delegating mutators throw through the frozen entity/headers.
-	 */
-	public static class Unmodifiable extends BasicResource implements UnmodifiableBean {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param copyFrom The bean to snapshot-copy.  Must not be <jk>null</jk>.
-		 */
-		@SuppressWarnings({
-			"java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.
-		})
-		protected Unmodifiable(BasicResource copyFrom) {
-			super(copyFrom);
-			freeze();
-		}
-
-		@Override /* Overridden from BasicResource */
-		protected BasicResource modify(Runnable mutation) {
-			throw uoex("Bean is unmodifiable.");
-		}
 	}
 }

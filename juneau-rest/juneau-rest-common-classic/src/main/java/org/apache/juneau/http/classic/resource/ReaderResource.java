@@ -19,9 +19,6 @@ package org.apache.juneau.http.classic.resource;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
-import java.util.function.*;
-
-import org.apache.http.*;
 import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
@@ -33,7 +30,7 @@ import org.apache.juneau.http.classic.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
-public class ReaderResource extends BasicResource {
+public class ReaderResource extends BasicResource<ReaderResource> {
 
 	/**
 	 * Constructor.
@@ -62,98 +59,8 @@ public class ReaderResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public ReaderResource addHeader(String name, String value) {
-		super.addHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource addHeaders(Header...values) {
-		super.addHeaders(values);
-		return this;
-	}
-
-	@Override
 	public ReaderResource copy() {
 		return new ReaderResource(this);
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setCached() throws IOException {
-		super.setCached();
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setChunked() {
-		super.setChunked();
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setChunked(boolean value) {
-		super.setChunked(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setContent(Object value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setContent(Supplier<?> value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setContentEncoding(ContentEncoding value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setContentEncoding(String value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setContentLength(long value) {
-		super.setContentLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setContentType(ContentType value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setContentType(String value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setHeader(String name, String value) {
-		super.setHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setHeaders(Header...values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
 	}
 
 	@Override /* Overridden from BasicResource */
@@ -180,7 +87,7 @@ public class ReaderResource extends BasicResource {
 		}
 
 		@Override /* Overridden from BasicResource */
-		protected BasicResource modify(Runnable mutation) {
+		protected ReaderResource modify(Runnable mutation) {
 			throw uoex("Bean is unmodifiable.");
 		}
 	}
