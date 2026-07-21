@@ -192,12 +192,12 @@ class Remote_CommonInterfaces_Test extends TestBase {
 	@Remote
 	@Rest
 	public interface D extends BasicJson5Config {
-		BasicResource httpResource() throws IOException ;
+		BasicResource<?> httpResource() throws IOException ;
 	}
 
 	public static class D1 implements D {
 		@Override
-		public BasicResource httpResource() throws IOException {
+		public BasicResource<?> httpResource() throws IOException {
 			return byteArrayResource("foo".getBytes()).setContentType("text/foo").setHeader("Foo","foo").addHeaders(eTag("\"bar\""));
 		}
 	}
