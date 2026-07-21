@@ -93,22 +93,22 @@ public final class HttpResponses {
 	// ------------------------------------------------------------------------------------------------------------------
 
 	/** @param location The redirect location. Can be <jk>null</jk>. @return A new {@code 301 Moved Permanently} response. */
-	public static BasicHttpResponse movedPermanently(String location) { return new MovedPermanently().withHeader("Location", location); }
+	public static BasicHttpResponse<?> movedPermanently(String location) { return new MovedPermanently().withHeader("Location", location); }
 
 	/** @param location The redirect location. Can be <jk>null</jk>. @return A new {@code 302 Found} response. */
-	public static BasicHttpResponse found(String location) { return new Found().withHeader("Location", location); }
+	public static BasicHttpResponse<?> found(String location) { return new Found().withHeader("Location", location); }
 
 	/** @param location The redirect location. Can be <jk>null</jk>. @return A new {@code 303 See Other} response. */
-	public static BasicHttpResponse seeOther(String location) { return new SeeOther().withHeader("Location", location); }
+	public static BasicHttpResponse<?> seeOther(String location) { return new SeeOther().withHeader("Location", location); }
 
 	/** @return A new {@code 304 Not Modified} response. */
 	public static NotModified notModified() { return new NotModified(); }
 
 	/** @param location The redirect location. Can be <jk>null</jk>. @return A new {@code 307 Temporary Redirect} response. */
-	public static BasicHttpResponse temporaryRedirect(String location) { return new TemporaryRedirect().withHeader("Location", location); }
+	public static BasicHttpResponse<?> temporaryRedirect(String location) { return new TemporaryRedirect().withHeader("Location", location); }
 
 	/** @param location The redirect location. Can be <jk>null</jk>. @return A new {@code 308 Permanent Redirect} response. */
-	public static BasicHttpResponse permanentRedirect(String location) { return new PermanentRedirect().withHeader("Location", location); }
+	public static BasicHttpResponse<?> permanentRedirect(String location) { return new PermanentRedirect().withHeader("Location", location); }
 
 	// ------------------------------------------------------------------------------------------------------------------
 	// 4xx Client Errors
