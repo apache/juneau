@@ -2650,21 +2650,7 @@ public class StringUtils {
 	 * @return A regular expression pattern, or <jk>null</jk> if the input string is <jk>null</jk>.
 	 */
 	public static Pattern getMatchPattern(String s, int flags) {
-		if (s == null)
-			return null;
-		var sb = new StringBuilder();
-		sb.append("\\Q");
-		for (var i = 0; i < s.length(); i++) {
-			var c = s.charAt(i);
-			if (c == '*')
-				sb.append("\\E").append(".*").append("\\Q");
-			else if (c == '?')
-				sb.append("\\E").append(".").append("\\Q");
-			else
-				sb.append(c);
-		}
-		sb.append("\\E");
-		return Pattern.compile(sb.toString(), flags);
+		return getGlobMatchPattern(s, flags);
 	}
 
 	/**

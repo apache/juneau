@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.*;
  * Handles aspects of matching and precedence ordering.
  *
  */
-public abstract sealed class UrlPathMatcher implements Comparable<UrlPathMatcher> permits UrlPathMatcher.FileNameMatcher, UrlPathMatcher.PathMatcher {
+public abstract sealed class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 
 	/**
 	 * A file name pattern such as "favicon.ico" or "*.jsp".

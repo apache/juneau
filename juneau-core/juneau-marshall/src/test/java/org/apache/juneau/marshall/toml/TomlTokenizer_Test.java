@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.time.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.parser.*;
@@ -448,159 +449,56 @@ class TomlTokenizer_Test extends TestBase {
 	// readInteger
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	void j01_readIntegerPositive() throws Exception {
-		assertEquals(42L, t("42").readInteger());
+	@ParameterizedTest
+	@MethodSource("j01_readIntegerValidProvider")
+	void j01_readIntegerValid(String input, long expected) throws Exception {
+		assertEquals(expected, t(input).readInteger());
 	}
 
-	@Test
-	void j02_readIntegerNegative() throws Exception {
-		assertEquals(-42L, t("-42").readInteger());
+	static Stream<Arguments> j01_readIntegerValidProvider() {
+		return Stream.of(
+			Arguments.of("42", 42L),                 // j01: positive
+			Arguments.of("-42", -42L),               // j02: negative
+			Arguments.of("+42", 42L),                // j03: explicit plus
+			Arguments.of("0", 0L),                   // j04: zero
+			Arguments.of("1_000_000", 1000000L),     // j05: underscores
+			Arguments.of("0xFF", 255L),              // j06: hex upper
+			Arguments.of("0xdead", 0xdeadL),         // j07: hex lower
+			Arguments.of("0XFF", 255L),              // j08: uppercase X
+			Arguments.of("-0xFF", -255L),            // j09: hex negative
+			Arguments.of("0xFFFF_FFFF", 0xFFFFFFFFL),// j10: hex underscores
+			Arguments.of("0o755", 0755L),            // j11: octal
+			Arguments.of("0O755", 0755L),            // j12: octal upper O
+			Arguments.of("-0o755", -0755L),          // j13: octal negative
+			Arguments.of("0o7_5_5", 0755L),          // j14: octal underscores
+			Arguments.of("0b1010", 10L),             // j15: binary
+			Arguments.of("0B1010", 10L),             // j16: binary upper B
+			Arguments.of("-0b1010", -10L),           // j17: binary negative
+			Arguments.of("0b10_10", 10L),            // j18: binary underscores
+			Arguments.of("0a", 0L),                  // j28: '0' then non-radix letter -> reads "0"
+			Arguments.of("  42", 42L)                // j29: leading whitespace
+		);
 	}
 
-	@Test
-	void j03_readIntegerExplicitPlus() throws Exception {
-		assertEquals(42L, t("+42").readInteger());
-	}
-
-	@Test
-	void j04_readIntegerZero() throws Exception {
-		assertEquals(0L, t("0").readInteger());
-	}
-
-	@Test
-	void j05_readIntegerWithUnderscores() throws Exception {
-		assertEquals(1000000L, t("1_000_000").readInteger());
-	}
-
-	@Test
-	void j06_readIntegerHexUpper() throws Exception {
-		assertEquals(255L, t("0xFF").readInteger());
-	}
-
-	@Test
-	void j07_readIntegerHexLower() throws Exception {
-		assertEquals(0xdeadL, t("0xdead").readInteger());
-	}
-
-	@Test
-	void j08_readIntegerHexUppercaseX() throws Exception {
-		assertEquals(255L, t("0XFF").readInteger());
-	}
-
-	@Test
-	void j09_readIntegerHexNegative() throws Exception {
-		assertEquals(-255L, t("-0xFF").readInteger());
-	}
-
-	@Test
-	void j10_readIntegerHexUnderscores() throws Exception {
-		assertEquals(0xFFFFFFFFL, t("0xFFFF_FFFF").readInteger());
-	}
-
-	@Test
-	void j11_readIntegerOctal() throws Exception {
-		assertEquals(0755L, t("0o755").readInteger());
-	}
-
-	@Test
-	void j12_readIntegerOctalUpperO() throws Exception {
-		assertEquals(0755L, t("0O755").readInteger());
-	}
-
-	@Test
-	void j13_readIntegerOctalNegative() throws Exception {
-		assertEquals(-0755L, t("-0o755").readInteger());
-	}
-
-	@Test
-	void j14_readIntegerOctalUnderscores() throws Exception {
-		assertEquals(0755L, t("0o7_5_5").readInteger());
-	}
-
-	@Test
-	void j15_readIntegerBinary() throws Exception {
-		assertEquals(10L, t("0b1010").readInteger());
-	}
-
-	@Test
-	void j16_readIntegerBinaryUpperB() throws Exception {
-		assertEquals(10L, t("0B1010").readInteger());
-	}
-
-	@Test
-	void j17_readIntegerBinaryNegative() throws Exception {
-		assertEquals(-10L, t("-0b1010").readInteger());
-	}
-
-	@Test
-	void j18_readIntegerBinaryUnderscores() throws Exception {
-		assertEquals(10L, t("0b10_10").readInteger());
-	}
-
-	@Test
-	void j19_readIntegerEmptyHexThrows() {
-		var tok = t("0x");
+	@ParameterizedTest
+	@MethodSource("j19_readIntegerInvalidProvider")
+	void j19_readIntegerInvalid(String input) {
+		var tok = t(input);
 		assertThrows(ParseException.class, tok::readInteger);
 	}
 
-	@Test
-	void j20_readIntegerEmptyOctalThrows() {
-		var tok = t("0o");
-		assertThrows(ParseException.class, tok::readInteger);
-	}
-
-	@Test
-	void j21_readIntegerEmptyBinaryThrows() {
-		var tok = t("0b");
-		assertThrows(ParseException.class, tok::readInteger);
-	}
-
-	@Test
-	void j22_readIntegerEmptyThrows() {
-		var tok = t("");
-		assertThrows(ParseException.class, tok::readInteger);
-	}
-
-	@Test
-	void j23_readIntegerLeadingZerosThrows() {
-		var tok = t("01");
-		assertThrows(ParseException.class, tok::readInteger);
-	}
-
-	@Test
-	void j24_readIntegerOverflowDecimal() {
-		var tok = t("99999999999999999999");
-		assertThrows(ParseException.class, tok::readInteger);
-	}
-
-	@Test
-	void j25_readIntegerOverflowHex() {
-		var tok = t("0xFFFFFFFFFFFFFFFFF");
-		assertThrows(ParseException.class, tok::readInteger);
-	}
-
-	@Test
-	void j26_readIntegerOverflowOctal() {
-		var tok = t("0o7777777777777777777777");
-		assertThrows(ParseException.class, tok::readInteger);
-	}
-
-	@Test
-	void j27_readIntegerOverflowBinary() {
-		var tok = t("0b" + "1".repeat(80));
-		assertThrows(ParseException.class, tok::readInteger);
-	}
-
-	@Test
-	void j28_readIntegerJustZeroFollowedByLetter() throws Exception {
-		// "0a" - '0' then 'a' is not x/o/b, so unread '0', then readDecimalInteger reads "0"
-		assertEquals(0L, t("0a").readInteger());
-	}
-
-	@Test
-	void j29_readIntegerWithLeadingWhitespace() throws Exception {
-		assertEquals(42L, t("  42").readInteger());
+	static Stream<Arguments> j19_readIntegerInvalidProvider() {
+		return Stream.of(
+			Arguments.of("0x"),                          // j19: empty hex
+			Arguments.of("0o"),                          // j20: empty octal
+			Arguments.of("0b"),                          // j21: empty binary
+			Arguments.of(""),                            // j22: empty
+			Arguments.of("01"),                          // j23: leading zeros
+			Arguments.of("99999999999999999999"),        // j24: overflow decimal
+			Arguments.of("0xFFFFFFFFFFFFFFFFF"),          // j25: overflow hex
+			Arguments.of("0o7777777777777777777777"),     // j26: overflow octal
+			Arguments.of("0b" + "1".repeat(80))          // j27: overflow binary
+		);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

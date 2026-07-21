@@ -212,7 +212,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentStringAssertion<R> asLc() {
-		return asTransformed(x -> lcr(x));
+		return asTransformed(Shorts::lcr);
 	}
 
 	/**
@@ -299,7 +299,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentStringAssertion<R> asUc() {
-		return asTransformed(x -> ucr(x));
+		return asTransformed(Shorts::ucr);
 	}
 
 	/**

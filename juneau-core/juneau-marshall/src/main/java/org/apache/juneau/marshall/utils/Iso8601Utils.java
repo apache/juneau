@@ -487,6 +487,9 @@ public final class Iso8601Utils {
 	 * @return The parsed {@link Duration}, or <jk>null</jk> if the string is too short, lacks a {@code PT}/{@code pt}
 	 * 	prefix, contains no component, or contains any stray/malformed content.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Hand-written ISO-8601 duration lexer/state-machine; decomposing the char-by-char scan would obscure the parse invariants without changing behavior.
+	})
 	private static Duration parseDurationManual(String s) {
 		if (s == null || s.length() < 3)
 			return null;

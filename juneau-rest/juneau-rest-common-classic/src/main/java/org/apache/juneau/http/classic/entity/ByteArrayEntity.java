@@ -101,6 +101,21 @@ public class ByteArrayEntity extends BasicHttpEntity<ByteArrayEntity> {
 		out.write(content());
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		// Leaf-type gate: keeps this entity from comparing equal to a different leaf with equal base content, while
+		// preserving D3 (ByteArrayEntity.Unmodifiable IS-A ByteArrayEntity, so bean.equals(bean.unmodifiable()) holds).
+		// This leaf adds no equality-relevant state of its own; base content is compared via super.equals(...).
+		return o instanceof ByteArrayEntity && super.equals(o);
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		// Fold in the leaf type so distinct leaves land in different buckets; stable across ByteArrayEntity and its
+		// Unmodifiable snapshot (both report ByteArrayEntity.class), keeping the equals/hashCode contract intact.
+		return h(ByteArrayEntity.class, super.hashCode());
+	}
+
 	private byte[] content() {
 		return contentOrElse(EMPTY);
 	}

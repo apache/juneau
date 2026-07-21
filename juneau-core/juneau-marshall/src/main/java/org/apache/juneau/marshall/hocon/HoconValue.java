@@ -33,7 +33,7 @@ import java.util.*;
  * 	<li class='link'><a class="doclink" href="https://github.com/lightbend/config/blob/main/HOCON.md">HOCON Specification</a>
  * </ul>
  */
-public abstract sealed class HoconValue permits HoconValue.HoconObject, HoconValue.HoconArray, HoconValue.HoconString, HoconValue.HoconNumber, HoconValue.HoconBoolean, HoconValue.HoconNull, HoconValue.HoconSubstitution, HoconValue.HoconConcat {
+public abstract sealed class HoconValue {
 
 	/** Value type. */
 	public enum Type {

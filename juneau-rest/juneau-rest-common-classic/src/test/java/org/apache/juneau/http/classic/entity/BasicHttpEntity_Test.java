@@ -110,4 +110,41 @@ class BasicHttpEntity_Test extends TestBase {
 	@Test void b07_emptyConstant_isUnmodifiable() {
 		assertTrue(BasicHttpEntity.EMPTY.isUnmodifiable());
 	}
+
+	@Test void b08_crossLeafInequality_equalBaseContentDifferentLeaf() {
+		// Two unrelated leaves with identical base content must NOT be equal (leaf-type gate), in both directions.
+		var s = new StringEntity().setContent("x").setContentType("text/plain");
+		var b = new ByteArrayEntity().setContent("x").setContentType("text/plain");
+		assertNotEquals(s, b);
+		assertNotEquals(b, s);
+	}
+
+	@Test void b09_crossLeafInequality_holdsAcrossSnapshots() {
+		// The leaf-type gate must also hold for the frozen snapshots (Unmodifiable IS-A its leaf).
+		var s = new StringEntity().setContent("x").unmodifiable();
+		var b = new ByteArrayEntity().setContent("x").unmodifiable();
+		assertNotEquals(s, b);
+		assertNotEquals(b, s);
+	}
+
+	@Test void b10_d3_holdsBothDirections_representativeLeaves() {
+		// D3: bean.equals(bean.unmodifiable()) AND the reverse, for a representative sampling of leaves.
+		var se = new StringEntity().setContent("x").setContentType("text/plain");
+		assertEquals(se, se.unmodifiable());
+		assertEquals(se.unmodifiable(), se);
+		assertEquals(se.hashCode(), se.unmodifiable().hashCode());
+
+		var be = new ByteArrayEntity().setContent(BYTES).setContentType("text/plain");
+		assertEquals(be, be.unmodifiable());
+		assertEquals(be.unmodifiable(), be);
+		assertEquals(be.hashCode(), be.unmodifiable().hashCode());
+	}
+
+	@Test void b11_sameLeafEquality_differentInstances() {
+		// Same leaf type + equal base content compare equal (sanity that the gate does not over-restrict).
+		var a = new StringEntity().setContent("x").setContentType("text/plain");
+		var b = new StringEntity().setContent("x").setContentType("text/plain");
+		assertEquals(a, b);
+		assertEquals(a.hashCode(), b.hashCode());
+	}
 }

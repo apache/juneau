@@ -61,7 +61,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	@SuppressWarnings({
 		"java:S107" // Constructor requires 8 parameters for XML writer configuration
 	})
-	public XmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver, boolean enableNs, Namespace defaultNamespace) {
+	protected XmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver, boolean enableNs, Namespace defaultNamespace) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.enableNs = enableNs;
 		this.defaultNsPrefix = defaultNamespace == null ? null : defaultNamespace.name;
@@ -72,7 +72,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	 *
 	 * @param w Writer being copied.
 	 */
-	public XmlWriter(XmlWriter<?> w) {
+	protected XmlWriter(XmlWriter<?> w) {
 		super(w);
 		this.enableNs = w.enableNs;
 		this.defaultNsPrefix = w.defaultNsPrefix;

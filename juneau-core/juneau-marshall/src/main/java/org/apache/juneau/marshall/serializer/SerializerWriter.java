@@ -75,7 +75,7 @@ public abstract class SerializerWriter<SELF extends SerializerWriter<SELF>> exte
 	 * @param w Writer being copied.
 	 * 	<br>Must not be <jk>null</jk>.
 	 */
-	public SerializerWriter(SerializerWriter<?> w) {
+	protected SerializerWriter(SerializerWriter<?> w) {
 		this.out = w.out;
 		this.useWhitespace = w.useWhitespace;
 		this.maxIndent = w.maxIndent;
@@ -95,7 +95,7 @@ public abstract class SerializerWriter<SELF extends SerializerWriter<SELF>> exte
 	 * @param quoteChar The character to write when {@link #q()} is called.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	public SerializerWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver) {
+	protected SerializerWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver) {
 		this.out = out;
 		this.useWhitespace = useWhitespace;
 		this.maxIndent = maxIndent;

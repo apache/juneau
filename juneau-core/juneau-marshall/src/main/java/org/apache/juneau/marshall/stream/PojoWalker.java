@@ -54,7 +54,8 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource" // TokenWriter is a fluent Closeable returning itself; discarding the chained return value is intentional, and the writer is the caller's to close.
+	"resource", // TokenWriter is a fluent Closeable returning itself; discarding the chained return value is intentional, and the writer is the caller's to close.
+	"java:S115" // ARG_-prefixed arg-key constants use the project's UPPER_camelCase convention.
 })
 public final class PojoWalker {
 

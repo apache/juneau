@@ -94,6 +94,9 @@ public class ThymeleafViewRenderer implements ViewRenderer {
 	// the bridge-default TemplateEngine and resolver are built once instead of rebuilt per render.  Created
 	// lazily (not eagerly) so a missing Thymeleaf engine still surfaces at render time as
 	// NO_ENGINE_DIAGNOSTIC rather than during RestContext construction.
+	@SuppressWarnings({
+		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-created fallbackMixin in fallbackMixin(); the reference is publish-once (fully constructed before assignment) and never compound-mutated.
+	})
 	private volatile ThymeleafMixin fallbackMixin;
 
 	@Override /* Overridden from ResponseProcessor */

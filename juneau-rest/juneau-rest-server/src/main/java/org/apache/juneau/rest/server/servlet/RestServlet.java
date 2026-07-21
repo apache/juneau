@@ -149,6 +149,9 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	@Override /* Overridden from GenericServlet */
+	@SuppressWarnings({
+		"java:S2654" // Coordinates with the synchronized init()/setContext() lifecycle methods so destroy() cannot interleave with an in-flight (re-)initialization of the shared 'context' field; lifecycle-only, not on the request-serving hot path.
+	})
 	public synchronized void destroy() {
 		var c = context.getAndSet(null);
 		if (nn(c))
@@ -172,7 +175,7 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @return The context information on this servlet.
 	 */
-	public synchronized RestContext getContext() {
+	public RestContext getContext() {
 		var rc = context.get();
 		if (rc == null)
 			throw new InternalServerError("RestContext object not set on resource.");
@@ -185,7 +188,7 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @return The path defined on this servlet, or an empty string if not specified.
 	 */
-	public synchronized String getPath() {
+	public String getPath() {
 		var context2 = this.context.get();
 		if (nn(context2))
 			return context2.getFullPath();
@@ -256,16 +259,19 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @return The current thread-local HTTP request, or <jk>null</jk> if it wasn't created.
 	 */
-	public synchronized RestRequest getRequest() { return getContext().getLocalSession().getOpSession().getRequest(); }
+	public RestRequest getRequest() { return getContext().getLocalSession().getOpSession().getRequest(); }
 
 	/**
 	 * Returns the current thread-local HTTP response.
 	 *
 	 * @return The current thread-local HTTP response, or <jk>null</jk> if it wasn't created.
 	 */
-	public synchronized RestResponse getResponse() { return getContext().getLocalSession().getOpSession().getResponse(); }
+	public RestResponse getResponse() { return getContext().getLocalSession().getOpSession().getResponse(); }
 
 	@Override /* Overridden from Servlet */
+	@SuppressWarnings({
+		"java:S2654" // Guards the non-atomic check-then-act one-time initialization (construct + postInit()/postInitChildFirst() side effects) of the shared 'context' field against concurrent re-entry; lifecycle-only, not on the request-serving hot path.
+	})
 	public synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
 			if (nn(context.get()))
@@ -367,6 +373,9 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param context Sets the context object on this servlet.  Must not be <jk>null</jk>.
 	 * @throws ServletException If error occurred during initialization.
 	 */
+	@SuppressWarnings({
+		"java:S2654" // Guards the non-atomic check-then-act one-time population of the shared 'context' field (super.init() + context.set()) against concurrent re-entry; lifecycle-only, not on the request-serving hot path.
+	})
 	protected synchronized void setContext(RestContext context) throws ServletException {
 		if (this.context.get() == null) {
 			super.init(context.getBuilder());

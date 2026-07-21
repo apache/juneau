@@ -298,7 +298,7 @@ class Shorts_Test extends TestBase {
 
 	@Test
 	void f002_dbk_distinctByKey() {
-		var pred = PredicateUtils.distinctByKey((String s) -> s.length());
+		var pred = PredicateUtils.distinctByKey(CharSequence::length);
 		assertTrue(pred.test("ab"));
 		assertFalse(pred.test("cd"));
 	}

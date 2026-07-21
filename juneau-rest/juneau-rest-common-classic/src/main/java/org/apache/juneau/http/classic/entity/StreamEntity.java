@@ -35,7 +35,7 @@ import org.apache.juneau.http.classic.header.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"resource", // Resource management handled externally
+	"resource" // Resource management handled externally
 })
 public class StreamEntity extends BasicHttpEntity<StreamEntity> {
 
@@ -139,6 +139,21 @@ public class StreamEntity extends BasicHttpEntity<StreamEntity> {
 				pipe(is, out, getMaxLength());
 			}
 		}
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		// Leaf-type gate: keeps this entity from comparing equal to a different leaf with equal base content, while
+		// preserving D3 (StreamEntity.Unmodifiable IS-A StreamEntity, so bean.equals(bean.unmodifiable()) still holds).
+		// byteCache/stringCache are memoized derivations of the inherited content/charset and are excluded from equality.
+		return o instanceof StreamEntity && super.equals(o);
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		// Fold in the leaf type so distinct leaves land in different buckets; stable across StreamEntity and its
+		// Unmodifiable snapshot (both report StreamEntity.class), keeping the equals/hashCode contract intact.
+		return h(StreamEntity.class, super.hashCode());
 	}
 
 	private InputStream content() {

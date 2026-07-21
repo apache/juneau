@@ -678,7 +678,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 			} catch (InvocationTargetException e) {
 				throw exex(e.getTargetException());
 			}
-		}, e -> exex(e));
+		}, Shorts::exex);
 	}
 
 	/**

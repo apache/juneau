@@ -935,7 +935,7 @@ public class BasicBeanStore implements WritableBeanStore {
 		Set<String> primaryNames = st();
 		var em = entryMetadata.get(beanType);
 		if (nn(em))
-			em.forEach((name, meta) -> { if (meta.primary) primaryNames.add(name); });
+			em.forEach((name, meta) -> { if (meta.primary()) primaryNames.add(name); });
 		if (primaryNames.isEmpty())
 			return oe();
 		if (primaryNames.size() > 1)
@@ -960,17 +960,8 @@ public class BasicBeanStore implements WritableBeanStore {
 			throw new IllegalStateException("BeanStore has been closed.");
 	}
 
-	private static class BeanSourceMeta {
+	private record BeanSourceMeta(boolean primary, Integer order, int priority) {
 		static final BeanSourceMeta DEFAULT = new BeanSourceMeta(false, null, Integer.MAX_VALUE / 2);
-		final boolean primary;
-		final Integer order;
-		final int priority;
-
-		BeanSourceMeta(boolean primary, Integer order, int priority) {
-			this.primary = primary;
-			this.order = order;
-			this.priority = priority;
-		}
 
 		int orderValue() {
 			return order == null ? priority : order.intValue();

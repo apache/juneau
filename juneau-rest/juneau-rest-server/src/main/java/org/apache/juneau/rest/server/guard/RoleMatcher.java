@@ -109,7 +109,7 @@ public class RoleMatcher {
 		}
 	}
 
-	abstract static sealed class Exp permits And, Eq, Match, Never, Or {
+	abstract static sealed class Exp {
 
 		@SuppressWarnings({
 			"unused" // set parameter unused in this default no-op implementation; subclasses use it

@@ -132,7 +132,8 @@ class Json5List_Test extends TestBase {
 		// so honoring p makes the strict parser throw where the ignored-parser path silently succeeded.
 		var json5WithComment = "[1,/*c*/2,3]";
 		assertEquals(3, Json5List.ofString(new StringReader(json5WithComment), Json5Parser.DEFAULT).size());
-		assertThrows(ParseException.class, () -> Json5List.ofString(new StringReader(json5WithComment), JsonParser.DEFAULT));
+		var strictReader = new StringReader(json5WithComment);
+		assertThrows(ParseException.class, () -> Json5List.ofString(strictReader, JsonParser.DEFAULT));
 		// The CharSequence overload already honored p — the Reader overload now matches it.
 		assertThrows(ParseException.class, () -> Json5List.ofString(json5WithComment, JsonParser.DEFAULT));
 	}

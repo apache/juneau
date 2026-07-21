@@ -28,60 +28,72 @@ import org.apache.juneau.commons.lang.*;
  * Represents a single entry in a configuration.
  *
  * This is a read-only object.
+ *
+ * @param rawLine The raw line this entry was parsed from, or <jk>null</jk> if the entry was created programmatically.
+ * @param key The name of this entry.
+ * @param value The raw value of this entry.
+ * @param comment The same-line comment of this entry, or <jk>null</jk> if it has no comment.
+ * @param modifiers The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
+ * @param preLines The pre-lines of this entry as an unmodifiable list.
  */
-@SuppressWarnings({
-	"java:S1206" // Internal config representation; value equality not needed
-})
-public class ConfigMapEntry {
-	static final ConfigMapEntry NULL = new ConfigMapEntry(null, null, null, null, null);
+public record ConfigMapEntry(String rawLine, String key, String value, String comment, String modifiers, List<String> preLines) {
+
+	static final ConfigMapEntry NULL = new ConfigMapEntry(null, null, null, null, null, null);
 	private static final AsciiSet REPLACE_CHARS = AsciiSet.of("\\#");
-	final String rawLine;
-	final String key;
-	final String value;
-	final String comment;
 
-	final String modifiers;
+	/**
+	 * Canonical constructor.
+	 *
+	 * <p>
+	 * Normalizes {@code preLines} to an unmodifiable copy (empty when <jk>null</jk>) so this record is truly immutable.
+	 */
+	public ConfigMapEntry {
+		preLines = preLines == null ? Collections.emptyList() : u(cp(preLines));
+	}
 
-	final List<String> preLines;
+	/**
+	 * Constructor for a programmatically-created entry (no raw line).
+	 *
+	 * @param key The name of this entry.
+	 * @param value The raw value of this entry.
+	 * @param modifiers The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
+	 * @param comment The same-line comment of this entry, or <jk>null</jk> if it has no comment.
+	 * @param preLines The pre-lines of this entry.  Can be <jk>null</jk>.
+	 */
+	ConfigMapEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
+		this(null, key, value, comment, modifiers, preLines);
+	}
 
-	ConfigMapEntry(String line, List<String> preLines) {
-		this.rawLine = line;
+	/**
+	 * Parses a raw config line into an entry.
+	 *
+	 * @param line The raw line to parse.
+	 * @param preLines The pre-lines preceding this entry.
+	 * @return A new immutable entry.
+	 */
+	static ConfigMapEntry parse(String line, List<String> preLines) {
 		var i = line.indexOf('=');
 		var key2 = line.substring(0, i).trim();
 
 		var m1 = key2.indexOf('<');
 		var m2 = key2.indexOf('>');
 
-		modifiers = nie((m1 > -1 && m2 > m1) ? key2.substring(m1 + 1, m2) : null);
+		var modifiers = nie((m1 > -1 && m2 > m1) ? key2.substring(m1 + 1, m2) : null);
+		var key = m1 == -1 ? key2 : key2.substring(0, m1);
 
-		this.key = m1 == -1 ? key2 : key2.substring(0, m1);
+		var rest = line.substring(i + 1);
 
-		line = line.substring(i + 1);
-
-		i = line.indexOf('#');
-		if (i != -1) {
-			var l2 = splita(line, '#', 2);
-			line = l2[0];
+		String comment = null;
+		if (rest.indexOf('#') != -1) {
+			var l2 = splita(rest, '#', 2);
+			rest = l2[0];
 			if (l2.length == 2)
-				this.comment = l2[1].trim();
-			else
-				this.comment = null;
-		} else {
-			this.comment = null;
+				comment = l2[1].trim();
 		}
 
-		this.value = replaceUnicodeSequences(line.trim());
+		var value = replaceUnicodeSequences(rest.trim());
 
-		this.preLines = u(cp(preLines));
-	}
-
-	ConfigMapEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
-		this.rawLine = null;
-		this.key = key;
-		this.value = value;
-		this.comment = comment;
-		this.modifiers = modifiers;
-		this.preLines = preLines == null ? Collections.emptyList() : u(cp(preLines));
+		return new ConfigMapEntry(line, key, value, comment, modifiers, preLines);
 	}
 
 	/**

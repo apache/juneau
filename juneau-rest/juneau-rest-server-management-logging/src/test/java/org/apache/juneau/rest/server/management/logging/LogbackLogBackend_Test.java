@@ -84,7 +84,9 @@ class LogbackLogBackend_Test extends org.apache.juneau.TestBase {
 		assertThrows(IllegalArgumentException.class, () -> backend.setLevel(LNAME, "NOPE"));
 	}
 
-	@Test void a09_defaultCtorRequiresLogbackBinding() {
+	@Test
+	@SuppressWarnings("java:S1612") // LogbackLogBackend::new is ambiguous here: it matches both assertDoesNotThrow(Executable) and assertDoesNotThrow(ThrowingSupplier<T>), unlike the equivalent lambda.
+	void a09_defaultCtorRequiresLogbackBinding() {
 		// The test classpath binds SLF4J to Logback, so the no-arg ctor resolves the bound context.
 		assertDoesNotThrow(() -> new LogbackLogBackend());
 	}

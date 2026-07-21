@@ -385,7 +385,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		"rawtypes", // Raw types necessary for generic type handling
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 	})
-	protected SerializerWriter<?> writeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
+	protected UonWriter writeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null) {
 			out.appendObject(null, false);

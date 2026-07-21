@@ -41,6 +41,9 @@ import org.junit.jupiter.api.*;
  * This class lives in the {@code juneau-test-utils} module, which depends only on {@code juneau-commons} and JUnit, so
  * it never introduces a {@code juneau-marshall} dependency onto its consumers.
  */
+@SuppressWarnings({
+	"java:S5960" // test-support utility shipped as main source; assertions are intentional
+})
 public abstract class BasicTestUtils extends Shorts {
 
 	private static final ThreadLocal<TimeZone> SYSTEM_TIME_ZONE = new ThreadLocal<>();
@@ -166,6 +169,7 @@ public abstract class BasicTestUtils extends Shorts {
 	 */
 	public static final synchronized void unsetTimeZone() {
 		TimeZone.setDefault(SYSTEM_TIME_ZONE.get());
+		SYSTEM_TIME_ZONE.remove();
 	}
 
 	/**

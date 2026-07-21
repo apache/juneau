@@ -1693,24 +1693,24 @@ class CollectionUtils_Test extends TestBase {
 		// Basic parity with accumulate
 		List<String> list1 = list("a", "b", "c");
 		List<Object> fromAccumulate = accumulate(list1);
-		List<Object> fromDeepStream = deepStream(list1).collect(java.util.stream.Collectors.toList());
+		List<Object> fromDeepStream = deepStream(list1).toList();
 		assertEquals(fromAccumulate, fromDeepStream);
 
 		// Multi-root parity: list + primitive array + leaf
 		int[] arr = {1, 2};
 		List<?> accMulti = accumulate(list1, arr, "x");
-		List<?> dsMulti = deepStream(list1, arr, "x").collect(java.util.stream.Collectors.toList());
+		List<?> dsMulti = deepStream(list1, arr, "x").toList();
 		assertEquals(accMulti, dsMulti);
 
 		// null root returns empty stream
-		assertTrue(deepStream((Object[]) null).collect(java.util.stream.Collectors.toList()).isEmpty());
+		assertTrue(deepStream((Object[]) null).toList().isEmpty());
 
 		// null element mid-traversal contributes nothing
 		List<Object> withNull = new ArrayList<>();
 		withNull.add("p");
 		withNull.add(null);
 		withNull.add("q");
-		List<?> dsNull = deepStream(withNull).collect(java.util.stream.Collectors.toList());
+		List<?> dsNull = deepStream(withNull).toList();
 		assertEquals(list("p", "q"), dsNull);
 
 		// Laziness: the underlying Iterable's iterator() must not be called until the stream is consumed
@@ -1733,21 +1733,21 @@ class CollectionUtils_Test extends TestBase {
 		String[] arr = {"a", "b", "c"};
 
 		// stream(T[] array) — shallow, yields the 3 String elements directly
-		List<String> shallow = stream(arr).collect(java.util.stream.Collectors.toList());
+		List<String> shallow = stream(arr).toList();
 		assertEquals(list("a", "b", "c"), shallow);
 
 		// deepStream(Object... o) — cast to Object[] makes intent explicit: arr is passed as the
 		// entire varargs array (String[] is-a Object[], array covariance), so each element "a","b","c"
 		// is traversed individually — same flattened result as the shallow stream above
-		List<Object> deep = deepStream((Object[]) arr).collect(java.util.stream.Collectors.toList());
+		List<Object> deep = deepStream((Object[]) arr).toList();
 		assertEquals(list("a", "b", "c"), deep);
 
 		// The key distinction with nested arrays: stream is shallow, deepStream fully flattens
 		String[][] nested = {{"a", "b"}, {"c"}};
-		List<String[]> shallowNested = stream(nested).collect(java.util.stream.Collectors.toList());
+		List<String[]> shallowNested = stream(nested).toList();
 		assertEquals(2, shallowNested.size()); // 2 sub-arrays, not 3 strings
 
-		List<Object> deepNested = deepStream((Object[]) nested).collect(java.util.stream.Collectors.toList());
+		List<Object> deepNested = deepStream((Object[]) nested).toList();
 		assertEquals(list("a", "b", "c"), deepNested); // fully flattened
 	}
 }

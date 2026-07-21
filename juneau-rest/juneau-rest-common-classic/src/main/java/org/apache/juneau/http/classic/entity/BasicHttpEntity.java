@@ -76,6 +76,9 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 	/**
 	 * An empty HttpEntity.
 	 */
+	@SuppressWarnings({
+		"java:S2390" // Convenience constant, not a static-init cycle: ByteArrayEntity()/unmodifiable() touch no static state of either class (only per-instance fields), so nothing here observes a not-yet-initialized value.
+	})
 	public static final BasicHttpEntity<?> EMPTY = new ByteArrayEntity().unmodifiable();
 
 	private boolean cached;
@@ -91,7 +94,7 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 	/**
 	 * Constructor.
 	 */
-	public BasicHttpEntity() {}
+	protected BasicHttpEntity() {}
 
 	/**
 	 * Copy constructor.
@@ -116,7 +119,7 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 	 * @param contentType The entity content type.  Can be <jk>null</jk>.
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 */
-	public BasicHttpEntity(ContentType contentType, Object content) {
+	protected BasicHttpEntity(ContentType contentType, Object content) {
 		this.contentType = contentType;
 		this.content = content;
 	}
@@ -392,6 +395,18 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 		// No-op: Intentional empty implementation for optional interface method
 	}
 
+	/**
+	 * Compares the shared base content of two entities.
+	 *
+	 * <p>
+	 * This base implementation compares only the fields declared on {@link BasicHttpEntity} and deliberately accepts any
+	 * {@code BasicHttpEntity} subtype so that concrete leaves can delegate to it via {@code super.equals(...)}.  It does
+	 * <b>not</b> gate on the concrete leaf type; each concrete leaf overrides {@code equals} to first apply an
+	 * {@code instanceof <ThatLeaf>} gate (so two unrelated leaves with equal base content are not equal) and then calls
+	 * {@code super.equals(...)} to compare the inherited content.  Using {@code instanceof <ThatLeaf>} (rather than
+	 * {@code getClass() ==}) is what preserves the immutability invariant that {@code bean.equals(bean.unmodifiable())}
+	 * holds, since each {@code X.Unmodifiable} snapshot is a subclass of its leaf {@code X}.
+	 */
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return o instanceof BasicHttpEntity<?> other && eq(this, other, (x, y) ->

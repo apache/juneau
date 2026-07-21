@@ -98,6 +98,9 @@ public class MustacheViewRenderer implements ViewRenderer {
 	// the bridge-default MustacheFactory is built once instead of rebuilt per render.  Created lazily (not
 	// eagerly) so a missing Mustache engine still surfaces at render time as NO_ENGINE_DIAGNOSTIC rather
 	// than during RestContext construction.
+	@SuppressWarnings({
+		"java:S3077" // Publish-once cache: assigned once under double-checked locking in fallbackMixin(); MustacheMixin is fully built (effectively immutable — its only field is final) before assignment, so volatile safe-publication is sufficient.
+	})
 	private volatile MustacheMixin fallbackMixin;
 
 	@Override /* Overridden from ResponseProcessor */

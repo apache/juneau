@@ -66,15 +66,23 @@ public abstract class McpRestServlet extends BasicRestServlet {
 	 * The default implementation lazily caches the value of {@link #createMcpConfig()}; subclasses needing
 	 * per-request reconfiguration may override.
 	 *
+	 * <p>
+	 * This is invoked on every request, so the cache is published via a lock-free {@link AtomicReference#compareAndSet}
+	 * rather than a {@code synchronized} block, avoiding monitor contention on the hot path. Under a first-access
+	 * race, {@link #createMcpConfig()} may be invoked by more than one thread, but only one resulting instance is
+	 * ever published to {@link #config} and returned to any caller; the others are discarded. This is safe as long
+	 * as {@link #createMcpConfig()} is side-effect-free and idempotent (i.e. simply constructs and returns a new
+	 * config), which is the documented contract of that method.
+	 *
 	 * @return The config. Never {@code null}.
 	 */
-	public synchronized McpServerConfig getMcpConfig() {
+	public McpServerConfig getMcpConfig() {
 		var c = config.get();
 		if (c == null) {
-			c = createMcpConfig();
-			if (c == null)
+			var nc = createMcpConfig();
+			if (nc == null)
 				throw new IllegalStateException("createMcpConfig() returned null");
-			config.set(c);
+			c = config.compareAndSet(null, nc) ? nc : config.get();
 		}
 		return c;
 	}

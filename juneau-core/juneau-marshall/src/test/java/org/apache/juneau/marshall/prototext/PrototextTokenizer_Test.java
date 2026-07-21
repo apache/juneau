@@ -628,7 +628,8 @@ class PrototextTokenizer_Test {
 
 	@Test void c02_parseExceptionUnexpectedCharPercent() {
 		// Drives an actual parse error whose echoed character is a literal '%'.
-		var ex = assertThrows(ParseException.class, () -> tok("%").peek());
+		var t = tok("%");
+		var ex = assertThrows(ParseException.class, t::peek);
 		assertTrue(ex.getMessage().contains("Unexpected character: %"));
 	}
 }

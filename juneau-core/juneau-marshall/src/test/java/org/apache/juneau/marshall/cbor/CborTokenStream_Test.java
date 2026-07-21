@@ -52,7 +52,7 @@ class CborTokenStream_Test extends TestBase {
 		}
 
 		@Test void a03_definiteLengthArray() throws Exception {
-			// [1,2,3] = 0x83 0x01 0x02 0x03
+			// Bytes 0x83 0x01 0x02 0x03 encode a definite-length array holding one, two and three.
 			try (var r = CborParser.DEFAULT.readTokens(new byte[]{(byte) 0x83, 0x01, 0x02, 0x03})) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next()); assertEquals(1L, r.getNumber().longValue());
@@ -63,7 +63,7 @@ class CborTokenStream_Test extends TestBase {
 		}
 
 		@Test void a04_definiteLengthMap() throws Exception {
-			// {"a":1,"b":2} = 0xA2 0x61 'a' 0x01 0x61 'b' 0x02
+			// Bytes 0xA2 0x61 'a' 0x01 0x61 'b' 0x02 encode a definite-length map with entries a-to-one and b-to-two.
 			var bytes = new byte[]{(byte) 0xA2, 0x61, 'a', 0x01, 0x61, 'b', 0x02};
 			try (var r = CborParser.DEFAULT.readTokens(bytes)) {
 				assertEquals(TokenType.START_OBJECT, r.next());
@@ -76,7 +76,7 @@ class CborTokenStream_Test extends TestBase {
 		}
 
 		@Test void a05_indefiniteLengthArray() throws Exception {
-			// 0x9F 0x01 0x02 0xFF = indefinite [1,2]
+			// Bytes 0x9F 0x01 0x02 0xFF encode an indefinite-length array holding one and two.
 			var bytes = new byte[]{(byte) 0x9F, 0x01, 0x02, (byte) 0xFF};
 			try (var r = CborParser.DEFAULT.readTokens(bytes)) {
 				assertSequence(r,
@@ -88,7 +88,7 @@ class CborTokenStream_Test extends TestBase {
 		}
 
 		@Test void a06_indefiniteLengthMap() throws Exception {
-			// 0xBF 0x61 'a' 0x01 0xFF = indefinite {"a":1}
+			// Bytes 0xBF 0x61 'a' 0x01 0xFF encode an indefinite-length map with entry a-to-one.
 			var bytes = new byte[]{(byte) 0xBF, 0x61, 'a', 0x01, (byte) 0xFF};
 			try (var r = CborParser.DEFAULT.readTokens(bytes)) {
 				assertEquals(TokenType.START_OBJECT, r.next());
@@ -108,7 +108,7 @@ class CborTokenStream_Test extends TestBase {
 		}
 
 		@Test void a08_booleanAndNull() throws Exception {
-			// 0x83 0xF5 0xF4 0xF6 = [true, false, null]
+			// Bytes 0x83 0xF5 0xF4 0xF6 encode an array holding the values true, false and null.
 			var bytes = new byte[]{(byte) 0x83, (byte) 0xF5, (byte) 0xF4, (byte) 0xF6};
 			try (var r = CborParser.DEFAULT.readTokens(bytes)) {
 				assertEquals(TokenType.START_ARRAY, r.next());

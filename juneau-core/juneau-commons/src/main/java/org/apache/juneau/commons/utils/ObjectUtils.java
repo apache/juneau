@@ -31,7 +31,9 @@ import org.apache.juneau.commons.lang.*;
  * <p>Terse aliases for these methods live in {@link Shorts}.
  */
 @SuppressWarnings({
-	"java:S1118" // Utility class with static methods only.
+	"java:S1118", // Utility class with static methods only.
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"java:S1221"  // equal(...) overloads (aliased by Shorts.eq) have 60+ callers reactor-wide; renaming would be a high-blast-radius public-API break.
 })
 public class ObjectUtils {
 

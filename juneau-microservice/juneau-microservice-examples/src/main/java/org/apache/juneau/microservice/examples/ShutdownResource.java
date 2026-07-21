@@ -39,6 +39,7 @@ public class ShutdownResource extends BasicRestServlet {
 	 * @return The string <js>"OK"</js>.
 	 */
 	@RestGet(path = "/", description = "Show contents of config file.")
+	@SuppressWarnings("java:S2654") // Background thread is required so the delayed System.exit() runs off the request thread, letting this method's "OK" response flush to the client before the JVM dies; no managed executor is available in this embedded microservice container.
 	public String shutdown() {
 		new Thread(() -> {
 			try {

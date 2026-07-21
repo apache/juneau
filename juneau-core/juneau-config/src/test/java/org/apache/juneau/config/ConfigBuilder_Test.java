@@ -68,7 +68,7 @@ class ConfigBuilder_Test extends TestBase {
 		assertJson("{'':{},Test:{A:'b'}}", cf.toMap());
 	}
 
-	@Test void a02_autoDetectYamlByExtension() throws Exception {
+	@Test void a02_autoDetectYamlByExtension() {
 		var s = MemoryStore.create().build();
 		s.update("A.yaml",
 			"foo:",
@@ -86,7 +86,7 @@ class ConfigBuilder_Test extends TestBase {
 		assertEquals("foo:\n  bar:\n    k1: v1\n", s.read("B.cfg"));
 	}
 
-	@Test void a04_explicitFormatOverride() throws Exception {
+	@Test void a04_explicitFormatOverride() {
 		var s = MemoryStore.create().build();
 		s.update("C.yaml", "[S1]\nk1=v1\n");
 		var c = Config.create().store(s).name("C.yaml").format(IniConfigFormat.INSTANCE).build();

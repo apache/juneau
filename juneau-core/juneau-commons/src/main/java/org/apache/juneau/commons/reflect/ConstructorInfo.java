@@ -246,7 +246,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 			} catch (InvocationTargetException e) {
 				throw exex(e.getTargetException());
 			}
-		}, e -> exex(e));  // HTT
+		}, Shorts::exex);  // HTT
 	}
 
 	/**

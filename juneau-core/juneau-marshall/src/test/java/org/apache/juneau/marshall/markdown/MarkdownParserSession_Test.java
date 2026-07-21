@@ -222,24 +222,23 @@ class MarkdownParserSession_Test extends TestBase {
 	// d - Cell-value coercion paths (numbers, booleans, plain text)
 	//====================================================================================================
 
-	@Test void d01_autoDetectLong() {
-		var md = "| Property | Value |\n|---|---|\n| big | 9999999999 |";
+	@ParameterizedTest
+	@MethodSource("d01_autoDetectProvider")
+	void d01_autoDetect(String md, String key, Object expected) {
 		var r = (Map<?,?>) MarkdownParser.DEFAULT.read(md, Object.class);
-		assertEquals(9999999999L, r.get("big"));
-		assertInstanceOf(Long.class, r.get("big"));
+		assertEquals(expected, r.get(key));
+		assertInstanceOf(expected.getClass(), r.get(key));
 	}
 
-	@Test void d02_autoDetectDouble() {
-		var md = "| Property | Value |\n|---|---|\n| pi | 3.14 |";
-		var r = (Map<?,?>) MarkdownParser.DEFAULT.read(md, Object.class);
-		assertEquals(3.14, r.get("pi"));
-		assertInstanceOf(Double.class, r.get("pi"));
-	}
-
-	@Test void d03_autoDetectFalse() {
-		var md = "| Property | Value |\n|---|---|\n| flag | false |";
-		var r = (Map<?,?>) MarkdownParser.DEFAULT.read(md, Object.class);
-		assertEquals(Boolean.FALSE, r.get("flag"));
+	static Stream<Arguments> d01_autoDetectProvider() {
+		return Stream.of(
+			// d01: 9999999999 auto-detected as Long
+			Arguments.of("| Property | Value |\n|---|---|\n| big | 9999999999 |", "big", 9999999999L),
+			// d02: 3.14 auto-detected as Double
+			Arguments.of("| Property | Value |\n|---|---|\n| pi | 3.14 |", "pi", 3.14),
+			// d03: false auto-detected as Boolean
+			Arguments.of("| Property | Value |\n|---|---|\n| flag | false |", "flag", Boolean.FALSE)
+		);
 	}
 
 	@Test void d04_emptyCellPreservedForString() {

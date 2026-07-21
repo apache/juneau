@@ -60,26 +60,44 @@ import java.util.*;
 })
 public abstract class TypedFunction implements VarFunction {
 
-	/** Per-overload reflection metadata. */
-	private static final class Overload {
-		final Method method;
-		final Class<?>[] argTypes;     // excluding leading session arg if present
-		final boolean takesSession;
-		final boolean variadic;
-		final int fixedCount;          // arg count excluding the variadic slot
+	/**
+	 * Per-overload reflection metadata.
+	 *
+	 * @param method The reflected {@code invoke} method.
+	 * @param argTypes The argument types, excluding any leading session arg.
+	 * @param takesSession Whether the method takes a leading {@link VarResolverSession} argument.
+	 * @param variadic Whether the final argument slot is a variadic {@code String[]}.
+	 */
+	private record Overload(Method method, Class<?>[] argTypes, boolean takesSession, boolean variadic) {
 
-		Overload(Method method, Class<?>[] argTypes, boolean takesSession, boolean variadic) {
-			this.method = method;
-			this.argTypes = argTypes;
-			this.takesSession = takesSession;
-			this.variadic = variadic;
-			this.fixedCount = variadic ? argTypes.length - 1 : argTypes.length;
+		/** Arg count excluding the variadic slot. */
+		int fixedCount() {
+			return variadic ? argTypes.length - 1 : argTypes.length;
 		}
 
 		boolean acceptsArity(int n) {
 			if (variadic)
-				return n >= fixedCount;
-			return n == fixedCount;
+				return n >= fixedCount();
+			return n == fixedCount();
+		}
+
+		@Override /* Content-based: the 'argTypes' array must compare by content, not identity (S6218). */
+		public boolean equals(Object o) {
+			return o instanceof Overload x
+				&& Objects.equals(method, x.method)
+				&& Arrays.equals(argTypes, x.argTypes)
+				&& takesSession == x.takesSession
+				&& variadic == x.variadic;
+		}
+
+		@Override
+		public int hashCode() {
+			return 31 * Objects.hash(method, takesSession, variadic) + Arrays.hashCode(argTypes);
+		}
+
+		@Override /* Renders the 'argTypes' array by content rather than identity (S6218). */
+		public String toString() {
+			return "Overload[method=" + method + ", argTypes=" + Arrays.toString(argTypes) + ", takesSession=" + takesSession + ", variadic=" + variadic + "]";
 		}
 	}
 
@@ -94,12 +112,12 @@ public abstract class TypedFunction implements VarFunction {
 		var hi = 0;
 		var anyVariadic = false;
 		for (var o : overloads) {
-			if (o.variadic) {
+			if (o.variadic()) {
 				anyVariadic = true;
-				lo = Math.min(lo, o.fixedCount);
+				lo = Math.min(lo, o.fixedCount());
 			} else {
-				lo = Math.min(lo, o.fixedCount);
-				hi = Math.max(hi, o.fixedCount);
+				lo = Math.min(lo, o.fixedCount());
+				hi = Math.max(hi, o.fixedCount());
 			}
 		}
 		this.minArity = lo == Integer.MAX_VALUE ? 0 : lo;
@@ -122,17 +140,17 @@ public abstract class TypedFunction implements VarFunction {
 		if (o == null)
 			throw iaex("Function '%s' has no overload accepting %s argument(s)", name(), n);
 
-		var coerced = ArgCoercer.coerce(name(), o.argTypes, args);
+		var coerced = ArgCoercer.coerce(name(), o.argTypes(), args);
 		try {
 			Object[] effective;
-			if (o.takesSession) {
+			if (o.takesSession()) {
 				effective = new Object[coerced.length + 1];
 				effective[0] = session;
 				System.arraycopy(coerced, 0, effective, 1, coerced.length);
 			} else {
 				effective = coerced;
 			}
-			var result = o.method.invoke(this, effective);
+			var result = o.method().invoke(this, effective);
 			return result == null ? "" : result.toString();
 		} catch (InvocationTargetException e) {
 			var cause = e.getTargetException();
@@ -163,7 +181,7 @@ public abstract class TypedFunction implements VarFunction {
 			throw iaex("TypedFunction subclass %s must declare a public invoke(...) method", cls.getName());
 		// Sort by descending fixedCount so larger arity overloads get matched before any
 		// variadic overload they might overlap with.
-		found.sort((a, b) -> Integer.compare(b.fixedCount, a.fixedCount));
+		found.sort((a, b) -> Integer.compare(b.fixedCount(), a.fixedCount()));
 		return found.toArray(new Overload[0]);
 	}
 }

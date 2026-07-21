@@ -42,7 +42,7 @@ public abstract class HtmlWriter<SELF extends HtmlWriter<SELF>> extends XmlWrite
 	 *
 	 * @param w Writer being copied.
 	 */
-	public HtmlWriter(HtmlWriter<?> w) {
+	protected HtmlWriter(HtmlWriter<?> w) {
 		super(w);
 	}
 
@@ -56,7 +56,7 @@ public abstract class HtmlWriter<SELF extends HtmlWriter<SELF>> extends XmlWrite
 	 * @param quoteChar The quote character to use (i.e. <js>'\''</js> or <js>'"'</js>)
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	public HtmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver) {
+	protected HtmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver, false, null);
 	}
 

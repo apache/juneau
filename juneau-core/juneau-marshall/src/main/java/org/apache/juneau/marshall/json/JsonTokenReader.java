@@ -333,8 +333,8 @@ public class JsonTokenReader implements TokenReader {
 	@Override /* Overridden from TokenReader */
 	public boolean canRead() throws IOException, ParseException {
 		// Auto-advance through structural separators that don't themselves emit value tokens.
-		// This lets users write `while (r.canRead()) bean = r.read(...)` for array
-		// streaming without manually consuming commas.
+		// This lets users stream array elements with a canRead()/read() loop without manually
+		// consuming commas.
 		advanceToValueState();
 		if (state != S00_expectValue)
 			return false;

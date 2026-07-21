@@ -2650,6 +2650,9 @@ public class HttpPartSchema {
 			return this;
 		}
 
+		@SuppressWarnings({
+			"java:S3776" // Annotation-name dispatch over HTTP-part annotations (Path/Response/StatusCode/...); the switch encodes per-annotation schema-mapping rules that are clearer inline than fragmented across helpers.
+		})
 		private Builder applyHttpAnnotation(Annotation a) {
 			var annotationName = a.annotationType().getSimpleName();
 
@@ -2750,7 +2753,8 @@ public class HttpPartSchema {
 		// -----------------------------------------------------------------------------------------------------------------
 
 		@SuppressWarnings({
-			"removal" // Handles deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
+			"removal", // Handles deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
+			"java:S3776" // Maps every @Schema attribute (plus its short-form alias) onto the builder; the flat attribute-by-attribute copy is behavior-preserving and clearer as one method than split across helpers.
 		})
 		Builder apply(Schema a) {
 			default_(joinnlOrNull(a.default_(), a.df()));

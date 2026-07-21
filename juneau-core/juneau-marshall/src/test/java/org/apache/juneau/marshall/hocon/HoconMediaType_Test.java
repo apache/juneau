@@ -49,7 +49,7 @@ class HoconMediaType_Test {
 	}
 
 	@Test
-	void j03_contentNegotiation() throws Exception {
+	void j03_contentNegotiation() {
 		var a = JsonMap.of("name", "test", "count", 42);
 		var hocon = toHocon(a);
 		assertNotNull(hocon);

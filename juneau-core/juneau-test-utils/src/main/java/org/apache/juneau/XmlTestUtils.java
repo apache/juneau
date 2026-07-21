@@ -25,6 +25,15 @@ import java.util.regex.*;
  */
 public final class XmlTestUtils {
 
+	// Whitespace-validation patterns.  The lookbehind on the trailing '>' distinguishes start tags ('(?<!/)')
+	// from self-closing tags ('(?<=/)') in a single linear pass, avoiding the super-linear backtracking of the
+	// previous '.*'/nested-quantifier forms (java:S8786).  Hoisted to static final fields since they're
+	// stateless and otherwise get recompiled on every checkXmlWhitespace() call/recursion.
+	private static final Pattern START_TAG = Pattern.compile("^(\\s*)<[^/>][^>]*(?<!/)>$");
+	private static final Pattern END_TAG = Pattern.compile("^(\\s*)</[^>]+>$");
+	private static final Pattern COMBINED_TAG = Pattern.compile("^(\\s*)<[^/>][^>]*(?<=/)>$");
+	private static final Pattern CONTENT_ONLY = Pattern.compile("^(\\s*)[^\\s\\<]+$");
+
 	private XmlTestUtils() {}
 
 	/**
@@ -43,64 +52,74 @@ public final class XmlTestUtils {
 			return;
 		}
 
-		var indent = -1;
-		// Whitespace-validation patterns.  The lookbehind on the trailing '>' distinguishes start tags ('(?<!/)')
-		// from self-closing tags ('(?<=/)') in a single linear pass, avoiding the super-linear backtracking of the
-		// previous '.*'/nested-quantifier forms (java:S8786).
-		var startTag = Pattern.compile("^(\\s*)<[^/>][^>]*(?<!/)>$");
-		var endTag = Pattern.compile("^(\\s*)</[^>]+>$");
-		var combinedTag = Pattern.compile("^(\\s*)<[^/>][^>]*(?<=/)>$");
-		var contentOnly = Pattern.compile("^(\\s*)[^\\s\\<]+$");
 		var lines = out.split("\n");
+		var indent = -1;
 		try {
-			for (var i = 0; i < lines.length; i++) {
-				var line = lines[i];
-				var m = startTag.matcher(line);
-				if (m.matches()) {
-					indent++;
-					if (m.group(1).length() != indent)
-						throw new Exception("Wrong indentation detected on start tag line ''" + (i+1) + "''");
-					continue;
-				}
-				m = endTag.matcher(line);
-				if (m.matches()) {
-					if (m.group(1).length() != indent)
-						throw new Exception("Wrong indentation detected on end tag line ''" + (i+1) + "''");
-					indent--;
-					continue;
-				}
-				m = combinedTag.matcher(line);
-				if (m.matches()) {
-					indent++;
-					if (m.group(1).length() != indent)
-						throw new Exception("Wrong indentation detected on combined tag line ''" + (i+1) + "''");
-					indent--;
-					continue;
-				}
-				m = contentOnly.matcher(line);
-				if (m.matches()) {
-					indent++;
-					if (m.group(1).length() != indent)
-						throw new Exception("Wrong indentation detected on content-only line ''" + (i+1) + "''");
-					indent--;
-					continue;
-				}
-				var twc = tagWithContentIndent(line);
-				if (twc != -1) {
-					indent++;
-					if (twc != indent)
-						throw new Exception("Wrong indentation detected on tag-with-content line ''" + (i+1) + "''");
-					indent--;
-					continue;
-				}
-				throw new Exception("Unmatched whitespace line at line number ''" + (i+1) + "''");
-			}
+			for (var i = 0; i < lines.length; i++)
+				indent = checkLineIndent(lines[i], i + 1, indent);
 			if (indent != -1)
 				throw new Exception("Possible unmatched tag.  indent=''" + indent + "''");
 		} catch (Exception e) {
 			printLines(lines);
 			throw e;
 		}
+	}
+
+	/**
+	 * Validates the indentation of a single line of XML and returns the indent depth after processing it.
+	 *
+	 * @param line The line to validate.
+	 * @param lineNum The 1-based line number (for error messages).
+	 * @param indent The indent depth before processing this line.
+	 * @return The indent depth after processing this line.
+	 * @throws Exception If the line's indentation is wrong, or the line doesn't match any recognized form.
+	 */
+	private static int checkLineIndent(String line, int lineNum, int indent) throws Exception {
+		var m = START_TAG.matcher(line);
+		if (m.matches()) {
+			checkIndent(indent + 1, m.group(1).length(), lineNum, "start tag");
+			return indent + 1;
+		}
+
+		m = END_TAG.matcher(line);
+		if (m.matches()) {
+			checkIndent(indent, m.group(1).length(), lineNum, "end tag");
+			return indent - 1;
+		}
+
+		m = COMBINED_TAG.matcher(line);
+		if (m.matches()) {
+			checkIndent(indent + 1, m.group(1).length(), lineNum, "combined tag");
+			return indent;
+		}
+
+		m = CONTENT_ONLY.matcher(line);
+		if (m.matches()) {
+			checkIndent(indent + 1, m.group(1).length(), lineNum, "content-only");
+			return indent;
+		}
+
+		var twc = tagWithContentIndent(line);
+		if (twc != -1) {
+			checkIndent(indent + 1, twc, lineNum, "tag-with-content");
+			return indent;
+		}
+
+		throw new Exception("Unmatched whitespace line at line number ''" + lineNum + "''");
+	}
+
+	/**
+	 * Verifies that an observed indent width matches the expected one, throwing a descriptive exception otherwise.
+	 *
+	 * @param expected The expected indent width.
+	 * @param actual The observed indent width.
+	 * @param lineNum The 1-based line number (for error messages).
+	 * @param lineType A human-readable description of the line kind being checked (for error messages).
+	 * @throws Exception If <c>actual != expected</c>.
+	 */
+	private static void checkIndent(int expected, int actual, int lineNum, String lineType) throws Exception {
+		if (actual != expected)
+			throw new Exception("Wrong indentation detected on " + lineType + " line ''" + lineNum + "''");
 	}
 
 	/**

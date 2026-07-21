@@ -66,7 +66,8 @@ import org.apache.juneau.rest.client.remote.*;
  * @since 9.2.1
  */
 @SuppressWarnings({
-	"resource" // transport is closed in RestClient.close(); this class owns it
+	"resource", // transport is closed in RestClient.close(); this class owns it
+	"java:S115" // Constants use UPPER_snakeCase convention
 })
 public final class RestClient implements Closeable {
 

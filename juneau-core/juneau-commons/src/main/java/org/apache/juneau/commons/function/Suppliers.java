@@ -24,7 +24,9 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 /** Supplier factories: memoizing wrappers moved from the former {@code Utils}. */
-@SuppressWarnings({ "java:S1118" // Utility class with static methods only.
+@SuppressWarnings({
+	"java:S1118", // Utility class with static methods only.
+	"java:S115"   // Constants use UPPER_snakeCase convention
 })
 public class Suppliers {
 

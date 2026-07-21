@@ -75,7 +75,9 @@ class Log4j2LogBackend_Test extends org.apache.juneau.TestBase {
 		assertEquals("DEBUG", backend.getLevel(LNAME));
 	}
 
-	@Test void a08_defaultCtorResolvesContext() {
+	@Test
+	@SuppressWarnings("java:S1612") // Log4j2LogBackend::new is ambiguous here: it matches both assertDoesNotThrow(Executable) and assertDoesNotThrow(ThrowingSupplier<T>), unlike the equivalent lambda.
+	void a08_defaultCtorResolvesContext() {
 		assertDoesNotThrow(() -> new Log4j2LogBackend());
 	}
 }

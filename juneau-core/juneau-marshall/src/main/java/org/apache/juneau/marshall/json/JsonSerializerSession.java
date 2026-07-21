@@ -150,6 +150,9 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 		escapeSolidus = builder.escapeSolidus;
 	}
 
+	@SuppressWarnings({
+		"java:S1452" // Returns the passed-in writer whose concrete CRTP self-type is not nameable here.
+	})
 	protected SerializerWriter<?> writeBeanMap(JsonWriter<?> out, BeanMap<?> m, String typeName) throws SerializeException {
 		int i = indent;
 		out.w('{');
@@ -215,6 +218,9 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	}
 
 	
+	@SuppressWarnings({
+		"java:S1452" // Returns the passed-in writer whose concrete CRTP self-type is not nameable here.
+	})
 	protected SerializerWriter<?> writeMap(JsonWriter<?> out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
@@ -259,6 +265,9 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The output target object wrapped in an {@link JsonWriter}.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Raw output may be any JsonWriter CRTP leaf; the concrete self-type is not nameable here.
+	})
 	protected JsonWriter<?> getJsonWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
 		if (output instanceof JsonWriter<?> output2)
@@ -356,6 +365,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S1452" // Returns the passed-in writer whose concrete CRTP self-type is not nameable here.
 	})
 	protected JsonWriter<?> writeAnything(JsonWriter<?> out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 

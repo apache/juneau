@@ -36,7 +36,7 @@ import org.apache.juneau.http.classic.header.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"resource", // Resource management handled externally
+	"resource" // Resource management handled externally
 })
 public class ReaderEntity extends BasicHttpEntity<ReaderEntity> {
 
@@ -136,6 +136,21 @@ public class ReaderEntity extends BasicHttpEntity<ReaderEntity> {
 			osw.flush();
 		}
 		out.flush();
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		// Leaf-type gate: keeps this entity from comparing equal to a different leaf with equal base content, while
+		// preserving D3 (ReaderEntity.Unmodifiable IS-A ReaderEntity, so bean.equals(bean.unmodifiable()) still holds).
+		// byteCache/stringCache are memoized derivations of the inherited content/charset and are excluded from equality.
+		return o instanceof ReaderEntity && super.equals(o);
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		// Fold in the leaf type so distinct leaves land in different buckets; stable across ReaderEntity and its
+		// Unmodifiable snapshot (both report ReaderEntity.class), keeping the equals/hashCode contract intact.
+		return h(ReaderEntity.class, super.hashCode());
 	}
 
 	private Reader content() {

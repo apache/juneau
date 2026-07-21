@@ -406,6 +406,11 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		private final Consumer<Throwable> onTerminate;
 		private final AtomicBoolean terminated = new AtomicBoolean();
 		private volatile boolean wrote;
+
+		/** Published once by {@code onSubscribe} (Reactive Streams: at most one call); read by {@code onNext}/{@code cancel}. */
+		@SuppressWarnings({
+			"java:S3077" // Publish-once reference: assigned exactly once in onSubscribe; request()/cancel() are required by the Reactive Streams spec to support concurrent invocation, so volatile safe-publication of the reference alone is sufficient.
+		})
 		private volatile Flow.Subscription subscription;
 
 		StreamingSubscriber(RestResponse res, FinishablePrintWriter writer, FrameEncoder encoder,

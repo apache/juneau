@@ -636,6 +636,9 @@ public abstract class Context {
 		 * @param value The value to copy.  Can be <jk>null</jk>.
 		 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 		 */
+		@SuppressWarnings({
+			"java:S1452" // Public API: the copied builder's concrete subtype is intentionally unknown to callers.
+		})
 		public static Builder<?> copyOrNull(Builder<?> value) {
 			return value == null ? null : value.copy();
 		}
@@ -714,6 +717,9 @@ public abstract class Context {
 		 *
 		 * @return The context class if it was specified.
 		 */
+		@SuppressWarnings({
+			"java:S1452" // Public API: the context class is intentionally exposed as an open type.
+		})
 		public Optional<Class<?>> getType() { return o(type); }
 
 		/**

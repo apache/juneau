@@ -51,9 +51,12 @@
 		<spring.version>4.0.6</spring.version>
 		<sonar.organization>apache</sonar.organization>
 		<!-- javadoc.css uses custom HTML element selectors (ja, jc, jd, ...) for Javadoc syntax highlighting; css:S4670 false positives. -->
-		<sonar.issue.ignore.multicriteria>e1</sonar.issue.ignore.multicriteria>
+		<sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
 		<sonar.issue.ignore.multicriteria.e1.ruleKey>css:S4670</sonar.issue.ignore.multicriteria.e1.ruleKey>
 		<sonar.issue.ignore.multicriteria.e1.resourceKey>**/javadoc.css</sonar.issue.ignore.multicriteria.e1.resourceKey>
+		<!-- HTTP-status response/exception beans (BasicHttpResponse/BasicHttpException CRTP+immutability hierarchy, TODO-273) are intentionally >5 ancestors deep; not a design smell to flatten. -->
+		<sonar.issue.ignore.multicriteria.e2.ruleKey>java:S110</sonar.issue.ignore.multicriteria.e2.ruleKey>
+		<sonar.issue.ignore.multicriteria.e2.resourceKey>**/http/response/**</sonar.issue.ignore.multicriteria.e2.resourceKey>
 		<!-- Coverage/exclusion config for the SonarScanner-for-Maven (used by CI in .github/workflows/sonarcloud.yml). -->
 		<!-- The Maven scanner reads these from the POM and ignores sonar-project.properties. -->
 		<!-- Aggregate report (cross-module integration-test coverage) via reactor-root path, per-module report via basedir fallback. -->

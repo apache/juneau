@@ -270,9 +270,9 @@ class ViewProjection_Test extends TestBase {
 	// K: view interacts with beanProperties* (intersection: view ∩ filter)
 
 	@Test void k01_viewAndBeanPropertiesFilter_onlyUntaggedSurvivesBoth() {
-		// beanProperties restricts visible set to {id, name}
-		// view "detail" restricts to {id (untagged), description (in detail)}
-		// intersection: only id (untagged, in beanProperties) survives both filters
+		// beanProperties restricts the visible set to id and name.
+		// The detail view restricts to id (untagged) and description (in detail).
+		// Their intersection leaves only id (untagged, in beanProperties) surviving both filters.
 		var s = Json5Serializer.DEFAULT.copy()
 			.beanProperties(A.class, "id,name")
 			.activeView("detail")

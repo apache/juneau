@@ -110,7 +110,7 @@ public abstract class JsonWriter<SELF extends JsonWriter<SELF>> extends Serializ
 	@SuppressWarnings({
 		"java:S107" // Factory method mirrors the constructor; all 8 parameters are distinct JSON writer configuration settings
 	})
-	public static JsonWriter<?> create(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean simpleAttrs, boolean trimStrings, UriResolver uriResolver) {
+	public static BasicJsonWriter create(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean simpleAttrs, boolean trimStrings, UriResolver uriResolver) {
 		return new BasicJsonWriter(out, useWhitespace, maxIndent, escapeSolidus, quoteChar, simpleAttrs, trimStrings, uriResolver);
 	}
 

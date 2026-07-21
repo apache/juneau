@@ -553,14 +553,18 @@ class PartList_Test extends TestBase {
 		var p = part("b", "2");
 		assertThrows(UnsupportedOperationException.class, () -> u.add(p));
 		assertThrows(UnsupportedOperationException.class, () -> u.add(0, p));
-		assertThrows(UnsupportedOperationException.class, () -> u.addAll(l(p)));
-		assertThrows(UnsupportedOperationException.class, () -> u.addAll(0, l(p)));
+		var pList = l(p);
+		assertThrows(UnsupportedOperationException.class, () -> u.addAll(pList));
+		assertThrows(UnsupportedOperationException.class, () -> u.addAll(0, pList));
 		assertThrows(UnsupportedOperationException.class, () -> u.set(0, p));
 		assertThrows(UnsupportedOperationException.class, () -> u.remove(0));
-		assertThrows(UnsupportedOperationException.class, () -> u.remove((Object)u.get(0)));
+		var first = u.get(0);
+		assertThrows(UnsupportedOperationException.class, () -> u.remove((Object)first));
 		assertThrows(UnsupportedOperationException.class, u::clear);
-		assertThrows(UnsupportedOperationException.class, () -> u.removeAll(l(u.get(0))));
-		assertThrows(UnsupportedOperationException.class, () -> u.retainAll(l()));
+		var firstAsList = l(first);
+		assertThrows(UnsupportedOperationException.class, () -> u.removeAll(firstAsList));
+		var emptyList = l();
+		assertThrows(UnsupportedOperationException.class, () -> u.retainAll(emptyList));
 		assertThrows(UnsupportedOperationException.class, () -> u.removeIf(x -> true));
 		assertThrows(UnsupportedOperationException.class, () -> u.replaceAll(x -> x));
 		assertThrows(UnsupportedOperationException.class, () -> u.sort((a, b) -> 0));
@@ -590,8 +594,9 @@ class PartList_Test extends TestBase {
 		assertTrue(li.hasNext());
 		assertNotNull(li.next());
 		assertThrows(UnsupportedOperationException.class, li::remove);
-		assertThrows(UnsupportedOperationException.class, () -> li.set(part("c", "3")));
-		assertThrows(UnsupportedOperationException.class, () -> li.add(part("c", "3")));
+		var newPart = part("c", "3");
+		assertThrows(UnsupportedOperationException.class, () -> li.set(newPart));
+		assertThrows(UnsupportedOperationException.class, () -> li.add(newPart));
 	}
 
 	@Test void e07_unmodifiable_contentEquality() {

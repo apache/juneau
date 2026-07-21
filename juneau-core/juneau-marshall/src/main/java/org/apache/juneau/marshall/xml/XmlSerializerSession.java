@@ -311,6 +311,9 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The output target object wrapped in an {@link XmlWriter}.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Raw output may be any XmlWriter CRTP leaf; the concrete self-type is not nameable here.
+	})
 	public final XmlWriter<?> getXmlWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
 		if (output instanceof XmlWriter<?> output2)

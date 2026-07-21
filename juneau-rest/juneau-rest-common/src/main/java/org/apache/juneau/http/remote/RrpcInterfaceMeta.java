@@ -103,20 +103,19 @@ public final class RrpcInterfaceMeta {
 
 		this.iface = iface;
 		this.basePath = buildBasePath(remote);
-		this.baseUrl = remote == null ? "" : VarResolver.DEFAULT.resolve(remote.baseUrl());
-		this.accept = remote == null ? "" : VarResolver.DEFAULT.resolve(remote.accept());
-		this.contentType = remote == null ? "" : VarResolver.DEFAULT.resolve(remote.contentType());
+		this.baseUrl = buildBaseUrl(remote);
+		this.accept = buildAccept(remote);
+		this.contentType = buildContentType(remote);
 		this.headers = buildHeaders(remote);
-		this.queryData = remote == null ? List.of() : parseConstantParts(remote.queryData(), '=');
-		this.formData = remote == null ? List.of() : parseConstantParts(remote.formData(), '=');
-		var hpm = iface.getAnnotation(HttpPartMarshalling.class);
-		this.partSerializer = hpm == null ? null : RrpcInterfaceMethodMeta.resolvePartSerializer(hpm.serializer());
+		this.queryData = buildQueryData(remote);
+		this.formData = buildFormData(remote);
+		this.partSerializer = buildPartSerializer(iface);
 		// Interface-level cross-cutting policy defaults.
-		this.interceptorClasses = remote == null ? new Class<?>[0] : remote.interceptors();
-		this.timeout = remote == null ? "" : remote.timeout();
-		this.retries = remote == null ? 0 : remote.retries();
-		this.retryNonIdempotent = remote != null && remote.retryNonIdempotent();
-		this.throwOnError = remote != null && remote.throwOnError();
+		this.interceptorClasses = buildInterceptorClasses(remote);
+		this.timeout = buildTimeout(remote);
+		this.retries = buildRetries(remote);
+		this.retryNonIdempotent = buildRetryNonIdempotent(remote);
+		this.throwOnError = buildThrowOnError(remote);
 
 		var metas = new LinkedHashMap<Method, RrpcInterfaceMethodMeta>();
 		for (var m : iface.getMethods()) {
@@ -139,6 +138,51 @@ public final class RrpcInterfaceMeta {
 		if (remote == null)
 			return "";
 		return remote.path().isEmpty() ? remote.value() : remote.path();
+	}
+
+	private static String buildBaseUrl(Remote remote) {
+		return remote == null ? "" : VarResolver.DEFAULT.resolve(remote.baseUrl());
+	}
+
+	private static String buildAccept(Remote remote) {
+		return remote == null ? "" : VarResolver.DEFAULT.resolve(remote.accept());
+	}
+
+	private static String buildContentType(Remote remote) {
+		return remote == null ? "" : VarResolver.DEFAULT.resolve(remote.contentType());
+	}
+
+	private static List<Map.Entry<String,String>> buildQueryData(Remote remote) {
+		return remote == null ? List.of() : parseConstantParts(remote.queryData(), '=');
+	}
+
+	private static List<Map.Entry<String,String>> buildFormData(Remote remote) {
+		return remote == null ? List.of() : parseConstantParts(remote.formData(), '=');
+	}
+
+	private static HttpPartSerializer buildPartSerializer(Class<?> iface) {
+		var hpm = iface.getAnnotation(HttpPartMarshalling.class);
+		return hpm == null ? null : RrpcInterfaceMethodMeta.resolvePartSerializer(hpm.serializer());
+	}
+
+	private static Class<?>[] buildInterceptorClasses(Remote remote) {
+		return remote == null ? new Class<?>[0] : remote.interceptors();
+	}
+
+	private static String buildTimeout(Remote remote) {
+		return remote == null ? "" : remote.timeout();
+	}
+
+	private static int buildRetries(Remote remote) {
+		return remote == null ? 0 : remote.retries();
+	}
+
+	private static boolean buildRetryNonIdempotent(Remote remote) {
+		return remote != null && remote.retryNonIdempotent();
+	}
+
+	private static boolean buildThrowOnError(Remote remote) {
+		return remote != null && remote.throwOnError();
 	}
 
 	/**

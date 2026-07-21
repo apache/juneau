@@ -490,14 +490,18 @@ class HeaderList_Test extends TestBase {
 		var h = header("X-B", "b");
 		assertThrows(UnsupportedOperationException.class, () -> u.add(h));
 		assertThrows(UnsupportedOperationException.class, () -> u.add(0, h));
-		assertThrows(UnsupportedOperationException.class, () -> u.addAll(l(h)));
-		assertThrows(UnsupportedOperationException.class, () -> u.addAll(0, l(h)));
+		var hList = l(h);
+		assertThrows(UnsupportedOperationException.class, () -> u.addAll(hList));
+		assertThrows(UnsupportedOperationException.class, () -> u.addAll(0, hList));
 		assertThrows(UnsupportedOperationException.class, () -> u.set(0, h));
 		assertThrows(UnsupportedOperationException.class, () -> u.remove(0));
-		assertThrows(UnsupportedOperationException.class, () -> u.remove((Object)u.get(0)));
+		var first = u.get(0);
+		assertThrows(UnsupportedOperationException.class, () -> u.remove((Object)first));
 		assertThrows(UnsupportedOperationException.class, u::clear);
-		assertThrows(UnsupportedOperationException.class, () -> u.removeAll(l(u.get(0))));
-		assertThrows(UnsupportedOperationException.class, () -> u.retainAll(l()));
+		var firstAsList = l(first);
+		assertThrows(UnsupportedOperationException.class, () -> u.removeAll(firstAsList));
+		var emptyList = l();
+		assertThrows(UnsupportedOperationException.class, () -> u.retainAll(emptyList));
 		assertThrows(UnsupportedOperationException.class, () -> u.removeIf(x -> true));
 		assertThrows(UnsupportedOperationException.class, () -> u.replaceAll(x -> x));
 		assertThrows(UnsupportedOperationException.class, () -> u.sort((a, b) -> 0));
@@ -528,8 +532,9 @@ class HeaderList_Test extends TestBase {
 		assertTrue(li.hasNext());
 		assertNotNull(li.next());
 		assertThrows(UnsupportedOperationException.class, li::remove);
-		assertThrows(UnsupportedOperationException.class, () -> li.set(header("X-C", "c")));
-		assertThrows(UnsupportedOperationException.class, () -> li.add(header("X-C", "c")));
+		var newHeader = header("X-C", "c");
+		assertThrows(UnsupportedOperationException.class, () -> li.set(newHeader));
+		assertThrows(UnsupportedOperationException.class, () -> li.add(newHeader));
 	}
 
 	@Test void e07_unmodifiable_contentEquality() {

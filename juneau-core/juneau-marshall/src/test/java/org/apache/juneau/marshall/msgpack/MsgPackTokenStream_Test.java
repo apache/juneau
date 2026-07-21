@@ -51,7 +51,7 @@ class MsgPackTokenStream_Test extends TestBase {
 		}
 
 		@Test void a03_simpleArray() throws Exception {
-			// 0x93 0x01 0x02 0x03 = fixarray[3] of 1,2,3
+			// Bytes 0x93 0x01 0x02 0x03 encode a fixarray of length three holding the values one, two and three.
 			var bytes = new byte[]{(byte) 0x93, 0x01, 0x02, 0x03};
 			try (var r = MsgPackParser.DEFAULT.readTokens(bytes)) {
 				assertEquals(TokenType.START_ARRAY, r.next());
@@ -63,7 +63,7 @@ class MsgPackTokenStream_Test extends TestBase {
 		}
 
 		@Test void a04_simpleMap() throws Exception {
-			// 0x82 0xA1 'a' 0x01 0xA1 'b' 0x02 = {"a":1,"b":2}
+			// Bytes 0x82 0xA1 'a' 0x01 0xA1 'b' 0x02 encode a fixmap with entries a-to-one and b-to-two.
 			var bytes = new byte[]{(byte) 0x82, (byte) 0xA1, 'a', 0x01, (byte) 0xA1, 'b', 0x02};
 			try (var r = MsgPackParser.DEFAULT.readTokens(bytes)) {
 				assertEquals(TokenType.START_OBJECT, r.next());

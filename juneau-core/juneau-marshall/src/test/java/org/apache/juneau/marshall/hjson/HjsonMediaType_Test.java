@@ -49,7 +49,7 @@ class HjsonMediaType_Test {
 	}
 
 	@Test
-	void g03_contentNegotiation() throws Exception {
+	void g03_contentNegotiation() {
 		var a = JsonMap.of("name", "test", "count", 42);
 		var hjson = toHjson(a);
 		assertNotNull(hjson);

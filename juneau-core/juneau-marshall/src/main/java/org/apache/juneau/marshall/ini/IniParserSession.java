@@ -161,6 +161,9 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	 * @param line The (already-trimmed) candidate line.
 	 * @return A two-element array of {raw-key, raw-value}, or <jk>null</jk> if the line is not a key/value pair.
 	 */
+	@SuppressWarnings({
+		"java:S1168" // null is a distinct "not a key/value pair" sentinel; the caller guards on != null before indexing, so an empty array would change parse semantics.
+	})
 	private static String[] splitKeyValue(String line) {
 		if (line.isEmpty())
 			return null;

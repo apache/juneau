@@ -180,6 +180,21 @@ public class SerializedEntity extends BasicHttpEntity<SerializedEntity> {
 		}
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		// Leaf-type gate: keeps this entity from comparing equal to a different leaf with equal base content, while
+		// preserving D3 (SerializedEntity.Unmodifiable IS-A SerializedEntity, so bean.equals(bean.unmodifiable()) holds).
+		// serializer and schema are real configuration state (not derived caches), so they participate in equality.
+		// Neither Serializer nor HttpPartSchema overrides equals(), so those two are compared by reference (identity).
+		return o instanceof SerializedEntity x && super.equals(o) && eq(serializer, x.serializer) && eq(schema, x.schema);
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		// Fold in the leaf type plus the equality-relevant config state; serializer/schema hash by identity (reference).
+		return h(SerializedEntity.class, super.hashCode(), serializer, schema);
+	}
+
 	/**
 	 * Unmodifiable point-in-time snapshot of the enclosing {@link SerializedEntity}.
 	 *

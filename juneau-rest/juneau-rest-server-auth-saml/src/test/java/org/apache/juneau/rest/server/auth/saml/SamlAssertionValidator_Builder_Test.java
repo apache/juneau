@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth.saml;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.security.*;
 import java.time.*;
@@ -120,7 +121,7 @@ class SamlAssertionValidator_Builder_Test extends TestBase {
 
 	@Test void d01_credentialAndResolverMutuallyExclusive() throws Exception {
 		var cred = dummyCredential();
-		var meta = org.mockito.Mockito.mock(org.opensaml.saml.metadata.resolver.MetadataResolver.class);
+		var meta = mock(org.opensaml.saml.metadata.resolver.MetadataResolver.class);
 		assertThrows(IllegalStateException.class, () -> SamlAssertionValidator.create()
 			.spEntityId("sp").expectedIssuer("idp")
 			.signingCredential(cred)

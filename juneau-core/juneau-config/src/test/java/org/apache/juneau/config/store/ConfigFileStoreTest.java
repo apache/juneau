@@ -278,7 +278,7 @@ class ConfigFileStoreTest extends TestBase {
 		assertNotNull(s);
 	}
 
-	@Test void b15_close_withWatcher() throws Exception {
+	@Test void b15_close_withWatcher() {
 		var fs = FileStore.create().directory(DIR).enableWatcher().build();
 		assertDoesNotThrow(fs::close);
 	}

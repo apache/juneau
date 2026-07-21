@@ -773,6 +773,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The output target object wrapped in an {@link HtmlWriter}.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Raw output may be any HtmlWriter CRTP leaf; the concrete self-type is not nameable here.
+	})
 	protected final HtmlWriter<?> getHtmlWriter(SerializerPipe out) {
 		Object output = out.getRawOutput();
 		if (output instanceof HtmlWriter<?> output2)

@@ -24,6 +24,7 @@ import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
@@ -187,5 +188,42 @@ class SerializedEntity_Test extends TestBase {
 		// copyWith returns same instance when serializer is already set
 		var copy = x.copyWith(JsonSerializer.DEFAULT, null);
 		assertSame(x, copy);
+	}
+
+	@Test void a29_equals_sameContentAndSerializer() {
+		var a = new SerializedEntity().setContent("hello").setSerializer(JsonSerializer.DEFAULT);
+		var b = new SerializedEntity().setContent("hello").setSerializer(JsonSerializer.DEFAULT);
+		assertEquals(a, b);
+		assertEquals(a.hashCode(), b.hashCode());
+	}
+
+	@Test void a30_equals_reflectsSerializer() {
+		// serializer participates in equality (compared by reference).
+		var a = new SerializedEntity().setContent("hello").setSerializer(JsonSerializer.DEFAULT);
+		var b = new SerializedEntity().setContent("hello").setSerializer(JsonSerializer.DEFAULT_READABLE);
+		assertNotEquals(a, b);
+	}
+
+	@Test void a31_equals_reflectsSchema() {
+		// schema participates in equality (compared by reference).
+		var a = new SerializedEntity().setContent("hello").setSchema(HttpPartSchema.T_INTEGER);
+		var b = new SerializedEntity().setContent("hello").setSchema(HttpPartSchema.T_BOOLEAN);
+		assertNotEquals(a, b);
+	}
+
+	@Test void a32_d3_holdsBothDirections() {
+		// D3: bean.equals(bean.unmodifiable()) AND the reverse, including serializer/schema state.
+		var x = new SerializedEntity().setContent("hello").setSerializer(JsonSerializer.DEFAULT).setSchema(HttpPartSchema.T_INTEGER);
+		assertEquals(x, x.unmodifiable());
+		assertEquals(x.unmodifiable(), x);
+		assertEquals(x.hashCode(), x.unmodifiable().hashCode());
+	}
+
+	@Test void a33_crossLeafInequality() {
+		// A SerializedEntity is never equal to a different leaf with equal base content, in both directions.
+		var a = new SerializedEntity().setContent("hello");
+		var b = new StringEntity().setContent("hello");
+		assertNotEquals(a, b);
+		assertNotEquals(b, a);
 	}
 }

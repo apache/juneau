@@ -29,6 +29,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Enhanced annotation provider that returns {@link AnnotationInfo} objects and supports runtime annotations.
@@ -1031,7 +1032,7 @@ public class AnnotationProvider {
 		else if (element instanceof FieldInfo || element instanceof ConstructorInfo)
 			t = l(a(SELF));
 		else {
-			assertType(ParameterInfo.class, element, () -> uoex());
+			assertType(ParameterInfo.class, element, Shorts::uoex);
 			t = l(a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE));
 		}
 

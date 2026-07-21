@@ -69,7 +69,7 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	 *
 	 * @param entity The entity that makes up this resource content.  Must not be <jk>null</jk>.
 	 */
-	public BasicResource(BasicHttpEntity<?> entity) {
+	protected BasicResource(BasicHttpEntity<?> entity) {
 		this.entity = entity;
 	}
 
@@ -78,7 +78,7 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	 *
 	 * @param copyFrom The bean being copied.  Must not be <jk>null</jk>.
 	 */
-	public BasicResource(BasicResource<?> copyFrom) {
+	protected BasicResource(BasicResource<?> copyFrom) {
 		this.entity = copyFrom.entity.copy();
 		this.headers = copyFrom.headers.copy();
 	}
@@ -92,7 +92,7 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 * @throws IOException Rethrown from {@link HttpEntity#getContent()}.
 	 */
-	public BasicResource(HttpResponse response) throws IOException {
+	protected BasicResource(HttpResponse response) throws IOException {
 		this(new StreamEntity());
 		copyFrom(response);
 	}

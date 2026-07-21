@@ -705,13 +705,9 @@ class RestArgResolvers_Test extends TestBase {
 	// u — RestRequestArgs / RestResponseArgs
 	// -----------------------------------------------------------------------------------------
 
-	@Test void u01_restRequestArgs_create_matchesRestRequest() {
-		var pi = firstParam(Fixture.class, "withRestRequest");
-		assertNotNull(RestRequestArgs.create(pi));
-	}
-
-	@Test void u02_restRequestArgs_create_matchesInputStream() {
-		var pi = firstParam(Fixture.class, "withInputStream");
+	@ParameterizedTest @ValueSource(strings = {"withRestRequest", "withInputStream", "withVarResolverSession"})
+	void u01_u02_w01_restRequestArgs_create_matchesKnownTypes(String fixtureMethod) {
+		var pi = firstParam(Fixture.class, fixtureMethod);
 		assertNotNull(RestRequestArgs.create(pi));
 	}
 
@@ -820,15 +816,6 @@ class RestArgResolvers_Test extends TestBase {
 	@Test void v04_sseSubscriptionArg_create_returnsNullForUnknownType() {
 		var pi = firstParam(Fixture.class, "noAnnotation");
 		assertNull(SseSubscriptionArg.create(pi));
-	}
-
-	// -----------------------------------------------------------------------------------------
-	// w — VarResolverSession via RestRequestArgs
-	// -----------------------------------------------------------------------------------------
-
-	@Test void w01_restRequestArgs_create_matchesVarResolverSession() {
-		var pi = firstParam(Fixture.class, "withVarResolverSession");
-		assertNotNull(RestRequestArgs.create(pi));
 	}
 
 	// -----------------------------------------------------------------------------------------

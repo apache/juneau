@@ -91,7 +91,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 *
 	 * @param statusLine The HTTP status line.  Must not be <jk>null</jk>.
 	 */
-	public BasicHttpResponse(BasicStatusLine statusLine) {
+	protected BasicHttpResponse(BasicStatusLine statusLine) {
 		setStatusLine(statusLine.copy());
 	}
 
@@ -103,7 +103,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 *
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 */
-	public BasicHttpResponse(HttpResponse response) {
+	protected BasicHttpResponse(HttpResponse response) {
 		assertArgNotNull(ARG_response, response);
 		setHeaders(response.getAllHeaders());
 		setContent(response.getEntity());

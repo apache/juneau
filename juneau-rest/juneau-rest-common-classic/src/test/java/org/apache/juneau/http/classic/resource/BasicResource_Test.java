@@ -245,13 +245,15 @@ class BasicResource_Test extends TestBase {
 		assertFalse(x.isUnmodifiable());
 		assertTrue(u.isUnmodifiable());
 		// The snapshot's direct-field mutator (setHeaders(HeaderList)) throws through the modify() funnel...
-		assertThrows(UnsupportedOperationException.class, () -> u.setHeaders(HeaderList.create().append("X", "y")));
+		var newHeaders = HeaderList.create().append("X", "y");
+		assertThrows(UnsupportedOperationException.class, () -> u.setHeaders(newHeaders));
 		// ...and the sub-bean-delegating mutators throw through the frozen entity/headers.
 		assertThrows(UnsupportedOperationException.class, () -> u.setContent("other"));
 		assertThrows(UnsupportedOperationException.class, () -> u.addHeader("X", "y"));
 		assertThrows(UnsupportedOperationException.class, () -> u.setHeader("X", "y"));
 		assertThrows(UnsupportedOperationException.class, () -> u.setChunked(true));
-		assertThrows(UnsupportedOperationException.class, () -> u.getHeaders().append("X", "y"));
+		var frozenHeaders = u.getHeaders();
+		assertThrows(UnsupportedOperationException.class, () -> frozenHeaders.append("X", "y"));
 	}
 
 	@Test void e03_unmodifiable_idempotent() {

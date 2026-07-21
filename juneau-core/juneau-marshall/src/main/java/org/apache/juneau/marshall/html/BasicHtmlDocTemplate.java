@@ -40,6 +40,7 @@ import org.apache.juneau.commons.utils.*;
 	"resource", // Resource management handled externally
 	"java:S112", // Generic exception thrown; template methods throw Exception for subclass flexibility
 	"java:S1192", // HTML tag names (e.g. aside, section) repeated in template; constants would obscure markup
+	"java:S110" // Body-var-resolving anonymous writer inherits the inherent CRTP writer chain (Writer->SerializerWriter->XmlWriter->HtmlWriter->BasicHtmlWriter); depth is not reducible without unwinding CRTP.
 })
 public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 

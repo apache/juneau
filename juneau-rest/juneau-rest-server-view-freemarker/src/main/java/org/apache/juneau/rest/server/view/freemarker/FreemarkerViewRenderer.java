@@ -98,6 +98,9 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 	// the bridge-default Configuration and its template cache are built once instead of rebuilt per render.
 	// Created lazily (not eagerly) so a missing FreeMarker engine still surfaces at render time as
 	// NO_ENGINE_DIAGNOSTIC rather than during RestContext construction.
+	@SuppressWarnings({
+		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-built fallback FreemarkerMixin in fallbackMixin(); the reference is publish-once (fully constructed before assignment, immutable thereafter) and never compound-mutated.
+	})
 	private volatile FreemarkerMixin fallbackMixin;
 
 	@Override /* Overridden from ResponseProcessor */

@@ -217,7 +217,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 		var proto = ser.write(m);
 		assertNotNull(proto);
-		// Whitespace between `:` and `{` may vary (single or double space); accept any.
+		// The separator whitespace between the field name and its message body may vary (one or two spaces), so accept either.
 		assertTrue(proto.contains("inner:") && proto.contains("{"), () -> "Expected 'inner:' and '{' in: " + proto);
 		assertTrue(proto.matches("(?s).*inner:\\s+\\{.*"), () -> "Expected 'inner:<ws>{' in: " + proto);
 	}

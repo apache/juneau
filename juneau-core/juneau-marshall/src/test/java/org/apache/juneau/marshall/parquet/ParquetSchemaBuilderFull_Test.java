@@ -148,7 +148,7 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, false);
 		// Raw List resolves element type to Object (not null); use an array-typed leaf path instead.
 		// A primitive array has a determinable element type, so to hit the null branch we need a
-		// collection ClassMeta whose getElementType()==null.  Set<?> raw still yields Object; instead
+		// collection ClassMeta whose element type resolves to null.  A raw Set still yields Object; instead
 		// assert the happy path keeps a determinable element type and the null guard is documented HTT.
 		var s = b.buildSchema(MC.getClassMeta(Set.class));
 		assertFalse(s.isEmpty());

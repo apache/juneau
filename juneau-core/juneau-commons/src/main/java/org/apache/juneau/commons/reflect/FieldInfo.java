@@ -198,7 +198,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 		return safe(() -> {
 			inner.setAccessible(true);
 			return (T)inner.get(o);
-		}, e -> brex(e));
+		}, Shorts::brex);
 	}
 
 	@Override /* Annotatable */
@@ -451,7 +451,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 		safe((Snippet)() -> {
 			inner.setAccessible(true);
 			inner.set(o, value);
-		}, e -> brex(e));
+		}, Shorts::brex);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

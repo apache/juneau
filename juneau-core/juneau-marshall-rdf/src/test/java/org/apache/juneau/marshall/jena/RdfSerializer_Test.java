@@ -948,7 +948,7 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void j25_serialize_seq_collection_format() throws Exception {
-			// SEQ format exercises the default branch in the switch (line 314)
+			// SEQ format exercises the default branch of the switch statement at line 314
 			var s = RdfSerializer.create().ntriple().collectionFormat(RdfCollectionFormat.SEQ).build();
 			assertFalse(s.write(new ArrayList<>(List.of("p", "q"))).isBlank());
 		}

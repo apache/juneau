@@ -75,15 +75,7 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 
 	}
 
-	private static class SimpleMapEntry {
-		final Object key;
-		final Object value;
-
-		SimpleMapEntry(Object key, Object value) {
-			this.key = key;
-			this.value = value;
-		}
-	}
+	private record SimpleMapEntry(Object key, Object value) {}
 
 	/**
 	 * Creates a new builder for this object.
@@ -327,8 +319,8 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 		out.startMap(entries.size());
 
 		entries.forEach(x -> {
-			Object value = x.value;
-			Object key = generalize(x.key, keyType);
+			Object value = x.value();
+			Object key = generalize(x.key(), keyType);
 			writeAnything(out, key, keyType, null, null);
 			writeAnything(out, value, valueType, null, null);
 		});

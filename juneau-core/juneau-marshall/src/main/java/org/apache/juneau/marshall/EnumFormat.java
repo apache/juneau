@@ -46,6 +46,9 @@ import java.util.*;
  * the parser-side {@code EnumFormat} setting. The parser-side setting is consulted only for genuinely
  * ambiguous input.
  */
+@SuppressWarnings({
+	"java:S115" // ARG_-prefixed arg-key constant uses the project's UPPER_camelCase convention.
+})
 public enum EnumFormat {
 
 	/** Sentinel meaning "no value configured" — falls through to the next-higher precedence level. */

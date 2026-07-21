@@ -52,6 +52,9 @@ import java.util.*;
  * <b>Beta — API subject to change:</b> This type is part of the next-generation typed tree model layered over the
  * {@code Marshalled*} collections and may change incompatibly in a future release.
  */
+@SuppressWarnings({
+	"java:S115" // ARG_-prefixed arg-key constants use the project's UPPER_camelCase convention.
+})
 public class JsonPointer {
 
 	/** Sentinel distinguishing an absent value from a present <jk>null</jk> value during traversal. */

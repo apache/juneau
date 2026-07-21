@@ -85,7 +85,8 @@ class MarshallerStaticStreamShortcuts_Test extends TestBase {
 			}
 			@Override public void close() { /* no-op */ }
 		};
-		assertThrows(SerializeException.class, () -> Json.of(Map.of("a", 1), badWriter));
+		var payload = Map.of("a", 1);
+		assertThrows(SerializeException.class, () -> Json.of(payload, badWriter));
 	}
 
 	@Test void a06_inputStreamIoExceptionWrappedAsParseException() {
@@ -103,6 +104,7 @@ class MarshallerStaticStreamShortcuts_Test extends TestBase {
 				throw new IOException("boom");
 			}
 		};
-		assertThrows(SerializeException.class, () -> MsgPack.of(Map.of("a", 1), badOut));
+		var payload = Map.of("a", 1);
+		assertThrows(SerializeException.class, () -> MsgPack.of(payload, badOut));
 	}
 }

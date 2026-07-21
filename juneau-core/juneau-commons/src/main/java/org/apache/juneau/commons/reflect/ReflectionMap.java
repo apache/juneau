@@ -269,20 +269,20 @@ public class ReflectionMap<V> {
 					if (k.endsWith(")")) {
 						int i = k.substring(0, k.indexOf('(')).lastIndexOf('.');
 						if (i == -1 || isUpperCase(k.charAt(i + 1))) {
-							constructorEntries.add(new ConstructorEntry<>(k, value));
+							constructorEntries.add(ConstructorEntry.parse(k, value));
 						} else {
-							methodEntries.add(new MethodEntry<>(k, value));
+							methodEntries.add(MethodEntry.parse(k, value));
 						}
 					} else {
 						var i = k.lastIndexOf('.');
 						if (i == -1) {
-							classEntries.add(new ClassEntry<>(k, value));
+							classEntries.add(ClassEntry.parse(k, value));
 						} else if (isUpperCase(k.charAt(i + 1))) {
-							classEntries.add(new ClassEntry<>(k, value));
-							fieldEntries.add(new FieldEntry<>(k, value));
+							classEntries.add(ClassEntry.parse(k, value));
+							fieldEntries.add(FieldEntry.parse(k, value));
 						} else {
-							methodEntries.add(new MethodEntry<>(k, value));
-							fieldEntries.add(new FieldEntry<>(k, value));
+							methodEntries.add(MethodEntry.parse(k, value));
+							fieldEntries.add(FieldEntry.parse(k, value));
 						}
 					}
 			});
@@ -333,20 +333,14 @@ public class ReflectionMap<V> {
 		}
 	}
 
-	private static class ClassEntry<V> {
+	private record ClassEntry<V>(String simpleName, String fullName, V value) {
 		// Property name constants
 		private static final String PROP_fullName = "fullName";
 		private static final String PROP_simpleName = "simpleName";
 		private static final String PROP_value = "value";
 
-		final String simpleName;
-		final String fullName;
-		final V value;
-
-		ClassEntry(String name, V value) {
-			this.simpleName = simpleClassName(name);
-			this.fullName = name;
-			this.value = value;
+		static <V> ClassEntry<V> parse(String name, V value) {
+			return new ClassEntry<>(simpleClassName(name), name, value);
 		}
 
 		public boolean matches(Class<?> c) {
@@ -370,29 +364,22 @@ public class ReflectionMap<V> {
 		}
 	}
 
-	private static class ConstructorEntry<V> {
+	private record ConstructorEntry<V>(String simpleClassName, String fullClassName, String[] args, V value) {
 		// Property name constants
 		private static final String PROP_args = "args";
 		private static final String PROP_fullClassName = "fullClassName";
 		private static final String PROP_simpleClassName = "simpleClassName";
 		private static final String PROP_value = "value";
 
-		String simpleClassName;
-		String fullClassName;
-		String[] args;
-		V value;
-
-		ConstructorEntry(String name, V value) {
+		static <V> ConstructorEntry<V> parse(String name, V value) {
 			var i = name.indexOf('(');
-			this.args = splitMethodArgs(name.substring(i + 1, name.length() - 1));
+			var args = splitMethodArgs(name.substring(i + 1, name.length() - 1));
 			for (var j = 0; j < args.length; j++) {
 				// Strip off generic parameters (e.g., "List<String>[]" -> "List[]")
 				args[j] = stripGenerics(args[j]);
 			}
-			name = name.substring(0, i).trim();
-			this.simpleClassName = simpleClassName(name);
-			this.fullClassName = name;
-			this.value = value;
+			var cn = name.substring(0, i).trim();
+			return new ConstructorEntry<>(ReflectionMap.simpleClassName(cn), cn, args, value);
 		}
 
 		public boolean matches(Constructor<?> m) {
@@ -400,6 +387,20 @@ public class ReflectionMap<V> {
 				return false;
 			var c = m.getDeclaringClass();
 			return classMatches(simpleClassName, fullClassName, c) && (argsMatch(args, m.getParameterTypes()));
+		}
+
+		@Override /* Content-based: the 'args' array must compare by content, not identity (S6218). */
+		public boolean equals(Object o) {
+			return o instanceof ConstructorEntry<?> e
+				&& eq(simpleClassName, e.simpleClassName)
+				&& eq(fullClassName, e.fullClassName)
+				&& Arrays.equals(args, e.args)
+				&& eq(value, e.value);
+		}
+
+		@Override
+		public int hashCode() {
+			return 31 * Objects.hash(simpleClassName, fullClassName, value) + Arrays.hashCode(args);
 		}
 
 		protected FluentMap<String,Object> properties() {
@@ -418,26 +419,18 @@ public class ReflectionMap<V> {
 		}
 	}
 
-	private static class FieldEntry<V> {
+	private record FieldEntry<V>(String simpleClassName, String fullClassName, String fieldName, V value) {
 		// Property name constants
 		private static final String PROP_fieldName = "fieldName";
 		private static final String PROP_fullClassName = "fullClassName";
 		private static final String PROP_simpleClassName = "simpleClassName";
 		private static final String PROP_value = "value";
 
-		String simpleClassName;
-		String fullClassName;
-		String fieldName;
-		V value;
-
-		FieldEntry(String name, V value) {
+		static <V> FieldEntry<V> parse(String name, V value) {
 			var i = name.lastIndexOf('.');
 			var s1 = name.substring(0, i);
 			var s2 = name.substring(i + 1);
-			this.simpleClassName = simpleClassName(s1);
-			this.fullClassName = s1;
-			this.fieldName = s2;
-			this.value = value;
+			return new FieldEntry<>(ReflectionMap.simpleClassName(s1), s1, s2, value);
 		}
 
 		public boolean matches(Field f) {
@@ -463,7 +456,7 @@ public class ReflectionMap<V> {
 		}
 	}
 
-	private static class MethodEntry<V> {
+	private record MethodEntry<V>(String simpleClassName, String fullClassName, String methodName, String[] args, V value) {
 		// Property name constants
 		private static final String PROP_args = "args";
 		private static final String PROP_fullClassName = "fullClassName";
@@ -471,29 +464,20 @@ public class ReflectionMap<V> {
 		private static final String PROP_simpleClassName = "simpleClassName";
 		private static final String PROP_value = "value";
 
-		String simpleClassName;
-		String fullClassName;
-		String methodName;
-		String[] args;
-		V value;
-
-		MethodEntry(String name, V value) {
+		static <V> MethodEntry<V> parse(String name, V value) {
 			var i = name.indexOf('(');
-			this.args = i == -1 ? null : splitMethodArgs(name.substring(i + 1, name.length() - 1));
+			var args = i == -1 ? null : splitMethodArgs(name.substring(i + 1, name.length() - 1));
 			if (nn(args)) {
 				for (var j = 0; j < args.length; j++) {
 					// Strip off generic parameters (e.g., "List<String>[]" -> "List[]")
 					args[j] = stripGenerics(args[j]);
 				}
 			}
-			name = i == -1 ? name : name.substring(0, i);
-			i = name.lastIndexOf('.');
-			var s1 = name.substring(0, i).trim();
-			var s2 = name.substring(i + 1).trim();
-			this.simpleClassName = simpleClassName(s1);
-			this.fullClassName = s1;
-			this.methodName = s2;
-			this.value = value;
+			var n = i == -1 ? name : name.substring(0, i);
+			i = n.lastIndexOf('.');
+			var s1 = n.substring(0, i).trim();
+			var s2 = n.substring(i + 1).trim();
+			return new MethodEntry<>(ReflectionMap.simpleClassName(s1), s1, s2, args, value);
 		}
 
 		public boolean matches(Method m) {
@@ -506,6 +490,21 @@ public class ReflectionMap<V> {
 				&& (eq(m.getName(), methodName))
 				&& (argsMatch(args, m.getParameterTypes()));
 			// @formatter:on
+		}
+
+		@Override /* Content-based: the 'args' array must compare by content, not identity (S6218). */
+		public boolean equals(Object o) {
+			return o instanceof MethodEntry<?> e
+				&& eq(simpleClassName, e.simpleClassName)
+				&& eq(fullClassName, e.fullClassName)
+				&& eq(methodName, e.methodName)
+				&& Arrays.equals(args, e.args)
+				&& eq(value, e.value);
+		}
+
+		@Override
+		public int hashCode() {
+			return 31 * Objects.hash(simpleClassName, fullClassName, methodName, value) + Arrays.hashCode(args);
 		}
 
 		protected FluentMap<String,Object> properties() {
@@ -685,7 +684,7 @@ public class ReflectionMap<V> {
 	 * @return A stream of all values associated with the class. Empty stream if no matches found.
 	 */
 	public Stream<V> find(Class<?> c) {
-		return classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value);
+		return classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value());
 	}
 
 	/**
@@ -711,7 +710,7 @@ public class ReflectionMap<V> {
 	 * @return A stream of all values associated with the constructor. Empty stream if no matches found.
 	 */
 	public Stream<V> find(Constructor<?> c) {
-		return constructorEntries.stream().filter(x -> x.matches(c)).map(x -> x.value);
+		return constructorEntries.stream().filter(x -> x.matches(c)).map(x -> x.value());
 	}
 
 	/**
@@ -737,7 +736,7 @@ public class ReflectionMap<V> {
 	 * @return A stream of all values associated with the field. Empty stream if no matches found.
 	 */
 	public Stream<V> find(Field f) {
-		return fieldEntries.stream().filter(x -> x.matches(f)).map(x -> x.value);
+		return fieldEntries.stream().filter(x -> x.matches(f)).map(x -> x.value());
 	}
 
 	/**
@@ -765,7 +764,7 @@ public class ReflectionMap<V> {
 	 * @return A stream of all values associated with the method. Empty stream if no matches found.
 	 */
 	public Stream<V> find(Method m) {
-		return methodEntries.stream().filter(x -> x.matches(m)).map(x -> x.value);
+		return methodEntries.stream().filter(x -> x.matches(m)).map(x -> x.value());
 	}
 
 	protected FluentMap<String,Object> properties() {

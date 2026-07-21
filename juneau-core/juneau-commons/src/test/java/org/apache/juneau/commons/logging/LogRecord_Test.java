@@ -195,7 +195,8 @@ class LogRecord_Test extends TestBase {
 		);
 	}
 
-	@Disabled // TODO: stack-walk source detection is unreliable in this JVM/test-runner combination — revisit
+	// Stack-walk source detection is unreliable in this JVM/test-runner combination; revisit if source-detection accuracy becomes important.
+	@Disabled("stack-walk source detection is unreliable in this JVM/test-runner combination")
 	@Test void d04_formatted_classAndMethod() {
 		// Create LogRecord through Logger to get proper call stack
 		// findSource() filters out LogRecord, Logger, and lambda methods, so test classes are included
@@ -265,7 +266,8 @@ class LogRecord_Test extends TestBase {
 		assertTrue(formatted.contains("RuntimeException"));
 	}
 
-	@Disabled // TODO: stack-walk source detection is unreliable in this JVM/test-runner combination — revisit
+	// Stack-walk source detection is unreliable in this JVM/test-runner combination; revisit if source-detection accuracy becomes important.
+	@Disabled("stack-walk source detection is unreliable in this JVM/test-runner combination")
 	@Test void d12_formatted_source() {
 		// Create LogRecord through Logger to get proper call stack
 		// findSource() now only filters out LogRecord and Logger classes, so test classes are included
