@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -68,6 +69,43 @@ public class GetPromptResult {
 	 */
 	public GetPromptResult setMessages(List<PromptMessage> value) {
 		messages = value;
+		return this;
+	}
+
+	/**
+	 * Sets rendered messages.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public GetPromptResult setMessages(PromptMessage...value) {
+		messages = list(value);
+		return this;
+	}
+
+	/**
+	 * Appends to the rendered messages.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public GetPromptResult addMessages(PromptMessage...value) {
+		if (messages == null)
+			messages = list();
+		Collections.addAll(messages, value);
+		return this;
+	}
+
+	/**
+	 * Appends to the rendered messages.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public GetPromptResult addMessages(Collection<PromptMessage> value) {
+		if (messages == null)
+			messages = list();
+		messages.addAll(value);
 		return this;
 	}
 }

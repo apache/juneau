@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -131,6 +132,20 @@ public class ServerCapabilities {
 	 */
 	public ServerCapabilities setExperimental(Map<String, Object> value) {
 		experimental = value;
+		return this;
+	}
+
+	/**
+	 * Convenience method to add a single experimental extension entry.
+	 *
+	 * @param name The extension name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The extension value.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object (for method chaining).
+	 */
+	public ServerCapabilities putExperimental(String name, Object value) {
+		if (experimental == null)
+			experimental = map();
+		experimental.put(name, value);
 		return this;
 	}
 }

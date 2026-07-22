@@ -438,6 +438,18 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	}
 
 	/**
+	 * Bean property appender:  <property>allOf</property>.
+	 *
+	 * @param value The collection of items to append to the <property>allOf</property> property on this bean.
+	 * @return This object.
+	 */
+	public SELF addAllOf(Collection<JsonSchema<?>> value) {
+		setMasterOn(value);
+		this.allOf = addAll(this.allOf, value == null ? null : new ArrayList<>(value));
+		return self();
+	}
+
+	/**
 	 * Bean property appender:  <property>anyOf</property>.
 	 *
 	 * @param value The list of items to append to the <property>anyOf</property> property on this bean.
@@ -449,6 +461,20 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 		setMasterOn(value);
 		for (var s : value)
 			this.anyOf.add(s);
+		return self();
+	}
+
+	/**
+	 * Bean property appender:  <property>anyOf</property>.
+	 *
+	 * @param value The collection of items to append to the <property>anyOf</property> property on this bean.
+	 * @return This object.
+	 */
+	public SELF addAnyOf(Collection<JsonSchema<?>> value) {
+		if (this.anyOf == null)
+			this.anyOf = new LinkedList<>();
+		setMasterOn(value);
+		this.anyOf.addAll(value);
 		return self();
 	}
 
@@ -541,6 +567,19 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	}
 
 	/**
+	 * Bean property appender:  <property>enum</property>.
+	 *
+	 * @param value The collection of items to append to the <property>enum</property> property on this bean.
+	 * @return This object.
+	 */
+	public SELF addEnum(Collection<Object> value) {
+		if (this.enum_ == null)
+			this.enum_ = new LinkedList<>();
+		this.enum_.addAll(value);
+		return self();
+	}
+
+	/**
 	 * Bean property appender:  <property>examples</property>.
 	 *
 	 * @param value The list of items to append to the <property>examples</property> property on this bean.
@@ -551,6 +590,19 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 			this.examples = new LinkedList<>();
 		for (var e : value)
 			this.examples.add(e);
+		return self();
+	}
+
+	/**
+	 * Bean property appender:  <property>examples</property>.
+	 *
+	 * @param value The collection of items to append to the <property>examples</property> property on this bean.
+	 * @return This object.
+	 */
+	public SELF addExamples(Collection<Object> value) {
+		if (this.examples == null)
+			this.examples = new LinkedList<>();
+		this.examples.addAll(value);
 		return self();
 	}
 
@@ -584,6 +636,20 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	}
 
 	/**
+	 * Bean property appender:  <property>oneOf</property>.
+	 *
+	 * @param value The collection of items to append to the <property>oneOf</property> property on this bean.
+	 * @return This object.
+	 */
+	public SELF addOneOf(Collection<JsonSchema<?>> value) {
+		if (this.oneOf == null)
+			this.oneOf = new LinkedList<>();
+		setMasterOn(value);
+		this.oneOf.addAll(value);
+		return self();
+	}
+
+	/**
 	 * Bean property appender:  <property>patternProperties</property>.
 	 *
 	 * <p>
@@ -602,6 +668,28 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 			setMasterOn(p);
 			this.patternProperties.put(p.getName(), p);
 		}
+		return self();
+	}
+
+	/**
+	 * Bean property appender:  <property>patternProperties</property>.
+	 *
+	 * <p>
+	 * Unlike {@link #addPatternProperties(JsonSchemaProperty...)}, this keyed form does not require the value's
+	 * <property>name</property> property to be pre-set — it is set automatically from {@code name}.
+	 *
+	 * @param name The key in the patternProperties map entry.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The value in the patternProperties map entry.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object.
+	 */
+	public SELF addPatternProperty(String name, JsonSchema<?> value) {
+		if (this.patternProperties == null)
+			this.patternProperties = map();
+		if (value != null) {
+			setMasterOn(value);
+			value.setName(name);
+		}
+		this.patternProperties.put(name, value);
 		return self();
 	}
 
@@ -638,6 +726,28 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 			setMasterOn(p);
 			this.properties.put(p.getName(), p);
 		}
+		return self();
+	}
+
+	/**
+	 * Bean property appender:  <property>properties</property>.
+	 *
+	 * <p>
+	 * Unlike {@link #addProperties(JsonSchema...)}, this keyed form does not require the value's
+	 * <property>name</property> property to be pre-set — it is set automatically from {@code name}.
+	 *
+	 * @param name The key in the properties map entry.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The value in the properties map entry.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object.
+	 */
+	public SELF addProperty(String name, JsonSchema<?> value) {
+		if (this.properties == null)
+			this.properties = map();
+		if (value != null) {
+			setMasterOn(value);
+			value.setName(name);
+		}
+		this.properties.put(name, value);
 		return self();
 	}
 
@@ -1427,6 +1537,16 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	}
 
 	/**
+	 * Bean property setter:  <property>allOf</property>.
+	 *
+	 * @param value The new value for the <property>allOf</property> property on this bean.
+	 * @return This object.
+	 */
+	public SELF setAllOf(JsonSchema<?>...value) {
+		return setAllOf(list(value));
+	}
+
+	/**
 	 * Bean property setter:  <property>anyOf</property>.
 	 *
 	 * @param value The new value of the <property>anyOf</property> property on this bean.
@@ -1436,6 +1556,16 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 		this.anyOf = value;
 		setMasterOn(value);
 		return self();
+	}
+
+	/**
+	 * Bean property setter:  <property>anyOf</property>.
+	 *
+	 * @param value The new value for the <property>anyOf</property> property on this bean.
+	 * @return This object.
+	 */
+	public SELF setAnyOf(JsonSchema<?>...value) {
+		return setAnyOf(list(value));
 	}
 
 	/**
@@ -1633,6 +1763,16 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	}
 
 	/**
+	 * Bean property setter:  <property>enum</property>.
+	 *
+	 * @param value The new value for the <property>enum</property> property on this bean.
+	 * @return This object.
+	 */
+	public SELF setEnum(Object...value) {
+		return setEnum(list(value));
+	}
+
+	/**
 	 * Bean property setter:  <property>examples</property>.
 	 *
 	 * <p>
@@ -1644,6 +1784,19 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	public SELF setExamples(List<Object> value) {
 		this.examples = value;
 		return self();
+	}
+
+	/**
+	 * Bean property setter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 06.
+	 *
+	 * @param value The new value for the <property>examples</property> property on this bean.
+	 * @return This object.
+	 */
+	public SELF setExamples(Object...value) {
+		return setExamples(list(value));
 	}
 
 	/**
@@ -1907,6 +2060,16 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	}
 
 	/**
+	 * Bean property setter:  <property>oneOf</property>.
+	 *
+	 * @param value The new value for the <property>oneOf</property> property on this bean.
+	 * @return This object.
+	 */
+	public SELF setOneOf(JsonSchema<?>...value) {
+		return setOneOf(list(value));
+	}
+
+	/**
 	 * Bean property setter:  <property>pattern</property>.
 	 *
 	 * @param value The new value for the <property>pattern</property> property on this bean.
@@ -2010,6 +2173,16 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	public SELF setRequired(List<String> value) {
 		this.required = value;
 		return self();
+	}
+
+	/**
+	 * Bean property setter:  <property>required</property>.
+	 *
+	 * @param value The new value for the <property>required</property> property on this bean.
+	 * @return This object.
+	 */
+	public SELF setRequired(String...value) {
+		return setRequired(list(value));
 	}
 
 	/**

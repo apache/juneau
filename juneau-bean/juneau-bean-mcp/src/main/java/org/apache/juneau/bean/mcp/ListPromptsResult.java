@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -48,6 +49,43 @@ public class ListPromptsResult {
 	 */
 	public ListPromptsResult setPrompts(List<Prompt> value) {
 		prompts = value;
+		return this;
+	}
+
+	/**
+	 * Sets the prompt descriptors.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ListPromptsResult setPrompts(Prompt...value) {
+		prompts = list(value);
+		return this;
+	}
+
+	/**
+	 * Appends to the prompt descriptors.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public ListPromptsResult addPrompts(Prompt...value) {
+		if (prompts == null)
+			prompts = list();
+		Collections.addAll(prompts, value);
+		return this;
+	}
+
+	/**
+	 * Appends to the prompt descriptors.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public ListPromptsResult addPrompts(Collection<Prompt> value) {
+		if (prompts == null)
+			prompts = list();
+		prompts.addAll(value);
 		return this;
 	}
 

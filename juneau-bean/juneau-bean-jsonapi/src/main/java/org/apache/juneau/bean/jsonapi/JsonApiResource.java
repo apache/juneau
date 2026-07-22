@@ -208,6 +208,20 @@ public class JsonApiResource {
 	}
 
 	/**
+	 * Convenience method to add a single link.
+	 *
+	 * @param name The link name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The link value (a {@link String} URL or a {@link JsonApiLink} object).  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object.
+	 */
+	public JsonApiResource putLink(String name, Object value) {
+		if (links == null)
+			links = map();
+		links.put(name, value);
+		return this;
+	}
+
+	/**
 	 * Bean property getter:  <property>meta</property>.
 	 *
 	 * @return The value of the <property>meta</property> property, or <jk>null</jk> if it is not set.
@@ -222,6 +236,20 @@ public class JsonApiResource {
 	 */
 	public JsonApiResource setMeta(Map<String,Object> value) {
 		meta = value;
+		return this;
+	}
+
+	/**
+	 * Convenience method to add a single meta entry.
+	 *
+	 * @param name The meta key.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The meta value.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object.
+	 */
+	public JsonApiResource putMeta(String name, Object value) {
+		if (meta == null)
+			meta = map();
+		meta.put(name, value);
 		return this;
 	}
 

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -89,6 +90,43 @@ public class Prompt {
 	 */
 	public Prompt setArguments(List<PromptArgument> value) {
 		arguments = value;
+		return this;
+	}
+
+	/**
+	 * Sets declared arguments.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Prompt setArguments(PromptArgument...value) {
+		arguments = list(value);
+		return this;
+	}
+
+	/**
+	 * Appends to the declared arguments.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public Prompt addArguments(PromptArgument...value) {
+		if (arguments == null)
+			arguments = list();
+		Collections.addAll(arguments, value);
+		return this;
+	}
+
+	/**
+	 * Appends to the declared arguments.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public Prompt addArguments(Collection<PromptArgument> value) {
+		if (arguments == null)
+			arguments = list();
+		arguments.addAll(value);
 		return this;
 	}
 }

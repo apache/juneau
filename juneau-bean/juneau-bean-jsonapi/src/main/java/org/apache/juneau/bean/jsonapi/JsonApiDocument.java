@@ -130,6 +130,17 @@ public class JsonApiDocument {
 	}
 
 	/**
+	 * Bean property setter:  <property>errors</property>.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public JsonApiDocument setErrors(JsonApiError...value) {
+		errors = list(value);
+		return this;
+	}
+
+	/**
 	 * Bean property appender:  <property>errors</property>.
 	 *
 	 * @param value The error objects to append.
@@ -139,6 +150,19 @@ public class JsonApiDocument {
 		if (errors == null)
 			errors = list();
 		Collections.addAll(errors, value);
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>errors</property>.
+	 *
+	 * @param value The error objects to append.
+	 * @return This object.
+	 */
+	public JsonApiDocument addErrors(Collection<JsonApiError> value) {
+		if (errors == null)
+			errors = list();
+		errors.addAll(value);
 		return this;
 	}
 
@@ -157,6 +181,20 @@ public class JsonApiDocument {
 	 */
 	public JsonApiDocument setMeta(Map<String,Object> value) {
 		meta = value;
+		return this;
+	}
+
+	/**
+	 * Convenience method to add a single meta entry.
+	 *
+	 * @param name The meta key.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The meta value.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object.
+	 */
+	public JsonApiDocument putMeta(String name, Object value) {
+		if (meta == null)
+			meta = map();
+		meta.put(name, value);
 		return this;
 	}
 
@@ -204,6 +242,20 @@ public class JsonApiDocument {
 	}
 
 	/**
+	 * Convenience method to add a single link.
+	 *
+	 * @param name The link name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The link value (a {@link String} URL or a {@link JsonApiLink} object).  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object.
+	 */
+	public JsonApiDocument putLink(String name, Object value) {
+		if (links == null)
+			links = map();
+		links.put(name, value);
+		return this;
+	}
+
+	/**
 	 * Bean property getter:  <property>included</property>.
 	 *
 	 * @return The value of the <property>included</property> property, or <jk>null</jk> if it is not set.
@@ -222,6 +274,17 @@ public class JsonApiDocument {
 	}
 
 	/**
+	 * Bean property setter:  <property>included</property>.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public JsonApiDocument setIncluded(JsonApiResource...value) {
+		included = list(value);
+		return this;
+	}
+
+	/**
 	 * Bean property appender:  <property>included</property>.
 	 *
 	 * @param value The resource objects to append.
@@ -231,6 +294,19 @@ public class JsonApiDocument {
 		if (included == null)
 			included = list();
 		Collections.addAll(included, value);
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>included</property>.
+	 *
+	 * @param value The resource objects to append.
+	 * @return This object.
+	 */
+	public JsonApiDocument addIncluded(Collection<JsonApiResource> value) {
+		if (included == null)
+			included = list();
+		included.addAll(value);
 		return this;
 	}
 

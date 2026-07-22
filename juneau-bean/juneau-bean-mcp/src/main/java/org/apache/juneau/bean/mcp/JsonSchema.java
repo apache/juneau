@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -79,6 +80,20 @@ public class JsonSchema {
 	}
 
 	/**
+	 * Convenience method to add a single property schema.
+	 *
+	 * @param name The property name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The property schema.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema addProperty(String name, JsonSchema value) {
+		if (properties == null)
+			properties = map();
+		properties.put(name, value);
+		return this;
+	}
+
+	/**
 	 * Required property names.
 	 *
 	 * @return The required list, or {@code null} if not set.
@@ -95,6 +110,43 @@ public class JsonSchema {
 	 */
 	public JsonSchema setRequired(List<String> value) {
 		required = value;
+		return this;
+	}
+
+	/**
+	 * Sets required property names.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema setRequired(String...value) {
+		required = list(value);
+		return this;
+	}
+
+	/**
+	 * Appends to the required property names.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema addRequired(String...value) {
+		if (required == null)
+			required = list();
+		Collections.addAll(required, value);
+		return this;
+	}
+
+	/**
+	 * Appends to the required property names.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema addRequired(Collection<String> value) {
+		if (required == null)
+			required = list();
+		required.addAll(value);
 		return this;
 	}
 
@@ -155,6 +207,20 @@ public class JsonSchema {
 	 */
 	public JsonSchema setDefs(Map<String, JsonSchema> value) {
 		defs = value;
+		return this;
+	}
+
+	/**
+	 * Convenience method to add a single reusable sub-schema.
+	 *
+	 * @param name The sub-schema name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The sub-schema.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema addDef(String name, JsonSchema value) {
+		if (defs == null)
+			defs = map();
+		defs.put(name, value);
 		return this;
 	}
 }

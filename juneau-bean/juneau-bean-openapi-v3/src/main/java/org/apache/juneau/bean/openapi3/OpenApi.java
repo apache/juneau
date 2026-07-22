@@ -461,6 +461,17 @@ public class OpenApi extends OpenApiElement {
 	}
 
 	/**
+	 * Sets the security requirements list.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public OpenApi setSecurity(SecurityRequirement...value) {
+		setSecurity(toListBuilder(value, SecurityRequirement.class).sparse().build());
+		return this;
+	}
+
+	/**
 	 * Sets the servers list.
 	 *
 	 * @param value The new value for this property.
@@ -470,6 +481,17 @@ public class OpenApi extends OpenApiElement {
 		servers.clear();
 		if (nn(value))
 			servers.addAll(value);
+		return this;
+	}
+
+	/**
+	 * Sets the servers list.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public OpenApi setServers(Server...value) {
+		setServers(toListBuilder(value, Server.class).sparse().build());
 		return this;
 	}
 

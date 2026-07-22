@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -68,6 +69,20 @@ public class GetPromptRequest {
 	 */
 	public GetPromptRequest setArguments(Map<String, Object> value) {
 		arguments = value;
+		return this;
+	}
+
+	/**
+	 * Convenience method to add a single argument value.
+	 *
+	 * @param name The argument name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The argument value.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object (for method chaining).
+	 */
+	public GetPromptRequest putArgument(String name, Object value) {
+		if (arguments == null)
+			arguments = map();
+		arguments.put(name, value);
 		return this;
 	}
 }

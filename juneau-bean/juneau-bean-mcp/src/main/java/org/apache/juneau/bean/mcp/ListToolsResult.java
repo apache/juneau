@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -48,6 +49,43 @@ public class ListToolsResult {
 	 */
 	public ListToolsResult setTools(List<Tool> value) {
 		tools = value;
+		return this;
+	}
+
+	/**
+	 * Sets the tool descriptors.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ListToolsResult setTools(Tool...value) {
+		tools = list(value);
+		return this;
+	}
+
+	/**
+	 * Appends to the tool descriptors.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public ListToolsResult addTools(Tool...value) {
+		if (tools == null)
+			tools = list();
+		Collections.addAll(tools, value);
+		return this;
+	}
+
+	/**
+	 * Appends to the tool descriptors.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public ListToolsResult addTools(Collection<Tool> value) {
+		if (tools == null)
+			tools = list();
+		tools.addAll(value);
 		return this;
 	}
 

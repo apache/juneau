@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -48,6 +49,43 @@ public class ListResourcesResult {
 	 */
 	public ListResourcesResult setResources(List<Resource> value) {
 		resources = value;
+		return this;
+	}
+
+	/**
+	 * Sets the resource descriptors.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ListResourcesResult setResources(Resource...value) {
+		resources = list(value);
+		return this;
+	}
+
+	/**
+	 * Appends to the resource descriptors.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public ListResourcesResult addResources(Resource...value) {
+		if (resources == null)
+			resources = list();
+		Collections.addAll(resources, value);
+		return this;
+	}
+
+	/**
+	 * Appends to the resource descriptors.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public ListResourcesResult addResources(Collection<Resource> value) {
+		if (resources == null)
+			resources = list();
+		resources.addAll(value);
 		return this;
 	}
 

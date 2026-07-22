@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.jsonapi;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -110,6 +111,20 @@ public class JsonApiResourceIdentifier {
 	 */
 	public JsonApiResourceIdentifier setMeta(Map<String,Object> value) {
 		meta = value;
+		return this;
+	}
+
+	/**
+	 * Convenience method to add a single meta entry.
+	 *
+	 * @param name The meta key.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The meta value.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object.
+	 */
+	public JsonApiResourceIdentifier putMeta(String name, Object value) {
+		if (meta == null)
+			meta = map();
+		meta.put(name, value);
 		return this;
 	}
 

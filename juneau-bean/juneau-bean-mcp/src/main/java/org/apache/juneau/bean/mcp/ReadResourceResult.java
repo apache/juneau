@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -47,6 +48,43 @@ public class ReadResourceResult {
 	 */
 	public ReadResourceResult setContents(List<ResourceContents> value) {
 		contents = value;
+		return this;
+	}
+
+	/**
+	 * Sets resource bodies.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ReadResourceResult setContents(ResourceContents...value) {
+		contents = list(value);
+		return this;
+	}
+
+	/**
+	 * Appends to the resource bodies.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public ReadResourceResult addContents(ResourceContents...value) {
+		if (contents == null)
+			contents = list();
+		Collections.addAll(contents, value);
+		return this;
+	}
+
+	/**
+	 * Appends to the resource bodies.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public ReadResourceResult addContents(Collection<ResourceContents> value) {
+		if (contents == null)
+			contents = list();
+		contents.addAll(value);
 		return this;
 	}
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.jsonapi;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -89,6 +90,20 @@ public class JsonApiError {
 	@Swap(JsonApiLinkOrStringSwap.class)
 	public JsonApiError setLinks(Map<String,Object> value) {
 		links = value;
+		return this;
+	}
+
+	/**
+	 * Convenience method to add a single link.
+	 *
+	 * @param name The link name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The link value (a {@link String} URL or a {@link JsonApiLink} object).  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object.
+	 */
+	public JsonApiError putLink(String name, Object value) {
+		if (links == null)
+			links = map();
+		links.put(name, value);
 		return this;
 	}
 
@@ -203,6 +218,20 @@ public class JsonApiError {
 	 */
 	public JsonApiError setMeta(Map<String,Object> value) {
 		meta = value;
+		return this;
+	}
+
+	/**
+	 * Convenience method to add a single meta entry.
+	 *
+	 * @param name The meta key.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The meta value.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object.
+	 */
+	public JsonApiError putMeta(String name, Object value) {
+		if (meta == null)
+			meta = map();
+		meta.put(name, value);
 		return this;
 	}
 

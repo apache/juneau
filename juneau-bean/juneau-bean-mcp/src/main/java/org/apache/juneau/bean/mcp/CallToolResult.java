@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -48,6 +49,43 @@ public class CallToolResult {
 	 */
 	public CallToolResult setContent(List<Content> value) {
 		content = value;
+		return this;
+	}
+
+	/**
+	 * Sets the content blocks.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public CallToolResult setContent(Content...value) {
+		content = list(value);
+		return this;
+	}
+
+	/**
+	 * Appends to the content blocks.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public CallToolResult addContent(Content...value) {
+		if (content == null)
+			content = list();
+		Collections.addAll(content, value);
+		return this;
+	}
+
+	/**
+	 * Appends to the content blocks.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public CallToolResult addContent(Collection<Content> value) {
+		if (content == null)
+			content = list();
+		content.addAll(value);
 		return this;
 	}
 
