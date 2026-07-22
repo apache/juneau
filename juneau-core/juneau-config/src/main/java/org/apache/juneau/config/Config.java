@@ -194,8 +194,8 @@ public class Config extends Context implements ConfigEventListener {
 		 * 	The new value for this property.
 		 * 	<br>The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"Config.binaryFormat"
-		 * 		<li>Environment variable <js>"CONFIG_BINARYFORMAT"
+		 * 		<li>System property <js>"Config.binaryFormat"</js>
+		 * 		<li>Environment variable <js>"CONFIG_BINARYFORMAT"</js>
 		 * 		<li>{@link BinaryFormat#BASE64}
 		 * 	</ul>
 		 * 	<br>Cannot be <jk>null</jk>.
@@ -217,8 +217,8 @@ public class Config extends Context implements ConfigEventListener {
 		 * 	The new value for this property.
 		 * 	<br>The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"Config.binaryLineLength"
-		 * 		<li>Environment variable <js>"CONFIG_BINARYLINELENGTH"
+		 * 		<li>System property <js>"Config.binaryLineLength"</js>
+		 * 		<li>Environment variable <js>"CONFIG_BINARYLINELENGTH"</js>
 		 * 		<li><c>-1</c>
 		 * 	</ul>
 		 * @return This object.
@@ -278,8 +278,8 @@ public class Config extends Context implements ConfigEventListener {
 		 * <p>
 		 * The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"Config.multiLineValuesOnSeparateLine"
-		 * 		<li>Environment variable <js>"CONFIG_MULTILINEVALUESONSEPARATELINE"
+		 * 		<li>System property <js>"Config.multiLineValuesOnSeparateLine"</js>
+		 * 		<li>Environment variable <js>"CONFIG_MULTILINEVALUESONSEPARATELINE"</js>
 		 * 		<li><jk>false</jk>
 		 * 	</ul>
 		 *
@@ -302,8 +302,8 @@ public class Config extends Context implements ConfigEventListener {
 		 * 	The new value for this property.
 		 * 	<br>The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"Config.name"
-		 * 		<li>Environment variable <js>"CONFIG_NAME"
+		 * 		<li>System property <js>"Config.name"</js>
+		 * 		<li>Environment variable <js>"CONFIG_NAME"</js>
 		 * 		<li><js>"Configuration.cfg"</js>
 		 * 	</ul>
 		 * 	<br>Cannot be <jk>null</jk>.
@@ -397,8 +397,8 @@ public class Config extends Context implements ConfigEventListener {
 		 * <p>
 		 * 	The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"Config.readOnly"
-		 * 		<li>Environment variable <js>"CONFIG_READONLY"
+		 * 		<li>System property <js>"Config.readOnly"</js>
+		 * 		<li>Environment variable <js>"CONFIG_READONLY"</js>
 		 * 		<li><jk>false</jk>
 		 * 	</ul>
 		 *

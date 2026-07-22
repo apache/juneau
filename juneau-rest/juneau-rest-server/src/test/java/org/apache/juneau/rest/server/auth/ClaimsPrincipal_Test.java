@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -108,7 +110,7 @@ class ClaimsPrincipal_Test extends TestBase {
 	@Test void b07_getClaimListValueDirectReturn() {
 		var p = new ClaimsPrincipal("alice", Map.of("aud", List.of("api", "admin")));
 		var aud = p.getClaim("aud", List.class).orElseThrow();
-		Assertions.assertEquals(2, aud.size());
+		assertList(aud, "api", "admin");
 	}
 
 	@Test void b08_getClaimRejectsNullArgs() {

@@ -28,7 +28,7 @@ class RrpcInterfaceMethodMeta_Test extends TestBase {
 
 	// Regression: getHeaderDefault/getQueryDefault/getFormDataDefault/getPathDefault(null) NPE'd because they
 	// delegated straight into a null-hostile Map.of()-backed map, despite each documenting an "or null" @return.
-	@Test void getXxxDefault_nullName() throws Exception {
+	@Test void a01_getXxxDefault_nullName() throws Exception {
 		var m = Object.class.getMethod("toString");
 		var meta = new RrpcInterfaceMethodMeta(m, "POST", "/x", RemoteReturn.BODY);
 

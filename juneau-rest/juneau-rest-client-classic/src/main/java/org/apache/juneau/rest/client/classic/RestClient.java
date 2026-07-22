@@ -8018,8 +8018,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 
 	/*
 	 * Returns the parser that best matches the specified content type.
-	 * If no match found or the content type is null, returns the parser in the list if it's a list of one.
-	 * Returns null if no parsers are defined.
+	 * If no match found or the content type is <jk>null</jk>, returns the parser in the list if it's a list of one.
+	 * Returns <jk>null</jk> if no parsers are defined.
 	 */
 	Parser getMatchingParser(String mediaType) {
 		if (parsers.isEmpty())
@@ -8035,8 +8035,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 
 	/*
 	 * Returns the serializer that best matches the specified content type.
-	 * If no match found or the content type is null, returns the serializer in the list if it's a list of one.
-	 * Returns null if no serializers are defined.
+	 * If no match found or the content type is <jk>null</jk>, returns the serializer in the list if it's a list of one.
+	 * Returns <jk>null</jk> if no serializers are defined.
 	 */
 	Serializer getMatchingSerializer(String mediaType) {
 		if (serializers.isEmpty())

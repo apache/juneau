@@ -76,6 +76,12 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	private static class Categories {
 		int bits;
 
+		/**
+		 * Checks whether this instance represents the same set of categories as another.
+		 *
+		 * @param cat The other instance to compare against.
+		 * @return <jk>true</jk> if both instances have identical category bits set.
+		 */
 		public boolean same(Categories cat) {
 			return cat.bits == bits;
 		}

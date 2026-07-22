@@ -51,37 +51,37 @@ class JsonPatch_RoundTrip_Test {
 	class A_IndividualOps {
 
 		@Test
-		void addOp_roundTrip() {
+		void a01_addOpRoundTrip() {
 			var op = new AddOp("/a/b/c", JsonMap.of("k", "v"));
 			assertJsonRoundTrip(op, JsonPatchOperation.class);
 		}
 
 		@Test
-		void removeOp_roundTrip() {
+		void a02_removeOpRoundTrip() {
 			var op = new RemoveOp("/a/b/c");
 			assertJsonRoundTrip(op, JsonPatchOperation.class);
 		}
 
 		@Test
-		void replaceOp_roundTrip() {
+		void a03_replaceOpRoundTrip() {
 			var op = new ReplaceOp("/a/b/c", 42);
 			assertJsonRoundTrip(op, JsonPatchOperation.class);
 		}
 
 		@Test
-		void moveOp_roundTrip() {
+		void a04_moveOpRoundTrip() {
 			var op = new MoveOp("/a/b/c", "/a/b/d");
 			assertJsonRoundTrip(op, JsonPatchOperation.class);
 		}
 
 		@Test
-		void copyOp_roundTrip() {
+		void a05_copyOpRoundTrip() {
 			var op = new CopyOp("/a/b/c", "/a/b/e");
 			assertJsonRoundTrip(op, JsonPatchOperation.class);
 		}
 
 		@Test
-		void testOp_roundTrip() {
+		void a06_testOpRoundTrip() {
 			var op = new TestOp("/a/b/c", "foo");
 			assertJsonRoundTrip(op, JsonPatchOperation.class);
 		}
@@ -91,7 +91,7 @@ class JsonPatch_RoundTrip_Test {
 	class B_OpsContainNullValuesAndDefaultConstructors {
 
 		@Test
-		void addOp_defaultsAreNull() {
+		void b01_addOpDefaultsAreNull() {
 			var op = new AddOp();
 			assertNull(op.getPath());
 			assertNull(op.getValue());
@@ -101,7 +101,7 @@ class JsonPatch_RoundTrip_Test {
 		}
 
 		@Test
-		void removeOp_defaultsAreNull() {
+		void b02_removeOpDefaultsAreNull() {
 			var op = new RemoveOp();
 			assertNull(op.getPath());
 			op.setPath("/x");
@@ -109,7 +109,7 @@ class JsonPatch_RoundTrip_Test {
 		}
 
 		@Test
-		void replaceOp_defaultsAreNull() {
+		void b03_replaceOpDefaultsAreNull() {
 			var op = new ReplaceOp();
 			assertNull(op.getPath());
 			assertNull(op.getValue());
@@ -119,7 +119,7 @@ class JsonPatch_RoundTrip_Test {
 		}
 
 		@Test
-		void moveOp_defaultsAreNull() {
+		void b04_moveOpDefaultsAreNull() {
 			var op = new MoveOp();
 			assertNull(op.getPath());
 			assertNull(op.getFrom());
@@ -129,7 +129,7 @@ class JsonPatch_RoundTrip_Test {
 		}
 
 		@Test
-		void copyOp_defaultsAreNull() {
+		void b05_copyOpDefaultsAreNull() {
 			var op = new CopyOp();
 			assertNull(op.getPath());
 			assertNull(op.getFrom());
@@ -139,7 +139,7 @@ class JsonPatch_RoundTrip_Test {
 		}
 
 		@Test
-		void testOp_defaultsAreNull() {
+		void b06_testOpDefaultsAreNull() {
 			var op = new TestOp();
 			assertNull(op.getPath());
 			assertNull(op.getValue());
@@ -153,7 +153,7 @@ class JsonPatch_RoundTrip_Test {
 	class C_PolymorphicDispatch {
 
 		@Test
-		void allSixOps_roundTripViaPatchDocument() {
+		void c01_allSixOpsRoundTripViaPatchDocument() {
 			var patch = new JsonPatch()
 				.append(new AddOp("/a/b/c", "foo"))
 				.append(new RemoveOp("/a/b/c"))
@@ -165,7 +165,7 @@ class JsonPatch_RoundTrip_Test {
 		}
 
 		@Test
-		void parserPicksRightSubclassForEachOp() {
+		void c02_parserPicksRightSubclassForEachOp() {
 			var patch = new JsonPatch()
 				.append(new AddOp("/a", 1))
 				.append(new RemoveOp("/b"))
@@ -186,7 +186,7 @@ class JsonPatch_RoundTrip_Test {
 		}
 
 		@Test
-		void wireFormat_isJsonArrayOfOperationObjects() {
+		void c03_wireFormatIsJsonArrayOfOperationObjects() {
 			var patch = new JsonPatch().append(new AddOp("/x", 1));
 			var j = SER.write(patch);
 			assertTrue(j.startsWith("["), () -> "Top-level should be a JSON array: " + j);
@@ -200,7 +200,7 @@ class JsonPatch_RoundTrip_Test {
 	class D_PatchConstruction {
 
 		@Test
-		void varargsConstructor_andAppend() {
+		void d01_varargsConstructorAndAppend() {
 			var p = new JsonPatch(new AddOp("/a", 1), new RemoveOp("/b"));
 			assertEquals(2, p.size());
 			p.append(new TestOp("/c", "v"));
@@ -208,13 +208,13 @@ class JsonPatch_RoundTrip_Test {
 		}
 
 		@Test
-		void emptyConstructor() {
+		void d02_emptyConstructor() {
 			var p = new JsonPatch();
 			assertTrue(p.isEmpty());
 		}
 
 		@Test
-		void roundTrips_aListReadFromTheSpec() {
+		void d03_roundTripsAListReadFromTheSpec() {
 			// Mirrors the JSON Patch RFC 6902 §3 example.
 			var p = new JsonPatch().append(
 				new TestOp("/a/b/c", "foo"),
@@ -228,7 +228,7 @@ class JsonPatch_RoundTrip_Test {
 		}
 
 		@Test
-		void operationToStringDoesNotThrow() {
+		void d04_operationToStringDoesNotThrow() {
 			assertNotNull(new AddOp("/x", 1).toString());
 			assertNotNull(new RemoveOp("/x").toString());
 		}

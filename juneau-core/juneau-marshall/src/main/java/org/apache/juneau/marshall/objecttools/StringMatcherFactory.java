@@ -66,6 +66,12 @@ public class StringMatcherFactory extends MatcherFactory {
 		Pattern[] andPatterns;
 		Pattern[] notPatterns;
 
+		/**
+		 * Constructor.
+		 *
+		 * @param searchPattern The search pattern, made up of one or more quoted/unquoted, ORed/ANDed/NOTed
+		 * 	sub-patterns (e.g. <js>"foo* -bar"</js>).
+		 */
 		@SuppressWarnings({
 			"java:S3776" // Cognitive complexity acceptable for string pattern matching
 		})

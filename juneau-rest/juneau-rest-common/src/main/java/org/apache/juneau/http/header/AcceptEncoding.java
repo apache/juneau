@@ -38,10 +38,20 @@ public class AcceptEncoding extends HttpStringRangesHeader {
 
 	public static final String NAME = "Accept-Encoding";
 
+	/**
+	 * Constructor with an eager value.
+	 *
+	 * @param value The header value. May be <jk>null</jk>.
+	 */
 	public AcceptEncoding(String value) {
 		super(NAME, value);
 	}
 
+	/**
+	 * Constructor with an already-parsed value.
+	 *
+	 * @param value The parsed header value. May be <jk>null</jk>.
+	 */
 	public AcceptEncoding(StringRanges value) {
 		super(NAME, value);
 	}
@@ -50,18 +60,42 @@ public class AcceptEncoding extends HttpStringRangesHeader {
 		super(NAME, supplier, lazyMode);
 	}
 
+	/**
+	 * Static factory method for a header with an eager value.
+	 *
+	 * @param value The header value. May be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
 	public static AcceptEncoding of(String value) {
 		return new AcceptEncoding(value);
 	}
 
+	/**
+	 * Static factory method for a header with an already-parsed value.
+	 *
+	 * @param value The parsed header value. May be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
 	public static AcceptEncoding of(StringRanges value) {
 		return new AcceptEncoding(value);
 	}
 
+	/**
+	 * Static factory method for a header with a lazily-supplied, unparsed wire value.
+	 *
+	 * @param supplier Supplier for the raw header value string. Must not be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
 	public static AcceptEncoding ofLazyWire(Supplier<String> supplier) {
 		return new AcceptEncoding(supplier, LAZY_WIRE_STRING);
 	}
 
+	/**
+	 * Static factory method for a header with a lazily-supplied, already-parsed value.
+	 *
+	 * @param supplier Supplier for the parsed header value. Must not be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
 	public static AcceptEncoding ofLazyParsed(Supplier<StringRanges> supplier) {
 		return new AcceptEncoding(supplier, LAZY_STRING_RANGES);
 	}

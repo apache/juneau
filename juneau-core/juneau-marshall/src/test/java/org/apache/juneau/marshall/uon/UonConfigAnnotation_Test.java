@@ -14,15 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.jsonschema;
+package org.apache.juneau.marshall.uon;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
 import java.util.function.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
@@ -31,24 +28,15 @@ import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests the @JsonSchemaConfig annotation.
+ * Tests the @UonConfig annotation.
  */
-class JsonSchemaConfigAnnotationTest extends TestBase {
+class UonConfigAnnotation_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
 
-	private static final Function<Object,String> TO_STRING = t -> {
-		if (t instanceof Collection)
-			return ((Collection<?>)t)
-				.stream()
-				.map(JsonSchemaConfigAnnotationTest.TO_STRING)
-				.collect(Collectors.joining(","));
-		if (t instanceof MarshallingDefMapper)
-			return cns(t);
-		return t.toString();
-	};
+	private static final Function<Object,String> TO_STRING = Object::toString;
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
@@ -56,48 +44,52 @@ class JsonSchemaConfigAnnotationTest extends TestBase {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@JsonSchemaConfig(
-		addDescriptionsTo="$X{BEAN}",
-		addExamplesTo="$X{BEAN}",
-		allowNestedDescriptions="$X{true}",
-		allowNestedExamples="$X{true}",
-		beanDefMapper=BasicBeanDefMapper.class,
-		ignoreTypes="$X{foo}",
-		useBeanDefs="$X{true}"
+	@UonConfig(
+		addBeanTypes="$X{true}",
+		decoding="$X{true}",
+		encoding="$X{true}",
+		paramFormat="$X{UON}",
+		validateEnd="$X{true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test void basic() {
+	@Test void a01_basicSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
-		var x = JsonSchemaGenerator.create().apply(al).build().getSession();
-		check("BEAN", x.getAddDescriptionsTo());
-		check("BEAN", x.getAddExamplesTo());
-		check("true", x.isAllowNestedDescriptions());
-		check("true", x.isAllowNestedExamples());
-		check("BasicBeanDefMapper", x.getBeanDefMapper());
-		check("foo", x.getIgnoreTypes());
-		check("true", x.isUseBeanDefs());
+		var x = UonSerializer.create().apply(al).build().getSession();
+		check("true", x.isAddBeanTypes());
+		check("true", x.isEncoding());
+		check("UON", x.getParamFormat());
+	}
+
+	@Test void a02_basicParser() {
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
+		var x = UonParser.create().apply(al).build().getSession();
+		check("true", x.isDecoding());
+		check("true", x.isValidateEnd());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotation with no values.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@JsonSchemaConfig()
+	@UonConfig()
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test void noValues() {
+	@Test void a03_noValuesSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
-		var x = JsonSchemaGenerator.create().apply(al).build().getSession();
-		check("", x.getAddDescriptionsTo());
-		check("", x.getAddExamplesTo());
-		check("false", x.isAllowNestedDescriptions());
-		check("false", x.isAllowNestedExamples());
-		check("BasicBeanDefMapper", x.getBeanDefMapper());
-		check("", x.getIgnoreTypes());
-		check("false", x.isUseBeanDefs());
+		var x = UonSerializer.create().apply(al).build().getSession();
+		check("false", x.isAddBeanTypes());
+		check("false", x.isEncoding());
+		check("UON", x.getParamFormat());
+	}
+
+	@Test void a04_noValuesParser() {
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
+		var x = UonParser.create().apply(al).build().getSession();
+		check("false", x.isDecoding());
+		check("false", x.isValidateEnd());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -107,15 +99,18 @@ class JsonSchemaConfigAnnotationTest extends TestBase {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test void noAnnotation() {
+	@Test void a05_noAnnotationSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
-		var x = JsonSchemaGenerator.create().apply(al).build().getSession();
-		check("", x.getAddDescriptionsTo());
-		check("", x.getAddExamplesTo());
-		check("false", x.isAllowNestedDescriptions());
-		check("false", x.isAllowNestedExamples());
-		check("BasicBeanDefMapper", x.getBeanDefMapper());
-		check("", x.getIgnoreTypes());
-		check("false", x.isUseBeanDefs());
+		var x = UonSerializer.create().apply(al).build().getSession();
+		check("false", x.isAddBeanTypes());
+		check("false", x.isEncoding());
+		check("UON", x.getParamFormat());
+	}
+
+	@Test void a06_noAnnotationParser() {
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
+		var x = UonParser.create().apply(al).build().getSession();
+		check("false", x.isDecoding());
+		check("false", x.isValidateEnd());
 	}
 }

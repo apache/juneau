@@ -86,7 +86,7 @@ public final class ResponseBodyAssertion {
 	}
 
 	/**
-	 * Asserts that the response body is empty (null or zero-length).
+	 * Asserts that the response body is empty (<jk>null</jk> or zero-length).
 	 *
 	 * @return This object (for chaining).
 	 * @throws AssertionError If the body is non-empty.
@@ -103,7 +103,7 @@ public final class ResponseBodyAssertion {
 	 * Asserts that the response body is present and non-empty.
 	 *
 	 * @return This object (for chaining).
-	 * @throws AssertionError If the body is null or empty.
+	 * @throws AssertionError If the body is <jk>null</jk> or empty.
 	 * @throws UncheckedIOException If reading the body throws {@link IOException}.
 	 */
 	public ResponseBodyAssertion isNotEmpty() {

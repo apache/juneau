@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.urlencoding;
+package org.apache.juneau.marshall.msgpack;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,9 +28,9 @@ import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests the @UrlEncodingConfig annotation.
+ * Tests the @MsgPackConfig annotation.
  */
-class UrlEncodingConfigAnnotationTest extends TestBase {
+class MsgPackConfigAnnotation_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -44,42 +44,40 @@ class UrlEncodingConfigAnnotationTest extends TestBase {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@UrlEncodingConfig(
-		expandedParams="$X{true}"
+	 @MsgPackConfig(
+		addBeanTypes="$X{true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test void basicSerializer() {
+	@Test void a01_basicSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
-		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
-		check("true", x.isExpandedParams());
+		var x = MsgPackSerializer.create().apply(al).build().getSession();
+		check("true", x.isAddBeanTypes());
 	}
 
-	@Test void basicParser() {
+	@Test void a02_basicParser() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
-		var x = UrlEncodingParser.create().apply(al).build().getSession();
-		check("true", x.isExpandedParams());
+		assertDoesNotThrow(()->MsgPackParser.create().apply(al).build().createSession());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotation with no values.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@UrlEncodingConfig()
+	@MsgPackConfig()
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test void noValuesSerializer() {
+	@Test void a03_noValuesSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
-		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
-		check("false", x.isExpandedParams());
+		var x = MsgPackSerializer.create().apply(al).build().getSession();
+		check("false", x.isAddBeanTypes());
 	}
 
-	@Test void noValuesParser() {
+	@Test void a04_noValuesParser() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
-		var x = UrlEncodingParser.create().apply(al).build().getSession();
-		check("false", x.isExpandedParams());
+		assertDoesNotThrow(()->MsgPackParser.create().apply(al).build().createSession());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -89,15 +87,14 @@ class UrlEncodingConfigAnnotationTest extends TestBase {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test void noAnnotationSerializer() {
+	@Test void a05_noAnnotationSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
-		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
-		check("false", x.isExpandedParams());
+		var x = MsgPackSerializer.create().apply(al).build().getSession();
+		check("false", x.isAddBeanTypes());
 	}
 
-	@Test void noAnnotationParser() {
+	@Test void a06_noAnnotationParser() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
-		var x = UrlEncodingParser.create().apply(al).build().getSession();
-		check("false", x.isExpandedParams());
+		assertDoesNotThrow(()->MsgPackParser.create().apply(al).build().createSession());
 	}
 }

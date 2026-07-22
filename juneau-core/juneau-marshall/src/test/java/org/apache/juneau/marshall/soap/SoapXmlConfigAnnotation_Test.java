@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.msgpack;
+package org.apache.juneau.marshall.soap;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,9 +28,9 @@ import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests the @MsgPackConfig annotation.
+ * Tests the @SoapXmlConfig annotation.
  */
-class MsgPackConfigAnnotationTest extends TestBase {
+class SoapXmlConfigAnnotation_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -44,40 +44,30 @@ class MsgPackConfigAnnotationTest extends TestBase {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	 @MsgPackConfig(
-		addBeanTypes="$X{true}"
+	@SoapXmlConfig(
+		soapAction="$X{foo}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test void basicSerializer() {
+	@Test void a01_basic() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
-		var x = MsgPackSerializer.create().apply(al).build().getSession();
-		check("true", x.isAddBeanTypes());
-	}
-
-	@Test void basicParser() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
-		assertDoesNotThrow(()->MsgPackParser.create().apply(al).build().createSession());
+		var x = SoapXmlSerializer.create().apply(al).build().getSession();
+		check("foo", x.getSoapAction());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotation with no values.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@MsgPackConfig()
+	@SoapXmlConfig()
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test void noValuesSerializer() {
+	@Test void a02_noValues() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
-		var x = MsgPackSerializer.create().apply(al).build().getSession();
-		check("false", x.isAddBeanTypes());
-	}
-
-	@Test void noValuesParser() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
-		assertDoesNotThrow(()->MsgPackParser.create().apply(al).build().createSession());
+		var x = SoapXmlSerializer.create().apply(al).build().getSession();
+		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -87,14 +77,9 @@ class MsgPackConfigAnnotationTest extends TestBase {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test void noAnnotationSerializer() {
+	@Test void a03_noAnnotation() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
-		var x = MsgPackSerializer.create().apply(al).build().getSession();
-		check("false", x.isAddBeanTypes());
-	}
-
-	@Test void noAnnotationParser() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
-		assertDoesNotThrow(()->MsgPackParser.create().apply(al).build().createSession());
+		var x = SoapXmlSerializer.create().apply(al).build().getSession();
+		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}
 }

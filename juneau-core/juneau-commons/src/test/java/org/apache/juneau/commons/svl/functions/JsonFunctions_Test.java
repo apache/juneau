@@ -44,66 +44,66 @@ class JsonFunctions_Test extends TestBase {
 		return sb.toString();
 	}
 
-	@Test void jsonPath_topLevel() {
+	@Test void a01_jsonPath_topLevel() {
 		assertEquals("alice", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", \"/name\")}"));
 	}
 
-	@Test void jsonPath_arrayIndex() {
+	@Test void a02_jsonPath_arrayIndex() {
 		assertEquals("b", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", \"/tags/1\")}"));
 	}
 
-	@Test void jsonPath_nested() {
+	@Test void a03_jsonPath_nested() {
 		assertEquals("sf", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", \"/address/city\")}"));
 	}
 
-	@Test void jsonPath_missing_emptyDefault() {
+	@Test void a04_jsonPath_missing_emptyDefault() {
 		assertEquals("", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", \"/nope\")}"));
 	}
 
-	@Test void jsonPath_missing_explicitDefault() {
+	@Test void a05_jsonPath_missing_explicitDefault() {
 		assertEquals("fallback", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", \"/nope\", fallback)}"));
 	}
 
-	@Test void get_fromObject() {
+	@Test void a06_get_fromObject() {
 		assertEquals("alice", vr.resolve("#{get(" + arg(JSON_DOC) + ", name)}"));
 	}
 
-	@Test void get_fromArray() {
+	@Test void a07_get_fromArray() {
 		assertEquals("a", vr.resolve("#{get(" + arg("[\"a\",\"b\"]") + ", 0)}"));
 	}
 
-	@Test void get_missing() {
+	@Test void a08_get_missing() {
 		assertEquals("", vr.resolve("#{get(" + arg(JSON_DOC) + ", nope)}"));
 	}
 
-	@Test void keys_object() {
+	@Test void a09_keys_object() {
 		assertEquals("[\"name\",\"age\",\"tags\",\"address\"]",
 			vr.resolve("#{keys(" + arg(JSON_DOC) + ")}"));
 	}
 
-	@Test void keys_nonObject() {
+	@Test void a10_keys_nonObject() {
 		assertEquals("[]", vr.resolve("#{keys(" + arg("[\"a\",\"b\"]") + ")}"));
 	}
 
-	@Test void values_object() {
+	@Test void a11_values_object() {
 		var s = vr.resolve("#{values(" + arg("{\"a\":1,\"b\":2}") + ")}");
 		assertEquals("[\"1\",\"2\"]", s);
 	}
 
-	@Test void values_array() {
+	@Test void a12_values_array() {
 		var s = vr.resolve("#{values(" + arg("[\"a\",\"b\"]") + ")}");
 		assertEquals("[\"a\",\"b\"]", s);
 	}
 
-	@Test void size_object() {
+	@Test void a13_size_object() {
 		assertEquals("4", vr.resolve("#{size(" + arg(JSON_DOC) + ")}"));
 	}
 
-	@Test void size_array() {
+	@Test void a14_size_array() {
 		assertEquals("2", vr.resolve("#{size(" + arg("[1,2]") + ")}"));
 	}
 
-	@Test void size_string() {
+	@Test void a15_size_string() {
 		assertEquals("5", vr.resolve("#{size(" + arg("\"hello\"") + ")}"));
 	}
 }

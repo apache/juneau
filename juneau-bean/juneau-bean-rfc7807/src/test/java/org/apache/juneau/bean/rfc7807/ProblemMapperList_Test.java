@@ -119,6 +119,8 @@ class ProblemMapperList_Test extends TestBase {
 		var list = new ProblemMapperList();
 		list.append(List.of(m1, m2));
 		assertEquals(2, list.asList().size());
+		assertSame(m1, list.asList().get(0));
+		assertSame(m2, list.asList().get(1));
 	}
 
 	@Test void d04_appendCollection_returnsSelf() {

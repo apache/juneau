@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.petstore.jetty;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.marshall.json.*;
@@ -68,6 +69,7 @@ class PetStoreClient_Test {
 			var svc = client.remote(PetStoreClient.class);
 			var pets = svc.getPets();
 			assertEquals(9, pets.size());
+			assertBean(pets.get(0), "name,species", "Mr. Frisky,CAT");
 		}
 	}
 

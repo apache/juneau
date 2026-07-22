@@ -119,7 +119,7 @@ public class BootTimeBenchmark {
 	// ------------------------------------------------------------------------------------------------
 
 	@Test
-	void measure() throws Exception {
+	void a01_measure() throws Exception {
 		runAndReport();
 	}
 

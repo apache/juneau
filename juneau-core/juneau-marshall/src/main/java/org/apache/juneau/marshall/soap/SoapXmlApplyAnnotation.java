@@ -31,13 +31,25 @@ import org.apache.juneau.marshall.*;
  */
 public class SoapXmlApplyAnnotation {
 
+	/**
+	 * Prevents instantiation.
+	 */
 	private SoapXmlApplyAnnotation() {}
 
+	/**
+	 * Applies targeted {@link SoapXmlApply} annotations to a {@link org.apache.juneau.marshall.Context.Builder}.
+	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.
 	})
 	public static class Applier extends AnnotationApplier<SoapXmlApply,Context.Builder> {
 
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 * 	<br>Must not be <jk>null</jk>.
+		 */
 		public Applier(VarResolverSession vr) {
 			super(SoapXmlApply.class, Context.Builder.class, vr);
 		}
@@ -51,14 +63,30 @@ public class SoapXmlApplyAnnotation {
 		}
 	}
 
+	/**
+	 * Builder class.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(java.lang.annotation.Annotation...)}
+	 * </ul>
+	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
 		SoapXml value = SoapXmlAnnotation.DEFAULT;
 
+		/**
+		 * Constructor.
+		 */
 		protected Builder() {
 			super(SoapXmlApply.class);
 		}
 
+		/**
+		 * Sets the {@link SoapXmlApply#value()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
 		public Builder value(SoapXml value) {
 			this.value = value;
 			return this;
@@ -74,6 +102,11 @@ public class SoapXmlApplyAnnotation {
 		@Override public Builder on(FieldInfo...value) { super.on(value); return this; }
 		@Override public Builder on(MethodInfo...value) { super.on(value); return this; }
 
+		/**
+		 * Instantiates a new {@link SoapXmlApply @SoapXmlApply} object initialized with this builder.
+		 *
+		 * @return A new {@link SoapXmlApply} object.
+		 */
 		public SoapXmlApply build() {
 			return new Object(this);
 		}
@@ -94,12 +127,39 @@ public class SoapXmlApplyAnnotation {
 		@Override public SoapXml value() { return value; }
 	}
 
+	/** Default value */
 	public static final SoapXmlApply DEFAULT = create().build();
 
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
 	public static Builder create() { return new Builder(); }
+
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
 	public static Builder create(Class<?>...on) { return create().on(on); }
+
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
 	public static Builder create(String...on) { return create().on(on); }
 
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>true</jk>).
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
 	public static boolean empty(SoapXmlApply a) {
 		return a == null || DEFAULT.equals(a);
 	}

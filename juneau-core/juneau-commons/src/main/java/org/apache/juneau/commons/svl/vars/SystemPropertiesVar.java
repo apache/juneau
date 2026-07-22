@@ -23,7 +23,7 @@ import org.apache.juneau.commons.svl.*;
  * System property variable resolver.
  *
  * <p>
- * The format for this var is <js>"$S{systemProperty[,defaultValue]}"</js></js>
+ * The format for this var is <js>"$S{systemProperty[,defaultValue]}"</js>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>

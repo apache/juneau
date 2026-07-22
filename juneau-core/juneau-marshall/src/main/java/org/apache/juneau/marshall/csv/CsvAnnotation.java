@@ -26,20 +26,40 @@ import org.apache.juneau.commons.*;
  */
 public class CsvAnnotation {
 
+	/**
+	 * Prevents instantiation.
+	 */
 	private CsvAnnotation() {}
 
+	/**
+	 * Builder class.
+	 */
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
 
+		/**
+		 * Constructor.
+		 */
 		protected Builder() {
 			super(Csv.class);
 		}
 
+		/**
+		 * Instantiates a new {@link Csv @Csv} object initialized with this builder.
+		 *
+		 * @return A new {@link Csv @Csv} object.
+		 */
 		public Csv build() {
 			return new Object(this);
 		}
 
+		/**
+		 * Sets the description property.
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
 		public Builder description(String...value) {
 			description = value;
 			return this;
@@ -65,8 +85,14 @@ public class CsvAnnotation {
 		}
 	}
 
+	/** Default value */
 	public static final Csv DEFAULT = create().build();
 
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
 	public static Builder create() {
 		return new Builder();
 	}

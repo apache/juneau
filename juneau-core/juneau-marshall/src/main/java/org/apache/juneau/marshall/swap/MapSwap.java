@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.collections.*;
  *
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> MyBean unswap(MarshallingSession <jv>session</jv>, JsonMap <jv>map</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
- * 			<jk>return</jk> new</jk> MyBean(<jv>map</jv>.get(<js>"foo"</js>));
+ * 			<jk>return</jk> <jk>new</jk> MyBean(<jv>map</jv>.get(<js>"foo"</js>));
  * 		}
  * 	}
  *

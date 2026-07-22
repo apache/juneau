@@ -90,6 +90,13 @@ public class ObjectMerger {
 		private final Object[] pojos;
 		private final boolean callAllNonGetters;
 
+		/**
+		 * Constructor.
+		 *
+		 * @param callAllNonGetters If <jk>true</jk>, non-getter methods are invoked on all POJOs; if <jk>false</jk>,
+		 * 	only on the first POJO.
+		 * @param pojos The POJOs to merge, in priority order.
+		 */
 		public MergeInvocationHandler(boolean callAllNonGetters, Object...pojos) {
 			this.callAllNonGetters = callAllNonGetters;
 			this.pojos = pojos;

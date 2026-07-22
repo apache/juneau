@@ -27,32 +27,32 @@ class EncodingFunctions_Test extends TestBase {
 
 	private final VarResolver vr = VarResolver.create().functions(EncodingFunctions.ALL).build();
 
-	@Test void base64_roundtrip() {
+	@Test void a01_base64_roundtrip() {
 		var encoded = vr.resolve("#{base64Encode(hello)}");
 		assertEquals("aGVsbG8=", encoded);
 		assertEquals("hello", vr.resolve("#{base64Decode(aGVsbG8=)}"));
 	}
 
-	@Test void urlEncode() {
+	@Test void a02_urlEncode() {
 		// URLEncoder uses '+' for space (application/x-www-form-urlencoded form per OQA spec).
 		assertEquals("a+b%26c", vr.resolve("#{urlEncode(\"a b&c\")}"));
 	}
 
-	@Test void urlDecode() {
+	@Test void a03_urlDecode() {
 		assertEquals("a b&c", vr.resolve("#{urlDecode(\"a+b%26c\")}"));
 	}
 
-	@Test void htmlEscape() {
+	@Test void a04_htmlEscape() {
 		assertEquals("&lt;b&gt;hi&amp;hello&lt;/b&gt;",
 			vr.resolve("#{htmlEscape(\"<b>hi&hello</b>\")}"));
 	}
 
-	@Test void htmlUnescape() {
+	@Test void a05_htmlUnescape() {
 		assertEquals("<b>hi&hello</b>",
 			vr.resolve("#{htmlUnescape(\"&lt;b&gt;hi&amp;hello&lt;/b&gt;\")}"));
 	}
 
-	@Test void htmlUnescape_numeric() {
+	@Test void a06_htmlUnescape_numeric() {
 		assertEquals("A", vr.resolve("#{htmlUnescape(\"&#65;\")}"));
 	}
 }

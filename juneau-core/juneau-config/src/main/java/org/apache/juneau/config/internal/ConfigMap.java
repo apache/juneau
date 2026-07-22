@@ -818,7 +818,11 @@ public class ConfigMap implements ConfigStoreListener {
 		return this;
 	}
 
-	// Serializes the current entries snapshot to INI form.
+	/**
+	 * Serializes the current entries snapshot to INI form.
+	 *
+	 * @return The INI-formatted string.
+	 */
 	public String asIniString() {
 		try {
 			var st = state;
@@ -906,7 +910,7 @@ public class ConfigMap implements ConfigStoreListener {
 		return changes2;
 	}
 
-	@SuppressWarnings("java:S2259") // False positive: 'format' is a final field assigned a non-null value in every constructor (defaults to IniConfigFormat.INSTANCE), so this dereference cannot throw an NPE.
+	@SuppressWarnings("javabugs:S2259") // False positive: 'format' is a final field assigned a non-null value in every constructor (defaults to IniConfigFormat.INSTANCE); Sonar's symbolic execution can't follow the ternary default across the constructor-to-load() call chain.
 	private ConfigMap load(String contents) throws IOException {
 		var internalContents = format.toInternal(contents);
 		return loadIni(internalContents, contents);

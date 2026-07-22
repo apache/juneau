@@ -63,7 +63,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public String get(String key)
 	//====================================================================================================
-	@Test void get() {
+	@Test void b01_get() {
 		var c = init("a=1", "[S]", "b=2");
 
 		assertEquals("1", c.get("a").get());
@@ -79,7 +79,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public Config set(String key, String value)
 	//====================================================================================================
-	@Test void set1() throws Exception {
+	@Test void b02_set1() throws Exception {
 		var c = init("a1=1", "[S]", "b1=1");
 
 		c.set("a1", "2");
@@ -120,7 +120,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public Config set(String key, Object value)
 	//====================================================================================================
-	@Test void set2() throws Exception {
+	@Test void b03_set2() throws Exception {
 		var c = init("a1=1", "[S]", "b1=1");
 
 		c.set("a1", 2);
@@ -161,7 +161,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public Config set(String key, Object value, Serializer serializer)
 	//====================================================================================================
-	@Test void set3() {
+	@Test void b04_set3() {
 		var c = init("a1=1", "[S]", "b1=1");
 
 		var b = new ABean().init();
@@ -183,7 +183,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public Config set(String key, Object value, Serializer serializer, ConfigMod[] modifiers, String comment, List<String> preLines)
 	//====================================================================================================
-	@Test void set4() throws Exception {
+	@Test void b05_set4() throws Exception {
 		var c = init("a1=1", "[S]", "b1=1");
 
 		var b = new ABean().init();
@@ -211,7 +211,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public Config remove(String key)
 	//====================================================================================================
-	@Test void remove() throws Exception {
+	@Test void b06_remove() throws Exception {
 		var c = init("a1=1", "a2=2", "[S]", "b1=1");
 
 		c.remove("a1");
@@ -230,7 +230,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public String getString1(String key)
 	//====================================================================================================
-	@Test void xgetString1() {
+	@Test void b07_xgetString1() {
 		var c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 
 		assertEquals("1", c.get("a1").as(String.class).orElse(null));
@@ -245,7 +245,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public String getString(String key, String def)
 	//====================================================================================================
-	@Test void getString2() {
+	@Test void b08_getString2() {
 		var c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		assertEquals("1", c.get("a1").orElse("foo"));
 		assertEquals("2", c.get("a2").orElse("foo"));
@@ -259,7 +259,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public String[] getStringArray(String key)
 	//====================================================================================================
-	@Test void getStringArray1() {
+	@Test void b09_getStringArray1() {
 		var c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
 		assertList(c.get("a1").as(String[].class).orElse(null), "1", "2");
 		assertList(c.get("a2").as(String[].class).orElse(null), "2", "3");
@@ -273,7 +273,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public String[] getStringArray(String key, String[] def)
 	//====================================================================================================
-	@Test void getStringArray2() {
+	@Test void b10_getStringArray2() {
 		var c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
 		assertList(c.get("a1").asStringArray().orElse(a("foo")), "1", "2");
 		assertList(c.get("a2").asStringArray().orElse(a("foo")), "2", "3");
@@ -287,7 +287,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public int getInt(String key)
 	//====================================================================================================
-	@Test void getInt1() {
+	@Test void b11_getInt1() {
 		var c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		assertEquals(1, c.get("a1").asInteger().orElse(0));
 		assertEquals(2, c.get("a2").asInteger().orElse(0));
@@ -298,7 +298,7 @@ class Config_Test extends TestBase {
 		assertEquals(0, c.get("T/c1").asInteger().orElse(0));
 	}
 
-	@Test void getInt1BadValues() {
+	@Test void b12_getInt1BadValues() {
 		var c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 		assertThrows(Exception.class, ()->c.get("a1").asInteger().orElse(0));
 		assertThrows(Exception.class, ()->c.get("a2").asInteger().orElse(0));
@@ -309,7 +309,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public int getInt2(String key, int def)
 	//====================================================================================================
-	@Test void getInt2() {
+	@Test void b13_getInt2() {
 		var c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		assertEquals(1, c.get("a1").asInteger().orElse(-1));
 		assertEquals(2, c.get("a2").asInteger().orElse(-1));
@@ -320,7 +320,7 @@ class Config_Test extends TestBase {
 		assertEquals(-1, c.get("T/c1").asInteger().orElse(-1));
 	}
 
-	@Test void getInt2BadValues() {
+	@Test void b14_getInt2BadValues() {
 		var c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 		assertThrows(Exception.class, ()->c.get("a1").asInteger().orElse(-1));
 		assertThrows(Exception.class, ()->c.get("a2").asInteger().orElse(-1));
@@ -331,7 +331,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public boolean getBoolean(String key)
 	//====================================================================================================
-	@Test void getBoolean1() {
+	@Test void b15_getBoolean1() {
 		var c = init("a1=true", "a2=false", "[S]", "b1=TRUE", "b2=");
 		assertEquals(true, c.get("a1").asBoolean().orElse(false));
 		assertEquals(false, c.get("a2").asBoolean().orElse(false));
@@ -342,7 +342,7 @@ class Config_Test extends TestBase {
 		assertEquals(false, c.get("T/c1").asBoolean().orElse(false));
 	}
 
-	@Test void getBoolean1BadValues() {
+	@Test void b16_getBoolean1BadValues() {
 		var c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=T");
 		assertEquals(false, c.get("a1").asBoolean().orElse(false));
 		assertEquals(false, c.get("a2").asBoolean().orElse(false));
@@ -353,7 +353,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public boolean getBoolean(String key, boolean def)
 	//====================================================================================================
-	@Test void getBoolean2() {
+	@Test void b17_getBoolean2() {
 		var c = init("a1=true", "a2=false", "[S]", "b1=TRUE", "b2=");
 		assertEquals(true, c.get("a1").asBoolean().orElse(true));
 		assertEquals(false, c.get("a2").asBoolean().orElse(true));
@@ -364,7 +364,7 @@ class Config_Test extends TestBase {
 		assertEquals(true, c.get("T/c1").asBoolean().orElse(true));
 	}
 
-	@Test void getBoolean2BadValues() {
+	@Test void b18_getBoolean2BadValues() {
 		var c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=T");
 		assertEquals(false, c.get("a1").asBoolean().orElse(true));
 		assertEquals(false, c.get("a2").asBoolean().orElse(true));
@@ -375,7 +375,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public long getLong(String key)
 	//====================================================================================================
-	@Test void getLong1() {
+	@Test void b19_getLong1() {
 		var c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		assertEquals(1L, c.get("a1").asLong().orElse(0L));
 		assertEquals(2L, c.get("a2").asLong().orElse(0L));
@@ -386,7 +386,7 @@ class Config_Test extends TestBase {
 		assertEquals(0L, c.get("T/c1").asLong().orElse(0L));
 	}
 
-	@Test void getLong1BadValues() {
+	@Test void b20_getLong1BadValues() {
 		var c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 		assertThrows(Exception.class, ()->c.get("a1").as(long.class));
 		assertThrows(Exception.class, ()->c.get("a2").as(long.class));
@@ -397,7 +397,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public long getLong(String key, long def)
 	//====================================================================================================
-	@Test void getLong2() {
+	@Test void b21_getLong2() {
 		var c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		assertEquals(1L, c.get("a1").asLong().orElse(Long.MAX_VALUE));
 		assertEquals(2L, c.get("a2").asLong().orElse(Long.MAX_VALUE));
@@ -408,7 +408,7 @@ class Config_Test extends TestBase {
 		assertEquals(Long.MAX_VALUE, c.get("T/c1").asLong().orElse(Long.MAX_VALUE));
 	}
 
-	@Test void getLong2BadValues() {
+	@Test void b22_getLong2BadValues() {
 		var c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 
 		var a1Entry = c.get("a1");
@@ -424,7 +424,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public boolean getBytes(String key)
 	//====================================================================================================
-	@Test void getBytes1() {
+	@Test void b23_getBytes1() {
 		var c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 
 		assertList(c.get("a1").as(byte[].class).get(), (byte)102, (byte)111, (byte)111);
@@ -436,7 +436,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public boolean getBytes(String key, byte[] def)
 	//====================================================================================================
-	@Test void getBytes2() {
+	@Test void b24_getBytes2() {
 		var c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 
 		assertList(c.get("a1").asBytes().orElse(bytes(1)), (byte)102, (byte)111, (byte)111);
@@ -448,7 +448,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@Test void getObject1() {
+	@Test void b25_getObject1() {
 		var c = init(
 			"a1={foo:123}",
 			"a2=[{foo:123}]",
@@ -488,7 +488,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Parser parser, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@Test void getObject2() {
+	@Test void b26_getObject2() {
 		var c = init(
 			"a1=(foo=123)",
 			"a2=@((foo=123))",
@@ -528,7 +528,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Class<T> type) throws ParseException
 	//====================================================================================================
-	@Test void getObject3() {
+	@Test void b27_getObject3() {
 		var c = init(
 			"a1={foo:123}",
 			"a2=[{foo:123}]",
@@ -564,7 +564,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Parser parser, Class<T> type) throws ParseException
 	//====================================================================================================
-	@Test void getObject4() {
+	@Test void b28_getObject4() {
 		var c = init(
 			"a1=(foo=123)",
 			"a2=@((foo=123))",
@@ -600,7 +600,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, T def, Class<T> type) throws ParseException
 	//====================================================================================================
-	@Test void getObjectWithDefault1() {
+	@Test void b29_getObjectWithDefault1() {
 		var c = init(
 			"a1={foo:123}",
 			"a2=[{foo:123}]",
@@ -645,7 +645,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, Parser parser, T def, Class<T> type) throws ParseException
 	//====================================================================================================
-	@Test void getObjectWithDefault2() {
+	@Test void b30_getObjectWithDefault2() {
 		var c = init(
 			"a1=(foo=123)",
 			"a2=@((foo=123))",
@@ -690,7 +690,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, T def, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@Test void getObjectWithDefault3() {
+	@Test void b31_getObjectWithDefault3() {
 		var c = init(
 			"a1={foo:123}",
 			"a2=[{foo:123}]",
@@ -735,7 +735,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, Parser parser, T def, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@Test void getObjectWithDefault4() {
+	@Test void b32_getObjectWithDefault4() {
 		var c = init(
 			"a1=(foo=123)",
 			"a2=@((foo=123))",
@@ -780,7 +780,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public Set<String> getKeys(String section)
 	//====================================================================================================
-	@Test void getKeys() {
+	@Test void b33_getKeys() {
 		var c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 
 		assertJson("['a1','a2']", c.getKeys(""));
@@ -794,7 +794,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public Config writeProperties(String section, Object bean, boolean ignoreUnknownProperties)
 	//====================================================================================================
-	@Test void writeProperties() {
+	@Test void b34_writeProperties() {
 		var a = new ABean().init();
 		var b = new BBean().init();
 
@@ -816,7 +816,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getSectionAsBean(String sectionName, Class<T>c)
 	//====================================================================================================
-	@Test void getSectionAsBean1() {
+	@Test void b35_getSectionAsBean1() {
 		var c = init("foo=qux", "[S]", "foo=baz", "[T]", "foo=qux", "bar=qux");
 
 		var a = c.getSection("").asBean(ABean.class).get();
@@ -842,7 +842,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getSectionAsBean(String section, Class<T> c, boolean ignoreUnknownProperties)
 	//====================================================================================================
-	@Test void getSectionAsBean2() {
+	@Test void b36_getSectionAsBean2() {
 		var c = init("foo=qux", "[S]", "foo=baz", "[T]", "foo=qux", "bar=qux");
 
 		var a = c.getSection("T").asBean(ABean.class, true).get();
@@ -857,7 +857,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public JsonMap getSectionAsMap(String section)
 	//====================================================================================================
-	@Test void getSectionAsMap() {
+	@Test void b37_getSectionAsMap() {
 		var c = init("a=1", "[S]", "b=2", "[T]");
 
 		assertJson("{a:'1'}", c.getSection("").asMap().get());
@@ -871,7 +871,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getSectionAsInterface(String sectionName, Class<T> c)
 	//====================================================================================================
-	@Test void getSectionAsInterface() {
+	@Test void b38_getSectionAsInterface() {
 		var c = init("foo=qux", "[S]", "foo=baz", "[T]", "foo=qux", "bar=qux");
 
 		var a = c.getSection("").asInterface(AInterface.class).get();
@@ -899,7 +899,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public boolean exists(String key)
 	//====================================================================================================
-	@Test void exists() {
+	@Test void b39_exists() {
 		var c = init("a=1", "[S]", "b=2", "c=", "[T]");
 
 		assertTrue(c.exists("a"));
@@ -913,7 +913,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public Config setSection(String name, List<String> preLines)
 	//====================================================================================================
-	@Test void setSection1() {
+	@Test void b40_setSection1() {
 		var c = init();
 
 		c.setSection("", l("#C1", "#C2"));
@@ -937,7 +937,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public Config setSection(String name, List<String> preLines, Map<String,Object> contents)
 	//====================================================================================================
-	@Test void setSection2() {
+	@Test void b41_setSection2() {
 		var c = init();
 		var m = JsonMap.of("a", "b");
 
@@ -962,7 +962,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public Config removeSection(String name)
 	//====================================================================================================
-	@Test void removeSection() {
+	@Test void b42_removeSection() {
 		var c = init("a=1", "[S]", "b=2", "c=", "[T]");
 
 		c.removeSection("S");
@@ -977,7 +977,7 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public Writer writeTo(Writer w)
 	//====================================================================================================
-	@Test void writeTo() throws Exception {
+	@Test void b43_writeTo() throws Exception {
 		var c = init("a=1", "[S]", "b=2", "c=", "[T]");
 
 		assertEquals("a=1|[S]|b=2|c=|[T]|", pipedLines(c.writeTo(new StringWriter())));
@@ -1524,7 +1524,7 @@ class Config_Test extends TestBase {
 	//	setSystemProperties
 	//====================================================================================================
 
-	@Test void setSystemProperties() {
+	@Test void b44_setSystemProperties() {
 		var c = init("a=1", "[S]", "b=2");
 		c.setSystemProperties();
 		assertEquals("1", System.getProperty("a"));
@@ -1658,9 +1658,7 @@ class Config_Test extends TestBase {
 	@Test void a31_entryAsList_noBrackets() throws Exception {
 		var c = init("a=\"x\",\"y\"");
 		var list = c.get("a").asList().get();
-		assertEquals(2, list.size());
-		assertEquals("x", list.get(0));
-		assertEquals("y", list.get(1));
+		assertList(list, "x", "y");
 		assertFalse(c.get("x").asList().isPresent());
 	}
 

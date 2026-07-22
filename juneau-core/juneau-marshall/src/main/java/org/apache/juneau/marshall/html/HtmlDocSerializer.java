@@ -40,8 +40,8 @@ import org.apache.juneau.marshall.*;
  *
  * <h5 class='topic'>Description</h5>
  * <p>
- * Same as {@link HtmlSerializer}, except wraps the response in <code><xt>&lt;html&gt;</code>,
- * <code><xt>&lt;head&gt;</code>, and <code><xt>&lt;body&gt;</code> tags so that it can be rendered in a browser.
+ * Same as {@link HtmlSerializer}, except wraps the response in <code><xt>&lt;html&gt;</xt></code>,
+ * <code><xt>&lt;head&gt;</xt></code>, and <code><xt>&lt;body&gt;</xt></code> tags so that it can be rendered in a browser.
  *
  * <p>
  * Configurable properties are typically specified via <ja>@HtmlDocConfig</ja>.

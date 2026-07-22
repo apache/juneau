@@ -280,5 +280,10 @@ public class MockServletResponse implements HttpServletResponse {
 		return baos.toByteArray();
 	}
 
+	/**
+	 * Returns the raw header map backing this response.
+	 *
+	 * @return The header map, keyed by header name to all values set for that name. Never <jk>null</jk>.
+	 */
 	public Map<String,String[]> getHeaders() { return headerMap; }
 }

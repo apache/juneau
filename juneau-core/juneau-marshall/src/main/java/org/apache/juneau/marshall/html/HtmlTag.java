@@ -143,6 +143,12 @@ enum HtmlTag {
 		cache.put(id, this);
 	}
 
+	/**
+	 * Checks whether this tag matches any of the specified tags.
+	 *
+	 * @param tags The tags to check against. Can be empty.
+	 * @return <jk>true</jk> if this tag is equal to one of the specified tags.
+	 */
 	public boolean isOneOf(HtmlTag...tags) {
 		for (var tag : tags)
 			if (tag == this)

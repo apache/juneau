@@ -860,7 +860,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 *
 	 * Header values are ignored.
 	 * <br>If there is more than one matching header in the message the last element of {@link #getHeaders(String)} is returned.
-	 * <br>If there is no matching header in the message null is returned.
+	 * <br>If there is no matching header in the message, <jk>null</jk> is returned.
 	 *
 	 * @param name The name of the header to return.
 	 * 	<br>Cannot be <jk>null</jk>.

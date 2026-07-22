@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.validation;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -99,12 +100,9 @@ class BeanValidator_Test extends TestBase {
 	void c02_validate_violatingBean_throwsValidationException() {
 		var b = new C_Bean();  // name is null — violates @NotNull
 		var ex = assertThrows(ValidationException.class, () -> BeanValidator.validate(b, null));
-		assertEquals(1, ex.getViolations().size());
-		assertEquals("name", ex.getViolations().get(0).getPath());
-		assertEquals("NotNull", ex.getViolations().get(0).getConstraint());
 		// invalidValue is omitted by default — guarded by ValidationViolation, not BeanValidator, but worth pinning
 		// here to catch regressions where the dispatcher accidentally populates it from the ConstraintViolation.
-		assertNull(ex.getViolations().get(0).getInvalidValue());
+		assertBeans(ex.getViolations(), "path,constraint,invalidValue", "name,NotNull,<null>");
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

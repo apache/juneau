@@ -31,13 +31,13 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
-class ConfigImportsTest extends TestBase {
+class ConfigImports_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Value inheritance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void oneSimpleImport() throws Exception {
+	@Test void b01_oneSimpleImport() throws Exception {
 		var ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1");
 		ms.write("B", "", "<A>");
@@ -53,7 +53,7 @@ class ConfigImportsTest extends TestBase {
 		assertEquals("x = 2\n", ms.read("B"));
 	}
 
-	@Test void twoSimpleImports() throws Exception {
+	@Test void b02_twoSimpleImports() throws Exception {
 		var ms = MemoryStore.create().build();
 		ms.write("A1", "", "x=1");
 		ms.write("A2", "", "y=2");
@@ -70,7 +70,7 @@ class ConfigImportsTest extends TestBase {
 		assertEquals("x = 3\ny = 4\n", ms.read("B"));
 	}
 
-	@Test void nestedImports() throws Exception {
+	@Test void b03_nestedImports() throws Exception {
 		var ms = MemoryStore.create().build();
 		ms.write("A1", "", "x=1");
 		ms.write("A2", "", "<A1>\ny=2");
@@ -87,7 +87,7 @@ class ConfigImportsTest extends TestBase {
 		assertEquals("x = 3\ny = 4\n", ms.read("B"));
 	}
 
-	@Test void nestedImportsLoop() {
+	@Test void b04_nestedImportsLoop() {
 		// This shouldn't blow up.
 		var ms = MemoryStore.create().build();
 		ms.write("A1", "", "<A2>\nx=1");
@@ -96,14 +96,14 @@ class ConfigImportsTest extends TestBase {
 		assertThrows(Exception.class, ()->Config.create("B").store(ms).build());
 	}
 
-	@Test void importNotFound() {
+	@Test void b05_importNotFound() {
 		var ms = MemoryStore.create().build();
 		ms.write("B", "", "<A>\nx=1");
 		var c = Config.create("B").store(ms).build();
 		assertEquals("1", c.get("x").get());
 	}
 
-	@Test void noOverwriteOnImports() {
+	@Test void b06_noOverwriteOnImports() {
 		var ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1");
 		ms.write("B", "", "<A>");
@@ -114,7 +114,7 @@ class ConfigImportsTest extends TestBase {
 		assertEquals("1", Config.create("A").store(ms).build().get("x").get());
 	}
 
-	@Test void overlappingSections() {
+	@Test void b07_overlappingSections() {
 		var ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na2=2");
@@ -123,7 +123,7 @@ class ConfigImportsTest extends TestBase {
 		assertEquals("2", c.get("A/a2").get());
 	}
 
-	@Test void overlappingSectionsImportAtEnd() {
+	@Test void b08_overlappingSectionsImportAtEnd() {
 		var ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "[A]\na2=2\n<A>");
@@ -132,7 +132,7 @@ class ConfigImportsTest extends TestBase {
 		assertEquals("2", c.get("A/a2").get());
 	}
 
-	@Test void overlappingSectionsAndValues() {
+	@Test void b09_overlappingSectionsAndValues() {
 		var ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na1=2");

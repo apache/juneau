@@ -49,33 +49,33 @@ class HttpPartBeanMeta_Test {
 	}
 
 	@Test
-	void req01_getGetter_returnsMethod() throws Exception {
+	void a01_getGetter_returnsMethod() throws Exception {
 		var meta = buildReqMeta("getQuery", null, null);
 		assertEquals("getQuery", meta.getGetter().getName());
 	}
 
 	@Test
-	void req02_getPartType_returnsQueryType() throws Exception {
+	void a02_getPartType_returnsQueryType() throws Exception {
 		var meta = buildReqMeta("getQuery", null, null);
 		assertEquals(QUERY, meta.getPartType());
 	}
 
 	@Test
-	void req03_getSchema_returnsNonNull() throws Exception {
+	void a03_getSchema_returnsNonNull() throws Exception {
 		var meta = buildReqMeta("getQuery", null, null);
 		assertNotNull(meta.getSchema());
 		assertEquals("q", meta.getPartName());
 	}
 
 	@Test
-	void req04_getParser_parserNull_returnsDefault() throws Exception {
+	void a04_getParser_parserNull_returnsDefault() throws Exception {
 		var meta = buildReqMeta("getQuery", null, null);
 		var session = mock();
 		assertSame(session, meta.getParser(session));
 	}
 
 	@Test
-	void req04b_getParser_parserNotNull_returnsParserSession() throws Exception {
+	void a05_getParser_parserNotNull_returnsParserSession() throws Exception {
 		// Pass a real parser as the default; schema has no parser class, so meta.parser = the default parser
 		var meta = buildReqMeta("getQuery", null, UonParser.DEFAULT);
 		var result = meta.getParser(null);
@@ -83,7 +83,7 @@ class HttpPartBeanMeta_Test {
 	}
 
 	@Test
-	void req05_getSerializer_noSchemaSerializer_returnsEmpty() throws Exception {
+	void a06_getSerializer_noSchemaSerializer_returnsEmpty() throws Exception {
 		var meta = buildReqMeta("getQuery", null, null);
 		assertFalse(meta.getSerializer().isPresent());
 	}
@@ -104,25 +104,25 @@ class HttpPartBeanMeta_Test {
 	}
 
 	@Test
-	void resp01_getGetter_returnsMethod() throws Exception {
+	void b01_getGetter_returnsMethod() throws Exception {
 		var meta = buildRespMeta("getStatus");
 		assertEquals("getStatus", meta.getGetter().getName());
 	}
 
 	@Test
-	void resp02_getPartType_returnsHeaderType() throws Exception {
+	void b02_getPartType_returnsHeaderType() throws Exception {
 		var meta = buildRespMeta("getStatus");
 		assertEquals(HEADER, meta.getPartType());
 	}
 
 	@Test
-	void resp03_getSchema_returnsNonNull() throws Exception {
+	void b03_getSchema_returnsNonNull() throws Exception {
 		var meta = buildRespMeta("getStatus");
 		assertNotNull(meta.getSchema());
 	}
 
 	@Test
-	void resp04_getPartName_withSchema_returnsName() throws Exception {
+	void b04_getPartName_withSchema_returnsName() throws Exception {
 		var schema = HttpPartSchema.create().name("x-status").build();
 		var m = MethodInfo.of(RespInterface.class.getMethod("getStatus"));
 		var b = ResponseBeanPropertyMeta.create(HEADER, schema, m);
@@ -132,19 +132,19 @@ class HttpPartBeanMeta_Test {
 	}
 
 	@Test
-	void resp05_getParser_noSchemaParser_returnsEmpty() throws Exception {
+	void b05_getParser_noSchemaParser_returnsEmpty() throws Exception {
 		var meta = buildRespMeta("getStatus");
 		assertFalse(meta.getParser().isPresent());
 	}
 
 	@Test
-	void resp06_getSerializer_noSchemaSerializer_returnsEmpty() throws Exception {
+	void b06_getSerializer_noSchemaSerializer_returnsEmpty() throws Exception {
 		var meta = buildRespMeta("getStatus");
 		assertFalse(meta.getSerializer().isPresent());
 	}
 
 	@Test
-	void resp07_builderName_setsName() throws Exception {
+	void b07_builderName_setsName() throws Exception {
 		// ResponseBeanPropertyMeta.Builder.name() is a package-private setter — cover it here.
 		var m = MethodInfo.of(RespInterface.class.getMethod("getStatus"));
 		var b = ResponseBeanPropertyMeta.create(HEADER, m);

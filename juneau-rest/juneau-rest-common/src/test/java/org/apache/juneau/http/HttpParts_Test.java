@@ -17,6 +17,7 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;
@@ -79,7 +80,7 @@ class HttpParts_Test extends TestBase {
 
 	@Test void b01_partList_varArgs() {
 		var pl = partList(part("a", "1"), part("b", "2"));
-		assertEquals(2, pl.size());
+		assertList(pl, "a=1", "b=2");
 	}
 
 	@Test void b02_partList_empty() {

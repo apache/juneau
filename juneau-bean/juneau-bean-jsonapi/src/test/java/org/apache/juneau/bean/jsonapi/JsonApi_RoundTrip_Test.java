@@ -44,7 +44,7 @@ class JsonApi_RoundTrip_Test {
 	class A_Link {
 
 		@Test
-		void allFields_roundTrip() {
+		void a01_allFieldsRoundTrip() {
 			var link = new JsonApiLink()
 				.setHref("https://example.com/articles/1")
 				.setRel("canonical")
@@ -57,14 +57,14 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void hrefConstructor_andToString() {
+		void a02_hrefConstructorAndToString() {
 			var link = new JsonApiLink("/u");
 			assertEquals("/u", link.getHref());
 			assertNotNull(link.toString());
 		}
 
 		@Test
-		void emptyConstructor_allFieldsNull() {
+		void a03_emptyConstructorAllFieldsNull() {
 			var l = new JsonApiLink();
 			assertNull(l.getHref());
 			assertNull(l.getRel());
@@ -80,14 +80,14 @@ class JsonApi_RoundTrip_Test {
 	class B_Version {
 
 		@Test
-		void roundTrip() {
+		void b01_roundTrip() {
 			var v = new JsonApiVersion("1.1").setMeta(map("k", "v"));
 			assertJsonRoundTrip(v, JsonApiVersion.class);
 			assertEquals("1.1", v.getVersion());
 		}
 
 		@Test
-		void emptyConstructor() {
+		void b02_emptyConstructor() {
 			var v = new JsonApiVersion();
 			assertNull(v.getVersion());
 			assertNull(v.getMeta());
@@ -99,13 +99,13 @@ class JsonApi_RoundTrip_Test {
 	class C_ResourceIdentifier {
 
 		@Test
-		void roundTrip() {
+		void c01_roundTrip() {
 			var rid = new JsonApiResourceIdentifier("people", "9").setMeta(map("k", "v"));
 			assertJsonRoundTrip(rid, JsonApiResourceIdentifier.class);
 		}
 
 		@Test
-		void settersAndDefaultConstructor() {
+		void c02_settersAndDefaultConstructor() {
 			var rid = new JsonApiResourceIdentifier()
 				.setType("articles")
 				.setId("1")
@@ -121,7 +121,7 @@ class JsonApi_RoundTrip_Test {
 	class D_Relationship {
 
 		@Test
-		void singleIdentifierData_roundTrip() {
+		void d01_singleIdentifierDataRoundTrip() {
 			var rel = new JsonApiRelationship()
 				.setData(new JsonApiResourceIdentifier("people", "9"))
 				.setLinks(new LinkedHashMap<>(Map.of("self", "/articles/1/relationships/author")))
@@ -131,7 +131,7 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void manyIdentifiersData_roundTrip() {
+		void d02_manyIdentifiersDataRoundTrip() {
 			var rel = new JsonApiRelationship()
 				.setData(list(
 					new JsonApiResourceIdentifier("comments", "5"),
@@ -141,7 +141,7 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void linksAcceptStringOrLinkObject() {
+		void d03_linksAcceptStringOrLinkObject() {
 			var rel = new JsonApiRelationship()
 				.setLinks(new LinkedHashMap<>(Map.of(
 					"self", "/articles/1/relationships/author",
@@ -157,14 +157,14 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void nullData_isPreserved() {
+		void d04_nullDataIsPreserved() {
 			var rel = new JsonApiRelationship().setData((Object) null).setMeta(map("k", "v"));
 			assertNull(rel.getData());
 			assertJsonRoundTrip(rel, JsonApiRelationship.class);
 		}
 
 		@Test
-		void toString_doesNotThrow() {
+		void d05_toStringDoesNotThrow() {
 			assertNotNull(new JsonApiRelationship().toString());
 		}
 	}
@@ -173,7 +173,7 @@ class JsonApi_RoundTrip_Test {
 	class E_ErrorAndSource {
 
 		@Test
-		void allFields_roundTrip() {
+		void e01_allFieldsRoundTrip() {
 			var src = new JsonApiErrorSource()
 				.setPointer("/data/attributes/title")
 				.setParameter("filter[title]")
@@ -191,7 +191,7 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void source_emptyConstructorAndToString() {
+		void e02_sourceEmptyConstructorAndToString() {
 			var s = new JsonApiErrorSource();
 			assertNull(s.getPointer());
 			assertNull(s.getParameter());
@@ -200,7 +200,7 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void error_emptyConstructorAndToString() {
+		void e03_errorEmptyConstructorAndToString() {
 			var e = new JsonApiError();
 			assertNull(e.getId());
 			assertNull(e.getLinks());
@@ -218,7 +218,7 @@ class JsonApi_RoundTrip_Test {
 	class F_Resource {
 
 		@Test
-		void allFields_roundTrip() {
+		void f01_allFieldsRoundTrip() {
 			var res = new JsonApiResource("articles", "1")
 				.setAttributes(JsonMap.of("title", "JSON:API paints my bikeshed!"))
 				.putAttribute("body", "lorem")
@@ -231,20 +231,20 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void putAttribute_setsBackingMapIfNull() {
+		void f02_putAttributeSetsBackingMapIfNull() {
 			var r = new JsonApiResource().putAttribute("k", "v");
 			assertEquals("v", r.getAttributes().get("k"));
 		}
 
 		@Test
-		void putRelationship_setsBackingMapIfNull() {
+		void f03_putRelationshipSetsBackingMapIfNull() {
 			var r = new JsonApiResource().putRelationship("author",
 				new JsonApiRelationship().setData(new JsonApiResourceIdentifier("people", "9")));
 			assertNotNull(r.getRelationships().get("author"));
 		}
 
 		@Test
-		void typeIsPlainString_notDiscriminator() {
+		void f04_typeIsPlainStringNotDiscriminator() {
 			// JSON:API ‘type’ is just data. Round-tripping a custom value must not require a Java dictionary entry.
 			var r = new JsonApiResource("very-custom-resource-not-in-any-registry", "1");
 			var j = SER.write(r);
@@ -254,7 +254,7 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void settersAndDefaultConstructor() {
+		void f05_settersAndDefaultConstructor() {
 			var r = new JsonApiResource()
 				.setType("a")
 				.setId("1")
@@ -276,7 +276,7 @@ class JsonApi_RoundTrip_Test {
 	class G_Document {
 
 		@Test
-		void singleResource_roundTrip() {
+		void g01_singleResourceRoundTrip() {
 			var doc = new JsonApiDocument()
 				.setData(new JsonApiResource("articles", "1"))
 				.setJsonapi(new JsonApiVersion("1.1"));
@@ -284,7 +284,7 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void manyResources_roundTrip() {
+		void g02_manyResourcesRoundTrip() {
 			var doc = new JsonApiDocument().setData(list(
 				new JsonApiResource("articles", "1"),
 				new JsonApiResource("articles", "2")
@@ -293,7 +293,7 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void errorsDocument_roundTrip() {
+		void g03_errorsDocumentRoundTrip() {
 			var doc = new JsonApiDocument().addErrors(
 				new JsonApiError().setStatus("422").setTitle("Bad")
 			);
@@ -301,7 +301,7 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void compoundDocumentExample_roundTrip() {
+		void g04_compoundDocumentExampleRoundTrip() {
 			// Spec example: top-level data + included.
 			var author = new JsonApiResource("people", "9")
 				.setAttributes(JsonMap.of("firstName", "Dan", "lastName", "Gebhardt"))
@@ -337,7 +337,7 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void setData_allOverloads() {
+		void g05_setDataAllOverloads() {
 			var doc1 = new JsonApiDocument().setData((Object) "x");
 			assertEquals("x", doc1.getData());
 			var doc2 = new JsonApiDocument().setData(new JsonApiResource("a", "1"));
@@ -347,16 +347,19 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void setIncludedAndErrors_replacesBackingList() {
+		void g06_setIncludedAndErrorsReplacesBackingList() {
 			var doc = new JsonApiDocument()
 				.setIncluded(list(new JsonApiResource("a", "1")))
 				.setErrors(list(new JsonApiError().setTitle("x")));
 			assertEquals(1, doc.getIncluded().size());
+			assertEquals("a", doc.getIncluded().get(0).getType());
+			assertEquals("1", doc.getIncluded().get(0).getId());
 			assertEquals(1, doc.getErrors().size());
+			assertEquals("x", doc.getErrors().get(0).getTitle());
 		}
 
 		@Test
-		void validate_throwsWhenDataAndErrorsCoexist() {
+		void g07_validateThrowsWhenDataAndErrorsCoexist() {
 			var doc = new JsonApiDocument()
 				.setData(new JsonApiResource("a", "1"))
 				.addErrors(new JsonApiError());
@@ -364,41 +367,45 @@ class JsonApi_RoundTrip_Test {
 		}
 
 		@Test
-		void validate_throwsWhenEmpty() {
+		void g08_validateThrowsWhenEmpty() {
 			var doc = new JsonApiDocument();
 			assertThrows(IllegalStateException.class, doc::validate);
 		}
 
 		@Test
-		void validate_okWithJustMeta() {
+		void g09_validateOkWithJustMeta() {
 			var doc = new JsonApiDocument().setMeta(map("k", "v"));
 			assertSame(doc, doc.validate());
 		}
 
 		@Test
-		void validate_okWithJustData() {
+		void g10_validateOkWithJustData() {
 			var doc = new JsonApiDocument().setData(new JsonApiResource("a", "1"));
 			assertSame(doc, doc.validate());
 		}
 
 		@Test
-		void validate_okWithJustErrors() {
+		void g11_validateOkWithJustErrors() {
 			var doc = new JsonApiDocument().addErrors(new JsonApiError().setTitle("x"));
 			assertSame(doc, doc.validate());
 		}
 
 		@Test
-		void addErrors_andAddIncluded_appendToBackingLists() {
+		void g12_addErrorsAndAddIncludedAppendToBackingLists() {
 			var doc = new JsonApiDocument()
 				.addErrors(new JsonApiError().setTitle("a"))
 				.addErrors(new JsonApiError().setTitle("b"));
 			assertEquals(2, doc.getErrors().size());
+			assertEquals("a", doc.getErrors().get(0).getTitle());
+			assertEquals("b", doc.getErrors().get(1).getTitle());
 			doc.addIncluded(new JsonApiResource("a", "1")).addIncluded(new JsonApiResource("a", "2"));
 			assertEquals(2, doc.getIncluded().size());
+			assertEquals("1", doc.getIncluded().get(0).getId());
+			assertEquals("2", doc.getIncluded().get(1).getId());
 		}
 
 		@Test
-		void links_emptyConstructorTrip() {
+		void g13_linksEmptyConstructorTrip() {
 			var d = new JsonApiDocument();
 			assertNull(d.getLinks());
 			assertNull(d.getMeta());
@@ -414,27 +421,27 @@ class JsonApi_RoundTrip_Test {
 	class H_LinkSwap_directInvocation {
 
 		@Test
-		void unswap_nullIsNull() {
+		void h01_unswapNullIsNull() {
 			var swap = new JsonApiLinkOrStringSwap();
 			assertNull(swap.unswap(null, null, null));
 		}
 
 		@Test
-		void swap_isIdentity() {
+		void h02_swapIsIdentity() {
 			var swap = new JsonApiLinkOrStringSwap();
 			var input = new Object();
 			assertSame(input, swap.swap(null, input));
 		}
 
 		@Test
-		void unswap_nonMapPassesThrough() {
+		void h03_unswapNonMapPassesThrough() {
 			var swap = new JsonApiLinkOrStringSwap();
 			var input = "raw-string";
 			assertSame(input, swap.unswap(null, input, null));
 		}
 
 		@Test
-		void unswap_mapWithScalarEntry_passesValueThrough() {
+		void h04_unswapMapWithScalarEntryPassesValueThrough() {
 			// A nested map (object) that itself contains a scalar at the "x" key still parses to a JsonApiLink
 			// (the per-entry rule); a more direct scalar-passthrough is hit via the JsonApiDocument case below.
 			var json = "{\"links\":{\"self\":\"/x\"}}";

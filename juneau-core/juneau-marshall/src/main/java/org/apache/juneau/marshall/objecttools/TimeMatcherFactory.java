@@ -330,6 +330,12 @@ public class TimeMatcherFactory extends MatcherFactory {
 		ZonedDateTime start;
 		ZonedDateTime end;
 
+		/**
+		 * Constructor for single-bound ranges (e.g. <js>">2001-01-01"</js>, <js>"&lt;2001-01-01"</js>).
+		 *
+		 * @param eq The comparison operator (e.g. <c>GT</c>, <c>GTE</c>, <c>LT</c>, <c>LTE</c>, <c>NONE</c>).
+		 * @param singleDate The granular date/time string defining the bound.
+		 */
 		public TimestampRange(Equality eq, String singleDate) {
 			var singleDate1 = GranularZonedDateTime.of(singleDate);
 			if (eq == Equality.GT) {
@@ -350,6 +356,12 @@ public class TimeMatcherFactory extends MatcherFactory {
 			}
 		}
 
+		/**
+		 * Constructor for explicit-bound ranges (e.g. <js>"2001-01-01-2001-12-31"</js>).
+		 *
+		 * @param start The granular date/time string defining the start of the range (inclusive).
+		 * @param end The granular date/time string defining the end of the range (inclusive).
+		 */
 		public TimestampRange(String start, String end) {
 			var start1 = GranularZonedDateTime.of(start);
 			var end1 = GranularZonedDateTime.of(end);
@@ -357,6 +369,12 @@ public class TimeMatcherFactory extends MatcherFactory {
 			this.end = end1.roll(1).getZonedDateTime();
 		}
 
+		/**
+		 * Checks whether the specified date/time falls within this range.
+		 *
+		 * @param zdt The date/time to test.
+		 * @return <jk>true</jk> if the date/time is within range.
+		 */
 		public boolean matches(ZonedDateTime zdt) {
 			return zdt.isAfter(start) && zdt.isBefore(end);
 		}

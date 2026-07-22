@@ -139,7 +139,7 @@ public class OperationMap extends TreeMap<String,Operation> {
 	 *
 	 * @param key The key.
 	 * @param value The value.
-	 * @return The previous value associated with key, or null if there was no mapping for key.
+	 * @return The previous value associated with key, or <jk>null</jk> if there was no mapping for key.
 	 */
 	@Override
 	public Operation put(String key, Operation value) {

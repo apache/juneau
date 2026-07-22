@@ -32,34 +32,34 @@ class McpCursor_Test {
 	private static final BeanStore CTX = new BasicBeanStore();
 
 	@Test
-	void singlePage_returnsAll_withNullCursor() {
+	void a01_singlePage_returnsAll_withNullCursor() {
 		var page = McpCursor.SINGLE_PAGE.page(List.of("a", "b", "c"), null, CTX);
 		assertList(page.items(), "a", "b", "c");
 		assertNull(page.nextCursor());
 	}
 
 	@Test
-	void singlePage_acceptsNullList() {
+	void a02_singlePage_acceptsNullList() {
 		var page = McpCursor.SINGLE_PAGE.page(null, "ignored", CTX);
 		assertEmpty(page.items());
 		assertNull(page.nextCursor());
 	}
 
 	@Test
-	void singlePage_acceptsAnyCursor() {
+	void a03_singlePage_acceptsAnyCursor() {
 		var page = McpCursor.SINGLE_PAGE.page(List.of("a", "b"), "ignored", CTX);
 		assertSize(2, page.items());
 		assertNull(page.nextCursor());
 	}
 
 	@Test
-	void fixedSize_invalid_pageSize_throws() {
+	void b01_fixedSize_invalid_pageSize_throws() {
 		assertThrows(IllegalArgumentException.class, () -> McpCursor.fixedSize(0));
 		assertThrows(IllegalArgumentException.class, () -> McpCursor.fixedSize(-1));
 	}
 
 	@Test
-	void fixedSize_first_page() {
+	void b02_fixedSize_first_page() {
 		var c = McpCursor.fixedSize(2);
 		var page = c.page(List.of("a", "b", "c", "d"), null, CTX);
 		assertList(page.items(), "a", "b");
@@ -67,7 +67,7 @@ class McpCursor_Test {
 	}
 
 	@Test
-	void fixedSize_middle_page() {
+	void b03_fixedSize_middle_page() {
 		var c = McpCursor.fixedSize(2);
 		var page = c.page(List.of("a", "b", "c", "d", "e"), "2", CTX);
 		assertList(page.items(), "c", "d");
@@ -75,7 +75,7 @@ class McpCursor_Test {
 	}
 
 	@Test
-	void fixedSize_last_page_no_next() {
+	void b04_fixedSize_last_page_no_next() {
 		var c = McpCursor.fixedSize(2);
 		var page = c.page(List.of("a", "b", "c"), "2", CTX);
 		assertList(page.items(), "c");
@@ -83,7 +83,7 @@ class McpCursor_Test {
 	}
 
 	@Test
-	void fixedSize_offset_beyond_returnsEmpty() {
+	void b05_fixedSize_offset_beyond_returnsEmpty() {
 		var c = McpCursor.fixedSize(2);
 		var page = c.page(List.of("a", "b"), "10", CTX);
 		assertEmpty(page.items());
@@ -91,7 +91,7 @@ class McpCursor_Test {
 	}
 
 	@Test
-	void fixedSize_acceptsNullList() {
+	void b06_fixedSize_acceptsNullList() {
 		var c = McpCursor.fixedSize(3);
 		var page = c.page(null, null, CTX);
 		assertEmpty(page.items());
@@ -99,7 +99,7 @@ class McpCursor_Test {
 	}
 
 	@Test
-	void parseOffset_handlesNullsAndJunk() {
+	void c01_parseOffset_handlesNullsAndJunk() {
 		assertEquals(0, McpCursor.parseOffset(null));
 		assertEquals(0, McpCursor.parseOffset(""));
 		assertEquals(0, McpCursor.parseOffset("not-a-number"));
@@ -108,7 +108,7 @@ class McpCursor_Test {
 	}
 
 	@Test
-	void mcpPage_nullItems_defaultsToEmpty() {
+	void d01_mcpPage_nullItems_defaultsToEmpty() {
 		var p = new McpPage<>(null, "next");
 		assertEmpty(p.items());
 		assertString("next", p.nextCursor());

@@ -70,7 +70,7 @@ class McpRestServlet_Test extends TestBase {
 		return MockRestClient.create(A.class).json().contentType("application/json").accept("application/json").build();
 	}
 
-	@Test void initialize_returnsServerInfo() throws Exception {
+	@Test void a01_initialize_returnsServerInfo() throws Exception {
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(1)
@@ -80,7 +80,7 @@ class McpRestServlet_Test extends TestBase {
 		assertNotNull(parsed.getResult());
 	}
 
-	@Test void toolsList_returnsRegisteredTool() throws Exception {
+	@Test void a02_toolsList_returnsRegisteredTool() throws Exception {
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(1)
@@ -89,7 +89,7 @@ class McpRestServlet_Test extends TestBase {
 		assertContains("echo", resp);
 	}
 
-	@Test void toolsCall_invokesHandler() throws Exception {
+	@Test void a03_toolsCall_invokesHandler() throws Exception {
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(1)
@@ -100,7 +100,7 @@ class McpRestServlet_Test extends TestBase {
 		assertContains("\"type\":\"text\"", resp);
 	}
 
-	@Test void unknown_methodReturnsErrorEnvelope() throws Exception {
+	@Test void a04_unknown_methodReturnsErrorEnvelope() throws Exception {
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(1)
@@ -131,7 +131,7 @@ class McpRestServlet_Test extends TestBase {
 		}
 	}
 
-	@Test void endpointMixin_dispatches() throws Exception {
+	@Test void b01_endpointMixin_dispatches() throws Exception {
 		var c = MockRestClient.create(B.class).json().contentType("application/json").accept("application/json").build();
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
@@ -153,19 +153,19 @@ class McpRestServlet_Test extends TestBase {
 		}
 	}
 
-	@Test void servlet_getMcpConfig_cachesValue() {
+	@Test void c01_servlet_getMcpConfig_cachesValue() {
 		var s = new A();
 		var c1 = s.getMcpConfig();
 		var c2 = s.getMcpConfig();
 		assertSame(c1, c2);
 	}
 
-	@Test void servlet_getMcpConfig_nullThrows() {
+	@Test void c02_servlet_getMcpConfig_nullThrows() {
 		var s = new C();
 		assertThrows(IllegalStateException.class, s::getMcpConfig);
 	}
 
-	@Test void servlet_nullConfigCausesFailure() throws Exception {
+	@Test void c03_servlet_nullConfigCausesFailure() throws Exception {
 		var c = MockRestClient.create(C.class).json().contentType("application/json").accept("application/json").ignoreErrors().build();
 		var req = new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1).setMethod(McpMethods.INITIALIZE);
 		c.post("/", req).run().assertStatus(500);

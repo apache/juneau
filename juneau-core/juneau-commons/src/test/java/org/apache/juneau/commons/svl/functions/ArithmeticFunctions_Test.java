@@ -27,15 +27,15 @@ class ArithmeticFunctions_Test extends TestBase {
 
 	private final VarResolver vr = VarResolver.create().functions(ArithmeticFunctions.ALL).build();
 
-	@Test void add_int() { assertEquals("5", vr.resolve("#{add(2, 3)}")); }
-	@Test void add_float() { assertEquals("5.5", vr.resolve("#{add(2.0, 3.5)}")); }
-	@Test void subtract() { assertEquals("3", vr.resolve("#{subtract(10, 7)}")); }
-	@Test void multiply() { assertEquals("21", vr.resolve("#{multiply(3, 7)}")); }
-	@Test void divide() { assertEquals("2.5", vr.resolve("#{divide(5, 2)}")); }
-	@Test void divide_intResult() { assertEquals("3", vr.resolve("#{divide(9, 3)}")); }
-	@Test void modulo() { assertEquals("1", vr.resolve("#{modulo(10, 3)}")); }
-	@Test void min() { assertEquals("2", vr.resolve("#{min(5, 2)}")); }
-	@Test void max() { assertEquals("5", vr.resolve("#{max(5, 2)}")); }
-	@Test void abs_neg() { assertEquals("5", vr.resolve("#{abs(-5)}")); }
-	@Test void abs_pos() { assertEquals("5", vr.resolve("#{abs(5)}")); }
+	@Test void a01_add_int() { assertEquals("5", vr.resolve("#{add(2, 3)}")); }
+	@Test void a02_add_float() { assertEquals("5.5", vr.resolve("#{add(2.0, 3.5)}")); }
+	@Test void a03_subtract() { assertEquals("3", vr.resolve("#{subtract(10, 7)}")); }
+	@Test void a04_multiply() { assertEquals("21", vr.resolve("#{multiply(3, 7)}")); }
+	@Test void a05_divide() { assertEquals("2.5", vr.resolve("#{divide(5, 2)}")); }
+	@Test void a06_divide_intResult() { assertEquals("3", vr.resolve("#{divide(9, 3)}")); }
+	@Test void a07_modulo() { assertEquals("1", vr.resolve("#{modulo(10, 3)}")); }
+	@Test void a08_min() { assertEquals("2", vr.resolve("#{min(5, 2)}")); }
+	@Test void a09_max() { assertEquals("5", vr.resolve("#{max(5, 2)}")); }
+	@Test void a10_abs_neg() { assertEquals("5", vr.resolve("#{abs(-5)}")); }
+	@Test void a11_abs_pos() { assertEquals("5", vr.resolve("#{abs(5)}")); }
 }

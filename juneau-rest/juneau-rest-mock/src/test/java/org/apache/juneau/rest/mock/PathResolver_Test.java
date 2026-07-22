@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"java:S5961" // High assertion count acceptable in comprehensive test
 })
-class PathResolverTest extends TestBase {
+class PathResolver_Test extends TestBase {
 
 	public static class PathResolver2 extends MockPathResolver {
 
@@ -64,7 +64,7 @@ class PathResolverTest extends TestBase {
 		return new PathResolver2(target, contextPath, servletPath, pathToResolve, pathVars);
 	}
 
-	@Test void basicDefaultTarget() {
+	@Test void a01_basicDefaultTarget() {
 		create(null, null, null, "/foo", null)
 			.assertUri().is("http://localhost/foo")
 			.assertTarget().is("http://localhost")
@@ -143,7 +143,7 @@ class PathResolverTest extends TestBase {
 			.assertPathInfo().is("/foo/foo2");
 	}
 
-	@Test void basicWithTarget() {
+	@Test void a02_basicWithTarget() {
 		create("http://foobar", null, null, "/foo", null)
 			.assertUri().is("http://foobar/foo")
 			.assertTarget().is("http://foobar")
@@ -208,7 +208,7 @@ class PathResolverTest extends TestBase {
 			.assertPathInfo().is("");
 	}
 
-	@Test void basicWithPathVars() {
+	@Test void a03_basicWithPathVars() {
 		Map<String,Object> vars = m("foo","123");
 
 		create(null, null, null, "/foo", vars)
@@ -226,7 +226,7 @@ class PathResolverTest extends TestBase {
 			.assertPathInfo().is("/foo/{foo}");
 	}
 
-	@Test void fullPaths() {
+	@Test void a04_fullPaths() {
 		Map<String,Object> vars = m("foo","123");
 
 		create(null, null, null, "http://foobar/foo", vars)
@@ -351,7 +351,7 @@ class PathResolverTest extends TestBase {
 			.assertPathInfo().is("");
 	}
 
-	@Test void errors() {
+	@Test void a05_errors() {
 		create(null, null, null, "http://", null)
 			.assertError().is("Invalid URI pattern encountered:  http://");
 		create(null, null, null, "http:///", null)

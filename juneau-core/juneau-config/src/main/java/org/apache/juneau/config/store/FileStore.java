@@ -131,8 +131,8 @@ public class FileStore extends ConfigStore {
 		 * 	The new value for this property.
 		 * 	<br>The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"ConfigFileStore.charset"
-		 * 		<li>Environment variable <js>"CONFIGFILESTORE_CHARSET"
+		 * 		<li>System property <js>"ConfigFileStore.charset"</js>
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_CHARSET"</js>
 		 * 		<li>{@link Charset#defaultCharset()}
 		 * 	</ul>
 		 * 	<br>Cannot be <jk>null</jk>.
@@ -158,8 +158,8 @@ public class FileStore extends ConfigStore {
 		 * 	The new value for this property.
 		 * 	<br>The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"ConfigFileStore.directory"
-		 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"
+		 * 		<li>System property <js>"ConfigFileStore.directory"</js>
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"</js>
 		 * 		<li><js>"."</js>.
 		 * 	</ul>
 		 * 	<br>Cannot be <jk>null</jk>.
@@ -180,8 +180,8 @@ public class FileStore extends ConfigStore {
 		 * 	The new value for this property.
 		 * 	<br>The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"ConfigFileStore.directory"
-		 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"
+		 * 		<li>System property <js>"ConfigFileStore.directory"</js>
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"</js>
 		 * 		<li><js>"."</js>
 		 * 	</ul>
 		 * 	<br>Cannot be <jk>null</jk>.
@@ -205,8 +205,8 @@ public class FileStore extends ConfigStore {
 		 *	<p>
 		 * 	The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"ConfigFileStore.enableWatcher"
-		 * 		<li>Environment variable <js>"CONFIGFILESTORE_ENABLEWATCHER"
+		 * 		<li>System property <js>"ConfigFileStore.enableWatcher"</js>
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_ENABLEWATCHER"</js>
 		 * 		<li><jk>false</jk>.
 		 * 	</ul>
 		 *
@@ -227,8 +227,8 @@ public class FileStore extends ConfigStore {
 		 * 	The new value for this property.
 		 * 	The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"ConfigFileStore.extensions"
-		 * 		<li>Environment variable <js>"CONFIGFILESTORE_EXTENSIONS"
+		 * 		<li>System property <js>"ConfigFileStore.extensions"</js>
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_EXTENSIONS"</js>
 		 * 		<li><js>"cfg"</js>
 		 * 	</ul>
 		 * 	<br>Cannot be <jk>null</jk>.
@@ -252,8 +252,8 @@ public class FileStore extends ConfigStore {
 		 *	<p>
 		 * 	The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"ConfigFileStore.updateOnWrite"
-		 * 		<li>Environment variable <js>"CONFIGFILESTORE_UPDATEONWRITE"
+		 * 		<li>System property <js>"ConfigFileStore.updateOnWrite"</js>
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_UPDATEONWRITE"</js>
 		 * 		<li><jk>false</jk>.
 		 * 	</ul>
 		 *
@@ -278,8 +278,8 @@ public class FileStore extends ConfigStore {
 		 * 	The new value for this property.
 		 * 	<br>The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"ConfigFileStore.watcherSensitivity"
-		 * 		<li>Environment variable <js>"CONFIGFILESTORE_WATCHERSENSITIVITY"
+		 * 		<li>System property <js>"ConfigFileStore.watcherSensitivity"</js>
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_WATCHERSENSITIVITY"</js>
 		 * 		<li>{@link WatcherSensitivity#MEDIUM}
 		 * 	</ul>
 		 * 	<br>Cannot be <jk>null</jk>.

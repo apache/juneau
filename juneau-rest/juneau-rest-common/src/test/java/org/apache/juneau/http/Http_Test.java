@@ -20,6 +20,7 @@ import static org.apache.juneau.http.HttpBodies.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.http.HttpResponses.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -247,7 +248,7 @@ public class Http_Test {
 
 		@Test void c04_partList_of() {
 			var list = PartList.of(part("a", "1"), part("b", "2"));
-			assertEquals(2, list.size());
+			assertList(list, "a=1", "b=2");
 			assertFalse(list.isEmpty());
 		}
 
@@ -315,12 +316,12 @@ public class Http_Test {
 
 		@Test void c16_httpParts_factory() {
 			var list = partList(part("x", "1"), part("y", "2"));
-			assertEquals(2, list.size());
+			assertList(list, "x=1", "y=2");
 		}
 
 		@Test void c17_httpParts_ofPairs() {
 			var list = partListOfPairs("a", "1");
-			assertEquals(1, list.size());
+			assertList(list, "a=1");
 		}
 
 		@Test void c18_partList_writeTo_nullCheck() {
@@ -398,7 +399,7 @@ public class Http_Test {
 
 		@Test void d10_formBodyOfPairs() {
 			var body = formBodyOfPairs("a", "1", "b", "2");
-			assertEquals(2, body.size());
+			assertList(body, "a=1", "b=2");
 		}
 
 		@Test void d11_fileBody() {
@@ -563,7 +564,7 @@ public class Http_Test {
 		@Test void f13_getHeaders_filterByName() {
 			var resp = ok().withHeader("X-A", "1").withHeader("X-B", "2").withHeader("X-A", "3");
 			var xas = resp.getHeaders("X-A");
-			assertEquals(2, xas.size());
+			assertList(xas, "X-A: 1", "X-A: 3");
 		}
 
 		@Test void f14_statusClasses() {

@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
@@ -152,8 +153,7 @@ class MarshallUtils_Test extends TestBase {
 		// json("[1,2,3]") parsed into List<Integer>
 		String jsonStr = "[1,2,3]";
 		List<Integer> r = json((Object) jsonStr, List.class, Integer.class);
-		assertEquals(3, r.size());
-		assertEquals(Integer.valueOf(1), r.get(0));
+		assertList(r, 1, 2, 3);
 
 		assertNotNull(json5((Object) "[1,2,3]", List.class, Integer.class));
 		assertNotNull(jsonl((Object) "1\n2\n3\n", List.class, Integer.class));
@@ -166,7 +166,7 @@ class MarshallUtils_Test extends TestBase {
 	@Test void d02_parseObjectParameterizedType_binaryFormats() throws Exception {
 		var bytes = msgPack(List.of(1, 2, 3));
 		List<Integer> r = msgPack((Object) bytes, List.class, Integer.class);
-		assertEquals(3, r.size());
+		assertList(r, 1, 2, 3);
 
 		var cborBytes = cbor(List.of(1, 2, 3));
 		assertNotNull(cbor((Object) cborBytes, List.class, Integer.class));
@@ -231,7 +231,7 @@ class MarshallUtils_Test extends TestBase {
 
 	@Test void e05_parseStringParameterizedType() throws Exception {
 		List<Integer> r = json("[1,2,3]", List.class, Integer.class);
-		assertEquals(3, r.size());
+		assertList(r, 1, 2, 3);
 
 		assertNotNull(json5("[1,2,3]", List.class, Integer.class));
 		assertNotNull(jsonl("1\n2\n3\n", List.class, Integer.class));
@@ -249,7 +249,7 @@ class MarshallUtils_Test extends TestBase {
 	@Test void e06_parseBinaryParameterizedType_byteArrays() throws Exception {
 		var mpBytes = msgPack(List.of(1, 2, 3));
 		List<Integer> mpResult = msgPack(mpBytes, List.class, Integer.class);
-		assertEquals(3, mpResult.size());
+		assertList(mpResult, 1, 2, 3);
 
 		var cborBytes = cbor(List.of(1, 2, 3));
 		assertNotNull(cbor(cborBytes, List.class, Integer.class));
@@ -262,14 +262,14 @@ class MarshallUtils_Test extends TestBase {
 		var bytes = parquet(new A04_Bean());
 		// (byte[], Type) overload returns List<T>
 		List<A04_Bean> r1 = parquet(bytes, (java.lang.reflect.Type) A04_Bean.class);
-		assertEquals(1, r1.size());
+		assertList(r1, (Predicate<A04_Bean>) b -> "test".equals(b.x));
 
 		// (byte[], Type, Type...) overload
 		List<A04_Bean> r2 = parquet(bytes, List.class, A04_Bean.class);
-		assertEquals(1, r2.size());
+		assertList(r2, (Predicate<A04_Bean>) b -> "test".equals(b.x));
 
 		// (byte[], Class) overload
 		List<A04_Bean> r3 = parquet(bytes, A04_Bean.class);
-		assertEquals(1, r3.size());
+		assertList(r3, (Predicate<A04_Bean>) b -> "test".equals(b.x));
 	}
 }

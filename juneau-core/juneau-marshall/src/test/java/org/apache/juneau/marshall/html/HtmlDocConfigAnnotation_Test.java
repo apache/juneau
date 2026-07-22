@@ -77,7 +77,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test void basic() {
+	@Test void a01_basic() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("foo", x.getAside());
@@ -102,7 +102,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test void defaults() {
+	@Test void b01_defaults() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("", x.getAside());
@@ -126,7 +126,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test void noAnnotation() {
+	@Test void c01_noAnnotation() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("", x.getAside());
@@ -161,7 +161,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static class D1 extends A {}
 	static ClassInfo d1 = ClassInfo.of(D1.class);
 
-	@Test void inheritance1() {
+	@Test void d01_inheritance1() {
 		var al = AnnotationWorkList.of(sr, rstream(d1.getAnnotations()));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("foo2,foo", x.getAside());
@@ -189,7 +189,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static class D2 extends A {}
 	static ClassInfo d2 = ClassInfo.of(D2.class);
 
-	@Test void inheritance2() {
+	@Test void d02_inheritance2() {
 		var al = AnnotationWorkList.of(sr, rstream(d2.getAnnotations()));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("foo,foo2", x.getAside());
@@ -217,7 +217,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static class D3 extends A {}
 	static ClassInfo d3 = ClassInfo.of(D3.class);
 
-	@Test void inheritance3() {
+	@Test void d03_inheritance3() {
 		var al = AnnotationWorkList.of(sr, rstream(d3.getAnnotations()));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("foo2", x.getAside());
@@ -245,7 +245,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static class D4 extends A {}
 	static ClassInfo d4 = ClassInfo.of(D4.class);
 
-	@Test void inheritance4() {
+	@Test void d04_inheritance4() {
 		var al = AnnotationWorkList.of(sr, rstream(d4.getAnnotations()));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("", x.getAside());
@@ -299,7 +299,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 		}
 	}
 
-	@Test void widgets_basic() {
+	@Test void f01_widgets_basic() {
 		var al = AnnotationWorkList.of(sr, rstream(e.getAnnotations()));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("$W{E}", x.getAside());
@@ -316,7 +316,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 		check("BasicHtmlDocTemplate", x.getTemplate());
 	}
 
-	@Test void widgets_resolution() throws Exception {
+	@Test void f02_widgets_resolution() throws Exception {
 		var al = AnnotationWorkList.of(sr, rstream(e.getAnnotations()));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		var r = x.write(null).replaceAll("[\r\n]+", "|");

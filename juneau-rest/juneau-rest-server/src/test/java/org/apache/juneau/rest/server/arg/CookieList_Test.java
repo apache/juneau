@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.arg;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -41,8 +42,6 @@ class CookieList_Test extends TestBase {
 
 	@Test void a02_populatedCookiesPreserved() {
 		var l = CookieList.of(new Cookie[]{new Cookie("a", "1"), new Cookie("b", "2")});
-		assertEquals(2, l.size());
-		assertEquals("a", l.get(0).getName());
-		assertEquals("b", l.get(1).getName());
+		assertBeans(l, "name", "a", "b");
 	}
 }

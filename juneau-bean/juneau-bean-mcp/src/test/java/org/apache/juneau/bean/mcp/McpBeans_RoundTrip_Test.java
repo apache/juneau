@@ -60,7 +60,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void jsonRpc_stringId_roundTrip() {
+	void a01_jsonRpcStringIdRoundTrip() {
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId("abc")
@@ -70,7 +70,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void jsonRpc_intId_roundTrip() {
+	void a02_jsonRpcIntIdRoundTrip() {
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(42)
@@ -80,7 +80,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void jsonRpc_errorResponse_roundTrip() {
+	void a03_jsonRpcErrorResponseRoundTrip() {
 		var res = new JsonRpcResponse()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(7)
@@ -89,7 +89,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void callToolResult_mixedContent_roundTrip() {
+	void a04_callToolResultMixedContentRoundTrip() {
 		var emb = new EmbeddedResourceContent()
 			.setResource(new TextResourceContents().setUri("file:///x").setMimeType("text/plain").setText("hi"));
 		var result = new CallToolResult()
@@ -103,7 +103,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void readResourceResult_mixedContents_roundTrip() {
+	void a05_readResourceResultMixedContentsRoundTrip() {
 		var rr = new ReadResourceResult()
 			.setContents(list(
 				new TextResourceContents().setUri("u1").setText("alpha"),
@@ -113,7 +113,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void initializeResult_roundTrip() {
+	void a06_initializeResultRoundTrip() {
 		var init = new InitializeResult()
 			.setProtocolVersion(McpProtocol.VERSION_2025_06_18)
 			.setInstructions("Be concise.")
@@ -129,7 +129,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void getPromptResult_withRole_roundTrip() {
+	void a07_getPromptResultWithRoleRoundTrip() {
 		var pr = new GetPromptResult()
 			.setDescription("d")
 			.setMessages(list(
@@ -140,7 +140,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void jsonSchema_defs_roundTrip() {
+	void a08_jsonSchemaDefsRoundTrip() {
 		var nested = new JsonSchema().setType("string");
 		var props = new LinkedHashMap<String, JsonSchema>();
 		props.put("id", nested);
@@ -157,7 +157,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void jsonRpc_successResponse_roundTrip() {
+	void a09_jsonRpcSuccessResponseRoundTrip() {
 		var tools = new ListToolsResult()
 			.setNextCursor("c1")
 			.setTools(list(
@@ -174,7 +174,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void initializeRequest_roundTrip() {
+	void a10_initializeRequestRoundTrip() {
 		var roots = new RootsCapability().setListChanged(true);
 		var caps = new ClientCapabilities()
 			.setRoots(roots)
@@ -188,7 +188,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void listPromptsResult_roundTrip() {
+	void a11_listPromptsResultRoundTrip() {
 		var arg = new PromptArgument().setName("a1").setDescription("ad").setRequired(true);
 		var prompt = new Prompt().setName("p1").setDescription("pd").setArguments(list(arg));
 		var lr = new ListPromptsResult().setPrompts(list(prompt)).setNextCursor("n");
@@ -196,7 +196,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void listResourcesResult_roundTrip() {
+	void a12_listResourcesResultRoundTrip() {
 		var r = new Resource()
 			.setUri("file:///r")
 			.setName("n")
@@ -209,7 +209,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void callToolRequest_getPromptRequest_readResourceRequest_roundTrip() {
+	void a13_callToolRequestGetPromptRequestReadResourceRequestRoundTrip() {
 		assertJsonRoundTripPlain(
 			new CallToolRequest().setName("tool").setArguments(JsonMap.of("q", "v")),
 			CallToolRequest.class
@@ -222,7 +222,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void initializeResult_experimentalAndResourceListChanged_roundTrip() {
+	void a14_initializeResultExperimentalAndResourceListChangedRoundTrip() {
 		var caps = new ServerCapabilities()
 			.setTools(new ToolCapability().setListChanged(true))
 			.setResources(new ResourceCapability().setListChanged(true).setSubscribe(false))
@@ -235,14 +235,14 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void role_toWire_allValues() {
+	void a15_roleToWireAllValues() {
 		for (var r : Role.values()) {
 			assertEquals(r.toString(), r.toWire());
 		}
 	}
 
 	@Test
-	void mcpException_toJsonRpcError() {
+	void a16_mcpExceptionToJsonRpcError() {
 		var ex = new McpException(-32000, "Tool failed", JsonMap.of("tool", "t1"));
 		var err = ex.toJsonRpcError();
 		assertEquals(-32000, err.getCode());
@@ -251,7 +251,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void mcpException_twoArgConstructorAndSetters() {
+	void a17_mcpExceptionTwoArgConstructorAndSetters() {
 		var ex = new McpException(1, "m");
 		assertNull(ex.getData());
 		ex.setCode(2).setData(JsonMap.of("a", 1));
@@ -263,7 +263,7 @@ class McpBeans_RoundTrip_Test {
 	}
 
 	@Test
-	void getPromptResult_systemAndToolRoles_roundTrip() {
+	void a18_getPromptResultSystemAndToolRolesRoundTrip() {
 		var pr = new GetPromptResult()
 			.setMessages(list(
 				new PromptMessage().setRole(Role.SYSTEM).setContent(new TextContent().setText("sys")),

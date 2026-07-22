@@ -73,7 +73,7 @@ class McpServerConfig_Test {
 	}
 
 	@Test
-	void defaults() {
+	void a01_defaults() {
 		var c = new McpServerConfig();
 		assertNull(c.getServerInfo());
 		assertString(McpProtocol.VERSION_2025_06_18, c.getProtocolVersion());
@@ -86,7 +86,7 @@ class McpServerConfig_Test {
 	}
 
 	@Test
-	void setters_and_addCalls() {
+	void a02_setters_and_addCalls() {
 		var info = new Implementation().setName("x").setVersion("1");
 		var caps = new ServerCapabilities().setLogging(new LoggingCapability());
 		var c = new McpServerConfig()
@@ -110,7 +110,7 @@ class McpServerConfig_Test {
 	}
 
 	@Test
-	void setLists_replacingAndNullClears() {
+	void a03_setLists_replacingAndNullClears() {
 		var c = new McpServerConfig().addTool(dummyTool("t")).addPrompt(dummyPrompt("p")).addResource(dummyResource("r"));
 		c.setTools(null);
 		c.setPrompts(null);
@@ -128,7 +128,7 @@ class McpServerConfig_Test {
 	}
 
 	@Test
-	void setCursor_nullResets() {
+	void a04_setCursor_nullResets() {
 		var c = new McpServerConfig().setCursor(McpCursor.fixedSize(2));
 		c.setCursor(null);
 		assertSame(McpCursor.SINGLE_PAGE, c.getCursor());

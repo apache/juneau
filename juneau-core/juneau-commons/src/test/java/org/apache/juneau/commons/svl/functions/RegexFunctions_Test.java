@@ -27,13 +27,13 @@ class RegexFunctions_Test extends TestBase {
 
 	private final VarResolver vr = VarResolver.create().functions(RegexFunctions.ALL).build();
 
-	@Test void match_true() { assertEquals("true", vr.resolve("#{match(hello123, \"\\\\d+\")}")); }
-	@Test void match_false() { assertEquals("false", vr.resolve("#{match(hello, \"\\\\d+\")}")); }
+	@Test void a01_match_true() { assertEquals("true", vr.resolve("#{match(hello123, \"\\\\d+\")}")); }
+	@Test void a02_match_false() { assertEquals("false", vr.resolve("#{match(hello, \"\\\\d+\")}")); }
 
-	@Test void extract_full() { assertEquals("123", vr.resolve("#{extract(hello123world, \"\\\\d+\")}")); }
-	@Test void extract_group() {
+	@Test void a03_extract_full() { assertEquals("123", vr.resolve("#{extract(hello123world, \"\\\\d+\")}")); }
+	@Test void a04_extract_group() {
 		assertEquals("hello", vr.resolve("#{extract(\"name=hello;\", \"name=([a-z]+);\", 1)}"));
 	}
 
-	@Test void replaceRegex() { assertEquals("hX", vr.resolve("#{replaceRegex(hello, \"e.lo\", X)}")); }
+	@Test void a05_replaceRegex() { assertEquals("hX", vr.resolve("#{replaceRegex(hello, \"e.lo\", X)}")); }
 }

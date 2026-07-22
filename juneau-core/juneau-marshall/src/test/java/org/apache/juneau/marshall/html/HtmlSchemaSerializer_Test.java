@@ -26,7 +26,7 @@ import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Most of the heavy testing for HtmlSchemaSerializer is done in JsonSchemaGeneratorTest.
+ * Most of the heavy testing for HtmlSchemaSerializer is done in JsonSchemaGenerator_Test.
  */
 class HtmlSchemaSerializer_Test extends TestBase {
 

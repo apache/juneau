@@ -301,84 +301,128 @@ public class JsonSchema_Test extends TestBase {
 		var x = new JsonSchema();
 		x.addAdditionalItems(new JsonSchemaProperty("a", JsonType.STRING));
 		x.addAdditionalItems(new JsonSchemaProperty("b", JsonType.NUMBER)); // non-null path
-		assertEquals(2, x.getAdditionalItemsAsSchemaArray().size());
+		var items = x.getAdditionalItemsAsSchemaArray();
+		assertEquals(2, items.size());
+		assertEquals("a", ((JsonSchemaProperty<?>) items.get(0)).getName());
+		assertEquals("b", ((JsonSchemaProperty<?>) items.get(1)).getName());
 	}
 
 	@Test void b02_addAnyOf_calledTwice() {
 		var x = new JsonSchema();
 		x.addAnyOf(new JsonSchemaRef("http://a"));
 		x.addAnyOf(new JsonSchemaRef("http://b")); // non-null path
-		assertEquals(2, x.getAnyOf().size());
+		var anyOf = x.getAnyOf();
+		assertEquals(2, anyOf.size());
+		assertEquals(URI.create("http://a"), ((JsonSchema) anyOf.get(0)).getRef());
+		assertEquals(URI.create("http://b"), ((JsonSchema) anyOf.get(1)).getRef());
 	}
 
 	@Test void b03_addDef_calledTwice() {
 		var x = new JsonSchema();
-		x.addDef("k1", new JsonSchema());
-		x.addDef("k2", new JsonSchema()); // non-null path
-		assertEquals(2, x.getDefs().size());
+		var d1 = new JsonSchema().setDescription("d1");
+		var d2 = new JsonSchema().setDescription("d2");
+		x.addDef("k1", d1);
+		x.addDef("k2", d2); // non-null path
+		var defs = x.getDefs();
+		assertEquals(2, defs.size());
+		assertSame(d1, defs.get("k1"));
+		assertSame(d2, defs.get("k2"));
 	}
 
 	@Test void b04_addDefinition_calledTwice() {
 		var x = new JsonSchema();
-		x.addDefinition("d1", new JsonSchema());
-		x.addDefinition("d2", new JsonSchema()); // non-null path
-		assertEquals(2, x.getDefinitions().size());
+		var d1 = new JsonSchema().setDescription("d1");
+		var d2 = new JsonSchema().setDescription("d2");
+		x.addDefinition("d1", d1);
+		x.addDefinition("d2", d2); // non-null path
+		var definitions = x.getDefinitions();
+		assertEquals(2, definitions.size());
+		assertSame(d1, definitions.get("d1"));
+		assertSame(d2, definitions.get("d2"));
 	}
 
 	@Test void b05_addDependency_calledTwice() {
 		var x = new JsonSchema();
-		x.addDependency("d1", new JsonSchema());
-		x.addDependency("d2", new JsonSchema()); // non-null path
-		assertEquals(2, x.getDependencies().size());
+		var d1 = new JsonSchema().setDescription("d1");
+		var d2 = new JsonSchema().setDescription("d2");
+		x.addDependency("d1", d1);
+		x.addDependency("d2", d2); // non-null path
+		var dependencies = x.getDependencies();
+		assertEquals(2, dependencies.size());
+		assertSame(d1, dependencies.get("d1"));
+		assertSame(d2, dependencies.get("d2"));
 	}
 
 	@Test void b06_addDependentRequired_calledTwice() {
 		var x = new JsonSchema();
 		x.addDependentRequired("k1", java.util.Arrays.asList("f1"));
 		x.addDependentRequired("k2", java.util.Arrays.asList("f2")); // non-null path
-		assertEquals(2, x.getDependentRequired().size());
+		var dependentRequired = x.getDependentRequired();
+		assertEquals(2, dependentRequired.size());
+		assertEquals(java.util.Arrays.asList("f1"), dependentRequired.get("k1"));
+		assertEquals(java.util.Arrays.asList("f2"), dependentRequired.get("k2"));
 	}
 
 	@Test void b07_addDependentSchema_calledTwice() {
 		var x = new JsonSchema();
-		x.addDependentSchema("k1", new JsonSchema());
-		x.addDependentSchema("k2", new JsonSchema()); // non-null path
-		assertEquals(2, x.getDependentSchemas().size());
+		var d1 = new JsonSchema().setDescription("d1");
+		var d2 = new JsonSchema().setDescription("d2");
+		x.addDependentSchema("k1", d1);
+		x.addDependentSchema("k2", d2); // non-null path
+		var dependentSchemas = x.getDependentSchemas();
+		assertEquals(2, dependentSchemas.size());
+		assertSame(d1, dependentSchemas.get("k1"));
+		assertSame(d2, dependentSchemas.get("k2"));
 	}
 
 	@Test void b08_addEnum_calledTwice() {
 		var x = new JsonSchema();
 		x.addEnum("a");
 		x.addEnum("b"); // non-null path
-		assertEquals(2, x.getEnum().size());
+		var enum_ = x.getEnum();
+		assertEquals(2, enum_.size());
+		assertEquals("a", enum_.get(0));
+		assertEquals("b", enum_.get(1));
 	}
 
 	@Test void b09_addExamples_calledTwice() {
 		var x = new JsonSchema();
 		x.addExamples("ex1");
 		x.addExamples("ex2"); // non-null path
-		assertEquals(2, x.getExamples().size());
+		var examples = x.getExamples();
+		assertEquals(2, examples.size());
+		assertEquals("ex1", examples.get(0));
+		assertEquals("ex2", examples.get(1));
 	}
 
 	@Test void b10_addItems_calledTwice() {
 		var x = new JsonSchema();
 		x.addItems(new JsonSchema().setType(JsonType.STRING));
 		x.addItems(new JsonSchema().setType(JsonType.NUMBER)); // non-null path
-		assertEquals(2, x.getItemsAsSchemaArray().size());
+		var items = x.getItemsAsSchemaArray();
+		assertEquals(2, items.size());
+		assertEquals(JsonType.STRING, items.get(0).getType());
+		assertEquals(JsonType.NUMBER, items.get(1).getType());
 	}
 
 	@Test void b11_addOneOf_calledTwice() {
 		var x = new JsonSchema();
 		x.addOneOf(new JsonSchemaRef("http://a"));
 		x.addOneOf(new JsonSchemaRef("http://b")); // non-null path
-		assertEquals(2, x.getOneOf().size());
+		var oneOf = x.getOneOf();
+		assertEquals(2, oneOf.size());
+		assertEquals(URI.create("http://a"), ((JsonSchema) oneOf.get(0)).getRef());
+		assertEquals(URI.create("http://b"), ((JsonSchema) oneOf.get(1)).getRef());
 	}
 
 	@Test void b12_addPatternProperties_calledTwice() {
 		var x = new JsonSchema();
 		x.addPatternProperties(new JsonSchemaProperty("/pat1/", JsonType.STRING));
 		x.addPatternProperties(new JsonSchemaProperty("/pat2/", JsonType.NUMBER)); // non-null path
-		assertEquals(2, x.getPatternProperties().size());
+		var patternProperties = x.getPatternProperties();
+		assertEquals(2, patternProperties.size());
+		assertEquals(JsonType.STRING, ((JsonSchema) patternProperties.get("/pat1/")).getType());
+		assertEquals(JsonType.NUMBER, ((JsonSchema) patternProperties.get("/pat2/")).getType());
 	}
 
 	@Test void b13_addPatternProperties_nullNameThrows() {
@@ -391,14 +435,20 @@ public class JsonSchema_Test extends TestBase {
 		var x = new JsonSchema();
 		x.addPrefixItems(new JsonSchema().setType(JsonType.STRING));
 		x.addPrefixItems(new JsonSchema().setType(JsonType.NUMBER)); // non-null path
-		assertEquals(2, x.getPrefixItems().size());
+		var prefixItems = x.getPrefixItems();
+		assertEquals(2, prefixItems.size());
+		assertEquals(JsonType.STRING, prefixItems.get(0).getType());
+		assertEquals(JsonType.NUMBER, prefixItems.get(1).getType());
 	}
 
 	@Test void b15_addProperties_calledTwice() {
 		var x = new JsonSchema();
 		x.addProperties(new JsonSchemaProperty("f1", JsonType.STRING));
 		x.addProperties(new JsonSchemaProperty("f2", JsonType.NUMBER)); // non-null path
-		assertEquals(2, x.getProperties().size());
+		var properties = x.getProperties();
+		assertEquals(2, properties.size());
+		assertEquals(JsonType.STRING, ((JsonSchema) properties.get("f1")).getType());
+		assertEquals(JsonType.NUMBER, ((JsonSchema) properties.get("f2")).getType());
 	}
 
 	@Test void b16_addProperties_nullNameThrows() {
@@ -411,35 +461,38 @@ public class JsonSchema_Test extends TestBase {
 		var x = new JsonSchema();
 		x.addRequired(new JsonSchemaProperty("f1"));
 		x.addRequired(new JsonSchemaProperty("f2")); // non-null path
-		assertEquals(2, x.getRequired().size());
+		assertEquals(java.util.Arrays.asList("f1", "f2"), x.getRequired());
 	}
 
 	@Test void b18_addRequired_listOverload_calledTwice() {
 		var x = new JsonSchema();
 		x.addRequired(java.util.Arrays.asList("f1"));
 		x.addRequired(java.util.Arrays.asList("f2")); // non-null path
-		assertEquals(2, x.getRequired().size());
+		assertEquals(java.util.Arrays.asList("f1", "f2"), x.getRequired());
 	}
 
 	@Test void b19_jsonTypeArray_constructor() {
 		var arr = new JsonTypeArray(JsonType.STRING, JsonType.NUMBER);
 		assertEquals(2, arr.size());
-		assertTrue(arr.contains(JsonType.STRING));
-		assertTrue(arr.contains(JsonType.NUMBER));
+		assertEquals(JsonType.STRING, arr.get(0));
+		assertEquals(JsonType.NUMBER, arr.get(1));
 	}
 
 	@Test void b20_addRequired_stringOverload_calledTwice() {
 		var x = new JsonSchema();
 		x.addRequired("f1");
 		x.addRequired("f2"); // non-null path
-		assertEquals(2, x.getRequired().size());
+		assertEquals(java.util.Arrays.asList("f1", "f2"), x.getRequired());
 	}
 
 	@Test void b21_addTypes_calledTwice() {
 		var x = new JsonSchema();
 		x.addTypes(JsonType.STRING);
 		x.addTypes(JsonType.NUMBER); // non-null path
-		assertEquals(2, x.getTypeAsJsonTypeArray().size());
+		var types = x.getTypeAsJsonTypeArray();
+		assertEquals(2, types.size());
+		assertEquals(JsonType.STRING, types.get(0));
+		assertEquals(JsonType.NUMBER, types.get(1));
 	}
 
 	@Test void b22_beanIgnoreGetters() {

@@ -52,7 +52,7 @@ class McpTypedHandlers_Test {
 	private final McpDispatcher dispatcher = new McpDispatcher();
 
 	@Test
-	void typedTool_argsBound_andResultWrappedAsText() {
+	void a01_typedTool_argsBound_andResultWrappedAsText() {
 		var typed = new McpTypedToolHandler<EchoArgs, EchoResult>() {
 			@Override
 			public Tool descriptor() {
@@ -84,7 +84,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void typedTool_returningCallToolResult_passesThrough() {
+	void a02_typedTool_returningCallToolResult_passesThrough() {
 		var ctr = new CallToolResult().setContent(List.of(new TextContent().setText("direct")));
 		var typed = new McpTypedToolHandler<EchoArgs, CallToolResult>() {
 			@Override
@@ -113,7 +113,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void typedTool_returningString_wrapped() {
+	void a03_typedTool_returningString_wrapped() {
 		var typed = new McpTypedToolHandler<EchoArgs, String>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("s"); }
@@ -131,7 +131,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void typedTool_nullResult_wrappedAsEmpty() {
+	void a04_typedTool_nullResult_wrappedAsEmpty() {
 		var typed = new McpTypedToolHandler<EchoArgs, EchoResult>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("n"); }
@@ -149,7 +149,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void typedTool_nullArgs_passNull() {
+	void a05_typedTool_nullArgs_passNull() {
 		var typed = new McpTypedToolHandler<EchoArgs, String>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("z"); }
@@ -169,7 +169,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void typedTool_argBindingFailure_invalidParams() {
+	void a06_typedTool_argBindingFailure_invalidParams() {
 		var typed = new McpTypedToolHandler<EchoArgs, String>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("x"); }
@@ -188,7 +188,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void typedPrompt_nullArgs_passNull() {
+	void b01_typedPrompt_nullArgs_passNull() {
 		var typed = new McpTypedPromptHandler<EchoArgs>() {
 			@Override
 			public Prompt descriptor() { return new Prompt().setName("p"); }
@@ -215,7 +215,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void adaptTool_nullArgumentsMap_propagatesNull() {
+	void c01_adaptTool_nullArgumentsMap_propagatesNull() {
 		var typed = new McpTypedToolHandler<EchoArgs, String>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("z"); }
@@ -232,7 +232,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void adaptPrompt_nullArgumentsMap_propagatesNull() {
+	void c02_adaptPrompt_nullArgumentsMap_propagatesNull() {
 		var typed = new McpTypedPromptHandler<EchoArgs>() {
 			@Override
 			public Prompt descriptor() { return new Prompt().setName("p"); }
@@ -249,7 +249,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void typedTool_unserializableResult_internalError() {
+	void a07_typedTool_unserializableResult_internalError() {
 		var typed = new McpTypedToolHandler<EchoArgs, Unserializable>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("u"); }
@@ -266,7 +266,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void typedPrompt_argsBoundAndResult() {
+	void b02_typedPrompt_argsBoundAndResult() {
 		var typed = new McpTypedPromptHandler<EchoArgs>() {
 			@Override
 			public Prompt descriptor() { return new Prompt().setName("p"); }

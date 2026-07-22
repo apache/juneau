@@ -17,6 +17,7 @@
 package org.apache.juneau.http.classic;
 
 import static org.apache.juneau.http.classic.HttpParts.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -421,17 +422,17 @@ class HttpParts_Test extends TestBase {
 
 	@Test void b25_partList_list() {
 		var pl = partList(List.<NameValuePair>of(BasicPart.of("a", "1"), BasicPart.of("b", "2")));
-		assertEquals(2, pl.size());
+		assertList(pl, "a=1", "b=2");
 	}
 
 	@Test void b26_partList_varargs() {
 		var pl = partList(BasicPart.of("a", "1"), BasicPart.of("b", "2"));
-		assertEquals(2, pl.size());
+		assertList(pl, "a=1", "b=2");
 	}
 
 	@Test void b27_partList_pairs() {
 		var pl = partList("a", "1", "b", "2");
-		assertEquals(2, pl.size());
+		assertList(pl, "a=1", "b=2");
 	}
 
 	// isHttpPart — every switch arm.

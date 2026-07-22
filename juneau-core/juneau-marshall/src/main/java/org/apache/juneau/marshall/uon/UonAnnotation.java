@@ -29,20 +29,40 @@ import org.apache.juneau.commons.*;
  */
 public class UonAnnotation {
 
+	/**
+	 * Prevents instantiation.
+	 */
 	private UonAnnotation() {}
 
+	/**
+	 * Builder class.
+	 */
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
 
+		/**
+		 * Constructor.
+		 */
 		protected Builder() {
 			super(Uon.class);
 		}
 
+		/**
+		 * Instantiates a new {@link Uon @Uon} object initialized with this builder.
+		 *
+		 * @return A new {@link Uon @Uon} object.
+		 */
 		public Uon build() {
 			return new Object(this);
 		}
 
+		/**
+		 * Sets the description property.
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
 		public Builder description(String...value) {
 			description = value;
 			return this;
@@ -68,8 +88,14 @@ public class UonAnnotation {
 		}
 	}
 
+	/** Default value */
 	public static final Uon DEFAULT = create().build();
 
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
 	public static Builder create() {
 		return new Builder();
 	}

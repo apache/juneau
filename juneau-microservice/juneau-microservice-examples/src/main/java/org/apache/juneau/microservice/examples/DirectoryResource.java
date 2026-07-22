@@ -173,7 +173,7 @@ public class DirectoryResource extends BasicRestServlet {
 		}
 
 		/**
-		 * Returns child files when this is a directory and includeChildren is true.
+		 * Returns child files when this is a directory and includeChildren is <jk>true</jk>.
 		 *
 		 * @return Child files, or <jk>null</jk> when this is a file or includeChildren is false.
 		 */

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 })
 class MultiSet_Test extends TestBase {
 
-	@Test void doTest() {
+	@Test void a01_doTest() {
 		List<String> l1, l2;
 		MultiSet<String> ms;
 
@@ -130,7 +130,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void hasNext_whenCurrentIteratorExhausted_butMoreCollectionsHaveElements() {
+	void a02_hasNext_whenCurrentIteratorExhausted_butMoreCollectionsHaveElements() {
 		// Test the hasNext() logic when current iterator is exhausted but remaining collections have elements
 		var l1 = l(a("1", "2"));
 		var l2 = l(a("3", "4"));
@@ -162,7 +162,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void hasNext_withEmptyCollectionsInBetween() {
+	void a03_hasNext_withEmptyCollectionsInBetween() {
 		// Test hasNext() when there are empty collections between non-empty ones
 		var l1 = l(a("1"));
 		var l2 = l(new String[0]);
@@ -191,7 +191,7 @@ class MultiSet_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void toString_singleCollection() {
+	void b01_toString_singleCollection() {
 		var l1 = l(a("1", "2"));
 		var ms = new MultiSet<>(l1);
 
@@ -200,7 +200,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void toString_multipleCollections() {
+	void b02_toString_multipleCollections() {
 		var l1 = l(a("1", "2"));
 		var l2 = l(a("3", "4"));
 		var l3 = l(a("5", "6"));
@@ -211,7 +211,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void toString_emptyCollections() {
+	void b03_toString_emptyCollections() {
 		var l1 = l(a());
 		var l2 = l(a());
 		var ms = new MultiSet<>(l1, l2);
@@ -221,7 +221,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void toString_mixedEmptyAndNonEmpty() {
+	void b04_toString_mixedEmptyAndNonEmpty() {
 		List<String> l1 = l(a());
 		var l2 = l(a("1", "2"));
 		List<String> l3 = l(a());
@@ -236,7 +236,7 @@ class MultiSet_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void equals_sameContents() {
+	void c01_equals_sameContents() {
 		var l1 = l(a("1", "2"));
 		var l2 = l(a("3", "4"));
 		var multiSet1 = new MultiSet<>(l1, l2);
@@ -250,7 +250,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void equals_differentContents() {
+	void c02_equals_differentContents() {
 		var l1 = l(a("1", "2"));
 		var multiSet1 = new MultiSet<>(l1);
 
@@ -262,7 +262,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void equals_differentOrder() {
+	void c03_equals_differentOrder() {
 		var l1 = l(a("1", "2"));
 		var l2 = l(a("3", "4"));
 		var multiSet1 = new MultiSet<>(l1, l2);
@@ -275,7 +275,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void equals_regularSet() {
+	void c04_equals_regularSet() {
 		var l1 = l(a("1", "2", "3"));
 		var multiSet = new MultiSet<>(l1);
 
@@ -287,7 +287,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void equals_notASet() {
+	void c05_equals_notASet() {
 		var l1 = l(a("1", "2"));
 		var multiSet = new MultiSet<>(l1);
 
@@ -295,7 +295,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void hashCode_sameContents() {
+	void c06_hashCode_sameContents() {
 		var l1 = l(a("1", "2", "3"));
 		var multiSet1 = new MultiSet<>(l1);
 
@@ -306,7 +306,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void hashCode_regularSet() {
+	void c07_hashCode_regularSet() {
 		var l1 = l(a("1", "2", "3"));
 		var multiSet = new MultiSet<>(l1);
 
@@ -320,7 +320,7 @@ class MultiSet_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void iterator_hasNext_whenI2IsNull() {
+	void d01_iterator_hasNext_whenI2IsNull() {
 		// Line 213: return false when i2 == null
 		// This happens when MultiSet is created with no collections
 		var ms = new MultiSet<String>();
@@ -329,7 +329,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void equals_notASet_otherTypes() {
+	void d02_equals_notASet_otherTypes() {
 		// Line 308: return (o instanceof Set o2) && ...
 		// Test when object is not a Set (testing the instanceof check)
 		var l1 = l(a("1", "2"));
@@ -342,7 +342,7 @@ class MultiSet_Test extends TestBase {
 	}
 
 	@Test
-	void hashCode_withNullElements() {
+	void d03_hashCode_withNullElements() {
 		// Line 330: h += e == null ? 0 : e.hashCode()
 		// Test hashCode with null elements
 		var l1 = l(a("1", null));

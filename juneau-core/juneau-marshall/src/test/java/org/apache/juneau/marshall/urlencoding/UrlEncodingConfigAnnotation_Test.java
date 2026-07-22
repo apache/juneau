@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.json;
+package org.apache.juneau.marshall.urlencoding;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,9 +28,9 @@ import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests the @JsonConfig annotation.
+ * Tests the @UrlEncodingConfig annotation.
  */
-class JsonConfigAnnotationTest extends TestBase {
+class UrlEncodingConfigAnnotation_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -44,46 +44,42 @@ class JsonConfigAnnotationTest extends TestBase {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@JsonConfig(
-		addBeanTypes="$X{true}",
-		escapeSolidus="$X{true}",
-		validateEnd="$X{true}"
+	@UrlEncodingConfig(
+		expandedParams="$X{true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test void basicSerializer() {
+	@Test void a01_basicSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
-		var x = JsonSerializer.create().apply(al).build().getSession();
-		check("true", x.isAddBeanTypes());
-		check("true", x.isEscapeSolidus());
+		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
+		check("true", x.isExpandedParams());
 	}
 
-	@Test void basicParser() {
+	@Test void a02_basicParser() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
-		var x = JsonParser.create().apply(al).build().getSession();
-		check("true", x.isValidateEnd());
+		var x = UrlEncodingParser.create().apply(al).build().getSession();
+		check("true", x.isExpandedParams());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotation with no values.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@JsonConfig()
+	@UrlEncodingConfig()
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test void noValuesSerializer() {
+	@Test void a03_noValuesSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
-		var x = JsonSerializer.create().apply(al).build().getSession();
-		check("false", x.isAddBeanTypes());
-		check("false", x.isEscapeSolidus());
+		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
+		check("false", x.isExpandedParams());
 	}
 
-	@Test void noValuesParser() {
+	@Test void a04_noValuesParser() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
-		var x = JsonParser.create().apply(al).build().getSession();
-		check("false", x.isValidateEnd());
+		var x = UrlEncodingParser.create().apply(al).build().getSession();
+		check("false", x.isExpandedParams());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -93,16 +89,15 @@ class JsonConfigAnnotationTest extends TestBase {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test void noAnnotationSerializer() {
+	@Test void a05_noAnnotationSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
-		var x = JsonSerializer.create().apply(al).build().getSession();
-		check("false", x.isAddBeanTypes());
-		check("false", x.isEscapeSolidus());
+		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
+		check("false", x.isExpandedParams());
 	}
 
-	@Test void noAnnotationParser() {
+	@Test void a06_noAnnotationParser() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
-		var x = JsonParser.create().apply(al).build().getSession();
-		check("false", x.isValidateEnd());
+		var x = UrlEncodingParser.create().apply(al).build().getSession();
+		check("false", x.isExpandedParams());
 	}
 }

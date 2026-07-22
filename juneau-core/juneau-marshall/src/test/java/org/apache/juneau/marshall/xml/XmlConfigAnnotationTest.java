@@ -100,7 +100,7 @@ class XmlConfigAnnotationTest extends TestBase {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test void basicSerializer() {
+	@Test void a01_basicSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 		var x = XmlSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
@@ -111,7 +111,7 @@ class XmlConfigAnnotationTest extends TestBase {
 		check("[foo:null]", x.getNamespaces());
 	}
 
-	@Test void basicParser() {
+	@Test void a02_basicParser() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 		var x = XmlParser.create().apply(al).build().getSession();
 		check("AA", x.getEventAllocator());
@@ -129,7 +129,7 @@ class XmlConfigAnnotationTest extends TestBase {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test void noValuesSerializer() {
+	@Test void a03_noValuesSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var x = XmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
@@ -140,7 +140,7 @@ class XmlConfigAnnotationTest extends TestBase {
 		check("[]", x.getNamespaces());
 	}
 
-	@Test void noValuesParser() {
+	@Test void a04_noValuesParser() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var x = XmlParser.create().apply(al).build().getSession();
 		check(null, x.getEventAllocator());
@@ -157,7 +157,7 @@ class XmlConfigAnnotationTest extends TestBase {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test void noAnnotationSerializer() {
+	@Test void a05_noAnnotationSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var x = XmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
@@ -168,7 +168,7 @@ class XmlConfigAnnotationTest extends TestBase {
 		check("[]", x.getNamespaces());
 	}
 
-	@Test void noAnnotationParser() {
+	@Test void a06_noAnnotationParser() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var x = XmlParser.create().apply(al).build().getSession();
 		check(null, x.getEventAllocator());

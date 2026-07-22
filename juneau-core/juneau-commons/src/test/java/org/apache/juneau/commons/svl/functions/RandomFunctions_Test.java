@@ -29,53 +29,53 @@ class RandomFunctions_Test extends TestBase {
 
 	private final VarResolver vr = VarResolver.create().functions(RandomFunctions.ALL).build();
 
-	@Test void rand_inRange() {
+	@Test void a01_rand_inRange() {
 		for (var i = 0; i < 20; i++) {
 			var v = Double.parseDouble(vr.resolve("#{rand()}"));
 			assertTrue(v >= 0.0 && v < 1.0);
 		}
 	}
 
-	@Test void randInt_unaryInRange() {
+	@Test void a02_randInt_unaryInRange() {
 		for (var i = 0; i < 20; i++) {
 			var v = Integer.parseInt(vr.resolve("#{randInt(10)}"));
 			assertTrue(v >= 0 && v < 10);
 		}
 	}
 
-	@Test void randInt_binaryInRange() {
+	@Test void a03_randInt_binaryInRange() {
 		for (var i = 0; i < 20; i++) {
 			var v = Integer.parseInt(vr.resolve("#{randInt(5, 8)}"));
 			assertTrue(v >= 5 && v <= 8);
 		}
 	}
 
-	@Test void randInt_invalidMaxThrows() {
+	@Test void a04_randInt_invalidMaxThrows() {
 		assertThrows(IllegalArgumentException.class, () -> vr.resolve("#{randInt(0)}"));
 	}
 
-	@Test void randLong_inRange() {
+	@Test void a05_randLong_inRange() {
 		for (var i = 0; i < 10; i++) {
 			var v = Long.parseLong(vr.resolve("#{randLong(100, 200)}"));
 			assertTrue(v >= 100 && v <= 200);
 		}
 	}
 
-	@Test void randString_lengthOnly() {
+	@Test void a06_randString_lengthOnly() {
 		var s = vr.resolve("#{randString(16)}");
 		assertEquals(16, s.length());
 		for (var c : s.toCharArray())
 			assertTrue(Character.isLetterOrDigit(c));
 	}
 
-	@Test void randString_charset() {
+	@Test void a07_randString_charset() {
 		var s = vr.resolve("#{randString(8, abc)}");
 		assertEquals(8, s.length());
 		for (var c : s.toCharArray())
 			assertTrue(c == 'a' || c == 'b' || c == 'c');
 	}
 
-	@Test void randChoice() {
+	@Test void a08_randChoice() {
 		var seen = new HashSet<String>();
 		for (var i = 0; i < 50; i++)
 			seen.add(vr.resolve("#{randChoice(red, green, blue)}"));
@@ -86,7 +86,7 @@ class RandomFunctions_Test extends TestBase {
 			assertTrue(s.equals("red") || s.equals("green") || s.equals("blue"));
 	}
 
-	@Test void uuid_format() {
+	@Test void a09_uuid_format() {
 		var s = vr.resolve("#{uuid()}");
 		assertEquals(36, s.length());
 		assertEquals('-', s.charAt(8));
@@ -95,7 +95,7 @@ class RandomFunctions_Test extends TestBase {
 		assertEquals('-', s.charAt(23));
 	}
 
-	@Test void uuid_freshPerCall() {
+	@Test void a10_uuid_freshPerCall() {
 		var first = vr.resolve("#{uuid()}");
 		var second = vr.resolve("#{uuid()}");
 		assertNotEquals(first, second, "uuid() must produce a fresh value per resolve");

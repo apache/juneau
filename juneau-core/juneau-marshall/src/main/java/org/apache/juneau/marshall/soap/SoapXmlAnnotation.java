@@ -26,20 +26,40 @@ import org.apache.juneau.commons.*;
  */
 public class SoapXmlAnnotation {
 
+	/**
+	 * Prevents instantiation.
+	 */
 	private SoapXmlAnnotation() {}
 
+	/**
+	 * Builder class.
+	 */
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
 
+		/**
+		 * Constructor.
+		 */
 		protected Builder() {
 			super(SoapXml.class);
 		}
 
+		/**
+		 * Instantiates a new {@link SoapXml @SoapXml} object initialized with this builder.
+		 *
+		 * @return A new {@link SoapXml @SoapXml} object.
+		 */
 		public SoapXml build() {
 			return new Object(this);
 		}
 
+		/**
+		 * Sets the description property.
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
 		public Builder description(String...value) {
 			description = value;
 			return this;
@@ -65,8 +85,14 @@ public class SoapXmlAnnotation {
 		}
 	}
 
+	/** Default value */
 	public static final SoapXml DEFAULT = create().build();
 
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
 	public static Builder create() {
 		return new Builder();
 	}

@@ -27,25 +27,25 @@ class ConditionalFunctions_Test extends TestBase {
 
 	private final VarResolver vr = VarResolver.create().functions(ConditionalFunctions.ALL).build();
 
-	@Test void if_true() { assertEquals("yes", vr.resolve("#{if(true, yes, no)}")); }
-	@Test void if_false() { assertEquals("no", vr.resolve("#{if(false, yes, no)}")); }
-	@Test void if_truthy_one() { assertEquals("yes", vr.resolve("#{if(1, yes, no)}")); }
-	@Test void if_truthy_yes() { assertEquals("yes", vr.resolve("#{if(yes, yes, no)}")); }
+	@Test void a01_if_true() { assertEquals("yes", vr.resolve("#{if(true, yes, no)}")); }
+	@Test void a02_if_false() { assertEquals("no", vr.resolve("#{if(false, yes, no)}")); }
+	@Test void a03_if_truthy_one() { assertEquals("yes", vr.resolve("#{if(1, yes, no)}")); }
+	@Test void a04_if_truthy_yes() { assertEquals("yes", vr.resolve("#{if(yes, yes, no)}")); }
 
-	@Test void switch_match() { assertEquals("alpha", vr.resolve("#{switch(a, a, alpha, b, beta, c, gamma)}")); }
-	@Test void switch_default() { assertEquals("default", vr.resolve("#{switch(z, a, alpha, b, beta, default)}")); }
-	@Test void switch_noDefault_noMatch() { assertEquals("", vr.resolve("#{switch(z, a, alpha, b, beta)}")); }
-	@Test void switch_globStar() { assertEquals("YES", vr.resolve("#{switch(foobar, foo*, YES, *, NO)}")); }
-	@Test void switch_globEnd() { assertEquals("YES", vr.resolve("#{switch(foobar, *bar, YES, *, NO)}")); }
-	@Test void switch_globMid() { assertEquals("Fruit", vr.resolve("#{switch(Apple, *Ap*, Fruit, *Car*, Veg, *, NA)}")); }
-	@Test void switch_questionMark() { assertEquals("YES", vr.resolve("#{switch(abc, ???, YES, *, NO)}")); }
-	@Test void switch_questionMarkNo() { assertEquals("NO", vr.resolve("#{switch(abcd, ???, YES, *, NO)}")); }
-	@Test void switch_globStarOnlyDefault() { assertEquals("DEFAULT", vr.resolve("#{switch(anything, *, DEFAULT)}")); }
+	@Test void a05_switch_match() { assertEquals("alpha", vr.resolve("#{switch(a, a, alpha, b, beta, c, gamma)}")); }
+	@Test void a06_switch_default() { assertEquals("default", vr.resolve("#{switch(z, a, alpha, b, beta, default)}")); }
+	@Test void a07_switch_noDefault_noMatch() { assertEquals("", vr.resolve("#{switch(z, a, alpha, b, beta)}")); }
+	@Test void a08_switch_globStar() { assertEquals("YES", vr.resolve("#{switch(foobar, foo*, YES, *, NO)}")); }
+	@Test void a09_switch_globEnd() { assertEquals("YES", vr.resolve("#{switch(foobar, *bar, YES, *, NO)}")); }
+	@Test void a10_switch_globMid() { assertEquals("Fruit", vr.resolve("#{switch(Apple, *Ap*, Fruit, *Car*, Veg, *, NA)}")); }
+	@Test void a11_switch_questionMark() { assertEquals("YES", vr.resolve("#{switch(abc, ???, YES, *, NO)}")); }
+	@Test void a12_switch_questionMarkNo() { assertEquals("NO", vr.resolve("#{switch(abcd, ???, YES, *, NO)}")); }
+	@Test void a13_switch_globStarOnlyDefault() { assertEquals("DEFAULT", vr.resolve("#{switch(anything, *, DEFAULT)}")); }
 
-	@Test void coalesce_first() { assertEquals("a", vr.resolve("#{coalesce(a, b, c)}")); }
-	@Test void coalesce_skipsEmpty() { assertEquals("b", vr.resolve("#{coalesce(\"\", b, c)}")); }
-	@Test void coalesce_allEmpty() { assertEquals("", vr.resolve("#{coalesce(\"\", \"\")}")); }
+	@Test void a14_coalesce_first() { assertEquals("a", vr.resolve("#{coalesce(a, b, c)}")); }
+	@Test void a15_coalesce_skipsEmpty() { assertEquals("b", vr.resolve("#{coalesce(\"\", b, c)}")); }
+	@Test void a16_coalesce_allEmpty() { assertEquals("", vr.resolve("#{coalesce(\"\", \"\")}")); }
 
-	@Test void notEmpty_true() { assertEquals("true", vr.resolve("#{notEmpty(hello)}")); }
-	@Test void notEmpty_false() { assertEquals("false", vr.resolve("#{notEmpty(\"\")}")); }
+	@Test void a17_notEmpty_true() { assertEquals("true", vr.resolve("#{notEmpty(hello)}")); }
+	@Test void a18_notEmpty_false() { assertEquals("false", vr.resolve("#{notEmpty(\"\")}")); }
 }

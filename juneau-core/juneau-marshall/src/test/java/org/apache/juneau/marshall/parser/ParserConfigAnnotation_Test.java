@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @ParserConfig annotation.
  */
-class ParserConfigAnnotationTest extends TestBase {
+class ParserConfigAnnotation_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -66,7 +66,7 @@ class ParserConfigAnnotationTest extends TestBase {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test void basicReaderParser() {
+	@Test void a01_basicReaderParser() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 		var x = JsonParser.create().apply(al).build().getSession();
 		check("true", x.isAutoCloseStreams());
@@ -77,7 +77,7 @@ class ParserConfigAnnotationTest extends TestBase {
 		check("true", x.isUnbuffered());
 	}
 
-	@Test void basicInputStreamParser() {
+	@Test void a02_basicInputStreamParser() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 		var x = MsgPackParser.create().apply(al).build().getSession();
 		check("true", x.isAutoCloseStreams());
@@ -96,7 +96,7 @@ class ParserConfigAnnotationTest extends TestBase {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test void noValuesReaderParser() {
+	@Test void a03_noValuesReaderParser() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
@@ -107,7 +107,7 @@ class ParserConfigAnnotationTest extends TestBase {
 		check("false", x.isUnbuffered());
 	}
 
-	@Test void noValuesInputStreamParser() {
+	@Test void a04_noValuesInputStreamParser() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var x = MsgPackParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
@@ -125,7 +125,7 @@ class ParserConfigAnnotationTest extends TestBase {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test void noAnnotationReaderParser() {
+	@Test void a05_noAnnotationReaderParser() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
@@ -136,7 +136,7 @@ class ParserConfigAnnotationTest extends TestBase {
 		check("false", x.isUnbuffered());
 	}
 
-	@Test void noAnnotationInputStreamParser() {
+	@Test void a06_noAnnotationInputStreamParser() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var x = MsgPackParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());

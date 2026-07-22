@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -138,9 +139,7 @@ class NextGenContentNegotiation_Test {
 					var got = new ArrayList<Bean>();
 					while (r.canRead())
 						got.add(r.read(Bean.class));
-					assertEquals(3, got.size());
-					assertEquals("a", got.get(0).name);
-					assertEquals(3, got.get(2).age);
+					assertBeans(got, "name,age", "a,1", "b,2", "c,3");
 				}
 			}
 		}
@@ -156,7 +155,7 @@ class NextGenContentNegotiation_Test {
 					var got = new ArrayList<Bean>();
 					while (r.canRead())
 						got.add(r.read(Bean.class));
-					assertEquals(3, got.size());
+					assertBeans(got, "name,age", "a,1", "b,2", "c,3");
 				}
 			}
 		}

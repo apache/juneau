@@ -30,25 +30,25 @@ import org.junit.jupiter.api.*;
 class McpHandlerDefaults_Test {
 
 	@Test
-	void toolHandler_defaultDescriptor_throws() {
+	void a01_toolHandler_defaultDescriptor_throws() {
 		McpToolHandler h = (args, ctx) -> new CallToolResult();
 		assertThrows(UnsupportedOperationException.class, h::descriptor);
 	}
 
 	@Test
-	void promptHandler_defaultDescriptor_throws() {
+	void a02_promptHandler_defaultDescriptor_throws() {
 		McpPromptHandler h = (args, ctx) -> new GetPromptResult();
 		assertThrows(UnsupportedOperationException.class, h::descriptor);
 	}
 
 	@Test
-	void resourceHandler_defaultDescriptor_throws() {
+	void a03_resourceHandler_defaultDescriptor_throws() {
 		McpResourceHandler h = (uri, ctx) -> new ReadResourceResult();
 		assertThrows(UnsupportedOperationException.class, h::descriptor);
 	}
 
 	@Test
-	void mcpException_default_data_isNull() {
+	void b01_mcpException_default_data_isNull() {
 		var e = new McpException(-1, "x");
 		assertNull(e.getData());
 		assertEquals(-1, e.getCode());
@@ -56,7 +56,7 @@ class McpHandlerDefaults_Test {
 	}
 
 	@Test
-	void mcpException_with_data() {
+	void b02_mcpException_with_data() {
 		var e = new McpException(-1, "x", "data");
 		assertString("data", e.getData());
 		var rpc = e.toJsonRpcError();
@@ -66,7 +66,7 @@ class McpHandlerDefaults_Test {
 	}
 
 	@Test
-	void typedHandlers_constructor_isPrivate() {
+	void c01_typedHandlers_constructor_isPrivate() {
 		// Sanity: the static façade class should not be instantiable. Reflection trick used to bump coverage on the
 		// implicit private no-arg constructor.
 		assertDoesNotThrow(() -> {
@@ -77,7 +77,7 @@ class McpHandlerDefaults_Test {
 	}
 
 	@Test
-	void mcp_facade_constructor_isPrivate() {
+	void c02_mcp_facade_constructor_isPrivate() {
 		assertDoesNotThrow(() -> {
 			var ctor = Mcp.class.getDeclaredConstructor();
 			ctor.setAccessible(true);
@@ -86,7 +86,7 @@ class McpHandlerDefaults_Test {
 	}
 
 	@Test
-	void cursor_passes_ctx_to_strategy() {
+	void d01_cursor_passes_ctx_to_strategy() {
 		// Verify ctx parameter reaches the cursor (covers the BeanStore parameter passthrough).
 		var bs = new BasicBeanStore();
 		var got = new Object[1];

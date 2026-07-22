@@ -273,10 +273,26 @@ public class NumberMatcherFactory extends MatcherFactory {
 		int end;
 		boolean isNot;
 
+		/**
+		 * Constructor for single-bound ranges (e.g. <js>"123"</js>, <js>">123"</js>, <js>"&lt;123"</js>).
+		 *
+		 * @param eq The comparison operator (e.g. <c>GT</c>, <c>GTE</c>, <c>LT</c>, <c>LTE</c>, <c>NONE</c>).
+		 * @param num The bound value.
+		 * @param isNot If <jk>true</jk>, negates the match result.
+		 */
 		public NumberRange(Equality eq, Integer num, boolean isNot) {
 			this(eq, num, null, isNot);
 		}
 
+		/**
+		 * Constructor for explicit-bound ranges (e.g. <js>"123-456"</js>).
+		 *
+		 * @param eq The comparison operator. If not {@link Equality#NONE}, <c>end</c> is ignored and the range is
+		 * 	derived from <c>start</c> and <c>eq</c> alone.
+		 * @param start The start of the range (inclusive).
+		 * @param end The end of the range (inclusive). Ignored unless <c>eq</c> is {@link Equality#NONE}.
+		 * @param isNot If <jk>true</jk>, negates the match result.
+		 */
 		public NumberRange(Equality eq, Integer start, Integer end, boolean isNot) {
 			this.isNot = isNot;
 
@@ -302,6 +318,12 @@ public class NumberMatcherFactory extends MatcherFactory {
 			}
 		}
 
+		/**
+		 * Checks whether the specified number falls within this range.
+		 *
+		 * @param n The number to test.
+		 * @return <jk>true</jk> if the number is within range (or outside it, if this range is negated).
+		 */
 		public boolean matches(Number n) {
 			var i = n.longValue();
 			var b = (i >= start && i <= end);
