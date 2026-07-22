@@ -87,7 +87,10 @@ import org.apache.juneau.rest.server.*;
  *
  * <p>
  * Refill math uses {@link System#nanoTime()}.  This is monotonic and safe across wall-clock jumps but does not
- * map to a calendar instant, which slightly complicates debugging when the bucket is in an unexpected state.
+ * map to a calendar instant, which slightly complicates debugging when the bucket is in an unexpected state.  The
+ * nanosecond source is pluggable on {@link InMemoryStorage} (package-private constructor overload) so tests can
+ * pin the refill window with a deterministic clock instead of racing real wall-clock time; production code always
+ * goes through the single-arg constructor, which defaults to {@code System::nanoTime}.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerRateLimitAndRequestId">REST Server — Rate-Limiting and Request-Id Propagation</a>
@@ -578,16 +581,35 @@ public class RateLimitGuard extends RestGuard {
 
 		private final ConcurrentHashMap<String,Bucket> buckets = new ConcurrentHashMap<>();
 		private final int maxKeys;
+		private final LongSupplier nanoClock;
 
 		InMemoryStorage(int maxKeys) {
+			this(maxKeys, System::nanoTime);
+		}
+
+		/**
+		 * Constructor allowing the nanosecond time source to be overridden.
+		 *
+		 * <p>
+		 * Test-only seam.  Production code should always use {@link #InMemoryStorage(int)}, which defaults to
+		 * real {@link System#nanoTime()}.  Tests that need to pin the token-bucket refill window regardless of
+		 * machine speed can supply a deterministic {@link LongSupplier} here instead of racing {@link Thread#sleep}
+		 * against real time.
+		 *
+		 * @param maxKeys The maximum number of keys held before LRU-style eviction kicks in.  Must be {@code > 0}.
+		 * @param nanoClock Supplies the current time in nanoseconds for refill math and idle-eviction bookkeeping.  Must not be <jk>null</jk>.
+		 */
+		InMemoryStorage(int maxKeys, LongSupplier nanoClock) {
+			assertArgNotNull("nanoClock", nanoClock);
 			if (maxKeys <= 0)
 				throw new IllegalArgumentException("Argument 'maxKeys' must be > 0.");
 			this.maxKeys = maxKeys;
+			this.nanoClock = nanoClock;
 		}
 
 		@Override
 		public AcquireResult tryAcquire(String key, int capacity, double permitsPerSecond) {
-			var bucket = buckets.computeIfAbsent(key, k -> new Bucket(capacity));
+			var bucket = buckets.computeIfAbsent(key, k -> new Bucket(capacity, nanoClock));
 			var result = bucket.tryAcquire(capacity, permitsPerSecond);
 			if (buckets.size() > maxKeys)
 				evictOldest();
@@ -596,7 +618,7 @@ public class RateLimitGuard extends RestGuard {
 
 		@Override
 		public void evict(Duration ttl) {
-			var threshold = System.nanoTime() - ttl.toNanos();
+			var threshold = nanoClock.getAsLong() - ttl.toNanos();
 			buckets.entrySet().removeIf(e -> e.getValue().lastTouchedNanos() < threshold);
 		}
 
@@ -642,15 +664,30 @@ public class RateLimitGuard extends RestGuard {
 		private double tokens;
 		private long lastNanos;
 		private long lastWallMillis;
+		private final LongSupplier nanoClock;
 
 		Bucket(int capacity) {
+			this(capacity, System::nanoTime);
+		}
+
+		/**
+		 * Constructor allowing the nanosecond time source to be overridden.
+		 *
+		 * <p>
+		 * Test-only seam — see {@link InMemoryStorage#InMemoryStorage(int, LongSupplier)}.
+		 *
+		 * @param capacity The initial (full) token count.
+		 * @param nanoClock Supplies the current time in nanoseconds for refill math.  Must not be <jk>null</jk>.
+		 */
+		Bucket(int capacity, LongSupplier nanoClock) {
+			this.nanoClock = nanoClock;
 			this.tokens = capacity;
-			this.lastNanos = System.nanoTime();
+			this.lastNanos = nanoClock.getAsLong();
 			this.lastWallMillis = System.currentTimeMillis();
 		}
 
 		synchronized Storage.AcquireResult tryAcquire(int capacity, double permitsPerSecond) {
-			var now = System.nanoTime();
+			var now = nanoClock.getAsLong();
 			var elapsedSeconds = (now - lastNanos) / 1_000_000_000.0;
 			tokens = Math.min(capacity, tokens + elapsedSeconds * permitsPerSecond);
 			lastNanos = now;

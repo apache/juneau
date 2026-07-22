@@ -66,6 +66,9 @@ class RateLimitGuard_AdvisoryHeaders_Test extends TestBase {
 					.burst(5)
 					.keyBy(req -> "static-headers-rejection")
 					.exemptPaths()
+					// Frozen clock: draining all 5 burst tokens then hitting 429 depends on landing inside the
+					// same 1-second refill window, which a real clock can't guarantee under CPU starvation/GC pauses.
+					.storage(new RateLimitGuard.InMemoryStorage(100_000, () -> 0L))
 					.build()
 			).build();
 		}

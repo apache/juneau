@@ -43,6 +43,9 @@ class RateLimitGuard_XForwardedFor_Test extends TestBase {
 					.burst(1)
 					.xForwardedForAware(true)
 					.exemptPaths()
+					// Frozen clock: the 200/429 sequence below depends on landing inside the same 1-second
+					// refill window, which a real clock can't guarantee under CPU starvation/GC pauses.
+					.storage(new RateLimitGuard.InMemoryStorage(100_000, () -> 0L))
 					.build()
 			).build();
 		}
@@ -83,6 +86,8 @@ class RateLimitGuard_XForwardedFor_Test extends TestBase {
 					.permitsPerSecond(1)
 					.burst(1)
 					.exemptPaths()
+					// Frozen clock: see rationale on class A above.
+					.storage(new RateLimitGuard.InMemoryStorage(100_000, () -> 0L))
 					.build()
 			).build();
 		}

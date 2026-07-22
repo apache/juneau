@@ -37,6 +37,9 @@ class RateLimitGuard_KeyIsolation_Test extends TestBase {
 					.burst(1)
 					.keyBy(req -> req.getHeader("X-Tenant"))
 					.exemptPaths()
+					// Frozen clock: the per-tenant 200/429 pairs below depend on landing inside the same
+					// 1-second refill window, which a real clock can't guarantee under CPU starvation/GC pauses.
+					.storage(new RateLimitGuard.InMemoryStorage(100_000, () -> 0L))
 					.build()
 			).build();
 		}
@@ -78,6 +81,8 @@ class RateLimitGuard_KeyIsolation_Test extends TestBase {
 					.burst(1)
 					.keyBy(req -> null)
 					.exemptPaths()
+					// Frozen clock: see rationale on class A above.
+					.storage(new RateLimitGuard.InMemoryStorage(100_000, () -> 0L))
 					.build()
 			).build();
 		}

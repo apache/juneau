@@ -38,6 +38,9 @@ class RateLimitGuard_ExemptPaths_Test extends TestBase {
 					.permitsPerSecond(1)
 					.burst(1)
 					.keyBy(req -> "static-exempt")
+					// Frozen clock: the trailing 200/429 pair below depends on landing inside the same
+					// 1-second refill window, which a real clock can't guarantee under CPU starvation/GC pauses.
+					.storage(new RateLimitGuard.InMemoryStorage(100_000, () -> 0L))
 					.build()
 			).build();
 		}
@@ -76,6 +79,8 @@ class RateLimitGuard_ExemptPaths_Test extends TestBase {
 					.burst(1)
 					.keyBy(req -> "static-custom-exempt")
 					.exemptPaths("/special")
+					// Frozen clock: see rationale on class A above.
+					.storage(new RateLimitGuard.InMemoryStorage(100_000, () -> 0L))
 					.build()
 			).build();
 		}
@@ -107,6 +112,8 @@ class RateLimitGuard_ExemptPaths_Test extends TestBase {
 					.burst(1)
 					.keyBy(req -> "static-no-exempt")
 					.exemptPaths()
+					// Frozen clock: see rationale on class A above.
+					.storage(new RateLimitGuard.InMemoryStorage(100_000, () -> 0L))
 					.build()
 			).build();
 		}
