@@ -97,6 +97,7 @@ public class IniParser extends ReaderParser implements IniMetaProvider, RecordRe
 	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>, IniClassMeta> iniClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
 	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta, IniBeanPropertyMeta> iniBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
 
+	private static final String PROP_kvSeparator = "kvSeparator";
 	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
@@ -106,16 +107,37 @@ public class IniParser extends ReaderParser implements IniMetaProvider, RecordRe
 
 		private static final Cache<HashKey,IniParser> CACHE = Cache.of(HashKey.class, IniParser.class).build();
 
+		private char kvSeparator = '=';
+
 		protected Builder() {
 			consumes("text/ini,text/x-ini");
 		}
 
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			kvSeparator = copyFrom.kvSeparator;
 		}
 
 		protected Builder(IniParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			kvSeparator = copyFrom.kvSeparator;
+		}
+
+		/**
+		 * Key-value separator character.
+		 *
+		 * <p>
+		 * By default, the parser recognizes both <c>=</c> and <c>:</c> as key-value separators (matching
+		 * {@link IniSerializer.Builder#kvSeparator(char)}'s default of <c>=</c>). Set this to match a
+		 * serializer configured with a non-default {@code kvSeparator} so the resulting INI can be
+		 * round-tripped.
+		 *
+		 * @param value The key-value separator character to recognize (in addition to the default <c>=</c>/<c>:</c> pair).
+		 * @return This object.
+		 */
+		public Builder kvSeparator(char value) {
+			kvSeparator = value;
+			return this;
 		}
 
 		@Override
@@ -126,6 +148,11 @@ public class IniParser extends ReaderParser implements IniMetaProvider, RecordRe
 		@Override
 		public Builder copy() {
 			return new Builder(this);
+		}
+
+		@Override /* Overridden from Context.Builder<?> */
+		public HashKey hashKey() {
+			return HashKey.of(super.hashKey(), kvSeparator);
 		}
 	}
 
@@ -141,6 +168,9 @@ public class IniParser extends ReaderParser implements IniMetaProvider, RecordRe
 		return new Builder();
 	}
 
+	/** Key-value separator. */
+	protected final char kvSeparator;
+
 	/**
 	 * Constructor.
 	 *
@@ -148,6 +178,7 @@ public class IniParser extends ReaderParser implements IniMetaProvider, RecordRe
 	 */
 	public IniParser(Builder builder) {
 		super(builder);
+		kvSeparator = builder.kvSeparator;
 	}
 
 	@Override
@@ -170,6 +201,12 @@ public class IniParser extends ReaderParser implements IniMetaProvider, RecordRe
 	@Override
 	public Builder copy() {
 		return new Builder(this);
+	}
+
+	@Override
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a(PROP_kvSeparator, String.valueOf(kvSeparator));
 	}
 
 	/**

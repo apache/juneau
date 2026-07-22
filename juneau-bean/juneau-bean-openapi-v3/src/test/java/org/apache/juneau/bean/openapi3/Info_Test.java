@@ -39,14 +39,15 @@ class Info_Test extends TestBase {
 					.setContact(contact().setEmail("a1").setName("a2").setUrl(URI.create("a3")))
 					.setDescription("b")
 					.setLicense(license().setName("c1").setUrl(URI.create("c2")))
-					.setTermsOfService("d")
-					.setTitle("e")
-					.setVersion("f")
+					.setSiteName("d")
+					.setTermsOfService("e")
+					.setTitle("f")
+					.setVersion("g")
 			)
-			.props("contact{email,name,url},description,license{name,url},termsOfService,title,version")
-			.vals("{a1,a2,a3},b,{c1,c2},d,e,f")
-			.json("{contact:{email:'a1',name:'a2',url:'a3'},description:'b',license:{name:'c1',url:'c2'},termsOfService:'d',title:'e',version:'f'}")
-			.string("{'contact':{'email':'a1','name':'a2','url':'a3'},'description':'b','license':{'name':'c1','url':'c2'},'termsOfService':'d','title':'e','version':'f'}".replace('\'','"'))
+			.props("contact{email,name,url},description,license{name,url},siteName,termsOfService,title,version")
+			.vals("{a1,a2,a3},b,{c1,c2},d,e,f,g")
+			.json("{contact:{email:'a1',name:'a2',url:'a3'},description:'b',license:{name:'c1',url:'c2'},siteName:'d',termsOfService:'e',title:'f',version:'g'}")
+			.string("{'contact':{'email':'a1','name':'a2','url':'a3'},'description':'b','license':{'name':'c1','url':'c2'},'siteName':'d','termsOfService':'e','title':'f','version':'g'}".replace('\'','"'))
 		;
 
 		@Test void a01_gettersAndSetters() {
@@ -74,7 +75,7 @@ class Info_Test extends TestBase {
 		}
 
 		@Test void a07_keySet() {
-			assertList(TESTER.bean().keySet(), "contact", "description", "license", "termsOfService", "title", "version");
+			assertList(TESTER.bean().keySet(), "contact", "description", "license", "siteName", "termsOfService", "title", "version");
 		}
 
 		@Test void a08_nullParameters() {
@@ -157,16 +158,17 @@ class Info_Test extends TestBase {
 					.set("contact", contact().setName("a"))
 					.set("description", "b")
 					.set("license", license().setName("c"))
-					.set("termsOfService", "d")
-					.set("title", "e")
-					.set("version", "f")
+					.set("siteName", "d")
+					.set("termsOfService", "e")
+					.set("title", "f")
+					.set("version", "g")
 					.set("x1", "x1a")
 					.set("x2", null)
 			)
-			.props("contact{name},description,license{name},termsOfService,title,version,x1,x2")
-			.vals("{a},b,{c},d,e,f,x1a,<null>")
-			.json("{contact:{name:'a'},description:'b',license:{name:'c'},termsOfService:'d',title:'e',version:'f',x1:'x1a'}")
-			.string("{'contact':{'name':'a'},'description':'b','license':{'name':'c'},'termsOfService':'d','title':'e','version':'f','x1':'x1a'}".replace('\'', '"'))
+			.props("contact{name},description,license{name},siteName,termsOfService,title,version,x1,x2")
+			.vals("{a},b,{c},d,e,f,g,x1a,<null>")
+			.json("{contact:{name:'a'},description:'b',license:{name:'c'},siteName:'d',termsOfService:'e',title:'f',version:'g',x1:'x1a'}")
+			.string("{'contact':{'name':'a'},'description':'b','license':{'name':'c'},'siteName':'d','termsOfService':'e','title':'f','version':'g','x1':'x1a'}".replace('\'', '"'))
 		;
 
 		@Test void c01_gettersAndSetters() {
@@ -194,22 +196,22 @@ class Info_Test extends TestBase {
 		}
 
 		@Test void c07_keySet() {
-			assertList(TESTER.bean().keySet(), "contact", "description", "license", "termsOfService", "title", "version", "x1", "x2");
+			assertList(TESTER.bean().keySet(), "contact", "description", "license", "siteName", "termsOfService", "title", "version", "x1", "x2");
 		}
 
 		@Test void c08_get() {
 			assertMapped(
 				TESTER.bean(), (obj,prop) -> obj.get(prop, Object.class),
-				"contact{name},description,license{name},termsOfService,title,version,x1,x2",
-				"{a},b,{c},d,e,f,x1a,<null>"
+				"contact{name},description,license{name},siteName,termsOfService,title,version,x1,x2",
+				"{a},b,{c},d,e,f,g,x1a,<null>"
 			);
 		}
 
 		@Test void c09_getTypes() {
 			assertMapped(
 				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
-				"contact,description,license,termsOfService,title,version,x1,x2",
-				"Contact,String,License,String,String,String,String,<null>"
+				"contact,description,license,siteName,termsOfService,title,version,x1,x2",
+				"Contact,String,License,String,String,String,String,String,<null>"
 			);
 		}
 

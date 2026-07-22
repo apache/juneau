@@ -121,10 +121,17 @@ class SchemaInfo_Test extends TestBase {
 					.addRequired("b1", "b2")
 					.addAllOf(schemaInfo("c1"), schemaInfo("c2"))
 					.addAnyOf(schemaInfo("d1"), schemaInfo("d2"))
-					.addOneOf(schemaInfo("e1"), schemaInfo("e2")),
-				"enum,required,allOf{#{type}},anyOf{#{type}},oneOf{#{type}}",
-				"[a1,a2],[b1,b2],{[{c1},{c2}]},{[{d1},{d2}]},{[{e1},{e2}]}"
+					.addOneOf(schemaInfo("e1"), schemaInfo("e2"))
+					.addProperty("f1", schemaInfo("f2")),
+				"enum,required,allOf{#{type}},anyOf{#{type}},oneOf{#{type}},properties{f1{type}}",
+				"[a1,a2],[b1,b2],{[{c1},{c2}]},{[{d1},{d2}]},{[{e1},{e2}]},{{f2}}"
 			);
+		}
+
+		@Test void a09b_addProperty_nullChecks() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, () -> x.addProperty(null, schemaInfo("a")));
+			assertThrows(IllegalArgumentException.class, () -> x.addProperty("a", null));
 		}
 
 		@Test void a10_asMap() {

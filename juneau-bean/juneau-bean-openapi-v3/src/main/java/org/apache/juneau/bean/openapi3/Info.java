@@ -110,10 +110,12 @@ public class Info extends OpenApiElement {
 	private static final String PROP_contact = "contact";
 	private static final String PROP_description = "description";
 	private static final String PROP_license = "license";
+	private static final String PROP_siteName = "siteName";
 	private static final String PROP_termsOfService = "termsOfService";
 	private static final String PROP_title = "title";
 	private static final String PROP_version = "version";
 
+	private String siteName;
 	private String title;
 	private String description;
 	private String termsOfService;
@@ -136,6 +138,7 @@ public class Info extends OpenApiElement {
 
 		this.title = copyFrom.title;
 		this.description = copyFrom.description;
+		this.siteName = copyFrom.siteName;
 		this.termsOfService = copyFrom.termsOfService;
 		this.version = copyFrom.version;
 		this.contact = copyOf(copyFrom.contact);
@@ -160,6 +163,7 @@ public class Info extends OpenApiElement {
 			case PROP_termsOfService -> toType(getTermsOfService(), type);
 			case PROP_contact -> toType(getContact(), type);
 			case PROP_license -> toType(getLicense(), type);
+			case PROP_siteName -> toType(getSiteName(), type);
 			case PROP_version -> toType(getVersion(), type);
 			default -> super.get(property, type);
 		};
@@ -194,6 +198,16 @@ public class Info extends OpenApiElement {
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public License getLicense() { return license; }
+
+	/**
+	 * Bean property getter:  <property>siteName</property>.
+	 *
+	 * <p>
+	 * The site name of the application.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getSiteName() { return siteName; }
 
 	/**
 	 * Bean property getter:  <property>termsOfService</property>.
@@ -232,6 +246,7 @@ public class Info extends OpenApiElement {
 			.addIf(nn(contact), PROP_contact)
 			.addIf(nn(description), PROP_description)
 			.addIf(nn(license), PROP_license)
+			.addIf(nn(siteName), PROP_siteName)
 			.addIf(nn(termsOfService), PROP_termsOfService)
 			.addIf(nn(title), PROP_title)
 			.addIf(nn(version), PROP_version)
@@ -247,6 +262,7 @@ public class Info extends OpenApiElement {
 			case PROP_contact -> setContact(toType(value, Contact.class));
 			case PROP_description -> setDescription(s(value));
 			case PROP_license -> setLicense(toType(value, License.class));
+			case PROP_siteName -> setSiteName(s(value));
 			case PROP_termsOfService -> setTermsOfService(s(value));
 			case PROP_title -> setTitle(s(value));
 			case PROP_version -> setVersion(s(value));
@@ -302,6 +318,22 @@ public class Info extends OpenApiElement {
 	 */
 	public Info setLicense(License value) {
 		license = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>siteName</property>.
+	 *
+	 * <p>
+	 * The site name of the application.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Info setSiteName(String value) {
+		siteName = value;
 		return this;
 	}
 

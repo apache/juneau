@@ -104,7 +104,9 @@ import org.apache.juneau.commons.collections.*;
 public class SchemaInfo extends OpenApiElement {
 
 	// Argument name constants for assertArgNotNull
+	private static final String ARG_key = "key";
 	private static final String ARG_property = "property";
+	private static final String ARG_value = "value";
 
 	// Property name constants
 	private static final String PROP_additionalProperties = "additionalProperties";
@@ -353,6 +355,22 @@ public class SchemaInfo extends OpenApiElement {
 			for (var v : values)
 				if (nn(v))
 					oneOf.add(v);
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>properties</property>.
+	 *
+	 * @param key The property key.  Must not be <jk>null</jk>.
+	 * @param value The property value.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public SchemaInfo addProperty(String key, SchemaInfo value) {
+		assertArgNotNull(ARG_key, key);
+		assertArgNotNull(ARG_value, value);
+		if (properties == null)
+			properties = map();
+		properties.put(key, value);
 		return this;
 	}
 
@@ -660,6 +678,14 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * <p>
 	 * The list of required properties.
+	 *
+	 * <p>
+	 * <b>Note:</b> Named/typed <c>required</c> (<c>List&lt;String&gt;</c>) here per the OpenAPI 3.x JSON Schema
+	 * subset, vs. <c>requiredProperties</c> (<c>Set&lt;String&gt;</c>) in swagger-v2's sibling
+	 * {@code org.apache.juneau.bean.swagger.SchemaInfo}. This is an intentional, maintainer-confirmed divergence
+	 * (PARITY-02): each module tracks its own spec version's canonical field name/type; swagger-v2 additionally
+	 * carries a separate boolean {@code getRequired()}/{@code setRequired(Boolean)} pair that this module has no
+	 * equivalent for. No rename/retype planned.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */

@@ -183,4 +183,41 @@ class IniRoundTrip_Test extends TestBase {
 		var b = (Map<String, Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(b, "name,emoji", "José,Hello \uD83D\uDE00");
 	}
+
+	//====================================================================================================
+	// b - Custom kvSeparator round-trip (PARITY-01)
+	//====================================================================================================
+
+	@Test
+	void b01_customKvSeparatorRoundTrip_map() throws Exception {
+		var a = new LinkedHashMap<String, Object>();
+		a.put("name", "Alice");
+		a.put("age", 30);
+		var s = IniSerializer.create().kvSeparator('|').build();
+		var ini = s.write(a);
+		var p = IniParser.create().kvSeparator('|').build();
+		var b = (Map<String, Object>) p.read(ini, Map.class, String.class, Object.class);
+		assertBean(b, "name,age", "Alice,30");
+	}
+
+	@Test
+	void b02_customKvSeparatorRoundTrip_bean() throws Exception {
+		var a = new ComplexPerson("Alice", new Address("123 Main", "Boston"), list("a", "b", "c"));
+		var s = IniSerializer.create().kvSeparator('|').build();
+		var ini = s.write(a);
+		var p = IniParser.create().kvSeparator('|').build();
+		var b = p.read(ini, ComplexPerson.class);
+		assertBean(b, "name,address{street,city},tags", "Alice,{123 Main,Boston},[a,b,c]");
+	}
+
+	@Test
+	void b03_defaultKvSeparatorBehaviorUnchanged() throws Exception {
+		var a = new LinkedHashMap<String, Object>();
+		a.put("name", "Alice");
+		a.put("age", 30);
+		var ini = IniSerializer.DEFAULT.write(a);
+		var p = IniParser.create().build();
+		var b = (Map<String, Object>) p.read(ini, Map.class, String.class, Object.class);
+		assertBean(b, "name,age", "Alice,30");
+	}
 }

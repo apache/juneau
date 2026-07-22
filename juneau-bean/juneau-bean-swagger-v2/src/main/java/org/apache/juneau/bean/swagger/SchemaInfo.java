@@ -580,6 +580,14 @@ public class SchemaInfo extends SwaggerElement {
 	 * <p>
 	 * The list of required properties.
 	 *
+	 * <p>
+	 * <b>Note:</b> Named/typed <c>requiredProperties</c> (<c>Set&lt;String&gt;</c>) here per the JSON Schema Draft
+	 * this module targets, vs. <c>required</c> (<c>List&lt;String&gt;</c>) in openapi3's sibling
+	 * {@code org.apache.juneau.bean.openapi3.SchemaInfo}. This is an intentional, maintainer-confirmed divergence
+	 * (PARITY-02): each module tracks its own spec version's canonical field name/type; the separate boolean
+	 * {@link #getRequired()}/{@link #setRequired(Boolean)} pair on this class (unrelated to this property) has no
+	 * openapi3-side equivalent. No rename/retype planned.
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Set<String> getRequiredProperties() { return nie(requiredProperties); }

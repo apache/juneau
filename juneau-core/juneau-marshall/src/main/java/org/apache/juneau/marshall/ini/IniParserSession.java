@@ -59,8 +59,11 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	 */
 	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
+		private final IniParser ctx;
+
 		protected Builder(IniParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
+			this.ctx = ctx;
 		}
 
 		@Override
@@ -80,8 +83,11 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
+	private final IniParser ctx;
+
 	protected IniParserSession(Builder builder) {
 		super(builder);
+		ctx = builder.ctx;
 	}
 
 	@Override /* RecordReadable */
@@ -151,12 +157,17 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	}
 
 	/**
-	 * Splits an INI {@code key=value} / {@code key:value} line into its key and raw-value parts.
+	 * Splits an INI {@code key=value} / {@code key:value} (or configured-separator) line into its key and
+	 * raw-value parts.
 	 *
 	 * <p>
 	 * Behavior mirrors the former {@code ^([^=#\s][^=]*)\s*[=:]\s*(.*)$} regex but without its super-linear
-	 * backtracking: an {@code '='} delimiter (if present) binds to the first {@code '='}; otherwise the last
-	 * {@code ':'} is used. Surrounding whitespace is left in place (callers trim).
+	 * backtracking: when this session's {@link IniParser.Builder#kvSeparator(char) kvSeparator} is left at its
+	 * default (<c>=</c>), an {@code '='} delimiter (if present) binds to the first {@code '='}; otherwise the
+	 * last {@code ':'} is used (unchanged legacy behavior). When a non-default {@code kvSeparator} has been
+	 * configured (e.g. to round-trip an {@link IniSerializer} that was configured with a matching
+	 * {@code kvSeparator}), only that character is recognized as the delimiter. Surrounding whitespace is left
+	 * in place (callers trim).
 	 *
 	 * @param line The (already-trimmed) candidate line.
 	 * @return A two-element array of {raw-key, raw-value}, or <jk>null</jk> if the line is not a key/value pair.
@@ -164,14 +175,15 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	@SuppressWarnings({
 		"java:S1168" // null is a distinct "not a key/value pair" sentinel; the caller guards on != null before indexing, so an empty array would change parse semantics.
 	})
-	private static String[] splitKeyValue(String line) {
+	private String[] splitKeyValue(String line) {
 		if (line.isEmpty())
 			return null;
 		var first = line.charAt(0);
 		if (first == '=' || first == '#' || Character.isWhitespace(first))
 			return null;
-		var idx = line.indexOf('=');
-		if (idx < 0)
+		var sep = ctx.kvSeparator;
+		var idx = line.indexOf(sep);
+		if (idx < 0 && sep == '=')
 			idx = line.lastIndexOf(':');
 		if (idx < 1)
 			return null;

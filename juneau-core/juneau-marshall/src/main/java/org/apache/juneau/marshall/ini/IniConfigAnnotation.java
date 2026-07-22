@@ -44,7 +44,8 @@ public class IniConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<IniConfig> ai, IniParser.Builder b) {
-			// No-op: Parser accepts both = and :; no format-specific settings needed.
+			IniConfig a = ai.inner();
+			string(a.kvSeparator()).filter(s -> !s.isEmpty()).ifPresent(s -> b.kvSeparator(s.charAt(0)));
 		}
 	}
 
