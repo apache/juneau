@@ -56,7 +56,7 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 *
 	 * @param <T> The bean type.
 	 * @param beanType The bean type.
-	 * @param bean The bean instance.  Can be <jk>null</jk>.
+	 * @param bean The bean instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @return The bean.
 	 */
 	@SuppressWarnings({
@@ -72,7 +72,7 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 *
 	 * @param <T> The bean type.
 	 * @param beanType The bean type.
-	 * @param bean The bean instance.  Can be <jk>null</jk>.
+	 * @param bean The bean instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The bean.
 	 */
@@ -89,7 +89,7 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 *
 	 * @param <T> The bean type.
 	 * @param beanType The bean type.
-	 * @param bean The bean instance.  Can be <jk>null</jk>.
+	 * @param bean The bean instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @return This object for method chaining.
 	 */
 	<T> WritableBeanStore addBean(Class<T> beanType, T bean);
@@ -99,7 +99,7 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 *
 	 * @param <T> The bean type.
 	 * @param beanType The bean type.
-	 * @param bean The bean instance.  Can be <jk>null</jk>.
+	 * @param bean The bean instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return This object for method chaining.
 	 */

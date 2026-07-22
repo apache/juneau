@@ -787,7 +787,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	/**
 	 * Returns the first matching declared constructor on this class.
 	 *
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk> (if null, all entries are accepted).
 	 * @return The declared constructor that matches the specified predicate.
 	 */
 	public Optional<ConstructorInfo> getDeclaredConstructor(Predicate<ConstructorInfo> filter) {
@@ -806,7 +806,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	/**
 	 * Returns the first matching declared field on this class.
 	 *
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk> (if null, all entries are accepted).
 	 * @return The declared field, or <jk>null</jk> if not found.
 	 */
 	public Optional<FieldInfo> getDeclaredField(Predicate<FieldInfo> filter) {
@@ -862,7 +862,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	/**
 	 * Returns the first matching declared method on this class.
 	 *
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk> (if null, all entries are accepted).
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
 	public Optional<MethodInfo> getDeclaredMethod(Predicate<MethodInfo> filter) {
@@ -1069,7 +1069,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	/**
 	 * Returns the first matching method on this class.
 	 *
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk> (if null, all entries are accepted).
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
 	public Optional<MethodInfo> getMethod(Predicate<MethodInfo> filter) {
@@ -1602,7 +1602,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	/**
 	 * Returns the first matching public constructor on this class.
 	 *
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk> (if null, all entries are accepted).
 	 * @return The public constructor that matches the specified predicate.
 	 */
 	public Optional<ConstructorInfo> getPublicConstructor(Predicate<ConstructorInfo> filter) {
@@ -1619,7 +1619,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	/**
 	 * Returns the first matching public field on this class.
 	 *
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk> (if null, all entries are accepted).
 	 * @return The public field, or <jk>null</jk> if not found.
 	 */
 	public Optional<FieldInfo> getPublicField(Predicate<FieldInfo> filter) {
@@ -1642,7 +1642,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	/**
 	 * Returns the first matching public method on this class.
 	 *
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk> (if null, all entries are accepted).
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
 	public Optional<MethodInfo> getPublicMethod(Predicate<MethodInfo> filter) {

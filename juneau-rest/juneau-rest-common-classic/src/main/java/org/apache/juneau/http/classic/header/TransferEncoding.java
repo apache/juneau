@@ -102,7 +102,7 @@ public class TransferEncoding extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public TransferEncoding(String value) {
 		super(NAME, value);
@@ -116,7 +116,7 @@ public class TransferEncoding extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public TransferEncoding(Supplier<String> value) {
 		super(NAME, value);

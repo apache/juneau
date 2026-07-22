@@ -51,7 +51,7 @@ public class AtomBuilder {
 	/**
 	 * Creates a {@link Category} element with the specified {@link Category#setTerm(String)} attribute.
 	 *
-	 * @param term The {@link Category#setTerm(String)} attribute.  Can be <jk>null</jk>.
+	 * @param term The {@link Category#setTerm(String)} attribute.  Can be <jk>null</jk> to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Category category(String term) {
@@ -70,7 +70,7 @@ public class AtomBuilder {
 	/**
 	 * Creates a {@link Content} element.
 	 *
-	 * @param type The {@link Content#setType(String)} attribute.  Can be <jk>null</jk>.
+	 * @param type The {@link Content#setType(String)} attribute.  Can be <jk>null</jk> to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Content content(String type) {
@@ -81,9 +81,9 @@ public class AtomBuilder {
 	 * Creates an {@link Entry} element with the specified {@link Entry#setId(Id)}, {@link Entry#setTitle(Text)}, and
 	 * {@link Entry#setUpdated(Calendar)} attributes.
 	 *
-	 * @param id The {@link Entry#setId(Id)} attribute.  Can be <jk>null</jk>.
-	 * @param title The {@link Entry#setTitle(Text)} attribute.  Can be <jk>null</jk>.
-	 * @param updated The {@link Entry#setUpdated(Calendar)} attribute.  Can be <jk>null</jk>.
+	 * @param id The {@link Entry#setId(Id)} attribute.  Can be <jk>null</jk> to leave the property unset.
+	 * @param title The {@link Entry#setTitle(Text)} attribute.  Can be <jk>null</jk> to leave the property unset.
+	 * @param updated The {@link Entry#setUpdated(Calendar)} attribute.  Can be <jk>null</jk> to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Entry entry(Id id, Text title, Calendar updated) {
@@ -94,9 +94,9 @@ public class AtomBuilder {
 	 * Creates an {@link Entry} element with the specified {@link Entry#setId(Id)}, {@link Entry#setTitle(Text)}, and
 	 * {@link Entry#setUpdated(Calendar)} attributes.
 	 *
-	 * @param id The {@link Entry#setId(Id)} attribute.  Can be <jk>null</jk>.
-	 * @param title The {@link Entry#setTitle(Text)} attribute.  Can be <jk>null</jk>.
-	 * @param updated The {@link Entry#setUpdated(Calendar)} attribute.  Can be <jk>null</jk>.
+	 * @param id The {@link Entry#setId(Id)} attribute.  Can be <jk>null</jk>, in which case the property is set to an {@link Id} with no text (not left unset).
+	 * @param title The {@link Entry#setTitle(Text)} attribute.  Can be <jk>null</jk>, in which case the property is set to a {@link Text} with no text (not left unset).
+	 * @param updated The {@link Entry#setUpdated(Calendar)} attribute.  Can be <jk>null</jk> or blank to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Entry entry(String id, String title, String updated) {
@@ -107,9 +107,9 @@ public class AtomBuilder {
 	 * Creates a {@link Feed} element with the specified {@link Feed#setId(Id)}, {@link Entry#setTitle(Text)}, and
 	 * {@link Feed#setUpdated(Calendar)} attributes.
 	 *
-	 * @param id The {@link Feed#setId(Id)} attribute.  Can be <jk>null</jk>.
-	 * @param title The {@link Feed#setTitle(Text)} attribute.  Can be <jk>null</jk>.
-	 * @param updated The {@link Feed#setUpdated(Calendar)} attribute.  Can be <jk>null</jk>.
+	 * @param id The {@link Feed#setId(Id)} attribute.  Can be <jk>null</jk> to leave the property unset.
+	 * @param title The {@link Feed#setTitle(Text)} attribute.  Can be <jk>null</jk> to leave the property unset.
+	 * @param updated The {@link Feed#setUpdated(Calendar)} attribute.  Can be <jk>null</jk> to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Feed feed(Id id, Text title, Calendar updated) {
@@ -120,9 +120,9 @@ public class AtomBuilder {
 	 * Creates a {@link Feed} element with the specified {@link Feed#setId(Id)}, {@link Entry#setTitle(Text)}, and
 	 * {@link Feed#setUpdated(Calendar)} attributes.
 	 *
-	 * @param id The {@link Feed#setId(Id)} attribute.  Can be <jk>null</jk>.
-	 * @param title The {@link Feed#setTitle(Text)} attribute.  Can be <jk>null</jk>.
-	 * @param updated The {@link Feed#setUpdated(Calendar)} attribute.  Can be <jk>null</jk>.
+	 * @param id The {@link Feed#setId(Id)} attribute.  Can be <jk>null</jk>, in which case the property is set to an {@link Id} with no text (not left unset).
+	 * @param title The {@link Feed#setTitle(Text)} attribute.  Can be <jk>null</jk>, in which case the property is set to a {@link Text} with no text (not left unset).
+	 * @param updated The {@link Feed#setUpdated(Calendar)} attribute.  Can be <jk>null</jk> or blank to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Feed feed(String id, String title, String updated) {
@@ -132,7 +132,7 @@ public class AtomBuilder {
 	/**
 	 * Creates a {@link Generator} element with the specified {@link Generator#setText(String)} child node.
 	 *
-	 * @param text The {@link Generator#setText(String)} child node.  Can be <jk>null</jk>.
+	 * @param text The {@link Generator#setText(String)} child node.  Can be <jk>null</jk> to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Generator generator(String text) {
@@ -149,7 +149,7 @@ public class AtomBuilder {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param uri The {@link Icon#setUri(Object)} attribute.  Can be <jk>null</jk>.
+	 * @param uri The {@link Icon#setUri(Object)} attribute.  Can be <jk>null</jk> to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Icon icon(Object uri) {
@@ -159,7 +159,7 @@ public class AtomBuilder {
 	/**
 	 * Creates an {@link Id} element with the specified {@link Id#setText(String)} child node.
 	 *
-	 * @param text The {@link Id#setText(String)} child node.  Can be <jk>null</jk>.
+	 * @param text The {@link Id#setText(String)} child node.  Can be <jk>null</jk> to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Id id(String text) {
@@ -170,9 +170,9 @@ public class AtomBuilder {
 	 * Creates a {@link Link} element with the specified {@link Link#setRel(String)}, {@link Link#setType(String)}, and
 	 * {@link Link#setHref(String)} attributes.
 	 *
-	 * @param rel The {@link Link#setRel(String)} attribute.  Can be <jk>null</jk>.
-	 * @param type The {@link Link#setType(String)} attribute.  Can be <jk>null</jk>.
-	 * @param href The {@link Link#setHref(String)} attribute.  Can be <jk>null</jk>.
+	 * @param rel The {@link Link#setRel(String)} attribute.  Can be <jk>null</jk> to leave the property unset.
+	 * @param type The {@link Link#setType(String)} attribute.  Can be <jk>null</jk> to leave the property unset.
+	 * @param href The {@link Link#setHref(String)} attribute.  Can be <jk>null</jk> to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Link link(String rel, String type, String href) {
@@ -189,7 +189,7 @@ public class AtomBuilder {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param uri The {@link Logo#setUri(Object)} attribute.  Can be <jk>null</jk>.
+	 * @param uri The {@link Logo#setUri(Object)} attribute.  Can be <jk>null</jk> to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Logo logo(Object uri) {
@@ -199,7 +199,7 @@ public class AtomBuilder {
 	/**
 	 * Creates a {@link Person} element with the specified {@link Person#setName(String)} attribute.
 	 *
-	 * @param name The {@link Person#setName(String)} attribute.  Can be <jk>null</jk>.
+	 * @param name The {@link Person#setName(String)} attribute.  Can be <jk>null</jk> to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Person person(String name) {
@@ -227,7 +227,7 @@ public class AtomBuilder {
 	/**
 	 * Creates a {@link Text} element with the specified {@link Text#setType(String)} attribute.
 	 *
-	 * @param type The {@link Text#setType(String)} attribute.  Can be <jk>null</jk>.
+	 * @param type The {@link Text#setType(String)} attribute.  Can be <jk>null</jk> to leave the property unset.
 	 * @return The new element.
 	 */
 	public static final Text text(String type) {

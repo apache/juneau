@@ -618,7 +618,7 @@ public class RestSession extends ContextSession {
 	 * Sets the URL path pattern match on this call.
 	 *
 	 * @param value The match pattern.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @return This object.
 	 */
 	public RestSession urlPathMatch(UrlPathMatch value) {

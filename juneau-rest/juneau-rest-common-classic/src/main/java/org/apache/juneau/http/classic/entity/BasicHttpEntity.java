@@ -116,8 +116,8 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.  Can be <jk>null</jk>.
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param contentType The entity content type.  Can be <jk>null</jk> to omit an explicit <c>Content-Type</c> header.
+	 * @param content The entity content.  Can be <jk>null</jk> (the effect depends on the concrete leaf type: e.g. treated as empty for {@link StringEntity}/{@link ByteArrayEntity}, or a {@link NullPointerException} on read for {@link StreamEntity}/{@link ReaderEntity}/{@link FileEntity}).
 	 */
 	protected BasicHttpEntity(ContentType contentType, Object content) {
 		this.contentType = contentType;
@@ -307,7 +307,7 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 	 * Repeatable entities such as {@link StringEntity} use this to allow the entity content to be resolved at
 	 * serialization time.
 	 *
-	 * @param value The entity content, can be <jk>null</jk>.
+	 * @param value The entity content, can be <jk>null</jk> (treated as a supplier that always returns <jk>null</jk>).
 	 * @return This object.
 	 */
 	public SELF setContent(Supplier<?> value) {

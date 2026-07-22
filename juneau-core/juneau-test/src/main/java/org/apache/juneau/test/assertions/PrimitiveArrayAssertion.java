@@ -110,7 +110,7 @@ public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<
 	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static <E,T> PrimitiveArrayAssertion<E,T> create(T value) {
@@ -122,7 +122,7 @@ public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public PrimitiveArrayAssertion(T value) {
 		super(value, null);

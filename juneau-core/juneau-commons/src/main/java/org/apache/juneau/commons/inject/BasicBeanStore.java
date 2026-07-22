@@ -156,8 +156,8 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * 	<li>local default suppliers (added via {@link #addDefaultSupplier(Class,Supplier) addDefaultSupplier})
 	 * </ol>
 	 *
-	 * @param parent The parent bean store, used as a fallback after local entries.  Can be <jk>null</jk>.
-	 * @param overridingParent The overriding parent bean store, consulted before local entries.  Can be <jk>null</jk>.
+	 * @param parent The parent bean store, used as a fallback after local entries.  Can be <jk>null</jk> (this store then has no parent fallback).
+	 * @param overridingParent The overriding parent bean store, consulted before local entries.  Can be <jk>null</jk> (no overriding parent is consulted).
 	 */
 	public BasicBeanStore(BeanStore parent, BeanStore overridingParent) {
 		this.parent = parent;
@@ -180,7 +180,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 *
 	 * @param <T> The class to associate this bean with.
 	 * @param beanType The class to associate this bean with.  Must not be <jk>null</jk>.
-	 * @param bean The bean.  Can be <jk>null</jk>.
+	 * @param bean The bean.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @return The bean.
 	 */
 	@Override
@@ -194,8 +194,8 @@ public class BasicBeanStore implements WritableBeanStore {
 	 *
 	 * @param <T> The class to associate this bean with.
 	 * @param beanType The class to associate this bean with.  Must not be <jk>null</jk>.
-	 * @param bean The bean.  Can be <jk>null</jk>.
-	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
+	 * @param bean The bean.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
+	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The bean.
 	 */
 	@Override
@@ -209,7 +209,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 *
 	 * @param <T> The class to associate this bean with.
 	 * @param beanType The class to associate this bean with.  Must not be <jk>null</jk>.
-	 * @param bean The bean.  Can be <jk>null</jk>.
+	 * @param bean The bean.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @return This object.
 	 */
 	@Override
@@ -222,8 +222,8 @@ public class BasicBeanStore implements WritableBeanStore {
 	 *
 	 * @param <T> The class to associate this bean with.
 	 * @param beanType The class to associate this bean with.  Must not be <jk>null</jk>.
-	 * @param bean The bean.  Can be <jk>null</jk>.
-	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
+	 * @param bean The bean.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
+	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk> for unnamed beans.
 	 * @return This object.
 	 */
 	@Override
@@ -256,7 +256,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @param <T> The class to associate this bean with.
 	 * @param beanType The class to associate this bean with.  Must not be <jk>null</jk>.
 	 * @param bean The bean supplier.  Must not be <jk>null</jk>.
-	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
+	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk> for unnamed beans.
 	 * @return This object.
 	 */
 	@Override
@@ -297,7 +297,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @param <T> The bean type.
 	 * @param beanType The bean type.  Must not be <jk>null</jk>.
 	 * @param supplier The bean supplier.  Must not be <jk>null</jk>.
-	 * @param name The bean name.  Can be <jk>null</jk>.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return This object.
 	 */
 	@Override
@@ -417,7 +417,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 *
 	 * @param <T> The type of bean to return.
 	 * @param beanType The type of bean to return.  Must not be <jk>null</jk>.
-	 * @param name The bean name.  Can be <jk>null</jk>.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The bean, or {@link Optional#empty()} if not found.
 	 */
 	@Override
@@ -566,7 +566,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * If not found in this store, searches the parent store recursively.
 	 *
 	 * @param beanType The bean type to check.  Must not be <jk>null</jk>.
-	 * @param name The bean name.  Can be <jk>null</jk>.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return <jk>true</jk> if this store contains a bean of the specified type and name.
 	 */
 	@Override
@@ -617,7 +617,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 *
 	 * @param <T> The bean type.
 	 * @param beanType The bean type.  Must not be <jk>null</jk>.
-	 * @param name The bean name.  Can be <jk>null</jk>.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.
 	 */
 	@SuppressWarnings({
@@ -671,7 +671,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 *
 	 * @param <T> The bean type.
 	 * @param beanType The bean type.  Must not be <jk>null</jk>.
-	 * @param name The bean name.  Can be <jk>null</jk>.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.
 	 */
 	@Override
@@ -701,7 +701,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @param beanType The type of bean to create.  Must not be <jk>null</jk>.
 	 * @param onClassOrObject The object instance or {@link Class} whose public methods are searched.
 	 * 	Must not be <jk>null</jk>.
-	 * @param filter Optional predicate restricting which methods are eligible.  Can be <jk>null</jk>.
+	 * @param filter Optional predicate restricting which methods are eligible.  Can be <jk>null</jk> (any method qualifies).
 	 * @param extraBeans Optional bean instances visible to parameter resolution for this call only.
 	 * @return The created bean wrapped in an {@link Optional}, or {@link Optional#empty()} if no matching
 	 * 	factory method was found.

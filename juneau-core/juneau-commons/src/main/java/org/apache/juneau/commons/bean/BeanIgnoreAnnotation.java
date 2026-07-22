@@ -66,7 +66,7 @@ public class BeanIgnoreAnnotation {
 		/**
 		 * Sets the description property on this annotation.
 		 *
-		 * @param value The new value for this property.  Can be <jk>null</jk>.
+		 * @param value The new value for this property.  Can be <jk>null</jk> (stored as-is, with no default substitution).
 		 * @return This object.
 		 */
 		public Builder description(String...value) {

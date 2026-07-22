@@ -139,8 +139,8 @@ public class OpenApi extends OpenApiElement {
 	/**
 	 * Adds a path to this OpenAPI document.
 	 *
-	 * @param path The path string.  Must not be <jk>null</jk>.
-	 * @param pathItem The path item.  Must not be <jk>null</jk>.
+	 * @param path The path string.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param pathItem The path item.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public OpenApi addPath(String path, PathItem pathItem) {
@@ -268,8 +268,8 @@ public class OpenApi extends OpenApiElement {
 	/**
 	 * Finds a reference within this OpenAPI document.
 	 *
-	 * @param ref The reference string (e.g., <js>"#/components/schemas/User"</js>).  Must not be <jk>null</jk> or blank.
-	 * @param c The expected class type.  Must not be <jk>null</jk>.
+	 * @param ref The reference string (e.g., <js>"#/components/schemas/User"</js>).  Must not be <jk>null</jk> or blank, or an {@link IllegalArgumentException} is thrown.
+	 * @param c The expected class type.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The referenced node, or <jk>null</jk> if not found.
 	 */
 	public <T> T findRef(String ref, Class<T> c) {

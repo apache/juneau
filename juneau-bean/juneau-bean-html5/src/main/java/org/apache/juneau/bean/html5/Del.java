@@ -90,7 +90,7 @@ public class Del extends HtmlElementMixed<Del> {
 	 * <p>
 	 * The URL should point to a document that explains why the content was deleted.
 	 *
-	 * @param value The URL explaining the reason for the deletion. Can be <jk>null</jk>.
+	 * @param value The URL explaining the reason for the deletion. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Del cite(String value) {

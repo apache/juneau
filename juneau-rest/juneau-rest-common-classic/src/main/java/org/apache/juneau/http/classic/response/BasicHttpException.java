@@ -134,7 +134,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * Constructor.
 	 *
 	 * @param statusCode The HTTP status code.
-	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param msg The message.  Can be <jk>null</jk>, in which case the reason phrase is used as the message.
 	 * @param args Optional <c>printf</c>-style (<js>"%s"</js>) arguments in the message.
 	 */
 	public BasicHttpException(int statusCode, String msg, Object...args) {
@@ -146,7 +146,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * Constructor.
 	 *
 	 * @param statusCode The HTTP status code.
-	 * @param causedBy The cause.  Can be <jk>null</jk>.
+	 * @param causedBy The cause.  Can be <jk>null</jk>, in which case no cause is chained and the reason phrase is used as the message.
 	 */
 	public BasicHttpException(int statusCode, Throwable causedBy) {
 		super(causedBy);
@@ -157,8 +157,8 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * Constructor.
 	 *
 	 * @param statusCode The HTTP status code.
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param cause The caused-by exception.  Can be <jk>null</jk> (no cause is chained).
+	 * @param msg The message.  Can be <jk>null</jk>, in which case the cause's message is used, or the reason phrase if the cause is also <jk>null</jk> or has no message.
 	 * @param args The message arguments.
 	 */
 	public BasicHttpException(int statusCode, Throwable cause, String msg, Object...args) {
@@ -369,7 +369,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	/**
 	 * Sets the body on this response.
 	 *
-	 * @param value The body on this response.  Can be <jk>null</jk>.
+	 * @param value The body on this response.  Can be <jk>null</jk> (treated as an empty string).
 	 * @return This object.
 	 */
 	public BasicHttpException setContent(String value) {
@@ -475,7 +475,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * <p>
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk>, in which case the default protocol version is cleared and {@link BasicStatusLine#getProtocolVersion()} returns <jk>null</jk>.
 	 * @return This object.
 	 */
 	public BasicHttpException setProtocolVersion(ProtocolVersion value) {
@@ -494,7 +494,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * If not specified, the reason phrase will be retrieved from the reason phrase catalog
 	 * using the locale on this builder.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk> to fall back to the reason phrase catalog.
 	 * @return This object.
 	 */
 	public BasicHttpException setReasonPhrase2(String value) {
@@ -507,7 +507,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * <p>
 	 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk> to fall back to {@link EnglishReasonPhraseCatalog#INSTANCE}.
 	 * @return This object.
 	 */
 	public BasicHttpException setReasonPhraseCatalog(ReasonPhraseCatalog value) {

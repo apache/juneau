@@ -130,7 +130,7 @@ public class AcceptCharset extends BasicStringRangesHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public AcceptCharset(String value) {
 		super(NAME, value);
@@ -141,7 +141,7 @@ public class AcceptCharset extends BasicStringRangesHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public AcceptCharset(StringRanges value) {
 		super(NAME, value);
@@ -155,7 +155,7 @@ public class AcceptCharset extends BasicStringRangesHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public AcceptCharset(Supplier<StringRanges> value) {
 		super(NAME, value);

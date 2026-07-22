@@ -105,7 +105,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicIntegerHeader(String name, Integer value) {
@@ -121,7 +121,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicIntegerHeader(String name, String value) {
@@ -139,7 +139,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicIntegerHeader(String name, Supplier<Integer> value) {
@@ -196,7 +196,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	/**
 	 * Returns the header value as an {@link Integer}.
 	 *
-	 * @return The header value as an {@link Integer}.  Can be <jk>null</jk>.
+	 * @return The header value as an {@link Integer}, or <jk>null</jk> if the header has no value.
 	 */
 	public Integer toInteger() {
 		return value();

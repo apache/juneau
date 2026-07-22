@@ -126,8 +126,10 @@ public class MarshallingContextConverter implements Converter {
 	 * non-static inner class construction.
 	 *
 	 * @param o The object to convert.
-	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
-	 * @param session The converter session, or <jk>null</jk>.
+	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk> if the target is
+	 * 	not a non-static inner member class.
+	 * @param session The converter session, or <jk>null</jk> (ignored either way; this implementation does not use a
+	 * 	converter session).
 	 * @param type The target class type.
 	 * @param <T> The target type to convert to.
 	 * @return The converted object, or <jk>null</jk> if the input object is <jk>null</jk>.
@@ -143,8 +145,10 @@ public class MarshallingContextConverter implements Converter {
 	 * non-static inner class construction.
 	 *
 	 * @param o The object to convert.
-	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
-	 * @param session The converter session, or <jk>null</jk>.
+	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk> if the target is
+	 * 	not a non-static inner member class.
+	 * @param session The converter session, or <jk>null</jk> (ignored either way; this implementation does not use a
+	 * 	converter session).
 	 * @param mainType The main type to convert to.
 	 * @param args The type parameters of the main type.
 	 * @param <T> The target type to convert to.

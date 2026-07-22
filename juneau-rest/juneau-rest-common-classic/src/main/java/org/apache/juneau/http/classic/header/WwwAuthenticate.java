@@ -91,7 +91,7 @@ public class WwwAuthenticate extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public WwwAuthenticate(String value) {
 		super(NAME, value);
@@ -105,7 +105,7 @@ public class WwwAuthenticate extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public WwwAuthenticate(Supplier<String> value) {
 		super(NAME, value);

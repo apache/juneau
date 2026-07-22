@@ -103,7 +103,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicStringRangesHeader(String name, String value) {
@@ -119,7 +119,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicStringRangesHeader(String name, StringRanges value) {
@@ -138,7 +138,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicStringRangesHeader(String name, Supplier<StringRanges> value) {
@@ -211,7 +211,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	/**
 	 * Returns the header value as a {@link StringRanges}.
 	 *
-	 * @return The header value as a {@link StringRanges}.  Can be <jk>null</jk>.
+	 * @return The header value as a {@link StringRanges}, or <jk>null</jk> if the header has no value.
 	 */
 	public StringRanges toStringRanges() {
 		return value();

@@ -102,7 +102,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be a comma-delimited list.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicCsvHeader(String name, String value) {
@@ -117,7 +117,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicCsvHeader(String name, String...value) {
@@ -135,7 +135,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicCsvHeader(String name, Supplier<String[]> value) {
@@ -250,7 +250,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * <p>
 	 * The array is a copy of the value of this header.
 	 *
-	 * @return The header value as an array.  Can be <jk>null</jk>.
+	 * @return The header value as an array, or <jk>null</jk> if the header has no value.
 	 */
 	public String[] toArray() {
 		return cp(value());
@@ -262,7 +262,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * <p>
 	 * The list is unmodifiable.
 	 *
-	 * @return The header value as a list.  Can be <jk>null</jk>.
+	 * @return The header value as a list, or <jk>null</jk> if the header has no value.
 	 */
 	public List<String> toList() {
 		return u(l(value()));

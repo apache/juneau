@@ -81,7 +81,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Same as {@link #attr(String, String, Object)}, except pass in a {@link Namespace} object for the namespace.
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The attribute name.
 	 * @param value The attribute value.
 	 * @return This object.
@@ -116,7 +116,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Shortcut for <code>attr(ns, name, value, <jk>false</jk>);</code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The attribute name.
 	 * @param value The attribute value.
 	 * @return This object.
@@ -128,7 +128,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Writes an attribute to the output:  <code><xa>ns:name</xa>=<xs>'value'</xs></code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The attribute name.
 	 * @param value The attribute value.
 	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
@@ -141,7 +141,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Writes an attribute with a URI value to the output:  <code><xa>ns:name</xa>=<xs>'uri-value'</xs></code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The attribute name.
 	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
 	 * @return This object.
@@ -164,7 +164,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Writes an attribute with a URI value to the output:  <code><xa>ns:name</xa>=<xs>'uri-value'</xs></code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The attribute name.
 	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
 	 * @return This object.
@@ -214,7 +214,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	 * Shortcut for <code>i(indent).eTag(ns, name, <jk>false</jk>);</code>
 	 *
 	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @return This object.
 	 */
@@ -226,7 +226,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	 * Shortcut for <c>i(indent).eTag(ns, name, needsEncoding);</c>
 	 *
 	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
@@ -248,7 +248,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Shortcut for <code>eTag(ns, name, <jk>false</jk>);</code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @return This object.
 	 */
@@ -259,7 +259,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Writes an end tag to the output:  <code><xt>&lt;/ns:name&gt;</xt></code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
@@ -279,7 +279,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Writes an open-ended attribute to the output:  <code><xa>ns:name</xa>=</code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The attribute name.
 	 * @return This object.
 	 */
@@ -290,7 +290,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Writes an open-ended attribute to the output:  <code><xa>ns:name</xa>=</code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The attribute name.
 	 * @return This object.
 	 */
@@ -317,7 +317,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	 * Shortcut for <code>i(indent).oTag(ns, name, <jk>false</jk>);</code>
 	 *
 	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @return This object.
 	 */
@@ -329,7 +329,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	 * Shortcut for <c>i(indent).oTag(ns, name, needsEncoding);</c>
 	 *
 	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
@@ -351,7 +351,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Shortcut for <code>oTag(ns, name, <jk>false</jk>);</code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @return This object.
 	 */
@@ -362,7 +362,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Writes an opening tag to the output:  <code><xt>&lt;ns:name</xt></code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
@@ -393,7 +393,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	 * Shortcut for <code>i(indent).sTag(ns, name, <jk>false</jk>);</code>
 	 *
 	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @return This object.
 	 */
@@ -405,7 +405,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	 * Shortcut for <c>i(indent).sTag(ns, name, needsEncoding);</c>
 	 *
 	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
@@ -427,7 +427,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Shortcut for <code>sTag(ns, name, <jk>false</jk>);</code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @return This object.
 	 */
@@ -438,7 +438,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Writes a start tag to the output:  <code><xt>&lt;ns:name&gt;</xt></code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
@@ -463,7 +463,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	 * Shortcut for <code>i(indent).tag(ns, name, <jk>false</jk>);</code>
 	 *
 	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @return This object.
 	 */
@@ -475,7 +475,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	 * Shortcut for <c>i(indent).tag(ns, name, needsEncoding);</c>
 	 *
 	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
@@ -497,7 +497,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Shortcut for <code>tag(ns, name, <jk>false</jk>);</code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @return This object.
 	 */
@@ -508,7 +508,7 @@ public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends Serializer
 	/**
 	 * Writes a closed tag to the output:  <code><xt>&lt;ns:name/&gt;</xt></code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param ns The namespace.  Can be <jk>null</jk> (no namespace prefix is written).
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.

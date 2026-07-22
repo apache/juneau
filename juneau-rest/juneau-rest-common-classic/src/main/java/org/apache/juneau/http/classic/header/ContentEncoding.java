@@ -114,7 +114,7 @@ public class ContentEncoding extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentEncoding(String value) {
 		super(NAME, value);
@@ -128,7 +128,7 @@ public class ContentEncoding extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentEncoding(Supplier<String> value) {
 		super(NAME, value);

@@ -212,7 +212,7 @@ public class BeanAnnotation {
 	/**
 	 * Pulls the name/value attribute from a {@link Bean} annotation.
 	 *
-	 * @param a The annotation to check.  Can be <jk>null</jk>.
+	 * @param a The annotation to check.  Can be <jk>null</jk> (returns an empty string).
 	 * @return The annotation value, or an empty string if the annotation is <jk>null</jk>.
 	 */
 	public static String name(Bean a) {

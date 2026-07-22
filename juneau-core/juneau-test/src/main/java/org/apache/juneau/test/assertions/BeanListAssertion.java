@@ -132,7 +132,7 @@ public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAsse
 	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static <E> BeanListAssertion<E> create(List<E> value) {
@@ -144,7 +144,7 @@ public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAsse
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public BeanListAssertion(List<E> value) {
 		super(value, null);

@@ -415,7 +415,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param m The bean map to create a class property on.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param typeName The type name of the bean.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the created property's value is <jk>null</jk>).
 	 * @return A new bean property value.
 	 */
 	protected static final BeanPropertyValue createBeanTypeNameProperty(BeanMap<?> m, String typeName) {
@@ -541,7 +541,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	<br>Can be <jk>null</jk> (treated as the {@code Object} type).
 	 * @param attrName The bean attribute name, or <jk>null</jk> if this isn't a bean attribute.
 	 * @param value The object being serialized.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case the result depends on {@link Serializer.Builder#keepNullProperties() keepNullProperties} (ignored unless that setting is enabled).
 	 * @return <jk>true</jk> if the specified value should not be serialized.
 	 * @throws SerializeException If recursion occurred.
 	 */
@@ -603,7 +603,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param pMeta The bean property meta for the value being considered.  Must not be <jk>null</jk>.
 	 * @param attrName The bean attribute name.  Must not be <jk>null</jk>.
 	 * @param value The current property value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (treated as an absent value; whether it's omitted depends on {@link Serializer.Builder#keepNullProperties() keepNullProperties}).
 	 * @return <jk>true</jk> if the property should be omitted from the output.
 	 * @throws SerializeException If recursion occurred.
 	 * @since 10.0.0
@@ -1026,7 +1026,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 *
 	 * @param <E> The element type.
 	 * @param c The collection being sorted.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk> unchanged).
 	 * @return The sorted collection, or the input collection unchanged if sorting is disabled or the collection isn't sortable.
 	 */
 	public final <E> Collection<E> sort(Collection<E> c) {
@@ -1042,7 +1042,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 *
 	 * @param <E> The element type.
 	 * @param c The collection being sorted.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk> unchanged).
 	 * @return The sorted list, or the input list unchanged if sorting is disabled or the list isn't sortable.
 	 */
 	public final <E> List<E> sort(List<E> c) {
@@ -1059,7 +1059,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param <K> The key type.
 	 * @param <V> The value type.
 	 * @param m The map being sorted.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk> unchanged).
 	 * @return A new sorted {@link TreeMap}, or the input map unchanged if sorting is disabled or the keys aren't sortable.
 	 */
 	public final <K,V> Map<K,V> sort(Map<K,V> m) {
@@ -1249,9 +1249,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * Generalize the specified object if a POJO swap is associated with it.
 	 *
 	 * @param o The object to generalize.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param type The type of object.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the object's actual runtime class's swap, if any, is used instead).
 	 * @return The generalized object, or <jk>null</jk> if the object is <jk>null</jk>.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
@@ -1277,7 +1277,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param eType The expected type of the bean property.
 	 * @param aType The actual type of the bean property.
 	 * @param pMeta The current bean property being serialized.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the bean-property-level dictionary lookup tier is skipped).
 	 * @return The bean dictionary name, or <jk>null</jk> if a name could not be found.
 	 */
 	@SuppressWarnings({
@@ -1333,7 +1333,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * no reason to add <js>"_type"</js> attributes to the root-level object.
 	 *
 	 * @param o The object to get the expected type on.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk> unless root typing is enabled, in which case the generic {@link Object} type is returned).
 	 * @return The expected type, or <jk>null</jk> if the object was <jk>null</jk> and root typing is disabled.
 	 */
 	@SuppressWarnings({
@@ -1572,11 +1572,11 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * Same as {@link #push(String, Object, ClassMeta)} but wraps {@link MarshallingRecursionException} inside {@link SerializeException}.
 	 *
 	 * @param attrName The attribute name.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> for unnamed entries (e.g. array elements); used only for stack-trace labeling.
 	 * @param o The current object being traversed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param eType The expected class type.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case the object's actual runtime type is used instead.
 	 * @return
 	 * 	The {@link ClassMeta} of the object so that <c>instanceof</c> operations only need to be performed
 	 * 	once (since they can be expensive).
@@ -1634,7 +1634,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	/**
 	 * Invokes the specified swap on the specified object if the swap is not null.
 	 *
-	 * @param swap The swap to invoke.  Can be <jk>null</jk>.
+	 * @param swap The swap to invoke.  Can be <jk>null</jk> (no-op; the input object is returned unchanged).
 	 * @param o The input object.
 	 * @return The swapped object.
 	 * @throws SerializeException If swap method threw an exception.

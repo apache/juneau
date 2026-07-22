@@ -107,7 +107,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the programmatic configuration builder stashed on this resource, or <jk>null</jk> if none.
 	 *
-	 * @return The stashed builder, or <jk>null</jk>.
+	 * @return The stashed builder, or <jk>null</jk> if none was injected.
 	 * @since 10.0.0
 	 */
 	@SuppressWarnings({

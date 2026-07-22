@@ -95,7 +95,7 @@ public class UserAgent extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public UserAgent(String value) {
 		super(NAME, value);
@@ -109,7 +109,7 @@ public class UserAgent extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public UserAgent(Supplier<String> value) {
 		super(NAME, value);

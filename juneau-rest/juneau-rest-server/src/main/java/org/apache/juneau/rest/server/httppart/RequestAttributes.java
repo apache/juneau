@@ -125,7 +125,7 @@ public class RequestAttributes {
 	 *
 	 * @param pairs
 	 * 	The default entries.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no-op).
 	 * @return This object.
 	 */
 	public RequestAttributes addDefault(List<NamedAttribute> pairs) {
@@ -144,7 +144,7 @@ public class RequestAttributes {
 	 *
 	 * @param pairs
 	 * 	The default entries.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no-op).
 	 * @return This object.
 	 */
 	public RequestAttributes addDefault(NamedAttribute...pairs) {
@@ -156,7 +156,7 @@ public class RequestAttributes {
 	 *
 	 * @param pairs
 	 * 	The default entries.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no-op).
 	 * @return This object.
 	 */
 	public RequestAttributes addDefault(NamedAttributeMap pairs) {
@@ -294,7 +294,7 @@ public class RequestAttributes {
 	 * @param name The attribute name.  Must not be <jk>null</jk>.
 	 * @param value
 	 * 	The attribute value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (removes the attribute, per {@code HttpServletRequest.setAttribute} semantics).
 	 * @return This object.
 	 */
 	public RequestAttributes set(String name, Object value) {

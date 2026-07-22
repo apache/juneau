@@ -90,7 +90,7 @@ public class Form extends HtmlElementMixed<Form> {
 	/**
 	 * Creates a {@link Form} element with the specified {@link Form#action(String)} attribute.
 	 *
-	 * @param action The {@link Form#action(String)} attribute. Can be <jk>null</jk>.
+	 * @param action The {@link Form#action(String)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 */
 	public Form(String action) {
 		action(action);
@@ -99,7 +99,7 @@ public class Form extends HtmlElementMixed<Form> {
 	/**
 	 * Creates an {@link Form} element with the specified {@link Form#action(String)} attribute and child nodes.
 	 *
-	 * @param action The {@link Form#action(String)} attribute. Can be <jk>null</jk>.
+	 * @param action The {@link Form#action(String)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Form(String action, Object...children) {
@@ -143,7 +143,7 @@ public class Form extends HtmlElementMixed<Form> {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public Form action(String value) {

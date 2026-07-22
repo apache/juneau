@@ -577,7 +577,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * Specifies the media type that this serializer produces.
 		 *
 		 * @param value The value for this setting.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (clears the produces media type).
 		 * @return This object.
 		 */
 		public SELF produces(String value) {

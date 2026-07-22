@@ -85,7 +85,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicMediaRangesHeader(String name, MediaRanges value) {
@@ -102,7 +102,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicMediaRangesHeader(String name, String value) {
@@ -121,7 +121,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicMediaRangesHeader(String name, Supplier<MediaRanges> value) {
@@ -210,7 +210,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	/**
 	 * Returns the header value as a {@link MediaRanges}.
 	 *
-	 * @return The header value as a {@link MediaRanges}.  Can be <jk>null</jk>.
+	 * @return The header value as a {@link MediaRanges}, or <jk>null</jk> if the header has no value.
 	 */
 	public MediaRanges toMediaRanges() {
 		return value();

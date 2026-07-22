@@ -103,7 +103,7 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static LongAssertion create(Long value) {
@@ -115,7 +115,7 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public LongAssertion(Long value) {
 		super(value, null);

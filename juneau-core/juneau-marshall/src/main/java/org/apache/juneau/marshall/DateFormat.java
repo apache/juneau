@@ -107,7 +107,7 @@ public enum DateFormat {
 	/**
 	 * Formats the specified value using this format.
 	 *
-	 * @param value The value to format. Can be <jk>null</jk>.
+	 * @param value The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param zoneId The default zone id used to interpret the date.
 	 * @return The formatted string, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
@@ -123,7 +123,7 @@ public enum DateFormat {
 	/**
 	 * Parses the specified wire value using this format.
 	 *
-	 * @param value The wire value. Can be <jk>null</jk> or blank.
+	 * @param value The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).
 	 * @param zoneId The default zone id used for time-only / unzoned values.
 	 * @return The parsed {@link Date}, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 */

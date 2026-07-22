@@ -173,7 +173,7 @@ public class Via extends BasicCsvHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Via(String value) {
 		super(NAME, value);
@@ -184,7 +184,7 @@ public class Via extends BasicCsvHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> or empty to create a header with no value.
 	 */
 	public Via(String...value) {
 		super(NAME, value);
@@ -198,7 +198,7 @@ public class Via extends BasicCsvHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Via(Supplier<String[]> value) {
 		super(NAME, value);

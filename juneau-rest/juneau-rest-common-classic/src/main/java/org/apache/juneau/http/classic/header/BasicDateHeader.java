@@ -104,7 +104,7 @@ public class BasicDateHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicDateHeader(String name, String value) {
@@ -122,7 +122,7 @@ public class BasicDateHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicDateHeader(String name, Supplier<ZonedDateTime> value) {
@@ -137,7 +137,7 @@ public class BasicDateHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicDateHeader(String name, ZonedDateTime value) {
@@ -197,7 +197,7 @@ public class BasicDateHeader extends BasicHeader {
 	/**
 	 * Returns the header value as a {@link ZonedDateTime}.
 	 *
-	 * @return The header value as a {@link ZonedDateTime}.  Can be <jk>null</jk>.
+	 * @return The header value as a {@link ZonedDateTime}, or <jk>null</jk> if the header has no value.
 	 */
 	public ZonedDateTime toZonedDateTime() {
 		return value();

@@ -86,7 +86,7 @@ public class Img extends HtmlElementVoid<Img> {
 	/**
 	 * Creates an {@link Img} element with the specified {@link Img#src(Object)} attribute.
 	 *
-	 * @param src The {@link Img#src(Object)} attribute. Can be <jk>null</jk>.
+	 * @param src The {@link Img#src(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 */
 	public Img(Object src) {
 		src(src);
@@ -191,7 +191,7 @@ public class Img extends HtmlElementVoid<Img> {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public Img src(Object value) {

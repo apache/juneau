@@ -2948,7 +2948,7 @@ public class RestContext extends Context {
 	 * or returns <jk>null</jk> when the instance carries none or is not a builder-aware base type.
 	 *
 	 * @param r The resource instance.
-	 * @return The stashed builder, or <jk>null</jk>.
+	 * @return The stashed builder, or <jk>null</jk> if <c>r</c> carries none or is not a builder-aware base type.
 	 */
 	private static RestBuilder<?> stashedRestBuilder(Object r) {
 		if (r instanceof RestServlet x)

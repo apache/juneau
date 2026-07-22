@@ -148,7 +148,7 @@ public class TE extends BasicStringRangesHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public TE(String value) {
 		super(NAME, value);
@@ -159,7 +159,7 @@ public class TE extends BasicStringRangesHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public TE(StringRanges value) {
 		super(NAME, value);
@@ -173,7 +173,7 @@ public class TE extends BasicStringRangesHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public TE(Supplier<StringRanges> value) {
 		super(NAME, value);

@@ -82,7 +82,7 @@ public class ParserPipe implements Closeable {
 	 * Equivalent to calling <code><jk>new</jk> ParserPipe(input, <jk>false</jk>, <jk>false</jk>, <jk>false</jk>, <jk>false</jk>, <jk>null</jk>);</code>
 	 *
 	 * @param input The input object.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the pipe wraps no data; {@link #getReader()}/{@link #getInputStream()} return <jk>null</jk>).
 	 */
 	public ParserPipe(Object input) {
 		this(input, false, false, false, false, null);
@@ -92,7 +92,7 @@ public class ParserPipe implements Closeable {
 	 * Constructor for stream-based parsers.
 	 *
 	 * @param input The parser input object.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the pipe wraps no data; {@link #getReader()}/{@link #getInputStream()} return <jk>null</jk>).
 	 * @param debug
 	 * 	If <jk>true</jk>, the input contents will be copied locally and accessible via the {@link #getInputAsString()}
 	 * 	method.
@@ -104,7 +104,7 @@ public class ParserPipe implements Closeable {
 	 * 	multiple times.
 	 * 	<br>Otherwise, we read character data into a reusable buffer.
 	 * @param binaryFormat The binary format of input strings when converted to bytes.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (string input converts to an empty byte array).
 	 */
 	public ParserPipe(Object input, boolean debug, boolean autoCloseStreams, boolean unbuffered, BinaryFormat binaryFormat) {
 		this.input = input;
@@ -122,7 +122,7 @@ public class ParserPipe implements Closeable {
 	 * Constructor for reader-based parsers.
 	 *
 	 * @param input The parser input object.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the pipe wraps no data; {@link #getReader()}/{@link #getInputStream()} return <jk>null</jk>).
 	 * @param debug
 	 * 	If <jk>true</jk>, the input contents will be copied locally and accessible via the {@link #getInputAsString()}
 	 * 	method.
@@ -311,7 +311,7 @@ public class ParserPipe implements Closeable {
 	 * Used for gathering the failure position when {@link ParseException} is thrown.
 	 *
 	 * @param positionable The ParserReader/ParserInputStream/XmlReader constructed from this pipe.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the failure position reported on {@link ParseException} is {@link Position#UNKNOWN}).
 	 */
 	public void setPositionable(Positionable positionable) { this.positionable = positionable; }
 

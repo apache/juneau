@@ -71,7 +71,7 @@ public class RestCallException extends HttpException {
 	 * Constructor.
 	 *
 	 * @param statusCode The HTTP response status code.  Use <c>0</c> if no connection could be made.
-	 * @param thrown The value of the <js>"Thrown"</js> header on the response.  Can be <jk>null</jk>.
+	 * @param thrown The value of the <js>"Thrown"</js> header on the response.  Can be <jk>null</jk> if the header is not present.
 	 * @param cause The cause of this exception.
 	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
 	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
@@ -85,7 +85,7 @@ public class RestCallException extends HttpException {
 	/**
 	 * Constructor.
 	 *
-	 * @param response The HTTP response.  Can be <jk>null</jk>.
+	 * @param response The HTTP response.  Can be <jk>null</jk> (treated as a connection failure: status code <c>0</c> with no thrown info).
 	 * @param cause The cause of this exception.
 	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
 	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.

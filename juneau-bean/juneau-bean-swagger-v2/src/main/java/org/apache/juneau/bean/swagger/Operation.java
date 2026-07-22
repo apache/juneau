@@ -343,8 +343,8 @@ public class Operation extends SwaggerElement {
 	/**
 	 * Adds a single value to the <property>responses</property> property.
 	 *
-	 * @param statusCode The HTTP status code.  Must not be <jk>null</jk>.
-	 * @param response The response description.  Must not be <jk>null</jk>.
+	 * @param statusCode The HTTP status code.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param response The response description.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public Operation addResponse(String statusCode, ResponseInfo response) {
@@ -398,7 +398,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to add to this property.
-	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public Operation addSecurity(Collection<Map<String,List<String>>> value) {
@@ -412,7 +412,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param scheme
 	 * 	The scheme name.
-	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @param alternatives
 	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR
 	 * 	between the security requirements).
@@ -544,7 +544,7 @@ public class Operation extends SwaggerElement {
 	/**
 	 * Returns the parameter with the specified type and name.
 	 *
-	 * @param in The parameter in.  Must not be <jk>null</jk>.
+	 * @param in The parameter in.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @param name The parameter name.  Can be <jk>null</jk> for parameter type <c>body</c>.
 	 * @return The matching parameter info, or <jk>null</jk> if not found.
 	 */
@@ -605,7 +605,7 @@ public class Operation extends SwaggerElement {
 	/**
 	 * Returns the response info with the given status code.
 	 *
-	 * @param status The HTTP status code.  Must not be <jk>null</jk>.
+	 * @param status The HTTP status code.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The response info, or <jk>null</jk> if not found.
 	 */
 	public ResponseInfo getResponse(String status) {

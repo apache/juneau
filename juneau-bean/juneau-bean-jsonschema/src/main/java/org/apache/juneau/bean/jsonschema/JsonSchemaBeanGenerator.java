@@ -66,7 +66,7 @@ public final class JsonSchemaBeanGenerator {
 	/**
 	 * Generates a schema bean from a Java type.
 	 *
-	 * @param type The Java type.  Must not be <jk>null</jk>.
+	 * @param type The Java type.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the type.
 	 */
 	public JsonSchema<?> generate(Type type) {
@@ -88,7 +88,7 @@ public final class JsonSchemaBeanGenerator {
 	/**
 	 * Generates a schema bean from a Java class.
 	 *
-	 * @param type The Java class.  Must not be <jk>null</jk>.
+	 * @param type The Java class.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the class.
 	 */
 	public JsonSchema<?> generate(Class<?> type) {
@@ -101,7 +101,7 @@ public final class JsonSchemaBeanGenerator {
 	 * <p>
 	 * The value can be a POJO or a <c>Class</c>/<c>Type</c>.
 	 *
-	 * @param o The value to infer a schema from.  Must not be <jk>null</jk>.
+	 * @param o The value to infer a schema from.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the value.
 	 */
 	public JsonSchema<?> generate(Object o) {
@@ -126,7 +126,7 @@ public final class JsonSchemaBeanGenerator {
 	 * <p>
 	 * Conversion uses a JSON roundtrip to ensure the swaps declared on {@link JsonSchema} are honored.
 	 *
-	 * @param schemaMap The generated schema map.  Must not be <jk>null</jk>.
+	 * @param schemaMap The generated schema map.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The typed schema bean.
 	 */
 	public static JsonSchema<?> toBean(JsonMap schemaMap) {

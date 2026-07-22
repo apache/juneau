@@ -57,7 +57,7 @@ public class RrpcInterfaceMeta {
 	 * @param uri
 	 * 	The absolute URL of the remote REST interface that implements this proxy interface.
 	 * 	<br>This is only used on the client side.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case each method's URL is prefixed with the literal text <js>"null"</js>.
 	 */
 	public RrpcInterfaceMeta(Class<?> c, String uri) {
 		this.c = c;

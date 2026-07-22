@@ -152,7 +152,7 @@ public class Json5List extends MarshalledList {
 	/**
 	 * Construct a list initialized with the specified list.
 	 *
-	 * @param values The list to copy. Can be <jk>null</jk>.
+	 * @param values The list to copy. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A new list or <jk>null</jk> if the list was <jk>null</jk>.
 	 */
 	public static Json5List of(Collection<?> values) {
@@ -284,7 +284,7 @@ public class Json5List extends MarshalledList {
 	/**
 	 * Construct a list initialized with the specified string.
 	 *
-	 * @param in The input being parsed. Can be <jk>null</jk>.
+	 * @param in The input being parsed. Can be <jk>null</jk> or empty (results in an empty list; no parsing occurs).
 	 * @param p The parser to use. If <jk>null</jk>, uses {@link Json5Parser}.
 	 * @throws ParseException Malformed input encountered.
 	 */
@@ -295,7 +295,7 @@ public class Json5List extends MarshalledList {
 	/**
 	 * Construct a list initialized with the specified list.
 	 *
-	 * @param copyFrom The list to copy. Can be <jk>null</jk>.
+	 * @param copyFrom The list to copy. Can be <jk>null</jk> (results in an empty list).
 	 */
 	public Json5List(Collection<?> copyFrom) {
 		super(copyFrom);

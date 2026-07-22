@@ -238,7 +238,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	/**
 	 * If the specified object is an {@link Optional}, returns the inner object.
 	 *
-	 * @param o The object to check.  Can be <jk>null</jk>.
+	 * @param o The object to check.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The inner object if it's an {@link Optional}, <jk>null</jk> if it's <jk>null</jk>, or else the same object.
 	 */
 	protected final Object getOptionalValue(Object o) {
@@ -347,9 +347,9 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	 * {@link MarshallingTraverseContext.Builder#detectRecursions() detectRecursions}; to omit repeated nodes as
 	 * <jk>null</jk>, enable {@link MarshallingTraverseContext.Builder#ignoreRecursions() ignoreRecursions}.
 	 *
-	 * @param attrName The attribute name.  Can be <jk>null</jk>.
+	 * @param attrName The attribute name.  Can be <jk>null</jk> for unnamed entries (e.g. array elements); used only for stack-trace labeling.
 	 * @param o The current object being traversed.  Can be <jk>null</jk> (returns <jk>null</jk>).
-	 * @param eType The expected class type.  Can be <jk>null</jk>.
+	 * @param eType The expected class type.  Can be <jk>null</jk>, in which case the object's actual runtime type is used instead.
 	 * @return
 	 * 	The {@link ClassMeta} of the object so that <c>instanceof</c> operations only need to be performed
 	 * 	once (since they can be expensive).

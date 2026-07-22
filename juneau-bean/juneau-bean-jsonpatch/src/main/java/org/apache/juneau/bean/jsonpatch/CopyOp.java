@@ -38,8 +38,8 @@ public class CopyOp extends JsonPatchOperation {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param path The JSON Pointer destination.  Can be <jk>null</jk>.
-	 * @param from The JSON Pointer source.  Can be <jk>null</jk>.
+	 * @param path The JSON Pointer destination.  Can be <jk>null</jk> to leave the property unset.
+	 * @param from The JSON Pointer source.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public CopyOp(String path, String from) {
 		super(path);

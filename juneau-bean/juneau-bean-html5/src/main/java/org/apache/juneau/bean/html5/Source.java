@@ -91,8 +91,8 @@ public class Source extends HtmlElementVoid<Source> {
 	 * Creates a {@link Source} element with the specified {@link Source#src(Object)} and {@link Source#type(String)}
 	 * attributes.
 	 *
-	 * @param src The {@link Source#src(Object)} attribute. Can be <jk>null</jk>.
-	 * @param type The {@link Source#type(String)} attribute. Can be <jk>null</jk>.
+	 * @param src The {@link Source#src(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
+	 * @param type The {@link Source#type(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 */
 	public Source(Object src, String type) {
 		src(src).type(type);
@@ -114,7 +114,7 @@ public class Source extends HtmlElementVoid<Source> {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public Source src(Object value) {

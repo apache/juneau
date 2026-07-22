@@ -159,7 +159,7 @@ public class ParserSet {
 		 * is the supplied store, so test-time overrides win over the builder's regular bean lookups during
 		 * construction-time reflective injection.  Passing {@code null} is a no-op.
 		 *
-		 * @param store The override layer.  Can be <jk>null</jk>.
+		 * @param store The override layer.  Can be <jk>null</jk> (no-op).
 		 * @return This object.
 		 * @since 10.0.0
 		 */
@@ -242,7 +242,7 @@ public class ParserSet {
 		 * Associates an existing bean context builder with all parser builders in this group.
 		 *
 		 * @param value The bean context builder to associate.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (clears any previously-associated bean context builder).
 		 * @return This object.
 		 */
 		public Builder marshallingContext(MarshallingContext.Builder value) {
@@ -355,7 +355,7 @@ public class ParserSet {
 		 * Overrides the bean returned by the {@link #build()} method with a pre-built instance.
 		 *
 		 * @param value The pre-built instance.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (clears the override; {@link #build()} constructs a new instance).
 		 * @return This object.
 		 */
 		public Builder impl(Object value) {
@@ -565,7 +565,7 @@ public class ParserSet {
 	/**
 	 * Same as {@link #getParserMatch(MediaType)} but returns just the matched parser.
 	 *
-	 * @param mediaType The HTTP media type.  Can be <jk>null</jk>.
+	 * @param mediaType The HTTP media type.  Can be <jk>null</jk> (returns {@link Optional#empty()}).
 	 * @return The parser that matched the media type, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<Parser> getParser(MediaType mediaType) {
@@ -575,7 +575,7 @@ public class ParserSet {
 	/**
 	 * Same as {@link #getParserMatch(String)} but returns just the matched parser.
 	 *
-	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header string.  Can be <jk>null</jk>.
+	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header string.  Can be <jk>null</jk> (returns {@link Optional#empty()}).
 	 * @return The parser that matched the content type header, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<Parser> getParser(String contentTypeHeader) {
@@ -585,7 +585,7 @@ public class ParserSet {
 	/**
 	 * Same as {@link #getParserMatch(String)} but matches using a {@link MediaType} instance.
 	 *
-	 * @param mediaType The HTTP <l>Content-Type</l> header value as a media type.  Can be <jk>null</jk>.
+	 * @param mediaType The HTTP <l>Content-Type</l> header value as a media type.  Can be <jk>null</jk> (returns {@link Optional#empty()}).
 	 * @return The parser and media type that matched the media type, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<ParserMatch> getParserMatch(MediaType mediaType) {
@@ -598,7 +598,7 @@ public class ParserSet {
 	 * <p>
 	 * The returned object includes both the parser and media type that matched.
 	 *
-	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header value.  Can be <jk>null</jk>.
+	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header value.  Can be <jk>null</jk> (returns {@link Optional#empty()}).
 	 * @return The parser and media type that matched the content type header, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<ParserMatch> getParserMatch(String contentTypeHeader) {

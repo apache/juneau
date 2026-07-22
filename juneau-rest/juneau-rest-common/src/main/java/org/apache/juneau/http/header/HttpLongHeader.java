@@ -79,7 +79,7 @@ public class HttpLongHeader extends HttpHeaderBean {
 	 * Constructor.
 	 *
 	 * @param name Header name. Must not be <jk>null</jk>.
-	 * @param typedValue The long value. Can be <jk>null</jk>.
+	 * @param typedValue The long value. Can be <jk>null</jk>, in which case the parsed value is <jk>null</jk>.
 	 */
 	protected HttpLongHeader(String name, Long typedValue) {
 		super(name, s(typedValue));

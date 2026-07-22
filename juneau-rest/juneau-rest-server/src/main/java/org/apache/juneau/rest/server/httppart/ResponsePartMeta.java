@@ -40,9 +40,9 @@ public class ResponsePartMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param partType The part type.  Can be <jk>null</jk>.
-	 * @param schema The part schema.  Can be <jk>null</jk>.
-	 * @param serializer The serializer to use to serialize the part.  Can be <jk>null</jk>.
+	 * @param partType The part type.  Can be <jk>null</jk> (see {@link #NULL}).
+	 * @param schema The part schema.  Can be <jk>null</jk> (see {@link #NULL}).
+	 * @param serializer The serializer to use to serialize the part.  Can be <jk>null</jk> (see {@link #NULL}).
 	 */
 	public ResponsePartMeta(HttpPartType partType, HttpPartSchema schema, HttpPartSerializer serializer) {
 		this.partType = partType;

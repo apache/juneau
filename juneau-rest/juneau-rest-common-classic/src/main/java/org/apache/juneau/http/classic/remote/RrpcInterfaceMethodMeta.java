@@ -66,7 +66,7 @@ public class RrpcInterfaceMethodMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.  Can be <jk>null</jk>.
+	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.  Can be <jk>null</jk> (the resulting method URL is then prefixed with the literal text <js>"null"</js>).
 	 * @param m The Java method.  Must not be <jk>null</jk>.
 	 */
 	public RrpcInterfaceMethodMeta(String restUrl, Method m) {

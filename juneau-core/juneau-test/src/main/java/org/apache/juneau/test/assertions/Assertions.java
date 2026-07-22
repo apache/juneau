@@ -102,7 +102,7 @@ public class Assertions {
 	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -130,7 +130,7 @@ public class Assertions {
 	 * @param <E> The value element type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -159,7 +159,7 @@ public class Assertions {
 	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -188,7 +188,7 @@ public class Assertions {
 	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -214,7 +214,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -241,7 +241,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -273,7 +273,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -304,7 +304,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -330,7 +330,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * 	<br>Stream is automatically closed.
 	 * @return
 	 * 	A new assertion object.
@@ -358,7 +358,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -390,7 +390,7 @@ public class Assertions {
 	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -417,7 +417,7 @@ public class Assertions {
 	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -443,7 +443,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -470,7 +470,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -497,7 +497,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -524,7 +524,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -550,7 +550,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -578,7 +578,7 @@ public class Assertions {
 	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -606,7 +606,7 @@ public class Assertions {
 	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -634,7 +634,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -661,7 +661,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -690,7 +690,7 @@ public class Assertions {
 	 * @param <V> The value type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -719,7 +719,7 @@ public class Assertions {
 	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -748,7 +748,7 @@ public class Assertions {
 	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -774,7 +774,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * 	<br>Reader is automatically closed.
 	 * @return
 	 * 	A new assertion object.
@@ -803,7 +803,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -830,7 +830,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -861,7 +861,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -889,7 +889,7 @@ public class Assertions {
 	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -943,7 +943,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
@@ -969,7 +969,7 @@ public class Assertions {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.

@@ -256,12 +256,12 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @param r The reader being parsed.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param outer The outer object (for constructing nested inner classes).
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> if there is no enclosing (outer) object; the parsed object is then not linked to a parent.
 	 * @param isUrlParamValue
 	 * 	If <jk>true</jk>, then we're parsing a top-level URL-encoded value which is treated a bit different than the
 	 * 	default case.
 	 * @param pMeta The current bean property being parsed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> if no bean property metadata applies (e.g. the root value or an unknown property).
 	 * @return The parsed object.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws ParseException Malformed input encountered.

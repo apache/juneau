@@ -123,7 +123,7 @@ public class Pet {
 	/**
 	 * Returns the tags associated with the pet.
 	 *
-	 * @return The tags associated with the pet.  Can be <jk>null</jk>.
+	 * @return The tags associated with the pet.  Can be <jk>null</jk> if not set.
 	 */
 	public List<String> getTags() {
 		return u(tags);
@@ -132,7 +132,7 @@ public class Pet {
 	/**
 	 * Sets the tags associated with the pet.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Pet setTags(List<String> value) {
@@ -163,7 +163,7 @@ public class Pet {
 	/**
 	 * Returns the URI of the pet photo.
 	 *
-	 * @return The URI of the pet photo.  Can be <jk>null</jk>.
+	 * @return The URI of the pet photo.  Can be <jk>null</jk> if not set.
 	 */
 	public String getPhoto() {
 		return photo;
@@ -172,7 +172,7 @@ public class Pet {
 	/**
 	 * Sets the URI of the pet photo.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Pet setPhoto(String value) {

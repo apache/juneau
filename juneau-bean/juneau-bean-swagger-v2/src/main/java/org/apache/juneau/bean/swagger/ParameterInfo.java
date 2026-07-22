@@ -257,7 +257,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param p
 	 * 	The object to copy fields from.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no-op).
 	 * @return This object.
 	 */
 	@SuppressWarnings({

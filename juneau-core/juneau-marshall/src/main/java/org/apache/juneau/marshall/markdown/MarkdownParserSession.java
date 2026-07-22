@@ -810,7 +810,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * Unescapes Markdown table cell escape sequences.
 	 *
 	 * @param s The escaped cell value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The unescaped value.  Returns <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	protected String unescapeCell(String s) {

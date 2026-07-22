@@ -86,7 +86,7 @@ public class ServiceUnavailable extends BasicHttpException {
 	/**
 	 * Constructor.
 	 *
-	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param msg The message.  Can be <jk>null</jk>, in which case the reason phrase is used as the message.
 	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments in the message.
 	 */
 	public ServiceUnavailable(String msg, Object...args) {
@@ -96,7 +96,7 @@ public class ServiceUnavailable extends BasicHttpException {
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param cause The cause.  Can be <jk>null</jk>, in which case the reason phrase is used as the message and no cause is chained.
 	 */
 	public ServiceUnavailable(Throwable cause) {
 		this(cause, cause == null ? REASON_PHRASE : cause.getMessage());
@@ -105,8 +105,8 @@ public class ServiceUnavailable extends BasicHttpException {
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param cause The caused-by exception.  Can be <jk>null</jk> (no cause is chained).
+	 * @param msg The message.  Can be <jk>null</jk>, in which case the cause's message is used, or the reason phrase if the cause is also <jk>null</jk> or has no message.
 	 * @param args The message arguments.
 	 */
 	public ServiceUnavailable(Throwable cause, String msg, Object...args) {

@@ -66,8 +66,8 @@ public class JsonApiResource {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param type The entity-type name.  Can be <jk>null</jk>.
-	 * @param id The identifier value.  Can be <jk>null</jk>.
+	 * @param type The entity-type name.  Can be <jk>null</jk> to leave the property unset.
+	 * @param id The identifier value.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public JsonApiResource(String type, String id) {
 		this.type = type;
@@ -139,8 +139,8 @@ public class JsonApiResource {
 	/**
 	 * Convenience method to add a single attribute.
 	 *
-	 * @param name The attribute name.  Can be <jk>null</jk>.
-	 * @param value The attribute value.  Can be <jk>null</jk>.
+	 * @param name The attribute name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The attribute value.  Can be <jk>null</jk> (stored as <jk>null</jk>).
 	 * @return This object.
 	 */
 	public JsonApiResource putAttribute(String name, Object value) {
@@ -171,8 +171,8 @@ public class JsonApiResource {
 	/**
 	 * Convenience method to add a single named relationship.
 	 *
-	 * @param name The relationship name.  Can be <jk>null</jk>.
-	 * @param value The relationship object.  Can be <jk>null</jk>.
+	 * @param name The relationship name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The relationship object.  Can be <jk>null</jk> (stored as <jk>null</jk>).
 	 * @return This object.
 	 */
 	public JsonApiResource putRelationship(String name, JsonApiRelationship value) {

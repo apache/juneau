@@ -39,7 +39,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static Components copyOf(Components value) {
@@ -49,7 +49,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static Contact copyOf(Contact value) {
@@ -59,7 +59,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static Discriminator copyOf(Discriminator value) {
@@ -69,7 +69,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static ExternalDocumentation copyOf(ExternalDocumentation value) {
@@ -79,7 +79,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static Info copyOf(Info value) {
@@ -89,7 +89,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static Items copyOf(Items value) {
@@ -99,7 +99,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static License copyOf(License value) {
@@ -109,7 +109,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static OAuthFlow copyOf(OAuthFlow value) {
@@ -119,7 +119,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static Operation copyOf(Operation value) {
@@ -129,7 +129,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static RequestBodyInfo copyOf(RequestBodyInfo value) {
@@ -139,7 +139,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static SchemaInfo copyOf(SchemaInfo value) {
@@ -149,7 +149,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static Server copyOf(Server value) {
@@ -159,7 +159,7 @@ public class OpenApiCopyUtils extends CopyUtils {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static Xml copyOf(Xml value) {

@@ -91,7 +91,7 @@ public class Input extends HtmlElementVoid<Input> {
 	/**
 	 * Creates an {@link Input} element with the specified {@link Input#type(String)} attribute.
 	 *
-	 * @param type The {@link Input#type(String)} attribute. Can be <jk>null</jk>.
+	 * @param type The {@link Input#type(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 */
 	public Input(String type) {
 		type(type);
@@ -276,7 +276,7 @@ public class Input extends HtmlElementVoid<Input> {
 	 * <p>
 	 * URL to use for form submission.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input formaction(String value) {
@@ -290,7 +290,7 @@ public class Input extends HtmlElementVoid<Input> {
 	 * <p>
 	 * Form data set encoding type to use for form submission.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input formenctype(String value) {
@@ -304,7 +304,7 @@ public class Input extends HtmlElementVoid<Input> {
 	 * <p>
 	 * HTTP method to use for form submission.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input formmethod(String value) {
@@ -319,7 +319,7 @@ public class Input extends HtmlElementVoid<Input> {
 	 * <p>
 	 * Bypass form control validation for form submission.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input formnovalidate(String value) {
@@ -333,7 +333,7 @@ public class Input extends HtmlElementVoid<Input> {
 	 * <p>
 	 * Browsing context for form submission.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input formtarget(String value) {
@@ -423,7 +423,7 @@ public class Input extends HtmlElementVoid<Input> {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-maxlength">maxlength</a> attribute.
 	 * Maximum length of value.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
@@ -497,7 +497,7 @@ public class Input extends HtmlElementVoid<Input> {
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input name(String value) {
@@ -606,7 +606,7 @@ public class Input extends HtmlElementVoid<Input> {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input src(Object value) {
@@ -620,7 +620,7 @@ public class Input extends HtmlElementVoid<Input> {
 	 * <p>
 	 * Granularity to be matched by the form control's value.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Input step(String value) {

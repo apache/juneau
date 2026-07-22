@@ -76,7 +76,7 @@ public class Order {
 	/**
 	 * Returns the shipping date as an ISO 8601 string.
 	 *
-	 * @return The shipping date as an ISO 8601 string.  Can be <jk>null</jk>.
+	 * @return The shipping date as an ISO 8601 string.  Can be <jk>null</jk> if the order has not yet shipped.
 	 */
 	public String getShipDate() {
 		return shipDate;
@@ -85,7 +85,7 @@ public class Order {
 	/**
 	 * Sets the shipping date.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk> to indicate the order has not shipped.
 	 * @return This object.
 	 */
 	public Order setShipDate(String value) {

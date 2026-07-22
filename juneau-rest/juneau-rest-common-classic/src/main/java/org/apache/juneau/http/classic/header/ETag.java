@@ -107,7 +107,7 @@ public class ETag extends BasicEntityTagHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ETag(EntityTag value) {
 		super(NAME, value);
@@ -119,7 +119,7 @@ public class ETag extends BasicEntityTagHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be an entity tag value (e.g. <js>"\"xyzzy\""</js>).
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ETag(String value) {
 		super(NAME, value);
@@ -133,7 +133,7 @@ public class ETag extends BasicEntityTagHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ETag(Supplier<EntityTag> value) {
 		super(NAME, value);

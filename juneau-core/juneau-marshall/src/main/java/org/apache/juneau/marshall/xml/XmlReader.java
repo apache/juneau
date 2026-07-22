@@ -53,11 +53,11 @@ public class XmlReader implements XMLStreamReader, Positionable {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param validating The value for the {@link XMLInputFactory#IS_VALIDATING} setting.
 	 * @param reporter The value for the {@link XMLInputFactory#REPORTER} setting.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the factory's default reporter is used).
 	 * @param resolver The value for the {@link XMLInputFactory#RESOLVER} setting.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the factory's default resolver is used).
 	 * @param eventAllocator The value for the {@link XMLInputFactory#ALLOCATOR} setting.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the factory's default event allocator is used).
 	 * @throws IOException Thrown by underlying I/O.
 	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 */

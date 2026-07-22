@@ -136,7 +136,7 @@ public final class PartList implements HttpBody, Iterable<HttpPart> {
 	 * Returns the first part with the given name (case-sensitive), or <jk>null</jk> if absent.
 	 *
 	 * @param name The part name. Must not be <jk>null</jk>.
-	 * @return The first matching part, or <jk>null</jk>.
+	 * @return The first matching part, or <jk>null</jk> if absent.
 	 */
 	public HttpPart getFirst(String name) {
 		assertArgNotNull("name", name);

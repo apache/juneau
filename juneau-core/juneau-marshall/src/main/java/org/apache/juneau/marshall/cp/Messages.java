@@ -230,7 +230,7 @@ public class Messages extends ResourceBundle {
 		/**
 		 * Adds a parent bundle.
 		 *
-		 * @param value The parent bundle.  Can be <jk>null</jk>.
+		 * @param value The parent bundle.  Can be <jk>null</jk> to clear any previously-set parent bundle.
 		 * @return This object.
 		 */
 		public Builder parent(Messages value) {

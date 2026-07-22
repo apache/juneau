@@ -122,7 +122,7 @@ public class StringListAssertion extends FluentStringListAssertion<StringListAss
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static StringListAssertion create(List<String> value) {
@@ -134,7 +134,7 @@ public class StringListAssertion extends FluentStringListAssertion<StringListAss
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public StringListAssertion(List<String> value) {
 		super(value, null);

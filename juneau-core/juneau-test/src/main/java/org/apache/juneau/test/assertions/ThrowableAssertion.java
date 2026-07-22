@@ -102,7 +102,7 @@ public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAsse
 	 * @param <X> The throwable type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static <X extends Throwable> ThrowableAssertion<X> create(X value) {
@@ -114,7 +114,7 @@ public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAsse
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public ThrowableAssertion(T value) {
 		super(value, null);

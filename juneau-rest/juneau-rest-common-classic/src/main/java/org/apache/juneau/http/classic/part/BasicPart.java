@@ -60,7 +60,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	/**
 	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
 	 *
-	 * @param o The object to check.  Can be <jk>null</jk>.
+	 * @param o The object to check.  Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
 	 */
 	public static boolean canCast(Object o) {
@@ -106,7 +106,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	/**
 	 * Creates a {@link NameValuePair} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
 	 *
-	 * @param pair The pair string.  Can be <jk>null</jk>.
+	 * @param pair The pair string.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A new {@link NameValuePair} object, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static BasicPart ofPair(String pair) {

@@ -221,7 +221,7 @@ public class ThrowableUtils {
 	 * Calculates a 16-bit hash for the specified throwable based on it's stack trace.
 	 *
 	 * @param t The throwable to calculate the stack trace on.  Can be <jk>null</jk> (returns <c>0</c>).
-	 * @param stopClass Optional stop class on which to stop calculation of a stack trace beyond when found.  Can be <jk>null</jk>.
+	 * @param stopClass Optional stop class on which to stop calculation of a stack trace beyond when found.  Can be <jk>null</jk> (the entire stack trace, including causes, is used).
 	 * @return A calculated hash.
 	 */
 	public static int hash(Throwable t, String stopClass) {

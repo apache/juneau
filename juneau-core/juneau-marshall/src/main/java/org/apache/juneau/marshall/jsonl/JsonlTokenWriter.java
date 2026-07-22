@@ -63,7 +63,8 @@ public class JsonlTokenWriter implements TokenWriter {
 	 *
 	 * @param out The writer to emit JSONL to.  Must not be <jk>null</jk>.
 	 * @param settings The output-formatting settings.  Must not be <jk>null</jk>.
-	 * @param owned A resource owned by this writer that should be closed on close, or <jk>null</jk>.
+	 * @param owned A resource owned by this writer that should be closed on close, or <jk>null</jk> (no extra
+	 * 	resource is closed).
 	 */
 	JsonlTokenWriter(Writer out, JsonTokenWriter.Settings settings, Closeable owned) {
 		this.delegate = new JsonTokenWriter(out, settings);

@@ -136,7 +136,8 @@ public abstract sealed class HoconValue {
 		 *
 		 * @param path Path components.
 		 * 	<br>Can be <jk>null</jk> or empty (returns <jk>null</jk>).
-		 * @return The value, or <jk>null</jk>.
+		 * @return The value, or <jk>null</jk> if the path is <jk>null</jk>, empty, or does not resolve to an existing
+		 * 	value.
 		 */
 		public HoconValue getPath(String[] path) {
 			if (path == null || path.length == 0)

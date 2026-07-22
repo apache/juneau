@@ -106,7 +106,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicLongHeader(String name, Long value) {
@@ -122,7 +122,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link Long#parseLong(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicLongHeader(String name, String value) {
@@ -140,7 +140,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicLongHeader(String name, Supplier<Long> value) {
@@ -197,7 +197,7 @@ public class BasicLongHeader extends BasicHeader {
 	/**
 	 * Returns the header value as a {@link Long}.
 	 *
-	 * @return The header value as a {@link Long}.  Can be <jk>null</jk>.
+	 * @return The header value as a {@link Long}, or <jk>null</jk> if the header has no value.
 	 */
 	public Long toLong() {
 		return value();

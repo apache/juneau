@@ -70,7 +70,7 @@ public abstract class RestResource {
 	/**
 	 * Returns the programmatic configuration builder stashed on this resource, or <jk>null</jk> if none.
 	 *
-	 * @return The stashed builder, or <jk>null</jk>.
+	 * @return The stashed builder, or <jk>null</jk> if none was injected.
 	 */
 	@SuppressWarnings({
 		"java:S1452" // RestBuilder<?> wildcard return intentional; concrete builder type varies by REST resource class

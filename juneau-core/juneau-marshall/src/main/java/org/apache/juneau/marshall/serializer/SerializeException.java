@@ -75,7 +75,7 @@ public class SerializeException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param session The serializer session to extract information from.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk> (the message is not augmented with location info).
 	 * @param causedBy The inner exception.
 	 * 	Must not be <jk>null</jk>.
 	 */
@@ -87,7 +87,7 @@ public class SerializeException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param session The serializer session to extract information from.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk> (the message is not augmented with location info).
 	 * @param message The exception message containing {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
 	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */

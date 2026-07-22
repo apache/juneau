@@ -273,7 +273,7 @@ public class JsonMap extends MarshalledMap {
 	 *
 	 * @param values
 	 * 	The map to copy.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * 	<br>Keys will be converted to strings using {@link Object#toString()}.
 	 * @return A new map or <jk>null</jk> if the map was <jk>null</jk>.
 	 */
@@ -384,7 +384,7 @@ public class JsonMap extends MarshalledMap {
 	 *
 	 * @param in
 	 * 	The input being parsed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> or empty (results in an empty map; no parsing occurs).
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
@@ -399,7 +399,7 @@ public class JsonMap extends MarshalledMap {
 	 *
 	 * @param in
 	 * 	The map to copy.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (results in an empty map).
 	 * 	<br>Keys will be converted to strings using {@link Object#toString()}.
 	 */
 	public JsonMap(Map<?,?> in) {

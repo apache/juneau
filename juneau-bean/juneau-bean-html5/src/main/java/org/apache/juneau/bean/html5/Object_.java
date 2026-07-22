@@ -131,7 +131,7 @@ public class Object_ extends HtmlElementMixed<Object_> {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param value The URL of the resource to be embedded. Can be <jk>null</jk>.
+	 * @param value The URL of the resource to be embedded. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Object_ data(String value) {
@@ -145,7 +145,7 @@ public class Object_ extends HtmlElementMixed<Object_> {
 	 * <p>
 	 * Associates the control with a form element.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Object_ form(String value) {
@@ -177,7 +177,7 @@ public class Object_ extends HtmlElementMixed<Object_> {
 	 * <p>
 	 * Name of nested browsing context.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Object_ name(String value) {
@@ -191,7 +191,7 @@ public class Object_ extends HtmlElementMixed<Object_> {
 	 * <p>
 	 * Type of embedded resource.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Object_ type(String value) {
@@ -224,7 +224,7 @@ public class Object_ extends HtmlElementMixed<Object_> {
 	 * <p>
 	 * Name of image map to use.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Object_ usemap(String value) {

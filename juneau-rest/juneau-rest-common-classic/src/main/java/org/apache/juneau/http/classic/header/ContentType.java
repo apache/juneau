@@ -153,7 +153,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentType(MediaType value) {
 		super(NAME, value);
@@ -165,7 +165,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentType(String value) {
 		super(NAME, value);
@@ -179,7 +179,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentType(Supplier<MediaType> value) {
 		super(NAME, value);

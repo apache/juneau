@@ -54,7 +54,7 @@ public class Namespace {
 	 * </ul>
 	 *
 	 * @param o The input.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The namespace object, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static Namespace create(Object o) {
@@ -145,9 +145,9 @@ public class Namespace {
 	 * Previously-encountered name/uri pairs return a cached copy.
 	 *
 	 * @param name The namespace name.  See {@link Namespace#getName()}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the namespace has no name).
 	 * @param uri The namespace URI.  See {@link Namespace#getUri()}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the namespace has no URI).
 	 * @return The namespace object.
 	 */
 	public static Namespace of(String name, String uri) {

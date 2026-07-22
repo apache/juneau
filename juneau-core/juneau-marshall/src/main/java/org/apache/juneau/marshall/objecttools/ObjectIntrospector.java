@@ -84,7 +84,7 @@ public class ObjectIntrospector {
 	/**
 	 * Constructor.
 	 *
-	 * @param object The object on which Java methods will be invoked.  Can be <jk>null</jk>.
+	 * @param object The object on which Java methods will be invoked.  Can be <jk>null</jk> (subsequent method invocations return <jk>null</jk>).
 	 * @param parser The parser to use to parse the method arguments.
 	 * If <jk>null</jk>, {@link Json5Parser#DEFAULT} is used.
 	 */

@@ -220,7 +220,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 *
 	 * @param pairs
 	 * 	The default entries.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no-op).
 	 * @return This object.
 	 */
 	public RequestPathParamList addDefault(List<HttpPart> pairs) {
@@ -246,7 +246,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 *
 	 * @param pairs
 	 * 	The default entries.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no-op).
 	 * @return This object.
 	 */
 	public RequestPathParamList addDefault(HttpPart...pairs) {
@@ -538,7 +538,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * @param value
 	 * 	The parameter value.
 	 * 	<br>Converted to a string using {@link Object#toString()}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the parameter is set with a <jk>null</jk> value).
 	 * @return This object.
 	 */
 	public RequestPathParamList set(String name, Object value) {

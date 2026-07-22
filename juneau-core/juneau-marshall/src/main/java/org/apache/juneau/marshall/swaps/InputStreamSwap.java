@@ -108,7 +108,7 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 	 *
 	 * @param is
 	 * 	The input stream to convert to bytes.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns an empty array).
 	 * 	<br>The stream is automatically closed.
 	 * @return The byte array.
 	 * @throws IOException Thrown by input stream.

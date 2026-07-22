@@ -102,8 +102,8 @@ public class Callback extends OpenApiElement {
 	/**
 	 * Adds a callback.
 	 *
-	 * @param expression The callback expression.  Must not be <jk>null</jk>.
-	 * @param pathItem The path item for the callback.  Must not be <jk>null</jk>.
+	 * @param expression The callback expression.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param pathItem The path item for the callback.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public Callback addCallback(String expression, PathItem pathItem) {

@@ -165,10 +165,10 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @param name
 	 * 	The name of the callback.
-	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @param callback
 	 * 	The callback object.
-	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public Operation addCallback(String name, Callback callback) {
@@ -222,10 +222,10 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @param statusCode
 	 * 	The status code for the response.
-	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @param response
 	 * 	The response object.
-	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public Operation addResponse(String statusCode, Response response) {
@@ -410,8 +410,8 @@ public class Operation extends OpenApiElement {
 	/**
 	 * Returns the parameter with the specified type and name.
 	 *
-	 * @param in The parameter in.  Must not be <jk>null</jk>.
-	 * @param name The parameter name.  Must not be <jk>null</jk>.
+	 * @param in The parameter in.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param name The parameter name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The matching parameter, or <jk>null</jk> if not found.
 	 */
 	public Parameter getParameter(String in, String name) {
@@ -450,7 +450,7 @@ public class Operation extends OpenApiElement {
 	/**
 	 * Returns the response with the given status code.
 	 *
-	 * @param status The HTTP status code.  Must not be <jk>null</jk>.
+	 * @param status The HTTP status code.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The response, or <jk>null</jk> if not found.
 	 */
 	public Response getResponse(String status) {

@@ -83,7 +83,7 @@ public abstract class OpenApiElement {
 	 * <p>
 	 * Can be used to retrieve non-standard Swagger fields such as <js>"$ref"</js>.
 	 *
-	 * @param property The property name to retrieve.  Must not be <jk>null</jk>.
+	 * @param property The property name to retrieve.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
 	 */
 	@BeanProp("*")
@@ -125,7 +125,7 @@ public abstract class OpenApiElement {
 	 * <p>
 	 * Can be used to set non-standard Swagger fields such as <js>"$ref"</js>.
 	 *
-	 * @param property The property name to set.  Must not be <jk>null</jk>.
+	 * @param property The property name to set.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @param value The new value for the property.
 	 * @return This object
 	 * @throws RuntimeException if strict mode is enabled.

@@ -38,8 +38,8 @@ public class TestOp extends JsonPatchOperation {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param path The JSON Pointer target.  Can be <jk>null</jk>.
-	 * @param value The value to test for.  Can be <jk>null</jk>.
+	 * @param path The JSON Pointer target.  Can be <jk>null</jk> to leave the property unset.
+	 * @param value The value to test for.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public TestOp(String path, Object value) {
 		super(path);

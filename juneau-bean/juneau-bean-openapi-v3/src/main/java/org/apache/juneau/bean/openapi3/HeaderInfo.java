@@ -137,8 +137,8 @@ public class HeaderInfo extends OpenApiElement {
 	/**
 	 * Adds a single value to the <property>examples</property> property.
 	 *
-	 * @param name The example name.  Must not be <jk>null</jk>.
-	 * @param example The example.  Must not be <jk>null</jk>.
+	 * @param name The example name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param example The example.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object
 	 */
 	public HeaderInfo addExample(String name, Example example) {

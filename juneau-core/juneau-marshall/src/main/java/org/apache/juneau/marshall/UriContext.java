@@ -94,16 +94,16 @@ public class UriContext {
 	 *
 	 * @param authority
 	 * 	The authority portion of URL (e.g. <js>"http://hostname:port"</js>)
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (treated the same as blank).
 	 * @param contextRoot
 	 * 	The context root of the application (e.g. <js>"/context-root"</js>, or <js>"context-root"</js>)
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (treated the same as blank).
 	 * @param servletPath
 	 * 	The servlet path (e.g. <js>"/servlet-path"</js>, or <js>"servlet-path"</js>)
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (treated the same as blank).
 	 * @param pathInfo
 	 * 	The path info (e.g. <js>"/path-info"</js>, or <js>"path-info"</js>)
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (treated the same as blank).
 	 * @return A new {@link UriContext} object.
 	 */
 	public static UriContext of(String authority, String contextRoot, String servletPath, String pathInfo) {

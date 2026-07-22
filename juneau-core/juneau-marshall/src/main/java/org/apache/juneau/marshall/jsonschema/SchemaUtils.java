@@ -58,7 +58,7 @@ public class SchemaUtils {
 	/**
 	 * Parses a generic object as JSON and converts it to an {@link JsonMap}.
 	 *
-	 * @param o The object to convert.  Can be <jk>null</jk>.
+	 * @param o The object to convert.  Can be <jk>null</jk> (returns a new empty {@link JsonMap}).
 	 * @return
 	 * 	The parsed contents (a new empty {@link JsonMap} if {@code o} is <jk>null</jk> or an empty string),
 	 * 	never <jk>null</jk>.

@@ -129,8 +129,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>examples</property> property.
 	 *
-	 * @param mimeType The mime-type string.  Must not be <jk>null</jk>.
-	 * @param example The example.  Must not be <jk>null</jk>.
+	 * @param mimeType The mime-type string.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param example The example.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public ResponseInfo addExample(String mimeType, Object example) {
@@ -143,8 +143,8 @@ public class ResponseInfo extends SwaggerElement {
 	/**
 	 * Bean property appender:  <property>headers</property>.
 	 *
-	 * @param name The header name.  Must not be <jk>null</jk>.
-	 * @param header The header descriptions  Must not be <jk>null</jk>.
+	 * @param name The header name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param header The header descriptions  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public ResponseInfo addHeader(String name, HeaderInfo header) {
@@ -168,7 +168,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @param r
 	 * 	The object to copy fields from.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no-op).
 	 * @return This object.
 	 */
 	public ResponseInfo copyFrom(ResponseInfo r) {
@@ -218,7 +218,7 @@ public class ResponseInfo extends SwaggerElement {
 	/**
 	 * Returns the header information with the specified name.
 	 *
-	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @param name The header name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The header info, or <jk>null</jk> if not found.
 	 */
 	public HeaderInfo getHeader(String name) {

@@ -115,7 +115,7 @@ public class MaxForwards extends BasicIntegerHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public MaxForwards(Integer value) {
 		super(NAME, value);
@@ -127,7 +127,7 @@ public class MaxForwards extends BasicIntegerHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public MaxForwards(String value) {
 		super(NAME, value);
@@ -141,7 +141,7 @@ public class MaxForwards extends BasicIntegerHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public MaxForwards(Supplier<Integer> value) {
 		super(NAME, value);

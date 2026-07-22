@@ -54,7 +54,7 @@ public abstract class JsonPatchOperation {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param path The JSON Pointer target of the operation.  Can be <jk>null</jk>.
+	 * @param path The JSON Pointer target of the operation.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	protected JsonPatchOperation(String path) {
 		this.path = path;

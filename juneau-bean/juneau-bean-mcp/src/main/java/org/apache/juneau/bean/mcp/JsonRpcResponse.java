@@ -55,7 +55,7 @@ public class JsonRpcResponse {
 	/**
 	 * Correlates to the {@link JsonRpcRequest#getId() request id}.
 	 *
-	 * @return The id, or {@code null}.
+	 * @return The id, or {@code null} if not set.
 	 */
 	public Object getId() {
 		return id;

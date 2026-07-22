@@ -257,7 +257,7 @@ public class ReflectionMap<V> {
 		 * 	</ul>
 		 * @param value
 		 * 	The value to associate with the matching reflection element(s).
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (the key pattern will then map to a <jk>null</jk> value).
 		 * @return This object.
 		 * @throws RuntimeException If the key pattern is invalid or empty.
 		 */

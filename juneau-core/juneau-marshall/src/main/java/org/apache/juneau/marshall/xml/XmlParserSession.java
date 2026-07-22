@@ -588,7 +588,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
 	 *
 	 * @param s The string to be decoded.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The decoded string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	protected final String decodeString(String s) {
@@ -876,16 +876,16 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 *
 	 * @param <T> The expected type of object.
 	 * @param eType The expected type of object.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case the generic {@link Object} type is used and the actual type is auto-detected from the XML.
 	 * @param currAttr The current bean property name.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> if not being parsed as a named bean property (e.g. the root value).
 	 * @param r The reader.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param outer The outer object.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> if there is no enclosing (outer) object; the parsed object is then not linked to a parent.
 	 * @param isRoot If <jk>true</jk>, then we're serializing a root element in the document.
 	 * @param pMeta The bean property metadata.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> if no bean property metadata applies (e.g. the root value or an unknown property).
 	 * @return The parsed object, or <jk>null</jk> if the element represents a <jk>null</jk> value.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws ParseException Malformed input encountered.

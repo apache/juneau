@@ -67,7 +67,7 @@ public enum TimeZoneFormat {
 	/**
 	 * Formats the specified {@link TimeZone} using this format.
 	 *
-	 * @param value The value to format. Can be <jk>null</jk>.
+	 * @param value The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The formatted string, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
 	public String format(TimeZone value) {
@@ -84,7 +84,7 @@ public enum TimeZoneFormat {
 	/**
 	 * Formats the specified {@link ZoneId} using this format.
 	 *
-	 * @param value The value to format. Can be <jk>null</jk>.
+	 * @param value The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The formatted string, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
 	public String format(ZoneId value) {
@@ -101,7 +101,7 @@ public enum TimeZoneFormat {
 	/**
 	 * Parses the specified wire value as a {@link TimeZone}.
 	 *
-	 * @param value The wire value. Can be <jk>null</jk> or blank.
+	 * @param value The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).
 	 * @return The parsed {@link TimeZone}, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 */
 	public static TimeZone parseTimeZone(String value) {
@@ -116,7 +116,7 @@ public enum TimeZoneFormat {
 	/**
 	 * Parses the specified wire value as a {@link ZoneId}.
 	 *
-	 * @param value The wire value. Can be <jk>null</jk> or blank.
+	 * @param value The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).
 	 * @return The parsed {@link ZoneId}, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 */
 	public static ZoneId parseZoneId(String value) {

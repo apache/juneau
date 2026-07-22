@@ -231,7 +231,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param values
 	 * 	The map to copy.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * 	<br>Keys will be converted to strings using {@link Object#toString()}.
 	 * @return A new map or <jk>null</jk> if the map was <jk>null</jk>.
 	 */
@@ -313,7 +313,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param in
 	 * 	The input being parsed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> or empty (results in an empty map; no parsing occurs).
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -330,7 +330,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param in
 	 * 	The map to copy.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (results in an empty map).
 	 * 	<br>Keys will be converted to strings using {@link Object#toString()}.
 	 */
 	public MarshalledMap(Map<?,?> in) {
@@ -368,7 +368,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Appends all the entries in the specified map to this map.
 	 *
-	 * @param values The map to copy.  Can be <jk>null</jk>.
+	 * @param values The map to copy.  Can be <jk>null</jk> (no-op).
 	 * @return This object.
 	 */
 	public MarshalledMap append(Map<String,Object> values) {
@@ -1207,7 +1207,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * Same as {@link #get(String,Class)} but returns a default value if the value does not exist.
 	 *
 	 * @param key The key.
-	 * @param def The default value.  Can be <jk>null</jk>.
+	 * @param def The default value.  Can be <jk>null</jk> (returns <jk>null</jk> if the entry doesn't exist).
 	 * @param <T> The class type returned.
 	 * @param type The class type returned.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
@@ -1220,7 +1220,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * Same as {@link #get(String,Type,Type...)} but returns a default value if the value does not exist.
 	 *
 	 * @param key The key.
-	 * @param def The default value.  Can be <jk>null</jk>.
+	 * @param def The default value.  Can be <jk>null</jk> (returns <jk>null</jk> if the entry doesn't exist).
 	 * @param <T> The class type returned.
 	 * @param type The class type returned.
 	 * @param args The class type parameters.

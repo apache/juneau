@@ -118,10 +118,10 @@ public class Encoding extends OpenApiElement {
 	/**
 	 * Adds one or more values to the <property>headers</property> property.
 	 *
-	 * @param key The mapping key.  Must not be <jk>null</jk>.
+	 * @param key The mapping key.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @param value
 	 * 	The values to add to this property.
-	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object
 	 */
 	public Encoding addHeader(String key, HeaderInfo value) {

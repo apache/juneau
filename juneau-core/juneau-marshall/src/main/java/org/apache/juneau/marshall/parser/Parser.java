@@ -387,7 +387,7 @@ public class Parser extends MarshallingContextable {
 		 * &mdash; listeners are POJO-level observers with no token-layer analog.
 		 *
 		 * @param value The new value for this property.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (no listener will be used, listener methods will not be called).
 		 * @return This object.
 		 */
 		public SELF listener(Class<? extends ParserListener> value) {
@@ -634,7 +634,7 @@ public class Parser extends MarshallingContextable {
 	 * Returns <jk>true</jk> if this parser can handle the specified content type.
 	 *
 	 * @param contentType The content type to test.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if this parser can handle the specified content type.
 	 */
 	public boolean canHandle(String contentType) {
@@ -883,7 +883,7 @@ public class Parser extends MarshallingContextable {
 	 * 	The outer object to associate with this parse session.
 	 * 	Used for {@link ParentProperty @ParentProperty} injection and
 	 * 	non-static inner class construction.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk> (no outer object is associated; <ja>@ParentProperty</ja> injection and non-static inner-class construction are skipped).
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 */

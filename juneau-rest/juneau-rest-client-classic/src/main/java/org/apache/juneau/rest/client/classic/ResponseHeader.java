@@ -78,7 +78,7 @@ public class ResponseHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param request The request object.
 	 * @param response The response object.
-	 * @param header The wrapped header.  Can be <jk>null</jk>.
+	 * @param header The wrapped header.  Can be <jk>null</jk> (treated as an absent header with no value and no elements).
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public ResponseHeader(String name, RestRequest request, RestResponse response, Header header) {

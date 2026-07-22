@@ -85,7 +85,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the description property on this annotation.
 		 *
-		 * @param value The new value for this property.  Can be <jk>null</jk>.
+		 * @param value The new value for this property.  Can be <jk>null</jk> (stored as-is, with no default substitution).
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
@@ -96,7 +96,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#elementType()} property on this annotation.
 		 *
-		 * @param value The new value for this property.  Can be <jk>null</jk>.
+		 * @param value The new value for this property.  Can be <jk>null</jk> (stored as-is, with no default substitution).
 		 * @return This object.
 		 */
 		public Builder elementType(Class<?> value) {
@@ -107,7 +107,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#factory()} property on this annotation.
 		 *
-		 * @param value The new value for this property.  Can be <jk>null</jk>.
+		 * @param value The new value for this property.  Can be <jk>null</jk> (stored as-is, with no default substitution).
 		 * @return This object.
 		 */
 		public Builder factory(Class<? extends BeanFactory> value) {
@@ -118,7 +118,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#name()} property on this annotation.
 		 *
-		 * @param value The new value for this property.  Can be <jk>null</jk>.
+		 * @param value The new value for this property.  Can be <jk>null</jk> (stored as-is, with no default substitution).
 		 * @return This object.
 		 */
 		public Builder name(String value) {
@@ -129,7 +129,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#params()} property on this annotation.
 		 *
-		 * @param value The new value for this property.  Can be <jk>null</jk>.
+		 * @param value The new value for this property.  Can be <jk>null</jk> (stored as-is, with no default substitution).
 		 * @return This object.
 		 */
 		public Builder params(Class<?>...value) {
@@ -140,7 +140,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#ro()} property on this annotation.
 		 *
-		 * @param value The new value for this property.  Can be <jk>null</jk>.
+		 * @param value The new value for this property.  Can be <jk>null</jk> (stored as-is, with no default substitution).
 		 * @return This object.
 		 */
 		public Builder ro(String value) {
@@ -151,7 +151,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#summary()} property on this annotation.
 		 *
-		 * @param value The new value for this property.  Can be <jk>null</jk>.
+		 * @param value The new value for this property.  Can be <jk>null</jk> (stored as-is, with no default substitution).
 		 * @return This object.
 		 * @since 10.0.0
 		 */
@@ -163,7 +163,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#type()} property on this annotation.
 		 *
-		 * @param value The new value for this property.  Can be <jk>null</jk>.
+		 * @param value The new value for this property.  Can be <jk>null</jk> (stored as-is, with no default substitution).
 		 * @return This object.
 		 */
 		public Builder type(Class<?> value) {
@@ -174,7 +174,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#value()} property on this annotation.
 		 *
-		 * @param value The new value for this property.  Can be <jk>null</jk>.
+		 * @param value The new value for this property.  Can be <jk>null</jk> (stored as-is, with no default substitution).
 		 * @return This object.
 		 */
 		public Builder value(String value) {
@@ -185,7 +185,7 @@ public class BeanPropAnnotation {
 		/**
 		 * Sets the {@link BeanProp#wo()} property on this annotation.
 		 *
-		 * @param value The new value for this property.  Can be <jk>null</jk>.
+		 * @param value The new value for this property.  Can be <jk>null</jk> (stored as-is, with no default substitution).
 		 * @return This object.
 		 */
 		public Builder wo(String value) {

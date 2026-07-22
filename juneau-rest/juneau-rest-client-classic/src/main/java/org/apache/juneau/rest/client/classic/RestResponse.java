@@ -95,7 +95,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @param client The RestClient that created this response.
 	 * @param request The REST request.
-	 * @param response The HTTP response.  Can be <jk>null</jk>.
+	 * @param response The HTTP response.  Can be <jk>null</jk> (a default empty response with a status code of <c>0</c> is substituted).
 	 * @param parser The overridden parser passed into {@link RestRequest#parser(Parser)}.
 	 */
 	protected RestResponse(RestClient client, RestRequest request, HttpResponse response, Parser parser) {

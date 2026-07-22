@@ -69,9 +69,9 @@ public class Area extends HtmlElementVoid<Area> {
 	 * Creates an {@link Area} element with the specified {@link Area#shape(String)}, {@link Area#coords(String)},
 	 * and {@link Area#href(Object)} attributes.
 	 *
-	 * @param shape The {@link Area#shape(String)} attribute. Can be <jk>null</jk>.
-	 * @param coords The {@link Area#coords(String)} attribute. Can be <jk>null</jk>.
-	 * @param href The {@link Area#href(Object)} attribute. Can be <jk>null</jk>.
+	 * @param shape The {@link Area#shape(String)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param coords The {@link Area#coords(String)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param href The {@link Area#href(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 */
 	public Area(String shape, String coords, Object href) {
 		shape(shape).coords(coords).href(href);
@@ -152,7 +152,7 @@ public class Area extends HtmlElementVoid<Area> {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public Area href(Object value) {

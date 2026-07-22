@@ -104,7 +104,7 @@ public class ConverterUtils {
 	 * </ul>
 	 *
 	 * @param <T> The element type.
-	 * @param value The value to convert. Can be <jk>null</jk>.
+	 * @param value The value to convert. Can be <jk>null</jk> (no elements are added; an empty builder is returned).
 	 * @param type The element type class.
 	 * @return A new {@link Lists} containing the converted elements.
 	 */
@@ -125,7 +125,7 @@ public class ConverterUtils {
 	 *
 	 * @param <K> The key type.
 	 * @param <V> The value type.
-	 * @param value The value to convert. Can be <jk>null</jk>.
+	 * @param value The value to convert. Can be <jk>null</jk> (no entries are added; an empty builder is returned).
 	 * @param keyType The key type class.
 	 * @param valueType The value type class.
 	 * @return A new {@link Maps} containing the converted entries.
@@ -153,7 +153,7 @@ public class ConverterUtils {
 	 * Duplicate elements (after conversion) will be automatically removed as per {@link Set Set} semantics.
 	 *
 	 * @param <T> The element type.
-	 * @param value The value to convert. Can be <jk>null</jk>.
+	 * @param value The value to convert. Can be <jk>null</jk> (no elements are added; an empty builder is returned).
 	 * @param type The element type class.
 	 * @return A new {@link Sets} containing the converted elements.
 	 */

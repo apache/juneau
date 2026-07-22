@@ -354,7 +354,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * See {@link #convertToType(Object, ClassMeta)} for the list of valid conversions.
 	 *
 	 * @param <T> The class type to convert the value to.
-	 * @param value The value to convert.  Can be <jk>null</jk>.
+	 * @param value The value to convert.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param type The class type to convert the value to.
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
@@ -496,7 +496,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * </table>
 	 *
 	 * @param <T> The class type to convert the value to.
-	 * @param value The value to be converted.  Can be <jk>null</jk>.
+	 * @param value The value to be converted.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param type The target object type.  Can be <jk>null</jk> (treated as the {@code Object} type).
 	 * @return The converted type.
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
@@ -621,7 +621,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 *
 	 * @param cm
 	 * 	The class meta of the type we're trying to resolve the type name for.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk> (falls back to the session-wide {@link MarshallingContext.Builder#typePropertyName(String) typePropertyName}).
 	 * @return The type property name.  Never <jk>null</jk>.
 	 */
 	public final String getBeanTypePropertyName(ClassMeta cm) {
@@ -1262,7 +1262,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @param outer
 	 * 	If class is a member class, this is the instance of the containing class.
 	 * 	Should be <jk>null</jk> if not a member class.
-	 * @param value The value to convert.  Can be <jk>null</jk>.
+	 * @param value The value to convert.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param to The class type to convert the value to.  Can be <jk>null</jk> (treated as the {@code Object} type).
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
@@ -1302,7 +1302,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * Shortcut for calling {@code getClassMeta(o.getClass())} but returns a default value if object is <jk>null</jk>.
 	 *
 	 * @param o The class to find the class type for.  Can be <jk>null</jk> (returns {@code def}).
-	 * @param def The default {@link ClassMeta} if the object is null.  Can be <jk>null</jk>.
+	 * @param def The default {@link ClassMeta} if the object is null.  Can be <jk>null</jk> (returned as-is if
+	 * 	<c>o</c> is <jk>null</jk>).
 	 * @return The ClassMeta object, or the default value if {@code o} is <jk>null</jk>.
 	 */
 	protected final ClassMeta<?> getClassMetaForObject(Object o, ClassMeta<?> def) {

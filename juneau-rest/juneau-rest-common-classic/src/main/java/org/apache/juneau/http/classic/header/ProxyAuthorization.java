@@ -95,7 +95,7 @@ public class ProxyAuthorization extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ProxyAuthorization(String value) {
 		super(NAME, value);
@@ -109,7 +109,7 @@ public class ProxyAuthorization extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ProxyAuthorization(Supplier<String> value) {
 		super(NAME, value);

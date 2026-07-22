@@ -81,7 +81,7 @@ public class Embed extends HtmlElementVoid<Embed> {
 	/**
 	 * Creates an {@link Embed} element with the specified {@link Embed#src(Object)} attribute.
 	 *
-	 * @param src The {@link Embed#src(Object)} attribute. Can be <jk>null</jk>.
+	 * @param src The {@link Embed#src(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 */
 	public Embed(Object src) {
 		src(src);
@@ -121,7 +121,7 @@ public class Embed extends HtmlElementVoid<Embed> {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public Embed src(Object value) {

@@ -210,7 +210,7 @@ public class PrototextApplyAnnotation {
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
 	 * @param a The annotation to check.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>true</jk>).
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(PrototextApply a) {

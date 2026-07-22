@@ -711,7 +711,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * <p>
 	 * See {@link org.apache.juneau.rest.mock.classic.MockRestClient.Builder#pathVars(Map)} for an example.
 	 *
-	 * @param pathVars The parent path variables to add. Can be <jk>null</jk>.
+	 * @param pathVars The parent path variables to add. Can be <jk>null</jk> (no-op).
 	 * @return This object.
 	 * @see org.apache.juneau.rest.mock.classic.MockRestClient.Builder#pathVars(Map)
 	 */

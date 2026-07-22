@@ -139,7 +139,7 @@ public class Holder<T> {
 	/**
 	 * Convenience method for checking if the specified type is this class.
 	 *
-	 * @param t The type to check.  Can be <jk>null</jk>.
+	 * @param t The type to check.  Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if the specified type is this class.
 	 */
 	public static boolean isType(Type t) {
@@ -166,7 +166,7 @@ public class Holder<T> {
 	/**
 	 * Returns the generic parameter type of the Holder type.
 	 *
-	 * @param t The type to find the parameter type of.  Can be <jk>null</jk>.
+	 * @param t The type to find the parameter type of.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Holder</c>.
 	 */
 	public static Type getParameterType(Type t) {
@@ -186,7 +186,7 @@ public class Holder<T> {
 	/**
 	 * Returns the unwrapped type.
 	 *
-	 * @param t The type to unwrap.  Can be <jk>null</jk>.
+	 * @param t The type to unwrap.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The unwrapped type, or the same type if the type isn't {@link Holder}.
 	 */
 	public static Type unwrap(Type t) {

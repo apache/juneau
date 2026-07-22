@@ -43,7 +43,7 @@ public class JsonSchemaRef extends JsonSchema<JsonSchemaRef> {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param uri The URI of the target reference.  Can be <jk>null</jk>.
+	 * @param uri The URI of the target reference.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public JsonSchemaRef(Object uri) {
 		this.setRef(uri);

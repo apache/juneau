@@ -57,7 +57,7 @@ public enum LocaleFormat {
 	/**
 	 * Formats the specified value using this format.
 	 *
-	 * @param value The value to format. Can be <jk>null</jk>.
+	 * @param value The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The formatted string, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
 	public String format(Locale value) {
@@ -72,7 +72,7 @@ public enum LocaleFormat {
 	/**
 	 * Parses the specified wire value using this format.
 	 *
-	 * @param value The wire value. Can be <jk>null</jk> or blank.
+	 * @param value The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).
 	 * @return The parsed {@link Locale}, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 */
 	public Locale parse(String value) {

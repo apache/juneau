@@ -196,7 +196,7 @@ public class StringUtils {
 	 * 	abbreviate(<jk>null</jk>, 10);                <jc>// null</jc>
 	 * </p>
 	 *
-	 * @param in The input string. Can be <jk>null</jk>.
+	 * @param in The input string. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param length The maximum length of the resulting string (must be at least 4 for abbreviation to occur).
 	 * @return The abbreviated string with ellipses, or the original string if no abbreviation is needed.
 	 */
@@ -315,7 +315,7 @@ public class StringUtils {
 	 *
 	 * @param sb The StringBuilder to append to. Can be <jk>null</jk>.
 	 * @param str The string to append. Can be <jk>null</jk>.
-	 * @param separator The separator to add before the string if the StringBuilder is not empty. Can be <jk>null</jk>.
+	 * @param separator The separator to add before the string if the StringBuilder is not empty. Can be <jk>null</jk> (no separator is appended).
 	 * @return The same StringBuilder instance for method chaining, or a new StringBuilder if <c>sb</c> was <jk>null</jk> and an append occurred, or <jk>null</jk> if <c>sb</c> was <jk>null</jk> and no append occurred.
 	 */
 	public static StringBuilder appendWithSeparator(StringBuilder sb, String str, String separator) {
@@ -1919,8 +1919,8 @@ public class StringUtils {
 	 * 	<jc>// Returns: ["baz"]</jc>
 	 * </p>
 	 *
-	 * @param array The array to filter. Can be <jk>null</jk>.
-	 * @param predicate The predicate to apply to each element. Can be <jk>null</jk>.
+	 * @param array The array to filter. Can be <jk>null</jk> (returns an empty array).
+	 * @param predicate The predicate to apply to each element. Can be <jk>null</jk> (returns an empty array).
 	 * @return A new array containing only the elements that match the predicate, or an empty array if the array was <jk>null</jk>.
 	 */
 	public static String[] filter(String[] array, Predicate<String> predicate) {
@@ -4463,8 +4463,8 @@ public class StringUtils {
 	 * 	<jc>// Returns: ["prefix-foo", "prefix-bar", "prefix-baz"]</jc>
 	 * </p>
 	 *
-	 * @param array The array to map. Can be <jk>null</jk>.
-	 * @param mapper The function to apply to each element. Can be <jk>null</jk>.
+	 * @param array The array to map. Can be <jk>null</jk> (returns an empty array).
+	 * @param mapper The function to apply to each element. Can be <jk>null</jk> (returns an unmapped copy of the array).
 	 * @return A new array with the mapped elements, or an empty array if the array was <jk>null</jk>.
 	 */
 	public static String[] mapped(String[] array, UnaryOperator<String> mapper) {
@@ -7482,10 +7482,9 @@ public class StringUtils {
 	 * Converts a collection of strings to a string array.
 	 *
 	 * <p>
-	 * Returns <jk>null</jk> if the collection is <jk>null</jk>.
-	 * Returns an empty array if the collection is empty.
+	 * Returns an empty array if the collection is <jk>null</jk> or empty.
 	 *
-	 * @param collection The collection to convert. Can be <jk>null</jk>.
+	 * @param collection The collection to convert. Can be <jk>null</jk> (returns an empty array).
 	 * @return A new string array containing the collection elements, or an empty array if the collection was <jk>null</jk>.
 	 */
 	public static String[] toStringArray(Collection<String> collection) {
@@ -7546,9 +7545,9 @@ public class StringUtils {
 	 * 	<jc>// "XYZ"</jc>
 	 * </p>
 	 *
-	 * @param str The string to transliterate. Can be <jk>null</jk>.
-	 * @param fromChars The source character set. Can be <jk>null</jk>.
-	 * @param toChars The target character set. Can be <jk>null</jk>.
+	 * @param str The string to transliterate. Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @param fromChars The source character set. Can be <jk>null</jk> (returns <c>str</c> unchanged).
+	 * @param toChars The target character set. Can be <jk>null</jk> (returns <c>str</c> unchanged).
 	 * @return The transliterated string, or <jk>null</jk> if input is <jk>null</jk>.
 	 * @throws IllegalArgumentException If <c>fromChars</c> and <c>toChars</c> have different lengths.
 	 */

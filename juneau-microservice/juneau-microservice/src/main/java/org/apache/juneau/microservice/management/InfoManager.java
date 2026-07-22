@@ -62,7 +62,7 @@ public class InfoManager {
 	/**
 	 * Renders the manifest's main attributes (build/version/git metadata) as a sorted map.
 	 *
-	 * @param manifest The resolved manifest, or <jk>null</jk>.
+	 * @param manifest The resolved manifest, or <jk>null</jk> (in which case an empty map is returned).
 	 * @return A sorted map of manifest attribute &rarr; value (empty when {@code manifest} is <jk>null</jk>); never <jk>null</jk>.
 	 */
 	public JsonMap getInfo(ManifestFile manifest) {

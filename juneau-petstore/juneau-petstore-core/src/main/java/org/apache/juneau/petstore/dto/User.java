@@ -59,7 +59,7 @@ public class User {
 	/**
 	 * Returns the first name.
 	 *
-	 * @return The first name.  Can be <jk>null</jk>.
+	 * @return The first name.  Can be <jk>null</jk> if not set.
 	 */
 	public String getFirstName() {
 		return firstName;
@@ -68,7 +68,7 @@ public class User {
 	/**
 	 * Sets the first name.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public User setFirstName(String value) {
@@ -79,7 +79,7 @@ public class User {
 	/**
 	 * Returns the last name.
 	 *
-	 * @return The last name.  Can be <jk>null</jk>.
+	 * @return The last name.  Can be <jk>null</jk> if not set.
 	 */
 	public String getLastName() {
 		return lastName;
@@ -88,7 +88,7 @@ public class User {
 	/**
 	 * Sets the last name.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public User setLastName(String value) {
@@ -99,7 +99,7 @@ public class User {
 	/**
 	 * Returns the email address.
 	 *
-	 * @return The email address.  Can be <jk>null</jk>.
+	 * @return The email address.  Can be <jk>null</jk> if not set.
 	 */
 	public String getEmail() {
 		return email;
@@ -108,7 +108,7 @@ public class User {
 	/**
 	 * Sets the email address.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public User setEmail(String value) {
@@ -122,7 +122,7 @@ public class User {
 	 * <p>
 	 * Stored in plaintext for sample purposes only.  Do not use this pattern in production.
 	 *
-	 * @return The password.  Can be <jk>null</jk>.
+	 * @return The password.  Can be <jk>null</jk> if not set.
 	 */
 	public String getPassword() {
 		return password;
@@ -131,7 +131,7 @@ public class User {
 	/**
 	 * Sets the password.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public User setPassword(String value) {
@@ -142,7 +142,7 @@ public class User {
 	/**
 	 * Returns the phone number.
 	 *
-	 * @return The phone number.  Can be <jk>null</jk>.
+	 * @return The phone number.  Can be <jk>null</jk> if not set.
 	 */
 	public String getPhone() {
 		return phone;
@@ -151,7 +151,7 @@ public class User {
 	/**
 	 * Sets the phone number.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public User setPhone(String value) {

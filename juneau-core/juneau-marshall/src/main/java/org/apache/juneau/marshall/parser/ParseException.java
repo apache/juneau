@@ -48,7 +48,7 @@ public class ParseException extends BasicRuntimeException {
 	 * Otherwise we create a new {@link ParseException}.
 	 *
 	 * @param e The exception being wrapped or unwrapped.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (a new {@link ParseException} with no cause is created).
 	 * @return The specified throwable wrapped or unwrapped as a {@link ParseException} (may be the same instance if it already was one).
 	 */
 	public static ParseException create(Throwable e) {
@@ -94,7 +94,7 @@ public class ParseException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param session The parser session.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the message is not augmented with position/debug info).
 	 * @param causedBy The inner exception.
 	 * 	<br>Must not be <jk>null</jk>.
 	 */
@@ -106,7 +106,7 @@ public class ParseException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param session The parser session.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the message is not augmented with position/debug info).
 	 * @param message The exception message containing {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
 	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
@@ -118,9 +118,9 @@ public class ParseException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param session The parser session.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the message is not augmented with position/debug info).
 	 * @param causedBy The cause of this exception.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no cause is set).
 	 * @param message The exception message containing {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
 	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */
@@ -142,7 +142,7 @@ public class ParseException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param causedBy The cause of this exception.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no cause is set).
 	 */
 	public ParseException(Throwable causedBy) {
 		super(causedBy);
@@ -152,7 +152,7 @@ public class ParseException extends BasicRuntimeException {
 	 * Constructor.
 	 *
 	 * @param causedBy The cause of this exception.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no cause is set).
 	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
 	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */

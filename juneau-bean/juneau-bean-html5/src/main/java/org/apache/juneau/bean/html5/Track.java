@@ -97,8 +97,8 @@ public class Track extends HtmlElementVoid<Track> {
 	 * Creates a {@link Track} element with the specified {@link Track#src(Object)} and {@link Track#kind(String)}
 	 * attributes.
 	 *
-	 * @param src The {@link Track#src(Object)} attribute. Can be <jk>null</jk>.
-	 * @param kind The {@link Track#kind(String)} attribute. Can be <jk>null</jk>.
+	 * @param src The {@link Track#src(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
+	 * @param kind The {@link Track#kind(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 */
 	public Track(Object src, String kind) {
 		src(src).kind(kind);
@@ -190,7 +190,7 @@ public class Track extends HtmlElementVoid<Track> {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public Track src(Object value) {

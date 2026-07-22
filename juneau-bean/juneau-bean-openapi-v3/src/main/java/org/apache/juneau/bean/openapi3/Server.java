@@ -111,10 +111,10 @@ public class Server extends OpenApiElement {
 	/**
 	 * Adds one or more values to the <property>variables</property> property.
 	 *
-	 * @param key The mapping key.  Must not be <jk>null</jk>.
+	 * @param key The mapping key.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @param value
 	 * 	The values to add to this property.
-	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object
 	 */

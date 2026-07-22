@@ -206,8 +206,8 @@ public enum FloatFormat {
 	 * tokens regardless of the {@code format} hint. The hint is informational only.
 	 *
 	 * @param <T> The target type ({@link Double} or {@link Float}).
-	 * @param value The wire value. Can be <jk>null</jk> or blank.
-	 * @param format The configured format hint (informational only — parsing is format-agnostic). Can be <jk>null</jk>.
+	 * @param value The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).
+	 * @param format The configured format hint (informational only — parsing is format-agnostic). Can be <jk>null</jk> (ignored; parsing is format-agnostic).
 	 * @param targetType The desired return type — {@link Double} or {@link Float}.
 	 * @return The parsed value, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 * @throws IllegalArgumentException If the value cannot be parsed or {@code targetType} is unsupported.

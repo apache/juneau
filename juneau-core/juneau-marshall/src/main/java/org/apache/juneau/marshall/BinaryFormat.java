@@ -85,7 +85,7 @@ public enum BinaryFormat {
 	/**
 	 * Formats the specified value using this format.
 	 *
-	 * @param value The value to format.  Can be <jk>null</jk>.
+	 * @param value The value to format.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The formatted string, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
 	public String format(byte[] value) {
@@ -107,7 +107,7 @@ public enum BinaryFormat {
 	 * configured constant, mirroring the format-agnostic parser convention used by other {@code <type>Format}
 	 * enums in this package.  The configured format is consulted only as a hint for ambiguous input.
 	 *
-	 * @param value The wire value.  Can be <jk>null</jk> or blank.
+	 * @param value The wire value.  Can be <jk>null</jk> or blank (returns an empty array).
 	 * @return The parsed bytes, or an empty array if {@code value} is <jk>null</jk> or blank.
 	 */
 	public byte[] parse(String value) {

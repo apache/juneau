@@ -114,7 +114,7 @@ public class Age extends BasicIntegerHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Age(Integer value) {
 		super(NAME, value);
@@ -126,7 +126,7 @@ public class Age extends BasicIntegerHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Age(String value) {
 		super(NAME, value);
@@ -140,7 +140,7 @@ public class Age extends BasicIntegerHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Age(Supplier<Integer> value) {
 		super(NAME, value);

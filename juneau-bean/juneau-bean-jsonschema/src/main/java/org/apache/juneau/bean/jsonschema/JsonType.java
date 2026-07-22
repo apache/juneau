@@ -59,7 +59,7 @@ public enum JsonType {
 	/**
 	 * Converts the specified lowercase form of the enum back into an <c>Enum</c>.
 	 *
-	 * @param value The lowercase form of the enum (e.g. <js>"array"</js>).  Can be <jk>null</jk>.
+	 * @param value The lowercase form of the enum (e.g. <js>"array"</js>).  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The matching <c>Enum</c>, or <jk>null</jk> if no match found.
 	 */
 	@SuppressWarnings({

@@ -146,7 +146,7 @@ public interface FileFinder {
 		 * Adds a class subpackage to the lookup paths.
 		 *
 		 * @param c The class whose package will be added to the lookup paths.  Must not be <jk>null</jk>.
-		 * @param path The absolute or relative subpath.  Can be <jk>null</jk>.
+		 * @param path The absolute or relative subpath.  Can be <jk>null</jk> (the class's own package root is used with no subpath appended).
 		 * @param recursive If <jk>true</jk>, also recursively adds all the paths of the parent classes as well.
 		 * @return This object.
 		 */

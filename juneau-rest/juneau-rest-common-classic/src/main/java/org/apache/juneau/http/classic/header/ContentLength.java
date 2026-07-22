@@ -117,7 +117,7 @@ public class ContentLength extends BasicLongHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentLength(Long value) {
 		super(NAME, value);
@@ -129,7 +129,7 @@ public class ContentLength extends BasicLongHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable using {@link Long#parseLong(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentLength(String value) {
 		super(NAME, value);
@@ -143,7 +143,7 @@ public class ContentLength extends BasicLongHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentLength(Supplier<Long> value) {
 		super(NAME, value);

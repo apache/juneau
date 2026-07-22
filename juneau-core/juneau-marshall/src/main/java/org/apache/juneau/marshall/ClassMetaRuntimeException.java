@@ -72,7 +72,7 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The initial cause of the exception.  Can be <jk>null</jk>.
+	 * @param cause The initial cause of the exception.  Can be <jk>null</jk> (no cause is set).
 	 */
 	public ClassMetaRuntimeException(Throwable cause) {
 		this(cause, null, null);
@@ -81,7 +81,7 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause of this exception.  Can be <jk>null</jk>.
+	 * @param cause The cause of this exception.  Can be <jk>null</jk> (no cause is set).
 	 * @param c The class name of the bean that caused the exception.  Can be <jk>null</jk> (omits the class-name prefix).
 	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
 	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.

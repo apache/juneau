@@ -148,7 +148,7 @@ public class IfMatch extends BasicEntityTagsHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public IfMatch(EntityTags value) {
 		super(NAME, value);
@@ -160,7 +160,7 @@ public class IfMatch extends BasicEntityTagsHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public IfMatch(String value) {
 		super(NAME, value);
@@ -174,7 +174,7 @@ public class IfMatch extends BasicEntityTagsHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public IfMatch(Supplier<EntityTags> value) {
 		super(NAME, value);

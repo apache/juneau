@@ -78,7 +78,7 @@ public class HttpUriHeader extends HttpHeaderBean {
 	 * Constructor.
 	 *
 	 * @param name Header name. Must not be <jk>null</jk>.
-	 * @param value The URI value. Can be <jk>null</jk>.
+	 * @param value The URI value. Can be <jk>null</jk>, in which case the parsed value is <jk>null</jk>.
 	 */
 	protected HttpUriHeader(String name, URI value) {
 		super(name, s(value));

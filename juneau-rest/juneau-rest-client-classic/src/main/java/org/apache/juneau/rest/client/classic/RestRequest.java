@@ -1388,7 +1388,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @param level The log level.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param t The throwable cause.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no exception details are logged).
 	 * @param msg The message with {@link String#format(String, Object...) String.format}-style (<c>%s</c>) arguments.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param args The arguments.

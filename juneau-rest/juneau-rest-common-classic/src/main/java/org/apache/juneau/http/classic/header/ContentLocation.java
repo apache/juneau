@@ -125,7 +125,7 @@ public class ContentLocation extends BasicUriHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link URI#create(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentLocation(String value) {
 		super(NAME, value);
@@ -139,7 +139,7 @@ public class ContentLocation extends BasicUriHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentLocation(Supplier<URI> value) {
 		super(NAME, value);
@@ -150,7 +150,7 @@ public class ContentLocation extends BasicUriHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentLocation(URI value) {
 		super(NAME, value);

@@ -311,7 +311,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 *
 	 * @param values
 	 * 	The collection to copy.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static MarshalledList of(Collection<?> values) {
@@ -403,7 +403,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 *
 	 * @param in
 	 * 	The input being parsed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (results in an empty list; no parsing occurs).
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -420,7 +420,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 *
 	 * @param copyFrom
 	 * 	The collection to copy.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (results in an empty list).
 	 */
 	public MarshalledList(Collection<?> copyFrom) {
 		super(copyFrom);

@@ -1174,7 +1174,7 @@ public class BctAssertions {
 	 * <p>If a custom message is provided, it is composed with the default message in the format:
 	 * <js>"{custom}, Caused by: {default}"</js>. Otherwise, the default message is returned.</p>
 	 *
-	 * @param customMessage Optional custom message supplier. Can be <jk>null</jk>.
+	 * @param customMessage Optional custom message supplier. Can be <jk>null</jk>, in which case the default message is returned unmodified.
 	 * @param defaultMessage Default message template.
 	 * @param defaultArgs Arguments for the default message template.
 	 * @return A supplier that produces the composed error message.

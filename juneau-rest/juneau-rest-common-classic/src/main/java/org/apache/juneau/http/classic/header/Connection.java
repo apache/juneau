@@ -123,7 +123,7 @@ public class Connection extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Connection(String value) {
 		super(NAME, value);
@@ -137,7 +137,7 @@ public class Connection extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Connection(Supplier<String> value) {
 		super(NAME, value);

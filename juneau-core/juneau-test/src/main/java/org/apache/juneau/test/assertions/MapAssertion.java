@@ -109,7 +109,7 @@ public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>>
 	 * @param <V> The value type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static <K,V> MapAssertion<K,V> create(Map<K,V> value) {
@@ -121,7 +121,7 @@ public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>>
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public MapAssertion(Map<K,V> value) {
 		super(value, null);

@@ -37,7 +37,7 @@ public class RuntimeParseException extends RuntimeException {
 	 *
 	 * @param cause The underlying checked exception (typically {@link java.io.IOException} or
 	 * 	{@link ParseException}).
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the exception is created with no cause and no message).
 	 */
 	public RuntimeParseException(Throwable cause) {
 		super(cause);

@@ -60,7 +60,7 @@ public class SerializedHeader extends BasicHeader {
 	 * 	The POJO to serialize as the header value.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case the value is converted directly to a string instead of being serialized.
 	 * @param schema
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
@@ -103,7 +103,7 @@ public class SerializedHeader extends BasicHeader {
 	 * 	The supplier of the POJO to serialize as the header value.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case the value is converted directly to a string instead of being serialized.
 	 * @param schema
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
@@ -131,7 +131,7 @@ public class SerializedHeader extends BasicHeader {
 	 * @param value The POJO to serialize to the parameter value.  Can be <jk>null</jk>.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case the value is converted directly to a string instead of being serialized.
 	 * @param schema
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
@@ -163,7 +163,7 @@ public class SerializedHeader extends BasicHeader {
 	 * @param value The supplier of the POJO to serialize to the parameter value.  Can be <jk>null</jk>.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case the value is converted directly to a string instead of being serialized.
 	 * @param schema
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
@@ -185,7 +185,7 @@ public class SerializedHeader extends BasicHeader {
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The object to copy.  Must not be <jk>null</jk>.
+	 * @param copyFrom The object to copy.  Must not be <jk>null</jk> or a {@link NullPointerException} is thrown.
 	 */
 	protected SerializedHeader(SerializedHeader copyFrom) {
 		super(copyFrom);
@@ -209,8 +209,8 @@ public class SerializedHeader extends BasicHeader {
 	/**
 	 * Copies this bean and sets the serializer and schema on it.
 	 *
-	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk>.
-	 * @param schema The new schema for the bean.  Can be <jk>null</jk>.
+	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk> to leave the serializer unchanged.
+	 * @param schema The new schema for the bean.  Can be <jk>null</jk> to leave the schema unchanged.
 	 * @return Either a new bean with the serializer set, or this bean if
 	 * 	both values are <jk>null</jk> or the serializer and schema were already set.
 	 */

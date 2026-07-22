@@ -106,7 +106,7 @@ public class ClientVersion extends BasicStringHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link Version#of(String)}
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ClientVersion(String value) {
 		super(NAME, value);
@@ -122,7 +122,7 @@ public class ClientVersion extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ClientVersion(Supplier<Version> value) {
 		super(NAME, (String)null);
@@ -135,7 +135,7 @@ public class ClientVersion extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ClientVersion(Version value) {
 		super(NAME, s(value));

@@ -58,7 +58,7 @@ public class JsonApiLink {
 	/**
 	 * Convenience constructor with the required {@code href} field.
 	 *
-	 * @param href The link target URI.  Can be <jk>null</jk>.
+	 * @param href The link target URI.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public JsonApiLink(String href) {
 		this.href = href;

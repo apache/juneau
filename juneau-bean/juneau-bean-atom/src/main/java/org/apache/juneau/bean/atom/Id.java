@@ -87,7 +87,7 @@ public class Id extends Common {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param text The id element contents.  Can be <jk>null</jk>.
+	 * @param text The id element contents.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public Id(String text) {
 		setText(text);

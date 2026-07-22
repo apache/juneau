@@ -209,7 +209,7 @@ public class OpenApi extends CharMarshaller {
 	 *
 	 * <p>
 	 * A shortcut for serializing a value with the specified part schema using the {@link #DEFAULT} serializer.
-	 * @param schema The part schema.  Can be <jk>null</jk>.
+	 * @param schema The part schema.  Can be <jk>null</jk> (treated as {@link HttpPartSchema#DEFAULT}).
 	 * @param object The object to serialize.
 	 * @return The serialized object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
@@ -225,7 +225,7 @@ public class OpenApi extends CharMarshaller {
 	 * A shortcut for parsing the input with the specified part schema using the {@link #DEFAULT} parser.
 	 *
 	 * @param <T> The class type of the object being created.
-	 * @param schema The part type schema.  Can be <jk>null</jk>.
+	 * @param schema The part type schema.  Can be <jk>null</jk> (treated as {@link HttpPartSchema#DEFAULT}).
 	 * @param input
 	 * 	The input.
 	 * @param type The object type to create.

@@ -205,7 +205,7 @@ public class MediaType implements Comparable<MediaType> {
 	/**
 	 * Constructor.
 	 *
-	 * @param mt The media type string.  Can be <jk>null</jk>.
+	 * @param mt The media type string.  Can be <jk>null</jk> (treated as an empty string).
 	 */
 	public MediaType(String mt) {
 		this(parse(mt));
@@ -214,7 +214,7 @@ public class MediaType implements Comparable<MediaType> {
 	/**
 	 * Constructor.
 	 *
-	 * @param mt The media type string.  Can be <jk>null</jk>.
+	 * @param mt The media type string.  Can be <jk>null</jk> (treated as an empty string).
 	 * @param parameters The media type parameters.  If <jk>null</jk>, they're pulled from the media type string.
 	 */
 	public MediaType(String mt, NameValuePair[] parameters) {
@@ -315,7 +315,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * @param st
 	 * 	The subtype string.
 	 * 	Case is ignored.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if the subtype contains the specified subtype string.
 	 */
 	public final boolean hasSubType(String st) {
@@ -345,7 +345,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * <br>The purpose for this is to allow parsers to match when artifacts such as <c>id</c> properties are
 	 * present in the header.
 	 *
-	 * @param mediaTypes The media types to match against.  Must not be <jk>null</jk>.
+	 * @param mediaTypes The media types to match against.  Must not be <jk>null</jk> or a {@link NullPointerException} is thrown.
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int match(List<MediaType> mediaTypes) {
@@ -400,7 +400,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * 	</ul>
 	 * </ul>
 	 *
-	 * @param o The media type to compare with.  Can be <jk>null</jk>.
+	 * @param o The media type to compare with.  Can be <jk>null</jk> (returns <c>-1</c>).
 	 * @param allowExtraSubTypes If <jk>true</jk>,
 	 * @return <jk>true</jk> if the media types match.
 	 */

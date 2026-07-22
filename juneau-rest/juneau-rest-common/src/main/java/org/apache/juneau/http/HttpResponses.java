@@ -70,13 +70,13 @@ public final class HttpResponses {
 	/** @return A new {@code 200 OK} response. */
 	public static Ok ok() { return new Ok(); }
 
-	/** @param body The response body. Can be <jk>null</jk>. @return A new {@code 200 OK} response. */
+	/** @param body The response body. Can be <jk>null</jk> for no response body. @return A new {@code 200 OK} response. */
 	public static Ok ok(String body) { return new Ok(body); }
 
 	/** @return A new {@code 201 Created} response. */
 	public static Created created() { return new Created(); }
 
-	/** @param body The response body. Can be <jk>null</jk>. @return A new {@code 201 Created} response. */
+	/** @param body The response body. Can be <jk>null</jk> for no response body. @return A new {@code 201 Created} response. */
 	public static Created created(String body) { return new Created(body); }
 
 	/** @return A new {@code 202 Accepted} response. */
@@ -92,22 +92,22 @@ public final class HttpResponses {
 	// 3xx Redirection
 	// ------------------------------------------------------------------------------------------------------------------
 
-	/** @param location The redirect location. Can be <jk>null</jk>. @return A new {@code 301 Moved Permanently} response. */
+	/** @param location The redirect location. Can be <jk>null</jk> to omit the {@code Location} header. @return A new {@code 301 Moved Permanently} response. */
 	public static MovedPermanently movedPermanently(String location) { return new MovedPermanently().withHeader("Location", location); }
 
-	/** @param location The redirect location. Can be <jk>null</jk>. @return A new {@code 302 Found} response. */
+	/** @param location The redirect location. Can be <jk>null</jk> to omit the {@code Location} header. @return A new {@code 302 Found} response. */
 	public static Found found(String location) { return new Found().withHeader("Location", location); }
 
-	/** @param location The redirect location. Can be <jk>null</jk>. @return A new {@code 303 See Other} response. */
+	/** @param location The redirect location. Can be <jk>null</jk> to omit the {@code Location} header. @return A new {@code 303 See Other} response. */
 	public static SeeOther seeOther(String location) { return new SeeOther().withHeader("Location", location); }
 
 	/** @return A new {@code 304 Not Modified} response. */
 	public static NotModified notModified() { return new NotModified(); }
 
-	/** @param location The redirect location. Can be <jk>null</jk>. @return A new {@code 307 Temporary Redirect} response. */
+	/** @param location The redirect location. Can be <jk>null</jk> to omit the {@code Location} header. @return A new {@code 307 Temporary Redirect} response. */
 	public static TemporaryRedirect temporaryRedirect(String location) { return new TemporaryRedirect().withHeader("Location", location); }
 
-	/** @param location The redirect location. Can be <jk>null</jk>. @return A new {@code 308 Permanent Redirect} response. */
+	/** @param location The redirect location. Can be <jk>null</jk> to omit the {@code Location} header. @return A new {@code 308 Permanent Redirect} response. */
 	public static PermanentRedirect permanentRedirect(String location) { return new PermanentRedirect().withHeader("Location", location); }
 
 	// ------------------------------------------------------------------------------------------------------------------
@@ -117,25 +117,25 @@ public final class HttpResponses {
 	/** @return A new {@code 400 Bad Request} exception. */
 	public static BadRequest badRequest() { return new BadRequest(); }
 
-	/** @param message The error message. Can be <jk>null</jk>. @return A new {@code 400 Bad Request} exception. */
+	/** @param message The error message. Can be <jk>null</jk> for no message body. @return A new {@code 400 Bad Request} exception. */
 	public static BadRequest badRequest(String message) { return new BadRequest(message); }
 
 	/** @return A new {@code 401 Unauthorized} exception. */
 	public static Unauthorized unauthorized() { return new Unauthorized(); }
 
-	/** @param message The error message. Can be <jk>null</jk>. @return A new {@code 401 Unauthorized} exception. */
+	/** @param message The error message. Can be <jk>null</jk> for no message body. @return A new {@code 401 Unauthorized} exception. */
 	public static Unauthorized unauthorized(String message) { return new Unauthorized(message); }
 
 	/** @return A new {@code 403 Forbidden} exception. */
 	public static Forbidden forbidden() { return new Forbidden(); }
 
-	/** @param message The error message. Can be <jk>null</jk>. @return A new {@code 403 Forbidden} exception. */
+	/** @param message The error message. Can be <jk>null</jk> for no message body. @return A new {@code 403 Forbidden} exception. */
 	public static Forbidden forbidden(String message) { return new Forbidden(message); }
 
 	/** @return A new {@code 404 Not Found} exception. */
 	public static NotFound notFound() { return new NotFound(); }
 
-	/** @param message The error message. Can be <jk>null</jk>. @return A new {@code 404 Not Found} exception. */
+	/** @param message The error message. Can be <jk>null</jk> for no message body. @return A new {@code 404 Not Found} exception. */
 	public static NotFound notFound(String message) { return new NotFound(message); }
 
 	/** @return A new {@code 405 Method Not Allowed} exception. */
@@ -144,7 +144,7 @@ public final class HttpResponses {
 	/** @return A new {@code 409 Conflict} exception. */
 	public static Conflict conflict() { return new Conflict(); }
 
-	/** @param message The error message. Can be <jk>null</jk>. @return A new {@code 409 Conflict} exception. */
+	/** @param message The error message. Can be <jk>null</jk> for no message body. @return A new {@code 409 Conflict} exception. */
 	public static Conflict conflict(String message) { return new Conflict(message); }
 
 	/** @return A new {@code 410 Gone} exception. */
@@ -156,13 +156,13 @@ public final class HttpResponses {
 	/** @return A new {@code 415 Unsupported Media Type} exception. */
 	public static UnsupportedMediaType unsupportedMediaType() { return new UnsupportedMediaType(); }
 
-	/** @param message The error message. Can be <jk>null</jk>. @return A new {@code 415 Unsupported Media Type} exception. */
+	/** @param message The error message. Can be <jk>null</jk> for no message body. @return A new {@code 415 Unsupported Media Type} exception. */
 	public static UnsupportedMediaType unsupportedMediaType(String message) { return new UnsupportedMediaType(message); }
 
 	/** @return A new {@code 422 Unprocessable Entity} exception. */
 	public static UnprocessableEntity unprocessableEntity() { return new UnprocessableEntity(); }
 
-	/** @param message The error message. Can be <jk>null</jk>. @return A new {@code 422 Unprocessable Entity} exception. */
+	/** @param message The error message. Can be <jk>null</jk> for no message body. @return A new {@code 422 Unprocessable Entity} exception. */
 	public static UnprocessableEntity unprocessableEntity(String message) { return new UnprocessableEntity(message); }
 
 	/** @return A new {@code 429 Too Many Requests} exception. */
@@ -175,10 +175,10 @@ public final class HttpResponses {
 	/** @return A new {@code 500 Internal Server Error} exception. */
 	public static InternalServerError internalServerError() { return new InternalServerError(); }
 
-	/** @param message The error message. Can be <jk>null</jk>. @return A new {@code 500 Internal Server Error} exception. */
+	/** @param message The error message. Can be <jk>null</jk> for no message body. @return A new {@code 500 Internal Server Error} exception. */
 	public static InternalServerError internalServerError(String message) { return new InternalServerError(message); }
 
-	/** @param cause The cause. Can be <jk>null</jk>. @return A new {@code 500 Internal Server Error} exception. */
+	/** @param cause The cause. Can be <jk>null</jk> (no cause is chained). @return A new {@code 500 Internal Server Error} exception. */
 	public static InternalServerError internalServerError(Throwable cause) { return new InternalServerError(cause); }
 
 	/** @return A new {@code 501 Not Implemented} exception. */
@@ -187,6 +187,6 @@ public final class HttpResponses {
 	/** @return A new {@code 503 Service Unavailable} exception. */
 	public static ServiceUnavailable serviceUnavailable() { return new ServiceUnavailable(); }
 
-	/** @param message The error message. Can be <jk>null</jk>. @return A new {@code 503 Service Unavailable} exception. */
+	/** @param message The error message. Can be <jk>null</jk> for no message body. @return A new {@code 503 Service Unavailable} exception. */
 	public static ServiceUnavailable serviceUnavailable(String message) { return new ServiceUnavailable(message); }
 }

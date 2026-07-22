@@ -44,7 +44,7 @@ public class BasicRuntimeException extends org.apache.juneau.commons.BasicRuntim
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause of this exception.  Can be <jk>null</jk>.
+	 * @param cause The cause of this exception.  Can be <jk>null</jk> (no cause is set).
 	 */
 	public BasicRuntimeException(Throwable cause) {
 		super(cause);
@@ -53,7 +53,7 @@ public class BasicRuntimeException extends org.apache.juneau.commons.BasicRuntim
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause of this exception.  Can be <jk>null</jk>.
+	 * @param cause The cause of this exception.  Can be <jk>null</jk> (no cause is set).
 	 * @param message The {@link String#format(String, Object...) String.format}-style message (<c>%s</c> placeholders).
 	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.
 	 */

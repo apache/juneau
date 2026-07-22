@@ -113,7 +113,7 @@ public enum UuidFormat {
 	 * <p>
 	 * {@link #NOT_SET} falls through to {@link #STANDARD}.
 	 *
-	 * @param value The value to format.  Can be <jk>null</jk>.
+	 * @param value The value to format.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The formatted wire representation, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
 	public static String format(UUID value, UuidFormat format) {
@@ -134,8 +134,8 @@ public enum UuidFormat {
 	 * Lenient parsing — accepts any of the three textual shapes ({@link #STANDARD} / {@link #NO_DASHES} /
 	 * {@link #URN}) regardless of the {@code format} hint.  The hint is informational only.
 	 *
-	 * @param value The wire value.  Can be <jk>null</jk> or blank.
-	 * @param format The configured format hint (informational only — parsing is format-agnostic).  Can be <jk>null</jk>.
+	 * @param value The wire value.  Can be <jk>null</jk> or blank (returns <jk>null</jk>).
+	 * @param format The configured format hint (informational only — parsing is format-agnostic).  Can be <jk>null</jk> (ignored; parsing is format-agnostic).
 	 * @return The parsed {@link UUID}, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 * @throws IllegalArgumentException If the value does not match any supported UUID textual shape.
 	 */

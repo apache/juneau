@@ -114,7 +114,7 @@ public class Location extends BasicUriHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link URI#create(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Location(String value) {
 		super(NAME, value);
@@ -128,7 +128,7 @@ public class Location extends BasicUriHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Location(Supplier<URI> value) {
 		super(NAME, value);
@@ -139,7 +139,7 @@ public class Location extends BasicUriHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Location(URI value) {
 		super(NAME, value);

@@ -115,8 +115,8 @@ public class Property<T, V> {
 	/**
 	 * Constructor.
 	 *
-	 * @param producer The producer function (getter). Can be <jk>null</jk>.
-	 * @param consumer The consumer function (setter). Can be <jk>null</jk>.
+	 * @param producer The producer function (getter). Can be <jk>null</jk>, in which case {@link #canRead()} returns <jk>false</jk> and {@link #get(Object)} throws an {@link ExecutableException}.
+	 * @param consumer The consumer function (setter). Can be <jk>null</jk>, in which case {@link #canWrite()} returns <jk>false</jk> and {@link #set(Object,Object)} throws an {@link ExecutableException}.
 	 */
 	public Property(ThrowingFunction<T,V> producer, ThrowingConsumer2<T, V> consumer) {
 		this.producer = producer;
@@ -182,7 +182,7 @@ public class Property<T, V> {
 		/**
 		 * Sets the producer (getter) using a function.
 		 *
-		 * @param producer The producer function. Can be <jk>null</jk>.
+		 * @param producer The producer function. Can be <jk>null</jk> to leave the property unreadable.
 		 * @return This object.
 		 */
 		public Builder<T, V> getter(ThrowingFunction<T, V> producer) {
@@ -193,7 +193,7 @@ public class Property<T, V> {
 		/**
 		 * Sets the consumer (setter) using a throwing consumer.
 		 *
-		 * @param consumer The consumer function. Can be <jk>null</jk>.
+		 * @param consumer The consumer function. Can be <jk>null</jk> to leave the property unwritable.
 		 * @return This object.
 		 */
 		public Builder<T, V> setter(ThrowingConsumer2<T, V> consumer) {

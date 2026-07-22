@@ -62,7 +62,7 @@ public interface HttpResponseMessage {
 	 * Returns the first response header with the given name (case-insensitive), or <jk>null</jk> if absent.
 	 *
 	 * @param name The header name. Must not be <jk>null</jk>.
-	 * @return The first matching header, or <jk>null</jk>.
+	 * @return The first matching header, or <jk>null</jk> if absent.
 	 */
 	default HttpHeader getFirstHeader(String name) {
 		return getHeaders().stream()

@@ -393,7 +393,7 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	/**
 	 * Generates a {@link JsonSchema} bean from the specified type using {@link JsonSchemaBeanGenerator#DEFAULT}.
 	 *
-	 * @param type The type to generate a schema for.  Must not be <jk>null</jk>.
+	 * @param type The type to generate a schema for.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the type.
 	 */
 	public static JsonSchema<?> of(Type type) {
@@ -403,7 +403,7 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	/**
 	 * Generates a {@link JsonSchema} bean from the specified class using {@link JsonSchemaBeanGenerator#DEFAULT}.
 	 *
-	 * @param type The class to generate a schema for.  Must not be <jk>null</jk>.
+	 * @param type The class to generate a schema for.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the class.
 	 */
 	public static JsonSchema<?> of(Class<?> type) {
@@ -455,8 +455,8 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	/**
 	 * Bean property appender:  <property>$defs</property>.
 	 *
-	 * @param name The key in the defs map entry.  Can be <jk>null</jk>.
-	 * @param value The value in the defs map entry.  Can be <jk>null</jk>.
+	 * @param name The key in the defs map entry.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The value in the defs map entry.  Can be <jk>null</jk> (stored as <jk>null</jk>).
 	 * @return This object.
 	 */
 	public SELF addDef(String name, JsonSchema<?> value) {
@@ -470,8 +470,8 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	/**
 	 * Bean property appender:  <property>definitions</property>.
 	 *
-	 * @param name The key in the definitions map entry.  Can be <jk>null</jk>.
-	 * @param value The value in the definitions map entry.  Can be <jk>null</jk>.
+	 * @param name The key in the definitions map entry.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The value in the definitions map entry.  Can be <jk>null</jk> (stored as <jk>null</jk>).
 	 * @return This object.
 	 */
 	public SELF addDefinition(String name, JsonSchema<?> value) {
@@ -485,8 +485,8 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	/**
 	 * Bean property appender:  <property>dependencies</property>.
 	 *
-	 * @param name The key of the entry in the dependencies map.  Can be <jk>null</jk>.
-	 * @param value The value of the entry in the dependencies map.  Can be <jk>null</jk>.
+	 * @param name The key of the entry in the dependencies map.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The value of the entry in the dependencies map.  Can be <jk>null</jk> (stored as <jk>null</jk>).
 	 * @return This object.
 	 */
 	public SELF addDependency(String name, JsonSchema<?> value) {
@@ -500,8 +500,8 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	/**
 	 * Bean property appender:  <property>dependentRequired</property>.
 	 *
-	 * @param name The key of the entry in the dependentRequired map.  Can be <jk>null</jk>.
-	 * @param value The value of the entry in the dependentRequired map.  Can be <jk>null</jk>.
+	 * @param name The key of the entry in the dependentRequired map.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The value of the entry in the dependentRequired map.  Can be <jk>null</jk> (stored as <jk>null</jk>).
 	 * @return This object.
 	 */
 	public SELF addDependentRequired(String name, List<String> value) {
@@ -514,8 +514,8 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	/**
 	 * Bean property appender:  <property>dependentSchemas</property>.
 	 *
-	 * @param name The key of the entry in the dependentSchemas map.  Can be <jk>null</jk>.
-	 * @param value The value of the entry in the dependentSchemas map.  Can be <jk>null</jk>.
+	 * @param name The key of the entry in the dependentSchemas map.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The value of the entry in the dependentSchemas map.  Can be <jk>null</jk> (stored as <jk>null</jk>).
 	 * @return This object.
 	 */
 	public SELF addDependentSchema(String name, JsonSchema<?> value) {
@@ -1169,7 +1169,7 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * <p>
 	 * This is equivalent to calling <property>getProperty(name, <jk>false</jk>)</property>.
 	 *
-	 * @param name The property name.  Can be <jk>null</jk>.
+	 * @param name The property name.  Can be <jk>null</jk> (no property has a <jk>null</jk> name, so <jk>null</jk> is returned).
 	 * @return The property with the specified name, or <jk>null</jk> if no property is specified.
 	 */
 	public JsonSchema<?> getProperty(String name) {
@@ -1186,7 +1186,7 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * <property>getProperty(name).resolve()</property>, except it's safe from a potential
 	 * <property>NullPointerException</property>.
 	 *
-	 * @param name The property name.  Can be <jk>null</jk>.
+	 * @param name The property name.  Can be <jk>null</jk> (no property has a <jk>null</jk> name, so <jk>null</jk> is returned).
 	 * @param resolve If <jk>true</jk>, calls {@link #resolve()} on object before returning.
 	 * @return The property with the specified name, or <jk>null</jk> if no property is specified.
 	 */
@@ -1354,7 +1354,7 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * If this schema is not a reference, or no schema map is registered with this schema, this method is a no-op and
 	 * simply returns this object.
 	 *
-	 * @return The referenced schema, or <jk>null</jk>.
+	 * @return The referenced schema, or <jk>null</jk> if this schema is a <property>$ref</property> whose target is not found in the registered schema map.
 	 */
 	public JsonSchema<?> resolve() {
 		if (ref == null || master.schemaMap == null)
@@ -2016,7 +2016,7 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * Associates a schema map with this schema for resolving other schemas identified through <property>$ref</property>
 	 * properties.
 	 *
-	 * @param value The schema map to associate with this schema.  Can be <jk>null</jk>.
+	 * @param value The schema map to associate with this schema.  Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	@BeanIgnore
@@ -2195,7 +2195,7 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * All child elements in a schema should point to a single "master" schema in order to locate registered JsonSchemaMap
 	 * objects for resolving external schemas.
 	 *
-	 * @param master The master schema to associate on this and all children.  Can be <jk>null</jk>.
+	 * @param master The master schema to associate on this and all children.  Can be <jk>null</jk> to clear the master reference on this schema and all children.
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for this logic

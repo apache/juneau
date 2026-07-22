@@ -54,7 +54,7 @@ public enum Enablement {
 	/**
 	 * Retrieves this enum using case-insensitive matching.
 	 *
-	 * @param s The enum name to resolve. Can be <jk>null</jk>.
+	 * @param s The enum name to resolve. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The resolved value, or <jk>null</jk> if no match found.
 	 */
 	public static Enablement fromString(String s) {

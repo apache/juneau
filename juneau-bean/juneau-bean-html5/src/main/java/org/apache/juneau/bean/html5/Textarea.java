@@ -95,8 +95,8 @@ public class Textarea extends HtmlElementRawText<Textarea> {
 	 * Creates a {@link Textarea} element with the specified {@link Textarea#name(String)} attribute and
 	 * {@link Textarea#text(Object)} node.
 	 *
-	 * @param name The {@link Textarea#name(String)} attribute. Can be <jk>null</jk>.
-	 * @param text The {@link Textarea#text(Object)} node. Can be <jk>null</jk>.
+	 * @param name The {@link Textarea#name(String)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param text The {@link Textarea#text(Object)} node. Can be <jk>null</jk> to leave the text unset.
 	 */
 	public Textarea(String name, String text) {
 		name(name).text(text);

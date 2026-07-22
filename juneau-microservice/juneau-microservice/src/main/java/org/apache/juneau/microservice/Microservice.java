@@ -540,7 +540,7 @@ public class Microservice implements ConfigEventListener {
 		 * <c>@Bean</c>-supplied values — the resolved field is registered into the bean store <i>after</i>
 		 * configurations are processed, overwriting any same-type <c>@Bean</c> contribution.
 		 *
-		 * @param configurations The configuration classes.  Can be <jk>null</jk> or empty.
+		 * @param configurations The configuration classes.  Can be <jk>null</jk> or empty (no-op); <jk>null</jk> elements are ignored.
 		 * @return This object.
 		 * @since 10.0.0
 		 */
@@ -555,7 +555,7 @@ public class Microservice implements ConfigEventListener {
 		/**
 		 * Registers one or more <c>@Configuration</c>-annotated classes.
 		 *
-		 * @param configurations The configuration classes.  Can be <jk>null</jk> or empty.
+		 * @param configurations The configuration classes.  Can be <jk>null</jk> or empty (no-op); <jk>null</jk> elements are ignored.
 		 * @return This object.
 		 * @see #configurations(Class...)
 		 * @since 10.0.0
@@ -930,7 +930,7 @@ public class Microservice implements ConfigEventListener {
 	 * Allows you to execute a console command outside the console by simulating input and output.
 	 *
 	 * @param command The command name to execute.
-	 * @param input Optional input to the command.  Can be <jk>null</jk>.
+	 * @param input Optional input to the command.  Can be <jk>null</jk> (treated as an empty string).
 	 * @param args Optional command arguments to pass to the command.
 	 * @return The command output.
 	 */

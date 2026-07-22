@@ -114,7 +114,7 @@ public class FileReaderBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param file The file to read from.  Can be <jk>null</jk>.
+	 * @param file The file to read from.  Can be <jk>null</jk> ({@link #build()} then throws an {@link IllegalArgumentException} unless {@link #allowNoFile()} is set).
 	 * @return A new builder instance initialized with the specified file.
 	 */
 	public static FileReaderBuilder create(File file) {
@@ -247,7 +247,7 @@ public class FileReaderBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param value The file to read from.  Can be <jk>null</jk>.
+	 * @param value The file to read from.  Can be <jk>null</jk> ({@link #build()} then throws an {@link IllegalArgumentException} unless {@link #allowNoFile()} is set).
 	 * @return This object for method chaining.
 	 */
 	public FileReaderBuilder file(File value) {

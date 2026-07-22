@@ -317,11 +317,11 @@ public class IoUtils {
 	 *
 	 * @param in
 	 * 	The reader to pipe from.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <c>0</c>).
 	 * 	<br>Reader is automatically closed.
 	 * @param out
 	 * 	The file to write the output to.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <c>0</c>).
 	 * 	<br>Writer is flushed but not automatically closed.
 	 * @return
 	 * 	The number of characters piped.
@@ -695,7 +695,7 @@ public class IoUtils {
 	 *
 	 * @param in
 	 * 	The input stream to read.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns an empty array).
 	 * 	<br>Stream is automatically closed.
 	 * @return A byte array containing the contents.  Never <jk>null</jk>.
 	 * @throws IOException Thrown by underlying stream.
@@ -711,7 +711,7 @@ public class IoUtils {
 	 *
 	 * @param in
 	 * 	The input stream to read.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns an empty array).
 	 * 	<br>Stream is not automatically closed.
 	 * @param maxBytes
 	 * 	The maximum number of bytes or <c>-1</c> to read the entire stream.
@@ -735,7 +735,7 @@ public class IoUtils {
 	 *
 	 * @param in
 	 * 	The input stream to read.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns an empty array).
 	 * 	<br>Stream is automatically closed.
 	 * @return A byte array containing the contents.  Never <jk>null</jk>.
 	 * @throws IOException Thrown by underlying stream.

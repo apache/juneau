@@ -65,7 +65,7 @@ public class HttpUtils {
 	 * Given a Java method, infers the REST path.
 	 *
 	 * @param m The Java method. Must not be <jk>null</jk>.
-	 * @param method The HTTP method name if it's known. Can be <jk>null</jk>.
+	 * @param method The HTTP method name if it's known. Can be <jk>null</jk>, in which case the path is inferred from Java method naming conventions.
 	 * @return The REST path. Never <jk>null</jk> (falls back to <c>'/' + methodName</c> when no convention matches).
 	 */
 	@SuppressWarnings({

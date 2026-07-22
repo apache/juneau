@@ -92,7 +92,7 @@ public class SerializedPart extends BasicPart {
 	 * @param type The HTTP part type.  Can be <jk>null</jk>.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case the value is converted using a simple string conversion instead of being serialized.
 	 * @param schema
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
@@ -140,8 +140,8 @@ public class SerializedPart extends BasicPart {
 	/**
 	 * Copies this bean and sets the serializer and schema on it.
 	 *
-	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk>.
-	 * @param schema The new schema for the bean.  Can be <jk>null</jk>.
+	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk> (the serializer is left unchanged).
+	 * @param schema The new schema for the bean.  Can be <jk>null</jk> (the schema is left unchanged).
 	 * @return Either a new bean with the serializer set, or this bean if
 	 * 	both values are <jk>null</jk> or the serializer and schema were already set.
 	 */
@@ -178,7 +178,7 @@ public class SerializedPart extends BasicPart {
 	/**
 	 * Sets the schema object that defines the format of the output.
 	 *
-	 * @param value The new value for this property.  Can be <jk>null</jk>.
+	 * @param value The new value for this property.  Can be <jk>null</jk> to fall back to {@link HttpPartSchema#DEFAULT} when the value is read.
 	 * @return This object.
 	 */
 	public SerializedPart schema(HttpPartSchema value) {
@@ -201,7 +201,7 @@ public class SerializedPart extends BasicPart {
 	/**
 	 * Sets the serializer to use for serializing the value to a string value.
 	 *
-	 * @param value The new value for this property.  Can be <jk>null</jk>.
+	 * @param value The new value for this property.  Can be <jk>null</jk>, in which case the value is converted using a simple string conversion instead of being serialized.
 	 * @return This object.
 	 */
 	public SerializedPart serializer(HttpPartSerializerSession value) {

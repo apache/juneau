@@ -34,7 +34,7 @@ public class ViewArgs {
 	/**
 	 * Static creator.
 	 *
-	 * @param args List of view arguments.  Can be <jk>null</jk>.
+	 * @param args List of view arguments.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A new {@link ViewArgs} object, or <jk>null</jk> if <c>args</c> is <jk>null</jk>.
 	 */
 	public static ViewArgs create(List<String> args) {
@@ -46,7 +46,7 @@ public class ViewArgs {
 	/**
 	 * Static creator.
 	 *
-	 * @param args Comma-delimited list of view arguments.  Can be <jk>null</jk>.
+	 * @param args Comma-delimited list of view arguments.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A new {@link ViewArgs} object, or <jk>null</jk> if <c>args</c> is <jk>null</jk>.
 	 */
 	public static ViewArgs create(String args) {

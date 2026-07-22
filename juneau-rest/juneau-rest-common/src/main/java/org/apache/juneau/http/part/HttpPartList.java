@@ -175,7 +175,7 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	 * Appends a part constructed from the given name and string value.
 	 *
 	 * @param name The part name. Must not be <jk>null</jk>.
-	 * @param value The part value. Can be <jk>null</jk>.
+	 * @param value The part value. Can be <jk>null</jk> to omit the part from the request.
 	 * @return This object.
 	 */
 	public HttpPartList append(String name, String value) {
@@ -213,7 +213,7 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	 * Sets a default part with the given name and value (first-in-chain wins per name).
 	 *
 	 * @param name The part name. Must not be <jk>null</jk>.
-	 * @param value The part value. Can be <jk>null</jk>.
+	 * @param value The part value. Can be <jk>null</jk> to omit the part from the request.
 	 * @return This object.
 	 */
 	public HttpPartList setDefault(String name, String value) {
@@ -251,7 +251,7 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	 * Sets a part with the given name and value, replacing any prior entry with the same name.
 	 *
 	 * @param name The part name. Must not be <jk>null</jk>.
-	 * @param value The part value. Can be <jk>null</jk>.
+	 * @param value The part value. Can be <jk>null</jk> to omit the part from the request.
 	 * @return This object.
 	 */
 	public HttpPartList set(String name, String value) {

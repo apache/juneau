@@ -137,7 +137,7 @@ public class AnyAssertion<T> extends FluentAnyAssertion<T,AnyAssertion<T>> {
 	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static <T> AnyAssertion<T> create(T value) {
@@ -153,7 +153,7 @@ public class AnyAssertion<T> extends FluentAnyAssertion<T,AnyAssertion<T>> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public AnyAssertion(T value) {
 		super(value, null);

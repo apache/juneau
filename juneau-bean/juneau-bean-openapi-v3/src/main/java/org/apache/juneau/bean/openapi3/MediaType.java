@@ -114,10 +114,10 @@ public class MediaType extends OpenApiElement {
 	/**
 	 * Adds one or more values to the <property>encoding</property> property.
 	 *
-	 * @param key The mapping key.  Must not be <jk>null</jk>.
+	 * @param key The mapping key.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @param value
 	 * 	The values to add to this property.
-	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object
 	 */
 	public MediaType addEncoding(String key, Encoding value) {
@@ -130,8 +130,8 @@ public class MediaType extends OpenApiElement {
 	/**
 	 * Adds a single value to the <property>examples</property> property.
 	 *
-	 * @param name The example name.  Must not be <jk>null</jk>.
-	 * @param example The example.  Must not be <jk>null</jk>.
+	 * @param name The example name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param example The example.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object
 	 */
 	public MediaType addExample(String name, Example example) {

@@ -246,7 +246,7 @@ public class BeanInstantiator<T> {
 	 *
 	 * @param <T> The bean type to create.
 	 * @param beanType The bean type to create.  Must not be <jk>null</jk>.
-	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
+	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk> (the internal bean store then has no parent fallback).
 	 * @return A new bean creator builder.
 	 */
 	public static <T> Builder<T> of(Class<T> beanType, BeanStore parentStore) {
@@ -258,9 +258,9 @@ public class BeanInstantiator<T> {
 	 *
 	 * @param <T> The bean type to create.
 	 * @param beanType The bean type to create.  Must not be <jk>null</jk>.
-	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
-	 * @param name The bean name. Can be <jk>null</jk>.
-	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk>.
+	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk> (the internal bean store then has no parent fallback).
+	 * @param name The bean name. Can be <jk>null</jk> for unnamed beans.
+	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk> (the outer-instance skip rule is then never applied).
 	 * @return A new bean creator builder.
 	 */
 	public static <T> Builder<T> of(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
@@ -512,9 +512,9 @@ public class BeanInstantiator<T> {
 	 * Constructor.
 	 *
 	 * @param beanType The bean type being created.  Must not be <jk>null</jk>.
-	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
-	 * @param name The bean name. Can be <jk>null</jk>.
-	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk>.
+	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk> (the internal bean store then has no parent fallback).
+	 * @param name The bean name. Can be <jk>null</jk> for unnamed beans.
+	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk> (the outer-instance skip rule is then never applied).
 	 */
 	protected Builder(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
 		this.beanType = info(assertArgNotNull(ARG_beanType, beanType));
@@ -530,7 +530,7 @@ public class BeanInstantiator<T> {
 	 *
 	 * @param <T2> The bean type.
 	 * @param type The bean type.  Must not be <jk>null</jk>.
-	 * @param bean The bean instance.  Can be <jk>null</jk>.
+	 * @param bean The bean instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @return The bean that was added.
 	 */
 	public <T2> T2 add(Class<T2> type, T2 bean) {
@@ -544,7 +544,7 @@ public class BeanInstantiator<T> {
 	 *
 	 * @param <T2> The bean type.
 	 * @param type The bean type.  Must not be <jk>null</jk>.
-	 * @param bean The bean instance.  Can be <jk>null</jk>.
+	 * @param bean The bean instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @return This object.
 	 */
 	public <T2> Builder<T> addBean(Class<T2> type, T2 bean) {
@@ -558,7 +558,7 @@ public class BeanInstantiator<T> {
 	 *
 	 * @param <T2> The bean type.
 	 * @param type The bean type.  Must not be <jk>null</jk>.
-	 * @param bean The bean instance.  Can be <jk>null</jk>.
+	 * @param bean The bean instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return This object.
 	 */

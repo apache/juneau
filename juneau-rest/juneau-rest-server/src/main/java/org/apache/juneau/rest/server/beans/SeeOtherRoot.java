@@ -59,7 +59,7 @@ public class SeeOtherRoot extends SeeOther {
 	 * Used for end-to-end interfaces.
 	 *
 	 * @param content Message to send as the response.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> for no response body.
 	 */
 	public SeeOtherRoot(String content) {
 		super(content);

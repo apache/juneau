@@ -109,8 +109,8 @@ public class Discriminator extends OpenApiElement {
 	/**
 	 * Adds one or more values to the <property>mapping</property> property.
 	 *
-	 * @param key The key.  Must not be <jk>null</jk>.
-	 * @param value The value.  Must not be <jk>null</jk>.
+	 * @param key The key.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param value The value.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object
 	 */
 	public Discriminator addMapping(String key, String value) {

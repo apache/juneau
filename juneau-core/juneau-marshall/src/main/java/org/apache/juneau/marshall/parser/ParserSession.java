@@ -118,7 +118,7 @@ public class ParserSession extends MarshallingSession {
 		 *
 		 * @param value
 		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> to leave (or clear) the associated java method unset.
 		 * @return This object.
 		 */
 		public SELF javaMethod(Method value) {
@@ -248,7 +248,7 @@ public class ParserSession extends MarshallingSession {
 	 * Convenience method for calling the {@link NameProperty @NameProperty} method on the specified object if it exists.
 	 *
 	 * @param cm The class type of the object.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no-op).
 	 * @param o The object.
 	 * @param name The name to set.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
@@ -266,7 +266,7 @@ public class ParserSession extends MarshallingSession {
 	 * exists.
 	 *
 	 * @param cm The class type of the object.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no-op).
 	 * @param o The object.
 	 * @param parent The parent to set.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
@@ -876,9 +876,9 @@ public class ParserSession extends MarshallingSession {
 	 * @param m The map to convert to a bean.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param pMeta The current bean property being parsed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the <c>@MarshalledProp(dictionary={})</c> registry lookup is skipped).
 	 * @param eType The current expected type being parsed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the <c>@Marshalled(dictionary={})</c> registry lookup on the expected type is skipped).
 	 * @return
 	 * 	The converted bean, or the same map if the <js>"_type"</js> entry wasn't found or didn't resolve to a bean.
 	 */
@@ -917,9 +917,9 @@ public class ParserSession extends MarshallingSession {
 	 * @param outer
 	 * 	The outer object if we're converting to an inner object that needs to be created within the context
 	 * 	of an outer object.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> if the target is not a non-static inner class requiring an enclosing instance.
 	 * @param s The string to convert.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param type The class type to convert the string to.
 	 * 	<br>Can be <jk>null</jk> (defaults to <c>Object</c>).
 	 * @return The string converted as an object of the specified type, or <jk>null</jk> if the input string was <jk>null</jk>.
@@ -1071,9 +1071,9 @@ public class ParserSession extends MarshallingSession {
 	 *
 	 * @param typeName The dictionary name to resolve.
 	 * @param pMeta The bean property we're currently parsing.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the <c>@MarshalledProp(dictionary={})</c> registry lookup is skipped).
 	 * @param eType The expected type we're currently parsing.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the <c>@Marshalled(dictionary={})</c> registry lookup on the expected type is skipped).
 	 * @return The resolved class, or <jk>null</jk> if the type name could not be resolved.
 	 */
 	@SuppressWarnings({
@@ -1343,7 +1343,9 @@ public class ParserSession extends MarshallingSession {
 	 * @param beanMap The bean that doesn't have the expected property.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The parsed value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case whether the property is ignored is governed by
+	 * 	{@link MarshallingContext.Builder#ignoreUnknownNullBeanProperties()} rather than
+	 * 	{@link MarshallingContext.Builder#ignoreUnknownBeanProperties()}.
 	 * @throws ParseException
 	 * 	Automatically thrown if {@link MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is
 	 * 	<jk>false</jk>

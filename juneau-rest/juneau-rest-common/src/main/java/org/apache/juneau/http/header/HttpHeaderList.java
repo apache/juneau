@@ -176,7 +176,7 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	 * Appends a header constructed from the given name and string value.
 	 *
 	 * @param name The header name. Must not be <jk>null</jk>.
-	 * @param value The header value. Can be <jk>null</jk>.
+	 * @param value The header value. Can be <jk>null</jk> to omit the header from the request.
 	 * @return This object.
 	 */
 	public HttpHeaderList append(String name, String value) {
@@ -225,7 +225,7 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	 * Sets a default header with the given name and value (first-in-chain wins per name).
 	 *
 	 * @param name The header name. Must not be <jk>null</jk>.
-	 * @param value The header value. Can be <jk>null</jk>.
+	 * @param value The header value. Can be <jk>null</jk> to omit the header from the request.
 	 * @return This object.
 	 */
 	public HttpHeaderList setDefault(String name, String value) {
@@ -263,7 +263,7 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	 * Sets a header with the given name and value, replacing any prior entry with the same name.
 	 *
 	 * @param name The header name. Must not be <jk>null</jk>.
-	 * @param value The header value. Can be <jk>null</jk>.
+	 * @param value The header value. Can be <jk>null</jk> to omit the header from the request.
 	 * @return This object.
 	 */
 	public HttpHeaderList set(String name, String value) {

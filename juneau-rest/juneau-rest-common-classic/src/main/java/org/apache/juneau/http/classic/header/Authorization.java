@@ -115,7 +115,7 @@ public class Authorization extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Authorization(String value) {
 		super(NAME, value);
@@ -129,7 +129,7 @@ public class Authorization extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Authorization(Supplier<String> value) {
 		super(NAME, value);

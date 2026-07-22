@@ -116,7 +116,7 @@ public class ArrayAssertion<E> extends FluentArrayAssertion<E,ArrayAssertion<E>>
 	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static <E> ArrayAssertion<E> create(E[] value) {
@@ -128,7 +128,7 @@ public class ArrayAssertion<E> extends FluentArrayAssertion<E,ArrayAssertion<E>>
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public ArrayAssertion(E[] value) {
 		super(value, null);

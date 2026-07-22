@@ -62,7 +62,7 @@ public class HttpMediaTypeHeader extends HttpHeaderBean {
 	 * Constructor.
 	 *
 	 * @param name Header name. Must not be <jk>null</jk>.
-	 * @param value The media type value. Can be <jk>null</jk>.
+	 * @param value The media type value. Can be <jk>null</jk>, in which case the parsed value is <jk>null</jk>.
 	 */
 	protected HttpMediaTypeHeader(String name, MediaType value) {
 		super(name, value == null ? null : value.toString());

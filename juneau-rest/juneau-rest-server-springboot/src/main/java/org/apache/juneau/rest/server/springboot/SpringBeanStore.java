@@ -74,8 +74,8 @@ public class SpringBeanStore extends BasicBeanStore {
 	 * {@code application.yaml}, env vars, system properties, etc.).  The source is removed by
 	 * {@link #clear()}.
 	 *
-	 * @param appContext The Spring application context used to resolve beans. Can be <jk>null</jk>.
-	 * @param parent The parent bean store. Can be <jk>null</jk>.
+	 * @param appContext The Spring application context used to resolve beans. Can be <jk>null</jk> (no Spring environment bridge is installed).
+	 * @param parent The parent bean store. Can be <jk>null</jk> for a root store with no parent chain.
 	 */
 	public SpringBeanStore(ApplicationContext appContext, BeanStore parent) {
 		super(parent);

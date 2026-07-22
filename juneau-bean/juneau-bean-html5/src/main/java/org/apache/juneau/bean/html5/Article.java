@@ -162,7 +162,7 @@ public class Article extends HtmlElementMixed<Article> {
 	/**
 	 * Adds a link node to this element.
 	 *
-	 * @param value The link node to add to this article. Can be <jk>null</jk>.
+	 * @param value The link node to add to this article. Can be <jk>null</jk> (a <jk>null</jk> entry is added to the children list).
 	 * @return This object.
 	 */
 	public Article link(Link value) {
@@ -173,7 +173,7 @@ public class Article extends HtmlElementMixed<Article> {
 	/**
 	 * Adds a section node to this element.
 	 *
-	 * @param value The section node to add to this article. Can be <jk>null</jk>.
+	 * @param value The section node to add to this article. Can be <jk>null</jk> (a <jk>null</jk> entry is added to the children list).
 	 * @return This object.
 	 */
 	public Article section(Section value) {

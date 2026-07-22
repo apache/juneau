@@ -53,7 +53,7 @@ public final class Health {
 	 * Creates an {@link HealthStatus#DOWN} builder.
 	 *
 	 * @param name Component name. Must not be <jk>null</jk> or empty.
-	 * @param error Optional error causing the down state. Can be <jk>null</jk>.
+	 * @param error Optional error causing the down state. Can be <jk>null</jk> (no error is recorded).
 	 * @return A new builder.
 	 */
 	public static Builder down(String name, Throwable error) {
@@ -101,7 +101,7 @@ public final class Health {
 		 * Adds a structured detail.
 		 *
 		 * @param key Detail key. Must not be <jk>null</jk> or empty.
-		 * @param value Detail value. Can be <jk>null</jk>.
+		 * @param value Detail value. Can be <jk>null</jk> (the detail is recorded with a <jk>null</jk> value).
 		 * @return This builder.
 		 */
 		public Builder detail(String key, Object value) {

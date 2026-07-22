@@ -220,7 +220,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * 	<jv>map</jv>.add(123, 5);  <jc>// Key will be converted from Integer to String</jc>
 		 * </p>
 		 *
-		 * @param value The key conversion function. Can be <jk>null</jk>.
+		 * @param value The key conversion function. Can be <jk>null</jk> (keys are then used as-is without conversion).
 		 * @return This object for method chaining.
 		 */
 		public Builder<K,V> keyFunction(Function<Object,K> value) {
@@ -247,7 +247,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * 	<jv>map</jv>.add(<js>"key"</js>, <js>"123"</js>);  <jc>// Value will be converted from String to Integer</jc>
 		 * </p>
 		 *
-		 * @param value The value conversion function. Can be <jk>null</jk>.
+		 * @param value The value conversion function. Can be <jk>null</jk> (values are then used as-is without conversion).
 		 * @return This object for method chaining.
 		 */
 		public Builder<K,V> valueFunction(Function<Object,V> value) {
@@ -273,8 +273,8 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * 		.build();
 		 * </p>
 		 *
-		 * @param keyFunction The key conversion function. Can be <jk>null</jk>.
-		 * @param valueFunction The value conversion function. Can be <jk>null</jk>.
+		 * @param keyFunction The key conversion function. Can be <jk>null</jk> (keys are then used as-is without conversion).
+		 * @param valueFunction The value conversion function. Can be <jk>null</jk> (values are then used as-is without conversion).
 		 * @return This object for method chaining.
 		 */
 		public Builder<K,V> functions(Function<Object,K> keyFunction, Function<Object,V> valueFunction) {

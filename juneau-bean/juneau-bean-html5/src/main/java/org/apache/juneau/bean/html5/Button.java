@@ -84,7 +84,7 @@ public class Button extends HtmlElementMixed<Button> {
 	/**
 	 * Creates a {@link Button} element with the specified {@link Button#type(String)} attribute.
 	 *
-	 * @param type The {@link Button#type(String)} attribute. Can be <jk>null</jk>.
+	 * @param type The {@link Button#type(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 */
 	public Button(String type) {
 		type(type);
@@ -94,7 +94,7 @@ public class Button extends HtmlElementMixed<Button> {
 	 * Creates a {@link Button} element with the specified {@link Button#type(String)} attribute and
 	 * {@link Button#children(Object[])} nodes.
 	 *
-	 * @param type The {@link Button#type(String)} attribute. Can be <jk>null</jk>.
+	 * @param type The {@link Button#type(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @param children The {@link Button#children(Object[])} nodes. Must not be <jk>null</jk>.
 	 */
 	public Button(String type, Object...children) {
@@ -175,7 +175,7 @@ public class Button extends HtmlElementMixed<Button> {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param value The URL where the form data will be submitted. Can be <jk>null</jk>.
+	 * @param value The URL where the form data will be submitted. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public Button formaction(String value) {

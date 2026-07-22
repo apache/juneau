@@ -149,7 +149,7 @@ public enum ClassFormat {
 	 * <p>
 	 * {@link #NOT_SET} / {@code null} format are treated as {@link #FQCN}.
 	 *
-	 * @param value The value to format. Can be <jk>null</jk>.
+	 * @param value The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param format The configured format. Can be <jk>null</jk> (treated as {@link #FQCN}).
 	 * @return The formatted wire representation, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
@@ -201,7 +201,7 @@ public enum ClassFormat {
 	 * {@link #SIMPLE_NAME} is not supported on the parser side — throws
 	 * {@link UnsupportedOperationException}.
 	 *
-	 * @param value The wire value. Can be <jk>null</jk> or blank.
+	 * @param value The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).
 	 * @param format The configured format hint. Can be <jk>null</jk> (treated as {@link #FQCN}).
 	 * @param classLoader The class loader. Can be <jk>null</jk> (uses
 	 *   {@link Thread#getContextClassLoader() context class loader}).

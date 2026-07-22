@@ -228,7 +228,7 @@ public abstract class ObjectSwap<T,S> {
 	/**
 	 * Checks if the specified object is an instance of the normal class defined on this swap.
 	 *
-	 * @param o The object to check. Can be <jk>null</jk>.
+	 * @param o The object to check. Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return
 	 * 	<jk>true</jk> if the specified object is a subclass of the normal class defined on this transform.
 	 * 	A <jk>null</jk> value always returns <jk>false</jk>.
@@ -242,7 +242,7 @@ public abstract class ObjectSwap<T,S> {
 	/**
 	 * Checks if the specified object is an instance of the swap class defined on this swap.
 	 *
-	 * @param o The object to check. Can be <jk>null</jk>.
+	 * @param o The object to check. Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return
 	 * 	<jk>true</jk> if the specified object is a subclass of the transformed class defined on this transform.
 	 * 	A <jk>null</jk> value always returns <jk>false</jk>.
@@ -272,7 +272,7 @@ public abstract class ObjectSwap<T,S> {
 	 * 	<li><js>"text/xml"</js> = <c>0</c>
 	 * </ul>
 	 *
-	 * @param session The bean session. Can be <jk>null</jk>.
+	 * @param session The bean session. Can be <jk>null</jk> (returns <c>0</c>, or <c>1</c> if this swap has no media types configured).
 	 * @return Zero if swap doesn't match the session, or a positive number if it does.
 	 */
 	public int match(MarshallingSession session) {

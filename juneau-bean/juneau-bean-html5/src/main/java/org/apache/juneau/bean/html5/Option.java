@@ -80,7 +80,7 @@ public class Option extends HtmlElementText<Option> {
 	/**
 	 * Creates an {@link Option} element with the specified {@link Option#text(Object)} attribute.
 	 *
-	 * @param text The {@link Option#text(Object)} attribute. Can be <jk>null</jk>.
+	 * @param text The {@link Option#text(Object)} attribute. Can be <jk>null</jk> to leave the text unset.
 	 */
 	public Option(Object text) {
 		text(text);
@@ -90,8 +90,8 @@ public class Option extends HtmlElementText<Option> {
 	 * Creates an {@link Option} element with the specified {@link Option#value(Object)} attribute and
 	 * {@link Option#text(Object)} node.
 	 *
-	 * @param value The {@link Option#value(Object)} attribute. Can be <jk>null</jk>.
-	 * @param text The {@link Option#text(Object)} node. Can be <jk>null</jk>.
+	 * @param value The {@link Option#value(Object)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param text The {@link Option#text(Object)} node. Can be <jk>null</jk> to leave the text unset.
 	 */
 	public Option(Object value, Object text) {
 		value(value).text(text);

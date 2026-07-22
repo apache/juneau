@@ -55,7 +55,7 @@ public class HalLink {
 	/**
 	 * Convenience constructor with the required {@code href} field.
 	 *
-	 * @param href The link URI or URI template.  Can be <jk>null</jk>.
+	 * @param href The link URI or URI template.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public HalLink(String href) {
 		this.href = href;

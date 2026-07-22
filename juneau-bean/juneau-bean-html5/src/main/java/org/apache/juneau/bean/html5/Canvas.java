@@ -96,8 +96,8 @@ public class Canvas extends HtmlElementMixed<Canvas> {
 	 * Creates a {@link Canvas} element with the specified {@link Canvas#width(Object)} and
 	 * {@link Canvas#height(Object)} attributes.
 	 *
-	 * @param width The {@link Canvas#width(Object)} attribute. Can be <jk>null</jk>.
-	 * @param height The {@link Canvas#height(Object)} attribute. Can be <jk>null</jk>.
+	 * @param width The {@link Canvas#width(Object)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param height The {@link Canvas#height(Object)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 */
 	public Canvas(Number width, Number height) {
 		width(width).height(height);

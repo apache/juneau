@@ -96,9 +96,9 @@ public class Link extends Common {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param rel The rel of the link.  Can be <jk>null</jk>.
-	 * @param type The type of the link.  Can be <jk>null</jk>.
-	 * @param href The URI of the link.  Can be <jk>null</jk>.
+	 * @param rel The rel of the link.  Can be <jk>null</jk> to leave the property unset.
+	 * @param type The type of the link.  Can be <jk>null</jk> to leave the property unset.
+	 * @param href The URI of the link.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public Link(String rel, String type, String href) {
 		setRel(rel).setType(type).setHref(href);

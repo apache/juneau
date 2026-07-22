@@ -96,7 +96,7 @@ public class Debug extends BasicBooleanHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Debug(Boolean value) {
 		super(NAME, value);
@@ -108,7 +108,7 @@ public class Debug extends BasicBooleanHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Debug(String value) {
 		super(NAME, value);
@@ -122,7 +122,7 @@ public class Debug extends BasicBooleanHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Debug(Supplier<Boolean> value) {
 		super(NAME, value);

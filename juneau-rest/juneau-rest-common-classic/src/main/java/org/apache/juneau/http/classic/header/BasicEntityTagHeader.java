@@ -102,7 +102,7 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicEntityTagHeader(String name, EntityTag value) {
@@ -118,7 +118,7 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be an entity tag value (e.g. <js>"\"xyzzy\""</js>).
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicEntityTagHeader(String name, String value) {
@@ -136,7 +136,7 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicEntityTagHeader(String name, Supplier<EntityTag> value) {
@@ -174,7 +174,7 @@ public class BasicEntityTagHeader extends BasicHeader {
 	/**
 	 * Returns the header value as an {@link EntityTag}.
 	 *
-	 * @return The header value as an {@link EntityTag}.  Can be <jk>null</jk>.
+	 * @return The header value as an {@link EntityTag}, or <jk>null</jk> if the header has no value.
 	 */
 	public EntityTag toEntityTag() {
 		return value();

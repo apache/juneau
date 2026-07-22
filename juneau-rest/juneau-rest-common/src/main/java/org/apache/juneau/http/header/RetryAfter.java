@@ -151,16 +151,16 @@ public class RetryAfter extends HttpHeaderBean {
 	}
 
 	/**
-	 * @param value Delay seconds. May be <jk>null</jk>.
-	 * @return A new instance or <jk>null</jk>.
+	 * @param value Delay seconds. May be <jk>null</jk>, in which case <jk>null</jk> is returned.
+	 * @return A new instance, or <jk>null</jk> if <c>value</c> is <jk>null</jk>.
 	 */
 	public static RetryAfter of(Integer value) {
 		return value == null ? null : new RetryAfter(value);
 	}
 
 	/**
-	 * @param value Wire string. May be <jk>null</jk>.
-	 * @return A new instance or <jk>null</jk>.
+	 * @param value Wire string. May be <jk>null</jk>, in which case <jk>null</jk> is returned.
+	 * @return A new instance, or <jk>null</jk> if <c>value</c> is <jk>null</jk>.
 	 */
 	public static RetryAfter of(String value) {
 		return value == null ? null : new RetryAfter(value);
@@ -175,8 +175,8 @@ public class RetryAfter extends HttpHeaderBean {
 	}
 
 	/**
-	 * @param value HTTP-date. May be <jk>null</jk>.
-	 * @return A new instance or <jk>null</jk>.
+	 * @param value HTTP-date. May be <jk>null</jk>, in which case <jk>null</jk> is returned.
+	 * @return A new instance, or <jk>null</jk> if <c>value</c> is <jk>null</jk>.
 	 */
 	public static RetryAfter of(ZonedDateTime value) {
 		return value == null ? null : new RetryAfter(value);

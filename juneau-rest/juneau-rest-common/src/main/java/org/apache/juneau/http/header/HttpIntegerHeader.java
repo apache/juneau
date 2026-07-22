@@ -79,7 +79,7 @@ public class HttpIntegerHeader extends HttpHeaderBean {
 	 * Constructor.
 	 *
 	 * @param name Header name. Must not be <jk>null</jk>.
-	 * @param typedValue The integer value. Can be <jk>null</jk>.
+	 * @param typedValue The integer value. Can be <jk>null</jk>, in which case the parsed value is <jk>null</jk>.
 	 */
 	protected HttpIntegerHeader(String name, Integer typedValue) {
 		super(name, s(typedValue));

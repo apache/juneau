@@ -115,7 +115,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	/**
 	 * Builds a validator from a {@link JsonSchema} bean.
 	 *
-	 * @param schema The schema to validate against.  Must not be <jk>null</jk>.
+	 * @param schema The schema to validate against.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return A new validator.
 	 */
 	public static JsonSchemaValidator of(JsonSchema<?> schema) {
@@ -129,7 +129,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	 * <p>
 	 * Equivalent to {@code of(JsonSchemaBeanGenerator.toBean(schemaMap))}.
 	 *
-	 * @param schemaMap The schema map.  Must not be <jk>null</jk>.
+	 * @param schemaMap The schema map.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return A new validator.
 	 */
 	public static JsonSchemaValidator of(JsonMap schemaMap) {

@@ -161,7 +161,7 @@ public final class HttpResourceBean implements HttpResource {
 	 * Returns the first header with the given name (case-insensitive), or <jk>null</jk> if absent.
 	 *
 	 * @param name The header name. Must not be <jk>null</jk>.
-	 * @return The first matching header, or <jk>null</jk>.
+	 * @return The first matching header, or <jk>null</jk> if absent.
 	 */
 	public HttpHeader getFirstHeader(String name) {
 		assertArgNotNull("name", name);

@@ -343,7 +343,7 @@ public class Cache<K,V> {
 		 * 	Pattern <jv>p</jv> = <jv>cache</jv>.get(<js>"[a-z]+"</js>);
 		 * </p>
 		 *
-		 * @param value The default supplier function. Can be <jk>null</jk>.
+		 * @param value The default supplier function. Can be <jk>null</jk> (calls to {@link Cache#get(Object)} will then always return <jk>null</jk>).
 		 * @return This object for method chaining.
 		 */
 		public Builder<K,V> supplier(Function<K,V> value) {
@@ -564,7 +564,7 @@ public class Cache<K,V> {
 	/**
 	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key.
 	 *
-	 * @param key The key to check. Can be <jk>null</jk>.
+	 * @param key The key to check. Can be <jk>null</jk> (null keys are supported like any other key).
 	 * @return <jk>true</jk> if the cache contains the key.
 	 */
 	public boolean containsKey(K key) {
@@ -602,7 +602,7 @@ public class Cache<K,V> {
 	 * 	Pattern <jv>p</jv> = <jv>cache</jv>.get(<js>"[0-9]+"</js>);
 	 * </p>
 	 *
-	 * @param key The cache key. Can be <jk>null</jk>.
+	 * @param key The cache key. Can be <jk>null</jk> (null keys are supported like any other key).
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 * @throws NullPointerException if no default supplier was configured.
 	 */
@@ -645,8 +645,8 @@ public class Cache<K,V> {
 	 * 	<jsm>assert</jsm> <jv>p1</jv> == <jv>p2</jv>;  <jc>// Same instance</jc>
 	 * </p>
 	 *
-	 * @param key The cache key. Can be <jk>null</jk>.
-	 * @param supplier The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk>.
+	 * @param key The cache key. Can be <jk>null</jk> (null keys are supported like any other key).
+	 * @param supplier The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk> or an {@link IllegalArgumentException} is thrown.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 */
 	public V get(K key, Supplier<V> supplier) {
@@ -708,7 +708,7 @@ public class Cache<K,V> {
 	/**
 	 * Associates the specified value with the specified key in this cache.
 	 *
-	 * @param key The cache key. Can be <jk>null</jk>.
+	 * @param key The cache key. Can be <jk>null</jk> (null keys are supported like any other key).
 	 * @param value The value to associate with the key.
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
 	 */
@@ -726,7 +726,7 @@ public class Cache<K,V> {
 	/**
 	 * Removes the entry for the specified key from the cache.
 	 *
-	 * @param key The key to remove. Can be <jk>null</jk>.
+	 * @param key The key to remove. Can be <jk>null</jk> (null keys are supported like any other key).
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
 	 */
 	public V remove(K key) {

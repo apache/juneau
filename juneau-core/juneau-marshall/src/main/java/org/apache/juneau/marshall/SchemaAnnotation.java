@@ -1586,7 +1586,7 @@ public class SchemaAnnotation {
 	/**
 	 * Converts the specified <ja>@Schema</ja> annotation into a generic map.
 	 *
-	 * @param a The annotation instance.  Can be <jk>null</jk>.
+	 * @param a The annotation instance.  Can be <jk>null</jk> (returns an empty map).
 	 * @return The schema converted to a map, or an empty map if the annotation was null.
 	 * @throws ParseException Malformed input encountered.
 	 */

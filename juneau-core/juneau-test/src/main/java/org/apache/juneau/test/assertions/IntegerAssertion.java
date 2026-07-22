@@ -98,7 +98,7 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static IntegerAssertion create(Integer value) {
@@ -110,7 +110,7 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public IntegerAssertion(Integer value) {
 		super(value, null);

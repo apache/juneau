@@ -43,7 +43,7 @@ public abstract class HtmlElementContainer<SELF extends HtmlElementContainer<SEL
 	/**
 	 * Adds a child element to this element.
 	 *
-	 * @param value The child to add as a child element. Can be <jk>null</jk>.
+	 * @param value The child to add as a child element. Can be <jk>null</jk> (a <jk>null</jk> entry is added to the children list).
 	 * @return This object.
 	 */
 	public SELF child(Object value) {
@@ -133,7 +133,7 @@ public abstract class HtmlElementContainer<SELF extends HtmlElementContainer<SEL
 	/**
 	 * Sets the children for this container.
 	 *
-	 * @param children The new children for this container. Can be <jk>null</jk>.
+	 * @param children The new children for this container. Can be <jk>null</jk> to clear all children.
 	 * @return This object.
 	 */
 	@BeanProp("c")

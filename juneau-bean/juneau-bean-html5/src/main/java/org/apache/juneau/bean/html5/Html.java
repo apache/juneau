@@ -97,7 +97,7 @@ public class Html extends HtmlElementContainer<Html> {
 	 * <p>
 	 * The manifest file should be a text file that lists resources to be cached.
 	 *
-	 * @param value The URL of the application cache manifest file. Can be <jk>null</jk>.
+	 * @param value The URL of the application cache manifest file. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Html manifest(String value) {

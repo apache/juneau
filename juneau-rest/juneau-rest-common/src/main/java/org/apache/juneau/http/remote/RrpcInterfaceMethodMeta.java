@@ -344,7 +344,7 @@ public final class RrpcInterfaceMethodMeta {
 	 * Returns the method-level default for a {@link Header @Header} part, or <jk>null</jk> if none.
 	 *
 	 * @param name The header name.
-	 * @return The default value, or <jk>null</jk>.
+	 * @return The default value, or <jk>null</jk> if none is configured.
 	 */
 	public String getHeaderDefault(String name) {
 		return name == null ? null : headerDefaults.get(name);
@@ -354,7 +354,7 @@ public final class RrpcInterfaceMethodMeta {
 	 * Returns the method-level default for a {@link Query @Query} part, or <jk>null</jk> if none.
 	 *
 	 * @param name The query parameter name.
-	 * @return The default value, or <jk>null</jk>.
+	 * @return The default value, or <jk>null</jk> if none is configured.
 	 */
 	public String getQueryDefault(String name) {
 		return name == null ? null : queryDefaults.get(name);
@@ -364,7 +364,7 @@ public final class RrpcInterfaceMethodMeta {
 	 * Returns the method-level default for a {@link FormData @FormData} part, or <jk>null</jk> if none.
 	 *
 	 * @param name The form-data parameter name.
-	 * @return The default value, or <jk>null</jk>.
+	 * @return The default value, or <jk>null</jk> if none is configured.
 	 */
 	public String getFormDataDefault(String name) {
 		return name == null ? null : formDataDefaults.get(name);
@@ -374,7 +374,7 @@ public final class RrpcInterfaceMethodMeta {
 	 * Returns the method-level default for a {@link Path @Path} part, or <jk>null</jk> if none.
 	 *
 	 * @param name The path variable name.
-	 * @return The default value, or <jk>null</jk>.
+	 * @return The default value, or <jk>null</jk> if none is configured.
 	 */
 	public String getPathDefault(String name) {
 		return name == null ? null : pathDefaults.get(name);
@@ -387,7 +387,7 @@ public final class RrpcInterfaceMethodMeta {
 	 * Sourced from {@code @Content(def=...)} declared on the method.  Used as the body when a {@code @Content}
 	 * parameter is <jk>null</jk>, or as a constant body when the method declares no {@code @Content} parameter.
 	 *
-	 * @return The default body value, or <jk>null</jk>.
+	 * @return The default body value, or <jk>null</jk> if none is configured.
 	 */
 	public String getContentDefault() {
 		return contentDefault;
@@ -474,7 +474,7 @@ public final class RrpcInterfaceMethodMeta {
 	 * parameter's parts when the parameter itself declares no {@code @HttpPartMarshalling} serializer; the
 	 * interface-level default ({@link RrpcInterfaceMeta#getPartSerializer()}) applies when neither is present.
 	 *
-	 * @return The resolved part serializer, or <jk>null</jk>.
+	 * @return The resolved part serializer, or <jk>null</jk> if none is configured.
 	 */
 	public HttpPartSerializer getPartSerializer() {
 		return partSerializer;

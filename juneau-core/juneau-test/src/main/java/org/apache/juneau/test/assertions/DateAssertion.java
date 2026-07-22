@@ -114,7 +114,7 @@ public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static DateAssertion create(Date value) {
@@ -126,7 +126,7 @@ public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public DateAssertion(Date value) {
 		super(value, null);

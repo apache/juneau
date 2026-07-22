@@ -370,14 +370,14 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * @param out The writer to serialize to.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param o The object being serialized.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (written as the UON null literal).
 	 * @param eType The expected type of the object if this is a bean property.
 	 * 	<br>Can be <jk>null</jk> (defaults to {@code Object}).
 	 * @param attrName
 	 * 	The bean property name if this is a bean property.
 	 * 	<jk>null</jk> if this isn't a bean property being serialized.
 	 * @param pMeta The bean property metadata.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (bean-property-level URI detection is skipped).
 	 * @return The same writer passed in.
 	 * @throws SerializeException Generic serialization error occurred.
 	 */

@@ -132,7 +132,7 @@ public class EncoderSet {
 		 * is the supplied store, so test-time overrides win over the builder's regular bean lookups during
 		 * construction-time reflective injection.  Passing {@code null} is a no-op.
 		 *
-		 * @param store The override layer.  Can be <jk>null</jk>.
+		 * @param store The override layer.  Can be <jk>null</jk> (no-op).
 		 * @return This object.
 		 * @since 10.0.0
 		 */

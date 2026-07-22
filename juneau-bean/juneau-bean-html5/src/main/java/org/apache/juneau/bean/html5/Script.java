@@ -89,8 +89,8 @@ public class Script extends HtmlElementRawText<Script> {
 	 * Creates a {@link Script} element with the specified {@link Script#type(String)} attribute and
 	 * {@link Script#text(Object)} node.
 	 *
-	 * @param type The {@link Script#type(String)} attribute. Can be <jk>null</jk>.
-	 * @param text The child text node. Can be <jk>null</jk>.
+	 * @param type The {@link Script#type(String)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param text The child text node. Can be <jk>null</jk> to leave the text unset.
 	 */
 	public Script(String type, String...text) {
 		type(type).text(joinnl(text));
@@ -151,7 +151,7 @@ public class Script extends HtmlElementRawText<Script> {
 	 * <p>
 	 * How the element handles cross-origin requests.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Script crossorigin(String value) {
@@ -200,7 +200,7 @@ public class Script extends HtmlElementRawText<Script> {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public Script src(Object value) {
@@ -214,7 +214,7 @@ public class Script extends HtmlElementRawText<Script> {
 	 * <p>
 	 * Type of embedded resource.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Script type(String value) {

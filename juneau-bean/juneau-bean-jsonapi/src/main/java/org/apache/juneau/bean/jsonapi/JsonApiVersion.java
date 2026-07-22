@@ -49,7 +49,7 @@ public class JsonApiVersion {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param version The JSON:API protocol version (e.g. {@code "1.1"}).  Can be <jk>null</jk>.
+	 * @param version The JSON:API protocol version (e.g. {@code "1.1"}).  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public JsonApiVersion(String version) {
 		this.version = version;

@@ -114,7 +114,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<br>Should be <jk>null</jk> if this is the top-level assertion.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @param returns
 	 * 	The object to return after a test method is called.
 	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
@@ -130,7 +130,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @param returns
 	 * 	The object to return after a test method is called.
 	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be

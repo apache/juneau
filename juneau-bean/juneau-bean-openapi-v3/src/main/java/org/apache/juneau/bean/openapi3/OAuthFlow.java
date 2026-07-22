@@ -118,8 +118,8 @@ public class OAuthFlow extends OpenApiElement {
 	/**
 	 * Adds a single value to the <property>scopes</property> property.
 	 *
-	 * @param name The scope name.  Must not be <jk>null</jk>.
-	 * @param description A short description for the scope.  Must not be <jk>null</jk>.
+	 * @param name The scope name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param description A short description for the scope.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object
 	 */
 	public OAuthFlow addScope(String name, String description) {

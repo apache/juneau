@@ -82,7 +82,7 @@ public class Output extends HtmlElementMixed<Output> {
 	/**
 	 * Creates an {@link Output} element with the specified {@link Output#name(String)} attribute.
 	 *
-	 * @param name The {@link Output#name(String)} attribute. Can be <jk>null</jk>.
+	 * @param name The {@link Output#name(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 */
 	public Output(String name) {
 		name(name);

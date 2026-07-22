@@ -125,7 +125,7 @@ public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param key The attribute name.
-	 * @param val The attribute value. Can be <jk>null</jk>.
+	 * @param val The attribute value. Can be <jk>null</jk>, in which case the attribute is added with a <jk>null</jk> value (unlike {@link #attr(String, Object)}, the key is not removed).
 	 * @return This object.
 	 */
 	public SELF attrUri(String key, Object val) {
@@ -1053,7 +1053,7 @@ public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 	/**
 	 * Sets the attributes for this element.
 	 *
-	 * @param value The new attributes for this element. Can be <jk>null</jk>.
+	 * @param value The new attributes for this element. Can be <jk>null</jk> to clear all attributes.
 	 * @return This object.
 	 */
 	@BeanProp("a")
@@ -1171,7 +1171,7 @@ public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 	/**
 	 * If the specified attribute is a boolean, it gets converted to the attribute name if <jk>true</jk> or <jk>null</jk> if <jk>false</jk>.
 	 *
-	 * @param value The attribute value. Can be <jk>null</jk>.
+	 * @param value The attribute value. Can be <jk>null</jk> (returned as-is, since <jk>null</jk> is not a <c>Boolean</c>).
 	 * @param attr The attribute name.
 	 * @return The deminimized value, or the same value if the value wasn't a boolean, or <jk>null</jk> if the value was a boolean <jk>false</jk>.
 	*/

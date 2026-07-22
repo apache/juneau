@@ -112,8 +112,8 @@ public class Link extends OpenApiElement {
 	/**
 	 * Adds a single value to the <property>parameters</property> property.
 	 *
-	 * @param mimeType The parameter name.  Must not be <jk>null</jk>.
-	 * @param parameter The parameter value.  Must not be <jk>null</jk>.
+	 * @param mimeType The parameter name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param parameter The parameter value.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object
 	 */
 	public Link addParameter(String mimeType, Object parameter) {

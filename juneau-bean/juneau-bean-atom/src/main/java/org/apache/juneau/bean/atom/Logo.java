@@ -84,7 +84,7 @@ public class Logo extends Common {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param uri The URI of the logo.  Can be <jk>null</jk>.
+	 * @param uri The URI of the logo.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public Logo(Object uri) {
 		setUri(uri);

@@ -88,7 +88,7 @@ public class Style extends HtmlElementRawText<Style> {
 	/**
 	 * Creates a {@link Style} element with the specified {@link Style#text(Object)} node.
 	 *
-	 * @param text The {@link Style#text(Object)} node. Can be <jk>null</jk>.
+	 * @param text The {@link Style#text(Object)} node. Can be <jk>null</jk> to leave the text unset.
 	 */
 	public Style(Object text) {
 		text(text);
@@ -137,7 +137,7 @@ public class Style extends HtmlElementRawText<Style> {
 	 * <p>
 	 * Type of embedded resource.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Style type(String value) {

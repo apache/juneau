@@ -67,7 +67,7 @@ public class Title extends HtmlElementRawText<Title> {
 	/**
 	 * Creates a {@link Title} element with the specified {@link Title#text(Object)} node.
 	 *
-	 * @param text The {@link Title#text(Object)} node. Can be <jk>null</jk>.
+	 * @param text The {@link Title#text(Object)} node. Can be <jk>null</jk> to leave the text unset.
 	 */
 	public Title(String text) {
 		text(text);

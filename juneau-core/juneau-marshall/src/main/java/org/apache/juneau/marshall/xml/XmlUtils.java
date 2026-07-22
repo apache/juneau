@@ -102,7 +102,7 @@ public class XmlUtils {
 	 * Translates any _x####_ sequences (introduced by the various encode methods) back into their original characters.
 	 *
 	 * @param value The string being decoded.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param sb The string builder to use as a scratch pad.
 	 * 	<br>Can be <jk>null</jk> (a new one is created).
 	 * @return The decoded string, or <jk>null</jk> if the input was <jk>null</jk> or represented a <jk>null</jk> value.
@@ -145,7 +145,7 @@ public class XmlUtils {
 	 * @param w The writer to send the output to.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The object being serialized.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (written as the <c>_x0000_</c> null marker).
 	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
@@ -195,7 +195,7 @@ public class XmlUtils {
 	 * @param w The writer to send the output to.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The object being encoded.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (written as the <c>_x0000_</c> null marker).
 	 * @param trim
 	 * 	Trim the text before serializing it.
 	 * 	If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
@@ -243,7 +243,7 @@ public class XmlUtils {
 	 * Encodes any invalid XML element name characters to <c>_x####_</c> sequences.
 	 *
 	 * @param value The object being encoded.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns the <c>_x0000_</c> null marker).
 	 * @return The encoded element name string.
 	 */
 	public static String encodeElementName(Object value) {
@@ -271,7 +271,7 @@ public class XmlUtils {
 	 * @param w The writer to send the output to.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The object being encoded.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (written as the <c>_x0000_</c> null marker).
 	 * @return The same writer passed in.
 	 */
 	public static Writer encodeElementName(Writer w, Object value) {
@@ -300,7 +300,7 @@ public class XmlUtils {
 	 * @param w The writer to send the output to.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The object being encoded.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (written as the <c>_x0000_</c> null marker).
 	 * @param trim Trim the text before serializing it.
 	 * @param preserveWhitespace
 	 * 	Specifies whether we're in preserve-whitespace mode.
@@ -351,7 +351,7 @@ public class XmlUtils {
 	 * Escapes invalid XML text characters to <c>_x####_</c> sequences.
 	 *
 	 * @param value The object being encoded.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns the <c>_x0000_</c> null marker).
 	 * @return The encoded string.
 	 */
 	public static String escapeText(Object value) {

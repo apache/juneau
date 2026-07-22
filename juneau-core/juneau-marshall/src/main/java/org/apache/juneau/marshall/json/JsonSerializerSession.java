@@ -353,12 +353,12 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	 * @param out The output writer.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param o The object to serialize.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (written as the JSON literal <js>"null"</js>).
 	 * @param eType The expected type.
 	 * 	<br>Can be <jk>null</jk> (defaults to {@code Object}).
 	 * @param attrName The attribute name.
 	 * @param pMeta The bean property currently being serialized.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the bean-property-level dictionary lookup and URI detection are skipped).
 	 * @return The same writer passed in.
 	 * @throws SerializeException General serialization error occurred.
 	 */

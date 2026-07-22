@@ -271,7 +271,7 @@ public class HeaderList extends ArrayList<Header> {
 	 * This is the preferred method for iterating over headers as it does not involve
 	 * creation or copy of lists/arrays.
 	 *
-	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
+	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk> (if null, all headers are matched).
 	 * @param action An action to perform on each element.
 	 * @return This object.
 	 */
@@ -298,7 +298,7 @@ public class HeaderList extends ArrayList<Header> {
 	/**
 	 * Performs an action on the values for all matching headers in this list.
 	 *
-	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
+	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk> (if null, all headers are matched).
 	 * @param action An action to perform on each element.
 	 * @return This object.
 	 */
@@ -330,7 +330,7 @@ public class HeaderList extends ArrayList<Header> {
 	 * </p>
 	 *
 	 * @param <T> The return type.
-	 * @param type The header implementation class.  Must not be <jk>null</jk>.
+	 * @param type The header implementation class.  Must not be <jk>null</jk> or a {@link IllegalArgumentException} is thrown.
 	 * @return A header with a condensed value, or {@link Optional#empty()} if no headers by the given name are present.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
@@ -980,7 +980,7 @@ public class HeaderList extends ArrayList<Header> {
 		/**
 		 * Constructor.
 		 *
-		 * @param copyFrom The list to snapshot-copy.  Must not be <jk>null</jk>.
+		 * @param copyFrom The list to snapshot-copy.  Must not be <jk>null</jk> or a {@link NullPointerException} is thrown.
 		 */
 		Unmodifiable(HeaderList copyFrom) {
 			super(copyFrom);

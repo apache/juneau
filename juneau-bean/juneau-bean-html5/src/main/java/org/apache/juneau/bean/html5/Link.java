@@ -99,7 +99,7 @@ public class Link extends HtmlElementVoid<Link> {
 	/**
 	 * Creates a {@link Link} element with the specified {@link Link#href(Object)} attribute.
 	 *
-	 * @param href The {@link Link#href(Object)} attribute. Can be <jk>null</jk>.
+	 * @param href The {@link Link#href(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 */
 	public Link(Object href) {
 		href(href);
@@ -175,7 +175,7 @@ public class Link extends HtmlElementVoid<Link> {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public Link href(Object value) {

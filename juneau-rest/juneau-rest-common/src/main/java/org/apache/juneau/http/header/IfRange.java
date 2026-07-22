@@ -156,8 +156,8 @@ public class IfRange extends HttpHeaderBean {
 	/**
 	 * Static factory with an entity-tag.
 	 *
-	 * @param value The tag. May be <jk>null</jk>.
-	 * @return A new instance or <jk>null</jk>.
+	 * @param value The tag. May be <jk>null</jk>, in which case <jk>null</jk> is returned.
+	 * @return A new instance, or <jk>null</jk> if <c>value</c> is <jk>null</jk>.
 	 */
 	public static IfRange of(EntityTag value) {
 		return value == null ? null : new IfRange(value);
@@ -166,8 +166,8 @@ public class IfRange extends HttpHeaderBean {
 	/**
 	 * Static factory with a wire string.
 	 *
-	 * @param value The value. May be <jk>null</jk>.
-	 * @return A new instance or <jk>null</jk>.
+	 * @param value The value. May be <jk>null</jk>, in which case <jk>null</jk> is returned.
+	 * @return A new instance, or <jk>null</jk> if <c>value</c> is <jk>null</jk>.
 	 */
 	public static IfRange of(String value) {
 		return value == null ? null : new IfRange(value);
@@ -186,8 +186,8 @@ public class IfRange extends HttpHeaderBean {
 	/**
 	 * Static factory with an HTTP-date.
 	 *
-	 * @param value The date/time. May be <jk>null</jk>.
-	 * @return A new instance or <jk>null</jk>.
+	 * @param value The date/time. May be <jk>null</jk>, in which case <jk>null</jk> is returned.
+	 * @return A new instance, or <jk>null</jk> if <c>value</c> is <jk>null</jk>.
 	 */
 	public static IfRange of(ZonedDateTime value) {
 		return value == null ? null : new IfRange(value);

@@ -58,7 +58,7 @@ public abstract class HtmlElementRawText<SELF extends HtmlElementRawText<SELF>> 
 	/**
 	 * Sets the text node on this element.
 	 *
-	 * @param value The text node to add to this element. Can be <jk>null</jk>.
+	 * @param value The text node to add to this element. Can be <jk>null</jk> to leave the text unset.
 	 * @return This object.
 	 */
 	public SELF text(Object value) {

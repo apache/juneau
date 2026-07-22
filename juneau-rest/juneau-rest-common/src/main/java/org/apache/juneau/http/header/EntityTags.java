@@ -37,7 +37,7 @@ public class EntityTags {
 	/**
 	 * Returns a parsed entity tags header value.
 	 *
-	 * @param value The header value. Can be <jk>null</jk>.
+	 * @param value The header value. Can be <jk>null</jk>, in which case <jk>null</jk> is returned.
 	 * @return A parsed header value, or <jk>null</jk> if <c>value</c> is <jk>null</jk>.
 	 */
 	public static EntityTags of(EntityTag...value) {
@@ -83,7 +83,7 @@ public class EntityTags {
 	 * <p>
 	 * Returns a copy of the entity tags.
 	 *
-	 * @return The entity tags in this object as an array.  Can be <jk>null</jk>.
+	 * @return The entity tags in this object as an array.  Can be <jk>null</jk> if this object was constructed with a <jk>null</jk> array.
 	 */
 	public EntityTag[] toArray() {
 		return cp(value);
@@ -95,7 +95,7 @@ public class EntityTags {
 	 * <p>
 	 * Returns an unmodifiable list.
 	 *
-	 * @return The entity tags in this object as a list.  Can be <jk>null</jk>.
+	 * @return The entity tags in this object as a list.  Can be <jk>null</jk> if this object was constructed with a <jk>null</jk> array.
 	 */
 	public List<EntityTag> toList() {
 		return u(l(value));

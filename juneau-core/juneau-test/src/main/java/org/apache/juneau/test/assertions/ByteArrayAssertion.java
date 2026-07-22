@@ -117,7 +117,7 @@ public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssert
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static ByteArrayAssertion create(byte[] value) {
@@ -129,7 +129,7 @@ public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssert
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public ByteArrayAssertion(byte[] value) {
 		super(value, null);

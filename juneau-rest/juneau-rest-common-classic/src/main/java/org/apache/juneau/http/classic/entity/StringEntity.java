@@ -53,8 +53,8 @@ public class StringEntity extends BasicHttpEntity<StringEntity> {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.  Can be <jk>null</jk>.
-	 * @param content The entity contents.  Can be <jk>null</jk>.
+	 * @param contentType The entity content type.  Can be <jk>null</jk> to omit an explicit <c>Content-Type</c> header.
+	 * @param content The entity contents.  Can be <jk>null</jk> (treated as an empty string).
 	 */
 	public StringEntity(ContentType contentType, String content) {
 		super(contentType, content);

@@ -319,7 +319,7 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	 * Repeatable entities such as {@link StringEntity} use this to allow the entity content to be resolved at
 	 * serialization time.
 	 *
-	 * @param value The entity content, can be <jk>null</jk>.
+	 * @param value The entity content, can be <jk>null</jk> (treated as a supplier that always returns <jk>null</jk>).
 	 * @return This object.
 	 */
 	public SELF setContent(Supplier<?> value) {

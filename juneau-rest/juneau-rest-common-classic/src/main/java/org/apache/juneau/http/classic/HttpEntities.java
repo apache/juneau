@@ -44,7 +44,7 @@ public class HttpEntities {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk> (treated as an empty byte array).
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
 	public static final ByteArrayEntity byteArrayEntity(byte[] content) {
@@ -54,7 +54,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new {@link ByteArrayEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk> (treated as an empty byte array).
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
@@ -68,7 +68,7 @@ public class HttpEntities {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content supplier.  Can be <jk>null</jk>.
+	 * @param content The entity content supplier.  Can be <jk>null</jk> (treated as an empty byte array).
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
 	public static final ByteArrayEntity byteArrayEntity(Supplier<byte[]> content) {
@@ -78,7 +78,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new {@link ByteArrayEntity} builder.
 	 *
-	 * @param content The entity content supplier.  Can be <jk>null</jk>.
+	 * @param content The entity content supplier.  Can be <jk>null</jk> (treated as an empty byte array).
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
@@ -92,7 +92,7 @@ public class HttpEntities {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the entity's content is read.
 	 * @return A new {@link FileEntity} builder.
 	 */
 	public static final FileEntity fileEntity(File content) {
@@ -102,7 +102,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new {@link FileEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the entity's content is read.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link FileEntity} builder.
 	 */
@@ -113,7 +113,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new {@link ReaderEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the entity's content is read.
 	 * @return A new {@link ReaderEntity} builder.
 	 */
 	public static final ReaderEntity readerEntity(Reader content) {
@@ -123,7 +123,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new {@link ReaderEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the entity's content is read.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ReaderEntity} builder.
 	 */
@@ -136,7 +136,7 @@ public class HttpEntities {
 	 *
 	 * @param content
 	 * 	The Java POJO representing the content.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case it's converted to an empty string if no serializer is specified, or passed through to the serializer as-is otherwise.
 	 * @param serializer
 	 * 	The serializer to use to serialize the POJO.
 	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
@@ -151,7 +151,7 @@ public class HttpEntities {
 	 *
 	 * @param content
 	 * 	The Java POJO representing the content.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case it's converted to an empty string if no serializer is specified, or passed through to the serializer as-is otherwise.
 	 * @param serializer
 	 * 	The serializer to use to serialize the POJO.
 	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
@@ -168,7 +168,7 @@ public class HttpEntities {
 	 *
 	 * @param content
 	 * 	The supplier of a Java POJO representing the content.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (treated as a supplier that always returns <jk>null</jk>).
 	 * @param serializer
 	 * 	The serializer to use to serialize the POJO.
 	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
@@ -183,7 +183,7 @@ public class HttpEntities {
 	 *
 	 * @param content
 	 * 	The supplier of a Java POJO representing the content.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (treated as a supplier that always returns <jk>null</jk>).
 	 * @param serializer
 	 * 	The serializer to use to serialize the POJO.
 	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
@@ -201,7 +201,7 @@ public class HttpEntities {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the entity's content is read.
 	 * @return A new {@link StreamEntity} builder.
 	 */
 	public static final StreamEntity streamEntity(InputStream content) {
@@ -211,7 +211,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new {@link StreamEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the entity's content is read.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @param length The content length, or <c>-1</c> if not known.
 	 * @return A new {@link StreamEntity} builder.
@@ -223,7 +223,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new builder for a {@link StringEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk> (treated as an empty string).
 	 * @return A new {@link StringEntity} builder.
 	 */
 	public static final StringEntity stringEntity(String content) {
@@ -233,7 +233,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new builder for a {@link StringEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk> (treated as an empty string).
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link StringEntity} builder.
 	 */
@@ -244,7 +244,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new builder for a {@link StringEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk> (treated as an empty string).
 	 * @return A new {@link StringEntity} builder.
 	 */
 	public static final StringEntity stringEntity(Supplier<String> content) {
@@ -254,7 +254,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new builder for a {@link StringEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk> (treated as an empty string).
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link StringEntity} builder.
 	 */

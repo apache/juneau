@@ -253,7 +253,7 @@ public class PartList extends ArrayList<NameValuePair> {
 	 * This is the preferred method for iterating over parts as it does not involve
 	 * creation or copy of lists/arrays.
 	 *
-	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
+	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk> (if <jk>null</jk>, all elements are accepted).
 	 * @param action An action to perform on each element.
 	 * @return This object.
 	 */
@@ -280,7 +280,7 @@ public class PartList extends ArrayList<NameValuePair> {
 	/**
 	 * Performs an action on the values for all matching parts in this list.
 	 *
-	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
+	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk> (if <jk>null</jk>, all elements are accepted).
 	 * @param action An action to perform on each element.
 	 * @return This object.
 	 */

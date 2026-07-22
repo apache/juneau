@@ -47,7 +47,7 @@ public abstract class HtmlElementMixed<SELF extends HtmlElementMixed<SELF>> exte
 	 * 	The child to add as a child element.
 	 * 	Can be a string or {@link HtmlElement}.
 	 * 	Can also be a container of strings and elements.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk> (a <jk>null</jk> entry is added to the children list).
 	 * @return This object.
 	 */
 	public SELF child(Object value) {
@@ -141,7 +141,7 @@ public abstract class HtmlElementMixed<SELF extends HtmlElementMixed<SELF>> exte
 	/**
 	 * Sets the children of this element.
 	 *
-	 * @param children The new children of this element. Can be <jk>null</jk>.
+	 * @param children The new children of this element. Can be <jk>null</jk> to clear all children.
 	 * @return This object.
 	 */
 	@BeanProp("c")

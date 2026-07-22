@@ -3088,7 +3088,7 @@ public class HttpPartSchema {
 	 * @param a
 	 * 	The annotation to find the schema information on..
 	 * 	<br>Must not be <jk>null</jk>.
-	 * @param defaultName The default part name if not specified on the annotation.  Can be <jk>null</jk>.
+	 * @param defaultName The default part name if not specified on the annotation.  Can be <jk>null</jk> (the name from the annotation, if any, is left unchanged).
 	 * @return The schema information found on the annotation.  Never <jk>null</jk>.
 	 */
 	public static HttpPartSchema create(Annotation a, String defaultName) {
@@ -3116,7 +3116,7 @@ public class HttpPartSchema {
 	 * 	</ul>
 	 * @param t
 	 * 	The class containing the parameter.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no type-level annotations are applied).
 	 * @return The schema information about the parameter.  Never <jk>null</jk>.
 	 */
 	public static HttpPartSchema create(Class<? extends Annotation> c, Type t) {
@@ -4043,7 +4043,7 @@ public class HttpPartSchema {
 	/**
 	 * Returns the schema information for the specified property.
 	 *
-	 * @param name The property name.  Can be <jk>null</jk>.
+	 * @param name The property name.  Can be <jk>null</jk> (treated as an unmatched name; falls back to the <c>additionalProperties</c> schema).
 	 * @return The schema information for the specified property, or the <c>additionalProperties</c> schema if no matching property is defined, or <jk>null</jk> if neither is defined.
 	 */
 	public HttpPartSchema getProperty(String name) {
@@ -4207,7 +4207,7 @@ public class HttpPartSchema {
 	/**
 	 * Throws a {@link SchemaValidationException} if the specified pre-parsed input does not validate against this schema.
 	 *
-	 * @param in The input.  Can be <jk>null</jk>.
+	 * @param in The input.  Can be <jk>null</jk> (only the <c>required</c> check is performed; format/pattern/length checks are skipped).
 	 * @return The same object passed in.
 	 * @throws SchemaValidationException if the specified pre-parsed input does not validate against this schema.
 	 */
@@ -4240,7 +4240,7 @@ public class HttpPartSchema {
 	 * Validates the specified parsed output against this schema.
 	 *
 	 * @param <T> The return type.
-	 * @param o The parsed output.  Can be <jk>null</jk>.
+	 * @param o The parsed output.  Can be <jk>null</jk> (only the <c>required</c> check is performed; type-specific validation is skipped).
 	 * @return The same object passed in.
 	 * @throws SchemaValidationException if the specified parsed output does not validate against this schema.
 	 */

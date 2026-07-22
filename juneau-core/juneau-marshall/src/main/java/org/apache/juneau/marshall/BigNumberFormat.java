@@ -129,7 +129,7 @@ public enum BigNumberFormat {
 	 * 	<li>{@link String} → emit as a quoted string.
 	 * </ul>
 	 *
-	 * @param value The value to format. Can be <jk>null</jk>.
+	 * @param value The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param format The configured format. Can be <jk>null</jk> (treated as {@link #NUMBER}).
 	 * @return The formatted value (a {@link BigInteger} for numeric output, a {@link String} for string output),
 	 *   or <jk>null</jk> if {@code value} is <jk>null</jk>.
@@ -157,7 +157,7 @@ public enum BigNumberFormat {
 	 * {@link #STRING} since fractional values cannot be safely represented in a JS double regardless of
 	 * magnitude.  Zero-scale values are tested against the integer {@code ±(2^53 − 1)} bound.
 	 *
-	 * @param value The value to format. Can be <jk>null</jk>.
+	 * @param value The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param format The configured format. Can be <jk>null</jk> (treated as {@link #NUMBER}).
 	 * @return The formatted value (a {@link BigDecimal} for numeric output, a {@link String} for string output),
 	 *   or <jk>null</jk> if {@code value} is <jk>null</jk>.
@@ -185,8 +185,8 @@ public enum BigNumberFormat {
 	 * informational only.
 	 *
 	 * @param <T> The target type ({@link BigInteger} or {@link BigDecimal}).
-	 * @param value The wire value. Can be <jk>null</jk> or blank.
-	 * @param format The configured format (informational only — parsing is format-agnostic). Can be <jk>null</jk>.
+	 * @param value The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).
+	 * @param format The configured format (informational only — parsing is format-agnostic). Can be <jk>null</jk> (ignored; parsing is format-agnostic).
 	 * @param targetType The desired return type — {@link BigInteger} or {@link BigDecimal}.
 	 * @return The parsed value, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 * @throws IllegalArgumentException If the value cannot be parsed as a number or {@code targetType} is unsupported.

@@ -93,7 +93,7 @@ public class TestBeanStore extends BasicBeanStore {
 	 *
 	 * @param <T> The bean type.
 	 * @param type The bean type.  Must not be <jk>null</jk>.
-	 * @param bean The override instance.  Can be <jk>null</jk>.
+	 * @param bean The override instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @return This object.
 	 */
 	public <T> TestBeanStore override(Class<T> type, T bean) {
@@ -107,7 +107,7 @@ public class TestBeanStore extends BasicBeanStore {
 	 *
 	 * @param <T> The bean type.
 	 * @param type The bean type.  Must not be <jk>null</jk>.
-	 * @param bean The override instance.  Can be <jk>null</jk>.
+	 * @param bean The override instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return This object.
 	 */

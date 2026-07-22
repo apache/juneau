@@ -100,7 +100,7 @@ public class VarResolverSession {
 	 * @param context
 	 * 	The {@link VarResolver} context object that contains the {@link Var Vars} and context objects associated with
 	 * 	that resolver.
-	 * @param beanStore The bean store to use for resolving beans needed by vars.  Can be <jk>null</jk>.
+	 * @param beanStore The bean store to use for resolving beans needed by vars.  Can be <jk>null</jk> (this session will then have no parent bean store, and only beans explicitly added via {@link #bean(Class, Object)} will be resolvable).
 	 *
 	 */
 	public VarResolverSession(VarResolver context, WritableBeanStore beanStore) {
@@ -141,7 +141,7 @@ public class VarResolverSession {
 	 * Resolve all variables in the specified string.
 	 *
 	 * @param s
-	 * 	The string to resolve variables in.  Can be <jk>null</jk>.
+	 * 	The string to resolve variables in.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return
 	 * 	The new string with all variables resolved, or the same string if no variables were found.
 	 * 	<br>Returns <jk>null</jk> if the input was <jk>null</jk>.
@@ -195,7 +195,7 @@ public class VarResolverSession {
 	/**
 	 * Resolves the specified strings in the string array.
 	 *
-	 * @param in The string array containing variables to resolve.  Must not be <jk>null</jk>, though individual elements can be <jk>null</jk>.
+	 * @param in The string array containing variables to resolve.  Must not be <jk>null</jk> or a {@link NullPointerException} is thrown, though individual elements can be <jk>null</jk>.
 	 * @return An array with resolved strings.  Elements are <jk>null</jk> where the corresponding input element was <jk>null</jk>.
 	 */
 	public String[] resolve(String[] in) {
@@ -220,7 +220,7 @@ public class VarResolverSession {
 	 * </ul>
 	 *
 	 * @param <T> The value type.
-	 * @param o The object.  Can be <jk>null</jk>.
+	 * @param o The object.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The same object if no resolution was needed, otherwise a new object or data structure if resolution was
 	 * needed.  Returns <jk>null</jk> if the input was <jk>null</jk>.
 	 */

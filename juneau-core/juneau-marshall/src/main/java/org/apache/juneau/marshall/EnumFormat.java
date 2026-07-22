@@ -83,7 +83,7 @@ public enum EnumFormat {
 	/**
 	 * Formats the specified enum value using this format.
 	 *
-	 * @param value The enum value.  Can be <jk>null</jk>.
+	 * @param value The enum value.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The formatted wire representation, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
 	public String format(Enum<?> value) {
@@ -114,7 +114,7 @@ public enum EnumFormat {
 	 * </ol>
 	 *
 	 * @param <E> The enum class type.
-	 * @param value The wire value.  Can be <jk>null</jk> or blank.
+	 * @param value The wire value.  Can be <jk>null</jk> or blank (returns <jk>null</jk>).
 	 * @param enumClass The enum class.  Must not be <jk>null</jk>.
 	 * @return The parsed enum constant, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 * @throws IllegalArgumentException If the value does not match any enum constant.

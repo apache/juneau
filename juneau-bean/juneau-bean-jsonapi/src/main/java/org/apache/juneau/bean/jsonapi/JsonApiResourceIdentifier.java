@@ -51,8 +51,8 @@ public class JsonApiResourceIdentifier {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param type The entity-type name.  Can be <jk>null</jk>.
-	 * @param id The identifier value.  Can be <jk>null</jk>.
+	 * @param type The entity-type name.  Can be <jk>null</jk> to leave the property unset.
+	 * @param id The identifier value.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public JsonApiResourceIdentifier(String type, String id) {
 		this.type = type;

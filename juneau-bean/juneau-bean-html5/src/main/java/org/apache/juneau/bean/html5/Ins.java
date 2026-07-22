@@ -110,7 +110,7 @@ public class Ins extends HtmlElementMixed<Ins> {
 	 * <p>
 	 * Link to the source of the quotation or more information about the edit.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Ins cite(String value) {
@@ -124,7 +124,7 @@ public class Ins extends HtmlElementMixed<Ins> {
 	 * <p>
 	 * Date and (optionally) time of the change.
 	 *
-	 * @param value The new value for this attribute. Can be <jk>null</jk>.
+	 * @param value The new value for this attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Ins datetime(String value) {

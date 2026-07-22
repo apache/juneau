@@ -290,8 +290,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property appender:  <property>properties</property>.
 	 *
-	 * @param key The property key.  Must not be <jk>null</jk>.
-	 * @param value The property value.  Must not be <jk>null</jk>.
+	 * @param key The property key.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param value The property value.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public SchemaInfo addProperty(String key, SchemaInfo value) {

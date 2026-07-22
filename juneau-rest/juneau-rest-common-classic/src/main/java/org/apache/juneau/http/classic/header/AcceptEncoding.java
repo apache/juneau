@@ -151,7 +151,7 @@ public class AcceptEncoding extends BasicStringRangesHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public AcceptEncoding(String value) {
 		super(NAME, value);
@@ -162,7 +162,7 @@ public class AcceptEncoding extends BasicStringRangesHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public AcceptEncoding(StringRanges value) {
 		super(NAME, value);
@@ -176,7 +176,7 @@ public class AcceptEncoding extends BasicStringRangesHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public AcceptEncoding(Supplier<StringRanges> value) {
 		super(NAME, value);

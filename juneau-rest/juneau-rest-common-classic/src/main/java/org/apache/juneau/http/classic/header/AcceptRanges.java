@@ -106,7 +106,7 @@ public class AcceptRanges extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public AcceptRanges(String value) {
 		super(NAME, value);
@@ -120,7 +120,7 @@ public class AcceptRanges extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public AcceptRanges(Supplier<String> value) {
 		super(NAME, value);

@@ -820,15 +820,15 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	 * @param out The writer to send the output to.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param o The object to serialize.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (written as the XML null representation, e.g. <c>type='null'</c>).
 	 * @param eType The expected type if this is a bean property value being serialized.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (treated as the generic {@link Object} type).
 	 * @param keyName The property name or map key name.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the element is written without a separate property/key name).
 	 * @param elementName The root element name.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (falls back to the bean dictionary name, then <c>keyName</c>, then the JSON type name).
 	 * @param elementNamespace The namespace of the element.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (resolved from the serialized type's, then the actual type's, then the session's default namespace).
 	 * @param addNamespaceUris Flag indicating that namespace URIs need to be added.
 	 * @param format The format to serialize the output to.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -836,7 +836,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	 * @param preserveWhitespace
 	 * 	<jk>true</jk> if we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
 	 * @param pMeta The bean property metadata if this is a bean property being serialized.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no bean-property-level URI/child-name/namespace metadata is applied).
 	 * @return The same writer passed in so that calls to the writer can be chained.
 	 * @throws SerializeException General serialization error occurred.
 	 */

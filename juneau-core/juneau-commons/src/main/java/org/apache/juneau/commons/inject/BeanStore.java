@@ -81,7 +81,7 @@ public interface BeanStore {
 	 *
 	 * @param <T> The bean type.
 	 * @param beanType The bean type.
-	 * @param name The bean name.  Can be <jk>null</jk>.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The bean, or {@link Optional#empty()} if no bean of the specified type and name exists.
 	 */
 	<T> Optional<T> getBean(Class<T> beanType, String name);
@@ -111,7 +111,7 @@ public interface BeanStore {
 	 * Returns <jk>true</jk> if this store contains a bean of the specified type and name.
 	 *
 	 * @param beanType The bean type.
-	 * @param name The bean name.  Can be <jk>null</jk>.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return <jk>true</jk> if this store contains a bean of the specified type and name.
 	 */
 	boolean hasBean(Class<?> beanType, String name);
@@ -164,7 +164,7 @@ public interface BeanStore {
 	 *
 	 * @param <T> The bean type.
 	 * @param beanType The bean type.
-	 * @param name The bean name.  Can be <jk>null</jk>.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.
 	 */
 	<T> Optional<Supplier<T>> getBeanSupplier(Class<T> beanType, String name);
@@ -214,7 +214,7 @@ public interface BeanStore {
 	 * @param beanType The type of bean to create.  Must not be <jk>null</jk>.
 	 * @param onClassOrObject The object instance or {@link Class} whose public methods are searched.
 	 * 	Must not be <jk>null</jk>.
-	 * @param filter Optional predicate restricting which methods are eligible.  Can be <jk>null</jk>.
+	 * @param filter Optional predicate restricting which methods are eligible.  Can be <jk>null</jk> (any method qualifies).
 	 * @param extraBeans Optional bean instances visible to parameter resolution for this call only.
 	 * 	These are <em>not</em> registered in the store.
 	 * @return The created bean wrapped in an {@link Optional}, or {@link Optional#empty()} if no matching
@@ -271,7 +271,7 @@ public interface BeanStore {
 	 * </ul>
 	 *
 	 * @param executable The constructor or method to inspect.  Must not be <jk>null</jk>.
-	 * @param outer The outer object to use for inner-class param resolution.  Can be <jk>null</jk>.
+	 * @param outer The outer object to use for inner-class param resolution.  Can be <jk>null</jk> (the outer-instance skip rule is then never applied).
 	 * @return <jk>true</jk> if every required parameter can be resolved from this store.
 	 */
 	default boolean hasAllParams(ExecutableInfo executable, Object outer) {
@@ -297,7 +297,7 @@ public interface BeanStore {
 	 * for the full skip rules.
 	 *
 	 * @param executable The constructor or method to resolve parameters for.  Must not be <jk>null</jk>.
-	 * @param outer The outer object to use for inner-class param resolution.  Can be <jk>null</jk>.
+	 * @param outer The outer object to use for inner-class param resolution.  Can be <jk>null</jk> (the outer-instance skip rule is then never applied).
 	 * @return An array of resolved parameter values, one per parameter of <c>executable</c>.
 	 */
 	default Object[] getParams(ExecutableInfo executable, Object outer) {
@@ -325,7 +325,7 @@ public interface BeanStore {
 	 * Skipped parameters (outer-instance match, {@link Optional}) never appear in the result.
 	 *
 	 * @param executable The constructor or method to inspect.  Must not be <jk>null</jk>.
-	 * @param outer The outer object to use for inner-class param resolution.  Can be <jk>null</jk>.
+	 * @param outer The outer object to use for inner-class param resolution.  Can be <jk>null</jk> (the outer-instance skip rule is then never applied).
 	 * @return A comma-delimited list of missing parameter type names, or <jk>null</jk> when none are missing.
 	 */
 	default String getMissingParams(ExecutableInfo executable, Object outer) {

@@ -123,7 +123,7 @@ public class JsonPointer {
 	 * Walks the tokens from <c>root</c> (which may be a {@link Map}/{@link List} such as the {@link MarshalledMap}/
 	 * {@link MarshalledList} family). The empty pointer returns <c>root</c>.
 	 *
-	 * @param root The root document. Can be <jk>null</jk>.
+	 * @param root The root document. Can be <jk>null</jk> (treated as an empty document; the addressed value evaluates to <jk>null</jk>).
 	 * @return The addressed value, or <jk>null</jk> on any missing key, out-of-range index, or type mismatch.
 	 */
 	public Object eval(Object root) {
@@ -154,7 +154,7 @@ public class JsonPointer {
 	/**
 	 * Removes the member or element addressed by this pointer.
 	 *
-	 * @param root The root document.  Can be <jk>null</jk>.
+	 * @param root The root document.  Can be <jk>null</jk> (treated as an empty document — nothing is found to remove).
 	 * @return The removed value, or <jk>null</jk> if the addressed member/element was absent (or the pointer is the root pointer).
 	 */
 	public Object remove(Object root) {

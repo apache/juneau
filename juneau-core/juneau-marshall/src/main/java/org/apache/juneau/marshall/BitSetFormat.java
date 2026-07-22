@@ -105,7 +105,7 @@ public enum BitSetFormat {
 	 * <p>
 	 * {@link #NOT_SET} falls through to {@link #INDICES}.
 	 *
-	 * @param value The value to format.  Can be <jk>null</jk>.
+	 * @param value The value to format.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param format The format to use.  Can be <jk>null</jk> (treated as {@link #INDICES}).
 	 * @return The formatted wire representation, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
@@ -144,7 +144,7 @@ public enum BitSetFormat {
 	 * Parsing is directed by the {@code format} hint (defaulting to {@link #INDICES}); the three textual
 	 * shapes are mutually ambiguous, so the configured format is honored rather than auto-detected.
 	 *
-	 * @param value The wire value.  Can be <jk>null</jk> or blank.
+	 * @param value The wire value.  Can be <jk>null</jk> (returns <jk>null</jk>) or blank (returns an empty {@link BitSet}).
 	 * @param format The configured format hint.  Can be <jk>null</jk> (treated as {@link #INDICES}).
 	 * @return The parsed {@link BitSet}, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 * @throws IllegalArgumentException If the value does not match the configured textual shape.

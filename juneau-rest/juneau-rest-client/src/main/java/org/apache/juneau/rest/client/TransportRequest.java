@@ -92,7 +92,7 @@ public final class TransportRequest {
 	 * Returns the first header with the given name (case-insensitive), or {@code null} if absent.
 	 *
 	 * @param name The header name. Must not be <jk>null</jk>.
-	 * @return The first matching header, or <jk>null</jk>.
+	 * @return The first matching header, or <jk>null</jk> if absent.
 	 */
 	public TransportHeader getFirstHeader(String name) {
 		return headers.stream()

@@ -53,8 +53,8 @@ public class FileEntity extends BasicHttpEntity<FileEntity> {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.  Can be <jk>null</jk>.
-	 * @param content The entity contents.  Can be <jk>null</jk>.
+	 * @param contentType The entity content type.  Can be <jk>null</jk> to omit an explicit <c>Content-Type</c> header.
+	 * @param content The entity contents.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the entity's content is read.
 	 */
 	public FileEntity(ContentType contentType, File content) {
 		super(contentType, content);

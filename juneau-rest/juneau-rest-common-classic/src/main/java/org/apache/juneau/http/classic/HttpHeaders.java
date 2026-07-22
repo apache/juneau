@@ -513,7 +513,7 @@ public class HttpHeaders {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @return A new header bean.  Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
@@ -1387,7 +1387,7 @@ public class HttpHeaders {
 	 *
 	 * @param <T> The header implementation class.
 	 * @param type The header implementation class.  Must not be <jk>null</jk>.
-	 * @param value The header value.  Can be <jk>null</jk>.
+	 * @param value The header value.  Can be <jk>null</jk>, in which case it is passed as-is (or stringified to <jk>null</jk>) to the bean's constructor.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
 	public static final <T extends Header> T header(Class<T> type, Object value) {
@@ -1409,7 +1409,7 @@ public class HttpHeaders {
 	 * @param <T> The header implementation class.
 	 * @param type The header implementation class.  Must not be <jk>null</jk>.
 	 * @param name The header name.  Can be <jk>null</jk> to use the name from the {@link org.apache.juneau.http.Header @Header} annotation.
-	 * @param value The header value.  Can be <jk>null</jk>.
+	 * @param value The header value.  Can be <jk>null</jk>, in which case it is passed as-is (or stringified to <jk>null</jk>) to the bean's constructor.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
 	public static final <T extends Header> T header(Class<T> type, String name, Object value) {

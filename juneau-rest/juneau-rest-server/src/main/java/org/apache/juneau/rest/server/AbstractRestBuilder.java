@@ -136,7 +136,7 @@ public abstract class AbstractRestBuilder<R, SELF extends AbstractRestBuilder<R,
 	/**
 	 * Returns the programmatic MDC async-propagation override, or <jk>null</jk> if not set.
 	 *
-	 * @return The override, or <jk>null</jk>.
+	 * @return The override, or <jk>null</jk> if not set.
 	 */
 	public Boolean getMdcAsyncPropagation() {
 		return mdcAsyncPropagation;

@@ -123,9 +123,9 @@ public class Entry extends CommonEntry<Entry> {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param id The ID of this entry.  Can be <jk>null</jk>.
-	 * @param title The title of this entry.  Can be <jk>null</jk>.
-	 * @param updated The updated timestamp of this entry.  Can be <jk>null</jk>.
+	 * @param id The ID of this entry.  Can be <jk>null</jk> to leave the property unset.
+	 * @param title The title of this entry.  Can be <jk>null</jk> to leave the property unset.
+	 * @param updated The updated timestamp of this entry.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public Entry(Id id, Text title, Calendar updated) {
 		super(id, title, updated);
@@ -134,9 +134,9 @@ public class Entry extends CommonEntry<Entry> {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param id The ID of this entry.  Can be <jk>null</jk>.
-	 * @param title The title of this entry.  Can be <jk>null</jk>.
-	 * @param updated The updated timestamp of this entry.  Can be <jk>null</jk>.
+	 * @param id The ID of this entry.  Can be <jk>null</jk>, in which case the property is set to an {@link Id} with no text (not left unset).
+	 * @param title The title of this entry.  Can be <jk>null</jk>, in which case the property is set to a {@link Text} with no text (not left unset).
+	 * @param updated The updated timestamp of this entry.  Can be <jk>null</jk> or blank to leave the property unset.
 	 */
 	public Entry(String id, String title, String updated) {
 		super(id, title, updated);

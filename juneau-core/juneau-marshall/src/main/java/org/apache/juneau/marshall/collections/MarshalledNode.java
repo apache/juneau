@@ -75,7 +75,7 @@ public class MarshalledNode {
 	 * and fluent building to work the value should be (or contain) the {@link MarshalledMap}/{@link MarshalledList}
 	 * family, but any {@link Map}/{@link List} is accepted.
 	 *
-	 * @param value The value to wrap. Can be <jk>null</jk>.
+	 * @param value The value to wrap. Can be <jk>null</jk> (creates a <i>null</i> node).
 	 * @return A new node wrapping the value, never <jk>null</jk>.
 	 */
 	public static MarshalledNode of(Object value) {
@@ -211,7 +211,7 @@ public class MarshalledNode {
 	/**
 	 * Returns the raw backing value wrapped by this node.
 	 *
-	 * @return The raw backing value. Can be <jk>null</jk>.
+	 * @return The raw backing value, or <jk>null</jk> if this is a <i>null</i> node.
 	 */
 	public Object value() {
 		return value;

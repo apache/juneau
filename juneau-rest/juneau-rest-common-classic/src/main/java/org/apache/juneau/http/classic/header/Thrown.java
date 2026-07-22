@@ -143,7 +143,7 @@ public class Thrown extends BasicCsvHeader {
 	 *
 	 * @param values
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> or empty (treated as no thrown values).
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Thrown of(Throwable...values) {

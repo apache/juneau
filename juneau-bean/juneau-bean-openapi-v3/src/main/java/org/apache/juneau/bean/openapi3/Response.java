@@ -118,8 +118,8 @@ public class Response extends OpenApiElement {
 	/**
 	 * Adds one or more values to the <property>content</property> property.
 	 *
-	 * @param key The mapping key.  Must not be <jk>null</jk>.
-	 * @param value The values to add to this property.  Must not be <jk>null</jk>.
+	 * @param key The mapping key.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param value The values to add to this property.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object
 	 */
 	public Response addContent(String key, MediaType value) {
@@ -132,8 +132,8 @@ public class Response extends OpenApiElement {
 	/**
 	 * Adds one or more values to the <property>headers</property> property.
 	 *
-	 * @param key The mapping key.  Must not be <jk>null</jk>.
-	 * @param value The values to add to this property.  Must not be <jk>null</jk>.
+	 * @param key The mapping key.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param value The values to add to this property.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object
 	 */
 	public Response addHeader(String key, HeaderInfo value) {
@@ -146,8 +146,8 @@ public class Response extends OpenApiElement {
 	/**
 	 * Adds one or more values to the <property>links</property> property.
 	 *
-	 * @param key The mapping key.  Must not be <jk>null</jk>.
-	 * @param value The values to add to this property.  Must not be <jk>null</jk>.
+	 * @param key The mapping key.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param value The values to add to this property.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object
 	 */
 	public Response addLink(String key, Link value) {
@@ -188,7 +188,7 @@ public class Response extends OpenApiElement {
 	/**
 	 * Returns the content with the specified media type.
 	 *
-	 * @param mediaType The media type.  Must not be <jk>null</jk>.
+	 * @param mediaType The media type.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The media type info, or <jk>null</jk> if not found.
 	 */
 	public MediaType getContent(String mediaType) {
@@ -209,7 +209,7 @@ public class Response extends OpenApiElement {
 	/**
 	 * Returns the header with the specified name.
 	 *
-	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @param name The header name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The header info, or <jk>null</jk> if not found.
 	 */
 	public HeaderInfo getHeader(String name) {
@@ -227,7 +227,7 @@ public class Response extends OpenApiElement {
 	/**
 	 * Returns the link with the specified name.
 	 *
-	 * @param name The link name.  Must not be <jk>null</jk>.
+	 * @param name The link name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The link info, or <jk>null</jk> if not found.
 	 */
 	public Link getLink(String name) {

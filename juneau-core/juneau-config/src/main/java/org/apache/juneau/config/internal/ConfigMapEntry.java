@@ -58,7 +58,7 @@ public record ConfigMapEntry(String rawLine, String key, String value, String co
 	 * @param value The raw value of this entry.
 	 * @param modifiers The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
 	 * @param comment The same-line comment of this entry, or <jk>null</jk> if it has no comment.
-	 * @param preLines The pre-lines of this entry.  Can be <jk>null</jk>.
+	 * @param preLines The pre-lines of this entry.  Can be <jk>null</jk> (treated as an empty list).
 	 */
 	ConfigMapEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
 		this(null, key, value, comment, modifiers, preLines);

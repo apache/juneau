@@ -91,8 +91,8 @@ public class Problem {
 	 * </p>
 	 *
 	 * @param status The HTTP status code (e.g. {@code 404}).
-	 * @param title A short, human-readable summary of the problem type. Can be <jk>null</jk>.
-	 * @param detail A human-readable explanation specific to this occurrence. Can be <jk>null</jk>.
+	 * @param title A short, human-readable summary of the problem type. Can be <jk>null</jk> to leave the title unset.
+	 * @param detail A human-readable explanation specific to this occurrence. Can be <jk>null</jk> to leave the detail unset.
 	 * @return A new {@link Problem} populated with the supplied values.
 	 */
 	public static Problem fromStatus(int status, String title, String detail) {
@@ -263,7 +263,7 @@ public class Problem {
 	 * The extension map is lazily initialised on first use.
 	 *
 	 * @param property The property name to set. Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
-	 * @param value The new value for the property. Can be <jk>null</jk>.
+	 * @param value The new value for the property. Can be <jk>null</jk> (stored as <jk>null</jk>).
 	 * @return This object.
 	 */
 	@BeanProp("*")

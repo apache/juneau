@@ -212,7 +212,7 @@ public class FilteredList<E> extends AbstractList<E> {
 		 * 	<jv>list</jv>.add(<js>"123"</js>);  <jc>// Element will be converted from String to Integer</jc>
 		 * </p>
 		 *
-		 * @param value The element conversion function. Can be <jk>null</jk>.
+		 * @param value The element conversion function. Can be <jk>null</jk> (elements are then used as-is without conversion).
 		 * @return This object for method chaining.
 		 */
 		public Builder<E> elementFunction(Function<Object,E> value) {

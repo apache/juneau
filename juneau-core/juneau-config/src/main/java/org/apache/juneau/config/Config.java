@@ -1160,7 +1160,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
 	 * @param contents
 	 * 	Values to set in the new section.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no additional values are set).
 	 * @return This object.
 	 * @throws SerializeException Contents could not be serialized.
 	 * @throws UnsupportedOperationException If configuration is read only.

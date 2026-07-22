@@ -106,7 +106,7 @@ public class LogConfig {
 	/**
 	 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 	 *
-	 * @param value The value to copy.  Can be <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (in which case <jk>null</jk> is returned).
 	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static LogConfig copyOrNull(LogConfig value) {

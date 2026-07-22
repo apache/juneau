@@ -86,7 +86,7 @@ public class MediaRanges {
 	/**
 	 * Returns a parsed <c>Accept</c> header value.
 	 *
-	 * @param value The raw <c>Accept</c> header value.  Can be <jk>null</jk>.
+	 * @param value The raw <c>Accept</c> header value.  Can be <jk>null</jk> or empty (returns {@link #EMPTY}).
 	 * @return A parsed <c>Accept</c> header value.
 	 */
 	public static MediaRanges of(String value) {
@@ -119,7 +119,7 @@ public class MediaRanges {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The <c>Accept</c> header value.  Can be <jk>null</jk>.
+	 * @param value The <c>Accept</c> header value.  Can be <jk>null</jk> (treated as an empty string).
 	 */
 	public MediaRanges(String value) {
 		this(parse(value));
@@ -184,7 +184,7 @@ public class MediaRanges {
 	 * <p>
 	 * See <a class="doclink" href="https://www.w3.org/TR/activitypub/#retrieving-objects">ActivityPub / Retrieving Objects</a>
 	 *
-	 * @param mediaTypes The media types to match against.  Can be <jk>null</jk>.
+	 * @param mediaTypes The media types to match against.  Can be <jk>null</jk> (returns <c>-1</c>).
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int match(List<? extends MediaType> mediaTypes) {

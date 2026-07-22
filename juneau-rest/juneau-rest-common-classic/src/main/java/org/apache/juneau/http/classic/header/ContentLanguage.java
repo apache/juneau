@@ -128,7 +128,7 @@ public class ContentLanguage extends BasicCsvHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentLanguage(String value) {
 		super(NAME, value);
@@ -139,7 +139,7 @@ public class ContentLanguage extends BasicCsvHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> or empty to create a header with no value.
 	 */
 	public ContentLanguage(String...value) {
 		super(NAME, value);
@@ -153,7 +153,7 @@ public class ContentLanguage extends BasicCsvHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public ContentLanguage(Supplier<String[]> value) {
 		super(NAME, value);

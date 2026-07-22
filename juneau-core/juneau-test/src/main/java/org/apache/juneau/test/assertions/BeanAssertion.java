@@ -99,7 +99,7 @@ public class BeanAssertion<T> extends FluentBeanAssertion<T,BeanAssertion<T>> {
 	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static <T> BeanAssertion<T> create(T value) {
@@ -111,7 +111,7 @@ public class BeanAssertion<T> extends FluentBeanAssertion<T,BeanAssertion<T>> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public BeanAssertion(T value) {
 		super(value, null);

@@ -147,7 +147,7 @@ public class IfRange extends BasicDateHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public IfRange(EntityTag value) {
 		super(NAME, (String)null);
@@ -178,7 +178,7 @@ public class IfRange extends BasicDateHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Supplier must supply either {@link EntityTag} or {@link ZonedDateTime} objects.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public IfRange(Supplier<?> value) {
 		super(NAME, (String)null);
@@ -191,7 +191,7 @@ public class IfRange extends BasicDateHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public IfRange(ZonedDateTime value) {
 		super(NAME, value);

@@ -255,7 +255,7 @@ public class Accept extends BasicMediaRangesHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Accept(MediaRanges value) {
 		super(NAME, value);
@@ -267,7 +267,7 @@ public class Accept extends BasicMediaRangesHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Accept(String value) {
 		super(NAME, value);
@@ -281,7 +281,7 @@ public class Accept extends BasicMediaRangesHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Accept(Supplier<MediaRanges> value) {
 		super(NAME, value);

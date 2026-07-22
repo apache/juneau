@@ -41,7 +41,8 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (no {@link Xml @Xml}/{@link XmlSchema @XmlSchema} annotations are looked up; namespace,
+	 * 	format, and child-name default accordingly).
 	 * @param mp XML metadata provider (for finding information about other artifacts).
 	 */
 	public XmlClassMeta(ClassMeta<?> cm, XmlMetaProvider mp) {

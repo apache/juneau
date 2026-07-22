@@ -122,7 +122,7 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static StringAssertion create(Object value) {
@@ -134,7 +134,7 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public StringAssertion(Object value) {
 		super(s(value), null);

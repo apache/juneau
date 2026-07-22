@@ -416,7 +416,7 @@ public final class RrpcInterfaceMeta {
 	 * the lowest-precedence default for part serialization: a parameter-level or method-level
 	 * {@code @HttpPartMarshalling} serializer takes precedence over it.
 	 *
-	 * @return The resolved part serializer, or <jk>null</jk>.
+	 * @return The resolved part serializer, or <jk>null</jk> if none is configured.
 	 */
 	public HttpPartSerializer getPartSerializer() {
 		return partSerializer;
@@ -484,7 +484,7 @@ public final class RrpcInterfaceMeta {
 	 * Returns the metadata for the given method, or {@code null} if the method has no remote annotation.
 	 *
 	 * @param method The method. Can be <jk>null</jk> (returns <jk>null</jk>).
-	 * @return The metadata, or <jk>null</jk>.
+	 * @return The metadata, or <jk>null</jk> if the method is <jk>null</jk> or has no remote annotation.
 	 */
 	public RrpcInterfaceMethodMeta getMethodMeta(Method method) {
 		return methodMetas.get(method);

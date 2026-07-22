@@ -296,7 +296,7 @@ public class RestUtils {
 	 * 	<li>Leading slash is added if needed.
 	 * </ul>
 	 *
-	 * @param s The value to convert. Can be <jk>null</jk>.
+	 * @param s The value to convert. Can be <jk>null</jk> (treated as an empty string, yielding an empty result).
 	 * @return The converted path.
 	 */
 	public static String toValidContextPath(String s) {

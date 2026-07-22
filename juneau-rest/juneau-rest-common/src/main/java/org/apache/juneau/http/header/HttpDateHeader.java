@@ -82,7 +82,7 @@ public class HttpDateHeader extends HttpHeaderBean {
 	 * Constructor.
 	 *
 	 * @param name Header name. Must not be <jk>null</jk>.
-	 * @param value The date value. Can be <jk>null</jk>.
+	 * @param value The date value. Can be <jk>null</jk>, in which case the parsed value is <jk>null</jk>.
 	 */
 	protected HttpDateHeader(String name, ZonedDateTime value) {
 		super(name, (String)null);
@@ -135,7 +135,7 @@ public class HttpDateHeader extends HttpHeaderBean {
 	/**
 	 * Returns the parsed value of this header, or the specified default if unset.
 	 *
-	 * @param other The default value. Can be <jk>null</jk>.
+	 * @param other The default value. Can be <jk>null</jk> to allow a <jk>null</jk> result when the header is unset.
 	 * @return The parsed value, or <c>other</c> if the value is unset. Can be <jk>null</jk> if <c>other</c> is <jk>null</jk>.
 	 */
 	public ZonedDateTime orElse(ZonedDateTime other) {

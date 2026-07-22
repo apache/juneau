@@ -66,7 +66,7 @@ public class Base extends HtmlElementVoid<Base> {
 	/**
 	 * Creates a {@link Base} element with the specified {@link Base#href(Object)} attribute.
 	 *
-	 * @param value The {@link Base#href(Object)} attribute. Can be <jk>null</jk>.
+	 * @param value The {@link Base#href(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 */
 	public Base(Object value) {
 		href(value);
@@ -88,7 +88,7 @@ public class Base extends HtmlElementVoid<Base> {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public Base href(Object value) {

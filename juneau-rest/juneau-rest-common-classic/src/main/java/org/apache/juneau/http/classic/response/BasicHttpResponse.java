@@ -213,7 +213,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	/**
 	 * Sets the body on this response.
 	 *
-	 * @param value The body on this response.  Can be <jk>null</jk>.
+	 * @param value The body on this response.  Can be <jk>null</jk> (treated as an empty string).
 	 * @return This object.
 	 */
 	public SELF setContent(String value) {
@@ -312,7 +312,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	/**
 	 * Specifies the value for the <c>Location</c> header.
 	 *
-	 * @param value The new header location.  Can be <jk>null</jk>.
+	 * @param value The new header location.  Can be <jk>null</jk> (no-op; the header is left unchanged).
 	 * @return This object.
 	 */
 	public SELF setLocation(String value) {
@@ -322,7 +322,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	/**
 	 * Specifies the value for the <c>Location</c> header.
 	 *
-	 * @param value The new header location.  Can be <jk>null</jk>.
+	 * @param value The new header location.  Can be <jk>null</jk> (no-op; the header is left unchanged).
 	 * @return This object.
 	 */
 	public SELF setLocation(URI value) {
@@ -344,7 +344,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 * <p>
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk>, in which case the default protocol version is cleared and {@link BasicStatusLine#getProtocolVersion()} returns <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SELF setProtocolVersion(ProtocolVersion value) {
@@ -363,7 +363,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 * If not specified, the reason phrase will be retrieved from the reason phrase catalog
 	 * using the locale on this builder.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk> to fall back to the reason phrase catalog.
 	 * @return This object.
 	 */
 	public SELF setReasonPhrase2(String value) {
@@ -376,7 +376,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 * <p>
 	 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk> to fall back to {@link EnglishReasonPhraseCatalog#INSTANCE}.
 	 * @return This object.
 	 */
 	public SELF setReasonPhraseCatalog(ReasonPhraseCatalog value) {

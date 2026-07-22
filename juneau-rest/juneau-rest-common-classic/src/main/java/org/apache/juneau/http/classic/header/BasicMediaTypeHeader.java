@@ -85,7 +85,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicMediaTypeHeader(String name, MediaType value) {
@@ -101,7 +101,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicMediaTypeHeader(String name, String value) {
@@ -119,7 +119,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicMediaTypeHeader(String name, Supplier<MediaType> value) {
@@ -302,7 +302,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	/**
 	 * Returns the header value as a {@link MediaType}.
 	 *
-	 * @return The header value as a {@link MediaType}.  Can be <jk>null</jk>.
+	 * @return The header value as a {@link MediaType}, or <jk>null</jk> if the header has no value.
 	 */
 	public MediaType toMediaType() {
 		return value();

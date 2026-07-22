@@ -81,8 +81,8 @@ public class Param extends HtmlElementVoid<Param> {
 	 * Creates a {@link Param} element with the specified {@link Param#name(String)} and {@link Param#value(Object)}
 	 * attributes.
 	 *
-	 * @param name The {@link Param#name(String)} attribute. Can be <jk>null</jk>.
-	 * @param value The {@link Param#value(Object)} attribute. Can be <jk>null</jk>.
+	 * @param name The {@link Param#name(String)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param value The {@link Param#value(Object)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 */
 	public Param(String name, Object value) {
 		name(name).value(value);

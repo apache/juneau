@@ -140,8 +140,8 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The available scopes for the OAuth2 security scheme.
 	 *
-	 * @param key The scope key.  Must not be <jk>null</jk>.
-	 * @param value The scope value.  Must not be <jk>null</jk>.
+	 * @param key The scope key.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param value The scope value.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public SecurityScheme addScope(String key, String value) {

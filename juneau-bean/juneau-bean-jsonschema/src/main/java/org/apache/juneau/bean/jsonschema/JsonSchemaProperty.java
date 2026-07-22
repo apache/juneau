@@ -34,7 +34,7 @@ public class JsonSchemaProperty<SELF extends JsonSchemaProperty<SELF>> extends J
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param name The name of this property.  Can be <jk>null</jk>.
+	 * @param name The name of this property.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public JsonSchemaProperty(String name) {
 		setName(name);
@@ -43,8 +43,8 @@ public class JsonSchemaProperty<SELF extends JsonSchemaProperty<SELF>> extends J
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param name The name of this property.  Can be <jk>null</jk>.
-	 * @param type The JSON type of this property.  Can be <jk>null</jk>.
+	 * @param name The name of this property.  Can be <jk>null</jk> to leave the property unset.
+	 * @param type The JSON type of this property.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public JsonSchemaProperty(String name, JsonType type) {
 		setName(name);

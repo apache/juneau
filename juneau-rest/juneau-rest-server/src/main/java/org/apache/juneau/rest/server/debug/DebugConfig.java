@@ -175,7 +175,7 @@ public class DebugConfig {
 	/**
 	 * Resolves debug for resource-level requests.
 	 *
-	 * @param context The context.  Can be <jk>null</jk>.
+	 * @param context The context.  Can be <jk>null</jk> (resolution proceeds without a resource-class context).
 	 * @param req The request.  Can be <jk>null</jk> (debug resolves to disabled).
 	 * @return A debug result.
 	 */
@@ -216,7 +216,7 @@ public class DebugConfig {
 	 * Returns the configured rule for the specified target key, or <jk>null</jk> if none.
 	 *
 	 * @param target The target key.
-	 * @return The configured rule, or <jk>null</jk>.
+	 * @return The configured rule, or <jk>null</jk> if none is configured for the target (or the target is <jk>null</jk>).
 	 */
 	public DebugRule getRuleFor(String target) {
 		return target == null ? null : rules.get(target);

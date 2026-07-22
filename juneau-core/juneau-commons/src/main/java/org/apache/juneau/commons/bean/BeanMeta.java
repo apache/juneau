@@ -207,7 +207,7 @@ public class BeanMeta<T> {
 	 *
 	 * @param <T> The class type.
 	 * @param cm The bean type info for the class to create bean metadata for.  Must not be <jk>null</jk>.
-	 * @param implClass Optional implementation class info to use when looking for a no-arg constructor.  Can be <jk>null</jk>.
+	 * @param implClass Optional implementation class info to use when looking for a no-arg constructor.  Can be <jk>null</jk> (the bean class's own no-arg constructor is used instead).
 	 * @return A {@link BeanMetaValue} containing the bean metadata (if successful) or a reason why it's not a bean.
 	 */
 	public static <T> BeanMetaValue<T> create(BeanInfo<T> cm, ClassInfo implClass) {
@@ -225,7 +225,7 @@ public class BeanMeta<T> {
 	 *
 	 * @param <T> The class type.
 	 * @param cm The bean type info for the class to create bean metadata for.  Must not be <jk>null</jk>.
-	 * @param implClass Optional implementation class info to use when looking for a no-arg constructor.  Can be <jk>null</jk>.
+	 * @param implClass Optional implementation class info to use when looking for a no-arg constructor.  Can be <jk>null</jk> (the bean class's own no-arg constructor is used instead).
 	 * @param propertyNamer Optional property namer to use for deriving property names.  If <jk>null</jk>, the namer is
 	 * 	resolved the normal way (bean filter, then {@link BeanConfigContext#getPropertyNamer()}).
 	 * @return A {@link BeanMetaValue} containing the bean metadata (if successful) or a reason why it's not a bean.
@@ -431,9 +431,9 @@ public class BeanMeta<T> {
 	 * </ul>
 	 *
 	 * @param cm The class metadata for the bean class.  Must not be <jk>null</jk>.
-	 * @param bf Optional bean filter to apply. Can be <jk>null</jk>.
+	 * @param bf Optional bean filter to apply. Can be <jk>null</jk> (no bean filter customizations are applied; the default stop class of {@code Object} is used).
 	 * @param pNames Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
-	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk>.
+	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk> (the bean class's own no-arg constructor is used instead).
 	 */
 	protected BeanMeta(BeanInfo<T> cm, BeanFilter bf, String[] pNames, ClassInfo implClass) {
 		this(cm, cm, cm.getBeanConfigContext(), cm.getMarshallingContext(), bf, pNames, implClass, null);
@@ -444,9 +444,9 @@ public class BeanMeta<T> {
 	 * {@link PropertyNamer} override.
 	 *
 	 * @param cm The class metadata for the bean class.  Must not be <jk>null</jk>.
-	 * @param bf Optional bean filter to apply. Can be <jk>null</jk>.
+	 * @param bf Optional bean filter to apply. Can be <jk>null</jk> (no bean filter customizations are applied; the default stop class of {@code Object} is used).
 	 * @param pNames Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
-	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk>.
+	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk> (the bean class's own no-arg constructor is used instead).
 	 * @param propertyNamerOverride Optional namer that, when non-<jk>null</jk>, takes precedence over the bean filter
 	 * 	and {@link BeanConfigContext#getPropertyNamer()} for deriving property names.
 	 */

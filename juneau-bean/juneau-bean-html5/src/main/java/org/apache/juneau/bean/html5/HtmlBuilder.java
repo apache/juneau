@@ -141,7 +141,7 @@ public class HtmlBuilder {
 	 * Creates an {@link A} element with the specified {@link A#href(Object)} attribute and {@link A#children(Object[])}
 	 * nodes.
 	 *
-	 * @param href The {@link A#href(Object)} attribute. Can be <jk>null</jk>.
+	 * @param href The {@link A#href(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @param children The {@link A#children(Object[])} nodes. Must not be <jk>null</jk>.
 	 * @return The new element.
 	 */
@@ -162,7 +162,7 @@ public class HtmlBuilder {
 	 * Creates an {@link Abbr} element with the specified {@link Abbr#title(String)} attribute and
 	 * {@link Abbr#children(Object[])} nodes.
 	 *
-	 * @param title The {@link Abbr#title(String)} attribute. Can be <jk>null</jk>.
+	 * @param title The {@link Abbr#title(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @param children The {@link Abbr#children(Object[])} nodes. Must not be <jk>null</jk>.
 	 * @return The new element.
 	 */
@@ -202,9 +202,9 @@ public class HtmlBuilder {
 	 * Creates an {@link Area} element with the specified {@link Area#shape(String)}, {@link Area#coords(String)},
 	 * and {@link Area#href(Object)} attributes.
 	 *
-	 * @param shape The {@link Area#shape(String)} attribute. Can be <jk>null</jk>.
-	 * @param coords The {@link Area#coords(String)} attribute. Can be <jk>null</jk>.
-	 * @param href The {@link Area#href(Object)} attribute. Can be <jk>null</jk>.
+	 * @param shape The {@link Area#shape(String)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param coords The {@link Area#coords(String)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param href The {@link Area#href(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return The new element.
 	 */
 	public static final Area area(String shape, String coords, Object href) {
@@ -261,7 +261,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates an {@link Audio} element with the specified {@link Audio#src(Object)} attribute.
 	 *
-	 * @param src The {@link Audio#src(Object)} attribute. Can be <jk>null</jk>.
+	 * @param src The {@link Audio#src(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return The new element.
 	 */
 	public static final Audio audio(String src) {
@@ -299,7 +299,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Base} element with the specified {@link Base#href(Object)} attribute.
 	 *
-	 * @param href The {@link Base#href(Object)} attribute. Can be <jk>null</jk>.
+	 * @param href The {@link Base#href(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return The new element.
 	 */
 	public static final Base base(Object href) {
@@ -318,7 +318,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Bdi} element with the specified {@link Bdi#text(Object)} node.
 	 *
-	 * @param text The {@link Bdi#text(Object)} node. Can be <jk>null</jk>.
+	 * @param text The {@link Bdi#text(Object)} node. Can be <jk>null</jk> to leave the text unset.
 	 * @return The new element.
 	 */
 	public static final Bdi bdi(Object text) {
@@ -337,7 +337,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Bdo} element with the specified {@link Bdo#dir(String)} attribute and child nodes.
 	 *
-	 * @param dir The {@link Bdo#dir(String)} attribute. Can be <jk>null</jk>.
+	 * @param dir The {@link Bdo#dir(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 * @return The new element.
 	 */
@@ -404,7 +404,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Button} element with the specified {@link Button#type(String)} attribute.
 	 *
-	 * @param type The {@link Button#type(String)} attribute. Can be <jk>null</jk>.
+	 * @param type The {@link Button#type(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return The new element.
 	 */
 	public static final Button button(String type) {
@@ -415,7 +415,7 @@ public class HtmlBuilder {
 	 * Creates a {@link Button} element with the specified {@link Button#type(String)} attribute and
 	 * {@link Button#children(Object[])} nodes.
 	 *
-	 * @param type The {@link Button#type(String)} attribute. Can be <jk>null</jk>.
+	 * @param type The {@link Button#type(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @param children The {@link Button#children(Object[])} nodes. Must not be <jk>null</jk>.
 	 * @return The new element.
 	 */
@@ -435,8 +435,8 @@ public class HtmlBuilder {
 	 * Creates a {@link Canvas} element with the specified {@link Canvas#width(Object)} and
 	 * {@link Canvas#height(Object)} attributes.
 	 *
-	 * @param width The {@link Canvas#width(Object)} attribute. Can be <jk>null</jk>.
-	 * @param height The {@link Canvas#height(Object)} attribute. Can be <jk>null</jk>.
+	 * @param width The {@link Canvas#width(Object)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param height The {@link Canvas#height(Object)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return The new element.
 	 */
 	public static final Canvas canvas(Number width, Number height) {
@@ -513,7 +513,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Col} element with the specified {@link Col#span(Object)} attribute.
 	 *
-	 * @param span The {@link Col#span(Object)} attribute. Can be <jk>null</jk>.
+	 * @param span The {@link Col#span(Object)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return The new element.
 	 */
 	public static final Col col(Number span) {
@@ -551,8 +551,8 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Data} element with the specified {@link Data#value(Object)} attribute and child node.
 	 *
-	 * @param value The {@link Data#value(Object)} attribute. Can be <jk>null</jk>.
-	 * @param child The child node. Can be <jk>null</jk>.
+	 * @param value The {@link Data#value(Object)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param child The child node. Can be <jk>null</jk> (a <jk>null</jk> entry is added to the children list).
 	 * @return The new element.
 	 */
 	public static final Data data(String value, Object child) {
@@ -571,7 +571,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Datalist} element with the specified {@link Datalist#id(String)} attribute and child nodes.
 	 *
-	 * @param id The {@link Datalist#id(String)} attribute. Can be <jk>null</jk>.
+	 * @param id The {@link Datalist#id(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 * @return The new element.
 	 */
@@ -724,7 +724,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates an {@link Embed} element with the specified {@link Embed#src(Object)} attribute.
 	 *
-	 * @param src The {@link Embed#src(Object)} attribute. Can be <jk>null</jk>.
+	 * @param src The {@link Embed#src(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return The new element.
 	 */
 	public static final Embed embed(Object src) {
@@ -819,7 +819,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Form} element with the specified {@link Form#action(String)} attribute.
 	 *
-	 * @param action The {@link Form#action(String)} attribute. Can be <jk>null</jk>.
+	 * @param action The {@link Form#action(String)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return The new element.
 	 */
 	public static final Form form(String action) {
@@ -829,7 +829,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates an {@link Form} element with the specified {@link Form#action(String)} attribute and child nodes.
 	 *
-	 * @param action The {@link Form#action(String)} attribute. Can be <jk>null</jk>.
+	 * @param action The {@link Form#action(String)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 * @return The new element.
 	 */
@@ -1066,7 +1066,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates an {@link Img} element with the specified {@link Img#src(Object)} attribute.
 	 *
-	 * @param src The {@link Img#src(Object)} attribute. Can be <jk>null</jk>.
+	 * @param src The {@link Img#src(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return The new element.
 	 */
 	public static final Img img(Object src) {
@@ -1085,7 +1085,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates an {@link Input} element with the specified {@link Input#type(String)} attribute.
 	 *
-	 * @param type The {@link Input#type(String)} attribute. Can be <jk>null</jk>.
+	 * @param type The {@link Input#type(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return The new element.
 	 */
 	public static final Input input(String type) {
@@ -1208,7 +1208,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Link} element with the specified {@link Link#href(Object)} attribute.
 	 *
-	 * @param href The {@link Link#href(Object)} attribute. Can be <jk>null</jk>.
+	 * @param href The {@link Link#href(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return The new element.
 	 */
 	public static final Link link(Object href) {
@@ -1413,7 +1413,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates an {@link Option} element with the specified {@link Option#text(Object)} attribute.
 	 *
-	 * @param text The {@link Option#text(Object)} attribute. Can be <jk>null</jk>.
+	 * @param text The {@link Option#text(Object)} attribute. Can be <jk>null</jk> to leave the text unset.
 	 * @return The new element.
 	 */
 	public static final Option option(Object text) {
@@ -1424,8 +1424,8 @@ public class HtmlBuilder {
 	 * Creates an {@link Option} element with the specified {@link Option#value(Object)} attribute and
 	 * {@link Option#text(Object)} node.
 	 *
-	 * @param value The {@link Option#value(Object)} attribute. Can be <jk>null</jk>.
-	 * @param text The {@link Option#text(Object)} node. Can be <jk>null</jk>.
+	 * @param value The {@link Option#value(Object)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param text The {@link Option#text(Object)} node. Can be <jk>null</jk> to leave the text unset.
 	 * @return The new element.
 	 */
 	public static final Option option(Object value, Object text) {
@@ -1444,7 +1444,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates an {@link Output} element with the specified {@link Output#name(String)} attribute.
 	 *
-	 * @param name The {@link Output#name(String)} attribute. Can be <jk>null</jk>.
+	 * @param name The {@link Output#name(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return The new element.
 	 */
 	public static final Output output(String name) {
@@ -1483,8 +1483,8 @@ public class HtmlBuilder {
 	 * Creates a {@link Param} element with the specified {@link Param#name(String)} and {@link Param#value(Object)}
 	 * attributes.
 	 *
-	 * @param name The {@link Param#name(String)} attribute. Can be <jk>null</jk>.
-	 * @param value The {@link Param#value(Object)} attribute. Can be <jk>null</jk>.
+	 * @param name The {@link Param#name(String)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param value The {@link Param#value(Object)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return The new element.
 	 */
 	public static final Param param(String name, Object value) {
@@ -1694,8 +1694,8 @@ public class HtmlBuilder {
 	 * Creates a {@link Script} element with the specified {@link Script#type(String)} attribute and
 	 * {@link Script#text(Object)} node.
 	 *
-	 * @param type The {@link Script#type(String)} attribute. Can be <jk>null</jk>.
-	 * @param text The child text node. Can be <jk>null</jk>.
+	 * @param type The {@link Script#type(String)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param text The child text node. Can be <jk>null</jk> to leave the text unset.
 	 * @return The new element.
 	 */
 	public static final Script script(String type, String...text) {
@@ -1733,7 +1733,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Select} element with the specified {@link Select#name(String)} attribute and child nodes.
 	 *
-	 * @param name The {@link Select#name(String)} attribute. Can be <jk>null</jk>.
+	 * @param name The {@link Select#name(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 * @return The new element.
 	 */
@@ -1773,8 +1773,8 @@ public class HtmlBuilder {
 	 * Creates a {@link Source} element with the specified {@link Source#src(Object)} and {@link Source#type(String)}
 	 * attributes.
 	 *
-	 * @param src The {@link Source#src(Object)} attribute. Can be <jk>null</jk>.
-	 * @param type The {@link Source#type(String)} attribute. Can be <jk>null</jk>.
+	 * @param src The {@link Source#src(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
+	 * @param type The {@link Source#type(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return The new element.
 	 */
 	public static final Source source(Object src, String type) {
@@ -1831,7 +1831,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Style} element with the specified {@link Style#text(Object)} node.
 	 *
-	 * @param text The {@link Style#text(Object)} node. Can be <jk>null</jk>.
+	 * @param text The {@link Style#text(Object)} node. Can be <jk>null</jk> to leave the text unset.
 	 * @return The new element.
 	 */
 	public static final Style style(Object text) {
@@ -1844,7 +1844,7 @@ public class HtmlBuilder {
 	 * @param text
 	 * 	The contents of the style element.
 	 * 	<br>Values will be concatenated with newlines.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to leave the text unset.
 	 * @return The new element.
 	 */
 	public static final Style style(String...text) {
@@ -1958,7 +1958,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Template} element with the specified {@link Template#id(String)} attribute and child nodes.
 	 *
-	 * @param id The {@link Template#id(String)} attribute. Can be <jk>null</jk>.
+	 * @param id The {@link Template#id(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 * @return The new element.
 	 */
@@ -1979,8 +1979,8 @@ public class HtmlBuilder {
 	 * Creates a {@link Textarea} element with the specified {@link Textarea#name(String)} attribute and
 	 * {@link Textarea#text(Object)} node.
 	 *
-	 * @param name The {@link Textarea#name(String)} attribute. Can be <jk>null</jk>.
-	 * @param text The {@link Textarea#text(Object)} node. Can be <jk>null</jk>.
+	 * @param name The {@link Textarea#name(String)} attribute. Can be <jk>null</jk> to unset the attribute.
+	 * @param text The {@link Textarea#text(Object)} node. Can be <jk>null</jk> to leave the text unset.
 	 * @return The new element.
 	 */
 	public static final Textarea textarea(String name, String text) {
@@ -2075,7 +2075,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Title} element with the specified {@link Title#text(Object)} node.
 	 *
-	 * @param text The {@link Title#text(Object)} node. Can be <jk>null</jk>.
+	 * @param text The {@link Title#text(Object)} node. Can be <jk>null</jk> to leave the text unset.
 	 * @return The new element.
 	 */
 	public static final Title title(String text) {
@@ -2114,8 +2114,8 @@ public class HtmlBuilder {
 	 * Creates a {@link Track} element with the specified {@link Track#src(Object)} and {@link Track#kind(String)}
 	 * attributes.
 	 *
-	 * @param src The {@link Track#src(Object)} attribute. Can be <jk>null</jk>.
-	 * @param kind The {@link Track#kind(String)} attribute. Can be <jk>null</jk>.
+	 * @param src The {@link Track#src(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
+	 * @param kind The {@link Track#kind(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @return The new element.
 	 */
 	public static final Track track(Object src, String kind) {
@@ -2197,7 +2197,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Video} element with the specified {@link Video#src(Object)} attribute.
 	 *
-	 * @param src The {@link Video#src(Object)} attribute. Can be <jk>null</jk>.
+	 * @param src The {@link Video#src(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return The new element.
 	 */
 	public static final Video video(Object src) {

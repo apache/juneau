@@ -104,7 +104,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicBooleanHeader(String name, Boolean value) {
@@ -120,7 +120,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicBooleanHeader(String name, String value) {
@@ -138,7 +138,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicBooleanHeader(String name, Supplier<Boolean> value) {
@@ -204,7 +204,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	/**
 	 * Returns the header value as a {@link Boolean}.
 	 *
-	 * @return The header value as a {@link Boolean}.  Can be <jk>null</jk>.
+	 * @return The header value as a {@link Boolean}, or <jk>null</jk> if the header has no value.
 	 */
 	public Boolean toBoolean() {
 		return value();

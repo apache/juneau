@@ -125,7 +125,7 @@ public class PathReaderBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param path The path to read from.  Can be <jk>null</jk>.
+	 * @param path The path to read from.  Can be <jk>null</jk> ({@link #build()} then throws an {@link IllegalStateException} unless {@link #allowNoFile()} is set).
 	 * @return A new builder instance initialized with the specified path.
 	 */
 	public static PathReaderBuilder create(Path path) {
@@ -265,7 +265,7 @@ public class PathReaderBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param path The path to read from.  Can be <jk>null</jk>.
+	 * @param path The path to read from.  Can be <jk>null</jk> ({@link #build()} then throws an {@link IllegalStateException} unless {@link #allowNoFile()} is set).
 	 * @return This object for method chaining.
 	 */
 	public PathReaderBuilder path(Path path) {

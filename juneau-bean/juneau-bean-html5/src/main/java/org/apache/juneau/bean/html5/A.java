@@ -70,7 +70,7 @@ public class A extends HtmlElementMixed<A> {
 	 * Creates an {@link A} element with the specified {@link A#href(Object)} attribute and {@link A#children(Object[])}
 	 * nodes.
 	 *
-	 * @param href The {@link A#href(Object)} attribute. Can be <jk>null</jk>.
+	 * @param href The {@link A#href(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @param children The {@link A#children(Object[])} nodes. Must not be <jk>null</jk>.
 	 */
 	public A(Object href, Object[] children) {
@@ -110,7 +110,7 @@ public class A extends HtmlElementMixed<A> {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public A href(Object value) {

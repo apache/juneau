@@ -46,7 +46,7 @@ public class HttpResources {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk> (treated as an empty byte array).
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
 	public static final ByteArrayResource byteArrayResource(byte[] content) {
@@ -56,7 +56,7 @@ public class HttpResources {
 	/**
 	 * Creates a new {@link ByteArrayResource} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk> (treated as an empty byte array).
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
@@ -70,7 +70,7 @@ public class HttpResources {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content supplier.  Can be <jk>null</jk>.
+	 * @param content The entity content supplier.  Can be <jk>null</jk> (treated as an empty byte array).
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
 	public static final ByteArrayResource byteArrayResource(Supplier<byte[]> content) {
@@ -80,7 +80,7 @@ public class HttpResources {
 	/**
 	 * Creates a new {@link ByteArrayResource} builder.
 	 *
-	 * @param content The entity content supplier.  Can be <jk>null</jk>.
+	 * @param content The entity content supplier.  Can be <jk>null</jk> (treated as an empty byte array).
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
@@ -94,7 +94,7 @@ public class HttpResources {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the resource's content is read.
 	 * @return A new {@link FileResource} builder.
 	 */
 	public static final FileResource fileResource(File content) {
@@ -104,7 +104,7 @@ public class HttpResources {
 	/**
 	 * Creates a new {@link FileResource} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the resource's content is read.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link FileResource} builder.
 	 */
@@ -115,7 +115,7 @@ public class HttpResources {
 	/**
 	 * Creates a new {@link ReaderResource} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the resource's content is read.
 	 * @return A new {@link ReaderResource} builder.
 	 */
 	public static final ReaderResource readerResource(Reader content) {
@@ -125,7 +125,7 @@ public class HttpResources {
 	/**
 	 * Creates a new {@link ReaderResource} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the resource's content is read.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ReaderResource} builder.
 	 */
@@ -139,7 +139,7 @@ public class HttpResources {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the resource's content is read.
 	 * @return A new {@link StreamResource} builder.
 	 */
 	public static final StreamResource streamResource(InputStream content) {
@@ -149,7 +149,7 @@ public class HttpResources {
 	/**
 	 * Creates a new {@link StreamResource} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case a {@link NullPointerException} is thrown when the resource's content is read.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @param length The content length, or <c>-1</c> if not known.
 	 * @return A new {@link StreamResource} builder.
@@ -161,7 +161,7 @@ public class HttpResources {
 	/**
 	 * Creates a new builder for a {@link StringResource} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk> (treated as an empty string).
 	 * @return A new {@link StringResource} builder.
 	 */
 	public static final StringResource stringResource(String content) {
@@ -171,7 +171,7 @@ public class HttpResources {
 	/**
 	 * Creates a new builder for a {@link StringResource} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk> (treated as an empty string).
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link StringResource} builder.
 	 */
@@ -182,7 +182,7 @@ public class HttpResources {
 	/**
 	 * Creates a new builder for a {@link StringResource} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk> (treated as an empty string).
 	 * @return A new {@link StringResource} builder.
 	 */
 	public static final StringResource stringResource(Supplier<String> content) {
@@ -192,7 +192,7 @@ public class HttpResources {
 	/**
 	 * Creates a new builder for a {@link StringResource} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param content The entity content.  Can be <jk>null</jk> (treated as an empty string).
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link StringResource} builder.
 	 */

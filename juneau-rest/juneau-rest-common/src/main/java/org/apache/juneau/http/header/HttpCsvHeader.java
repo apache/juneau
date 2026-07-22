@@ -67,7 +67,7 @@ public class HttpCsvHeader extends HttpHeaderBean {
 	 * Constructor.
 	 *
 	 * @param name Header name. Must not be <jk>null</jk>.
-	 * @param value Wire value. Can be <jk>null</jk> or empty.
+	 * @param value Wire value. Can be <jk>null</jk> or empty, in which case the parsed tokens are <jk>null</jk>.
 	 */
 	protected HttpCsvHeader(String name, String value) {
 		super(name, value);
@@ -80,7 +80,7 @@ public class HttpCsvHeader extends HttpHeaderBean {
 	 * Constructor.
 	 *
 	 * @param name Header name. Must not be <jk>null</jk>.
-	 * @param values The token values. Can be <jk>null</jk>.
+	 * @param values The token values. Can be <jk>null</jk>, in which case the parsed tokens are <jk>null</jk>.
 	 */
 	protected HttpCsvHeader(String name, String... values) {
 		super(name, values == null || values.length == 0 ? null : join(values, ", "));
@@ -152,7 +152,7 @@ public class HttpCsvHeader extends HttpHeaderBean {
 	/**
 	 * Returns the parsed tokens of this header, or the specified default if unset.
 	 *
-	 * @param other The default value. Can be <jk>null</jk>.
+	 * @param other The default value. Can be <jk>null</jk> to allow a <jk>null</jk> result when the header is unset.
 	 * @return The parsed tokens, or <c>other</c> if the value is unset. Can be <jk>null</jk> if <c>other</c> is <jk>null</jk>.
 	 */
 	public String[] orElse(String[] other) {

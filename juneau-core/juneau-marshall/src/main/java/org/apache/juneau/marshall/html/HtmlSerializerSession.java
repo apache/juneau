@@ -248,7 +248,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 *
 	 * @param pMeta
 	 * 	The property metadata of the bean property of the object.
-	 * 	Can be <jk>null</jk> if the object isn't from a bean property.
+	 * 	Can be <jk>null</jk> if the object isn't from a bean property; the {@code PROPERTY_NAME} anchor-text mode
+	 * 	then falls back to the URL string itself.
 	 * @param o The URL object.
 	 * @return The anchor text to use for the specified URL object.
 	 */
@@ -295,7 +296,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @param cm The ClassMeta of the object being serialized.
 	 * @param pMeta
 	 * 	The property metadata of the bean property of the object.
-	 * 	Can be <jk>null</jk> if the object isn't from a bean property.
+	 * 	Can be <jk>null</jk> if the object isn't from a bean property; bean-property-level URI detection is then
+	 * 	skipped, relying solely on <c>cm</c>.
 	 * @param o The object.
 	 * @return <jk>true</jk> if the specified object is a URL.
 	 */

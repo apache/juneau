@@ -126,7 +126,7 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static <E> ListAssertion<E> create(List<E> value) {
@@ -139,7 +139,7 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static <E> ListAssertion<E> create(Stream<E> value) {
@@ -151,7 +151,7 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public ListAssertion(List<E> value) {
 		super(value, null);

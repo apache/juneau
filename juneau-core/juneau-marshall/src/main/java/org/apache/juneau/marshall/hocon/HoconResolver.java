@@ -146,7 +146,8 @@ public class HoconResolver {
 	 *
 	 * @param path The path (e.g., "database.host").
 	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
-	 * @return The value at that path, or <jk>null</jk>.
+	 * @return The value at that path, or <jk>null</jk> if the path is <jk>null</jk>, blank, or does not resolve to an
+	 * 	existing value.
 	 */
 	public HoconValue lookup(String path) {
 		if (isEmpty(path))

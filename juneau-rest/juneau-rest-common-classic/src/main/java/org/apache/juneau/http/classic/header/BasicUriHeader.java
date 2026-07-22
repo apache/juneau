@@ -99,7 +99,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link URI#create(String)}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicUriHeader(String name, String value) {
@@ -117,7 +117,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicUriHeader(String name, Supplier<URI> value) {
@@ -132,7 +132,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicUriHeader(String name, URI value) {

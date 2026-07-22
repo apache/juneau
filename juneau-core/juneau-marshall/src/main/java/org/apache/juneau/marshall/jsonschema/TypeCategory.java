@@ -71,7 +71,7 @@ public enum TypeCategory {
 	/**
 	 * Parses a comma-delimited list of values into a set of {@link TypeCategory} values.
 	 *
-	 * @param s The comma-delimited string.  Can be <jk>null</jk>.
+	 * @param s The comma-delimited string.  Can be <jk>null</jk> (returns an empty set).
 	 * @return A set of {@link TypeCategory} values (empty if the string is <jk>null</jk> or empty).
 	 */
 	public static Set<TypeCategory> parse(String s) {
@@ -85,7 +85,7 @@ public enum TypeCategory {
 	/**
 	 * Parses a comma-delimited list of values into an array of {@link TypeCategory} values.
 	 *
-	 * @param s The comma-delimited string.  Can be <jk>null</jk>.
+	 * @param s The comma-delimited string.  Can be <jk>null</jk> (returns an empty array).
 	 * @return An array of {@link TypeCategory} values (empty if the string is <jk>null</jk> or empty).
 	 */
 	public static TypeCategory[] parseArray(String s) {

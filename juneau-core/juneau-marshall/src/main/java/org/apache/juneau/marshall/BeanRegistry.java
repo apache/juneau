@@ -87,7 +87,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 	 * @param typeName
 	 * 	The bean type name as defined by {@link Marshalled#typeName() @Marshalled(typeName)}.
 	 * 	Can include multi-dimensional array type names (e.g. <js>"X^^"</js>).
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The class metadata for the bean, or <jk>null</jk> if the registry is empty, the type name is <jk>null</jk>, or no matching entry was found.
 	 */
 	public ClassMeta<?> getClassMeta(String typeName) {
@@ -110,7 +110,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 	/**
 	 * Given the specified class, return the dictionary name for it.
 	 *
-	 * @param c The class to lookup in this registry. Can be <jk>null</jk>.
+	 * @param c The class to lookup in this registry. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The dictionary name for the specified class in this registry, or <jk>null</jk> if not found.
 	 */
 	public String getTypeName(ClassMeta<?> c) {
@@ -125,7 +125,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 	 * bean-modeling layer (which is being decoupled from {@link ClassMeta}) can perform a polymorphic-dispatch
 	 * lookup without holding a {@link ClassMeta} reference.
 	 *
-	 * @param c The class to lookup in this registry. Can be <jk>null</jk>.
+	 * @param c The class to lookup in this registry. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The dictionary name for the specified class in this registry, or <jk>null</jk> if not found.
 	 */
 	@Override
@@ -136,7 +136,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 	/**
 	 * Returns <jk>true</jk> if this dictionary has an entry for the specified type name.
 	 *
-	 * @param typeName The bean type name. Can be <jk>null</jk>.
+	 * @param typeName The bean type name. Can be <jk>null</jk> (returns <jk>false</jk>).
 	 * @return <jk>true</jk> if this dictionary has an entry for the specified type name.
 	 */
 	@Override

@@ -53,7 +53,7 @@ public class BasicStatusLine implements StatusLine {
 	 * Instantiates a new instance of this bean.
 	 *
 	 * @param statusCode The initial status code.
-	 * @param reasonPhrase The initial reason phrase.  Can be <jk>null</jk>.
+	 * @param reasonPhrase The initial reason phrase.  Can be <jk>null</jk> to look up the reason phrase from the reason phrase catalog.
 	 * @return A new bean.
 	 */
 	public static BasicStatusLine create(int statusCode, String reasonPhrase) {

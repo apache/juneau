@@ -51,8 +51,8 @@ public class UrlPathMatch {
 	 *
 	 * @param path The path being matched against.  Can be <jk>null</jk>.
 	 * @param matchedParts The number of parts that were matched against the path.
-	 * @param keys The variable keys.  Can be <jk>null</jk>.
-	 * @param values The variable values.  Can be <jk>null</jk>.
+	 * @param keys The variable keys.  Can be <jk>null</jk> (no path variables are recorded; the variable map resolves to empty).
+	 * @param values The variable values.  Can be <jk>null</jk> if <c>keys</c> is also <jk>null</jk>; otherwise must align positionally with <c>keys</c>.
 	 */
 	protected UrlPathMatch(String path, int matchedParts, String[] keys, String[] values) {
 		this.path = path;

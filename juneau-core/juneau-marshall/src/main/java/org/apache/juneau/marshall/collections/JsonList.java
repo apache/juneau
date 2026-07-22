@@ -356,7 +356,7 @@ public class JsonList extends MarshalledList {
 	 *
 	 * @param values
 	 * 	The list to copy.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return A new list or <jk>null</jk> if the list was <jk>null</jk>.
 	 */
 	public static JsonList of(Collection<?> values) {
@@ -506,7 +506,7 @@ public class JsonList extends MarshalledList {
 	 *
 	 * @param in
 	 * 	The input being parsed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> or empty (results in an empty list; no parsing occurs).
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
@@ -521,7 +521,7 @@ public class JsonList extends MarshalledList {
 	 *
 	 * @param copyFrom
 	 * 	The list to copy.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (results in an empty list).
 	 */
 	public JsonList(Collection<?> copyFrom) {
 		super(copyFrom);

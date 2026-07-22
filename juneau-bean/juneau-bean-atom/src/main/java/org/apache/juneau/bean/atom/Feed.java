@@ -127,9 +127,9 @@ public class Feed extends CommonEntry<Feed> {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param id The feed identifier.  Can be <jk>null</jk>.
-	 * @param title The feed title.  Can be <jk>null</jk>.
-	 * @param updated The feed updated timestamp.  Can be <jk>null</jk>.
+	 * @param id The feed identifier.  Can be <jk>null</jk> to leave the property unset.
+	 * @param title The feed title.  Can be <jk>null</jk> to leave the property unset.
+	 * @param updated The feed updated timestamp.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public Feed(Id id, Text title, Calendar updated) {
 		super(id, title, updated);
@@ -138,9 +138,9 @@ public class Feed extends CommonEntry<Feed> {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param id The feed identifier.  Can be <jk>null</jk>.
-	 * @param title The feed title.  Can be <jk>null</jk>.
-	 * @param updated The feed updated timestamp.  Can be <jk>null</jk>.
+	 * @param id The feed identifier.  Can be <jk>null</jk>, in which case the property is set to an {@link Id} with no text (not left unset).
+	 * @param title The feed title.  Can be <jk>null</jk>, in which case the property is set to a {@link Text} with no text (not left unset).
+	 * @param updated The feed updated timestamp.  Can be <jk>null</jk> or blank to leave the property unset.
 	 */
 	public Feed(String id, String title, String updated) {
 		super(id, title, updated);

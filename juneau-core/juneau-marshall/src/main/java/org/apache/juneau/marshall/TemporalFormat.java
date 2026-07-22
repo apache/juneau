@@ -196,7 +196,7 @@ public enum TemporalFormat {
 	/**
 	 * Formats the specified value using this format.
 	 *
-	 * @param value The value to format. Can be <jk>null</jk>.
+	 * @param value The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param zoneId The default zone id used for time-only / unzoned values.
 	 * @return The formatted string, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 *         For {@link #MILLIS} this is a numeric string for every subtype except {@link LocalTime},
@@ -248,7 +248,7 @@ public enum TemporalFormat {
 	 * Parses the specified wire value using this format.
 	 *
 	 * @param <T> The temporal subtype.
-	 * @param value The wire value. Can be <jk>null</jk> or blank.
+	 * @param value The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).
 	 * @param targetType The target temporal subtype.  Must be either a {@link Temporal} subtype or
 	 *                   {@link MonthDay} (the only non-{@link Temporal} {@link TemporalAccessor} the JDK
 	 *                   currently exposes).

@@ -116,8 +116,8 @@ public class HalResource {
 	 * If a value already exists for {@code relation}, it is replaced with the supplied single link. To accumulate
 	 * multiple links under the same relation use {@link #addLinks(String, HalLink...)} instead.
 	 *
-	 * @param relation The link relation (e.g. {@code "self"}, {@code "next"}, {@code "curies"}).  Must not be <jk>null</jk>.
-	 * @param value The link to set.  Can be <jk>null</jk>.
+	 * @param relation The link relation (e.g. {@code "self"}, {@code "next"}, {@code "curies"}).  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param value The link to set.  Can be <jk>null</jk> (stored as a <jk>null</jk> entry under the relation).
 	 * @return This object.
 	 */
 	public HalResource addLink(String relation, HalLink value) {
@@ -135,7 +135,7 @@ public class HalResource {
 	 * If the current value at {@code relation} is a single {@link HalLink}, it is promoted to a {@link HalLinkArray}
 	 * containing the original link and the appended ones.
 	 *
-	 * @param relation The link relation.  Must not be <jk>null</jk>.
+	 * @param relation The link relation.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @param values The links to append.
 	 * @return This object.
 	 */
@@ -193,8 +193,8 @@ public class HalResource {
 	/**
 	 * Convenience method that embeds a single sub-resource under the given relation.
 	 *
-	 * @param relation The relation name.  Must not be <jk>null</jk>.
-	 * @param value The sub-resource.  Can be <jk>null</jk>.
+	 * @param relation The relation name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param value The sub-resource.  Can be <jk>null</jk> (stored as a <jk>null</jk> entry under the relation).
 	 * @return This object.
 	 */
 	public HalResource addEmbedded(String relation, HalResource value) {
@@ -209,7 +209,7 @@ public class HalResource {
 	 * Convenience method that appends one or more sub-resources to a {@link HalResourceArray} stored under
 	 * {@code relation}.
 	 *
-	 * @param relation The relation name.  Must not be <jk>null</jk>.
+	 * @param relation The relation name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @param values The sub-resources to append.
 	 * @return This object.
 	 */
@@ -245,7 +245,7 @@ public class HalResource {
 	/**
 	 * Generic property getter.
 	 *
-	 * @param property The property name. Must not be <jk>null</jk>.
+	 * @param property The property name. Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The property value, or <jk>null</jk> if the property is not set.
 	 */
 	@BeanProp("*")
@@ -260,8 +260,8 @@ public class HalResource {
 	 * <p>
 	 * Use this to set arbitrary payload fields alongside {@code _links} and {@code _embedded}.
 	 *
-	 * @param property The property name. Must not be <jk>null</jk>.
-	 * @param value The new value for the property. Can be <jk>null</jk>.
+	 * @param property The property name. Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param value The new value for the property. Can be <jk>null</jk> (stored as <jk>null</jk>).
 	 * @return This object.
 	 */
 	@BeanProp("*")

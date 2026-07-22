@@ -65,7 +65,7 @@ public enum HttpPartCollectionFormat {
 	/**
 	 * Create from lowercase string.
 	 *
-	 * @param value The enum name.  Can be <jk>null</jk>.
+	 * @param value The enum name.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The enum, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static HttpPartCollectionFormat fromString(String value) {

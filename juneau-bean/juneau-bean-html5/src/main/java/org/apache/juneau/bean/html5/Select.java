@@ -94,7 +94,7 @@ public class Select extends HtmlElementContainer<Select> {
 	/**
 	 * Creates a {@link Select} element with the specified {@link Select#name(String)} attribute and child nodes.
 	 *
-	 * @param name The {@link Select#name(String)} attribute. Can be <jk>null</jk>.
+	 * @param name The {@link Select#name(String)} attribute. Can be <jk>null</jk> to unset the attribute.
 	 * @param children The child nodes. Must not be <jk>null</jk>.
 	 */
 	public Select(String name, Object...children) {
@@ -121,7 +121,7 @@ public class Select extends HtmlElementContainer<Select> {
 	/**
 	 * Convenience method for selecting a child {@link Option} after the options have already been populated.
 	 *
-	 * @param optionValue The option value. Can be <jk>null</jk>.
+	 * @param optionValue The option value. Can be <jk>null</jk> (no-op; no option is selected).
 	 * @return This object.
 	 */
 	public Select choose(Object optionValue) {

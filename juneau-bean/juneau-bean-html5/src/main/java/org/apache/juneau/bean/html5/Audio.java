@@ -71,7 +71,7 @@ public class Audio extends HtmlElementMixed<Audio> {
 	/**
 	 * Creates an {@link Audio} element with the specified {@link Audio#src(Object)} attribute.
 	 *
-	 * @param src The {@link Audio#src(Object)} attribute. Can be <jk>null</jk>.
+	 * @param src The {@link Audio#src(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 */
 	public Audio(String src) {
 		src(src);
@@ -238,7 +238,7 @@ public class Audio extends HtmlElementMixed<Audio> {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public Audio src(Object value) {

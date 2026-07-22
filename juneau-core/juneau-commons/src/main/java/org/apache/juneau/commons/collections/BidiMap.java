@@ -116,8 +116,8 @@ public class BidiMap<K,V> implements Map<K,V> {
 		 * Null keys and values are allowed in the builder but will be filtered out
 		 * during the {@link #build()} operation.
 		 *
-		 * @param key The key. Can be <jk>null</jk>.
-		 * @param value The value. Can be <jk>null</jk>.
+		 * @param key The key. Can be <jk>null</jk> (filtered out, along with its value, during {@link #build()}).
+		 * @param value The value. Can be <jk>null</jk> (filtered out, along with its key, during {@link #build()}).
 		 * @return This object.
 		 * @throws IllegalArgumentException if the value already exists mapped to a different key.
 		 */
@@ -183,7 +183,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 	 * Constructs a bidirectional map from the provided builder, automatically filtering
 	 * out any entries with null keys or values.
 	 *
-	 * @param builder The builder containing the initial entries. Must not be <jk>null</jk>.
+	 * @param builder The builder containing the initial entries. Must not be <jk>null</jk> or a {@link NullPointerException} is thrown.
 	 */
 	public BidiMap(Builder<K,V> builder) {
 		var forward2 = builder.map.entrySet().stream().filter(x -> nn(x.getKey()) && nn(x.getValue())).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b, LinkedHashMap::new));
@@ -319,7 +319,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 	 * <p>
 	 * This operation updates both the forward and reverse maps.
 	 *
-	 * @param m Mappings to be stored in this map. Must not be <jk>null</jk>.
+	 * @param m Mappings to be stored in this map. Must not be <jk>null</jk> or a {@link NullPointerException} is thrown.
 	 * @throws UnsupportedOperationException if the map is unmodifiable.
 	 * @throws IllegalArgumentException if any value in the map already exists mapped to a different key.
 	 */

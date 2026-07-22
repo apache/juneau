@@ -104,7 +104,7 @@ public class Video extends HtmlElementMixed<Video> {
 	/**
 	 * Creates a {@link Video} element with the specified {@link Video#src(Object)} attribute.
 	 *
-	 * @param src The {@link Video#src(Object)} attribute. Can be <jk>null</jk>.
+	 * @param src The {@link Video#src(Object)} attribute. Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 */
 	public Video(Object src) {
 		src(src);
@@ -261,7 +261,7 @@ public class Video extends HtmlElementMixed<Video> {
 	 * <p>
 	 * The poster image should be representative of the video content and help users understand what the video contains.
 	 *
-	 * @param value The URL of the poster image to display before video playback. Can be <jk>null</jk>.
+	 * @param value The URL of the poster image to display before video playback. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Video poster(String value) {
@@ -308,7 +308,7 @@ public class Video extends HtmlElementMixed<Video> {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk>, in which case the attribute is stored with a <jk>null</jk> value (not removed).
 	 * @return This object.
 	 */
 	public Video src(Object value) {

@@ -89,7 +89,7 @@ public class Blockquote extends HtmlElementMixed<Blockquote> {
 	 * <p>
 	 * The URL should point to the original source of the quoted material.
 	 *
-	 * @param value The URL of the source document for the quotation. Can be <jk>null</jk>.
+	 * @param value The URL of the source document for the quotation. Can be <jk>null</jk> to unset the attribute.
 	 * @return This object.
 	 */
 	public Blockquote cite(String value) {

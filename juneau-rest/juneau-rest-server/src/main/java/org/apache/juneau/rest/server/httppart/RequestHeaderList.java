@@ -204,7 +204,7 @@ public class RequestHeaderList extends ArrayList<RequestHeader> {
 	 * <br>Existing headers with the same name are not changed.
 	 *
 	 * @param name The header name.  Must not be <jk>null</jk>.
-	 * @param value The header value.  Can be <jk>null</jk>.
+	 * @param value The header value.  Can be <jk>null</jk> (the header is added with a <jk>null</jk> value).
 	 * @return This object.
 	 */
 	public RequestHeaderList add(String name, Object value) {
@@ -463,7 +463,7 @@ public class RequestHeaderList extends ArrayList<RequestHeader> {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Converted to a string using {@link Object#toString()}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the header is set with a <jk>null</jk> value).
 	 * @return This object.
 	 */
 	public RequestHeaderList set(String name, Object value) {

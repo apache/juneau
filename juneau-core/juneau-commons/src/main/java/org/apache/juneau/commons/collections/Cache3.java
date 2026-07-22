@@ -185,7 +185,7 @@ public class Cache3<K1,K2,K3,V> {
 		/**
 		 * Specifies the default supplier function for computing values when keys are not found.
 		 *
-		 * @param value The default supplier function. Can be <jk>null</jk>.
+		 * @param value The default supplier function. Can be <jk>null</jk>, in which case {@link Cache3#get(Object,Object,Object)} will throw a {@link NullPointerException} (use {@link Cache3#get(Object, Object, Object, java.util.function.Supplier)} instead to supply one per call).
 		 * @return This object for method chaining.
 		 */
 		public Builder<K1,K2,K3,V> supplier(Function3<K1,K2,K3,V> value) {
@@ -339,9 +339,9 @@ public class Cache3<K1,K2,K3,V> {
 	/**
 	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key triplet.
 	 *
-	 * @param key1 The first key. Can be <jk>null</jk>.
-	 * @param key2 The second key. Can be <jk>null</jk>.
-	 * @param key3 The third key. Can be <jk>null</jk>.
+	 * @param key1 The first key. Can be <jk>null</jk> (null keys are supported like any other key).
+	 * @param key2 The second key. Can be <jk>null</jk> (null keys are supported like any other key).
+	 * @param key3 The third key. Can be <jk>null</jk> (null keys are supported like any other key).
 	 * @return <jk>true</jk> if the cache contains the key triplet.
 	 */
 	public boolean containsKey(K1 key1, K2 key2, K3 key3) {
@@ -364,9 +364,9 @@ public class Cache3<K1,K2,K3,V> {
 	/**
 	 * Retrieves a cached value by key triplet using the default supplier.
 	 *
-	 * @param key1 First key component. Can be <jk>null</jk>.
-	 * @param key2 Second key component. Can be <jk>null</jk>.
-	 * @param key3 Third key component. Can be <jk>null</jk>.
+	 * @param key1 First key component. Can be <jk>null</jk> (null keys are supported like any other key).
+	 * @param key2 Second key component. Can be <jk>null</jk> (null keys are supported like any other key).
+	 * @param key3 Third key component. Can be <jk>null</jk> (null keys are supported like any other key).
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 * @throws NullPointerException if no default supplier was configured.
 	 */
@@ -377,10 +377,10 @@ public class Cache3<K1,K2,K3,V> {
 	/**
 	 * Retrieves a cached value by key triplet, computing it if necessary using the provided supplier.
 	 *
-	 * @param key1 First key component. Can be <jk>null</jk>.
-	 * @param key2 Second key component. Can be <jk>null</jk>.
-	 * @param key3 Third key component. Can be <jk>null</jk>.
-	 * @param supplier The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk>.
+	 * @param key1 First key component. Can be <jk>null</jk> (null keys are supported like any other key).
+	 * @param key2 Second key component. Can be <jk>null</jk> (null keys are supported like any other key).
+	 * @param key3 Third key component. Can be <jk>null</jk> (null keys are supported like any other key).
+	 * @param supplier The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk> or an {@link IllegalArgumentException} is thrown.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, java.util.function.Supplier<V> supplier) {
@@ -421,9 +421,9 @@ public class Cache3<K1,K2,K3,V> {
 	/**
 	 * Associates the specified value with the specified key triplet.
 	 *
-	 * @param key1 The first key. Can be <jk>null</jk>.
-	 * @param key2 The second key. Can be <jk>null</jk>.
-	 * @param key3 The third key. Can be <jk>null</jk>.
+	 * @param key1 The first key. Can be <jk>null</jk> (null keys are supported like any other key).
+	 * @param key2 The second key. Can be <jk>null</jk> (null keys are supported like any other key).
+	 * @param key3 The third key. Can be <jk>null</jk> (null keys are supported like any other key).
 	 * @param value The value to associate with the key triplet.
 	 * @return The previous value associated with the key triplet, or <jk>null</jk> if there was no mapping.
 	 */
@@ -437,9 +437,9 @@ public class Cache3<K1,K2,K3,V> {
 	/**
 	 * Removes the entry for the specified key triplet from the cache.
 	 *
-	 * @param key1 The first key. Can be <jk>null</jk>.
-	 * @param key2 The second key. Can be <jk>null</jk>.
-	 * @param key3 The third key. Can be <jk>null</jk>.
+	 * @param key1 The first key. Can be <jk>null</jk> (null keys are supported like any other key).
+	 * @param key2 The second key. Can be <jk>null</jk> (null keys are supported like any other key).
+	 * @param key3 The third key. Can be <jk>null</jk> (null keys are supported like any other key).
 	 * @return The previous value associated with the key triplet, or <jk>null</jk> if there was no mapping.
 	 */
 	public V remove(K1 key1, K2 key2, K3 key3) {

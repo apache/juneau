@@ -102,7 +102,7 @@ public class ThrownStore {
 		 * Parent stores are used for aggregating statistics across multiple child stores.
 		 * <br>The {@link ThrownStore#GLOBAL} store can be used for aggregating all thrown exceptions in a single JVM.
 		 *
-		 * @param value The parent store.  Can be <jk>null</jk>.
+		 * @param value The parent store.  Can be <jk>null</jk> for a root store with no parent chain.
 		 * @return This object.
 		 */
 		public Builder parent(ThrownStore value) {

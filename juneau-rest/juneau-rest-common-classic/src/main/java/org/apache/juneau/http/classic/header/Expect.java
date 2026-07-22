@@ -112,7 +112,7 @@ public class Expect extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Expect(String value) {
 		super(NAME, value);
@@ -126,7 +126,7 @@ public class Expect extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public Expect(Supplier<String> value) {
 		super(NAME, value);

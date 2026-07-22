@@ -48,7 +48,7 @@ public class TransportException extends IOException {
 	 * Constructor.
 	 *
 	 * @param message The error message.
-	 * @param cause The underlying cause. Can be <jk>null</jk>.
+	 * @param cause The underlying cause. Can be <jk>null</jk> (no cause is chained).
 	 */
 	public TransportException(String message, Throwable cause) {
 		super(message, cause);
@@ -57,7 +57,7 @@ public class TransportException extends IOException {
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The underlying cause. Can be <jk>null</jk>.
+	 * @param cause The underlying cause. Can be <jk>null</jk> (no cause is chained).
 	 */
 	public TransportException(Throwable cause) {
 		super(cause);

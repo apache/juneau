@@ -106,7 +106,7 @@ public class VersionAssertion extends FluentVersionAssertion<VersionAssertion> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 * @return A new assertion object.
 	 */
 	public static VersionAssertion create(Version value) {
@@ -118,7 +118,7 @@ public class VersionAssertion extends FluentVersionAssertion<VersionAssertion> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (assertions such as {@code isNull()} then operate on the absence of a value).
 	 */
 	public VersionAssertion(Version value) {
 		super(value, null);

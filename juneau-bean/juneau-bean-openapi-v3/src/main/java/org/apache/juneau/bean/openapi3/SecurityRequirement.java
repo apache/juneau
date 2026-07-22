@@ -65,8 +65,8 @@ public class SecurityRequirement extends OpenApiElement {
 	/**
 	 * Adds a security requirement.
 	 *
-	 * @param schemeName The security scheme name.  Must not be <jk>null</jk>.
-	 * @param scopes The required scopes.  Must not be <jk>null</jk>.
+	 * @param schemeName The security scheme name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param scopes The required scopes.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public SecurityRequirement addRequirement(String schemeName, String...scopes) {
@@ -152,7 +152,7 @@ public class SecurityRequirement extends OpenApiElement {
 	 * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/authentication/">OpenAPI Authentication</a>
 	 * </ul>
 	 *
-	 * @param schemeName The security scheme name.  Must not be <jk>null</jk>.
+	 * @param schemeName The security scheme name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	@BeanIgnore

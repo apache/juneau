@@ -139,7 +139,7 @@ public class CacheControl extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public CacheControl(String value) {
 		super(NAME, value);
@@ -153,7 +153,7 @@ public class CacheControl extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public CacheControl(Supplier<String> value) {
 		super(NAME, value);

@@ -83,7 +83,7 @@ public final class StackOverlay implements BeanStore {
 	 * The frame becomes the highest-priority lookup target for subsequent {@link #getBean(Class)} /
 	 * {@link #getBeanSupplier(Class)} calls until it is popped.
 	 *
-	 * @param overlay The bean store to push.  Must not be <jk>null</jk>.
+	 * @param overlay The bean store to push.  Must not be <jk>null</jk> or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public StackOverlay push(BeanStore overlay) {

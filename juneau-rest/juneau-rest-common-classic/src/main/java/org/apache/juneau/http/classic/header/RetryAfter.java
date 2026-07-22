@@ -138,7 +138,7 @@ public class RetryAfter extends BasicDateHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public RetryAfter(Integer value) {
 		super(NAME, (String)null);
@@ -152,7 +152,7 @@ public class RetryAfter extends BasicDateHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>) or an integer.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public RetryAfter(String value) {
 		super(NAME, isNumeric(value) ? null : value);
@@ -182,7 +182,7 @@ public class RetryAfter extends BasicDateHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public RetryAfter(ZonedDateTime value) {
 		super(NAME, value);

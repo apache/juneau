@@ -74,7 +74,7 @@ public final class RestLogEntry {
 	/**
 	 * Returns the response received, or {@code null} if the transport failed before a response was received.
 	 *
-	 * @return The response, or <jk>null</jk>.
+	 * @return The response, or <jk>null</jk> if the transport failed before a response was received.
 	 */
 	public RestResponse getResponse() {
 		return response;
@@ -83,7 +83,7 @@ public final class RestLogEntry {
 	/**
 	 * Returns the error that occurred, or {@code null} on success.
 	 *
-	 * @return The error, or <jk>null</jk>.
+	 * @return The error, or <jk>null</jk> on success.
 	 */
 	public Throwable getError() {
 		return error;

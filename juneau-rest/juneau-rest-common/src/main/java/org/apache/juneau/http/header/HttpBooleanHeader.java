@@ -79,7 +79,7 @@ public class HttpBooleanHeader extends HttpHeaderBean {
 	 * Constructor.
 	 *
 	 * @param name Header name. Must not be <jk>null</jk>.
-	 * @param typedValue The boolean value. Can be <jk>null</jk>.
+	 * @param typedValue The boolean value. Can be <jk>null</jk>, in which case the parsed value is <jk>null</jk>.
 	 */
 	protected HttpBooleanHeader(String name, Boolean typedValue) {
 		super(name, s(typedValue));
@@ -130,7 +130,7 @@ public class HttpBooleanHeader extends HttpHeaderBean {
 	/**
 	 * Returns the parsed value of this header, or the specified default if unset.
 	 *
-	 * @param other The default value. Can be <jk>null</jk>.
+	 * @param other The default value. Can be <jk>null</jk> to allow a <jk>null</jk> result when the header is unset.
 	 * @return The parsed value, or <c>other</c> if the value is unset. Can be <jk>null</jk> if <c>other</c> is <jk>null</jk>.
 	 */
 	public Boolean orElse(Boolean other) {

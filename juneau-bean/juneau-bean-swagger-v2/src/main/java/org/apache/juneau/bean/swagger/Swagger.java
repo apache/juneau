@@ -234,8 +234,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>definitions</property> property.
 	 *
-	 * @param name A definition name.  Must not be <jk>null</jk>.
-	 * @param schema The schema that the name defines.  Must not be <jk>null</jk>.
+	 * @param name A definition name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param schema The schema that the name defines.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public Swagger addDefinition(String name, JsonMap schema) {
@@ -251,8 +251,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>parameter</property> property.
 	 *
-	 * @param name The parameter name.  Must not be <jk>null</jk>.
-	 * @param parameter The parameter definition.  Must not be <jk>null</jk>.
+	 * @param name The parameter name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param parameter The parameter definition.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public Swagger addParameter(String name, ParameterInfo parameter) {
@@ -268,9 +268,9 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>paths</property> property.
 	 *
-	 * @param path The path template.  Must not be <jk>null</jk>.
-	 * @param methodName The HTTP method name.  Must not be <jk>null</jk>.
-	 * @param operation The operation that describes the path.  Must not be <jk>null</jk>.
+	 * @param path The path template.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param methodName The HTTP method name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param operation The operation that describes the path.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public Swagger addPath(String path, String methodName, Operation operation) {
@@ -325,8 +325,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>responses</property> property.
 	 *
-	 * @param name The response name.  Must not be <jk>null</jk>.
-	 * @param response The response definition.  Must not be <jk>null</jk>.
+	 * @param name The response name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param response The response definition.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public Swagger addResponse(String name, ResponseInfo response) {
@@ -409,7 +409,7 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>securityDefinitions</property> property.
 	 *
-	 * @param scheme The security scheme that applies to this operation  Must not be <jk>null</jk>.
+	 * @param scheme The security scheme that applies to this operation  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @param alternatives
 	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
 	 * @return This object.
@@ -428,8 +428,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>securityDefinitions</property> property.
 	 *
-	 * @param name A security name.  Must not be <jk>null</jk>.
-	 * @param securityScheme A security schema.  Must not be <jk>null</jk>.
+	 * @param name A security name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param securityScheme A security schema.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return This object.
 	 */
 	public Swagger addSecurityDefinition(String name, SecurityScheme securityScheme) {
@@ -504,8 +504,8 @@ public class Swagger extends SwaggerElement {
 	 * Resolves a <js>"$ref"</js> tags to nodes in this swagger document.
 	 *
 	 * @param <T> The class to convert the reference to.
-	 * @param ref The ref tag value.  Must not be <jk>null</jk> or blank.
-	 * @param c The class to convert the reference to.  Must not be <jk>null</jk>.
+	 * @param ref The ref tag value.  Must not be <jk>null</jk> or blank, or an {@link IllegalArgumentException} is thrown.
+	 * @param c The class to convert the reference to.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The referenced node, or <jk>null</jk> if not found.
 	 */
 	public <T> T findRef(String ref, Class<T> c) {
@@ -606,8 +606,8 @@ public class Swagger extends SwaggerElement {
 	/**
 	 * Shortcut for calling <c>getPaths().get(path).get(operation);</c>
 	 *
-	 * @param path The path (e.g. <js>"/foo"</js>).  Must not be <jk>null</jk>.
-	 * @param operation The HTTP operation (e.g. <js>"get"</js>).  Must not be <jk>null</jk>.
+	 * @param path The path (e.g. <js>"/foo"</js>).  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param operation The HTTP operation (e.g. <js>"get"</js>).  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
 	 */
 	public Operation getOperation(String path, String operation) {
@@ -619,9 +619,9 @@ public class Swagger extends SwaggerElement {
 	/**
 	 * Convenience method for calling <c>getPath(path).get(method).getParameter(in,name);</c>
 	 *
-	 * @param path The HTTP path.  Must not be <jk>null</jk>.
-	 * @param method The HTTP method.  Must not be <jk>null</jk>.
-	 * @param in The parameter type.  Must not be <jk>null</jk>.
+	 * @param path The HTTP path.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param method The HTTP method.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param in The parameter type.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @param name The parameter name.  Can be <jk>null</jk> for parameter type <c>body</c>.
 	 * @return The parameter information or <jk>null</jk> if not found.
 	 */
@@ -645,7 +645,7 @@ public class Swagger extends SwaggerElement {
 	/**
 	 * Shortcut for calling <c>getPaths().get(path);</c>
 	 *
-	 * @param path The path (e.g. <js>"/foo"</js>).  Must not be <jk>null</jk>.
+	 * @param path The path (e.g. <js>"/foo"</js>).  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The operation map for the specified path, or <jk>null</jk> if it doesn't exist.
 	 */
 	public OperationMap getPath(String path) {
@@ -688,9 +688,9 @@ public class Swagger extends SwaggerElement {
 	/**
 	 * Shortcut for calling <c>getPaths().get(path).get(operation).getResponse(status);</c>
 	 *
-	 * @param path The path (e.g. <js>"/foo"</js>).  Must not be <jk>null</jk>.
-	 * @param operation The HTTP operation (e.g. <js>"get"</js>).  Must not be <jk>null</jk>.
-	 * @param status The HTTP response status (e.g. <js>"200"</js>).  Must not be <jk>null</jk>.
+	 * @param path The path (e.g. <js>"/foo"</js>).  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param operation The HTTP operation (e.g. <js>"get"</js>).  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param status The HTTP response status (e.g. <js>"200"</js>).  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
 	 */
 	public ResponseInfo getResponseInfo(String path, String operation, String status) {

@@ -1844,8 +1844,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		/**
 		 * Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.
 		 *
-		 * @param value The value to copy.  Can be <jk>null</jk>.
-		 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
+	 * @param value The value to copy.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.
 		 */
 		public static Builder copyOrNull(Builder value) {
 			return value == null ? null : value.copy();
@@ -4256,7 +4256,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to convert.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param type The class type to convert the value to.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
@@ -4886,7 +4886,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @param type
 	 * 	The class to resolve.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link ClassInfo}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link ClassInfo}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -5542,7 +5542,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 *
 	 * @param <T> The class type we're wrapping.
 	 * @param p The property annotation info on the type if there is one.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> (the class type is resolved from <c>ci</c> alone, with no <ja>@BeanProp</ja>-based narrowing).
 	 * @param ci The class info for the type.
 	 * @param typeVarImpls
 	 * 	Contains known resolved type parameters on the specified class so that we can result

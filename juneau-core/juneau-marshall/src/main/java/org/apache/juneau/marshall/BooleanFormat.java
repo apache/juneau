@@ -174,8 +174,8 @@ public enum BooleanFormat {
 	 * {@code yes}/{@code no}, {@code y}/{@code n}, {@code on}/{@code off}) regardless of the {@code format}
 	 * hint, case-insensitive. The hint is informational only.
 	 *
-	 * @param value The wire value. Must not be <jk>null</jk> or blank.
-	 * @param format The configured format hint (informational only — parsing is format-agnostic). Can be <jk>null</jk>.
+	 * @param value The wire value. Must not be <jk>null</jk> or blank, or an {@link IllegalArgumentException} is thrown.
+	 * @param format The configured format hint (informational only — parsing is format-agnostic). Can be <jk>null</jk> (ignored; parsing is format-agnostic).
 	 * @return The parsed boolean value.
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>, blank, or does not match any supported boolean textual shape.
 	 */

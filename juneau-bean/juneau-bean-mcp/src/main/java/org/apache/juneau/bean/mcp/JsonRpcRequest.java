@@ -55,7 +55,7 @@ public class JsonRpcRequest {
 	/**
 	 * Request identifier (string, integer, or {@code null} for notifications).
 	 *
-	 * @return The id, or {@code null}.
+	 * @return The id, or {@code null} if not set.
 	 */
 	public Object getId() {
 		return id;
@@ -95,7 +95,7 @@ public class JsonRpcRequest {
 	/**
 	 * Method parameters (object, array, or {@code null}).
 	 *
-	 * @return The params payload, or {@code null}.
+	 * @return The params payload, or {@code null} if not set.
 	 */
 	public Object getParams() {
 		return params;

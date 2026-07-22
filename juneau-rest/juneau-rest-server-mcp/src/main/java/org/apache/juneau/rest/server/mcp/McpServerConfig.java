@@ -74,7 +74,7 @@ public class McpServerConfig {
 	/**
 	 * Sets the protocol revision.
 	 *
-	 * @param protocolVersion The new value. Can be <jk>null</jk>.
+	 * @param protocolVersion The new value. Can be <jk>null</jk> to unset it.
 	 * @return This object (for method chaining).
 	 */
 	public McpServerConfig setProtocolVersion(String protocolVersion) {

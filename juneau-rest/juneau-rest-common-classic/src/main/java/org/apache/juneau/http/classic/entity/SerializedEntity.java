@@ -50,10 +50,10 @@ public class SerializedEntity extends BasicHttpEntity<SerializedEntity> {
 	/**
 	 * Constructor.
 	 *
-	 * @param contentType The entity content type.  Can be <jk>null</jk>.
-	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @param serializer The entity serializer.  Can be <jk>null</jk>.
-	 * @param schema The entity schema.  Can be <jk>null</jk>.
+	 * @param contentType The entity content type.  Can be <jk>null</jk>, in which case the <c>Content-Type</c> header falls back to the serializer's primary media type (if a serializer is set) or is omitted.
+	 * @param content The entity content.  Can be <jk>null</jk>, in which case it's converted to an empty string if no serializer is set, or passed through to the serializer as-is otherwise.
+	 * @param serializer The entity serializer.  Can be <jk>null</jk>, in which case the content is written via its <c>toString()</c> value (or an empty string if the content is also <jk>null</jk>) instead of being serialized.
+	 * @param schema The entity schema.  Can be <jk>null</jk> (no schema is applied to the serializer).
 	 */
 	public SerializedEntity(ContentType contentType, Object content, Serializer serializer, HttpPartSchema schema) {
 		super(contentType, content);
@@ -88,8 +88,8 @@ public class SerializedEntity extends BasicHttpEntity<SerializedEntity> {
 	/**
 	 * Copies this bean and sets the serializer and schema on it.
 	 *
-	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk>.
-	 * @param schema The new schema for the bean.  Can be <jk>null</jk>.
+	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk> (the serializer is left unchanged).
+	 * @param schema The new schema for the bean.  Can be <jk>null</jk> (the schema is left unchanged).
 	 * @return Either a new bean with the serializer set, or this bean if
 	 * 	both values are <jk>null</jk> or the serializer and schema were already set.
 	 */
@@ -138,7 +138,7 @@ public class SerializedEntity extends BasicHttpEntity<SerializedEntity> {
 	 * <p>
 	 * Used to provide instructions to the serializer on how to serialize this object.
 	 *
-	 * @param value The entity schema, can be <jk>null</jk>.
+	 * @param value The entity schema, can be <jk>null</jk> (no schema is applied to the serializer).
 	 * @return This object.
 	 */
 	public SerializedEntity setSchema(HttpPartSchema value) {
@@ -148,7 +148,7 @@ public class SerializedEntity extends BasicHttpEntity<SerializedEntity> {
 	/**
 	 * Sets the serializer on this entity bean.
 	 *
-	 * @param value The entity serializer, can be <jk>null</jk>.
+	 * @param value The entity serializer, can be <jk>null</jk>, in which case the content is written via its <c>toString()</c> value instead of being serialized.
 	 * @return This object.
 	 */
 	public SerializedEntity setSerializer(Serializer value) {

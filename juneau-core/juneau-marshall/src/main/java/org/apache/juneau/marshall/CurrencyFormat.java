@@ -136,7 +136,7 @@ public enum CurrencyFormat {
 	 * {@link #NOT_SET} falls through to {@link #ISO_CODE}. {@code null} locale is treated as
 	 * {@link Locale#ROOT}.
 	 *
-	 * @param value The value to format. Can be <jk>null</jk>.
+	 * @param value The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @param format The configured format. Can be <jk>null</jk> (treated as {@link #ISO_CODE}).
 	 * @param locale The locale used by {@link #SYMBOL} / {@link #DISPLAY_NAME}. Can be <jk>null</jk>
 	 *   (treated as {@link Locale#ROOT}).
@@ -163,7 +163,7 @@ public enum CurrencyFormat {
 	 * iterate-and-match scan against {@link Currency#getAvailableCurrencies()}; when multiple currencies
 	 * match a symbol, prefers the locale's default currency.
 	 *
-	 * @param value The wire value. Can be <jk>null</jk> or blank.
+	 * @param value The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).
 	 * @param format The configured format hint. Can be <jk>null</jk> (treated as {@link #ISO_CODE}).
 	 * @param locale The locale used to disambiguate {@link #SYMBOL} / {@link #DISPLAY_NAME} matches.
 	 *   Can be <jk>null</jk> (treated as {@link Locale#ROOT}).

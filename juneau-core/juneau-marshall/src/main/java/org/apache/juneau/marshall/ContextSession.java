@@ -88,7 +88,7 @@ public abstract class ContextSession {
 		 *
 		 * @param <T> The target type.
 		 * @param value The value to convert.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (returns <jk>null</jk>).
 		 * @param type The target class.
 		 * @return The converted value, or <jk>null</jk> if the input value was <jk>null</jk>.
 		 */

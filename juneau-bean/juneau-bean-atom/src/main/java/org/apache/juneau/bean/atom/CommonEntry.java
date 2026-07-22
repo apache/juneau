@@ -80,9 +80,9 @@ public class CommonEntry<SELF extends CommonEntry<SELF>> extends Common {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param id The ID of this object.  Can be <jk>null</jk>.
-	 * @param title The title of this object.  Can be <jk>null</jk>.
-	 * @param updated The updated timestamp of this object.  Can be <jk>null</jk>.
+	 * @param id The ID of this object.  Can be <jk>null</jk> to leave the property unset.
+	 * @param title The title of this object.  Can be <jk>null</jk> to leave the property unset.
+	 * @param updated The updated timestamp of this object.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public CommonEntry(Id id, Text title, Calendar updated) {
 		setId(id).setTitle(title).setUpdated(updated);
@@ -91,9 +91,9 @@ public class CommonEntry<SELF extends CommonEntry<SELF>> extends Common {
 	/**
 	 * Normal constructor.
 	 *
-	 * @param id The ID of this object.  Can be <jk>null</jk>.
-	 * @param title The title of this object.  Can be <jk>null</jk>.
-	 * @param updated The updated timestamp of this object.  Can be <jk>null</jk>.
+	 * @param id The ID of this object.  Can be <jk>null</jk>, in which case the property is set to an {@link Id} with no text (not left unset).
+	 * @param title The title of this object.  Can be <jk>null</jk>, in which case the property is set to a {@link Text} with no text (not left unset).
+	 * @param updated The updated timestamp of this object.  Can be <jk>null</jk> or blank to leave the property unset.
 	 */
 	public CommonEntry(String id, String title, String updated) {
 		setId(id).setTitle(title).setUpdated(updated);

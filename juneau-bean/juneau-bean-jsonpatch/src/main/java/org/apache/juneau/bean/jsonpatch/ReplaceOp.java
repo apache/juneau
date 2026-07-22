@@ -38,8 +38,8 @@ public class ReplaceOp extends JsonPatchOperation {
 	/**
 	 * Convenience constructor.
 	 *
-	 * @param path The JSON Pointer target.  Can be <jk>null</jk>.
-	 * @param value The replacement value.  Can be <jk>null</jk>.
+	 * @param path The JSON Pointer target.  Can be <jk>null</jk> to leave the property unset.
+	 * @param value The replacement value.  Can be <jk>null</jk> to leave the property unset.
 	 */
 	public ReplaceOp(String path, Object value) {
 		super(path);

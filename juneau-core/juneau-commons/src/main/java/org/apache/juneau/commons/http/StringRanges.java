@@ -89,7 +89,7 @@ public class StringRanges {
 	/**
 	 * Returns a parsed string range header value.
 	 *
-	 * @param value The raw header value.  Can be <jk>null</jk>.
+	 * @param value The raw header value.  Can be <jk>null</jk> or empty (returns {@link #EMPTY}).
 	 * @return A parsed header value.
 	 */
 	public static StringRanges of(String value) {
@@ -132,7 +132,7 @@ public class StringRanges {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The string range header value.  Must not be <jk>null</jk>.
+	 * @param value The string range header value.  Must not be <jk>null</jk> or a {@link NullPointerException} is thrown.
 	 */
 	public StringRanges(String value) {
 		this(parse(value));
@@ -187,7 +187,7 @@ public class StringRanges {
 	 * <p>
 	 * See <a class="doclink" href="https://www.w3.org/TR/activitypub/#retrieving-objects">ActivityPub / Retrieving Objects</a>
 	 *
-	 * @param names The names to match against.  Must not be <jk>null</jk>.
+	 * @param names The names to match against.  Must not be <jk>null</jk> or a {@link NullPointerException} may be thrown.
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int match(List<String> names) {

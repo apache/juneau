@@ -149,7 +149,7 @@ public class IfModifiedSince extends BasicDateHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public IfModifiedSince(String value) {
 		super(NAME, value);
@@ -163,7 +163,7 @@ public class IfModifiedSince extends BasicDateHeader {
 	 *
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public IfModifiedSince(Supplier<ZonedDateTime> value) {
 		super(NAME, value);
@@ -174,7 +174,7 @@ public class IfModifiedSince extends BasicDateHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 */
 	public IfModifiedSince(ZonedDateTime value) {
 		super(NAME, value);

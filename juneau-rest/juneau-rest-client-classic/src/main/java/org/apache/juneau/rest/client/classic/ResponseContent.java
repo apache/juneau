@@ -121,7 +121,7 @@ public class ResponseContent implements HttpEntity {
 	 * @param client The client used to build this request.
 	 * @param request The request object.
 	 * @param response The response object.
-	 * @param parser The parser to use to consume the body.  Can be <jk>null</jk>.
+	 * @param parser The parser to use to consume the body.  Can be <jk>null</jk> to use the response's negotiated/default parser.
 	 */
 	public ResponseContent(RestClient client, RestRequest request, RestResponse response, Parser parser) {
 		this.client = client;

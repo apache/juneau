@@ -438,7 +438,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 *
 	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to search for.
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk> (if null, all entries are accepted).
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
@@ -1447,7 +1447,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * Similar to {@link #equals(Object)} except primitive and Object types that are similar are considered the same.
 	 * (e.g. <jk>boolean</jk> == <c>Boolean</c>).
 	 *
-	 * @param cm The class meta to compare to. Can be <jk>null</jk>.
+	 * @param cm The class meta to compare to. Can be <jk>null</jk>, in which case this method returns <jk>false</jk>.
 	 * @return <jk>true</jk> if the specified class-meta is equivalent to this one.
 	 */
 	public boolean same(ClassMeta<?> cm) {
@@ -1476,7 +1476,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	/**
 	 * Converts the specified object to a string.
 	 *
-	 * @param t The object to convert.  Can be <jk>null</jk>.
+	 * @param t The object to convert.  Can be <jk>null</jk> (returns <jk>null</jk>).
 	 * @return The object converted to a string, or <jk>null</jk> if the object was null.
 	 */
 	public String toString(Object t) {

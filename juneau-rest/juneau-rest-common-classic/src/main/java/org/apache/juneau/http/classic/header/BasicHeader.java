@@ -100,7 +100,7 @@ public class BasicHeader implements Header, Serializable {
 	 * 	The parameter value.
 	 * 	<br>Any non-String value will be converted to a String using {@link Object#toString()}.
 	 * 	<br>Can also be an <l>Object</l> {@link Supplier}.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	@SuppressWarnings({
@@ -123,7 +123,7 @@ public class BasicHeader implements Header, Serializable {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk> to create a header with no value.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicHeader(String name, Supplier<Object> value) {

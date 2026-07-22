@@ -106,7 +106,8 @@ final class MarshalledBeanMetaInitializer implements BeanMetaInitializer {
 	 * @param marshallingContext The marshalling context.  May be <jk>null</jk>.
 	 * @param classInfo The bean's class info (used to derive the parents/interfaces walk).
 	 * @param rawClass The raw class to look up a type name for.
-	 * @return The dictionary name found in a parent's registry, or <jk>null</jk>.
+	 * @return The dictionary name found in a parent's registry, or <jk>null</jk> if <c>marshallingContext</c> is
+	 * 	<jk>null</jk> or no parent/interface has a matching type-name mapping for <c>rawClass</c>.
 	 */
 	@Override
 	public String findTypeNameInParents(Object marshallingContext, ClassInfo classInfo, Class<?> rawClass) {
