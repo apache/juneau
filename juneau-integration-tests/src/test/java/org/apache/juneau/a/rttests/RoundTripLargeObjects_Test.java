@@ -44,8 +44,13 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
+ *
+ * <p>
+ * Round-trips a 20000-element object across every serializer/parser pair in the reactor, 10 times each;
+ * tagged manual because the runtime cost is too high for the normal build, not because of a correctness issue.
+ * </p>
  */
-@Disabled
+@Tag("manual")
 @SuppressWarnings({
 	"serial"  // serialVersionUID not required for test classes.
 })

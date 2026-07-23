@@ -109,58 +109,6 @@ class LogRecord_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Source class and method name calculation
-	//====================================================================================================
-
-	@Test void c01_getSourceClassName_calculatedLazily() {
-		// Create LogRecord through Logger to get proper call stack
-		// findSource() filters out LogRecord, Logger, and lambda methods, so test classes are included
-		try (var capture = getLogger("c01").captureEvents()) {
-			var logger = getLogger("c01");
-			logger.info("Message");
-
-			var rec = capture.getRecords().get(0);
-			var className = rec.getSourceClassName();
-			// Should be calculated from stack trace
-			assertNotNull(className);
-			assertTrue(className.contains("LogRecord_Test")); // Should be this test class
-		}
-	}
-
-	@Test void c02_getSourceMethodName_calculatedLazily() {
-		// Create LogRecord through Logger to get proper call stack
-		// findSource() filters out LogRecord, Logger, and lambda methods, so test methods are included
-		try (var capture = getLogger("c02").captureEvents()) {
-			var logger = getLogger("c02");
-			logger.info("Message");
-
-			var rec = capture.getRecords().get(0);
-			var methodName = rec.getSourceMethodName();
-			// Should be calculated from stack trace
-			assertNotNull(methodName);
-			assertEquals("c02_getSourceMethodName_calculatedLazily", methodName);
-		}
-	}
-
-	@Test void c03_source_cachedAfterFirstAccess() {
-		// Create LogRecord through Logger to get proper call stack
-		try (var capture = getLogger("c03").captureEvents()) {
-			var logger = getLogger("c03");
-			logger.info("Message");
-
-			var rec = capture.getRecords().get(0);
-			var className1 = rec.getSourceClassName();
-			var className2 = rec.getSourceClassName();
-			var methodName1 = rec.getSourceMethodName();
-			var methodName2 = rec.getSourceMethodName();
-
-			// Should return same values (cached)
-			assertEquals(className1, className2);
-			assertEquals(methodName1, methodName2);
-		}
-	}
-
-	//====================================================================================================
 	// formatted() method - named placeholders
 	//====================================================================================================
 
@@ -193,23 +141,6 @@ class LogRecord_Test extends TestBase {
 			Arguments.of("{timestamp}", "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{4}"),
 			Arguments.of("{date}", null)  // null means just check not null and not empty
 		);
-	}
-
-	// Stack-walk source detection is unreliable in this JVM/test-runner combination; revisit if source-detection accuracy becomes important.
-	@Disabled("stack-walk source detection is unreliable in this JVM/test-runner combination")
-	@Test void d04_formatted_classAndMethod() {
-		// Create LogRecord through Logger to get proper call stack
-		// findSource() filters out LogRecord, Logger, and lambda methods, so test classes are included
-		try (var capture = getLogger("d04").captureEvents()) {
-			var logger = getLogger("d04");
-			logger.info("Message");
-
-			var rec = capture.getRecords().get(0);
-			var formatted = rec.formatted("{class}.{method}");
-			assertNotNull(formatted);
-			assertTrue(formatted.contains("LogRecord_Test"));
-			assertTrue(formatted.contains("d04_formatted_classAndMethod"));
-		}
 	}
 
 	@Test void d05_formatted_logger() {
@@ -266,25 +197,6 @@ class LogRecord_Test extends TestBase {
 		assertTrue(formatted.contains("RuntimeException"));
 	}
 
-	// Stack-walk source detection is unreliable in this JVM/test-runner combination; revisit if source-detection accuracy becomes important.
-	@Disabled("stack-walk source detection is unreliable in this JVM/test-runner combination")
-	@Test void d12_formatted_source() {
-		// Create LogRecord through Logger to get proper call stack
-		// findSource() now only filters out LogRecord and Logger classes, so test classes are included
-		try (var capture = getLogger("d12").captureEvents()) {
-			var logger = getLogger("d12");
-			logger.info("Message");
-
-			var rec = capture.getRecords().get(0);
-			var formatted = rec.formatted("{source}");
-			assertNotNull(formatted);
-			// The {source} placeholder resolves to %2$s which formats the source supplier
-			// The source supplier returns "className methodName"
-			assertTrue(formatted.contains("LogRecord_Test"));
-			assertTrue(formatted.contains("d12_formatted_source"));
-		}
-	}
-
 	//====================================================================================================
 	// formatted() method - Formatter-style specifiers
 	//====================================================================================================
@@ -292,7 +204,7 @@ class LogRecord_Test extends TestBase {
 	@Test void e01_formatted_formatterSpecifiers() {
 		var rec = new LogRecord("test.logger", Level.INFO, "Message", null, null);
 
-		var formatted = rec.formatted("%4$s: %5$s");
+		var formatted = rec.formatted("%3$s: %4$s");
 		assertTrue(formatted.contains("INFO"));
 		assertTrue(formatted.contains("Message"));
 	}

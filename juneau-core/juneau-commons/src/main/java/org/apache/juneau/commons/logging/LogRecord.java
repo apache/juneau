@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.logging;
 
-import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -75,19 +74,14 @@ public class LogRecord extends java.util.logging.LogRecord {
 
 	// Key constants for format placeholders
 	private static final String KEY_date = "date";
-	private static final String KEY_source = "source";
 	private static final String KEY_logger = "logger";
 	private static final String KEY_level = "level";
 	private static final String KEY_msg = "msg";
 	private static final String KEY_thrown = "thrown";
 	private static final String KEY_timestamp = "timestamp";
-	private static final String KEY_class = "class";
-	private static final String KEY_method = "method";
 	private static final String KEY_thread = "thread";
 	private static final String KEY_threadid = "threadid";
 	private static final String KEY_exception = "exception";
-
-	private transient Supplier<Optional<StackTraceElement>> source = memoize(()->findSource());
 
 	/**
 	 * Constructor.
@@ -122,49 +116,6 @@ public class LogRecord extends java.util.logging.LogRecord {
 	}
 
 	/**
-	 * Returns the source class name, calculating it lazily from the stack trace if not already set.
-	 *
-	 * @return The source class name, or <jk>null</jk> if not available.
-	 */
-	@Override
-	public String getSourceClassName() {
-		if (source == null)
-			source = memoize(()->findSource());
-		return source.get().map(x -> x.getClassName()).orElse(null);
-	}
-
-	/**
-	 * Returns the source method name, calculating it lazily from the stack trace if not already set.
-	 *
-	 * @return The source method name, or <jk>null</jk> if not available.
-	 */
-	@Override
-	public String getSourceMethodName() {
-		if (source == null)
-			source = memoize(()->findSource());
-		return source.get().map(x -> x.getMethodName()).orElse(null);
-	}
-
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for stack trace filtering
-	})
-	private static Optional<StackTraceElement> findSource() {
-		for (var e : new Throwable().getStackTrace()) {
-			var c = e.getClassName();
-			var m = e.getMethodName();
-			// Skip internal classes, logging classes, lambda methods/classes, and synthetic methods
-			if (eq(c, cn(LogRecord.class)) || eq(c, cn(Logger.class)) || eq(c, cn(StringUtils.class))
-				|| c.startsWith("java.util.logging.")
-				|| (m != null && (m.contains("lambda$") || m.startsWith("access$")))
-				|| c.contains("$$Lambda$") || (c.contains("/") && c.contains("$Lambda"))) {
-				continue;
-			}
-			return o(e);
-		}
-		return oe();
-	}
-
-	/**
 	 * Formats this log record as a string using the specified format pattern.
 	 *
 	 * <p>
@@ -179,7 +130,6 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 * {@link java.util.Formatter Formatter} with the following arguments:
 	 * <ol>
 	 * 	<li><c>date</c> - The date/time as a {@link Date} object
-	 * 	<li><c>source</c> - The source class name and method name (e.g., "com.example.MyClass myMethod")
 	 * 	<li><c>logger</c> - The logger name
 	 * 	<li><c>level</c> - The log level
 	 * 	<li><c>message</c> - The formatted log message
@@ -190,9 +140,6 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 * <ul>
 	 * 	<li><js>"{date}"</js> - The date/time formatted using {@link SimpleFormatter SimpleFormatter}'s default date format
 	 * 	<li><js>"{timestamp}"</js> - The date/time formatted as ISO-8601 (yyyy-MM-dd'T'HH:mm:ss.SSSZ)
-	 * 	<li><js>"{class}"</js> - The source class name
-	 * 	<li><js>"{method}"</js> - The source method name
-	 * 	<li><js>"{source}"</js> - The source class name and method name (e.g., "com.example.MyClass myMethod")
 	 * 	<li><js>"{logger}"</js> - The logger name
 	 * 	<li><js>"{level}"</js> - The log level name
 	 * 	<li><js>"{msg}"</js> - The log message (formatted if parameters are present)
@@ -209,11 +156,10 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 * </p>
 	 * <ul>
 	 * 	<li><js>"%1$s"</js> or <js>"%1$tc"</js> - The date/time (argument 1)
-	 * 	<li><js>"%2$s"</js> - The source (argument 2)
-	 * 	<li><js>"%3$s"</js> - The logger name (argument 3)
-	 * 	<li><js>"%4$s"</js> - The log level (argument 4)
-	 * 	<li><js>"%5$s"</js> - The log message (argument 5)
-	 * 	<li><js>"%6$s"</js> - The throwable and its backtrace (argument 6)
+	 * 	<li><js>"%2$s"</js> - The logger name (argument 2)
+	 * 	<li><js>"%3$s"</js> - The log level (argument 3)
+	 * 	<li><js>"%4$s"</js> - The log message (argument 4)
+	 * 	<li><js>"%5$s"</js> - The throwable and its backtrace (argument 5)
 	 * </ul>
 	 *
 	 * <p>
@@ -245,7 +191,7 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 * 	<jc>// Result: "[2025-01-22T07:42:45.123-0500 INFO] User John logged in"</jc>
 	 *
 	 * 	<jc>// Using Formatter-style specifiers</jc>
-	 * 	String <jv>formatted2</jv> = <jv>record</jv>.formatted(<js>"%4$s: %5$s [%1$tc]%n"</js>);
+	 * 	String <jv>formatted2</jv> = <jv>record</jv>.formatted(<js>"%3$s: %4$s [%1$tc]%n"</js>);
 	 * 	<jc>// Result: "INFO: User John logged in [Tue Jan 22 07:42:45 PST 2025]"</jc>
 	 *
 	 * 	<jc>// Mixed named placeholders and Formatter specifiers</jc>
@@ -263,23 +209,19 @@ public class LogRecord extends java.util.logging.LogRecord {
 	})
 	public String formatted(String format) {
 		var date = new Date(getMillis());
-		Supplier<String> sourceName = () -> getSourceClassName() + ' ' + getSourceMethodName();
 
 		Function<String, Object> resolver = key -> switch (key) {
 			case KEY_date -> "%1$s";
-			case KEY_source -> sourceName.get();  // Override default behavior since logging class doesn't handle classes outside of java.util.logging.
-			case KEY_logger -> "%3$s";
-			case KEY_level -> "%4$s";
-			case KEY_msg -> "%5$s";
-			case KEY_thrown -> "%6$s";
+			case KEY_logger -> "%2$s";
+			case KEY_level -> "%3$s";
+			case KEY_msg -> "%4$s";
+			case KEY_thrown -> "%5$s";
 			case KEY_timestamp -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(date);
-			case KEY_class -> getSourceClassName();
-			case KEY_method -> getSourceMethodName();
 			case KEY_thread, KEY_threadid -> s(getThreadID());
 			case KEY_exception -> o(getThrown()).map(x -> x.getMessage()).orElse("");
 			default -> "";
 		};
 
-		return safeOptCatch(()->f(formatNamed(format, resolver), date, sourceName, getLoggerName(), getLevel(), getMessage(), getThrown()), x -> x.getLocalizedMessage()).orElse(null);
+		return safeOptCatch(()->f(formatNamed(format, resolver), date, getLoggerName(), getLevel(), getMessage(), getThrown()), x -> x.getLocalizedMessage()).orElse(null);
 	}
 }

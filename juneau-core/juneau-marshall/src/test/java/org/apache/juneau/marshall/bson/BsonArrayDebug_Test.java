@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.*;
 
-/** Debug test to inspect BSON output for arrays. Disabled to avoid stdout noise during normal test runs. */
-@Disabled("Debug test - prints hex dumps for manual inspection; run manually when needed")
+/** Debug test to inspect BSON output for arrays. Tagged manual to avoid stdout noise during normal test runs; run explicitly with -Dgroups=manual. */
+@Tag("manual")
 class BsonArrayDebug_Test {
 
 	@Test
@@ -35,7 +35,7 @@ class BsonArrayDebug_Test {
 	@Test
 	void dumpJsonListBson() {
 		var s = BsonSerializer.create().keepNullProperties().addBeanTypes().addRootType().build();
-		var x = new org.apache.juneau.marshall.collections.JsonList("['abc',123]");
+		var x = new org.apache.juneau.marshall.collections.JsonList("[\"abc\",123]");
 		var bytes = s.write(x);
 		assertTrue(bytes.length > 0);
 	}

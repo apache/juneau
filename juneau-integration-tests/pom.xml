@@ -681,7 +681,9 @@
 					<execution>
 						<id>default-test</id>
 						<configuration>
-							<excludedGroups>container,benchmark</excludedGroups>
+							<!-- ${excludedGroups} (default "manual", see root pom) is merged in here so it stays
+							     overridable via -DexcludedGroups= the same way as every other module. -->
+							<excludedGroups>container,benchmark,${excludedGroups}</excludedGroups>
 							<reportsDirectory>${project.build.directory}/surefire-reports/core</reportsDirectory>
 							<!--
 								Process-level parallelism for the in-memory core bucket: each fork is a
@@ -701,7 +703,7 @@
 						</goals>
 						<configuration>
 							<groups>container</groups>
-							<excludedGroups>benchmark</excludedGroups>
+							<excludedGroups>benchmark,${excludedGroups}</excludedGroups>
 							<reportsDirectory>${project.build.directory}/surefire-reports/container</reportsDirectory>
 						</configuration>
 					</execution>

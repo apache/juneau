@@ -141,7 +141,7 @@ class LogRecordCapture_Test extends TestBase {
 		try (var capture = logger.captureEvents()) {
 			logger.info("Message");
 
-			var formatted = capture.getRecords("%4$s: %5$s");
+			var formatted = capture.getRecords("%3$s: %4$s");
 			assertSize(1, formatted);
 			assertTrue(formatted.get(0).contains("INFO"));
 			assertTrue(formatted.get(0).contains("Message"));
