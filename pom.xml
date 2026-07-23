@@ -79,9 +79,6 @@
 		<jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
 		<logback.version>1.5.18</logback.version>
 		<log4j.version>2.24.3</log4j.version>
-		<!-- Default Surefire excludedGroups; overridable on the CLI (e.g. -DexcludedGroups= to run "manual"-tagged
-		     tests) because it's referenced via ${excludedGroups} rather than hardcoded in the plugin config. -->
-		<excludedGroups>manual</excludedGroups>
 	</properties>
 
 	<modules>
@@ -300,19 +297,23 @@
 					Modules that define their own surefire <systemPropertyVariables> (e.g. java.locale.providers)
 					merge with these; module-level keys win on conflict.  See src/test/resources/.
 
-					Also excludes the "manual" JUnit5 tag by default so on-demand/manual-inspection tests
-					(e.g. debug harnesses, expensive stress tests) are skipped during normal builds; run them
-					explicitly with -DexcludedGroups= -Dgroups=manual.  The value comes from the ${excludedGroups}
-					property (default "manual") rather than a literal, so it can be overridden on the CLI -
-					a literal value in this <configuration> would take precedence over any -D override.
-					Modules that already override <excludedGroups> per execution (e.g. juneau-integration-tests)
-					merge ${excludedGroups} into their own exclusion lists the same way.
+					Deliberately does NOT set <excludedGroups>, nor define an "excludedGroups" property, anywhere
+					in this root pom: Surefire's excludedGroups mojo parameter is bound to a property of the
+					same name (so -DexcludedGroups=... works with zero pom.xml wiring), which means merely
+					declaring an "excludedGroups" property in <properties> - even with no <configuration> use -
+					would feed every module's Surefire execution reactor-wide via inheritance. Surefire hard-
+					fails a module with "groups/excludedGroups require TestNG, JUnit48+ or JUnit 5" as soon as
+					that parameter is non-null, even when it resolves to an empty string - and several modules
+					(e.g. juneau-rest-server-rdf) have no JUnit5 engine on their test classpath. Only the
+					modules that actually contain @Tag("manual") tests (currently juneau-marshall and
+					juneau-integration-tests) declare their own local "excludedGroups" property (default
+					"manual", still overridable via -DexcludedGroups=) and wire it into their own Surefire
+					config, since only those modules are guaranteed to have the JUnit5 engine present.
 				-->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<configuration>
-						<excludedGroups>${excludedGroups}</excludedGroups>
 						<systemPropertyVariables>
 							<logback.configurationFile>${maven.multiModuleProjectDirectory}/src/test/resources/logback-test.xml</logback.configurationFile>
 							<java.util.logging.config.file>${maven.multiModuleProjectDirectory}/src/test/resources/logging.properties</java.util.logging.config.file>

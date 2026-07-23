@@ -32,6 +32,11 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Local (not inherited from root - see root pom's pluginManagement Surefire comment for why) default
+		     Surefire excludedGroups value, referenced via ${excludedGroups} below rather than a literal so it's
+		     still overridable on the CLI (e.g. -DexcludedGroups= to run "manual"-tagged tests like
+		     RoundTripLargeObjects_Test). -->
+		<excludedGroups>manual</excludedGroups>
 	</properties>
 
 	<dependencyManagement>
@@ -681,8 +686,12 @@
 					<execution>
 						<id>default-test</id>
 						<configuration>
-							<!-- ${excludedGroups} (default "manual", see root pom) is merged in here so it stays
-							     overridable via -DexcludedGroups= the same way as every other module. -->
+							<!-- ${excludedGroups} (local property above, default "manual") is merged in here so it
+							     stays overridable via -DexcludedGroups=. This module has the JUnit5 engine on its
+							     test classpath and contains @Tag("manual") tests (RoundTripLargeObjects_Test), so
+							     it's one of the few modules that wires ${excludedGroups} explicitly - it is NOT set
+							     reactor-wide in the root pom's pluginManagement Surefire config (see comment there)
+							     because that breaks modules with no JUnit5 engine on their test classpath. -->
 							<excludedGroups>container,benchmark,${excludedGroups}</excludedGroups>
 							<reportsDirectory>${project.build.directory}/surefire-reports/core</reportsDirectory>
 							<!--

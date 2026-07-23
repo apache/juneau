@@ -32,6 +32,11 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Local (not inherited from root - see root pom's pluginManagement Surefire comment for why) default
+		     Surefire excludedGroups value, referenced via ${excludedGroups} below rather than a literal so it's
+		     still overridable on the CLI (e.g. -DexcludedGroups= to run "manual"-tagged tests like
+		     BsonArrayDebug_Test). -->
+		<excludedGroups>manual</excludedGroups>
 	</properties>
 
 	<dependencies>
@@ -75,6 +80,13 @@
 					<includes>
 						<include>**/*Test.class</include>
 					</includes>
+					<!-- This module has the JUnit5 engine on its test classpath (junit-jupiter dependency above)
+					     and contains @Tag("manual") tests (e.g. BsonArrayDebug_Test), so it's one of the few
+					     modules that declares a local ${excludedGroups} property (see <properties> above,
+					     default "manual") and wires it into its Surefire config; see the root pom's
+					     pluginManagement Surefire comment for why this isn't set reactor-wide. Still
+					     overridable via -DexcludedGroups= to run the manual tests on demand. -->
+					<excludedGroups>${excludedGroups}</excludedGroups>
 					<systemPropertyVariables>
 						<java.locale.providers>JRE,COMPAT,SPI,CLDR</java.locale.providers>
 					</systemPropertyVariables>
