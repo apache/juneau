@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
  * 6.7&times; full-suite slowdown during an earlier prototype.
  *
  * <p>
- * In FINISHED-79, an earlier draft of @Rest(config=...) bridging registered a
+ * In an earlier draft, @Rest(config=...) bridging registered a
  * {@code ConfigPropertySource} per resolved RestContext via {@code Settings.get().addSource(...)}.
  * MockRestClient statically caches RestContext instances and never invokes {@code destroy()},
  * so the global {@code Settings} source list grew unbounded across the test suite — a 6.7x
@@ -122,7 +122,7 @@ class Settings_NoLeakedSources_Test extends TestBase {
 	@Test void a03_twoHundredInstantiations_zeroNewSources() {
 		var before = Settings.get().sourceCount();
 		// 200 builds = 10 base classes × 10 builds × 2 mixes (config + no-config) = matches the
-		// FINISHED-79 cache-saturation threshold that produced the 6.7x regression.
+		// cache-saturation threshold that produced the 6.7x regression.
 		for (var i = 0; i < 10; i++) {
 			for (var c : NO_CONFIG_CLASSES)
 				MockRestClient.build(c);
@@ -131,6 +131,6 @@ class Settings_NoLeakedSources_Test extends TestBase {
 		}
 		var after = Settings.get().sourceCount();
 		assertEquals(before, after,
-			"After 200 @Rest builds, Settings.get() source list must not grow (FINISHED-79 regression guard).");
+			"After 200 @Rest builds, Settings.get() source list must not grow (regression guard).");
 	}
 }

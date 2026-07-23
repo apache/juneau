@@ -24,7 +24,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.*;
 
 /**
- * Phase G regression: verifies that stable-folded {@link Var}s (per RD #10) inside
+ * Phase G regression: verifies that stable-folded {@link Var}s inside
  * {@code @Value} expressions fold to a literal at compile time, so subsequent bean
  * constructions read the cached literal text with no runtime dispatch.
  *
@@ -55,7 +55,7 @@ class Value_StableFolding_Test extends TestBase {
 		assertTrue(t.isLiteral(),
 			"$S{...} with SystemPropertiesVar opts-in to stable folding — template should be literal after compile");
 
-		// Mutate the property AFTER compile — folded value is frozen (RD #10 caveat).
+		// Mutate the property AFTER compile — folded value is frozen.
 		System.setProperty("Value_StableFolding_Test.sysprop", "barney");
 		var bean = BeanInstantiator.of(SysPropBean.class, new BasicBeanStore(null)).run();
 		assertEquals("fred", bean.value,
@@ -68,10 +68,10 @@ class Value_StableFolding_Test extends TestBase {
 	}
 
 	@Test void a03_propertyVarDoesNotFold_dynamicReads() {
-		// PropertyVar stays unstable per RD #10 — Settings can be updated at runtime, so the
+		// PropertyVar stays unstable — Settings can be updated at runtime, so the
 		// @Value("${key}") form must NOT fold at compile time.
 		var t = ValueResolver.getCompiledTemplate("${Value_StableFolding_Test.dynamic:default}");
 		assertFalse(t.isLiteral(),
-			"PropertyVar (the ${...} shortcut) is unstable per RD #10; template must not fold to literal");
+			"PropertyVar (the ${...} shortcut) is unstable; template must not fold to literal");
 	}
 }
