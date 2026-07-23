@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.commons.*;
@@ -289,6 +290,45 @@ class Shorts_Test extends TestBase {
 	void e008_safeOrNull_safeRunOrNull() {
 		String r = safeOrNull(() -> "ok");
 		assertEquals("ok", r);
+	}
+
+	@Test
+	void e009_rex_causeCarrying() {
+		Throwable cause = new Exception("root");
+		RuntimeException e = rex(cause, "test %s", "msg");
+		assertEquals("test msg", e.getMessage());
+		assertSame(cause, e.getCause());
+	}
+
+	@Test
+	void e010_iaex_causeCarrying() {
+		Throwable cause = new Exception("root");
+		IllegalArgumentException e = iaex(cause, "bad arg %s", "x");
+		assertEquals("bad arg x", e.getMessage());
+		assertSame(cause, e.getCause());
+	}
+
+	@Test
+	void e011_isex_causeCarrying() {
+		Throwable cause = new Exception("root");
+		IllegalStateException e = isex(cause, "bad state %s", 1);
+		assertEquals("bad state 1", e.getMessage());
+		assertSame(cause, e.getCause());
+	}
+
+	@Test
+	void e012_ioex_causeCarrying() {
+		Throwable cause = new Exception("root");
+		IOException e = ioex(cause, "bad io %s", "y");
+		assertEquals("bad io y", e.getMessage());
+		assertSame(cause, e.getCause());
+	}
+
+	@Test
+	void e013_isex_causeOnly() {
+		Throwable cause = new Exception("root");
+		IllegalStateException e = isex(cause);
+		assertSame(cause, e.getCause());
 	}
 
 	// ---- PredicateUtils aliases ----

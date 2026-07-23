@@ -1521,6 +1521,12 @@ public class Shorts {
 	/** Creates an {@link IllegalStateException} with a formatted message. */
 	public static IllegalStateException isex(String m, Object...a) { return new IllegalStateException(StringUtils.format(m, a)); }
 
+	/** Creates an {@link IllegalStateException} wrapping a cause. */
+	public static IllegalStateException isex(Throwable t) { return new IllegalStateException(t); }
+
+	/** Creates an {@link IllegalStateException} with a cause and formatted message. */
+	public static IllegalStateException isex(Throwable t, String m, Object...a) { return new IllegalStateException(StringUtils.format(m, a), t); }
+
 	/** Creates an {@link UnsupportedOperationException} with the message "Not supported." */
 	public static UnsupportedOperationException uoex() { return new UnsupportedOperationException("Not supported."); }
 

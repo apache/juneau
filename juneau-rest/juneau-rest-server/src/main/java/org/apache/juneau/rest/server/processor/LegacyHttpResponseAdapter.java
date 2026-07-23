@@ -138,7 +138,7 @@ final class LegacyHttpResponseAdapter {
 			var m = target.getClass().getMethod(method, argTypes);
 			return m.invoke(target, args);
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			throw new IllegalStateException("Failed to invoke " + method + " on " + cn(target), e);
+			throw isex(e, "Failed to invoke %s on %s", method, cn(target));
 		}
 	}
 

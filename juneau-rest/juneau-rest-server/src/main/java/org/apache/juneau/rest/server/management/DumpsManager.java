@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.management;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.lang.management.*;
 import java.nio.file.*;
@@ -103,7 +105,7 @@ public class DumpsManager {
 		} catch (ClassNotFoundException | NoSuchMethodException e) {
 			return false;  // HTT: non-HotSpot JVM with no heap-dump support — not reproducible on HotSpot CI (caller degrades to 501).
 		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException("Failed to write heap dump to " + target.getAbsolutePath(), e);
+			throw rex(e, "Failed to write heap dump to %s", target.getAbsolutePath());
 		}
 	}
 
