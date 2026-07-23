@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.ops;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
@@ -195,7 +196,7 @@ public class EchoMixin {
 		var s = new LinkedHashSet<String>();
 		for (var h : builder.redactedHeaders)
 			s.add(h.toLowerCase(Locale.ROOT));
-		redactedHeadersLower = Collections.unmodifiableSet(s);
+		redactedHeadersLower = u(s);
 	}
 
 	/**

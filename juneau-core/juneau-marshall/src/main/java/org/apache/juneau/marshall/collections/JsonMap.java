@@ -134,7 +134,7 @@ public class JsonMap extends MarshalledMap {
 
 		@Override
 		public Set<Map.Entry<String,Object>> entrySet() {
-			return Collections.unmodifiableSet(super.entrySet());
+			return u(super.entrySet());
 		}
 
 		@Override
@@ -142,7 +142,7 @@ public class JsonMap extends MarshalledMap {
 
 		@Override
 		public Set<String> keySet() {
-			return Collections.unmodifiableSet(super.keySet());
+			return u(super.keySet());
 		}
 
 		@Override

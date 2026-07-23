@@ -234,7 +234,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			if (type.isCollection()) {
 				Object coll = type.newInstance();
 				if (coll == null)
-					coll = new ArrayList<>();
+					coll = l();
 				((Collection<Object>)coll).add(convertToType(prepareMapForBean(inner, type.getElementType()), type.getElementType()));
 				return (T)coll;
 			}
@@ -251,7 +251,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			if (keyType != null && !keyType.isAssignableTo(String.class) && isKeyValuePairFormat(rows)) {
 				var valueType = type.getValueType();
 				if (valueType == null) valueType = ctx.getMarshallingContext().getClassMeta(Object.class);
-				var result = new LinkedHashMap<>();
+				var result = m();
 				for (var row : rows) {
 					var rowMap = (Map<?,?>)row;
 					var rawKey = rowMap.get("key");
@@ -278,7 +278,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		}
 		if (type.isArray()) {
 			var componentMeta = type.getElementType();
-			var unwrapped = new ArrayList<>();
+			var unwrapped = l();
 			for (var row : rows) {
 				var v = unwrapValueHolder(row, componentMeta);
 				unwrapped.add(v);
@@ -287,7 +287,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		}
 		if (type.isCollection()) {
 			var collElemType = type.getElementType();
-			var unwrapped = new ArrayList<>();
+			var unwrapped = l();
 			for (var row : rows) {
 				var v = unwrapValueHolder(row, collElemType);
 				unwrapped.add(v);
@@ -866,11 +866,11 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 					if (stacks[k] == null) stacks[k] = new ArrayList<>();
 				if (level == 1) {
 					// Level-1 null is handled above (def==0); level-1 empty reaches here (def==1).
-					result.add(new ArrayList<>());
+					result.add(l());
 				} else if (isNull) {
 					stacks[level - 2].add(null);   // null list at level k → parent gets null slot
 				} else {
-					stacks[level - 2].add(new ArrayList<>());  // empty list at level k
+					stacks[level - 2].add(l());  // empty list at level k
 				}
 			} else {
 				// Element (null if def < maxDef, present if def == maxDef).
@@ -898,7 +898,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			}
 		}
 		while (result.size() < numRows)
-			result.add(new ArrayList<>());
+			result.add(l());
 		return result;
 	}
 
@@ -964,7 +964,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 	private static List<Object> reconstructRowsFromListColumn(List<Object[]> flattened, int numRows, int maxDef) {
 		var result = new ArrayList<>(numRows);
-		var current = new ArrayList<>();
+		var current = l();
 		// def=0: list null; def=1: list present empty; def>=maxDef-1: element slot (value can be null)
 		int elemPresentDef = Math.max(0, maxDef - 1);
 		for (var e : flattened) {
@@ -979,7 +979,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				if (def == 0)
 					result.add(null);
 				else if (def < elemPresentDef)
-					result.add(new ArrayList<>());
+					result.add(l());
 				else if (def >= elemPresentDef)
 					current.add(val);
 			} else if (def >= elemPresentDef) {
@@ -1023,7 +1023,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			// one or more data pages.  Walk pages from dataPageOffset until the chunk's numValues
 			// level/value entries are consumed.
 			int valuesToRead = (int)Math.min(cc.numValues(), numRows);
-			var values = new ArrayList<>();
+			var values = l();
 			List<Object> dictionary = null;
 			int pageOff = (int)cc.dataPageOffset();
 			int consumed = 0;
@@ -1358,7 +1358,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			var elemType = propClassMeta != null && (propClassMeta.isCollection() || propClassMeta.isArray()) ? propClassMeta.getElementType() : null;
 			if (elemType != null && elemType.isBean()) {
 				var elementProp = rowRelPath.substring(suffixStart);
-				groups.computeIfAbsent(listProp, k -> new ArrayList<>()).add(new ListColumnInfo(fullPath, elementProp, elemType));
+				groups.computeIfAbsent(listProp, k -> l()).add(new ListColumnInfo(fullPath, elementProp, elemType));
 			}
 		}
 		return groups;
@@ -1388,9 +1388,9 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	private Map<Object,Object> mergeMapColumns(MapColumnInfo info, Map<String,List<Object>> columnData, int rowIndex) throws ParseException {
 		var keyList = (List<?>) columnData.get(info.keyColumnPath()).get(rowIndex);
 		if (keyList.isEmpty())
-			return new LinkedHashMap<>();
+			return m();
 		var valueList = (List<?>) columnData.get(info.valueColumnPath()).get(rowIndex);
-		var result = new LinkedHashMap<>();
+		var result = m();
 		var valueIter = valueList.iterator();
 		for (var k : keyList) {
 			var v = valueIter.next();
@@ -1585,7 +1585,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			result = null;
 		}
 		if (result == null)
-			result = new ArrayList<>();
+			result = l();
 		for (var v : values)
 			result.add((Object)convertToType(v, elemType));
 		return result;

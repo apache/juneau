@@ -275,7 +275,7 @@ public class JsonList extends MarshalledList {
 
 		@Override /* Overridden from List */
 		public List<Object> subList(int start, int end) {
-			return Collections.unmodifiableList(new ArrayList<>(this).subList(start, end));
+			return u(new ArrayList<>(this).subList(start, end));
 		}
 
 		private static Iterator<Object> readOnlyIterator(Iterator<Object> it) {

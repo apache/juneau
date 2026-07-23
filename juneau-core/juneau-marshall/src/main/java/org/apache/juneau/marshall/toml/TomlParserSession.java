@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.toml;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.isEmpty;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 
 import java.io.*;
@@ -123,7 +124,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 	}
 
 	private Map<String,Object> readTomlDocument(TomlTokenizer t) throws IOException, ParseException {
-		Map<String,Object> root = new LinkedHashMap<>();
+		Map<String,Object> root = m();
 		Map<String,Object> currentTable = root;
 
 		while (!t.isEof()) {
@@ -141,10 +142,10 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 					if (!(existing instanceof List)) {
 						if (existing != null)
 							throw t.parseException("Key " + path + " redefined");
-						setAt(root, path, new ArrayList<>());
+						setAt(root, path, l());
 						existing = getOrCreateAt(root, path);
 					}
-					Map<String,Object> newTable = new LinkedHashMap<>();
+					Map<String,Object> newTable = m();
 					((List)existing).add(newTable);
 					currentTable = newTable;
 				} else {
@@ -222,7 +223,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		if (c == '[') {
 			t.read();
 			t.skipWhitespaceAndComments();
-			var list = new ArrayList<>();
+			var list = l();
 			while (t.peek() != ']') {
 				list.add(readValue(t));
 				t.skipWhitespaceAndComments();

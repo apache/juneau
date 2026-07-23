@@ -336,7 +336,7 @@ public class BasicOpenApiProviderSession {
 		if (schema.isEmpty())
 			return;
 		var canonical = canonicalize(schema);
-		sites.computeIfAbsent(canonical, k -> new ArrayList<>()).add(new SchemaSite(parent, key));
+		sites.computeIfAbsent(canonical, k -> l()).add(new SchemaSite(parent, key));
 	}
 
 	private static String canonicalize(Object o) {

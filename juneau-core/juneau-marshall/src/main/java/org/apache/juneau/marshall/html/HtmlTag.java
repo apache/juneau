@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.html;
 
 import static javax.xml.stream.XMLStreamConstants.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -131,7 +132,7 @@ enum HtmlTag {
 		return t;
 	}
 
-	private Map<Integer,HtmlTag> cache = new HashMap<>();
+	private Map<Integer,HtmlTag> cache = m();
 
 	int id;
 

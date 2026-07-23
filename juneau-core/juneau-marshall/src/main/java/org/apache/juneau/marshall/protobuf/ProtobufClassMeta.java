@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.protobuf;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.math.*;
 import java.util.*;
 
@@ -102,8 +104,8 @@ public class ProtobufClassMeta extends ExtendedClassMeta {
 			}
 		}
 
-		this.entriesByName = Collections.unmodifiableMap(byName);
-		this.entriesByNumber = Collections.unmodifiableMap(byNumber);
+		this.entriesByName = u(byName);
+		this.entriesByNumber = u(byNumber);
 		this.entries = List.copyOf(byNumber.values());
 	}
 

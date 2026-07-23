@@ -253,7 +253,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	private final boolean enableNamespaces;
 	private final XmlSerializer ctx;
 	private Namespace defaultNamespace;
-	private List<Namespace> namespaces = new ArrayList<>();
+	private List<Namespace> namespaces = l();
 
 	/**
 	 * Constructor.
@@ -271,7 +271,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 			builder.defaultNamespace != null ? Namespace.create(builder.defaultNamespace) : ctx.getDefaultNamespace()
 		);
 		var ctxNamespaces = ctx.getNamespaces();
-		namespaces = ctxNamespaces == null ? new ArrayList<>() : new ArrayList<>(ctxNamespaces);
+		namespaces = ctxNamespaces == null ? l() : new ArrayList<>(ctxNamespaces);
 	}
 
 	/**

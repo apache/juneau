@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
 import java.util.*;
@@ -139,7 +140,7 @@ public final class AuthResult {
 
 	private AuthResult(Principal principal, Set<String> roles, MergeMode mode) {
 		this.principal = principal;
-		this.roles = Collections.unmodifiableSet(roles);
+		this.roles = u(roles);
 		this.mode = mode;
 	}
 

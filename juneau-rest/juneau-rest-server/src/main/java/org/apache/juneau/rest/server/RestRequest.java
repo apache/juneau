@@ -1732,7 +1732,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public RestRequest setSerializerSessionProperty(String name, Object value) {
 		if (serializerSessionProperties == null)
-			serializerSessionProperties = new LinkedHashMap<>();
+			serializerSessionProperties = m();
 		serializerSessionProperties.put(name, value);
 		return this;
 	}
@@ -1749,7 +1749,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public RestRequest setParserSessionProperty(String name, Object value) {
 		if (parserSessionProperties == null)
-			parserSessionProperties = new LinkedHashMap<>();
+			parserSessionProperties = m();
 		parserSessionProperties.put(name, value);
 		return this;
 	}
@@ -1763,7 +1763,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public RestRequest setSerializerSessionProperties(Map<String,Object> values) {
 		if (ine(values)) {
 			if (serializerSessionProperties == null)
-				serializerSessionProperties = new LinkedHashMap<>();
+				serializerSessionProperties = m();
 			serializerSessionProperties.putAll(values);
 		}
 		return this;
@@ -1778,7 +1778,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public RestRequest setParserSessionProperties(Map<String,Object> values) {
 		if (ine(values)) {
 			if (parserSessionProperties == null)
-				parserSessionProperties = new LinkedHashMap<>();
+				parserSessionProperties = m();
 			parserSessionProperties.putAll(values);
 		}
 		return this;
@@ -1885,7 +1885,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 					result.putAll(map);
 			}
 		}
-		return result != null ? Collections.unmodifiableMap(result) : Collections.emptyMap();
+		return result != null ? u(result) : Collections.emptyMap();
 	}
 
 	private static void badRequest(String msg, Object...args) {

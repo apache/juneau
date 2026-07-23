@@ -712,10 +712,10 @@ public class SerializerSession extends MarshallingTraverseSession {
 			try {
 				return toBigDecimal(an).compareTo(toBigDecimal(bn)) == 0;
 			} catch (NumberFormatException e) {  // HTT — defensive: a Number subclass whose toString() isn't a valid decimal.
-				return Objects.equals(a, b);
+				return eq(a, b);
 			}
 		}
-		return Objects.equals(a, b);
+		return eq(a, b);
 	}
 
 	private static BigDecimal toBigDecimal(Number n) {
@@ -837,7 +837,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @since 9.2.1
 	 */
 	public final List<Object> toListFromStreamable(Object o, ClassMeta<?> type) {
-		var list = new ArrayList<>();
+		var list = l();
 		forEachStreamableEntry(o, type, list::add);
 		return list;
 	}

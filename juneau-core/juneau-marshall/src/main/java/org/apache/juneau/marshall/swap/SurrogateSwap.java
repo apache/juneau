@@ -57,7 +57,7 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 		"java:S1452"  // Wildcard required - List<SurrogateSwap<?,?>> for multiple constructor-based swaps
 	})
 	public static List<SurrogateSwap<?,?>> findObjectSwaps(Class<?> c, MarshallingContext bc) {
-		List<SurrogateSwap<?,?>> l = new LinkedList<>();
+		List<SurrogateSwap<?,?>> l = ll();
 		var ci = info(c);
 		ci.getPublicConstructors().stream().filter(x -> ! bc.getAnnotationProvider().has(BeanIgnore.class, x) && x.hasNumParameters(1) && x.isPublic()).forEach(x -> {
 			var pt = x.getParameter(0).getParameterType().inner();

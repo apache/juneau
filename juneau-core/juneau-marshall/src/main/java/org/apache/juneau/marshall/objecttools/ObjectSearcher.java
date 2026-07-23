@@ -158,7 +158,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	 */
 	private class RowMatcher {
 
-		Map<String,ColumnMatcher> entryMatchers = new HashMap<>();
+		Map<String,ColumnMatcher> entryMatchers = m();
 		MarshallingSession bs;
 
 		@SuppressWarnings({

@@ -302,7 +302,7 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 			return new ArrayList<>(value2);
 		if (value != null && value.getClass().isArray())
 			return toList(value.getClass(), value);
-		return new ArrayList<>();
+		return l();
 	}
 
 	private static boolean toBoolean(Object value) {

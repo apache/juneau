@@ -103,7 +103,7 @@ public class VersionProvider {
 	protected VersionProvider(Builder builder) {
 		if (! builder.explicit)
 			builder.fromManifest().fromGitProperties().fromJavaVersion();
-		info = Collections.unmodifiableMap(new LinkedHashMap<>(builder.entries));
+		info = u(cp(builder.entries));
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class VersionProvider {
 	 */
 	public static class Builder {
 
-		private final Map<String,String> entries = new LinkedHashMap<>();
+		private final Map<String,String> entries = m();
 		private boolean explicit;
 
 		/**

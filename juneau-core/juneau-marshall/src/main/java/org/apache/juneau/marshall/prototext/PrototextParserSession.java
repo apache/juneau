@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.prototext;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.isEmpty;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 
 import java.io.*;
@@ -123,7 +124,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 			else if (tok.type() == PrototextToken.TokenType.LANGLE)
 				closeBrace = PrototextToken.TokenType.RANGLE;
 			else
-				return new LinkedHashMap<>();
+				return m();
 		}
 
 		var result = new LinkedHashMap<String,Object>();
@@ -166,7 +167,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 			if (result.containsKey(fieldName)) {
 				var existing = result.get(fieldName);
 				if (!(existing instanceof List)) {
-					var list = new ArrayList<>();
+					var list = l();
 					list.add(existing);
 					result.put(fieldName, list);
 					existing = list;
@@ -206,7 +207,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		var tok = t.read();
 		if (tok.type() != PrototextToken.TokenType.LBRACKET)
 			throw t.parseException("Expected '['");
-		var list = new ArrayList<>();
+		var list = l();
 		t.skipWhitespaceAndComments();
 		tok = t.peek();
 		if (tok.type() == PrototextToken.TokenType.RBRACKET) {
@@ -353,7 +354,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		}
 		if (val instanceof List val2 && targetType.isCollectionOrArray()) {
 			var elType = targetType.getElementType();
-			var result = new ArrayList<>();
+			var result = l();
 			for (Object item : val2)
 				result.add(convertValue(item, elType));
 			return targetType.isArray() ? toArray(targetType, result) : result;

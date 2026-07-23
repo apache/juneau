@@ -646,7 +646,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		autoDetectNamespaces = ! builder.disableAutoDetectNamespaces;
 		defaultNamespace = nn(builder.defaultNamespace) ? builder.defaultNamespace : DEFAULT_JUNEAU_NAMESPACE;
 		enableNamespaces = builder.enableNamespaces;
-		namespaces = u(nn(builder.namespaces) ? new ArrayList<>(builder.namespaces) : new ArrayList<>());
+		namespaces = u(nn(builder.namespaces) ? new ArrayList<>(builder.namespaces) : l());
 		textNodeDelimiter = builder.textNodeDelimiter;
 		addBeanTypes2 = addBeanTypesXml || super.isAddBeanTypes();
 	}

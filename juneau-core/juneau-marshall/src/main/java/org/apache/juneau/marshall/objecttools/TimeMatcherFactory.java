@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.objecttools;
 
 import static java.time.temporal.ChronoField.*;
 import static org.apache.juneau.commons.lang.StateEnum.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
@@ -60,7 +61,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 		private static final AsciiSet WS = AsciiSet.of(" \t");
 
 		TimestampRange[] ranges;
-		List<TimestampRange> l = new LinkedList<>();
+		List<TimestampRange> l = ll();
 
 		@SuppressWarnings({
 			"java:S3776", // Cognitive complexity acceptable for parser state machine

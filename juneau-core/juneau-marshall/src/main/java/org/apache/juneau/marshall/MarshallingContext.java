@@ -4789,7 +4789,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 
 	private static Collection<Object> newCollection(Class<?> outType) {
 		if (outType == List.class || outType == Collection.class || outType == Iterable.class || outType == AbstractList.class)
-			return new ArrayList<>();
+			return l();
 		if (outType == Set.class || outType == LinkedHashSet.class || outType == AbstractSet.class)
 			return new LinkedHashSet<>();
 		if (outType == SortedSet.class || outType == NavigableSet.class || outType == TreeSet.class)
@@ -4797,7 +4797,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		try {
 			return (Collection<Object>) outType.getDeclaredConstructor().newInstance();
 		} catch (@SuppressWarnings("unused") Exception e) {
-			return new ArrayList<>();
+			return l();
 		}
 	}
 

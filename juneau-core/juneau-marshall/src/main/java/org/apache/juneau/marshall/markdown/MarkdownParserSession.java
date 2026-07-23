@@ -367,13 +367,13 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 
 		if (eType.isArray()) {
 			elementType = eType.getElementType();
-			result = new ArrayList<>();
+			result = l();
 		} else if (eType.isCollection()) {
 			elementType = eType.getElementType();
-			result = eType.canCreateNewInstance(outer) ? (Collection<Object>) eType.newInstance() : new ArrayList<>();
+			result = eType.canCreateNewInstance(outer) ? (Collection<Object>) eType.newInstance() : l();
 		} else if (eType.isObject()) {
 			elementType = object();
-			result = new ArrayList<>();
+			result = l();
 		} else {
 			// Single bean/map with multiple columns — not a standard use case, parse first row
 			if (!dataLines.isEmpty()) {
@@ -524,13 +524,13 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 
 		if (eType.isArray()) {
 			elementType = eType.getElementType();
-			result = new ArrayList<>();
+			result = l();
 		} else if (eType.isCollection()) {
 			elementType = eType.getElementType();
-			result = eType.canCreateNewInstance(outer) ? (Collection<Object>) eType.newInstance() : new ArrayList<>();
+			result = eType.canCreateNewInstance(outer) ? (Collection<Object>) eType.newInstance() : l();
 		} else {
 			elementType = eType.isObject() ? object() : eType;
-			result = new ArrayList<>();
+			result = l();
 		}
 
 		for (var item : items)

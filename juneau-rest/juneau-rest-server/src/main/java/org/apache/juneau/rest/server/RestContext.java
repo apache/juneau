@@ -2922,7 +2922,7 @@ public class RestContext extends Context {
 			return raw;
 		var combined = new ArrayList<>(raw);
 		combined.addAll(defaultConfigAnnotations);
-		return Collections.unmodifiableList(combined);
+		return u(combined);
 	}
 
 	/**
@@ -2939,7 +2939,7 @@ public class RestContext extends Context {
 		var combined = new ArrayList<AnnotationInfo<Rest>>(base.size() + 1);
 		combined.add(AnnotationInfo.of(ClassInfo.of(getResourceClass()), builderRestAnnotation));
 		combined.addAll(base);
-		return Collections.unmodifiableList(combined);
+		return u(combined);
 	}
 
 	/**
@@ -2970,7 +2970,7 @@ public class RestContext extends Context {
 	private final Memoizer<List<AnnotationInfo<Rest>>> restAnnotationsTopDown = memoizer(() -> {
 		var list = new ArrayList<>(getRestAnnotations());
 		Collections.reverse(list);
-		return Collections.unmodifiableList(list);
+		return u(list);
 	});
 
 	private Stream<AnnotationInfo<Rest>> restAnnotationsForPropertySortedByRank(String propertyName) {
@@ -3025,21 +3025,21 @@ public class RestContext extends Context {
 	 * default {@code "Accept,Content-Type"}.
 	 */
 	private final Memoizer<Set<String>> allowedHeaderParams = memoizer(() ->
-		Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedHeaderParams, defaultAllowedHeaderParams))));
+		u(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedHeaderParams, defaultAllowedHeaderParams))));
 
 	/**
 	 * HTTP method names that may be specified via a request header; resolved from {@code @Rest(allowedMethodHeaders)},
 	 * default empty.
 	 */
 	private final Memoizer<Set<String>> allowedMethodHeaders = memoizer(() ->
-		Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodHeaders, defaultAllowedMethodHeaders))));
+		u(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodHeaders, defaultAllowedMethodHeaders))));
 
 	/**
 	 * HTTP method names that may be specified via URL query parameter; resolved from {@code @Rest(allowedMethodParams)},
 	 * default {@code "HEAD,OPTIONS"}.
 	 */
 	private final Memoizer<Set<String>> allowedMethodParams = memoizer(() ->
-		Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodParams, defaultAllowedMethodParams))));
+		u(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodParams, defaultAllowedMethodParams))));
 
 	/**
 	 * Whether a {@code &content=} URL parameter may override the request body; inverse of

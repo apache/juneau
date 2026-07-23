@@ -155,7 +155,7 @@ public abstract sealed class HoconValue {
 	 * HOCON array (maps to List or array).
 	 */
 	public static final class HoconArray extends HoconValue {
-		private final List<HoconValue> elements = new ArrayList<>();
+		private final List<HoconValue> elements = l();
 
 		@Override
 		public Type getType() {
@@ -348,7 +348,7 @@ public abstract sealed class HoconValue {
 	 * HOCON value concatenation (adjacent values concatenated).
 	 */
 	public static final class HoconConcat extends HoconValue {
-		private final List<HoconValue> parts = new ArrayList<>();
+		private final List<HoconValue> parts = l();
 
 		@Override
 		public Type getType() {

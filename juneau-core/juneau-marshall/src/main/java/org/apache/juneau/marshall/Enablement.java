@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
@@ -41,7 +42,7 @@ public enum Enablement {
 	 */
 	NEVER;
 
-	private static final Map<String,Enablement> MAP = new HashMap<>();
+	private static final Map<String,Enablement> MAP = m();
 
 	static {
 		MAP.put("TRUE", ALWAYS);

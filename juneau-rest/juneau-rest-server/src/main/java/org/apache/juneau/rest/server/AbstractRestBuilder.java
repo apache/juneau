@@ -64,7 +64,7 @@ public abstract class AbstractRestBuilder<R,SELF extends AbstractRestBuilder<R,S
 
 	private final Class<R> resourceType;
 	private final RestAnnotation.Builder anno = RestAnnotation.create();
-	private final Map<String,Object> extras = new LinkedHashMap<>();
+	private final Map<String,Object> extras = m();
 	private Boolean mdcAsyncPropagation;
 
 	/**
@@ -149,7 +149,7 @@ public abstract class AbstractRestBuilder<R,SELF extends AbstractRestBuilder<R,S
 	 * @return An unmodifiable view of the extras map.  Never <jk>null</jk>.
 	 */
 	public Map<String,Object> getExtras() {
-		return Collections.unmodifiableMap(extras);
+		return u(extras);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.stream;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -184,7 +186,7 @@ public final class RecordAdapter {
 	 */
 	public static RecordWriter arrayWriter(SerializerSession session, Object output) {
 		return new RecordWriter() {
-			private final List<Object> buf = new ArrayList<>();
+			private final List<Object> buf = l();
 			private boolean closed;
 
 			@Override public RecordWriter write(Object value) {

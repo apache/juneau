@@ -405,7 +405,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 				if (nn(cp) && cpf.isOneOf(MIXED, MIXED_PWS)) {
 					if (cpcm.isCollectionOrArray()) {
 						if (l == null)
-							l = new LinkedList<>();
+							l = ll();
 						l.add(getText(r, false));
 					} else {
 						cp.set(m, null, getText(r, trim));
@@ -438,7 +438,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 					if (isWhitespaceElement(r) && (breg == null || ! breg.hasName(r.getLocalName()))) {
 						if (cpcm.isCollectionOrArray()) {
 							if (l == null)
-								l = new LinkedList<>();
+								l = ll();
 							l.add(readWhitespaceElement(r));
 						} else {
 							cp.set(m, null, readWhitespaceElement(r));
@@ -446,7 +446,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 					} else {
 						if (cpcm.isCollectionOrArray()) {
 							if (l == null)
-								l = new LinkedList<>();
+								l = ll();
 							l.add(readAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
 						} else {
 							cp.set(m, null, readAnything(cpcm, cp.getName(), r, m.getBean(false), false, cp));

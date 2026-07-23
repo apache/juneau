@@ -131,7 +131,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 				case SCALAR -> setProperty(m, entry, decodeSingle(entry.scalarType(), entry.propertyType(), is, m.getBean(false)));
 				case MESSAGE -> setProperty(m, entry, decodeSingle(ProtobufScalarType.AUTO, entry.propertyType(), is, m.getBean(false)));
 				case PACKED_REPEATED -> {
-					var list = repeated.computeIfAbsent(fn, k -> new ArrayList<>());
+					var list = repeated.computeIfAbsent(fn, k -> l());
 					var elType = entry.propertyType().getElementType();
 					if (wt == WireType.LEN) {
 						var sub = new ProtobufReader(is.readLenDelimited());
@@ -143,7 +143,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 					}
 				}
 				case TAGGED_REPEATED -> {
-					var list = repeated.computeIfAbsent(fn, k -> new ArrayList<>());
+					var list = repeated.computeIfAbsent(fn, k -> l());
 					var elType = entry.propertyType().getElementType();
 					var elSwap = elType == null ? null : elType.getSwap(this);
 					if (elSwap != null)
@@ -154,7 +154,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 						list.add(decodeScalar(entry.scalarType(), elType, is));
 				}
 				case MAP -> {
-					var map = maps.computeIfAbsent(fn, k -> new LinkedHashMap<>());
+					var map = maps.computeIfAbsent(fn, k -> m());
 					readMapEntry(entry.propertyType(), new ProtobufReader(is.readLenDelimited()), map);
 				}
 			}

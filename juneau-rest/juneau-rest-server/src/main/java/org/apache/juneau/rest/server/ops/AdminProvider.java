@@ -87,7 +87,7 @@ public class AdminProvider {
 	 * @param builder The builder. Must not be {@code null}.
 	 */
 	protected AdminProvider(Builder builder) {
-		cacheFlushHooks = Collections.unmodifiableMap(new LinkedHashMap<>(builder.cacheFlushHooks));
+		cacheFlushHooks = u(cp(builder.cacheFlushHooks));
 		threadNamePrefixExclude = List.copyOf(builder.threadNamePrefixExclude);
 	}
 
@@ -274,7 +274,7 @@ public class AdminProvider {
 	 */
 	public static class Builder {
 
-		private final Map<String,Runnable> cacheFlushHooks = new LinkedHashMap<>();
+		private final Map<String,Runnable> cacheFlushHooks = m();
 		private final List<String> threadNamePrefixExclude = new ArrayList<>(DEFAULT_THREAD_NAME_PREFIX_EXCLUDE);
 
 		/** Constructor &mdash; package access for {@link AdminProvider#create()}. */

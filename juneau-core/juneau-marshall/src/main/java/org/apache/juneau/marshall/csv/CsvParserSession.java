@@ -174,7 +174,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 
 		} else if (sType.isCollection()) {
 			var elementType = sType.getElementType();
-			Collection<Object> l = sType.canCreateNewInstance(outer) ? (Collection<Object>) sType.newInstance() : new ArrayList<>();
+			Collection<Object> l = sType.canCreateNewInstance(outer) ? (Collection<Object>) sType.newInstance() : l();
 			for (var row = r.readRow(); row != null; row = r.readRow())
 				l.add(readRow(headers, row, elementType, l));
 			o = l;

@@ -623,7 +623,7 @@ public class Parser extends MarshallingContextable {
 		nulls = builder.nulls == null ? Nulls.NOT_SET : builder.nulls;
 
 	String[] consumesParts = splita(nn(consumes) ? consumes : "");
-	List<MediaType> consumesList = new ArrayList<>();
+	List<MediaType> consumesList = l();
 	for (var consume : consumesParts) {
 		consumesList.add(MediaType.of(consume));
 	}

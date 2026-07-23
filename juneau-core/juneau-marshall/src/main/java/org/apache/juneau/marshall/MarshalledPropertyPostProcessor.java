@@ -400,11 +400,11 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			return java.lang.reflect.Array.newInstance(propertyClass.getComponentType(), 0);
 		if (List.class.isAssignableFrom(propertyClass) || Collection.class.equals(propertyClass)
 				|| Iterable.class.equals(propertyClass))
-			return new ArrayList<>();
+			return l();
 		if (Set.class.isAssignableFrom(propertyClass))
 			return new LinkedHashSet<>();
 		if (Map.class.isAssignableFrom(propertyClass))
-			return new LinkedHashMap<>();
+			return m();
 		// Primitive defaults — Java auto-unbox handles boxed-type assignment.
 		if (propertyClass.isPrimitive()) {
 			if (boolean.class.equals(propertyClass)) return Boolean.FALSE;

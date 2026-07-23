@@ -83,7 +83,7 @@ public class ClaimsPrincipal implements Principal {
 		this.name = name;
 		this.claims = claims == null
 			? Collections.emptyMap()
-			: Collections.unmodifiableMap(new LinkedHashMap<>(claims));
+			: u(cp(claims));
 	}
 
 	@Override /* Overridden from Principal */

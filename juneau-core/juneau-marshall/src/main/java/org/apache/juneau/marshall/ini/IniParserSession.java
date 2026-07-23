@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.ini;
 
 import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -129,7 +130,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	 */
 	protected Map<String,Map<String,String>> readIniContent(Reader r) throws IOException {
 		var sections = new LinkedHashMap<String,Map<String,String>>();
-		var current = sections.computeIfAbsent("", k -> new LinkedHashMap<>());
+		var current = sections.computeIfAbsent("", k -> m());
 		var br = r instanceof BufferedReader r2 ? r2 : new BufferedReader(r);
 		String line;
 		while ((line = br.readLine()) != null) {
@@ -141,7 +142,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 				if (end < 0)
 					continue;
 				var sectionName = line.substring(1, end).trim();
-				current = sections.computeIfAbsent(sectionName, k -> new LinkedHashMap<>());
+				current = sections.computeIfAbsent(sectionName, k -> m());
 				continue;
 			}
 			var kv = splitKeyValue(line);

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.health;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -35,7 +36,7 @@ public final class Health {
 	private Health(Builder b) {
 		this.name = b.name;
 		this.status = b.status;
-		this.details = Collections.unmodifiableMap(new LinkedHashMap<>(b.details));
+		this.details = u(cp(b.details));
 		this.error = b.error;
 	}
 
@@ -85,7 +86,7 @@ public final class Health {
 	public static final class Builder {
 		private final String name;
 		private final HealthStatus status;
-		private final Map<String,Object> details = new LinkedHashMap<>();
+		private final Map<String,Object> details = m();
 		private Throwable error;
 
 		private Builder(String name, HealthStatus status, Throwable error) {

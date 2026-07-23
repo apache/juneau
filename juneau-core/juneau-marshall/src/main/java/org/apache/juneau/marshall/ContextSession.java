@@ -257,7 +257,7 @@ public abstract class ContextSession {
 		if (unmodifiable)
 			return;
 		if (warnings == null)
-			warnings = new LinkedList<>();
+			warnings = ll();
 		warnings.add((warnings.size() + 1) + ": " + f(msg, args));
 	}
 

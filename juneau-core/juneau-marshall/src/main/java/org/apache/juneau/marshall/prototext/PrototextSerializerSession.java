@@ -59,7 +59,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 	public static void setDebugTrace(boolean value) { debugTrace = value; }
 
 	/** Last trace output when debugTrace was enabled. */
-	protected static final List<String> traceLog = new ArrayList<>();
+	protected static final List<String> traceLog = l();
 
 	/**
 	 * Builder for Prototext serializer session.

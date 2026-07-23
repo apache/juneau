@@ -96,7 +96,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 
 		@Override
 		public Set<Map.Entry<String,Object>> entrySet() {
-			return Collections.unmodifiableSet(super.entrySet());
+			return u(super.entrySet());
 		}
 
 		@Override
@@ -104,7 +104,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 
 		@Override
 		public Set<String> keySet() {
-			return Collections.unmodifiableSet(super.keySet());
+			return u(super.keySet());
 		}
 
 		@Override

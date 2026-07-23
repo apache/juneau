@@ -252,7 +252,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 			if (firstKey instanceof String || firstKey == null) {
 				// Apply POJO swaps to map values so types like A (with swap to JsonMap) use their swapped schema/encoding.
 				// Replace null keys with the null-key sentinel so they survive as a named column in the schema.
-				var swappedMap = new LinkedHashMap<>();
+				var swappedMap = m();
 				for (var e : m.entrySet()) {
 					var key = e.getKey() == null ? ctx.nullKeyString : trim(e.getKey());
 					var val = e.getValue();

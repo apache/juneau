@@ -144,7 +144,7 @@ public final class CsvCellParser {
 	private List<Object> readArray() throws ParseException {
 		if (consume() != '[')
 			throw new ParseException("Expected opening bracket");
-		var list = new ArrayList<>();
+		var list = l();
 		skipWhitespace();
 		if (peek() == ']') {
 			consume();

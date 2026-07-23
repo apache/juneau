@@ -283,11 +283,11 @@ public class RestChildren {
 		var initial = new LinkedHashMap<String,RestContext>();
 		for (var rc : builder.list)
 			initial.put(rc.getPath(), rc);
-		this.children = Collections.unmodifiableMap(initial);
+		this.children = u(initial);
 		var lazyMap = new LinkedHashMap<String,LazyChildEntry>();
 		for (var e : builder.lazyList)
 			lazyMap.put(e.path, e);
-		this.lazyEntries = Collections.unmodifiableMap(lazyMap);
+		this.lazyEntries = u(lazyMap);
 	}
 
 	/**
@@ -502,7 +502,7 @@ public class RestChildren {
 				return null;
 			var next = new LinkedHashMap<>(children);
 			next.remove(path);
-			children = Collections.unmodifiableMap(next);
+			children = u(next);
 		}
 		destroyChild(removed);
 		return removed;
@@ -529,7 +529,7 @@ public class RestChildren {
 				return null;
 			var next = new LinkedHashMap<>(children);
 			next.remove(key);
-			children = Collections.unmodifiableMap(next);
+			children = u(next);
 		}
 		destroyChild(removed);
 		return removed;
@@ -609,11 +609,11 @@ public class RestChildren {
 				withoutExisting.remove(key);
 				// We don't publish the intermediate "without existing" snapshot — single atomic swap below.
 				withoutExisting.put(key, cc);
-				children = Collections.unmodifiableMap(withoutExisting);
+				children = u(withoutExisting);
 			} else {
 				var next = new LinkedHashMap<>(children);
 				next.put(key, cc);
-				children = Collections.unmodifiableMap(next);
+				children = u(next);
 			}
 		}
 		if (replaced != null)
