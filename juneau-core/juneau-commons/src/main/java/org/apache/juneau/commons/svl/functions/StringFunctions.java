@@ -38,7 +38,6 @@ public final class StringFunctions {
 	/** All function classes in this category, in registration order. */
 	@SuppressWarnings({
 		"unchecked",   // Array initializer with parameterized element type; class literals are always erased at runtime.
-		"java:S2368",  // Public array field is intentional: ALL is a compile-time registry constant, not a mutable collection.
 		"java:S2386"   // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
 	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {

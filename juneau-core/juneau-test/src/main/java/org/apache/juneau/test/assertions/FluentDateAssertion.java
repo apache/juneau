@@ -115,7 +115,6 @@ import org.apache.juneau.commons.function.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention
-	"java:S6350", // Public assertion API is built on Date by design (all method signatures take/return Date); cannot swap to java.time without breaking API.
 	"java:S2143" // Public assertion API is built on Date by design (signatures take/return Date, extends FluentComparableAssertion<Date,R>); cannot swap to java.time without breaking the assertion API.
 })
 public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {

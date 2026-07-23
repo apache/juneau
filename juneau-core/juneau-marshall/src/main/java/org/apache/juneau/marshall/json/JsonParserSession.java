@@ -962,9 +962,6 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		return false;
 	}
 
-	@SuppressWarnings({
-		"java:S6466" // False positive: new JsonMap(this) resolves to JsonMap(MarshallingSession), not JsonMap(Object...), since JsonParserSession IS-A MarshallingSession.
-	})
 	@Override /* Overridden from MarshallingSession */
 	protected MarshalledMap newGenericMap() {
 		return new JsonMap(this);
