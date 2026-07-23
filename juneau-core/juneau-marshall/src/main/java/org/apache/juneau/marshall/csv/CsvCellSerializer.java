@@ -65,26 +65,26 @@ public final class CsvCellSerializer {
 	private String writeValue(Object value, CsvSerializerSession session) {
 		if (value == null)
 			return nullMarker;
-		if (value instanceof Map<?, ?> m)
-			return writeMap(m, session);
-		if (value instanceof Collection<?> c)
-			return writeCollection(c, session);
-		if (value instanceof Object[] a)
-			return writeObjectArray(a, session);
-		if (value instanceof byte[] b)
-			return byteArrayFormat == CsvByteArrayCellFormat.SEMICOLON_DELIMITED ? formatByteArraySemicolon(b) : base64Encode(b);
-		if (value instanceof int[] a) return formatIntArray(a);
-		if (value instanceof long[] a) return formatLongArray(a);
-		if (value instanceof double[] a) return formatDoubleArray(a);
-		if (value instanceof float[] a) return formatFloatArray(a);
-		if (value instanceof short[] a) return formatShortArray(a);
-		if (value instanceof boolean[] a) return formatBooleanArray(a);
-		if (value instanceof char[] a) return formatCharArray(a);
+		if (value instanceof Map<?, ?> value2)
+			return writeMap(value2, session);
+		if (value instanceof Collection<?> value2)
+			return writeCollection(value2, session);
+		if (value instanceof Object[] value2)
+			return writeObjectArray(value2, session);
+		if (value instanceof byte[] value2)
+			return byteArrayFormat == CsvByteArrayCellFormat.SEMICOLON_DELIMITED ? formatByteArraySemicolon(value2) : base64Encode(value2);
+		if (value instanceof int[] value2) return formatIntArray(value2);
+		if (value instanceof long[] value2) return formatLongArray(value2);
+		if (value instanceof double[] value2) return formatDoubleArray(value2);
+		if (value instanceof float[] value2) return formatFloatArray(value2);
+		if (value instanceof short[] value2) return formatShortArray(value2);
+		if (value instanceof boolean[] value2) return formatBooleanArray(value2);
+		if (value instanceof char[] value2) return formatCharArray(value2);
 		// Bean or simple: use session to convert/format
 		var prepared = session.prepareForInlineValue(value);
 		if (prepared instanceof Map) return writeMap((Map<?, ?>) prepared, session);
 		if (prepared instanceof Collection) return writeCollection((Collection<?>) prepared, session);
-		if (prepared instanceof Object[] objectArray) return writeObjectArray(objectArray, session);
+		if (prepared instanceof Object[] prepared2) return writeObjectArray(prepared2, session);
 		return escapeIfNeeded(prepared.toString());
 	}
 

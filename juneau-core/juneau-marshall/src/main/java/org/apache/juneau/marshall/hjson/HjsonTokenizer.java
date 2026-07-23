@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.hjson;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
@@ -140,7 +141,7 @@ public class HjsonTokenizer {
 	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public HjsonTokenizer(Reader reader) {
-		var in = reader instanceof BufferedReader br ? br : new BufferedReader(reader);
+		var in = reader instanceof BufferedReader reader2 ? reader2 : new BufferedReader(reader);
 		this.reader = new PushbackReader(in, 4);
 	}
 
@@ -396,7 +397,7 @@ public class HjsonTokenizer {
 		for (var i = 0; i < 4; i++) {
 			var c = readChar();
 			if (c < 0 || !isHexDigit(c))
-				throw new IOException("Invalid \\u escape sequence at line " + line + ", column " + column);
+				throw ioex("Invalid \\u escape sequence at line %s, column %s", line, column);
 			hex.append((char) c);
 		}
 		return (char) Integer.parseInt(hex.toString(), 16);

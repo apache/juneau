@@ -98,16 +98,16 @@ public final class Iso8601Utils {
 	public static String format(Object value, ClassMeta<?> type, TimeZone timeZone) {
 		if (value == null)
 			return null;
-		if (value instanceof Duration d)
-			return formatDuration(d, DurationFormat.ISO_8601_WITH_DAYS);
-		if (value instanceof Period p)
-			return formatPeriod(p, PeriodFormat.ISO_8601);
+		if (value instanceof Duration value2)
+			return formatDuration(value2, DurationFormat.ISO_8601_WITH_DAYS);
+		if (value instanceof Period value2)
+			return formatPeriod(value2, PeriodFormat.ISO_8601);
 		if (value instanceof Calendar || value instanceof XMLGregorianCalendar)
 			return formatCalendar(value, type, CalendarFormat.ISO_OFFSET_DATE_TIME, timeZone);
-		if (value instanceof Date d)
-			return formatDate(d, type, DateFormat.ISO_LOCAL_DATE_TIME, timeZone);
-		if (value instanceof TemporalAccessor t)
-			return formatTemporal(t, type, TemporalFormat.DEFAULT, timeZone);
+		if (value instanceof Date value2)
+			return formatDate(value2, type, DateFormat.ISO_LOCAL_DATE_TIME, timeZone);
+		if (value instanceof TemporalAccessor value2)
+			return formatTemporal(value2, type, TemporalFormat.DEFAULT, timeZone);
 		return value.toString();
 	}
 
@@ -182,8 +182,8 @@ public final class Iso8601Utils {
 	public static String formatCalendar(Object value, ClassMeta<?> sourceType, CalendarFormat format, TimeZone timeZone) {
 		if (value == null)
 			return null;
-		if (value instanceof XMLGregorianCalendar x)
-			return x.toXMLFormat();
+		if (value instanceof XMLGregorianCalendar value2)
+			return value2.toXMLFormat();
 		ZoneId zone = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
 		return (format == null ? CalendarFormat.ISO_OFFSET_DATE_TIME : format).format((Calendar)value, zone);
 	}
@@ -222,14 +222,14 @@ public final class Iso8601Utils {
 		if (value == null)
 			return null;
 		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
-		if (value instanceof Calendar c) {
-			ZonedDateTime zdt = (c instanceof GregorianCalendar gc) ? gc.toZonedDateTime() : c.toInstant().atZone(c.getTimeZone().toZoneId());
+		if (value instanceof Calendar value2) {
+			ZonedDateTime zdt = (value2 instanceof GregorianCalendar value3) ? value3.toZonedDateTime() : value2.toInstant().atZone(value2.getTimeZone().toZoneId());
 			return DateTimeFormatter.ISO_DATE.format(zdt);
 		}
-		if (value instanceof Date d)
-			return DateTimeFormatter.ISO_DATE.format(d.toInstant().atZone(zoneId));
-		if (value instanceof Temporal t)
-			return DateTimeFormatter.ISO_DATE.format(ZonedDateTime.from(new DefaultingTemporalAccessor(t, zoneId)));
+		if (value instanceof Date value2)
+			return DateTimeFormatter.ISO_DATE.format(value2.toInstant().atZone(zoneId));
+		if (value instanceof Temporal value2)
+			return DateTimeFormatter.ISO_DATE.format(ZonedDateTime.from(new DefaultingTemporalAccessor(value2, zoneId)));
 		return value.toString();
 	}
 
@@ -248,14 +248,14 @@ public final class Iso8601Utils {
 		if (value == null)
 			return null;
 		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
-		if (value instanceof Calendar c) {
-			ZonedDateTime zdt = (c instanceof GregorianCalendar gc) ? gc.toZonedDateTime() : c.toInstant().atZone(c.getTimeZone().toZoneId());
+		if (value instanceof Calendar value2) {
+			ZonedDateTime zdt = (value2 instanceof GregorianCalendar value3) ? value3.toZonedDateTime() : value2.toInstant().atZone(value2.getTimeZone().toZoneId());
 			return DateTimeFormatter.ISO_INSTANT.format(zdt.toInstant());
 		}
-		if (value instanceof Date d)
-			return DateTimeFormatter.ISO_INSTANT.format(d.toInstant());
-		if (value instanceof Temporal t) {
-			ZonedDateTime zdt = ZonedDateTime.from(new DefaultingTemporalAccessor(t, zoneId));
+		if (value instanceof Date value2)
+			return DateTimeFormatter.ISO_INSTANT.format(value2.toInstant());
+		if (value instanceof Temporal value2) {
+			ZonedDateTime zdt = ZonedDateTime.from(new DefaultingTemporalAccessor(value2, zoneId));
 			return DateTimeFormatter.ISO_INSTANT.format(zdt.toInstant());
 		}
 		return value.toString();
@@ -671,7 +671,7 @@ public final class Iso8601Utils {
 			throw toRex(e);
 		}
 
-		throw new IllegalArgumentException("Cannot parse ISO 8601 string into type: " + tc.getName());
+		throw iaex("Cannot parse ISO 8601 string into type: %s", tc.getName());
 	}
 
 	private static DateTimeFormatter getFormatterForType(Class<?> tc) {

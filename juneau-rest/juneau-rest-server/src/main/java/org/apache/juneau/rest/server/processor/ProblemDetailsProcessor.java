@@ -119,21 +119,21 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 		Problem problem;
 		boolean isErrorPath;
 
-		if (raw instanceof Problem p) {
-			problem = p;
+		if (raw instanceof Problem raw2) {
+			problem = raw2;
 			isErrorPath = false;
-		} else if (raw instanceof ProblemException pe) {
-			problem = pe.getProblem();
+		} else if (raw instanceof ProblemException raw2) {
+			problem = raw2.getProblem();
 			isErrorPath = opSession.getContext().isProblemDetails();
-		} else if (raw instanceof BasicHttpException e) {
+		} else if (raw instanceof BasicHttpException raw2) {
 			if (! opSession.getContext().isProblemDetails())
 				return NEXT;
-			problem = mapException(opSession, e);
+			problem = mapException(opSession, raw2);
 			isErrorPath = true;
-		} else if (raw instanceof Throwable t) {
+		} else if (raw instanceof Throwable raw2) {
 			if (! opSession.getContext().isProblemDetails())
 				return NEXT;
-			problem = mapException(opSession, t);
+			problem = mapException(opSession, raw2);
 			if (problem == null)
 				return NEXT;
 			isErrorPath = true;
@@ -189,8 +189,8 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 			if (result != null)
 				return result;
 		}
-		if (thrown instanceof BasicHttpException e)
-			return ProblemAdapters.fromException(e);
+		if (thrown instanceof BasicHttpException thrown2)
+			return ProblemAdapters.fromException(thrown2);
 		return null;
 	}
 

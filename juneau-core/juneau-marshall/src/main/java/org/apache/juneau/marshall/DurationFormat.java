@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.math.*;
 import java.time.*;
 import java.util.Locale;
@@ -185,7 +187,7 @@ public enum DurationFormat {
 			};
 		}
 		if (nanos == null)
-			throw new IllegalArgumentException("Invalid HOCON duration: " + s);
+			throw iaex("Invalid HOCON duration: %s", s);
 		return Duration.ofNanos(nanos.longValue());
 	}
 

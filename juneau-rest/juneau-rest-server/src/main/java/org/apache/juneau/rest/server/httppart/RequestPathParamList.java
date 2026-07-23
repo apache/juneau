@@ -576,7 +576,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 
 	@Override
 	public boolean equals(Object o) {
-		return this == o || (o instanceof RequestPathParamList other && super.equals(other));
+		return this == o || (o instanceof RequestPathParamList o2 && super.equals(o2));
 	}
 
 	@Override

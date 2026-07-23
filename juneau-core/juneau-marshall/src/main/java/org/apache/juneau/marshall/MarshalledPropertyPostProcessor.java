@@ -345,8 +345,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	private static Nulls resolveEffectiveNulls(Nulls perPropertyNulls, BeanSession session) {
 		if (perPropertyNulls != null && perPropertyNulls != Nulls.NOT_SET)
 			return perPropertyNulls;
-		if (session instanceof ParserSession ps) {
-			var ctx = ps.getNulls();
+		if (session instanceof ParserSession session2) {
+			var ctx = session2.getNulls();
 			if (ctx != null && ctx != Nulls.NOT_SET)
 				return ctx;
 		}
@@ -429,12 +429,12 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		"java:S1166" // RuntimeException intentionally swallowed; the documented contract is "fall back to LEAVE".
 	})
 	private static Object defaultValueFor(BeanPropertyMeta.Builder b, Class<?> propertyClass, ClassMeta<?> propertyMeta, BeanSession session) {
-		if (! (session instanceof MarshallingSession ms))
+		if (! (session instanceof MarshallingSession session2))
 			return coerceLeave(null, propertyClass, propertyMeta);
 		var ownerInfo = owningClass(b);
 		if (ownerInfo == null)
 			return coerceLeave(null, propertyClass, propertyMeta);
-		var ownerMeta = ms.getClassMeta(ownerInfo.inner());
+		var ownerMeta = session2.getClassMeta(ownerInfo.inner());
 		Optional<?> ref = ownerMeta.getProperty(NULLS_DEFAULT_REFERENCE_CACHE_KEY, cm -> {
 			var instance = BeanInstantiator.createOrNull(cm.inner());
 			return instance == null ? NO_DEFAULT_REFERENCE : instance;
@@ -443,7 +443,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		if (owner == null || owner == NO_DEFAULT_REFERENCE)
 			return coerceLeave(null, propertyClass, propertyMeta);
 		try {
-			var beanMap = ms.toBeanMap(owner);
+			var beanMap = session2.toBeanMap(owner);
 			var prop = beanMap.getMeta().getPropertyMeta(b.name);
 			if (prop == null)
 				return coerceLeave(null, propertyClass, propertyMeta);
@@ -454,10 +454,10 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	}
 
 	private static boolean isEmptyOptional(Object o) {
-		if (o instanceof Optional<?> opt) return opt.isEmpty();
-		if (o instanceof OptionalInt oi)  return oi.isEmpty();
-		if (o instanceof OptionalLong ol) return ol.isEmpty();
-		if (o instanceof OptionalDouble od) return od.isEmpty();
+		if (o instanceof Optional<?> o2) return o2.isEmpty();
+		if (o instanceof OptionalInt o2)  return o2.isEmpty();
+		if (o instanceof OptionalLong o2) return o2.isEmpty();
+		if (o instanceof OptionalDouble o2) return o2.isEmpty();
 		return false;
 	}
 
@@ -523,7 +523,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		var innerRead = b.readTransform;
 		b.readTransform = (session, o) -> {
 			Object v = nn(innerRead) ? innerRead.apply(session, o) : o;
-			if (session instanceof MarshallingSession ms && ms.isValidateSchema()) {
+			if (session instanceof MarshallingSession session2 && session2.isValidateSchema()) {
 				try {
 					validator.validate(v);
 				} catch (SchemaValidationException e) {
@@ -534,7 +534,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		};
 		var innerWrite = b.writeTransform;
 		b.writeTransform = (session, o) -> {
-			if (session instanceof MarshallingSession ms && ms.isValidateSchema()) {
+			if (session instanceof MarshallingSession session2 && session2.isValidateSchema()) {
 				try {
 					validator.validate(o);
 				} catch (SchemaValidationException e) {
@@ -1004,7 +1004,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				// Binary serializers with native byte-array wire type pass raw bytes through.  Binary
 				// serializers without native byte-array wire type (Parquet, binary RDF) fall through to
 				// format.format(o) and emit the configured BinaryFormat's text wire form.
-				if (session instanceof OutputStreamSerializerSession oss && oss.hasNativeBytes())
+				if (session instanceof OutputStreamSerializerSession session2 && session2.hasNativeBytes())
 					return o;
 				// CSV defers to its own CsvByteArrayCellFormat cell encoding.
 				// OpenAPI applies its own schema-directed BYTE / BINARY / BINARY_SPACED encoding.
@@ -1020,8 +1020,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			public byte[] unswap(MarshallingSession session, Object o, ClassMeta<?> hint) {
 				if (o == null)
 					return null;
-				if (o instanceof byte[] b)
-					return b;
+				if (o instanceof byte[] o2)
+					return o2;
 				return format.parse(o.toString());
 			}
 		};
@@ -1114,10 +1114,10 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				public BigInteger unswap(MarshallingSession session, Object o, ClassMeta<?> hint) {
 					if (o == null)
 						return null;
-					if (o instanceof BigInteger bi)
-						return bi;
-					if (o instanceof Number n)
-						return new BigInteger(n.toString());
+					if (o instanceof BigInteger o2)
+						return o2;
+					if (o instanceof Number o2)
+						return new BigInteger(o2.toString());
 					return BigNumberFormat.parse(o.toString(), format, BigInteger.class);
 				}
 			};
@@ -1136,10 +1136,10 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			public BigDecimal unswap(MarshallingSession session, Object o, ClassMeta<?> hint) {
 				if (o == null)
 					return null;
-				if (o instanceof BigDecimal bd)
-					return bd;
-				if (o instanceof Number n)
-					return new BigDecimal(n.toString());
+				if (o instanceof BigDecimal o2)
+					return o2;
+				if (o instanceof Number o2)
+					return new BigDecimal(o2.toString());
 				return BigNumberFormat.parse(o.toString(), format, BigDecimal.class);
 			}
 		};
@@ -1166,10 +1166,10 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			public Boolean unswap(MarshallingSession session, Object o, ClassMeta<?> hint) {
 				if (o == null)
 					return null;
-				if (o instanceof Boolean b)
-					return b;
-				if (o instanceof Number n)
-					return n.intValue() != 0;
+				if (o instanceof Boolean o2)
+					return o2;
+				if (o instanceof Number o2)
+					return o2.intValue() != 0;
 				var str = o.toString();
 				if (str.trim().isEmpty())
 					return null;
@@ -1203,8 +1203,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				// Binary serializers always emit native IEEE-754 (including native NaN / Infinity tags).
 				if (session instanceof OutputStreamSerializerSession)
 					return o;
-				if (o instanceof Float f)
-					return FloatFormat.format(f.floatValue(), format);
+				if (o instanceof Float o2)
+					return FloatFormat.format(o2.floatValue(), format);
 				return FloatFormat.format(o.doubleValue(), format);
 			}
 
@@ -1215,10 +1215,10 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				// receiving the original null, not a swap-synthesized NaN.
 				if (o == null)
 					return null;
-				if (o instanceof Number n && Float.class.equals(propertyClass))
-					return n.floatValue();
-				if (o instanceof Number n)
-					return n.doubleValue();
+				if (o instanceof Number o2 && Float.class.equals(propertyClass))
+					return o2.floatValue();
+				if (o instanceof Number o2)
+					return o2.doubleValue();
 				var s = o.toString();
 				// Preserve Juneau's lenient parsing convention: empty / blank string maps to zero for
 				// boxed Float / Double properties (matches the no-swap path's historical behaviour).

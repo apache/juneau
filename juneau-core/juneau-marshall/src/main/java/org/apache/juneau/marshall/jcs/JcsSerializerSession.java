@@ -99,28 +99,28 @@ public class JcsSerializerSession extends JsonSerializerSession {
 	 * @throws SerializeException If the number is NaN or Infinity.
 	 */
 	public static String toEcmaNumber(Number n) {
-		if (n instanceof Double d) {
-			if (Double.isNaN(d))
+		if (n instanceof Double n2) {
+			if (Double.isNaN(n2))
 				throw new SerializeException("NaN is not permitted in JCS (RFC 8785)");
-			if (Double.isInfinite(d))
+			if (Double.isInfinite(n2))
 				throw new SerializeException("Infinity is not permitted in JCS (RFC 8785)");
-			if (d == -0.0)
+			if (n2 == -0.0)
 				return "0";
-			return formatDouble(d);
+			return formatDouble(n2);
 		}
-		if (n instanceof Float f) {
-			if (Float.isNaN(f))
+		if (n instanceof Float n2) {
+			if (Float.isNaN(n2))
 				throw new SerializeException("NaN is not permitted in JCS (RFC 8785)");
-			if (Float.isInfinite(f))
+			if (Float.isInfinite(n2))
 				throw new SerializeException("Infinity is not permitted in JCS (RFC 8785)");
-			if (f == -0.0f)
+			if (n2 == -0.0f)
 				return "0";
-			return formatDouble(f.doubleValue());
+			return formatDouble(n2.doubleValue());
 		}
-		if (n instanceof BigDecimal bd)
-			return formatBigDecimal(bd);
-		if (n instanceof BigInteger bi)
-			return formatBigInteger(bi);
+		if (n instanceof BigDecimal n2)
+			return formatBigDecimal(n2);
+		if (n instanceof BigInteger n2)
+			return formatBigInteger(n2);
 		if (n instanceof Long || n instanceof Integer || n instanceof Short || n instanceof Byte) {
 			var l = n.longValue();
 			if (l == 0)
@@ -274,8 +274,8 @@ public class JcsSerializerSession extends JsonSerializerSession {
 	@Override /* Overridden from JsonSerializerSession */
 	protected JsonWriter<?> getJsonWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
-		if (output instanceof JcsWriter w)
-			return w;
+		if (output instanceof JcsWriter output2)
+			return output2;
 		var w = new JcsWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), false, isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;

@@ -1032,7 +1032,7 @@ public class BasicSwaggerProviderSession {
 		try {
 			if (o == null)
 				return null;
-			var s = (o instanceof String[] stringArray ? joinnl(stringArray) : o.toString());
+			var s = (o instanceof String[] o2 ? joinnl(o2) : o.toString());
 			if (s.isEmpty())
 				return null;
 			s = resolve(s);
@@ -1048,7 +1048,7 @@ public class BasicSwaggerProviderSession {
 		try {
 			if (o == null)
 				return null;
-			var s = (o instanceof String[] stringArray ? joinnl(stringArray) : o.toString());
+			var s = (o instanceof String[] o2 ? joinnl(o2) : o.toString());
 			if (s.isEmpty())
 				return null;
 			s = resolve(s);
@@ -1061,8 +1061,8 @@ public class BasicSwaggerProviderSession {
 	private MarshalledMap parseMap(Object o) throws ParseException {
 		if (o == null)
 			return null;
-		if (o instanceof String[] stringArray)
-			o = joinnl(stringArray);
+		if (o instanceof String[] o2)
+			o = joinnl(o2);
 		if (o instanceof String o2) {
 			if (o2.isEmpty())
 				return null;

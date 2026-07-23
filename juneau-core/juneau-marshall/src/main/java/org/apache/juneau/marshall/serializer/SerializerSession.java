@@ -633,14 +633,14 @@ public class SerializerSession extends MarshallingTraverseSession {
 	private static Object unwrapEmptyOptional(Object value) {
 		if (value == null)
 			return null;
-		if (value instanceof Optional<?> o)
-			return o.isEmpty() ? null : unwrapEmptyOptional(o.orElse(null));
-		if (value instanceof OptionalInt oi)
-			return oi.isEmpty() ? null : Integer.valueOf(oi.getAsInt());
-		if (value instanceof OptionalLong ol)
-			return ol.isEmpty() ? null : Long.valueOf(ol.getAsLong());
-		if (value instanceof OptionalDouble od)
-			return od.isEmpty() ? null : Double.valueOf(od.getAsDouble());
+		if (value instanceof Optional<?> value2)
+			return value2.isEmpty() ? null : unwrapEmptyOptional(value2.orElse(null));
+		if (value instanceof OptionalInt value2)
+			return value2.isEmpty() ? null : Integer.valueOf(value2.getAsInt());
+		if (value instanceof OptionalLong value2)
+			return value2.isEmpty() ? null : Long.valueOf(value2.getAsLong());
+		if (value instanceof OptionalDouble value2)
+			return value2.isEmpty() ? null : Double.valueOf(value2.getAsDouble());
 		return value;
 	}
 
@@ -719,10 +719,10 @@ public class SerializerSession extends MarshallingTraverseSession {
 	}
 
 	private static BigDecimal toBigDecimal(Number n) {
-		if (n instanceof BigDecimal bd)
-			return bd;
-		if (n instanceof BigInteger bi)
-			return new BigDecimal(bi);
+		if (n instanceof BigDecimal n2)
+			return n2;
+		if (n instanceof BigInteger n2)
+			return new BigDecimal(n2);
 		if (n instanceof Float || n instanceof Double)
 			return BigDecimal.valueOf(n.doubleValue());
 		return BigDecimal.valueOf(n.longValue());
@@ -790,9 +790,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 		if (type.isCollection()) {
 			forEachEntry((Collection)o, consumer);
 		} else if (type.isIterable()) {
-			if (o instanceof BeanSupplier bs) {
+			if (o instanceof BeanSupplier o2) {
 				try {
-					drainBeanSupplier(bs, consumer);
+					drainBeanSupplier(o2, consumer);
 				} catch (RuntimeException e) {
 					throw e;
 				} catch (Exception e) {
@@ -802,8 +802,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 				((Iterable)o).forEach(consumer);
 			}
 		} else if (type.isIterator()) {
-			if (o instanceof Enumeration e)
-				e.asIterator().forEachRemaining(consumer);
+			if (o instanceof Enumeration o2)
+				o2.asIterator().forEachRemaining(consumer);
 			else
 				((Iterator)o).forEachRemaining(consumer);
 		} else if (type.isStream()) {

@@ -43,13 +43,13 @@ class ClaimsRoleExtractor {
 		"unchecked" // Cast is safe: list element type is verified by instanceof check before casting.
 	})
 	static Set<String> extractRoles(Principal principal, String claimName) {
-		if (principal instanceof ClaimsPrincipal cp) {
-			var v = cp.getClaims().get(claimName);
-			if (v instanceof List<?> list) {
+		if (principal instanceof ClaimsPrincipal principal2) {
+			var v = principal2.getClaims().get(claimName);
+			if (v instanceof List<?> v2) {
 				var roles = new HashSet<String>();
-				for (var item : (List<Object>) list)
-					if (item instanceof String s)
-						roles.add(s);
+				for (var item : (List<Object>) v2)
+					if (item instanceof String item2)
+						roles.add(item2);
 				return roles;
 			}
 		}

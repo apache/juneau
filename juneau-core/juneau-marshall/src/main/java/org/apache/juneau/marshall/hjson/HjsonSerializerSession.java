@@ -91,8 +91,8 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 
 	protected final HjsonWriter getHjsonWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
-		if (output instanceof HjsonWriter w)
-			return w;
+		if (output instanceof HjsonWriter output2)
+			return output2;
 		var w = new HjsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(),
 			ctx.useNewlineSeparators, ctx.useQuotelessStrings, ctx.useQuotelessKeys, ctx.omitRootBraces,
 			ctx.useMultilineStrings, isUseWhitespace(), getUriResolver());

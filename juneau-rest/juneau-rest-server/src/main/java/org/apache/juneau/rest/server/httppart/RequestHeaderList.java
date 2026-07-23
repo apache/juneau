@@ -503,7 +503,7 @@ public class RequestHeaderList extends ArrayList<RequestHeader> {
 
 	@Override
 	public boolean equals(Object o) {
-		return this == o || (o instanceof RequestHeaderList other && super.equals(other));
+		return this == o || (o instanceof RequestHeaderList o2 && super.equals(o2));
 	}
 
 	@Override

@@ -212,8 +212,8 @@ public enum TemporalFormat {
 		// MonthDay only implements TemporalAccessor (not Temporal) and has no DateTimeFormatter that
 		// matches its --MM-DD wire form natively.  Use its own toString/parse pair regardless of the
 		// configured format — every other TemporalFormat value is structurally meaningless without a year.
-		if (value instanceof MonthDay md)
-			return md.toString();
+		if (value instanceof MonthDay value2)
+			return value2.toString();
 		if (this == MILLIS) {
 			Long millis = toEpochMillis(value);
 			if (millis != null)
@@ -229,17 +229,17 @@ public enum TemporalFormat {
 	}
 
 	private static Instant toInstant(TemporalAccessor value, ZoneId zone) {
-		if (value instanceof Instant i)
-			return i;
+		if (value instanceof Instant value2)
+			return value2;
 		try {
 			return Instant.from(value);
 		} catch (Exception e) {
-			if (value instanceof ChronoLocalDate cld)
-				return cld.atTime(LocalTime.MIDNIGHT).atZone(zone).toInstant();
-			if (value instanceof ChronoLocalDateTime<?> cldt)
-				return cldt.atZone(zone).toInstant();
-			if (value instanceof ChronoZonedDateTime<?> czdt)
-				return czdt.toInstant();
+			if (value instanceof ChronoLocalDate value2)
+				return value2.atTime(LocalTime.MIDNIGHT).atZone(zone).toInstant();
+			if (value instanceof ChronoLocalDateTime<?> value2)
+				return value2.atZone(zone).toInstant();
+			if (value instanceof ChronoZonedDateTime<?> value2)
+				return value2.toInstant();
 			throw e;
 		}
 	}
@@ -378,18 +378,18 @@ public enum TemporalFormat {
 		"java:S3776" // Per-subtype coercion table mirrors the legacy TemporalSwap.convertToSerializable path
 	})
 	private Temporal convertForFormatter(TemporalAccessor value, ZoneId zoneId) {
-		if (value instanceof Temporal t && (this == DEFAULT || this == NOT_SET))
-			return t;
+		if (value instanceof Temporal value2 && (this == DEFAULT || this == NOT_SET))
+			return value2;
 		var tc = value.getClass();
 		// Instant always serializes in GMT.
 		if (tc == Instant.class)
 			return ZonedDateTime.from(new DefaultingTemporalAccessor(value, Z));
 		// Zoned / offset variants are already serializable by any pattern.
-		if (value instanceof Temporal t && (tc == ZonedDateTime.class || tc == OffsetDateTime.class))
-			return t;
+		if (value instanceof Temporal value2 && (tc == ZonedDateTime.class || tc == OffsetDateTime.class))
+			return value2;
 		if (zoneOptional()) {
-			if (value instanceof LocalDateTime ldt)
-				return ldt;
+			if (value instanceof LocalDateTime value2)
+				return value2;
 			if (tc == OffsetTime.class)
 				return ZonedDateTime.from(new DefaultingTemporalAccessor(value, zoneId));
 			return LocalDateTime.from(new DefaultingTemporalAccessor(value, zoneId));
@@ -401,20 +401,20 @@ public enum TemporalFormat {
 		"java:S3776" // Per-subtype epoch-millis coercion is intentionally explicit
 	})
 	private static Long toEpochMillis(TemporalAccessor value) {
-		if (value instanceof Instant i)
-			return i.toEpochMilli();
-		if (value instanceof OffsetDateTime odt)
-			return odt.toInstant().toEpochMilli();
-		if (value instanceof ZonedDateTime zdt)
-			return zdt.toInstant().toEpochMilli();
-		if (value instanceof LocalDateTime ldt)
-			return ldt.toInstant(ZoneOffset.UTC).toEpochMilli();
-		if (value instanceof LocalDate ld)
-			return ld.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
-		if (value instanceof YearMonth ym)
-			return ym.atDay(1).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
-		if (value instanceof Year y)
-			return y.atDay(1).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+		if (value instanceof Instant value2)
+			return value2.toEpochMilli();
+		if (value instanceof OffsetDateTime value2)
+			return value2.toInstant().toEpochMilli();
+		if (value instanceof ZonedDateTime value2)
+			return value2.toInstant().toEpochMilli();
+		if (value instanceof LocalDateTime value2)
+			return value2.toInstant(ZoneOffset.UTC).toEpochMilli();
+		if (value instanceof LocalDate value2)
+			return value2.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+		if (value instanceof YearMonth value2)
+			return value2.atDay(1).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+		if (value instanceof Year value2)
+			return value2.atDay(1).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
 		return null;
 	}
 
@@ -431,7 +431,7 @@ public enum TemporalFormat {
 		if (targetType == OffsetTime.class) return (T) instant.atZone(zoneId).toOffsetDateTime().toOffsetTime();
 		if (targetType == YearMonth.class) return (T) YearMonth.from(instant.atZone(ZoneOffset.UTC));
 		if (targetType == Year.class) return (T) Year.from(instant.atZone(ZoneOffset.UTC));
-		throw new IllegalArgumentException("Cannot convert epoch millis to " + targetType.getName());
+		throw iaex("Cannot convert epoch millis to %s", targetType.getName());
 	}
 
 	private static Method findFromMethod(Class<? extends TemporalAccessor> tc) {
@@ -444,7 +444,7 @@ public enum TemporalFormat {
 				&& x.hasParameterTypes(TemporalAccessor.class)
 			)
 			.map(MethodInfo::inner)
-			.orElseThrow(() -> new IllegalArgumentException("No static from(TemporalAccessor) on " + tc.getName())));
+			.orElseThrow(() -> iaex("No static from(TemporalAccessor) on %s", tc.getName())));
 		// @formatter:on
 	}
 

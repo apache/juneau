@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.parquet;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.time.*;
@@ -181,7 +183,7 @@ final class ParquetColumnReader {
 		if (len <= 0)
 			return new byte[0];
 		if (len > MAX_BYTE_ARRAY_LEN)
-			throw new IOException("Byte array length " + len + " exceeds maximum " + MAX_BYTE_ARRAY_LEN);
+			throw ioex("Byte array length %s exceeds maximum %s", len, MAX_BYTE_ARRAY_LEN);
 		var b = new byte[len];
 		var n = 0;
 		while (n < len) {

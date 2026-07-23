@@ -64,8 +64,8 @@ public class JcsWriter extends JsonWriter<JcsWriter> {
 			w("null");
 			return this;
 		}
-		if (value instanceof Number n)
-			w(JcsSerializerSession.toEcmaNumber(n));
+		if (value instanceof Number value2)
+			w(JcsSerializerSession.toEcmaNumber(value2));
 		else
 			w(value.toString());
 		return this;

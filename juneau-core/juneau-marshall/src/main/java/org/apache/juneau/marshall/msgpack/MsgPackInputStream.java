@@ -131,7 +131,7 @@ public class MsgPackInputStream extends ParserInputStream {
 		var b = new byte[(int)length];
 		var bytesRead = read(b);
 		if (bytesRead != b.length)
-			throw new IOException("Expected to read " + b.length + " bytes but only read " + bytesRead);
+			throw ioex("Expected to read %s bytes but only read %s", b.length, bytesRead);
 		return b;
 	}
 

@@ -51,7 +51,7 @@ public class DelegateList<T extends Collection<?>> extends JsonList implements D
 
 	@Override
 	public boolean equals(Object o) {
-		return this == o || (o instanceof List<?> other && super.equals(other));
+		return this == o || (o instanceof List<?> o2 && super.equals(o2));
 	}
 
 	@Override

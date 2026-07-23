@@ -519,10 +519,10 @@ public class RequestHttpPart {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof org.apache.juneau.http.HttpPart hp)
-			return eq(getName(), hp.getName()) && eq(getValue(), hp.getValue());
-		if (o instanceof HttpHeader hh)
-			return eq(getName(), hh.getName()) && eq(getValue(), hh.getValue());
+		if (o instanceof org.apache.juneau.http.HttpPart o2)
+			return eq(getName(), o2.getName()) && eq(getValue(), o2.getValue());
+		if (o instanceof HttpHeader o2)
+			return eq(getName(), o2.getName()) && eq(getValue(), o2.getValue());
 		return false;
 	}
 

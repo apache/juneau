@@ -239,7 +239,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 		}
 		
 		for (var entry : bm.entrySet()) {
-			if (entry instanceof BeanMapEntry bme && !bme.getMeta().canRead())
+			if (entry instanceof BeanMapEntry entry2 && !entry2.getMeta().canRead())
 				continue;
 			w.tableRow(MarkdownWriter.escapeCell(entry.getKey()), writeInlineValue(entry.getValue()));
 		}

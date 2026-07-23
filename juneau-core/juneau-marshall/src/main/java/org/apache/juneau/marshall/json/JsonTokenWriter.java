@@ -287,7 +287,7 @@ public class JsonTokenWriter implements TokenWriter {
 	public TokenWriter number(double value) throws IOException {
 		assertOpen();
 		if (Double.isNaN(value) || Double.isInfinite(value))
-			throw new IOException("Cannot serialize non-finite double as JSON: " + value);
+			throw ioex("Cannot serialize non-finite double as JSON: %s", value);
 		preValue();
 		out.write(Double.toString(value));
 		postValue();
@@ -553,10 +553,10 @@ public class JsonTokenWriter implements TokenWriter {
 	public static JsonTokenWriter forOutput(Object output, Settings settings) throws IOException {
 		if (output == null)
 			throw new IOException("Output cannot be null.");
-		if (output instanceof Writer w)
-			return new JsonTokenWriter(w, null, false, settings);
-		if (output instanceof OutputStream os)
-			return new JsonTokenWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), null, true, settings);
-		throw new IOException("Cannot convert object of type " + output.getClass().getName() + " to a Writer.");
+		if (output instanceof Writer output2)
+			return new JsonTokenWriter(output2, null, false, settings);
+		if (output instanceof OutputStream output2)
+			return new JsonTokenWriter(new OutputStreamWriter(output2, StandardCharsets.UTF_8), null, true, settings);
+		throw ioex("Cannot convert object of type %s to a Writer.", output.getClass().getName());
 	}
 }

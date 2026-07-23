@@ -91,7 +91,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return this == o || (o instanceof AnnotationWorkList other && super.equals(other)); // HTT: super.equals(false) requires populating lists with matching AnnotationWork instances; not practical to test
+		return this == o || (o instanceof AnnotationWorkList o2 && super.equals(o2)); // HTT: super.equals(false) requires populating lists with matching AnnotationWork instances; not practical to test
 	}
 
 	@Override /* Overridden from Object */

@@ -65,8 +65,8 @@ public final class RecordAdapter {
 
 	/** Closes the handed input/output when it is {@link Closeable} (shared resource-ownership rule). */
 	private static void closeIfCloseable(Object io) throws IOException {
-		if (io instanceof Closeable c)
-			c.close();
+		if (io instanceof Closeable io2)
+			io2.close();
 	}
 
 	/**
@@ -197,8 +197,8 @@ public final class RecordAdapter {
 				return false;
 			}
 			@Override public void flush() throws IOException {
-				if (output instanceof Flushable f)
-					f.flush();
+				if (output instanceof Flushable output2)
+					output2.flush();
 			}
 			@Override public void close() throws IOException {
 				if (closed)
@@ -243,8 +243,8 @@ public final class RecordAdapter {
 			}
 
 			@Override public void flush() throws IOException {
-				if (output instanceof Flushable f)
-					f.flush();
+				if (output instanceof Flushable output2)
+					output2.flush();
 			}
 
 			@Override public void close() throws IOException {

@@ -137,8 +137,8 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 	public TokenWriter writeTokens(Object output) throws IOException {
 		if (output == null)
 			throw new IOException("Output cannot be null.");
-		if (!(output instanceof OutputStream os))
-			throw new IOException("Cannot convert object of type " + output.getClass().getName() + " to an OutputStream.");
+		if (!(output instanceof OutputStream output2))
+			throw ioex("Cannot convert object of type %s to an OutputStream.", output.getClass().getName());
 		var walk = new PojoWalker.Options(
 			isKeepNullProperties(),
 			isTrimEmptyMaps(),
@@ -147,7 +147,7 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 			isSortCollections(),
 			isTrimStrings(),
 			getMarshallingContext());
-		return new CborTokenWriter(os, new CborTokenWriter.Settings(walk));
+		return new CborTokenWriter(output2, new CborTokenWriter.Settings(walk));
 	}
 
 	/**

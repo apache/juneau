@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -106,7 +107,7 @@ public abstract class AbstractRestBuilder<R, SELF extends AbstractRestBuilder<R,
 		if (ctor != null)
 			return ctor.accessible().newInstance(this);
 		var noArg = ci.getNoArgConstructor(Visibility.PRIVATE)
-			.orElseThrow(() -> new IllegalStateException("Resource class " + resourceType.getName() + " has no no-arg or RestBuilder<?> constructor."));
+			.orElseThrow(() -> isex("Resource class %s has no no-arg or RestBuilder<?> constructor.", resourceType.getName()));
 		return noArg.accessible().newInstance();
 	}
 

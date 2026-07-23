@@ -139,15 +139,15 @@ public class ClaimsPrincipal implements Principal {
 			return (T) v;
 		if (type == String.class)
 			return (T) v.toString();
-		if (v instanceof Number n) {
+		if (v instanceof Number v2) {
 			if (type == Integer.class || type == int.class)
-				return (T) Integer.valueOf(n.intValue());
+				return (T) Integer.valueOf(v2.intValue());
 			if (type == Long.class || type == long.class)
-				return (T) Long.valueOf(n.longValue());
+				return (T) Long.valueOf(v2.longValue());
 			if (type == Double.class || type == double.class)
-				return (T) Double.valueOf(n.doubleValue());
+				return (T) Double.valueOf(v2.doubleValue());
 			if (type == Float.class || type == float.class)
-				return (T) Float.valueOf(n.floatValue());
+				return (T) Float.valueOf(v2.floatValue());
 		}
 		return null;
 	}

@@ -704,8 +704,8 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 			@Override public <T> T read(Type type, Type... args) { return XmlParserSession.this.<T>convertToType(nextElement(), type, args); }
 			@Override public boolean isStreaming() { return false; }
 			@Override public void close() throws IOException {
-				if (input instanceof Closeable c)
-					c.close();
+				if (input instanceof Closeable input2)
+					input2.close();
 			}
 			private Object nextElement() {
 				if (! iter.hasNext())
@@ -719,16 +719,16 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	private static List<Object> selectRootElements(Object parsed, String rootElementName) {
 		if (parsed == null)
 			return Collections.emptyList();
-		if (parsed instanceof Map<?,?> m) {
-			var v = m.get(rootElementName);
+		if (parsed instanceof Map<?,?> parsed2) {
+			var v = parsed2.get(rootElementName);
 			if (v == null)
 				return Collections.emptyList();
-			if (v instanceof List<?> l)
-				return new ArrayList<>(l);
+			if (v instanceof List<?> v2)
+				return new ArrayList<>(v2);
 			return new ArrayList<>(Collections.singletonList(v));
 		}
-		if (parsed instanceof List<?> l)
-			return new ArrayList<>(l);
+		if (parsed instanceof List<?> parsed2)
+			return new ArrayList<>(parsed2);
 		return new ArrayList<>(Collections.singletonList(parsed));
 	}
 

@@ -83,13 +83,13 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 				if ("*".equals(n)) {
 					for (var o2 : iterate(o)) {
 						HttpHeader h;
-						if (o2 instanceof Map.Entry o22) {
-							var k = s(o22.getKey());
-							h = toHeader(k, o22.getValue(), serializer, ps != null ? ps.getProperty(k) : null);
-						} else if (o2 instanceof HttpHeader o22) {
-							h = o22;
-						} else if (o2 instanceof HttpPart o23) {
-							h = HttpStringHeader.of(o23.getName(), o23.getValue());
+						if (o2 instanceof Map.Entry o3) {
+							var k = s(o3.getKey());
+							h = toHeader(k, o3.getValue(), serializer, ps != null ? ps.getProperty(k) : null);
+						} else if (o2 instanceof HttpHeader o3) {
+							h = o3;
+						} else if (o2 instanceof HttpPart o3) {
+							h = HttpStringHeader.of(o3.getName(), o3.getValue());
 						} else {
 							throw new InternalServerError("Invalid type '%s' for header '%s'", cn(o2), n);
 						}
@@ -99,8 +99,8 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 					HttpHeader h;
 					if (o instanceof HttpHeader o2)
 						h = o2;
-					else if (o instanceof HttpPart o3)
-						h = HttpStringHeader.of(o3.getName(), o3.getValue());
+					else if (o instanceof HttpPart o2)
+						h = HttpStringHeader.of(o2.getName(), o2.getValue());
 					else
 						h = toHeader(n, o, serializer, ps);
 					res.addHeader(h);

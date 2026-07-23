@@ -91,8 +91,8 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 
 	protected final HoconWriter getHoconWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
-		if (output instanceof HoconWriter w)
-			return w;
+		if (output instanceof HoconWriter output2)
+			return output2;
 		var w = new HoconWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(),
 			ctx.useNewlineSeparators, ctx.useUnquotedStrings, ctx.useUnquotedKeys, ctx.omitRootBraces,
 			ctx.useMultilineStrings, ctx.useEqualsSign, getUriResolver());
@@ -153,8 +153,8 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 			writeKeyPrefix(out, key, i, first);
 			if (isObject) {
 				out.append(" ");
-				if (value instanceof BeanMap bm)
-					writeBeanMap(out, bm, getBeanTypeName(this, cMeta, cMeta, pMeta), false);
+				if (value instanceof BeanMap value2)
+					writeBeanMap(out, value2, getBeanTypeName(this, cMeta, cMeta, pMeta), false);
 				else if (cMeta.isBean())
 					writeBeanMap(out, toBeanMap(value), getBeanTypeName(this, cMeta, cMeta, pMeta), false);
 				else
@@ -198,8 +198,8 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 			writeKeyPrefix(out, key, i, first);
 			if (isObject) {
 				out.append(" ");
-				if (value instanceof BeanMap bm)
-					writeBeanMap(out, bm, getBeanTypeName(this, valueType, getClassMetaForObject(value), null), false);
+				if (value instanceof BeanMap value2)
+					writeBeanMap(out, value2, getBeanTypeName(this, valueType, getClassMetaForObject(value), null), false);
 				else
 					writeMap(out, (Map) value, object(), false);
 			} else {
@@ -278,9 +278,9 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 
 		if (o == null || (sType.isChar() && ((Character) o).charValue() == 0)) {
 			hw.w("null");
-		} else if (o instanceof byte[] bytes) {
+		} else if (o instanceof byte[] o2) {
 			// byte[] gate: encode as Base64 before isArray would otherwise route it as a generic array.
-			writeString(hw, Base64.getEncoder().encodeToString(bytes));
+			writeString(hw, Base64.getEncoder().encodeToString(o2));
 		} else if (sType.isBean()) {
 			writeBeanMap(hw, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta), false);
 		} else if (sType.isMap()) {

@@ -296,7 +296,7 @@ public class MsgPackTokenReader implements TokenReader {
 	@Override /* TokenReader */
 	public String getFieldName() {
 		if (currentToken != TokenType.FIELD_NAME)
-			throw new IllegalStateException("Current token is not FIELD_NAME (was " + currentToken + ")");
+			throw isex("Current token is not FIELD_NAME (was %s)", currentToken);
 		return currentString;
 	}
 
@@ -308,36 +308,35 @@ public class MsgPackTokenReader implements TokenReader {
 			case VALUE_NUMBER:  return currentNumberLexeme;
 			case VALUE_BOOLEAN: return Boolean.toString(currentBoolean);
 			case VALUE_NULL:    return null;
-			default: throw new IllegalStateException(
-				"Current token does not have a string view (was " + currentToken + ")");
+			default: throw isex("Current token does not have a string view (was %s)", currentToken);
 		}
 	}
 
 	@Override /* TokenReader */
 	public Number getNumber() throws ParseException {
 		if (currentToken != TokenType.VALUE_NUMBER)
-			throw new IllegalStateException("Current token is not VALUE_NUMBER (was " + currentToken + ")");
+			throw isex("Current token is not VALUE_NUMBER (was %s)", currentToken);
 		return currentNumber;
 	}
 
 	@Override /* TokenReader */
 	public String getNumberLexeme() {
 		if (currentToken != TokenType.VALUE_NUMBER)
-			throw new IllegalStateException("Current token is not VALUE_NUMBER (was " + currentToken + ")");
+			throw isex("Current token is not VALUE_NUMBER (was %s)", currentToken);
 		return currentNumberLexeme;
 	}
 
 	@Override /* TokenReader */
 	public boolean getBool() {
 		if (currentToken != TokenType.VALUE_BOOLEAN)
-			throw new IllegalStateException("Current token is not VALUE_BOOLEAN (was " + currentToken + ")");
+			throw isex("Current token is not VALUE_BOOLEAN (was %s)", currentToken);
 		return currentBoolean;
 	}
 
 	@Override /* TokenReader */
 	public byte[] getBinary() {
 		if (currentToken != TokenType.VALUE_BINARY)
-			throw new IllegalStateException("Current token is not VALUE_BINARY (was " + currentToken + ")");
+			throw isex("Current token is not VALUE_BINARY (was %s)", currentToken);
 		return cp(currentBinary);
 	}
 
@@ -362,8 +361,8 @@ public class MsgPackTokenReader implements TokenReader {
 			currentToken = TokenType.NOT_AVAILABLE;
 			return o;
 		} catch (Exception e) {
-			if (e instanceof IOException ioe) throw ioe;
-			if (e instanceof ParseException pe) throw pe;
+			if (e instanceof IOException e2) throw e2;
+			if (e instanceof ParseException e2) throw e2;
 			throw new ParseException(s, "read failed: %s", e.getMessage());
 		}
 	}
@@ -417,7 +416,7 @@ public class MsgPackTokenReader implements TokenReader {
 	@Override /* TokenReader */
 	public int getExtType() {
 		if (nativeKind != BinaryNativeKind.MSGPACK_EXT)
-			throw new IllegalStateException("Current token is not a MsgPack ext (nativeKind=" + nativeKind + ")");
+			throw isex("Current token is not a MsgPack ext (nativeKind=%s)", nativeKind);
 		return extType;
 	}
 

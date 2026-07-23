@@ -221,10 +221,10 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	 * through to {@code BasicConverter}'s default {@code String → byte[]} UTF-8 coercion.
 	 */
 	private Object coerceMemberValue(Object raw, ClassMeta<?> type) throws ParseException {
-		if (raw instanceof String s && type != null && type.inner() == byte[].class) {
+		if (raw instanceof String raw2 && type != null && type.inner() == byte[].class) {
 			var swap = type.getSwap(this);
 			if (swap != null)
-				return unswap(swap, s, type);
+				return unswap(swap, raw2, type);
 		}
 		return convertToMemberType(null, raw, type);
 	}

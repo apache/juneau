@@ -472,9 +472,9 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 		};
 		// If the enclosing target is a typed Map (e.g. Map<TestEnum,String>), coerce keys / values
 		// via the converter's findMapConversion so the bean property binder gets a properly-keyed map.
-		if (result instanceof Map<?,?> m && type != null && type.isMap()
+		if (result instanceof Map<?,?> result2 && type != null && type.isMap()
 				&& type.getKeyType() != null && !type.getKeyType().isObject())
-			return convertToMemberType(null, m, type);
+			return convertToMemberType(null, result2, type);
 		return result;
 	}
 

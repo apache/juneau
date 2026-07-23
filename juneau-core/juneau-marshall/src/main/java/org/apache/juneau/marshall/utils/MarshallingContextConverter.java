@@ -159,7 +159,7 @@ public class MarshallingContextConverter implements Converter {
 	})
 	@Override
 	public <T> T to(Object o, Object memberOf, ConverterSession session, Type mainType, Type... args) {
-		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);
+		var rawType = (Class<T>) (mainType instanceof ParameterizedType mainType2 ? mainType2.getRawType() : (Class<?>) mainType);
 		return MarshallingContext.DEFAULT_SESSION.convertToMemberType(memberOf, o, rawType);
 	}
 }

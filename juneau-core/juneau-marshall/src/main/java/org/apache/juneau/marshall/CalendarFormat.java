@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.time.*;
@@ -143,11 +144,11 @@ public enum CalendarFormat {
 		if (this == MILLIS)
 			return Long.toString(value.getTimeInMillis());
 		if (this == XML_FORMAT) {
-			var gc = value instanceof GregorianCalendar gc2 ? gc2 : GregorianCalendar.from(value.toInstant().atZone(value.getTimeZone().toZoneId()));
+			var gc = value instanceof GregorianCalendar value2 ? value2 : GregorianCalendar.from(value.toInstant().atZone(value.getTimeZone().toZoneId()));
 			return DATATYPE_FACTORY.newXMLGregorianCalendar(gc).toXMLFormat();
 		}
 		var zone = zoneId == null ? value.getTimeZone().toZoneId() : zoneId;
-		var zdt = value instanceof GregorianCalendar gc ? gc.toZonedDateTime() : value.toInstant().atZone(zone);
+		var zdt = value instanceof GregorianCalendar value2 ? value2.toZonedDateTime() : value.toInstant().atZone(zone);
 		return formatter().format(zdt);
 	}
 
@@ -199,7 +200,7 @@ public enum CalendarFormat {
 			case ISO_WEEK_DATE -> DateTimeFormatter.ISO_WEEK_DATE;
 			case ISO_ZONED_DATE_TIME -> DateTimeFormatter.ISO_ZONED_DATE_TIME;
 			case RFC_1123_DATE_TIME -> DateTimeFormatter.RFC_1123_DATE_TIME;
-			case XML_FORMAT, MILLIS -> throw new IllegalStateException("Format " + this + " does not use a DateTimeFormatter");
+			case XML_FORMAT, MILLIS -> throw isex("Format %s does not use a DateTimeFormatter", this);
 		};
 	}
 

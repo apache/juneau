@@ -163,24 +163,24 @@ public class TomlWriter extends SerializerWriter<TomlWriter> {
 	}
 
 	TomlWriter localDateTimeValue(Object value) {
-		if (value instanceof LocalDateTime ldt)
-			w(ldt.format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+		if (value instanceof LocalDateTime value2)
+			w(value2.format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME));
 		else
 			w(value.toString());
 		return this;
 	}
 
 	TomlWriter localDateValue(Object value) {
-		if (value instanceof LocalDate ld)
-			w(ld.format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE));
+		if (value instanceof LocalDate value2)
+			w(value2.format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE));
 		else
 			w(value.toString());
 		return this;
 	}
 
 	TomlWriter localTimeValue(Object value) {
-		if (value instanceof LocalTime lt)
-			w(lt.format(java.time.format.DateTimeFormatter.ISO_LOCAL_TIME));
+		if (value instanceof LocalTime value2)
+			w(value2.format(java.time.format.DateTimeFormatter.ISO_LOCAL_TIME));
 		else
 			w(value.toString());
 		return this;

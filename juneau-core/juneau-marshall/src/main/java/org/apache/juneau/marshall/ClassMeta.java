@@ -1440,7 +1440,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 				return stringConstructor.get().<T>newInstance(outer, arg);
 			return stringConstructor.get().<T>newInstance(arg);
 		}
-		throw new ExecutableException("No string constructor or valueOf(String) method found for class '" + cn(inner()) + "'");
+		throw exex("No string constructor or valueOf(String) method found for class '%s'", cn(inner()));
 	}
 
 	/**

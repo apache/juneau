@@ -685,7 +685,7 @@ public class RestContext extends Context {
 		var vr = (store == null) ? null : store.getBean(VarResolver.class).orElse(null);
 		// Cast for the bean-store-backed resolver session only — when store is a plain BeanStore (not
 		// WritableBeanStore) we skip the session form and call vr.resolve(...) directly.
-		var ws = (store instanceof WritableBeanStore wbs) ? wbs : null;
+		var ws = (store instanceof WritableBeanStore store2) ? store2 : null;
 		return resolvePathsCore(annotations, resource, vr, ws);
 	}
 
@@ -2473,7 +2473,7 @@ public class RestContext extends Context {
 			parentContext = builder.parentContext;
 			contextKind = builder.args.kind();
 			isMixinContext = contextKind instanceof ContextKind.Mixin;
-			resolvedMixin = (contextKind instanceof ContextKind.Mixin m) ? m.def() : null;
+			resolvedMixin = (contextKind instanceof ContextKind.Mixin contextKind2) ? contextKind2.def() : null;
 			resourceClass = builder.resourceClass;
 			var rs = new ResourceSupplier(resourceClass, assertArgNotNull("resource", builder.args.resource()));
 			resource = rs;
@@ -2485,13 +2485,13 @@ public class RestContext extends Context {
 			if (rb == null)
 				rb = stashedRestBuilder(rs.get());
 			restBuilder = rb;
-			if (restBuilder instanceof AbstractRestBuilder<?,?> arb) {
+			if (restBuilder instanceof AbstractRestBuilder<?,?> restBuilder2) {
 				// Synthetic, highest-priority @Rest carrying the builder-set members; prepended (most-derived
 				// child position) to the @Rest chain by the restAnnotations memoizer so builder values win.
-				builderRestAnnotation = arb.toRestAnnotation();
+				builderRestAnnotation = restBuilder2.toRestAnnotation();
 				// Programmatic mdcAsyncPropagation knob (no @Rest member) wins over the env-driven default.
-				if (arb.getMdcAsyncPropagation() != null && builder.mdcAsyncPropagation == null)
-					builder.mdcAsyncPropagation = arb.getMdcAsyncPropagation();
+				if (restBuilder2.getMdcAsyncPropagation() != null && builder.mdcAsyncPropagation == null)
+					builder.mdcAsyncPropagation = restBuilder2.getMdcAsyncPropagation();
 			} else {
 				builderRestAnnotation = null;
 			}
@@ -2578,8 +2578,8 @@ public class RestContext extends Context {
 			// local @Bean registrations win.  Top-level resources and @Rest(children=...) sub-resources keep
 			// the original tier-4 default semantics so a parent-supplied framework bean (e.g. Spring's
 			// SerializerSet) still wins as it did before.
-			if (isMixinContext && beanStore instanceof BasicBeanStore mixinBs)
-				mixinBs.promoteDefaultsToLocalSuppliers();
+			if (isMixinContext && beanStore instanceof BasicBeanStore beanStore2)
+				beanStore2.promoteDefaultsToLocalSuppliers();
 
 			var rci2 = ClassInfo.of(resourceClass);
 
@@ -2618,8 +2618,8 @@ public class RestContext extends Context {
 				// Skip the WritableBeanStore factory (already consumed by createBeanStore()).
 				if (WritableBeanStore.class.equals(rt) || BeanStore.class.equals(rt))
 					return;
-				if (beanStore instanceof BasicBeanStore bbs2 && bbs2.hasDefaultSupplier(rt, name)) {
-					bbs2.getDefaultSupplier(rt, name).ifPresent(sup -> beanStore.addSupplier(rt, sup, name));
+				if (beanStore instanceof BasicBeanStore beanStore2 && beanStore2.hasDefaultSupplier(rt, name)) {
+					beanStore2.getDefaultSupplier(rt, name).ifPresent(sup -> beanStore.addSupplier(rt, sup, name));
 					return;
 				}
 				beanStore.createBeanFromMethod(rt, resource.get(), RestContext::isBeanMethod)
@@ -2950,12 +2950,12 @@ public class RestContext extends Context {
 	 * @return The stashed builder, or <jk>null</jk> if <c>r</c> carries none or is not a builder-aware base type.
 	 */
 	private static RestBuilder<?> stashedRestBuilder(Object r) {
-		if (r instanceof RestServlet x)
-			return x.getRestBuilder();
-		if (r instanceof RestResource x)
-			return x.getRestBuilder();
-		if (r instanceof RestMixin x)
-			return x.getRestBuilder();
+		if (r instanceof RestServlet r2)
+			return r2.getRestBuilder();
+		if (r instanceof RestResource r2)
+			return r2.getRestBuilder();
+		if (r instanceof RestMixin r2)
+			return r2.getRestBuilder();
 		return null;
 	}
 
@@ -4874,7 +4874,7 @@ public class RestContext extends Context {
 		if (nn(r) && r.value().length > 0)
 			code = r.value()[0];
 
-		var e2 = (e instanceof BasicHttpException e22 ? e22 : new BasicHttpException(code, null, e));
+		var e2 = (e instanceof BasicHttpException e3 ? e3 : new BasicHttpException(code, null, e));
 
 		var req = session.getRequest();
 		var res = session.getResponse();
@@ -4888,7 +4888,7 @@ public class RestContext extends Context {
 		try {
 			var statusCode = e2.getStatusLine().getStatusCode();
 
-			if (e2 instanceof ValidationException ve && writeValidationErrorBody(res, ve, statusCode, isProblemDetails()))
+			if (e2 instanceof ValidationException e3 && writeValidationErrorBody(res, e3, statusCode, isProblemDetails()))
 				return;
 
 			if (isProblemDetails() && writeProblemDetailsBody(res, e2, statusCode))

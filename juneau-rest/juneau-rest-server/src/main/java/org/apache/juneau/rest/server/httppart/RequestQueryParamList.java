@@ -572,7 +572,7 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 
 	@Override
 	public boolean equals(Object o) {
-		return this == o || (o instanceof RequestQueryParamList other && super.equals(other));
+		return this == o || (o instanceof RequestQueryParamList o2 && super.equals(o2));
 	}
 
 	@Override

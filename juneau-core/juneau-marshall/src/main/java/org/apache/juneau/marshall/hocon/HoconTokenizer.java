@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.hocon;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
@@ -161,7 +162,7 @@ public class HoconTokenizer {
 	 * 	<br>Must not be <jk>null</jk>.
 	 */
 	public HoconTokenizer(Reader reader) {
-		var in = reader instanceof BufferedReader br ? br : new BufferedReader(reader);
+		var in = reader instanceof BufferedReader reader2 ? reader2 : new BufferedReader(reader);
 		this.reader = new PushbackReader(in, 8);
 	}
 
@@ -430,7 +431,7 @@ public class HoconTokenizer {
 		// parser converts it to a ParseException rather than a StackOverflowError.
 		if (raw.isEmpty()) {
 			if (c >= 0)
-				throw new IOException("Unexpected character '" + (char) c + "' at line " + line + ", column " + column);
+				throw ioex("Unexpected character '%s' at line %s, column %s", (char) c, line, column);
 			return Token.of(TokenType.EOF);
 		}
 
@@ -519,7 +520,7 @@ public class HoconTokenizer {
 		for (var i = 0; i < 4; i++) {
 			var c = readChar();
 			if (c < 0 || !isHexDigit(c))
-				throw new IOException("Invalid \\u escape sequence at line " + line + ", column " + column);
+				throw ioex("Invalid \\u escape sequence at line %s, column %s", line, column);
 			hex.append((char) c);
 		}
 		return (char) Integer.parseInt(hex.toString(), 16);

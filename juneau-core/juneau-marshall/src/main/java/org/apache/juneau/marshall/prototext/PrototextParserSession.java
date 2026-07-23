@@ -103,10 +103,10 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 				// BinaryFormat's variant BinarySwap before falling through to convertValue's default
 				// String → byte[] UTF-8 coercion.  The collection-element route (Prototext's repeated
 				// bytes field) is intentionally not touched here.
-				if (raw instanceof String s && type != null && type.inner() == byte[].class) {
+				if (raw instanceof String raw2 && type != null && type.inner() == byte[].class) {
 					var swap = type.getSwap(this);
 					if (swap != null)
-						return (T) unswap(swap, s, type);
+						return (T) unswap(swap, raw2, type);
 				}
 				return (T) convertValue(raw, type);
 			}
@@ -279,8 +279,8 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		if (type.isMap()) {
 			var inner = type.inner();
 			if (inner != null && JsonMap.class.isAssignableFrom(inner)) {
-				if (map instanceof JsonMap jm)
-					return (T) jm;
+				if (map instanceof JsonMap map2)
+					return (T) map2;
 				return (T) toJsonMap(map);
 			}
 			// Coerce keys when the declared key type isn't String/Object.
@@ -299,7 +299,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		for (Entry<?, ?> e : map.entrySet()) {
 			var k = e.getKey();
 			var v = e.getValue();
-			Object converted = v instanceof Map m ? toJsonMap(m) : convertValue(v, object());
+			Object converted = v instanceof Map v2 ? toJsonMap(v2) : convertValue(v, object());
 			jm.put(k == null ? "null" : k.toString(), converted);
 		}
 		return jm;
@@ -386,13 +386,13 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		//       bytesValue path emits each byte as a hex-escaped char ("\xFF" etc.); the proto
 		//       tokenizer decodes those escapes back into a Java String where each char's code
 		//       point equals the byte's unsigned value.  Reconstruct byte[] by iterating chars.
-		if (val instanceof String s && targetType != null && targetType.inner() == byte[].class) {
+		if (val instanceof String val2 && targetType != null && targetType.inner() == byte[].class) {
 			var swap = targetType.getSwap(this);
 			if (swap != null)
-				return unswap(swap, s, targetType);
-			var bytes = new byte[s.length()];
-			for (var i = 0; i < s.length(); i++)
-				bytes[i] = (byte) s.charAt(i);
+				return unswap(swap, val2, targetType);
+			var bytes = new byte[val2.length()];
+			for (var i = 0; i < val2.length(); i++)
+				bytes[i] = (byte) val2.charAt(i);
 			return bytes;
 		}
 		return convertToMemberType(null, val, targetType);

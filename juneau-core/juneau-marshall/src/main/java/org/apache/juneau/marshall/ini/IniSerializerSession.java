@@ -118,8 +118,8 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 
 	protected final IniWriter getIniWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
-		if (output instanceof IniWriter w)
-			return w;
+		if (output instanceof IniWriter output2)
+			return output2;
 		var w = new IniWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(),
 			ctx.kvSeparator, ctx.spacedSeparator, getUriResolver());
 		out.setWriter(w);

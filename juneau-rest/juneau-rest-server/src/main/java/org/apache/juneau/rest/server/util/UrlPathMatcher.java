@@ -224,7 +224,7 @@ public abstract sealed class UrlPathMatcher implements Comparable<UrlPathMatcher
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof UrlPathMatcher other && compareTo(other) == 0;
+		return o instanceof UrlPathMatcher o2 && compareTo(o2) == 0;
 	}
 
 	@Override /* Overridden from Object */

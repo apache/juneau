@@ -578,7 +578,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 
 	@Override
 	public boolean equals(Object o) {
-		return this == o || (o instanceof RequestFormParamList other && super.equals(other));
+		return this == o || (o instanceof RequestFormParamList o2 && super.equals(o2));
 	}
 
 	@Override

@@ -1394,8 +1394,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		list.forEach(x -> {
 			var x2 = x;
 			if (! type.isInstance(x)) {
-				if (componentType.isArray() && x instanceof Collection<?> c)
-					x2 = toArray(componentType, c);
+				if (componentType.isArray() && x instanceof Collection<?> x3)
+					x2 = toArray(componentType, x3);
 				else if (x == null && componentType.isPrimitive())
 					x2 = componentType.getPrimitiveDefault();
 				else
@@ -1428,10 +1428,10 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	public final Object convertToType(Object value, Object targetType) {
 		if (targetType == null)
 			return convertToType(value, (ClassMeta<?>) null);
-		if (targetType instanceof ClassMeta<?> cm)
-			return convertToType(value, cm);
-		if (targetType instanceof Class<?> c)
-			return convertToType(value, c);
+		if (targetType instanceof ClassMeta<?> targetType2)
+			return convertToType(value, targetType2);
+		if (targetType instanceof Class<?> targetType2)
+			return convertToType(value, targetType2);
 		throw iaex("Unsupported targetType for convertToType: %s", cn(targetType));
 	}
 
@@ -1450,10 +1450,10 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	public final Object convertToMemberType(Object outer, Object value, Object targetType) {
 		if (targetType == null)
 			return convertToMemberType(outer, value, (ClassMeta<?>) null);
-		if (targetType instanceof ClassMeta<?> cm)
-			return convertToMemberType(outer, value, cm);
-		if (targetType instanceof Class<?> c)
-			return convertToMemberType(outer, value, c);
+		if (targetType instanceof ClassMeta<?> targetType2)
+			return convertToMemberType(outer, value, targetType2);
+		if (targetType instanceof Class<?> targetType2)
+			return convertToMemberType(outer, value, targetType2);
 		throw iaex("Unsupported targetType for convertToMemberType: %s", cn(targetType));
 	}
 

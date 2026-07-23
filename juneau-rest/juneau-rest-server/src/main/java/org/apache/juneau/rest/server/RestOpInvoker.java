@@ -134,10 +134,10 @@ public class RestOpInvoker extends MethodInvoker {
 			f.get();
 		} catch (ExecutionException ee) {
 			Throwable cause = ee.getCause() == null ? ee : ee.getCause();
-			if (cause instanceof Exception ex)
-				throw ex;
-			if (cause instanceof Error err)
-				throw err;
+			if (cause instanceof Exception cause2)
+				throw cause2;
+			if (cause instanceof Error cause2)
+				throw cause2;
 			throw new InternalServerError(cause);
 		} catch (InterruptedException ie) {
 			Thread.currentThread().interrupt();
@@ -199,9 +199,9 @@ public class RestOpInvoker extends MethodInvoker {
 			if (! inner().hasReturnType(Void.TYPE) && (nn(output) || ! res.getOutputStreamCalled()))
 				res.setContent(output);
 
-			if (effectivelyObservable && output instanceof CompletionStage<?> stage) {
+			if (effectivelyObservable && output instanceof CompletionStage<?> output2) {
 				observabilityDeferred = true;
-				deferObservability(stage, recorder, tracerScope, startNanos, opSession, opContext.getMetricName(), opContext.getMetricTags());
+				deferObservability(output2, recorder, tracerScope, startNanos, opSession, opContext.getMetricName(), opContext.getMetricTags());
 			}
 
 		} catch (IllegalAccessException | IllegalArgumentException e) {
@@ -271,8 +271,8 @@ public class RestOpInvoker extends MethodInvoker {
 	private static int deriveStatus(Throwable err) {
 		if (err == null)
 			return 200;
-		if (err instanceof BasicHttpException bhe)
-			return bhe.getStatusCode();
+		if (err instanceof BasicHttpException err2)
+			return err2.getStatusCode();
 		return 500;
 	}
 

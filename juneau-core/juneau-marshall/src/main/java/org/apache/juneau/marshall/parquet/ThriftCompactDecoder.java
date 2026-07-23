@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.parquet;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -104,7 +106,7 @@ final class ThriftCompactDecoder {
 			case ThriftCompactEncoder.BINARY: {
 				var len = readVarint();
 				if (len < 0 || len > MAX_BINARY_LENGTH)
-					throw new IOException("Invalid binary length: " + len);
+					throw ioex("Invalid binary length: %s", len);
 				in.skipNBytes((int) len);
 				break;
 			}
@@ -116,7 +118,7 @@ final class ThriftCompactDecoder {
 				if (size == 15)
 					size = (int) readVarint();
 				if (size < 0 || size > MAX_LIST_SIZE)
-					throw new IOException("Invalid list size: " + size);
+					throw ioex("Invalid list size: %s", size);
 				for (int i = 0; i < size; i++)
 					skipField(elemType);
 				break;
@@ -124,7 +126,7 @@ final class ThriftCompactDecoder {
 			case ThriftCompactEncoder.MAP: {
 				var size = (int) readVarint();
 				if (size < 0 || size > MAX_LIST_SIZE)
-					throw new IOException("Invalid map size: " + size);
+					throw ioex("Invalid map size: %s", size);
 				if (size == 0) break;
 				var b = in.read();
 				if (b < 0) break;
@@ -188,7 +190,7 @@ final class ThriftCompactDecoder {
 		if (lenLong <= 0)
 			return new byte[0];
 		if (lenLong > MAX_BINARY_LENGTH)
-			throw new IOException("Invalid binary length: " + lenLong);
+			throw ioex("Invalid binary length: %s", lenLong);
 		var len = (int) lenLong;
 		var b = new byte[len];
 		var n = 0;
@@ -218,7 +220,7 @@ final class ThriftCompactDecoder {
 		if (size == 15)
 			size = (int) readVarint();
 		if (size < 0 || size > MAX_LIST_SIZE)
-			throw new IOException("Invalid list size: " + size);
+			throw ioex("Invalid list size: %s", size);
 		return new ListHeader(elemType, size);
 	}
 

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.json;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 
@@ -282,7 +284,7 @@ public class JsonTokenReader implements TokenReader {
 	@Override /* Overridden from TokenReader */
 	public String getFieldName() {
 		if (currentToken != TokenType.FIELD_NAME)
-			throw new IllegalStateException("Current token is not FIELD_NAME (was " + currentToken + ")");
+			throw isex("Current token is not FIELD_NAME (was %s)", currentToken);
 		return currentFieldName;
 	}
 
@@ -443,8 +445,8 @@ public class JsonTokenReader implements TokenReader {
 			markValueConsumed();
 			return o;
 		} catch (Exception e) {
-			if (e instanceof IOException ioe) throw ioe;
-			if (e instanceof ParseException pe) throw pe;
+			if (e instanceof IOException e2) throw e2;
+			if (e instanceof ParseException e2) throw e2;
 			throw new ParseException(s, "read failed: %s", e.getMessage());
 		}
 	}

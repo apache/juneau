@@ -102,8 +102,8 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 
 	protected final TomlWriter getTomlWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
-		if (output instanceof TomlWriter w)
-			return w;
+		if (output instanceof TomlWriter output2)
+			return output2;
 		var w = new TomlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;
@@ -152,10 +152,10 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			if (!checkNull.test(v))
 				return;
 			ClassMeta<?> aType = getClassMetaForObject(v, type);
-			if (aType.isMap() && v instanceof Map<?,?> nested) {
+			if (aType.isMap() && v instanceof Map<?,?> v2) {
 				w.blankLine();
 				w.tableHeader(k);
-				writeMapAsTable(w, k, nested, aType);
+				writeMapAsTable(w, k, v2, aType);
 			} else {
 				writeKeyValue(w, k, v, null);
 			}

@@ -148,42 +148,42 @@ public final class PojoWalker {
 			w.nil();
 			return;
 		}
-		if (value instanceof CharSequence cs) {
-			var s = cs.toString();
+		if (value instanceof CharSequence value2) {
+			var s = value2.toString();
 			if (options.trimStrings)
 				s = s.trim();
 			w.string(s);
 			return;
 		}
-		if (value instanceof Boolean b) {
-			w.bool(b);
+		if (value instanceof Boolean value2) {
+			w.bool(value2);
 			return;
 		}
-		if (value instanceof byte[] bytes) {
-			w.binary(bytes);
+		if (value instanceof byte[] value2) {
+			w.binary(value2);
 			return;
 		}
-		if (value instanceof Number n) {
-			writeNumber(w, n);
+		if (value instanceof Number value2) {
+			writeNumber(w, value2);
 			return;
 		}
-		if (value instanceof Character c) {
-			w.string(c.toString());
+		if (value instanceof Character value2) {
+			w.string(value2.toString());
 			return;
 		}
-		if (value instanceof Map<?, ?> m) {
+		if (value instanceof Map<?, ?> value2) {
 			enterAncestor(value, ancestors);
 			try {
-				walkMap(w, m, options, ancestors);
+				walkMap(w, value2, options, ancestors);
 			} finally {
 				ancestors.remove(value);
 			}
 			return;
 		}
-		if (value instanceof Collection<?> c) {
+		if (value instanceof Collection<?> value2) {
 			enterAncestor(value, ancestors);
 			try {
-				walkCollection(w, c, options, ancestors);
+				walkCollection(w, value2, options, ancestors);
 			} finally {
 				ancestors.remove(value);
 			}
@@ -199,17 +199,17 @@ public final class PojoWalker {
 			}
 			return;
 		}
-		if (value instanceof Iterable<?> it) {
+		if (value instanceof Iterable<?> value2) {
 			enterAncestor(value, ancestors);
 			try {
-				walkIterable(w, it, options, ancestors);
+				walkIterable(w, value2, options, ancestors);
 			} finally {
 				ancestors.remove(value);
 			}
 			return;
 		}
-		if (value instanceof Enum<?> e) {
-			w.string(e.name());
+		if (value instanceof Enum<?> value2) {
+			w.string(value2.name());
 			return;
 		}
 		// Inspect the type via the live session's MarshallingContext to decide whether to walk it
@@ -236,20 +236,18 @@ public final class PojoWalker {
 	/** Adds the value to the ancestor set, throwing if it is already on the current walk path. */
 	private static void enterAncestor(Object value, Set<Object> ancestors) {
 		if (!ancestors.add(value))
-			throw new IllegalStateException(
-				"Recursion detected while walking a self-referencing object graph.  Offending type: "
-				+ value.getClass().getName());
+			throw isex("Recursion detected while walking a self-referencing object graph.  Offending type: %s", value.getClass().getName());
 	}
 
 	private static void writeNumber(TokenWriter w, Number n) throws IOException {
-		if (n instanceof Long l) { w.number(l.longValue()); return; }
-		if (n instanceof Integer i) { w.number(i.longValue()); return; }
-		if (n instanceof Short s) { w.number(s.longValue()); return; }
-		if (n instanceof Byte b) { w.number(b.longValue()); return; }
-		if (n instanceof Double d) { w.number(d.doubleValue()); return; }
-		if (n instanceof Float f) { w.number(f.doubleValue()); return; }
-		if (n instanceof BigDecimal bd) { w.number(bd); return; }
-		if (n instanceof BigInteger bi) { w.number(bi); return; }
+		if (n instanceof Long n2) { w.number(n2.longValue()); return; }
+		if (n instanceof Integer n2) { w.number(n2.longValue()); return; }
+		if (n instanceof Short n2) { w.number(n2.longValue()); return; }
+		if (n instanceof Byte n2) { w.number(n2.longValue()); return; }
+		if (n instanceof Double n2) { w.number(n2.doubleValue()); return; }
+		if (n instanceof Float n2) { w.number(n2.doubleValue()); return; }
+		if (n instanceof BigDecimal n2) { w.number(n2); return; }
+		if (n instanceof BigInteger n2) { w.number(n2); return; }
 		w.number(n);
 	}
 
@@ -283,10 +281,10 @@ public final class PojoWalker {
 	private static boolean skipMapEntry(Object value, Options options) {
 		if (value == null)
 			return !options.keepNullProperties;
-		if (options.trimEmptyMaps && value instanceof Map<?, ?> m && m.isEmpty())
+		if (options.trimEmptyMaps && value instanceof Map<?, ?> value2 && value2.isEmpty())
 			return true;
 		if (options.trimEmptyCollections) {
-			if (value instanceof Collection<?> c && c.isEmpty())
+			if (value instanceof Collection<?> value2 && value2.isEmpty())
 				return true;
 			if (value.getClass().isArray() && Array.getLength(value) == 0)
 				return true;

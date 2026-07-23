@@ -98,8 +98,8 @@ public abstract sealed class HoconValue {
 				var key = e.getKey();
 				var existing = members.get(key);
 				var incoming = e.getValue();
-				if (existing instanceof HoconObject existingObj && incoming instanceof HoconObject incomingObj)
-					existingObj.merge(incomingObj);
+				if (existing instanceof HoconObject existing2 && incoming instanceof HoconObject incoming2)
+					existing2.merge(incoming2);
 				else
 					members.put(key, incoming);
 			}
@@ -122,8 +122,8 @@ public abstract sealed class HoconValue {
 			var first = path[0];
 			var existing = members.get(first);
 			HoconObject sub;
-			if (existing instanceof HoconObject existingObj) {
-				sub = existingObj;
+			if (existing instanceof HoconObject existing2) {
+				sub = existing2;
 			} else {
 				sub = new HoconObject();
 				members.put(first, sub);
@@ -145,8 +145,8 @@ public abstract sealed class HoconValue {
 			var val = members.get(path[0]);
 			if (path.length == 1)
 				return val;
-			if (val instanceof HoconObject obj)
-				return obj.getPath(Arrays.copyOfRange(path, 1, path.length));
+			if (val instanceof HoconObject val2)
+				return val2.getPath(Arrays.copyOfRange(path, 1, path.length));
 			return null;
 		}
 	}
@@ -384,7 +384,7 @@ public abstract sealed class HoconValue {
 			if (isEmpty(path))
 				return false;
 			for (var p : parts) {
-				if (p instanceof HoconSubstitution sub && path.equals(sub.getPath()))
+				if (p instanceof HoconSubstitution p2 && path.equals(p2.getPath()))
 					return true;
 			}
 			return false;

@@ -320,7 +320,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 								value = formatIfDateOrDuration(value);
 								value = formatForCsvCell(value);
 								// Use toString() to respect trimStrings setting on String values
-								if (value instanceof String s) value = toString(s);
+								if (value instanceof String value2) value = toString(value2);
 								w.writeEntry(or(value, nullValue));
 							});
 							if (addTypeColumn && ine(typeColName)) {
@@ -341,8 +341,8 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 						Object keyVal;
 						if (x == null)
 							keyVal = nullValue;
-						else if (x instanceof String s)
-							keyVal = toString(s);
+						else if (x instanceof String x2)
+							keyVal = toString(x2);
 						else
 							keyVal = x;
 						w.writeEntry(keyVal);
@@ -362,7 +362,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 							var value = applySwap(y, getClassMetaForObject(y));
 							value = formatForCsvCell(value);
 							// Apply trimStrings to map values
-							if (value instanceof String s) value = toString(s);
+							if (value instanceof String value2) value = toString(value2);
 							w.writeEntry(or(value, nullValue));
 						});
 						if (addTypeColumn && ine(typeColName)) {
@@ -411,12 +411,12 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 		if (value == null)
 			return null;
 		var cm = getClassMetaForObject(value);
-		if (value instanceof Date d)
-			return writeDate(d, cm);
+		if (value instanceof Date value2)
+			return writeDate(value2, cm);
 		if (value instanceof Calendar || value instanceof javax.xml.datatype.XMLGregorianCalendar)
 			return writeCalendar(value, cm);
-		if (value instanceof TemporalAccessor t)
-			return writeTemporal(t, cm);
+		if (value instanceof TemporalAccessor value2)
+			return writeTemporal(value2, cm);
 		if (value instanceof Duration)
 			return value.toString();
 		return value;
@@ -434,77 +434,77 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 					|| (type.isBean() && !(value instanceof Map)))
 				return new CsvCellSerializer(byteArrayFormat, nullValue).write(value, this);
 		}
-		if (value instanceof byte[] b) {
+		if (value instanceof byte[] value2) {
 			return byteArrayFormat == CsvByteArrayCellFormat.SEMICOLON_DELIMITED
-				? formatByteArraySemicolon(b)
-				: base64Encode(b);
+				? formatByteArraySemicolon(value2)
+				: base64Encode(value2);
 		}
-		if (value instanceof int[] a) {
+		if (value instanceof int[] value2) {
 			var sb = new StringBuilder();
 			sb.append('[');
-			for (var i = 0; i < a.length; i++) {
+			for (var i = 0; i < value2.length; i++) {
 				if (i > 0) sb.append(';');
-				sb.append(a[i]);
+				sb.append(value2[i]);
 			}
 			sb.append(']');
 			return sb.toString();
 		}
-		if (value instanceof long[] a) {
+		if (value instanceof long[] value2) {
 			var sb = new StringBuilder();
 			sb.append('[');
-			for (var i = 0; i < a.length; i++) {
+			for (var i = 0; i < value2.length; i++) {
 				if (i > 0) sb.append(';');
-				sb.append(a[i]);
+				sb.append(value2[i]);
 			}
 			sb.append(']');
 			return sb.toString();
 		}
-		if (value instanceof double[] a) {
+		if (value instanceof double[] value2) {
 			var sb = new StringBuilder();
 			sb.append('[');
-			for (var i = 0; i < a.length; i++) {
+			for (var i = 0; i < value2.length; i++) {
 				if (i > 0) sb.append(';');
-				sb.append(a[i]);
+				sb.append(value2[i]);
 			}
 			sb.append(']');
 			return sb.toString();
 		}
-		if (value instanceof float[] a) {
+		if (value instanceof float[] value2) {
 			var sb = new StringBuilder();
 			sb.append('[');
-			for (var i = 0; i < a.length; i++) {
+			for (var i = 0; i < value2.length; i++) {
 				if (i > 0) sb.append(';');
-				sb.append(a[i]);
+				sb.append(value2[i]);
 			}
 			sb.append(']');
 			return sb.toString();
 		}
-		if (value instanceof short[] a) {
+		if (value instanceof short[] value2) {
 			var sb = new StringBuilder();
 			sb.append('[');
-			for (var i = 0; i < a.length; i++) {
+			for (var i = 0; i < value2.length; i++) {
 				if (i > 0) sb.append(';');
-				sb.append(a[i]);
+				sb.append(value2[i]);
 			}
 			sb.append(']');
 			return sb.toString();
 		}
-		if (value instanceof boolean[] a) {
+		if (value instanceof boolean[] value2) {
 			var sb = new StringBuilder();
 			sb.append('[');
-			for (var i = 0; i < a.length; i++) {
+			for (var i = 0; i < value2.length; i++) {
 				if (i > 0) sb.append(';');
-				sb.append(a[i]);
+				sb.append(value2[i]);
 			}
 			sb.append(']');
 			return sb.toString();
 		}
-		if (value instanceof char[] a) {
+		if (value instanceof char[] value2) {
 			var sb = new StringBuilder();
 			sb.append('[');
-			for (var i = 0; i < a.length; i++) {
+			for (var i = 0; i < value2.length; i++) {
 				if (i > 0) sb.append(';');
-				sb.append((int) a[i]);
+				sb.append((int) value2[i]);
 			}
 			sb.append(']');
 			return sb.toString();
@@ -532,12 +532,12 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 		var type = getClassMetaForObject(swapped);
 		if (type.isBean() && !(swapped instanceof Map))
 			return toBeanMap(swapped);
-		if (swapped instanceof Date d)
-			return writeDate(d, type);
+		if (swapped instanceof Date swapped2)
+			return writeDate(swapped2, type);
 		if (swapped instanceof Calendar || swapped instanceof XMLGregorianCalendar)
 			return writeCalendar(swapped, type);
-		if (swapped instanceof TemporalAccessor t)
-			return writeTemporal(t, type);
+		if (swapped instanceof TemporalAccessor swapped2)
+			return writeTemporal(swapped2, type);
 		if (swapped instanceof Duration)
 			return swapped.toString();
 		return swapped;

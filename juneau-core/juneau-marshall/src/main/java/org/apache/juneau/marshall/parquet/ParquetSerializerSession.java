@@ -148,8 +148,8 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		// collectBeans() always returns rows whose first element is a BeanMap (bean / collection / array /
 		// single-value roots, all BeanMap-wrapped) or a Map (string-keyed and non-string-keyed map roots),
 		// so those are the only two cases.
-		if (first instanceof BeanMap<?> bm) {
-			var elementType = getClassMetaForObject(bm.getBean());
+		if (first instanceof BeanMap<?> first2) {
+			var elementType = getClassMetaForObject(first2.getBean());
 			// For collection root: use element type for flat row schema (root.name, root.age).
 			// Each collection element becomes one Parquet row. Avoids list column format issues.
 			schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth, ctx.nativeLogicalTypes).buildSchema(elementType, first);
@@ -237,8 +237,8 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		if (o == null)
 			return List.of();
 		// Unwrap Optional at root so we serialize the inner value, not Optional as a bean
-		if (o instanceof Optional<?> opt) {
-			var inner = opt.orElse(null);
+		if (o instanceof Optional<?> o2) {
+			var inner = o2.orElse(null);
 			if (inner == null)
 				return List.of();
 			return collectBeans(inner);
@@ -460,10 +460,10 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		int def = 0;
 		for (var i = 0; i < parts.length; i++) {
 			var part = parts[i];
-			if (current instanceof Optional<?> opt)
-				current = opt.orElse(null);
-			else if (current instanceof BeanMap<?> bm)
-				current = bm.get(part);
+			if (current instanceof Optional<?> current2)
+				current = current2.orElse(null);
+			else if (current instanceof BeanMap<?> current2)
+				current = current2.get(part);
 			else
 				current = toBeanMap(current).get(part);
 			if (current != null && seen.contains(current))
@@ -585,20 +585,20 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	private Object mapKeyToStoredString(Object key) throws SerializeException {
 		if (key == null)
 			return ctx.nullKeyString;
-		if (key instanceof Date d) {
-			var cm = getClassMetaForObject(d);
-			return writeDate(d, cm);
+		if (key instanceof Date key2) {
+			var cm = getClassMetaForObject(key2);
+			return writeDate(key2, cm);
 		}
 		if (key instanceof Calendar) {
 			var cm = getClassMetaForObject(key);
 			return writeCalendar(key, cm);
 		}
-		if (key instanceof TemporalAccessor t) {
-			var cm = getClassMetaForObject(t);
-			return writeTemporal(t, cm);
+		if (key instanceof TemporalAccessor key2) {
+			var cm = getClassMetaForObject(key2);
+			return writeTemporal(key2, cm);
 		}
-		if (key instanceof Enum<?> e)
-			return ctx.getMarshallingContext().getEnumFormat().format(e);
+		if (key instanceof Enum<?> key2)
+			return ctx.getMarshallingContext().getEnumFormat().format(key2);
 		return trim(String.valueOf(generalize(key, getClassMetaForObject(key))));
 	}
 
@@ -678,10 +678,10 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		if (partIndex + 1 < parts.length && "list".equals(parts[partIndex]) && "element".equals(parts[partIndex + 1])) {
 			Collection<?> list = null;
 			if (obj != null) {
-			if (obj instanceof Collection<?> c)
-				list = c;
-			else if (obj instanceof Object[] arr) {
-				list = Arrays.asList(arr);
+			if (obj instanceof Collection<?> obj2)
+				list = obj2;
+			else if (obj instanceof Object[] obj2) {
+				list = Arrays.asList(obj2);
 			} else if (obj.getClass().isArray()) {
 				// Primitive arrays (boolean[], int[], char[], etc.) — box each element
 				int len = Array.getLength(obj);
@@ -729,12 +729,12 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		}
 		Object next = obj;
 		if (next != null) {
-			if (next instanceof Optional<?> opt)
-				next = opt.orElse(null);
-			else if (next instanceof BeanMap<?> bm)
-				next = bm.get(parts[partIndex]);
-			else if (next instanceof Map<?,?> m)
-				next = m.get(parts[partIndex]);
+			if (next instanceof Optional<?> next2)
+				next = next2.orElse(null);
+			else if (next instanceof BeanMap<?> next2)
+				next = next2.get(parts[partIndex]);
+			else if (next instanceof Map<?,?> next2)
+				next = next2.get(parts[partIndex]);
 			else
 				next = toBeanMap(next).get(parts[partIndex]);
 		}
@@ -752,16 +752,16 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		var parts = path.split("\\.");
 		var seen = Collections.newSetFromMap(new IdentityHashMap<Object, Boolean>());
 		seen.add(row);
-		if (row instanceof BeanMap<?> bm)
-			seen.add(bm.getBean());
+		if (row instanceof BeanMap<?> row2)
+			seen.add(row2.getBean());
 		Object current = row;
 		for (var part : parts) {
 			if (current == null)
 				return null;
-			if (current instanceof BeanMap<?> bm)
-				current = bm.get(part);
-			else if (current instanceof Map<?,?> m)
-				current = m.get(part);
+			if (current instanceof BeanMap<?> current2)
+				current = current2.get(part);
+			else if (current instanceof Map<?,?> current2)
+				current = current2.get(part);
 			else
 				current = toBeanMap(current).get(part);
 			if (current != null && seen.contains(current))
@@ -780,8 +780,8 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 
 	/** Unwraps Optional (including nested Optional<Optional<T>>) to inner value or null. */
 	private static Object unwrapOptional(Object v) {
-		while (v instanceof Optional<?> opt) {
-			v = opt.orElse(null);
+		while (v instanceof Optional<?> v2) {
+			v = v2.orElse(null);
 		}
 		return v;
 	}
@@ -792,7 +792,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		v = applyDefaultSwap(v);
 		switch (col.type) {
 			case TYPE_BOOLEAN:
-				w.writeBoolean(v instanceof Boolean b ? b : Boolean.parseBoolean(String.valueOf(v)));
+				w.writeBoolean(v instanceof Boolean v2 ? v2 : Boolean.parseBoolean(String.valueOf(v)));
 				break;
 			case TYPE_INT32:
 				// Native DATE (GAP-10): days since epoch.
@@ -813,10 +813,10 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 					w.writeInt64(toInt64(v));
 				break;
 			case TYPE_FLOAT:
-				w.writeFloat(v instanceof Number n ? n.floatValue() : Float.parseFloat(String.valueOf(v)));
+				w.writeFloat(v instanceof Number v2 ? v2.floatValue() : Float.parseFloat(String.valueOf(v)));
 				break;
 			case TYPE_DOUBLE:
-				w.writeDouble(v instanceof Number n ? n.doubleValue() : Double.parseDouble(String.valueOf(v)));
+				w.writeDouble(v instanceof Number v2 ? v2.doubleValue() : Double.parseDouble(String.valueOf(v)));
 				break;
 			case TYPE_BYTE_ARRAY:
 				w.writeByteArray(toByteArray(v));
@@ -830,71 +830,71 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	}
 
 	private static int toInt32(Object v) {
-		if (v instanceof Number n)
-			return n.intValue();
+		if (v instanceof Number v2)
+			return v2.intValue();
 		return Integer.parseInt(String.valueOf(v));
 	}
 
 	private static long toInt64(Object v) throws SerializeException {
-		if (v instanceof Date d)
-			return d.getTime();
-		if (v instanceof Calendar c)
-			return c.getTimeInMillis();
-		if (v instanceof Instant i)
-			return i.toEpochMilli();
-		if (v instanceof LocalDate ld)
-			return ld.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
-		if (v instanceof LocalDateTime ldt)
-			return ldt.atZone(ZoneOffset.UTC).toInstant().toEpochMilli();
-		if (v instanceof LocalTime lt)
-			return Duration.ofNanos(lt.toNanoOfDay()).toMillis();
-		if (v instanceof ZonedDateTime zdt)
-			return zdt.toInstant().toEpochMilli();
-		if (v instanceof OffsetDateTime odt)
-			return odt.toInstant().toEpochMilli();
-		if (v instanceof OffsetTime ot)
-			return Duration.ofNanos(ot.toLocalTime().toNanoOfDay()).toMillis();
-		if (v instanceof Year y)
-			return y.atDay(1).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
-		if (v instanceof YearMonth ym)
-			return ym.atDay(1).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
-		if (v instanceof TemporalAccessor ta) {
+		if (v instanceof Date v2)
+			return v2.getTime();
+		if (v instanceof Calendar v2)
+			return v2.getTimeInMillis();
+		if (v instanceof Instant v2)
+			return v2.toEpochMilli();
+		if (v instanceof LocalDate v2)
+			return v2.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+		if (v instanceof LocalDateTime v2)
+			return v2.atZone(ZoneOffset.UTC).toInstant().toEpochMilli();
+		if (v instanceof LocalTime v2)
+			return Duration.ofNanos(v2.toNanoOfDay()).toMillis();
+		if (v instanceof ZonedDateTime v2)
+			return v2.toInstant().toEpochMilli();
+		if (v instanceof OffsetDateTime v2)
+			return v2.toInstant().toEpochMilli();
+		if (v instanceof OffsetTime v2)
+			return Duration.ofNanos(v2.toLocalTime().toNanoOfDay()).toMillis();
+		if (v instanceof Year v2)
+			return v2.atDay(1).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+		if (v instanceof YearMonth v2)
+			return v2.atDay(1).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+		if (v instanceof TemporalAccessor v2) {
 			try {
-				return Instant.from(ta).toEpochMilli();
+				return Instant.from(v2).toEpochMilli();
 			} catch (@SuppressWarnings("unused") Exception e) {
 				return Long.parseLong(String.valueOf(v));
 			}
 		}
-		if (v instanceof Number n)
-			return n.longValue();
+		if (v instanceof Number v2)
+			return v2.longValue();
 		return Long.parseLong(String.valueOf(v));
 	}
 
 	/** Native DATE (GAP-10): epoch-day from a date-like temporal. */
 	private static long toEpochDay(Object v) throws SerializeException {
-		if (v instanceof LocalDate ld)
-			return ld.toEpochDay();
-		if (v instanceof LocalDateTime ldt)
-			return ldt.toLocalDate().toEpochDay();
-		if (v instanceof Instant i)
-			return i.atZone(ZoneOffset.UTC).toLocalDate().toEpochDay();
-		if (v instanceof ZonedDateTime zdt)
-			return zdt.toLocalDate().toEpochDay();
-		if (v instanceof OffsetDateTime odt)
-			return odt.toLocalDate().toEpochDay();
-		if (v instanceof Number n)
-			return n.longValue();
+		if (v instanceof LocalDate v2)
+			return v2.toEpochDay();
+		if (v instanceof LocalDateTime v2)
+			return v2.toLocalDate().toEpochDay();
+		if (v instanceof Instant v2)
+			return v2.atZone(ZoneOffset.UTC).toLocalDate().toEpochDay();
+		if (v instanceof ZonedDateTime v2)
+			return v2.toLocalDate().toEpochDay();
+		if (v instanceof OffsetDateTime v2)
+			return v2.toLocalDate().toEpochDay();
+		if (v instanceof Number v2)
+			return v2.longValue();
 		return LocalDate.parse(String.valueOf(v)).toEpochDay();
 	}
 
 	/** Native TIME_MICROS (GAP-10): micros since midnight. */
 	private static long toTimeMicros(Object v) {
-		if (v instanceof LocalTime lt)
-			return lt.toNanoOfDay() / 1_000L;
-		if (v instanceof OffsetTime ot)
-			return ot.toLocalTime().toNanoOfDay() / 1_000L;
-		if (v instanceof Number n)
-			return n.longValue();
+		if (v instanceof LocalTime v2)
+			return v2.toNanoOfDay() / 1_000L;
+		if (v instanceof OffsetTime v2)
+			return v2.toLocalTime().toNanoOfDay() / 1_000L;
+		if (v instanceof Number v2)
+			return v2.longValue();
 		return LocalTime.parse(String.valueOf(v)).toNanoOfDay() / 1_000L;
 	}
 
@@ -905,23 +905,23 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	}
 
 	private static Instant toInstant(Object v) throws SerializeException {
-		if (v instanceof Instant i)
-			return i;
-		if (v instanceof Date d)
-			return d.toInstant();
-		if (v instanceof Calendar c)
-			return c.toInstant();
-		if (v instanceof LocalDateTime ldt)
-			return ldt.toInstant(ZoneOffset.UTC);
-		if (v instanceof LocalDate ld)
-			return ld.atStartOfDay(ZoneOffset.UTC).toInstant();
-		if (v instanceof ZonedDateTime zdt)
-			return zdt.toInstant();
-		if (v instanceof OffsetDateTime odt)
-			return odt.toInstant();
-		if (v instanceof TemporalAccessor ta) {
+		if (v instanceof Instant v2)
+			return v2;
+		if (v instanceof Date v2)
+			return v2.toInstant();
+		if (v instanceof Calendar v2)
+			return v2.toInstant();
+		if (v instanceof LocalDateTime v2)
+			return v2.toInstant(ZoneOffset.UTC);
+		if (v instanceof LocalDate v2)
+			return v2.atStartOfDay(ZoneOffset.UTC).toInstant();
+		if (v instanceof ZonedDateTime v2)
+			return v2.toInstant();
+		if (v instanceof OffsetDateTime v2)
+			return v2.toInstant();
+		if (v instanceof TemporalAccessor v2) {
 			try {
-				return Instant.from(ta);
+				return Instant.from(v2);
 			} catch (@SuppressWarnings("unused") Exception e) {
 				// fall through to string parse
 			}
@@ -936,10 +936,10 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	/** Native DECIMAL (GAP-9): unscaled INT64 at the fixed schema scale; over-precise values are rounded. */
 	private static long toDecimalUnscaled(Object v) throws SerializeException {
 		java.math.BigDecimal bd;
-		if (v instanceof java.math.BigDecimal d)
-			bd = d;
-		else if (v instanceof Number n)
-			bd = new java.math.BigDecimal(n.toString());
+		if (v instanceof java.math.BigDecimal v2)
+			bd = v2;
+		else if (v instanceof Number v2)
+			bd = new java.math.BigDecimal(v2.toString());
 		else
 			bd = new java.math.BigDecimal(String.valueOf(v));
 		// Scale to the fixed schema scale (round half-up), then take the unscaled long.
@@ -947,23 +947,23 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	}
 
 	private byte[] toByteArray(Object v) throws SerializeException {
-		if (v instanceof byte[] b)
-			return b;
-		if (v instanceof String s)
-			return trim(s).getBytes(StandardCharsets.UTF_8);
-		if (v instanceof Enum<?> e)
-			return ctx.getMarshallingContext().getEnumFormat().format(e).getBytes(StandardCharsets.UTF_8);
-		if (v instanceof Duration d)
-			return d.toString().getBytes(StandardCharsets.UTF_8);
+		if (v instanceof byte[] v2)
+			return v2;
+		if (v instanceof String v2)
+			return trim(v2).getBytes(StandardCharsets.UTF_8);
+		if (v instanceof Enum<?> v2)
+			return ctx.getMarshallingContext().getEnumFormat().format(v2).getBytes(StandardCharsets.UTF_8);
+		if (v instanceof Duration v2)
+			return v2.toString().getBytes(StandardCharsets.UTF_8);
 		// BigDecimal and all other types stored as UTF-8 string.
 		return String.valueOf(v).getBytes(StandardCharsets.UTF_8);
 	}
 
 	private static byte[] toFixedLenByteArray(Object v) {
-		if (v instanceof UUID u) {
+		if (v instanceof UUID v2) {
 			byte[] b = new byte[16];
-			var msb = u.getMostSignificantBits();
-			var lsb = u.getLeastSignificantBits();
+			var msb = v2.getMostSignificantBits();
+			var lsb = v2.getLeastSignificantBits();
 			for (int i = 0; i < 8; i++)
 				b[i] = (byte)((msb >> (56 - i * 8)) & 0xFF);
 			for (int i = 0; i < 8; i++)

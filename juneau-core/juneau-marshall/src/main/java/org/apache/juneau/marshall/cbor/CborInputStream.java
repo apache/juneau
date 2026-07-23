@@ -291,7 +291,7 @@ public class CborInputStream extends ParserInputStream {
 			return readUnsignedLong();
 		if (lastDataType == NINT)
 			return -1 - readUnsignedLong();
-		throw new IllegalStateException("Expected integer type, got " + lastDataType);
+		throw isex("Expected integer type, got %s", lastDataType);
 	}
 
 	/**
@@ -311,7 +311,7 @@ public class CborInputStream extends ParserInputStream {
 			return magnitude;
 		if (lastDataType == NINT)
 			return BigInteger.valueOf(-1).subtract(magnitude);
-		throw new IllegalStateException("Expected integer type, got " + lastDataType);
+		throw isex("Expected integer type, got %s", lastDataType);
 	}
 
 	/**
@@ -342,7 +342,7 @@ public class CborInputStream extends ParserInputStream {
 			if (lastInitialByte == 0xFB)
 				return (float)Double.longBitsToDouble(readUInt8());
 		}
-		throw new IllegalStateException("Expected float type, got " + lastDataType);
+		throw isex("Expected float type, got %s", lastDataType);
 	}
 
 	/**
@@ -357,7 +357,7 @@ public class CborInputStream extends ParserInputStream {
 			if (lastInitialByte == 0xFB)
 				return Double.longBitsToDouble(readUInt8());
 		}
-		throw new IllegalStateException("Expected float type, got " + lastDataType);
+		throw isex("Expected float type, got %s", lastDataType);
 	}
 
 	private static float halfFloatToFloat(int half) {

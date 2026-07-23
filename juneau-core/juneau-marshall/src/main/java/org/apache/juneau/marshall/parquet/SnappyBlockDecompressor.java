@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.parquet;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 
 /**
@@ -62,10 +64,9 @@ final class SnappyBlockDecompressor {
 		int uncompressedLen = readVarint(input, in);
 		// A crafted varint can set bit 31 (negative) or exceed our sanity ceiling; reject both.
 		if (uncompressedLen < 0 || uncompressedLen > 256 * 1024 * 1024)
-			throw new IOException("Invalid Snappy uncompressed length: " + uncompressedLen);
+			throw ioex("Invalid Snappy uncompressed length: %s", uncompressedLen);
 		if (expectedSize >= 0 && uncompressedLen != expectedSize)
-			throw new IOException("Snappy length mismatch: header declares " + uncompressedLen
-				+ " but page expects " + expectedSize);
+			throw ioex("Snappy length mismatch: header declares %s but page expects %s", uncompressedLen, expectedSize);
 		var out = new byte[uncompressedLen];
 		int outPos = 0;
 		int pos = in[0];
@@ -123,7 +124,7 @@ final class SnappyBlockDecompressor {
 				}
 				// A crafted 4-byte offset can be zero or overflow int to negative; reject those and out-of-range.
 				if (offset <= 0 || offset > outPos)
-					throw new IOException("Invalid Snappy copy offset: " + offset);
+					throw ioex("Invalid Snappy copy offset: %s", offset);
 				if (outPos + length > uncompressedLen)
 					throw new IOException("Snappy copy overruns buffer");
 				// Byte-by-byte copy: overlapping runs (offset < length) are intentional and must replicate.

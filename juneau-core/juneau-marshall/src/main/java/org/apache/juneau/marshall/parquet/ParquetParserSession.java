@@ -1304,11 +1304,11 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 					continue;
 				var values = e.getValue();
 				var v = values.get(i);
-				if (v instanceof GroupNull gn) {
+				if (v instanceof GroupNull v2) {
 					// Null intermediate group: set the prefix path (up to the null level) to null without
 					// synthesizing the deeper map structure (GAP-14).
 					var parts = rowRelPath.split("\\.");
-					var lvl = Math.min(gn.defLevel(), parts.length - 1);
+					var lvl = Math.min(v2.defLevel(), parts.length - 1);
 					var prefix = String.join(".", Arrays.copyOfRange(parts, 0, lvl + 1));
 					if (isTrimStrings())
 						prefix = prefix.trim();
@@ -1427,16 +1427,16 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	private void replaceNullKeySentinel(Object obj) {
 		if (obj == null)
 			return;
-		if (obj instanceof Map<?, ?> m) {
-			if (m.containsKey(ctx.nullKeyString)) {
-				var val = m.get(ctx.nullKeyString);
-				((Map<Object, Object>)m).remove(ctx.nullKeyString);
-				((Map<Object, Object>)m).put(null, val);
+		if (obj instanceof Map<?, ?> obj2) {
+			if (obj2.containsKey(ctx.nullKeyString)) {
+				var val = obj2.get(ctx.nullKeyString);
+				((Map<Object, Object>)obj2).remove(ctx.nullKeyString);
+				((Map<Object, Object>)obj2).put(null, val);
 			}
-			for (var v : m.values())
+			for (var v : obj2.values())
 				replaceNullKeySentinel(v);
-		} else if (obj instanceof List<?> list) {
-			for (var e : list)
+		} else if (obj instanceof List<?> obj2) {
+			for (var e : obj2)
 				replaceNullKeySentinel(e);
 		}
 	}
@@ -1456,20 +1456,20 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			var propType = (ClassMeta<?>) pMeta.getBeanInfo();
 			if (val == null)
 				continue;
-			if (propType.isOptional() && val instanceof Map<?,?> m) {
+			if (propType.isOptional() && val instanceof Map<?,?> val2) {
 				var elemType = propType.getElementType();
-				boolean absent = isAbsentOptionalMap(m, elemType);
+				boolean absent = isAbsentOptionalMap(val2, elemType);
 				// Detect absent inner Optional: all-null map, empty map, or nested {value:{all-null}} structure.
 				// Use null so MarshallingSession's null→Optional<Optional<X>> conversion produces Optional.of(Optional.empty()).
 				if (absent) {
 					((Map<String,Object>)row).put(name, null);
 				} else {
-					var inner = m.get("value");
+					var inner = val2.get("value");
 					var collapsed = collapseOptionalValue(inner, elemType);
 					((Map<String,Object>)row).put(name, collapsed);
 				}
-			} else if (propType.isBean() && val instanceof Map<?,?> m2)
-				collapseOptionalWrappers(m2, propType);
+			} else if (propType.isBean() && val instanceof Map<?,?> val2)
+				collapseOptionalWrappers(val2, propType);
 		}
 	}
 
@@ -1489,11 +1489,11 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		if (m.values().stream().allMatch(v -> v == null))
 			return true;
 		var inner = m.get("value");
-		if (inner instanceof Map<?,?> innerMap) {
+		if (inner instanceof Map<?,?> inner2) {
 			if (elemType.isOptional())
-				return isAbsentOptionalMap(innerMap, elemType.getElementType());
+				return isAbsentOptionalMap(inner2, elemType.getElementType());
 			// For bean (non-Optional) inner type: check if all nested leaf values are null (absent bean group)
-			return allNullLeaves(innerMap);
+			return allNullLeaves(inner2);
 		}
 		return false;
 	}
@@ -1502,21 +1502,21 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	private boolean allNullLeaves(Object obj) {
 		if (obj == null)
 			return true;
-		if (!(obj instanceof Map<?,?> m))
+		if (!(obj instanceof Map<?,?> obj2))
 			return false;
-		return m.values().stream().allMatch(this::allNullLeaves);
+		return obj2.values().stream().allMatch(this::allNullLeaves);
 	}
 
 	/** Recursively unwraps {value: X} when target is Optional; collapses nested beans. */
 	private Object collapseOptionalValue(Object val, ClassMeta<?> targetType) {
-		if (targetType.isOptional() && val instanceof Map<?,?> m) {
-			if (isAbsentOptionalMap(m, targetType))
+		if (targetType.isOptional() && val instanceof Map<?,?> val2) {
+			if (isAbsentOptionalMap(val2, targetType))
 				return null;  // Let MarshallingSession convert null to Optional.of(Optional.empty())
-			return collapseOptionalValue(m.get("value"), targetType.getElementType());
+			return collapseOptionalValue(val2.get("value"), targetType.getElementType());
 		}
-		if (targetType.isBean() && val instanceof Map<?,?> m2) {
-			collapseOptionalWrappers(m2, targetType);
-			return m2;
+		if (targetType.isBean() && val instanceof Map<?,?> val2) {
+			collapseOptionalWrappers(val2, targetType);
+			return val2;
 		}
 		return val;
 	}
@@ -1545,19 +1545,19 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			return value;
 		if (value instanceof JsonMap)
 			return value;
-		if (value instanceof Map<?, ?> m && !type.isMap())
-			return new JsonMap(m);
+		if (value instanceof Map<?, ?> value2 && !type.isMap())
+			return new JsonMap(value2);
 		return value;
 	}
 
 	/** Unwraps ValueHolder map {value: X} to X when target is scalar; else converts via MarshallingSession. */
 	private Object unwrapValueHolder(Object row, ClassMeta<?> targetType) throws ParseException {
-		if (!(row instanceof Map<?, ?> m))
+		if (!(row instanceof Map<?, ?> row2))
 			return convertToType(row, targetType);
 		// Unwrap {value: X} when target is scalar (or Object) - allow maps with extra keys (e.g. _type)
-		if (m.containsKey("value") && (targetType.isObject()
+		if (row2.containsKey("value") && (targetType.isObject()
 			|| (!targetType.isMap() && !targetType.isCollection() && !targetType.isArray()))) {
-			var v = m.get("value");
+			var v = row2.get("value");
 			if (targetType.isObject())
 				return v;
 			return convertToType(prepareMapForBean(v, targetType), targetType);

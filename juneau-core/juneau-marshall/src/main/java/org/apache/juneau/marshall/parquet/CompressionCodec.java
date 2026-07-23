@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.parquet;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.zip.*;
 
@@ -121,8 +123,7 @@ public enum CompressionCodec {
 		for (var c : values())
 			if (c.thriftValue == value)
 				return c;
-		throw new IOException("Unsupported Parquet compression codec: " + codecName(value)
-			+ ". Only UNCOMPRESSED, GZIP, and SNAPPY (decode-only) are supported.");
+		throw ioex("Unsupported Parquet compression codec: %s. Only UNCOMPRESSED, GZIP, and SNAPPY (decode-only) are supported.", codecName(value));
 	}
 
 	private static String codecName(int value) {

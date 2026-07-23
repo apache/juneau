@@ -86,7 +86,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 
 		@Override
 		public boolean equals(Object o) {
-			return o instanceof SortEntry other && compareTo(other) == 0;
+			return o instanceof SortEntry o2 && compareTo(o2) == 0;
 		}
 
 		@Override

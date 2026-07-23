@@ -598,7 +598,7 @@ public class HtmlParserSession extends XmlParserSession {
 					}
 				}
 				if (nn(m) && nn(c)) {
-					var m2 = (m instanceof MarshalledMap mm ? mm : new JsonMap(m).session(this));
+					var m2 = (m instanceof MarshalledMap m3 ? m3 : new JsonMap(m).session(this));
 					m2.put(getBeanTypePropertyName(type.getElementType()), c);
 					l.add((E)cast(m2, pMeta, elementType));
 				} else {

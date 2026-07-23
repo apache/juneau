@@ -424,7 +424,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		for (Entry<?, ?> e : map.entrySet()) {
 			Object k = e.getKey();
 			Object v = e.getValue();
-			Object converted = v instanceof Map m ? toJsonMap(m) : convertValue(v, object());
+			Object converted = v instanceof Map v2 ? toJsonMap(v2) : convertValue(v, object());
 			jm.put(k == null ? "null" : k.toString(), converted);
 		}
 		return jm;
@@ -449,21 +449,21 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		if (val == null)
 			return null;
 		String nv = ctx != null ? ctx.getNullValue() : null;
-		if (val instanceof String s && nv != null && s.equals(nv))
+		if (val instanceof String val2 && nv != null && val2.equals(nv))
 			return null;
-		if (val instanceof Map map) {
+		if (val instanceof Map val2) {
 			if (JsonMap.class.isAssignableFrom(targetType.inner()))
-				return toJsonMap(map);
+				return toJsonMap(val2);
 			if (targetType.isBean()) {
 				BeanMap<?> child = toBeanMap(targetType.newInstance(getOuter()));
-				populateBeanMap(child, map);
+				populateBeanMap(child, val2);
 				return child.getBean();
 			}
 		}
-		if (val instanceof List list && targetType.isCollectionOrArray()) {
+		if (val instanceof List val2 && targetType.isCollectionOrArray()) {
 			ClassMeta<?> elType = targetType.getElementType();
 			List result = new ArrayList();
-			for (Object item : list) {
+			for (Object item : val2) {
 				result.add(convertValue(item, elType));
 			}
 			return targetType.isArray() ? toArray(targetType, result) : result;
@@ -473,39 +473,39 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		// MarshallingContext.get<Format>() hint (NANOS, ISO_YEAR, MILLIS, …) reaches the coercion.
 		// Without this routing the generic Number → T coercion below would silently drop the hint
 		// (e.g. treating Long(2024) as epoch-millis → 1970-01-01T00:00:02.024Z instead of year 2024).
-		if (val instanceof Number num) {
+		if (val instanceof Number val2) {
 			if (targetType.isNumber())
-				return convertToMemberType(null, num, targetType);
+				return convertToMemberType(null, val2, targetType);
 			if (targetType.isDuration())
-				return readDuration(num.toString());
+				return readDuration(val2.toString());
 			if (targetType.isPeriod())
-				return readPeriod(num.toString());
+				return readPeriod(val2.toString());
 			if (targetType.isDate())
-				return readDate(num.toString(), targetType);
+				return readDate(val2.toString(), targetType);
 			if (targetType.isCalendar())
-				return readCalendar(num.toString(), targetType);
+				return readCalendar(val2.toString(), targetType);
 			if (targetType.isTemporal())
-				return readTemporal(num.toString(), targetType);
+				return readTemporal(val2.toString(), targetType);
 		}
-		if (val instanceof String string) {
+		if (val instanceof String val2) {
 			if (targetType.isDate())
-				return readDate(string, targetType);
+				return readDate(val2, targetType);
 			if (targetType.isCalendar())
-				return readCalendar(string, targetType);
+				return readCalendar(val2, targetType);
 			if (targetType.isTemporal())
-				return readTemporal(string, targetType);
+				return readTemporal(val2, targetType);
 			if (targetType.isDuration())
-				return readDuration(string);
+				return readDuration(val2);
 			if (targetType.isPeriod())
-				return readPeriod(string);
+				return readPeriod(val2);
 		}
 		// Native TOML datetime literals (Z-zoned / offset / local) are returned by TomlTokenizer as
 		// java.time.OffsetDateTime / LocalDateTime / LocalDate / LocalTime objects.  Re-stringify
 		// through the temporal's own ISO toString() and route through readTemporal so the
 		// configured TemporalFormat hint (e.g. ISO_INSTANT) is honored — otherwise the generic
 		// Temporal → T coercion below applies the local zone and we lose the wire's UTC anchor.
-		if (val instanceof TemporalAccessor ta && targetType.isTemporal())
-			return readTemporal(ta.toString(), targetType);
+		if (val instanceof TemporalAccessor val2 && targetType.isTemporal())
+			return readTemporal(val2.toString(), targetType);
 		// Route String-shaped byte[] values (collection-element + top-level dispatch sites) through
 		// the configured BinaryFormat's variant binarySwap before falling through to the default
 		// String → byte[] coercion.  The bean-property path is unaffected because the per-property
@@ -530,11 +530,11 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		"java:S1168" // Null is a meaningful 'no byte[] unswap applies' signal; callers fall through on null (an empty array would wrongly mean 'unswapped to empty bytes').
 	})
 	private byte[] tryUnswapByteArray(Object val, ClassMeta<?> targetType) throws ParseException {
-		if (!(val instanceof String s) || targetType == null || targetType.inner() != byte[].class)
+		if (!(val instanceof String val2) || targetType == null || targetType.inner() != byte[].class)
 			return null;
 		var swap = targetType.getSwap(this);
 		if (swap == null)
 			return null;
-		return (byte[]) unswap(swap, s, targetType);
+		return (byte[]) unswap(swap, val2, targetType);
 	}
 }

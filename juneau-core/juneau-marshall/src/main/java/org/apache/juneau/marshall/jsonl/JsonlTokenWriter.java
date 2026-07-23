@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.jsonl;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.math.*;
 import java.nio.charset.*;
@@ -85,11 +87,11 @@ public class JsonlTokenWriter implements TokenWriter {
 	public static JsonlTokenWriter forOutput(Object output, JsonTokenWriter.Settings settings) throws IOException {
 		if (output == null)
 			throw new IOException("Output cannot be null.");
-		if (output instanceof Writer w)
-			return new JsonlTokenWriter(w, settings);
-		if (output instanceof OutputStream os)
-			return new JsonlTokenWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), settings);
-		throw new IOException("Cannot convert object of type " + output.getClass().getName() + " to a Writer.");
+		if (output instanceof Writer output2)
+			return new JsonlTokenWriter(output2, settings);
+		if (output instanceof OutputStream output2)
+			return new JsonlTokenWriter(new OutputStreamWriter(output2, StandardCharsets.UTF_8), settings);
+		throw ioex("Cannot convert object of type %s to a Writer.", output.getClass().getName());
 	}
 
 	@Override public TokenWriter startObject() throws IOException { assertOpen(); delegate.startObject(); depth++; return this; }

@@ -4184,8 +4184,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 
 		var objectSwapsList = new LinkedList<ObjectSwap<?,?>>();
 		swaps.forEach(x -> {
-			if (x instanceof ObjectSwap<?,?> os) {
-				objectSwapsList.add(os);
+			if (x instanceof ObjectSwap<?,?> x2) {
+				objectSwapsList.add(x2);
 			} else {
 				var ci = info((Class<?>)x);
 				if (ci.isAssignableTo(ObjectSwap.class))
@@ -4780,11 +4780,11 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	}
 
 	private static MarshallingSession marshallingSession(ConverterSession session) {
-		return session instanceof MarshallingSession bs ? bs : null;
+		return session instanceof MarshallingSession session2 ? session2 : null;
 	}
 
 	private MarshallingSession beanSessionOrDefault(ConverterSession session) {
-		return session instanceof MarshallingSession bs ? bs : defaultSession;
+		return session instanceof MarshallingSession session2 ? session2 : defaultSession;
 	}
 
 	private static Collection<Object> newCollection(Class<?> outType) {
@@ -5670,17 +5670,17 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		if (o == null)
 			return null;
 
-		if (o instanceof ClassMeta<?> cm) {
+		if (o instanceof ClassMeta<?> o2) {
 
 			// This classmeta could have been created by a different context.
 			// Need to re-resolve it to pick up ObjectSwaps and stuff on this context.
-			if (cm.getMarshallingContext() == this)
-				return cm;
-			if (cm.isMap())
-				return getClassMeta(cm.inner(), cm.getKeyType(), cm.getValueType());
-			if (cm.isCollection() || cm.isOptional())
-				return getClassMeta(cm.inner(), cm.getElementType());
-			return getClassMeta(cm.inner());
+			if (o2.getMarshallingContext() == this)
+				return o2;
+			if (o2.isMap())
+				return getClassMeta(o2.inner(), o2.getKeyType(), o2.getValueType());
+			if (o2.isCollection() || o2.isOptional())
+				return getClassMeta(o2.inner(), o2.getElementType());
+			return getClassMeta(o2.inner());
 		}
 
 		// Handle ClassInfo by extracting the underlying Type

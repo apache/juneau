@@ -108,8 +108,8 @@ final class LegacyHttpResponseAdapter {
 		if (hl == null)
 			return;
 		Iterable<?> iter;
-		if (hl instanceof Iterable<?> it) {
-			iter = it;
+		if (hl instanceof Iterable<?> hl2) {
+			iter = hl2;
 		} else {
 			var arr = (Object[]) invoke(hl, "getAll", new Class<?>[0]);
 			if (arr == null)
@@ -223,8 +223,8 @@ final class LegacyHttpResponseAdapter {
 				throw new IOException("Cannot invoke writeTo on legacy entity", e);
 			} catch (InvocationTargetException e) {
 				var t = e.getCause();
-				if (t instanceof IOException io) throw io;
-				if (t instanceof RuntimeException re) throw re;
+				if (t instanceof IOException t2) throw t2;
+				if (t instanceof RuntimeException t2) throw t2;
 				throw new IOException(t);
 			}
 		}

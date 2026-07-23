@@ -65,9 +65,9 @@ public class BinarySwap extends StringSwap<byte[]> {
 		// corresponding parser consumes it.  Binary serializers without a native byte-array wire type
 		// (Parquet, binary RDF) report hasNativeBytes()==false and still run this swap to produce /
 		// consume the configured text wire form (HEX / BASE64 / etc.) per OQ 10 (b).
-		if (session instanceof OutputStreamSerializerSession oss && oss.hasNativeBytes())
+		if (session instanceof OutputStreamSerializerSession session2 && session2.hasNativeBytes())
 			return 0;
-		if (session instanceof InputStreamParserSession ips && ips.hasNativeBytes())
+		if (session instanceof InputStreamParserSession session2 && session2.hasNativeBytes())
 			return 0;
 		// CSV defers byte[] cell formatting to its own CsvByteArrayCellFormat-driven cell serializer/parser.
 		if (session instanceof CsvSerializerSession || session instanceof CsvParserSession)

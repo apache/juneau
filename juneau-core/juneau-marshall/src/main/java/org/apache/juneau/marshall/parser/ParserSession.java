@@ -832,10 +832,10 @@ public class ParserSession extends MarshallingSession {
 		if (bodyThrown != null) {
 			if (completeThrown != null)
 				bodyThrown.addSuppressed(completeThrown);
-			if (bodyThrown instanceof ParseException e)
-				throw e;
-			if (bodyThrown instanceof IOException e)
-				throw e;
+			if (bodyThrown instanceof ParseException bodyThrown2)
+				throw bodyThrown2;
+			if (bodyThrown instanceof IOException bodyThrown2)
+				throw bodyThrown2;
 			throw new ParseException(this, bodyThrown, "Exception occurred.  exception=%s, message=%s.", cns(bodyThrown), localizedMessage(bodyThrown));
 		}
 		if (completeThrown != null)

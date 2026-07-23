@@ -171,10 +171,10 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 				map.put(resolvedKey, value);
 			}
 			is.readDocumentTerminator();
-			var raw = map instanceof MarshalledMap mm ? cast(mm, pMeta, eType) : map;
+			var raw = map instanceof MarshalledMap map2 ? cast(map2, pMeta, eType) : map;
 			// Convert JsonMap to target map type (TreeMap, LinkedHashMap, etc.) when needed
-			if (eType.isMap() && raw instanceof Map mr && !eType.inner().isInstance(raw))
-				result = convertToMemberType(null, mr, eType);
+			if (eType.isMap() && raw instanceof Map raw2 && !eType.inner().isInstance(raw))
+				result = convertToMemberType(null, raw2, eType);
 			else
 				result = raw;
 		} else if (!eType.isOptional() && (nn(builder) || sType.canCreateNewBean(outer))) {
@@ -236,8 +236,8 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 			}
 		}
 		// Final fallback: when target is Optional and we have map with "value", unwrap
-		if (eType.isOptional() && result instanceof Map m && m.size() == 1 && m.containsKey(BSON_VALUE_KEY)) {
-			result = convertToMemberType(null, m.get(BSON_VALUE_KEY), eType);
+		if (eType.isOptional() && result instanceof Map result2 && result2.size() == 1 && result2.containsKey(BSON_VALUE_KEY)) {
+			result = convertToMemberType(null, result2.get(BSON_VALUE_KEY), eType);
 			wrapInOptional = false; // convertToMemberType already wrapped
 		}
 		// Convert JsonMap to target Map type (TreeMap, LinkedHashMap, etc.) when needed
@@ -279,7 +279,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 			coll = newGenericList();
 		else {
 			var instance = sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : null;
-			coll = (instance instanceof Collection c) ? c : newGenericList();
+			coll = (instance instanceof Collection instance2) ? instance2 : newGenericList();
 		}
 		var elementType = coalesce(sType.getElementType(), object());
 

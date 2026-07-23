@@ -344,9 +344,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				v.get().setDefault(HttpStringPart.ofPair(s));
 		});
 		processParameterDefaults((paramAnn, def) -> {
-			if (paramAnn instanceof FormData f) {
+			if (paramAnn instanceof FormData paramAnn2) {
 				try {
-					v.get().setDefault(HttpStringPart.of(firstNonEmpty(f.name(), f.value()), toPartValue(parseIfJson(def))));
+					v.get().setDefault(HttpStringPart.of(firstNonEmpty(paramAnn2.name(), paramAnn2.value()), toPartValue(parseIfJson(def))));
 				} catch (ParseException e) {
 					throw new ConfigException(e, "Malformed @FormData annotation");
 				}
@@ -384,9 +384,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			ai.getString(PROPERTY_defaultContentType).filter(s -> !s.isEmpty()).ifPresent(s -> v.get().setDefault(ContentType.of(s)));
 		});
 		processParameterDefaults((paramAnn, def) -> {
-			if (paramAnn instanceof Header h) {
+			if (paramAnn instanceof Header paramAnn2) {
 				try {
-					v.get().set(HttpStringHeader.of(firstNonEmpty(h.name(), h.value()), toPartValue(parseIfJson(def))));
+					v.get().set(HttpStringHeader.of(firstNonEmpty(paramAnn2.name(), paramAnn2.value()), toPartValue(parseIfJson(def))));
 				} catch (ParseException e) {
 					throw new ConfigException(e, "Malformed @Header annotation");
 				}
@@ -415,9 +415,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				v.get().setDefault(HttpStringPart.ofPair(s));
 		});
 		processParameterDefaults((paramAnn, def) -> {
-			if (paramAnn instanceof Query q) {
+			if (paramAnn instanceof Query paramAnn2) {
 				try {
-					v.get().setDefault(HttpStringPart.of(firstNonEmpty(q.name(), q.value()), toPartValue(parseIfJson(def))));
+					v.get().setDefault(HttpStringPart.of(firstNonEmpty(paramAnn2.name(), paramAnn2.value()), toPartValue(parseIfJson(def))));
 				} catch (ParseException e) {
 					throw new ConfigException(e, "Malformed @Query annotation");
 				}
@@ -1060,8 +1060,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		for (var aa : method.getParameterAnnotations()) {
 			String def = null;
 			for (var a : aa) {
-				if (a instanceof Schema s)
-					def = joinnlFirstNonEmptyArray(s.default_(), s.df());
+				if (a instanceof Schema a2)
+					def = joinnlFirstNonEmptyArray(a2.default_(), a2.df());
 			}
 			if (def == null)
 				continue;
@@ -1278,11 +1278,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return "patch";
 		if (a instanceof RestOptions)
 			return "options";
-		if (a instanceof RestOp r) {
-			var m = vr.resolve(r.method());
+		if (a instanceof RestOp a2) {
+			var m = vr.resolve(a2.method());
 			if (ine(m))
 				return m;
-			var s = vr.resolve(r.value());
+			var s = vr.resolve(a2.value());
 			if (s != null) {
 				s = s.trim();
 				if (!s.isEmpty()) {

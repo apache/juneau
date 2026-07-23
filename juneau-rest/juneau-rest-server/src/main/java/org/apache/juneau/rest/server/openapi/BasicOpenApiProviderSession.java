@@ -180,9 +180,9 @@ public class BasicOpenApiProviderSession {
 
 		// Paths: rewrite each operation.
 		var paths = swagger.get(K_paths);
-		if (paths instanceof Map<?,?> pathsMap) {
+		if (paths instanceof Map<?,?> paths2) {
 			var newPaths = new Json5Map();
-			for (var pe : pathsMap.entrySet()) {
+			for (var pe : paths2.entrySet()) {
 				var path = String.valueOf(pe.getKey());
 				if (! (pe.getValue() instanceof Map<?,?> pathItem))
 					continue;
@@ -201,17 +201,17 @@ public class BasicOpenApiProviderSession {
 		// definitions → components.schemas
 		var components = new Json5Map();
 		var defs = swagger.get(K_definitions);
-		if (defs instanceof Map<?,?> defsMap && ! defsMap.isEmpty()) {
+		if (defs instanceof Map<?,?> defs2 && ! defs2.isEmpty()) {
 			var schemas = new Json5Map();
-			for (var e : defsMap.entrySet())
+			for (var e : defs2.entrySet())
 				schemas.put(String.valueOf(e.getKey()), rewriteRefs(e.getValue()));
 			components.put(K_schemas, schemas);
 		}
 		// securityDefinitions → components.securitySchemes
 		var secDefs = swagger.get(K_securityDefinitions);
-		if (secDefs instanceof Map<?,?> secDefsMap && ! secDefsMap.isEmpty()) {
+		if (secDefs instanceof Map<?,?> secDefs2 && ! secDefs2.isEmpty()) {
 			var schemes = new Json5Map();
-			for (var e : secDefsMap.entrySet())
+			for (var e : secDefs2.entrySet())
 				schemes.put(String.valueOf(e.getKey()), rewriteRefs(e.getValue()));
 			components.put(K_securitySchemes, schemes);
 		}
@@ -281,9 +281,9 @@ public class BasicOpenApiProviderSession {
 
 	private static void collectOperationSchemas(Json5Map doc, Map<String,List<SchemaSite>> sites) {
 		var paths = doc.get(K_paths);
-		if (! (paths instanceof Map<?,?> pathsMap))
+		if (! (paths instanceof Map<?,?> paths2))
 			return;
-		for (var pe : pathsMap.entrySet()) {
+		for (var pe : paths2.entrySet()) {
 			if (! (pe.getValue() instanceof Map<?,?> pathItem))
 				continue;
 			for (var oe : pathItem.entrySet()) {
@@ -296,18 +296,18 @@ public class BasicOpenApiProviderSession {
 
 	private static void visitOperation(Json5Map op, Map<String,List<SchemaSite>> sites) {
 		var params = op.get(K_parameters);
-		if (params instanceof List<?> paramList) {
-			for (var p : paramList) {
-				if (p instanceof Map<?,?> pm)
-					visitSchemaSlot(toJson5Map(pm), K_schema, sites);
+		if (params instanceof List<?> params2) {
+			for (var p : params2) {
+				if (p instanceof Map<?,?> p2)
+					visitSchemaSlot(toJson5Map(p2), K_schema, sites);
 			}
 		}
 		var requestBody = op.get(K_requestBody);
-		if (requestBody instanceof Map<?,?> rb)
-			visitContent(toJson5Map(rb), sites);
+		if (requestBody instanceof Map<?,?> requestBody2)
+			visitContent(toJson5Map(requestBody2), sites);
 		var responses = op.get(K_responses);
-		if (responses instanceof Map<?,?> resp) {
-			for (var re : resp.entrySet()) {
+		if (responses instanceof Map<?,?> responses2) {
+			for (var re : responses2.entrySet()) {
 				if (re.getValue() instanceof Map<?,?> r)
 					visitContent(toJson5Map(r), sites);
 			}
@@ -316,9 +316,9 @@ public class BasicOpenApiProviderSession {
 
 	private static void visitContent(Json5Map holder, Map<String,List<SchemaSite>> sites) {
 		var content = holder.get(K_content);
-		if (! (content instanceof Map<?,?> contentMap))
+		if (! (content instanceof Map<?,?> content2))
 			return;
-		for (var ce : contentMap.entrySet()) {
+		for (var ce : content2.entrySet()) {
 			if (ce.getValue() instanceof Map<?,?> media)
 				visitSchemaSlot(toJson5Map(media), K_schema, sites);
 		}
@@ -326,9 +326,9 @@ public class BasicOpenApiProviderSession {
 
 	private static void visitSchemaSlot(Json5Map parent, String key, Map<String,List<SchemaSite>> sites) {
 		var v = parent.get(key);
-		if (! (v instanceof Map<?,?> sm))
+		if (! (v instanceof Map<?,?> v2))
 			return;
-		var schema = toJson5Map(sm);
+		var schema = toJson5Map(v2);
 		// Re-attach the normalized map so subsequent replaceWith() updates the document.
 		parent.put(key, schema);
 		if (schema.containsKey(K_$ref))
@@ -394,11 +394,11 @@ public class BasicOpenApiProviderSession {
 		Json5Map formSchema = null;
 		var formRequired = new LinkedHashSet<String>();
 
-		if (oldParams instanceof List<?> paramsList) {
-			for (var p : paramsList) {
-				if (! (p instanceof Map<?,?> pm))
+		if (oldParams instanceof List<?> oldParams2) {
+			for (var p : oldParams2) {
+				if (! (p instanceof Map<?,?> p2))
 					continue;
-				var pmap = toJson5Map(pm);
+				var pmap = toJson5Map(p2);
 				var in = String.valueOf(pmap.getOrDefault(K_in, ""));
 				if (IN_BODY.equals(in)) {
 					requestBody = bodyParameterToRequestBody(pmap, consumes);
@@ -438,9 +438,9 @@ public class BasicOpenApiProviderSession {
 			newOp.put(K_parameters, newParams);
 
 		var oldResponses = op.get(K_responses);
-		if (oldResponses instanceof Map<?,?> respMap) {
+		if (oldResponses instanceof Map<?,?> oldResponses2) {
 			var newResponses = new Json5Map();
-			for (var re : respMap.entrySet()) {
+			for (var re : oldResponses2.entrySet()) {
 				var code = String.valueOf(re.getKey());
 				if (re.getValue() instanceof Map<?,?> rm)
 					newResponses.put(code, transformResponse(toJson5Map(rm), produces));
@@ -516,8 +516,8 @@ public class BasicOpenApiProviderSession {
 
 	private static void addExamplesForMedia(Json5Map response, String mediaType, Json5Map entry) {
 		var examples = response.get(K_examples);
-		if (examples instanceof Map<?,?> em && em.containsKey(mediaType))
-			entry.put("example", em.get(mediaType));
+		if (examples instanceof Map<?,?> examples2 && examples2.containsKey(mediaType))
+			entry.put("example", examples2.get(mediaType));
 	}
 
 	private static Json5Map transformQueryHeaderPathParameter(Json5Map p) {
@@ -571,17 +571,17 @@ public class BasicOpenApiProviderSession {
 	}
 
 	private static List<String> listOfStrings(Object o) {
-		if (! (o instanceof List<?> l))
+		if (! (o instanceof List<?> o2))
 			return List.of();
-		var out = new ArrayList<String>(l.size());
-		for (var v : l)
+		var out = new ArrayList<String>(o2.size());
+		for (var v : o2)
 			out.add(String.valueOf(v));
 		return out;
 	}
 
 	private static Json5Map toJson5Map(Map<?,?> m) {
-		if (m instanceof Json5Map jm)
-			return jm;
+		if (m instanceof Json5Map m2)
+			return m2;
 		var out = new Json5Map();
 		for (var e : m.entrySet())
 			out.put(String.valueOf(e.getKey()), e.getValue());
@@ -601,21 +601,21 @@ public class BasicOpenApiProviderSession {
 	 * @return A copy with all {@code $ref} entries rewritten.
 	 */
 	static Object rewriteRefs(Object o) {
-		if (o instanceof Map<?,?> map) {
+		if (o instanceof Map<?,?> o2) {
 			var copy = new Json5Map();
-			for (var e : map.entrySet()) {
+			for (var e : o2.entrySet()) {
 				var k = String.valueOf(e.getKey());
 				var v = e.getValue();
-				if (K_$ref.equals(k) && v instanceof String s && s.startsWith(DEFINITIONS_PREFIX))
-					copy.put(k, COMPONENTS_PREFIX + s.substring(DEFINITIONS_PREFIX.length()));
+				if (K_$ref.equals(k) && v instanceof String v2 && v2.startsWith(DEFINITIONS_PREFIX))
+					copy.put(k, COMPONENTS_PREFIX + v2.substring(DEFINITIONS_PREFIX.length()));
 				else
 					copy.put(k, rewriteRefs(v));
 			}
 			return copy;
 		}
-		if (o instanceof List<?> list) {
-			var copy = new ArrayList<>(list.size());
-			for (var v : list)
+		if (o instanceof List<?> o2) {
+			var copy = new ArrayList<>(o2.size());
+			for (var v : o2)
 				copy.add(rewriteRefs(v));
 			return copy;
 		}

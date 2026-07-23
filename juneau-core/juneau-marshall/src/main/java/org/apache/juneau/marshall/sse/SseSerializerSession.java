@@ -104,17 +104,17 @@ public class SseSerializerSession extends WriterSerializerSession implements Rec
 		var w = pipe.getWriter();
 		if (o == null)
 			return;
-		if (o instanceof SseEvent e) {
-			writeEvent(w, e);
-		} else if (o instanceof Iterable<?> i) {
-			for (var item : i)
+		if (o instanceof SseEvent o2) {
+			writeEvent(w, o2);
+		} else if (o instanceof Iterable<?> o2) {
+			for (var item : o2)
 				writeIfEvent(w, item);
-		} else if (o instanceof Stream<?> s) {
-			try (var s2 = s) {
+		} else if (o instanceof Stream<?> o2) {
+			try (var s2 = o2) {
 				s2.forEach(item -> writeIfEventUnchecked(w, item));
 			}
-		} else if (o instanceof SseEvent[] arr) {
-			for (var e : arr)
+		} else if (o instanceof SseEvent[] o2) {
+			for (var e : o2)
 				writeEvent(w, e);
 		} else if (o.getClass().isArray()) {
 			var arr = (Object[]) o;
@@ -128,9 +128,9 @@ public class SseSerializerSession extends WriterSerializerSession implements Rec
 	private static void writeIfEvent(Writer w, Object item) throws IOException, SerializeException {
 		if (item == null)
 			return;
-		if (!(item instanceof SseEvent e))
+		if (!(item instanceof SseEvent item2))
 			throw new SerializeException("SseSerializer encountered non-SseEvent element of type '%s'.", cn(item));
-		writeEvent(w, e);
+		writeEvent(w, item2);
 	}
 
 	private static void writeIfEventUnchecked(Writer w, Object item) {

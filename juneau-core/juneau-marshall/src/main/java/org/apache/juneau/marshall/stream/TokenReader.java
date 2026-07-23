@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.stream;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 
@@ -350,7 +352,7 @@ public interface TokenReader extends RecordReader {
 	 * 	{@link BinaryNativeKind#MSGPACK_EXT MSGPACK_EXT}.
 	 */
 	default int getExtType() {
-		throw new IllegalStateException("Current token is not a typed-binary (ext) value (nativeKind=" + getNativeKind() + ")");
+		throw isex("Current token is not a typed-binary (ext) value (nativeKind=%s)", getNativeKind());
 	}
 
 	/**
@@ -361,6 +363,6 @@ public interface TokenReader extends RecordReader {
 	 * 	{@link BinaryNativeKind#CBOR_SIMPLE CBOR_SIMPLE}.
 	 */
 	default int getSimpleValue() {
-		throw new IllegalStateException("Current token is not a simple value (nativeKind=" + getNativeKind() + ")");
+		throw isex("Current token is not a simple value (nativeKind=%s)", getNativeKind());
 	}
 }

@@ -192,7 +192,7 @@ public final class ParquetSchemaBuilder {
 		var et = cm.getElementType();
 		if (et == null) // HTT: ClassMeta always resolves Optional's type parameter to Object at minimum
 			et = marshallingContext.getClassMeta(Object.class);
-		Object innerSample = sampleBean instanceof Optional<?> o ? o.orElse(null) : sampleBean;
+		Object innerSample = sampleBean instanceof Optional<?> sampleBean2 ? sampleBean2.orElse(null) : sampleBean;
 		var optPath = parentPath != null ? parentPath + "." + name : name;
 		elements.add(new ParquetSchemaElement(name, null, null, isRoot ? null : OPTIONAL, 1, null, null, null, null, optPath));
 		addSchemaElements(elements, et, "value", optPath, false, innerSample, typesInProgress);
@@ -232,8 +232,8 @@ public final class ParquetSchemaBuilder {
 			var entries = new ArrayList<ResolvedProp>();
 			for (var p : props) {
 				Object childSample = null;
-				if (sampleBean instanceof Map<?, ?> m)
-					childSample = m.get(p.getName());
+				if (sampleBean instanceof Map<?, ?> sampleBean2)
+					childSample = sampleBean2.get(p.getName());
 				ClassMeta<?> propCm = (ClassMeta<?>) p.getBeanInfo();
 				// Native logical types (GAP-9/10): a java.time temporal property carries a swap, so its
 				// resolved ClassMeta is an Object/String surrogate that hides the concrete type.  Recover the
@@ -331,8 +331,8 @@ public final class ParquetSchemaBuilder {
 	}
 
 	private static Collection<?> extractSampleCollection(Object sampleBean) {
-		if (sampleBean instanceof Collection<?> c)
-			return c;
+		if (sampleBean instanceof Collection<?> sampleBean2)
+			return sampleBean2;
 		return Collections.emptyList();
 	}
 
