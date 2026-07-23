@@ -349,12 +349,12 @@ class RemoteClient_Test {
 	@Remote
 	interface MapQueryService {
 		@RemoteGet("/echo-query")
-		String getQuery(@Query("*") Map<String, String> params);
+		String getQuery(@Query("*") Map<String,String> params);
 	}
 
 	@Test void g01_query_mapExpansion() throws Exception {
 		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
-			var params = new LinkedHashMap<String, String>();
+			var params = new LinkedHashMap<String,String>();
 			params.put("a", "1");
 			params.put("b", "2");
 			var result = client.remote(MapQueryService.class).getQuery(params);

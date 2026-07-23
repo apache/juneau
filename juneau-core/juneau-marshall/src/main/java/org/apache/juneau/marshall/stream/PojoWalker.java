@@ -171,7 +171,7 @@ public final class PojoWalker {
 			w.string(value2.toString());
 			return;
 		}
-		if (value instanceof Map<?, ?> value2) {
+		if (value instanceof Map<?,?> value2) {
 			enterAncestor(value, ancestors);
 			try {
 				walkMap(w, value2, options, ancestors);
@@ -251,9 +251,9 @@ public final class PojoWalker {
 		w.number(n);
 	}
 
-	private static void walkMap(TokenWriter w, Map<?, ?> m, Options options, Set<Object> ancestors) throws IOException {
+	private static void walkMap(TokenWriter w, Map<?,?> m, Options options, Set<Object> ancestors) throws IOException {
 		w.startObject();
-		Iterable<? extends Map.Entry<?, ?>> entries = m.entrySet();
+		Iterable<? extends Map.Entry<?,?>> entries = m.entrySet();
 		if (options.sortMaps && !m.isEmpty())
 			entries = sortedEntries(m);
 		for (var entry : entries) {
@@ -267,8 +267,8 @@ public final class PojoWalker {
 		w.endObject();
 	}
 
-	private static List<Map.Entry<Object, Object>> sortedEntries(Map<?, ?> m) {
-		var list = new ArrayList<Map.Entry<Object, Object>>(m.size());
+	private static List<Map.Entry<Object,Object>> sortedEntries(Map<?,?> m) {
+		var list = new ArrayList<Map.Entry<Object,Object>>(m.size());
 		for (var entry : m.entrySet())
 			list.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue()));
 		list.sort(Comparator.comparing(e -> {
@@ -281,7 +281,7 @@ public final class PojoWalker {
 	private static boolean skipMapEntry(Object value, Options options) {
 		if (value == null)
 			return !options.keepNullProperties;
-		if (options.trimEmptyMaps && value instanceof Map<?, ?> value2 && value2.isEmpty())
+		if (options.trimEmptyMaps && value instanceof Map<?,?> value2 && value2.isEmpty())
 			return true;
 		if (options.trimEmptyCollections) {
 			if (value instanceof Collection<?> value2 && value2.isEmpty())

@@ -433,7 +433,7 @@ class UonParserSession_Test extends TestBase {
 
 	@Test void i01_doParseIntoMap() throws Exception {
 		// Use the readIntoMap path on the parser which delegates to doReadIntoMap.
-		var dest = new HashMap<String, Object>();
+		var dest = new HashMap<String,Object>();
 		P.readIntoMap("(a=1,b=2)", dest, String.class, Object.class);
 		assertEquals(1, dest.get("a"));
 		assertEquals(2, dest.get("b"));
@@ -454,7 +454,7 @@ class UonParserSession_Test extends TestBase {
 	@Test void i03_doParseIntoMap_validateEnd() {
 		// validateEnd with extra junk after map.
 		assertThrows(ParseException.class, () -> {
-			var dest = new HashMap<String, Object>();
+			var dest = new HashMap<String,Object>();
 			PVE.readIntoMap("(a=1)x", dest, String.class, Object.class);
 		});
 	}
@@ -607,7 +607,7 @@ class UonParserSession_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void m01_intKeyMap() throws Exception {
-		var m = (HashMap<Integer, String>) P.read("(1=a,2=b)", HashMap.class, Integer.class, String.class);
+		var m = (HashMap<Integer,String>) P.read("(1=a,2=b)", HashMap.class, Integer.class, String.class);
 		assertEquals("a", m.get(1));
 		assertEquals("b", m.get(2));
 	}
@@ -716,7 +716,7 @@ class UonParserSession_Test extends TestBase {
 		Q01_Wrapped(String v) { this.value = v; }
 	}
 
-	public static class Q01_WrappedSwap extends ObjectSwap<Q01_Wrapped, String> {
+	public static class Q01_WrappedSwap extends ObjectSwap<Q01_Wrapped,String> {
 		@Override public String swap(MarshallingSession session, Q01_Wrapped o) { return o.value; }
 		@Override public Q01_Wrapped unswap(MarshallingSession session, String f, ClassMeta<?> hint) { return new Q01_Wrapped(f); }
 	}
@@ -1241,7 +1241,7 @@ class UonParserSession_Test extends TestBase {
 
 	@Test void am07_map_AMPfirst_viaDoParseIntoMap() throws Exception {
 		// PE.readIntoMap with "&..." — '&' decoded to AMP reaches readIntoMap line 678 (AMP branch).
-		var dest = new HashMap<String, Object>();
+		var dest = new HashMap<String,Object>();
 		var result = PE.readIntoMap("&(a=1)", dest, String.class, Object.class);
 		assertNull(result);
 	}
@@ -1379,7 +1379,7 @@ class UonParserSession_Test extends TestBase {
 
 	@Test void au02_readIntoMap_emptyInput_returnsNull() throws Exception {
 		// readIntoMap with empty input: read() hits EOF on first char, early-return yields null.
-		var dest = new HashMap<String, Object>();
+		var dest = new HashMap<String,Object>();
 		var result = P.readIntoMap("", dest, String.class, Object.class);
 		assertNull(result);
 	}

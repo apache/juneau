@@ -401,7 +401,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	}
 
 	@Override
-	public void putAll(Map<? extends K, ? extends V> m) {
+	public void putAll(Map<? extends K,? extends V> m) {
 		for (var entry : m.entrySet()) {
 			if (filter.test(entry.getKey(), entry.getValue()))
 				map.put(entry.getKey(), entry.getValue());

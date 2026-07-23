@@ -138,7 +138,7 @@ public class PrototextSerializer extends WriterSerializer implements PrototextMe
 	 */
 	public static class Builder extends WriterSerializer.Builder<Builder> {
 
-		private static final Cache<HashKey, PrototextSerializer> CACHE =
+		private static final Cache<HashKey,PrototextSerializer> CACHE =
 			Cache.of(HashKey.class, PrototextSerializer.class).build();
 
 		private boolean useListSyntaxForBeans = false;
@@ -244,8 +244,8 @@ public class PrototextSerializer extends WriterSerializer implements PrototextMe
 	protected final boolean useListSyntaxForBeans;
 	protected final boolean useColonForMessages;
 
-	private final Map<ClassMeta<?>, PrototextClassMeta> prototextClassMetas = new ConcurrentHashMap<>();
-	private final Map<BeanPropertyMeta, PrototextBeanPropertyMeta> prototextBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final Map<ClassMeta<?>,PrototextClassMeta> prototextClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,PrototextBeanPropertyMeta> prototextBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -269,7 +269,7 @@ public class PrototextSerializer extends WriterSerializer implements PrototextMe
 	}
 
 	@Override
-	protected FluentMap<String, Object> properties() {
+	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a(PROP_useListSyntaxForBeans, useListSyntaxForBeans)
 			.a(PROP_useColonForMessages, useColonForMessages);

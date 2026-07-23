@@ -890,7 +890,7 @@ class MethodInfo_Test extends TestBase {
 		assertEquals(mi1a, mi1c);
 
 		// HashMap usage - same method should map to same value
-		Map<MethodInfo, String> map = new HashMap<>();
+		Map<MethodInfo,String> map = new HashMap<>();
 		map.put(mi1a, "value1");
 		assertEquals("value1", map.get(mi1b));
 		assertEquals("value1", map.get(mi1c));
@@ -930,7 +930,7 @@ class MethodInfo_Test extends TestBase {
 		public void method4(TestService[] services) {}
 		public void method5(List<TestService> services) {}
 		public void method6(Set<TestService> services) {}
-		public void method7(Map<String, TestService> services) {}
+		public void method7(Map<String,TestService> services) {}
 		public static void staticMethod(TestService service) {}
 	}
 

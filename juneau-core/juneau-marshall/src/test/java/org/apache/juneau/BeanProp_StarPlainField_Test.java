@@ -46,7 +46,7 @@ class BeanProp_StarPlainField_Test extends TestBase {
 	/** Dynamic {@code Map} field must remain the dyna property {@code *}. */
 	public static class C {
 		@BeanProp("*")
-		public Map<String, Object> extra = new LinkedHashMap<>();
+		public Map<String,Object> extra = new LinkedHashMap<>();
 	}
 
 	@Test

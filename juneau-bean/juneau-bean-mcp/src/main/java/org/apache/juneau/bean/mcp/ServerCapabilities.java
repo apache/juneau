@@ -33,7 +33,7 @@ public class ServerCapabilities {
 	private PromptCapability prompts;
 	private ResourceCapability resources;
 	private LoggingCapability logging;
-	private Map<String, Object> experimental;
+	private Map<String,Object> experimental;
 
 	/**
 	 * Tools capability.
@@ -120,7 +120,7 @@ public class ServerCapabilities {
 	 *
 	 * @return The experimental map, or {@code null} if not set.
 	 */
-	public Map<String, Object> getExperimental() {
+	public Map<String,Object> getExperimental() {
 		return u(experimental);
 	}
 
@@ -130,7 +130,7 @@ public class ServerCapabilities {
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ServerCapabilities setExperimental(Map<String, Object> value) {
+	public ServerCapabilities setExperimental(Map<String,Object> value) {
 		experimental = value;
 		return this;
 	}

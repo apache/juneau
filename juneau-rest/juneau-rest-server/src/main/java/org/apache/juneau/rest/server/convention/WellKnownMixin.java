@@ -175,7 +175,7 @@ public class WellKnownMixin extends RestMixin {
 	 * setter chains with true covariant returns alongside the inherited {@link RestBuilder}surface (e.g.
 	 * {@code path}, {@code roleGuard}).
 	 */
-	public static class Builder extends RestMixin.Builder<WellKnownMixin, Builder> {
+	public static class Builder extends RestMixin.Builder<WellKnownMixin,Builder> {
 
 		private String securityTxt;
 

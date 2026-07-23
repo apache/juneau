@@ -82,8 +82,8 @@ class PrototextParser_Test {
 		var list = a.getList("servers");
 		assertNotNull(list);
 		assertEquals(2, list.size());
-		assertEquals("alpha", ((Map<?, ?>) list.get(0)).get("host"));
-		assertEquals("beta", ((Map<?, ?>) list.get(1)).get("host"));
+		assertEquals("alpha", ((Map<?,?>) list.get(0)).get("host"));
+		assertEquals("beta", ((Map<?,?>) list.get(1)).get("host"));
 	}
 
 	@Test

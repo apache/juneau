@@ -979,11 +979,11 @@ public class BeanInstantiator<T> {
 	 * <ul>
 	 * 	<li>{@code TreeMap()}
 	 * 	<li>{@code TreeMap(Comparator)}
-	 * 	<li>{@code TreeMap(Map<? extends K, ? extends V>)}
+	 * 	<li>{@code TreeMap(Map<? extends K,? extends V>)}
 	 * 	<li>{@code TreeMap(SortedMap)}
 	 * </ul>
-	 * The default selection picks the {@code Map} copy-constructor — but that {@code Map<? extends K, ? extends V>}
-	 * parameter doesn't satisfy v2 inject-collection auto-resolution (which only handles {@code Map<String, T>}),
+	 * The default selection picks the {@code Map} copy-constructor — but that {@code Map<? extends K,? extends V>}
+	 * parameter doesn't satisfy v2 inject-collection auto-resolution (which only handles {@code Map<String,T>}),
 	 * so injection fails at runtime even though {@link ParameterInfo#canResolve(BeanStore, Object...)} optimistically
 	 * said yes. Callers that just want "give me a fresh empty container" should use this flag.
 	 *

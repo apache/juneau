@@ -142,9 +142,9 @@ class McpBeans_RoundTrip_Test {
 	@Test
 	void a08_jsonSchemaDefsRoundTrip() {
 		var nested = new JsonSchema().setType("string");
-		var props = new LinkedHashMap<String, JsonSchema>();
+		var props = new LinkedHashMap<String,JsonSchema>();
 		props.put("id", nested);
-		var defs = new LinkedHashMap<String, JsonSchema>();
+		var defs = new LinkedHashMap<String,JsonSchema>();
 		defs.put("IdString", nested);
 		var root = new JsonSchema()
 			.setType("object")

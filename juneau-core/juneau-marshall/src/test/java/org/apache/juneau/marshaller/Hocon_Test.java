@@ -34,7 +34,7 @@ class Hocon_Test {
 
 	@Test
 	void h01_of() {
-		var a = new LinkedHashMap<String, Object>();
+		var a = new LinkedHashMap<String,Object>();
 		a.put("name", "test");
 		a.put("count", 42);
 		var hocon = Hocon.of(a);
@@ -46,27 +46,27 @@ class Hocon_Test {
 	@Test
 	void h02_to() throws Exception {
 		var hocon = "name = Alice\nage = 30";
-		var m = (Map<String, Object>) Hocon.to(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) Hocon.to(hocon, Map.class, String.class, Object.class);
 		assertBean(m, "name,age", "Alice,30");
 	}
 
 	@Test
 	void h03_roundTrip() throws Exception {
-		var a = new LinkedHashMap<String, Object>();
+		var a = new LinkedHashMap<String,Object>();
 		a.put("name", "foo");
 		a.put("value", 123);
 		var hocon = Hocon.of(a);
-		var b = (Map<String, Object>) Hocon.to(hocon, Map.class, String.class, Object.class);
+		var b = (Map<String,Object>) Hocon.to(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "name,value", "foo,123");
 	}
 
 	@Test
 	void h04_defaultInstance() throws Exception {
-		var a = new LinkedHashMap<String, Object>();
+		var a = new LinkedHashMap<String,Object>();
 		a.put("k", "v");
 		var hocon = Hocon.of(a);
 		assertTrue(hocon.contains("k") && hocon.contains("v"));
-		var b = (Map<String, Object>) Hocon.to(hocon, Map.class, String.class, Object.class);
+		var b = (Map<String,Object>) Hocon.to(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "k", "v");
 	}
 }

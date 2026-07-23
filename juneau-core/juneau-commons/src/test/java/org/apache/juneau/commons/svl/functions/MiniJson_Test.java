@@ -182,7 +182,7 @@ class MiniJson_Test extends TestBase {
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
 	@Test void d03_parse_simpleObject() {
-		var m = (Map<String, Object>) MiniJson.parse("{\"a\":1}");
+		var m = (Map<String,Object>) MiniJson.parse("{\"a\":1}");
 		assertEquals(1L, m.get("a"));
 		assertEquals(1, m.size());
 	}
@@ -191,7 +191,7 @@ class MiniJson_Test extends TestBase {
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
 	@Test void d04_parse_multipleEntries() {
-		var m = (Map<String, Object>) MiniJson.parse("{\"a\":1,\"b\":2,\"c\":3}");
+		var m = (Map<String,Object>) MiniJson.parse("{\"a\":1,\"b\":2,\"c\":3}");
 		assertEquals(3, m.size());
 		assertEquals(1L, m.get("a"));
 		assertEquals(2L, m.get("b"));
@@ -202,8 +202,8 @@ class MiniJson_Test extends TestBase {
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
 	@Test void d05_parse_nestedObject() {
-		var m = (Map<String, Object>) MiniJson.parse("{\"a\":{\"b\":\"c\"}}");
-		var inner = (Map<String, Object>) m.get("a");
+		var m = (Map<String,Object>) MiniJson.parse("{\"a\":{\"b\":\"c\"}}");
+		var inner = (Map<String,Object>) m.get("a");
 		assertEquals("c", inner.get("b"));
 	}
 
@@ -219,7 +219,7 @@ class MiniJson_Test extends TestBase {
 		@SuppressWarnings({
 			"unchecked"  // Unchecked cast required for generic test utility.
 		})
-		var m = (Map<String, Object>) MiniJson.parse("{\"z\":1,\"a\":2,\"m\":3}");
+		var m = (Map<String,Object>) MiniJson.parse("{\"z\":1,\"a\":2,\"m\":3}");
 		assertEquals(List.of("z", "a", "m"), new ArrayList<>(m.keySet()));
 	}
 
@@ -325,7 +325,7 @@ class MiniJson_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void h01_render_emptyMap() {
-		assertEquals("{}", MiniJson.render(new LinkedHashMap<String, Object>()));
+		assertEquals("{}", MiniJson.render(new LinkedHashMap<String,Object>()));
 	}
 
 	static Stream<Arguments> h02_render_singleEntryMapCases() {
@@ -339,28 +339,28 @@ class MiniJson_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("h02_render_singleEntryMapCases")
 	void h02_render_singleEntryMap(Object value, String expected) {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("a", value);
 		assertEquals(expected, MiniJson.render(m));
 	}
 
 	@Test void h03_render_mapMultipleEntries() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("a", 1L);
 		m.put("b", "two");
 		assertEquals("{\"a\":1,\"b\":\"two\"}", MiniJson.render(m));
 	}
 
 	@Test void h05_render_mapWithNestedMap() {
-		var inner = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("b", "c");
-		var outer = new LinkedHashMap<String, Object>();
+		var outer = new LinkedHashMap<String,Object>();
 		outer.put("a", inner);
 		assertEquals("{\"a\":{\"b\":\"c\"}}", MiniJson.render(outer));
 	}
 
 	@Test void h07_render_mapWithBooleanAndNumber() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("flag", Boolean.TRUE);
 		m.put("count", 5L);
 		assertEquals("{\"flag\":true,\"count\":5}", MiniJson.render(m));
@@ -395,7 +395,7 @@ class MiniJson_Test extends TestBase {
 	}
 
 	@Test void i06_render_listOfMaps() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("k", "v");
 		assertEquals("[{\"k\":\"v\"}]", MiniJson.render(List.of(m)));
 	}
@@ -424,14 +424,14 @@ class MiniJson_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void k01_render_mapKeyWithQuote() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("a\"b", 1L);
 		// appendString escapes " and \
 		assertEquals("{\"a\\\"b\":1}", MiniJson.render(m));
 	}
 
 	@Test void k02_render_mapKeyWithBackslash() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("a\\b", 1L);
 		assertEquals("{\"a\\\\b\":1}", MiniJson.render(m));
 	}

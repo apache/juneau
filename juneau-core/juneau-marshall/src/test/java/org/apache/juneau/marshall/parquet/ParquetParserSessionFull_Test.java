@@ -62,11 +62,11 @@ class ParquetParserSessionFull_Test extends TestBase {
 
 	public static class MapBean {
 		public String name;
-		public Map<String, String> attrs;
+		public Map<String,String> attrs;
 	}
 
 	public static class IntKeyMapBean {
-		public Map<Integer, String> codes;
+		public Map<Integer,String> codes;
 	}
 
 	public static class OptionalBean {
@@ -329,7 +329,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// Empty file parsed as Map<Integer,String>: rows is empty, isKeyValuePairFormat returns false
 		// via e(rows) early-exit (line 731 true branch), exercises the isEmpty branch.
 		var bytes = ParquetSerializer.DEFAULT.write(list());
-		var out = (Map<Integer, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
+		var out = (Map<Integer,String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
 		// An empty Parquet file with no rows produces null or empty map for a Map target.
 		assertTrue(out == null || out.isEmpty());
 	}
@@ -575,22 +575,22 @@ class ParquetParserSessionFull_Test extends TestBase {
 	// =================================================================================
 
 	@Test void j01_rootMapStringKeys() throws Exception {
-		var in = new LinkedHashMap<String, String>();
+		var in = new LinkedHashMap<String,String>();
 		in.put("a", "1");
 		in.put("b", "2");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
-		var out = (Map<String, String>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, String.class);
+		var out = (Map<String,String>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, String.class);
 		assertEquals("1", out.get("a"));
 		assertEquals("2", out.get("b"));
 	}
 
 	@Test void j02_rootMapNonStringKeysWithNullKeyValue() throws Exception {
 		var s = ParquetSerializer.create().keepNullProperties().build();
-		var in = new LinkedHashMap<Integer, String>();
+		var in = new LinkedHashMap<Integer,String>();
 		in.put(10, "ten");
 		in.put(20, "twenty");
 		var bytes = s.write(in);
-		var out = (Map<Integer, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
+		var out = (Map<Integer,String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
 		assertEquals("ten", out.get(10));
 		assertEquals("twenty", out.get(20));
 	}
@@ -769,23 +769,23 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// A Map whose key is literally "root" with a nested Map value triggers the {root:{...}} unwrap
 		// on line 264: buildSchemaFromMap creates root.root.key_value.key/value columns; reassembleRows
 		// merges them into row["root"] = innerMap; doRead unwraps the single-key root map.
-		var inner = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("inner", "val");
-		var in = new LinkedHashMap<String, Object>();
+		var in = new LinkedHashMap<String,Object>();
 		in.put("root", inner);
 		var bytes = ParquetSerializer.DEFAULT.write(in);
-		var out = (Map<?, ?>) ParquetParser.DEFAULT.read(bytes, Map.class);
+		var out = (Map<?,?>) ParquetParser.DEFAULT.read(bytes, Map.class);
 		// The parser unwraps {root:{...}} → the inner map is returned directly.
 		assertNotNull(out);
 	}
 
 	@Test void p02_rootMapStringKeysFlatUnwrap() throws Exception {
 		// Normal string-keyed map: doRead single-row Map branch returns the flat row map directly.
-		var in = new LinkedHashMap<String, Object>();
+		var in = new LinkedHashMap<String,Object>();
 		in.put("a", "1");
 		in.put("b", "2");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
-		var out = (Map<String, Object>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
+		var out = (Map<String,Object>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
 		assertEquals("1", out.get("a"));
 		assertEquals("2", out.get("b"));
 	}
@@ -802,11 +802,11 @@ class ParquetParserSessionFull_Test extends TestBase {
 
 	@Test void p04_mapTargetNonStringKeyWithNullKey() throws Exception {
 		// nullKey path in isKeyValuePairFormat: null key stored as nullKeyString sentinel
-		var in = new LinkedHashMap<Integer, String>();
+		var in = new LinkedHashMap<Integer,String>();
 		in.put(1, "one");
 		in.put(null, "nullval");
 		var bytes = ParquetSerializer.create().keepNullProperties().build().write(in);
-		var out = (Map<Integer, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
+		var out = (Map<Integer,String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
 		assertEquals("one", out.get(1));
 		assertTrue(out.containsKey(null));
 		assertEquals("nullval", out.get(null));
@@ -814,11 +814,11 @@ class ParquetParserSessionFull_Test extends TestBase {
 
 	@Test void p05_mapTargetNonStringKeyNullValueType() throws Exception {
 		// valueType == null path in the non-string-key map branch (line 249)
-		var in = new LinkedHashMap<Integer, String>();
+		var in = new LinkedHashMap<Integer,String>();
 		in.put(10, "ten");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
-		// Parse as Map<Integer, ?> without explicit value type
-		var out = (Map<?, ?>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class);
+		// Parse as Map<Integer,?> without explicit value type
+		var out = (Map<?,?>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class);
 		assertEquals("ten", out.get(10));
 	}
 
@@ -1282,10 +1282,10 @@ class ParquetParserSessionFull_Test extends TestBase {
 
 	@Test void ee01_prepareMapForBeanMapTarget() throws Exception {
 		// value is a Map and target type is Map — exercises the !type.isMap() false branch (line 1575).
-		var in = new LinkedHashMap<String, String>();
+		var in = new LinkedHashMap<String,String>();
 		in.put("a", "1");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
-		var out = (Map<String, String>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, String.class);
+		var out = (Map<String,String>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, String.class);
 		assertEquals("1", out.get("a"));
 	}
 
@@ -1403,7 +1403,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// Serializing a scalar produces {value:"x"} rows; parsing as Map target hits the
 		// isMap() branch where inner is NOT a Map → inner instanceof Map<?,?> = false (line 240).
 		var bytes = ParquetSerializer.DEFAULT.write("hello");
-		var out = (Map<?, ?>) ParquetParser.DEFAULT.read(bytes, (Class<Object>)(Class<?>)Map.class);
+		var out = (Map<?,?>) ParquetParser.DEFAULT.read(bytes, (Class<Object>)(Class<?>)Map.class);
 		// Falls through to single-row Map branch and returns the {value:"hello"} row as-is.
 		assertNotNull(out);
 	}
@@ -1430,10 +1430,10 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void hh04_prepareMapForBeanMapTarget() throws Exception {
 		// prepareMapForBean with a Map value and a Map target type: type.isMap() = true
 		// → falls through to return value as-is (line 1539 false branch on !type.isMap()).
-		var in = new LinkedHashMap<String, Object>();
+		var in = new LinkedHashMap<String,Object>();
 		in.put("a", "1");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
-		var out = (Map<?, ?>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
+		var out = (Map<?,?>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
 		assertEquals("1", out.get("a"));
 	}
 
@@ -1455,11 +1455,11 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// Serializing a List<Map> wraps each Map element in a ValueHolder row {value: {k:v}}.
 		// Parsing with Map target enters the type.isMap() block; single {value: Map} row's inner
 		// value is a Map, so convertToType(inner, type) is returned directly.
-		var inner = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("k", "v");
 		var in = list(inner);
 		var bytes = ParquetSerializer.DEFAULT.write(in);
-		var out = (Map<?, ?>) ParquetParser.DEFAULT.read(bytes, (Class<Object>)(Class<?>)Map.class);
+		var out = (Map<?,?>) ParquetParser.DEFAULT.read(bytes, (Class<Object>)(Class<?>)Map.class);
 		assertNotNull(out);
 	}
 

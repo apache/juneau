@@ -27,7 +27,7 @@ class ThrowingFunction4_Test extends TestBase {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
-		var function = (ThrowingFunction4<String, Integer, Boolean, Double, String>)(a, b, c, d) -> {
+		var function = (ThrowingFunction4<String,Integer,Boolean,Double,String>)(a, b, c, d) -> {
 			return a + "-" + b + "-" + c + "-" + d;
 		};
 
@@ -35,7 +35,7 @@ class ThrowingFunction4_Test extends TestBase {
 	}
 
 	@Test void a02_returnsNull() {
-		ThrowingFunction4<String, Integer, Boolean, Double, String> function = (a, b, c, d) -> null;
+		ThrowingFunction4<String,Integer,Boolean,Double,String> function = (a, b, c, d) -> null;
 
 		assertNull(function.apply("test", 42, true, 3.14));
 	}
@@ -44,7 +44,7 @@ class ThrowingFunction4_Test extends TestBase {
 	// Exception handling tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void b01_throwsCheckedException() {
-		var function = (ThrowingFunction4<String, Integer, Boolean, Double, String>)(a, b, c, d) -> {
+		var function = (ThrowingFunction4<String,Integer,Boolean,Double,String>)(a, b, c, d) -> {
 			throw new Exception("Test exception");
 		};
 
@@ -57,7 +57,7 @@ class ThrowingFunction4_Test extends TestBase {
 	}
 
 	@Test void b02_throwsRuntimeException() {
-		var function = (ThrowingFunction4<String, Integer, Boolean, Double, String>)(a, b, c, d) -> {
+		var function = (ThrowingFunction4<String,Integer,Boolean,Double,String>)(a, b, c, d) -> {
 			throw new RuntimeException("Test runtime exception");
 		};
 
@@ -73,20 +73,20 @@ class ThrowingFunction4_Test extends TestBase {
 	// Functional interface tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void c01_usedAsFunction4() {
-		var function = (Function4<String, Integer, Boolean, Double, String>)(a, b, c, d) -> a + "-" + b;
+		var function = (Function4<String,Integer,Boolean,Double,String>)(a, b, c, d) -> a + "-" + b;
 
 		assertEquals("test-42", function.apply("test", 42, true, 3.14));
 	}
 
 	@Test void c02_lambdaExpression() {
-		ThrowingFunction4<Integer, Integer, Integer, Integer, Integer> function = (a, b, c, d) -> a + b + c + d;
+		ThrowingFunction4<Integer,Integer,Integer,Integer,Integer> function = (a, b, c, d) -> a + b + c + d;
 
 		assertEquals(10, function.apply(1, 2, 3, 4));
 	}
 
 	@Test void c03_andThen() {
-		var add = (ThrowingFunction4<Integer, Integer, Integer, Integer, Integer>)(a, b, c, d) -> a + b + c + d;
-		var toString = (java.util.function.Function<Integer, String>)Object::toString;
+		var add = (ThrowingFunction4<Integer,Integer,Integer,Integer,Integer>)(a, b, c, d) -> a + b + c + d;
+		var toString = (java.util.function.Function<Integer,String>)Object::toString;
 
 		var composed = add.andThen(toString);
 		assertEquals("10", composed.apply(1, 2, 3, 4));

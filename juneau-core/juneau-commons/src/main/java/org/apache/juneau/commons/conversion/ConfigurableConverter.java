@@ -77,9 +77,9 @@ public class ConfigurableConverter extends BasicConverter {
 	@SuppressWarnings({
 		"unchecked" // Type safety guaranteed by ConversionFinder contract
 	})
-	protected <I, O> Conversion<I, O> findConversion(Class<I> inType, Class<O> outType) {
+	protected <I,O> Conversion<I,O> findConversion(Class<I> inType, Class<O> outType) {
 		for (var finder : finders) {
-			var fn = (Conversion<I, O>) finder.findConversion(inType, outType);
+			var fn = (Conversion<I,O>) finder.findConversion(inType, outType);
 			if (fn != null)
 				return fn;
 		}

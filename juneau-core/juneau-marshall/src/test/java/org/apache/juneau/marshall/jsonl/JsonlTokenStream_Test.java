@@ -324,7 +324,7 @@ class JsonlTokenStream_Test extends TestBase {
 			assertString("{\"x\":1}\n{\"x\":2}\n{\"x\":3}\n", sb);
 
 			// Read them back via readArrayRecords(...) and assert each record's shape with BCT.
-			var records = new java.util.ArrayList<java.util.Map<?, ?>>();
+			var records = new java.util.ArrayList<java.util.Map<?,?>>();
 			try (RecordReader r = JsonlParser.DEFAULT.readArrayRecords(sb.toString())) {
 				assertTrue(r.isStreaming());
 				while (r.canRead())

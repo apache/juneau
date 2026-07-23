@@ -97,9 +97,9 @@ class Stringifier_Test extends TestBase {
 		@Test
 		void b01_andThenComposition() {
 			Stringifier<String> base = (converter, str) -> str.toLowerCase();
-			Function<String, String> postProcessor = s -> "[" + s + "]";
+			Function<String,String> postProcessor = s -> "[" + s + "]";
 
-			BiFunction<BeanConverter, String, String> composed = base.andThen(postProcessor);
+			BiFunction<BeanConverter,String,String> composed = base.andThen(postProcessor);
 
 			var converter = BasicBeanConverter.DEFAULT;
 			var result = composed.apply(converter, "TEST");

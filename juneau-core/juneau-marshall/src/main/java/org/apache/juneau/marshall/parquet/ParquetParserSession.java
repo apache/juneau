@@ -223,7 +223,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		boolean targetWantsScalar = !type.isMap()
 			&& !(type.isCollection() && type.getElementType() != null && type.getElementType().isMap())
 			&& !(type.isArray() && type.getElementType() != null && type.getElementType().isMap());
-		if (rows.size() == 1 && rows.get(0) instanceof Map<?, ?> m && m.containsKey("value") && targetWantsScalar) {
+		if (rows.size() == 1 && rows.get(0) instanceof Map<?,?> m && m.containsKey("value") && targetWantsScalar) {
 			var inner = m.get("value");
 			if (type.isOptional())
 				return (T)o(convertToType(inner, type.getElementType()));
@@ -242,9 +242,9 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		}
 		if (type.isMap()) {
 			// Unwrap ValueHolder {value: Map} when addRootType wrapped root Map (2.2)
-			if (rows.size() == 1 && rows.get(0) instanceof Map<?, ?> m && m.containsKey("value") && m.size() == 1) {
+			if (rows.size() == 1 && rows.get(0) instanceof Map<?,?> m && m.containsKey("value") && m.size() == 1) {
 				var inner = m.get("value");
-				if (inner instanceof Map<?, ?>)
+				if (inner instanceof Map<?,?>)
 					return (T)convertToType(inner, type);
 			}
 			var keyType = type.getKeyType();
@@ -253,7 +253,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				if (valueType == null) valueType = ctx.getMarshallingContext().getClassMeta(Object.class);
 				var result = new LinkedHashMap<>();
 				for (var row : rows) {
-					var rowMap = (Map<?, ?>)row;
+					var rowMap = (Map<?,?>)row;
 					var rawKey = rowMap.get("key");
 					var k = (rawKey != null && ctx.nullKeyString.equals(String.valueOf(rawKey)))
 						? null
@@ -263,9 +263,9 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				}
 				return (T)convertToType(result, type);
 			}
-			if (rows.size() == 1 && rows.get(0) instanceof Map<?, ?> m) {
+			if (rows.size() == 1 && rows.get(0) instanceof Map<?,?> m) {
 				// Unwrap {root: {...}} from buildSchemaFromMap flat format
-				if (m.size() == 1 && m.containsKey("root") && m.get("root") instanceof Map<?, ?> inner)
+				if (m.size() == 1 && m.containsKey("root") && m.get("root") instanceof Map<?,?> inner)
 					return (T)convertToType(prepareMapForBean(inner, type), type);
 				return (T)convertToType(prepareMapForBean(m, type), type);
 			}
@@ -331,7 +331,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	/** Sentinel for a null intermediate OPTIONAL group at the given def level (GAP-14 multi-level nesting). */
 	private record GroupNull(int defLevel) {}
 
-	private record FileMeta(long numRows, List<RowGroupMeta> rowGroups, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical) {}
+	private record FileMeta(long numRows, List<RowGroupMeta> rowGroups, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical) {}
 	private record RowGroupMeta(long numRows, List<ColumnChunkMeta> columns) {}
 	private record ColumnChunkMeta(int type, List<String> pathInSchema, int codec, long numValues, long dataPageOffset, long totalCompressedSize) {}
 
@@ -445,7 +445,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * physical-type heuristic when no logical type is recorded (backward compatibility with files written
 	 * without the opt-in discriminator).
 	 */
-	private record SchemaReadResult(Map<String, Integer> repetitions, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical) {}
+	private record SchemaReadResult(Map<String,Integer> repetitions, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical) {}
 
 	/**
 	 * Per-leaf logical-type metadata captured from the schema, used to decode native logical-type columns
@@ -460,10 +460,10 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			dec.readStructBegin();
 			long numRows = 0;
 			List<RowGroupMeta> rowGroups = null;
-			Map<String, Integer> schemaRepetition = Map.of();
+			Map<String,Integer> schemaRepetition = Map.of();
 			Set<String> rawByteArrayPaths = Set.of();
 			Set<String> uuidPaths = Set.of();
-			Map<String, ColumnLogical> columnLogical = Map.of();
+			Map<String,ColumnLogical> columnLogical = Map.of();
 			ThriftCompactDecoder.FieldHeader fh;
 			while (!(fh = dec.readFieldHeader()).isStop) {
 				switch (fh.fieldId) {
@@ -492,10 +492,10 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	private static SchemaReadResult readSchema(ThriftCompactDecoder dec) throws IOException {
 		var lh = dec.readListHeader();
 		var pathStack = new ArrayList<SchemaStackFrame>();
-		var result = new LinkedHashMap<String, Integer>();
+		var result = new LinkedHashMap<String,Integer>();
 		var rawByteArrayPaths = new LinkedHashSet<String>();
 		var uuidPaths = new LinkedHashSet<String>();
-		var columnLogical = new LinkedHashMap<String, ColumnLogical>();
+		var columnLogical = new LinkedHashMap<String,ColumnLogical>();
 		for (int i = 0; i < lh.size; i++) {
 			dec.readStructBegin();
 			Integer type = null;
@@ -678,7 +678,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return list;
 	}
 
-	private List<?> readAllRows(byte[] fileBytes, FileMeta meta, ClassMeta<?> elementType, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical) throws ParseException {
+	private List<?> readAllRows(byte[] fileBytes, FileMeta meta, ClassMeta<?> elementType, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical) throws ParseException {
 		if (meta.numRows() == 0 || meta.rowGroups().isEmpty())
 			return List.of();
 		// Multi-row-group (GAP-2): read every row group and concatenate its reassembled rows in order.
@@ -695,8 +695,8 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	@SuppressWarnings({
 		"java:S107" // Parser-internal method threads decode state (column paths, schema repetition, logical types); parameter count is intentional.
 	})
-	private List<?> readRowGroupRows(byte[] fileBytes, RowGroupMeta group, int numRows, ClassMeta<?> elementType, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical) throws ParseException {
-		var columnData = new LinkedHashMap<String, List<Object>>();
+	private List<?> readRowGroupRows(byte[] fileBytes, RowGroupMeta group, int numRows, ClassMeta<?> elementType, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical) throws ParseException {
+		var columnData = new LinkedHashMap<String,List<Object>>();
 		for (var cc : group.columns()) {
 			var path = String.join(".", cc.pathInSchema());
 			List<Object> values;
@@ -996,7 +996,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	@SuppressWarnings({
 		"java:S107" // Parser-internal method threads decode state (column paths, schema repetition, logical types); parameter count is intentional.
 	})
-	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical, boolean trimStrings) throws ParseException {
+	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical, boolean trimStrings) throws ParseException {
 		try {
 			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
 				throw new ParseException("Invalid numValues for column '%s': %s", String.join(".", cc.pathInSchema()), cc.numValues());
@@ -1290,7 +1290,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return new UUID(msb, lsb);
 	}
 
-	private List<Object> reassembleRows(Map<String, List<Object>> columnData, int numRows, ClassMeta<?> elementType) throws ParseException {
+	private List<Object> reassembleRows(Map<String,List<Object>> columnData, int numRows, ClassMeta<?> elementType) throws ParseException {
 		var result = new ArrayList<>(numRows);
 		var listBeanColumns = groupListBeanColumns(columnData.keySet(), elementType);
 		var mapColumns = groupMapColumns(columnData.keySet());
@@ -1341,8 +1341,8 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return result;
 	}
 
-	private static Map<String, List<ListColumnInfo>> groupListBeanColumns(Set<String> columnPaths, ClassMeta<?> elementType) {
-		var groups = new LinkedHashMap<String, List<ListColumnInfo>>();
+	private static Map<String,List<ListColumnInfo>> groupListBeanColumns(Set<String> columnPaths, ClassMeta<?> elementType) {
+		var groups = new LinkedHashMap<String,List<ListColumnInfo>>();
 		if (!elementType.isBean())
 			return groups;
 		var bm = elementType.getBeanMeta();
@@ -1368,8 +1368,8 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 	private record MapColumnInfo(String keyColumnPath, String valueColumnPath) {}
 
-	private static Map<String, MapColumnInfo> groupMapColumns(Set<String> columnPaths) {
-		var groups = new LinkedHashMap<String, MapColumnInfo>();
+	private static Map<String,MapColumnInfo> groupMapColumns(Set<String> columnPaths) {
+		var groups = new LinkedHashMap<String,MapColumnInfo>();
 		for (var fullPath : columnPaths) {
 			var rowRelPath = rowRelativePath(fullPath);
 			if (!isMapKeyValueColumnPath(rowRelPath))
@@ -1385,7 +1385,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return groups;
 	}
 
-	private Map<Object, Object> mergeMapColumns(MapColumnInfo info, Map<String, List<Object>> columnData, int rowIndex) throws ParseException {
+	private Map<Object,Object> mergeMapColumns(MapColumnInfo info, Map<String,List<Object>> columnData, int rowIndex) throws ParseException {
 		var keyList = (List<?>) columnData.get(info.keyColumnPath()).get(rowIndex);
 		if (keyList.isEmpty())
 			return new LinkedHashMap<>();
@@ -1400,7 +1400,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return result;
 	}
 
-	private List<Object> mergeListBeanColumns(List<ListColumnInfo> columnsInGroup, Map<String, List<Object>> columnData,
+	private List<Object> mergeListBeanColumns(List<ListColumnInfo> columnsInGroup, Map<String,List<Object>> columnData,
 		int rowIndex) throws ParseException {
 		var elemType = columnsInGroup.get(0).elementType();
 		var firstList = (List<?>) columnData.get(columnsInGroup.get(0).fullPath()).get(rowIndex);
@@ -1427,11 +1427,11 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	private void replaceNullKeySentinel(Object obj) {
 		if (obj == null)
 			return;
-		if (obj instanceof Map<?, ?> obj2) {
+		if (obj instanceof Map<?,?> obj2) {
 			if (obj2.containsKey(ctx.nullKeyString)) {
 				var val = obj2.get(ctx.nullKeyString);
-				((Map<Object, Object>)obj2).remove(ctx.nullKeyString);
-				((Map<Object, Object>)obj2).put(null, val);
+				((Map<Object,Object>)obj2).remove(ctx.nullKeyString);
+				((Map<Object,Object>)obj2).put(null, val);
 			}
 			for (var v : obj2.values())
 				replaceNullKeySentinel(v);
@@ -1545,14 +1545,14 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			return value;
 		if (value instanceof JsonMap)
 			return value;
-		if (value instanceof Map<?, ?> value2 && !type.isMap())
+		if (value instanceof Map<?,?> value2 && !type.isMap())
 			return new JsonMap(value2);
 		return value;
 	}
 
 	/** Unwraps ValueHolder map {value: X} to X when target is scalar; else converts via MarshallingSession. */
 	private Object unwrapValueHolder(Object row, ClassMeta<?> targetType) throws ParseException {
-		if (!(row instanceof Map<?, ?> row2))
+		if (!(row instanceof Map<?,?> row2))
 			return convertToType(row, targetType);
 		// Unwrap {value: X} when target is scalar (or Object) - allow maps with extra keys (e.g. _type)
 		if (row2.containsKey("value") && (targetType.isObject()

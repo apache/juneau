@@ -35,7 +35,7 @@ class HjsonParser_Test extends TestBase {
 	@Test
 	void a01_quotedStrings() throws Exception {
 		var hjson = "{\"name\":\"Alice\",\"age\":30}";
-		var m = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(m, "name,age", "Alice,30");
 	}
 
@@ -47,21 +47,21 @@ class HjsonParser_Test extends TestBase {
 			  age: 30
 			}
 			""";
-		var m = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(m, "name,age", "Alice,30");
 	}
 
 	@Test
 	void a03_rootBraceless() throws Exception {
 		var hjson = "name: Bob\nage: 25";
-		var m = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(m, "name,age", "Bob,25");
 	}
 
 	@Test
 	void a04_numberAndBoolean() throws Exception {
 		var hjson = "{\"count\":42,\"flag\":true}";
-		var m = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertEquals(42, m.get("count"));
 		assertEquals(true, m.get("flag"));
 	}
@@ -69,7 +69,7 @@ class HjsonParser_Test extends TestBase {
 	@Test
 	void a05_nullValue() throws Exception {
 		var hjson = "{\"name\":\"x\",\"middle\":null}";
-		var m = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertNull(m.get("middle"));
 		assertEquals("x", m.get("name"));
 	}
@@ -95,7 +95,7 @@ class HjsonParser_Test extends TestBase {
 			  age: 30
 			}
 			""";
-		var m = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(m, "name,age", "Alice,30");
 	}
 
@@ -107,7 +107,7 @@ class HjsonParser_Test extends TestBase {
 			  name: Bob
 			}
 			""";
-		var m = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertEquals("Bob", m.get("name"));
 	}
 
@@ -119,21 +119,21 @@ class HjsonParser_Test extends TestBase {
 			  x: 1
 			}
 			""";
-		var m = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertEquals(1, m.get("x"));
 	}
 
 	@Test
 	void b04_trailingCommas() throws Exception {
 		var hjson = "{\"a\":1,\"b\":2}";
-		var m = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(m, "a,b", "1,2");
 	}
 
 	@Test
 	void b05_quotelessValueEdgeCases() throws Exception {
 		var hjson = "n: 5\ns: 5 times\nb: true";
-		var m = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertEquals(5, m.get("n"));
 		assertEquals("5 times", m.get("s"));
 		assertEquals(true, m.get("b"));
@@ -142,8 +142,8 @@ class HjsonParser_Test extends TestBase {
 	@Test
 	void b06_nestedObjects() throws Exception {
 		var hjson = "{\"outer\":{\"inner\":\"value\"}}";
-		var m = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
-		var outer = (Map<String, Object>) m.get("outer");
+		var m = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
+		var outer = (Map<String,Object>) m.get("outer");
 		assertNotNull(outer);
 		assertEquals("value", outer.get("inner"));
 	}
@@ -151,7 +151,7 @@ class HjsonParser_Test extends TestBase {
 	@Test
 	void b07_arrays() throws Exception {
 		var hjson = "{\"arr\":[1,2,3]}";
-		var m = (Map<String, Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		var arr = m.get("arr");
 		assertTrue(arr instanceof List);
 	}

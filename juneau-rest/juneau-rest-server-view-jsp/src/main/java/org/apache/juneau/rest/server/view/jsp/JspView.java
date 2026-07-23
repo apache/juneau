@@ -64,8 +64,8 @@ import org.apache.juneau.rest.server.view.*;
 public final class JspView implements View {
 
 	private final String templateName;
-	private final Map<String, Object> attributes;
-	private final Map<String, String> responseHeaders;
+	private final Map<String,Object> attributes;
+	private final Map<String,String> responseHeaders;
 
 	/**
 	 * Creates a new {@code JspView} carrying the given template name and no attributes.
@@ -81,7 +81,7 @@ public final class JspView implements View {
 		return new JspView(templateName, Map.of(), Map.of());
 	}
 
-	private JspView(String templateName, Map<String, Object> attributes, Map<String, String> responseHeaders) {
+	private JspView(String templateName, Map<String,Object> attributes, Map<String,String> responseHeaders) {
 		this.templateName = templateName;
 		this.attributes = attributes;
 		this.responseHeaders = responseHeaders;
@@ -122,7 +122,7 @@ public final class JspView implements View {
 	 * 	logically the same instance with no entries added).
 	 * @return A new {@code JspView} carrying the additional attributes.
 	 */
-	public JspView attrs(Map<String, ?> values) {
+	public JspView attrs(Map<String,?> values) {
 		if (values == null || values.isEmpty())
 			return this;
 		var copy = new LinkedHashMap<>(attributes);
@@ -167,12 +167,12 @@ public final class JspView implements View {
 	}
 
 	@Override /* Overridden from View */
-	public Map<String, Object> getAttributes() {
+	public Map<String,Object> getAttributes() {
 		return attributes;
 	}
 
 	@Override /* Overridden from View */
-	public Map<String, String> getResponseHeaders() {
+	public Map<String,String> getResponseHeaders() {
 		return responseHeaders;
 	}
 

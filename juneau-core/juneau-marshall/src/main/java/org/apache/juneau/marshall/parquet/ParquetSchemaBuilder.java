@@ -109,7 +109,7 @@ public final class ParquetSchemaBuilder {
 	 */
 	public List<ParquetSchemaElement> buildSchema(ClassMeta<?> cm, Object sampleBean) {
 		var elements = new ArrayList<ParquetSchemaElement>();
-		var typesInProgress = new HashMap<Class<?>, Integer>();
+		var typesInProgress = new HashMap<Class<?>,Integer>();
 		addSchemaElements(elements, cm, "root", null, true, sampleBean, typesInProgress);
 		return elements;
 	}
@@ -120,7 +120,7 @@ public final class ParquetSchemaBuilder {
 	 * @param map The map instance (keys become column names).
 	 * @return The depth-first list of schema elements (root first).
 	 */
-	public List<ParquetSchemaElement> buildSchemaFromMap(Map<?, ?> map) {
+	public List<ParquetSchemaElement> buildSchemaFromMap(Map<?,?> map) {
 		var elements = new ArrayList<ParquetSchemaElement>();
 		var keys = map.keySet().stream()
 			.filter(String.class::isInstance)
@@ -138,7 +138,7 @@ public final class ParquetSchemaBuilder {
 			null,
 			null,
 			null));
-		var typesInProgress = new HashMap<Class<?>, Integer>();
+		var typesInProgress = new HashMap<Class<?>,Integer>();
 		for (var key : keys) {
 			var val = map.get(key);
 			var cm = marshallingContext.getClassMeta(val != null ? val.getClass() : Object.class);
@@ -159,7 +159,7 @@ public final class ParquetSchemaBuilder {
 	 */
 	public List<ParquetSchemaElement> buildSchemaForKeyValuePairs(Object keySample, Object valueSample) {
 		var elements = new ArrayList<ParquetSchemaElement>();
-		var typesInProgress = new HashMap<Class<?>, Integer>();
+		var typesInProgress = new HashMap<Class<?>,Integer>();
 		var keyCm = marshallingContext.getClassMeta(keySample != null ? keySample.getClass() : Object.class);
 		var valueCm = marshallingContext.getClassMeta(valueSample != null ? valueSample.getClass() : Object.class);
 		elements.add(new ParquetSchemaElement("root", null, null, null, 2, null, null, null, null, null));
@@ -168,7 +168,7 @@ public final class ParquetSchemaBuilder {
 		return elements;
 	}
 
-	private void addSchemaElements(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
+	private void addSchemaElements(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>,Integer> typesInProgress) {
 		if (cm.isOptional()) {
 			addOptionalSchema(elements, cm, name, parentPath, isRoot, sampleBean, typesInProgress);
 		} else if (cm.isBean()) {
@@ -188,7 +188,7 @@ public final class ParquetSchemaBuilder {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive Complexity: optional/value dispatch is inherently branchy
 	})
-	private void addOptionalSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
+	private void addOptionalSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>,Integer> typesInProgress) {
 		var et = cm.getElementType();
 		if (et == null) // HTT: ClassMeta always resolves Optional's type parameter to Object at minimum
 			et = marshallingContext.getClassMeta(Object.class);
@@ -201,7 +201,7 @@ public final class ParquetSchemaBuilder {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive Complexity: bean/cycle/property dispatch is inherently branchy
 	})
-	private void addBeanSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
+	private void addBeanSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>,Integer> typesInProgress) {
 		var bm = cm.getBeanMeta();
 		if (bm == null) // HTT: addBeanSchema is only called after isBean() check; getBeanMeta() is non-null
 			throw iaex("Class '%s' is not a bean", cm.getName());
@@ -232,7 +232,7 @@ public final class ParquetSchemaBuilder {
 			var entries = new ArrayList<ResolvedProp>();
 			for (var p : props) {
 				Object childSample = null;
-				if (sampleBean instanceof Map<?, ?> sampleBean2)
+				if (sampleBean instanceof Map<?,?> sampleBean2)
 					childSample = sampleBean2.get(p.getName());
 				ClassMeta<?> propCm = (ClassMeta<?>) p.getBeanInfo();
 				// Native logical types (GAP-9/10): a java.time temporal property carries a swap, so its
@@ -309,7 +309,7 @@ public final class ParquetSchemaBuilder {
 		return f != null && ap.has(ParentProperty.class, f);
 	}
 
-	private void addListSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
+	private void addListSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>,Integer> typesInProgress) {
 		var et = cm.getElementType();
 		if (et == null) // HTT: ClassMeta always provides an element type (at least Object) for list types
 			throw iaex("List element type cannot be determined for '%s'", cm.getName());
@@ -336,7 +336,7 @@ public final class ParquetSchemaBuilder {
 		return Collections.emptyList();
 	}
 
-	private void addMapSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Map<Class<?>, Integer> typesInProgress) {
+	private void addMapSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Map<Class<?>,Integer> typesInProgress) {
 		var vt = cm.getValueType();
 		// Parquet MAP stores keys as STRING; non-String keys (e.g. Enum) are serialized via toString/name()
 		if (vt == null) // HTT: ClassMeta always provides a value type (at least Object) for map types

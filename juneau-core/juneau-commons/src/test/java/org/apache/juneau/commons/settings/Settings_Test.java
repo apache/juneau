@@ -763,7 +763,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void q03_writeableFunctionalPropertySource_clear() {
 		// Test clear() functionality with a custom clearer
-		var map = new java.util.HashMap<String, String>();
+		var map = new java.util.HashMap<String,String>();
 		var source = FunctionalPropertyStore.of(
 			map::get,
 			map::put,

@@ -124,7 +124,7 @@ class MarkdownDocParserSession_Test {
 		public String val;
 	}
 
-	public static class CSwap extends ObjectSwap<CWrapped, String> {
+	public static class CSwap extends ObjectSwap<CWrapped,String> {
 		@Override
 		public String swap(MarshallingSession session, CWrapped o) {
 			return o == null ? null : o.val;
@@ -423,7 +423,7 @@ class MarkdownDocParserSession_Test {
 			| a | 1 |
 			| b | 2 |
 			""";
-		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
+		var r = (Map<String,Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertNotNull(r);
 		assertEquals(2, r.size());
 	}
@@ -442,7 +442,7 @@ class MarkdownDocParserSession_Test {
 			| x | 10 |
 			| y | 20 |
 			""";
-		var r = (TreeMap<String, Integer>) MarkdownDocParser.DEFAULT.read(md, TreeMap.class, String.class, Integer.class);
+		var r = (TreeMap<String,Integer>) MarkdownDocParser.DEFAULT.read(md, TreeMap.class, String.class, Integer.class);
 		assertNotNull(r);
 		assertEquals(10, (int) r.get("x"));
 		assertEquals(20, (int) r.get("y"));
@@ -459,7 +459,7 @@ class MarkdownDocParserSession_Test {
 
 			Just text, no table.
 			""";
-		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
+		var r = (Map<String,Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertNotNull(r);
 		assertTrue(r.isEmpty());
 	}
@@ -477,7 +477,7 @@ class MarkdownDocParserSession_Test {
 			|---|---|
 			| a | b |
 			""";
-		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
+		var r = (Map<String,Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertNotNull(r);
 		assertTrue(r.isEmpty());
 	}
@@ -497,7 +497,7 @@ class MarkdownDocParserSession_Test {
 			| badrow |
 			| k2 | v2 |
 			""";
-		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
+		var r = (Map<String,Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertEquals("v1", r.get("k1"));
 		assertEquals("v2", r.get("k2"));
 		assertFalse(r.containsKey("badrow"));
@@ -522,7 +522,7 @@ class MarkdownDocParserSession_Test {
 			some text
 			""";
 		var p = MarkdownDocParser.create().headingLevel(1).build();
-		var r = (Map<String, Object>) p.read(md, Map.class);
+		var r = (Map<String,Object>) p.read(md, Map.class);
 		assertNotNull(r);
 		assertEquals("v1", r.get("k1"));
 		assertTrue(r.containsKey("section1"));
@@ -636,7 +636,7 @@ class MarkdownDocParserSession_Test {
 		public String val;
 	}
 
-	public static class WSwap extends ObjectSwap<WWrapped, String> {
+	public static class WSwap extends ObjectSwap<WWrapped,String> {
 		@Override
 		public String swap(MarshallingSession session, WWrapped o) {
 			return o == null ? null : o.val;
@@ -676,7 +676,7 @@ class MarkdownDocParserSession_Test {
 			val2
 			""";
 		var p = MarkdownDocParser.create().headingLevel(1).build();
-		var r = (Map<String, Object>) p.read(md, Map.class);
+		var r = (Map<String,Object>) p.read(md, Map.class);
 		assertNotNull(r);
 		assertTrue(r.containsKey("key1"));
 		assertTrue(r.containsKey("key2"));
@@ -733,7 +733,7 @@ class MarkdownDocParserSession_Test {
 			|---|---|---|
 			| a | b | c |
 			""";
-		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
+		var r = (Map<String,Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertNotNull(r);
 		assertTrue(r.isEmpty());
 	}
@@ -751,7 +751,7 @@ class MarkdownDocParserSession_Test {
 			|---|---|
 			| k1 | v1 |
 			""";
-		var r = (Map<String, Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
+		var r = (Map<String,Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertNotNull(r);
 		assertTrue(r.isEmpty());
 	}
@@ -771,7 +771,7 @@ class MarkdownDocParserSession_Test {
 			| b | 2 |
 			| a | 1 |
 			""";
-		var r = (TreeMap<?, ?>) MarkdownDocParser.DEFAULT.read(md, TreeMap.class);
+		var r = (TreeMap<?,?>) MarkdownDocParser.DEFAULT.read(md, TreeMap.class);
 		assertNotNull(r);
 		assertInstanceOf(TreeMap.class, r);
 		assertEquals(2, r.size());
@@ -844,7 +844,7 @@ class MarkdownDocParserSession_Test {
 
 	public static class AEBean {
 		public String name;
-		public Map<String, String> props;
+		public Map<String,String> props;
 	}
 
 	@Test void af01_subSection_keyValueTable_nonBeanProp_readTable() {

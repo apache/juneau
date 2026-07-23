@@ -134,13 +134,13 @@ class PrototextSerializerSession_Test extends TestBase {
 	@Test void c01_beanProperty_listOfBeans() throws Exception {
 		// Exercise the collection-of-beans branch in writeBeanMap.
 		// Use Map-of-Map values (which Juneau treats as bean-like) to match existing proto patterns.
-		var c1 = new LinkedHashMap<String, Object>();
+		var c1 = new LinkedHashMap<String,Object>();
 		c1.put("id", 1);
 		c1.put("label", "alpha");
-		var c2 = new LinkedHashMap<String, Object>();
+		var c2 = new LinkedHashMap<String,Object>();
 		c2.put("id", 2);
 		c2.put("label", "beta");
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("name", "parent");
 		root.put("children", List.of(c1, c2));
 
@@ -153,13 +153,13 @@ class PrototextSerializerSession_Test extends TestBase {
 	@Test void c02_beanProperty_listOfBeans_listSyntax() throws Exception {
 		// useListSyntaxForBeans=true → exercise the [{...}, {...}] writer path.
 		var ser = PrototextSerializer.create().useListSyntaxForBeans(true).build();
-		var c1 = new LinkedHashMap<String, Object>();
+		var c1 = new LinkedHashMap<String,Object>();
 		c1.put("id", 1);
 		c1.put("label", "alpha");
-		var c2 = new LinkedHashMap<String, Object>();
+		var c2 = new LinkedHashMap<String,Object>();
 		c2.put("id", 2);
 		c2.put("label", "beta");
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("name", "parent");
 		root.put("children", List.of(c1, c2));
 
@@ -171,12 +171,12 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void c03_arrayOfMaps() throws Exception {
 		// Map<String,Object>[] property — exercises aType.isArray() branch in writeBeanMap with bean elements.
-		var c1 = new LinkedHashMap<String, Object>();
+		var c1 = new LinkedHashMap<String,Object>();
 		c1.put("label", "x");
-		var c2 = new LinkedHashMap<String, Object>();
+		var c2 = new LinkedHashMap<String,Object>();
 		c2.put("label", "y");
-		Map<String, Object>[] arr = new Map[] { c1, c2 };
-		var root = new LinkedHashMap<String, Object>();
+		Map<String,Object>[] arr = new Map[] { c1, c2 };
+		var root = new LinkedHashMap<String,Object>();
 		root.put("name", "parent");
 		root.put("children", arr);
 
@@ -187,7 +187,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void c04_intArray_property() throws Exception {
 		// int[] in a Map property — exercises array → list of scalars branch.
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("values", new int[] { 10, 20, 30 });
 		var proto = PrototextSerializer.DEFAULT.write(root);
 		assertNotNull(proto);
@@ -197,9 +197,9 @@ class PrototextSerializerSession_Test extends TestBase {
 	@Test void c05_listSyntax_useColon() throws Exception {
 		// Combine useListSyntaxForBeans + useColonForMessages to hit both branches.
 		var ser = PrototextSerializer.create().useListSyntaxForBeans(true).useColonForMessages(true).build();
-		var c1 = new LinkedHashMap<String, Object>();
+		var c1 = new LinkedHashMap<String,Object>();
 		c1.put("label", "z");
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("name", "parent");
 		root.put("children", List.of(c1));
 
@@ -210,9 +210,9 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void c06_useColonForMessages_nestedBean() throws Exception {
 		var ser = PrototextSerializer.create().useColonForMessages(true).build();
-		var inner = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("x", 1);
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("inner", inner);
 
 		var proto = ser.write(m);
@@ -226,13 +226,13 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void d01_mapOfMaps() throws Exception {
 		// Hits writeMap → bean/map branch (recursive writeMap).
-		var inner = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("a", 1);
 		inner.put("b", 2);
-		var outer = new LinkedHashMap<String, Object>();
+		var outer = new LinkedHashMap<String,Object>();
 		outer.put("nested", inner);
 		// Wrap so root is a top-level message rather than the map itself.
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("config", outer);
 
 		var proto = PrototextSerializer.DEFAULT.write(root);
@@ -244,9 +244,9 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void d02_mapWithListValues() throws Exception {
 		// Hits writeMap → collection branch.
-		var sub = new LinkedHashMap<String, Object>();
+		var sub = new LinkedHashMap<String,Object>();
 		sub.put("tags", List.of("a", "b"));
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("sub", sub);
 
 		var proto = PrototextSerializer.DEFAULT.write(root);
@@ -257,9 +257,9 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void d03_mapWithArrayValues() throws Exception {
 		// Hits writeMap → array branch (toList for array).
-		var sub = new LinkedHashMap<String, Object>();
+		var sub = new LinkedHashMap<String,Object>();
 		sub.put("ports", new int[] { 80, 443 });
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("sub", sub);
 
 		var proto = PrototextSerializer.DEFAULT.write(root);
@@ -268,17 +268,17 @@ class PrototextSerializerSession_Test extends TestBase {
 	}
 
 	@Test void d04_mapWithMapValues() throws Exception {
-		// Map<String, Map> nested values — exercises writeMap recursion.
-		var c1 = new LinkedHashMap<String, Object>();
+		// Map<String,Map> nested values — exercises writeMap recursion.
+		var c1 = new LinkedHashMap<String,Object>();
 		c1.put("id", 1);
 		c1.put("label", "first");
-		var c2 = new LinkedHashMap<String, Object>();
+		var c2 = new LinkedHashMap<String,Object>();
 		c2.put("id", 2);
 		c2.put("label", "second");
-		var entries = new LinkedHashMap<String, Object>();
+		var entries = new LinkedHashMap<String,Object>();
 		entries.put("k1", c1);
 		entries.put("k2", c2);
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("entries", entries);
 
 		var proto = PrototextSerializer.DEFAULT.write(root);
@@ -287,10 +287,10 @@ class PrototextSerializerSession_Test extends TestBase {
 	}
 
 	@Test void d05_mapWithNullValueIsSkipped() throws Exception {
-		var sub = new LinkedHashMap<String, Object>();
+		var sub = new LinkedHashMap<String,Object>();
 		sub.put("present", "yes");
 		sub.put("missing", null);
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("sub", sub);
 
 		var proto = PrototextSerializer.DEFAULT.write(root);
@@ -303,7 +303,7 @@ class PrototextSerializerSession_Test extends TestBase {
 	@Test void e01_iterableProperty_scalar() throws Exception {
 		// Iterable<String> as a Map-property value — exercises the streamable scalar element path.
 		Iterable<String> items = List.of("alpha", "beta");
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("items", items);
 		var proto = PrototextSerializer.DEFAULT.write(root);
 		assertNotNull(proto);
@@ -314,7 +314,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void f01_dateProperty() throws Exception {
 		// type.isDate() branch.
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("when", new Date(0L));
 		var proto = PrototextSerializer.DEFAULT.write(root);
 		assertNotNull(proto);
@@ -324,7 +324,7 @@ class PrototextSerializerSession_Test extends TestBase {
 	@Test void f02_calendarProperty() throws Exception {
 		// type.isCalendar() branch.
 		var cal = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("when", cal);
 		var proto = PrototextSerializer.DEFAULT.write(root);
 		assertNotNull(proto);
@@ -333,7 +333,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void f03_temporalProperty() throws Exception {
 		// type.isTemporal() branch.
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("when", Instant.ofEpochMilli(0L));
 		var proto = PrototextSerializer.DEFAULT.write(root);
 		assertNotNull(proto);
@@ -342,7 +342,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void f04_durationProperty() throws Exception {
 		// type.isDuration() branch.
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("length", Duration.ofMinutes(90));
 		var proto = PrototextSerializer.DEFAULT.write(root);
 		assertNotNull(proto);
@@ -352,7 +352,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void f05_periodProperty() throws Exception {
 		// type.isPeriod() branch.
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("span", Period.ofDays(7));
 		var proto = PrototextSerializer.DEFAULT.write(root);
 		assertNotNull(proto);
@@ -362,7 +362,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void f06_byteArrayProperty() throws Exception {
 		// value instanceof byte[] branch.
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("payload", new byte[] { 0x01, 0x02, 0x03 });
 		var proto = PrototextSerializer.DEFAULT.write(root);
 		assertNotNull(proto);
@@ -371,7 +371,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void f07_floatProperty() throws Exception {
 		// value instanceof Float branch (separate from Double).
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("ratio", 3.5f);
 		var proto = PrototextSerializer.DEFAULT.write(root);
 		assertNotNull(proto);
@@ -382,7 +382,7 @@ class PrototextSerializerSession_Test extends TestBase {
 		// keepNullProperties=true should still skip writing null values per the proto.
 		// However, this exercises the alternative branch in the checkNull predicate.
 		var ser = PrototextSerializer.create().keepNullProperties().build();
-		var root = new LinkedHashMap<String, Object>();
+		var root = new LinkedHashMap<String,Object>();
 		root.put("a", null);
 
 		// Should not throw even when all props are null.
@@ -394,7 +394,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void g01_optionalProperty_present() throws Exception {
 		// Hits isOptional branch in writeAnything (via map of Optional<String>).
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("opt", o("value"));
 		var proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
@@ -403,7 +403,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void g02_optionalProperty_empty() throws Exception {
 		// Optional.empty() -> writeAnything handles via getOptionalValue (returns null).
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("opt", oe());
 		var proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
@@ -425,9 +425,9 @@ class PrototextSerializerSession_Test extends TestBase {
 		// Bean has a List<Map> property — exercises writeBeanMap collection-with-bean-elements
 		// path (lines 270-296 in PrototextSerializerSession).
 		var bean = new BeanWithListOfMaps();
-		var c1 = new LinkedHashMap<String, Object>();
+		var c1 = new LinkedHashMap<String,Object>();
 		c1.put("k", "alpha");
-		var c2 = new LinkedHashMap<String, Object>();
+		var c2 = new LinkedHashMap<String,Object>();
 		c2.put("k", "beta");
 		bean.setItems(List.of(c1, c2));
 		var proto = PrototextSerializer.DEFAULT.write(bean);
@@ -439,9 +439,9 @@ class PrototextSerializerSession_Test extends TestBase {
 		// Bean with List<Map> + useListSyntaxForBeans — hits the [{...},{...}] writer path inside
 		// writeBeanMap (lines 274-288).
 		var bean = new BeanWithListOfMaps();
-		var c1 = new LinkedHashMap<String, Object>();
+		var c1 = new LinkedHashMap<String,Object>();
 		c1.put("k", "alpha");
-		var c2 = new LinkedHashMap<String, Object>();
+		var c2 = new LinkedHashMap<String,Object>();
 		c2.put("k", "beta");
 		bean.setItems(List.of(c1, c2));
 		var ser = PrototextSerializer.create().useListSyntaxForBeans(true).build();
@@ -456,9 +456,9 @@ class PrototextSerializerSession_Test extends TestBase {
 		// toBeanMap() unconditionally on the map elements, which threw BeanRuntimeException.
 		// The array path now dispatches Map vs Bean correctly.
 		var bean = new BeanWithMapArray();
-		var c1 = new LinkedHashMap<String, Object>();
+		var c1 = new LinkedHashMap<String,Object>();
 		c1.put("k", "alpha");
-		var c2 = new LinkedHashMap<String, Object>();
+		var c2 = new LinkedHashMap<String,Object>();
 		c2.put("k", "beta");
 		@SuppressWarnings({
 		})
@@ -473,9 +473,9 @@ class PrototextSerializerSession_Test extends TestBase {
 		// Same as h04 but with useListSyntaxForBeans=true — covers the [{...},{...}] writer branch
 		// where the dispatch fix also applies.
 		var bean = new BeanWithMapArray();
-		var c1 = new LinkedHashMap<String, Object>();
+		var c1 = new LinkedHashMap<String,Object>();
 		c1.put("k", "alpha");
-		var c2 = new LinkedHashMap<String, Object>();
+		var c2 = new LinkedHashMap<String,Object>();
 		c2.put("k", "beta");
 		@SuppressWarnings({
 		})
@@ -510,9 +510,9 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void h07_topLevelStreamOfMaps() throws Exception {
 		// Top-level Stream<Map> — hits writeStreamable bean-element branch.
-		var c1 = new LinkedHashMap<String, Object>();
+		var c1 = new LinkedHashMap<String,Object>();
 		c1.put("k", "alpha");
-		var c2 = new LinkedHashMap<String, Object>();
+		var c2 = new LinkedHashMap<String,Object>();
 		c2.put("k", "beta");
 		var stream = java.util.stream.Stream.of(c1, c2);
 		var proto = PrototextSerializer.DEFAULT.write(stream);
@@ -538,8 +538,8 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void j_mapWithMapValue() throws Exception {
 		// Map value inside a Map → writeMap: aType.isMap() branch (line 337/340 isMap=true)
-		var outer = new LinkedHashMap<String, Object>();
-		var inner = new LinkedHashMap<String, Object>();
+		var outer = new LinkedHashMap<String,Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("k1", "v1");
 		outer.put("nested", inner);
 		var proto = PrototextSerializer.DEFAULT.write(outer);
@@ -549,7 +549,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void j_mapWithCollectionValue() throws Exception {
 		// Collection value inside a Map → writeMap: aType.isCollection() branch
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("items", List.of("a", "b", "c"));
 		var proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
@@ -560,9 +560,9 @@ class PrototextSerializerSession_Test extends TestBase {
 		// Bean property with List<Map> → writeCollection: elementIsBeanOrMap=true, useListSyntaxForBeans=false (default)
 		// Exercises the else-if(nn(fieldName)) path in writeBeanMap for collection-of-maps
 		var root = new BeanWithBeanListProp();
-		var item1 = new LinkedHashMap<String, Object>();
+		var item1 = new LinkedHashMap<String,Object>();
 		item1.put("name", "alice");
-		var item2 = new LinkedHashMap<String, Object>();
+		var item2 = new LinkedHashMap<String,Object>();
 		item2.put("name", "bob");
 		root.setChildren(List.of(item1, item2));
 		var proto = PrototextSerializer.DEFAULT.write(root);
@@ -574,9 +574,9 @@ class PrototextSerializerSession_Test extends TestBase {
 		// Bean property with List<Map> and useListSyntaxForBeans=true → list syntax path
 		var s = PrototextSerializer.create().useListSyntaxForBeans(true).build();
 		var root = new BeanWithBeanListProp();
-		var item1 = new LinkedHashMap<String, Object>();
+		var item1 = new LinkedHashMap<String,Object>();
 		item1.put("name", "alice");
-		var item2 = new LinkedHashMap<String, Object>();
+		var item2 = new LinkedHashMap<String,Object>();
 		item2.put("name", "bob");
 		root.setChildren(List.of(item1, item2));
 		var proto = s.write(root);
@@ -587,9 +587,9 @@ class PrototextSerializerSession_Test extends TestBase {
 	@Test void j_collectionOfMaps_asProperty() throws Exception {
 		// Collection items that are Maps → writeCollectionItem: aType.isMap() branch (line 361)
 		var root = new BeanWithMapListProp();
-		var m1 = new LinkedHashMap<String, Object>();
+		var m1 = new LinkedHashMap<String,Object>();
 		m1.put("x", "1");
-		var m2 = new LinkedHashMap<String, Object>();
+		var m2 = new LinkedHashMap<String,Object>();
 		m2.put("x", "2");
 		root.setEntries(List.of(m1, m2));
 		var proto = PrototextSerializer.DEFAULT.write(root);
@@ -599,7 +599,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void j_mapWithBeanValue_writeMap() throws Exception {
 		// Map value that is a bean → writeMap: aType.isBean() branch (line 340 true)
-		var outer = new LinkedHashMap<String, Object>();
+		var outer = new LinkedHashMap<String,Object>();
 		outer.put("child", new ChildBean("eve"));
 		var proto = PrototextSerializer.DEFAULT.write(outer);
 		assertNotNull(proto);
@@ -703,9 +703,9 @@ class PrototextSerializerSession_Test extends TestBase {
 	}
 
 	public static class BeanWithListOfMaps {
-		private List<Map<String, Object>> items;
-		public List<Map<String, Object>> getItems() { return items; }
-		public void setItems(List<Map<String, Object>> v) { items = v; }
+		private List<Map<String,Object>> items;
+		public List<Map<String,Object>> getItems() { return items; }
+		public void setItems(List<Map<String,Object>> v) { items = v; }
 	}
 
 	public static class BeanWithListOfStrings {
@@ -721,9 +721,9 @@ class PrototextSerializerSession_Test extends TestBase {
 	}
 
 	public static class BeanWithMapArray {
-		private Map<String, Object>[] items;
-		public Map<String, Object>[] getItems() { return items; }
-		public void setItems(Map<String, Object>[] v) { items = v; }
+		private Map<String,Object>[] items;
+		public Map<String,Object>[] getItems() { return items; }
+		public void setItems(Map<String,Object>[] v) { items = v; }
 	}
 
 	public static class ChildBean {
@@ -741,9 +741,9 @@ class PrototextSerializerSession_Test extends TestBase {
 	}
 
 	public static class BeanWithMapListProp {
-		private List<Map<String, Object>> entries;
-		public List<Map<String, Object>> getEntries() { return entries; }
-		public void setEntries(List<Map<String, Object>> v) { entries = v; }
+		private List<Map<String,Object>> entries;
+		public List<Map<String,Object>> getEntries() { return entries; }
+		public void setEntries(List<Map<String,Object>> v) { entries = v; }
 	}
 
 	public static class BeanWithDateProp {

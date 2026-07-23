@@ -76,7 +76,7 @@ import jakarta.servlet.*;
 })
 public final class MockRestClient implements Closeable {
 
-	private static final Map<Class<?>, RestContext> restContextCache = new ConcurrentHashMap<>();
+	private static final Map<Class<?>,RestContext> restContextCache = new ConcurrentHashMap<>();
 
 	private final RestClient client;
 

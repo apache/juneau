@@ -167,7 +167,7 @@ public class HoconResolver {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The resolved string value.
 	 */
-	public HoconValue resolveConcatWithLookup(HoconValue.HoconConcat concat, Function<String, HoconValue> lookup) {
+	public HoconValue resolveConcatWithLookup(HoconValue.HoconConcat concat, Function<String,HoconValue> lookup) {
 		var sb = new StringBuilder();
 		for (var p : concat.getParts()) {
 			var resolved = resolveValueWithLookup(p, lookup);
@@ -177,7 +177,7 @@ public class HoconResolver {
 		return new HoconValue.HoconString(sb.toString());
 	}
 
-	private HoconValue resolveValueWithLookup(HoconValue val, Function<String, HoconValue> lookup) {
+	private HoconValue resolveValueWithLookup(HoconValue val, Function<String,HoconValue> lookup) {
 		if (val == null)
 			return null;
 		return switch (val.getType()) {
@@ -202,7 +202,7 @@ public class HoconResolver {
 	}
 
 	private HoconValue resolveSubstitutionWithLookup(HoconValue.HoconSubstitution sub, boolean optional,
-			Function<String, HoconValue> lookup) {
+			Function<String,HoconValue> lookup) {
 		var path = sub.getPath();
 		if (inProgress.contains(path))
 			throw rex("Circular substitution: %s", path);

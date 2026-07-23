@@ -177,7 +177,7 @@ class XmlParserSession_Test extends TestBase {
 	@Test void e01_intKeyMap() {
 		// Parse a Map<Integer,String> with encoded element names; convertAttrToType bridges to Integer.
 		var src = "<object><_x0031_>a</_x0031_><_x0032_>b</_x0032_></object>";
-		Map<Integer, String> m = P.read(src, HashMap.class, Integer.class, String.class);
+		Map<Integer,String> m = P.read(src, HashMap.class, Integer.class, String.class);
 		assertEquals("a", m.get(1));
 		assertEquals("b", m.get(2));
 	}

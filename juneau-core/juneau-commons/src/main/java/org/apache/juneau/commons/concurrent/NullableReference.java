@@ -162,7 +162,7 @@ public class NullableReference<V> extends AtomicReference<V> {
 	 * @param mapper A mapping function to apply to the value, if present. Must not be <jk>null</jk>.
 	 * @return An NullableReference describing the result of applying a mapping function to the value, if a value is present, otherwise an empty NullableReference.
 	 */
-	public <U> NullableReference<U> map(Function<? super V, ? extends U> mapper) {
+	public <U> NullableReference<U> map(Function<? super V,? extends U> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		V value = get();
 		return nn(value) ? NullableReference.of(mapper.apply(value)) : NullableReference.empty();
@@ -175,7 +175,7 @@ public class NullableReference<V> extends AtomicReference<V> {
 	 * @param mapper A mapping function to apply to the value, if present. Must not be <jk>null</jk>.
 	 * @return The result of applying an NullableReference-bearing mapping function to the value, if a value is present, otherwise an empty NullableReference.
 	 */
-	public <U> NullableReference<U> flatMap(Function<? super V, ? extends NullableReference<? extends U>> mapper) {
+	public <U> NullableReference<U> flatMap(Function<? super V,? extends NullableReference<? extends U>> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		V value = get();
 		if (nn(value)) {

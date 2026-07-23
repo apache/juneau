@@ -3576,7 +3576,7 @@ public class ClassInfo_Test extends TestBase {
 		@Inject
 		Set<TestService> serviceSet;
 		@Inject
-		Map<String, TestService> serviceMap;
+		Map<String,TestService> serviceMap;
 		@Inject
 		TestService[] serviceArray;
 		@Inject
@@ -3637,7 +3637,7 @@ public class ClassInfo_Test extends TestBase {
 		}
 
 		@Inject
-		void method6(Map<String, TestService> services) {
+		void method6(Map<String,TestService> services) {
 			method6Called = true;
 		}
 

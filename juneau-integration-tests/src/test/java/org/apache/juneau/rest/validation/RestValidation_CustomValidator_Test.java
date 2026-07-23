@@ -57,7 +57,7 @@ class RestValidation_CustomValidator_Test extends TestBase {
 		Class<? extends jakarta.validation.Payload>[] payload() default {};
 	}
 
-	public static class SkuValidator implements ConstraintValidator<Sku, String> {
+	public static class SkuValidator implements ConstraintValidator<Sku,String> {
 
 		@Override
 		public boolean isValid(String value, ConstraintValidatorContext context) {

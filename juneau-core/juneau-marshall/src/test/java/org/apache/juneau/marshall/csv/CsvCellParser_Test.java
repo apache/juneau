@@ -129,20 +129,20 @@ class CsvCellParser_Test extends TestBase {
 
 	@SuppressWarnings("unchecked")
 	@Test void d01_empty_object() throws ParseException {
-		var r = (Map<String, Object>) CsvCellParser.read("{}", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{}", null);
 		assertNotNull(r);
 		assertTrue(r.isEmpty());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test void d02_single_pair() throws ParseException {
-		var r = (Map<String, Object>) CsvCellParser.read("{a:1}", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{a:1}", null);
 		assertEquals(1L, r.get("a"));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test void d03_multiple_pairs() throws ParseException {
-		var r = (Map<String, Object>) CsvCellParser.read("{a:1;b:2;c:3}", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{a:1;b:2;c:3}", null);
 		assertEquals(1L, r.get("a"));
 		assertEquals(2L, r.get("b"));
 		assertEquals(3L, r.get("c"));
@@ -150,19 +150,19 @@ class CsvCellParser_Test extends TestBase {
 
 	@SuppressWarnings("unchecked")
 	@Test void d04_object_with_string_value() throws ParseException {
-		var r = (Map<String, Object>) CsvCellParser.read("{name:Alice}", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{name:Alice}", null);
 		assertEquals("Alice", r.get("name"));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test void d05_object_with_quoted_key() throws ParseException {
-		var r = (Map<String, Object>) CsvCellParser.read("{\"my key\":val}", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{\"my key\":val}", null);
 		assertEquals("val", r.get("my key"));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test void d06_object_with_null_value() throws ParseException {
-		var r = (Map<String, Object>) CsvCellParser.read("{a:null}", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{a:null}", null);
 		assertNull(r.get("a"));
 	}
 
@@ -176,7 +176,7 @@ class CsvCellParser_Test extends TestBase {
 
 	@SuppressWarnings("unchecked")
 	@Test void d09_nested_object() throws ParseException {
-		var r = (Map<String, Object>) CsvCellParser.read("{a:{b:1}}", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{a:{b:1}}", null);
 		assertInstanceOf(Map.class, r.get("a"));
 	}
 
@@ -239,7 +239,7 @@ class CsvCellParser_Test extends TestBase {
 
 	@SuppressWarnings("unchecked")
 	@Test void f01_object_with_spaces() throws ParseException {
-		var r = (Map<String, Object>) CsvCellParser.read("{ a : 1 ; b : 2 }", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{ a : 1 ; b : 2 }", null);
 		assertEquals(1L, r.get("a"));
 		assertEquals(2L, r.get("b"));
 	}
@@ -261,14 +261,14 @@ class CsvCellParser_Test extends TestBase {
 	@SuppressWarnings("unchecked")
 	@Test void h01_object_empty_value_before_semicolon() throws ParseException {
 		// In {a:;b:2}, the value of 'a' is parsed via readSimpleValue where peek() == ';'
-		var r = (Map<String, Object>) CsvCellParser.read("{a:;b:2}", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{a:;b:2}", null);
 		assertEquals("", r.get("a"));
 		assertEquals(2L, r.get("b"));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test void h02_object_empty_value_before_close() throws ParseException {
-		var r = (Map<String, Object>) CsvCellParser.read("{a:}", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{a:}", null);
 		assertEquals("", r.get("a"));
 	}
 
@@ -292,13 +292,13 @@ class CsvCellParser_Test extends TestBase {
 
 	@SuppressWarnings("unchecked")
 	@Test void i01_identifier_stops_at_colon() throws ParseException {
-		var r = (Map<String, Object>) CsvCellParser.read("{key:val}", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{key:val}", null);
 		assertEquals("val", r.get("key"));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test void i02_identifier_stops_at_semicolon() throws ParseException {
-		var r = (Map<String, Object>) CsvCellParser.read("{a:x;b:y}", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{a:x;b:y}", null);
 		assertEquals("x", r.get("a"));
 	}
 
@@ -313,7 +313,7 @@ class CsvCellParser_Test extends TestBase {
 	@SuppressWarnings("unchecked")
 	@Test void g02_empty_key_reads_to_empty_string() throws ParseException {
 		// parser reads empty identifier as empty string key
-		var r = (Map<String, Object>) CsvCellParser.read("{:val}", null);
+		var r = (Map<String,Object>) CsvCellParser.read("{:val}", null);
 		assertTrue(r.containsKey(""));
 		assertEquals("val", r.get(""));
 	}

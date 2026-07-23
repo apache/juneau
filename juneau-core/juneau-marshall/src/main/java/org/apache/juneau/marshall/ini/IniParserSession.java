@@ -127,8 +127,8 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return Map of section name to key-value map. Default section uses "".
 	 */
-	protected Map<String, Map<String, String>> readIniContent(Reader r) throws IOException {
-		var sections = new LinkedHashMap<String, Map<String, String>>();
+	protected Map<String,Map<String,String>> readIniContent(Reader r) throws IOException {
+		var sections = new LinkedHashMap<String,Map<String,String>>();
 		var current = sections.computeIfAbsent("", k -> new LinkedHashMap<>());
 		var br = r instanceof BufferedReader r2 ? r2 : new BufferedReader(r);
 		String line;
@@ -190,10 +190,10 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 		return new String[] { line.substring(0, idx), line.substring(idx + 1) };
 	}
 
-	private void populateBean(BeanMap<?> bm, Map<String, Map<String, String>> sections, String sectionPath) throws ParseException, ExecutableException {
+	private void populateBean(BeanMap<?> bm, Map<String,Map<String,String>> sections, String sectionPath) throws ParseException, ExecutableException {
 		var defaultSection = sections.get(sectionPath);
 		if (defaultSection != null) {
-			for (Entry<String, String> e : defaultSection.entrySet()) {
+			for (Entry<String,String> e : defaultSection.entrySet()) {
 				var key = e.getKey();
 				var rawValue = e.getValue();
 				var pMeta = bm.getMeta().getProperties().get(key);
@@ -232,19 +232,19 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 				var valueType = cMeta.getValueType();
 				if (valueType == null)
 					valueType = object();
-				var map = new LinkedHashMap<String, Object>();
-				for (Entry<String, String> e : sub.entrySet())
+				var map = new LinkedHashMap<String,Object>();
+				for (Entry<String,String> e : sub.entrySet())
 					map.put(e.getKey(), readValue(e.getValue(), valueType));
 				bm.put(childName, convertMapToTarget(map, cMeta));
 			}
 		}
 	}
 
-	private Map<String, Object> buildMapFromSections(Map<String, Map<String, String>> sections, String sectionPath) throws ParseException, ExecutableException {
-		var result = new LinkedHashMap<String, Object>();
+	private Map<String,Object> buildMapFromSections(Map<String,Map<String,String>> sections, String sectionPath) throws ParseException, ExecutableException {
+		var result = new LinkedHashMap<String,Object>();
 		var defaultSection = sections.get(sectionPath);
 		if (defaultSection != null) {
-			for (Entry<String, String> e : defaultSection.entrySet())
+			for (Entry<String,String> e : defaultSection.entrySet())
 				result.put(e.getKey(), readValue(e.getValue(), object()));
 		}
 		for (var entry : sections.entrySet()) {
@@ -265,8 +265,8 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 			if (hasNested) {
 				result.put(childName, buildMapFromSections(sections, childPath));
 			} else if (childSection != null) {
-				var map = new LinkedHashMap<String, Object>();
-				for (Entry<String, String> e : childSection.entrySet())
+				var map = new LinkedHashMap<String,Object>();
+				for (Entry<String,String> e : childSection.entrySet())
 					map.put(e.getKey(), readValue(e.getValue(), object()));
 				result.put(childName, map);
 			}
@@ -336,7 +336,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 		return json5Parser.get();
 	}
 
-	private static Object convertMapToTarget(Map<String, Object> map, ClassMeta<?> type) throws ParseException, ExecutableException {
+	private static Object convertMapToTarget(Map<String,Object> map, ClassMeta<?> type) throws ParseException, ExecutableException {
 		if (JsonMap.class.isAssignableFrom(type.inner()))
 			return new JsonMap(map);
 		return map;

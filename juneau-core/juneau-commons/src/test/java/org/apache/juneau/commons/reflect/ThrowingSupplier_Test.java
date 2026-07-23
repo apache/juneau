@@ -226,8 +226,8 @@ class ThrowingSupplier_Test extends TestBase {
 		@Test
 		void d04_successfulComplexOperation() {
 			// Simulate successful complex operation
-			ThrowingSupplier<Map<String, Object>> complexOperation = () -> {
-				var result = new HashMap<String, Object>();
+			ThrowingSupplier<Map<String,Object>> complexOperation = () -> {
+				var result = new HashMap<String,Object>();
 				result.put("status", "success");
 				result.put("data", l("item1", "item2", "item3"));
 				result.put("timestamp", System.currentTimeMillis());
@@ -394,8 +394,8 @@ class ThrowingSupplier_Test extends TestBase {
 
 		@Test
 		void g04_mapTypeSupplier() throws Exception {
-			ThrowingSupplier<Map<String, Integer>> mapSupplier = () -> {
-				var map = new HashMap<String, Integer>();
+			ThrowingSupplier<Map<String,Integer>> mapSupplier = () -> {
+				var map = new HashMap<String,Integer>();
 				map.put("key1", 1);
 				map.put("key2", 2);
 				return map;

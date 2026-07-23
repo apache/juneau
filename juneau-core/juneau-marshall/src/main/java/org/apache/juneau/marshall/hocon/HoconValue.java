@@ -68,7 +68,7 @@ public abstract sealed class HoconValue {
 	 * HOCON object (maps to Java bean or Map).
 	 */
 	public static final class HoconObject extends HoconValue {
-		private final LinkedHashMap<String, HoconValue> members = new LinkedHashMap<>();
+		private final LinkedHashMap<String,HoconValue> members = new LinkedHashMap<>();
 
 		@Override
 		public Type getType() {
@@ -83,7 +83,7 @@ public abstract sealed class HoconValue {
 		@SuppressWarnings({
 			"java:S1319" // LinkedHashMap return type intentional; HOCON preserves insertion order of object members
 		})
-		public LinkedHashMap<String, HoconValue> getMembers() {
+		public LinkedHashMap<String,HoconValue> getMembers() {
 			return members;
 		}
 

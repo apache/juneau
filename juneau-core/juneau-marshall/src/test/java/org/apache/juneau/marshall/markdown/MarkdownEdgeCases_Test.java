@@ -45,7 +45,7 @@ class MarkdownEdgeCases_Test {
 
 	@Test void f02_multiLineStrings() {
 		var value = "line1\nline2\nline3";
-		var bean = new LinkedHashMap<String, String>();
+		var bean = new LinkedHashMap<String,String>();
 		bean.put("text", value);
 		var md = toMarkdown(bean);
 		// Multi-line strings are wrapped in JSON5 backtick syntax for round-trip correctness
@@ -103,7 +103,7 @@ class MarkdownEdgeCases_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void f07_veryWideTable() {
-		var props = new LinkedHashMap<String, Integer>();
+		var props = new LinkedHashMap<String,Integer>();
 		for (var i = 0; i < 20; i++)
 			props.put("col" + i, i);
 		var list = List.of(props);
@@ -165,8 +165,8 @@ class MarkdownEdgeCases_Test {
 	@Test void f11_deepNesting() {
 		// Deeply nested structure - Maps render nested maps as inline JSON5; beans get sub-headings
 		var s = MarkdownDocSerializer.create().title("L1").build();
-		var nested = Map.<String, Object>of("x", "deep");
-		var l1 = new LinkedHashMap<String, Object>();
+		var nested = Map.<String,Object>of("x", "deep");
+		var l1 = new LinkedHashMap<String,Object>();
 		l1.put("nested", nested);
 		var md = s.write(l1);
 		assertTrue(md.contains("deep"), "Expected deep value: " + md);

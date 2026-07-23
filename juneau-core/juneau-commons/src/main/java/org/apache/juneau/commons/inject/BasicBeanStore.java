@@ -102,11 +102,11 @@ public class BasicBeanStore implements WritableBeanStore {
 	private static final String ARG_beanType = "beanType";
 	private static final String ARG_onClassOrObject = "onClassOrObject";
 
-	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, Supplier<?>>> entries;
-	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, Supplier<?>>> defaults;
-	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, BeanSourceMeta>> entryMetadata;
-	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, BeanSourceMeta>> defaultMetadata;
-	private final ConcurrentHashMap<Class<?>, Class<?>> typeBindings;
+	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,Supplier<?>>> entries;
+	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,Supplier<?>>> defaults;
+	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,BeanSourceMeta>> entryMetadata;
+	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,BeanSourceMeta>> defaultMetadata;
+	private final ConcurrentHashMap<Class<?>,Class<?>> typeBindings;
 	private final List<Object> resolvedBeans;
 	private final Set<Object> resolvedIdentities;
 	private final Set<Class<?>> registeredConfigurations;

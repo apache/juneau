@@ -51,5 +51,5 @@ public interface McpPromptHandler {
 	 * @param ctx Per-request bean store. Never {@code null}.
 	 * @return The rendered prompt. Never {@code null}.
 	 */
-	GetPromptResult get(Map<String, Object> arguments, BeanStore ctx);
+	GetPromptResult get(Map<String,Object> arguments, BeanStore ctx);
 }

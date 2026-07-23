@@ -38,7 +38,7 @@ public class FunctionalPropertyStore implements PropertyStore {
 	private static final String ARG_clearer = "clearer";
 
 	private final UnaryOperator<String> reader;
-	private final BiConsumer<String, String> writer;
+	private final BiConsumer<String,String> writer;
 	private final Consumer<String> unsetter;
 	private final Snippet clearer;
 
@@ -52,7 +52,7 @@ public class FunctionalPropertyStore implements PropertyStore {
 	 */
 	public FunctionalPropertyStore(
 		UnaryOperator<String> reader,
-		BiConsumer<String, String> writer,
+		BiConsumer<String,String> writer,
 		Consumer<String> unsetter,
 		Snippet clearer
 	) {
@@ -98,7 +98,7 @@ public class FunctionalPropertyStore implements PropertyStore {
 	 */
 	public static FunctionalPropertyStore of(
 		UnaryOperator<String> reader,
-		BiConsumer<String, String> writer,
+		BiConsumer<String,String> writer,
 		Consumer<String> unsetter,
 		Snippet clearer
 	) {

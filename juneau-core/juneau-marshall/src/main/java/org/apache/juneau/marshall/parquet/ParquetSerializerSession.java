@@ -154,7 +154,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 			// Each collection element becomes one Parquet row. Avoids list column format issues.
 			schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth, ctx.nativeLogicalTypes).buildSchema(elementType, first);
 		} else {
-			var mapFirst = (Map<?, ?>) first;
+			var mapFirst = (Map<?,?>) first;
 			if (!(((Map<?,?>) o).keySet().iterator().next() instanceof String)) {
 				schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth, ctx.nativeLogicalTypes)
 					.buildSchemaForKeyValuePairs(mapFirst.get("key"), mapFirst.get("value"));
@@ -245,7 +245,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		}
 		var sType = getExpectedRootType(o);
 		if (sType.isMap()) {
-			var m = (Map<?, ?>) o;
+			var m = (Map<?,?>) o;
 			if (m.isEmpty())
 				return List.of();
 			var firstKey = m.keySet().iterator().next();
@@ -262,9 +262,9 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 				}
 				return List.of(swappedMap);
 			}
-			var result = new ArrayList<Map<String, Object>>(m.size());
+			var result = new ArrayList<Map<String,Object>>(m.size());
 			for (var e : m.entrySet()) {
-				var row = new LinkedHashMap<String, Object>();
+				var row = new LinkedHashMap<String,Object>();
 				row.put("key", e.getKey());
 				row.put("value", e.getValue());
 				result.add(row);
@@ -453,7 +453,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	 */
 	private DefValue computeDefValue(Object row, String path, int maxDef) throws SerializeException {
 		var parts = path.split("\\.");
-		var seen = Collections.newSetFromMap(new IdentityHashMap<Object, Boolean>());
+		var seen = Collections.newSetFromMap(new IdentityHashMap<Object,Boolean>());
 		seen.add(row);
 		seen.add(((BeanMap<?>) row).getBean());
 		Object current = row;
@@ -607,7 +607,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		int maxDef = maxDefLevelForListPath(path);
 		int depth = listDepth(path);
 		for (var row : rows) {
-			var seen = Collections.newSetFromMap(new IdentityHashMap<Object, Boolean>());
+			var seen = Collections.newSetFromMap(new IdentityHashMap<Object,Boolean>());
 			flattenListValues(row, path, 0, true, 0, depth, maxDef, result, seen);
 		}
 		return result;
@@ -638,7 +638,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		return result;
 	}
 
-	private Map<?, ?> getMapAtPath(Object row, String mapProp) throws SerializeException {
+	private Map<?,?> getMapAtPath(Object row, String mapProp) throws SerializeException {
 		var obj = getValueByPath(row, mapProp);
 		if (obj == null)
 			return Collections.emptyMap();
@@ -750,7 +750,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 
 	private Object getValueByPath(Object row, String path) throws SerializeException {
 		var parts = path.split("\\.");
-		var seen = Collections.newSetFromMap(new IdentityHashMap<Object, Boolean>());
+		var seen = Collections.newSetFromMap(new IdentityHashMap<Object,Boolean>());
 		seen.add(row);
 		if (row instanceof BeanMap<?> row2)
 			seen.add(row2.getBean());

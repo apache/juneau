@@ -102,7 +102,7 @@ public class Setting<T> extends Memoizer<T> {
 	 * @return A Setting describing the result of applying a mapping function to the value of this Setting, if a value is present, otherwise an empty Setting.
 	 */
 	@Override
-	public <U> Setting<U> map(Function<? super T, ? extends U> mapper) {
+	public <U> Setting<U> map(Function<? super T,? extends U> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		return new Setting<>(settings, () -> {
 			T value = get();

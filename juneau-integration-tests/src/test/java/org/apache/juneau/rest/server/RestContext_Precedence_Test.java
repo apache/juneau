@@ -78,7 +78,7 @@ class RestContext_Precedence_Test extends TestBase {
 	})
 	public static class SpringLikeBeanStore extends BasicBeanStore {
 
-		private final Map<Class<?>, Object> springBindings = new HashMap<>();
+		private final Map<Class<?>,Object> springBindings = new HashMap<>();
 
 		public SpringLikeBeanStore(BeanStore parent) {
 			super(parent);

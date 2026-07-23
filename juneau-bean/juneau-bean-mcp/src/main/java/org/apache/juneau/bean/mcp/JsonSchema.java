@@ -31,13 +31,13 @@ import org.apache.juneau.marshall.*;
 public class JsonSchema {
 
 	private String type;
-	private Map<String, JsonSchema> properties;
+	private Map<String,JsonSchema> properties;
 	private List<String> required;
 	private Object additionalProperties;
 	private JsonSchema items;
 
 	@BeanProp(name="$defs")
-	private Map<String, JsonSchema> defs;
+	private Map<String,JsonSchema> defs;
 
 	/**
 	 * Schema {@code type} keyword (for example {@code object}).
@@ -64,7 +64,7 @@ public class JsonSchema {
 	 *
 	 * @return The properties map, or {@code null} if not set.
 	 */
-	public Map<String, JsonSchema> getProperties() {
+	public Map<String,JsonSchema> getProperties() {
 		return u(properties);
 	}
 
@@ -74,7 +74,7 @@ public class JsonSchema {
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public JsonSchema setProperties(Map<String, JsonSchema> value) {
+	public JsonSchema setProperties(Map<String,JsonSchema> value) {
 		properties = value;
 		return this;
 	}
@@ -195,7 +195,7 @@ public class JsonSchema {
 	 *
 	 * @return The defs map, or {@code null} if not set.
 	 */
-	public Map<String, JsonSchema> getDefs() {
+	public Map<String,JsonSchema> getDefs() {
 		return u(defs);
 	}
 
@@ -205,7 +205,7 @@ public class JsonSchema {
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public JsonSchema setDefs(Map<String, JsonSchema> value) {
+	public JsonSchema setDefs(Map<String,JsonSchema> value) {
 		defs = value;
 		return this;
 	}

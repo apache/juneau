@@ -27,7 +27,7 @@ class ThrowingFunction3_Test extends TestBase {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
-		var function = (ThrowingFunction3<String, Integer, Boolean, String>)(a, b, c) -> {
+		var function = (ThrowingFunction3<String,Integer,Boolean,String>)(a, b, c) -> {
 			return a + "-" + b + "-" + (c ? "Y" : "N");
 		};
 
@@ -36,7 +36,7 @@ class ThrowingFunction3_Test extends TestBase {
 	}
 
 	@Test void a02_returnsNull() {
-		ThrowingFunction3<String, Integer, Boolean, String> function = (a, b, c) -> null;
+		ThrowingFunction3<String,Integer,Boolean,String> function = (a, b, c) -> null;
 
 		assertNull(function.apply("test", 42, true));
 	}
@@ -45,7 +45,7 @@ class ThrowingFunction3_Test extends TestBase {
 	// Exception handling tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void b01_throwsCheckedException() {
-		var function = (ThrowingFunction3<String, Integer, Boolean, String>)(a, b, c) -> {
+		var function = (ThrowingFunction3<String,Integer,Boolean,String>)(a, b, c) -> {
 			throw new Exception("Test exception");
 		};
 
@@ -58,7 +58,7 @@ class ThrowingFunction3_Test extends TestBase {
 	}
 
 	@Test void b02_throwsRuntimeException() {
-		var function = (ThrowingFunction3<String, Integer, Boolean, String>)(a, b, c) -> {
+		var function = (ThrowingFunction3<String,Integer,Boolean,String>)(a, b, c) -> {
 			throw new RuntimeException("Test runtime exception");
 		};
 
@@ -74,21 +74,21 @@ class ThrowingFunction3_Test extends TestBase {
 	// Functional interface tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void c01_usedAsFunction3() {
-		var function = (Function3<String, Integer, Boolean, String>)(a, b, c) -> a + "-" + b + "-" + c;
+		var function = (Function3<String,Integer,Boolean,String>)(a, b, c) -> a + "-" + b + "-" + c;
 
 		assertEquals("test-42-true", function.apply("test", 42, true));
 	}
 
 	@Test void c02_lambdaExpression() {
-		ThrowingFunction3<Integer, Integer, Integer, Integer> function = (a, b, c) -> a + b + c;
+		ThrowingFunction3<Integer,Integer,Integer,Integer> function = (a, b, c) -> a + b + c;
 
 		assertEquals(6, function.apply(1, 2, 3));
 		assertEquals(0, function.apply(0, 0, 0));
 	}
 
 	@Test void c03_andThen() {
-		var add = (ThrowingFunction3<Integer, Integer, Integer, Integer>)(a, b, c) -> a + b + c;
-		var toString = (java.util.function.Function<Integer, String>)Object::toString;
+		var add = (ThrowingFunction3<Integer,Integer,Integer,Integer>)(a, b, c) -> a + b + c;
+		var toString = (java.util.function.Function<Integer,String>)Object::toString;
 
 		var composed = add.andThen(toString);
 		assertEquals("6", composed.apply(1, 2, 3));

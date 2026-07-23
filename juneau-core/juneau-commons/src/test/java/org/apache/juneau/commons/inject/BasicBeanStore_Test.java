@@ -1247,7 +1247,7 @@ class BasicBeanStore_Test extends TestBase {
 			@Override public boolean hasBean(Class<?> t, String n) { return false; }
 			@Override public <T> Optional<T> getBean(Class<T> t) { return oe(); }
 			@Override public <T> Optional<T> getBean(Class<T> t, String n) { return oe(); }
-			@Override public <T> Map<String, T> getBeansOfType(Class<T> t) { return Map.of(); }
+			@Override public <T> Map<String,T> getBeansOfType(Class<T> t) { return Map.of(); }
 		};
 		var store = new BasicBeanStore(null, overriding);
 		var s = store.toString();
@@ -1280,7 +1280,7 @@ class BasicBeanStore_Test extends TestBase {
 		@Override public boolean hasBean(Class<?> t, String n) { return delegate.hasBean(t, n); }
 		@Override public <T> Optional<T> getBean(Class<T> t) { return delegate.getBean(t); }
 		@Override public <T> Optional<T> getBean(Class<T> t, String n) { return delegate.getBean(t, n); }
-		@Override public <T> Map<String, T> getBeansOfType(Class<T> t) { return delegate.getBeansOfType(t); }
+		@Override public <T> Map<String,T> getBeansOfType(Class<T> t) { return delegate.getBeansOfType(t); }
 		@Override public WritableBeanStore registerConfiguration(Class<?> c) { return delegate.registerConfiguration(c); }
 		@Override public Snapshot pushOverlay(BeanStore overlay) { return delegate.pushOverlay(overlay); }
 		@Override public void popOverlay(Snapshot snapshot) { delegate.popOverlay(snapshot); }
@@ -1436,7 +1436,7 @@ class BasicBeanStore_Test extends TestBase {
 		@Override public boolean hasBean(Class<?> t, String n) { return delegate.hasBean(t, n); }
 		@Override public <T> Optional<T> getBean(Class<T> t) { return delegate.getBean(t); }
 		@Override public <T> Optional<T> getBean(Class<T> t, String n) { return delegate.getBean(t, n); }
-		@Override public <T> Map<String, T> getBeansOfType(Class<T> t) { return delegate.getBeansOfType(t); }
+		@Override public <T> Map<String,T> getBeansOfType(Class<T> t) { return delegate.getBeansOfType(t); }
 	}
 
 	@Test

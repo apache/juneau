@@ -374,7 +374,7 @@ class SimpleMap_Test extends TestBase {
 		Object[] values = { "value1", "value2" };
 		SimpleMap<String,Object> map = new SimpleMap<>(keys, values);
 
-		var regularMap = new LinkedHashMap<String, Object>();
+		var regularMap = new LinkedHashMap<String,Object>();
 		regularMap.put("key1", "value1");
 		regularMap.put("key2", "value2");
 
@@ -423,7 +423,7 @@ class SimpleMap_Test extends TestBase {
 		Object[] values = { "value1", "value2" };
 		SimpleMap<String,Object> map = new SimpleMap<>(keys, values);
 
-		var regularMap = new LinkedHashMap<String, Object>();
+		var regularMap = new LinkedHashMap<String,Object>();
 		regularMap.put("key1", "value1");
 		regularMap.put("key2", "value2");
 

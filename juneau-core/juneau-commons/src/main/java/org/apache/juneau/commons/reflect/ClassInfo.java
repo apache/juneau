@@ -207,7 +207,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	private final Supplier<List<AnnotationInfo<? extends Annotation>>> annotationInfos;  // All annotations on this class and parent classes/interfaces in child-to-parent order.
 	private final Supplier<List<RecordComponent>> recordComponents;  // All record components if this is a record class (Java 14+).
 	private final Supplier<List<Type>> genericInterfaces;  // All generic interface types (e.g., List<String> implements Comparable<List<String>>).
-	private final Supplier<List<TypeVariable<?>>> typeParameters;  // All type parameters declared on this class (e.g., <T, U> in class Foo<T, U>).
+	private final Supplier<List<TypeVariable<?>>> typeParameters;  // All type parameters declared on this class (e.g., <T,U> in class Foo<T,U>).
 	private final Supplier<List<AnnotatedType>> annotatedInterfaces;  // All annotated interface types with their annotations.
 	private final Supplier<List<Object>> signers;  // All signers of this class (for signed JARs).
 	private final Supplier<List<MethodInfo>> publicMethods;  // All public methods on this class and inherited, excluding Object methods.

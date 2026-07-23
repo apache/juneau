@@ -99,7 +99,7 @@ class Swapper_Test extends TestBase {
 		@Test
 		void b01_andThenComposition() {
 			Swapper<String> base = (converter, str) -> str.toLowerCase();
-			Function<Object, String> postProcessor = obj -> "[" + obj.toString() + "]";
+			Function<Object,String> postProcessor = obj -> "[" + obj.toString() + "]";
 
 			var composed = base.andThen(postProcessor);
 

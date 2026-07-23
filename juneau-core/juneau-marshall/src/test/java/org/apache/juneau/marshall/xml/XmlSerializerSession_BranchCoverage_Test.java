@@ -68,7 +68,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 
 	/** Map serializes to XML and round-trips via JsonMap. */
 	@Test void a03_map() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("k1", "v1");
 		m.put("k2", 42);
 		var xml = SER.write(m);
@@ -124,7 +124,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	/** trimStrings=true strips whitespace around string values during serialization. */
 	@Test void a08_trimStrings() {
 		var s = XmlSerializer.create().trimStrings().build();
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("key", "  padded  ");
 		var xml = s.write(m);
 		assertNotNull(xml);

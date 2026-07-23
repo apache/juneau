@@ -131,8 +131,8 @@ public class HoconSerializer extends WriterSerializer implements HoconMetaProvid
 
 	private static final String ARG_copyFrom = "copyFrom";
 
-	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>, HoconClassMeta> hoconClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
-	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta, HoconBeanPropertyMeta> hoconBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,HoconClassMeta> hoconClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,HoconBeanPropertyMeta> hoconBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/** Use = (not :) for key-value separator. */
 	protected final boolean useEqualsSign;
@@ -157,7 +157,7 @@ public class HoconSerializer extends WriterSerializer implements HoconMetaProvid
 	 */
 	public static class Builder extends WriterSerializer.Builder<Builder> {
 
-		private static final Cache<HashKey, HoconSerializer> CACHE = Cache.of(HashKey.class, HoconSerializer.class).build();
+		private static final Cache<HashKey,HoconSerializer> CACHE = Cache.of(HashKey.class, HoconSerializer.class).build();
 
 		private boolean useEqualsSign = true;
 		private boolean useUnquotedStrings = true;
@@ -357,7 +357,7 @@ public class HoconSerializer extends WriterSerializer implements HoconMetaProvid
 	}
 
 	@Override
-	protected FluentMap<String, Object> properties() {
+	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a("useEqualsSign", useEqualsSign)
 			.a("useUnquotedStrings", useUnquotedStrings)

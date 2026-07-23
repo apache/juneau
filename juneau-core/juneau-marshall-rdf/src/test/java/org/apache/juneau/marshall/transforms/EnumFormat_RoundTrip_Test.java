@@ -195,7 +195,7 @@ class EnumFormat_RoundTrip_Test extends TestBase {
 	//====================================================================================================
 
 	public static class A04Bean {
-		public Map<TestEnum, String> mapKey;
+		public Map<TestEnum,String> mapKey;
 	}
 
 	@ParameterizedTest(name = "{0} | {1}")

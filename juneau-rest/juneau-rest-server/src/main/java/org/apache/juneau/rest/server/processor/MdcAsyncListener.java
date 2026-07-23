@@ -174,11 +174,11 @@ public final class MdcAsyncListener {
 		"unchecked", // Type erasure on reflective/generic cast; element type is verified at call site
 		"java:S1168" // null is a meaningful lazy-skip sentinel: wrap() treats null as "no MDC to propagate"; an empty map would force unnecessary MDC installation.
 	})
-	public static Map<String, String> snapshot() {
+	public static Map<String,String> snapshot() {
 		if (!AVAILABLE)
 			return null;
 		try {
-			Map<String, String> map = (Map<String, String>) GET_COPY_OF_CONTEXT_MAP.invoke(null);
+			Map<String,String> map = (Map<String,String>) GET_COPY_OF_CONTEXT_MAP.invoke(null);
 			// Enrich the snapshot with the active OTel trace/span id (under the conventional OTel
 			// appender keys) so log correlation survives the async-completion hop even when the
 			// completion thread has lost the OTel context. Only when an OTel span is actually active.
@@ -194,7 +194,7 @@ public final class MdcAsyncListener {
 		"java:S3011", // Reflective access to the OTel trace API — intentional; OpenTelemetry is not a compile dep.
 		"java:S1168"  // null preserves the lazy-skip contract: a null map with no active trace must stay null (no MDC to propagate).
 	})
-	private static Map<String, String> enrichWithTraceContext(Map<String, String> map) {
+	private static Map<String,String> enrichWithTraceContext(Map<String,String> map) {
 		if (!OTEL_AVAILABLE)
 			return map;
 		try {
@@ -204,7 +204,7 @@ public final class MdcAsyncListener {
 			Object ctx = SPAN_GET_SPAN_CONTEXT.invoke(span);
 			if (ctx == null || ! ((Boolean) CTX_IS_VALID.invoke(ctx)).booleanValue())
 				return map;
-			var out = (map == null) ? new HashMap<String, String>(4) : new HashMap<>(map);
+			var out = (map == null) ? new HashMap<String,String>(4) : new HashMap<>(map);
 			out.put(MDC_TRACE_ID, String.valueOf(CTX_GET_TRACE_ID.invoke(ctx)));
 			out.put(MDC_SPAN_ID, String.valueOf(CTX_GET_SPAN_ID.invoke(ctx)));
 			return out;
@@ -237,7 +237,7 @@ public final class MdcAsyncListener {
 	 * @param requestMdc The MDC snapshot taken on the dispatch thread (from {@link #snapshot()}), or {@code null}.
 	 * @return A wrapped callback, or {@code action} itself when wrapping is not needed.
 	 */
-	public static <T> BiConsumer<T, Throwable> wrap(BiConsumer<T, Throwable> action, Map<String, String> requestMdc) {
+	public static <T> BiConsumer<T,Throwable> wrap(BiConsumer<T,Throwable> action, Map<String,String> requestMdc) {
 		if (!AVAILABLE || requestMdc == null)
 			return action;
 
@@ -259,7 +259,7 @@ public final class MdcAsyncListener {
 	@SuppressWarnings({
 		"java:S3011" // Reflective access to MDC methods — intentional; SLF4J is not a compile dep.
 	})
-	static void setContextMap(Map<String, String> map) {
+	static void setContextMap(Map<String,String> map) {
 		try {
 			SET_CONTEXT_MAP.invoke(null, map);
 		} catch (Exception e) {

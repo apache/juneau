@@ -254,7 +254,7 @@ public class VersionMixin extends RestMixin {
 	 * {@code roleGuard}). The worker config is forwarded once into {@link VersionProvider.Builder} and the REST
 	 * config is inherited once from {@link AbstractRestBuilder} &mdash; no triplication across the Version flavors.
 	 */
-	public static class Builder extends RestMixin.Builder<VersionMixin, Builder> {
+	public static class Builder extends RestMixin.Builder<VersionMixin,Builder> {
 
 		private final VersionProvider.Builder worker;
 

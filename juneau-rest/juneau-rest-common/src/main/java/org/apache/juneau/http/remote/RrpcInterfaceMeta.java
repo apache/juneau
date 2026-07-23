@@ -48,7 +48,7 @@ import org.apache.juneau.rest.common.utils.*;
  */
 public final class RrpcInterfaceMeta {
 
-	private static final Map<Class<?>, RrpcInterfaceMeta> CACHE = new java.util.concurrent.ConcurrentHashMap<>();
+	private static final Map<Class<?>,RrpcInterfaceMeta> CACHE = new java.util.concurrent.ConcurrentHashMap<>();
 
 	private final Class<?> iface;
 	private final String basePath;
@@ -68,8 +68,8 @@ public final class RrpcInterfaceMeta {
 	private final int retries;
 	private final boolean retryNonIdempotent;
 	private final boolean throwOnError;
-	private final Map<Method, RrpcInterfaceMethodMeta> methodMetas;
-	private final Map<String, RrpcInterfaceMethodMeta> methodMetasByPath;
+	private final Map<Method,RrpcInterfaceMethodMeta> methodMetas;
+	private final Map<String,RrpcInterfaceMethodMeta> methodMetasByPath;
 
 	private RrpcInterfaceMeta(Class<?> iface) {
 		this(iface, false);
@@ -117,7 +117,7 @@ public final class RrpcInterfaceMeta {
 		this.retryNonIdempotent = buildRetryNonIdempotent(remote);
 		this.throwOnError = buildThrowOnError(remote);
 
-		var metas = new LinkedHashMap<Method, RrpcInterfaceMethodMeta>();
+		var metas = new LinkedHashMap<Method,RrpcInterfaceMethodMeta>();
 		for (var m : iface.getMethods()) {
 			var opt = buildMethodMeta(m);
 			if (opt.isPresent()) {
@@ -128,7 +128,7 @@ public final class RrpcInterfaceMeta {
 		}
 		this.methodMetas = Collections.unmodifiableMap(metas);
 
-		var byPath = new LinkedHashMap<String, RrpcInterfaceMethodMeta>();
+		var byPath = new LinkedHashMap<String,RrpcInterfaceMethodMeta>();
 		for (var v : metas.values())
 			byPath.put(v.getPath(), v);
 		this.methodMetasByPath = Collections.unmodifiableMap(byPath);
@@ -304,7 +304,7 @@ public final class RrpcInterfaceMeta {
 	 *
 	 * @return An unmodifiable map from path to {@link RrpcInterfaceMethodMeta}. Never <jk>null</jk>.
 	 */
-	public Map<String, RrpcInterfaceMethodMeta> getMethodsByPath() {
+	public Map<String,RrpcInterfaceMethodMeta> getMethodsByPath() {
 		return methodMetasByPath;
 	}
 
@@ -476,7 +476,7 @@ public final class RrpcInterfaceMeta {
 	 *
 	 * @return An unmodifiable map from {@link Method} to {@link RrpcInterfaceMethodMeta}. Never <jk>null</jk>.
 	 */
-	public Map<Method, RrpcInterfaceMethodMeta> getMethodMetas() {
+	public Map<Method,RrpcInterfaceMethodMeta> getMethodMetas() {
 		return methodMetas;
 	}
 

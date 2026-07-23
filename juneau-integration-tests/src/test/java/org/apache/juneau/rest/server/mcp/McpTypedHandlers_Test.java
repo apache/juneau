@@ -53,7 +53,7 @@ class McpTypedHandlers_Test {
 
 	@Test
 	void typedTool_argsBound_andResultWrappedAsText() {
-		var typed = new McpTypedToolHandler<EchoArgs, EchoResult>() {
+		var typed = new McpTypedToolHandler<EchoArgs,EchoResult>() {
 			@Override
 			public Tool descriptor() {
 				return new Tool().setName("echo");
@@ -86,7 +86,7 @@ class McpTypedHandlers_Test {
 	@Test
 	void typedTool_returningCallToolResult_passesThrough() {
 		var ctr = new CallToolResult().setContent(List.of(new TextContent().setText("direct")));
-		var typed = new McpTypedToolHandler<EchoArgs, CallToolResult>() {
+		var typed = new McpTypedToolHandler<EchoArgs,CallToolResult>() {
 			@Override
 			public Tool descriptor() {
 				return new Tool().setName("d");
@@ -114,7 +114,7 @@ class McpTypedHandlers_Test {
 
 	@Test
 	void typedTool_returningString_wrapped() {
-		var typed = new McpTypedToolHandler<EchoArgs, String>() {
+		var typed = new McpTypedToolHandler<EchoArgs,String>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("s"); }
 			@Override
@@ -132,7 +132,7 @@ class McpTypedHandlers_Test {
 
 	@Test
 	void typedTool_nullResult_wrappedAsEmpty() {
-		var typed = new McpTypedToolHandler<EchoArgs, EchoResult>() {
+		var typed = new McpTypedToolHandler<EchoArgs,EchoResult>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("n"); }
 			@Override
@@ -150,7 +150,7 @@ class McpTypedHandlers_Test {
 
 	@Test
 	void typedTool_nullArgs_passNull() {
-		var typed = new McpTypedToolHandler<EchoArgs, String>() {
+		var typed = new McpTypedToolHandler<EchoArgs,String>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("z"); }
 			@Override
@@ -170,7 +170,7 @@ class McpTypedHandlers_Test {
 
 	@Test
 	void typedTool_argBindingFailure_invalidParams() {
-		var typed = new McpTypedToolHandler<EchoArgs, String>() {
+		var typed = new McpTypedToolHandler<EchoArgs,String>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("x"); }
 			@Override
@@ -216,7 +216,7 @@ class McpTypedHandlers_Test {
 
 	@Test
 	void adaptTool_nullArgumentsMap_propagatesNull() {
-		var typed = new McpTypedToolHandler<EchoArgs, String>() {
+		var typed = new McpTypedToolHandler<EchoArgs,String>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("z"); }
 			@Override
@@ -250,7 +250,7 @@ class McpTypedHandlers_Test {
 
 	@Test
 	void typedTool_unserializableResult_internalError() {
-		var typed = new McpTypedToolHandler<EchoArgs, Unserializable>() {
+		var typed = new McpTypedToolHandler<EchoArgs,Unserializable>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("u"); }
 			@Override

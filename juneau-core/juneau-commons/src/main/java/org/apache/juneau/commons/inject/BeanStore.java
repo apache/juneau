@@ -97,7 +97,7 @@ public interface BeanStore {
 	 * @param beanType The bean type.
 	 * @return A map of bean names to bean instances.  Never <jk>null</jk>.
 	 */
-	<T> Map<String, T> getBeansOfType(Class<T> beanType);
+	<T> Map<String,T> getBeansOfType(Class<T> beanType);
 
 	/**
 	 * Returns <jk>true</jk> if this store contains at least one bean of the specified type.

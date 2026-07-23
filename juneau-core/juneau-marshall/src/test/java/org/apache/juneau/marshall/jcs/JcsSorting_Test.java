@@ -61,7 +61,7 @@ class JcsSorting_Test extends TestBase {
 	@Test
 	void c05_utf16SortOrder() throws Exception {
 		// RFC 8785: keys sorted by UTF-16 code unit order
-		var m = new LinkedHashMap<String, Integer>();
+		var m = new LinkedHashMap<String,Integer>();
 		m.put(Character.toString((char) 0x00F6), 1);   // ö
 		m.put("1", 2);
 		m.put("\r", 3);  // carriage return
@@ -83,7 +83,7 @@ class JcsSorting_Test extends TestBase {
 
 	@Test
 	void c06_mapKeysSorted() throws Exception {
-		var m = new HashMap<String, Object>();
+		var m = new HashMap<String,Object>();
 		m.put("z", 1);
 		m.put("a", 2);
 		m.put("m", 3);

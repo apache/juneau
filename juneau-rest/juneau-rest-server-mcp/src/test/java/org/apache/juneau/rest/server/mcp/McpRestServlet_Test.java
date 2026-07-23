@@ -57,7 +57,7 @@ class McpRestServlet_Test extends TestBase {
 					}
 
 					@Override
-					public CallToolResult call(Map<String, Object> arguments, BeanStore ctx) {
+					public CallToolResult call(Map<String,Object> arguments, BeanStore ctx) {
 						var ctr = new CallToolResult();
 						ctr.setContent(List.of(new TextContent().setText(String.valueOf(arguments.get("text")))));
 						return ctr;
@@ -124,7 +124,7 @@ class McpRestServlet_Test extends TestBase {
 				public Tool descriptor() { return new Tool().setName("ping"); }
 
 				@Override
-				public CallToolResult call(Map<String, Object> arguments, BeanStore ctx) {
+				public CallToolResult call(Map<String,Object> arguments, BeanStore ctx) {
 					return new CallToolResult().setContent(List.of(new TextContent().setText("pong")));
 				}
 			});

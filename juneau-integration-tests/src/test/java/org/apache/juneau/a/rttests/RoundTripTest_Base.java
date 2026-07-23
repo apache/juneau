@@ -217,7 +217,7 @@ public abstract class RoundTripTest_Base extends TestBase {
 				return true;
 		}
 		// Map containing Class keys/values or other incompatible elements
-		if (o instanceof Map<?, ?> m) {
+		if (o instanceof Map<?,?> m) {
 			for (var k : m.keySet())
 				if (k instanceof Class || (k != null && isParquetIncompatibleBeanOrCollection(k)))
 					return true;

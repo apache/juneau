@@ -66,7 +66,7 @@ class BsonEdgeCases_Test extends TestBase {
 
 	@Test
 	void a04_nestedEmptyStructures() throws Exception {
-		Map<String, Object> m = new LinkedHashMap<>();
+		Map<String,Object> m = new LinkedHashMap<>();
 		m.put("emptyMap", new LinkedHashMap<>());
 		m.put("emptyList", List.of());
 		var s = BsonSerializer.create().keepNullProperties().build();

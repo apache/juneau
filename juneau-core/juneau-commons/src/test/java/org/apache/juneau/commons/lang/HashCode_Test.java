@@ -334,7 +334,7 @@ class HashCode_Test extends TestBase {
 
 	@Test
 	void g03_addObject_map() {
-		var map = new HashMap<String, String>();
+		var map = new HashMap<String,String>();
 		map.put("key", "value");
 		var hc = HashCode.create();
 		hc.add(map);

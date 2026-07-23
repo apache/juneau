@@ -326,7 +326,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 		});
 	}
 
-	private void writeMap(PrototextWriter out, Map<?, ?> map, ClassMeta<?> type) throws SerializeException {
+	private void writeMap(PrototextWriter out, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
 		forEachEntry(map, e -> {
 			var k = toString(e.getKey());
 			var v = e.getValue();

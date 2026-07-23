@@ -50,19 +50,19 @@ class View_Test extends TestBase {
 	/** Minimal {@code View} impl that exercises the abstract members only. */
 	private static final class A01_MinimalView implements View {
 		private final String name;
-		private final Map<String, Object> attrs;
+		private final Map<String,Object> attrs;
 
-		A01_MinimalView(String name, Map<String, Object> attrs) {
+		A01_MinimalView(String name, Map<String,Object> attrs) {
 			this.name = name;
 			this.attrs = attrs;
 		}
 
 		@Override public String getTemplateName() { return name; }
-		@Override public Map<String, Object> getAttributes() { return attrs; }
+		@Override public Map<String,Object> getAttributes() { return attrs; }
 	}
 
 	@Test void a01_minimalImplCarriesTemplateAndAttributes() {
-		var attrs = Map.<String, Object>of("k1", "v1", "k2", 42);
+		var attrs = Map.<String,Object>of("k1", "v1", "k2", 42);
 		var view = new A01_MinimalView("hello.jsp", attrs);
 
 		assertEquals("hello.jsp", view.getTemplateName());
@@ -93,8 +93,8 @@ class View_Test extends TestBase {
 	/** Custom impl that overrides {@code getResponseHeaders()} to verify the seam works. */
 	private static final class A05_HeadersView implements View {
 		@Override public String getTemplateName() { return "h.jsp"; }
-		@Override public Map<String, Object> getAttributes() { return Map.of(); }
-		@Override public Map<String, String> getResponseHeaders() {
+		@Override public Map<String,Object> getAttributes() { return Map.of(); }
+		@Override public Map<String,String> getResponseHeaders() {
 			return Map.of("Content-Type", "text/html; charset=UTF-8");
 		}
 	}

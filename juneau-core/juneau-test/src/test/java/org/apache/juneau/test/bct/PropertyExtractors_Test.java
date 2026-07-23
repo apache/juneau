@@ -299,7 +299,7 @@ class PropertyExtractors_Test extends TestBase {
 		@Test
 		@DisplayName("extract() - empty map")
 		void c04_extract_emptyMap() {
-			var map = new HashMap<String, Object>();
+			var map = new HashMap<String,Object>();
 
 			assertEquals(0, extractor.extract(converter, map, "size"));
 
@@ -323,7 +323,7 @@ class PropertyExtractors_Test extends TestBase {
 		@Test
 		@DisplayName("extract() - ConcurrentHashMap")
 		void c06_extract_concurrentHashMap() {
-			var map = new ConcurrentHashMap<String, Object>();
+			var map = new ConcurrentHashMap<String,Object>();
 			map.put("thread-safe", true);
 			map.put("capacity", 16);
 
@@ -346,7 +346,7 @@ class PropertyExtractors_Test extends TestBase {
 		@DisplayName("extract() - null value setting handling")
 		void c08_extract_nullValueSettingHandling() {
 			// Test the specific line 238 logic where property name matches nullValue setting
-			var map = new HashMap<String, Object>();
+			var map = new HashMap<String,Object>();
 			map.put(null, "null key value"); // Map with actual null key
 			map.put("other", "other value");
 
@@ -422,14 +422,14 @@ class PropertyExtractors_Test extends TestBase {
 	}
 
 	public static class TestBeanWithMapGetter {
-		private Map<String, String> data = m("key1", "mapped value", "key2", "another value");
+		private Map<String,String> data = m("key1", "mapped value", "key2", "another value");
 
 		public String get(String key) {
 			return data.get(key);
 		}
 	}
 
-	public static class TestMapWithMethods extends HashMap<String, Object> {
+	public static class TestMapWithMethods extends HashMap<String,Object> {
 		private static final long serialVersionUID = 1L;
 
 		public String getCustomProperty() {

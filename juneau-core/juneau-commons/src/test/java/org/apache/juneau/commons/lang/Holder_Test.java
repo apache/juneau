@@ -378,7 +378,7 @@ class Holder_Test extends TestBase {
 
 	@Test
 	void g06_hashCode_useInHashMap() {
-		var map = new java.util.HashMap<Holder<String>, String>();
+		var map = new java.util.HashMap<Holder<String>,String>();
 		var key1 = Holder.of("key");
 		var key2 = Holder.of("key");
 		map.put(key1, "value");

@@ -416,7 +416,7 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	// Swap targeting Map<String,Object> - exercises top-level keyValueTableToJson5 / needsJson5Path branch.
-	public static class IBeanMapSwap extends ObjectSwap<IBeanWithSwap, Map<String,Object>> {
+	public static class IBeanMapSwap extends ObjectSwap<IBeanWithSwap,Map<String,Object>> {
 		@Override
 		public Map<String,Object> swap(MarshallingSession session, IBeanWithSwap o) {
 			var m = new LinkedHashMap<String,Object>();
@@ -492,7 +492,7 @@ class MarkdownParserSession_Test extends TestBase {
 		public int count;
 	}
 
-	public static class I07BeanSwap extends ObjectSwap<I07Bean, Map<String,Object>> {
+	public static class I07BeanSwap extends ObjectSwap<I07Bean,Map<String,Object>> {
 		@Override
 		public Map<String,Object> swap(MarshallingSession session, I07Bean o) {
 			var m = new LinkedHashMap<String,Object>();
@@ -550,7 +550,7 @@ class MarkdownParserSession_Test extends TestBase {
 		assertEquals("x", r.name);
 	}
 
-	public static class IBeanMapSwapBool extends ObjectSwap<IBeanBool, Map<String,Object>> {
+	public static class IBeanMapSwapBool extends ObjectSwap<IBeanBool,Map<String,Object>> {
 		@Override
 		public Map<String,Object> swap(MarshallingSession session, IBeanBool o) {
 			var m = new LinkedHashMap<String,Object>();
@@ -791,7 +791,7 @@ class MarkdownParserSession_Test extends TestBase {
 	void t01_keyValueTable_asTypedMap() {
 		// Key-value table with typed Map target → isMap() branch in readKeyValueTable at line 306
 		// Also covers line 311 (keyType != null), 315 (cells.size() < 2)
-		var r = (TreeMap<String, String>) MarkdownParser.DEFAULT.read(
+		var r = (TreeMap<String,String>) MarkdownParser.DEFAULT.read(
 			"| Key | Value |\n|---|---|\n| k1 | v1 |\n| k2 | v2 |",
 			TreeMap.class, String.class, String.class
 		);

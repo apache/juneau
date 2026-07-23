@@ -29,7 +29,7 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a01_simpleBean() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "Alice");
 		m.put("age", 30);
 		m.put("active", true);
@@ -42,10 +42,10 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a02_nestedBean() {
-		var address = new LinkedHashMap<String, Object>();
+		var address = new LinkedHashMap<String,Object>();
 		address.put("city", "Boston");
 		address.put("state", "MA");
-		var config = new LinkedHashMap<String, Object>();
+		var config = new LinkedHashMap<String,Object>();
 		config.put("name", "myapp");
 		config.put("address", address);
 		var hjson = HjsonSerializer.DEFAULT.write(config);
@@ -56,7 +56,7 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a03_quotelessStrings() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("key", "simple");
 		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
@@ -66,7 +66,7 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a04_compactMode() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "Alice");
 		m.put("age", 30);
 		var hjson = HjsonSerializer.DEFAULT_COMPACT.write(m);
@@ -77,7 +77,7 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a05_nullValue() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "Alice");
 		m.put("middle", null);
 		var s = HjsonSerializer.create().keepNullProperties().build();
@@ -88,7 +88,7 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a06_arrayOfStrings() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("tags", List.of("web", "api", "rest"));
 		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
@@ -97,7 +97,7 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a07_quotedStringRequired() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("special", "a{b}c:d\"e");
 		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
@@ -106,7 +106,7 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a08_multilineString() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("desc", "line1\nline2");
 		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
@@ -115,7 +115,7 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a09_emptyBean() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("{") && hjson.contains("}"));
@@ -123,7 +123,7 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a10_emptyCollection() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("tags", List.of());
 		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
@@ -132,7 +132,7 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a11_stringLikeBoolean() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("s", "true");
 		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
@@ -141,7 +141,7 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a12_omitRootBraces() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "x");
 		var s = HjsonSerializer.create().omitRootBraces(true).build();
 		var hjson = s.write(m);

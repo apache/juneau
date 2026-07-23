@@ -80,7 +80,7 @@ class PredicateUtils_Test {
 
 		try {
 			// Test peek() function
-			Function<String, String> peekFunc = peek();
+			Function<String,String> peekFunc = peek();
 			String result = peekFunc.apply("test value");
 
 			// Should return the value unchanged
@@ -92,7 +92,7 @@ class PredicateUtils_Test {
 
 			// Test with null
 			errCapture.reset();
-			Function<Object, Object> peekFunc2 = peek();
+			Function<Object,Object> peekFunc2 = peek();
 			Object result2 = peekFunc2.apply(null);
 			assertNull(result2);
 			String output2 = errCapture.toString();
@@ -100,7 +100,7 @@ class PredicateUtils_Test {
 
 			// Test with different types
 			errCapture.reset();
-			Function<Integer, Integer> peekInt = peek();
+			Function<Integer,Integer> peekInt = peek();
 			Integer result3 = peekInt.apply(123);
 			assertEquals(123, result3);
 			String output3 = errCapture.toString();
@@ -122,7 +122,7 @@ class PredicateUtils_Test {
 
 		try {
 			// Test peek() with message and formatter
-			Function<String, String> peekFunc = peek("Processing: {0}", String::toUpperCase);
+			Function<String,String> peekFunc = peek("Processing: {0}", String::toUpperCase);
 			String result = peekFunc.apply("test");
 
 			// Should return the value unchanged
@@ -134,7 +134,7 @@ class PredicateUtils_Test {
 
 			// Test with different formatter
 			errCapture.reset();
-			Function<Integer, Integer> peekInt = peek("Value: {0}", i -> i * 2);
+			Function<Integer,Integer> peekInt = peek("Value: {0}", i -> i * 2);
 			Integer result2 = peekInt.apply(5);
 			assertEquals(5, result2);
 			String output2 = errCapture.toString();
@@ -142,7 +142,7 @@ class PredicateUtils_Test {
 
 			// Test with null value
 			errCapture.reset();
-			Function<String, String> peekNull = peek("Null value: {0}", s -> s == null ? "null" : s);
+			Function<String,String> peekNull = peek("Null value: {0}", s -> s == null ? "null" : s);
 			String result3 = peekNull.apply(null);
 			assertNull(result3);
 			String output3 = errCapture.toString();
@@ -154,7 +154,7 @@ class PredicateUtils_Test {
 				String name;
 				Person(String name) { this.name = name; }
 			}
-			Function<Person, Person> peekPerson = peek("Person: {0}", p -> p.name);
+			Function<Person,Person> peekPerson = peek("Person: {0}", p -> p.name);
 			Person person = new Person("John");
 			Person result4 = peekPerson.apply(person);
 			assertSame(person, result4);

@@ -26,7 +26,7 @@ class TomlSerializer_Test {
 
 	@Test
 	void a01_simpleBean() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("host", "localhost");
 		m.put("port", 8080);
 		m.put("debug", true);
@@ -40,7 +40,7 @@ class TomlSerializer_Test {
 
 	@Test
 	void a02_collectionOfStrings() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("tags", List.of("web", "api", "rest"));
 
 		String toml = TomlSerializer.DEFAULT.write(m);
@@ -50,10 +50,10 @@ class TomlSerializer_Test {
 
 	@Test
 	void a03_nestedBean() {
-		var db = new LinkedHashMap<String, Object>();
+		var db = new LinkedHashMap<String,Object>();
 		db.put("host", "localhost");
 		db.put("port", 5432);
-		var config = new LinkedHashMap<String, Object>();
+		var config = new LinkedHashMap<String,Object>();
 		config.put("name", "myapp");
 		config.put("database", db);
 

@@ -54,7 +54,7 @@ public final class RestRequest {
 	private final List<HttpHeader> headers = new ArrayList<>();
 	private final List<HttpPart> queryData = new ArrayList<>();
 	private final List<HttpPart> formData = new ArrayList<>();
-	private final Map<String, Object> pathData = new LinkedHashMap<>();
+	private final Map<String,Object> pathData = new LinkedHashMap<>();
 	private HttpBody body;
 	private TransportBody convertedBody;
 	private boolean debug;

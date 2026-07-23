@@ -71,8 +71,8 @@ import org.apache.juneau.rest.server.view.*;
 public final class ThymeleafView implements View {
 
 	private final String templateName;
-	private final Map<String, Object> attributes;
-	private final Map<String, String> responseHeaders;
+	private final Map<String,Object> attributes;
+	private final Map<String,String> responseHeaders;
 
 	/**
 	 * Creates a new {@code ThymeleafView} carrying the given template name and no attributes.
@@ -93,7 +93,7 @@ public final class ThymeleafView implements View {
 		return new ThymeleafView(templateName, Map.of(), Map.of());
 	}
 
-	private ThymeleafView(String templateName, Map<String, Object> attributes, Map<String, String> responseHeaders) {
+	private ThymeleafView(String templateName, Map<String,Object> attributes, Map<String,String> responseHeaders) {
 		this.templateName = templateName;
 		this.attributes = attributes;
 		this.responseHeaders = responseHeaders;
@@ -137,7 +137,7 @@ public final class ThymeleafView implements View {
 	 * @throws IllegalArgumentException If any entry has a {@code null}/blank key or a {@code null}
 	 * 	value.
 	 */
-	public ThymeleafView attrs(Map<String, ?> values) {
+	public ThymeleafView attrs(Map<String,?> values) {
 		if (values == null || values.isEmpty())
 			return this;
 		var copy = new LinkedHashMap<>(attributes);
@@ -182,12 +182,12 @@ public final class ThymeleafView implements View {
 	}
 
 	@Override /* Overridden from View */
-	public Map<String, Object> getAttributes() {
+	public Map<String,Object> getAttributes() {
 		return attributes;
 	}
 
 	@Override /* Overridden from View */
-	public Map<String, String> getResponseHeaders() {
+	public Map<String,String> getResponseHeaders() {
 		return responseHeaders;
 	}
 

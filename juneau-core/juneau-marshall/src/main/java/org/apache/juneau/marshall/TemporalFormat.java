@@ -157,7 +157,7 @@ public enum TemporalFormat {
 	private static final DateTimeFormatter YEAR_FORMATTER = DateTimeFormatter.ofPattern("uuuu");
 	private static final DateTimeFormatter YEAR_MONTH_FORMATTER = DateTimeFormatter.ofPattern("uuuu-MM");
 
-	private static final Map<Class<?>, DateTimeFormatter> DEFAULT_FORMATTERS = Map.ofEntries(
+	private static final Map<Class<?>,DateTimeFormatter> DEFAULT_FORMATTERS = Map.ofEntries(
 		Map.entry(Instant.class, DateTimeFormatter.ISO_INSTANT),
 		Map.entry(ZonedDateTime.class, DateTimeFormatter.ISO_OFFSET_DATE_TIME),
 		Map.entry(OffsetDateTime.class, DateTimeFormatter.ISO_OFFSET_DATE_TIME),
@@ -169,7 +169,7 @@ public enum TemporalFormat {
 		Map.entry(YearMonth.class, YEAR_MONTH_FORMATTER)
 	);
 
-	private static final Map<Class<? extends TemporalAccessor>, Method> FROM_METHODS = new ConcurrentHashMap<>();
+	private static final Map<Class<? extends TemporalAccessor>,Method> FROM_METHODS = new ConcurrentHashMap<>();
 
 	/**
 	 * Returns <jk>true</jk> when {@link #MILLIS} produces a numeric wire string for the specified subtype.

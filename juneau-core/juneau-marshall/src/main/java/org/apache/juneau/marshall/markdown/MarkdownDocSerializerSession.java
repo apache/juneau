@@ -175,8 +175,8 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 	 */
 	protected void writeBeanWithHeadings(MarkdownWriter w, BeanMap<?> bm, int level) throws IOException, SerializeException {
 		// Collect simple properties for the key/value table
-		var simpleProps = new LinkedHashMap<String, Object>();
-		var complexProps = new LinkedHashMap<String, Object>();
+		var simpleProps = new LinkedHashMap<String,Object>();
+		var complexProps = new LinkedHashMap<String,Object>();
 
 		for (var e : bm.entrySet()) {
 			var key = e.getKey();

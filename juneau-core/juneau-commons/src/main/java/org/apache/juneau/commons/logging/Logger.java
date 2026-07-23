@@ -97,7 +97,7 @@ public class Logger extends java.util.logging.Logger {
 	 * different instance, breaking {@link LogRecordCapture} and any other code that
 	 * assumes one name == one identity.
 	 */
-	private static final ConcurrentHashMap<String, Logger> loggers = new ConcurrentHashMap<>();
+	private static final ConcurrentHashMap<String,Logger> loggers = new ConcurrentHashMap<>();
 
 	/**
 	 * The underlying logger instance that we delegate to.

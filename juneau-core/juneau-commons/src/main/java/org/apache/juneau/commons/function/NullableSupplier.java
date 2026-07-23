@@ -141,7 +141,7 @@ public interface NullableSupplier<T> extends Supplier<T> {
 	 * @param mapper A mapping function to apply to the value, if present. Must not be <jk>null</jk>.
 	 * @return A NullableSupplier describing the result of applying a mapping function to the value of this NullableSupplier, if a value is present, otherwise an empty NullableSupplier.
 	 */
-	default <U> NullableSupplier<U> map(Function<? super T, ? extends U> mapper) {
+	default <U> NullableSupplier<U> map(Function<? super T,? extends U> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		return () -> {
 			T value = get();
@@ -156,7 +156,7 @@ public interface NullableSupplier<T> extends Supplier<T> {
 	 * @param mapper A mapping function to apply to the value, if present. Must not be <jk>null</jk>.
 	 * @return The result of applying a NullableSupplier-bearing mapping function to the value of this NullableSupplier, if a value is present, otherwise an empty NullableSupplier.
 	 */
-	default <U> NullableSupplier<U> flatMap(Function<? super T, ? extends NullableSupplier<? extends U>> mapper) {
+	default <U> NullableSupplier<U> flatMap(Function<? super T,? extends NullableSupplier<? extends U>> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		return () -> {
 			T value = get();

@@ -45,26 +45,26 @@ import org.openjdk.jmh.runner.options.*;
 public class BenchmarkRunner {
 
 	private List<Integer> list;
-	private Map<String, Integer> map;
+	private Map<String,Integer> map;
 
 	// Consumers to test
 	private Consumer<List<Integer>> listIterator;
 	private Consumer<List<Integer>> listForEach;
 	private Consumer<List<Integer>> listStreamForEach;
 
-	private Consumer<Map<String, Integer>> mapValuesIterator;
-	private Consumer<Map<String, Integer>> mapEntrySetIterator;
-	private Consumer<Map<String, Integer>> mapValuesForEach;
-	private Consumer<Map<String, Integer>> mapForEach;
+	private Consumer<Map<String,Integer>> mapValuesIterator;
+	private Consumer<Map<String,Integer>> mapEntrySetIterator;
+	private Consumer<Map<String,Integer>> mapValuesForEach;
+	private Consumer<Map<String,Integer>> mapForEach;
 
 	private ThrowingConsumer<List<Integer>> throwingListIterator;
 	private ThrowingConsumer<List<Integer>> throwingListForEach;
 	private ThrowingConsumer<List<Integer>> throwingListStreamForEach;
 
-	private ThrowingConsumer<Map<String, Integer>> throwingMapValuesIterator;
-	private ThrowingConsumer<Map<String, Integer>> throwingMapEntrySetIterator;
-	private ThrowingConsumer<Map<String, Integer>> throwingMapValuesForEach;
-	private ThrowingConsumer<Map<String, Integer>> throwingMapForEach;
+	private ThrowingConsumer<Map<String,Integer>> throwingMapValuesIterator;
+	private ThrowingConsumer<Map<String,Integer>> throwingMapEntrySetIterator;
+	private ThrowingConsumer<Map<String,Integer>> throwingMapValuesForEach;
+	private ThrowingConsumer<Map<String,Integer>> throwingMapForEach;
 
 	@Setup(Level.Trial)
 	public void setup() {

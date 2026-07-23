@@ -32,7 +32,7 @@ class ThrowingConsumer3_Test extends TestBase {
 		var callCount = new AtomicInteger();
 		var receivedValues = new Object[3];
 
-		var consumer = (ThrowingConsumer3<String, Integer, Boolean>)(a, b, c) -> {
+		var consumer = (ThrowingConsumer3<String,Integer,Boolean>)(a, b, c) -> {
 			callCount.incrementAndGet();
 			receivedValues[0] = a;
 			receivedValues[1] = b;
@@ -50,7 +50,7 @@ class ThrowingConsumer3_Test extends TestBase {
 		var callCount = new AtomicInteger();
 		var receivedValues = new Object[3];
 
-		var consumer = (ThrowingConsumer3<String, Integer, Boolean>)(a, b, c) -> {
+		var consumer = (ThrowingConsumer3<String,Integer,Boolean>)(a, b, c) -> {
 			callCount.incrementAndGet();
 			receivedValues[0] = a;
 			receivedValues[1] = b;
@@ -68,7 +68,7 @@ class ThrowingConsumer3_Test extends TestBase {
 	// Exception handling tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void b01_throwsCheckedException() {
-		var consumer = (ThrowingConsumer3<String, Integer, Boolean>)(a, b, c) -> {
+		var consumer = (ThrowingConsumer3<String,Integer,Boolean>)(a, b, c) -> {
 			throw new Exception("Test exception");
 		};
 
@@ -81,7 +81,7 @@ class ThrowingConsumer3_Test extends TestBase {
 	}
 
 	@Test void b02_throwsRuntimeException() {
-		var consumer = (ThrowingConsumer3<String, Integer, Boolean>)(a, b, c) -> {
+		var consumer = (ThrowingConsumer3<String,Integer,Boolean>)(a, b, c) -> {
 			throw new RuntimeException("Test runtime exception");
 		};
 
@@ -99,7 +99,7 @@ class ThrowingConsumer3_Test extends TestBase {
 	@Test void c01_usedAsConsumer3() {
 		var callCount = new AtomicInteger();
 
-		var consumer = (Consumer3<String, Integer, Boolean>)(a, b, c) -> {
+		var consumer = (Consumer3<String,Integer,Boolean>)(a, b, c) -> {
 			callCount.incrementAndGet();
 		};
 
@@ -110,7 +110,7 @@ class ThrowingConsumer3_Test extends TestBase {
 	@Test void c02_lambdaExpression() {
 		var sum = new AtomicInteger(0);
 
-		ThrowingConsumer3<Integer, Integer, Integer> consumer = (a, b, c) -> {
+		ThrowingConsumer3<Integer,Integer,Integer> consumer = (a, b, c) -> {
 			sum.addAndGet(a + b + c);
 		};
 
@@ -123,8 +123,8 @@ class ThrowingConsumer3_Test extends TestBase {
 		var callCount1 = new AtomicInteger();
 		var callCount2 = new AtomicInteger();
 
-		ThrowingConsumer3<String, Integer, Boolean> consumer1 = (a, b, c) -> callCount1.incrementAndGet();
-		ThrowingConsumer3<String, Integer, Boolean> consumer2 = (a, b, c) -> callCount2.incrementAndGet();
+		ThrowingConsumer3<String,Integer,Boolean> consumer1 = (a, b, c) -> callCount1.incrementAndGet();
+		ThrowingConsumer3<String,Integer,Boolean> consumer2 = (a, b, c) -> callCount2.incrementAndGet();
 
 		var composed = consumer1.andThen(consumer2);
 		composed.apply("test", 42, true);

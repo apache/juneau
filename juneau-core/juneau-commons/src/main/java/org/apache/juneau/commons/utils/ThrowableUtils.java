@@ -310,7 +310,7 @@ public class ThrowableUtils {
 	@SuppressWarnings({
 		"java:S1181" // Need to catch Throwable to handle all exception types including Error
 	})
-	public static void safe(Snippet snippet, Function<Throwable, RuntimeException> exceptionMapper) {
+	public static void safe(Snippet snippet, Function<Throwable,RuntimeException> exceptionMapper) {
 		try {
 			snippet.run();
 		} catch (RuntimeException t) {
@@ -338,7 +338,7 @@ public class ThrowableUtils {
 	@SuppressWarnings({
 		"java:S1181" // Need to catch Throwable to handle all exception types including Error
 	})
-	public static <T> T safe(ThrowingSupplier<T> s, Function<Throwable, RuntimeException> exceptionMapper) {
+	public static <T> T safe(ThrowingSupplier<T> s, Function<Throwable,RuntimeException> exceptionMapper) {
 		try {
 			return s.get();
 		} catch (RuntimeException e) {
@@ -408,7 +408,7 @@ public class ThrowableUtils {
 	@SuppressWarnings({
 		"java:S1181" // Need to catch Throwable to handle all exception types including Error
 	})
-	public static <T> T safeSupplier(SupplierWithThrowable<T> supplier, Function<Throwable, RuntimeException> exceptionMapper) {
+	public static <T> T safeSupplier(SupplierWithThrowable<T> supplier, Function<Throwable,RuntimeException> exceptionMapper) {
 		try {
 			return supplier.get();
 		} catch (RuntimeException t) {

@@ -113,7 +113,7 @@ class RestBuilder_Test extends TestBase {
 	// Subclass builders chain with true covariant returns (Option B).
 	//-----------------------------------------------------------------------------------------------------------------
 
-	public static class CustomBuilder extends RestResource.Builder<A, CustomBuilder> {
+	public static class CustomBuilder extends RestResource.Builder<A,CustomBuilder> {
 		String custom;
 		public CustomBuilder() { super(A.class); }
 		public CustomBuilder custom(String value) { this.custom = value; return self(); }

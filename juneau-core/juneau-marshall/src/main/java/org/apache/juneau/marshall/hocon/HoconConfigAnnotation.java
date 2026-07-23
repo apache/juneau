@@ -30,7 +30,7 @@ public class HoconConfigAnnotation {
 	/**
 	 * Applies {@link HoconConfig} annotations to an {@link HoconParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<HoconConfig, HoconParser.Builder> {
+	public static class ParserApply extends AnnotationApplier<HoconConfig,HoconParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -52,7 +52,7 @@ public class HoconConfigAnnotation {
 	/**
 	 * Applies {@link HoconConfig} annotations to an {@link HoconSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<HoconConfig, HoconSerializer.Builder> {
+	public static class SerializerApply extends AnnotationApplier<HoconConfig,HoconSerializer.Builder> {
 
 		/**
 		 * Constructor.

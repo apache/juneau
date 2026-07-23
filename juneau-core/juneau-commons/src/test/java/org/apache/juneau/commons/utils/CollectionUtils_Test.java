@@ -438,15 +438,15 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a023_copyOf_map() {
-		Map<String, Integer> map = map("a", 1, "b", 2);
-		Map<String, Integer> result = copyOf(map);
+		Map<String,Integer> map = map("a", 1, "b", 2);
+		Map<String,Integer> result = copyOf(map);
 		assertNotNull(result);
 		assertEquals(2, result.size());
 		assertEquals(1, result.get("a"));
 		assertEquals(2, result.get("b"));
 		assertNotSame(map, result);
 
-		assertNull(copyOf((Map<String, Integer>)null));
+		assertNull(copyOf((Map<String,Integer>)null));
 	}
 
 	//====================================================================================================
@@ -454,8 +454,8 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a024_copyOf_mapFunction() {
-		Map<String, Integer> map = map("a", 1, "b", 2);
-		Map<String, Integer> result = copyOf(map, v -> v * 2);
+		Map<String,Integer> map = map("a", 1, "b", 2);
+		Map<String,Integer> result = copyOf(map, v -> v * 2);
 		assertNotNull(result);
 		assertEquals(2, result.size());
 		assertEquals(2, result.get("a"));
@@ -467,14 +467,14 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a025_copyOf_mapFunctionSupplier() {
-		Map<String, Integer> map = map("a", 1);
-		Map<String, Integer> result = copyOf(map, v -> v, TreeMap::new);
+		Map<String,Integer> map = map("a", 1);
+		Map<String,Integer> result = copyOf(map, v -> v, TreeMap::new);
 		assertNotNull(result);
 		assertTrue(result instanceof TreeMap);
 		assertEquals(1, result.size());
 
 		// Test line 647: null map returns null
-		assertNull(copyOf((Map<String, Integer>)null, v -> v, TreeMap::new));
+		assertNull(copyOf((Map<String,Integer>)null, v -> v, TreeMap::new));
 	}
 
 	//====================================================================================================
@@ -777,59 +777,59 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a051_m() {
 		// Empty
-		Map<String, Integer> empty = immutableMap();
+		Map<String,Integer> empty = immutableMap();
 		assertNotNull(empty);
 		assertTrue(empty.isEmpty());
 		assertThrows(UnsupportedOperationException.class, () -> empty.put("x", 1));
 
 		// 1 pair
-		Map<String, Integer> m1 = immutableMap("a", 1);
+		Map<String,Integer> m1 = immutableMap("a", 1);
 		assertEquals(1, m1.size());
 		assertEquals(1, m1.get("a"));
 
 		// 2 pairs
-		Map<String, Integer> m2 = immutableMap("a", 1, "b", 2);
+		Map<String,Integer> m2 = immutableMap("a", 1, "b", 2);
 		assertEquals(2, m2.size());
 		assertEquals(1, m2.get("a"));
 		assertEquals(2, m2.get("b"));
 
 		// 3 pairs
-		Map<String, Integer> m3 = immutableMap("a", 1, "b", 2, "c", 3);
+		Map<String,Integer> m3 = immutableMap("a", 1, "b", 2, "c", 3);
 		assertEquals(3, m3.size());
 
 		// 4 pairs
-		Map<String, Integer> m4 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4);
+		Map<String,Integer> m4 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4);
 		assertEquals(4, m4.size());
 
 		// 5 pairs
-		Map<String, Integer> m5 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5);
+		Map<String,Integer> m5 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5);
 		assertEquals(5, m5.size());
 
 		// 6 pairs
-		Map<String, Integer> m6 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6);
+		Map<String,Integer> m6 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6);
 		assertEquals(6, m6.size());
 
 		// 7 pairs
-		Map<String, Integer> m7 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7);
+		Map<String,Integer> m7 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7);
 		assertEquals(7, m7.size());
 
 		// 8 pairs
-		Map<String, Integer> m8 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8);
+		Map<String,Integer> m8 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8);
 		assertEquals(8, m8.size());
 
 		// 9 pairs
-		Map<String, Integer> m9 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9);
+		Map<String,Integer> m9 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9);
 		assertEquals(9, m9.size());
 
 		// 10 pairs
-		Map<String, Integer> m10 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10);
+		Map<String,Integer> m10 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10);
 		assertEquals(10, m10.size());
 
 		// Null handling
-		Map<String, Integer> nullKey = immutableMap(null, 1);
+		Map<String,Integer> nullKey = immutableMap(null, 1);
 		assertEquals(1, nullKey.get(null));
 
-		Map<String, Integer> nullValue = immutableMap("a", null);
+		Map<String,Integer> nullValue = immutableMap("a", null);
 		assertNull(nullValue.get("a"));
 		assertTrue(nullValue.containsKey("a"));
 
@@ -839,7 +839,7 @@ class CollectionUtils_Test extends TestBase {
 		});
 
 		// Insertion order preservation
-		Map<String, Integer> ordered = immutableMap("z", 1, "a", 2, "m", 3, "b", 4);
+		Map<String,Integer> ordered = immutableMap("z", 1, "a", 2, "m", 3, "b", 4);
 		var keys = new ArrayList<>(ordered.keySet());
 		assertEquals(list("z", "a", "m", "b"), keys);
 
@@ -855,61 +855,61 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a052_map() {
 		// Empty
-		Map<String, Integer> empty = map();
+		Map<String,Integer> empty = map();
 		assertNotNull(empty);
 		assertTrue(empty.isEmpty());
 		empty.put("x", 1); // Modifiable
 		assertEquals(1, empty.size());
 
 		// 1 pair
-		Map<String, Integer> m1 = map("a", 1);
+		Map<String,Integer> m1 = map("a", 1);
 		assertEquals(1, m1.size());
 		assertEquals(1, m1.get("a"));
 
 		// 2 pairs
-		Map<String, Integer> m2 = map("a", 1, "b", 2);
+		Map<String,Integer> m2 = map("a", 1, "b", 2);
 		assertEquals(2, m2.size());
 
 		// 3 pairs
-		Map<String, Integer> m3 = map("a", 1, "b", 2, "c", 3);
+		Map<String,Integer> m3 = map("a", 1, "b", 2, "c", 3);
 		assertEquals(3, m3.size());
 
 		// 4 pairs
-		Map<String, Integer> m4 = map("a", 1, "b", 2, "c", 3, "d", 4);
+		Map<String,Integer> m4 = map("a", 1, "b", 2, "c", 3, "d", 4);
 		assertEquals(4, m4.size());
 		var keys = new ArrayList<>(m4.keySet());
 		assertEquals(fixedSizeList("a", "b", "c", "d"), keys);
 
 		// 5 pairs
-		Map<String, Integer> m5 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5);
+		Map<String,Integer> m5 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5);
 		assertEquals(5, m5.size());
 
 		// 6 pairs
-		Map<String, Integer> m6 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6);
+		Map<String,Integer> m6 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6);
 		assertEquals(6, m6.size());
 
 		// 7 pairs - test lines 1400-1408
-		Map<String, Integer> m7 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7);
+		Map<String,Integer> m7 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7);
 		assertEquals(7, m7.size());
 		assertEquals(7, m7.get("g"));
 
 		// 8 pairs - test lines 1435-1444
-		Map<String, Integer> m8 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8);
+		Map<String,Integer> m8 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8);
 		assertEquals(8, m8.size());
 		assertEquals(8, m8.get("h"));
 
 		// 9 pairs - test lines 1473-1483
-		Map<String, Integer> m9 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9);
+		Map<String,Integer> m9 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9);
 		assertEquals(9, m9.size());
 		assertEquals(9, m9.get("i"));
 
 		// 10 pairs
-		Map<String, Integer> m10 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10);
+		Map<String,Integer> m10 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10);
 		assertEquals(10, m10.size());
 		assertEquals(fixedSizeList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"), new ArrayList<>(m10.keySet()));
 
 		// Null values
-		Map<String, String> nullVals = map("a", "val1", "b", null, "c", "val3", "d", null);
+		Map<String,String> nullVals = map("a", "val1", "b", null, "c", "val3", "d", null);
 		assertEquals(4, nullVals.size());
 		assertNull(nullVals.get("b"));
 	}
@@ -919,9 +919,9 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a053_mapBuilder() {
-		Maps<String, Object> builder = mapBuilder();
+		Maps<String,Object> builder = mapBuilder();
 		assertNotNull(builder);
-		Map<String, Object> result = builder.add("a", 1).add("b", 2).build();
+		Map<String,Object> result = builder.add("a", 1).add("b", 2).build();
 		assertEquals(2, result.size());
 		assertEquals(1, result.get("a"));
 		assertEquals(2, result.get("b"));
@@ -932,9 +932,9 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a054_mapb_class() {
-		Maps<String, Integer> builder = mapBuilder(String.class, Integer.class);
+		Maps<String,Integer> builder = mapBuilder(String.class, Integer.class);
 		assertNotNull(builder);
-		Map<String, Integer> result = builder.add("a", 1).build();
+		Map<String,Integer> result = builder.add("a", 1).build();
 		assertEquals(1, result.size());
 	}
 
@@ -951,7 +951,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a057_mapOfType() {
-		Map<String, Integer> result = mapOfType(String.class, Integer.class);
+		Map<String,Integer> result = mapOfType(String.class, Integer.class);
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
 		result.put("a", 1); // Modifiable
@@ -1121,7 +1121,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a070_sortedMap() {
-		SortedMap<String, Integer> result = sortedMap();
+		SortedMap<String,Integer> result = sortedMap();
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
 		result.put("a", 1);
@@ -1183,12 +1183,12 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a074_synced_map() {
-		Map<String, Integer> map = map("a", 1);
-		Map<String, Integer> result = synced(map);
+		Map<String,Integer> map = map("a", 1);
+		Map<String,Integer> result = synced(map);
 		assertNotNull(result);
 		assertEquals(1, result.size());
 		assertEquals(1, result.get("a"));
-		assertNull(synced((Map<String, Integer>)null));
+		assertNull(synced((Map<String,Integer>)null));
 	}
 
 	//====================================================================================================
@@ -1287,7 +1287,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("x", result4.get(0));
 
 		// Map
-		Map<String, Integer> map = map("a", 1, "b", 2);
+		Map<String,Integer> map = map("a", 1, "b", 2);
 		List<?> result5 = toList(map);
 		assertEquals(2, result5.size());
 
@@ -1507,11 +1507,11 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a090_u_map() {
-		Map<String, Integer> map = map("a", 1);
-		Map<String, Integer> result = unmodifiable(map);
+		Map<String,Integer> map = map("a", 1);
+		Map<String,Integer> result = unmodifiable(map);
 		assertNotNull(result);
 		assertThrows(UnsupportedOperationException.class, () -> result.put("b", 2));
-		assertNull(unmodifiable((Map<String, Integer>)null));
+		assertNull(unmodifiable((Map<String,Integer>)null));
 	}
 
 	//====================================================================================================

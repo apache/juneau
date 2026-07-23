@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.*;
 public class CallToolRequest {
 
 	private String name;
-	private Map<String, Object> arguments;
+	private Map<String,Object> arguments;
 
 	/**
 	 * Tool name to invoke.
@@ -57,7 +57,7 @@ public class CallToolRequest {
 	 *
 	 * @return The arguments map, or {@code null} if not set.
 	 */
-	public Map<String, Object> getArguments() {
+	public Map<String,Object> getArguments() {
 		return u(arguments);
 	}
 
@@ -67,7 +67,7 @@ public class CallToolRequest {
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public CallToolRequest setArguments(Map<String, Object> value) {
+	public CallToolRequest setArguments(Map<String,Object> value) {
 		arguments = value;
 		return this;
 	}

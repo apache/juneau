@@ -32,7 +32,7 @@ class ThrowingConsumer4_Test extends TestBase {
 		var callCount = new AtomicInteger();
 		var receivedValues = new Object[4];
 
-		var consumer = (ThrowingConsumer4<String, Integer, Boolean, Double>)(a, b, c, d) -> {
+		var consumer = (ThrowingConsumer4<String,Integer,Boolean,Double>)(a, b, c, d) -> {
 			callCount.incrementAndGet();
 			receivedValues[0] = a;
 			receivedValues[1] = b;
@@ -52,7 +52,7 @@ class ThrowingConsumer4_Test extends TestBase {
 	// Exception handling tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void b01_throwsCheckedException() {
-		var consumer = (ThrowingConsumer4<String, Integer, Boolean, Double>)(a, b, c, d) -> {
+		var consumer = (ThrowingConsumer4<String,Integer,Boolean,Double>)(a, b, c, d) -> {
 			throw new Exception("Test exception");
 		};
 
@@ -65,7 +65,7 @@ class ThrowingConsumer4_Test extends TestBase {
 	}
 
 	@Test void b02_throwsRuntimeException() {
-		var consumer = (ThrowingConsumer4<String, Integer, Boolean, Double>)(a, b, c, d) -> {
+		var consumer = (ThrowingConsumer4<String,Integer,Boolean,Double>)(a, b, c, d) -> {
 			throw new RuntimeException("Test runtime exception");
 		};
 
@@ -83,7 +83,7 @@ class ThrowingConsumer4_Test extends TestBase {
 	@Test void c01_usedAsConsumer4() {
 		var callCount = new AtomicInteger();
 
-		var consumer = (Consumer4<String, Integer, Boolean, Double>)(a, b, c, d) -> {
+		var consumer = (Consumer4<String,Integer,Boolean,Double>)(a, b, c, d) -> {
 			callCount.incrementAndGet();
 		};
 
@@ -94,7 +94,7 @@ class ThrowingConsumer4_Test extends TestBase {
 	@Test void c02_lambdaExpression() {
 		var sum = new AtomicInteger(0);
 
-		ThrowingConsumer4<Integer, Integer, Integer, Integer> consumer = (a, b, c, d) -> {
+		ThrowingConsumer4<Integer,Integer,Integer,Integer> consumer = (a, b, c, d) -> {
 			sum.addAndGet(a + b + c + d);
 		};
 
@@ -106,8 +106,8 @@ class ThrowingConsumer4_Test extends TestBase {
 		var callCount1 = new AtomicInteger();
 		var callCount2 = new AtomicInteger();
 
-		ThrowingConsumer4<String, Integer, Boolean, Double> consumer1 = (a, b, c, d) -> callCount1.incrementAndGet();
-		ThrowingConsumer4<String, Integer, Boolean, Double> consumer2 = (a, b, c, d) -> callCount2.incrementAndGet();
+		ThrowingConsumer4<String,Integer,Boolean,Double> consumer1 = (a, b, c, d) -> callCount1.incrementAndGet();
+		ThrowingConsumer4<String,Integer,Boolean,Double> consumer2 = (a, b, c, d) -> callCount2.incrementAndGet();
 
 		var composed = consumer1.andThen(consumer2);
 		composed.apply("test", 42, true, 3.14);

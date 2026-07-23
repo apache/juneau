@@ -71,9 +71,9 @@ final class MiniJson {
 		throw err("Unexpected character '" + c + "'");
 	}
 
-	private LinkedHashMap<String, Object> parseObject() {
+	private LinkedHashMap<String,Object> parseObject() {
 		pos++; // consume '{'
-		var out = new LinkedHashMap<String, Object>();
+		var out = new LinkedHashMap<String,Object>();
 		skipWs();
 		if (peek() == '}') { pos++; return out; }
 		while (true) {
@@ -212,12 +212,12 @@ final class MiniJson {
 	static String render(Object value) {
 		if (value == null) return "";
 		if (value instanceof String value2) return value2;
-		if (value instanceof Map<?, ?> value3) return renderMap((Map<String, Object>) value3);
+		if (value instanceof Map<?,?> value3) return renderMap((Map<String,Object>) value3);
 		if (value instanceof List<?> value4) return renderList((List<Object>) value4);
 		return String.valueOf(value);
 	}
 
-	private static String renderMap(Map<String, Object> m) {
+	private static String renderMap(Map<String,Object> m) {
 		var sb = new StringBuilder();
 		sb.append('{');
 		var first = true;
@@ -250,7 +250,7 @@ final class MiniJson {
 		if (v == null) { sb.append("null"); return; }
 		if (v instanceof String v2) { appendString(sb, v2); return; }
 		if (v instanceof Boolean || v instanceof Number) { sb.append(v); return; }
-		if (v instanceof Map<?, ?> v3) { sb.append(renderMap((Map<String, Object>) v3)); return; }
+		if (v instanceof Map<?,?> v3) { sb.append(renderMap((Map<String,Object>) v3)); return; }
 		if (v instanceof List<?> v4) { sb.append(renderList((List<Object>) v4)); return; }
 		appendString(sb, String.valueOf(v));
 	}

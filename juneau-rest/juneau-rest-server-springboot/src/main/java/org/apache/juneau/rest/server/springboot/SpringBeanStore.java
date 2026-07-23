@@ -136,9 +136,9 @@ public class SpringBeanStore extends BasicBeanStore {
 	}
 
 	@Override
-	public <T> Map<String, T> getBeansOfType(Class<T> beanType) {
+	public <T> Map<String,T> getBeansOfType(Class<T> beanType) {
 		// Get beans from parent stores and local store
-		Map<String, T> result = super.getBeansOfType(beanType);
+		Map<String,T> result = super.getBeansOfType(beanType);
 
 		// Add beans from Spring context (if they don't already exist in the result)
 		if (nn(appContext)) {

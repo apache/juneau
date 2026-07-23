@@ -119,7 +119,7 @@ public abstract class CachingConverter implements Converter {
 	}
 
 	// Two-level cache: input type -> output type -> conversion function (or NO_CONVERSION sentinel).
-	private final Map<Class<?>, Map<Class<?>, Conversion<?,?>>> conversions = new ConcurrentHashMap<>();
+	private final Map<Class<?>,Map<Class<?>,Conversion<?,?>>> conversions = new ConcurrentHashMap<>();
 
 	/**
 	 * Finds a conversion function from the specified input type to the specified output type.
@@ -141,19 +141,19 @@ public abstract class CachingConverter implements Converter {
 	 * @param outType The target output class.
 	 * @return A {@link Conversion} function, or <jk>null</jk> if no conversion is available.
 	 */
-	protected abstract <I, O> Conversion<I, O> findConversion(Class<I> inType, Class<O> outType);
+	protected abstract <I,O> Conversion<I,O> findConversion(Class<I> inType, Class<O> outType);
 
 	@SuppressWarnings({
 		"unchecked" // Cast is safe: type parameter is verified at construction.
 	})
-	private <I, O> Conversion<I, O> lookupConversion(Class<I> inType, Class<O> outType) {
+	private <I,O> Conversion<I,O> lookupConversion(Class<I> inType, Class<O> outType) {
 		var fn = conversions
 			.computeIfAbsent(inType, k -> new ConcurrentHashMap<>())
 			.computeIfAbsent(outType, k -> {
-				Conversion<I, O> found = findConversion(inType, outType);
+				Conversion<I,O> found = findConversion(inType, outType);
 				return found != null ? found : NO_CONVERSION;
 			});
-		return fn == NO_CONVERSION ? null : (Conversion<I, O>) fn;
+		return fn == NO_CONVERSION ? null : (Conversion<I,O>) fn;
 	}
 
 	@Override
@@ -187,7 +187,7 @@ public abstract class CachingConverter implements Converter {
 		var inType = o.getClass();
 		if (inType == type)
 			return (T) o;
-		var fn = (Conversion<Object, T>) lookupConversion(inType, type);
+		var fn = (Conversion<Object,T>) lookupConversion(inType, type);
 		if (fn == null)
 			throw new InvalidConversionException(inType, type);
 		return fn.to(o, null, (ConverterSession)null);
@@ -225,7 +225,7 @@ public abstract class CachingConverter implements Converter {
 		if (o == null)
 			return nullDefault(rawType, argClasses);
 		var inType = o.getClass();
-		var fn = (Conversion<Object, T>) lookupConversion(inType, rawType);
+		var fn = (Conversion<Object,T>) lookupConversion(inType, rawType);
 		if (fn == null)
 			throw new InvalidConversionException(inType, rawType);
 		return fn.to(o, null, (ConverterSession)null, argClasses);
@@ -257,7 +257,7 @@ public abstract class CachingConverter implements Converter {
 		var inType = o.getClass();
 		if (inType == type)
 			return (T) o;
-		var fn = (Conversion<Object, T>) lookupConversion(inType, type);
+		var fn = (Conversion<Object,T>) lookupConversion(inType, type);
 		if (fn == null)
 			throw new InvalidConversionException(inType, type);
 		return fn.to(o, memberOf, session);
@@ -291,7 +291,7 @@ public abstract class CachingConverter implements Converter {
 		if (o == null)
 			return nullDefault(rawType, argClasses);
 		var inType = o.getClass();
-		var fn = (Conversion<Object, T>) lookupConversion(inType, rawType);
+		var fn = (Conversion<Object,T>) lookupConversion(inType, rawType);
 		if (fn == null)
 			throw new InvalidConversionException(inType, rawType);
 		var result = fn.to(o, memberOf, session, argClasses);

@@ -143,7 +143,7 @@ public class FluentMap<K,V> extends AbstractMap<K,V> {
 	 * @param m The map whose entries are to be added. Can be <jk>null</jk> (no-op).
 	 * @return This object for method chaining.
 	 */
-	public FluentMap<K,V> aa(Map<? extends K, ? extends V> m) {
+	public FluentMap<K,V> aa(Map<? extends K,? extends V> m) {
 		if (m != null)
 			map.putAll(m);
 		return this;
@@ -228,7 +228,7 @@ public class FluentMap<K,V> extends AbstractMap<K,V> {
 	}
 
 	@Override
-	public void putAll(Map<? extends K, ? extends V> m) {
+	public void putAll(Map<? extends K,? extends V> m) {
 		map.putAll(m);
 	}
 

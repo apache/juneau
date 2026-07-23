@@ -31,7 +31,7 @@ class Toml_Test {
 
 	@Test
 	void a01_of() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("a", "1");
 		m.put("b", 2);
 
@@ -81,10 +81,10 @@ class Toml_Test {
 
 	@Test
 	void a06_roundTripNested() {
-		var db = new LinkedHashMap<String, Object>();
+		var db = new LinkedHashMap<String,Object>();
 		db.put("host", "localhost");
 		db.put("port", 5432);
-		var config = new LinkedHashMap<String, Object>();
+		var config = new LinkedHashMap<String,Object>();
 		config.put("name", "myapp");
 		config.put("database", db);
 
@@ -171,14 +171,14 @@ class Toml_Test {
 		@SuppressWarnings({
 			"unchecked"  // Unchecked cast required for generic test utility.
 		})
-		var configMap = (Map<String, Object>) config;
+		var configMap = (Map<String,Object>) config;
 		var db = configMap.get("db");
 		assertNotNull(db);
 		assertTrue(db instanceof Map, "Expected Map for db");
 		@SuppressWarnings({
 			"unchecked"  // Unchecked cast required for generic test utility.
 		})
-		var dbMap = (Map<String, Object>) db;
+		var dbMap = (Map<String,Object>) db;
 		assertEquals("localhost", dbMap.get("host"));
 		assertEquals(5432L, dbMap.get("port"));
 	}
@@ -186,10 +186,10 @@ class Toml_Test {
 	@Test
 	void c03_serializerUseInlineTables() {
 		var s = TomlSerializer.create().useInlineTables(true).inlineTableThreshold(5).build();
-		var inner = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("x", 1);
 		inner.put("y", 2);
-		var outer = new LinkedHashMap<String, Object>();
+		var outer = new LinkedHashMap<String,Object>();
 		outer.put("point", inner);
 
 		String toml = s.write(outer);
@@ -344,7 +344,7 @@ class Toml_Test {
 	@Test
 	void h02_nullValue() {
 		var s = TomlSerializer.create().keepNullProperties().nullValue("~NULL~").build();
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "test");
 		m.put("value", null);
 		String toml = s.write(m);
@@ -353,9 +353,9 @@ class Toml_Test {
 
 	@Test
 	void h03_readableSerializer() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "test");
-		var db = new LinkedHashMap<String, Object>();
+		var db = new LinkedHashMap<String,Object>();
 		db.put("host", "localhost");
 		m.put("database", db);
 
@@ -445,7 +445,7 @@ class Toml_Test {
 
 	@Test
 	void j01_writeFloatSpecials() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("pos_inf", Double.POSITIVE_INFINITY);
 		m.put("neg_inf", Double.NEGATIVE_INFINITY);
 		m.put("nan_val", Double.NaN);

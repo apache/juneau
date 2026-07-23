@@ -78,7 +78,7 @@ public final class StubExtensionContext {
 		final Class<?> testClass;
 		final Object testInstance;
 		final ExtensionContext parent;
-		final Map<ExtensionContext.Namespace, Map<Object, Object>> namespaces = new ConcurrentHashMap<>();
+		final Map<ExtensionContext.Namespace,Map<Object,Object>> namespaces = new ConcurrentHashMap<>();
 
 		State(Class<?> testClass, Object testInstance, ExtensionContext parent) {
 			this.testClass = testClass;
@@ -132,7 +132,7 @@ public final class StubExtensionContext {
 			return makeStore(backing);
 		}
 
-		private static Store makeStore(Map<Object, Object> backing) {
+		private static Store makeStore(Map<Object,Object> backing) {
 			return (Store) Proxy.newProxyInstance(
 				Store.class.getClassLoader(),
 				new Class<?>[]{Store.class},
@@ -141,9 +141,9 @@ public final class StubExtensionContext {
 	}
 
 	private static final class StoreHandler implements InvocationHandler {
-		private final Map<Object, Object> backing;
+		private final Map<Object,Object> backing;
 
-		StoreHandler(Map<Object, Object> backing) { this.backing = backing; }
+		StoreHandler(Map<Object,Object> backing) { this.backing = backing; }
 
 		@Override
 		@SuppressWarnings({

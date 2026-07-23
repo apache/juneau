@@ -309,7 +309,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 		return out;
 	}
 
-	private static class BeanProp implements Map.Entry<String, Object> {
+	private static class BeanProp implements Map.Entry<String,Object> {
 		final BeanPropertyMeta pMeta;
 		final String key;
 		final Object value;

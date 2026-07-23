@@ -210,7 +210,7 @@ public class Memoizer<T> implements NullableSupplier<T> {
 	 * @return A Memoizer describing the result of applying a mapping function to the value of this Memoizer, if a value is present, otherwise an empty Memoizer.
 	 */
 	@Override
-	public <U> Memoizer<U> map(Function<? super T, ? extends U> mapper) {
+	public <U> Memoizer<U> map(Function<? super T,? extends U> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		return new Memoizer<>(() -> {
 			T value = get();

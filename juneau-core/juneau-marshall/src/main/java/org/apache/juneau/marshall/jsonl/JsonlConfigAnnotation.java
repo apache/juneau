@@ -34,7 +34,7 @@ public class JsonlConfigAnnotation {
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.
 	})
-	public static class ParserApply extends AnnotationApplier<JsonlConfig, JsonParser.Builder> {
+	public static class ParserApply extends AnnotationApplier<JsonlConfig,JsonParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -58,7 +58,7 @@ public class JsonlConfigAnnotation {
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.
 	})
-	public static class SerializerApply extends AnnotationApplier<JsonlConfig, JsonSerializer.Builder> {
+	public static class SerializerApply extends AnnotationApplier<JsonlConfig,JsonSerializer.Builder> {
 
 		/**
 		 * Constructor.

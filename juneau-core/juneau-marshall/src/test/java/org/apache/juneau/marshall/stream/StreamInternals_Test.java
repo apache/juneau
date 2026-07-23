@@ -123,7 +123,7 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void a10_map() throws Exception {
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("a", 1);
 			m.put("b", "x");
 			assertEquals("{\"a\":1,\"b\":\"x\"}", emit(m));
@@ -131,14 +131,14 @@ class StreamInternals_Test extends TestBase {
 
 		@Test void a11_mapWithNullKeyAndNullValue() throws Exception {
 			// Null key renders as the literal "null" field name; null value emitted (keepNullProperties default true).
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put(null, 1);
 			m.put("b", null);
 			assertEquals("{\"null\":1,\"b\":null}", emit(m));
 		}
 
 		@Test void a12_sortMapsWithNullKey() throws Exception {
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("z", 1);
 			m.put(null, 2);
 			var sort = new PojoWalker.Options(true, false, false, true, false, false, null);
@@ -147,7 +147,7 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void a13_skipNullPropertiesWhenDisabled() throws Exception {
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("a", 1);
 			m.put("b", null);
 			var skipNulls = new PojoWalker.Options(false, false, false, false, false, false, null);
@@ -155,7 +155,7 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void a14_trimEmptyMaps() throws Exception {
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("a", 1);
 			m.put("b", Map.of());
 			var trim = new PojoWalker.Options(true, true, false, false, false, false, null);
@@ -163,7 +163,7 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void a15_trimEmptyCollectionsAndArrays() throws Exception {
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("a", 1);
 			m.put("emptyList", List.of());
 			m.put("emptyArray", new int[0]);
@@ -212,7 +212,7 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void a24_recursionGuardOnMap() {
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("self", m);
 			assertThrowsWithMessage(IllegalStateException.class, "Recursion detected", () -> emit(m));
 		}
@@ -240,7 +240,7 @@ class StreamInternals_Test extends TestBase {
 
 		@Test void a29_trimEmptyCollectionsKeepsNonEmptyArrayValue() throws Exception {
 			var trim = new PojoWalker.Options(true, false, true, false, false, false, null);
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("a", new int[]{1});
 			assertEquals("{\"a\":[1]}", emit(m, trim));
 		}

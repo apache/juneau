@@ -124,7 +124,7 @@ class Json5lTokenStream_Test extends TestBase {
 			}
 			assertString("{\"x\":1}\n{\"x\":2}\n", sb);
 
-			var records = new java.util.ArrayList<java.util.Map<?, ?>>();
+			var records = new java.util.ArrayList<java.util.Map<?,?>>();
 			try (RecordReader r = Json5lParser.DEFAULT.readArrayRecords(sb.toString())) {
 				assertTrue(r.isStreaming());
 				while (r.canRead())

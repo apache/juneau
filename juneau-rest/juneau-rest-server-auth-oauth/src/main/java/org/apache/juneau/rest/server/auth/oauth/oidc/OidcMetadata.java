@@ -25,7 +25,7 @@ import java.util.*;
  *
  * <p>
  * Unknown fields (IdP-specific extensions) are preserved in {@link #extras()} as a read-only
- * {@code Map<String, Object>}.
+ * {@code Map<String,Object>}.
  *
  * @param issuer The {@code issuer} URI.  Never {@code null}.
  * @param tokenEndpoint The {@code token_endpoint} URI.

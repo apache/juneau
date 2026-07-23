@@ -269,7 +269,7 @@ class HashKey_Test extends TestBase {
 
 	@Test
 	void d01_hashMap_putAndGet() {
-		Map<HashKey, String> map = new HashMap<>();
+		Map<HashKey,String> map = new HashMap<>();
 		HashKey key = HashKey.of("a", "b", 42);
 		map.put(key, "value");
 		assertEquals("value", map.get(key));
@@ -277,7 +277,7 @@ class HashKey_Test extends TestBase {
 
 	@Test
 	void d02_hashMap_equivalentKeys() {
-		Map<HashKey, String> map = new HashMap<>();
+		Map<HashKey,String> map = new HashMap<>();
 		HashKey key1 = HashKey.of("a", "b", 42);
 		HashKey key2 = HashKey.of("a", "b", 42);
 		map.put(key1, "value");
@@ -286,7 +286,7 @@ class HashKey_Test extends TestBase {
 
 	@Test
 	void d03_hashMap_differentKeys() {
-		Map<HashKey, String> map = new HashMap<>();
+		Map<HashKey,String> map = new HashMap<>();
 		HashKey key1 = HashKey.of("a", "b", 42);
 		HashKey key2 = HashKey.of("a", "b", 43);
 		map.put(key1, "value1");
@@ -297,7 +297,7 @@ class HashKey_Test extends TestBase {
 
 	@Test
 	void d04_hashMap_multipleEntries() {
-		Map<HashKey, Integer> map = new HashMap<>();
+		Map<HashKey,Integer> map = new HashMap<>();
 		map.put(HashKey.of("a"), 1);
 		map.put(HashKey.of("b"), 2);
 		map.put(HashKey.of("c"), 3);
@@ -309,7 +309,7 @@ class HashKey_Test extends TestBase {
 
 	@Test
 	void d05_hashMap_withNullValues() {
-		Map<HashKey, String> map = new HashMap<>();
+		Map<HashKey,String> map = new HashMap<>();
 		HashKey key = HashKey.of("a", null, "b");
 		map.put(key, "value");
 		assertEquals("value", map.get(HashKey.of("a", null, "b")));
@@ -317,7 +317,7 @@ class HashKey_Test extends TestBase {
 
 	@Test
 	void d06_hashMap_emptyKey() {
-		Map<HashKey, String> map = new HashMap<>();
+		Map<HashKey,String> map = new HashMap<>();
 		HashKey key = HashKey.of();
 		map.put(key, "value");
 		assertEquals("value", map.get(HashKey.of()));

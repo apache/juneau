@@ -34,7 +34,7 @@ import java.util.*;
  * @param <O> The output type.
  */
 @FunctionalInterface
-public interface Conversion<I, O> {
+public interface Conversion<I,O> {
 
 	/**
 	 * Converts the input object to the output type.

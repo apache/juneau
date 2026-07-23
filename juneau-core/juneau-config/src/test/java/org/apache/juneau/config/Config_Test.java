@@ -1862,7 +1862,7 @@ class Config_Test extends TestBase {
 
 	@Test void a51_load_map() throws Exception {
 		var c = init();
-		var data = new LinkedHashMap<String, Map<String, Object>>();
+		var data = new LinkedHashMap<String,Map<String,Object>>();
 		data.put("S", JsonMap.of("k", "v"));
 		c.load(data);
 		assertEquals("v", c.get("S/k").get());

@@ -412,7 +412,7 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	// Swap targeting Map<String,Object> - exercises top-level keyValueTableToJson5 / needsJson5Path branch.
-	public static class IBeanMapSwap extends ObjectSwap<IBeanWithSwap, Map<String,Object>> {
+	public static class IBeanMapSwap extends ObjectSwap<IBeanWithSwap,Map<String,Object>> {
 		@Override
 		public Map<String,Object> swap(MarshallingSession session, IBeanWithSwap o) {
 			var m = new LinkedHashMap<String,Object>();
@@ -487,7 +487,7 @@ class MarkdownParserSession_Test extends TestBase {
 		assertEquals("x", r.name);
 	}
 
-	public static class IBeanMapSwapBool extends ObjectSwap<IBeanBool, Map<String,Object>> {
+	public static class IBeanMapSwapBool extends ObjectSwap<IBeanBool,Map<String,Object>> {
 		@Override
 		public Map<String,Object> swap(MarshallingSession session, IBeanBool o) {
 			var m = new LinkedHashMap<String,Object>();

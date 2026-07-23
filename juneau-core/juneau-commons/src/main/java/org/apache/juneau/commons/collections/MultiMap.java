@@ -386,7 +386,7 @@ public class MultiMap<K,V> extends AbstractMap<K,V> {
 	}
 
 	@Override
-	public void putAll(Map<? extends K, ? extends V> m) {
+	public void putAll(Map<? extends K,? extends V> m) {
 		throw uoex("putAll() not supported on MultiMap. Use underlying maps directly.");
 	}
 

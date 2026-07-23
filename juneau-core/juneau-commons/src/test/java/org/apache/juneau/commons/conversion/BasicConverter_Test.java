@@ -317,13 +317,13 @@ class BasicConverter_Test extends TestBase {
 		var a = C.to(Map.of("a", 1, "b", 2), Map.class);
 		assertNotNull(a);
 		assertInstanceOf(Map.class, a);
-		assertEquals(2, ((Map<?, ?>) a).size());
+		assertEquals(2, ((Map<?,?>) a).size());
 	}
 
 	@Test void g02_mapToMapTyped() {
 		var a = C.to(Map.of(1, "100", 2, "200"), (Type) Map.class, new Type[]{String.class, Integer.class});
 		assertNotNull(a);
-		var map = (Map<?, ?>) a;
+		var map = (Map<?,?>) a;
 		assertTrue(map.containsKey("1") || map.containsKey("2"));
 		for (var v : map.values())
 			assertInstanceOf(Integer.class, v);
@@ -333,21 +333,21 @@ class BasicConverter_Test extends TestBase {
 		var a = C.to(Map.of("c", 3, "a", 1, "b", 2), SortedMap.class);
 		assertNotNull(a);
 		assertInstanceOf(SortedMap.class, a);
-		assertEquals("a", ((SortedMap<?, ?>) a).firstKey());
+		assertEquals("a", ((SortedMap<?,?>) a).firstKey());
 	}
 
 	@Test void g04_mapToHashMap() {
 		var a = C.to(Map.of("a", 1), HashMap.class);
 		assertNotNull(a);
 		assertInstanceOf(HashMap.class, a);
-		assertEquals(1, ((HashMap<?, ?>) a).size());
+		assertEquals(1, ((HashMap<?,?>) a).size());
 	}
 
 	@Test void g05_mapToConcreteMap() {
 		var a = C.to(Map.of("a", 1), ConcurrentHashMap.class);
 		assertNotNull(a);
 		assertInstanceOf(ConcurrentHashMap.class, a);
-		assertEquals(1, ((ConcurrentHashMap<?, ?>) a).size());
+		assertEquals(1, ((ConcurrentHashMap<?,?>) a).size());
 	}
 
 	public static class G06_NoDefaultCtorMap extends HashMap<Object,Object> {
@@ -356,7 +356,7 @@ class BasicConverter_Test extends TestBase {
 	}
 
 	@Test void g06_mapToMapWithNoDefaultCtor() {
-		var a = (Map<?, ?>) C.to(Map.of("a", 1), G06_NoDefaultCtorMap.class);
+		var a = (Map<?,?>) C.to(Map.of("a", 1), G06_NoDefaultCtorMap.class);
 		assertNotNull(a);
 		assertInstanceOf(LinkedHashMap.class, a);
 		assertEquals(1, a.size());
@@ -364,7 +364,7 @@ class BasicConverter_Test extends TestBase {
 
 	@Test void g07_mapToLinkedHashMap() {
 		// Hits line 370 B=true branch (LinkedHashMap.class)
-		var a = (Map<?, ?>) C.to(Map.of("a", 1), LinkedHashMap.class);
+		var a = (Map<?,?>) C.to(Map.of("a", 1), LinkedHashMap.class);
 		assertNotNull(a);
 		assertInstanceOf(LinkedHashMap.class, a);
 		assertEquals(1, a.size());
@@ -372,7 +372,7 @@ class BasicConverter_Test extends TestBase {
 
 	@Test void g08_mapToAbstractMap() {
 		// Hits line 370 C=true branch (AbstractMap.class); use typed args to bypass short-circuit
-		var a = (Map<?, ?>) C.to(Map.of("a", 1), (Type) AbstractMap.class, new Type[]{String.class, Integer.class});
+		var a = (Map<?,?>) C.to(Map.of("a", 1), (Type) AbstractMap.class, new Type[]{String.class, Integer.class});
 		assertNotNull(a);
 		assertInstanceOf(AbstractMap.class, a);
 		assertEquals(1, a.size());
@@ -380,7 +380,7 @@ class BasicConverter_Test extends TestBase {
 
 	@Test void g09_mapToNavigableMap() {
 		// Hits line 372 B=true branch (NavigableMap.class)
-		var a = (Map<?, ?>) C.to(Map.of("a", 1), NavigableMap.class);
+		var a = (Map<?,?>) C.to(Map.of("a", 1), NavigableMap.class);
 		assertNotNull(a);
 		assertInstanceOf(NavigableMap.class, a);
 		assertEquals(1, a.size());
@@ -388,7 +388,7 @@ class BasicConverter_Test extends TestBase {
 
 	@Test void g10_mapToTreeMap() {
 		// Hits line 372 C=true branch (TreeMap.class)
-		var a = (Map<?, ?>) C.to(Map.of("a", 1), TreeMap.class);
+		var a = (Map<?,?>) C.to(Map.of("a", 1), TreeMap.class);
 		assertNotNull(a);
 		assertInstanceOf(TreeMap.class, a);
 		assertEquals(1, a.size());

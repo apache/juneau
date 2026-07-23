@@ -40,22 +40,22 @@ class BsonRoundTrip_Test extends TestBase {
 	void a01_simpleMapRoundTrip() throws Exception {
 		var a = JsonMap.of("name", "Alice", "age", 30, "active", true);
 		var bytes = BsonSerializer.create().keepNullProperties().build().write(a);
-		var b = (Map<String, Object>) BsonParser.create().build().read(bytes, Map.class, String.class, Object.class);
+		var b = (Map<String,Object>) BsonParser.create().build().read(bytes, Map.class, String.class, Object.class);
 		assertBean(b, "name,age,active", "Alice,30,true");
 	}
 
 	@Test
 	void a02_nestedMapRoundTrip() throws Exception {
-		var addr = new LinkedHashMap<String, Object>();
+		var addr = new LinkedHashMap<String,Object>();
 		addr.put("city", "Boston");
 		addr.put("state", "MA");
-		var a = new LinkedHashMap<String, Object>();
+		var a = new LinkedHashMap<String,Object>();
 		a.put("name", "Alice");
 		a.put("address", addr);
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
 		var bytes = s.write(a);
-		var b = (Map<String, Object>) p.read(bytes, Map.class, String.class, Object.class);
+		var b = (Map<String,Object>) p.read(bytes, Map.class, String.class, Object.class);
 		assertBean(b, "name,address{city,state}", "Alice,{Boston,MA}");
 	}
 

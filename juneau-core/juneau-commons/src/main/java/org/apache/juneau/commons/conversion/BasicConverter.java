@@ -167,7 +167,7 @@ public class BasicConverter extends CachingConverter {
 		"fromString", "valueOf", "of", "from", "parse", "create", "forName", "fromValue", "builder"
 	);
 
-	private static final Map<Class<?>, Class<?>> PRIMITIVE_TO_WRAPPER = Map.of(
+	private static final Map<Class<?>,Class<?>> PRIMITIVE_TO_WRAPPER = Map.of(
 		boolean.class, Boolean.class,
 		byte.class, Byte.class,
 		char.class, Character.class,
@@ -184,10 +184,10 @@ public class BasicConverter extends CachingConverter {
 	protected BasicConverter() {}
 
 	@Override
-	protected <I, O> Conversion<I, O> findConversion(Class<I> inType, Class<O> outType) {
+	protected <I,O> Conversion<I,O> findConversion(Class<I> inType, Class<O> outType) {
 		var out = outType.isPrimitive() ? (Class<O>) PRIMITIVE_TO_WRAPPER.get(outType) : outType;
 
-		Conversion<I, O> c;
+		Conversion<I,O> c;
 
 		if ((c = findSpecialConversion(inType, out)) != null) return c;
 
@@ -201,7 +201,7 @@ public class BasicConverter extends CachingConverter {
 		if (out == Character.class && (c = findCharacterConversion(inType)) != null) return c;
 
 		if (out == String.class)
-			return (Conversion<I, O>) findToStringConversion(inType);
+			return (Conversion<I,O>) findToStringConversion(inType);
 
 		if (out.isEnum() && (c = findEnumConversion(inType, out)) != null) return c;
 
@@ -229,17 +229,17 @@ public class BasicConverter extends CachingConverter {
 	// Number conversions
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I, O> Conversion<I, O> findNumberConversion(Class<I> inType, Class<O> outType) {
+	private <I,O> Conversion<I,O> findNumberConversion(Class<I> inType, Class<O> outType) {
 		if (Number.class.isAssignableFrom(inType))
 			return findNumberFromNumber(outType);
 		if (inType == Boolean.class)
-			return (Conversion<I, O>) findNumberFromBoolean(outType);
+			return (Conversion<I,O>) findNumberFromBoolean(outType);
 		if (CharSequence.class.isAssignableFrom(inType))
-			return (Conversion<I, O>) findNumberFromString(outType);
+			return (Conversion<I,O>) findNumberFromString(outType);
 		return null;
 	}
 
-	private <I, O> Conversion<I, O> findNumberFromNumber(Class<O> outType) {
+	private <I,O> Conversion<I,O> findNumberFromNumber(Class<O> outType) {
 		if (outType == Integer.class) return (in, memberOf, session, args) -> (O) Integer.valueOf(((Number) in).intValue());
 		if (outType == Long.class) return (in, memberOf, session, args) -> (O) Long.valueOf(((Number) in).longValue());
 		if (outType == Short.class) return (in, memberOf, session, args) -> (O) Short.valueOf(((Number) in).shortValue());
@@ -258,7 +258,7 @@ public class BasicConverter extends CachingConverter {
 		return null;
 	}
 
-	private <O> Conversion<Boolean, O> findNumberFromBoolean(Class<O> outType) {
+	private <O> Conversion<Boolean,O> findNumberFromBoolean(Class<O> outType) {
 		if (outType == Integer.class) return (in, memberOf, session, args) -> (O) Integer.valueOf(in.booleanValue() ? 1 : 0);
 		if (outType == Long.class) return (in, memberOf, session, args) -> (O) Long.valueOf(in.booleanValue() ? 1L : 0L);
 		if (outType == Short.class) return (in, memberOf, session, args) -> (O) Short.valueOf(in.booleanValue() ? (short) 1 : (short) 0);
@@ -272,7 +272,7 @@ public class BasicConverter extends CachingConverter {
 		return null;
 	}
 
-	private <O> Conversion<CharSequence, O> findNumberFromString(Class<O> outType) {
+	private <O> Conversion<CharSequence,O> findNumberFromString(Class<O> outType) {
 		return (in, memberOf, session, args) -> {
 			var s = in.toString();
 			if (s.isEmpty() || "null".equals(s))
@@ -285,7 +285,7 @@ public class BasicConverter extends CachingConverter {
 	// Boolean conversions
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I, O> Conversion<I, O> findBooleanConversion(Class<I> inType) {
+	private <I,O> Conversion<I,O> findBooleanConversion(Class<I> inType) {
 		if (Number.class.isAssignableFrom(inType))
 			return (in, memberOf, session, args) -> (O) Boolean.valueOf(((Number) in).intValue() != 0);
 		return null;
@@ -295,7 +295,7 @@ public class BasicConverter extends CachingConverter {
 	// Character conversions
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I, O> Conversion<I, O> findCharacterConversion(Class<I> inType) {
+	private <I,O> Conversion<I,O> findCharacterConversion(Class<I> inType) {
 		if (CharSequence.class.isAssignableFrom(inType))
 			return (in, memberOf, session, args) -> {
 				var s = in.toString();
@@ -315,7 +315,7 @@ public class BasicConverter extends CachingConverter {
 	// String conversions
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I> Conversion<I, String> findToStringConversion(Class<I> inType) {
+	private <I> Conversion<I,String> findToStringConversion(Class<I> inType) {
 		if (inType.isArray()) {
 			if (inType == int[].class) return (in, memberOf, session, args) -> Arrays.toString((int[]) in);
 			if (inType == long[].class) return (in, memberOf, session, args) -> Arrays.toString((long[]) in);
@@ -334,7 +334,7 @@ public class BasicConverter extends CachingConverter {
 	// Enum conversions
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I, O> Conversion<I, O> findEnumConversion(Class<I> inType, Class<O> outType) {
+	private <I,O> Conversion<I,O> findEnumConversion(Class<I> inType, Class<O> outType) {
 		if (CharSequence.class.isAssignableFrom(inType))
 			return (in, memberOf, session, args) -> (O) Enum.valueOf((Class<Enum>) outType, in.toString());
 		return null;
@@ -344,8 +344,8 @@ public class BasicConverter extends CachingConverter {
 	// Optional conversions
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I, O> Conversion<I, O> findOptionalConversion() {
-		return (Conversion<I, O>) (Conversion<Object, Optional<?>>) (in, memberOf, session, args) -> {
+	private <I,O> Conversion<I,O> findOptionalConversion() {
+		return (Conversion<I,O>) (Conversion<Object,Optional<?>>) (in, memberOf, session, args) -> {
 			if (in instanceof Optional<?> in2) {
 				if (args.length == 0)
 					return in2;
@@ -368,7 +368,7 @@ public class BasicConverter extends CachingConverter {
 	 * @param out The target primitive-optional class.
 	 * @return The conversion, never <jk>null</jk>.
 	 */
-	private <I, O> Conversion<I, O> findPrimitiveOptionalConversion(Class<O> out) {
+	private <I,O> Conversion<I,O> findPrimitiveOptionalConversion(Class<O> out) {
 		final Class<? extends Number> elementType;
 		if (out == OptionalInt.class)
 			elementType = Integer.class;
@@ -376,7 +376,7 @@ public class BasicConverter extends CachingConverter {
 			elementType = Long.class;
 		else
 			elementType = Double.class;
-		return (Conversion<I, O>) (Conversion<Object, Object>) (in, memberOf, session, args) -> {
+		return (Conversion<I,O>) (Conversion<Object,Object>) (in, memberOf, session, args) -> {
 			Object v = in;
 			if (v instanceof Optional<?> v2)
 				v = v2.orElse(null);
@@ -411,7 +411,7 @@ public class BasicConverter extends CachingConverter {
 	// Collection conversions
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I, O> Conversion<I, O> findCollectionConversion(Class<I> inType, Class<O> outType) {
+	private <I,O> Conversion<I,O> findCollectionConversion(Class<I> inType, Class<O> outType) {
 		if (Collection.class.isAssignableFrom(inType) || inType.isArray()) {
 			return (in, memberOf, session, args) -> {
 				// Treat Object.class as "no element type" since it means untyped/raw and needs no element conversion.
@@ -451,7 +451,7 @@ public class BasicConverter extends CachingConverter {
 	// Map conversions
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I, O> Conversion<I, O> findMapConversion(Class<I> inType, Class<O> outType) {
+	private <I,O> Conversion<I,O> findMapConversion(Class<I> inType, Class<O> outType) {
 		if (Map.class.isAssignableFrom(inType)) {
 			return (in, memberOf, session, args) -> {
 				// Treat Object.class as "no key/value type" since it means untyped/raw and needs no element conversion.
@@ -460,7 +460,7 @@ public class BasicConverter extends CachingConverter {
 				if (keyType == null && outType.isAssignableFrom(inType))
 					return (O) in;
 				var result = newMap(outType);
-				((Map<?, ?>) in).forEach((k, v) -> result.put(
+				((Map<?,?>) in).forEach((k, v) -> result.put(
 					keyType != null ? to(k, keyType) : k,
 					valType != null ? to(v, valType) : v
 				));
@@ -470,7 +470,7 @@ public class BasicConverter extends CachingConverter {
 		return null;
 	}
 
-	private Map<Object, Object> newMap(Class<?> outType) {
+	private Map<Object,Object> newMap(Class<?> outType) {
 		if (outType == Map.class || outType == LinkedHashMap.class || outType == AbstractMap.class)
 			return m();
 		if (outType == SortedMap.class || outType == NavigableMap.class || outType == TreeMap.class)
@@ -484,7 +484,7 @@ public class BasicConverter extends CachingConverter {
 	// Array conversions
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I, O> Conversion<I, O> findArrayConversion(Class<I> inType, Class<O> outType) {
+	private <I,O> Conversion<I,O> findArrayConversion(Class<I> inType, Class<O> outType) {
 		if (Collection.class.isAssignableFrom(inType) || inType.isArray()) {
 			var componentType = outType.getComponentType();
 			// For array→array, validate that element-level conversion is possible.
@@ -523,13 +523,13 @@ public class BasicConverter extends CachingConverter {
 	// Special-case conversions
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I, O> Conversion<I, O> findSpecialConversion(Class<I> inType, Class<O> outType) {
+	private <I,O> Conversion<I,O> findSpecialConversion(Class<I> inType, Class<O> outType) {
 		if (inType == String.class && outType == TimeZone.class)
-			return (Conversion<I, O>) (Conversion<String, TimeZone>) (in, memberOf, session, args) -> TimeZone.getTimeZone(in);
+			return (Conversion<I,O>) (Conversion<String,TimeZone>) (in, memberOf, session, args) -> TimeZone.getTimeZone(in);
 		if (TimeZone.class.isAssignableFrom(inType) && outType == String.class)
-			return (Conversion<I, O>) (Conversion<TimeZone, String>) (in, memberOf, session, args) -> in.getID();
+			return (Conversion<I,O>) (Conversion<TimeZone,String>) (in, memberOf, session, args) -> in.getID();
 		if (inType == String.class && outType == Locale.class)
-			return (Conversion<I, O>) (Conversion<String, Locale>) (in, memberOf, session, args) -> Locale.forLanguageTag(in.replace('_', '-'));
+			return (Conversion<I,O>) (Conversion<String,Locale>) (in, memberOf, session, args) -> Locale.forLanguageTag(in.replace('_', '-'));
 		if (CharSequence.class.isAssignableFrom(inType) && outType == Boolean.class)
 			return (in, memberOf, session, args) -> {
 				var s = in.toString();
@@ -546,7 +546,7 @@ public class BasicConverter extends CachingConverter {
 	// Reflection: static factory methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I, O> Conversion<I, O> findStaticFactory(Class<I> inType, Class<O> outType) {
+	private <I,O> Conversion<I,O> findStaticFactory(Class<I> inType, Class<O> outType) {
 		var ci = info(outType);
 
 		for (var name : FACTORY_METHOD_NAMES) {
@@ -611,7 +611,7 @@ public class BasicConverter extends CachingConverter {
 	// Reflection: public constructors
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I, O> Conversion<I, O> findConstructorConversion(Class<I> inType, Class<O> outType) {
+	private <I,O> Conversion<I,O> findConstructorConversion(Class<I> inType, Class<O> outType) {
 		if (outType.getEnclosingClass() != null && !Modifier.isStatic(outType.getModifiers())) {
 			var enclosing = outType.getEnclosingClass();
 			var opt = info(outType).getPublicConstructor(c ->
@@ -642,7 +642,7 @@ public class BasicConverter extends CachingConverter {
 	// Reflection: toX() instance methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <I, O> Conversion<I, O> findToXMethod(Class<I> inType, Class<O> outType) {
+	private <I,O> Conversion<I,O> findToXMethod(Class<I> inType, Class<O> outType) {
 		// Use getNameReadable() so that array types use "Array" suffix (e.g. "toStringArray" for String[]).
 		// Use equalsIgnoreCase to match Mutaters' behavior (e.g. "toByteArray" matches "tobyteArray" from byte[]).
 		var methodName = "to" + info(outType).getNameReadable();

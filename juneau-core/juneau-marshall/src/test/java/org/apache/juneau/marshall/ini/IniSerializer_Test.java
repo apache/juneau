@@ -38,7 +38,7 @@ class IniSerializer_Test {
 
 	@Test
 	void a01_simpleBean() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("host", "localhost");
 		m.put("port", 8080);
 		m.put("debug", true);
@@ -51,10 +51,10 @@ class IniSerializer_Test {
 
 	@Test
 	void a02_nestedBean() {
-		var db = new LinkedHashMap<String, Object>();
+		var db = new LinkedHashMap<String,Object>();
 		db.put("host", "localhost");
 		db.put("port", 5432);
-		var config = new LinkedHashMap<String, Object>();
+		var config = new LinkedHashMap<String,Object>();
 		config.put("name", "myapp");
 		config.put("database", db);
 		var ini = IniSerializer.DEFAULT.write(config);
@@ -67,7 +67,7 @@ class IniSerializer_Test {
 
 	@Test
 	void a03_beanWithListOfStrings() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("tags", List.of("web", "api", "rest"));
 		var ini = IniSerializer.DEFAULT.write(m);
 		assertNotNull(ini);
@@ -77,7 +77,7 @@ class IniSerializer_Test {
 
 	@Test
 	void a04_nullValues() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "Alice");
 		m.put("middle", null);
 		var s = IniSerializer.create().keepNullProperties().build();
@@ -89,7 +89,7 @@ class IniSerializer_Test {
 
 	@Test
 	void a05_stringQuoting() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("key", "123");
 		m.put("flag", "true");
 		var ini = IniSerializer.DEFAULT.write(m);
@@ -100,7 +100,7 @@ class IniSerializer_Test {
 
 	@Test
 	void a06_emptyStrings() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("empty", "");
 		var ini = IniSerializer.DEFAULT.write(m);
 		assertNotNull(ini);
@@ -109,10 +109,10 @@ class IniSerializer_Test {
 
 	@Test
 	void a07_beanWithMap() {
-		var settings = new LinkedHashMap<String, String>();
+		var settings = new LinkedHashMap<String,String>();
 		settings.put("timeout", "30");
 		settings.put("retries", "3");
-		var config = new LinkedHashMap<String, Object>();
+		var config = new LinkedHashMap<String,Object>();
 		config.put("name", "app");
 		config.put("settings", settings);
 		var ini = IniSerializer.DEFAULT.write(config);
@@ -124,13 +124,13 @@ class IniSerializer_Test {
 
 	@Test
 	void a08_deeplyNestedBean() {
-		var company = new LinkedHashMap<String, Object>();
+		var company = new LinkedHashMap<String,Object>();
 		company.put("name", "Acme");
 		company.put("ticker", "ACME");
-		var employment = new LinkedHashMap<String, Object>();
+		var employment = new LinkedHashMap<String,Object>();
 		employment.put("title", "Engineer");
 		employment.put("company", company);
-		var person = new LinkedHashMap<String, Object>();
+		var person = new LinkedHashMap<String,Object>();
 		person.put("name", "John");
 		person.put("employment", employment);
 		var ini = IniSerializer.DEFAULT.write(person);
@@ -142,11 +142,11 @@ class IniSerializer_Test {
 
 	@Test
 	void a09_multipleNestedBeans() {
-		var addr1 = new LinkedHashMap<String, Object>();
+		var addr1 = new LinkedHashMap<String,Object>();
 		addr1.put("city", "Boston");
-		var addr2 = new LinkedHashMap<String, Object>();
+		var addr2 = new LinkedHashMap<String,Object>();
 		addr2.put("city", "NYC");
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "x");
 		m.put("home", addr1);
 		m.put("work", addr2);
@@ -174,7 +174,7 @@ class IniSerializer_Test {
 
 	@Test
 	void a12_emptyBean() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		var ini = IniSerializer.DEFAULT.write(m);
 		assertNotNull(ini);
 		assertTrue(ini.trim().isEmpty() || ini.contains("\n\n"));
@@ -182,7 +182,7 @@ class IniSerializer_Test {
 
 	@Test
 	void a13_kvSeparator() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("key", "value");
 		var s = IniSerializer.create().kvSeparator(':').build();
 		var ini = s.write(m);
@@ -191,7 +191,7 @@ class IniSerializer_Test {
 
 	@Test
 	void a14_addBeanTypes() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "test");
 		var s = IniSerializer.create().addBeanTypes().addRootType().build();
 		var ini = s.write(m);
@@ -205,7 +205,7 @@ class IniSerializer_Test {
 
 	@Test
 	void b01_dateValues() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("date", LocalDate.of(2024, 3, 15));
 		m.put("instant", Instant.parse("2024-03-15T12:00:00Z"));
 		var ini = IniSerializer.DEFAULT.write(m);
@@ -215,7 +215,7 @@ class IniSerializer_Test {
 
 	@Test
 	void b02_enumValues() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("status", TestEnum.ACTIVE);
 		var ini = IniSerializer.DEFAULT.write(m);
 		assertTrue(ini.contains("ACTIVE"));

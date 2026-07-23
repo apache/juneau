@@ -304,11 +304,11 @@ class MarkdownParser_Test {
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
 	void j04_roundTripStringToStringMap() {
-		var original = new LinkedHashMap<String, String>();
+		var original = new LinkedHashMap<String,String>();
 		original.put("k1", "v1");
 		original.put("k2", "v2");
 		var md = MarkdownSerializer.DEFAULT.write(original);
-		var parsed = (Map<String, String>) MarkdownParser.DEFAULT.read(md, Map.class, String.class, String.class);
+		var parsed = (Map<String,String>) MarkdownParser.DEFAULT.read(md, Map.class, String.class, String.class);
 		assertEquals(original, parsed);
 	}
 

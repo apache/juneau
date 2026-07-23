@@ -72,7 +72,7 @@ class JcsEdgeCases_Test extends TestBase {
 	@Test
 	void f08_duplicateMapKeys() throws Exception {
 		// JSON semantics: last value wins. JCS output is sorted.
-		var m = new LinkedHashMap<String, Integer>();
+		var m = new LinkedHashMap<String,Integer>();
 		m.put("x", 1);
 		m.put("a", 2);
 		m.put("x", 3);  // overwrites
@@ -81,7 +81,7 @@ class JcsEdgeCases_Test extends TestBase {
 
 	@Test
 	void f09_largeObject() throws Exception {
-		var m = new TreeMap<String, Integer>();
+		var m = new TreeMap<String,Integer>();
 		for (var i = 0; i < 100; i++)
 			m.put("k" + i, i);
 		var s = JcsSerializer.DEFAULT.write(m);

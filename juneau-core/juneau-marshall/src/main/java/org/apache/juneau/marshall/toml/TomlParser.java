@@ -198,7 +198,7 @@ public class TomlParser extends ReaderParser implements RecordReadable {
 	}
 
 	@Override
-	protected FluentMap<String, Object> properties() {
+	protected FluentMap<String,Object> properties() {
 		return super.properties().a(PROP_nullValue, nullValue);
 	}
 

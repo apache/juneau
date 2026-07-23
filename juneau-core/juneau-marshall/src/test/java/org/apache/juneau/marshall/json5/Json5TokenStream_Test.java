@@ -286,7 +286,7 @@ class Json5TokenStream_Test extends TestBase {
 		}
 
 		@Test void e02_objectMatchesSerializer() throws Exception {
-			var m = new java.util.LinkedHashMap<String, Object>();
+			var m = new java.util.LinkedHashMap<String,Object>();
 			m.put("a", 1);
 			m.put("b", java.util.List.of("x", "y"));
 			var sb = new StringWriter();

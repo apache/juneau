@@ -104,13 +104,13 @@ class Listifier_Test extends TestBase {
 		@Test
 		void b01_andThenComposition() {
 			Listifier<String> base = (converter, str) -> l(str.toLowerCase());
-			Function<List<Object>, List<Object>> mapper = list -> {
+			Function<List<Object>,List<Object>> mapper = list -> {
 				List<Object> result = new ArrayList<>(list);
 				result.add("ADDED");
 				return result;
 			};
 
-			BiFunction<BeanConverter, String, List<Object>> composed = base.andThen(mapper);
+			BiFunction<BeanConverter,String,List<Object>> composed = base.andThen(mapper);
 
 			var converter = BasicBeanConverter.DEFAULT;
 			var result = composed.apply(converter, "TEST");

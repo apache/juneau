@@ -63,7 +63,7 @@ public final class ValueResolver {
 	 * read the cached {@link VarTemplate} and skip the tokenizer + var-registry-lookup
 	 * pipeline entirely.
 	 */
-	private static final ConcurrentMap<String, VarTemplate> TEMPLATE_CACHE = new ConcurrentHashMap<>();
+	private static final ConcurrentMap<String,VarTemplate> TEMPLATE_CACHE = new ConcurrentHashMap<>();
 
 	/**
 	 * Returns the compiled {@link VarTemplate} for the given expression, computing and caching

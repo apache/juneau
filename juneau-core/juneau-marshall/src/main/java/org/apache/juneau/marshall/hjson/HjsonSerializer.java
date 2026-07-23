@@ -121,8 +121,8 @@ public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvid
 
 	private static final String ARG_copyFrom = "copyFrom";
 
-	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>, HjsonClassMeta> hjsonClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
-	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta, HjsonBeanPropertyMeta> hjsonBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,HjsonClassMeta> hjsonClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,HjsonBeanPropertyMeta> hjsonBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/** Use multiline ''' for strings with newlines. */
 	protected final boolean useMultilineStrings;
@@ -144,7 +144,7 @@ public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvid
 	 */
 	public static class Builder extends WriterSerializer.Builder<Builder> {
 
-		private static final Cache<HashKey, HjsonSerializer> CACHE = Cache.of(HashKey.class, HjsonSerializer.class).build();
+		private static final Cache<HashKey,HjsonSerializer> CACHE = Cache.of(HashKey.class, HjsonSerializer.class).build();
 
 		private boolean useMultilineStrings = true;
 		private boolean useQuotelessStrings = true;
@@ -325,7 +325,7 @@ public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvid
 	}
 
 	@Override
-	protected FluentMap<String, Object> properties() {
+	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a("useMultilineStrings", useMultilineStrings)
 			.a("useQuotelessStrings", useQuotelessStrings)

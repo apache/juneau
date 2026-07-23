@@ -181,7 +181,7 @@ class MultiMap_Test extends TestBase {
 
 	@Test
 	void e02_isEmpty_someMapsHaveEntries() {
-		Map<String, String> map1 = map();
+		Map<String,String> map1 = map();
 		var map2 = map("key1", "value1");
 		var multiMap = new MultiMap<>(map1, map2);
 
@@ -198,7 +198,7 @@ class MultiMap_Test extends TestBase {
 		var map2 = map("key3", "value3");
 		var multiMap = new MultiMap<>(map1, map2);
 
-		var entries = new ArrayList<Map.Entry<String, String>>();
+		var entries = new ArrayList<Map.Entry<String,String>>();
 		multiMap.entrySet().forEach(entries::add);
 
 		assertEquals(3, entries.size());
@@ -214,7 +214,7 @@ class MultiMap_Test extends TestBase {
 		var map3 = map("key2", "value3");
 		var multiMap = new MultiMap<>(map1, map2, map3);
 
-		var entries = new ArrayList<Map.Entry<String, String>>();
+		var entries = new ArrayList<Map.Entry<String,String>>();
 		multiMap.entrySet().forEach(entries::add);
 
 		assertEquals(2, entries.size());
@@ -377,7 +377,7 @@ class MultiMap_Test extends TestBase {
 
 	@Test
 	void j03_nullValue() {
-		Map<String, String> map1 = map("key1", null);
+		Map<String,String> map1 = map("key1", null);
 		var map2 = map("key2", "value2");
 		var multiMap = new MultiMap<>(map1, map2);
 
@@ -388,7 +388,7 @@ class MultiMap_Test extends TestBase {
 
 	@Test
 	void j04_nullKey() {
-		var map1 = new LinkedHashMap<String, String>();
+		var map1 = new LinkedHashMap<String,String>();
 		map1.put(null, "value1");
 		var map2 = map("key2", "value2");
 		var multiMap = new MultiMap<>(map1, map2);
@@ -423,8 +423,8 @@ class MultiMap_Test extends TestBase {
 
 	@Test
 	void k03_toString_emptyMaps() {
-		Map<String, String> map1 = map();
-		Map<String, String> map2 = map();
+		Map<String,String> map1 = map();
+		Map<String,String> map2 = map();
 		var multiMap = new MultiMap<>(map1, map2);
 
 		var expected = "[" + map1.toString() + ", " + map2.toString() + "]";
@@ -433,9 +433,9 @@ class MultiMap_Test extends TestBase {
 
 	@Test
 	void k04_toString_mixedEmptyAndNonEmpty() {
-		Map<String, String> map1 = map();
+		Map<String,String> map1 = map();
 		var map2 = map("key1", "value1");
-		Map<String, String> map3 = map();
+		Map<String,String> map3 = map();
 		var multiMap = new MultiMap<>(map1, map2, map3);
 
 		var expected = "[" + map1.toString() + ", " + map2.toString() + ", " + map3.toString() + "]";
@@ -521,8 +521,8 @@ class MultiMap_Test extends TestBase {
 
 	@Test
 	void m01_entrySet_iterator_emptyMaps() {
-		Map<String, String> map1 = map();
-		Map<String, String> map2 = map();
+		Map<String,String> map1 = map();
+		Map<String,String> map2 = map();
 		var multiMap = new MultiMap<>(map1, map2);
 		var iterator = multiMap.entrySet().iterator();
 		assertFalse(iterator.hasNext());
@@ -530,7 +530,7 @@ class MultiMap_Test extends TestBase {
 
 	@Test
 	void m02_entrySet_iterator_next_throwsWhenNextEntryIsNull() {
-		Map<String, String> map1 = map();
+		Map<String,String> map1 = map();
 		var multiMap = new MultiMap<>(map1);
 		var iterator = multiMap.entrySet().iterator();
 		assertThrows(NoSuchElementException.class, iterator::next);

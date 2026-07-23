@@ -99,8 +99,8 @@ import org.apache.juneau.marshall.stream.*;
 })
 public class IniSerializer extends WriterSerializer implements IniMetaProvider, RecordWritable {
 
-	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>, IniClassMeta> iniClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
-	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta, IniBeanPropertyMeta> iniBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,IniClassMeta> iniClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,IniBeanPropertyMeta> iniBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
 
 	private static final String PROP_kvSeparator = "kvSeparator";
 	private static final String PROP_spacedSeparator = "spacedSeparator";

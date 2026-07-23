@@ -403,7 +403,7 @@ public class AssertionUtils {
 	 * @return The same collection.
 	 * @throws IllegalArgumentException Thrown if the specified collection or any of its elements are <jk>null</jk>.
 	 */
-	public static final <T, C extends Collection<T>> C assertArgNoNulls(String name, C collection) throws IllegalArgumentException {
+	public static final <T,C extends Collection<T>> C assertArgNoNulls(String name, C collection) throws IllegalArgumentException {
 		assertArgNotNull(name, collection);
 		var i = 0;
 		for (var element : collection)

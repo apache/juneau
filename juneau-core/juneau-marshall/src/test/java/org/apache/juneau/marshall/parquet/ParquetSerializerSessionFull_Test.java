@@ -362,7 +362,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	@Test
 	void e01_mapStringKeys() throws Exception {
-		var in = new LinkedHashMap<String, Object>();
+		var in = new LinkedHashMap<String,Object>();
 		in.put("a", 1);
 		in.put("b", "two");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
@@ -372,7 +372,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	@Test
 	void e02_mapWithNullKey() throws Exception {
-		var in = new HashMap<String, Object>();
+		var in = new HashMap<String,Object>();
 		in.put(null, "nullval");
 		in.put("a", "aval");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
@@ -382,35 +382,35 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	@Test
 	void e03_mapIntegerKeys() throws Exception {
-		var in = new TreeMap<Integer, String>();
+		var in = new TreeMap<Integer,String>();
 		in.put(1, "a");
 		in.put(2, "b");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
-		var out = (Map<Integer, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
+		var out = (Map<Integer,String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
 		assertEquals("a", out.get(1));
 		assertEquals("b", out.get(2));
 	}
 
 	@Test
 	void e04_mapEnumKeys() throws Exception {
-		var in = new LinkedHashMap<Color, String>();
+		var in = new LinkedHashMap<Color,String>();
 		in.put(Color.RED, "r");
 		in.put(Color.GREEN, "g");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
-		var out = (Map<Color, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Color.class, String.class);
+		var out = (Map<Color,String>) ParquetParser.DEFAULT.read(bytes, Map.class, Color.class, String.class);
 		assertEquals("r", out.get(Color.RED));
 	}
 
 	public static class NestedMapBean {
 		public String name;
-		public Map<String, Integer> counts;
+		public Map<String,Integer> counts;
 		public NestedMapBean() {}
-		public NestedMapBean(String name, Map<String, Integer> counts) { this.name = name; this.counts = counts; }
+		public NestedMapBean(String name, Map<String,Integer> counts) { this.name = name; this.counts = counts; }
 	}
 
 	@Test
 	void e05_nestedMapProperty() throws Exception {
-		var m = new LinkedHashMap<String, Integer>();
+		var m = new LinkedHashMap<String,Integer>();
 		m.put("x", 1);
 		m.put("y", 2);
 		var in = list(new NestedMapBean("a", m), new NestedMapBean("b", map()));
@@ -423,7 +423,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void e06_mapEnumKeysAndDateKeys() throws Exception {
 		// Map with non-string keys at root drives mapKeyToStoredString for Date/Calendar/Temporal branches.
-		var in = new LinkedHashMap<LocalDate, String>();
+		var in = new LinkedHashMap<LocalDate,String>();
 		in.put(LocalDate.parse("2020-01-01"), "a");
 		in.put(LocalDate.parse("2021-02-02"), "b");
 		var bytes = ParquetSerializer.create().keepNullProperties().addBeanTypes().addRootType().build().write(in);
@@ -433,15 +433,15 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	public static class TemporalMapBean {
 		public String name;
-		public Map<String, Instant> events;
+		public Map<String,Instant> events;
 		public TemporalMapBean() {}
-		public TemporalMapBean(String name, Map<String, Instant> events) { this.name = name; this.events = events; }
+		public TemporalMapBean(String name, Map<String,Instant> events) { this.name = name; this.events = events; }
 	}
 
 	@Test
 	void e07_nestedMapTemporalValuesAsString() throws Exception {
 		// Nested Map<String,Instant> value column at UTF8 (writeDatesAsTimestamp(false)); values reach writeValue raw.
-		var m = new LinkedHashMap<String, Instant>();
+		var m = new LinkedHashMap<String,Instant>();
 		m.put("start", Instant.parse("2020-01-02T03:04:05Z"));
 		m.put("end", Instant.parse("2020-01-03T03:04:05Z"));
 		var in = list(new TemporalMapBean("a", m), new TemporalMapBean("b", map()));
@@ -452,14 +452,14 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	public static class IntMapBean {
 		public String name;
-		public Map<String, Integer> nums;
+		public Map<String,Integer> nums;
 		public IntMapBean() {}
-		public IntMapBean(String name, Map<String, Integer> nums) { this.name = name; this.nums = nums; }
+		public IntMapBean(String name, Map<String,Integer> nums) { this.name = name; this.nums = nums; }
 	}
 
 	@Test
 	void e08_nestedMapWithNullValue() throws Exception {
-		var m = new LinkedHashMap<String, Integer>();
+		var m = new LinkedHashMap<String,Integer>();
 		m.put("x", 1);
 		m.put("y", null);
 		var in = list(new IntMapBean("a", m));
@@ -470,14 +470,14 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	public static class NonStrKeyMapBean {
 		public String name;
-		public Map<Integer, String> byId;
+		public Map<Integer,String> byId;
 		public NonStrKeyMapBean() {}
-		public NonStrKeyMapBean(String name, Map<Integer, String> byId) { this.name = name; this.byId = byId; }
+		public NonStrKeyMapBean(String name, Map<Integer,String> byId) { this.name = name; this.byId = byId; }
 	}
 
 	@Test
 	void e09_nestedMapNonStringKeys() throws Exception {
-		var m = new LinkedHashMap<Integer, String>();
+		var m = new LinkedHashMap<Integer,String>();
 		m.put(1, "a");
 		m.put(2, "b");
 		var in = list(new NonStrKeyMapBean("x", m));
@@ -693,7 +693,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	 *  driving the {@code toInt64} temporal-instance branches at INT64/TIMESTAMP_MILLIS columns. */
 	@Test
 	void g10_mapWithTemporalValuesDefault() throws Exception {
-		var in = new LinkedHashMap<String, Object>();
+		var in = new LinkedHashMap<String,Object>();
 		in.put("d", new Date(1_000_000_000L));
 		var cal = new GregorianCalendar();
 		cal.setTimeInMillis(2_000_000_000L);
@@ -717,14 +717,14 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void g11_mapWithTemporalValuesNative() throws Exception {
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
 		// DATE (INT32 / toEpochDay) — LocalDate, LocalDateTime, Instant, ZonedDateTime, OffsetDateTime.
-		var dates = new LinkedHashMap<String, Object>();
+		var dates = new LinkedHashMap<String,Object>();
 		dates.put("ld", LocalDate.parse("2020-01-02"));
 		assertNotNull(ser.write(dates));
 		// TIME (INT64 micros / toTimeMicros) — LocalTime, OffsetTime.
-		var times = new LinkedHashMap<String, Object>();
+		var times = new LinkedHashMap<String,Object>();
 		times.put("lt", LocalTime.parse("03:04:05"));
 		assertNotNull(ser.write(times));
-		var times2 = new LinkedHashMap<String, Object>();
+		var times2 = new LinkedHashMap<String,Object>();
 		times2.put("ot", OffsetTime.parse("03:04:05+01:00"));
 		assertNotNull(ser.write(times2));
 		// TIMESTAMP (INT64 micros / toInstant) — Date, Calendar, Instant, LocalDate, LocalDateTime, ZonedDateTime, OffsetDateTime.
@@ -735,7 +735,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 				LocalDateTime.parse("2020-01-02T03:04:05"),
 				ZonedDateTime.parse("2020-01-02T03:04:05Z"),
 				OffsetDateTime.parse("2020-01-02T03:04:05+01:00") }) {
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("ts", v);
 			assertNotNull(ser.write(m));
 		}
@@ -754,7 +754,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void g12_mapBigDecimalNative() throws Exception {
 		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("amt", new BigDecimal("12.5"));
 		m.put("amt2", new BigInteger("42"));
 		assertNotNull(ser.write(m));
@@ -763,7 +763,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	/** Root Map with byte[], enum, UUID, Duration values — drives toByteArray / toFixedLenByteArray branches with raw objects. */
 	@Test
 	void g13_mapWithBinaryValues() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("bytes", new byte[]{1, 2, 3});
 		m.put("color", Color.GREEN);
 		m.put("id", UUID.fromString("12345678-1234-5678-1234-567812345678"));
@@ -777,7 +777,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	 *  toByteArray CONVERTED_UTF8 branch. */
 	@Test
 	void g14_mapTemporalValuesAsString() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("inst", Instant.parse("2020-01-02T03:04:05Z"));
 		var bytes = ParquetSerializer.create().writeDatesAsTimestamp(false).build().write(m);
 		assertNotNull(bytes);
@@ -791,7 +791,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		b.name = "a";
 		b.counts = null;
 		// Bean with Map<String,Integer> values reach writeValue raw; combine with arbitrary scalar map.
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("n", 42L);
 		m.put("s", "str");
 		var bytes = ParquetSerializer.DEFAULT.write(m);
@@ -895,7 +895,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	public static class MapCycleBean {
 		public String name;
-		public Map<String, Object> data;
+		public Map<String,Object> data;
 		public MapCycleBean() { /* no-op */ }
 	}
 
@@ -1110,7 +1110,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void l11_toByteArrayConvertedTimestampMillis() throws Exception {
 		// writeDatesAsTimestamp(false) + temporal value -> CONVERTED_TIMESTAMP_MILLIS path in toByteArray (line 1023)
 		// A Date value at a BYTE_ARRAY/TIMESTAMP_MILLIS column reaches the timestamp-to-string branch.
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("d", new Date(1_000_000_000L));
 		var bytes = ParquetSerializer.create().writeDatesAsTimestamp(false).build().write(m);
 		assertNotNull(bytes);
@@ -1123,7 +1123,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void l12_applyDefaultSwapClassValue() throws Exception {
 		// A Class<?> value in a Map column: applyDefaultSwap finds the ClassSwap and returns a String.
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("type", String.class);
 		var bytes = ParquetSerializer.DEFAULT.write(m);
 		assertNotNull(bytes);
@@ -1181,9 +1181,9 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void l16_toByteArrayConvertedUtf8NonString() throws SerializeException {
 		// BYTE_ARRAY / CONVERTED_UTF8 column from row-0 String; row-1 passes an Integer -> String.valueOf fires.
-		var m0 = new LinkedHashMap<String, Object>();
+		var m0 = new LinkedHashMap<String,Object>();
 		m0.put("s", "hello");
-		var m1 = new LinkedHashMap<String, Object>();
+		var m1 = new LinkedHashMap<String,Object>();
 		m1.put("s", 42);
 		// Two maps serialized as two-row list equivalent via writeRecords
 		var ser = ParquetSerializer.DEFAULT;
@@ -1225,7 +1225,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void m01_emptyRootMap() throws Exception {
 		// sType.isMap() && m.isEmpty() -> true branch on line 249: returns List.of().
-		var bytes = ParquetSerializer.DEFAULT.write(new LinkedHashMap<String, Object>());
+		var bytes = ParquetSerializer.DEFAULT.write(new LinkedHashMap<String,Object>());
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -1233,7 +1233,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void m02_rootMapWithNullValue() throws Exception {
 		// String-keyed root map with null value -> val != null false branch (line 259): val stays null.
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("a", "x");
 		m.put("b", null);
 		var bytes = ParquetSerializer.create().keepNullProperties().build().write(m);
@@ -1273,15 +1273,15 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	public static class MapNestedBean {
 		public String id;
-		public Map<String, String> data;
+		public Map<String,String> data;
 		public MapNestedBean() { /* no-op */ }
-		public MapNestedBean(String id, Map<String, String> data) { this.id = id; this.data = data; }
+		public MapNestedBean(String id, Map<String,String> data) { this.id = id; this.data = data; }
 	}
 
 	@Test
 	void m04_computeDefValueMapPath() throws Exception {
 		// Bean with nested Map property -> computeDefValue walks Map path (line 483).
-		var m = new LinkedHashMap<String, String>();
+		var m = new LinkedHashMap<String,String>();
 		m.put("x", "1");
 		m.put("y", "2");
 		var in = list(new MapNestedBean("a", m), new MapNestedBean("b", null));
@@ -1311,17 +1311,17 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	public static class ListMapBean {
 		public String name;
-		public List<Map<String, String>> rows;
+		public List<Map<String,String>> rows;
 		public ListMapBean() { /* no-op */ }
-		public ListMapBean(String name, List<Map<String, String>> rows) { this.name = name; this.rows = rows; }
+		public ListMapBean(String name, List<Map<String,String>> rows) { this.name = name; this.rows = rows; }
 	}
 
 	@Test
 	void m06_flattenListMapElements() throws Exception {
 		// List<Map<String,String>> -> flattenListValues Map path (line 789).
-		var row1 = new LinkedHashMap<String, String>();
+		var row1 = new LinkedHashMap<String,String>();
 		row1.put("k", "v1");
-		var row2 = new LinkedHashMap<String, String>();
+		var row2 = new LinkedHashMap<String,String>();
 		row2.put("k", "v2");
 		var in = list(new ListMapBean("a", list(row1, row2)));
 		var bytes = ParquetSerializer.DEFAULT.write(in);
@@ -1374,15 +1374,15 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	public static class MapValueBean {
 		public String id;
-		public Map<String, Object> extra;
+		public Map<String,Object> extra;
 		public MapValueBean() { /* no-op */ }
-		public MapValueBean(String id, Map<String, Object> extra) { this.id = id; this.extra = extra; }
+		public MapValueBean(String id, Map<String,Object> extra) { this.id = id; this.extra = extra; }
 	}
 
 	@Test
 	void m09_getValueByPathMap() throws Exception {
 		// Bean with Map property -> getValueByPath hits Map branch (line 823).
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("sub", "val");
 		var in = list(new MapValueBean("a", m));
 		var bytes = ParquetSerializer.DEFAULT.write(in);
@@ -1417,7 +1417,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	public static class CycleMap {
 		public String name;
-		public Map<String, Object> data;
+		public Map<String,Object> data;
 		public CycleMap() { /* no-op */ }
 	}
 
@@ -1441,7 +1441,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// Non-string-key root Map with multiple entries -> collectBeans produces key/value pair rows,
 		// writeColumnChunk calls writeMapColumnChunk for root.key_value.key/value paths,
 		// extractFlattenedMapValues hits isRootKeyValue=true and the {key,value} row branch (lines 657/660).
-		var in = new LinkedHashMap<Integer, String>();
+		var in = new LinkedHashMap<Integer,String>();
 		in.put(1, "a");
 		in.put(2, null);  // null value -> def=1 branch in extractFlattenedMapValues (line 683)
 		var bytes = ParquetSerializer.create().keepNullProperties().build().write(in);
@@ -1452,7 +1452,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void m13_nonStringKeyRootMapSingleEntry() throws Exception {
 		// Single-entry non-string-key root Map -> isRootKeyValue path with exactly one entry (rep=0 only).
-		var in = new LinkedHashMap<Long, String>();
+		var in = new LinkedHashMap<Long,String>();
 		in.put(42L, "answer");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
 		assertNotNull(bytes);
@@ -1635,13 +1635,13 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		public SwappedBean() {}
 	}
 
-	public static class SwapToString extends ObjectSwap<SwappedBean, String> {
+	public static class SwapToString extends ObjectSwap<SwappedBean,String> {
 		@Override public String swap(MarshallingSession s, SwappedBean o) { return o.name; }
 	}
 
 	@Test
 	void m27_collectBeansOrigBeanSwappedToNonBean() throws Exception {
-		// ObjectSwap<SwappedBean, String>: swappedType.isBean()=false, origType.isBean()=true -> line 289 true branch.
+		// ObjectSwap<SwappedBean,String>: swappedType.isBean()=false, origType.isBean()=true -> line 289 true branch.
 		var ser = ParquetSerializer.create().swaps(SwapToString.class).build();
 		var bytes = ser.write(list(new SwappedBean("Alice"), new SwappedBean("Bob")));
 		assertNotNull(bytes);
@@ -1723,8 +1723,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static class InnerMapHolder {
-		public Map<String, Integer> counts;
-		public InnerMapHolder(Map<String, Integer> counts) { this.counts = counts; }
+		public Map<String,Integer> counts;
+		public InnerMapHolder(Map<String,Integer> counts) { this.counts = counts; }
 		public InnerMapHolder() {}
 	}
 
@@ -1737,7 +1737,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	@Test
 	void m31_getValueByPathNullMidPath() throws Exception {
-		var m = new LinkedHashMap<String, Integer>();
+		var m = new LinkedHashMap<String,Integer>();
 		m.put("x", 1);
 		var in = list(new OuterMapHolder("a", new InnerMapHolder(m)), new OuterMapHolder("b", null));
 		var bytes = ParquetSerializer.DEFAULT.write(in);
@@ -1762,7 +1762,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	void m32_getValueByPathCycleFlatBean() throws Exception {
 		// Schema inferred from row1: counts=Map -> key_value columns -> getMapAtPath calls getValueByPath.
 		// Row2: counts = row2 itself -> bm.get("counts") = row2 (in seen) -> handleCycle(NULL) -> map=empty.
-		var m = new LinkedHashMap<String, Integer>();
+		var m = new LinkedHashMap<String,Integer>();
 		m.put("x", 1);
 		var row1 = new CycleFlatMapBean("a", m);
 		var row2 = new CycleFlatMapBean("b", null);
@@ -1774,7 +1774,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void m33_getValueByPathCycleThrowMode() {
 		// Same structure with THROW mode: cycle at line 766 TT -> handleCycle(THROW) -> SerializeException.
-		var m = new LinkedHashMap<String, Integer>();
+		var m = new LinkedHashMap<String,Integer>();
 		m.put("x", 1);
 		var row1 = new CycleFlatMapBean("a", m);
 		var row2 = new CycleFlatMapBean("b", null);

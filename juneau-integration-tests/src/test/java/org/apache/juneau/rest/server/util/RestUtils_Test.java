@@ -186,7 +186,7 @@ class RestUtils_Test extends TestBase {
 	@Test void k03_testParseIfJson_jsonObject() {
 		var result = parseIfJson("{\"name\":\"John\",\"age\":30}");
 		assertTrue(result instanceof Map);
-		var map = (Map<String, Object>) result;
+		var map = (Map<String,Object>) result;
 		assertEquals("John", map.get("name"));
 		assertEquals(30, map.get("age"));
 	}
@@ -194,7 +194,7 @@ class RestUtils_Test extends TestBase {
 	@Test void k04_testParseIfJson_jsonObjectEmpty() {
 		var result = parseIfJson("{}");
 		assertTrue(result instanceof Map);
-		var map = (Map<String, Object>) result;
+		var map = (Map<String,Object>) result;
 		assertTrue(map.isEmpty());
 	}
 
@@ -235,7 +235,7 @@ class RestUtils_Test extends TestBase {
 	@Test void k10_testParseIfJson_jsonWithWhitespace() {
 		var result = parseIfJson("  {\"key\":\"value\"}  ");
 		assertTrue(result instanceof Map);
-		var map = (Map<String, Object>) result;
+		var map = (Map<String,Object>) result;
 		assertEquals("value", map.get("key"));
 	}
 
@@ -248,7 +248,7 @@ class RestUtils_Test extends TestBase {
 	@Test void k12_testParseIfJson_nestedStructures() {
 		var result = parseIfJson("{\"items\":[1,2,3],\"nested\":{\"a\":1,\"b\":2}}");
 		assertTrue(result instanceof Map);
-		var map = (Map<String, Object>) result;
+		var map = (Map<String,Object>) result;
 		assertTrue(map.get("items") instanceof List);
 		assertTrue(map.get("nested") instanceof Map);
 	}

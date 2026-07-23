@@ -375,7 +375,7 @@ class BeanContext_Test extends TestBase {
 		public DummyNormal(String v) { this.value = v; }
 	}
 
-	public static class DummySwap extends ObjectSwap<DummyNormal, String> {
+	public static class DummySwap extends ObjectSwap<DummyNormal,String> {
 		@Override
 		public String swap(MarshallingSession session, DummyNormal o) throws Exception {
 			return o.value;

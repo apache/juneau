@@ -55,5 +55,5 @@ public interface McpToolHandler {
 	 * @param ctx Per-request bean store. Never {@code null}.
 	 * @return The call result. Never {@code null}.
 	 */
-	CallToolResult call(Map<String, Object> arguments, BeanStore ctx);
+	CallToolResult call(Map<String,Object> arguments, BeanStore ctx);
 }

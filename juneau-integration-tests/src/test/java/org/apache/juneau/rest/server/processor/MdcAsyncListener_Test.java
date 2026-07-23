@@ -94,7 +94,7 @@ class MdcAsyncListener_Test extends TestBase {
 
 	@Test
 	void noSlf4j_02_nullSnapshotReturnsOriginalAction() {
-		var original = (java.util.function.BiConsumer<String, Throwable>) (v, e) -> {};
+		var original = (java.util.function.BiConsumer<String,Throwable>) (v, e) -> {};
 		var wrapped = MdcAsyncListener.wrap(original, null);
 		assertSame(original, wrapped, "wrap(action, null) must return the original action unchanged.");
 	}
@@ -107,7 +107,7 @@ class MdcAsyncListener_Test extends TestBase {
 	void optOut_01_nullSnapshotReturnsOriginalAction() {
 		// When propagation is disabled (or request thread has no MDC), the snapshot is null
 		// and wrap() returns the original action with no overhead.
-		var original = (java.util.function.BiConsumer<String, Throwable>) (v, e) -> {};
+		var original = (java.util.function.BiConsumer<String,Throwable>) (v, e) -> {};
 		assertSame(original, MdcAsyncListener.wrap(original, null),
 			"wrap(action, null) must return the original action unchanged when propagation is off.");
 	}

@@ -230,7 +230,7 @@ class CborOutputStream_Test extends TestBase {
 
 	@Test
 	void a31_longMap() throws Exception {
-		var m = new LinkedHashMap<String, Integer>();
+		var m = new LinkedHashMap<String,Integer>();
 		for (int i = 0; i < 24; i++)
 			m.put("k" + i, i);
 		var b = CborSerializer.DEFAULT.write(m);

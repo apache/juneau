@@ -586,7 +586,7 @@ class BidiMap_Test extends TestBase {
 			.add("two", 2)
 			.build();
 
-		var forwardMap = new LinkedHashMap<String, Integer>();
+		var forwardMap = new LinkedHashMap<String,Integer>();
 		forwardMap.put("one", 1);
 		forwardMap.put("two", 2);
 
@@ -630,7 +630,7 @@ class BidiMap_Test extends TestBase {
 			.add("two", 2)
 			.build();
 
-		var regularMap = new LinkedHashMap<String, Integer>();
+		var regularMap = new LinkedHashMap<String,Integer>();
 		regularMap.put("one", 1);
 		regularMap.put("two", 2);
 
@@ -673,7 +673,7 @@ class BidiMap_Test extends TestBase {
 			.add("two", 2)
 			.build();
 
-		var regularMap = new LinkedHashMap<String, Integer>();
+		var regularMap = new LinkedHashMap<String,Integer>();
 		regularMap.put("one", 1);
 		regularMap.put("two", 2);
 
@@ -733,7 +733,7 @@ class BidiMap_Test extends TestBase {
 			.add("one", 1)
 			.build();
 		// putAll with same key-value pairs is not a conflict
-		var sameEntries = new LinkedHashMap<String, Integer>();
+		var sameEntries = new LinkedHashMap<String,Integer>();
 		sameEntries.put("one", 1);
 		map.putAll(sameEntries);
 		assertEquals(1, map.size());

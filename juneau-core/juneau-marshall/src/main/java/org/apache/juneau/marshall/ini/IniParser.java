@@ -94,8 +94,8 @@ import org.apache.juneau.marshall.stream.*;
 })
 public class IniParser extends ReaderParser implements IniMetaProvider, RecordReadable {
 
-	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>, IniClassMeta> iniClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
-	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta, IniBeanPropertyMeta> iniBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,IniClassMeta> iniClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,IniBeanPropertyMeta> iniBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
 
 	private static final String PROP_kvSeparator = "kvSeparator";
 	private static final String ARG_copyFrom = "copyFrom";

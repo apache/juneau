@@ -102,7 +102,7 @@ public class TypeVariables {
 	 * @return A new TypeVariables instance.  An empty instance is returned if the type is <jk>null</jk>.
 	 */
 	public static TypeVariables of(Type type) {
-		Map<Class<?>, List<Class<?>>> m = m();
+		Map<Class<?>,List<Class<?>>> m = m();
 		findTypeVarImpls(type, m);
 		return fromMap(m);
 	}
@@ -116,7 +116,7 @@ public class TypeVariables {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for type variable implementation discovery
 	})
-	private static void findTypeVarImpls(Type t, Map<Class<?>, List<Class<?>>> m) {
+	private static void findTypeVarImpls(Type t, Map<Class<?>,List<Class<?>>> m) {
 		if (t instanceof Class<?> t2) {
 			findTypeVarImpls(t2.getGenericSuperclass(), m);
 			for (var ci : t2.getGenericInterfaces())
@@ -152,7 +152,7 @@ public class TypeVariables {
 	 * @param map The map of class to type variable implementations.
 	 * @return A new TypeVariables instance.
 	 */
-	static TypeVariables fromMap(Map<Class<?>, List<Class<?>>> map) {
+	static TypeVariables fromMap(Map<Class<?>,List<Class<?>>> map) {
 		return new TypeVariables(map);
 	}
 
@@ -161,7 +161,7 @@ public class TypeVariables {
 	 *
 	 * @param map The map of class to type variable implementations.
 	 */
-	TypeVariables(Map<Class<?>, List<Class<?>>> map) {
+	TypeVariables(Map<Class<?>,List<Class<?>>> map) {
 		this.map = map;
 	}
 

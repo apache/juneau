@@ -2023,7 +2023,7 @@ class BeanMap_Test extends TestBase {
 	/** Bean with a Map-backed dyna property for extra entries (see BasicBeans_Test.B). */
 	public static class DynaExtrasBean {
 		@BeanProp(name="*")
-		public Map<String, Object> extras = new LinkedHashMap<>();
+		public Map<String,Object> extras = new LinkedHashMap<>();
 	}
 
 	@Test void z02_containsKey_dynaBean_unknownKeyNotInExtrasMap() {

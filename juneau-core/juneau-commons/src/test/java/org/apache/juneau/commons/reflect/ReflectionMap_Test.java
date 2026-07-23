@@ -293,7 +293,7 @@ class ReflectionMap_Test extends TestBase {
 		static class B2a {
 			public void m1(List x) { /* no-op */ }
 			public void m2(List<String> x) { /* no-op */ }
-			public void m3(Map<String, Integer> x) { /* no-op */ }
+			public void m3(Map<String,Integer> x) { /* no-op */ }
 			public void m4(List<List<String>> x) { /* no-op */ }
 			public void m5(Map x, List y) { /* no-op */ }
 		}
@@ -352,7 +352,7 @@ class ReflectionMap_Test extends TestBase {
 		// Test for generic arrays - combining generics and arrays
 		static class B4 {
 			public void m1(List<String>[] x) { /* no-op */ }
-			public void m2(Map<String, Integer>[][] x) { /* no-op */ }
+			public void m2(Map<String,Integer>[][] x) { /* no-op */ }
 		}
 
 		@Test void a05_genericArrays() throws NoSuchMethodException, SecurityException {
@@ -552,9 +552,9 @@ class ReflectionMap_Test extends TestBase {
 
 		// Test for generic parameters with commas in constructor signatures
 		static class D3 {
-			public D3(Map<String, Integer> x) { /* no-op */ }
-			public D3(Map<String, Integer> x, List<String> y) { /* no-op */ }
-			public D3(Map<String, Integer>[] x) { /* no-op */ }
+			public D3(Map<String,Integer> x) { /* no-op */ }
+			public D3(Map<String,Integer> x, List<String> y) { /* no-op */ }
+			public D3(Map<String,Integer>[] x) { /* no-op */ }
 		}
 
 		@Test void a03_generics() throws NoSuchMethodException, SecurityException {

@@ -284,7 +284,7 @@ class ParameterInfo_Test extends TestBase {
 		public void basicMethod(int a, String b) {}
 		public void namedMethod(@Name("x") int x, @Name("y") String y) {}
 		public void finalMethod(final int value) {}
-		public void genericMethod(@Name("list") List<String> list, @Name("map") Map<String, Integer> map) {}
+		public void genericMethod(@Name("list") List<String> list, @Name("map") Map<String,Integer> map) {}
 		public void varargsMethod(@Name("values") String... values) {}
 		public void finalVarargsMethod(final @Name("args") String... args) {}
 		public void arrayMethod(@Name("numbers") int[] numbers, @Name("matrix") String[][] matrix) {}
@@ -998,7 +998,7 @@ class ParameterInfo_Test extends TestBase {
 		assertEquals(pi1a, pi1c);
 
 		// HashMap usage - same parameter should map to same value
-		Map<ParameterInfo, String> map = new HashMap<>();
+		Map<ParameterInfo,String> map = new HashMap<>();
 		map.put(pi1a, "value1");
 		assertEquals("value1", map.get(pi1b));
 		assertEquals("value1", map.get(pi1c));

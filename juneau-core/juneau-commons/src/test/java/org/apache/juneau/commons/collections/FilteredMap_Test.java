@@ -909,7 +909,7 @@ class FilteredMap_Test extends TestBase {
 
 	@Test
 	void t01_getFilter_returnsFilter() {
-		var originalFilter = (BiPredicate<String, Integer>)((k, v) -> v != null && v > 0);
+		var originalFilter = (BiPredicate<String,Integer>)((k, v) -> v != null && v > 0);
 		var map = FilteredMap
 			.create(String.class, Integer.class)
 			.filter(originalFilter)
@@ -1030,7 +1030,7 @@ class FilteredMap_Test extends TestBase {
 		map.put("key1", "value1");
 		map.put("key2", "value2");
 
-		var underlyingMap = new LinkedHashMap<String, String>();
+		var underlyingMap = new LinkedHashMap<String,String>();
 		underlyingMap.put("key1", "value1");
 		underlyingMap.put("key2", "value2");
 
@@ -1046,7 +1046,7 @@ class FilteredMap_Test extends TestBase {
 		map1.put("key1", "value1");
 		map1.put("key2", "value2");
 
-		var map2 = new LinkedHashMap<String, String>();
+		var map2 = new LinkedHashMap<String,String>();
 		map2.put("key1", "value1");
 		map2.put("key2", "value2");
 
@@ -1063,7 +1063,7 @@ class FilteredMap_Test extends TestBase {
 			.build();
 		map1.put("key1", "value1");
 
-		var map2 = new LinkedHashMap<String, String>();
+		var map2 = new LinkedHashMap<String,String>();
 		map2.put("key1", "value2");
 
 		assertNotEquals(map1, map2);
@@ -1079,7 +1079,7 @@ class FilteredMap_Test extends TestBase {
 		map.put("key1", "value1");
 		map.put("key2", "value2");
 
-		var underlyingMap = new LinkedHashMap<String, String>();
+		var underlyingMap = new LinkedHashMap<String,String>();
 		underlyingMap.put("key1", "value1");
 		underlyingMap.put("key2", "value2");
 

@@ -97,7 +97,7 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 		}
 		assertEquals("{\"x\":1}\n{\"x\":2}\n", sb.toString());
 
-		var seen = new ArrayList<Map<?, ?>>();
+		var seen = new ArrayList<Map<?,?>>();
 		try (var r = Jsonl.toArrayRecords(sb.toString())) {
 			while (r.canRead())
 				seen.add(r.read(Map.class));

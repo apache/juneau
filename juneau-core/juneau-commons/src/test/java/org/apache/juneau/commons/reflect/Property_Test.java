@@ -67,7 +67,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a002_functionGetterAndSetter() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.getter(TestClass::getPublicField)
 			.setter(TestClass::setPublicField)
 			.build();
@@ -83,7 +83,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a003_getterOnly() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.getter(TestClass::getPublicField)
 			.build();
 
@@ -99,7 +99,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a004_setterOnly() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.setter(TestClass::setPublicField)
 			.build();
 
@@ -115,7 +115,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a005_get_withNullProducer() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.setter(TestClass::setPublicField)
 			.build();
 
@@ -129,7 +129,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a006_set_withNullConsumer() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.getter(TestClass::getPublicField)
 			.build();
 
@@ -143,7 +143,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a007_get_withNullObject() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.getter(TestClass::getPublicField)
 			.build();
 
@@ -155,7 +155,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a008_set_withNullObject() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.setter(TestClass::setPublicField)
 			.build();
 
@@ -171,7 +171,7 @@ class Property_Test extends TestBase {
 			.filter(f -> f.getName().equals("publicField"))
 			.findFirst()
 			.orElseThrow();
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.field(field)
 			.build();
 
@@ -190,7 +190,7 @@ class Property_Test extends TestBase {
 			.filter(f -> f.getName().equals("privateField"))
 			.findFirst()
 			.orElseThrow();
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.field(field)
 			.build();
 
@@ -205,7 +205,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a011_field_withNullField() {
-		var builder = Property.<TestClass, String>create();
+		var builder = Property.<TestClass,String>create();
 		assertThrows(IllegalArgumentException.class, () -> builder.field(null));
 	}
 
@@ -218,7 +218,7 @@ class Property_Test extends TestBase {
 			.filter(m -> m.hasName("getPublicField"))
 			.findFirst()
 			.orElseThrow();
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.getter(getter)
 			.setter(TestClass::setPublicField)
 			.build();
@@ -237,7 +237,7 @@ class Property_Test extends TestBase {
 			.filter(m -> m.hasName("setPublicField") && m.hasParameterTypes(String.class))
 			.findFirst()
 			.orElseThrow();
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.getter(TestClass::getPublicField)
 			.setter(setter)
 			.build();
@@ -252,7 +252,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a014_getter_withNullMethod() {
-		var builder = Property.<TestClass, String>create();
+		var builder = Property.<TestClass,String>create();
 		assertThrows(IllegalArgumentException.class, () -> builder.getter((MethodInfo)null));
 	}
 
@@ -261,7 +261,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a015_setter_withNullMethod() {
-		var builder = Property.<TestClass, String>create();
+		var builder = Property.<TestClass,String>create();
 		assertThrows(IllegalArgumentException.class, () -> builder.setter((MethodInfo)null));
 	}
 
@@ -274,7 +274,7 @@ class Property_Test extends TestBase {
 			.filter(f -> f.getName().equals("intField"))
 			.findFirst()
 			.orElseThrow();
-		var prop = Property.<TestClass, Integer>create()
+		var prop = Property.<TestClass,Integer>create()
 			.field(field)
 			.build();
 
@@ -289,7 +289,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a017_set_withNullValue() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.getter(TestClass::getPublicField)
 			.setter(TestClass::setPublicField)
 			.build();
@@ -306,7 +306,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a018_get_exceptionHandling() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.getter(obj -> {
 				throw new RuntimeException("Test exception");
 			})
@@ -322,7 +322,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a019_set_exceptionHandling() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.setter((obj, val) -> {
 				throw new RuntimeException("Test exception");
 			})
@@ -339,7 +339,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a020_get_executableExceptionPassThrough() {
 		var originalEx = new ExecutableException("Original exception");
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.getter(obj -> {
 				throw originalEx;
 			})
@@ -356,7 +356,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a021_set_executableExceptionPassThrough() {
 		var originalEx = new ExecutableException("Original exception");
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.setter((obj, val) -> {
 				throw originalEx;
 			})
@@ -372,7 +372,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a022_get_checkedExceptionWrapping() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.getter(obj -> {
 				throw new java.io.IOException("IO error");
 			})
@@ -390,7 +390,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a023_set_checkedExceptionWrapping() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.setter((obj, val) -> {
 				throw new java.io.IOException("IO error");
 			})
@@ -408,7 +408,7 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a024_builder_chaining() {
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.getter(TestClass::getPublicField)
 			.setter(TestClass::setPublicField)
 			.build();
@@ -427,7 +427,7 @@ class Property_Test extends TestBase {
 			.filter(f -> f.getName().equals("publicField"))
 			.findFirst()
 			.orElseThrow();
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.field(field)
 			.build();
 
@@ -453,7 +453,7 @@ class Property_Test extends TestBase {
 			.filter(m -> m.hasName("setPublicField") && m.hasParameterTypes(String.class))
 			.findFirst()
 			.orElseThrow();
-		var prop = Property.<TestClass, String>create()
+		var prop = Property.<TestClass,String>create()
 			.getter(getter)
 			.setter(setter)
 			.build();

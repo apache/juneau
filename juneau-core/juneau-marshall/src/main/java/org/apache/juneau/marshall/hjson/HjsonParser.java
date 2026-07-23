@@ -126,8 +126,8 @@ public class HjsonParser extends ReaderParser implements HjsonMetaProvider, Reco
 
 	private static final String ARG_ctx = "ctx";
 
-	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>, HjsonClassMeta> hjsonClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
-	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta, HjsonBeanPropertyMeta> hjsonBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,HjsonClassMeta> hjsonClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,HjsonBeanPropertyMeta> hjsonBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/**
 	 * Builder class.

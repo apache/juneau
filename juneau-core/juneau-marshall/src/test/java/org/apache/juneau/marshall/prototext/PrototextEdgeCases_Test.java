@@ -106,7 +106,7 @@ class PrototextEdgeCases_Test {
 
 	@Test
 	void g10_mapWithNonStringKeys() {
-		var a = new LinkedHashMap<String, Object>();
+		var a = new LinkedHashMap<String,Object>();
 		a.put("k1", "one");
 		a.put("k2", "two");
 		var proto = toPrototext(a);

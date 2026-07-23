@@ -66,7 +66,7 @@ class ParameterInfo_Resolution_Test extends TestBase {
 	}
 
 	public static class MapBeanHolder {
-		public MapBeanHolder(Map<String, MyService> svcs) {}
+		public MapBeanHolder(Map<String,MyService> svcs) {}
 	}
 
 	public static class ArrayBeanHolder {

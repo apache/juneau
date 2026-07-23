@@ -254,14 +254,14 @@ class RestArgResolvers_Test extends TestBase {
 
 	static Stream<Arguments> abc03_namedArg_create_throwsWhenNameMissing() {
 		return Stream.of(
-			Arguments.of("@Query",    "queryNoName",    (Function<ParameterInfo, Object>) p -> QueryArg.create(p, EMPTY_AWL)),
-			Arguments.of("@Header",   "headerNoName",   (Function<ParameterInfo, Object>) p -> HeaderArg.create(p, EMPTY_AWL)),
-			Arguments.of("@FormData", "formDataNoName", (Function<ParameterInfo, Object>) p -> FormDataArg.create(p, EMPTY_AWL))
+			Arguments.of("@Query",    "queryNoName",    (Function<ParameterInfo,Object>) p -> QueryArg.create(p, EMPTY_AWL)),
+			Arguments.of("@Header",   "headerNoName",   (Function<ParameterInfo,Object>) p -> HeaderArg.create(p, EMPTY_AWL)),
+			Arguments.of("@FormData", "formDataNoName", (Function<ParameterInfo,Object>) p -> FormDataArg.create(p, EMPTY_AWL))
 		);
 	}
 
 	@ParameterizedTest @MethodSource("abc03_namedArg_create_throwsWhenNameMissing")
-	void a03_b03_c03_namedArg_create_throwsWhenNameMissing(String annotation, String fixtureMethod, Function<ParameterInfo, Object> factory) {
+	void a03_b03_c03_namedArg_create_throwsWhenNameMissing(String annotation, String fixtureMethod, Function<ParameterInfo,Object> factory) {
 		var pi = firstParam(Fixture.class, fixtureMethod);
 		assertThrows(ArgException.class, () -> factory.apply(pi),
 			"Arg must throw ArgException when " + annotation + " has no name/value");
@@ -673,15 +673,15 @@ class RestArgResolvers_Test extends TestBase {
 
 	static Stream<Arguments> t_contextArgs_returnsNullForUnknownType() {
 		return Stream.of(
-			Arguments.of("RestContextArgs",   (Function<ParameterInfo, Object>) RestContextArgs::create),
-			Arguments.of("RestOpContextArgs", (Function<ParameterInfo, Object>) RestOpContextArgs::create),
-			Arguments.of("RestOpSessionArgs", (Function<ParameterInfo, Object>) RestOpSessionArgs::create),
-			Arguments.of("RestSessionArgs",   (Function<ParameterInfo, Object>) RestSessionArgs::create)
+			Arguments.of("RestContextArgs",   (Function<ParameterInfo,Object>) RestContextArgs::create),
+			Arguments.of("RestOpContextArgs", (Function<ParameterInfo,Object>) RestOpContextArgs::create),
+			Arguments.of("RestOpSessionArgs", (Function<ParameterInfo,Object>) RestOpSessionArgs::create),
+			Arguments.of("RestSessionArgs",   (Function<ParameterInfo,Object>) RestSessionArgs::create)
 		);
 	}
 
 	@ParameterizedTest @MethodSource("t_contextArgs_returnsNullForUnknownType")
-	void t03_t05_t07_t09_contextArgs_create_returnsNullForUnknownType(String label, Function<ParameterInfo, Object> factory) {
+	void t03_t05_t07_t09_contextArgs_create_returnsNullForUnknownType(String label, Function<ParameterInfo,Object> factory) {
 		var pi = firstParam(Fixture.class, "noAnnotation");
 		assertNull(factory.apply(pi), label + ".create must return null for unannotated parameter");
 	}

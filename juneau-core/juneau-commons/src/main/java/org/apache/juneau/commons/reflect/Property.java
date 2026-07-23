@@ -82,7 +82,7 @@ import org.apache.juneau.commons.function.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class Property<T, V> {
+public class Property<T,V> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_object = "object";
@@ -105,12 +105,12 @@ public class Property<T, V> {
 	 * @param <V> The value type.
 	 * @return A new builder instance.
 	 */
-	public static <T, V> Builder<T, V> create() {
+	public static <T,V> Builder<T,V> create() {
 		return new Builder<>();
 	}
 
-	private final ThrowingFunction<T, V> producer;
-	private final ThrowingConsumer2<T, V> consumer;
+	private final ThrowingFunction<T,V> producer;
+	private final ThrowingConsumer2<T,V> consumer;
 
 	/**
 	 * Constructor.
@@ -118,7 +118,7 @@ public class Property<T, V> {
 	 * @param producer The producer function (getter). Can be <jk>null</jk>, in which case {@link #canRead()} returns <jk>false</jk> and {@link #get(Object)} throws an {@link ExecutableException}.
 	 * @param consumer The consumer function (setter). Can be <jk>null</jk>, in which case {@link #canWrite()} returns <jk>false</jk> and {@link #set(Object,Object)} throws an {@link ExecutableException}.
 	 */
-	public Property(ThrowingFunction<T,V> producer, ThrowingConsumer2<T, V> consumer) {
+	public Property(ThrowingFunction<T,V> producer, ThrowingConsumer2<T,V> consumer) {
 		this.producer = producer;
 		this.consumer = consumer;
 	}
@@ -175,9 +175,9 @@ public class Property<T, V> {
 	 * @param <T> The object type.
 	 * @param <V> The value type.
 	 */
-	public static class Builder<T, V> {
-		private ThrowingFunction<T, V> producer;
-		private ThrowingConsumer2<T, V> consumer;
+	public static class Builder<T,V> {
+		private ThrowingFunction<T,V> producer;
+		private ThrowingConsumer2<T,V> consumer;
 
 		/**
 		 * Sets the producer (getter) using a function.
@@ -185,7 +185,7 @@ public class Property<T, V> {
 		 * @param producer The producer function. Can be <jk>null</jk> to leave the property unreadable.
 		 * @return This object.
 		 */
-		public Builder<T, V> getter(ThrowingFunction<T, V> producer) {
+		public Builder<T,V> getter(ThrowingFunction<T,V> producer) {
 			this.producer = producer;
 			return this;
 		}
@@ -196,7 +196,7 @@ public class Property<T, V> {
 		 * @param consumer The consumer function. Can be <jk>null</jk> to leave the property unwritable.
 		 * @return This object.
 		 */
-		public Builder<T, V> setter(ThrowingConsumer2<T, V> consumer) {
+		public Builder<T,V> setter(ThrowingConsumer2<T,V> consumer) {
 			this.consumer = consumer;
 			return this;
 		}
@@ -211,9 +211,9 @@ public class Property<T, V> {
 		 * @return This object.
 		 */
 		@SuppressWarnings({
-			"unchecked" // Type erasure requires cast to Builder<T, V>
+			"unchecked" // Type erasure requires cast to Builder<T,V>
 		})
-		public Builder<T, V> field(FieldInfo field) {
+		public Builder<T,V> field(FieldInfo field) {
 			assertArgNotNull(ARG_field, field);
 			field.accessible();
 			boolean isStatic = field.isStatic();
@@ -232,9 +232,9 @@ public class Property<T, V> {
 		 * @return This object.
 		 */
 		@SuppressWarnings({
-			"unchecked" // Type erasure requires cast to Builder<T, V>
+			"unchecked" // Type erasure requires cast to Builder<T,V>
 		})
-		public Builder<T, V> getter(MethodInfo method) {
+		public Builder<T,V> getter(MethodInfo method) {
 			assertArgNotNull(ARG_method, method);
 			method.accessible();
 			boolean isStatic = method.isStatic();
@@ -251,7 +251,7 @@ public class Property<T, V> {
 		 * @param method The method info. Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder<T, V> setter(MethodInfo method) {
+		public Builder<T,V> setter(MethodInfo method) {
 			assertArgNotNull(ARG_method, method);
 			method.accessible();
 			boolean isStatic = method.isStatic();
@@ -264,7 +264,7 @@ public class Property<T, V> {
 		 *
 		 * @return A new property instance.
 		 */
-		public Property<T, V> build() {
+		public Property<T,V> build() {
 			return new Property<>(producer, consumer);
 		}
 	}

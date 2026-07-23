@@ -151,7 +151,7 @@ class JspView_Test extends TestBase {
 	}
 
 	@Test void c04_attrsRejectsBlankKey() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("ok", 1);
 		m.put("", 2);
 		var v = JspView.of("hello.jsp");

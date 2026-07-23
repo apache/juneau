@@ -453,13 +453,13 @@ class BeanInstantiator_Test extends TestBase {
 
 		// Bean with Map parameter for named beans
 		public static class A07_BeanWithMap {
-			private final Map<String, TestService> services;
+			private final Map<String,TestService> services;
 
-			public A07_BeanWithMap(Map<String, TestService> services) {
+			public A07_BeanWithMap(Map<String,TestService> services) {
 				this.services = services;
 			}
 
-			public Map<String, TestService> getServices() { return services; }
+			public Map<String,TestService> getServices() { return services; }
 		}
 
 		/**

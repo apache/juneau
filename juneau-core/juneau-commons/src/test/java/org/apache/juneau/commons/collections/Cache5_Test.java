@@ -297,7 +297,7 @@ class Cache5_Test extends TestBase {
 
 	@Test
 	void c01_create() {
-		var x = Cache5.<String, String, String, String, Integer, String>create()
+		var x = Cache5.<String,String,String,String,Integer,String>create()
 			.supplier((k1, k2, k3, k4, k5) -> k1 + ":" + k2 + ":" + k3 + ":" + k4 + ":" + k5)
 			.build();
 		var result = x.get("en", "US", "west", "formal", 1);
@@ -427,7 +427,7 @@ class Cache5_Test extends TestBase {
 			.threadLocal()
 			.build();
 		var executor = java.util.concurrent.Executors.newFixedThreadPool(2);
-		var threadValues = new java.util.concurrent.ConcurrentHashMap<Thread, String>();
+		var threadValues = new java.util.concurrent.ConcurrentHashMap<Thread,String>();
 
 		// Each thread caches ("en", "US", "west", "formal", 1) with its own value
 		var future1 = java.util.concurrent.CompletableFuture.runAsync(() -> {
@@ -544,7 +544,7 @@ class Cache5_Test extends TestBase {
 			.cacheMode(WEAK)
 			.build();
 		var executor = java.util.concurrent.Executors.newFixedThreadPool(2);
-		var threadValues = new java.util.concurrent.ConcurrentHashMap<Thread, String>();
+		var threadValues = new java.util.concurrent.ConcurrentHashMap<Thread,String>();
 
 		// Each thread caches ("en", "US", "west", "formal", 1) with its own value
 		var future1 = java.util.concurrent.CompletableFuture.runAsync(() -> {

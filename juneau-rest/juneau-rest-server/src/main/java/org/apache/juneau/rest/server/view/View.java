@@ -107,7 +107,7 @@ public interface View {
 	 * @return The attributes map. Never {@code null}; returns an immutable empty map when no
 	 * 	attributes are bound.
 	 */
-	Map<String, Object> getAttributes();
+	Map<String,Object> getAttributes();
 
 	/**
 	 * Optional response headers applied by the renderer before forwarding to the templating
@@ -120,7 +120,7 @@ public interface View {
 	 *
 	 * @return An immutable map of headers to apply. Never {@code null}; defaults to an empty map.
 	 */
-	default Map<String, String> getResponseHeaders() {
+	default Map<String,String> getResponseHeaders() {
 		return Map.of();
 	}
 }

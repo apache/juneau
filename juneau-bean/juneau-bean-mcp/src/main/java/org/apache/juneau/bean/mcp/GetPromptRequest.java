@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.*;
 public class GetPromptRequest {
 
 	private String name;
-	private Map<String, Object> arguments;
+	private Map<String,Object> arguments;
 
 	/**
 	 * Prompt name.
@@ -57,7 +57,7 @@ public class GetPromptRequest {
 	 *
 	 * @return The arguments map, or {@code null} if not set.
 	 */
-	public Map<String, Object> getArguments() {
+	public Map<String,Object> getArguments() {
 		return u(arguments);
 	}
 
@@ -67,7 +67,7 @@ public class GetPromptRequest {
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public GetPromptRequest setArguments(Map<String, Object> value) {
+	public GetPromptRequest setArguments(Map<String,Object> value) {
 		arguments = value;
 		return this;
 	}

@@ -53,7 +53,7 @@ class HjsonMediaType_Test {
 		var a = JsonMap.of("name", "test", "count", 42);
 		var hjson = toHjson(a);
 		assertNotNull(hjson);
-		var b = (Map<String, Object>) fromHjson(hjson, Map.class, String.class, Object.class);
+		var b = (Map<String,Object>) fromHjson(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "name,count", "test,42");
 	}
 

@@ -73,8 +73,8 @@ public class TestAssertions {
 	 * <p>Null keys render as {@code "<null>"}; null values render as {@code "<null>"}. Maps that are
 	 * neither {@link SortedMap} nor {@link LinkedHashMap} are sorted by key string for determinism.
 	 */
-	public static void assertMap(Map<?, ?> actual, Object... expected) {
-		Map<?, ?> ordered = toOrderedMap(actual);
+	public static void assertMap(Map<?,?> actual, Object... expected) {
+		Map<?,?> ordered = toOrderedMap(actual);
 		List<String> entries = ordered.entrySet().stream()
 			.map(e -> stringifyKey(e.getKey()) + "=" + stringify(e.getValue()))
 			.toList();
@@ -208,7 +208,7 @@ public class TestAssertions {
 			return "[" + l.stream().map(TestAssertions::stringify).collect(Collectors.joining(",")) + "]";
 		if (o instanceof Collection<?> c)
 			return "[" + c.stream().map(TestAssertions::stringify).collect(Collectors.joining(",")) + "]";
-		if (o instanceof Map<?, ?> m) {
+		if (o instanceof Map<?,?> m) {
 			return "{" + m.entrySet().stream()
 				.map(e -> stringifyKey(e.getKey()) + "=" + stringify(e.getValue()))
 				.collect(Collectors.joining(",")) + "}";
@@ -230,7 +230,7 @@ public class TestAssertions {
 
 	private static int sizeOf(Object o) {
 		if (o instanceof Collection<?> c) return c.size();
-		if (o instanceof Map<?, ?> m) return m.size();
+		if (o instanceof Map<?,?> m) return m.size();
 		if (o instanceof String s) return s.length();
 		if (o.getClass().isArray()) return Array.getLength(o);
 		// Try size() method
@@ -250,7 +250,7 @@ public class TestAssertions {
 
 	private static boolean isEmptyLike(Object o) {
 		if (o instanceof Collection<?> c) return c.isEmpty();
-		if (o instanceof Map<?, ?> m) return m.isEmpty();
+		if (o instanceof Map<?,?> m) return m.isEmpty();
 		if (o instanceof String s) return s.isEmpty();
 		if (o instanceof Optional<?> opt) return opt.isEmpty();
 		if (o instanceof Enumeration<?> e) return !e.hasMoreElements();
@@ -273,18 +273,18 @@ public class TestAssertions {
 	@SuppressWarnings({
 		"java:S1452"  // Wildcard type parameter required for test utility generics.
 	})
-	private static Map<?, ?> toOrderedMap(Map<?, ?> actual) {
+	private static Map<?,?> toOrderedMap(Map<?,?> actual) {
 		if (actual instanceof SortedMap || actual instanceof LinkedHashMap) return actual;
-		List<Map.Entry<?, ?>> entries = new ArrayList<>(actual.entrySet());
+		List<Map.Entry<?,?>> entries = new ArrayList<>(actual.entrySet());
 		entries.sort(Comparator.comparing(e -> stringifyKey(e.getKey())));
-		LinkedHashMap<Object, Object> result = new LinkedHashMap<>();
-		for (Map.Entry<?, ?> e : entries)
+		LinkedHashMap<Object,Object> result = new LinkedHashMap<>();
+		for (Map.Entry<?,?> e : entries)
 			result.put(e.getKey(), e.getValue());
 		return result;
 	}
 
 	private static Object getProperty(Object obj, String name) {
-		if (obj instanceof Map<?, ?> m) return m.get(name);
+		if (obj instanceof Map<?,?> m) return m.get(name);
 		// Try exact method name (e.g. on(), value(), number())
 		try {
 			Method m = obj.getClass().getMethod(name);

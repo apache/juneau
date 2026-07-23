@@ -78,7 +78,7 @@ class HoconParserSession_Test extends TestBase {
 		// Hits the "if (hoconParser.resolveSubstitutions)" false branch.
 		var p = HoconParser.create().resolveSubstitutions(false).build();
 		var hocon = "x = hello\nval = ${x}";
-		var m = (Map<String, Object>) p.read(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) p.read(hocon, Map.class, String.class, Object.class);
 		assertNotNull(m);
 		// When unresolved, ${x} stays as a HoconSubstitution which renders as string with $ token.
 		// We don't assert exact form — just that no exception is thrown and the doc parses.
@@ -88,7 +88,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void a05_bracedRoot() throws Exception {
 		// Root starts with LBRACE → readObject path, not readRootBraceless.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("{ a = 1, b = 2 }", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("{ a = 1, b = 2 }", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertEquals(1, ((Number) m.get("a")).intValue());
 		assertEquals(2, ((Number) m.get("b")).intValue());
@@ -101,7 +101,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void b01_numericKey() throws Exception {
 		// Key tokenized as NUMBER → tok.numberValue().toString() branch in readPath.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("{ 42 = answer }", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("{ 42 = answer }", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		// Number key path: HoconTokenizer reads "42" as NUMBER token.
 		assertTrue(m.containsKey("42"));
@@ -111,7 +111,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void b02_trueKey() throws Exception {
 		// Key tokenized as TRUE keyword → "true" branch in readPath.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("{ true = yes }", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("{ true = yes }", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertEquals("yes", m.get("true"));
 	}
@@ -119,7 +119,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void b03_falseKey() throws Exception {
 		// Key tokenized as FALSE keyword → "false" branch in readPath.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("{ false = no }", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("{ false = no }", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertEquals("no", m.get("false"));
 	}
@@ -127,7 +127,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void b04_quotedKey() throws Exception {
 		// Quoted key — uses QUOTED_STRING branch.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("\"my key\" = value", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("\"my key\" = value", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertEquals("value", m.get("my key"));
 	}
@@ -135,11 +135,11 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void b05_unquotedDottedPath() throws Exception {
 		// Unquoted dotted key — covers the "first.contains(\".\") → split" branch in readPath.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a.b.c = 7", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a.b.c = 7", Map.class, String.class, Object.class);
 		assertNotNull(m);
-		var a = (Map<?, ?>) m.get("a");
+		var a = (Map<?,?>) m.get("a");
 		assertNotNull(a);
-		var b = (Map<?, ?>) a.get("b");
+		var b = (Map<?,?>) a.get("b");
 		assertNotNull(b);
 		assertEquals(7, ((Number) b.get("c")).intValue());
 	}
@@ -148,7 +148,7 @@ class HoconParserSession_Test extends TestBase {
 	void b06_quotedKeyContainingDot() throws Exception {
 		// Quoted key with embedded dot — preserved literally (no split). Covers QUOTED_STRING branch
 		// with no path-split, and the empty-component skip when first is quoted.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("\"a.b.c\" = 9", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("\"a.b.c\" = 9", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertTrue(m.containsKey("a.b.c"));
 	}
@@ -160,7 +160,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void c01_nullValue() throws Exception {
 		// readValue NULL branch.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("x = null", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("x = null", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertTrue(m.containsKey("x"));
 		assertNull(m.get("x"));
@@ -168,26 +168,26 @@ class HoconParserSession_Test extends TestBase {
 
 	@Test
 	void c02_booleanValueTrue() throws Exception {
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("x = true", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("x = true", Map.class, String.class, Object.class);
 		assertEquals(Boolean.TRUE, m.get("x"));
 	}
 
 	@Test
 	void c03_booleanValueFalse() throws Exception {
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("x = false", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("x = false", Map.class, String.class, Object.class);
 		assertEquals(Boolean.FALSE, m.get("x"));
 	}
 
 	@Test
 	void c04_numberValue() throws Exception {
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("x = 3.14", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("x = 3.14", Map.class, String.class, Object.class);
 		assertEquals(3.14, ((Number) m.get("x")).doubleValue(), 1e-9);
 	}
 
 	@Test
 	void c05_inlineEmptyObject() throws Exception {
 		// readValue LBRACE branch.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("x = {}", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("x = {}", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertTrue(m.get("x") instanceof Map);
 		assertTrue(((Map<?,?>) m.get("x")).isEmpty());
@@ -197,7 +197,7 @@ class HoconParserSession_Test extends TestBase {
 	void c06_arrayConcatenation() throws Exception {
 		// readValueOrConcat: adjacent arrays without separator → flattened.
 		// HOCON: `[1,2] [3,4]` ≡ `[1,2,3,4]`.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a = [1,2] [3,4]", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a = [1,2] [3,4]", Map.class, String.class, Object.class);
 		var a = (List<?>) m.get("a");
 		assertEquals(4, a.size());
 		assertEquals(1, ((Number) a.get(0)).intValue());
@@ -207,8 +207,8 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void c07_objectConcatenation() throws Exception {
 		// readValueOrConcat: adjacent objects without separator → merged.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a = { x=1 } { y=2 }", Map.class, String.class, Object.class);
-		var a = (Map<String, Object>) m.get("a");
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a = { x=1 } { y=2 }", Map.class, String.class, Object.class);
+		var a = (Map<String,Object>) m.get("a");
 		assertEquals(1, ((Number) a.get("x")).intValue());
 		assertEquals(2, ((Number) a.get("y")).intValue());
 	}
@@ -217,7 +217,7 @@ class HoconParserSession_Test extends TestBase {
 	void c08_stringAndNumberConcat() throws Exception {
 		// Mixed string + number concat → goes through HoconConcat's resolveConcatPart.
 		// (whitespace is stripped between unquoted tokens by the tokenizer; current implementation joins).
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a = port 80", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a = port 80", Map.class, String.class, Object.class);
 		// Confirm a value was produced — exact format is implementation-dependent.
 		assertNotNull(m.get("a"));
 	}
@@ -226,7 +226,7 @@ class HoconParserSession_Test extends TestBase {
 	void c09_unquotedStringAfterArrayBreaksConcat() throws Exception {
 		// After an array, an UNQUOTED_STRING is treated as next key, not concat.
 		// Covers the "last instanceof HoconArray" break in readValueOrConcat.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a = [1,2]\nnext = ok", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a = [1,2]\nnext = ok", Map.class, String.class, Object.class);
 		var a = (List<?>) m.get("a");
 		assertEquals(2, a.size());
 		assertEquals("ok", m.get("next"));
@@ -235,8 +235,8 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void c10_unquotedStringAfterObjectBreaksConcat() throws Exception {
 		// After an inline object, UNQUOTED_STRING is next key, not concat target.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a = { x=1 }\nnext = ok", Map.class, String.class, Object.class);
-		var a = (Map<String, Object>) m.get("a");
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a = { x=1 }\nnext = ok", Map.class, String.class, Object.class);
+		var a = (Map<String,Object>) m.get("a");
 		assertEquals(1, ((Number) a.get("x")).intValue());
 		assertEquals("ok", m.get("next"));
 	}
@@ -280,7 +280,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void e01_plusEqualsCreatingNewArray() throws Exception {
 		// `list += a` with no prior `list` — covers existing == null branch (newArr empty case).
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("list += a", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("list += a", Map.class, String.class, Object.class);
 		var list = (List<?>) m.get("list");
 		assertEquals(1, list.size());
 		assertEquals("a", list.get(0));
@@ -289,7 +289,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void e02_plusEqualsAppendsToExistingArray() throws Exception {
 		// `list = [a]` then `list += b` — covers existing instanceof HoconArray.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("list = [a]\nlist += b", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("list = [a]\nlist += b", Map.class, String.class, Object.class);
 		var list = (List<?>) m.get("list");
 		assertEquals(2, list.size());
 	}
@@ -298,7 +298,7 @@ class HoconParserSession_Test extends TestBase {
 	void e03_plusEqualsConvertsScalarToArray() throws Exception {
 		// `list = a` then `list += b` — existing is scalar, gets wrapped in a new array.
 		// Covers the "existing != null" but not array branch in PLUS_EQUALS handler.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("list = a\nlist += b", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("list = a\nlist += b", Map.class, String.class, Object.class);
 		var list = (List<?>) m.get("list");
 		assertEquals(2, list.size());
 	}
@@ -306,8 +306,8 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void e04_plusEqualsInsideObject() throws Exception {
 		// PLUS_EQUALS branch in readObject (not just root).
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a { items += x\nitems += y }", Map.class, String.class, Object.class);
-		var a = (Map<String, Object>) m.get("a");
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a { items += x\nitems += y }", Map.class, String.class, Object.class);
+		var a = (Map<String,Object>) m.get("a");
 		var items = (List<?>) a.get("items");
 		assertEquals(2, items.size());
 	}
@@ -319,8 +319,8 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void f01_mergeObjectsAtRoot() throws Exception {
 		// `a { x=1 }` then `a { y=2 }` — second occurrence merges into first.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a { x=1 }\na { y=2 }", Map.class, String.class, Object.class);
-		var a = (Map<String, Object>) m.get("a");
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a { x=1 }\na { y=2 }", Map.class, String.class, Object.class);
+		var a = (Map<String,Object>) m.get("a");
 		assertEquals(1, ((Number) a.get("x")).intValue());
 		assertEquals(2, ((Number) a.get("y")).intValue());
 	}
@@ -328,9 +328,9 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void f02_mergeObjectsInsideParent() throws Exception {
 		var hocon = "p { a { x=1 }\na { y=2 } }";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
-		var p = (Map<String, Object>) m.get("p");
-		var a = (Map<String, Object>) p.get("a");
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
+		var p = (Map<String,Object>) m.get("p");
+		var a = (Map<String,Object>) p.get("a");
 		assertEquals(1, ((Number) a.get("x")).intValue());
 		assertEquals(2, ((Number) a.get("y")).intValue());
 	}
@@ -344,7 +344,7 @@ class HoconParserSession_Test extends TestBase {
 		// Concat that doesn't reference its own path — covers the early-return
 		// "!concat.referencesPath(pathStr) → return value" branch in resolveSelfRefConcatIfNeeded.
 		var hocon = "a = base\nb = ${a}\"-x\"";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("base-x", m.get("b"));
 	}
 
@@ -352,7 +352,7 @@ class HoconParserSession_Test extends TestBase {
 	void g02_selfRefWithExisting() throws Exception {
 		// existing != null branch — full self-ref concat.
 		var hocon = "a = base\na = ${a}\"-tail\"";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("base-tail", m.get("a"));
 	}
 
@@ -360,7 +360,7 @@ class HoconParserSession_Test extends TestBase {
 	void g03_concatWithoutSelfRef() throws Exception {
 		// HoconConcat that doesn't reference its own path → returns as-is from resolveSelfRefConcatIfNeeded.
 		var hocon = "x = hi\na = ${x}\"!\"";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertEquals("hi!", m.get("a"));
 	}
 
@@ -406,7 +406,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void i02_readBeanWithNameProperty() throws Exception {
 		// Hits injectAnnotations: cm.getNameProperty() != null path.
-		// Outer bean has a Map<String, NamedChild> where each value-bean has @NameProperty.
+		// Outer bean has a Map<String,NamedChild> where each value-bean has @NameProperty.
 		var hocon = "items { foo { value = aa }, bar { value = bb } }";
 		var bean = HoconParser.DEFAULT.read(hocon, OuterWithNamedMap.class);
 		assertNotNull(bean);
@@ -431,7 +431,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void j01_tripleQuotedAsKey() throws Exception {
 		// Triple-quoted as key — exercises the TRIPLE_QUOTED case in readPath.
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("\"\"\"k\"\"\" = v", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("\"\"\"k\"\"\" = v", Map.class, String.class, Object.class);
 		assertEquals("v", m.get("k"));
 	}
 
@@ -476,7 +476,7 @@ class HoconParserSession_Test extends TestBase {
 		var hocon = "null = x";
 		// Either parses to null or throws — both exercise the empty-path branch.
 		try {
-			var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
+			var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 			// If it parses, we just need any result.
 			assertTrue(m == null || !m.containsKey("x"));
 		} catch (Exception ignore) {
@@ -487,7 +487,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void l02_arrayWithNewlineSeparators() throws Exception {
 		// Arrays separated by newlines — covers readArray separator branch (NEWLINE).
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a = [\n  1\n  2\n  3\n]", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a = [\n  1\n  2\n  3\n]", Map.class, String.class, Object.class);
 		var a = (List<?>) m.get("a");
 		assertEquals(3, a.size());
 	}
@@ -497,7 +497,7 @@ class HoconParserSession_Test extends TestBase {
 		// EOF inside `[ ... ` — readArray's "EOF in while-condition" branch (line 372).
 		// Parser is tolerant: returns the partial array.
 		var hocon = "a = [ 1, 2";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var a = (List<?>) m.get("a");
 		assertEquals(2, a.size());
 	}
@@ -536,7 +536,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void l06_commaSeparatedInsideObject() throws Exception {
 		// Comma separator inside braced object — exercises readObject COMMA branch (line 360).
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("{ a = 1, b = 2, c = 3 }", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("{ a = 1, b = 2, c = 3 }", Map.class, String.class, Object.class);
 		assertEquals(1, ((Number) m.get("a")).intValue());
 		assertEquals(2, ((Number) m.get("b")).intValue());
 		assertEquals(3, ((Number) m.get("c")).intValue());
@@ -559,9 +559,9 @@ class HoconParserSession_Test extends TestBase {
 		// Quoted segment followed by `.` then unquoted — exercises readPath's
 		// "loop reads more tokens after quoted first" branch (lines 183-191).
 		var hocon = "\"a\".\"b\" = 5";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertNotNull(m);
-		var a = (Map<?, ?>) m.get("a");
+		var a = (Map<?,?>) m.get("a");
 		assertNotNull(a);
 		assertEquals(5, ((Number) a.get("b")).intValue());
 	}
@@ -570,7 +570,7 @@ class HoconParserSession_Test extends TestBase {
 	void l10_objectInsideArrayWithDottedKeys() throws Exception {
 		// Dotted unquoted keys inside array elements — re-entry through readPath/readObject.
 		var hocon = "list = [{ a.b = 1 }, { a.c = 2 }]";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var list = (List<?>) m.get("list");
 		assertEquals(2, list.size());
 	}
@@ -579,7 +579,7 @@ class HoconParserSession_Test extends TestBase {
 	void l11_substitutionToObject() throws Exception {
 		// Substitution target is an object — covers HoconConcat handling when value is non-string.
 		var hocon = "a = { x = 1 }\nb = ${a}";
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var b = m.get("b");
 		assertNotNull(b);
 		assertTrue(b instanceof Map);
@@ -590,7 +590,7 @@ class HoconParserSession_Test extends TestBase {
 	void l12_arrayOfArraysPreservesNesting() throws Exception {
 		// Nested arrays separated by COMMA — exercises readArray COMMA branch and ensures
 		// concat doesn't flatten (separator preserves nesting).
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a = [[1,2], [3,4]]", Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a = [[1,2], [3,4]]", Map.class, String.class, Object.class);
 		var a = (List<?>) m.get("a");
 		assertEquals(2, a.size());
 		assertTrue(a.get(0) instanceof List);
@@ -634,7 +634,7 @@ class HoconParserSession_Test extends TestBase {
 	}
 
 	public static class OuterWithNamedMap {
-		public Map<String, NamedChild> items;
+		public Map<String,NamedChild> items;
 	}
 
 	public static class BeanWithByteList {
@@ -642,7 +642,7 @@ class HoconParserSession_Test extends TestBase {
 	}
 
 	public static class BeanWithIntMap {
-		public Map<Integer, String> counts;
+		public Map<Integer,String> counts;
 	}
 
 	public static class BeanWithList {

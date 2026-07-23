@@ -759,7 +759,7 @@ class FieldInfo_Test extends TestBase {
 		public volatile boolean volatileField;
 		public transient Object transientField;
 		private List<String> genericField;
-		private Map<String, Integer> mapField;
+		private Map<String,Integer> mapField;
 		public int[] arrayField;
 		public String[][] matrixField;
 		public List<String>[] genericArrayField;
@@ -805,7 +805,7 @@ class FieldInfo_Test extends TestBase {
 		assertEquals(fi1a, fi1c);
 
 		// HashMap usage - same field should map to same value
-		Map<FieldInfo, String> map = new HashMap<>();
+		Map<FieldInfo,String> map = new HashMap<>();
 		map.put(fi1a, "value1");
 		assertEquals("value1", map.get(fi1b));
 		assertEquals("value1", map.get(fi1c));

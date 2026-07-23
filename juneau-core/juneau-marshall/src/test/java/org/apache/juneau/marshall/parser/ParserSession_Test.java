@@ -125,7 +125,7 @@ class ParserSession_Test extends TestBase {
 	}
 
 	@Test void a07_read_typeWithArgs_nestedMap() throws Exception {
-		var m = (Map<String, List<Bean>>) P.read(
+		var m = (Map<String,List<Bean>>) P.read(
 			"{\"a\":[{\"f1\":\"x\",\"f2\":1}]}",
 			Map.class, String.class, List.class, Bean.class);
 		assertEquals(1, m.size());
@@ -186,14 +186,14 @@ class ParserSession_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_readIntoMap_basic() throws Exception {
-		var dest = new HashMap<String, Integer>();
+		var dest = new HashMap<String,Integer>();
 		P.readIntoMap("{\"a\":1,\"b\":2}", dest, String.class, Integer.class);
 		assertEquals(1, dest.get("a"));
 		assertEquals(2, dest.get("b"));
 	}
 
 	@Test void c02_readIntoMap_intKeys() throws Exception {
-		var dest = new HashMap<Integer, String>();
+		var dest = new HashMap<Integer,String>();
 		P.readIntoMap("{\"1\":\"a\",\"2\":\"b\"}", dest, Integer.class, String.class);
 		assertEquals("a", dest.get(1));
 		assertEquals("b", dest.get(2));
@@ -201,13 +201,13 @@ class ParserSession_Test extends TestBase {
 
 	@Test void c03_readIntoMap_defaultElementTypes() throws Exception {
 		// Passing null types defaults to String/Object.
-		var dest = new HashMap<String, Object>();
+		var dest = new HashMap<String,Object>();
 		P.readIntoMap("{\"a\":1}", dest, null, null);
 		assertEquals(1, dest.get("a"));
 	}
 
 	@Test void c04_readIntoMap_malformedThrowsParseException() {
-		var dest = new HashMap<String, Object>();
+		var dest = new HashMap<String,Object>();
 		assertThrows(ParseException.class,
 			() -> P.readIntoMap("{not-json", dest, String.class, Object.class));
 	}
@@ -702,7 +702,7 @@ class ParserSession_Test extends TestBase {
 
 	@Test void m01_readIntoMap_runtimeWrappedAsParseException() {
 		// Malformed JSON (truncated input) triggers ParseException re-wrapping.
-		var dest = new HashMap<String, Object>();
+		var dest = new HashMap<String,Object>();
 		assertThrows(ParseException.class,
 			() -> P.readIntoMap("{\"a\":[1,2", dest, String.class, Object.class));
 	}
@@ -719,13 +719,13 @@ class ParserSession_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void n01_convertAttr_charType() throws Exception {
-		var m = (Map<Character, String>) P.read(
+		var m = (Map<Character,String>) P.read(
 			"{\"x\":\"foo\"}", HashMap.class, Character.class, String.class);
 		assertTrue(m.containsKey('x'));
 	}
 
 	@Test void n02_convertAttr_booleanType() throws Exception {
-		var m = (Map<Boolean, String>) P.read(
+		var m = (Map<Boolean,String>) P.read(
 			"{\"true\":\"yes\",\"false\":\"no\"}", HashMap.class, Boolean.class, String.class);
 		assertEquals("yes", m.get(true));
 		assertEquals("no", m.get(false));
@@ -768,7 +768,7 @@ class ParserSession_Test extends TestBase {
 
 	@Test void p01_convertAttr_temporalKey() throws Exception {
 		// Use java.time.LocalDate as a map key — exercises sType.isTemporal() branch.
-		var m = (Map<java.time.LocalDate, String>) P.read(
+		var m = (Map<java.time.LocalDate,String>) P.read(
 			"{\"2020-01-02\":\"v\"}", HashMap.class, java.time.LocalDate.class, String.class);
 		assertEquals(1, m.size());
 		assertEquals("v", m.values().iterator().next());
@@ -776,35 +776,35 @@ class ParserSession_Test extends TestBase {
 
 	@Test void p02_convertAttr_durationKey() throws Exception {
 		// Duration as a map key — exercises sType.isDuration() branch.
-		var m = (Map<java.time.Duration, String>) P.read(
+		var m = (Map<java.time.Duration,String>) P.read(
 			"{\"PT1H\":\"v\"}", HashMap.class, java.time.Duration.class, String.class);
 		assertEquals(1, m.size());
 	}
 
 	@Test void p03_convertAttr_periodKey() throws Exception {
 		// Period as a map key — exercises sType.isPeriod() branch.
-		var m = (Map<java.time.Period, String>) P.read(
+		var m = (Map<java.time.Period,String>) P.read(
 			"{\"P1D\":\"v\"}", HashMap.class, java.time.Period.class, String.class);
 		assertEquals(1, m.size());
 	}
 
 	@Test void p04_convertAttr_dateKey() throws Exception {
 		// Date as a map key — exercises sType.isDate() branch.
-		var m = (Map<Date, String>) P.read(
+		var m = (Map<Date,String>) P.read(
 			"{\"2020-01-02T00:00:00Z\":\"v\"}", HashMap.class, Date.class, String.class);
 		assertEquals(1, m.size());
 	}
 
 	@Test void p05_convertAttr_calendarKey() throws Exception {
 		// Calendar as a map key — exercises sType.isCalendar() branch.
-		var m = (Map<Calendar, String>) P.read(
+		var m = (Map<Calendar,String>) P.read(
 			"{\"2020-01-02T00:00:00Z\":\"v\"}", HashMap.class, Calendar.class, String.class);
 		assertEquals(1, m.size());
 	}
 
 	@Test void p06_convertAttr_numberKey() throws Exception {
 		// Number subtype (Long) as a map key.
-		var m = (Map<Long, String>) P.read(
+		var m = (Map<Long,String>) P.read(
 			"{\"100\":\"v\"}", HashMap.class, Long.class, String.class);
 		assertEquals("v", m.get(100L));
 	}

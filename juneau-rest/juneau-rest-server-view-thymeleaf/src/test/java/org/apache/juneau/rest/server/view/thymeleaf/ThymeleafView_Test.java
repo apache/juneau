@@ -150,7 +150,7 @@ class ThymeleafView_Test extends TestBase {
 	}
 
 	@Test void c04_attrsRejectsBlankKey() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("ok", 1);
 		m.put("", 2);
 		assertThrows(IllegalArgumentException.class,
@@ -158,7 +158,7 @@ class ThymeleafView_Test extends TestBase {
 	}
 
 	@Test void c05_attrsRejectsNullValue() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("ok", 1);
 		m.put("bad", null);
 		assertThrows(IllegalArgumentException.class,

@@ -765,7 +765,7 @@ class ConstructorInfo_Test extends TestBase {
 		assertEquals(ci1a, ci1c);
 
 		// HashMap usage - same constructor should map to same value
-		Map<ConstructorInfo, String> map = new HashMap<>();
+		Map<ConstructorInfo,String> map = new HashMap<>();
 		map.put(ci1a, "value1");
 		assertEquals("value1", map.get(ci1b));
 		assertEquals("value1", map.get(ci1c));
@@ -843,7 +843,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	public static class TestClass7 {
-		public TestClass7(Map<String, TestService> services) {
+		public TestClass7(Map<String,TestService> services) {
 			// Map parameter
 		}
 	}
@@ -1101,7 +1101,7 @@ class ConstructorInfo_Test extends TestBase {
 		var params = constructor.resolveParameters(beanStore, null);
 		assertEquals(1, params.length);
 		assertTrue(params[0] instanceof Map);
-		var map = (Map<String, TestService>) params[0];
+		var map = (Map<String,TestService>) params[0];
 		assertEquals(2, map.size());
 		assertSame(service1, map.get("service1"));
 		assertSame(service2, map.get("service2"));
@@ -1117,7 +1117,7 @@ class ConstructorInfo_Test extends TestBase {
 		var params = constructor.resolveParameters(beanStore, null);
 		assertEquals(1, params.length);
 		assertTrue(params[0] instanceof Map);
-		var map = (Map<String, TestService>) params[0];
+		var map = (Map<String,TestService>) params[0];
 		assertEquals(2, map.size());
 		assertSame(service1, map.get("")); // Unnamed beans use empty string as key
 		assertSame(service2, map.get("service2"));

@@ -94,7 +94,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 			if (r == null)
 				return null;
 			var t = new PrototextTokenizer(r);
-			Map<String, Object> root = readMessage(t, false);
+			Map<String,Object> root = readMessage(t, false);
 			if (isEmpty(root))
 				return type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : null;
 			if (root.size() == 1 && root.containsKey("_value")) {
@@ -114,7 +114,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		}
 	}
 
-	private Map<String, Object> readMessage(PrototextTokenizer t, boolean requireBraces) throws IOException, ParseException {
+	private Map<String,Object> readMessage(PrototextTokenizer t, boolean requireBraces) throws IOException, ParseException {
 		PrototextToken.TokenType closeBrace = null;
 		if (requireBraces) {
 			var tok = t.read();
@@ -126,7 +126,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 				return new LinkedHashMap<>();
 		}
 
-		var result = new LinkedHashMap<String, Object>();
+		var result = new LinkedHashMap<String,Object>();
 
 		while (true) {
 			t.skipWhitespaceAndComments();
@@ -275,7 +275,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		};
 	}
 
-	private <T> T convertMapToType(Map<String, Object> map, ClassMeta<T> type) throws ParseException, ExecutableException {
+	private <T> T convertMapToType(Map<String,Object> map, ClassMeta<T> type) throws ParseException, ExecutableException {
 		if (type.isMap()) {
 			var inner = type.inner();
 			if (inner != null && JsonMap.class.isAssignableFrom(inner)) {
@@ -294,9 +294,9 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		return bm.getBean();
 	}
 
-	private JsonMap toJsonMap(Map<?, ?> map) throws ParseException, ExecutableException {
+	private JsonMap toJsonMap(Map<?,?> map) throws ParseException, ExecutableException {
 		var jm = new JsonMap();
-		for (Entry<?, ?> e : map.entrySet()) {
+		for (Entry<?,?> e : map.entrySet()) {
 			var k = e.getKey();
 			var v = e.getValue();
 			Object converted = v instanceof Map v2 ? toJsonMap(v2) : convertValue(v, object());
@@ -305,9 +305,9 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		return jm;
 	}
 
-	private void populateBeanMap(BeanMap<?> bm, Map<String, Object> map) throws ParseException, ExecutableException {
+	private void populateBeanMap(BeanMap<?> bm, Map<String,Object> map) throws ParseException, ExecutableException {
 		var typePropName = getBeanTypePropertyName((ClassMeta<?>) bm.getBeanInfo());
-		for (Entry<String, Object> e : map.entrySet()) {
+		for (Entry<String,Object> e : map.entrySet()) {
 			var key = e.getKey();
 			if (key.equals(typePropName))
 				continue;

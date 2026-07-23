@@ -197,7 +197,7 @@ public class FaviconMixin extends RestMixin {
 	 * forwarded once into {@link FaviconProvider.Builder}, and the REST config is inherited once from
 	 * {@link AbstractRestBuilder}.
 	 */
-	public static class Builder extends RestMixin.Builder<FaviconMixin, Builder> {
+	public static class Builder extends RestMixin.Builder<FaviconMixin,Builder> {
 
 		private final FaviconProvider.Builder worker = FaviconProvider.create();
 

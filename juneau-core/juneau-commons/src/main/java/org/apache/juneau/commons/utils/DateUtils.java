@@ -40,7 +40,7 @@ public class DateUtils {
 	 */
 	private DateUtils() {}
 
-	private static final Cache<String, DateTimeFormatter> DATE_TIME_FORMATTER_CACHE = Cache.of(String.class, DateTimeFormatter.class)
+	private static final Cache<String,DateTimeFormatter> DATE_TIME_FORMATTER_CACHE = Cache.of(String.class, DateTimeFormatter.class)
 		.maxSize(100)
 		.supplier(pattern -> {
 			if (isEmpty(pattern))

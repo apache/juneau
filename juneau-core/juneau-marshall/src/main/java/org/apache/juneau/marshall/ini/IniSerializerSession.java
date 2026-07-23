@@ -128,8 +128,8 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 
 	private void writeBean(IniWriter w, BeanMap<?> m, String sectionPath) throws IOException, SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
-		var simple = new ArrayList<Map.Entry<BeanPropertyMeta, Object>>();
-		var sections = new ArrayList<Map.Entry<BeanPropertyMeta, Object>>();
+		var simple = new ArrayList<Map.Entry<BeanPropertyMeta,Object>>();
+		var sections = new ArrayList<Map.Entry<BeanPropertyMeta,Object>>();
 
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			if (nn(thrown))

@@ -63,7 +63,7 @@ class MediaRange_Test extends TestBase {
 		var x = new MediaRange(element);
 
 		// Collect all parameter values
-		var params = new HashMap<String, String>();
+		var params = new HashMap<String,String>();
 		x.forEachParameter(p -> params.put(p.getName(), p.getValue()));
 
 		assertEquals("UTF-8", params.get("charset"));

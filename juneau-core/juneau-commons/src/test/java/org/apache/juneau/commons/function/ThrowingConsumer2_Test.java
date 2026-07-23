@@ -32,7 +32,7 @@ class ThrowingConsumer2_Test extends TestBase {
 		var callCount = new AtomicInteger();
 		var receivedValues = new Object[2];
 
-		var consumer = (ThrowingConsumer2<String, Integer>)(a, b) -> {
+		var consumer = (ThrowingConsumer2<String,Integer>)(a, b) -> {
 			callCount.incrementAndGet();
 			receivedValues[0] = a;
 			receivedValues[1] = b;
@@ -48,7 +48,7 @@ class ThrowingConsumer2_Test extends TestBase {
 		var callCount = new AtomicInteger();
 		var receivedValues = new Object[2];
 
-		var consumer = (ThrowingConsumer2<String, Integer>)(a, b) -> {
+		var consumer = (ThrowingConsumer2<String,Integer>)(a, b) -> {
 			callCount.incrementAndGet();
 			receivedValues[0] = a;
 			receivedValues[1] = b;
@@ -64,7 +64,7 @@ class ThrowingConsumer2_Test extends TestBase {
 	// Exception handling tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void b01_throwsCheckedException() {
-		var consumer = (ThrowingConsumer2<String, Integer>)(a, b) -> {
+		var consumer = (ThrowingConsumer2<String,Integer>)(a, b) -> {
 			throw new Exception("Test exception");
 		};
 
@@ -77,7 +77,7 @@ class ThrowingConsumer2_Test extends TestBase {
 	}
 
 	@Test void b02_throwsRuntimeException() {
-		var consumer = (ThrowingConsumer2<String, Integer>)(a, b) -> {
+		var consumer = (ThrowingConsumer2<String,Integer>)(a, b) -> {
 			throw new RuntimeException("Test runtime exception");
 		};
 
@@ -91,7 +91,7 @@ class ThrowingConsumer2_Test extends TestBase {
 	}
 
 	@Test void b03_throwsError() {
-		var consumer = (ThrowingConsumer2<String, Integer>)(a, b) -> {
+		var consumer = (ThrowingConsumer2<String,Integer>)(a, b) -> {
 			throw new Error("Test error");
 		};
 
@@ -110,7 +110,7 @@ class ThrowingConsumer2_Test extends TestBase {
 		var callCount = new AtomicInteger();
 
 		// ThrowingConsumer2 extends Consumer2, so it can be used where Consumer2 is expected
-		var consumer = (Consumer2<String, Integer>)(a, b) -> {
+		var consumer = (Consumer2<String,Integer>)(a, b) -> {
 			callCount.incrementAndGet();
 		};
 
@@ -121,7 +121,7 @@ class ThrowingConsumer2_Test extends TestBase {
 	@Test void c02_lambdaExpression() {
 		var sum = new AtomicInteger(0);
 
-		var consumer = (ThrowingConsumer2<Integer, Integer>)(a, b) -> {
+		var consumer = (ThrowingConsumer2<Integer,Integer>)(a, b) -> {
 			sum.addAndGet(a + b);
 		};
 
@@ -131,9 +131,9 @@ class ThrowingConsumer2_Test extends TestBase {
 	}
 
 	@Test void c03_methodReference() {
-		var map = new java.util.HashMap<String, Integer>();
+		var map = new java.util.HashMap<String,Integer>();
 
-		var consumer = (ThrowingConsumer2<String, Integer>)map::put;
+		var consumer = (ThrowingConsumer2<String,Integer>)map::put;
 
 		consumer.apply("key1", 1);
 		consumer.apply("key2", 2);
@@ -146,8 +146,8 @@ class ThrowingConsumer2_Test extends TestBase {
 		var callCount1 = new AtomicInteger();
 		var callCount2 = new AtomicInteger();
 
-		var consumer1 = (ThrowingConsumer2<String, Integer>)(a, b) -> callCount1.incrementAndGet();
-		var consumer2 = (ThrowingConsumer2<String, Integer>)(a, b) -> callCount2.incrementAndGet();
+		var consumer1 = (ThrowingConsumer2<String,Integer>)(a, b) -> callCount1.incrementAndGet();
+		var consumer2 = (ThrowingConsumer2<String,Integer>)(a, b) -> callCount2.incrementAndGet();
 
 		var composed = consumer1.andThen(consumer2);
 		composed.apply("test", 42);
@@ -159,10 +159,10 @@ class ThrowingConsumer2_Test extends TestBase {
 	@Test void c05_andThen_withException() {
 		var callCount = new AtomicInteger();
 
-		var consumer1 = (ThrowingConsumer2<String, Integer>)(a, b) -> {
+		var consumer1 = (ThrowingConsumer2<String,Integer>)(a, b) -> {
 			throw new RuntimeException("First consumer failed");
 		};
-		var consumer2 = (ThrowingConsumer2<String, Integer>)(a, b) -> callCount.incrementAndGet();
+		var consumer2 = (ThrowingConsumer2<String,Integer>)(a, b) -> callCount.incrementAndGet();
 
 		var composed = consumer1.andThen(consumer2);
 

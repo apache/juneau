@@ -230,13 +230,13 @@ class ParquetParserSession_Test extends TestBase {
 	@Test void e01_mapTarget() throws Exception {
 		// Map<String,Object> from a single bean - exercises Map-target branch in doRead.
 		var bytes = ParquetSerializer.DEFAULT.write(simple("alice", 30));
-		var m = (Map<String, Object>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
+		var m = (Map<String,Object>) ParquetParser.DEFAULT.read(bytes, Map.class, String.class, Object.class);
 		assertNotNull(m);
 	}
 
 	@Test void e02_listOfMaps() throws Exception {
 		var bytes = ParquetSerializer.DEFAULT.write(list(simple("a", 1), simple("b", 2)));
-		var l = (List<Map<String, Object>>) ParquetParser.DEFAULT.read(bytes, List.class, Map.class);
+		var l = (List<Map<String,Object>>) ParquetParser.DEFAULT.read(bytes, List.class, Map.class);
 		assertEquals(2, l.size());
 	}
 
@@ -310,12 +310,12 @@ class ParquetParserSession_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void i01_intKeyedMap() throws Exception {
-		// Map<Integer, String> serialized as key/value pairs - exercises isKeyValuePairFormat branch.
-		var src = new LinkedHashMap<Integer, String>();
+		// Map<Integer,String> serialized as key/value pairs - exercises isKeyValuePairFormat branch.
+		var src = new LinkedHashMap<Integer,String>();
 		src.put(1, "a");
 		src.put(2, "b");
 		var bytes = ParquetSerializer.DEFAULT.write(src);
-		var m = (Map<Integer, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
+		var m = (Map<Integer,String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
 		assertNotNull(m);
 		assertEquals(2, m.size());
 		assertEquals("a", m.get(1));

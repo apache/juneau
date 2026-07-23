@@ -210,7 +210,7 @@ public class LogRecord extends java.util.logging.LogRecord {
 	public String formatted(String format) {
 		var date = new Date(getMillis());
 
-		Function<String, Object> resolver = key -> switch (key) {
+		Function<String,Object> resolver = key -> switch (key) {
 			case KEY_date -> "%1$s";
 			case KEY_logger -> "%2$s";
 			case KEY_level -> "%3$s";

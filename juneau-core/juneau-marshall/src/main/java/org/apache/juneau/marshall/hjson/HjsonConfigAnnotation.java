@@ -30,7 +30,7 @@ public class HjsonConfigAnnotation {
 	/**
 	 * Applies {@link HjsonConfig} annotations to an {@link HjsonParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<HjsonConfig, HjsonParser.Builder> {
+	public static class ParserApply extends AnnotationApplier<HjsonConfig,HjsonParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -51,7 +51,7 @@ public class HjsonConfigAnnotation {
 	/**
 	 * Applies {@link HjsonConfig} annotations to an {@link HjsonSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<HjsonConfig, HjsonSerializer.Builder> {
+	public static class SerializerApply extends AnnotationApplier<HjsonConfig,HjsonSerializer.Builder> {
 
 		/**
 		 * Constructor.

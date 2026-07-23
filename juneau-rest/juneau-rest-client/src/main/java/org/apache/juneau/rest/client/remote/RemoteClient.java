@@ -132,7 +132,7 @@ public final class RemoteClient {
 		 * objects) because {@link RestCallInterceptor} lives in this module and the metadata module must not depend on
 		 * it.  Resolved instances are independent of any client, so the cache is safely shared statically.
 		 */
-		private static final Map<Class<?>, RestCallInterceptor> INTERCEPTORS = new ConcurrentHashMap<>();
+		private static final Map<Class<?>,RestCallInterceptor> INTERCEPTORS = new ConcurrentHashMap<>();
 		private static final String HEADER_ACCEPT = "Accept";
 		private static final String MEDIA_OCTET_STREAM = "application/octet-stream";
 

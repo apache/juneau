@@ -65,7 +65,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	public static class A_WithMap {
 		public String name;
-		public Map<String, Object> props;
+		public Map<String,Object> props;
 	}
 
 	public static class A_WithSimpleList {
@@ -129,7 +129,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void a02_rootMap() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("k", "v");
 		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("k = \"v\""));
@@ -137,10 +137,10 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void a03_rootMapWithNestedMap() throws Exception {
-		var inner = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("host", "localhost");
 		inner.put("port", 5432);
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "myapp");
 		m.put("database", inner);
 		var toml = TomlSerializer.DEFAULT.write(m);
@@ -179,9 +179,9 @@ class TomlSerializerSession_Test extends TestBase {
 	@Test
 	void a06_rootCollectionOfMaps() throws Exception {
 		// Same erasure caveat as a05 — List.of(map, map) loses element type at runtime.
-		var m1 = new LinkedHashMap<String, Object>();
+		var m1 = new LinkedHashMap<String,Object>();
 		m1.put("k", "v1");
-		var m2 = new LinkedHashMap<String, Object>();
+		var m2 = new LinkedHashMap<String,Object>();
 		m2.put("k", "v2");
 		var toml = TomlSerializer.DEFAULT.write(List.of(m1, m2));
 		assertNotNull(toml);
@@ -298,7 +298,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void b03_beanWithNestedMap() throws Exception {
 		var x = new A_WithMap();
 		x.name = "outer";
-		var inner = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("k1", "v1");
 		inner.put("k2", 42);
 		x.props = inner;
@@ -398,7 +398,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void d01_keyWithDots() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("a.b.c", "val");
 		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("\"a.b.c\""));
@@ -406,7 +406,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void d02_keyWithSpaces() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("with spaces", "val");
 		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("\"with spaces\""));
@@ -414,7 +414,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void d03_emptyKeyQuoted() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("", "val");
 		var toml = TomlSerializer.DEFAULT.write(m);
 		// Empty key => quoted
@@ -423,7 +423,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void d04_bareKeyAlphanumDashUnderscore() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("my-key_1", "val");
 		var toml = TomlSerializer.DEFAULT.write(m);
 		// bare key: no quotes
@@ -432,7 +432,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void d05_nullKeyBecomesNullString() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put(null, "val");
 		var toml = TomlSerializer.DEFAULT.write(m);
 		// Null key serialized as "null"
@@ -445,7 +445,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void e01_floatValue() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("pi", 3.14);
 		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("pi = 3.14"));
@@ -453,7 +453,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void e02_floatValueWrappedFloat() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("f", Float.valueOf(1.5f));
 		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("f = 1.5"));
@@ -461,7 +461,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void e03_longValue() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("n", 1234567890123L);
 		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("n = 1234567890123"));
@@ -478,7 +478,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void e05_dateValue() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("when", new Date(0L));
 		var toml = TomlSerializer.DEFAULT.write(m);
 		// Date should serialize via writeDate
@@ -488,7 +488,7 @@ class TomlSerializerSession_Test extends TestBase {
 	@Test
 	void e06_calendarValue() throws Exception {
 		var c = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("when", c);
 		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("when ="));
@@ -496,7 +496,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void e07_temporalOffsetDateTime() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("ts", OffsetDateTime.of(2024, 1, 15, 10, 30, 0, 0, ZoneOffset.UTC));
 		var toml = TomlSerializer.DEFAULT.write(m);
 		// OffsetDateTime should serialize as raw temporal (not quoted)
@@ -505,7 +505,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void e08_temporalYear() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("y", Year.of(2024));
 		var toml = TomlSerializer.DEFAULT.write(m);
 		// Year should be string-quoted
@@ -514,7 +514,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void e09_temporalYearMonth() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("ym", YearMonth.of(2024, 6));
 		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("ym = \"2024-06\""));
@@ -522,7 +522,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void e10_durationValue() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("d", Duration.ofSeconds(30));
 		var toml = TomlSerializer.DEFAULT.write(m);
 		// Duration should be string-quoted
@@ -531,7 +531,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void e11_periodValue() throws Exception {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("p", Period.ofDays(5));
 		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("p = \""));
@@ -565,7 +565,7 @@ class TomlSerializerSession_Test extends TestBase {
 	@Test
 	void f03_nullElementInArray() throws Exception {
 		var s = TomlSerializer.create().keepNullProperties().build();
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		var list = new ArrayList<String>();
 		list.add("a");
 		list.add(null);
@@ -580,7 +580,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void f04_nullElementInPrimitiveArray() throws Exception {
 		// Object array with null element via reflective Array path
 		var s = TomlSerializer.create().keepNullProperties().build();
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("arr", new String[]{"a", null, "b"});
 		var toml = s.write(m);
 		assertTrue(toml.contains("\"<NULL>\""), () -> "Expected nullValue for null array element but got: " + toml);
@@ -615,9 +615,9 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void h01_mapWithComplexKeysGetsQuoted() throws Exception {
-		var inner = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("a.dotted", "v");
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("section", inner);
 		var toml = TomlSerializer.DEFAULT.write(m);
 		assertTrue(toml.contains("[section]"));

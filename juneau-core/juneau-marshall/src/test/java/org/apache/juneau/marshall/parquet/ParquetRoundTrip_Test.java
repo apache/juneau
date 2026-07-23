@@ -137,12 +137,12 @@ class ParquetRoundTrip_Test extends TestBase {
 
 	@Test
 	void a08_mapWithNonStringKeysRoundTrip() throws Exception {
-		var in = new TreeMap<Integer, String>();
+		var in = new TreeMap<Integer,String>();
 		in.put(1, "a");
 		in.put(2, "b");
 		in.put(3, "c");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
-		var out = (Map<Integer, String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
+		var out = (Map<Integer,String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
 		assertEquals(3, out.size());
 		assertEquals("a", out.get(1));
 		assertEquals("b", out.get(2));
@@ -174,11 +174,11 @@ class ParquetRoundTrip_Test extends TestBase {
 	@Test
 	void a11_mapWithEnumKeysRoundTrip() throws Exception {
 		// 2.7: Map<Enum,?> at root - enum keys serialized as name(), parser converts string back to enum
-		var in = new LinkedHashMap<TestEnum, String>();
+		var in = new LinkedHashMap<TestEnum,String>();
 		in.put(TestEnum.FOO, "x");
 		in.put(TestEnum.BAR, "y");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
-		var out = (Map<TestEnum, String>) ParquetParser.DEFAULT.read(bytes,
+		var out = (Map<TestEnum,String>) ParquetParser.DEFAULT.read(bytes,
 			Map.class, TestEnum.class, String.class);
 		assertEquals(2, out.size());
 		assertEquals("x", out.get(TestEnum.FOO));
@@ -188,17 +188,17 @@ class ParquetRoundTrip_Test extends TestBase {
 	/** Bean with nested Map&lt;Enum,Enum&gt; - 2.1 nested map key_value support. */
 	public static class BeanWithNestedMap {
 		public String name;
-		public Map<TestEnum, TestEnum> statusMap;
+		public Map<TestEnum,TestEnum> statusMap;
 	}
 
 	@Test
 	void a11_mapIntegerStringRoundTrip() throws Exception {
 		// 2.2: Root Map with non-String keys
-		var x = new TreeMap<Integer, String>();
+		var x = new TreeMap<Integer,String>();
 		x.put(1, "a");
 		x.put(2, null);
 		var bytes = ParquetSerializer.DEFAULT.write(x);
-		var parsed = (TreeMap<Integer, String>) ParquetParser.DEFAULT.read(bytes, TreeMap.class, Integer.class, String.class);
+		var parsed = (TreeMap<Integer,String>) ParquetParser.DEFAULT.read(bytes, TreeMap.class, Integer.class, String.class);
 		assertEquals("a", parsed.get(1));
 		assertNull(parsed.get(2));
 		assertEquals(2, parsed.size());
@@ -209,11 +209,11 @@ class ParquetRoundTrip_Test extends TestBase {
 		// 2.2: Root Map with addRootType (ValueHolder unwrap)
 		var s = ParquetSerializer.create().keepNullProperties().addBeanTypes().addRootType().build();
 		var p = ParquetParser.create().build();
-		var x = new TreeMap<Integer, String>();
+		var x = new TreeMap<Integer,String>();
 		x.put(1, "a");
 		x.put(2, null);
 		var bytes = s.write(x);
-		var parsed = (TreeMap<Integer, String>) p.read(bytes, TreeMap.class, Integer.class, String.class);
+		var parsed = (TreeMap<Integer,String>) p.read(bytes, TreeMap.class, Integer.class, String.class);
 		assertEquals("a", parsed.get(1));
 		assertNull(parsed.get(2));
 		assertEquals(2, parsed.size());
@@ -226,11 +226,11 @@ class ParquetRoundTrip_Test extends TestBase {
 		var p = ParquetParser.create().build();
 		var xd1 = GregorianCalendar.from(java.time.ZonedDateTime.of(1901, 3, 3, 4, 5, 6, 0, java.time.ZoneId.systemDefault())).getTime();
 		var xd2 = GregorianCalendar.from(java.time.ZonedDateTime.of(1902, 4, 4, 5, 6, 7, 0, java.time.ZoneId.systemDefault())).getTime();
-		var x = new TreeMap<Date, String>();
+		var x = new TreeMap<Date,String>();
 		x.put(xd1, "a");
 		x.put(xd2, null);
 		var bytes = s.write(x);
-		var parsed = (TreeMap<Date, String>) p.read(bytes, TreeMap.class, Date.class, String.class);
+		var parsed = (TreeMap<Date,String>) p.read(bytes, TreeMap.class, Date.class, String.class);
 		assertEquals("a", parsed.get(xd1));
 		assertNull(parsed.get(xd2));
 		assertEquals(2, parsed.size());
@@ -243,11 +243,11 @@ class ParquetRoundTrip_Test extends TestBase {
 		var p = ParquetParser.create().build();
 		var xc1 = GregorianCalendar.from(java.time.ZonedDateTime.parse("2012-12-21T12:34:56Z"));
 		var xc2 = GregorianCalendar.from(java.time.ZonedDateTime.parse("2012-12-21T12:34:57Z"));
-		var x = new TreeMap<Calendar, String>();
+		var x = new TreeMap<Calendar,String>();
 		x.put(xc1, "a");
 		x.put(xc2, null);
 		var bytes = s.write(x);
-		var parsed = (TreeMap<Calendar, String>) p.read(bytes, TreeMap.class, GregorianCalendar.class, String.class);
+		var parsed = (TreeMap<Calendar,String>) p.read(bytes, TreeMap.class, GregorianCalendar.class, String.class);
 		assertEquals("a", parsed.get(xc1));
 		assertNull(parsed.get(xc2));
 		assertEquals(2, parsed.size());

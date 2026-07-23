@@ -260,10 +260,10 @@ class HtmlSerializerSessionCoverage_Test extends TestBase {
 
 	@Test void d06_tableHeaders_mapListWithMaps() throws Exception {
 		// A collection of plain maps → getTableHeaders returns key set
-		var m1 = new LinkedHashMap<String, Object>();
+		var m1 = new LinkedHashMap<String,Object>();
 		m1.put("k1", "v1");
 		m1.put("k2", "v2");
-		var m2 = new LinkedHashMap<String, Object>();
+		var m2 = new LinkedHashMap<String,Object>();
 		m2.put("k1", "v3");
 		m2.put("k2", "v4");
 		var list = l(m1, m2);
@@ -397,7 +397,7 @@ class HtmlSerializerSessionCoverage_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Html(noTableHeaders=true)
-	public static class NoHeadersMapList extends LinkedHashMap<String, String> {}
+	public static class NoHeadersMapList extends LinkedHashMap<String,String> {}
 
 	@Test void f06_collection_noHeaderTableMaps() throws Exception {
 		// noTableHeaders on map class → getTableHeaders returns Object[0] → th=null inside loop
@@ -445,10 +445,10 @@ class HtmlSerializerSessionCoverage_Test extends TestBase {
 
 	@Test void f09_writeCollection_nonBeanMapWithNonMapValue() throws Exception {
 		// A list of plain maps where values are plain strings (not maps) → table headers from key set
-		var m1 = new LinkedHashMap<String, String>();
+		var m1 = new LinkedHashMap<String,String>();
 		m1.put("a", "1");
 		m1.put("b", "2");
-		var m2 = new LinkedHashMap<String, String>();
+		var m2 = new LinkedHashMap<String,String>();
 		m2.put("a", "3");
 		m2.put("b", "4");
 		var r = HtmlSerializer.DEFAULT_SQ.write(l(m1, m2));
@@ -512,7 +512,7 @@ class HtmlSerializerSessionCoverage_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void g04_writeMapEntry_nullKey() throws Exception {
-		var m = new LinkedHashMap<String, String>();
+		var m = new LinkedHashMap<String,String>();
 		m.put(null, "v1");
 		var r = HtmlSerializer.DEFAULT_SQ.write(m);
 		assertTrue(r.contains("<table"), "Expected table with null key, got: " + r);
@@ -731,7 +731,7 @@ class HtmlSerializerSessionCoverage_Test extends TestBase {
 		public String value = "original";
 	}
 
-	public static class SwappedBeanSwap extends ObjectSwap<SwappedBean, String> {
+	public static class SwappedBeanSwap extends ObjectSwap<SwappedBean,String> {
 		@Override
 		public String swap(MarshallingSession session, SwappedBean o) throws Exception {
 			return o.value + "_swapped";
@@ -1018,7 +1018,7 @@ class HtmlSerializerSessionCoverage_Test extends TestBase {
 
 	@Test void j10_writeMapEntry_crElements_complexKey() throws Exception {
 		// A map whose key is a bean should return CR_ELEMENTS from writeAnything
-		var m = new LinkedHashMap<Object, String>();
+		var m = new LinkedHashMap<Object,String>();
 		m.put(new TypedBean(), "value1");
 		var r = HtmlSerializer.DEFAULT_SQ.write(m);
 		assertTrue(r.contains("<table"), "Expected table for map with bean key, got: " + r);

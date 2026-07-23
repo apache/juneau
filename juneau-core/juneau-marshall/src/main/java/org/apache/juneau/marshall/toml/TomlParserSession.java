@@ -110,7 +110,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		try (Reader r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
-			Map<String, Object> root = readTomlDocument(new TomlTokenizer(r));
+			Map<String,Object> root = readTomlDocument(new TomlTokenizer(r));
 			if (isEmpty(root))
 				return type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : null;
 			// Root _value wrapper: document has exactly one key _value
@@ -122,9 +122,9 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		}
 	}
 
-	private Map<String, Object> readTomlDocument(TomlTokenizer t) throws IOException, ParseException {
-		Map<String, Object> root = new LinkedHashMap<>();
-		Map<String, Object> currentTable = root;
+	private Map<String,Object> readTomlDocument(TomlTokenizer t) throws IOException, ParseException {
+		Map<String,Object> root = new LinkedHashMap<>();
+		Map<String,Object> currentTable = root;
 
 		while (!t.isEof()) {
 			t.skipWhitespaceAndComments();
@@ -144,7 +144,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 						setAt(root, path, new ArrayList<>());
 						existing = getOrCreateAt(root, path);
 					}
-					Map<String, Object> newTable = new LinkedHashMap<>();
+					Map<String,Object> newTable = new LinkedHashMap<>();
 					((List)existing).add(newTable);
 					currentTable = newTable;
 				} else {
@@ -237,7 +237,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		if (c == '{') {
 			t.read();
 			t.skipWhitespace();
-			var map = new LinkedHashMap<String, Object>();
+			var map = new LinkedHashMap<String,Object>();
 			while (t.peek() != '}') {
 				t.skipWhitespace();
 				List<String> k = readKey(t);
@@ -362,46 +362,46 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		}
 	}
 
-	private static Object getOrCreateAt(Map<String, Object> root, String path) {
+	private static Object getOrCreateAt(Map<String,Object> root, String path) {
 		String[] parts = path.split("\\.");
 		Object current = root;
 		for (int i = 0; i < parts.length - 1; i++) {
-			current = ((Map)current).computeIfAbsent(parts[i], k -> new LinkedHashMap<String, Object>());
+			current = ((Map)current).computeIfAbsent(parts[i], k -> new LinkedHashMap<String,Object>());
 		}
 		return ((Map)current).get(parts[parts.length - 1]);
 	}
 
-	private static Map<String, Object> getOrCreateTableAt(Map<String, Object> root, String path) {
+	private static Map<String,Object> getOrCreateTableAt(Map<String,Object> root, String path) {
 		String[] parts = path.split("\\.");
 		Object current = root;
 		for (String part : parts) {
-			current = ((Map)current).computeIfAbsent(part, k -> new LinkedHashMap<String, Object>());
+			current = ((Map)current).computeIfAbsent(part, k -> new LinkedHashMap<String,Object>());
 		}
-		return (Map<String, Object>) current;
+		return (Map<String,Object>) current;
 	}
 
-	private static void setAt(Map<String, Object> root, String path, Object value) {
+	private static void setAt(Map<String,Object> root, String path, Object value) {
 		String[] parts = path.split("\\.");
 		Object current = root;
 		for (int i = 0; i < parts.length - 1; i++) {
-			current = ((Map)current).computeIfAbsent(parts[i], k -> new LinkedHashMap<String, Object>());
+			current = ((Map)current).computeIfAbsent(parts[i], k -> new LinkedHashMap<String,Object>());
 		}
 		((Map)current).put(parts[parts.length - 1], value);
 	}
 
-	private static void setValueAt(Map<String, Object> root, List<String> keyPath, Object value) {
+	private static void setValueAt(Map<String,Object> root, List<String> keyPath, Object value) {
 		if (keyPath.size() == 1) {
 			root.put(keyPath.get(0), value);
 			return;
 		}
 		Object current = root;
 		for (int i = 0; i < keyPath.size() - 1; i++) {
-			current = ((Map)current).computeIfAbsent(keyPath.get(i), k -> new LinkedHashMap<String, Object>());
+			current = ((Map)current).computeIfAbsent(keyPath.get(i), k -> new LinkedHashMap<String,Object>());
 		}
 		((Map)current).put(keyPath.get(keyPath.size() - 1), value);
 	}
 
-	private <T> T convertMapToType(Map<String, Object> map, ClassMeta<T> type) throws ParseException, ExecutableException {
+	private <T> T convertMapToType(Map<String,Object> map, ClassMeta<T> type) throws ParseException, ExecutableException {
 		if (type.isMap()) {
 			var keyType = type.getKeyType();
 			var valueType = type.getValueType();
@@ -419,9 +419,9 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		return (T) bm.getBean();
 	}
 
-	private JsonMap toJsonMap(Map<?, ?> map) throws ParseException, ExecutableException {
+	private JsonMap toJsonMap(Map<?,?> map) throws ParseException, ExecutableException {
 		var jm = new JsonMap();
-		for (Entry<?, ?> e : map.entrySet()) {
+		for (Entry<?,?> e : map.entrySet()) {
 			Object k = e.getKey();
 			Object v = e.getValue();
 			Object converted = v instanceof Map v2 ? toJsonMap(v2) : convertValue(v, object());
@@ -430,8 +430,8 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		return jm;
 	}
 
-	private void populateBeanMap(BeanMap<?> bm, Map<String, Object> map) throws ParseException, ExecutableException {
-		for (Entry<String, Object> e : map.entrySet()) {
+	private void populateBeanMap(BeanMap<?> bm, Map<String,Object> map) throws ParseException, ExecutableException {
+		for (Entry<String,Object> e : map.entrySet()) {
 			String key = e.getKey();
 			Object val = e.getValue();
 			BeanPropertyMeta pMeta = bm.getMeta().getProperties().get(key);

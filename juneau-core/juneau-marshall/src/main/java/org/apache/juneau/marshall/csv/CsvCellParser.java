@@ -103,10 +103,10 @@ public final class CsvCellParser {
 		return readSimpleValue();
 	}
 
-	private Map<String, Object> readObject() throws ParseException {
+	private Map<String,Object> readObject() throws ParseException {
 		if (consume() != '{')
 			throw new ParseException("Expected opening brace");
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		skipWhitespace();
 		if (peek() == '}') {
 			consume();

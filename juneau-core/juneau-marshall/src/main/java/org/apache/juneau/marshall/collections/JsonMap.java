@@ -118,17 +118,17 @@ public class JsonMap extends MarshalledMap {
 		}
 
 		@Override
-		public Object compute(String key, BiFunction<? super String, ? super Object, ?> remappingFunction) {
+		public Object compute(String key, BiFunction<? super String,? super Object,?> remappingFunction) {
 			throw uoroex();
 		}
 
 		@Override
-		public Object computeIfAbsent(String key, Function<? super String, ?> mappingFunction) {
+		public Object computeIfAbsent(String key, Function<? super String,?> mappingFunction) {
 			throw uoroex();
 		}
 
 		@Override
-		public Object computeIfPresent(String key, BiFunction<? super String, ? super Object, ?> remappingFunction) {
+		public Object computeIfPresent(String key, BiFunction<? super String,? super Object,?> remappingFunction) {
 			throw uoroex();
 		}
 
@@ -146,7 +146,7 @@ public class JsonMap extends MarshalledMap {
 		}
 
 		@Override
-		public Object merge(String key, Object value, BiFunction<? super Object, ? super Object, ?> remappingFunction) {
+		public Object merge(String key, Object value, BiFunction<? super Object,? super Object,?> remappingFunction) {
 			throw uoroex();
 		}
 
@@ -156,7 +156,7 @@ public class JsonMap extends MarshalledMap {
 		}
 
 		@Override
-		public void putAll(Map<? extends String, ?> m) {
+		public void putAll(Map<? extends String,?> m) {
 			throw uoroex();
 		}
 
@@ -186,7 +186,7 @@ public class JsonMap extends MarshalledMap {
 		}
 
 		@Override
-		public void replaceAll(BiFunction<? super String, ? super Object, ?> function) {
+		public void replaceAll(BiFunction<? super String,? super Object,?> function) {
 			throw uoroex();
 		}
 

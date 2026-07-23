@@ -38,7 +38,7 @@ class McpServerConfig_Test {
 			}
 
 			@Override
-			public CallToolResult call(Map<String, Object> arguments, BeanStore ctx) {
+			public CallToolResult call(Map<String,Object> arguments, BeanStore ctx) {
 				return new CallToolResult();
 			}
 		};
@@ -52,7 +52,7 @@ class McpServerConfig_Test {
 			}
 
 			@Override
-			public GetPromptResult get(Map<String, Object> arguments, BeanStore ctx) {
+			public GetPromptResult get(Map<String,Object> arguments, BeanStore ctx) {
 				return new GetPromptResult();
 			}
 		};

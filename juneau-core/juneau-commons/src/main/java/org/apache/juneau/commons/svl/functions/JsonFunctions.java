@@ -74,8 +74,8 @@ public final class JsonFunctions {
 			var current = root;
 			for (var seg : p.split("/")) {
 				if (current == null) return null;
-				if (current instanceof Map<?, ?> current2) {
-					current = ((Map<String, Object>) current2).get(seg);
+				if (current instanceof Map<?,?> current2) {
+					current = ((Map<String,Object>) current2).get(seg);
 				} else if (current instanceof List<?> current3) {
 					int idx;
 					try { idx = Integer.parseInt(seg); } catch (@SuppressWarnings("unused") NumberFormatException e) { return null; }
@@ -101,8 +101,8 @@ public final class JsonFunctions {
 		public String invoke(String json, String key) {
 			var v = MiniJson.parse(json);
 			if (v == null || key == null) return "";
-			if (v instanceof Map<?, ?> v2) {
-				var x = ((Map<String, Object>) v2).get(key);
+			if (v instanceof Map<?,?> v2) {
+				var x = ((Map<String,Object>) v2).get(key);
 				return x == null ? "" : MiniJson.render(x);
 			}
 			if (v instanceof List<?> v3) {
@@ -124,8 +124,8 @@ public final class JsonFunctions {
 		@Override public String name() { return "keys"; }
 		public String invoke(String json) {
 			var v = MiniJson.parse(json);
-			if (!(v instanceof Map<?, ?> v2)) return "[]";
-			return JsonShortcut.encodeArray(new ArrayList<>(((Map<String, Object>) v2).keySet()));
+			if (!(v instanceof Map<?,?> v2)) return "[]";
+			return JsonShortcut.encodeArray(new ArrayList<>(((Map<String,Object>) v2).keySet()));
 		}
 	}
 
@@ -137,9 +137,9 @@ public final class JsonFunctions {
 		@Override public String name() { return "values"; }
 		public String invoke(String json) {
 			var v = MiniJson.parse(json);
-			if (v instanceof Map<?, ?> v2) {
+			if (v instanceof Map<?,?> v2) {
 				var out = new ArrayList<String>();
-				for (var x : ((Map<String, Object>) v2).values()) out.add(MiniJson.render(x));
+				for (var x : ((Map<String,Object>) v2).values()) out.add(MiniJson.render(x));
 				return JsonShortcut.encodeArray(out);
 			}
 			if (v instanceof List<?> v3) {
@@ -160,7 +160,7 @@ public final class JsonFunctions {
 		public String invoke(String json) {
 			var v = MiniJson.parse(json);
 			if (v == null) return "0";
-			if (v instanceof Map<?, ?> v2) return String.valueOf(v2.size());
+			if (v instanceof Map<?,?> v2) return String.valueOf(v2.size());
 			if (v instanceof List<?> v3) return String.valueOf(v3.size());
 			if (v instanceof String v4) return String.valueOf(v4.length());
 			return "0";

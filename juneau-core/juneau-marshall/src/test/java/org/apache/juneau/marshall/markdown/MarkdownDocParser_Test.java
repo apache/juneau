@@ -167,7 +167,7 @@ class MarkdownDocParser_Test {
 			| k1 | v1 |
 			| k2 | v2 |
 			""";
-		var r = (Map<String, String>) MarkdownDocParser.DEFAULT.read(md, Map.class, String.class, String.class);
+		var r = (Map<String,String>) MarkdownDocParser.DEFAULT.read(md, Map.class, String.class, String.class);
 		assertEquals("v1", r.get("k1"));
 		assertEquals("v2", r.get("k2"));
 	}

@@ -32,7 +32,7 @@ class ThrowingConsumer5_Test extends TestBase {
 		var callCount = new AtomicInteger();
 		var receivedValues = new Object[5];
 
-		var consumer = (ThrowingConsumer5<String, Integer, Boolean, Double, Long>)(a, b, c, d, e) -> {
+		var consumer = (ThrowingConsumer5<String,Integer,Boolean,Double,Long>)(a, b, c, d, e) -> {
 			callCount.incrementAndGet();
 			receivedValues[0] = a;
 			receivedValues[1] = b;
@@ -54,7 +54,7 @@ class ThrowingConsumer5_Test extends TestBase {
 	// Exception handling tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void b01_throwsCheckedException() {
-		var consumer = (ThrowingConsumer5<String, Integer, Boolean, Double, Long>)(a, b, c, d, e) -> {
+		var consumer = (ThrowingConsumer5<String,Integer,Boolean,Double,Long>)(a, b, c, d, e) -> {
 			throw new Exception("Test exception");
 		};
 
@@ -67,7 +67,7 @@ class ThrowingConsumer5_Test extends TestBase {
 	}
 
 	@Test void b02_throwsRuntimeException() {
-		var consumer = (ThrowingConsumer5<String, Integer, Boolean, Double, Long>)(a, b, c, d, e) -> {
+		var consumer = (ThrowingConsumer5<String,Integer,Boolean,Double,Long>)(a, b, c, d, e) -> {
 			throw new RuntimeException("Test runtime exception");
 		};
 
@@ -85,7 +85,7 @@ class ThrowingConsumer5_Test extends TestBase {
 	@Test void c01_usedAsConsumer5() {
 		var callCount = new AtomicInteger();
 
-		var consumer = (Consumer5<String, Integer, Boolean, Double, Long>)(a, b, c, d, e) -> {
+		var consumer = (Consumer5<String,Integer,Boolean,Double,Long>)(a, b, c, d, e) -> {
 			callCount.incrementAndGet();
 		};
 
@@ -96,7 +96,7 @@ class ThrowingConsumer5_Test extends TestBase {
 	@Test void c02_lambdaExpression() {
 		var sum = new AtomicInteger(0);
 
-		ThrowingConsumer5<Integer, Integer, Integer, Integer, Integer> consumer = (a, b, c, d, e) -> {
+		ThrowingConsumer5<Integer,Integer,Integer,Integer,Integer> consumer = (a, b, c, d, e) -> {
 			sum.addAndGet(a + b + c + d + e);
 		};
 
@@ -108,8 +108,8 @@ class ThrowingConsumer5_Test extends TestBase {
 		var callCount1 = new AtomicInteger();
 		var callCount2 = new AtomicInteger();
 
-		ThrowingConsumer5<String, Integer, Boolean, Double, Long> consumer1 = (a, b, c, d, e) -> callCount1.incrementAndGet();
-		ThrowingConsumer5<String, Integer, Boolean, Double, Long> consumer2 = (a, b, c, d, e) -> callCount2.incrementAndGet();
+		ThrowingConsumer5<String,Integer,Boolean,Double,Long> consumer1 = (a, b, c, d, e) -> callCount1.incrementAndGet();
+		ThrowingConsumer5<String,Integer,Boolean,Double,Long> consumer2 = (a, b, c, d, e) -> callCount2.incrementAndGet();
 
 		var composed = consumer1.andThen(consumer2);
 		composed.apply("test", 42, true, 3.14, 100L);

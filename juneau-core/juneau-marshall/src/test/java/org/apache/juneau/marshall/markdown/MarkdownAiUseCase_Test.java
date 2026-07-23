@@ -162,6 +162,6 @@ class MarkdownAiUseCase_Test {
 		public String code;
 		public String message;
 		public String timestamp;
-		public Map<String, Object> details;
+		public Map<String,Object> details;
 	}
 }

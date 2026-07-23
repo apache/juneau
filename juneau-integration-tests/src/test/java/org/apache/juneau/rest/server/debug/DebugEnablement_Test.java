@@ -66,7 +66,7 @@ class DebugEnablement_Test extends TestBase {
 	public static class TestEnablement extends DebugEnablement {
 
 		// Used by constructor(BeanStore) tests — captures the builder produced by init().
-		static volatile Function<DebugEnablement.Builder, DebugEnablement.Builder> initFn = b -> b;
+		static volatile Function<DebugEnablement.Builder,DebugEnablement.Builder> initFn = b -> b;
 
 		public TestEnablement(DebugEnablement.Builder builder) {
 			super(builder);

@@ -30,8 +30,8 @@ import org.apache.juneau.marshall.*;
 public class ClientCapabilities {
 
 	private RootsCapability roots;
-	private Map<String, Object> sampling;
-	private Map<String, Object> experimental;
+	private Map<String,Object> sampling;
+	private Map<String,Object> experimental;
 
 	/**
 	 * Roots capability.
@@ -58,7 +58,7 @@ public class ClientCapabilities {
 	 *
 	 * @return The sampling map, or {@code null} if not set.
 	 */
-	public Map<String, Object> getSampling() {
+	public Map<String,Object> getSampling() {
 		return u(sampling);
 	}
 
@@ -68,7 +68,7 @@ public class ClientCapabilities {
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ClientCapabilities setSampling(Map<String, Object> value) {
+	public ClientCapabilities setSampling(Map<String,Object> value) {
 		sampling = value;
 		return this;
 	}
@@ -92,7 +92,7 @@ public class ClientCapabilities {
 	 *
 	 * @return The experimental map, or {@code null} if not set.
 	 */
-	public Map<String, Object> getExperimental() {
+	public Map<String,Object> getExperimental() {
 		return u(experimental);
 	}
 
@@ -102,7 +102,7 @@ public class ClientCapabilities {
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ClientCapabilities setExperimental(Map<String, Object> value) {
+	public ClientCapabilities setExperimental(Map<String,Object> value) {
 		experimental = value;
 		return this;
 	}

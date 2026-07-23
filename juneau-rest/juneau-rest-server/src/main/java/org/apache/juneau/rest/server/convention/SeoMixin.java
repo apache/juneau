@@ -229,7 +229,7 @@ public class SeoMixin extends RestMixin {
 	 * with true covariant returns alongside the inherited {@link RestBuilder}surface (e.g. {@code path},
 	 * {@code roleGuard}).
 	 */
-	public static class Builder extends RestMixin.Builder<SeoMixin, Builder> {
+	public static class Builder extends RestMixin.Builder<SeoMixin,Builder> {
 
 		private final List<RobotsRule> robotsRules = new ArrayList<>();
 		private final List<SitemapEntry> sitemapEntries = new ArrayList<>();

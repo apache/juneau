@@ -52,7 +52,7 @@ public final class RrpcInterfaceMethodMeta {
 	// Per-class cache of resolved part serializers, mirroring the classic
 	// RestClient.getPartSerializer(Class) per-class cache.  The next-gen client has no bean store, so resolved
 	// instances are independent of any client and safe to share statically across interfaces/methods.
-	private static final Map<Class<? extends HttpPartSerializer>, HttpPartSerializer> PART_SERIALIZERS = new ConcurrentHashMap<>();
+	private static final Map<Class<? extends HttpPartSerializer>,HttpPartSerializer> PART_SERIALIZERS = new ConcurrentHashMap<>();
 
 	/**
 	 * Resolves an {@link HttpPartSerializer} class declared on an {@link HttpPartMarshalling} annotation to a cached

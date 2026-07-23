@@ -922,7 +922,7 @@ class Cache_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void a51_create_basic() {
-		var cache = Cache.<String, String>create()
+		var cache = Cache.<String,String>create()
 			.supplier(k -> "value-" + k)
 			.build();
 
@@ -932,7 +932,7 @@ class Cache_Test extends TestBase {
 	}
 
 	@Test void a52_create_withConfiguration() {
-		var cache = Cache.<String, Integer>create()
+		var cache = Cache.<String,Integer>create()
 			.maxSize(50)
 			.cacheMode(WEAK)
 			.supplier(k -> k.length())
@@ -1002,7 +1002,7 @@ class Cache_Test extends TestBase {
 			.threadLocal()
 			.build();
 		var executor = Executors.newFixedThreadPool(2);
-		var threadValues = new ConcurrentHashMap<Thread, String>();
+		var threadValues = new ConcurrentHashMap<Thread,String>();
 
 		// Each thread caches "key1" with its own value
 		var future1 = CompletableFuture.runAsync(() -> {
@@ -1023,7 +1023,7 @@ class Cache_Test extends TestBase {
 		assertTrue(threadValues.containsValue("thread2-value"));
 
 		// Verify each thread's cache is independent - same thread should get same cached value
-		var threadValues2 = new ConcurrentHashMap<Thread, String>();
+		var threadValues2 = new ConcurrentHashMap<Thread,String>();
 		var threads = new ArrayList<>(threadValues.keySet());
 
 		future1 = CompletableFuture.runAsync(() -> {
@@ -1159,7 +1159,7 @@ class Cache_Test extends TestBase {
 			.cacheMode(WEAK)
 			.build();
 		var executor = Executors.newFixedThreadPool(2);
-		var threadValues = new ConcurrentHashMap<Thread, String>();
+		var threadValues = new ConcurrentHashMap<Thread,String>();
 
 		// Each thread caches "key1" with its own value
 		var future1 = CompletableFuture.runAsync(() -> {

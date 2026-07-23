@@ -164,8 +164,8 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 
 	private void writeBean(TomlWriter w, BeanMap<?> m, String tablePath) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
-		List<Map.Entry<BeanPropertyMeta, Object>> simple = new ArrayList<>();
-		List<Map.Entry<BeanPropertyMeta, Object>> complex = new ArrayList<>();
+		List<Map.Entry<BeanPropertyMeta,Object>> simple = new ArrayList<>();
+		List<Map.Entry<BeanPropertyMeta,Object>> complex = new ArrayList<>();
 
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			if (nn(thrown))

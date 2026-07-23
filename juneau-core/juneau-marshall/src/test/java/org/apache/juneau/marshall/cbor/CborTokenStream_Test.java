@@ -318,7 +318,7 @@ class CborTokenStream_Test extends TestBase {
 
 		@Test void e02_objectWithBinary() throws Exception {
 			// byte[] inside a Map should emit as VALUE_BINARY native, not base64.
-			var m = new java.util.LinkedHashMap<String, Object>();
+			var m = new java.util.LinkedHashMap<String,Object>();
 			m.put("name", "alice");
 			m.put("data", new byte[]{1, 2, 3});
 

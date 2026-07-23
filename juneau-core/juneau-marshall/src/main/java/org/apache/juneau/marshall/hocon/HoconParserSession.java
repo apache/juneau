@@ -278,7 +278,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 		if (existing == null)
 			return value;
 		var resolver = new HoconResolver(root);
-		java.util.function.Function<String, HoconValue> lookup = p -> p.equals(pathStr) ? existing : resolver.lookup(p);
+		java.util.function.Function<String,HoconValue> lookup = p -> p.equals(pathStr) ? existing : resolver.lookup(p);
 		return resolver.resolveConcatWithLookup(concat, lookup);
 	}
 
@@ -514,9 +514,9 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 				setName(cm, val, key);
 			if (cm.getParentProperty() != null)
 				setParent(cm, val, bean);
-			if (cm.isMap() && val instanceof Map<?, ?> val2 && !cm.getValueType().isObject() && cm.getValueType().getNameProperty() != null) {
+			if (cm.isMap() && val instanceof Map<?,?> val2 && !cm.getValueType().isObject() && cm.getValueType().getNameProperty() != null) {
 				var valueType = cm.getValueType();
-				for (Map.Entry<?, ?> e : ((Map<?, ?>) val2).entrySet())
+				for (Map.Entry<?,?> e : ((Map<?,?>) val2).entrySet())
 					setName(valueType, e.getValue(), e.getKey());
 			}
 		}

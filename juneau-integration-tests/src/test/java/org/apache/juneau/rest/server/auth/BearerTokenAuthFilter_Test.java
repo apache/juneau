@@ -119,7 +119,7 @@ class BearerTokenAuthFilter_Test extends TestBase {
 	}
 
 	@Test void a10_claimsPrincipal_rolesFlowToAuthResult() throws Exception {
-		var claims = Map.<String, Object>of("roles", List.of("user", "admin"), "sub", "alice");
+		var claims = Map.<String,Object>of("roles", List.of("user", "admin"), "sub", "alice");
 		var cp = new ClaimsPrincipal("alice", claims);
 		var f = filter(token -> cp);
 		var result = f.authenticate(req("Bearer tok"));
@@ -136,7 +136,7 @@ class BearerTokenAuthFilter_Test extends TestBase {
 	}
 
 	@Test void a12_customRolesClaim() throws Exception {
-		var claims = Map.<String, Object>of("groups", List.of("ops"), "sub", "alice");
+		var claims = Map.<String,Object>of("groups", List.of("ops"), "sub", "alice");
 		var cp = new ClaimsPrincipal("alice", claims);
 		var f = BearerTokenAuthFilter.create().validator(token -> cp).rolesClaim("groups").build();
 		var result = f.authenticate(req("Bearer tok"));

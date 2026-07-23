@@ -231,7 +231,7 @@ class HtmlElement_Attr_Test extends TestBase {
 
 	// HtmlElement.setAttrs() line 1054: url/href/action keys → converted to URI
 	@Test void b04_htmlElement_setAttrs_withUriKeys() {
-		var attrs = new java.util.LinkedHashMap<String, Object>();
+		var attrs = new java.util.LinkedHashMap<String,Object>();
 		attrs.put("url", "http://example.org/");
 		attrs.put("href", "http://example.org/page");
 		attrs.put("formaction", "http://example.org/submit");

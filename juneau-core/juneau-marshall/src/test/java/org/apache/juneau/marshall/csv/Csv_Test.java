@@ -538,10 +538,10 @@ class Csv_Test extends TestBase {
 	public static class J {
 		public String name;
 		public List<String> tags;
-		public Map<String, Object> meta;
+		public Map<String,Object> meta;
 
 		public J() {}
-		public J(String name, List<String> tags, Map<String, Object> meta) {
+		public J(String name, List<String> tags, Map<String,Object> meta) {
 			this.name = name;
 			this.tags = tags;
 			this.meta = meta;

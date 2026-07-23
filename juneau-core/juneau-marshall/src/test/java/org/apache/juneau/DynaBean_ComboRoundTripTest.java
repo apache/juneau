@@ -227,7 +227,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		public void setF3(int v) { f3 = v; }
 
 		@BeanProp(name="*")
-		public Map<String, Object> xxx() {
+		public Map<String,Object> xxx() {
 			return f2;
 		}
 
@@ -297,7 +297,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		public void setF3(int v) { f3 = v; }
 
 		@BeanProp(name="*")
-		public Map<String, Object> xxx() {
+		public Map<String,Object> xxx() {
 			return f2;
 		}
 

@@ -53,7 +53,7 @@ public final class Iso8601Utils {
 	private static final DateTimeFormatter YEAR_FORMATTER = DateTimeFormatter.ofPattern("uuuu");
 	private static final DateTimeFormatter YEAR_MONTH_FORMATTER = DateTimeFormatter.ofPattern("uuuu-MM");
 
-	private static final Map<Class<?>, DateTimeFormatter> DEFAULT_FORMATTERS = Map.ofEntries(
+	private static final Map<Class<?>,DateTimeFormatter> DEFAULT_FORMATTERS = Map.ofEntries(
 		Map.entry(Instant.class, DateTimeFormatter.ISO_INSTANT),
 		Map.entry(ZonedDateTime.class, DateTimeFormatter.ISO_OFFSET_DATE_TIME),
 		Map.entry(OffsetDateTime.class, DateTimeFormatter.ISO_OFFSET_DATE_TIME),

@@ -760,7 +760,7 @@ class Yaml_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// k0x — typed Map and List parsing (Map<String, Integer> etc.).
+	// k0x — typed Map and List parsing (Map<String,Integer> etc.).
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void k01_parseTypedMap() throws Exception {

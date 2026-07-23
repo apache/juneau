@@ -42,10 +42,10 @@ class PrototextRoundTrip_Test {
 
 	@Test
 	void a02_nestedBeanRoundTrip() {
-		var inner = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("city", "Boston");
 		inner.put("state", "MA");
-		var a = new LinkedHashMap<String, Object>();
+		var a = new LinkedHashMap<String,Object>();
 		a.put("name", "Alice");
 		a.put("address", inner);
 
@@ -60,10 +60,10 @@ class PrototextRoundTrip_Test {
 
 	@Test
 	void a03_collectionOfBeansRoundTrip() {
-		var a1 = new LinkedHashMap<String, Object>();
+		var a1 = new LinkedHashMap<String,Object>();
 		a1.put("host", "alpha");
 		a1.put("port", 8080);
-		var a2 = new LinkedHashMap<String, Object>();
+		var a2 = new LinkedHashMap<String,Object>();
 		a2.put("host", "beta");
 		a2.put("port", 8081);
 		var a = JsonMap.of("servers", List.of(a1, a2));
@@ -73,8 +73,8 @@ class PrototextRoundTrip_Test {
 		var list = b.getList("servers");
 		assertNotNull(list);
 		assertEquals(2, list.size());
-		assertEquals("alpha", ((Map<?, ?>) list.get(0)).get("host"));
-		assertEquals("beta", ((Map<?, ?>) list.get(1)).get("host"));
+		assertEquals("alpha", ((Map<?,?>) list.get(0)).get("host"));
+		assertEquals("beta", ((Map<?,?>) list.get(1)).get("host"));
 	}
 
 	@Test
@@ -87,7 +87,7 @@ class PrototextRoundTrip_Test {
 
 	@Test
 	void a05_mapRoundTrip() {
-		var a = new LinkedHashMap<String, Object>();
+		var a = new LinkedHashMap<String,Object>();
 		a.put("env", new LinkedHashMap<>(Map.of("PATH", "/usr/bin", "HOME", "/home")));
 
 		var proto = toPrototext(a);
@@ -171,7 +171,7 @@ class PrototextRoundTrip_Test {
 
 	@Test
 	void a13_nullableReferenceRoundTrip() {
-		var a = new LinkedHashMap<String, Object>();
+		var a = new LinkedHashMap<String,Object>();
 		a.put("s", "x");
 		a.put("n", 1);
 		a.put("nullStr", null);

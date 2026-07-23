@@ -99,7 +99,7 @@ public final class PredicateUtils {
 	 * @return A predicate that returns <jk>true</jk> for the first occurrence of each unique key,
 	 * 	and <jk>false</jk> for subsequent occurrences with the same key.
 	 */
-	public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+	public static <T> Predicate<T> distinctByKey(Function<? super T,?> keyExtractor) {
 		var seen = ConcurrentHashMap.newKeySet();
 		return t -> seen.add(keyExtractor.apply(t));
 	}

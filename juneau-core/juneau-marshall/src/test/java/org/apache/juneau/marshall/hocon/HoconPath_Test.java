@@ -32,49 +32,49 @@ class HoconPath_Test {
 
 	@Test
 	void d01_simplePath() {
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a.b = 1", Map.class, String.class, Object.class);
-		var a = (Map<String, Object>) m.get("a");
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a.b = 1", Map.class, String.class, Object.class);
+		var a = (Map<String,Object>) m.get("a");
 		assertNotNull(a);
 		assertEquals(1, ((Number) a.get("b")).intValue());
 	}
 
 	@Test
 	void d02_deepPath() {
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a.b.c.d = 1", Map.class, String.class, Object.class);
-		var a = (Map<String, Object>) m.get("a");
-		var b = (Map<String, Object>) a.get("b");
-		var c = (Map<String, Object>) b.get("c");
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a.b.c.d = 1", Map.class, String.class, Object.class);
+		var a = (Map<String,Object>) m.get("a");
+		var b = (Map<String,Object>) a.get("b");
+		var c = (Map<String,Object>) b.get("c");
 		assertEquals(1, ((Number) c.get("d")).intValue());
 	}
 
 	@Test
 	void d03_quotedPathComponent() {
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("\"a.b\".c = 1", Map.class, String.class, Object.class);
-		var ab = (Map<String, Object>) m.get("a.b");
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("\"a.b\".c = 1", Map.class, String.class, Object.class);
+		var ab = (Map<String,Object>) m.get("a.b");
 		assertNotNull(ab);
 		assertEquals(1, ((Number) ab.get("c")).intValue());
 	}
 
 	@Test
 	void d04_mixedPathAndNested() {
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a.b { c = 1 }", Map.class, String.class, Object.class);
-		var a = (Map<String, Object>) m.get("a");
-		var b = (Map<String, Object>) a.get("b");
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a.b { c = 1 }", Map.class, String.class, Object.class);
+		var a = (Map<String,Object>) m.get("a");
+		var b = (Map<String,Object>) a.get("b");
 		assertEquals(1, ((Number) b.get("c")).intValue());
 	}
 
 	@Test
 	void d05_pathMerging() {
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a.x = 1\na.y = 2", Map.class, String.class, Object.class);
-		var a = (Map<String, Object>) m.get("a");
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a.x = 1\na.y = 2", Map.class, String.class, Object.class);
+		var a = (Map<String,Object>) m.get("a");
 		assertEquals(1, ((Number) a.get("x")).intValue());
 		assertEquals(2, ((Number) a.get("y")).intValue());
 	}
 
 	@Test
 	void d06_pathOverwrite() {
-		var m = (Map<String, Object>) HoconParser.DEFAULT.read("a.b = 1\na.b = 2", Map.class, String.class, Object.class);
-		var a = (Map<String, Object>) m.get("a");
+		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a.b = 1\na.b = 2", Map.class, String.class, Object.class);
+		var a = (Map<String,Object>) m.get("a");
 		assertEquals(2, ((Number) a.get("b")).intValue());
 	}
 }

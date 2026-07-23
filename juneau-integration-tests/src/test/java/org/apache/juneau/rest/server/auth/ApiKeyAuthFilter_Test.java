@@ -136,7 +136,7 @@ class ApiKeyAuthFilter_Test extends TestBase {
 	}
 
 	@Test void a11_claimsPrincipal_rolesFlowToAuthResult() throws Exception {
-		var claims = Map.<String, Object>of("roles", List.of("user"), "sub", "alice");
+		var claims = Map.<String,Object>of("roles", List.of("user"), "sub", "alice");
 		var cp = new ClaimsPrincipal("alice", claims);
 		ApiKeyStore store = key -> "good-key".equals(key) ? o(cp) : oe();
 		var f = ApiKeyAuthFilter.create().store(store).build();

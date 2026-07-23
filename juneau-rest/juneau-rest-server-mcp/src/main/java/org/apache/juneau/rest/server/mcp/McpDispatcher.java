@@ -229,15 +229,15 @@ public class McpDispatcher {
 	@SuppressWarnings({
 		"unchecked" // Cast is safe: type parameter verified by MCP protocol contract.
 	})
-	private static Map<String, Object> asMap(Object params) {
+	private static Map<String,Object> asMap(Object params) {
 		if (params == null)
 			return Map.of();
 		if (params instanceof Map)
-			return (Map<String, Object>) params;
+			return (Map<String,Object>) params;
 		throw new McpException(CODE_INVALID_PARAMS, "Params must be an object");
 	}
 
-	private static String strParam(Map<String, Object> p, String key) {
+	private static String strParam(Map<String,Object> p, String key) {
 		var v = p.get(key);
 		return v == null ? null : v.toString();
 	}
@@ -245,12 +245,12 @@ public class McpDispatcher {
 	@SuppressWarnings({
 		"unchecked" // Cast is safe: type parameter verified by MCP protocol contract.
 	})
-	private static Map<String, Object> mapParam(Map<String, Object> p, String key) {
+	private static Map<String,Object> mapParam(Map<String,Object> p, String key) {
 		var v = p.get(key);
 		if (v == null)
 			return Map.of();
 		if (v instanceof Map)
-			return (Map<String, Object>) v;
+			return (Map<String,Object>) v;
 		throw new McpException(CODE_INVALID_PARAMS, "Param '" + key + "' must be an object");
 	}
 

@@ -34,7 +34,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void a01_addSingleEntry() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2").a("key3", "value3");
 
 		assertSize(3, map);
@@ -45,7 +45,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void a02_addSingleEntry_returnsThis() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		var result = map.a("key1", "value1");
 
 		assertSame(map, result);
@@ -53,7 +53,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void a03_addSingleEntry_nullValue() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").a("key2", null).a("key3", "value3");
 
 		assertSize(3, map);
@@ -64,7 +64,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void a04_addSingleEntry_nullKey() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a(null, "value1").a("key2", "value2");
 
 		assertSize(2, map);
@@ -74,7 +74,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void a05_addSingleEntry_updateExisting() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1");
 		map.a("key1", "value1-updated");
 
@@ -88,7 +88,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void b01_addMap() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		var other = map("key1", "value1", "key2", "value2", "key3", "value3");
 		map.aa(other);
 
@@ -100,7 +100,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void b02_addMap_returnsThis() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		var other = map("key1", "value1", "key2", "value2");
 		var result = map.aa(other);
 
@@ -109,9 +109,9 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void b03_addMap_nullMap() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1");
-		map.aa((Map<String, String>)null);
+		map.aa((Map<String,String>)null);
 		map.a("key2", "value2");
 
 		assertSize(2, map);
@@ -121,7 +121,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void b04_addMap_emptyMap() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1");
 		map.aa(map());
 		map.a("key2", "value2");
@@ -133,7 +133,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void b05_addMap_multipleCalls() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.aa(map("key1", "value1", "key2", "value2"));
 		map.aa(map("key3", "value3", "key4", "value4"));
 
@@ -146,7 +146,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void b06_addMap_overwritesExisting() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1");
 		map.aa(map("key1", "value1-updated", "key2", "value2"));
 
@@ -161,7 +161,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void c01_ai_conditionTrue() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").ai(true, "key2", "value2").a("key3", "value3");
 
 		assertSize(3, map);
@@ -172,7 +172,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void c02_ai_conditionFalse() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").ai(false, "key2", "value2").a("key3", "value3");
 
 		assertSize(2, map);
@@ -183,7 +183,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void c03_ai_returnsThis() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		var result1 = map.ai(true, "key1", "value1");
 		var result2 = map.ai(false, "key2", "value2");
 
@@ -196,7 +196,7 @@ class FluentMap_Test extends TestBase {
 		boolean includeDebug = true;
 		boolean includeTest = false;
 
-		var map = new FluentMap<>(new LinkedHashMap<String, String>())
+		var map = new FluentMap<>(new LinkedHashMap<String,String>())
 			.a("host", "localhost")
 			.a("port", "8080")
 			.ai(includeDebug, "debug", "true")
@@ -215,7 +215,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void d01_methodChaining() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>())
+		var map = new FluentMap<>(new LinkedHashMap<String,String>())
 			.a("key1", "value1")
 			.a("key2", "value2")
 			.ai(true, "key3", "value3")
@@ -237,7 +237,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void e01_mapInterface_get() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2");
 
 		assertEquals("value1", map.get("key1"));
@@ -247,7 +247,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void e02_mapInterface_put() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		assertNull(map.put("key1", "value1"));
 		assertEquals("value1", map.put("key1", "value1-updated"));
 
@@ -257,7 +257,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void e03_mapInterface_putAll() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1");
 		map.putAll(map("key2", "value2", "key3", "value3"));
 
@@ -269,7 +269,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void e04_mapInterface_remove() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2").a("key3", "value3");
 
 		assertEquals("value2", map.remove("key2"));
@@ -281,7 +281,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void e05_mapInterface_containsKey() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2");
 
 		assertTrue(map.containsKey("key1"));
@@ -291,7 +291,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void e06_mapInterface_containsValue() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2");
 
 		assertTrue(map.containsValue("value1"));
@@ -301,7 +301,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void e07_mapInterface_size() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		assertEquals(0, map.size());
 
 		map.a("key1", "value1");
@@ -313,7 +313,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void e08_mapInterface_isEmpty() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		assertTrue(map.isEmpty());
 
 		map.a("key1", "value1");
@@ -322,7 +322,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void e09_mapInterface_clear() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2").a("key3", "value3");
 
 		map.clear();
@@ -332,7 +332,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void e10_mapInterface_keySet() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2").a("key3", "value3");
 
 		var keySet = map.keySet();
@@ -344,7 +344,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void e11_mapInterface_values() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2").a("key3", "value3");
 
 		var values = map.values();
@@ -356,7 +356,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void e12_mapInterface_entrySet() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2").a("key3", "value3");
 
 		var entrySet = map.entrySet();
@@ -377,7 +377,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void f01_hashMap() {
-		var map = new FluentMap<>(new HashMap<String, String>());
+		var map = new FluentMap<>(new HashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2").a("key3", "value3");
 
 		assertSize(3, map);
@@ -385,7 +385,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void f02_treeMap() {
-		var map = new FluentMap<>(new TreeMap<String, String>());
+		var map = new FluentMap<>(new TreeMap<String,String>());
 		map.a("zebra", "value3").a("apple", "value1").a("banana", "value2");
 
 		assertSize(3, map);
@@ -396,7 +396,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void f03_concurrentHashMap() {
-		var map = new FluentMap<>(new ConcurrentHashMap<String, String>());
+		var map = new FluentMap<>(new ConcurrentHashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2").a("key3", "value3");
 
 		assertSize(3, map);
@@ -408,7 +408,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void g01_emptyMap() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 
 		assertTrue(map.isEmpty());
 		assertSize(0, map);
@@ -418,7 +418,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void g02_nullKeyAndValue() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a(null, null).a("key1", "value1");
 
 		assertSize(2, map);
@@ -429,7 +429,7 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void g03_updateWithNullValue() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1");
 		map.a("key1", null);
 
@@ -444,10 +444,10 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void w01_toString_delegatesToUnderlyingMap() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2");
 
-		var underlyingMap = new LinkedHashMap<String, String>();
+		var underlyingMap = new LinkedHashMap<String,String>();
 		underlyingMap.put("key1", "value1");
 		underlyingMap.put("key2", "value2");
 
@@ -456,10 +456,10 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void w02_equals_delegatesToUnderlyingMap() {
-		var map1 = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map1 = new FluentMap<>(new LinkedHashMap<String,String>());
 		map1.a("key1", "value1").a("key2", "value2");
 
-		var map2 = new LinkedHashMap<String, String>();
+		var map2 = new LinkedHashMap<String,String>();
 		map2.put("key1", "value1");
 		map2.put("key2", "value2");
 
@@ -470,10 +470,10 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void w03_equals_differentContents_returnsFalse() {
-		var map1 = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map1 = new FluentMap<>(new LinkedHashMap<String,String>());
 		map1.a("key1", "value1");
 
-		var map2 = new LinkedHashMap<String, String>();
+		var map2 = new LinkedHashMap<String,String>();
 		map2.put("key1", "value2");
 
 		assertNotEquals(map1, map2);
@@ -482,10 +482,10 @@ class FluentMap_Test extends TestBase {
 
 	@Test
 	void w04_hashCode_delegatesToUnderlyingMap() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.a("key1", "value1").a("key2", "value2");
 
-		var underlyingMap = new LinkedHashMap<String, String>();
+		var underlyingMap = new LinkedHashMap<String,String>();
 		underlyingMap.put("key1", "value1");
 		underlyingMap.put("key2", "value2");
 
@@ -497,14 +497,14 @@ class FluentMap_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void x01_ai_predicateTrue() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.ai(s -> !s.isEmpty(), "key1", "value1");
 		assertEquals("value1", map.get("key1"));
 	}
 
 	@Test
 	void x02_ai_predicateFalse() {
-		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		var map = new FluentMap<>(new LinkedHashMap<String,String>());
 		map.ai(s -> !s.isEmpty(), "key1", "");
 		assertFalse(map.containsKey("key1"));
 	}

@@ -27,14 +27,14 @@ class ThrowingFunction2_Test extends TestBase {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
-		var function = (ThrowingFunction2<String, Integer, String>)(a, b) -> a + "-" + b;
+		var function = (ThrowingFunction2<String,Integer,String>)(a, b) -> a + "-" + b;
 
 		assertEquals("test-42", function.apply("test", 42));
 		assertEquals("hello-0", function.apply("hello", 0));
 	}
 
 	@Test void a02_withNullValues() {
-		var function = (ThrowingFunction2<String, Integer, String>)(a, b) -> {
+		var function = (ThrowingFunction2<String,Integer,String>)(a, b) -> {
 			String aStr = a == null ? "null" : a;
 			String bStr = b == null ? "null" : String.valueOf(b);
 			return aStr + "-" + bStr;
@@ -45,7 +45,7 @@ class ThrowingFunction2_Test extends TestBase {
 	}
 
 	@Test void a03_returnsNull() {
-		var function = (ThrowingFunction2<String, Integer, String>)(a, b) -> null;
+		var function = (ThrowingFunction2<String,Integer,String>)(a, b) -> null;
 
 		assertNull(function.apply("test", 42));
 	}
@@ -54,7 +54,7 @@ class ThrowingFunction2_Test extends TestBase {
 	// Exception handling tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void b01_throwsCheckedException() {
-		var function = (ThrowingFunction2<String, Integer, String>)(a, b) -> {
+		var function = (ThrowingFunction2<String,Integer,String>)(a, b) -> {
 			throw new Exception("Test exception");
 		};
 
@@ -67,7 +67,7 @@ class ThrowingFunction2_Test extends TestBase {
 	}
 
 	@Test void b02_throwsRuntimeException() {
-		var function = (ThrowingFunction2<String, Integer, String>)(a, b) -> {
+		var function = (ThrowingFunction2<String,Integer,String>)(a, b) -> {
 			throw new RuntimeException("Test runtime exception");
 		};
 
@@ -80,7 +80,7 @@ class ThrowingFunction2_Test extends TestBase {
 	}
 
 	@Test void b03_throwsError() {
-		var function = (ThrowingFunction2<String, Integer, String>)(a, b) -> {
+		var function = (ThrowingFunction2<String,Integer,String>)(a, b) -> {
 			throw new Error("Test error");
 		};
 
@@ -95,13 +95,13 @@ class ThrowingFunction2_Test extends TestBase {
 	// Functional interface tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void c01_usedAsFunction2() {
-		var function = (Function2<String, Integer, String>)(a, b) -> a + "-" + b;
+		var function = (Function2<String,Integer,String>)(a, b) -> a + "-" + b;
 
 		assertEquals("test-42", function.apply("test", 42));
 	}
 
 	@Test void c02_lambdaExpression() {
-		var function = (ThrowingFunction2<Integer, Integer, Integer>)(a, b) -> a + b;
+		var function = (ThrowingFunction2<Integer,Integer,Integer>)(a, b) -> a + b;
 
 		assertEquals(5, function.apply(2, 3));
 		assertEquals(0, function.apply(0, 0));
@@ -109,15 +109,15 @@ class ThrowingFunction2_Test extends TestBase {
 	}
 
 	@Test void c03_methodReference() {
-		var function = (ThrowingFunction2<String, String, Boolean>)String::equals;
+		var function = (ThrowingFunction2<String,String,Boolean>)String::equals;
 
 		assertTrue(function.apply("test", "test"));
 		assertFalse(function.apply("test", "other"));
 	}
 
 	@Test void c04_andThen() {
-		var add = (ThrowingFunction2<Integer, Integer, Integer>)(a, b) -> a + b;
-		var toString = (java.util.function.Function<Integer, String>)Object::toString;
+		var add = (ThrowingFunction2<Integer,Integer,Integer>)(a, b) -> a + b;
+		var toString = (java.util.function.Function<Integer,String>)Object::toString;
 
 		var composed = add.andThen(toString);
 		assertEquals("5", composed.apply(2, 3));

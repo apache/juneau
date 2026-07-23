@@ -53,7 +53,7 @@ class HoconMediaType_Test {
 		var a = JsonMap.of("name", "test", "count", 42);
 		var hocon = toHocon(a);
 		assertNotNull(hocon);
-		var b = (Map<String, Object>) fromHocon(hocon, Map.class, String.class, Object.class);
+		var b = (Map<String,Object>) fromHocon(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "name,count", "test,42");
 	}
 

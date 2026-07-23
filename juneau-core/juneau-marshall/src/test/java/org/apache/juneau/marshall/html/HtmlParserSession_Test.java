@@ -101,11 +101,11 @@ class HtmlParserSession_Test extends TestBase {
 
 	@Test void b04_tableWithObjectType_intoMap() throws Exception {
 		// Table with type="object" → sType.isMap() at line 347
-		var map = new LinkedHashMap<String, String>();
+		var map = new LinkedHashMap<String,String>();
 		map.put("k1", "v1");
 		map.put("k2", "v2");
 		var html = SER.write(map);
-		var result = (Map<String, String>) PAR.read(html, LinkedHashMap.class, String.class, String.class);
+		var result = (Map<String,String>) PAR.read(html, LinkedHashMap.class, String.class, String.class);
 		assertEquals("v1", result.get("k1"));
 	}
 

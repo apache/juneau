@@ -283,7 +283,7 @@ class MarkdownDocSerializer_Test {
 
 	public static class G {
 		public String name;
-		public Map<String, Object> settings;
+		public Map<String,Object> settings;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

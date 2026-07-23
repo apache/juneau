@@ -30,7 +30,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a01_simpleBean() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "Alice");
 		m.put("age", 30);
 		m.put("active", true);
@@ -44,10 +44,10 @@ class HoconSerializer_Test {
 
 	@Test
 	void a02_nestedBean() {
-		var address = new LinkedHashMap<String, Object>();
+		var address = new LinkedHashMap<String,Object>();
 		address.put("city", "Boston");
 		address.put("state", "MA");
-		var config = new LinkedHashMap<String, Object>();
+		var config = new LinkedHashMap<String,Object>();
 		config.put("name", "myapp");
 		config.put("address", address);
 		var hocon = HoconSerializer.DEFAULT.write(config);
@@ -58,7 +58,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a03_unquotedStrings() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("key", "simple");
 		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertNotNull(hocon);
@@ -68,7 +68,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a04_omitRootBraces() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "Alice");
 		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertNotNull(hocon);
@@ -77,7 +77,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a05_withRootBraces() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "Alice");
 		var hocon = HoconSerializer.DEFAULT_BRACES.write(m);
 		assertNotNull(hocon);
@@ -86,7 +86,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a06_arrayOfStrings() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("tags", List.of("web", "api", "rest"));
 		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertNotNull(hocon);
@@ -95,10 +95,10 @@ class HoconSerializer_Test {
 
 	@Test
 	void a07_mapProperty() {
-		var nested = new LinkedHashMap<String, Object>();
+		var nested = new LinkedHashMap<String,Object>();
 		nested.put("host", "localhost");
 		nested.put("port", 8080);
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("database", nested);
 		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertNotNull(hocon);
@@ -108,7 +108,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a08_nullValues() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "Alice");
 		m.put("middle", null);
 		var s = HoconSerializer.create().keepNullProperties().build();
@@ -119,7 +119,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a09_quotedStringRequired() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("special", "a{b}c:d\"e");
 		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertNotNull(hocon);
@@ -128,7 +128,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a10_tripleQuotedString() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("desc", "line1\nline2");
 		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertNotNull(hocon);
@@ -137,7 +137,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a11_equalsSignSeparator() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("key", "value");
 		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertTrue(hocon.contains("="));
@@ -146,7 +146,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a12_newlineSeparators() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("a", 1);
 		m.put("b", 2);
 		var hocon = HoconSerializer.DEFAULT.write(m);
@@ -155,7 +155,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a13_compactMode() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("name", "Alice");
 		m.put("age", 30);
 		var hocon = HoconSerializer.DEFAULT_COMPACT.write(m);
@@ -165,7 +165,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a14_emptyBean() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		var hocon = HoconSerializer.DEFAULT_BRACES.write(m);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("{") && hocon.contains("}"));
@@ -173,7 +173,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a15_emptyCollection() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("tags", List.of());
 		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertNotNull(hocon);
@@ -182,7 +182,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a16_enumValues() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("size", "LARGE");
 		m.put("status", "ACTIVE");
 		var hocon = HoconSerializer.DEFAULT.write(m);
@@ -191,7 +191,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a17_stringLikeSpecialValues() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("asBoolean", "true");
 		m.put("asNumber", "42");
 		m.put("asNull", "null");
@@ -201,13 +201,13 @@ class HoconSerializer_Test {
 
 	@Test
 	void a18_collectionOfBeans() {
-		var server1 = new LinkedHashMap<String, Object>();
+		var server1 = new LinkedHashMap<String,Object>();
 		server1.put("host", "a");
 		server1.put("port", 8080);
-		var server2 = new LinkedHashMap<String, Object>();
+		var server2 = new LinkedHashMap<String,Object>();
 		server2.put("host", "b");
 		server2.put("port", 9090);
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("servers", List.of(server1, server2));
 		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertNotNull(hocon);
@@ -218,9 +218,9 @@ class HoconSerializer_Test {
 
 	@Test
 	void a19_indentation() {
-		var nested = new LinkedHashMap<String, Object>();
+		var nested = new LinkedHashMap<String,Object>();
 		nested.put("inner", "value");
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("outer", nested);
 		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertNotNull(hocon);

@@ -30,7 +30,7 @@ public class IniConfigAnnotation {
 	/**
 	 * Applies {@link IniConfig} annotations to an {@link IniParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<IniConfig, IniParser.Builder> {
+	public static class ParserApply extends AnnotationApplier<IniConfig,IniParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -52,7 +52,7 @@ public class IniConfigAnnotation {
 	/**
 	 * Applies {@link IniConfig} annotations to an {@link IniSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<IniConfig, IniSerializer.Builder> {
+	public static class SerializerApply extends AnnotationApplier<IniConfig,IniSerializer.Builder> {
 
 		/**
 		 * Constructor.

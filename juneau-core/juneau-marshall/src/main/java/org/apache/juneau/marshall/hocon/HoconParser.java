@@ -74,8 +74,8 @@ public class HoconParser extends ReaderParser implements HoconMetaProvider, Reco
 
 	private static final String ARG_ctx = "ctx";
 
-	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>, HoconClassMeta> hoconClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
-	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta, HoconBeanPropertyMeta> hoconBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>,HoconClassMeta> hoconClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta,HoconBeanPropertyMeta> hoconBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/** Whether to resolve ${var} substitutions. */
 	protected final boolean resolveSubstitutions;
@@ -85,7 +85,7 @@ public class HoconParser extends ReaderParser implements HoconMetaProvider, Reco
 	 */
 	public static class Builder extends ReaderParser.Builder<Builder> {
 
-		private static final Cache<HashKey, HoconParser> CACHE = Cache.of(HashKey.class, HoconParser.class).build();
+		private static final Cache<HashKey,HoconParser> CACHE = Cache.of(HashKey.class, HoconParser.class).build();
 
 		private boolean resolveSubstitutions = true;
 

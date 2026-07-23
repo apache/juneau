@@ -34,7 +34,7 @@ class McpDispatcher_Test {
 	private final McpDispatcher dispatcher = new McpDispatcher();
 	private final BeanStore ctx = new BasicBeanStore();
 
-	private static McpToolHandler tool(String name, java.util.function.Function<Map<String, Object>, CallToolResult> fn) {
+	private static McpToolHandler tool(String name, java.util.function.Function<Map<String,Object>,CallToolResult> fn) {
 		return new McpToolHandler() {
 			@Override
 			public Tool descriptor() {
@@ -42,13 +42,13 @@ class McpDispatcher_Test {
 			}
 
 			@Override
-			public CallToolResult call(Map<String, Object> arguments, BeanStore ctx) {
+			public CallToolResult call(Map<String,Object> arguments, BeanStore ctx) {
 				return fn.apply(arguments);
 			}
 		};
 	}
 
-	private static McpPromptHandler prompt(String name, java.util.function.Function<Map<String, Object>, GetPromptResult> fn) {
+	private static McpPromptHandler prompt(String name, java.util.function.Function<Map<String,Object>,GetPromptResult> fn) {
 		return new McpPromptHandler() {
 			@Override
 			public Prompt descriptor() {
@@ -56,13 +56,13 @@ class McpDispatcher_Test {
 			}
 
 			@Override
-			public GetPromptResult get(Map<String, Object> arguments, BeanStore ctx) {
+			public GetPromptResult get(Map<String,Object> arguments, BeanStore ctx) {
 				return fn.apply(arguments);
 			}
 		};
 	}
 
-	private static McpResourceHandler resource(String uri, java.util.function.Function<String, ReadResourceResult> fn) {
+	private static McpResourceHandler resource(String uri, java.util.function.Function<String,ReadResourceResult> fn) {
 		return new McpResourceHandler() {
 			@Override
 			public Resource descriptor() {

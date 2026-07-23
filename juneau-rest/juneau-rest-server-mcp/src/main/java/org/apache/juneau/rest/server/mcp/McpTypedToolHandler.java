@@ -31,7 +31,7 @@ import org.apache.juneau.commons.inject.*;
  * @param <A> Argument bean type.
  * @param <R> Return type. If {@link CallToolResult}, the return value passes through unchanged.
  */
-public interface McpTypedToolHandler<A, R> {
+public interface McpTypedToolHandler<A,R> {
 
 	/**
 	 * Returns the static descriptor for this tool.

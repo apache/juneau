@@ -65,7 +65,7 @@ public final class CsvCellSerializer {
 	private String writeValue(Object value, CsvSerializerSession session) {
 		if (value == null)
 			return nullMarker;
-		if (value instanceof Map<?, ?> value2)
+		if (value instanceof Map<?,?> value2)
 			return writeMap(value2, session);
 		if (value instanceof Collection<?> value2)
 			return writeCollection(value2, session);
@@ -82,13 +82,13 @@ public final class CsvCellSerializer {
 		if (value instanceof char[] value2) return formatCharArray(value2);
 		// Bean or simple: use session to convert/format
 		var prepared = session.prepareForInlineValue(value);
-		if (prepared instanceof Map) return writeMap((Map<?, ?>) prepared, session);
+		if (prepared instanceof Map) return writeMap((Map<?,?>) prepared, session);
 		if (prepared instanceof Collection) return writeCollection((Collection<?>) prepared, session);
 		if (prepared instanceof Object[] prepared2) return writeObjectArray(prepared2, session);
 		return escapeIfNeeded(prepared.toString());
 	}
 
-	private String writeMap(Map<?, ?> m, CsvSerializerSession session) {
+	private String writeMap(Map<?,?> m, CsvSerializerSession session) {
 		var sb = new StringBuilder();
 		sb.append('{');
 		var first = true;

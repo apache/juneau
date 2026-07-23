@@ -178,7 +178,7 @@ class PrototextParserSession_Test extends TestBase {
 	@Test void d03_readToMap_stringKey() throws Exception {
 		// convertMapToType → isMap() → default string key path → return map
 		@SuppressWarnings("unchecked")
-		var r = (Map<String, String>) PrototextParser.DEFAULT.read("a: \"1\" b: \"2\"", Map.class, String.class, String.class);
+		var r = (Map<String,String>) PrototextParser.DEFAULT.read("a: \"1\" b: \"2\"", Map.class, String.class, String.class);
 		assertNotNull(r);
 	}
 
@@ -242,6 +242,6 @@ class PrototextParserSession_Test extends TestBase {
 	}
 
 	public static class BeanWithMapProp {
-		public Map<String, Object> metadata;
+		public Map<String,Object> metadata;
 	}
 }

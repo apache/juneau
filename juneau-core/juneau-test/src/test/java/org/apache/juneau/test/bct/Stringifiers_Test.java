@@ -52,7 +52,7 @@ class Stringifiers_Test extends TestBase {
 		void a02_stringifyWithNullKey() {
 			var converter = BasicBeanConverter.builder().defaultSettings().build();
 			var stringifier = Stringifiers.mapEntryStringifier();
-			var entry = new AbstractMap.SimpleEntry<String, String>(null, "value");
+			var entry = new AbstractMap.SimpleEntry<String,String>(null, "value");
 			var result = stringifier.apply(converter, entry);
 
 			assertEquals("<null>=value", result);
@@ -543,7 +543,7 @@ class Stringifiers_Test extends TestBase {
 		void m04_stringifyWithNullValues() {
 			var converter = BasicBeanConverter.builder().defaultSettings().build();
 			var stringifier = Stringifiers.mapStringifier();
-			var input = new HashMap<String, String>();
+			var input = new HashMap<String,String>();
 			input.put("key1", "value1");
 			input.put("key2", null);
 			var result = stringifier.apply(converter, input);

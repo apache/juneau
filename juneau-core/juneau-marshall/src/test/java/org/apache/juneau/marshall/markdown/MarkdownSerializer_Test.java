@@ -75,7 +75,7 @@ class MarkdownSerializer_Test {
 	//====================================================================================================
 
 	@Test void b01_writeStringMap() {
-		var m = new LinkedHashMap<String, String>();
+		var m = new LinkedHashMap<String,String>();
 		m.put("k1", "v1");
 		m.put("k2", "v2");
 		var md = toMarkdown(m);
@@ -232,11 +232,11 @@ class MarkdownSerializer_Test {
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
 	void i04_roundTripMap() {
-		var original = new LinkedHashMap<String, String>();
+		var original = new LinkedHashMap<String,String>();
 		original.put("k1", "v1");
 		original.put("k2", "v2");
 		var md = toMarkdown(original);
-		var parsed = (Map<String, String>) fromMarkdown(md, Map.class, String.class, String.class);
+		var parsed = (Map<String,String>) fromMarkdown(md, Map.class, String.class, String.class);
 		assertEquals(original, parsed);
 	}
 
@@ -384,7 +384,7 @@ class MarkdownSerializer_Test {
 
 	@Test void m01_writeStringWithSingleQuoteAndBackslash() {
 		// Single-quote and backslash in string → escapeJson5String special char branches
-		var m = new java.util.LinkedHashMap<String, String>();
+		var m = new java.util.LinkedHashMap<String,String>();
 		m.put("val", "it's a \\test");
 		var md = MarkdownSerializer.DEFAULT.write(m);
 		assertNotNull(md);
@@ -397,7 +397,7 @@ class MarkdownSerializer_Test {
 
 	@Test void m02_writeStringWithTabAndCR() {
 		// Tab and CR in string → escapeJson5String \t and \r paths
-		var m = new java.util.LinkedHashMap<String, String>();
+		var m = new java.util.LinkedHashMap<String,String>();
 		m.put("tab", "a\tb");
 		m.put("cr", "a\rb");
 		var md = MarkdownSerializer.DEFAULT.write(m);
@@ -443,7 +443,7 @@ class MarkdownSerializer_Test {
 	@ParameterizedTest
 	@MethodSource("o01_temporalTypeAsMapValueProvider")
 	void o01_temporalTypeAsMapValue(String key, Object value) {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put(key, value);
 		var md = MarkdownSerializer.DEFAULT.write(m);
 		assertNotNull(md);
@@ -500,7 +500,7 @@ class MarkdownSerializer_Test {
 	@Test void q01_noHeadersForMap() {
 		// showHeaders=false with a map → skip header at line 257
 		var s = MarkdownSerializer.create().showHeaders(false).build();
-		var m = new java.util.LinkedHashMap<String, String>();
+		var m = new java.util.LinkedHashMap<String,String>();
 		m.put("k1", "v1");
 		var md = s.write(m);
 		assertFalse(md.contains("| Key |"), "Should not have header row: " + md);
@@ -513,7 +513,7 @@ class MarkdownSerializer_Test {
 
 	@Test void r01_numericMapKey() {
 		// Key that looks like a number → isAmbiguousString returns true for key at line 266
-		var m = new java.util.LinkedHashMap<String, String>();
+		var m = new java.util.LinkedHashMap<String,String>();
 		m.put("42", "answer");
 		var md = MarkdownSerializer.DEFAULT.write(m);
 		assertNotNull(md);
@@ -555,7 +555,7 @@ class MarkdownSerializer_Test {
 
 	@Test void u01_emptyStringAsMapValue() {
 		// Empty string value → isAmbiguousString returns true at line 369 (s.isEmpty())
-		var m = new java.util.LinkedHashMap<String, String>();
+		var m = new java.util.LinkedHashMap<String,String>();
 		m.put("key", "");
 		var md = MarkdownSerializer.DEFAULT.write(m);
 		assertNotNull(md);
@@ -566,7 +566,7 @@ class MarkdownSerializer_Test {
 	@MethodSource("u02_ambiguousMapEntryProducesOutputProvider")
 	void u02_ambiguousMapEntryProducesOutput(String key, String value) {
 		// Ambiguous map keys/values still produce non-null serialized output.
-		var m = new java.util.LinkedHashMap<String, String>();
+		var m = new java.util.LinkedHashMap<String,String>();
 		m.put(key, value);
 		var md = MarkdownSerializer.DEFAULT.write(m);
 		assertNotNull(md);

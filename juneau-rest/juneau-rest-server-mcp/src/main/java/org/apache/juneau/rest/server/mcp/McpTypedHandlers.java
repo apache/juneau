@@ -50,7 +50,7 @@ public final class McpTypedHandlers {
 	 * @param <R> Return type.
 	 * @return A raw handler delegating to {@code typed}.
 	 */
-	public static <A, R> McpToolHandler adaptTool(McpTypedToolHandler<A, R> typed) {
+	public static <A,R> McpToolHandler adaptTool(McpTypedToolHandler<A,R> typed) {
 		assertArgNotNull("typed", typed);
 		return new McpToolHandler() {
 			@Override
@@ -59,7 +59,7 @@ public final class McpTypedHandlers {
 			}
 
 			@Override
-			public CallToolResult call(Map<String, Object> arguments, BeanStore ctx) {
+			public CallToolResult call(Map<String,Object> arguments, BeanStore ctx) {
 				A bound = bindArguments(arguments, typed.argumentType());
 				R result = typed.call(bound, ctx);
 				return wrapToolResult(result);
@@ -87,14 +87,14 @@ public final class McpTypedHandlers {
 			}
 
 			@Override
-			public GetPromptResult get(Map<String, Object> arguments, BeanStore ctx) {
+			public GetPromptResult get(Map<String,Object> arguments, BeanStore ctx) {
 				A bound = bindArguments(arguments, typed.argumentType());
 				return typed.get(bound, ctx);
 			}
 		};
 	}
 
-	private static <T> T bindArguments(Map<String, Object> arguments, Class<T> type) {
+	private static <T> T bindArguments(Map<String,Object> arguments, Class<T> type) {
 		if (arguments == null || arguments.isEmpty())
 			return null;
 		try {

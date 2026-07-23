@@ -106,7 +106,7 @@ public class PrototextParser extends ReaderParser implements PrototextMetaProvid
 	 */
 	public static class Builder extends ReaderParser.Builder<Builder> {
 
-		private static final Cache<HashKey, PrototextParser> CACHE =
+		private static final Cache<HashKey,PrototextParser> CACHE =
 			Cache.of(HashKey.class, PrototextParser.class).build();
 
 		protected Builder() {
@@ -135,8 +135,8 @@ public class PrototextParser extends ReaderParser implements PrototextMetaProvid
 	/** Default parser instance. */
 	public static final PrototextParser DEFAULT = new PrototextParser(create());
 
-	private final Map<ClassMeta<?>, PrototextClassMeta> prototextClassMetas = new ConcurrentHashMap<>();
-	private final Map<BeanPropertyMeta, PrototextBeanPropertyMeta> prototextBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final Map<ClassMeta<?>,PrototextClassMeta> prototextClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,PrototextBeanPropertyMeta> prototextBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Creates a new builder.

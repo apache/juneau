@@ -509,7 +509,7 @@ class JsonTokenStream_Test extends TestBase {
 			}
 			var streamed = sb.toString();
 
-			var pojo = new LinkedHashMap<String, Object>();
+			var pojo = new LinkedHashMap<String,Object>();
 			pojo.put("a", 1);
 			pojo.put("b", List.of("x", "y"));
 			var databind = JsonSerializer.DEFAULT.writeToString(pojo);
@@ -875,7 +875,7 @@ class JsonTokenStream_Test extends TestBase {
 			public String name;
 			public int age;
 			public List<String> tags;
-			public Map<String, Integer> scores;
+			public Map<String,Integer> scores;
 		}
 
 		@Test void h01_simpleScalar() throws Exception {
@@ -919,7 +919,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h05_compositeWithMapsAndArrays() throws Exception {
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("a", 1);
 			m.put("b", List.of("x", "y"));
 			m.put("c", new int[]{10, 20});
@@ -960,7 +960,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h08_sortMapsHonored() throws Exception {
-			var m = new LinkedHashMap<String, Integer>();
+			var m = new LinkedHashMap<String,Integer>();
 			m.put("z", 1);
 			m.put("a", 2);
 			m.put("m", 3);
@@ -975,7 +975,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void h09_sortMapsDefaultOff() throws Exception {
 			// Default: insertion order preserved.
-			var m = new LinkedHashMap<String, Integer>();
+			var m = new LinkedHashMap<String,Integer>();
 			m.put("z", 1);
 			m.put("a", 2);
 			var sb = new StringWriter();
@@ -986,7 +986,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h10_keepNullPropertiesOff() throws Exception {
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("a", 1);
 			m.put("b", null);
 			m.put("c", 3);
@@ -1002,7 +1002,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h11_keepNullPropertiesOn() throws Exception {
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("a", 1);
 			m.put("b", null);
 			var ser = JsonSerializer.create().keepNullProperties().build();
@@ -1014,7 +1014,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h12_trimEmptyMapsHonored() throws Exception {
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("a", 1);
 			m.put("b", Map.of());
 			var ser = JsonSerializer.create().trimEmptyMaps().build();
@@ -1026,7 +1026,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h13_trimEmptyCollectionsHonored() throws Exception {
-			var m = new LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String,Object>();
 			m.put("a", 1);
 			m.put("b", List.of());
 			var ser = JsonSerializer.create().trimEmptyCollections().build();

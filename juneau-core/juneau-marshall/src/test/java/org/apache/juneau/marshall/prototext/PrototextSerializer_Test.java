@@ -30,7 +30,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a01_simpleBean() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("host", "localhost");
 		m.put("port", 8080);
 		m.put("debug", true);
@@ -50,10 +50,10 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a02_nestedBean() {
-		var db = new LinkedHashMap<String, Object>();
+		var db = new LinkedHashMap<String,Object>();
 		db.put("host", "localhost");
 		db.put("port", 5432);
-		var config = new LinkedHashMap<String, Object>();
+		var config = new LinkedHashMap<String,Object>();
 		config.put("name", "myapp");
 		config.put("database", db);
 
@@ -67,12 +67,12 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a03_deeplyNestedBean() {
-		var ssl = new LinkedHashMap<String, Object>();
+		var ssl = new LinkedHashMap<String,Object>();
 		ssl.put("enabled", true);
-		var server = new LinkedHashMap<String, Object>();
+		var server = new LinkedHashMap<String,Object>();
 		server.put("host", "localhost");
 		server.put("ssl", ssl);
-		var config = new LinkedHashMap<String, Object>();
+		var config = new LinkedHashMap<String,Object>();
 		config.put("server", server);
 
 		String proto = PrototextSerializer.DEFAULT.write(config);
@@ -84,7 +84,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a04_collectionOfStrings() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("tags", List.of("a", "b", "c"));
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
@@ -95,7 +95,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a05_collectionOfIntegers() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("ports", List.of(8080, 8443, 9090));
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
@@ -106,13 +106,13 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a06_collectionOfBeans() {
-		var a = new LinkedHashMap<String, Object>();
+		var a = new LinkedHashMap<String,Object>();
 		a.put("host", "alpha");
 		a.put("port", 8080);
-		var b = new LinkedHashMap<String, Object>();
+		var b = new LinkedHashMap<String,Object>();
 		b.put("host", "beta");
 		b.put("port", 8081);
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("servers", List.of(a, b));
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
@@ -123,7 +123,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a07_mapProperty() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("env", Map.of("PATH", "/usr/bin", "HOME", "/home/user"));
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
@@ -134,7 +134,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a08_nullValues() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("a", "x");
 		m.put("b", null);
 		m.put("c", 1);
@@ -148,7 +148,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a09_booleanValues() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("t", true);
 		m.put("f", false);
 
@@ -159,7 +159,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a10_floatValues() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("x", 3.14);
 		m.put("inf", Double.POSITIVE_INFINITY);
 		m.put("nan", Double.NaN);
@@ -173,7 +173,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a11_stringEscaping() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("s", "a\nb\tc\\d\"e");
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
@@ -183,7 +183,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a12_enumValues() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("level", LogLevel.WARN);
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
@@ -193,7 +193,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a13_emptyBean() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
@@ -202,7 +202,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a14_emptyCollections() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("tags", List.of());
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
@@ -211,9 +211,9 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a16_noColonBeforeMessages() {
-		var inner = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("x", 1);
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("inner", inner);
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
@@ -223,9 +223,9 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a17_indentation() {
-		var inner = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String,Object>();
 		inner.put("x", 1);
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("inner", inner);
 
 		String proto = PrototextSerializer.DEFAULT_READABLE.write(m);
@@ -244,7 +244,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a20_binaryData() {
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("data", new byte[] { 0x0a, 0x05 });
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
@@ -265,7 +265,7 @@ class PrototextSerializer_Test {
 
 	@Test void b02_quotedFieldName_for_non_identifier_key() {
 		// Triggers PrototextWriter.fieldName() quoted-key branch: key starts with digit
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("123abc", "val");
 		var proto = PrototextSerializer.DEFAULT.write(m);
 		assertTrue(proto.contains("\"123abc\""), "expected quoted key in: " + proto);
@@ -273,7 +273,7 @@ class PrototextSerializer_Test {
 
 	@Test void b03_negativeIntegerKey_gets_quoted() {
 		// Triggers isBareIntegerTag false branch: negative integer
-		var m = new LinkedHashMap<String, Object>();
+		var m = new LinkedHashMap<String,Object>();
 		m.put("-1", "val");
 		var proto = PrototextSerializer.DEFAULT.write(m);
 		assertTrue(proto.contains("\"-1\""), "expected quoted negative key in: " + proto);
