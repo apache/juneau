@@ -92,7 +92,8 @@ import org.apache.juneau.marshall.parser.*;
 	"java:S116", // Field names use trailing underscores (default_, enum_, const_) to avoid Java keyword conflicts
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_additionalProperties)
 	"java:S5843", // Complex regex patterns needed for RFC compliance (IPv6, ISO 8601 duration, date-time formats)
-	"java:S1452"  // Wildcard required for parsed type metadata
+	"java:S1452", // Wildcard required for parsed type metadata
+	"java:S6539"  // Monster class; HttpPartSchema is intentionally a single cohesive OpenAPI/HTTP-part schema model+validator
 })
 public class HttpPartSchema {
 

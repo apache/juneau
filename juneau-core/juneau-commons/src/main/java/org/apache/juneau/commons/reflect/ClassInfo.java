@@ -72,7 +72,8 @@ import org.apache.juneau.commons.inject.*;
 	"unchecked", // Type erasure requires unchecked casts
 	"rawtypes", // Raw types necessary for generic type handling
 	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"java:S1452"  // Wildcard required - List<AnnotationInfo<? extends Annotation>>, List<TypeVariable<?>>
+	"java:S1452", // Wildcard required - List<AnnotationInfo<? extends Annotation>>, List<TypeVariable<?>>
+	"java:S6539" // Monster class; ClassInfo is intentionally a single cohesive reflection-metadata facade over Class
 })
 public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Type, Comparable<ClassInfo> {
 

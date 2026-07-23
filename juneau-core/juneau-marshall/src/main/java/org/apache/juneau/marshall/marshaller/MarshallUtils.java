@@ -63,6 +63,9 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S6539" // Monster class; MarshallUtils is intentionally a single cohesive terse-marshalling-facade hub, one method family per format
+})
 public final class MarshallUtils {
 
 	private MarshallUtils() {}

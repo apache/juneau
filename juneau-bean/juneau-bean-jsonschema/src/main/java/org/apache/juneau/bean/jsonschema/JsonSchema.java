@@ -202,7 +202,8 @@ import org.apache.juneau.marshall.swap.*;
 @Marshalled(typeName = "schema")
 @SuppressWarnings({
 	"java:S116", // Field names follow OpenAPI/JSON Schema spec
-	"java:S119"  // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"java:S119", // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	"java:S6539" // Monster class; JsonSchema intentionally models the entire JSON Schema Draft 2020-12 keyword set as one cohesive bean
 })
 public class JsonSchema<SELF extends JsonSchema<SELF>> {
 

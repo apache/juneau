@@ -54,7 +54,8 @@ import org.apache.juneau.commons.reflect.*;
  * replace {@code import static ...utils.Utils.*} with {@code import static ...utils.Shorts.*}.
  */
 @SuppressWarnings({
-	"java:S1118" // Utility facade with static methods only.
+	"java:S1118", // Utility facade with static methods only.
+	"java:S6539" // Monster class; Shorts is intentionally a single terse-alias factory facade, each method tiny and independent
 })
 public class Shorts {
 

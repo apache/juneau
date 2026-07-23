@@ -177,7 +177,7 @@ import org.apache.juneau.marshall.utils.*;
 @SuppressWarnings({
 	"unchecked",  // Type erasure requires unchecked casts
 	"rawtypes",   // Raw types necessary for generic type handling
-	"java:S6539", // Collection.toArray() usage intentional
+	"java:S6539", // Monster class; MarshallingContext is intentionally the central bean-context configuration hub (also covers Collection.toArray() usage)
 	"java:S115",  // Constants use UPPER_snakeCase naming convention
 	"java:S1452", // Wildcard required - ClassMeta<?> for parameter resolution and type variables
 	"java:S1612"  // Lambdas used instead of method references for readability in complex chained expressions

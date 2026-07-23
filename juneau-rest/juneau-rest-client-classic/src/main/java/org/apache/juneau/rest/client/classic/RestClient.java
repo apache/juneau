@@ -1070,6 +1070,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
 	"resource",  // Resource management handled externally
 	"java:S106",  // System.err is the intentional default fallback for the configurable console PrintStream
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S6539" // Monster class; RestClient is intentionally a single fluent builder/client aggregating config, call orchestration, and remote-proxy wiring
 })
 public class RestClient extends MarshallingContextable implements HttpClient, Closeable {
 

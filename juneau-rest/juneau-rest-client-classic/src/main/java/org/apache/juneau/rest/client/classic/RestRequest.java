@@ -110,7 +110,8 @@ import org.apache.juneau.marshall.xml.*;
 	"java:S115",  // Constants use UPPER_snakeCase naming convention
 	"resource",   // Resource management handled externally
 	"java:S3740", // Raw Class/Supplier types used for fluent REST request building where response type is unknown at construction time
-	"java:S1133"  // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
+	"java:S1133", // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
+	"java:S6539"  // Monster class; RestRequest is intentionally a single per-request fluent builder aggregating headers/query/form/body/serialization config
 })
 public class RestRequest extends MarshallingSession implements HttpUriRequest, Configurable, AutoCloseable {
 

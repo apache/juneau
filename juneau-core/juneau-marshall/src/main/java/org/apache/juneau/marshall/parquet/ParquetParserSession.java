@@ -41,7 +41,8 @@ import org.apache.juneau.marshall.stream.*;
 	"java:S3776",
 	"java:S6541", // Brain Method: Parquet parsing/serialization flows are inherently branchy
 	"java:S1192", // Duplicated literals (.list.element, root.list.element., value) are schema keys; constants would obscure
-	"resource"    // RecordReader returned by RecordAdapter is a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
+	"resource",   // RecordReader returned by RecordAdapter is a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
+	"java:S6539"  // Monster class; ParquetParserSession is intentionally a single cohesive Parquet codec session
 })
 public class ParquetParserSession extends InputStreamParserSession implements RecordReadable, ArrayRecordReadable {
 

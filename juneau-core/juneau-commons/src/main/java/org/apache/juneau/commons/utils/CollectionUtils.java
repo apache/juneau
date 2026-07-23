@@ -123,7 +123,8 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S6539" // Monster class; CollectionUtils is intentionally a single cohesive collection-utility hub, not a set of unrelated responsibilities
 })
 public class CollectionUtils {
 

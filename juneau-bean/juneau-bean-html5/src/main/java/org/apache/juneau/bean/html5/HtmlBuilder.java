@@ -126,6 +126,9 @@ package org.apache.juneau.bean.html5;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S6539" // Monster class; HtmlBuilder is intentionally a single static-factory facade, one creator method per HTML5 element
+})
 public class HtmlBuilder {
 
 	/**

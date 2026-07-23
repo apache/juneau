@@ -95,7 +95,8 @@ import org.apache.juneau.marshall.oapi.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S3740" // Raw Supplier/Header types used in factory methods where HTTP header value type cannot be statically parameterized
+	"java:S3740", // Raw Supplier/Header types used in factory methods where HTTP header value type cannot be statically parameterized
+	"java:S6539"  // Monster class; HttpHeaders is intentionally a single static-factory facade, one creator method per standard HTTP header
 })
 public class HttpHeaders {
 

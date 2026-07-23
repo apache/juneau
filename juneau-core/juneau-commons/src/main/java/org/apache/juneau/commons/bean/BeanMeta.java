@@ -78,7 +78,8 @@ import org.apache.juneau.commons.utils.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_class)
-	"java:S1200" // Central bean-introspection type; high coupling to annotations/reflect/utils is inherent to its role
+	"java:S1200", // Central bean-introspection type; high coupling to annotations/reflect/utils is inherent to its role
+	"java:S6539" // Monster class; BeanMeta is intentionally a single cohesive bean-introspection metadata cache
 })
 public class BeanMeta<T> {
 

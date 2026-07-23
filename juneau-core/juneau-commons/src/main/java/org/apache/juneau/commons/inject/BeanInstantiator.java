@@ -188,7 +188,8 @@ import org.apache.juneau.commons.reflect.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention
-	"resource" // transient build-time scratch store; lifetime is bounded by the Builder itself, no foreign resources are captured
+	"resource", // transient build-time scratch store; lifetime is bounded by the Builder itself, no foreign resources are captured
+	"java:S6539" // Monster class; BeanInstantiator intentionally centralizes multi-strategy bean-instantiation auto-wiring
 })
 public class BeanInstantiator<T> {
 

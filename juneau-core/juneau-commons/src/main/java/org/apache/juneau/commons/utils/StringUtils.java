@@ -57,7 +57,8 @@ import org.apache.juneau.commons.reflect.*;
 	"java:S115",  // Constant names use UPPER_snakeCase convention
 	"java:S1192", // Duplicated string literals (HTML entities) are intentional
 	"java:S5843", // FP_REGEX copied from JDK source for parsing consistency
-	"java:S3516"  // Methods flagged as always returning the same value are valid utility implementations (e.g. null-safe wrappers)
+	"java:S3516", // Methods flagged as always returning the same value are valid utility implementations (e.g. null-safe wrappers)
+	"java:S6539"  // Monster class; StringUtils is intentionally a single cohesive string-utility hub, not a set of unrelated responsibilities
 })
 public class StringUtils {
 

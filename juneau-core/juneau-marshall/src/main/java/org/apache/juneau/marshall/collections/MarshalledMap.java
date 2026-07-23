@@ -55,7 +55,8 @@ import org.apache.juneau.marshall.swap.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S2160" // equals() / hashCode() inherited from LinkedHashMap; map equality is element-based
+	"java:S2160", // equals() / hashCode() inherited from LinkedHashMap; map equality is element-based
+	"java:S6539"  // Monster class; MarshalledMap's large method surface follows directly from implementing the Map contract plus path-navigation helpers
 })
 public class MarshalledMap extends LinkedHashMap<String,Object> {
 
