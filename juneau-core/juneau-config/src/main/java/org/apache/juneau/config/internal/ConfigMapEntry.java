@@ -160,7 +160,7 @@ public record ConfigMapEntry(String rawLine, String key, String value, String co
 				if (c == '\n')
 					w.append('\n').append('\t');
 				else if (c != '\r') { // HTT - '\r' in value requires OS-level carriage return injection
-					if (REPLACE_CHARS.contains(c) || (Character.isISOControl(c) && ! (c == '\n' || c == '\r' || c == '\t'))) { // HTT - some branch combinations (e.g. '\r' in isISOControl) are unreachable due to the outer '\r' check
+					if (REPLACE_CHARS.contains(c) || (Character.isISOControl(c) && c != '\t')) { // c is already known to be neither '\n' nor '\r' here
 						w.append(unicodeSequence(c));
 					} else {
 						w.append(c);

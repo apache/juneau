@@ -26,8 +26,7 @@ import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S1186", // Empty test method intentional for framework testing
-	"removal" // Tests deprecated API for backward compatibility
+	"java:S1186" // Empty test method intentional for framework testing
 })
 class SchemaAnnotation_Test extends TestBase {
 
@@ -49,8 +48,6 @@ class SchemaAnnotation_Test extends TestBase {
 		.e("l")
 		.emax(true)
 		.emin(true)
-		.exclusiveMaximum(true)
-		.exclusiveMinimum(true)
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
 		.f("m")
 		.format("n")
@@ -104,8 +101,6 @@ class SchemaAnnotation_Test extends TestBase {
 		.e("l")
 		.emax(true)
 		.emin(true)
-		.exclusiveMaximum(true)
-		.exclusiveMinimum(true)
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
 		.f("m")
 		.format("n")
@@ -147,8 +142,8 @@ class SchemaAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"$ref,default_,enum_,aev,allOf,allowEmptyValue,cf,collectionFormat,d,description,df,discriminator,e,emax,emin,exclusiveMaximum,exclusiveMinimum,externalDocs{description,url},f,format,ignore,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxProperties,maxi,maximum,maxl,maxp,min,minItems,minLength,minProperties,mini,minimum,minl,minp,mo,multipleOf,p,pattern,r,readOnly,required,ro,sie,skipIfEmpty,su,summary,t,title,type,ui,uniqueItems,xml",
-			"c,[a],[b],false,[e],false,f,g,[h],[i],[j],k,[l],true,true,true,true,{[],},m,n,true,{,[],[],,,[],[],[],false,false,false,false,,,{,[],[],,,[],[],[],false,false,false,false,,,,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},o,2,4,6,1,p,3,5,q,8,10,12,7,r,9,11,s,t,v,w,true,true,true,true,false,false,ee,dd,z,aa,bb,true,true,[cc]");
+			"$ref,default_,enum_,aev,allOf,allowEmptyValue,cf,collectionFormat,d,description,df,discriminator,e,emax,emin,externalDocs{description,url},f,format,ignore,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxProperties,maxi,maximum,maxl,maxp,min,minItems,minLength,minProperties,mini,minimum,minl,minp,mo,multipleOf,p,pattern,r,readOnly,required,ro,sie,skipIfEmpty,su,summary,t,title,type,ui,uniqueItems,xml",
+			"c,[a],[b],false,[e],false,f,g,[h],[i],[j],k,[l],true,true,{[],},m,n,true,{,[],[],,,[],[],[],false,false,false,false,,,{,[],[],,,[],[],[],false,false,false,false,,,,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},o,2,4,6,1,p,3,5,q,8,10,12,7,r,9,11,s,t,v,w,true,true,true,true,false,false,ee,dd,z,aa,bb,true,true,[cc]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -189,8 +184,6 @@ class SchemaAnnotation_Test extends TestBase {
 		e="l",
 		emax=true,
 		emin=true,
-		exclusiveMaximum=true,
-		exclusiveMinimum=true,
 		externalDocs=@ExternalDocs,
 		f="m",
 		format="n",
@@ -246,8 +239,6 @@ class SchemaAnnotation_Test extends TestBase {
 		e="l",
 		emax=true,
 		emin=true,
-		exclusiveMaximum=true,
-		exclusiveMinimum=true,
 		externalDocs=@ExternalDocs,
 		f="m",
 		format="n",
@@ -412,37 +403,16 @@ class SchemaAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Backward compatibility: exclusiveMaximum/exclusiveMinimum fallback
+	// Draft 2020-12 numeric exclusiveMaximum/exclusiveMinimum
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void f01_backwardCompatibility_exclusiveMaxMin() {
-		// Test that old boolean exclusiveMaximum/exclusiveMinimum still work
-		Schema oldStyle = SchemaAnnotation.create()
-			.exclusiveMaximum(true)
-			.exclusiveMinimum(true)
-			.maximum("100")
-			.minimum("0")
-			.build();
-
-		assertBean(oldStyle, "exclusiveMaximum,exclusiveMinimum,maximum,minimum", "true,true,100,0");
-
-		// Test that new numeric style takes precedence
+	@Test void f01_exclusiveMaxMinValue() {
 		Schema newStyle = SchemaAnnotation.create()
 			.exclusiveMaximumValue("100")
 			.exclusiveMinimumValue("0")
 			.build();
 
 		assertBean(newStyle, "exclusiveMaximumValue,exclusiveMinimumValue", "100,0");
-
-		// Test that new style takes precedence when both are set
-		Schema mixed = SchemaAnnotation.create()
-			.exclusiveMaximum(false)
-			.exclusiveMinimum(false)
-			.exclusiveMaximumValue("100")
-			.exclusiveMinimumValue("0")
-			.build();
-
-		assertBean(mixed, "exclusiveMaximum,exclusiveMinimum,exclusiveMaximumValue,exclusiveMinimumValue", "false,false,100,0");
 	}
 
 	@Test void g01_summary_asMap_emptyAnnotationOmitsKey() throws Exception {
@@ -508,24 +478,14 @@ class SchemaAnnotation_Test extends TestBase {
 		assertEquals("true", SchemaAnnotation.asMap(a).get("ignore"));
 	}
 
-	@Test void i03_asMap_exclusiveMaximumBooleanFallback() throws Exception {
-		// Forces the `else if (a.exclusiveMaximum() || a.emax())` short-circuit branch. // NOSONAR
-		var a = SchemaAnnotation.create().exclusiveMaximum(true).build();
-		assertEquals("true", SchemaAnnotation.asMap(a).get("exclusiveMaximum"));
-	}
-
 	@Test void i04_asMap_exclusiveMaximumEmaxAlias() throws Exception {
-		// Triggers the second operand of `exclusiveMaximum() || emax()`.
+		// Forces the `else if (a.emax())` short-circuit branch.
 		var a = SchemaAnnotation.create().emax(true).build();
 		assertEquals("true", SchemaAnnotation.asMap(a).get("exclusiveMaximum"));
 	}
 
-	@Test void i05_asMap_exclusiveMinimumBooleanFallback() throws Exception {
-		var a = SchemaAnnotation.create().exclusiveMinimum(true).build();
-		assertEquals("true", SchemaAnnotation.asMap(a).get("exclusiveMinimum"));
-	}
-
 	@Test void i06_asMap_exclusiveMinimumEminAlias() throws Exception {
+		// Forces the `else if (a.emin())` short-circuit branch.
 		var a = SchemaAnnotation.create().emin(true).build();
 		assertEquals("true", SchemaAnnotation.asMap(a).get("exclusiveMinimum"));
 	}

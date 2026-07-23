@@ -35,7 +35,6 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"serial",  // Serialization not relevant for test beans
-	"removal", // Tests precedence of new numeric style over deprecated boolean style
 	"unused"   // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class JsonSchemaGenerator_Test extends TestBase {
@@ -1501,33 +1500,19 @@ class JsonSchemaGenerator_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Backward compatibility: Old boolean exclusiveMaximum/exclusiveMinimum
+	// Draft 2020-12 numeric exclusiveMaximum/exclusiveMinimum (the legacy boolean form was removed in 10.0.0)
 	//====================================================================================================
 
-	@Test void k01_backwardCompatibility_exclusiveMaxMin_boolean() throws Exception {
+	@Test void k02_exclusiveMaxMinValue() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.getSession();
-		var schema = s.getSchema(OldStyleExclusiveBean.class);
-		assertBean(schema, "exclusiveMaximum,exclusiveMinimum,maximum,minimum", "true,true,100,0");
-	}
-
-	@Schema(type="integer", exclusiveMaximum=true, exclusiveMinimum=true, maximum="100", minimum="0")
-	public static class OldStyleExclusiveBean {
-		public int value;
-	}
-
-	@Test void k02_backwardCompatibility_newStyleTakesPrecedence() throws Exception {
-		var s = JsonSchemaGenerator.DEFAULT.getSession();
-		// New numeric style should take precedence in asMap() when both are set
-		var schema = s.getSchema(MixedStyleExclusiveBean.class);
+		var schema = s.getSchema(NumericExclusiveBean.class);
 		assertBean(schema, "exclusiveMaximum,exclusiveMinimum", "100,0");
 	}
 
 	@Schema(type="integer",
 		exclusiveMaximumValue="100",
-		exclusiveMinimumValue="0",
-		exclusiveMaximum=false,  // This should be ignored in favor of numeric values
-		exclusiveMinimum=false)
-	public static class MixedStyleExclusiveBean {
+		exclusiveMinimumValue="0")
+	public static class NumericExclusiveBean {
 		public int value;
 	}
 

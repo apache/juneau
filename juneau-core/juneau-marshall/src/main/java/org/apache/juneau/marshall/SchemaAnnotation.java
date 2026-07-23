@@ -106,8 +106,6 @@ public class SchemaAnnotation {
 		private boolean allowEmptyValue;
 		private boolean emax;
 		private boolean emin;
-		private boolean exclusiveMaximum;
-		private boolean exclusiveMinimum;
 		private boolean ignore;
 		private boolean r;
 		private boolean readOnly;
@@ -532,17 +530,6 @@ public class SchemaAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Schema#exclusiveMaximum} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder exclusiveMaximum(boolean value) {
-			exclusiveMaximum = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Schema#exclusiveMaximumValue} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -550,17 +537,6 @@ public class SchemaAnnotation {
 		 */
 		public Builder exclusiveMaximumValue(String value) {
 			exclusiveMaximumValue = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#exclusiveMinimum} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder exclusiveMinimum(boolean value) {
-			exclusiveMinimum = value;
 			return this;
 		}
 
@@ -1054,9 +1030,7 @@ public class SchemaAnnotation {
 		private final String[] description;
 		private final boolean aev;
 		private final boolean allowEmptyValue;
-		private final boolean exclusiveMaximum;
 		private final boolean emax;
-		private final boolean exclusiveMinimum;
 		private final boolean emin;
 		private final boolean uniqueItems;
 		private final boolean ui;
@@ -1144,8 +1118,6 @@ public class SchemaAnnotation {
 			e = cp(b.e);
 			emax = b.emax;
 			emin = b.emin;
-			exclusiveMaximum = b.exclusiveMaximum;
-			exclusiveMinimum = b.exclusiveMinimum;
 			externalDocs = b.externalDocs;
 			f = b.f;
 			format = b.format;
@@ -1341,18 +1313,8 @@ public class SchemaAnnotation {
 		}
 
 		@Override /* Overridden from Schema */
-		public boolean exclusiveMaximum() {
-			return exclusiveMaximum;
-		}
-
-		@Override /* Overridden from Schema */
 		public String exclusiveMaximumValue() {
 			return exclusiveMaximumValue;
-		}
-
-		@Override /* Overridden from Schema */
-		public boolean exclusiveMinimum() {
-			return exclusiveMinimum;
 		}
 
 		@Override /* Overridden from Schema */
@@ -1590,9 +1552,6 @@ public class SchemaAnnotation {
 	 * @return The schema converted to a map, or an empty map if the annotation was null.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings({
-		"removal" // Handles deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
-	})
 	public static JsonMap asMap(Schema a) throws ParseException {
 		if (a == null)
 			return JsonMap.EMPTY_MAP;
@@ -1609,7 +1568,7 @@ public class SchemaAnnotation {
 		String exclusiveMaximumValue;
 		if (ne.test(a.exclusiveMaximumValue())) {
 			exclusiveMaximumValue = a.exclusiveMaximumValue();
-		} else if (a.exclusiveMaximum() || a.emax()) {
+		} else if (a.emax()) {
 			exclusiveMaximumValue = "true";
 		} else {
 			exclusiveMaximumValue = null;
@@ -1619,7 +1578,7 @@ public class SchemaAnnotation {
 		String exclusiveMinimumValue;
 		if (ne.test(a.exclusiveMinimumValue())) {
 			exclusiveMinimumValue = a.exclusiveMinimumValue();
-		} else if (a.exclusiveMinimum() || a.emin()) {
+		} else if (a.emin()) {
 			exclusiveMinimumValue = "true";
 		} else {
 			exclusiveMinimumValue = null;

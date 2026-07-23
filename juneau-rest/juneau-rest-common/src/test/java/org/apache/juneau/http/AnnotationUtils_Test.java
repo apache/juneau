@@ -138,8 +138,8 @@ class AnnotationUtils_Test extends TestBase {
 		assertFalse(SchemaAnnotation.empty(schema().e(a("foo")).build()));
 		assertFalse(SchemaAnnotation.empty(schema().emax(true).build()));
 		assertFalse(SchemaAnnotation.empty(schema().emin(true).build()));
-		assertFalse(SchemaAnnotation.empty(schema().exclusiveMaximum(true).build()));
-		assertFalse(SchemaAnnotation.empty(schema().exclusiveMinimum(true).build()));
+		assertFalse(SchemaAnnotation.empty(schema().exclusiveMaximumValue("foo").build()));
+		assertFalse(SchemaAnnotation.empty(schema().exclusiveMinimumValue("foo").build()));
 		assertFalse(SchemaAnnotation.empty(schema().externalDocs(externalDocs().url("foo").build()).build()));
 		assertFalse(SchemaAnnotation.empty(schema().f("foo").build()));
 		assertFalse(SchemaAnnotation.empty(schema().format("foo").build()));

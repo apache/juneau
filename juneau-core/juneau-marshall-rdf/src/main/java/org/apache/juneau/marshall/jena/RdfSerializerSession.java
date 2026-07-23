@@ -185,15 +185,10 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		return XmlUtils.escapeText(s);
 	}
 
-	private String getUri(Object uri, Object uri2) {
-		String s = null;
-		if (nn(uri))
-			s = uri.toString();
-		if (ie(s) && nn(uri2)) // HTT - all callers pass uri2=null; uri2 fallback is dead
-			s = uri2.toString();
-		if (s == null)
+	private String getUri(Object uri) {
+		if (! nn(uri))
 			return null;
-		return getUriResolver().resolve(s);
+		return getUriResolver().resolve(uri.toString());
 	}
 
 	@SuppressWarnings({
@@ -262,7 +257,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 
 		} else if (sType.isUri() || isURI) {
 			// RDF URI gate must come before isBean/isMap/isCharSequence: @Uri-annotated values (where sType could be String or a bean) need to route through the Resource emission path.  RDF URIs must be absolute to be valid.
-			var uri = getUri(o, null);
+			var uri = getUri(o);
 			if (isAbsoluteUri(uri))
 				n = m.createResource(uri);
 			else
@@ -274,7 +269,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			RdfBeanMeta rbm = getRdfBeanMeta(bm.getMeta());
 			if (rbm.hasBeanUri())
 				uri = rbm.getBeanUriProperty().get(bm, null);
-			String uri2 = getUri(uri, null);
+			String uri2 = getUri(uri);
 			n = m.createResource(uri2);
 			writeBeanMap(bm, (Resource)n, typeName);
 
@@ -284,7 +279,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 				var rbm = getRdfBeanMeta(o2.getMeta());
 				if (rbm.hasBeanUri())
 					uri = rbm.getBeanUriProperty().get(o2, null);
-				var uri2 = getUri(uri, null);
+				var uri2 = getUri(uri);
 				n = m.createResource(uri2);
 				writeBeanMap(o2, (Resource)n, typeName);
 			} else {

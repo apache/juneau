@@ -728,14 +728,16 @@ public @interface Schema {
 	String[] e() default {};
 
 	/**
-	 * Synonym for {@link #exclusiveMaximum()}.
+	 * Short-form boolean flag mirroring the legacy Swagger 2.0/OpenAPI 3.0/JSON Schema Draft 04
+	 * <mk>exclusiveMaximum</mk> semantics (superseded by {@link #exclusiveMaximumValue()} for Draft 2020-12).
 	 *
 	 * @return The annotation value.
 	 */
 	boolean emax() default false;
 
 	/**
-	 * Synonym for {@link #exclusiveMinimum()}.
+	 * Short-form boolean flag mirroring the legacy Swagger 2.0/OpenAPI 3.0/JSON Schema Draft 04
+	 * <mk>exclusiveMinimum</mk> semantics (superseded by {@link #exclusiveMinimumValue()} for Draft 2020-12).
 	 *
 	 * @return The annotation value.
 	 */
@@ -777,47 +779,6 @@ public @interface Schema {
 	String[] examples() default {};
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
-	 *
-	 * <p>
-	 * Defines whether the maximum is matched exclusively.
-	 *
-	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
-	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
-	 *
-	 * <p>
-	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
-	 * <br>If <jk>true</jk>, must be accompanied with <c>maximum</c>.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		<b>Deprecated in JSON Schema Draft 2020-12:</b> This boolean format is from Swagger 2.0/OpenAPI 3.0 and JSON Schema Draft 04.
-	 * 		Consider using {@link #exclusiveMaximumValue()} for Draft 2020-12 compliance, which uses a numeric value instead.
-	 * 		For backward compatibility, if {@link #exclusiveMaximumValue()} is set, it takes precedence over this property.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side schema-based parsing validation.
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * 	<li>
-	 * 		Client-side schema-based serializing validation.
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 * @deprecated Use {@link #exclusiveMaximumValue()} for JSON Schema Draft 2020-12 compliance.
-	 */
-	@Deprecated(since = "9.2.0", forRemoval = true)
-	@SuppressWarnings({
-		"java:S1133" // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
-	})
-	boolean exclusiveMaximum() default false;
-
-	/**
 	 * <mk>exclusiveMaximum</mk> field of the JSON Schema (Draft 2020-12 numeric value).
 	 *
 	 * <p>
@@ -825,9 +786,8 @@ public @interface Schema {
 	 * The instance is valid if it is strictly less than (not equal to) the value specified by this keyword.
 	 *
 	 * <p>
-	 * This is a JSON Schema Draft 2020-12 property that replaces the boolean {@link #exclusiveMaximum()}.
-	 * For backward compatibility, both properties are supported.
-	 * If this property is specified, it takes precedence over the boolean version.
+	 * This is a JSON Schema Draft 2020-12 property. The legacy Swagger 2.0/OpenAPI 3.0/JSON Schema Draft 04
+	 * boolean form was removed in 10.0.0; use this numeric form instead.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
@@ -858,47 +818,6 @@ public @interface Schema {
 	String exclusiveMaximumValue() default "";
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
-	 *
-	 * <p>
-	 * Defines whether the minimum is matched exclusively.
-	 *
-	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
-	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
-	 *
-	 * <p>
-	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
-	 * <br>If <jk>true</jk>, must be accompanied with <c>minimum</c>.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		<b>Deprecated in JSON Schema Draft 2020-12:</b> This boolean format is from Swagger 2.0/OpenAPI 3.0 and JSON Schema Draft 04.
-	 * 		Consider using {@link #exclusiveMinimumValue()} for Draft 2020-12 compliance, which uses a numeric value instead.
-	 * 		For backward compatibility, if {@link #exclusiveMinimumValue()} is set, it takes precedence over this property.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side schema-based parsing validation.
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * 	<li>
-	 * 		Client-side schema-based serializing validation.
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 * @deprecated Use {@link #exclusiveMinimumValue()} for JSON Schema Draft 2020-12 compliance.
-	 */
-	@Deprecated(since = "9.2.0", forRemoval = true)
-	@SuppressWarnings({
-		"java:S1133" // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
-	})
-	boolean exclusiveMinimum() default false;
-
-	/**
 	 * <mk>exclusiveMinimum</mk> field of the JSON Schema (Draft 2020-12 numeric value).
 	 *
 	 * <p>
@@ -906,9 +825,8 @@ public @interface Schema {
 	 * The instance is valid if it is strictly greater than (not equal to) the value specified by this keyword.
 	 *
 	 * <p>
-	 * This is a JSON Schema Draft 2020-12 property that replaces the boolean {@link #exclusiveMinimum()}.
-	 * For backward compatibility, both properties are supported.
-	 * If this property is specified, it takes precedence over the boolean version.
+	 * This is a JSON Schema Draft 2020-12 property. The legacy Swagger 2.0/OpenAPI 3.0/JSON Schema Draft 04
+	 * boolean form was removed in 10.0.0; use this numeric form instead.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>

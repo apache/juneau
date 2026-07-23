@@ -2754,7 +2754,6 @@ public class HttpPartSchema {
 		// -----------------------------------------------------------------------------------------------------------------
 
 		@SuppressWarnings({
-			"removal", // Handles deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
 			"java:S3776" // Maps every @Schema attribute (plus its short-form alias) onto the builder; the flat attribute-by-attribute copy is behavior-preserving and clearer as one method than split across helpers.
 		})
 		Builder apply(Schema a) {
@@ -2767,7 +2766,7 @@ public class HttpPartSchema {
 			String exMaxVal = a.exclusiveMaximumValue();
 			if (ine(exMaxVal)) {
 				exclusiveMaximumValue(toNumber(exMaxVal));
-			} else if (a.exclusiveMaximum() || a.emax()) {
+			} else if (a.emax()) {
 				exclusiveMaximum(true);
 			}
 
@@ -2775,7 +2774,7 @@ public class HttpPartSchema {
 			String exMinVal = a.exclusiveMinimumValue();
 			if (ine(exMinVal)) {
 				exclusiveMinimumValue(toNumber(exMinVal));
-			} else if (a.exclusiveMinimum() || a.emin()) {
+			} else if (a.emin()) {
 				exclusiveMinimum(true);
 			}
 
@@ -3046,18 +3045,6 @@ public class HttpPartSchema {
 
 	/** Object type */
 	public static final HttpPartSchema T_OBJECT = HttpPartSchema.tObject().build();
-
-	/** Comma-delimited object type */
-	public static final HttpPartSchema T_OBJECT_CSV = HttpPartSchema.tObjectCsv().build();
-
-	/** Pipe-delimited object type */
-	public static final HttpPartSchema T_OBJECT_PIPES = HttpPartSchema.tObjectPipes().build();
-
-	/** Space-delimited object type */
-	public static final HttpPartSchema T_OBJECT_SSV = HttpPartSchema.tObjectSsv().build();
-
-	/** Tab-delimited object type */
-	public static final HttpPartSchema T_OBJECT_TSV = HttpPartSchema.tObjectTsv().build();
 
 	/** UON-formated object type */
 	public static final HttpPartSchema T_OBJECT_UON = HttpPartSchema.tObjectUon().build();
@@ -3475,42 +3462,6 @@ public class HttpPartSchema {
 	 */
 	public static Builder tObject() {
 		return create().tObject();
-	}
-
-	/**
-	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>OBJECT</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>CSV</jsf>)</c>.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static Builder tObjectCsv() {
-		return create().tObject().cfCsv();
-	}
-
-	/**
-	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>OBJECT</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>PIPES</jsf>)</c>.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static Builder tObjectPipes() {
-		return create().tObject().cfPipes();
-	}
-
-	/**
-	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>OBJECT</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>SSV</jsf>)</c>.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static Builder tObjectSsv() {
-		return create().tObject().cfSsv();
-	}
-
-	/**
-	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>OBJECT</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>TSV</jsf>)</c>.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static Builder tObjectTsv() {
-		return create().tObject().cfTsv();
 	}
 
 	/**

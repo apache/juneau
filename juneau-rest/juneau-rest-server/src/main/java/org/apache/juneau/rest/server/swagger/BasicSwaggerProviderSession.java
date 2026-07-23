@@ -945,9 +945,6 @@ public class BasicSwaggerProviderSession {
 		// @formatter:on
 	}
 
-	@SuppressWarnings({
-		"removal" // Uses deprecated exclusiveMaximum/exclusiveMinimum for backward compatibility
-	})
 	private MarshalledMap merge(MarshalledMap om, Schema a) {
 		try {
 			if (SchemaAnnotation.empty(a))
@@ -966,8 +963,8 @@ public class BasicSwaggerProviderSession {
 				.appendIf(ne, SWAGGER_discriminator, a.discriminator())
 				.appendIf(ne, SWAGGER_description, resolve(a.description(), a.d()))
 				.appendFirst(nec, SWAGGER_enum, toSet(a.enum_()), toSet(a.e()))
-				.appendIf(nf, SWAGGER_exclusiveMaximum, a.exclusiveMaximum() || a.emax())
-				.appendIf(nf, SWAGGER_exclusiveMinimum, a.exclusiveMinimum() || a.emin())
+				.appendIf(nf, SWAGGER_exclusiveMaximum, a.emax())
+				.appendIf(nf, SWAGGER_exclusiveMinimum, a.emin())
 				.appendIf(nem, SWAGGER_externalDocs, merge(om.getMap(SWAGGER_externalDocs), a.externalDocs()))
 				.appendFirst(ne, SWAGGER_format, a.format(), a.f())
 				.appendIf(ne, SWAGGER_ignore, a.ignore() ? SWAGGER_true : null)

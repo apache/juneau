@@ -31,7 +31,6 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"java:S1186", // Empty method body intentional for callback testing
-	"removal" // Tests deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
 })
 class HttpPartSchema_Body_Test extends TestBase {
 
@@ -724,11 +723,12 @@ class HttpPartSchema_Body_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Backward compatibility: Old boolean exclusiveMaximum/exclusiveMinimum
+	// Backward compatibility: the `emax`/`emin` boolean aliases (the long-named `exclusiveMaximum`/`exclusiveMinimum`
+	// boolean attributes were removed in 10.0.0; use the numeric `exclusiveMaximumValue`/`exclusiveMinimumValue`)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Content
-	@Schema(t="integer", exclusiveMaximum=true, exclusiveMinimum=true, maximum="100", minimum="0")
+	@Schema(t="integer", emax=true, emin=true, maximum="100", minimum="0")
 	public static class D03a {}
 
 	@Test void d03a_exclusiveBooleanBounds() throws Exception {
@@ -745,7 +745,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	}
 
 	@Content
-	@Schema(t="integer", exclusiveMaximum=false, exclusiveMinimum=false, maximum="100", minimum="0")
+	@Schema(t="integer", emax=false, emin=false, maximum="100", minimum="0")
 	public static class D03b {}
 
 	@Test void d03b_inclusiveBounds() throws Exception {
@@ -762,7 +762,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	}
 
 	@Content
-	@Schema(t="integer", exclusiveMaximumValue="100", exclusiveMinimumValue="0", exclusiveMaximum=false, exclusiveMinimum=false)
+	@Schema(t="integer", exclusiveMaximumValue="100", exclusiveMinimumValue="0", emax=false, emin=false)
 	public static class D03c {}
 
 	@Test void d03c_newStyleTakesPrecedence() throws Exception {

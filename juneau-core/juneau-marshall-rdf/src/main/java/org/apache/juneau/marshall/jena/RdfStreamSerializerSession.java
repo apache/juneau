@@ -261,15 +261,10 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		return XmlUtils.escapeText(toString(o));
 	}
 
-	private String getUri(Object uri, Object uri2) {
-		String s = null;
-		if (nn(uri))
-			s = uri.toString();
-		if (ie(s) && nn(uri2))
-			s = uri2.toString();
-		if (s == null)
+	private String getUri(Object uri) {
+		if (! nn(uri))
 			return null;
-		return getUriResolver().resolve(s);
+		return getUriResolver().resolve(uri.toString());
 	}
 
 	@SuppressWarnings({
@@ -321,7 +316,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 			}
 		} else if (sType.isUri() || isURI) {
 			// RDF URI gate must come before isBean/isMap/isCharSequence: @Uri-annotated values need Resource emission, not literal text.
-			var uri = getUri(o, null);
+			var uri = getUri(o);
 			if (isAbsoluteUri(uri))
 				n = m.createResource(uri);
 			else
@@ -332,7 +327,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 			var rbm = ctx.getRdfBeanMeta(bm.getMeta());
 			if (rbm.hasBeanUri())
 				uri = rbm.getBeanUriProperty().get(bm, null);
-			var uri2 = getUri(uri, null);
+			var uri2 = getUri(uri);
 			n = m.createResource(uri2);
 			writeBeanMap(bm, (Resource)n, typeName);
 		} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
@@ -341,7 +336,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 				var rbm = ctx.getRdfBeanMeta(o2.getMeta());
 				if (rbm.hasBeanUri())
 					uri = rbm.getBeanUriProperty().get(o2, null);
-				var uri2 = getUri(uri, null);
+				var uri2 = getUri(uri);
 				n = m.createResource(uri2);
 				writeBeanMap(o2, (Resource)n, typeName);
 			} else {
