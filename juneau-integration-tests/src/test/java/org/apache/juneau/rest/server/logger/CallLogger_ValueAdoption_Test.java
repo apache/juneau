@@ -32,7 +32,7 @@ import org.junit.jupiter.api.parallel.*;
  * Acceptance tests for {@code @Value}-driven defaults on {@link CallLogger.Builder}.
  *
  * <p>
- * 3-test triad per migrated field per OQA #4 — system property set, unset (default), and {@code Settings.setGlobal}.
+ * 3-test triad per migrated field — system property set, unset (default), and {@code Settings.setGlobal}.
  */
 @ResourceLock(Resources.SYSTEM_PROPERTIES)
 class CallLogger_ValueAdoption_Test extends TestBase {

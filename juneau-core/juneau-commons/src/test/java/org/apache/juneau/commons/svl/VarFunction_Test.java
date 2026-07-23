@@ -102,7 +102,7 @@ class VarFunction_Test extends TestBase {
 
 	@Test void a06_unknownFunctionLazyFail() {
 		var vr = VarResolver.create().build();
-		// Compile succeeds (lazy-fail per OQA #4)…
+		// Compile succeeds (lazy-fail)…
 		var tpl = vr.compile("hello #{nope()} world");
 		assertNotNull(tpl);
 		// …but resolve throws.

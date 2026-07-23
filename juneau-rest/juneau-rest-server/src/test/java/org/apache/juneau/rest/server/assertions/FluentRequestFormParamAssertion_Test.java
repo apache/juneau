@@ -23,7 +23,7 @@ import org.apache.juneau.rest.server.httppart.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Validates {@link FluentRequestFormParamAssertion} tolerates a null {@code value} (TODO-286 #6 null-tolerance fix).
+ * Validates {@link FluentRequestFormParamAssertion} tolerates a null {@code value}.
  *
  * <p>
  * A null {@link RequestFormParam} used to NPE in the constructor ({@code value.asString()}) and in every transform

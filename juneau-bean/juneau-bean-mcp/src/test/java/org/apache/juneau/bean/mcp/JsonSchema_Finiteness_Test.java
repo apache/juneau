@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
  * contract treats it as an <b>acyclic-by-wire DAG</b>: schemas are assembled bottom-up (each child is fully
  * built before it is attached to a parent), so there is no supported way to manufacture a cycle over the wire.
  * These tests pin that invariant — {@code toString()} and JSON serialization over a deeply-nested schema
- * terminate finitely (no depth blow-up / infinite recursion).  Mirrors the {@code juneau-marshall} TODO-253
+ * terminate finitely (no depth blow-up / infinite recursion).  Mirrors the {@code juneau-marshall}
  * {@code HttpPartSchema} deep-nesting finiteness anchor.
  */
 class JsonSchema_Finiteness_Test {

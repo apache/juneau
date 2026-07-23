@@ -84,7 +84,7 @@ class BasicOps_OpenApiHidden_Test extends TestBase {
 		c.get("/echo/x").run().assertStatus(200);
 		c.get("/options").run().assertStatus(200);
 		c.get("/admin/threads").run().assertStatus(200);
-		// FINISHED-101: /routes is no longer a multi-path default; migration covered by the
+		// /routes is no longer a multi-path default; migration covered by the
 		// per-mixin *_SvlPathOverride_Test classes.
 		c.get("/routes").run().assertStatus(404);
 	}

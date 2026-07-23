@@ -66,7 +66,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 	}
 
 	@Test void a02_legacyDebugEchoAliasNotMountedByDefault() throws Exception {
-		// FINISHED-101: /debug/echo/* is no longer a multi-path default. It only mounts when
+		// /debug/echo/* is no longer a multi-path default. It only mounts when
 		// the deployer overrides juneau.echo.path=debug/echo. Default-build hosts get 404 here.
 		ca.get("/debug/echo/something").run().assertStatus(404);
 	}
@@ -103,7 +103,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 	}
 
 	@Test void b02_legacyDebugEchoAliasReturns404WhenNotOverridden() throws Exception {
-		// FINISHED-101: secondary alias only mounts when sysprop override is set.
+		// Secondary alias only mounts when sysprop override is set.
 		cb.get("/debug/echo/abc").run().assertStatus(404);
 	}
 

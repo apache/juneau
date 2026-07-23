@@ -449,7 +449,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 		// Resolve to the runtime type and apply any registered swap.  Required for collection/array
 		// elements that arrive here without having gone through writeAnything's swap step (e.g.
 		// List<Locale> elements where the bean-property swap is on the List, not on Locale).
-		// Bug #8: without this, Locale list-elements wire as Locale.toString() ("en_US") regardless
+		// Without this, Locale list-elements wire as Locale.toString() ("en_US") regardless
 		// of the configured LocaleFormat, breaking BCP_47 round-trips on the parser side.
 		var rType = getClassMetaForObject(value, type);
 		var swap = rType.getSwap(this);

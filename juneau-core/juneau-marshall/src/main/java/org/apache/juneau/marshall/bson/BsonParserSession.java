@@ -158,7 +158,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 		if (!eType.isOptional() && sType.isMap()) {
 			var map = sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType);
 			// Coerce string keys to the declared key type when non-String (e.g. Map<TestEnum,String>)
-			// so map.get(EnumConstant) works (Bug #7b).  Matches the JSON-family readIntoMap2 pattern.
+			// so map.get(EnumConstant) works.  Matches the JSON-family readIntoMap2 pattern.
 			var keyType = sType.getKeyType();
 			var coerceKeys = nn(keyType) && !keyType.isObject() && !keyType.isString();
 			while (!is.isDocumentEnd()) {

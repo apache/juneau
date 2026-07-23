@@ -154,7 +154,7 @@ class RestPathsRuntimeOverride_Springboot_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// e — BeanStore parity: getter override resolves identically through SpringBeanStore as it would
-	//     through a plain BasicBeanStore (acceptance bullet from the original work item 73 plan).
+	//     through a plain BasicBeanStore.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test

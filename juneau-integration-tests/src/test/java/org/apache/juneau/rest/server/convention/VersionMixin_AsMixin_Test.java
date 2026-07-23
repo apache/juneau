@@ -42,7 +42,7 @@ import org.junit.jupiter.api.*;
  * </ul>
  *
  * <p>
- * Per the FINISHED-101 multi-path collapse, the historical {@code /info} and {@code /about}
+ * Per the multi-path collapse, the historical {@code /info} and {@code /about}
  * mount aliases (formerly a triple default on a single op) are now reached via
  * {@code -Djuneau.version.path=info} (or {@code about}); that behavior is covered by
  * {@code VersionMixin_SvlPathOverride_Test}.
@@ -67,7 +67,7 @@ class VersionMixin_AsMixin_Test extends TestBase {
 	}
 
 	@Test void a02_legacyAliasesNotMountedByDefault() throws Exception {
-		// FINISHED-101: /info and /about are no longer multi-path defaults. They only mount when
+		// /info and /about are no longer multi-path defaults. They only mount when
 		// the deployer overrides juneau.version.path. Default-build hosts get 404 here.
 		ca.get("/info").run().assertStatus(404);
 		ca.get("/about").run().assertStatus(404);

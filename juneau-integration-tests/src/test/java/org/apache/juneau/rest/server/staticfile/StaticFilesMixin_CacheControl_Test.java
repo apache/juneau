@@ -56,7 +56,7 @@ class StaticFilesMixin_CacheControl_Test extends TestBase {
 	}
 
 	@Test void a02_cacheControlOnLegacyHtdocPath() throws Exception {
-		// FINISHED-101: /htdocs/* is no longer a multi-path default on the mixin, but
+		// /htdocs/* is no longer a multi-path default on the mixin, but
 		// BasicRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.
 		// That handler also reads from BasicStaticFiles, so the Cache-Control default flows
 		// through unchanged.

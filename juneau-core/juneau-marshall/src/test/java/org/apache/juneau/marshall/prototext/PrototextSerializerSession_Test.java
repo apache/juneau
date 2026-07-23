@@ -452,7 +452,7 @@ class PrototextSerializerSession_Test extends TestBase {
 	}
 
 	@Test void h04_beanWithMapArray() throws Exception {
-		// Bean with Map[] property — regression for bug #8: writeBeanMap was calling
+		// Bean with Map[] property — regression coverage: writeBeanMap was calling
 		// toBeanMap() unconditionally on the map elements, which threw BeanRuntimeException.
 		// The array path now dispatches Map vs Bean correctly.
 		var bean = new BeanWithMapArray();

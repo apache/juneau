@@ -79,7 +79,7 @@ class BasicOps_ParentChain_Test extends TestBase {
 	}
 
 	@Test void a02_echoServesAtPrimaryMount() throws Exception {
-		// FINISHED-101: /debug/echo/* is no longer a multi-path default. Migration to that
+		// /debug/echo/* is no longer a multi-path default. Migration to that
 		// secondary alias is covered by EchoMixin_SvlPathOverride_Test#a02.
 		c.get("/echo/x").run().assertStatus(200);
 		c.get("/debug/echo/x").run().assertStatus(404);
@@ -113,7 +113,7 @@ class BasicOps_ParentChain_Test extends TestBase {
 	}
 
 	@Test void a06_legacyRoutesAliasNotMountedByDefault() throws Exception {
-		// FINISHED-101: /routes is no longer a multi-path default. Migration covered by
+		// /routes is no longer a multi-path default. Migration covered by
 		// RouteIndexMixin_SvlPathOverride_Test#a02.
 		c.get("/routes").run().assertStatus(404);
 	}

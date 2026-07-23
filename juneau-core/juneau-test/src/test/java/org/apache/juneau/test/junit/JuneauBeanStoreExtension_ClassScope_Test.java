@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
 
 /**
- * Tests for class-scope overlays produced by {@link JuneauBeanStoreExtension} (Phase 3 of work item 35).
+ * Tests for class-scope overlays produced by {@link JuneauBeanStoreExtension}.
  *
  * <p>
  * Phase 3 covers {@code @TestBean(scope = CLASS)} discovery, shared lifetime across test methods,

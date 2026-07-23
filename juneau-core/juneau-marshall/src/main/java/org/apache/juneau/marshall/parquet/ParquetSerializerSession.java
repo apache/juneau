@@ -130,7 +130,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	@Override /* OutputStreamSerializerSession */
 	public boolean hasNativeBytes() {
 		// Parquet's column writer has no native byte-array primitive type — it stores byte[] as a raw
-		// BYTE_ARRAY column (at BinaryFormat.NOT_SET; Bug #11 schema branch) or as a UTF-8 string column
+		// BYTE_ARRAY column (at BinaryFormat.NOT_SET) or as a UTF-8 string column
 		// (at any other BinaryFormat, after the BinarySwap fires and emits the configured text wire form).
 		return false;
 	}

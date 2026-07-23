@@ -24,7 +24,7 @@ import org.apache.juneau.test.junit.*;
 import org.junit.jupiter.api.*;
 
 /**
- * End-to-end tests for {@code MockRestClient.Builder.overridingBeanStore(...)} (Phase 1 of work item 35).
+ * End-to-end tests for {@code MockRestClient.Builder.overridingBeanStore(...)}.
  *
  * <p>
  * Builds a {@link TestBeanStore} overlay, threads it into {@link MockRestClient} via the new builder

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.parallel.*;
  * {@link VersionMixin.Builder}.
  *
  * <p>
- * 3-test triad per migrated field per OQA #4 — system property set, unset (default = JVM-resolved),
+ * 3-test triad per migrated field — system property set, unset (default = JVM-resolved),
  * and {@code Settings.setGlobal} override.
  *
  * <p>

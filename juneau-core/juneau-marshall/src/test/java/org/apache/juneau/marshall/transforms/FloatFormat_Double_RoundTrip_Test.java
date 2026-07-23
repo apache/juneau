@@ -77,11 +77,11 @@ import org.junit.jupiter.params.provider.*;
  *
  * <p>
  * Unlike the {@link Float} sibling, this file has no Prototext-skip helper — the Prototext text-format tokenizer
- * bugs that forced those skips (Bug #4a — neg-flag discard on the Double return path of
- * {@code readDecimalOrFloat}; Bug #4b — {@code 0.x} mis-tokenisation in {@code lexNumber}'s `0`-prefix
- * branch) were both fixed before this file landed (see the work item 57 notes). The {@code a04} non-finite
- * test still skips Prototext in the {@link Float} sibling because Bug #4c ({@code mightStartNumber}
- * {@code nan}/{@code inf} asymmetry) is still open — same predicate carried into this file for the same
+ * bugs that forced those skips (a neg-flag discard on the Double return path of
+ * {@code readDecimalOrFloat}, and a {@code 0.x} mis-tokenisation in {@code lexNumber}'s `0`-prefix
+ * branch) were both fixed before this file landed. The {@code a04} non-finite
+ * test still skips Prototext in the {@link Float} sibling because a {@code mightStartNumber}
+ * {@code nan}/{@code inf} asymmetry is still open — the same predicate is carried into this file for the same
  * reason.
  */
 @SuppressWarnings({

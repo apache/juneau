@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
  * function references at compile time and reuses them on every subsequent resolve.
  *
  * <p>
- * Acceptance bar (Phase G #3): {@code vr.compile("#{upper(${name})}").resolve(session)}
+ * Acceptance bar: {@code vr.compile("#{upper(${name})}").resolve(session)}
  * performs zero function-registry lookups and zero string tokenization on the second-and-
  * subsequent {@code .resolve(...)} calls. The cached {@code VarFunction} reference lives
  * on the {@link ScriptSegment} produced at compile time; arg templates are themselves

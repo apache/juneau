@@ -77,7 +77,7 @@ class ParentProperty_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a02_parentPropertyField(RoundTrip_Tester t) throws Exception {
-		// @ParentProperty not supported for inline JSON5 beans in Markdown (see work-item-9 markdown remaining issues, item 9)
+		// @ParentProperty not supported for inline JSON5 beans in Markdown
 		if (t.label.contains("Markdown"))
 			return;
 		var x = new ParentPropertyFieldContainer().init();

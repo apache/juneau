@@ -111,7 +111,7 @@ class VersionMixin_JettyMicroservice_Test extends TestBase {
 	}
 
 	@Test void a02_infoLegacyAliasNotMountedByDefault() throws Exception {
-		// FINISHED-101: /info is no longer a multi-path default. Migration covered by
+		// /info is no longer a multi-path default. Migration covered by
 		// VersionMixin_SvlPathOverride_Test#a02.
 		var resp = get("/info");
 		assertTrue(resp.statusCode() == 404 || resp.statusCode() == 500,
@@ -119,7 +119,7 @@ class VersionMixin_JettyMicroservice_Test extends TestBase {
 	}
 
 	@Test void a03_aboutLegacyAliasNotMountedByDefault() throws Exception {
-		// FINISHED-101: /about is no longer a multi-path default.
+		// /about is no longer a multi-path default.
 		var resp = get("/about");
 		assertTrue(resp.statusCode() == 404 || resp.statusCode() == 500,
 			"expected 404 or 500 (not mounted); got " + resp.statusCode() + ": " + resp.body());

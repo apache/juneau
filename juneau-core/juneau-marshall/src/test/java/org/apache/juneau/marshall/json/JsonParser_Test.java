@@ -183,7 +183,7 @@ class JsonParser_Test extends TestBase {
 		public B01_Bean setV(Set<B_Enum> x) { v = x; return this; }
 	}
 
-	// Headline case, mirroring the exact repro from FINISHED-147 (abstract Set<Enum>, empty array, null field).
+	// Headline case: abstract Set<Enum>, empty array, null field.
 	@Test void b01_emptyArrayIntoAbstractSetOfEnum() throws Exception {
 		var p2 = JsonParser.create().ignoreUnknownBeanProperties().build();
 		var x = p2.read("{\"v\":[]}", B01_Bean.class);

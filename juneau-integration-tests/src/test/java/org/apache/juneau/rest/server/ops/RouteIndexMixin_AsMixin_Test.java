@@ -44,7 +44,7 @@ import org.junit.jupiter.api.*;
  * </ul>
  *
  * <p>
- * Per the FINISHED-101 multi-path collapse, the historical {@code /routes} mount alias
+ * Per the multi-path collapse, the historical {@code /routes} mount alias
  * (formerly a dual default on a single op) is now reached via
  * {@code -Djuneau.routeindex.path=routes}; that behavior is covered by
  * {@code RouteIndexMixin_SvlPathOverride_Test}.
@@ -84,7 +84,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 	}
 
 	@Test void a02_legacyRoutesAliasNotMountedByDefault() throws Exception {
-		// FINISHED-101: /routes is no longer a multi-path default. It only mounts when the
+		// /routes is no longer a multi-path default. It only mounts when the
 		// deployer overrides juneau.routeindex.path=routes. Default-build hosts get 404 here.
 		ca.get("/routes").run().assertStatus(404);
 	}

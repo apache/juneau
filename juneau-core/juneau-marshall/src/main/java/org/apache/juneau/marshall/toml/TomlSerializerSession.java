@@ -281,7 +281,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		// Resolve to the runtime type and apply any registered swap.  Required for collection/array
 		// elements that arrive here without having gone through writeKeyValue's swap step (e.g.
 		// List<Locale> elements where the bean-property swap is on the List, not on Locale).
-		// Bug #8: without this, Locale list-elements wire as Locale.toString() ("en_US") regardless of
+		// Without this, Locale list-elements wire as Locale.toString() ("en_US") regardless of
 		// the configured LocaleFormat, breaking BCP_47 round-trips on the parser side.
 		var rType = getClassMetaForObject(value, aType);
 		var swap = rType.getSwap(this);
@@ -337,7 +337,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		} else if (aType.isPeriod()) {
 			w.stringValue(writePeriod((Period)value));
 		} else if (value.getClass().isArray()) {
-			// Bug #11/#12 a04 residual (generalized): when aType arrives erased — most commonly
+			// Generalized fallback: when aType arrives erased — most commonly
 			// because the value is a typed List<T[]> bean-property element and the parent List's
 			// elementType resolved to Object (getClassMetaForObject(value, cMeta) ignores the
 			// cMeta hint when value != null and returns the raw runtime ArrayList ClassMeta) —

@@ -2693,7 +2693,7 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isNumeric("-#123"));
 		assertEquals(-0x123, parseNumber("-#123", null));
 
-		// Decimal — Bug #5 fix: auto-detect returns Double, not Float.
+		// Decimal — auto-detect returns Double, not Float.
 		assertTrue(isNumeric("0.123"));
 		assertEquals(0.123d, parseNumber("0.123", null));
 
@@ -2715,7 +2715,7 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isNumeric("0.16666666666666666d"));
 		assertEquals(0.16666666666666666d, parseNumber("0.16666666666666666d", null));
 
-		// Bug #5 fix: auto-detect always returns Double for max precision.
+		// Auto-detect always returns Double for max precision.
 		assertTrue(isNumeric("0.16666666f"));
 		assertEquals(Double.valueOf("0.16666666f"), parseNumber("0.16666666f", null));
 
@@ -2819,7 +2819,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(1.2345678901234568E20, parseNumber(s, null));
 
 		// Autodetected floating point numbers.
-		// Bug #5 fix: auto-detect always returns Double now (highest-precision Java tier).
+		// Auto-detect always returns Double now (highest-precision Java tier).
 		// Float is only returned when the caller explicitly requests Float.class / Float.TYPE.
 		s = String.valueOf(Float.MAX_VALUE / 2);
 		assertTrue(isNumeric(s));
@@ -2920,7 +2920,7 @@ class StringUtils_Test extends TestBase {
 
 		assertEquals(1000000, parseNumber("1_000_000", null));
 		assertEquals(1000000000, parseNumber("1_000_000_000", null));
-		// Bug #5 fix: auto-detect returns Double, not Float.
+		// Auto-detect returns Double, not Float.
 		assertEquals(1000.5d, parseNumber("1_000.5", null));
 
 		// Error cases
@@ -4605,7 +4605,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(0x123, parseNumber("0x123", null));
 		assertEquals(-0x123, parseNumber("-0x123", null));
 
-		// Decimal — Bug #5 fix: auto-detect returns Double, not Float.
+		// Decimal — auto-detect returns Double, not Float.
 		assertEquals(0.123d, parseNumber("0.123", null));
 		assertEquals(-0.123d, parseNumber("-0.123", null));
 

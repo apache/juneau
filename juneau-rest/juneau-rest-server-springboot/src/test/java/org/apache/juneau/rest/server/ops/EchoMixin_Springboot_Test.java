@@ -48,7 +48,7 @@ import org.springframework.test.annotation.*;
  * Catches things {@code MockRest} and the Jetty parity test cannot:
  * <ul>
  * 	<li>Spring's bean store adapter ({@code SpringBeanStore}) resolving the host's
- * 		{@code @Bean EchoMixin} during the FINISHED-72 mixin walk through
+ * 		{@code @Bean EchoMixin} during the mixin walk through
  * 		{@link org.springframework.context.ApplicationContext#getBean(Class)
  * 		ApplicationContext.getBean(...)}.
  * 	<li>End-to-end format-pinned JSON ({@link org.apache.juneau.rest.server.server.RestResponse#getDirectWriter

@@ -67,7 +67,7 @@ class PetstoreSpringboot_Test {
 	 * REST servlet to initialize. The first request to the group resource ({@code /}) forces one-time
 	 * {@code RestContext} setup of the root <i>and all of its child resources</i> (serializer/parser metadata,
 	 * {@code HtmlDocSerializer} construction) in a single request. Under a loaded CI agent this cold start can exceed
-	 * the per-request timeout the test methods use (it timed out at exactly 10s in build #2472). Absorbing that
+	 * the per-request timeout the test methods use (it has timed out at exactly 10s under a loaded CI run before). Absorbing that
 	 * startup cost here once (with a generous budget + retry) removes the race from {@code a01} while keeping the
 	 * per-test timeouts tight. Mirrors the same guard in {@code PetstoreJetty_Test}.
 	 */

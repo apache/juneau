@@ -40,7 +40,7 @@ import org.junit.jupiter.api.*;
  * <p>
  * The positive activation tests live in {@code juneau-integration-tests} (where the reactive module IS on the
  * classpath); this negative test cannot live there because the module's presence auto-activates the
- * processor for every resource. See {@code FINISHED-119}/{@code FINISHED-120} for the opt-in design.
+ * processor for every resource.
  */
 @SuppressWarnings({
 	"resource" // Closeable test fixtures are intentionally held/unassigned; lifecycle is managed by the test framework.

@@ -130,7 +130,7 @@ class StaticFilesMixin_Springboot_Test {
 	}
 
 	@Test void a02_htdocsPathServesFileViaLegacyMount() throws Exception {
-		// FINISHED-101: /htdocs/* is no longer a multi-path default on the mixin, but
+		// /htdocs/* is no longer a multi-path default on the mixin, but
 		// BasicSpringRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.
 		var resp = get("/htdocs/javadoc.css");
 		assertEquals(200, resp.statusCode());

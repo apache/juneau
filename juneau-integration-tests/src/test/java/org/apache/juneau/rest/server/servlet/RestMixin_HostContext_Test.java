@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  * <p>
  * Verifies the opt-in host-context accessor: it returns the host {@link RestContext} when the mixin is
  * composed via {@code @Rest(mixins=...)}, returns {@code null} when the mixin is used standalone, and
- * resolves to the single flat top-level host under nested mixins (FINISHED-81 flat-inheritance rule).
+ * resolves to the single flat top-level host under nested mixins (flat-inheritance rule).
  *
  * @since 10.0.0
  */

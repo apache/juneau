@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  * <p>
  * Builds on {@code AdminMixin_AsMixin_Test}'s {@code c01_rateLimitListsRegisteredGuard}
  * pattern; the snapshot coverage is the v1 follow-up that closes the {@code "buckets": []}
- * placeholder noted in the FINISHED-77 archive.
+ * placeholder.
  *
  * @since 10.0.0
  */

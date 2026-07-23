@@ -26,7 +26,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for the opt-in, default-OFF Parquet footer logical-type discriminator (work item 134).
+ * Tests for the opt-in, default-OFF Parquet footer logical-type discriminator.
  *
  * <p>
  * The discriminator is modeled on JSON's optional {@code _type} behavior: by default the writer emits

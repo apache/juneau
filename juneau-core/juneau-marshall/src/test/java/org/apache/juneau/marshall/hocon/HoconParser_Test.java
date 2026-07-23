@@ -260,7 +260,7 @@ class HoconParser_Test {
 		assertEquals(2, ((Number) obj.get("b")).intValue());
 	}
 
-	// Regression for the tokenizer peek/skip invariant (work item 135 / FINISHED-57 OQ #13).
+	// Regression for the tokenizer peek/skip invariant.
 	// Newline-separated inner arrays inside an outer array must stay NESTED — the newline is an
 	// element separator, NOT a value-concatenation join.  If skipWhitespaceAndComments wrongly read
 	// past the closing ']' cached by readValueOrConcat's peekNoSkip and ate the following newline,

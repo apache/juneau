@@ -233,7 +233,7 @@ class CalendarFormat_RoundTrip_Test extends TestBase {
 	// a HOCON-specific parsing issue when used with {@link CalendarFormat#BASIC_ISO_DATE} (the colon-less
 	// offset "+0900" was emitted unquoted by the HOCON serializer and tripped a parser-side recursion
 	// bug); both the HOCON serializer's QUOTE_VALUE_CHARS set and the parser-side recursion guard have
-	// been fixed (Bug #15) so positive offsets now round-trip correctly.
+	// been fixed so positive offsets now round-trip correctly.
 	//
 	public static class A03Bean {
 		public Calendar ny;

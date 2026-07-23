@@ -77,7 +77,7 @@ class StaticFilesMixin_OpenApiHidden_Test extends TestBase {
 		c.get("/static/javadoc.css")
 			.run()
 			.assertStatus(200);
-		// FINISHED-101: /htdocs/* is no longer a multi-path default; migration covered by
+		// /htdocs/* is no longer a multi-path default; migration covered by
 		// StaticFilesMixin_SvlPathOverride_Test#a02.
 		c.get("/htdocs/javadoc.css")
 			.run()

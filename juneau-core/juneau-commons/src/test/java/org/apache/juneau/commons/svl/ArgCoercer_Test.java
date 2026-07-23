@@ -62,7 +62,7 @@ class ArgCoercer_Test extends TestBase {
 
 	/**
 	 * Function with a non-final {@code String[]} param so it triggers JSON-array shortcut
-	 * coercion (rather than variadic gather) per OQA #7.
+	 * coercion (rather than variadic gather).
 	 */
 	public static class JsonArrFn extends TypedFunction {
 		@Override public String name() { return "jsonArr"; }
@@ -127,7 +127,7 @@ class ArgCoercer_Test extends TestBase {
 		// JSON-array shortcut form must be quoted in the script body so the recursive-descent
 		// parser doesn't split on the inner commas. Once delivered to ArgCoercer as a single
 		// String, the JSON-array parse handles the rest. The String[] slot must be NON-final
-		// for JSON-array coercion to apply (a final String[] is variadic per OQA #7's "final
+		// for JSON-array coercion to apply (a final String[] is variadic per the "final
 		// slot collects excess" rule).
 		assertEquals("X=[a, b, c]", vr().resolve("#{jsonArr(\"[\\\"a\\\",\\\"b\\\",\\\"c\\\"]\", X)}"));
 	}

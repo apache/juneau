@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Blast-radius regression guard for the mixin-override property-resolution migration ("cleanup #3").
+ * Blast-radius regression guard for the mixin-override property-resolution migration.
  *
  * <p>
  * That migration moves several {@code @Rest} properties &mdash; {@code defaultRequestHeaders},

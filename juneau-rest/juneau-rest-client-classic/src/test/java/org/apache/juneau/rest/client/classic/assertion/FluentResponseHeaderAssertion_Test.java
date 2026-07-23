@@ -22,7 +22,7 @@ import org.apache.juneau.rest.client.classic.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Validates {@link FluentResponseHeaderAssertion} tolerates a null {@code value} (TODO-286 #9/#10 null-tolerance fix).
+ * Validates {@link FluentResponseHeaderAssertion} tolerates a null {@code value}.
  *
  * <p>
  * A null {@link ResponseHeader} used to NPE in both constructors ({@code value.asString()}) and in every transform

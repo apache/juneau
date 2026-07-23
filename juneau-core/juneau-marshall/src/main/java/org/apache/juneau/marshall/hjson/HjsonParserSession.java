@@ -129,7 +129,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 
 	private Object readRootBraceless(HjsonTokenizer t, ClassMeta<?> type, String firstKey) throws IOException, ParseException, ExecutableException {
 		var result = newGenericMap();
-		// Same per-property type threading as readObject so braceless-root beans get typed-map keys (Bug #7b).
+		// Same per-property type threading as readObject so braceless-root beans get typed-map keys.
 		var beanMeta = (type != null && type.isBean()) ? type.getBeanMeta() : null;
 		if (t.read().type() != HjsonTokenizer.TokenType.COLON)
 			throw new ParseException(this, "Expected : after key at line %s", t.getLine());
@@ -211,7 +211,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 
 	/**
 	 * Coerces a parsed scalar value to the expected type, honoring session-aware default swaps for
-	 * {@code byte[]} targets at the collection-element / top-level dispatch sites (Bug #12).
+	 * {@code byte[]} targets at the collection-element / top-level dispatch sites.
 	 *
 	 * <p>For all other targets this is a transparent wrapper over {@link #convertToMemberType} so the
 	 * existing dispatch behavior is preserved.  The narrow {@code byte[]} hook lets the configured
@@ -233,10 +233,10 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	 * Resolves the {@link ClassMeta} to parse a bean-property value against, falling back to {@code object()}
 	 * when the enclosing type isn't a bean or the key isn't a known property.  Threading the property type
 	 * lets typed-map properties (e.g. {@code Map<TestEnum,String>}) coerce their keys via the converter's
-	 * {@code Map → Map} path (Bug #7b).
+	 * {@code Map → Map} path.
 	 *
 	 * <p>
-	 * Extended in Bug #12 to also surface {@link ClassMeta#isCollectionOrArray()} property types so the
+	 * Also surfaces {@link ClassMeta#isCollectionOrArray()} property types so the
 	 * collection-element dispatch in {@link #readArray} threads the parent's element type into recursion —
 	 * that's where {@link #coerceMemberValue} reads the {@code byte[]} target and invokes the configured
 	 * {@link org.apache.juneau.marshall.swaps.BinarySwap}'s unswap on the wire-form string.  Other property shapes

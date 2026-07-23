@@ -73,7 +73,7 @@ import com.nimbusds.jose.proc.*;
  */
 final class JwksCache implements JWKSource<SecurityContext> {
 
-	/** Module logger. Warnings on JWKS fetch failures are intentionally loud per Resolved Decision #2. */
+	/** Module logger. Warnings on JWKS fetch failures are intentionally loud. */
 	private static final Logger LOG = Logger.getLogger(JwksCache.class.getName());
 
 	/** Selector that pulls every key from the upstream source. */

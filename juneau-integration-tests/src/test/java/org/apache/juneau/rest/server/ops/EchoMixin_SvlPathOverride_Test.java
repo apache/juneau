@@ -27,7 +27,7 @@ import org.junit.jupiter.api.parallel.*;
  * Validates the {@code ${juneau.echo.path:echo}} SVL override on {@link EchoMixin}.
  *
  * <p>
- * Per the FINISHED-101 multi-path collapse, the historical {@code /debug/echo/*} alias (formerly
+ * Per the multi-path collapse, the historical {@code /debug/echo/*} alias (formerly
  * a dual-path default on a single op) is now reached by overriding the SVL variable to
  * {@code debug/echo}. The {@code a02} test exercises that migration scenario.
  *

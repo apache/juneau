@@ -182,7 +182,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	@Override /* InputStreamParserSession */
 	public boolean hasNativeBytes() {
 		// Parquet's column reader has no native byte-array primitive type — it surfaces byte[] as a raw
-		// BYTE_ARRAY column (at BinaryFormat.NOT_SET; Bug #11 raw-bytes path) or as a UTF-8 string column
+		// BYTE_ARRAY column (at BinaryFormat.NOT_SET) or as a UTF-8 string column
 		// (at any other BinaryFormat, after the BinarySwap reverses the configured text wire form).
 		return false;
 	}
@@ -433,7 +433,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * Result of {@link #readSchema(ThriftCompactDecoder)}: the per-leaf repetition map plus the set of
 	 * leaf paths whose physical type is {@code TYPE_BYTE_ARRAY} with no {@code convertedType} —
 	 * i.e. raw {@code byte[]} columns emitted by {@code ParquetSchemaBuilder.addLeafSchema}'s
-	 * {@code cm.isByteArray()} branch (Bug #11).  The Parquet file footer drops the
+	 * {@code cm.isByteArray()} branch.  The Parquet file footer drops the
 	 * {@code logicalType} discriminant ({@code ParquetSchemaElement.writeTo} omits field 7), so the
 	 * parser uses "{@code TYPE_BYTE_ARRAY} with no {@code convertedType}" as the unique signal that a
 	 * column should be reassembled back into {@code byte[]} instead of decoded as UTF-8 text.
@@ -539,17 +539,17 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				// temporal converted types matter to the decoder; the UUID/string paths are handled separately.
 				if (convertedType != null)
 					columnLogical.put(path, new ColumnLogical(convertedType, scale, precision));
-				// Bug #11 fix: a TYPE_BYTE_ARRAY column with no convertedType uniquely identifies a
+				// A TYPE_BYTE_ARRAY column with no convertedType uniquely identifies a
 				// raw byte[] column emitted by ParquetSchemaBuilder.addLeafSchema's cm.isByteArray()
 				// branch.  Every other writer site that emits TYPE_BYTE_ARRAY sets a discriminator
 				// (CONVERTED_UTF8 for strings/dates/durations/decimals, CONVERTED_ENUM for enums, or
-				// CONVERTED_TIMESTAMP_MILLIS).  Mirrors the Bug #7a UUID parse-back assumption
+				// CONVERTED_TIMESTAMP_MILLIS).  Mirrors the UUID parse-back assumption
 				// (TYPE_FIXED_LEN_BYTE_ARRAY uniquely identifies UUIDs) at a different physical type.
 				if (type == TYPE_BYTE_ARRAY && convertedType == null)
 					rawByteArrayPaths.add(path);
 				// Prefer the explicit LogicalType discriminant (field 10) when present; otherwise fall back to
 				// the legacy "FIXED_LEN_BYTE_ARRAY == UUID" physical-type heuristic for backward compatibility
-				// with files written without the opt-in discriminator (work item 134).
+				// with files written without the opt-in discriminator.
 				if (type == TYPE_FIXED_LEN_BYTE_ARRAY)
 					uuidPaths.add(path);
 				if (parquetDebug())
@@ -1172,7 +1172,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			case TYPE_FLOAT -> reader.readFloat();
 			case TYPE_DOUBLE -> reader.readDouble();
 			case TYPE_BYTE_ARRAY -> {
-				// Bug #11 fix: when the schema marks this column as a raw byte[] column
+				// When the schema marks this column as a raw byte[] column
 				// (TYPE_BYTE_ARRAY with no convertedType — see SchemaReadResult), surface the bytes
 				// as a byte[] so the framework can hand them straight to the bean-property setter.
 				// Otherwise read the bytes as UTF-8 for string / enum / date / duration / decimal

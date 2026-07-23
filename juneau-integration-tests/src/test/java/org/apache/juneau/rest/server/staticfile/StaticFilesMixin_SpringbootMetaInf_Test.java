@@ -124,7 +124,7 @@ class StaticFilesMixin_SpringbootMetaInf_Test {
 	}
 
 	@Test void a02_metaInfResourcesServedViaLegacyHtdocsMount() throws Exception {
-		// FINISHED-101: /htdocs/* is no longer a multi-path default on the mixin, but
+		// /htdocs/* is no longer a multi-path default on the mixin, but
 		// BasicSpringRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.
 		// The same META-INF/resources file is reachable through the legacy mount.
 		var resp = get("/htdocs/spring-fixture.txt");

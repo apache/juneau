@@ -120,7 +120,7 @@ class EchoMixin_JettyMicroservice_Test extends TestBase {
 	}
 
 	@Test void a03_debugEchoLegacyAliasNotMountedByDefault() throws Exception {
-		// FINISHED-101: /debug/echo/* is no longer a multi-path default. Default-build hosts
+		// /debug/echo/* is no longer a multi-path default. Default-build hosts
 		// route the request through the host's normal routing — which returns 404 or 500
 		// depending on container error mapping; both indicate "not handled by the echo mixin".
 		var resp = get("/debug/echo/abc");

@@ -41,7 +41,7 @@ class StaticFilesMixin_Standalone_Test extends TestBase {
 	}
 
 	@Test void a02_legacyHtdocsAliasNotMountedByDefault() throws Exception {
-		// FINISHED-101: /htdocs/* is no longer a multi-path default. Migration covered by
+		// /htdocs/* is no longer a multi-path default. Migration covered by
 		// StaticFilesMixin_SvlPathOverride_Test#a02.
 		c.get("/htdocs/javadoc.css")
 			.run()

@@ -259,7 +259,7 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 
 		Settings.get().setGlobal("override.key", "from-settings-global");
 		try {
-			// Override active → setGlobal must beat resource Config (per OQA #3).
+			// Override active → setGlobal must beat resource Config.
 			assertEquals("from-settings-global", bean.value.get(),
 				"Settings.setGlobal must win over resource @Rest(config) values.");
 		} finally {

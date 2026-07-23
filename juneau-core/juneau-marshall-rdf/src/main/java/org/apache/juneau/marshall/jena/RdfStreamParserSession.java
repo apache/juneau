@@ -132,7 +132,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 	@Override /* InputStreamParserSession */
 	public boolean hasNativeBytes() {
 		// The RDF graph layer has no native byte-array literal type — byte[] is surfaced either as an
-		// xsd:base64Binary typed literal (at BinaryFormat.NOT_SET; Bug #11 fix) or as a plain string literal
+		// xsd:base64Binary typed literal (at BinaryFormat.NOT_SET) or as a plain string literal
 		// carrying the configured BinaryFormat's text wire form (at any other BinaryFormat; BinarySwap fires
 		// to reverse the wire form back to byte[]).
 		return false;

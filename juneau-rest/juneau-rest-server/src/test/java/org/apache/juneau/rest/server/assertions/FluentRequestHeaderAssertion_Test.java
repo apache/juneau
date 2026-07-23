@@ -60,7 +60,7 @@ class FluentRequestHeaderAssertion_Test extends TestBase {
 		assertFalse(e.getMessage().startsWith("CUSTOM "));
 	}
 
-	// TODO-286 #5: a null RequestHeader used to NPE in the constructor (value.asString()) and in every
+	// A null RequestHeader used to NPE in the constructor (value.asString()) and in every
 	// transform method (value.asBoolean(), etc.). Verify null is now tolerated end-to-end.
 
 	@Test void a03_nullValue_chainedConstructor_doesNotThrow() {

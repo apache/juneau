@@ -56,7 +56,7 @@ import jakarta.servlet.http.*;
  * 	<li><b>Juneau-layer assertions</b>: uses {@code MockRestClient} to verify that the Juneau stack
  * 		({@code RoleBasedRestGuard}, {@code @Auth Principal}) responds correctly when a request arrives with
  * 		credentials already stashed by an upstream filter — simulated here via {@link BearerTokenGuard} (the
- * 		FINISHED-69 op-level guard), which uses the same {@link RestServerConstants#PRINCIPAL_ATTR} stash key.
+ * 		op-level guard), which uses the same {@link RestServerConstants#PRINCIPAL_ATTR} stash key.
  * </ol>
  *
  * @since 10.0.0
@@ -198,7 +198,7 @@ class AuthFilterChain_GuardIntegration_Test extends TestBase {
 	// Juneau-layer tests (MockRest): verify @Auth Principal injection reads PRINCIPAL_ATTR.
 	//
 	// Note: MockRest does not run servlet filters, so AuthenticatedRequestWrapper is not in the
-	// request chain here.  These tests use BearerTokenGuard (FINISHED-69) as a stand-in to
+	// request chain here.  These tests use BearerTokenGuard as a stand-in to
 	// pre-populate RestServerConstants.PRINCIPAL_ATTR, verifying that the Juneau stack reads
 	// the same attribute key that AuthenticatedRequestWrapper writes.  Full
 	// RoleBasedRestGuard + filter-produced isUserInRole() integration requires a live Jetty

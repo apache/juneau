@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Targeted coverage tests for {@link HoconParserSession} focusing on uncovered
- * gaps reported by JaCoCo (see coverage analysis issue 155, Tier E14).
+ * gaps reported by JaCoCo.
  *
  * <p>Each test exercises a specific branch in HoconParserSession not already
  * covered by the existing {@code Hocon*_Test} suite.
@@ -446,7 +446,7 @@ class HoconParserSession_Test extends TestBase {
 	@Test
 	void j03_beanWithTypedMap() throws Exception {
 		// Bean property is Map<Integer,String> — covers the cm.isMap() child-type lookup
-		// in hoconToMap (Bug #7b path) plus the convertToMemberType key-coercion branch.
+		// in hoconToMap plus the convertToMemberType key-coercion branch.
 		var bean = HoconParser.DEFAULT.read("counts { 1 = a, 2 = b }", BeanWithIntMap.class);
 		assertNotNull(bean);
 		assertEquals("a", bean.counts.get(1));

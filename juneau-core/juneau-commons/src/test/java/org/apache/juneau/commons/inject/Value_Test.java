@@ -138,7 +138,7 @@ class Value_Test extends TestBase {
 		}
 	}
 
-	/** Setter that accepts an {@code Optional<String>} @Value parameter — worked example of the FINISHED-128 fix. */
+	/** Setter that accepts an {@code Optional<String>} @Value parameter — worked example of the fix. */
 	public static class OptionalSetterBean {
 		Optional<String> maybe;
 
@@ -148,7 +148,7 @@ class Value_Test extends TestBase {
 		}
 	}
 
-	/** Constructor that mixes a plain and an Optional @Value parameter — worked example of the FINISHED-128 fix. */
+	/** Constructor that mixes a plain and an Optional @Value parameter — worked example of the fix. */
 	public static class OptionalConstructorBean {
 		final String plain;
 		final Optional<String> maybe;
@@ -302,7 +302,7 @@ class Value_Test extends TestBase {
 		assertEquals("from-settings", bean.field);
 	}
 
-	// FINISHED-128 worked example: Optional<T> setter parameter previously threw IAE at reflective invoke.
+	// Worked example: Optional<T> setter parameter previously threw IAE at reflective invoke.
 	@Test
 	void c03_setter_optionalParam_missing_isEmpty() {
 		var bean = BeanInstantiator.of(OptionalSetterBean.class, beanStore).run();
@@ -319,7 +319,7 @@ class Value_Test extends TestBase {
 		assertEquals("setter-opt", bean.maybe.get());
 	}
 
-	// FINISHED-128 worked example: Optional<T> constructor parameter.
+	// Worked example: Optional<T> constructor parameter.
 	@Test
 	void b03_constructorParam_optionalMissing_isEmpty() {
 		var bean = BeanInstantiator.of(OptionalConstructorBean.class, beanStore).run();

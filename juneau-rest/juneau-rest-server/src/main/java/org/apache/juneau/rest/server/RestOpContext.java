@@ -493,7 +493,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * <p>
 	 * An {@code @Bean RestGuardList} bean (via the bean store or an {@code @Bean} method
-	 * with matching {@code methodScope}) REPLACES the entire annotation-derived list (Decision #1).
+	 * with matching {@code methodScope}) REPLACES the entire annotation-derived list.
 	 */
 	private final Memoizer<RestGuard[]> guards = memoizer(() -> {
 		var bs = beanStore();

@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * The mixin's {@code @RestOp} methods are pure POJOs that inherit serializers/parsers from the
- * host's {@code RestContext} via the FINISHED-81 sub-context model. This test demonstrates that a
+ * host's {@code RestContext} via the sub-context model. This test demonstrates that a
  * minimal host (vanilla {@link RestResource} + {@link BasicUniversalConfig}) is sufficient to mount
  * the {@code /api} endpoint without dragging in the rest of the {@code BasicRestOperations}
  * surface.

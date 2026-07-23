@@ -49,7 +49,7 @@ import org.springframework.test.annotation.*;
  * {@link VersionMixin_JettyMicroservice_Test Jetty parity test} cannot:
  * <ul>
  * 	<li>Spring's bean store adapter ({@code SpringBeanStore}) resolving the host's
- * 		{@code @Bean VersionMixin} during the FINISHED-72 mixin walk through
+ * 		{@code @Bean VersionMixin} during the mixin walk through
  * 		{@link org.springframework.context.ApplicationContext#getBean(Class)
  * 		ApplicationContext.getBean(...)}.
  * 	<li>End-to-end format-pinned JSON ({@link org.apache.juneau.rest.server.server.RestResponse#getDirectWriter
@@ -122,7 +122,7 @@ class VersionMixin_Springboot_Test {
 	}
 
 	@Test void a02_infoLegacyAliasNotMountedByDefault() throws Exception {
-		// FINISHED-101: /info is no longer a multi-path default. Default-build hosts route
+		// /info is no longer a multi-path default. Default-build hosts route
 		// the request through the host's normal routing (404 or 500 from Spring Boot's
 		// error-page mapping); both indicate "not handled by the version mixin".
 		var resp = get("/info");
@@ -131,7 +131,7 @@ class VersionMixin_Springboot_Test {
 	}
 
 	@Test void a03_aboutLegacyAliasNotMountedByDefault() throws Exception {
-		// FINISHED-101: /about is no longer a multi-path default. Migration covered by
+		// /about is no longer a multi-path default. Migration covered by
 		// VersionMixin_SvlPathOverride_Test#a02.
 		var resp = get("/about");
 		assertTrue(resp.statusCode() == 404 || resp.statusCode() == 500,

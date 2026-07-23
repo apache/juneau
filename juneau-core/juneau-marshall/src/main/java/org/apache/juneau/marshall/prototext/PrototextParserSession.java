@@ -99,10 +99,10 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 				return type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : null;
 			if (root.size() == 1 && root.containsKey("_value")) {
 				var raw = root.get("_value");
-				// Bug #12 (top-level only): when the root payload is a String-shaped byte[], consult
-				// the configured BinaryFormat's variant BinarySwap before falling through to convertValue's
-				// default String → byte[] UTF-8 coercion.  Collection-element route is intentionally not
-				// touched here — that surface is Bug #11 (Prototext's repeated bytes field).
+				// Top-level only: when the root payload is a String-shaped byte[], consult the configured
+				// BinaryFormat's variant BinarySwap before falling through to convertValue's default
+				// String → byte[] UTF-8 coercion.  The collection-element route (Prototext's repeated
+				// bytes field) is intentionally not touched here.
 				if (raw instanceof String s && type != null && type.inner() == byte[].class) {
 					var swap = type.getSwap(this);
 					if (swap != null)
@@ -190,9 +190,9 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 			return t.read().stringValue();
 		if (tok.type() == PrototextToken.TokenType.STRING)
 			return t.read().stringValue();
-		// Bare integer / hex / octal field tags (e.g. {@code 0: "first"}).  Required for the
-		// Bug #7b residual fix on the serialize side, which emits numeric Map<K,V> keys as bare
-		// integer tags rather than quoted strings.  The string-form of the numeric value is the
+		// Bare integer / hex / octal field tags (e.g. {@code 0: "first"}).  Required to parse back
+		// what the serialize side emits: numeric Map<K,V> keys as bare integer tags rather than
+		// quoted strings.  The string-form of the numeric value is the
 		// field-name; downstream key-type coercion in convertMapToType / convertValue handles the
 		// conversion back to the bean property's declared key type.
 		if (tok.type() == PrototextToken.TokenType.DEC_INT
@@ -283,7 +283,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 					return (T) jm;
 				return (T) toJsonMap(map);
 			}
-			// Coerce keys when the declared key type isn't String/Object (Bug #7b).
+			// Coerce keys when the declared key type isn't String/Object.
 			var keyType = type.getKeyType();
 			if (keyType != null && !keyType.isObject() && !keyType.isString())
 				return convertToMemberType(null, map, type);
@@ -344,7 +344,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 			if (targetType.isMap()) {
 				// When the bean property's declared key type is non-String (e.g. Map<TestEnum,String>),
 				// route through the converter's Map→Map path so keys are coerced to the declared type.
-				// toJsonMap unconditionally toString-keys the entries which loses the enum/typed key (Bug #7b).
+				// toJsonMap unconditionally toString-keys the entries which loses the enum/typed key.
 				var keyType = targetType.getKeyType();
 				if (keyType != null && !keyType.isObject() && !keyType.isString())
 					return convertToMemberType(null, val2, targetType);
@@ -377,8 +377,8 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 				return readPeriod(val2.toString());
 		}
 		// String → byte[] dispatch at the collection-element / map-value / top-level call site.
-		// Mirrors the Bug #12 top-level fix in doRead but for the collection-element path that
-		// was intentionally carved out of that turn.  Two routes:
+		// Mirrors the top-level handling in doRead, but covers the collection-element path that
+		// doRead intentionally leaves untouched.  Two routes:
 		//   (1) non-NOT_SET: consult the variant BinarySwap installed on byte[].class via
 		//       targetType.getSwap(this); the wire is a hex / base64 string emitted by the
 		//       swap's swap() on the serializer side.

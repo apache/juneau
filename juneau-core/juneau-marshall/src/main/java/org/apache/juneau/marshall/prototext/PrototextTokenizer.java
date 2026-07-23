@@ -163,7 +163,7 @@ class PrototextTokenizer {
 			unread(c); // restore sign for lexNumber
 			return Character.isDigit(next) || next == '.' || next == 'i' || next == 'I' || next == 'n' || next == 'N';
 		}
-		// Bug #4c: 'n'/'i' might start nan / inf / infinity at value position, but it might also
+		// 'n'/'i' might start nan / inf / infinity at value position, but it might also
 		// start a regular identifier-shaped field name (nano_seconds, inf, index, ...).  Multi-char
 		// lookahead disambiguates: peek past the leading letter to see if the assembled token is
 		// nan / inf / infinity (case-insensitive) AND is followed by a value-terminator (whitespace,

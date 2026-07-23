@@ -48,7 +48,7 @@ import io.opentelemetry.sdk.trace.export.*;
  * header injection.
  *
  * <p>
- * Reuses FINISHED-67's OpenTelemetry SDK + {@link InMemorySpanExporter} test-fixture pattern: a
+ * Reuses the OpenTelemetry SDK + {@link InMemorySpanExporter} test-fixture pattern: a
  * statically-wired SDK is installed before the {@code @Rest} resources build their
  * {@link MockRestClient}s so the {@link OtelTracerHook} bridge captures the server-started span's
  * context and stashes the rendered headers for the response processor to write.

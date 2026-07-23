@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
  * 	<li>{@code GET /swagger} with {@code Accept: application/json} returns JSON (defaultAccept doesn't
  * 		override an explicit header).
  * 	<li>The {@code /api} mount uses Juneau's standard content negotiation (no defaultAccept).
- * 	<li>Both endpoints are backed by separate sub-{@code RestContext}s per FINISHED-81.
+ * 	<li>Both endpoints are backed by separate sub-{@code RestContext}s.
  * </ul>
  */
 class SwaggerUiMixin_AsMixin_Test extends TestBase {

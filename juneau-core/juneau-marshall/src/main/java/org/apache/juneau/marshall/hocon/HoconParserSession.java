@@ -412,16 +412,16 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 	private Object hoconToMap(HoconValue val, ClassMeta<?> type) throws ParseException {
 		if (val == null)
 			return null;
-		// Bug #12: STRING values targeting byte[] consult the configured BinaryFormat's variant
-		// BinarySwap before falling back to the default String → byte[] UTF-8 coercion that the bean
-		// binder would otherwise apply at the collection-element / top-level dispatch site.  The
+		// STRING values targeting byte[] consult the configured BinaryFormat's variant BinarySwap
+		// before falling back to the default String → byte[] UTF-8 coercion that the bean binder
+		// would otherwise apply at the collection-element / top-level dispatch site.  The
 		// bean-property path is unaffected because the per-property MPP install hides the type-level
 		// default swap behind the per-property swap on the BeanPropertyMeta.
 		//
-		// Bug #11/#12 a04 residual: at BinaryFormat.NOT_SET BinarySwap.match returns 0 and no swap
-		// fires, but HoconSerializerSession emits byte[] at NOT_SET as a base64 string (to sidestep
-		// HOCON's array-concatenation flattening for nested int-array wire forms).  Decode that
-		// here as the symmetric fallback so List<byte[]> and top-level byte[] round-trip at NOT_SET.
+		// At BinaryFormat.NOT_SET BinarySwap.match returns 0 and no swap fires, but
+		// HoconSerializerSession emits byte[] at NOT_SET as a base64 string (to sidestep HOCON's
+		// array-concatenation flattening for nested int-array wire forms).  Decode that here as the
+		// symmetric fallback so List<byte[]> and top-level byte[] round-trip at NOT_SET.
 		if (val.getType() == HoconValue.Type.STRING && type != null && type.inner() == byte[].class) {
 			var s = ((HoconValue.HoconString) val).getValue();
 			var swap = type.getSwap(this);
@@ -430,11 +430,11 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 			return Base64.getDecoder().decode(s);
 		}
 		// Look up bean property metas so nested typed-map properties (Map<K,V> with non-String K) can have
-		// their keys coerced via the converter's Map→Map path before the bean binds them (Bug #7b).
-		// Extended in Bug #12 to also surface Collection/Array property types so the ARRAY branch can
-		// thread the parent's element type into recursion and the byte[] swap dispatch above can fire
-		// at the right depth.  Other property shapes (Optional, primitive, bean) still pass through as
-		// object() so the lazy-typed conversion path stays in place.
+		// their keys coerced via the converter's Map→Map path before the bean binds them.  Collection/Array
+		// property types are also surfaced here so the ARRAY branch can thread the parent's element type
+		// into recursion and the byte[] swap dispatch above can fire at the right depth.  Other property
+		// shapes (Optional, primitive, bean) still pass through as object() so the lazy-typed conversion
+		// path stays in place.
 		var beanMeta = (type != null && type.isBean()) ? type.getBeanMeta() : null;
 		var result = switch (val.getType()) {
 			case STRING -> ((HoconValue.HoconString) val).getValue();

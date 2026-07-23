@@ -506,10 +506,10 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		// Temporal → T coercion below applies the local zone and we lose the wire's UTC anchor.
 		if (val instanceof TemporalAccessor ta && targetType.isTemporal())
 			return readTemporal(ta.toString(), targetType);
-		// Bug #12: route String-shaped byte[] values (collection-element + top-level dispatch sites)
-		// through the configured BinaryFormat's variant binarySwap before falling through to the
-		// default String → byte[] coercion.  The bean-property path is unaffected because the
-		// per-property MPP install hides the type-level default swap behind the per-property swap.
+		// Route String-shaped byte[] values (collection-element + top-level dispatch sites) through
+		// the configured BinaryFormat's variant binarySwap before falling through to the default
+		// String → byte[] coercion.  The bean-property path is unaffected because the per-property
+		// MPP install hides the type-level default swap behind the per-property swap.
 		var binBytes = tryUnswapByteArray(val, targetType);
 		if (binBytes != null)
 			return binBytes;

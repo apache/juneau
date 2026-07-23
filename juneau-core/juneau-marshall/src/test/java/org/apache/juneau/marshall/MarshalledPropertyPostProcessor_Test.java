@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  * <p>
  * Targets short-circuit arms in {@code applyPropertyFormats} / {@code applyClassFormats} (a typed
  * field with {@code @MarshalledProp} / {@code @Marshalled} default = NOT_SET), edge cases in the
- * XMLGregorianCalendar swap, the Bug #18 {@code temporalAccessorSwap} MILLIS branch, and other
+ * XMLGregorianCalendar swap, the {@code temporalAccessorSwap} MILLIS branch, and other
  * swap-internal arms the cross-serializer/parser matrix doesn't reach because it always supplies a
  * non-NOT_SET context format and never feeds null / blank values through swap.unswap.
  *
@@ -193,7 +193,7 @@ class MarshalledPropertyPostProcessor_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Group D — Bug #18 carryover: TemporalFormat.MILLIS on the temporalAccessorSwap path.
+	// Group D — TemporalFormat.MILLIS on the temporalAccessorSwap path.
 	// The MILLIS-numeric arm in temporalAccessorSwap.swap is structurally identical to temporalSwap's
 	// (line 727 in MPP) but is only exercised when propertyClass is a TemporalAccessor (MonthDay) and
 	// the format is MILLIS.  MonthDay falls back to ISO_OFFSET_TIME-like text via the carve-out, so

@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.*;
 
 /**
  * Coverage tests for {@link MarkdownParserSession} branches not exercised by the higher-level
- * {@link MarkdownParser_Test} suite (see coverage analysis issue 155, Tier E3).
+ * {@link MarkdownParser_Test} suite.
  */
 class MarkdownParserSession_Test extends TestBase {
 

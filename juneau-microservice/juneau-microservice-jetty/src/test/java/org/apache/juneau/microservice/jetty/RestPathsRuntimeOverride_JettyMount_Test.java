@@ -42,7 +42,7 @@ import jakarta.servlet.*;
  * 	<li>SVL substitution applied per-element to {@code @Rest(paths={"$C{key}"})} resolves through the
  * 		microservice's bean store ({@link Config} bean) before the comma-split and produces the
  * 		runtime-resolved mount paths.
- * 	<li>Collision detection still runs on the resolved paths (FINISHED-72 invariant).
+ * 	<li>Collision detection still runs on the resolved paths.
  * </ul>
  *
  * <p>

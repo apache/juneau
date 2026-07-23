@@ -31,7 +31,7 @@ import org.junit.jupiter.api.parallel.*;
  * Acceptance tests for the {@code @Value}-driven env-default fields on {@link RestContext}.
  *
  * <p>
- * 3-test triad per migrated field per OQA #4 — system property set, unset (default), and
+ * 3-test triad per migrated field — system property set, unset (default), and
  * {@code Settings.setGlobal} override. Validates the {@code @Value} field receives the resolved
  * value at injection time. The downstream {@code mergeReplacedStringAttribute} pipeline applies
  * its own DefaultConfig-driven precedence on top of these fields and is exercised by the existing

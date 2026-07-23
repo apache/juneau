@@ -52,7 +52,7 @@ class VarFunctionDiscovery_Test extends TestBase {
 	}
 
 	@Test void unknownFunctionFailsLazily() {
-		// Unknown function name resolves to an exception at resolve-time per OQA #4.
+		// Unknown function name resolves to an exception at resolve-time.
 		var vr = VarResolver.DEFAULT;
 		var ex = assertThrows(IllegalArgumentException.class, () -> vr.resolve("#{nosuchfn(x)}"));
 		assertTrue(ex.getMessage().contains("nosuchfn"), () -> "Expected message to mention function name; got: " + ex.getMessage());

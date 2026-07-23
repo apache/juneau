@@ -328,7 +328,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	 * than repeated for every {@code […]} / {@code {…}} value.
 	 *
 	 * <p>
-	 * Bug #8: list-of-{@link Locale} values written under {@link LocaleFormat#UNDERSCORE}
+	 * List-of-{@link Locale} values written under {@link LocaleFormat#UNDERSCORE}
 	 * (wire form {@code "en_US"}) were being parsed via {@code Locale.forLanguageTag("en_US")} (BCP_47 default)
 	 * which returns {@link Locale#ROOT}, dropping the locale content.
 	 */

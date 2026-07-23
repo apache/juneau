@@ -116,13 +116,13 @@ class BasicConvention_ParentChain_Test extends TestBase {
 	}
 
 	@Test void a06_infoLegacyAliasNotMountedByDefault() throws Exception {
-		// FINISHED-101: /info is no longer a multi-path default. Migration to that secondary
+		// /info is no longer a multi-path default. Migration to that secondary
 		// alias is covered by VersionMixin_SvlPathOverride_Test#a02.
 		c.get("/info").run().assertStatus(404);
 	}
 
 	@Test void a07_aboutLegacyAliasNotMountedByDefault() throws Exception {
-		// FINISHED-101: /about is no longer a multi-path default.
+		// /about is no longer a multi-path default.
 		c.get("/about").run().assertStatus(404);
 	}
 

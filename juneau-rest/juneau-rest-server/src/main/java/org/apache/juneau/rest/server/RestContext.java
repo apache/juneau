@@ -373,7 +373,6 @@ public class RestContext extends Context {
 	 * chain, and would have no {@code noInherit} analog — it must NOT reuse the mixin override-resolution path.
 	 * The {@code Child} variant is intentionally shaped so it can later widen to reference a {@code ResolvedChild}
 	 * (mirroring how {@code Mixin} references a {@code ResolvedMixin}) without re-plumbing this discriminator.
-	 * See {@code MAYBE-182} for the parked {@code @Child} design.
 	 *
 	 * @since 10.0.0
 	 */
@@ -1546,7 +1545,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<NamedAttributeMap> defaultRequestAttributes = memoizer(() -> {
 		var v = Holder.of(NamedAttributeMap.create());
-		// Resolution moved onto the unified noInherit-aware walk (cleanup #3): getRestAnnotationsForProperty yields
+		// Resolution goes through the unified noInherit-aware walk: getRestAnnotationsForProperty yields
 		// the same parent-to-child order getRestAnnotationsTopDown did for non-mixin contexts, plus host→mixin
 		// inheritance, noInherit cutoff, and @Mixin override injection for mixin sub-contexts.
 		getRestAnnotationsForProperty(PROPERTY_defaultRequestAttributes).forEach(ai -> Arrays.stream(ai.inner().defaultRequestAttributes())
@@ -1569,7 +1568,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<HttpHeaderList> defaultRequestHeaders = memoizer(() -> {
 		var v = Holder.of(HttpHeaderList.create());
-		// Resolution moved onto the unified noInherit-aware walk (cleanup #3) — see defaultRequestAttributes.
+		// Resolution goes through the unified noInherit-aware walk — see defaultRequestAttributes.
 		// defaultAccept/defaultContentType are folded into this same walk (as they always were); they key off
 		// the defaultRequestHeaders property for noInherit/override purposes.
 		getRestAnnotationsForProperty(PROPERTY_defaultRequestHeaders).forEach(ai -> {
@@ -1595,7 +1594,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<HttpHeaderList> defaultResponseHeaders = memoizer(() -> {
 		var v = Holder.of(HttpHeaderList.create());
-		// Resolution moved onto the unified noInherit-aware walk (cleanup #3) — see defaultRequestAttributes.
+		// Resolution goes through the unified noInherit-aware walk — see defaultRequestAttributes.
 		getRestAnnotationsForProperty(PROPERTY_defaultResponseHeaders).forEach(ai -> Arrays.stream(ai.inner().defaultResponseHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(HttpStringHeader::ofPair).forEach(v.get()::setDefault));
 		beanStore().createBeanFromMethod(HttpHeaderList.class, resource().get(), x -> isBeanMethod(x, PROP_defaultResponseHeaders), v.get()).ifPresent(v::set);
 		return v.get();
@@ -1686,7 +1685,7 @@ public class RestContext extends Context {
 		// Walk @Rest annotations parent-to-child; child wins because location() prepends.
 		// Resolve location strings against the simple resolver — full resolver isn't available yet
 		// (it depends on getMessages()).
-		// NOTE (cleanup #3): messages is structurally bundle-CHAINED (not list/replace-merged), so it keeps its
+		// NOTE: messages is structurally bundle-CHAINED (not list/replace-merged), so it keeps its
 		// own local location walk + Messages.chain rather than routing through getRestAnnotationsForProperty
 		// (which would double-count host locations for a mixin context).  The two @Mixin hooks are layered on
 		// explicitly instead: (1) a host @Mixin(messages=...) location is applied last (highest priority), and
@@ -3327,7 +3326,7 @@ public class RestContext extends Context {
 			}
 		}
 		var resolved = annotations.subList(0, cutoff);
-		// Mixin override injection (cleanup #3): for a mixin sub-context carrying host @Mixin overrides, the
+		// Mixin override injection: for a mixin sub-context carrying host @Mixin overrides, the
 		// synthetic override annotation is the most-derived contribution.  `resolved` is in child-to-parent order
 		// (it is reversed to parent-to-child by rstream below), so prepending here places the override LAST in the
 		// emitted stream — list-shaped props append it after the inherited host+mixin chain, replace-shaped props

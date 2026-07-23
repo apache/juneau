@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests {@link ReactiveResponseProcessor} using only the JDK-native
  * {@link Flow.Publisher Flow.Publisher} return type (no external reactive
- * library). This is the MAYBE-120 spine: {@code Flow.Publisher<SseEvent>} SSE streaming plus the
+ * library). This is the spine: {@code Flow.Publisher<SseEvent>} SSE streaming plus the
  * shared buffer / NDJSON shapes that all reactive types funnel through.
  *
  * <p>

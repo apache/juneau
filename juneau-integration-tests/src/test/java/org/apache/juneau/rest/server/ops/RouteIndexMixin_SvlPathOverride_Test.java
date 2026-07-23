@@ -29,7 +29,7 @@ import org.junit.jupiter.api.parallel.*;
  * {@link RouteIndexMixin}.
  *
  * <p>
- * Per the FINISHED-101 multi-path collapse, the historical {@code /routes} alias (formerly a
+ * Per the multi-path collapse, the historical {@code /routes} alias (formerly a
  * dual-path default on a single op) is now reached by overriding the SVL variable to
  * {@code routes}. The {@code a02} test exercises that migration scenario.
  *

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.parallel.*;
  * {@link VersionMixin}.
  *
  * <p>
- * Per the FINISHED-101 multi-path collapse, the historical {@code /info} and {@code /about}
+ * Per the multi-path collapse, the historical {@code /info} and {@code /about}
  * aliases (formerly a triple-path default on a single op) are now reached by overriding the SVL
  * variable to {@code info} or {@code about}. The {@code a02} test exercises the {@code /info}
  * alias migration scenario.

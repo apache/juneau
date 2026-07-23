@@ -41,7 +41,7 @@ import org.junit.jupiter.api.*;
  * {@link BasicStaticFiles} default constructor's recursive {@code cp(...,"htdocs",true)} walk.
  * The default {@link BasicStaticFiles} classpath search root still walks both {@code static/}
  * and {@code htdocs/} directories &mdash; only the URL-side mount is now single. Per the
- * FINISHED-101 multi-path collapse, the {@code /htdocs/*} mount alias (formerly a dual default)
+ * multi-path collapse, the {@code /htdocs/*} mount alias (formerly a dual default)
  * is now reached via {@code -Djuneau.staticfiles.path=htdocs}; that behavior is covered by
  * {@code StaticFilesMixin_SvlPathOverride_Test}.
  *

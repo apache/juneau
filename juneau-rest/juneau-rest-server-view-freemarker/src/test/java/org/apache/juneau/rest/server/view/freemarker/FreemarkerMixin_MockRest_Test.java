@@ -44,7 +44,7 @@ import org.junit.jupiter.api.*;
  * {@link Rest#responseProcessors() @Rest(responseProcessors=...)} declaration appends to the
  * chain, so the default HTML serializer wins under MockRest and the {@code FreemarkerView} is
  * serialized as a Juneau-bean HTML table instead of routed through FreeMarker. The response-
- * processor "prepend" mechanism that fixes this is tracked separately (work item 96) and blocks
+ * processor "prepend" mechanism that fixes this blocks
  * the typed-handler integration matrix for all four sibling view modules (JSP / Thymeleaf /
  * Mustache / FreeMarker). The typed-handler test surface lights up alongside the real-container
  * coverage once that prereq lands &mdash; tracked as the FreeMarker analog of the deferred JSP /

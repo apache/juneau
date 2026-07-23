@@ -30,7 +30,7 @@ import org.junit.jupiter.api.parallel.*;
  * {@link Microservice.Builder}.
  *
  * <p>
- * 3-test triad per migrated field per OQA #4 — system property set, unset (default = null), and
+ * 3-test triad per migrated field — system property set, unset (default = null), and
  * {@code Settings.setGlobal} override.
  */
 @JettyMicroserviceTest

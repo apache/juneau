@@ -28,7 +28,7 @@ import org.junit.jupiter.api.parallel.*;
  * {@link StaticFilesMixin}.
  *
  * <p>
- * Per the FINISHED-101 multi-path collapse, the historical {@code /htdocs/*} alias is now
+ * Per the multi-path collapse, the historical {@code /htdocs/*} alias is now
  * reached by setting the override to {@code htdocs} &mdash; the same path the classpath
  * {@link BasicStaticFiles} root walks by default. The {@code a02} test exercises that exact
  * migration scenario.

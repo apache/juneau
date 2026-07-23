@@ -50,7 +50,7 @@ import org.junit.jupiter.api.*;
  *    {@link JsonParserSession} overrides both, but the public
 	 *    {@link ParserSession#readIntoMap}/{@link ParserSession#readIntoCollection} wrappers
  *    re-wrap the {@code UnsupportedOperationException} as a {@link ParseException}.
- *  - The XML follow-up bug (issue 155 #12) was a {@code doReadIntoMap}/{@code doReadIntoCollection}
+ *  - The XML follow-up bug was a {@code doReadIntoMap}/{@code doReadIntoCollection}
  *    self-recursion where the override called {@code super.doRead(...)} instead of the
  *    format-specific parse-anything routine.  No similar dispatch issues were observed in JSON,
  *    UON, or CSV parser sessions; all override and call their internal {@code readAnything}.
