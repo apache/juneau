@@ -177,7 +177,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * For example, the media type <js>"text/foo+bar"</js> will return a list of
 	 * <code>[<js>'foo'</js>,<js>'bar'</js>]</code>
 	 *
-	 * @return An unmodifiable list of subtype fragments.  Can be <jk>null</jk>.
+	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
 	 */
 	public final List<String> getSubTypes() { return orElse(MediaType.EMPTY).getSubTypes(); }
 

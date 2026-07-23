@@ -161,7 +161,7 @@ public class IfRange extends BasicDateHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException}).
 	 */
 	public IfRange(String value) {
 		super(NAME, isEtag(value) ? null : value);

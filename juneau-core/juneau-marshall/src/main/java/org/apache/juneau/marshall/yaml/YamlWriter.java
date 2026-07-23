@@ -149,7 +149,7 @@ public class YamlWriter extends SerializerWriter<YamlWriter> {
 	 * Resolves the URI and writes it as a double-quoted YAML string.
 	 *
 	 * @param uri The URI to append to the output.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link UriResolver#resolve(Object)}.
 	 * @return This object.
 	 */
 	public YamlWriter uriValue(Object uri) {

@@ -130,8 +130,8 @@ public interface BeanMetaInitializer {
 	 * Builds the bean-level {@link BeanRegistryLookup} for the supplied class.  Returns <jk>null</jk> on the
 	 * commons-side path (no marshalling context).
 	 *
-	 * @param marshallingContext The marshalling-side context (as an opaque {@link Object}).  Can be <jk>null</jk>.
-	 * @param beanFilter The bean filter applied to this bean meta.  Can be <jk>null</jk>.
+	 * @param marshallingContext The marshalling-side context (as an opaque {@link Object}).  Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link org.apache.juneau.marshall.MarshalledBeanMetaInitializer}, the sole concrete implementer of this SPI.
+	 * @param beanFilter The bean filter applied to this bean meta.  Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link org.apache.juneau.marshall.MarshalledBeanMetaInitializer}.
 	 * @param classInfo The class info of the bean.  Must not be <jk>null</jk>.
 	 * @param config The bean-modeling configuration.  Must not be <jk>null</jk>.
 	 * @return The bean-level registry, or <jk>null</jk>.
@@ -152,7 +152,7 @@ public interface BeanMetaInitializer {
 	 * Walks the parent classes/interfaces of {@code classInfo} and returns the first dictionary-name mapping for
 	 * {@code rawClass} found in any parent's registry, or <jk>null</jk> if none.
 	 *
-	 * @param marshallingContext The marshalling-side context.  Can be <jk>null</jk>.
+	 * @param marshallingContext The marshalling-side context.  Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link org.apache.juneau.marshall.MarshalledBeanMetaInitializer}.
 	 * @param classInfo The bean's class info.
 	 * @param rawClass The raw class to look up.
 	 * @return The dictionary name found in a parent's registry, or <jk>null</jk>.

@@ -136,14 +136,14 @@ public class FluentRequestHeaderAssertion<R> extends FluentStringAssertion<R> {
 	 * 	<br>Should be <jk>null</jk> if this is the top-level assertion.
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case this assertion behaves as if testing a part with no value (e.g. {@link #isNull()} passes, transform methods yield <jk>null</jk>-valued assertions).
 	 * @param returns
 	 * 	The object to return after a test method is called.
 	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
 	 * used on the same assertion.
 	 */
 	public FluentRequestHeaderAssertion(Assertion creator, RequestHeader value, R returns) {
-		super(creator, value.asString().orElse(null), returns);
+		super(creator, value == null ? null : value.asString().orElse(null), returns);
 		this.value = value;
 		setThrowable(BadRequest.class);
 	}
@@ -153,7 +153,7 @@ public class FluentRequestHeaderAssertion<R> extends FluentStringAssertion<R> {
 	 *
 	 * @param value
 	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>, in which case this assertion behaves as if testing a part with no value (e.g. {@link #isNull()} passes, transform methods yield <jk>null</jk>-valued assertions).
 	 * @param returns
 	 * 	The object to return after a test method is called.
 	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
@@ -171,7 +171,7 @@ public class FluentRequestHeaderAssertion<R> extends FluentStringAssertion<R> {
 	 * @return A new fluent assertion object.
 	 */
 	public <T> FluentAnyAssertion<T,R> as(Class<T> type) {
-		return new FluentAnyAssertion<>(value.as(type).orElse(null), returns());
+		return new FluentAnyAssertion<>(value == null ? null : value.as(type).orElse(null), returns());
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class FluentRequestHeaderAssertion<R> extends FluentStringAssertion<R> {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentAnyAssertion<Object,R> as(Type type, Type...args) {
-		return new FluentAnyAssertion<>(value.as(type, args).orElse(null), returns());
+		return new FluentAnyAssertion<>(value == null ? null : value.as(type, args).orElse(null), returns());
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class FluentRequestHeaderAssertion<R> extends FluentStringAssertion<R> {
 	 * @throws AssertionError If object is not a boolean.
 	 */
 	public FluentBooleanAssertion<R> asBoolean() {
-		return new FluentBooleanAssertion<>(this, value.asBoolean().orElse(null), returns());
+		return new FluentBooleanAssertion<>(this, value == null ? null : value.asBoolean().orElse(null), returns());
 	}
 
 	/**
@@ -205,7 +205,7 @@ public class FluentRequestHeaderAssertion<R> extends FluentStringAssertion<R> {
 	 * @throws AssertionError If object is not an integer.
 	 */
 	public FluentIntegerAssertion<R> asInteger() {
-		return new FluentIntegerAssertion<>(this, value.asInteger().orElse(null), returns());
+		return new FluentIntegerAssertion<>(this, value == null ? null : value.asInteger().orElse(null), returns());
 	}
 
 	@Override /* Overridden from FluentStringAssertion */
@@ -221,7 +221,7 @@ public class FluentRequestHeaderAssertion<R> extends FluentStringAssertion<R> {
 	 * @throws AssertionError If object is not a long.
 	 */
 	public FluentLongAssertion<R> asLong() {
-		return new FluentLongAssertion<>(this, value.asLong().orElse(null), returns());
+		return new FluentLongAssertion<>(this, value == null ? null : value.asLong().orElse(null), returns());
 	}
 
 	/**
@@ -231,7 +231,7 @@ public class FluentRequestHeaderAssertion<R> extends FluentStringAssertion<R> {
 	 * @throws AssertionError If object is not a zoned-datetime.
 	 */
 	public FluentZonedDateTimeAssertion<R> asZonedDateTime() {
-		return new FluentZonedDateTimeAssertion<>(this, value.asDateHeader().asZonedDateTime().orElse(null), returns());
+		return new FluentZonedDateTimeAssertion<>(this, value == null ? null : value.asDateHeader().asZonedDateTime().orElse(null), returns());
 	}
 
 	@Override /* Overridden from Assertion */

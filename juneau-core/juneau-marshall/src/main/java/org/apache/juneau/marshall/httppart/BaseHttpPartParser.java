@@ -96,7 +96,7 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	 * 	<br>Can be <jk>null</jk> (will default to {@link HttpPartType#OTHER}).
 	 * @param schema
 	 * 	Schema information about the part.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link HttpPartParserSession}.
 	 * 	<br>Not all part parsers use the schema information.
 	 * @param in The input being parsed.
 	 * 	<br>Can be <jk>null</jk> (will return <jk>null</jk> or use schema default if available).
@@ -118,7 +118,7 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	 * 	<br>Can be <jk>null</jk> (will default to {@link HttpPartType#OTHER}).
 	 * @param schema
 	 * 	Schema information about the part.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link HttpPartParserSession}.
 	 * 	<br>Not all part parsers use the schema information.
 	 * @param in The input being parsed.
 	 * 	<br>Can be <jk>null</jk> (will return <jk>null</jk> or use schema default if available).
@@ -140,7 +140,7 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	 * 	<br>Can be <jk>null</jk> (will default to {@link HttpPartType#OTHER}).
 	 * @param schema
 	 * 	Schema information about the part.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link HttpPartParserSession}.
 	 * 	<br>Not all part parsers use the schema information.
 	 * @param in The input being parsed.
 	 * 	<br>Can be <jk>null</jk> (will return <jk>null</jk> or use schema default if available).

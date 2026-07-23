@@ -130,7 +130,7 @@ public class UriResolver {
 	 * Same as {@link #resolve(Object)} except appends result to the specified appendable.
 	 *
 	 * @param a The appendable to append the URL to. Must not be <jk>null</jk>.
-	 * @param o The URI to convert to absolute form. Can be <jk>null</jk>.
+	 * @param o The URI to convert to absolute form. Can be <jk>null</jk>.  The effect is implementation-dependent, varying with the configured {@link UriResolution} and {@link UriRelativity}.
 	 * @return The same appendable passed in.
 	 */
 	@SuppressWarnings({
@@ -282,8 +282,8 @@ public class UriResolver {
 	 * 	String <jv>relativeUri</jv> = <jv>resolver</jv>.relativize(<js>"servlet:/"</js>, <js>"/context/servlet/path/foo"</js>);
 	 * </p>
 	 *
-	 * @param relativeTo The URI to relativize against. Can be <jk>null</jk>.
-	 * @param uri The URI to relativize. Can be <jk>null</jk>.
+	 * @param relativeTo The URI to relativize against. Can be <jk>null</jk>.  The effect is implementation-dependent, varying with the configured {@link UriResolution} and {@link UriRelativity}.
+	 * @param uri The URI to relativize. Can be <jk>null</jk>.  The effect is implementation-dependent, varying with the configured {@link UriResolution} and {@link UriRelativity}.
 	 * @return The relativized URI.
 	 */
 	public String relativize(Object relativeTo, Object uri) {
@@ -297,7 +297,7 @@ public class UriResolver {
 	 *
 	 * @param uri
 	 * 	The URI to convert to absolute form.
-	 * 	Can be <jk>null</jk>.
+	 * 	Can be <jk>null</jk>.  The effect is implementation-dependent, varying with the configured {@link UriResolution} and {@link UriRelativity}.
 	 * 	Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link URI}

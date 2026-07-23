@@ -302,7 +302,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 	 * <p>
 	 * If not specified, uses {@link Locale#getDefault()}.
 	 *
-	 * @param value The new value.  Can be <jk>null</jk>.
+	 * @param value The new value.  Can be <jk>null</jk>.  The effect is implementation-dependent, depending on the configured {@link ReasonPhraseCatalog} (e.g. ignored by {@link EnglishReasonPhraseCatalog}).
 	 * @return This object.
 	 */
 	public SELF setLocale2(Locale value) {

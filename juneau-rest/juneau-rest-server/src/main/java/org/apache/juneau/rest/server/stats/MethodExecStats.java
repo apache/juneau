@@ -184,7 +184,7 @@ public class MethodExecStats {
 	/**
 	 * Call when an error occurs.
 	 *
-	 * @param e The exception thrown.  Can be <jk>null</jk>.
+	 * @param e The exception thrown.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws {@link NullPointerException} via {@link ThrownStore#add(Throwable)}).
 	 * @return This object.
 	 */
 	public MethodExecStats error(Throwable e) {

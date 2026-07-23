@@ -121,7 +121,7 @@ public class PartBeanMeta<T> {
 	 *
 	 * @param value
 	 * 	The part value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.  The effect is implementation-dependent, depending on the target bean type's constructor shape — see {@link #construct(String, Object)}.
 	 * @return A newly constructed bean.
 	 * @throws UnsupportedOperationException If bean could not be constructed (e.g. couldn't find a constructor).
 	 */
@@ -138,7 +138,7 @@ public class PartBeanMeta<T> {
 	 * 	{@link Header#value() @Header(value)} annotations.
 	 * @param value
 	 * 	The part value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.  The effect is implementation-dependent, depending on the target bean type's constructor shape (e.g. coerced to <c>String</c> for a single-<c>String</c>-arg constructor, passed through unchanged otherwise).
 	 * @return A newly constructed bean.
 	 * @throws UnsupportedOperationException If bean could not be constructed (e.g. couldn't find a constructor).
 	 */

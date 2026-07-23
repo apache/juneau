@@ -84,7 +84,7 @@ public abstract class BaseHttpPartSerializer extends MarshallingContextable impl
 	 * 	<br>Can be <jk>null</jk> (will default to {@link HttpPartType#OTHER}).
 	 * @param schema
 	 * 	Schema information about the part.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link HttpPartSerializerSession}.
 	 * 	<br>Not all part serializers use the schema information.
 	 * @param value The value being serialized.
 	 * 	<br>Can be <jk>null</jk> (will return <jk>null</jk>).

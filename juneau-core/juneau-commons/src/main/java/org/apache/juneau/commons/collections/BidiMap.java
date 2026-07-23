@@ -36,7 +36,7 @@ import java.util.*;
  * 	<li>Implements the standard {@link Map} interface for forward key→value lookups
  * 	<li>Provides {@link #getKey(Object)} method for reverse value→key lookups
  * 	<li>Maintains insertion order using {@link LinkedHashMap} internally
- * 	<li>Automatically filters out null keys and values
+ * 	<li>Filters out null keys and values when built via the {@link Builder}
  * 	<li>Supports both mutable and unmodifiable instances via the builder
  * 	<li>Thread-safety: Not thread-safe by default; external synchronization required if accessed by multiple threads
  * </ul>
@@ -59,9 +59,10 @@ import java.util.*;
  *
  * <h5 class='section'>Null Handling:</h5>
  * <p>
- * This map automatically filters out entries with null keys or values during construction.
- * Attempting to add null keys or values via {@link #put(Object, Object)} or {@link #putAll(Map)}
- * after construction will result in them being stored in the forward map but not the reverse map.
+ * The {@link Builder#add(Object, Object)}/{@link Builder#build()} construction path filters out entries with
+ * null keys or values.
+ * {@link #put(Object, Object)} and {@link #putAll(Map)} perform <b>no</b> null filtering after construction —
+ * null keys and values are stored in both the forward and reverse maps unconditionally.
  *
  * <h5 class='section'>Unmodifiable Instances:</h5>
  * <p class='bjava'>

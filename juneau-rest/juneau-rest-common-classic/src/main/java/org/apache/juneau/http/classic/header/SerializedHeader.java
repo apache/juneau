@@ -44,7 +44,7 @@ public class SerializedHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The POJO to serialize as the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link HttpPartSerializerSession} and {@link HttpPartSchema}.
 	 * @return A new header bean.  Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
@@ -84,7 +84,7 @@ public class SerializedHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The supplier of the POJO to serialize as the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link HttpPartSerializerSession} and {@link HttpPartSchema}.
 	 * @return A new header bean.  Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
@@ -128,7 +128,7 @@ public class SerializedHeader extends BasicHeader {
 	 * Constructor.
 	 *
 	 * @param name The HTTP header name name.
-	 * @param value The POJO to serialize to the parameter value.  Can be <jk>null</jk>.
+	 * @param value The POJO to serialize to the parameter value.  Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link HttpPartSerializerSession} and {@link HttpPartSchema}.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
 	 * 	<br>Can be <jk>null</jk>, in which case the value is converted directly to a string instead of being serialized.
@@ -160,7 +160,7 @@ public class SerializedHeader extends BasicHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param name The HTTP header name name.
-	 * @param value The supplier of the POJO to serialize to the parameter value.  Can be <jk>null</jk>.
+	 * @param value The supplier of the POJO to serialize to the parameter value.  Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link HttpPartSerializerSession} and {@link HttpPartSchema}.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
 	 * 	<br>Can be <jk>null</jk>, in which case the value is converted directly to a string instead of being serialized.

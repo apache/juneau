@@ -304,7 +304,7 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	/**
 	 * Sets the content on this entity bean.
 	 *
-	 * @param value The entity content, can be <jk>null</jk>.
+	 * @param value The entity content.  Can be <jk>null</jk> (the effect depends on the concrete leaf type: e.g. treated as empty for {@link StringEntity}/{@link ByteArrayEntity}, or a {@link NullPointerException} on read for {@link StreamEntity}/{@link ReaderEntity}/{@link FileEntity}).
 	 * @return This object.
 	 */
 	public SELF setContent(Object value) {

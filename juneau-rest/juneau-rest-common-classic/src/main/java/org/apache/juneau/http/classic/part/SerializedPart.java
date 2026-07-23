@@ -89,7 +89,7 @@ public class SerializedPart extends BasicPart {
 	 *
 	 * @param name The part name.
 	 * @param value The POJO to serialize to The part value.
-	 * @param type The HTTP part type.  Can be <jk>null</jk>.
+	 * @param type The HTTP part type.  Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link HttpPartSerializerSession#write}.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
 	 * 	<br>Can be <jk>null</jk>, in which case the value is converted using a simple string conversion instead of being serialized.
@@ -232,7 +232,7 @@ public class SerializedPart extends BasicPart {
 	/**
 	 * Sets the HTTP part type.
 	 *
-	 * @param value The new value for this property.  Can be <jk>null</jk>.
+	 * @param value The new value for this property.  Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link HttpPartSerializerSession#write}.
 	 * @return This object.
 	 */
 	public SerializedPart type(HttpPartType value) {

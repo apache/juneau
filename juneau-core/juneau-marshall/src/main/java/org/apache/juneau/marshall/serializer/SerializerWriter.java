@@ -235,7 +235,7 @@ public abstract class SerializerWriter<SELF extends SerializerWriter<SELF>> exte
 	 * session.
 	 *
 	 * @param value The URI to serialize.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.  The effect is implementation-dependent — see {@link UriResolver#append(Appendable, Object)}.
 	 * @return This object.
 	 */
 	public SELF appendUri(Object value) {

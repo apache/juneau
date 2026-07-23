@@ -59,4 +59,26 @@ class FluentRequestHeaderAssertion_Test extends TestBase {
 		var e = assertThrows(RuntimeException.class, () -> h.is("expected"));
 		assertFalse(e.getMessage().startsWith("CUSTOM "));
 	}
+
+	// TODO-286 #5: a null RequestHeader used to NPE in the constructor (value.asString()) and in every
+	// transform method (value.asBoolean(), etc.). Verify null is now tolerated end-to-end.
+
+	@Test void a03_nullValue_chainedConstructor_doesNotThrow() {
+		var h = new FluentRequestHeaderAssertion<>(null, (RequestHeader)null, null);
+		assertDoesNotThrow(h::isNull);
+	}
+
+	@Test void a04_nullValue_directConstructor_doesNotThrow() {
+		var h = new FluentRequestHeaderAssertion<>((RequestHeader)null, null);
+		assertDoesNotThrow(h::isNull);
+	}
+
+	@Test void a05_nullValue_transformMethodsDoNotThrowAndYieldNull() {
+		var h = new FluentRequestHeaderAssertion<>((RequestHeader)null, null);
+		assertDoesNotThrow(() -> h.asBoolean().isNull());
+		assertDoesNotThrow(() -> h.asInteger().isNull());
+		assertDoesNotThrow(() -> h.asLong().isNull());
+		assertDoesNotThrow(() -> h.asZonedDateTime().isNull());
+		assertDoesNotThrow(() -> h.as(String.class).isNull());
+	}
 }

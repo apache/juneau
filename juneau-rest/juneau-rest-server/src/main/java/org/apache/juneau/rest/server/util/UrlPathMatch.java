@@ -49,7 +49,7 @@ public class UrlPathMatch {
 	/**
 	 * Constructor.
 	 *
-	 * @param path The path being matched against.  Can be <jk>null</jk>.
+	 * @param path The path being matched against.  Must not be <jk>null</jk> (a <jk>null</jk> argument causes {@link #getPrefix()}/{@link #getSuffix()} to throw {@link NullPointerException}).
 	 * @param matchedParts The number of parts that were matched against the path.
 	 * @param keys The variable keys.  Can be <jk>null</jk> (no path variables are recorded; the variable map resolves to empty).
 	 * @param values The variable values.  Can be <jk>null</jk> if <c>keys</c> is also <jk>null</jk>; otherwise must align positionally with <c>keys</c>.
