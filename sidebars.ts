@@ -36,12 +36,11 @@ const sidebars: SidebarsConfig = {
 					type: 'category',
 					label: 'About Juneau',
 					collapsed: false,
+					link: {
+						type: 'doc',
+						id: 'topics/01.JuneauEcosystemOverview',
+					},
 					items: [
-						{
-							type: 'doc',
-							id: 'topics/01.JuneauEcosystemOverview',
-							label: '1. Juneau Ecosystem',
-						},
 						{
 							type: 'doc',
 							id: 'topics/01.01.FrameworkComparisons',
