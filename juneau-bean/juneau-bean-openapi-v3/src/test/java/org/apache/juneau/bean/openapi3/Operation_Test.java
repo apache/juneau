@@ -269,6 +269,20 @@ class Operation_Test extends TestBase {
 				x.setTags(nullTagList);
 			});
 		}
+
+		@Test void a18_copyDeepCopiesMapValues() {
+			var orig = bean()
+				.setResponses(map("200", response().setDescription("orig")))
+				.addCallback("cb1", callback());
+
+			var copy = orig.copy();
+
+			assertNotSame(orig.getResponses().get("200"), copy.getResponses().get("200"));
+			assertNotSame(orig.getCallbacks().get("cb1"), copy.getCallbacks().get("cb1"));
+
+			copy.getResponses().get("200").setDescription("mutated");
+			assertEquals("orig", orig.getResponses().get("200").getDescription());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

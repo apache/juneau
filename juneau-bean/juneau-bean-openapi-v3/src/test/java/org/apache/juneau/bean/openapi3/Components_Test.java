@@ -112,6 +112,34 @@ class Components_Test extends TestBase {
 
 			assertDoesNotThrow(() -> bean().set("foo", "bar"));
 		}
+
+		@Test void a12_copyDeepCopiesMapValues() {
+			var orig = bean()
+				.setSchemas(map("a1", schemaInfo().setType("orig")))
+				.setResponses(map("b1", response("orig")))
+				.setParameters(map("c1", parameter("orig", "orig")))
+				.setExamples(map("d1", example().setSummary("orig")))
+				.setRequestBodies(map("e1", requestBodyInfo().setDescription("orig")))
+				.setHeaders(map("f1", headerInfo(schemaInfo("orig"))))
+				.setSecuritySchemes(map("g1", securitySchemeInfo("orig")))
+				.setLinks(map("h1", link().setOperationId("orig")))
+				.setCallbacks(map("i1", callback()));
+
+			var copy = orig.copy();
+
+			assertNotSame(orig.getSchemas().get("a1"), copy.getSchemas().get("a1"));
+			assertNotSame(orig.getResponses().get("b1"), copy.getResponses().get("b1"));
+			assertNotSame(orig.getParameters().get("c1"), copy.getParameters().get("c1"));
+			assertNotSame(orig.getExamples().get("d1"), copy.getExamples().get("d1"));
+			assertNotSame(orig.getRequestBodies().get("e1"), copy.getRequestBodies().get("e1"));
+			assertNotSame(orig.getHeaders().get("f1"), copy.getHeaders().get("f1"));
+			assertNotSame(orig.getSecuritySchemes().get("g1"), copy.getSecuritySchemes().get("g1"));
+			assertNotSame(orig.getLinks().get("h1"), copy.getLinks().get("h1"));
+			assertNotSame(orig.getCallbacks().get("i1"), copy.getCallbacks().get("i1"));
+
+			copy.getSchemas().get("a1").setType("mutated");
+			assertEquals("orig", orig.getSchemas().get("a1").getType());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

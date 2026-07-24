@@ -126,6 +126,18 @@ class Callback_Test extends TestBase {
 				"{{{a2}},{{b2}}}"
 			);
 		}
+
+		@Test void a14_copyDeepCopiesMapValues() {
+			var orig = bean()
+				.addCallback("a1", pathItem().setGet(operation().setSummary("orig")));
+
+			var copy = orig.copy();
+
+			assertNotSame(orig.getCallbacks().get("a1"), copy.getCallbacks().get("a1"));
+
+			copy.getCallbacks().get("a1").setGet(operation().setSummary("mutated"));
+			assertEquals("orig", orig.getCallbacks().get("a1").getGet().getSummary());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

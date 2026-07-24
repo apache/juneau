@@ -136,6 +136,18 @@ class Parameter_Test extends TestBase {
 			assertDoesNotThrow(() -> x.setStyle("deepObject"));
 			assertDoesNotThrow(() -> y.setStyle("invalid"));
 		}
+
+		@Test void a12_copyDeepCopiesMapValues() {
+			var orig = bean()
+				.setExamples(map("a1", example().setSummary("orig")));
+
+			var copy = orig.copy();
+
+			assertNotSame(orig.getExamples().get("a1"), copy.getExamples().get("a1"));
+
+			copy.getExamples().get("a1").setSummary("mutated");
+			assertEquals("orig", orig.getExamples().get("a1").getSummary());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

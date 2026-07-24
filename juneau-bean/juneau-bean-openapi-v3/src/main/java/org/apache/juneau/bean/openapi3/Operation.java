@@ -150,8 +150,8 @@ public class Operation extends OpenApiElement {
 		this.externalDocs = copyOf(copyFrom.externalDocs);
 		parameters.addAll(copyOf(copyFrom.parameters, Parameter::copy));
 		this.requestBody = copyOf(copyFrom.requestBody);
-		responses.putAll(copyFrom.responses);
-		callbacks.putAll(copyFrom.callbacks);
+		responses.putAll(copyOf(copyFrom.responses, Response::copy));
+		callbacks.putAll(copyOf(copyFrom.callbacks, Callback::copy));
 		this.deprecated = copyFrom.deprecated;
 		security.addAll(copyOf(copyFrom.security, SecurityRequirement::copy));
 		servers.addAll(copyOf(copyFrom.servers, Server::copy));

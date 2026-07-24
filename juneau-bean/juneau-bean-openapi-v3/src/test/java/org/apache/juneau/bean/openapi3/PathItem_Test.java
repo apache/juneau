@@ -111,6 +111,20 @@ class PathItem_Test extends TestBase {
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
 		}
+
+		@Test void a12_copyDeepCopiesListValues() {
+			var orig = bean()
+				.setServers(l(server().setUrl(URI.create("http://example.com"))))
+				.setParameters(l(parameter().setIn("q").setName("orig")));
+
+			var copy = orig.copy();
+
+			assertNotSame(orig.getServers().get(0), copy.getServers().get(0));
+			assertNotSame(orig.getParameters().get(0), copy.getParameters().get(0));
+
+			copy.getParameters().get(0).setName("mutated");
+			assertEquals("orig", orig.getParameters().get(0).getName());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {
