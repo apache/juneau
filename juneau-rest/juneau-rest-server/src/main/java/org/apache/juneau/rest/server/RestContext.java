@@ -222,9 +222,10 @@ public class RestContext extends Context {
 	 * 	{@code getPaths()} getter, then {@link Rest#paths()} (SVL-resolved per element and comma-split).
 	 * 	An empty array explicitly clears the mount list (no top-level mounts).
 	 * @param kind The build-time {@link ContextKind kind} of this context — {@link ContextKind#ROOT ROOT} for a
-	 * 	top-level/host/mock resource, {@link ContextKind#CHILD CHILD} for a {@link Rest#children() @Rest(children)}
-	 * 	sub-resource (isolated resolution), or a {@link ContextKind.Mixin MIXIN} carrying the {@link ResolvedMixin}
-	 * 	that produced a per-mixin sub-context (parent-linked to the host so that
+	 * 	top-level/host/mock resource, a {@link ContextKind.Child CHILD} carrying the {@link ResolvedChild} for a
+	 * 	{@link Rest#children() @Rest(children)}/{@link Rest#childrenDefs() childrenDefs} sub-resource (isolated
+	 * 	resolution, with an optional host-seeded payload), or a {@link ContextKind.Mixin MIXIN} carrying the
+	 * 	{@link ResolvedMixin} that produced a per-mixin sub-context (parent-linked to the host so that
 	 * 	{@link RestContext#getRestAnnotationsForProperty(String) annotation-property walks} prepend the host's
 	 * 	{@code @Rest} chain before the mixin's own).
 	 *
@@ -355,6 +356,62 @@ public class RestContext extends Context {
 	}
 
 	/**
+	 * Normalized carrier for a routed child, produced by discovery from either a bare {@link Rest#children()}
+	 * class or a rich {@link Rest#childrenDefs() @Child} declaration — the exact structural analog of
+	 * {@link ResolvedMixin}.
+	 *
+	 * <p>
+	 * A bare class is normalized to {@code new ResolvedChild(type, ChildAnnotation.DEFAULT)} (i.e.
+	 * {@code @Child(type=X)} with an empty seed), so a bare class and an empty-seed {@code @Child} are
+	 * structurally identical — the same equivalence {@link ResolvedMixin} establishes for mixins.
+	 *
+	 * @param type The child class.
+	 * @param seed The host-declared seed annotation, or {@link ChildAnnotation#DEFAULT} for a bare class.
+	 *
+	 * @since 10.0.0
+	 */
+	public static record ResolvedChild(Class<?> type, Child seed) {
+
+		/**
+		 * Compact canonical constructor — validates required components and null-coalesces {@code seed}.
+		 */
+		public ResolvedChild {
+			assertArgNotNull("type", type);
+			if (seed == null)
+				seed = ChildAnnotation.DEFAULT;
+		}
+
+		/**
+		 * Normalizes a bare child class to a {@link ResolvedChild} with no seed.
+		 *
+		 * @param type The child class.
+		 * @return A {@link ResolvedChild} carrying {@link ChildAnnotation#DEFAULT} as its seed.
+		 */
+		static ResolvedChild ofBare(Class<?> type) {
+			return new ResolvedChild(type, ChildAnnotation.DEFAULT);
+		}
+
+		/**
+		 * Normalizes a rich {@code @Child} declaration to a {@link ResolvedChild}.
+		 *
+		 * @param c The {@code @Child} annotation.
+		 * @return A {@link ResolvedChild} carrying {@code c} as its seed.
+		 */
+		static ResolvedChild ofDef(Child c) {
+			return new ResolvedChild(c.type(), c);
+		}
+
+		/**
+		 * Returns {@code true} when this child carries no host-declared seed (i.e. is equivalent to a bare class).
+		 *
+		 * @return {@code true} if the seed payload is {@link ChildAnnotation#DEFAULT}.
+		 */
+		boolean hasNoSeed() {
+			return seed == ChildAnnotation.DEFAULT;
+		}
+	}
+
+	/**
 	 * The build-time <i>kind</i> of a {@link RestContext} — which of the three construction flavors produced it.
 	 *
 	 * <p>
@@ -368,11 +425,14 @@ public class RestContext extends Context {
 	 * parent-linked to the host and <i>inherits</i> the host's {@code @Rest} annotation chain
 	 * ({@link #getRestAnnotationsForProperty(String)} walks host&rarr;mixin), so {@code @Mixin} overrides
 	 * <i>layer on top of</i> an inherited chain.  A {@link Child} is <i>isolated</i> ({@link #HOST_ONLY_PROPERTIES}
-	 * includes {@code children}; children retain pre-10.0.0 isolated resolution with no parent walk).  So a future
-	 * {@code @Child} would <i>seed</i> settings onto an isolated context rather than <i>override</i> an inherited
-	 * chain, and would have no {@code noInherit} analog — it must NOT reuse the mixin override-resolution path.
-	 * The {@code Child} variant is intentionally shaped so it can later widen to reference a {@code ResolvedChild}
-	 * (mirroring how {@code Mixin} references a {@code ResolvedMixin}) without re-plumbing this discriminator.
+	 * includes {@link RestServerConstants#PROPERTY_children}; children retain pre-10.0.0 isolated resolution with
+	 * no parent walk).  A {@code @Child} seed therefore does not <i>override</i> an inherited chain the way a
+	 * {@code @Mixin} override does — instead, {@link #computeRawRestAnnotations()} injects the seed's synthetic
+	 * {@code @Rest} at the <b>least-derived</b> slot of the child's own (still fully isolated) annotation chain,
+	 * between the child's real {@code @Rest} declarations and the synthesized {@link
+	 * org.apache.juneau.rest.server.config.DefaultConfig DefaultConfig} fallback.  This ranks the seed below
+	 * everything the child itself declares (so the child's own explicit value wins for child-wins scalars, and
+	 * the child's own {@code noInherit} cutoff naturally cuts the seed too) but above the framework defaults.
 	 *
 	 * @since 10.0.0
 	 */
@@ -381,8 +441,14 @@ public class RestContext extends Context {
 		/** A top-level (host) resource, mock context, or servlet-mounted resource. */
 		record Root() implements ContextKind {}
 
-		/** A routed child resource (mounted via {@link Rest#children() @Rest(children)}); isolated resolution. */
-		record Child() implements ContextKind {}
+		/**
+		 * A routed child resource (mounted via {@link Rest#children()}/{@link Rest#childrenDefs()}); isolated
+		 * resolution, with an optional host-seeded {@code @Child} payload injected at the least-derived slot of
+		 * its own annotation chain (see the class javadoc above).
+		 *
+		 * @param def The normalized declaration that produced this sub-context — carries the host-declared seed payload.
+		 */
+		record Child(ResolvedChild def) implements ContextKind {}
 
 		/**
 		 * A per-mixin sub-context (composed via {@link Rest#mixins()}/{@link Rest#mixinDefs()}); inherits the host chain.
@@ -393,9 +459,6 @@ public class RestContext extends Context {
 
 		/** Shared {@link Root} singleton (the common case). */
 		ContextKind ROOT = new Root();
-
-		/** Shared {@link Child} singleton (the path override travels in {@link Args#path()}, not here). */
-		ContextKind CHILD = new Child();
 	}
 
 	/**
@@ -836,6 +899,8 @@ public class RestContext extends Context {
 	protected final ContextKind contextKind;
 	/** The normalized mixin declaration that produced this sub-context, or {@code null} when not a mixin context. */
 	protected final ResolvedMixin resolvedMixin;
+	/** The normalized child declaration that produced this sub-context, or {@code null} when not a child context. */
+	protected final ResolvedChild resolvedChild;
 	protected final String fullPath;
 	protected final String path;
 	protected final String[] paths;
@@ -874,6 +939,15 @@ public class RestContext extends Context {
 	 * @return The resolved mixin, or {@code null}.
 	 */
 	private ResolvedMixin resolvedMixinField() { return resolvedMixin; }
+
+	/**
+	 * Field accessor for {@link #resolvedChild}, callable from memoizer field-initializer lambdas (which run
+	 * before the blank-final field is read directly).  Returns the normalized child declaration that produced
+	 * this sub-context, or {@code null} when this is not a child context.
+	 *
+	 * @return The resolved child, or {@code null}.
+	 */
+	private ResolvedChild resolvedChildField() { return resolvedChild; }
 
 	/**
 	 * Creates the bean store for this context.
@@ -2391,14 +2465,60 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * The {@link RestChildren} for this resource — child {@link RestContext} instances registered via
-	 * {@link Rest#children() @Rest(children)}.
+	 * Discovers all children declared on this resource's {@code @Rest} chain, normalized to {@link ResolvedChild}.
 	 *
 	 * <p>
-	 * Reads child classes directly from the {@code @Rest(children)} annotation chain (parent-to-child),
-	 * deduplicates, instantiates each child via the bean store, and builds a {@link RestContext} for each.
-	 * Eagerly initialized in the constructor (via an explicit {@code .get()} call inside the try-catch
-	 * block) so that any construction failure surfaces at initialization time rather than lazily.
+	 * Reads both {@link Rest#children() bare-class} and {@link Rest#childrenDefs() rich &#64;Child} entries (bare
+	 * first, then {@code childrenDefs}). First occurrence of a class wins for ordering; a rich {@code @Child}
+	 * <b>upgrades</b> an earlier bare entry for the same class (a bare class is just {@code @Child(type=X)} with
+	 * an empty seed, so upgrading only adds the host-declared seed).
+	 *
+	 * <p>
+	 * Deliberately <b>non-recursive</b>, unlike {@link #getResolvedMixins()}: children do not flatten transitively
+	 * to the host — each child resolves its own nested {@code @Rest(children=...)}/{@code childrenDefs} independently
+	 * when its own {@link RestContext} is constructed.
+	 *
+	 * @return The ordered, de-duplicated normalized children, never {@code null}.
+	 */
+	private Collection<ResolvedChild> getResolvedChildren() {
+		var out = new LinkedHashMap<Class<?>,ResolvedChild>();
+		getRestAnnotations().forEach(ai -> {
+			for (var c : ai.inner().children())
+				collectResolvedChild(ResolvedChild.ofBare(c), out);
+			for (var def : ai.inner().childrenDefs())
+				collectResolvedChild(ResolvedChild.ofDef(def), out);
+		});
+		return out.values();
+	}
+
+	private void collectResolvedChild(ResolvedChild rc, LinkedHashMap<Class<?>,ResolvedChild> out) {
+		var type = rc.type();
+		// type==null is defensive only — @Child.type() is required and a declarative @Child requires a class
+		// literal, so it is never null in practice.  type==resourceClass() guards a self-reference (skip to
+		// avoid an infinite loop).
+		if (type == null || type == resourceClass())  // HTT: the null arm is not reachable via the annotation API.
+			return;
+		var existing = out.get(type);
+		if (existing != null) {
+			// Already discovered.  A rich @Child upgrades a bare entry (in place, preserving position); otherwise
+			// the first occurrence wins.  No recursion into the child's own nested children (see javadoc above).
+			if (existing.hasNoSeed() && ! rc.hasNoSeed())
+				out.put(type, rc);
+			return;
+		}
+		out.put(type, rc);  // No recursion into type's own children — each child owns its own subtree.
+	}
+
+	/**
+	 * The {@link RestChildren} for this resource — child {@link RestContext} instances registered via
+	 * {@link Rest#children() @Rest(children)}/{@link Rest#childrenDefs() childrenDefs}.
+	 *
+	 * <p>
+	 * Reads children (bare and rich) directly from the {@code @Rest} annotation chain via
+	 * {@link #getResolvedChildren()}, instantiates each child via the bean store, and builds a {@link RestContext}
+	 * for each, threading through any host-declared {@code @Child} seed. Eagerly initialized in the constructor
+	 * (via an explicit {@code .get()} call inside the try-catch block) so that any construction failure surfaces
+	 * at initialization time rather than lazily.
 	 */
 	@SuppressWarnings({
 		"java:S3776" // cognitive complexity acceptable for child-context construction
@@ -2408,22 +2528,16 @@ public class RestContext extends Context {
 		var servletConfig = bs.getBean(ServletConfig.class).orElse(null);
 		var b = RestChildren.create(this, bs, servletConfig);
 
-		// Collect child classes from @Rest(children) on the annotation chain (parent-to-child order).
-		// Deduplicate so the same child class registered on both a parent and child annotation
-		// doesn't create two contexts.
-		var seen = new LinkedHashSet<Class<?>>();
-		getRestAnnotations().forEach(ai -> seen.addAll(Arrays.asList(ai.inner().children())));
-
 		var lazy = isLazyChildren();
 
-		for (var rc2 : seen) {
-			if (rc2 == resourceClass())
-				continue;  // Guard against self-reference infinite loop.
+		for (var rc2 : getResolvedChildren()) {
 			if (lazy) {
 				// Lazy: register a routing stub now; defer full RestContext construction to first request.
+				// The stub carries the full ResolvedChild (including any host-declared @Child seed), so a
+				// lazily-materialized child receives its seed on first invocation identically to an eager one.
 				b.addLazy(rc2, "");
 			} else {
-				// Eager (default): build the full child RestContext immediately.
+				// Eager (default): build the full child RestContext immediately, seed included.
 				b.add(RestChildren.buildChildContext(this, bs, servletConfig, rc2, null, ""));
 			}
 		}
@@ -2474,6 +2588,7 @@ public class RestContext extends Context {
 			contextKind = builder.args.kind();
 			isMixinContext = contextKind instanceof ContextKind.Mixin;
 			resolvedMixin = (contextKind instanceof ContextKind.Mixin contextKind2) ? contextKind2.def() : null;
+			resolvedChild = (contextKind instanceof ContextKind.Child contextKind3) ? contextKind3.def() : null;
 			resourceClass = builder.resourceClass;
 			var rs = new ResourceSupplier(resourceClass, assertArgNotNull("resource", builder.args.resource()));
 			resource = rs;
@@ -2881,6 +2996,51 @@ public class RestContext extends Context {
 	}
 
 	/**
+	 * The host-declared {@code @Child} seed values translated into a synthetic {@link Rest} annotation, for a
+	 * child sub-context that carries a seed. {@code null} for non-child contexts and for children with no seed
+	 * (bare classes).
+	 *
+	 * <p>
+	 * Built once at memoizer-init time (zero per-request cost). Unlike {@link #mixinOverrideAnnotation}, this is
+	 * injected at the <b>least-derived</b> slot of {@link #computeRawRestAnnotations()} — below the child's own
+	 * real {@code @Rest} declarations but above the synthesized {@code DefaultConfig} fallback — so the seed acts
+	 * as a default/fallback the child's own explicit configuration wins over (see {@link ContextKind} javadoc).
+	 */
+	private final Memoizer<AnnotationInfo<Rest>> childSeedAnnotation = memoizer(() -> {
+		var rc = resolvedChildField();
+		if (rc == null || rc.hasNoSeed())
+			return null;
+		var rest = buildChildSeedRest(rc.seed());
+		return AnnotationInfo.of(ClassInfo.of(getResourceClass()), rest);
+	});
+
+	/**
+	 * Translates a host-declared {@link Child @Child} into a synthetic {@link Rest @Rest} carrying only its
+	 * seed slots (the §3 scope subset — no {@code encoders}/{@code serializers}/{@code parsers}/
+	 * {@code responseProcessors}/{@code restOpArgs}/{@code messages}/default headers or attributes/
+	 * {@code produces}/{@code consumes}), so the standard {@code @Rest} resolution chain applies the seed uniformly.
+	 *
+	 * @param c The {@code @Child} seed declaration.
+	 * @return A synthetic {@code @Rest} populated from {@code c}'s seed slots.
+	 */
+	private static Rest buildChildSeedRest(Child c) {
+		// @formatter:off
+		var b = RestAnnotation.create()
+			.guards(c.guards())
+			.roleGuard(c.roleGuard())
+			.rolesDeclared(c.rolesDeclared())
+			.converters(c.converters())
+			.callLogger(c.callLogger())
+			.partSerializer(c.partSerializer())
+			.partParser(c.partParser())
+			.debug(c.debug())
+			.defaultCharset(c.defaultCharset())
+			.maxInput(c.maxInput());
+		// @formatter:on
+		return b.build();
+	}
+
+	/**
 	 * Memoized list of every {@link Rest} annotation on the resource class and its supertypes, in child-to-parent order.
 	 *
 	 * <p>
@@ -2906,7 +3066,16 @@ public class RestContext extends Context {
 
 	/**
 	 * Computes the raw {@code @Rest} annotation chain (most-derived first), folding in the framework
-	 * {@code DefaultConfig} annotations for non-mixin contexts.  Does not include the synthetic builder annotation.
+	 * {@code DefaultConfig} annotations for non-mixin contexts, and — for a {@linkplain ContextKind.Child child}
+	 * context carrying a host-declared {@code @Child} seed — injecting the seed's synthetic {@code @Rest} at the
+	 * least-derived slot: {@code raw ++ [seed] ++ defaultConfigAnnotations}. This ranks the seed below everything
+	 * the child itself declares (child-wins scalars resolve to the child's own value when present) but above the
+	 * framework's {@code DefaultConfig} fallback (the seed is never masked by framework defaults). This holds
+	 * uniformly whether {@code DefaultConfig} is separately synthesized (the common case) or already embedded
+	 * within {@code raw} because the child class transitively implements {@code DefaultConfig} itself (e.g. by
+	 * extending {@code BasicRestServlet}/{@code BasicRestServletGroup}) — in the embedded case, {@code raw} is
+	 * split around the embedded {@code DefaultConfig} entry/entries so the seed still lands between the child's
+	 * own declarations and that entry, rather than after it. Does not include the synthetic builder annotation.
 	 *
 	 * @return The raw annotation chain.
 	 */
@@ -2914,14 +3083,46 @@ public class RestContext extends Context {
 		var raw = getAnnotationProvider().find(Rest.class, ClassInfo.of(getResourceClass()));
 		if (isMixinContextField())
 			return raw;
-		var hasDefaultConfig = raw.stream().anyMatch(ai -> ai.getAnnotatable() instanceof ClassInfo ci && DefaultConfig.class.equals(ci.inner()));
-		if (hasDefaultConfig)
-			return raw;
+		var seed = childSeedAnnotation.get();  // null for non-child contexts and no-seed children
+		// The framework's DefaultConfig fallback is synthesized/appended for EVERY non-mixin context that
+		// doesn't already transitively implement DefaultConfig itself — this happens unconditionally,
+		// regardless of whether this context also carries an @Child seed (that baseline behavior predates
+		// and is independent of @Child). Partition raw into "the resource's own real declarations" and any
+		// DefaultConfig entries already embedded within its own hierarchy (e.g. because it extends
+		// BasicRestServlet/BasicRestServletGroup, which implement DefaultConfig), so that when a seed IS
+		// present it can always be inserted between them — below everything the child itself declares, but
+		// above DefaultConfig's fallback values, whether that fallback is embedded here or synthesized below.
+		var embeddedDefaultConfig = raw.stream().filter(ai -> ai.getAnnotatable() instanceof ClassInfo ci && DefaultConfig.class.equals(ci.inner())).toList();
+		if (!embeddedDefaultConfig.isEmpty()) {
+			if (seed == null)
+				return raw;
+			var ownDeclarations = raw.stream().filter(ai -> !(ai.getAnnotatable() instanceof ClassInfo ci && DefaultConfig.class.equals(ci.inner()))).toList();
+			var combined = new ArrayList<AnnotationInfo<Rest>>(raw.size() + 1);
+			combined.addAll(ownDeclarations);
+			combined.add(seed);
+			combined.addAll(embeddedDefaultConfig);
+			return u(combined);
+		}
 		var defaultConfigAnnotations = getAnnotationProvider().find(Rest.class, ClassInfo.of(DefaultConfig.class));
 		if (defaultConfigAnnotations.isEmpty())
-			return raw;
+			return seed == null ? raw : appendAnnotation(raw, seed);
 		var combined = new ArrayList<>(raw);
+		if (seed != null)
+			combined.add(seed);
 		combined.addAll(defaultConfigAnnotations);
+		return u(combined);
+	}
+
+	/**
+	 * Returns a new unmodifiable list with {@code extra} appended after {@code base}.
+	 *
+	 * @param base The base list.
+	 * @param extra The entry to append.
+	 * @return An unmodifiable list of {@code base} followed by {@code extra}.
+	 */
+	private static List<AnnotationInfo<Rest>> appendAnnotation(List<AnnotationInfo<Rest>> base, AnnotationInfo<Rest> extra) {
+		var combined = new ArrayList<>(base);
+		combined.add(extra);
 		return u(combined);
 	}
 
@@ -3281,7 +3482,7 @@ public class RestContext extends Context {
 	 * preserves that invariant when a mixin sub-context walks annotations for these properties.
 	 */
 	private static final Set<String> HOST_ONLY_PROPERTIES = Set.of(
-		PROPERTY_path, PROPERTY_paths, PROPERTY_mixins, "children"
+		PROPERTY_path, PROPERTY_paths, PROPERTY_mixins, PROPERTY_children
 	);
 
 	/**
@@ -3484,6 +3685,9 @@ public class RestContext extends Context {
 	 * @param s The raw string. Can be {@code null}.
 	 * @return The resolved string.
 	 */
+	@SuppressWarnings({
+		"java:S2259" // getVarResolver() is never null post-construction: registerFrameworkDefaults() always registers a VarResolver default supplier before the constructor returns.
+	})
 	protected String resolve(String s) {
 		return getVarResolver().resolve(s);
 	}
@@ -4144,6 +4348,9 @@ public class RestContext extends Context {
 	 *
 	 * @return The context statistics.
 	 */
+	@SuppressWarnings({
+		"java:S2259" // getMethodExecStore() is never null post-construction: registerFrameworkDefaults() always registers a MethodExecStore default supplier before the constructor returns.
+	})
 	public RestContextStats getStats() { return new RestContextStats(startTime, getMethodExecStore().getStatsByTotalTime()); }
 
 	/**
@@ -4548,6 +4755,9 @@ public class RestContext extends Context {
 		return this;
 	}
 
+	@SuppressWarnings({
+		"java:S2259" // mi is guarded by the nn(mi) check above; Sonar's flow analysis does not track nn() as a null guard.
+	})
 	private void initializeResourceContext(Object resource2) {
 		var mi = ClassInfo.of(resource2).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
 		if (nn(mi)) {
@@ -4565,6 +4775,9 @@ public class RestContext extends Context {
 	 * @return This object.
 	 * @throws ServletException Error occurred.
 	 */
+	@SuppressWarnings({
+		"java:S2259" // getRestChildren() is never null post-construction: registerFrameworkDefaults() always registers a RestChildren default supplier before the constructor returns.
+	})
 	public RestContext postInitChildFirst() throws ServletException {
 		if (initialized.get())
 			return this;
@@ -4580,6 +4793,9 @@ public class RestContext extends Context {
 		return this;
 	}
 
+	@SuppressWarnings({
+		"java:S2259" // getDebugConfig() is never null post-construction: registerFrameworkDefaults() always registers a DebugConfig default supplier before the constructor returns.
+	})
 	private boolean isDebug(RestSession call) {
 		return getDebugConfig().resolve(this, call.getRequest()).enabled();
 	}
@@ -4797,6 +5013,9 @@ public class RestContext extends Context {
 	 * @param m The method to get statistics for.
 	 * @return The cached time-stats object.
 	 */
+	@SuppressWarnings({
+		"java:S2259" // getMethodExecStore() is never null post-construction: registerFrameworkDefaults() always registers a MethodExecStore default supplier before the constructor returns.
+	})
 	protected MethodExecStats getMethodExecStats(Method m) {
 		return getMethodExecStore().getStats(m);
 	}
@@ -5071,7 +5290,8 @@ public class RestContext extends Context {
 	 * @throws NotImplemented No registered response processors could handle the call.
 	 */
 	@SuppressWarnings({
-		"java:S127" // Loop counter i resets to -1 on RESTART
+		"java:S127", // Loop counter i resets to -1 on RESTART
+		"java:S2259" // getResponseProcessors() is never null post-construction: registerFrameworkDefaults() always registers a ResponseProcessor[] default supplier before the constructor returns.
 	})
 	public void processResponse(RestOpSession opSession) throws IOException, BasicHttpException, NotImplemented {
 

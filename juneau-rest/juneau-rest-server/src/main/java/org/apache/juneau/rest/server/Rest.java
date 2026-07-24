@@ -224,6 +224,47 @@ public @interface Rest {
 	Class<?>[] children() default {};
 
 	/**
+	 * Rich child definitions &mdash; the host-side seed form of {@link #children()}.
+	 *
+	 * <p>
+	 * Each {@link Child @Child} entry names a child class (via {@link Child#type()}) <b>and</b> lets the host
+	 * seed a curated set of {@code @Rest}-level settings onto that child's otherwise-isolated
+	 * {@link RestContext} &mdash; guards, role guards, a call logger, part serializer/parser, debug, and a
+	 * handful of default-scalar settings &mdash; without editing the child class.
+	 *
+	 * <p>
+	 * Unlike {@link #mixinDefs() mixinDefs}, this does not override an inherited chain (children never inherit
+	 * from the host); it seeds settings onto an isolated context. Additive-security seed members ({@code guards},
+	 * {@code converters}, {@code roleGuard}, {@code rolesDeclared}) can't be removed or weakened by the child;
+	 * the remaining scalar seed members are a fallback the child's own explicit {@code @Rest} declaration wins
+	 * over. See {@link Child} for the full semantics.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Rest</ja>(
+	 * 		childrenDefs=<ja>@Child</ja>(type=FooChild.<jk>class</jk>, callLogger=SeedLogger.<jk>class</jk>)
+	 * 	)
+	 * 	<jk>public class</jk> MyResource { ... }
+	 * </p>
+	 *
+	 * <p>
+	 * This attribute is additive to {@link #children()}: bare-class entries in {@code children()} and rich
+	 * entries here are discovered together (bare classes first, then {@code childrenDefs}). A
+	 * {@code @Child(type=X.class)} with no seed members is the exact equivalent of a bare
+	 * {@code children=X.class} entry.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Child}
+	 * 	<li class='jm'>{@link #children()}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources#host-side-seeding-with-child-1000">Child Resources &mdash; Host-side seeding with @Child</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 10.0.0
+	 */
+	Child[] childrenDefs() default {};
+
+	/**
 	 * REST mixins.
 	 *
 	 * <p>

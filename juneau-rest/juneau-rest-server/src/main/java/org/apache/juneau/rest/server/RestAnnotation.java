@@ -77,6 +77,7 @@ public class RestAnnotation {
 		private Debug debug = DebugAnnotation.DEFAULT;
 		private Class<? extends Serializer>[] serializers = new Class[0];
 		private Class<?>[] children = {};
+		private Child[] childrenDefs = {};
 		private Class<?>[] mixins = {};
 		private Mixin[] mixinDefs = {};
 		private Class<?>[] parsers = {};
@@ -213,6 +214,17 @@ public class RestAnnotation {
 		 */
 		public Builder children(Class<?>...value) {
 			children = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#childrenDefs()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder childrenDefs(Child...value) {
+			childrenDefs = value;
 			return this;
 		}
 
@@ -806,6 +818,7 @@ public class RestAnnotation {
 		private final Debug debug;
 		private final Class<? extends Serializer>[] serializers;
 		private final Class<?>[] children;
+		private final Child[] childrenDefs;
 		private final Class<?>[] mixins;
 		private final Mixin[] mixinDefs;
 		private final Class<?>[] parsers;
@@ -862,6 +875,7 @@ public class RestAnnotation {
 			callLogger = b.callLogger;
 			authenticator = b.authenticator;
 			children = cp(b.children);
+			childrenDefs = cp(b.childrenDefs);
 			mixins = cp(b.mixins);
 			mixinDefs = cp(b.mixinDefs);
 			clientVersionHeader = b.clientVersionHeader;
@@ -945,6 +959,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public Class<?>[] children() {
 			return children;
+		}
+
+		@Override /* Overridden from Rest */
+		public Child[] childrenDefs() {
+			return childrenDefs;
 		}
 
 		@Override /* Overridden from Rest */

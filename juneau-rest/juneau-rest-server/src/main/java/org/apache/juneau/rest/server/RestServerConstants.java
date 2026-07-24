@@ -232,6 +232,9 @@ public final class RestServerConstants {
 	/** The {@code "mixins"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the class-chain walk when resolving operation mixins. */
 	public static final String PROPERTY_mixins = "mixins";
 
+	/** The {@code "children"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the class-chain walk when resolving routed children. */
+	public static final String PROPERTY_children = "children";
+
 	/** The {@code "value"} annotation attribute name — used by {@code @RestOp}/verb annotations to hold the (optional method-prefixed) path; folded into {@link #PROPERTY_path}. */
 	public static final String PROPERTY_value = "value";
 

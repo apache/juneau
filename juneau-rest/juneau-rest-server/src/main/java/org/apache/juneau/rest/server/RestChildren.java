@@ -71,6 +71,7 @@ public class RestChildren {
 	 */
 	static class LazyChildEntry {
 
+		final RestContext.ResolvedChild resolvedChild;
 		final Class<?> resourceClass;
 		final String path;
 		final UrlPathMatcher pathMatcher;
@@ -86,8 +87,9 @@ public class RestChildren {
 
 		private final Object lock = new Object();
 
-		LazyChildEntry(Class<?> resourceClass, String path, RestContext parent, BeanStore beanStore, ServletConfig servletConfig) {
-			this.resourceClass = resourceClass;
+		LazyChildEntry(RestContext.ResolvedChild resolvedChild, String path, RestContext parent, BeanStore beanStore, ServletConfig servletConfig) {
+			this.resolvedChild = resolvedChild;
+			this.resourceClass = resolvedChild.type();
 			this.path = path;
 			var p = path;
 			if (! p.endsWith("/*"))
@@ -120,7 +122,7 @@ public class RestChildren {
 					return rc;
 				LOGGER.info(() -> "Lazy REST child materializing: " + resourceClass.getName() + " at path '" + path + "'");
 				try {
-					rc = buildChildContext(parent, beanStore, servletConfig, resourceClass, null, "");
+					rc = buildChildContext(parent, beanStore, servletConfig, resolvedChild, null, "");
 					rc.postInit();
 					rc.postInitChildFirst();
 				} catch (Exception e) {
@@ -215,14 +217,41 @@ public class RestChildren {
 		 * The path is pre-resolved from the resource class so that routing works immediately at parent startup.
 		 * The full {@link RestContext} is built on the first matching request.
 		 *
+		 * <p>
+		 * Delegates to {@link #addLazy(RestContext.ResolvedChild, String)} with a bare (no-seed) declaration —
+		 * this public overload's signature is preserved unchanged (it has no external-caller-visible way to
+		 * express a host-declared {@code @Child} seed; see that overload for the seed-carrying entry point used
+		 * internally by {@link RestContext}'s {@code childrenDefs} discovery).
+		 *
 		 * @param resourceClass The resource class to materialize lazily. Must not be {@code null}.
 		 * @param path The pre-resolved path prefix (without leading slash). Use {@code ""} to read from
 		 * 	{@link Rest#path() @Rest(path)} on the resource class.
 		 * @return This object.
 		 */
 		public Builder addLazy(Class<?> resourceClass, String path) {
+			return addLazy(RestContext.ResolvedChild.ofBare(resourceClass), path);
+		}
+
+		/**
+		 * Registers a lazy child resource entry carrying a normalized child declaration, which may include a
+		 * host-declared {@code @Child} seed.
+		 *
+		 * <p>
+		 * The path is pre-resolved from the resource class so that routing works immediately at parent startup.
+		 * The full {@link RestContext} is built on the first matching request, with the seed (if any) threaded
+		 * through to {@link RestChildren#buildChildContext} at that point — so a lazily-materialized child
+		 * receives its host-seeded settings identically to an eagerly-built one.
+		 *
+		 * @param resolvedChild The normalized child declaration (class plus any host-declared seed). Must not be
+		 * 	{@code null}.
+		 * @param path The pre-resolved path prefix (without leading slash). Use {@code ""} to read from
+		 * 	{@link Rest#path() @Rest(path)} on the resource class.
+		 * @return This object.
+		 */
+		Builder addLazy(RestContext.ResolvedChild resolvedChild, String path) {
+			var resourceClass = resolvedChild.type();
 			var resolvedPath = isNotEmpty(path) ? trimLeadingSlashes(path) : LazyChildEntry.resolvePathForClass(resourceClass);
-			lazyList.add(new LazyChildEntry(resourceClass, resolvedPath, parent, beanStore, servletConfig));
+			lazyList.add(new LazyChildEntry(resolvedChild, resolvedPath, parent, beanStore, servletConfig));
 			return this;
 		}
 
@@ -553,7 +582,8 @@ public class RestChildren {
 	 * @param parent The parent {@link RestContext}. Must not be {@code null}.
 	 * @param beanStore The bean store to resolve instances and dependencies from. Must not be {@code null}.
 	 * @param servletConfig The {@link ServletConfig} to pass through to the child. May be {@code null}.
-	 * @param resourceClass The resource class. Must not be {@code null}.
+	 * @param resolvedChild The normalized child declaration (class plus any host-declared {@code @Child} seed).
+	 * 	Must not be {@code null}.
 	 * @param resourceInstance A pre-supplied instance of the resource. If {@code null}, the instance is resolved
 	 * 	from the bean store or freshly instantiated via {@link BeanInstantiator}.
 	 * @param pathOverride An explicit path segment (relative to the parent). Use {@code ""} to read the path from
@@ -565,9 +595,10 @@ public class RestChildren {
 			RestContext parent,
 			BeanStore beanStore,
 			ServletConfig servletConfig,
-			Class<?> resourceClass,
+			RestContext.ResolvedChild resolvedChild,
 			Object resourceInstance,
 			String pathOverride) throws Exception {
+		var resourceClass = resolvedChild.type();
 		Supplier<?> so;
 		if (resourceInstance != null) {
 			final Object r = resourceInstance;
@@ -578,7 +609,7 @@ public class RestChildren {
 			Object o = BeanInstantiator.of(resourceClass, beanStore).run();
 			so = () -> o;
 		}
-		var cc = new RestContext(new RestContext.Args(resourceClass, parent, servletConfig, so, pathOverride, null, null, null, RestContext.ContextKind.CHILD));
+		var cc = new RestContext(new RestContext.Args(resourceClass, parent, servletConfig, so, pathOverride, null, null, null, new RestContext.ContextKind.Child(resolvedChild)));
 		var mi = ClassInfo.of(so.get())
 			.getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class))
 			.orElse(null);
@@ -592,7 +623,8 @@ public class RestChildren {
 			throw isex("Cannot add a child to a RestChildren that was not initialized with a parent RestContext.");
 		RestContext cc;
 		try {
-			cc = buildChildContext(parent, beanStore, servletConfig, resourceClass, resourceInstance, pathOverride);
+			// The dynamic-add API has no seed — a bare ResolvedChild preserves its existing no-override behavior.
+			cc = buildChildContext(parent, beanStore, servletConfig, RestContext.ResolvedChild.ofBare(resourceClass), resourceInstance, pathOverride);
 		} catch (Exception e) {
 			throw new ServletException("Failed to build child REST context for " + resourceClass.getName(), unwrapThrowable(e));
 		}
