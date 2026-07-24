@@ -221,25 +221,30 @@ public class CborParserSession extends InputStreamParserSession implements Token
 			} else if (nn(builder) || sType.canCreateNewBean(outer)) {
 				if (dt == MAP) {
 					BeanMap m = builder == null ? newBeanMap(outer, sType.inner()) : toBeanMap(builder.create(this, eType));
-					for (var i = 0; shouldContinueContainer(is, len, i); i++) {
-						String pName = readAnything(string(), is, m.getBean(false), null);
-						var bpm = m.getPropertyMeta(pName);
-						if (bpm == null) {
-							if (pName.equals(getBeanTypePropertyName(eType)))
-								readAnything(string(), is, null, null);
-							else
-								onUnknownProperty(pName, m, readAnything(string(), is, null, null));
-						} else {
-							var cm = (ClassMeta<?>) bpm.getBeanInfo();
-							Object value = readAnything(cm, is, m.getBean(false), bpm);
-							setName(cm, value, pName);
-							try {
-								bpm.set(m, pName, value);
-							} catch (BeanRuntimeException e) {
-								onBeanSetterException(pMeta, e);
-								throw e;
+					var pb = swapParentBean(m.getBean(false));
+					try {
+						for (var i = 0; shouldContinueContainer(is, len, i); i++) {
+							String pName = readAnything(string(), is, m.getBean(false), null);
+							var bpm = m.getPropertyMeta(pName);
+							if (bpm == null) {
+								if (pName.equals(getBeanTypePropertyName(eType)))
+									readAnything(string(), is, null, null);
+								else
+									onUnknownProperty(pName, m, readAnything(string(), is, null, null));
+							} else {
+								var cm = (ClassMeta<?>) bpm.getBeanInfo();
+								Object value = readAnything(cm, is, m.getBean(false), bpm);
+								setName(cm, value, pName);
+								try {
+									bpm.set(m, pName, value);
+								} catch (BeanRuntimeException e) {
+									onBeanSetterException(pMeta, e);
+									throw e;
+								}
 							}
 						}
+					} finally {
+						swapParentBean(pb);
 					}
 					o = builder == null ? m.getBean() : builder.build(this, m.getBean(), eType);
 				} else {
@@ -324,8 +329,8 @@ public class CborParserSession extends InputStreamParserSession implements Token
 		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (nn(outer))
-			setParent(eType, o, outer);
+		if (nn(parentBean()))
+			setParent(eType, o, parentBean());
 
 		return (T)o;
 	}

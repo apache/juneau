@@ -276,8 +276,8 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (nn(outer))
-			setParent(eType, o, outer);
+		if (nn(parentBean()))
+			setParent(eType, o, parentBean());
 
 		return (T)o;
 	}
@@ -328,6 +328,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		var state = S1;
 		var currAttr = "";
 		int c = 0;
+		var pb = swapParentBean(m.getBean(false));
 		mark();
 		try {
 			while (c != -1) {
@@ -402,6 +403,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 				throw new ParseException(this, "Could not find '}' marking end of JSON object.");
 		} finally {
 			unmark();
+			swapParentBean(pb);
 		}
 
 		return null; // Unreachable.

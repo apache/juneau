@@ -969,13 +969,23 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());
 				var bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);
 				var cm = (ClassMeta<?>) m.getMeta().getBeanInfo();
-				Object value = readAnything(cm, currAttr, r, m.getBean(false), false, null);
-				setName(cm, value, currAttr);
-				bpm.set(m, currAttr, value);
+				var pb = swapParentBean(m.getBean(false));
+				try {
+					Object value = readAnything(cm, currAttr, r, m.getBean(false), false, null);
+					setName(cm, value, currAttr);
+					bpm.set(m, currAttr, value);
+				} finally {
+					swapParentBean(pb);
+				}
 				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
 			} else {
 				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());
-				m = readIntoBean(r, m, isNil);
+				var pb = swapParentBean(m.getBean(false));
+				try {
+					m = readIntoBean(r, m, isNil);
+				} finally {
+					swapParentBean(pb);
+				}
 				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
 			}
 		} else if (sType.isMap()) {
@@ -1026,8 +1036,8 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (nn(outer))
-			setParent(eType, o, outer);
+		if (nn(parentBean()))
+			setParent(eType, o, parentBean());
 
 		return (T)o;
 	}

@@ -224,8 +224,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (nn(outer))
-			setParent(eType, o, outer);
+		if (nn(parentBean()))
+			setParent(eType, o, parentBean());
 
 		return (T)o;
 	}
@@ -254,6 +254,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 		var state = S1;
 		var currAttr = "";
+		var pb = swapParentBean(m.getBean(false));
 		mark();
 		try {
 			while (c != -1) {
@@ -365,6 +366,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 				throw new ParseException(this, "Could not find end of object.");
 		} finally {
 			unmark();
+			swapParentBean(pb);
 		}
 
 		return null; // Unreachable.

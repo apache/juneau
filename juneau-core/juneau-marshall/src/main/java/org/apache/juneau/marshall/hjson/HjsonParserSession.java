@@ -327,14 +327,52 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 			var cm = (ClassMeta<?>) pm.getBeanInfo();
 			if (cm.getNameProperty() != null)
 				setName(cm, val, key);
-			if (cm.getParentProperty() != null)
-				setParent(cm, val, bean);
-			if (cm.isMap() && val instanceof Map<?,?> val2 && !cm.getValueType().isObject() && cm.getValueType().getNameProperty() != null) {
-				var valueType = cm.getValueType();
-				for (Map.Entry<?,?> e : ((Map<?,?>)val2).entrySet())
-					setName(valueType, e.getValue(), e.getKey());
-			}
+			injectParentAnnotations(cm, val, entry.getValue(), bean);
 		}
+	}
+
+	/*
+	 * Recursively injects @ParentProperty (and @NameProperty on map values / nested beans) into val.
+	 * Intermediate collections and maps are transparent: a collection/map element's parent is
+	 * parentBean (the nearest enclosing bean), skipping all intermediate containers.  This keeps HJSON
+	 * consistent with the streaming parsers under TODO-291 (Option A).
+	 */
+	private void injectParentAnnotations(ClassMeta<?> cm, Object val, Object node, Object parentBean) throws ExecutableException {
+		if (val == null || cm == null)
+			return;
+		if (cm.getParentProperty() != null)
+			setParent(cm, val, parentBean);
+		if (cm.isCollectionOrArray()) {
+			var et = cm.getElementType();
+			if (et == null || et.isObject())
+				return;
+			var nodeList = node instanceof List<?> nl ? nl : null;
+			var i = 0;
+			for (var element : toIterable(val)) {
+				injectParentAnnotations(et, element, nodeList != null && i < nodeList.size() ? nodeList.get(i) : null, parentBean);
+				i++;
+			}
+		} else if (cm.isMap() && val instanceof Map<?,?> valMap) {
+			var vt = cm.getValueType();
+			if (vt == null || vt.isObject())
+				return;
+			var nodeMap = node instanceof Map<?,?> nm ? nm : null;
+			for (Map.Entry<?,?> e : valMap.entrySet()) {
+				if (vt.getNameProperty() != null)
+					setName(vt, e.getValue(), e.getKey());
+				injectParentAnnotations(vt, e.getValue(), nodeMap != null ? nodeMap.get(e.getKey()) : null, parentBean);
+			}
+		} else if (cm.isBean() && !(val instanceof Map) && node instanceof MarshalledMap nodeMap) {
+			injectAnnotations(nodeMap, val);
+		}
+	}
+
+	private static Iterable<?> toIterable(Object val) {
+		if (val instanceof Collection<?> c)
+			return c;
+		if (val instanceof Object[] a)
+			return Arrays.asList(a);
+		return List.of();
 	}
 
 	private static Object getBeanValueSafely(BeanMap<?> bm, String key) {

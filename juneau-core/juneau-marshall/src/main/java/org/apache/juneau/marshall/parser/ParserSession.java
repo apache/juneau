@@ -279,6 +279,37 @@ public class ParserSession extends MarshallingSession {
 			m.set(o, parent);
 	}
 
+	/**
+	 * Returns the nearest enclosing bean used as the parent for {@link ParentProperty @ParentProperty} injection.
+	 *
+	 * <p>
+	 * Unlike {@link #getOuter()} (which also serves as the instantiation context for non-static member/inner classes),
+	 * this value tracks only the nearest enclosing <i>bean</i> as the object graph is parsed, deliberately skipping any
+	 * intermediate collections/maps/arrays.  It is {@code null} at the document root (no enclosing bean), which means a
+	 * bean parsed at the root or directly inside a top-level collection has no parent injected.
+	 *
+	 * @return The nearest enclosing bean, or {@code null} if there is none.
+	 */
+	protected final Object parentBean() {
+		return parentBean;
+	}
+
+	/**
+	 * Sets the nearest-enclosing-bean tracker used for {@link ParentProperty @ParentProperty} injection.
+	 *
+	 * <p>
+	 * Callers should invoke this when they begin populating a bean's properties (passing that bean), then pass the
+	 * returned previous value back to this method once done, restoring the tracker stack-style.
+	 *
+	 * @param value The new nearest enclosing bean (typically the bean currently being populated).
+	 * @return The previous value, to be passed back to this method to restore the tracker.
+	 */
+	protected final Object swapParentBean(Object value) {
+		var old = parentBean;
+		parentBean = value;
+		return old;
+	}
+
 	private final HttpPartSchema schema;
 	private final Method javaMethod;
 	private final Object outer;
@@ -289,6 +320,7 @@ public class ParserSession extends MarshallingSession {
 	private final Deque<StringBuilder> sbStack;
 	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
+	private Object parentBean;
 	private Position mark = new Position(-1);
 	private ParserPipe pipe;
 
@@ -303,6 +335,7 @@ public class ParserSession extends MarshallingSession {
 		ctx = builder.ctx;
 		javaMethod = builder.javaMethod;
 		outer = builder.outer;
+		parentBean = builder.outer;
 		schema = builder.schema;
 		trimStrings = builder.trimStrings;
 		nulls = builder.nulls == null ? Nulls.NOT_SET : builder.nulls;

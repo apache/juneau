@@ -422,8 +422,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (nn(outer))
-			setParent(eType, o, outer);
+		if (nn(parentBean()))
+			setParent(eType, o, parentBean());
 
 		return (T)o;
 	}
@@ -465,6 +465,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 		var state = S1;
 		var currAttr = "";
+		var pb = swapParentBean(m.getBean(false));
 		mark();
 		try {
 			while (true) {
@@ -548,6 +549,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			}
 		} finally {
 			unmark();
+			swapParentBean(pb);
 		}
 	}
 

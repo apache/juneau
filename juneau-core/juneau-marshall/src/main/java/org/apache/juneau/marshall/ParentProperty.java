@@ -52,7 +52,7 @@ import java.lang.annotation.*;
  *
  * 	<jk>public class</jk> Person {
  * 		<ja>@ParentProperty</ja>
- * 		<jk>public</jk> AddressBook addressBook;  <jc>// Automatically set to containing AddressBook</jc>
+ * 		<jk>public</jk> AddressBook addressBook;  <jc>// Automatically set to the enclosing AddressBook (the intervening List is skipped).</jc>
  *
  * 		<jk>public</jk> String name;
  * 		<jk>public</jk> <jk>char</jk> sex;
@@ -79,6 +79,17 @@ import java.lang.annotation.*;
  * 	<li>This allows child objects to navigate back to their parent if needed
  * </ul>
  *
+ * <h5 class='section'>Parent resolution through collections and maps:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>A collection/map element's <ja>@ParentProperty</ja> is set to the nearest enclosing bean, skipping any
+ * 		intervening collections, maps, or arrays.  In the example above, each <c>Person</c> lives inside a
+ * 		<c>List&lt;Person&gt;</c>, yet its <c>addressBook</c> back-reference receives the enclosing <c>AddressBook</c>
+ * 		bean, not the <c>List</c>.  The same holds through arbitrarily deep nesting
+ * 		(e.g. <c>List&lt;List&lt;Person&gt;&gt;</c>, <c>Map&lt;String,List&lt;Person&gt;&gt;</c>).
+ * 	<li>A bean at the document root (or directly inside a top-level collection) has no enclosing bean, so its
+ * 		<ja>@ParentProperty</ja> is left <jk>null</jk>.
+ * </ul>
+ *
  * <h5 class='section'>Cyclic graphs and serialization:</h5>
  * <ul class='spaced-list'>
  * 	<li>When a <ja>@ParentProperty</ja> back-reference is also a normally-visible bean property (e.g. a <jk>public</jk>
@@ -97,6 +108,17 @@ import java.lang.annotation.*;
  * 		{@link MarshallingTraverseContext.Builder#ignoreRecursions() ignoreRecursions} — the repeated node is emitted as
  * 		<jk>null</jk>, and parsing re-injects the parent via this annotation.
  * </ul>
+ *
+ * <p>
+ * Putting it together, the <c>AddressBook</c>/<c>List&lt;Person&gt;</c> graph above round-trips cleanly when the
+ * back-reference is omitted on serialize and re-injected on parse:
+ * <p class='bjava'>
+ * 	Serializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().ignoreRecursions().build();
+ * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>addressBook</jv>);
+ * 	AddressBook <jv>parsed</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, AddressBook.<jk>class</jk>);
+ * 	Person <jv>person</jv> = <jv>parsed</jv>.people.get(0);
+ * 	<jsm>assertTrue</jsm>(<jv>person</jv>.addressBook == <jv>parsed</jv>);  <jc>// Parent re-injected through the List.</jc>
+ * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ParentPropertyAnnotation">@ParentProperty Annotation</a>

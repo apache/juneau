@@ -125,8 +125,8 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 				yield null;
 			}
 		};
-		if (nn(outer) && nn(o))
-			setParent(targetType, o, outer);
+		if (nn(parentBean()) && nn(o))
+			setParent(targetType, o, parentBean());
 		return o;
 	}
 
@@ -179,29 +179,34 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 				result = raw;
 		} else if (!eType.isOptional() && (nn(builder) || sType.canCreateNewBean(outer))) {
 			var beanMap = builder == null ? newBeanMap(outer, sType.inner()) : toBeanMap(builder.create(this, eType));
-			while (!is.isDocumentEnd()) {
-				var et = is.readElementType();
-				var name = is.readElementName();
-				var key = trimKey(name);
-				var bpm = beanMap.getPropertyMeta(key);
-				Object value;
-				if (name.equals(getBeanTypePropertyName(eType))) {
-					value = readTypedValue(is, et, string(), null, null);
-					if (nn(value))
-						beanMap = applyTypeProperty(beanMap, value.toString(), eType);
-				} else if (bpm != null) {
-					var bcm = (ClassMeta<?>) bpm.getBeanInfo();
-					value = readTypedValue(is, et, bcm, beanMap.getBean(false), bpm);
-					setName(bcm, value, key);
-					try {
-						bpm.set(beanMap, key, value);
-					} catch (BeanRuntimeException e) {
-						onBeanSetterException(nn(pMeta) ? pMeta : bpm, e);
-						throw e;
+			var pb = swapParentBean(beanMap.getBean(false));
+			try {
+				while (!is.isDocumentEnd()) {
+					var et = is.readElementType();
+					var name = is.readElementName();
+					var key = trimKey(name);
+					var bpm = beanMap.getPropertyMeta(key);
+					Object value;
+					if (name.equals(getBeanTypePropertyName(eType))) {
+						value = readTypedValue(is, et, string(), null, null);
+						if (nn(value))
+							beanMap = applyTypeProperty(beanMap, value.toString(), eType);
+					} else if (bpm != null) {
+						var bcm = (ClassMeta<?>) bpm.getBeanInfo();
+						value = readTypedValue(is, et, bcm, beanMap.getBean(false), bpm);
+						setName(bcm, value, key);
+						try {
+							bpm.set(beanMap, key, value);
+						} catch (BeanRuntimeException e) {
+							onBeanSetterException(nn(pMeta) ? pMeta : bpm, e);
+							throw e;
+						}
+					} else {
+						onUnknownProperty(key, beanMap, readTypedValue(is, et, object(), null, null));
 					}
-				} else {
-					onUnknownProperty(key, beanMap, readTypedValue(is, et, object(), null, null));
 				}
+			} finally {
+				swapParentBean(pb);
 			}
 			is.readDocumentTerminator();
 			result = builder == null ? beanMap.getBean() : builder.build(this, beanMap.getBean(), eType);

@@ -394,8 +394,8 @@ public class HtmlParserSession extends XmlParserSession {
 		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (nn(outer))
-			setParent(eType, o, outer);
+		if (nn(parentBean()))
+			setParent(eType, o, parentBean());
 
 		skipWs(r);
 		return (T)o;
@@ -410,39 +410,44 @@ public class HtmlParserSession extends XmlParserSession {
 		"java:S3776" // Cognitive complexity acceptable for HTML bean parsing
 	})
 	private <T> BeanMap<T> readIntoBean(XmlReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException, XMLStreamException {
-		while (true) {
-			HtmlTag tag = nextTag(r, TR, X_TABLE);
-			if (tag == X_TABLE)
-				break;
-			tag = nextTag(r, TD, TH);
-			// Skip over the column headers.
-			if (tag == TH) {
-				skipTag(r);
-				r.nextTag();
-				skipTag(r);
-			} else {
-				String key = getElementText(r);
-				nextTag(r, TD);
-				var pMeta = m.getPropertyMeta(key);
-				if (pMeta == null) {
-					onUnknownProperty(key, m, readAnything(object(), r, null, false, null));
+		var pb = swapParentBean(m.getBean(false));
+		try {
+			while (true) {
+				HtmlTag tag = nextTag(r, TR, X_TABLE);
+				if (tag == X_TABLE)
+					break;
+				tag = nextTag(r, TD, TH);
+				// Skip over the column headers.
+				if (tag == TH) {
+					skipTag(r);
+					r.nextTag();
+					skipTag(r);
 				} else {
-					var cm = (ClassMeta<?>) pMeta.getBeanInfo();
-					Object value = readAnything(cm, r, m.getBean(false), false, pMeta);
-					setName(cm, value, key);
-					try {
-						pMeta.set(m, key, value);
-					} catch (BeanRuntimeException e) {
-						onBeanSetterException(pMeta, e);
-						throw e;
+					String key = getElementText(r);
+					nextTag(r, TD);
+					var pMeta = m.getPropertyMeta(key);
+					if (pMeta == null) {
+						onUnknownProperty(key, m, readAnything(object(), r, null, false, null));
+					} else {
+						var cm = (ClassMeta<?>) pMeta.getBeanInfo();
+						Object value = readAnything(cm, r, m.getBean(false), false, pMeta);
+						setName(cm, value, key);
+						try {
+							pMeta.set(m, key, value);
+						} catch (BeanRuntimeException e) {
+							onBeanSetterException(pMeta, e);
+							throw e;
+						}
 					}
 				}
+				HtmlTag t = nextTag(r, X_TD, X_TR);
+				if (t == X_TD)
+					nextTag(r, X_TR);
 			}
-			HtmlTag t = nextTag(r, X_TD, X_TR);
-			if (t == X_TD)
-				nextTag(r, X_TR);
+			return m;
+		} finally {
+			swapParentBean(pb);
 		}
-		return m;
 	}
 
 	/*
@@ -550,25 +555,30 @@ public class HtmlParserSession extends XmlParserSession {
 					: newBeanMap(l, elementType.inner())
 				;
 				// @formatter:on
-				for (var key : keys) {
-					tag = nextTag(r, X_TD, TD, NULL);
-					if (tag == X_TD)
-						tag = nextTag(r, TD, NULL);
-					if (tag == NULL) {
-						m = null;
-						nextTag(r, X_NULL);
-						break;
+				var pb = swapParentBean(m.getBean(false));
+				try {
+					for (var key : keys) {
+						tag = nextTag(r, X_TD, TD, NULL);
+						if (tag == X_TD)
+							tag = nextTag(r, TD, NULL);
+						if (tag == NULL) {
+							m = null;
+							nextTag(r, X_NULL);
+							break;
+						}
+						BeanMapEntry e = m.getProperty(key);
+						if (e == null) {
+							readAnything(object(), r, l, false, null);
+						} else {
+							BeanPropertyMeta bpm = e.getMeta();
+							var cm = (ClassMeta<?>) bpm.getBeanInfo();
+							Object value = readAnything(cm, r, m.getBean(false), false, bpm);
+							setName(cm, value, key);
+							bpm.set(m, key, value);
+						}
 					}
-					BeanMapEntry e = m.getProperty(key);
-					if (e == null) {
-						readAnything(object(), r, l, false, null);
-					} else {
-						BeanPropertyMeta bpm = e.getMeta();
-						var cm = (ClassMeta<?>) bpm.getBeanInfo();
-						Object value = readAnything(cm, r, m.getBean(false), false, bpm);
-						setName(cm, value, key);
-						bpm.set(m, key, value);
-					}
+				} finally {
+					swapParentBean(pb);
 				}
 				E element;
 				if (m == null) {
@@ -578,6 +588,8 @@ public class HtmlParserSession extends XmlParserSession {
 				} else {
 					element = (E)m.getBean();
 				}
+				if (nn(parentBean()) && nn(element))
+					setParent(elementType, element, parentBean());
 				l.add(element);
 			} else {
 				String c = getAttributes(r).get(getBeanTypePropertyName(type.getElementType()));

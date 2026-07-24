@@ -312,8 +312,8 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (nn(outer))
-			setParent(eType, o, outer);
+		if (nn(parentBean()))
+			setParent(eType, o, parentBean());
 
 		return (T)o;
 	}
@@ -488,6 +488,8 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	}
 
 	private <T> void readBeanProperty(ParserReader r, BeanMap<T> m, String currAttr) throws IOException, ParseException, ExecutableException {
+		var pb = swapParentBean(m.getBean(false));
+		try {
 		var pm = m.getPropertyMeta(currAttr);
 		setCurrentProperty(pm);
 		if (pm == null) {
@@ -502,6 +504,9 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				onBeanSetterException(pm, e);
 				throw e;
 			}
+		}
+		} finally {
+			swapParentBean(pb);
 		}
 		setCurrentProperty(null);
 	}
@@ -868,6 +873,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		var state = S1;
 		var currAttr = "";
 		int c = 0;
+		var pb = swapParentBean(m.getBean(false));
 		mark();
 		try {
 			while (c != -1) {
@@ -941,6 +947,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				throw new ParseException(this, "Could not find '}' marking end of YAML flow mapping.");
 		} finally {
 			unmark();
+			swapParentBean(pb);
 		}
 
 		return null; // Unreachable.
@@ -953,6 +960,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 
 		int blockIndent = -1;
 
+		var pb = swapParentBean(m.getBean(false));
 		mark();
 		try {
 			while (true) {
@@ -1018,6 +1026,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 			}
 		} finally {
 			unmark();
+			swapParentBean(pb);
 		}
 
 		return m;
