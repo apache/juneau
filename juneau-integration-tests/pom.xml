@@ -236,49 +236,49 @@
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-core-api</artifactId>
-			<version>5.2.2</version>
+			<version>5.2.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-core-impl</artifactId>
-			<version>5.2.2</version>
+			<version>5.2.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-saml-api</artifactId>
-			<version>5.2.2</version>
+			<version>5.2.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-saml-impl</artifactId>
-			<version>5.2.2</version>
+			<version>5.2.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-security-api</artifactId>
-			<version>5.2.2</version>
+			<version>5.2.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-security-impl</artifactId>
-			<version>5.2.2</version>
+			<version>5.2.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-xmlsec-api</artifactId>
-			<version>5.2.2</version>
+			<version>5.2.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-xmlsec-impl</artifactId>
-			<version>5.2.2</version>
+			<version>5.2.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
