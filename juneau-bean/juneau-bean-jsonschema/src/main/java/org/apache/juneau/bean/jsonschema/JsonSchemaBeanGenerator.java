@@ -69,6 +69,9 @@ public final class JsonSchemaBeanGenerator {
 	 * @param type The Java type.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the type.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: the generated schema's concrete SELF subtype is not known here, so JsonSchema<?> is the only sound return type.
+	})
 	public JsonSchema<?> generate(Type type) {
 		assertArgNotNull("type", type);
 		try {
@@ -91,6 +94,9 @@ public final class JsonSchemaBeanGenerator {
 	 * @param type The Java class.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the class.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: the generated schema's concrete SELF subtype is not known here, so JsonSchema<?> is the only sound return type.
+	})
 	public JsonSchema<?> generate(Class<?> type) {
 		return generate((Type)type);
 	}
@@ -104,6 +110,9 @@ public final class JsonSchemaBeanGenerator {
 	 * @param o The value to infer a schema from.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the value.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: the generated schema's concrete SELF subtype is not known here, so JsonSchema<?> is the only sound return type.
+	})
 	public JsonSchema<?> generate(Object o) {
 		assertArgNotNull("o", o);
 		try {
@@ -129,6 +138,9 @@ public final class JsonSchemaBeanGenerator {
 	 * @param schemaMap The generated schema map.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The typed schema bean.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: the parsed schema's concrete SELF subtype is not known here, so JsonSchema<?> is the only sound return type.
+	})
 	public static JsonSchema<?> toBean(JsonMap schemaMap) {
 		assertArgNotNull("schemaMap", schemaMap);
 		try {

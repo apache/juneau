@@ -40,7 +40,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Regression tests for TODO-291 / FINISHED-291.
+ * Regression tests for FINISHED-291.
  *
  * <p>
  * Verifies that a bean annotated with {@link ParentProperty} that is nested inside a collection or

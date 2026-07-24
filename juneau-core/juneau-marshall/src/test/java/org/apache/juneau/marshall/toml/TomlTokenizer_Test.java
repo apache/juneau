@@ -253,28 +253,19 @@ class TomlTokenizer_Test extends TestBase {
 	// readBasicString and escapes
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	void f01_readBasicStringSimple() throws Exception {
-		var tok = t("\"hello\"");
-		assertEquals("hello", tok.readBasicString());
+	@ParameterizedTest
+	@MethodSource("f01_readBasicStringValidProvider")
+	void f01_readBasicStringValid(String input, String expected) throws Exception {
+		assertEquals(expected, t(input).readBasicString());
 	}
 
-	@Test
-	void f03_readBasicStringAllEscapes() throws Exception {
-		var tok = t("\"\\b\\t\\n\\f\\r\\\"\\\\\"");
-		assertEquals("\b\t\n\f\r\"\\", tok.readBasicString());
-	}
-
-	@Test
-	void f04_readBasicStringUnicodeShort() throws Exception {
-		var tok = t("\"\\u0041\"");
-		assertEquals("A", tok.readBasicString());
-	}
-
-	@Test
-	void f05_readBasicStringUnicodeLong() throws Exception {
-		var tok = t("\"\\U00000041\"");
-		assertEquals("A", tok.readBasicString());
+	static Stream<Arguments> f01_readBasicStringValidProvider() {
+		return Stream.of(
+			Arguments.of("\"hello\"", "hello"),                             // f01: simple string
+			Arguments.of("\"\\b\\t\\n\\f\\r\\\"\\\\\"", "\b\t\n\f\r\"\\"),  // f03: all standard escapes
+			Arguments.of("\"\\u0041\"", "A"),                               // f04: short \\u unicode escape
+			Arguments.of("\"\\U00000041\"", "A")                            // f05: long \\U unicode escape
+		);
 	}
 
 	@ParameterizedTest

@@ -522,7 +522,7 @@ public class Config extends Context implements ConfigEventListener {
 
 		var cmd = env("sun.java.command", "not_found").split("\\s+")[0];
 		if (cmd.endsWith(".jar") && ! co(cmd, "surefirebooter")) { // HTT - not a .jar during tests
-			cmd = cmd.replaceAll("(?:.*[\\\\\\/])?([^\\\\\\/]+)\\.jar$", "$1");
+			cmd = cmd.replaceAll("(?:[^\\\\\\/]*[\\\\\\/])*([^\\\\\\/]+)\\.jar$", "$1"); // Unrolled loop (no .* overlapping the separator class) avoids super-linear backtracking; same "strip path up to last separator" semantics.
 			l.add(cmd + ".cfg");
 			cmd = cmd.replaceAll("[\\.\\_].*$", "");  // Try also without version in jar name.
 			l.add(cmd + ".cfg");

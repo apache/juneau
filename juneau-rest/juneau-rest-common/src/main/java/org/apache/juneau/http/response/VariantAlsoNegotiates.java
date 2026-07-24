@@ -38,6 +38,9 @@ import org.apache.juneau.http.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"java:S110" // intentional — mirrors the HTTP status-code response hierarchy
+})
 public class VariantAlsoNegotiates extends BasicHttpException {
 
 	private static final long serialVersionUID = 1L;

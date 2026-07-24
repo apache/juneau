@@ -161,12 +161,23 @@ class MarkdownParserSession_Test extends TestBase {
 		assertEquals("---", r);
 	}
 
-	@Test void c03_keyHeaderVariant() {
-		// "Key"/"Value" headers should also be detected as a key/value table.
-		var md = "| Key | Value |\n|---|---|\n| name | Bob |\n| age | 25 |";
+	@ParameterizedTest
+	@MethodSource("c03_keyValueTableToBeanProvider")
+	void c03_keyValueTableToBean(String md, String expectedName, int expectedAge) {
 		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.A.class);
-		assertEquals("Bob", r.name);
-		assertEquals(25, r.age);
+		assertEquals(expectedName, r.name);
+		assertEquals(expectedAge, r.age);
+	}
+
+	static Stream<Arguments> c03_keyValueTableToBeanProvider() {
+		return Stream.of(
+			// c03: "Key"/"Value" headers should also be detected as a key/value table.
+			Arguments.of("| Key | Value |\n|---|---|\n| name | Bob |\n| age | 25 |", "Bob", 25),
+			// k02: lines not starting with | should be filtered out of the table-line collection.
+			Arguments.of("| Property | Value |\n|---|---|\n| name | Alice |\nthis is not a row\n| age | 30 |", "Alice", 30),
+			// n02: empty cell for int type -> readCellValue returns null/default-zero.
+			Arguments.of("| Property | Value |\n|---|---|\n| name | Alice |\n| age |  |", "Alice", 0)
+		);
 	}
 
 	@Test void c04_tableEmptyHeaderCells() {
@@ -600,14 +611,6 @@ class MarkdownParserSession_Test extends TestBase {
 		assertEquals("Alice", r.get("name"));
 	}
 
-	@Test void k02_lineWithoutPipeIgnored() {
-		// Lines not starting with | should be filtered out of the table-line collection.
-		var md = "| Property | Value |\n|---|---|\n| name | Alice |\nthis is not a row\n| age | 30 |";
-		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.A.class);
-		assertEquals("Alice", r.name);
-		assertEquals(30, r.age);
-	}
-
 	//====================================================================================================
 	// l - Multi-column simple element type (readRow simple type fall-through)
 	//====================================================================================================
@@ -649,14 +652,6 @@ class MarkdownParserSession_Test extends TestBase {
 		var r = p.read(md, MarkdownParser_Test.A.class);
 		assertEquals("Alice", r.name);
 		assertEquals(30, r.age);
-	}
-
-	@Test void n02_emptyCellForIntType() {
-		// Empty cell for int type → readCellValue returns null/default-zero at line 578
-		var md = "| Property | Value |\n|---|---|\n| name | Alice |\n| age |  |";
-		var r = MarkdownParser.DEFAULT.read(md, MarkdownParser_Test.A.class);
-		assertEquals("Alice", r.name);
-		assertEquals(0, r.age);
 	}
 
 	@Test void n03_customNullValueMatch() {

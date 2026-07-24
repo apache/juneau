@@ -30,7 +30,8 @@ import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.xml.*;
 
 @SuppressWarnings({
-	"unchecked" // Cast from Object to T in round-trip test infra
+	"unchecked", // Cast from Object to T in round-trip test infra
+	"java:S101" // Underscore test-type naming (e.g. sibling ComboRoundTrip_Tester classes) is an established Juneau convention.
 })
 public class RoundTrip_Tester {
 
@@ -177,6 +178,9 @@ public class RoundTrip_Tester {
 		return skipIf != null && skipIf.test(o);
 	}
 
+	@SuppressWarnings({
+		"java:S106" // Test harness diagnostic output, gated behind the debug flag; mirrors juneau-test's Assertion.java precedent.
+	})
 	public <T> Object serialize(T object, Serializer s) throws Exception {
 
 		Object out;
@@ -187,7 +191,7 @@ public class RoundTrip_Tester {
 		}
 
 		if (debug)
-			System.err.println("Serialized contents from ["+label+"]...\n---START---\n" + (out instanceof byte[] ? toReadableBytes((byte[])out) : out) + "\n---END---\n"); // NOT DEBUG
+			System.err.println("Serialized contents from ["+label+"]...\n---START---\n" + (out instanceof byte[] byteArray ? toReadableBytes(byteArray) : out) + "\n---END---\n"); // NOT DEBUG
 
 		if (validateXmlWhitespace)
 			checkXmlWhitespace(out.toString());

@@ -130,7 +130,8 @@ class SchemaInfo_Test extends TestBase {
 
 		@Test void a09b_addProperty_nullChecks() {
 			var x = bean();
-			assertThrows(IllegalArgumentException.class, () -> x.addProperty(null, schemaInfo("a")));
+			var a = schemaInfo("a");
+			assertThrows(IllegalArgumentException.class, () -> x.addProperty(null, a));
 			assertThrows(IllegalArgumentException.class, () -> x.addProperty("a", null));
 		}
 

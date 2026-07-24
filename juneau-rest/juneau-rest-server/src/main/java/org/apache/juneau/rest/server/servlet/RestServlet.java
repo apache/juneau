@@ -175,6 +175,9 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @return The context information on this servlet.
 	 */
+	@SuppressWarnings({
+		"java:S2886" // Reads the AtomicReference 'context' field, which already guarantees atomicity and cross-thread visibility (same as a volatile read); synchronizing this single read with the setContext()/init() lock would add hot-path contention with no correctness benefit.
+	})
 	public RestContext getContext() {
 		var rc = context.get();
 		if (rc == null)
@@ -188,6 +191,9 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @return The path defined on this servlet, or an empty string if not specified.
 	 */
+	@SuppressWarnings({
+		"java:S2886" // Reads the AtomicReference 'context' field, which already guarantees atomicity and cross-thread visibility (same as a volatile read); synchronizing this single read with the setContext()/init() lock would add hot-path contention with no correctness benefit.
+	})
 	public String getPath() {
 		var context2 = this.context.get();
 		if (nn(context2))

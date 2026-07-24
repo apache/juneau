@@ -31,12 +31,6 @@ import org.junit.jupiter.params.provider.*;
  */
 class LogRecord_Test extends TestBase {
 
-	private static Logger getLogger(String name) {
-		var l = Logger.getLogger(name);
-		l.setLevel(Level.OFF);
-		return l;
-	}
-
 	//====================================================================================================
 	// Constructor and basic properties
 	//====================================================================================================

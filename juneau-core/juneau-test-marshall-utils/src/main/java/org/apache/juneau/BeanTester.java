@@ -58,7 +58,8 @@ import org.apache.juneau.test.bct.*;
  * @param <T> The type of bean being tested
  */
 @SuppressWarnings({
-	"unchecked" // Class<T> cast for generic bean type in test utility
+	"unchecked", // Class<T> cast for generic bean type in test utility
+	"java:S5960" // Test utility; JUnit assertions are its intentional purpose, not a production-code side effect.
 })
 public class BeanTester<T> {
 

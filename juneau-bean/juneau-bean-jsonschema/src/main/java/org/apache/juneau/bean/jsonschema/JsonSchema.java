@@ -397,6 +397,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * @param type The type to generate a schema for.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the type.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: the generated schema's concrete SELF subtype is not known here, so JsonSchema<?> is the only sound return type.
+	})
 	public static JsonSchema<?> of(Type type) {
 		return JsonSchemaBeanGenerator.DEFAULT.generate(type);
 	}
@@ -407,6 +410,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * @param type The class to generate a schema for.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
 	 * @return The generated schema bean, or <jk>null</jk> if a schema could not be generated for the class.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: the generated schema's concrete SELF subtype is not known here, so JsonSchema<?> is the only sound return type.
+	})
 	public static JsonSchema<?> of(Class<?> type) {
 		return JsonSchemaBeanGenerator.DEFAULT.generate(type);
 	}
@@ -882,6 +888,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
 	@BeanIgnore
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: additionalPropertiesSchema is declared JsonSchema<?> since callers may attach any concrete SELF subtype.
+	})
 	public JsonSchema<?> getAdditionalPropertiesAsSchema() { return additionalPropertiesSchema; }
 
 	/**
@@ -1028,6 +1037,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * @return The value of the <property>else</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@BeanProp("else")
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: else_ is declared JsonSchema<?> since callers may attach any concrete SELF subtype.
+	})
 	public JsonSchema<?> getElse() { return else_; }
 
 	/**
@@ -1113,6 +1125,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * @return The value of the <property>if</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@BeanProp("if")
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: if_ is declared JsonSchema<?> since callers may attach any concrete SELF subtype.
+	})
 	public JsonSchema<?> getIf() { return if_; }
 
 	/**
@@ -1138,6 +1153,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchemaArray}.
 	 */
 	@BeanIgnore
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: itemsSchema is declared JsonSchema<?> since callers may attach any concrete SELF subtype.
+	})
 	public JsonSchema<?> getItemsAsSchema() { return itemsSchema; }
 
 	/**
@@ -1232,6 +1250,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 *
 	 * @return The value of the <property>not</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: 'not' is declared JsonSchema<?> since callers may attach any concrete SELF subtype.
+	})
 	public JsonSchema<?> getNot() { return not; }
 
 	/**
@@ -1283,6 +1304,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * @param name The property name.  Can be <jk>null</jk> (no property has a <jk>null</jk> name, so <jk>null</jk> is returned).
 	 * @return The property with the specified name, or <jk>null</jk> if no property is specified.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: 'properties' map values are declared JsonSchema<?> since callers may attach any concrete SELF subtype.
+	})
 	public JsonSchema<?> getProperty(String name) {
 		return getProperty(name, false);
 	}
@@ -1301,6 +1325,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * @param resolve If <jk>true</jk>, calls {@link #resolve()} on object before returning.
 	 * @return The property with the specified name, or <jk>null</jk> if no property is specified.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: 'properties' map values are declared JsonSchema<?> since callers may attach any concrete SELF subtype.
+	})
 	public JsonSchema<?> getProperty(String name, boolean resolve) {
 		if (properties == null)
 			return null;
@@ -1354,6 +1381,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 * @return The value of the <property>then</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@BeanProp("then")
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: then_ is declared JsonSchema<?> since callers may attach any concrete SELF subtype.
+	})
 	public JsonSchema<?> getThen() { return then_; }
 
 	/**
@@ -1424,6 +1454,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 *
 	 * @return The value of the <property>unevaluatedItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: unevaluatedItems is declared JsonSchema<?> since callers may attach any concrete SELF subtype.
+	})
 	public JsonSchema<?> getUnevaluatedItems() { return unevaluatedItems; }
 
 	/**
@@ -1434,6 +1467,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 *
 	 * @return The value of the <property>unevaluatedProperties</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: unevaluatedProperties is declared JsonSchema<?> since callers may attach any concrete SELF subtype.
+	})
 	public JsonSchema<?> getUnevaluatedProperties() { return unevaluatedProperties; }
 
 	/**
@@ -1467,6 +1503,9 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 	 *
 	 * @return The referenced schema, or <jk>null</jk> if this schema is a <property>$ref</property> whose target is not found in the registered schema map.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: resolved schemas come from JsonSchemaMap's JsonSchema<?>-typed value, so no narrower type is possible.
+	})
 	public JsonSchema<?> resolve() {
 		if (ref == null || master.schemaMap == null)
 			return this;

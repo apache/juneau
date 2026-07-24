@@ -335,7 +335,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	 * Recursively injects @ParentProperty (and @NameProperty on map values / nested beans) into val.
 	 * Intermediate collections and maps are transparent: a collection/map element's parent is
 	 * parentBean (the nearest enclosing bean), skipping all intermediate containers.  This keeps HJSON
-	 * consistent with the streaming parsers under TODO-291 (Option A).
+	 * consistent with the streaming parsers.
 	 */
 	private void injectParentAnnotations(ClassMeta<?> cm, Object val, Object node, Object parentBean) throws ExecutableException {
 		if (val == null || cm == null)

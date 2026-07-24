@@ -27,8 +27,6 @@ import java.util.Formatter;
 import java.util.function.*;
 import java.util.logging.*;
 
-import org.apache.juneau.commons.utils.*;
-
 /**
  * LogRecord that supports lazy message formatting.
  *

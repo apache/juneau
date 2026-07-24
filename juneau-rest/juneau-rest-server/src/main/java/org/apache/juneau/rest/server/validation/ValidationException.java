@@ -53,7 +53,8 @@ import org.apache.juneau.http.response.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S110" // Deep inheritance inherent to the exception hierarchy
+	"java:S110", // Deep inheritance inherent to the exception hierarchy
+	"java:S2160" // Exceptions are compared by identity, not by their violations payload; no equals() override needed
 })
 public class ValidationException extends BadRequest {
 

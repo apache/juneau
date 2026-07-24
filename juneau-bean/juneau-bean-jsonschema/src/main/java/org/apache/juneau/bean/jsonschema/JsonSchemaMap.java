@@ -131,6 +131,9 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema<?>>
 	 * @param uri The URI to load the schema from.
 	 * @return The parsed schema, or <jk>null</jk> if the document is unreachable.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: the loaded schema's concrete SELF subtype is not known here, so JsonSchema<?> is the only sound return type.
+	})
 	public JsonSchema<?> load(URI uri) {
 		try (var r = getReader(uri)) {
 			if (r == null)

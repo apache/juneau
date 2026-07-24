@@ -27,23 +27,36 @@ public class TestURI {
 	@Xml(format=XmlFormat.ATTR)
 	public String f0 = "f0/x0";
 
-	public URI f1, f2, f3;
+	public URI f1;
+	public URI f2;
+	public URI f3;
 
 	@Uri
-	public String f4, f5, f6;
+	public String f4;
+	@Uri
+	public String f5;
+	@Uri
+	public String f6;
 
 	public URL f7;
 
 	public TestURIb f8;
 
-	public String fa, fb, fc, fd, fe;
+	public String fa;
+	public String fb;
+	public String fc;
+	public String fd;
+	public String fe;
 
 	@Uri
 	public String getF9() {
 		return "f9/x9";
 	}
 
-	public TestURI() throws Exception {
+	@SuppressWarnings({
+		"java:S1075" // Test fixture; fixed round-trip URIs are the intended test data, not a configurable endpoint.
+	})
+	public TestURI() throws URISyntaxException, MalformedURLException {
 		f1 = new URI("f1/x1");
 		f2 = new URI("/f2/x2");
 		f3 = new URI("http://www.apache.org/f3/x3");

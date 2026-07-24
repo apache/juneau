@@ -429,7 +429,10 @@ public class FileStore extends ConfigStore {
 		name = resolveName(name);
 
 		var p = resolveFile(name);
-		name = p.getFileName().toString();
+		var pName = p.getFileName();
+		if (n(pName))
+			throw ioex("Could not resolve a file name from path '%s'.", p); // Real NPE guard: getFileName() can return null when p resolves to a root path (e.g. a caller-supplied absolute name).
+		name = pName.toString();
 
 		var s = cache.get(name);
 		if (nn(s))
@@ -480,7 +483,10 @@ public class FileStore extends ConfigStore {
 		dir.mkdirs();
 
 		var p = resolveFile(name);
-		name = p.getFileName().toString();
+		var pName = p.getFileName();
+		if (n(pName))
+			throw ioex("Could not resolve a file name from path '%s'.", p); // Real NPE guard: getFileName() can return null when p resolves to a root path (e.g. a caller-supplied absolute name).
+		name = pName.toString();
 
 		var exists = Files.exists(p);
 
@@ -526,6 +532,9 @@ public class FileStore extends ConfigStore {
 		return null;
 	}
 
+	@SuppressWarnings({
+		"javabugs:S2259" // p.getParent() is only reached when p does not exist; p is always dir.resolve(nonEmptySegment), so the only way p could be a rootless path with a null parent is if p itself were the filesystem root, which always exists and would skip this branch.
+	})
 	private synchronized boolean isWritable(Path p) {
 		try {
 			if (! Files.exists(p)) {
@@ -550,6 +559,9 @@ public class FileStore extends ConfigStore {
 	 * @param e The file system event.
 	 * @throws IOException Thrown by underlying stream.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // e.context() for ENTRY_CREATE/DELETE/MODIFY events (OVERFLOW is filtered out before this is called) is documented to return the single relative path segment of the changed entry, which always has a non-null file name.
+	})
 	protected synchronized void onFileEvent(WatchEvent<Path> e) throws IOException {
 		var fn = e.context().getFileName().toString();
 
@@ -572,7 +584,8 @@ public class FileStore extends ConfigStore {
 
 	@Override
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for name resolution logic
+		"java:S3776", // Cognitive complexity acceptable for name resolution logic
+		"javabugs:S2259" // nameCache.get(name) at the end is always preceded by a put for this key in this call (or the key already existed), and no code ever removes entries, so the map is guaranteed to contain it.
 	})
 	protected String resolveName(String name) {
 		if (! nameCache.containsKey(name)) {

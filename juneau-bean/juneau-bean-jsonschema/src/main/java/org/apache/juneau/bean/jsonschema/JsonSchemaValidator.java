@@ -148,6 +148,9 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	 *
 	 * @return The schema.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-bounded (CRTP) generic: the validated schema's concrete SELF subtype is not known here, so JsonSchema<?> is the only sound return type.
+	})
 	public JsonSchema<?> getSchema() {
 		return schema;
 	}
