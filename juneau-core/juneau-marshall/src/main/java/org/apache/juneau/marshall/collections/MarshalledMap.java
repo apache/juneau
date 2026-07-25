@@ -63,13 +63,13 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	@SuppressWarnings({
 		"java:S2160" // equals() / hashCode() inherited from MarshalledMap; map equality is element-based
 	})
-	private static class UnmodifiableMarshalledMap extends MarshalledMap {
+	private static class Unmodifiable extends MarshalledMap {
 		private static final long serialVersionUID = 1L;
 
 		@SuppressWarnings({
 			"synthetic-access" // Access to outer class members is intentional
 		})
-		UnmodifiableMarshalledMap(MarshalledMap contents) {
+		Unmodifiable(MarshalledMap contents) {
 			if (nn(contents))
 				contents.forEach(super::put);
 		}
@@ -1519,9 +1519,9 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @return An unmodifiable copy of this map if it's modifiable, or this map if it is already unmodifiable.
 	 */
 	public MarshalledMap unmodifiable() {
-		if (this instanceof UnmodifiableMarshalledMap this2)
+		if (this instanceof Unmodifiable this2)
 			return this2;
-		return new UnmodifiableMarshalledMap(this);
+		return new Unmodifiable(this);
 	}
 
 	/**

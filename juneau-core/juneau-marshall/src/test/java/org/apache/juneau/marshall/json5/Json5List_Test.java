@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
@@ -230,5 +231,51 @@ class Json5List_Test extends TestBase {
 		assertNotNull(l);
 		assertEquals(3, l.size());
 		assertEquals("a", l.getString(0));
+	}
+
+	@SuppressWarnings({
+		"java:S5778", // Lambda intentionally calls multiple throwing methods to test compound failure scenarios.
+		"java:S5961"  // High assertion count is acceptable in a comprehensive data-driven mutator-surface test.
+	})
+	@Test void a20_unmodifiableFullMutatorSurfaceThrows() {
+		// Regression: Json5List.Unmodifiable originally overrode only add(int,·)/remove(int)/set(int,·), leaving
+		// every other List/Deque mutator (and iterator/listIterator remove) able to bypass the freeze.
+		var l = Json5List.of("a", "b", "c").unmodifiable();
+		assertThrows(UnsupportedOperationException.class, () -> l.add(0, "x"));
+		assertThrows(UnsupportedOperationException.class, () -> l.add("x"));
+		assertThrows(UnsupportedOperationException.class, () -> l.remove(0));
+		assertThrows(UnsupportedOperationException.class, () -> l.remove("a"));
+		assertThrows(UnsupportedOperationException.class, () -> l.set(0, "x"));
+		assertThrows(UnsupportedOperationException.class, () -> l.addAll(List.of("x")));
+		assertThrows(UnsupportedOperationException.class, () -> l.addAll(0, List.of("x")));
+		assertThrows(UnsupportedOperationException.class, () -> l.removeAll(List.of("a")));
+		assertThrows(UnsupportedOperationException.class, () -> l.retainAll(List.of("a")));
+		assertThrows(UnsupportedOperationException.class, l::clear);
+		assertThrows(UnsupportedOperationException.class, () -> l.addFirst("x"));
+		assertThrows(UnsupportedOperationException.class, () -> l.addLast("x"));
+		assertThrows(UnsupportedOperationException.class, l::removeFirst);
+		assertThrows(UnsupportedOperationException.class, l::removeLast);
+		assertThrows(UnsupportedOperationException.class, () -> l.removeFirstOccurrence("a"));
+		assertThrows(UnsupportedOperationException.class, () -> l.removeLastOccurrence("a"));
+		assertThrows(UnsupportedOperationException.class, () -> l.offer("x"));
+		assertThrows(UnsupportedOperationException.class, () -> l.offerFirst("x"));
+		assertThrows(UnsupportedOperationException.class, () -> l.offerLast("x"));
+		assertThrows(UnsupportedOperationException.class, l::poll);
+		assertThrows(UnsupportedOperationException.class, l::pollFirst);
+		assertThrows(UnsupportedOperationException.class, l::pollLast);
+		assertThrows(UnsupportedOperationException.class, l::pop);
+		assertThrows(UnsupportedOperationException.class, () -> l.push("x"));
+		assertThrows(UnsupportedOperationException.class, () -> l.removeIf(o -> true));
+		assertThrows(UnsupportedOperationException.class, () -> l.replaceAll(o -> "x"));
+		assertThrows(UnsupportedOperationException.class, () -> l.sort((a, b) -> 0));
+		var it = l.iterator();
+		it.next();
+		assertThrows(UnsupportedOperationException.class, it::remove);
+		var lit = l.listIterator();
+		lit.next();
+		assertThrows(UnsupportedOperationException.class, lit::remove);
+		assertThrows(UnsupportedOperationException.class, () -> lit.add("x"));
+		assertThrows(UnsupportedOperationException.class, () -> lit.set("x"));
+		assertEquals(3, l.size());
 	}
 }

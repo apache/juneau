@@ -70,15 +70,20 @@ public class Json5List extends MarshalledList {
 	@SuppressWarnings({
 		"java:S110" // Inner class has many fields, acceptable for collection implementation
 	})
-	private static class UnmodifiableJson5List extends Json5List {
+	private static class Unmodifiable extends Json5List {
 		private static final long serialVersionUID = 1L;
 
 		@SuppressWarnings({
 			"synthetic-access" // Access to outer class members is intentional
 		})
-		UnmodifiableJson5List(Json5List contents) {
+		Unmodifiable(Json5List contents) {
 			if (nn(contents))
 				contents.forEach(super::add);
+		}
+
+		@Override /* Overridden from List */
+		public boolean add(Object object) {
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
@@ -86,8 +91,93 @@ public class Json5List extends MarshalledList {
 			throw uoroex();
 		}
 
+		@Override /* Overridden from List */
+		public boolean addAll(Collection<?> c) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from List */
+		public boolean addAll(int location, Collection<?> c) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Deque */
+		public void addFirst(Object object) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Deque */
+		public void addLast(Object object) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from List */
+		public void clear() {
+			throw uoroex();
+		}
+
 		@Override
 		public boolean isUnmodifiable() { return true; }
+
+		@Override /* Overridden from List */
+		public Iterator<Object> iterator() {
+			return readOnlyIterator(super.iterator());
+		}
+
+		@Override /* Overridden from List */
+		public ListIterator<Object> listIterator() {
+			return readOnlyListIterator(super.listIterator());
+		}
+
+		@Override /* Overridden from List */
+		public ListIterator<Object> listIterator(int location) {
+			return readOnlyListIterator(super.listIterator(location));
+		}
+
+		@Override /* Overridden from Queue */
+		public boolean offer(Object object) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Deque */
+		public boolean offerFirst(Object object) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Deque */
+		public boolean offerLast(Object object) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Queue */
+		public Object poll() {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Deque */
+		public Object pollFirst() {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Deque */
+		public Object pollLast() {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Deque */
+		public Object pop() {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Deque */
+		public void push(Object object) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Queue */
+		public Object remove() {
+			throw uoroex();
+		}
 
 		@Override /* Overridden from List */
 		public Object remove(int location) {
@@ -95,8 +185,87 @@ public class Json5List extends MarshalledList {
 		}
 
 		@Override /* Overridden from List */
+		public boolean remove(Object object) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from List */
+		public boolean removeAll(Collection<?> c) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Deque */
+		public Object removeFirst() {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Deque */
+		public boolean removeFirstOccurrence(Object object) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Collection */
+		public boolean removeIf(Predicate<? super Object> filter) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Deque */
+		public Object removeLast() {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from Deque */
+		public boolean removeLastOccurrence(Object object) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from List */
+		public void replaceAll(UnaryOperator<Object> operator) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from List */
+		public boolean retainAll(Collection<?> c) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from List */
 		public Object set(int location, Object object) {
 			throw uoroex();
+		}
+
+		@Override /* Overridden from List */
+		public void sort(Comparator<? super Object> c) {
+			throw uoroex();
+		}
+
+		@Override /* Overridden from List */
+		public List<Object> subList(int start, int end) {
+			return u(new ArrayList<>(this).subList(start, end));
+		}
+
+		private static Iterator<Object> readOnlyIterator(Iterator<Object> it) {
+			return new Iterator<>() {
+				@Override public boolean hasNext() { return it.hasNext(); }
+				@Override public Object next() { return it.next(); }
+				@Override public void remove() { throw uoroex(); }
+				@Override public void forEachRemaining(Consumer<? super Object> action) { it.forEachRemaining(action); }
+			};
+		}
+
+		private static ListIterator<Object> readOnlyListIterator(ListIterator<Object> it) {
+			return new ListIterator<>() {
+				@Override public boolean hasNext() { return it.hasNext(); }
+				@Override public Object next() { return it.next(); }
+				@Override public boolean hasPrevious() { return it.hasPrevious(); }
+				@Override public Object previous() { return it.previous(); }
+				@Override public int nextIndex() { return it.nextIndex(); }
+				@Override public int previousIndex() { return it.previousIndex(); }
+				@Override public void remove() { throw uoroex(); }
+				@Override public void set(Object e) { throw uoroex(); }
+				@Override public void add(Object e) { throw uoroex(); }
+				@Override public void forEachRemaining(Consumer<? super Object> action) { it.forEachRemaining(action); }
+			};
 		}
 	}
 
@@ -443,9 +612,9 @@ public class Json5List extends MarshalledList {
 
 	@Override /* Overridden from MarshalledList */
 	public Json5List unmodifiable() {
-		if (this instanceof UnmodifiableJson5List this2)
+		if (this instanceof Unmodifiable this2)
 			return this2;
-		return new UnmodifiableJson5List(this);
+		return new Unmodifiable(this);
 	}
 
 	/**

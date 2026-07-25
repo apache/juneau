@@ -58,13 +58,13 @@ public class MarshalledList extends LinkedList<Object> {
 	@SuppressWarnings({
 		"java:S110" // Inner class has many fields, acceptable for collection implementation
 	})
-	private static class UnmodifiableMarshalledList extends MarshalledList {
+	private static class Unmodifiable extends MarshalledList {
 		private static final long serialVersionUID = 1L;
 
 		@SuppressWarnings({
 			"synthetic-access" // Access to outer class members is intentional
 		})
-		UnmodifiableMarshalledList(MarshalledList contents) {
+		Unmodifiable(MarshalledList contents) {
 			if (nn(contents))
 				contents.forEach(super::add);
 		}
@@ -876,9 +876,9 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @return An unmodifiable copy of this list if it's modifiable, or this list if it is already unmodifiable.
 	 */
 	public MarshalledList unmodifiable() {
-		if (this instanceof UnmodifiableMarshalledList this2)
+		if (this instanceof Unmodifiable this2)
 			return this2;
-		return new UnmodifiableMarshalledList(this);
+		return new Unmodifiable(this);
 	}
 
 	private PathTraversal getPathTraversal() {

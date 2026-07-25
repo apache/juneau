@@ -67,19 +67,54 @@ public class Json5Map extends MarshalledMap {
 		"java:S2160", // equals() / hashCode() inherited from Json5Map; map equality is element-based
 		"java:S110"   // Inheritance depth inherited from MarshalledMap -> LinkedHashMap chain; intentional
 	})
-	private static class UnmodifiableJson5Map extends Json5Map {
+	private static class Unmodifiable extends Json5Map {
 		private static final long serialVersionUID = 1L;
 
 		@SuppressWarnings({
 			"synthetic-access" // Access to outer class members is intentional
 		})
-		UnmodifiableJson5Map(Json5Map contents) {
+		Unmodifiable(Json5Map contents) {
 			if (nn(contents))
 				contents.forEach(super::put);
 		}
 
 		@Override
+		public void clear() {
+			throw uoroex();
+		}
+
+		@Override
+		public Object compute(String key, BiFunction<? super String,? super Object,?> remappingFunction) {
+			throw uoroex();
+		}
+
+		@Override
+		public Object computeIfAbsent(String key, Function<? super String,?> mappingFunction) {
+			throw uoroex();
+		}
+
+		@Override
+		public Object computeIfPresent(String key, BiFunction<? super String,? super Object,?> remappingFunction) {
+			throw uoroex();
+		}
+
+		@Override
+		public Set<Map.Entry<String,Object>> entrySet() {
+			return u(super.entrySet());
+		}
+
+		@Override
 		public boolean isUnmodifiable() { return true; }
+
+		@Override
+		public Set<String> keySet() {
+			return u(super.keySet());
+		}
+
+		@Override
+		public Object merge(String key, Object value, BiFunction<? super Object,? super Object,?> remappingFunction) {
+			throw uoroex();
+		}
 
 		@Override
 		public Object put(String key, Object val) {
@@ -87,8 +122,43 @@ public class Json5Map extends MarshalledMap {
 		}
 
 		@Override
+		public void putAll(Map<? extends String,?> m) {
+			throw uoroex();
+		}
+
+		@Override
+		public Object putIfAbsent(String key, Object value) {
+			throw uoroex();
+		}
+
+		@Override
 		public Object remove(Object key) {
 			throw uoroex();
+		}
+
+		@Override
+		public boolean remove(Object key, Object value) {
+			throw uoroex();
+		}
+
+		@Override
+		public Object replace(String key, Object value) {
+			throw uoroex();
+		}
+
+		@Override
+		public boolean replace(String key, Object oldValue, Object newValue) {
+			throw uoroex();
+		}
+
+		@Override
+		public void replaceAll(BiFunction<? super String,? super Object,?> function) {
+			throw uoroex();
+		}
+
+		@Override
+		public Collection<Object> values() {
+			return Collections.unmodifiableCollection(super.values());
 		}
 	}
 
@@ -549,9 +619,9 @@ public class Json5Map extends MarshalledMap {
 
 	@Override /* Overridden from MarshalledMap */
 	public Json5Map unmodifiable() {
-		if (this instanceof UnmodifiableJson5Map this2)
+		if (this instanceof Unmodifiable this2)
 			return this2;
-		return new UnmodifiableJson5Map(this);
+		return new Unmodifiable(this);
 	}
 
 	/**

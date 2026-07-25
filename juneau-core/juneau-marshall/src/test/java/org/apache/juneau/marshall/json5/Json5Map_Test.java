@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
@@ -234,5 +235,37 @@ class Json5Map_Test extends TestBase {
 		assertTrue(o instanceof Json5Map, "Expected Json5Map, got " + cn(o));
 		Object inner = ((Json5Map)o).get("b");
 		assertTrue(inner instanceof Json5List, "Expected Json5List for nested array, got " + cn(inner));
+	}
+
+	@SuppressWarnings({
+		"java:S5778" // Lambda intentionally calls multiple throwing methods to test compound failure scenarios.
+	})
+	@Test void a23_unmodifiableFullMutatorSurfaceThrows() {
+		// Regression: Json5Map.Unmodifiable originally overrode only put()/remove(Object), leaving every
+		// other Map mutator (and the keySet()/entrySet()/values() collection views) able to bypass the freeze.
+		var m = Json5Map.of("a", 1).unmodifiable();
+		assertThrows(UnsupportedOperationException.class, () -> m.put("b", 2));
+		assertThrows(UnsupportedOperationException.class, () -> m.remove("a"));
+		assertThrows(UnsupportedOperationException.class, () -> m.putAll(Map.of("b", 2)));
+		assertThrows(UnsupportedOperationException.class, m::clear);
+		assertThrows(UnsupportedOperationException.class, () -> m.putIfAbsent("b", 2));
+		assertThrows(UnsupportedOperationException.class, () -> m.remove("a", 1));
+		assertThrows(UnsupportedOperationException.class, () -> m.replace("a", 2));
+		assertThrows(UnsupportedOperationException.class, () -> m.replace("a", 1, 2));
+		assertThrows(UnsupportedOperationException.class, () -> m.replaceAll((k, v) -> 99));
+		assertThrows(UnsupportedOperationException.class, () -> m.compute("a", (k, v) -> 99));
+		assertThrows(UnsupportedOperationException.class, () -> m.computeIfAbsent("b", k -> 99));
+		assertThrows(UnsupportedOperationException.class, () -> m.computeIfPresent("a", (k, v) -> 99));
+		assertThrows(UnsupportedOperationException.class, () -> m.merge("a", 99, (v1, v2) -> 99));
+		var entryIt = m.entrySet().iterator();
+		entryIt.next();
+		assertThrows(UnsupportedOperationException.class, entryIt::remove);
+		var keyIt = m.keySet().iterator();
+		keyIt.next();
+		assertThrows(UnsupportedOperationException.class, keyIt::remove);
+		var valIt = m.values().iterator();
+		valIt.next();
+		assertThrows(UnsupportedOperationException.class, valIt::remove);
+		assertEquals(1, m.size());
 	}
 }

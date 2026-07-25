@@ -774,7 +774,7 @@ class MarshalledMap_Test extends TestBase {
 	}
 
 	@Test void b81_unmodifiableConstructorWithNull() {
-		// UnmodifiableMarshalledMap is private but reachable via .unmodifiable().
+		// Unmodifiable is private but reachable via .unmodifiable().
 		// Construct from a null source by going through the public API.
 		var m = MarshalledMap.create().unmodifiable();
 		assertTrue(m.isUnmodifiable());

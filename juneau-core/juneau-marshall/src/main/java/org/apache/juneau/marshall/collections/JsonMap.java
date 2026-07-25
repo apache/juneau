@@ -101,13 +101,13 @@ public class JsonMap extends MarshalledMap {
 		"java:S2160", // equals() / hashCode() inherited from JsonMap; map equality is element-based
 		"java:S110" // Inheritance depth is intentional in the marshalled-map hierarchy.
 	})
-	private static class UnmodifiableJsonMap extends JsonMap {
+	private static class Unmodifiable extends JsonMap {
 		private static final long serialVersionUID = 1L;
 
 		@SuppressWarnings({
 			"synthetic-access" // Access to outer class members is intentional
 		})
-		UnmodifiableJsonMap(JsonMap contents) {
+		Unmodifiable(JsonMap contents) {
 			if (nn(contents))
 				contents.forEach(super::put);
 		}
@@ -714,9 +714,9 @@ public class JsonMap extends MarshalledMap {
 
 	@Override /* Overridden from MarshalledMap */
 	public JsonMap unmodifiable() {
-		if (this instanceof UnmodifiableJsonMap this2)
+		if (this instanceof Unmodifiable this2)
 			return this2;
-		return new UnmodifiableJsonMap(this);
+		return new Unmodifiable(this);
 	}
 
 	/**

@@ -104,13 +104,13 @@ public class JsonList extends MarshalledList {
 	@SuppressWarnings({
 		"java:S110" // Inner class has many fields, acceptable for collection implementation
 	})
-	private static class UnmodifiableJsonList extends JsonList {
+	private static class Unmodifiable extends JsonList {
 		private static final long serialVersionUID = 1L;
 
 		@SuppressWarnings({
 			"synthetic-access" // Access to outer class members is intentional
 		})
-		UnmodifiableJsonList(JsonList contents) {
+		Unmodifiable(JsonList contents) {
 			if (nn(contents))
 				contents.forEach(super::add);
 		}
@@ -712,9 +712,9 @@ public class JsonList extends MarshalledList {
 
 	@Override /* Overridden from MarshalledList */
 	public JsonList unmodifiable() {
-		if (this instanceof UnmodifiableJsonList this2)
+		if (this instanceof Unmodifiable this2)
 			return this2;
-		return new UnmodifiableJsonList(this);
+		return new Unmodifiable(this);
 	}
 
 	/**
