@@ -17,6 +17,7 @@
 package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -213,7 +214,7 @@ public final class MultipartBody implements HttpBody {
 	public static final class Builder {
 
 		private String boundary = UUID.randomUUID().toString().replace("-", "");
-		private final List<MultipartPart> parts = new ArrayList<>();
+		private final List<MultipartPart> parts = l();
 
 		private Builder() {}
 

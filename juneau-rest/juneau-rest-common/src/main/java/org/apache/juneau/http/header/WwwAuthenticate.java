@@ -160,7 +160,7 @@ public class WwwAuthenticate extends HttpStringHeader {
 	public static class Builder {
 
 		private String scheme;
-		private final Map<String,String> params = new LinkedHashMap<>();
+		private final Map<String,String> params = m();
 
 		/**
 		 * Sets the authentication scheme (e.g. <js>"Basic"</js>, <js>"Bearer"</js>, <js>"Digest"</js>).

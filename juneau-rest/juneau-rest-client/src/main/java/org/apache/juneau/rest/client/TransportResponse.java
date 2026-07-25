@@ -137,7 +137,7 @@ public final class TransportResponse implements Closeable {
 
 		int statusCode;
 		String reasonPhrase;
-		final List<TransportHeader> headers = new ArrayList<>();
+		final List<TransportHeader> headers = l();
 		InputStream body;
 		Closeable closeCallback;
 

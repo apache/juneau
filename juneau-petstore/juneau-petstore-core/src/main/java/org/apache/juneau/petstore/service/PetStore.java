@@ -94,7 +94,7 @@ public class PetStore {
 		var loader = PetStore.class.getClassLoader();
 		try (var in = loader.getResourceAsStream(resourcePath)) {
 			if (in == null)
-				return new ArrayList<>();
+				return l();
 			try (var reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
 				return Json5.DEFAULT.read(reader, List.class, elementType);
 			}

@@ -51,7 +51,7 @@ public record OAuthToken(
 		Objects.requireNonNull(refreshToken, "refreshToken");
 		Objects.requireNonNull(scope, "scope");
 		Objects.requireNonNull(idToken, "idToken");
-		scope = scope.map(s -> Collections.unmodifiableSet(new LinkedHashSet<>(s)));
+		scope = scope.map(s -> u(cp(s)));
 	}
 
 	/**

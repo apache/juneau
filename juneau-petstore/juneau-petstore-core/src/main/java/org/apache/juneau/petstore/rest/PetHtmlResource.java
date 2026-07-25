@@ -18,9 +18,8 @@ package org.apache.juneau.petstore.rest;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 
-import java.util.*;
-
 import org.apache.juneau.bean.html5.*;
+import org.apache.juneau.commons.utils.Shorts;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.petstore.service.*;
@@ -96,7 +95,7 @@ public class PetHtmlResource extends BasicRestServlet {
 	 */
 	@RestGet("/table")
 	public Table getPetTable() {
-		var rows = new ArrayList<>();
+		var rows = Shorts.l();
 		rows.add(tr(th("Name"), th("Species"), th("Price"), th("Status")));
 		for (var pet : store.getPets())
 			rows.add(tr(td(pet.getName()), td(pet.getSpecies()), td(pet.getPrice()), td(pet.getStatus())));

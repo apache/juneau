@@ -381,18 +381,18 @@ public final class RestClient implements Closeable {
 	public static final class Builder {
 
 		HttpTransport transport;
-		final List<HttpHeader> defaultHeaders = new ArrayList<>();
-		final List<HttpPart> defaultQueryData = new ArrayList<>();
+		final List<HttpHeader> defaultHeaders = l();
+		final List<HttpPart> defaultQueryData = l();
 		String rootUrl;
-		final List<RestCallInterceptor> interceptors = new ArrayList<>();
+		final List<RestCallInterceptor> interceptors = l();
 		RestLogger logger;
 		List<BodyConverter<?>> bodyConverters = new ArrayList<>(DEFAULT_BODY_CONVERTERS);
 		SerializerSet serializers;
 		ParserSet parsers;
 		Serializer defaultSerializer;
 		Parser defaultParser;
-		final List<Serializer> serializerList = new ArrayList<>();
-		final List<Parser> parserList = new ArrayList<>();
+		final List<Serializer> serializerList = l();
+		final List<Parser> parserList = l();
 
 		private Builder() {}
 

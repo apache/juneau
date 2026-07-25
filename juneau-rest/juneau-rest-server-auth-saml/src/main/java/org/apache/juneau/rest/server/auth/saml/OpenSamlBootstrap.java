@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.opensaml.core.config.*;
 
 /**
@@ -51,7 +53,7 @@ final class OpenSamlBootstrap {
 				InitializationService.initialize();
 				initialized = true;
 			} catch (Exception e) {
-				throw new IllegalStateException("OpenSAML initialization failed", e);
+				throw isex(e, "OpenSAML initialization failed");
 			}
 		}
 	}

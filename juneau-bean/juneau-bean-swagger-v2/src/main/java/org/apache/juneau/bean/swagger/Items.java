@@ -129,7 +129,7 @@ public class Items extends SwaggerElement {
 	})
 	private Items items;
 	private Object default_;
-	private Set<Object> enum_ = new LinkedHashSet<>();
+	private Set<Object> enum_ = st();
 
 	/**
 	 * Default constructor.

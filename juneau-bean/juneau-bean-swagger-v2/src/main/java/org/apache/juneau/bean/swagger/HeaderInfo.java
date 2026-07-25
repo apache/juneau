@@ -130,7 +130,7 @@ public class HeaderInfo extends SwaggerElement {
 	private Boolean uniqueItems;
 	private Items items;
 	private Object default_;
-	private Set<Object> enum_ = new LinkedHashSet<>();
+	private Set<Object> enum_ = st();
 	private Object example;
 
 	/**

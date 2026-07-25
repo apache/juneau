@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -101,7 +102,7 @@ public final class SerializerBody implements HttpBody {
 		try {
 			serializer.write(value, out);
 		} catch (SerializeException e) {
-			throw new IOException(e);
+			throw ioex(e);
 		}
 	}
 

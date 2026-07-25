@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.Enablement.*;
 import static org.apache.juneau.rest.server.util.RestUtils.*;
 
@@ -307,7 +308,7 @@ public final class MockRestClient implements Closeable {
 
 				return new MockRestClient(ngClient);
 			} catch (Exception e) {
-				throw new RuntimeException("Could not initialize MockRestClient", e);
+				throw rex(e, "Could not initialize MockRestClient");
 			}
 		}
 

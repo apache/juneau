@@ -192,10 +192,10 @@ public class Operation extends SwaggerElement {
 	private String operationId;
 	private Boolean deprecated;
 	private ExternalDocumentation externalDocs;
-	private Set<String> tags = new LinkedHashSet<>();
-	private Set<String> schemes = new LinkedHashSet<>();
-	private Set<MediaType> consumes = new LinkedHashSet<>();
-	private Set<MediaType> produces = new LinkedHashSet<>();
+	private Set<String> tags = st();
+	private Set<String> schemes = st();
+	private Set<MediaType> consumes = st();
+	private Set<MediaType> produces = st();
 	private List<ParameterInfo> parameters = list();
 	private List<Map<String,List<String>>> security = list();
 

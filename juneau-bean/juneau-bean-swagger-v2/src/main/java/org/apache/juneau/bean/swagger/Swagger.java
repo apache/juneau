@@ -136,10 +136,10 @@ public class Swagger extends SwaggerElement {
 	private String basePath;
 	private Info info;
 	private ExternalDocumentation externalDocs;
-	private Set<String> schemes = new LinkedHashSet<>();
-	private Set<MediaType> consumes = new LinkedHashSet<>();
-	private Set<MediaType> produces = new LinkedHashSet<>();
-	private Set<Tag> tags = new LinkedHashSet<>();
+	private Set<String> schemes = st();
+	private Set<MediaType> consumes = st();
+	private Set<MediaType> produces = st();
+	private Set<Tag> tags = st();
 	private List<Map<String,List<String>>> security = list();
 	private Map<String,JsonMap> definitions = map();
 	private Map<String,ParameterInfo> parameters = map();

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -142,7 +143,7 @@ public final class MockHttpTransport implements HttpTransport {
 	 * @return The recorded requests. Empty if recording is disabled.
 	 */
 	public List<TransportRequest> getRecordedRequests() {
-		return recordedRequests != null ? Collections.unmodifiableList(recordedRequests) : List.of();
+		return recordedRequests != null ? u(recordedRequests) : List.of();
 	}
 
 	/**
@@ -170,7 +171,7 @@ public final class MockHttpTransport implements HttpTransport {
 	 */
 	public static final class Builder {
 
-		final List<Route> routes = new ArrayList<>();
+		final List<Route> routes = l();
 		RequestHandler fallback;
 		boolean recordRequests;
 

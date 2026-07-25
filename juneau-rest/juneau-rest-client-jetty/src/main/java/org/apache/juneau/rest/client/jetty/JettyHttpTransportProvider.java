@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client.jetty;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.rest.client.*;
 
 /**
@@ -65,7 +67,7 @@ public final class JettyHttpTransportProvider implements HttpTransportProvider {
 		try {
 			return JettyHttpTransport.create();
 		} catch (Exception e) {
-			throw new RuntimeException("Failed to create JettyHttpTransport: " + e.getMessage(), e);
+			throw rex(e, "Failed to create JettyHttpTransport: %s", e.getMessage());
 		}
 	}
 }

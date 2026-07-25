@@ -100,7 +100,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		private Supplier<String> clientSecretSupplier;
 		private TokenCache tokenCache;
 		private Duration cacheTtl = DEFAULT_CACHE_TTL;
-		private Set<String> requiredScopes = new LinkedHashSet<>();
+		private Set<String> requiredScopes = st();
 		private Clock clock = Clock.systemUTC();
 		private Consumer<HTTPRequest> httpRequestConfigurator;
 
@@ -267,7 +267,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		this.clientSecretSupplier = b.clientSecretSupplier;
 		this.tokenCache = b.tokenCache;
 		this.cacheTtl = b.cacheTtl;
-		this.requiredScopes = Collections.unmodifiableSet(new LinkedHashSet<>(b.requiredScopes));
+		this.requiredScopes = u(cp(b.requiredScopes));
 		this.clock = b.clock;
 		this.httpRequestConfigurator = b.httpRequestConfigurator;
 	}

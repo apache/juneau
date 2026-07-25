@@ -139,7 +139,7 @@ public final class TransportRequest {
 
 		String method;
 		URI uri;
-		final List<TransportHeader> headers = new ArrayList<>();
+		final List<TransportHeader> headers = l();
 		TransportBody body;
 		Duration timeout;
 
@@ -178,7 +178,7 @@ public final class TransportRequest {
 			try {
 				uri = new URI(value);
 			} catch (URISyntaxException e) {
-				throw new IllegalArgumentException("Invalid URI: " + value, e);
+				throw iaex(e, "Invalid URI: %s", value);
 			}
 			return this;
 		}

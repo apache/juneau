@@ -135,7 +135,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 
 		void addText(String t) {
 			if (additionalText == null)
-				additionalText = new LinkedList<>();
+				additionalText = ll();
 			additionalText.add(t);
 		}
 
@@ -192,7 +192,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 		// Close the reader in a finally so a parse failure mid-loop doesn't leak the file descriptor.
 		br = new BufferedReader(new InputStreamReader(new FileInputStream(f), Charset.defaultCharset()));
 		try {
-			List<Entry> allEntries = new ArrayList<>();
+			List<Entry> allEntries = l();
 			Entry prev = null;
 			String line;
 			while (nn(line = br.readLine())) {

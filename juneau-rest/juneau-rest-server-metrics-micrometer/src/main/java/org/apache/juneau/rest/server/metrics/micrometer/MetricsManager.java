@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.metrics.micrometer;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.rest.server.*;
 
 import io.micrometer.core.instrument.*;
@@ -81,7 +83,7 @@ public class MetricsManager {
 		} catch (@SuppressWarnings("unused") NoSuchMethodException e) {
 			return null;  // Not a scrapeable (Prometheus) registry — caller degrades to 501.
 		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException("Failed to scrape MeterRegistry " + registry.getClass().getName(), e);
+			throw rex(e, "Failed to scrape MeterRegistry %s", registry.getClass().getName());
 		}
 	}
 }

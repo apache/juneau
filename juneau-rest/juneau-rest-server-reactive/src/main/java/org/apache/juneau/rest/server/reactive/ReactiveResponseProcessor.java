@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.reactive;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -385,7 +386,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	/** Collects all emitted elements into a list and completes the supplied future (buffer shape). */
 	private static final class CollectingSubscriber implements Flow.Subscriber<Object> {
 		private final CompletableFuture<List<Object>> cf;
-		private final List<Object> items = new ArrayList<>();
+		private final List<Object> items = l();
 
 		CollectingSubscriber(CompletableFuture<List<Object>> cf) {
 			this.cf = cf;
@@ -462,7 +463,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 				res.flushBuffer();
 				wrote = true;
 			} catch (IOException | SerializeException e) {
-				throw new IllegalStateException(e);
+				throw isex(e);
 			}
 		}
 

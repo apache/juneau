@@ -53,17 +53,17 @@ public class RemoteOperationMeta {
 		String httpMethod;
 		String fullPath;
 		String path;
-		List<RemoteOperationArg> pathArgs = new LinkedList<>();
-		List<RemoteOperationArg> queryArgs = new LinkedList<>();
-		List<RemoteOperationArg> headerArgs = new LinkedList<>();
-		List<RemoteOperationArg> formDataArgs = new LinkedList<>();
-		List<RemoteOperationBeanArg> requestArgs = new LinkedList<>();
+		List<RemoteOperationArg> pathArgs = ll();
+		List<RemoteOperationArg> queryArgs = ll();
+		List<RemoteOperationArg> headerArgs = ll();
+		List<RemoteOperationArg> formDataArgs = ll();
+		List<RemoteOperationBeanArg> requestArgs = ll();
 		RemoteOperationArg bodyArg;
 		RemoteOperationReturn methodReturn;
-		Map<String,String> pathDefaults = new LinkedHashMap<>();
-		Map<String,String> queryDefaults = new LinkedHashMap<>();
-		Map<String,String> headerDefaults = new LinkedHashMap<>();
-		Map<String,String> formDataDefaults = new LinkedHashMap<>();
+		Map<String,String> pathDefaults = m();
+		Map<String,String> queryDefaults = m();
+		Map<String,String> headerDefaults = m();
+		Map<String,String> formDataDefaults = m();
 		String contentDefault = null;
 		static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
@@ -248,10 +248,10 @@ public class RemoteOperationMeta {
 		contentArg = b.bodyArg;
 		methodReturn = b.methodReturn;
 		exceptions = m.getExceptionTypes();
-		pathDefaults = Collections.unmodifiableMap(b.pathDefaults);
-		queryDefaults = Collections.unmodifiableMap(b.queryDefaults);
-		headerDefaults = Collections.unmodifiableMap(b.headerDefaults);
-		formDataDefaults = Collections.unmodifiableMap(b.formDataDefaults);
+		pathDefaults = u(b.pathDefaults);
+		queryDefaults = u(b.queryDefaults);
+		headerDefaults = u(b.headerDefaults);
+		formDataDefaults = u(b.formDataDefaults);
 		contentDefault = b.contentDefault;
 	}
 

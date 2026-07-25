@@ -126,12 +126,12 @@ public final class RrpcInterfaceMeta {
 				metas.put(m, new RrpcInterfaceMethodMeta(m, "POST", buildSignaturePath(m), RemoteReturn.BODY));
 			}
 		}
-		this.methodMetas = Collections.unmodifiableMap(metas);
+		this.methodMetas = u(metas);
 
 		var byPath = new LinkedHashMap<String,RrpcInterfaceMethodMeta>();
 		for (var v : metas.values())
 			byPath.put(v.getPath(), v);
-		this.methodMetasByPath = Collections.unmodifiableMap(byPath);
+		this.methodMetasByPath = u(byPath);
 	}
 
 	private static String buildBasePath(Remote remote) {
@@ -208,7 +208,7 @@ public final class RrpcInterfaceMeta {
 			var vh = remote.versionHeader().isEmpty() ? "Client-Version" : VarResolver.DEFAULT.resolve(remote.versionHeader());
 			l.add(Map.entry(vh, version));
 		}
-		return Collections.unmodifiableList(l);
+		return u(l);
 	}
 
 	/**
@@ -234,7 +234,7 @@ public final class RrpcInterfaceMeta {
 			if (i != -1)
 				l.add(Map.entry(s.substring(0, i).trim(), s.substring(i + 1).trim()));
 		}
-		return Collections.unmodifiableList(l);
+		return u(l);
 	}
 
 	private static String buildSignaturePath(Method m) {

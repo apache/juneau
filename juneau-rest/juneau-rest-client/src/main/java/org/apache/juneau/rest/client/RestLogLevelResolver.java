@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -105,7 +107,7 @@ public interface RestLogLevelResolver {
 	 */
 	class RuleBuilder {
 
-		private final List<Rule> rules = new ArrayList<>();
+		private final List<Rule> rules = l();
 		private System.Logger.Level defaultLevel = System.Logger.Level.INFO;
 
 		private RuleBuilder() {}

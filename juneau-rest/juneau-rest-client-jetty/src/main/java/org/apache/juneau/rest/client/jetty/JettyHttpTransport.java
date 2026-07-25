@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client.jetty;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.concurrent.*;
 
@@ -130,7 +132,7 @@ public final class JettyHttpTransport implements HttpTransport {
 		try {
 			httpClient.stop();
 		} catch (Exception e) {
-			throw new IOException("Failed to stop Jetty HttpClient: " + e.getMessage(), e);
+			throw ioex(e, "Failed to stop Jetty HttpClient: %s", e.getMessage());
 		}
 	}
 

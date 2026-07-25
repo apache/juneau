@@ -100,7 +100,7 @@ public class RdfParserSession extends ReaderParserSession {
 	private final org.apache.jena.rdf.model.Property pRdfType;
 	private final Lang lang;
 	private final RdfParser ctx;
-	private final Set<Resource> urisVisited = new HashSet<>();
+	private final Set<Resource> urisVisited = st();
 
 	/**
 	 * Constructor.

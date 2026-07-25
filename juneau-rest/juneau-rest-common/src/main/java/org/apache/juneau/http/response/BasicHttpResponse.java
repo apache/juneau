@@ -136,7 +136,7 @@ public abstract class BasicHttpResponse<SELF extends BasicHttpResponse<SELF>> im
 
 	@Override /* HttpResponseMessage */
 	public List<HttpHeader> getHeaders() {
-		return Collections.unmodifiableList(headers);
+		return u(headers);
 	}
 
 	@Override /* HttpResponseMessage */

@@ -110,7 +110,7 @@ public class Callback extends OpenApiElement {
 		assertArgNotNull(ARG_expression, expression);
 		assertArgNotNull(ARG_pathItem, pathItem);
 		if (callbacks == null)
-			callbacks = new LinkedHashMap<>();
+			callbacks = m();
 		callbacks.put(expression, pathItem);
 		return this;
 	}

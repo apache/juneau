@@ -269,7 +269,7 @@ public class Problem {
 	@BeanProp("*")
 	public Problem set(String property, Object value) {
 		if (extra == null)
-			extra = new LinkedHashMap<>();
+			extra = m();
 		extra.put(property, value);
 		return this;
 	}

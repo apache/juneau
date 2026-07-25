@@ -161,7 +161,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 
 	@Override /* HttpResponseMessage */
 	public List<HttpHeader> getHeaders() {
-		return Collections.unmodifiableList(headers);
+		return u(headers);
 	}
 
 	@Override /* HttpResponseMessage */

@@ -60,7 +60,7 @@ public class ProfileConfigStore extends ConfigStore {
 
 		ConfigStore delegate;
 		String baseName;
-		List<String> profiles = new ArrayList<>();
+		List<String> profiles = l();
 		ConfigFormat format = IniConfigFormat.INSTANCE;
 
 		/** Constructor, default settings. */
@@ -117,7 +117,7 @@ public class ProfileConfigStore extends ConfigStore {
 		 * 	<br>Can be <jk>null</jk> (treated as no active profiles).
 		 * @return This object.
 		 */
-		public Builder profiles(List<String> value) { profiles = value == null ? new ArrayList<>() : new ArrayList<>(value); return this; }
+		public Builder profiles(List<String> value) { profiles = value == null ? l() : new ArrayList<>(value); return this; }
 
 		/**
 		 * Sets the config format used to parse the base + profile files.

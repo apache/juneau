@@ -110,7 +110,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	private static final String ARG_entries = "entries";
 	private static final String ARG_test = "test";
 
-	private static final Map<Class<?>,Function<Object,String>> STRINGIFIERS = new HashMap<>();
+	private static final Map<Class<?>,Function<Object,String>> STRINGIFIERS = m();
 	static {
 		STRINGIFIERS.put(boolean.class, x -> Arrays.toString((boolean[])x));
 		STRINGIFIERS.put(byte.class, x -> Arrays.toString((byte[])x));

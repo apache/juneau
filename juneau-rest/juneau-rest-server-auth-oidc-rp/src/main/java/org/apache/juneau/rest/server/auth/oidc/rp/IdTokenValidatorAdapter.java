@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.text.*;
@@ -219,7 +220,7 @@ public class IdTokenValidatorAdapter {
 		try {
 			return JWKSourceBuilder.create(b.jwksUri.toURL()).build();
 		} catch (MalformedURLException e) {
-			throw new IllegalArgumentException("Invalid JWKS URI: " + b.jwksUri, e);
+			throw iaex(e, "Invalid JWKS URI: %s", b.jwksUri);
 		}
 	}
 

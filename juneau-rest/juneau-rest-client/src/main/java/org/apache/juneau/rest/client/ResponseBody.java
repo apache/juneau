@@ -186,7 +186,7 @@ public final class ResponseBody {
 		try {
 			return parser.read(body, type);
 		} catch (ParseException e) {
-			throw new IOException(e);
+			throw ioex(e);
 		}
 	}
 

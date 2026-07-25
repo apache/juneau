@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.*;
@@ -33,9 +35,9 @@ public class McpServerConfig {
 	private Implementation serverInfo;
 	private String protocolVersion = McpProtocol.VERSION_2025_06_18;
 	private String instructions;
-	private List<McpToolHandler> tools = new ArrayList<>();
-	private List<McpPromptHandler> prompts = new ArrayList<>();
-	private List<McpResourceHandler> resources = new ArrayList<>();
+	private List<McpToolHandler> tools = l();
+	private List<McpPromptHandler> prompts = l();
+	private List<McpResourceHandler> resources = l();
 	private ServerCapabilities capabilities;
 	private McpCursor cursor = McpCursor.SINGLE_PAGE;
 
@@ -118,7 +120,7 @@ public class McpServerConfig {
 	 * @return This object (for method chaining).
 	 */
 	public McpServerConfig setTools(List<McpToolHandler> tools) {
-		this.tools = tools == null ? new ArrayList<>() : new ArrayList<>(tools);
+		this.tools = tools == null ? l() : new ArrayList<>(tools);
 		return this;
 	}
 
@@ -149,7 +151,7 @@ public class McpServerConfig {
 	 * @return This object (for method chaining).
 	 */
 	public McpServerConfig setPrompts(List<McpPromptHandler> prompts) {
-		this.prompts = prompts == null ? new ArrayList<>() : new ArrayList<>(prompts);
+		this.prompts = prompts == null ? l() : new ArrayList<>(prompts);
 		return this;
 	}
 
@@ -180,7 +182,7 @@ public class McpServerConfig {
 	 * @return This object (for method chaining).
 	 */
 	public McpServerConfig setResources(List<McpResourceHandler> resources) {
-		this.resources = resources == null ? new ArrayList<>() : new ArrayList<>(resources);
+		this.resources = resources == null ? l() : new ArrayList<>(resources);
 		return this;
 	}
 

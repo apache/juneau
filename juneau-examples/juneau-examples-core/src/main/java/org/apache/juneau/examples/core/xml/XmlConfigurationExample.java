@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.core.xml;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.logging.*;
@@ -51,7 +53,7 @@ public class XmlConfigurationExample {
 		// the output will be padded with spaces after format characters.
 		Logger.getLogger(XmlConfigurationExample.class).info(withWhitespace);
 
-		Map<String,List<Pojo>> values = new HashMap<>();
+		Map<String,List<Pojo>> values = m();
 		var pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
 
 		//Produces

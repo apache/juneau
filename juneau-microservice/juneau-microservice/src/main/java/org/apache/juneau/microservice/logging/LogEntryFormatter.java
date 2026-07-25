@@ -132,7 +132,7 @@ public class LogEntryFormatter extends Formatter {
 		if (useStackTraceHashes)
 			hashes = new ConcurrentHashMap<>();
 
-		fieldIndexes = new HashMap<>();
+		fieldIndexes = m();
 
 		// @formatter:off
 		format = format

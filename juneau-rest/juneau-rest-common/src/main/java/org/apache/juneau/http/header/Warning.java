@@ -123,7 +123,7 @@ public class Warning extends HttpStringHeader {
 	 */
 	public static class Builder {
 
-		private final List<String> warnings = new ArrayList<>();
+		private final List<String> warnings = l();
 
 		/**
 		 * Adds a warning-value (without a warn-date).

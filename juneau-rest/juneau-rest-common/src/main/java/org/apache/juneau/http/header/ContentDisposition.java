@@ -144,7 +144,7 @@ public class ContentDisposition extends HttpStringRangesHeader {
 	public static class Builder {
 
 		private String type;
-		private final Map<String,String> params = new LinkedHashMap<>();
+		private final Map<String,String> params = m();
 
 		/**
 		 * Sets the disposition-type (e.g. <js>"inline"</js>, <js>"attachment"</js>, <js>"form-data"</js>).

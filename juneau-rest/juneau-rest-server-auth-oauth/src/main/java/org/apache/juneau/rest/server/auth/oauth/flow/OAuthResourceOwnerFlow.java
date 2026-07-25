@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth.oauth.flow;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.util.*;
@@ -73,7 +74,7 @@ public class OAuthResourceOwnerFlow {
 		private Supplier<String> clientSecretSupplier;
 		private String username;
 		private Supplier<String> passwordSupplier;
-		private Set<String> scopes = new LinkedHashSet<>();
+		private Set<String> scopes = st();
 		private Consumer<HTTPRequest> httpRequestConfigurator;
 
 		/** Constructor. */
@@ -235,7 +236,7 @@ public class OAuthResourceOwnerFlow {
 		this.clientSecretSupplier = b.clientSecretSupplier;
 		this.username = b.username;
 		this.passwordSupplier = b.passwordSupplier;
-		this.scopes = Collections.unmodifiableSet(new LinkedHashSet<>(b.scopes));
+		this.scopes = u(cp(b.scopes));
 		this.httpRequestConfigurator = b.httpRequestConfigurator;
 	}
 

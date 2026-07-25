@@ -181,7 +181,7 @@ public class SignedCookieSessionStore implements SessionStore {
 				throw isex("Signed session cookie exceeds maxCookieBytes (%s); reduce the claim set or switch to a server-side SessionStore.", maxCookieBytes);
 			return serialized;
 		} catch (JOSEException e) {
-			throw new IllegalStateException("Failed to sign session cookie", e);
+			throw isex(e, "Failed to sign session cookie");
 		}
 	}
 

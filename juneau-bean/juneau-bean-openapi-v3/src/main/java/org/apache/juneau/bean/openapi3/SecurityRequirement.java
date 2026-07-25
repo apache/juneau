@@ -73,7 +73,7 @@ public class SecurityRequirement extends OpenApiElement {
 		assertArgNotNull(ARG_schemeName, schemeName);
 		assertArgNoNulls(ARG_scopes, scopes);
 		if (requirements == null)
-			requirements = new LinkedHashMap<>();
+			requirements = m();
 		requirements.put(schemeName, l(scopes));
 		return this;
 	}

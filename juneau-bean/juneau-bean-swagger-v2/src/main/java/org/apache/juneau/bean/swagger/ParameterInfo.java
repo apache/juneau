@@ -182,7 +182,7 @@ public class ParameterInfo extends SwaggerElement {
 	private SchemaInfo schema;
 	private Items items;
 	private Object default_;
-	private Set<Object> enum_ = new LinkedHashSet<>();
+	private Set<Object> enum_ = st();
 	private Object example;
 	private Map<String,String> examples;
 

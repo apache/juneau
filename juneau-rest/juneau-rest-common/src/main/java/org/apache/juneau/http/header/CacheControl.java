@@ -138,7 +138,7 @@ public class CacheControl extends HttpStringHeader {
 		private Long sMaxAge;
 		private Long staleWhileRevalidate;
 		private Long staleIfError;
-		private final List<String> extensions = new ArrayList<>();
+		private final List<String> extensions = l();
 
 		/**
 		 * Adds the <c>public</c> directive (responses may be cached by any cache).

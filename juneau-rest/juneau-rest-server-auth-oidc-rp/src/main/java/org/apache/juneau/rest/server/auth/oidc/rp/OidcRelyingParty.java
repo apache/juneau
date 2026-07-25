@@ -142,7 +142,7 @@ public class OidcRelyingParty {
 		URI redirectUri;
 		URI postLogoutRedirectUri;
 		String postLoginRedirect = "/";
-		Set<String> scopes = new LinkedHashSet<>();
+		Set<String> scopes = st();
 		SessionStore sessionStore;
 		String rolesClaim = DEFAULT_ROLES_CLAIM;
 		Duration stateNonceTtl = EphemeralStore.DEFAULT_TTL;
@@ -158,7 +158,7 @@ public class OidcRelyingParty {
 		int clockSkewSeconds = 60;
 		JWKSet jwkSet;
 		JWKSource<SecurityContext> jwkSource;
-		Set<String> userInfoClaims = new LinkedHashSet<>();
+		Set<String> userInfoClaims = st();
 		Clock clock = Clock.systemUTC();
 
 		/** Constructor. */
@@ -543,7 +543,7 @@ public class OidcRelyingParty {
 		var s = new LinkedHashSet<String>();
 		s.add("openid");
 		s.addAll(b.scopes);
-		this.scopes = Collections.unmodifiableSet(s);
+		this.scopes = u(s);
 		this.sessionStore = b.sessionStore;
 		this.rolesClaim = b.rolesClaim;
 		this.sessionTtl = b.sessionTtl;
@@ -557,7 +557,7 @@ public class OidcRelyingParty {
 		this.clockSkewSeconds = b.clockSkewSeconds;
 		this.jwkSet = b.jwkSet;
 		this.injectedJwkSource = b.jwkSource;
-		this.userInfoClaims = Collections.unmodifiableSet(new LinkedHashSet<>(b.userInfoClaims));
+		this.userInfoClaims = u(cp(b.userInfoClaims));
 		this.clock = b.clock;
 		this.ephemeralStore = new EphemeralStore(b.stateNonceTtl, b.ephemeralMaxEntries, b.clock);
 	}
@@ -851,7 +851,7 @@ public class OidcRelyingParty {
 					clientBuilder.httpRequestConfigurator(httpRequestConfigurator);
 				metadataCache = clientBuilder.build().discover();
 			} catch (IOException | OidcDiscoveryException e) {
-				throw new IllegalStateException("OIDC discovery failed for issuer " + issuer, e);
+				throw isex(e, "OIDC discovery failed for issuer %s", issuer);
 			}
 			return metadataCache;
 		}
@@ -914,7 +914,7 @@ public class OidcRelyingParty {
 				try {
 					jwkSourceCache = JWKSourceBuilder.create(metadata().jwksUri().toURL()).build();
 				} catch (MalformedURLException e) {
-					throw new IllegalStateException("Invalid JWKS URI: " + metadata().jwksUri(), e);
+					throw isex(e, "Invalid JWKS URI: %s", metadata().jwksUri());
 				}
 			}
 			return jwkSourceCache;

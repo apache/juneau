@@ -125,7 +125,7 @@ public class Range extends HttpStringHeader {
 	public static class Builder {
 
 		private String unit = "bytes";
-		private final List<String> specs = new ArrayList<>();
+		private final List<String> specs = l();
 
 		/**
 		 * Sets the range unit (default <c>bytes</c>).

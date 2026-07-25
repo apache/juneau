@@ -243,7 +243,7 @@ public class JwtTokenValidator implements TokenValidator {
 			assertArgNotNull("values", values);
 			if (values.length == 0)
 				throw iaex("algorithms allowlist must be non-empty");
-			Set<JWSAlgorithm> next = new LinkedHashSet<>();
+			Set<JWSAlgorithm> next = st();
 			for (var a : values) {
 				assertArgNotNull("algorithm", a);
 				if (Algorithm.NONE.equals(a))
@@ -379,7 +379,7 @@ public class JwtTokenValidator implements TokenValidator {
 	protected JwtTokenValidator(Builder builder) {
 		this.issuer = builder.issuer;
 		this.audience = builder.audience;
-		this.algorithms = Collections.unmodifiableSet(new LinkedHashSet<>(builder.algorithms));
+		this.algorithms = u(cp(builder.algorithms));
 		this.clockSkew = builder.clockSkew;
 		this.clock = builder.clock;
 		this.jwkSource = builder.jwkSource != null
@@ -507,7 +507,7 @@ public class JwtTokenValidator implements TokenValidator {
 		try {
 			return JWKSourceBuilder.create(jwksUrl.toURL()).build();
 		} catch (MalformedURLException e) {
-			throw new IllegalArgumentException("Invalid JWKS URL: " + jwksUrl, e);
+			throw iaex(e, "Invalid JWKS URL: %s", jwksUrl);
 		}
 	}
 

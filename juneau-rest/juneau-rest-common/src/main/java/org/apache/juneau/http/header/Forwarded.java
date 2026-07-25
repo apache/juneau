@@ -129,14 +129,14 @@ public class Forwarded extends HttpStringHeader {
 	 */
 	public static class Builder {
 
-		private final List<Map<String,String>> elements = new ArrayList<>();
+		private final List<Map<String,String>> elements = l();
 		private Map<String,String> current;
 
 		/**
 		 * Constructor.
 		 */
 		public Builder() {
-			current = new LinkedHashMap<>();
+			current = m();
 			elements.add(current);
 		}
 
@@ -208,7 +208,7 @@ public class Forwarded extends HttpStringHeader {
 		 * @return This object.
 		 */
 		public Builder next() {
-			current = new LinkedHashMap<>();
+			current = m();
 			elements.add(current);
 			return this;
 		}

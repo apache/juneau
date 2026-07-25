@@ -67,8 +67,8 @@ public class InMemorySessionStore implements SessionStore {
 	private final int maxEntries;
 	private final Clock clock;
 	private final Map<String,OidcSession> byId;
-	private final Map<String,Set<String>> bySubject = new HashMap<>();
-	private final Map<String,Set<String>> bySid = new HashMap<>();
+	private final Map<String,Set<String>> bySubject = m();
+	private final Map<String,Set<String>> bySid = m();
 	private final Object lock = new Object();
 
 	/**
@@ -99,8 +99,8 @@ public class InMemorySessionStore implements SessionStore {
 		assertArgNotNull("session", session);
 		synchronized (lock) {
 			byId.put(session.id(), session);
-			bySubject.computeIfAbsent(session.subject(), k -> new HashSet<>()).add(session.id());
-			session.sid().ifPresent(sid -> bySid.computeIfAbsent(sid, k -> new HashSet<>()).add(session.id()));
+			bySubject.computeIfAbsent(session.subject(), k -> st()).add(session.id());
+			session.sid().ifPresent(sid -> bySid.computeIfAbsent(sid, k -> st()).add(session.id()));
 		}
 		return session.id();
 	}

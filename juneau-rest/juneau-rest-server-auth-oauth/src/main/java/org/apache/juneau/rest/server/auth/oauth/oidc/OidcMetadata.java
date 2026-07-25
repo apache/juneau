@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.auth.oauth.oidc;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.net.*;
 import java.util.*;
 
@@ -57,9 +59,9 @@ public record OidcMetadata(
 		Objects.requireNonNull(issuer, "issuer");
 		supportedScopes = supportedScopes == null
 			? Collections.emptySet()
-			: Collections.unmodifiableSet(new LinkedHashSet<>(supportedScopes));
+			: u(cp(supportedScopes));
 		extras = extras == null
 			? Collections.emptyMap()
-			: Collections.unmodifiableMap(new LinkedHashMap<>(extras));
+			: u(cp(extras));
 	}
 }

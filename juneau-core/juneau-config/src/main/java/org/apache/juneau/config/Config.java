@@ -630,7 +630,7 @@ public class Config extends Context implements ConfigEventListener {
 	protected final WriterSerializer serializer;
 
 	private final ConfigMap configMap;
-	private final List<ConfigEventListener> listeners = synced(new LinkedList<>());
+	private final List<ConfigEventListener> listeners = synced(ll());
 
 	/**
 	 * Constructor.

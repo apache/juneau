@@ -250,7 +250,7 @@ public class SamlAuthFilter extends AuthFilter {
 				out.write(buf, 0, n);
 			}
 		} catch (DataFormatException e) {
-			throw new IOException("SAMLResponse: malformed DEFLATE", e);
+			throw ioex(e, "SAMLResponse: malformed DEFLATE");
 		} finally {
 			inflater.end();
 		}

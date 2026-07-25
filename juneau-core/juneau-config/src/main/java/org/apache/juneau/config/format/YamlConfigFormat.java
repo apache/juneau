@@ -112,7 +112,7 @@ public class YamlConfigFormat implements ConfigFormat {
 	@Override /* ConfigFormat */
 	public String fromInternal(ConfigMap map) {
 		var sb = new StringBuilder();
-		List<String> opened = new ArrayList<>();
+		List<String> opened = l();
 		for (var section : map.getSections()) {
 			var segments = splitPath(section);
 			var common = commonPrefix(opened, segments);

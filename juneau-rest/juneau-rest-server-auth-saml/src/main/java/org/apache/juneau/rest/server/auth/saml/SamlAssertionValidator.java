@@ -300,7 +300,7 @@ public class SamlAssertionValidator {
 		this.decryptionCredential = b.decryptionCredential;
 		this.spEntityId = b.spEntityId;
 		this.expectedIssuer = b.expectedIssuer;
-		this.algorithms = Collections.unmodifiableSet(new LinkedHashSet<>(b.algorithms));
+		this.algorithms = u(cp(b.algorithms));
 		this.clockSkew = b.clockSkew;
 		this.clock = b.clock;
 	}
@@ -538,7 +538,7 @@ public class SamlAssertionValidator {
 				var name = attr.getName();
 				if (name == null)
 					continue;
-				var values = new ArrayList<>();
+				var values = l();
 				for (var av : attr.getAttributeValues())
 					values.add(extractStringValue(av));
 				if (values.size() == 1)

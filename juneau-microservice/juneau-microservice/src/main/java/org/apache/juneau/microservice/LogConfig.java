@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 import java.util.logging.*;
 import java.util.logging.Formatter;
@@ -50,7 +52,7 @@ public class LogConfig {
 	Integer count;
 	Level fileLevel;
 	Level consoleLevel;
-	Map<String,Level> levels = new LinkedHashMap<>();
+	Map<String,Level> levels = m();
 
 	Formatter formatter;
 

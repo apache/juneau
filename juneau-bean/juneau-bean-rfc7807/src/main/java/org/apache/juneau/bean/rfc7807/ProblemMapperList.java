@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.rfc7807;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 /**
@@ -58,7 +60,7 @@ public class ProblemMapperList {
 	 * {@link #append(Collection)}.
 	 */
 	public ProblemMapperList() {
-		mappers = new ArrayList<>();
+		mappers = l();
 	}
 
 	/**
@@ -108,7 +110,7 @@ public class ProblemMapperList {
 	 * @return An unmodifiable view of the underlying list. Never {@code null}.
 	 */
 	public List<ProblemMapper<?>> asList() {
-		return Collections.unmodifiableList(mappers);
+		return u(mappers);
 	}
 
 	/**

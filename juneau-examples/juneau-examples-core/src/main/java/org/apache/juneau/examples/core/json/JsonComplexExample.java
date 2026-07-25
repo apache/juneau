@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.core.json;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.logging.*;
@@ -49,11 +51,11 @@ public class JsonComplexExample {
 		var jsonParser = JsonParser.DEFAULT;
 
 		// Fill some data to a PojoComplex bean
-		Map<String,List<Pojo>> values = new HashMap<>();
-		List<Pojo> setOne = new ArrayList<>();
+		Map<String,List<Pojo>> values = m();
+		List<Pojo> setOne = l();
 		setOne.add(new Pojo("1.1", "name1"));
 		setOne.add(new Pojo("1.1", "name2"));
-		List<Pojo> setTwo = new ArrayList<>();
+		List<Pojo> setTwo = l();
 		setTwo.add(new Pojo("1.2", "name1"));
 		setTwo.add(new Pojo("1.2", "name2"));
 		values.put("setOne", setOne);

@@ -167,9 +167,9 @@ public class SchemaInfo extends SwaggerElement {
 	private Items items;
 	private Xml xml;
 	private ExternalDocumentation externalDocs;
-	private Set<Object> enum_ = new LinkedHashSet<>();
-	private Set<SchemaInfo> allOf = new LinkedHashSet<>();
-	private Set<String> requiredProperties = new LinkedHashSet<>();
+	private Set<Object> enum_ = st();
+	private Set<SchemaInfo> allOf = st();
+	private Set<String> requiredProperties = st();
 	private Map<String,SchemaInfo> properties = map();
 	private SchemaInfo additionalProperties;
 

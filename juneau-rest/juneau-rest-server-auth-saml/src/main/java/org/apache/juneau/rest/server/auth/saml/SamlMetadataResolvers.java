@@ -92,7 +92,7 @@ public final class SamlMetadataResolvers {
 			resolver.initialize();
 			return resolver;
 		} catch (ComponentInitializationException | ResolverException e) {
-			throw new IOException("Failed to initialize FilesystemMetadataResolver for " + file, e);
+			throw ioex(e, "Failed to initialize FilesystemMetadataResolver for %s", file);
 		}
 	}
 
@@ -144,10 +144,10 @@ public final class SamlMetadataResolvers {
 			return resolver;
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
-			throw new IOException("Interrupted while fetching SAML metadata from " + url, e);
+			throw ioex(e, "Interrupted while fetching SAML metadata from %s", url);
 		} catch (ComponentInitializationException | javax.xml.parsers.ParserConfigurationException
 				| org.xml.sax.SAXException e) {
-			throw new IOException("Failed to initialize DOMMetadataResolver for " + url, e);
+			throw ioex(e, "Failed to initialize DOMMetadataResolver for %s", url);
 		}
 	}
 

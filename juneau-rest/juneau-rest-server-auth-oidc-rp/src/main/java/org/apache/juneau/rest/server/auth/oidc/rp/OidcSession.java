@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.time.*;
 import java.util.*;
 
@@ -75,7 +77,7 @@ public record OidcSession(
 		Objects.requireNonNull(expiresAt, "expiresAt");
 		roles = roles == null
 			? Collections.emptySet()
-			: Collections.unmodifiableSet(new LinkedHashSet<>(roles));
+			: u(cp(roles));
 	}
 
 	/**

@@ -930,7 +930,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		var imports2 = mapOfType(String.class, ConfigMap.class);
 
-		List<String> lines = new LinkedList<>();
+		List<String> lines = ll();
 		try (var scanner = new Scanner(contents)) {
 			while (scanner.hasNextLine()) {
 				var line = scanner.nextLine();

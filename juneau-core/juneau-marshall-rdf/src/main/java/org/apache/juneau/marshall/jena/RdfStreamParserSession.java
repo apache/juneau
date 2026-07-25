@@ -103,7 +103,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 	private final org.apache.jena.rdf.model.Property pRdfType;
 	private final Lang lang;
 	private final RdfStreamParser ctx;
-	private final Set<Resource> urisVisited = new HashSet<>();
+	private final Set<Resource> urisVisited = st();
 
 	/**
 	 * Constructor.

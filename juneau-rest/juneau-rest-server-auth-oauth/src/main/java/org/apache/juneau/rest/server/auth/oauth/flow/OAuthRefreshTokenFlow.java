@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth.oauth.flow;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.util.*;
@@ -61,7 +62,7 @@ public class OAuthRefreshTokenFlow {
 		private String clientId;
 		private Supplier<String> clientSecretSupplier;
 		private String refreshToken;
-		private Set<String> scopes = new LinkedHashSet<>();
+		private Set<String> scopes = st();
 		private Consumer<HTTPRequest> httpRequestConfigurator;
 
 		/** Constructor. */
@@ -182,7 +183,7 @@ public class OAuthRefreshTokenFlow {
 		this.clientId = b.clientId;
 		this.clientSecretSupplier = b.clientSecretSupplier;
 		this.refreshToken = b.refreshToken;
-		this.scopes = Collections.unmodifiableSet(new LinkedHashSet<>(b.scopes));
+		this.scopes = u(cp(b.scopes));
 		this.httpRequestConfigurator = b.httpRequestConfigurator;
 	}
 

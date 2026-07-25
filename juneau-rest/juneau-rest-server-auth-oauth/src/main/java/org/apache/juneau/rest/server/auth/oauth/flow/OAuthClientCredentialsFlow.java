@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth.oauth.flow;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.time.*;
@@ -78,7 +79,7 @@ public class OAuthClientCredentialsFlow {
 		private URI tokenEndpoint;
 		private String clientId;
 		private Supplier<String> clientSecretSupplier;
-		private Set<String> scopes = new LinkedHashSet<>();
+		private Set<String> scopes = st();
 		private TokenCache tokenCache;
 		private Duration cacheSkew = Duration.ofSeconds(30);
 		private Consumer<HTTPRequest> httpRequestConfigurator;
@@ -216,7 +217,7 @@ public class OAuthClientCredentialsFlow {
 		this.tokenEndpoint = b.tokenEndpoint;
 		this.clientId = b.clientId;
 		this.clientSecretSupplier = b.clientSecretSupplier;
-		this.scopes = Collections.unmodifiableSet(new LinkedHashSet<>(b.scopes));
+		this.scopes = u(cp(b.scopes));
 		this.tokenCache = b.tokenCache;
 		this.cacheSkew = b.cacheSkew;
 		this.httpRequestConfigurator = b.httpRequestConfigurator;

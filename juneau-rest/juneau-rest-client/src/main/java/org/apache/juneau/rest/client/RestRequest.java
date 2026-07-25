@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
@@ -51,17 +53,17 @@ public final class RestRequest {
 	private final RestClient client;
 	private final String method;
 	private final String url;
-	private final List<HttpHeader> headers = new ArrayList<>();
-	private final List<HttpPart> queryData = new ArrayList<>();
-	private final List<HttpPart> formData = new ArrayList<>();
-	private final Map<String,Object> pathData = new LinkedHashMap<>();
+	private final List<HttpHeader> headers = l();
+	private final List<HttpPart> queryData = l();
+	private final List<HttpPart> formData = l();
+	private final Map<String,Object> pathData = m();
 	private HttpBody body;
 	private TransportBody convertedBody;
 	private boolean debug;
 	private URI resolvedUri;
 	private Duration timeout;
 	// Per-request interceptors, unioned with the client-level interceptors at run() time.
-	private final List<RestCallInterceptor> requestInterceptors = new ArrayList<>();
+	private final List<RestCallInterceptor> requestInterceptors = l();
 
 	RestRequest(RestClient client, String method, String url) {
 		this.client = client;
@@ -586,7 +588,7 @@ public final class RestRequest {
 			try {
 				return new URI(baseUrl);
 			} catch (URISyntaxException e) {
-				throw new IllegalArgumentException("Invalid URL: " + baseUrl, e);
+				throw iaex(e, "Invalid URL: %s", baseUrl);
 			}
 		}
 		var sb = new StringBuilder(baseUrl);
@@ -602,7 +604,7 @@ public final class RestRequest {
 		try {
 			return new URI(sb.toString());
 		} catch (URISyntaxException e) {
-			throw new IllegalArgumentException("Invalid URL: " + sb, e);
+			throw iaex(e, "Invalid URL: %s", sb);
 		}
 	}
 
