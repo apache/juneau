@@ -59,11 +59,8 @@ import org.apache.juneau.commons.reflect.*;
  * 		.add(GzipEncoder.<jk>class</jk>)
  * 		.build();
  *
- * 	<jc>// Should return "gzip"</jc>
- * 	String <jv>matchedCoding</jv> = <jv>encoders</jv>.findMatch(<js>"compress;q=1.0, gzip;q=0.8, identity;q=0.5, *;q=0"</js>);
- *
- * 	<jc>// Get the encoder</jc>
- * 	Encoder <jv>encoder</jv> = <jv>encoders</jv>.getEncoder(<jv>matchedCoding</jv>);
+ * 	<jc>// Get the encoder for "gzip"</jc>
+ * 	Encoder <jv>encoder</jv> = <jv>encoders</jv>.getEncoder(<js>"compress;q=1.0, gzip;q=0.8, identity;q=0.5, *;q=0"</js>);
  * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>

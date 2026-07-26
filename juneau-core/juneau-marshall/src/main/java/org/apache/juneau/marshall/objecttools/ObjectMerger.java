@@ -58,13 +58,13 @@ import org.apache.juneau.commons.reflect.*;
  * The getters will be called in order until the first non-null value is returned...
  *
  * <p class='bjava'>
- * 	<jv>merge</jv> = ObjectMerger.<jsm>merger</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<js>"1"</js>), <jk>new</jk> A(<js>"2"</js>));
+ * 	<jv>merge</jv> = ObjectMerger.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<js>"1"</js>), <jk>new</jk> A(<js>"2"</js>));
  * 	<jsm>assertEquals</jsm>(<js>"1"</js>, <jv>merge</jv>.getX());
  *
- * 	<jv>merge</jv> = ObjectMerger.<jsm>merger</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<js>"2"</js>));
+ * 	<jv>merge</jv> = ObjectMerger.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<js>"2"</js>));
  * 	<jsm>assertEquals</jsm>(<js>"2"</js>, <jv>merge</jv>.getX());
  *
- * 	<jv>merge</jv> = ObjectMerger.<jsm>merger</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<jk>null</jk>));
+ * 	<jv>merge</jv> = ObjectMerger.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<jk>null</jk>));
  * 	<jsm>assertEquals</jsm>(<jk>null</jk>, <jv>merge</jv>.getX());
  * </p>
  *

@@ -36,8 +36,8 @@ import org.apache.juneau.marshall.parser.*;
  * <p class='bjava'>
  * 	String <jv>string1</jv> = <js>"foobar"</js>;
  * 	String <jv>string2</jv> = ObjectIntrospector
- * 		.create(<jv>string</jv>)
- * 		.invoke(String.<jk>class</jk>, <js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
+ * 		.create(<jv>string1</jv>)
+ * 		.invokeMethod(String.<jk>class</jk>, <js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
  * </p>
  * <p>
  * 	The arguments passed to the identified method are POJOs serialized in JSON format.  Arbitrarily complex arguments can be passed
