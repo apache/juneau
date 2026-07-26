@@ -533,4 +533,21 @@ class UonParser_Test extends TestBase {
 	private static Reader reader(String in) {
 		return new CloseableStringReader(in);
 	}
+
+	//====================================================================================================
+	// Malformed input -- UonParserSession error-path branches
+	//====================================================================================================
+
+	@Test void a06_mapMissingOpenParenThrows() {
+		assertThrowsWithMessage(ParseException.class, "Expected '(' at beginning of object", ()->p.read("x", Map.class));
+	}
+
+	@Test void a07_arrayMissingCloseParenThrows() {
+		assertThrowsWithMessage(ParseException.class, "Could not find end of entry in array", ()->p.read("@(1", List.class));
+	}
+
+	@Test void a08_remainderAfterParseThrows() {
+		var p2 = UonParser.DEFAULT.copy().validateEnd().build();
+		assertThrowsWithMessage(ParseException.class, "Remainder after parse", ()->p2.read("(a=1)extra", Map.class));
+	}
 }

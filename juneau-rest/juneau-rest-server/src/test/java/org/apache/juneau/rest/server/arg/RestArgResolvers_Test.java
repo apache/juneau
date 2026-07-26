@@ -925,4 +925,18 @@ class RestArgResolvers_Test extends TestBase {
 	@Test void z11_restContextArgs_create_matchesThrownStore() {
 		assertNotNull(RestContextArgs.create(firstParam(Fixture.class, "withThrownStore")));
 	}
+
+	// -----------------------------------------------------------------------------------------
+	// aa — DefaultArg
+	// -----------------------------------------------------------------------------------------
+
+	@Test void aa01_defaultArg_create_neverReturnsNull() {
+		// DefaultArg is the fallback resolver -- unlike every other *Arg.create() above, it has no
+		// annotation/type gate and always succeeds (its "no other resolver matched" gate lives one
+		// layer up, in the resolver-selection pipeline that calls this as a last resort).
+		var pi = firstParam(Fixture.class, "noAnnotation");
+		var arg = DefaultArg.create(pi);
+		assertNotNull(arg);
+		assertInstanceOf(RestOpArg.class, arg);
+	}
 }

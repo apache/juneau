@@ -16,12 +16,14 @@
  */
 package org.apache.juneau.marshall.hjson;
 
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -155,5 +157,24 @@ class HjsonEdgeCases_Test extends TestBase {
 		assertNotNull(desc);
 		assertTrue(desc.contains("line1"));
 		assertTrue(desc.contains("line2"));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Malformed input -- HjsonParserSession error-path branches
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void g01_missingColonAfterKeyThrows() {
+		assertThrowsWithMessage(ParseException.class, "Expected : after key", ()->HjsonParser.DEFAULT.read("{\"a\" 1}", Map.class, String.class, Object.class));
+	}
+
+	@Test
+	void g02_unexpectedTokenInValuePositionThrows() {
+		assertThrowsWithMessage(ParseException.class, "Unexpected token", ()->HjsonParser.DEFAULT.read("{\"a\":}", Map.class, String.class, Object.class));
+	}
+
+	@Test
+	void g03_invalidKeyTokenThrows() {
+		assertThrowsWithMessage(ParseException.class, "Expected key", ()->HjsonParser.DEFAULT.read("{{}:1}", Map.class, String.class, Object.class));
 	}
 }

@@ -115,4 +115,32 @@ class HoconEdgeCases_Test extends TestBase {
 		assertEquals(1, ((Number) m.get("a")).intValue());
 		assertEquals(2, ((Number) m.get("b")).intValue());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Malformed input -- HoconParserSession error-path branches
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void j01_missingSeparatorAtTopLevelThrows() {
+		var ex = assertThrows(Exception.class, () -> HoconParser.DEFAULT.read("key value", Map.class, String.class, Object.class));
+		assertTrue(ex.getMessage().contains("Expected") || ex.getMessage().contains("brace"));
+	}
+
+	@Test
+	void j02_missingSeparatorInNestedObjectThrows() {
+		var ex = assertThrows(Exception.class, () -> HoconParser.DEFAULT.read("obj { key value }", Map.class, String.class, Object.class));
+		assertTrue(ex.getMessage().contains("Expected") || ex.getMessage().contains("brace"));
+	}
+
+	@Test
+	void j03_missingKeyThrows() {
+		var ex = assertThrows(Exception.class, () -> HoconParser.DEFAULT.read("= 1", Map.class, String.class, Object.class));
+		assertTrue(ex.getMessage().contains("Expected key"));
+	}
+
+	@Test
+	void j04_unexpectedTokenInValuePositionThrows() {
+		var ex = assertThrows(Exception.class, () -> HoconParser.DEFAULT.read("key = }", Map.class, String.class, Object.class));
+		assertTrue(ex.getMessage().contains("Unexpected token"));
+	}
 }

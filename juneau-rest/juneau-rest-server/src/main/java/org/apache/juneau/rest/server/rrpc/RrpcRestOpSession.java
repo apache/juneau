@@ -129,10 +129,13 @@ public class RrpcRestOpSession extends RestOpSession {
 			return;
 
 		} else if ("POST".equals(session.getMethod())) {
-			var pip = session.getUrlPath().getPath();
-			if (pip.indexOf('/') != -1)
-				pip = pip.substring(pip.lastIndexOf('/') + 1);
-			pip = urlDecode(pip);
+			// The method-signature path is whatever remains of the URL below this operation's matched path
+			// pattern (e.g. pattern "/calc/*" matched against "/calc/add/(int,int)" leaves "add/(int,int)"),
+			// NOT merely the last '/'-delimited segment of the full request path. A method-signature path
+			// itself contains a '/' (name/(paramTypes)), so truncating at the last slash strips the method
+			// name and leaves only the parameter-type token, which can never match a registered method path.
+			var match = session.getUrlPathMatch();
+			var pip = urlDecode(emptyIfNull(nn(match) ? match.getRemainder() : null));
 			RrpcInterfaceMethodMeta rmm = ctx.getMeta().getMethodMetaByPath(pip);
 			if (nn(rmm)) {
 				Method m = rmm.getJavaMethod();

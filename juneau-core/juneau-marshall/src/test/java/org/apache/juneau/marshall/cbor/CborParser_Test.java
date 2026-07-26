@@ -158,6 +158,17 @@ class CborParser_Test extends TestBase {
 		}
 	}
 
+	//====================================================================================================
+	// Malformed input -- CborParserSession error-path branches
+	//====================================================================================================
+
+	@Test
+	void d21_wrongDataTypeForBeanTargetThrows() {
+		// "81 01" == a 1-element array [1]; a bean target requires a MAP wire type.
+		var ex = assertThrows(Exception.class, ()->CborParser.DEFAULT.read(fromHex("8101"), Person.class));
+		assertTrue(ex.getMessage().contains("Invalid data type"));
+	}
+
 	public static class Person {
 		public String name;
 		public int age;

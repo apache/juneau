@@ -60,6 +60,18 @@ class MarkdownParser_Test {
 	}
 
 	//====================================================================================================
+	// z - Malformed input -- MarkdownParserSession#readKeyValueTable JSON5 error-path branch
+	//====================================================================================================
+
+	@Test void z01_malformedInlineJson5InKeyValueTableThrows() {
+		// Backtick-wrapped cell content is embedded into the JSON5 object verbatim (unquoted); an
+		// unbalanced brace here produces invalid JSON5 syntax, exercising the needsJson5Path(...) catch branch.
+		var md = "| Property | Value |\n|---|---|\n| a | `{invalid` |";
+		var ex = assertThrows(org.apache.juneau.marshall.parser.ParseException.class, ()->MarkdownParser.DEFAULT.read(md, List.class));
+		assertTrue(ex.getMessage().contains("Could not parse key-value table"));
+	}
+
+	//====================================================================================================
 	// b - Parse multi-column table to list of beans
 	//====================================================================================================
 

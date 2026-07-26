@@ -197,4 +197,24 @@ class PrototextParser_Test {
 		var result = PrototextParser.DEFAULT.getPrototextBeanPropertyMeta(null);
 		assertSame(PrototextBeanPropertyMeta.DEFAULT, result);
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// c — Malformed input -- PrototextParserSession#populateBeanMap error-path branch
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void c01_unknownBeanPropertyThrows() {
+		var ex = assertThrows(org.apache.juneau.marshall.parser.ParseException.class,
+			()->PrototextParser.DEFAULT.read("name: \"Alice\"\nfoo: 1", C01Bean.class));
+		assertTrue(ex.getMessage().contains("Unknown property 'foo'"));
+	}
+
+	@Test void c02_unknownBeanPropertyIgnoredWhenConfigured() {
+		var p = PrototextParser.create().ignoreUnknownBeanProperties().build();
+		var bean = p.read("name: \"Alice\"\nfoo: 1", C01Bean.class);
+		assertEquals("Alice", bean.name);
+	}
+
+	public static class C01Bean {
+		public String name;
+	}
 }

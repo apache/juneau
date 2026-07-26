@@ -31,6 +31,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.time.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.api.*;
 
@@ -858,6 +859,24 @@ public class OpenApi_Test extends TestBase {
 		assertEquals("a=b\\=c\\\\\\=d\\,e\\=f\\\\\\=g", s);
 		r = parse(ps, s, JsonMap.class);
 		assertJson(json(in), r);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Malformed input -- OpenApiParserSession error-path branches (Type == OBJECT)
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void g02_objectType_noSeparatorThrows() {
+		var ps = T_OBJECT;
+		assertThrowsWithMessage(ParseException.class, "Invalid input", ()->parse(ps, "abc", JsonMap.class));
+	}
+
+	@Test void g03_objectType_unknownBeanPropertyThrows() {
+		var ps = tObject().p("a", tString()).build();
+		assertThrowsWithMessage(ParseException.class, "Cannot find property", ()->parse(ps, "a=1,foo=2", G03Bean.class));
+	}
+
+	public static class G03Bean {
+		public String a;
 	}
 
 	//---------------------------------------------------------------------------------------------

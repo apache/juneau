@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -123,6 +124,19 @@ class MsgPackParser_Test extends TestBase {
 		assertJson("{'1':1}", r);
 		r = p.read(is, Object.class);
 		assertJson("{'1':2}", r);
+	}
+
+	//====================================================================================================
+	// Malformed input -- MsgPackParserSession error-path branches
+	//====================================================================================================
+
+	@Test void a03_wrongDataTypeForBeanTargetThrows() {
+		// "91 01" == a 1-element array [1]; a bean target requires a MAP wire type.
+		assertThrowsWithMessage(ParseException.class, "Invalid data type", ()->MsgPackParser.DEFAULT.read(is("91 01"), A03Bean.class));
+	}
+
+	public static class A03Bean {
+		public String a;
 	}
 
 	private static InputStream is(String spacedHex) {

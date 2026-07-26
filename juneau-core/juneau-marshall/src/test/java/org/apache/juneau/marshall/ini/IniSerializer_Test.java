@@ -222,4 +222,42 @@ class IniSerializer_Test {
 	}
 
 	enum TestEnum { ACTIVE, INACTIVE }
+
+	//====================================================================================================
+	// c - IniWriter comment/null-value branches (via @Ini(comment=...))
+	//====================================================================================================
+
+	public static class CommentedBean {
+		@Ini(comment="A single-line comment.")
+		public String name;
+		@Ini(comment="Line one.\nLine two.")
+		public String description;
+	}
+
+	@Test
+	void c01_singleLineCommentEmitted() {
+		var b = new CommentedBean();
+		b.name = "Alice";
+		var ini = IniSerializer.create().useComments().build().write(b);
+		assertTrue(ini.contains("# A single-line comment."));
+		assertTrue(ini.contains("name") && ini.contains("Alice"));
+	}
+
+	@Test
+	void c02_multiLineCommentEmittedPerLine() {
+		var b = new CommentedBean();
+		b.description = "x";
+		var ini = IniSerializer.create().useComments().build().write(b);
+		assertTrue(ini.contains("# Line one."));
+		assertTrue(ini.contains("# Line two."));
+	}
+
+	@Test
+	void c03_commentsNotEmittedByDefault() {
+		var b = new CommentedBean();
+		b.name = "Alice";
+		var ini = IniSerializer.DEFAULT.write(b);
+		assertFalse(ini.contains("#"));
+	}
+
 }

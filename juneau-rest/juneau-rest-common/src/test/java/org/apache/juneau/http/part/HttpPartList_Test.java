@@ -252,4 +252,107 @@ class HttpPartList_Test extends TestBase {
 		var v = new HttpPartList.Void();
 		assertTrue(v.isEmpty());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Unmodifiable (D4 collection-mutator-override variant)
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_unmodifiable_isUnmodifiable() {
+		var x = HttpPartList.create().append("a", "1");
+		assertFalse(x.isUnmodifiable());
+		assertTrue(x.unmodifiable().isUnmodifiable());
+	}
+
+	@Test void f02_unmodifiable_idempotent() {
+		var u = HttpPartList.create().append("a", "1").unmodifiable();
+		assertSame(u, u.unmodifiable()); // D1: already unmodifiable -> returned as-is.
+	}
+
+	@Test void f03_unmodifiable_readsStillWork() {
+		var u = HttpPartList.create().append("a", "1").append("b", "2").unmodifiable();
+		assertEquals(2, u.size());
+		assertEquals("1", u.getFirst("a").getValue());
+		assertEquals("2", u.getFirst("b").getValue());
+		var count = new AtomicInteger();
+		u.forEach("a", p -> count.incrementAndGet());
+		assertEquals(1, count.get());
+	}
+
+	@Test void f04_unmodifiable_arrayListMutatorsThrow() {
+		var u = HttpPartList.create().append("a", "1").unmodifiable();
+		var p = HttpPartBean.of("b", "2");
+		assertThrows(UnsupportedOperationException.class, () -> u.add(p));
+		assertThrows(UnsupportedOperationException.class, () -> u.add(0, p));
+		var pList = List.of(p);
+		assertThrows(UnsupportedOperationException.class, () -> u.addAll(pList));
+		assertThrows(UnsupportedOperationException.class, () -> u.addAll(0, pList));
+		assertThrows(UnsupportedOperationException.class, () -> u.set(0, p));
+		assertThrows(UnsupportedOperationException.class, () -> u.remove(0));
+		var first = u.get(0);
+		assertThrows(UnsupportedOperationException.class, () -> u.remove((Object)first));
+		assertThrows(UnsupportedOperationException.class, u::clear);
+		var firstAsList = List.of(first);
+		assertThrows(UnsupportedOperationException.class, () -> u.removeAll(firstAsList));
+		var emptyList = List.<HttpPart>of();
+		assertThrows(UnsupportedOperationException.class, () -> u.retainAll(emptyList));
+		assertThrows(UnsupportedOperationException.class, () -> u.removeIf(x -> true));
+		assertThrows(UnsupportedOperationException.class, () -> u.replaceAll(x -> x));
+		assertThrows(UnsupportedOperationException.class, () -> u.sort((a, b) -> 0));
+	}
+
+	@Test void f05_unmodifiable_fluentMutatorsThrow() {
+		var u = HttpPartList.create().append("a", "1").unmodifiable();
+		var p = HttpPartBean.of("b", "2");
+		assertThrows(UnsupportedOperationException.class, () -> u.append(p));
+		assertThrows(UnsupportedOperationException.class, () -> u.append(p, p));
+		assertThrows(UnsupportedOperationException.class, () -> u.append(List.of(p)));
+		assertThrows(UnsupportedOperationException.class, () -> u.append("c", "3"));
+		assertThrows(UnsupportedOperationException.class, () -> u.set(p));
+		assertThrows(UnsupportedOperationException.class, () -> u.set(p, p));
+		assertThrows(UnsupportedOperationException.class, () -> u.set("c", "3"));
+		assertThrows(UnsupportedOperationException.class, () -> u.setDefault(p));
+		assertThrows(UnsupportedOperationException.class, () -> u.setDefault(p, p));
+		assertThrows(UnsupportedOperationException.class, () -> u.setDefault("c", "3"));
+		assertThrows(UnsupportedOperationException.class, () -> u.removeAll("a"));
+		assertThrows(UnsupportedOperationException.class, () -> u.caseInsensitive(true));
+	}
+
+	@Test void f06_unmodifiable_iteratorMutatorsThrow() {
+		var u = HttpPartList.create().append("a", "1").append("b", "2").unmodifiable();
+		var i = u.iterator();
+		assertTrue(i.hasNext());
+		assertNotNull(i.next());
+		assertThrows(UnsupportedOperationException.class, i::remove);
+
+		var li = u.listIterator();
+		assertTrue(li.hasNext());
+		assertNotNull(li.next());
+		assertThrows(UnsupportedOperationException.class, li::remove);
+		var newPart = HttpPartBean.of("c", "3");
+		assertThrows(UnsupportedOperationException.class, () -> li.set(newPart));
+		assertThrows(UnsupportedOperationException.class, () -> li.add(newPart));
+
+		var li2 = u.listIterator(1);
+		assertTrue(li2.hasPrevious());
+		assertEquals(0, li2.previousIndex());
+		assertEquals(1, li2.nextIndex());
+		assertNotNull(li2.previous());
+	}
+
+	@Test void f07_unmodifiable_contentEquality() {
+		var x = HttpPartList.create().append("a", "1").append("b", "2");
+		var u = x.unmodifiable();
+		// D3 content-only equality: a modifiable list equals its frozen snapshot (and vice versa).
+		assertEquals(x, u);
+		assertEquals(u, x);
+		assertEquals(x.hashCode(), u.hashCode());
+	}
+
+	@Test void f08_unmodifiable_snapshotIndependence() {
+		var x = HttpPartList.create().append("a", "1");
+		var u = x.unmodifiable();
+		x.append("b", "2"); // Mutate original after snapshotting.
+		assertEquals(1, u.size());
+		assertEquals("a", u.get(0).getName());
+	}
 }

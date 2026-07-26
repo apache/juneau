@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.ini;
 
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -127,6 +129,58 @@ class IniParser_Test extends TestBase {
 			IniParser.DEFAULT.read("[]", List.class, String.class));
 		assertTrue(ex.getMessage().contains("not supported") || ex.getMessage().contains("bean")
 			|| cns(ex).contains("Parse"));
+	}
+
+	//====================================================================================================
+	// b - Malformed/edge-case input (IniParserSession#splitKeyValue / #readIniContent branches)
+	//====================================================================================================
+
+	@Test
+	void b01_unterminatedSectionHeaderIgnored() throws Exception {
+		// No closing ']' -- readIniContent's "end < 0" branch skips the line entirely (current section unchanged).
+		var ini = "[section\nkey = value";
+		var m = (Map<String,Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
+		assertBean(m, "key", "value");
+		assertFalse(m.containsKey("section"));
+	}
+
+	@Test
+	void b02_lineStartingWithEqualsIgnored() throws Exception {
+		// splitKeyValue's "first == '='" guard rejects the line as not a key/value pair.
+		var ini = "=badline\nkey = value";
+		var m = (Map<String,Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
+		assertBean(m, "key", "value");
+		assertEquals(1, m.size());
+	}
+
+	@Test
+	void b03_lineWithNoSeparatorIgnored() throws Exception {
+		// No '=' or ':' present -- splitKeyValue's "idx < 1" guard rejects the line.
+		var ini = "justtext\nkey = value";
+		var m = (Map<String,Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
+		assertBean(m, "key", "value");
+		assertEquals(1, m.size());
+	}
+
+	@Test
+	void b04_unknownBeanPropertyThrows() {
+		var ini = "name = Alice\nfoo = bar";
+		assertThrowsWithMessage(ParseException.class, "Unknown property 'foo'", () ->
+			IniParser.DEFAULT.read(ini, IniRoundTrip_Test.Person.class));
+	}
+
+	@Test
+	void b05_unknownBeanPropertyIgnoredWhenConfigured() throws Exception {
+		var ini = "name = Alice\nage = 30\nfoo = bar";
+		var p = IniParser.create().ignoreUnknownBeanProperties().build().read(ini, IniRoundTrip_Test.Person.class);
+		assertBean(p, "name,age", "Alice,30");
+	}
+
+	@Test
+	void b06_inlineCommentStrippedOutsideQuotesOnly() throws Exception {
+		var ini = "a = 'has#hash'\nb = plain # comment";
+		var m = (Map<String,Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
+		assertBean(m, "a,b", "has#hash,plain");
 	}
 
 }
