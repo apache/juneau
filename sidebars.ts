@@ -219,7 +219,7 @@ const sidebars: SidebarsConfig = {
 							{
 								type: 'doc',
 								id: 'topics/03.03.06.BeanIgnoreAnnotation',
-								label: '3.3.6. @MarshalledIgnore Annotation',
+								label: '3.3.6. @BeanIgnore Annotation',
 							},
 							{
 								type: 'doc',
