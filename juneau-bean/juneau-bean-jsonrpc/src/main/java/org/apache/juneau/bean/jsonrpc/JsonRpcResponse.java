@@ -27,6 +27,8 @@ import org.apache.juneau.marshall.*;
 @Marshalled
 public class JsonRpcResponse {
 
+	private static final String JSONRPC_2_0 = "2.0";
+
 	private String jsonrpc;
 	private Object id;
 	private Object result;
@@ -110,5 +112,61 @@ public class JsonRpcResponse {
 	public JsonRpcResponse setError(JsonRpcError value) {
 		error = value;
 		return this;
+	}
+
+	/**
+	 * Tests whether a JSON-RPC id identifies a notification (a request that must not be answered).
+	 *
+	 * <p>
+	 * A JSON-RPC request with no {@code id} is a notification; the server performs the work and returns
+	 * no response body.
+	 *
+	 * @param id The request id. Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the id is <jk>null</jk>.
+	 */
+	public static boolean notification(Object id) {
+		return id == null;
+	}
+
+	/**
+	 * Creates a JSON-RPC 2.0 success response.
+	 *
+	 * @param id The request id to correlate against. Can be <jk>null</jk>.
+	 * @param result The result payload. Can be <jk>null</jk>.
+	 * @return A new response object. Never <jk>null</jk>.
+	 */
+	public static JsonRpcResponse ok(Object id, Object result) {
+		return new JsonRpcResponse()
+			.setJsonrpc(JSONRPC_2_0)
+			.setId(id)
+			.setResult(result);
+	}
+
+	/**
+	 * Creates a JSON-RPC 2.0 error response with no structured error data.
+	 *
+	 * @param id The request id to correlate against. Can be <jk>null</jk>.
+	 * @param code The JSON-RPC error code.
+	 * @param message The error message. Can be <jk>null</jk>.
+	 * @return A new response object. Never <jk>null</jk>.
+	 */
+	public static JsonRpcResponse errorResponse(Object id, int code, String message) {
+		return errorResponse(id, code, message, null);
+	}
+
+	/**
+	 * Creates a JSON-RPC 2.0 error response.
+	 *
+	 * @param id The request id to correlate against. Can be <jk>null</jk>.
+	 * @param code The JSON-RPC error code.
+	 * @param message The error message. Can be <jk>null</jk>.
+	 * @param data Optional structured error data. Can be <jk>null</jk> to leave the property unset.
+	 * @return A new response object. Never <jk>null</jk>.
+	 */
+	public static JsonRpcResponse errorResponse(Object id, int code, String message, Object data) {
+		return new JsonRpcResponse()
+			.setJsonrpc(JSONRPC_2_0)
+			.setId(id)
+			.setError(new JsonRpcError().setCode(code).setMessage(message).setData(data));
 	}
 }
