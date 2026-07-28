@@ -37,6 +37,7 @@
 		<module>juneau-bean-html5</module>
 		<module>juneau-bean-jsonapi</module>
 		<module>juneau-bean-jsonpatch</module>
+		<module>juneau-bean-jsonrpc</module>
 		<module>juneau-bean-jsonschema</module>
 		<module>juneau-bean-mcp</module>
 		<module>juneau-bean-openapi-v3</module>
