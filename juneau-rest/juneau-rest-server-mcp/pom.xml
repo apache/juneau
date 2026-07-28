@@ -73,6 +73,37 @@
 
 	<build>
 		<plugins>
+			<!--
+				The MCP core is revision-neutral by contract: no per-revision MCP module may appear
+				anywhere on its dependency tree. Enforced here rather than left to code review,
+				because a single convenience import is all it takes to quietly couple the core to one
+				revision and defeat the whole layering.
+			-->
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-no-revision-modules</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<bannedDependencies>
+									<excludes>
+										<exclude>org.apache.juneau:juneau-bean-mcp-*</exclude>
+										<exclude>org.apache.juneau:juneau-rest-server-mcp-*</exclude>
+									</excludes>
+									<searchTransitive>true</searchTransitive>
+									<message>juneau-rest-server-mcp is the revision-neutral MCP core: it must not depend on any per-revision MCP module (juneau-bean-mcp-* / juneau-rest-server-mcp-*), in any scope, directly or transitively.</message>
+								</bannedDependencies>
+							</rules>
+							<fail>true</fail>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
