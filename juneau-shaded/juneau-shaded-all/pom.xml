@@ -64,6 +64,11 @@
 			<artifactId>juneau-rest-server-mcp</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-mcp-2025-06-18</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		
 		<!-- Bean modules -->
 		<dependency>

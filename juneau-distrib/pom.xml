@@ -167,6 +167,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-mcp-2025-06-18</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-auth-jwt</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
@@ -741,6 +747,31 @@
 									<artifactId>juneau-rest-server-mcp</artifactId>
 									<version>${project.version}</version>
 									<destFileName>org.apache.juneau.rest.server.mcp_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-rest-server-mcp-2025-06-18 -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-mcp-2025-06-18</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-rest-server-mcp-2025-06-18-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-mcp-2025-06-18</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-rest-server-mcp-2025-06-18-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-mcp-2025-06-18</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.rest.server.mcp.v20250618_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<!-- juneau-rest-server-auth-jwt -->
