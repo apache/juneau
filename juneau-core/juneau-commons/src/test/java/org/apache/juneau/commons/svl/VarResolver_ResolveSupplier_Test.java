@@ -78,6 +78,9 @@ class VarResolver_ResolveSupplier_Test extends TestBase {
 	 * {@code .get()} is safe to call concurrently from many threads. Verifies no shared mutable
 	 * session state surfaces (each {@code .get()} opens a fresh session).
 	 */
+	@SuppressWarnings({
+		"java:S2093" // ExecutorService teardown uses explicit shutdownNow() in finally; try-with-resources close() would instead block awaiting termination, changing this concurrency test's teardown semantics.
+	})
 	@Test void a04_supplierIsThreadsafe() throws Exception {
 		var vr = VarResolver.create().vars(CounterVar.class).build();
 		var counter = new AtomicInteger();

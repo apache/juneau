@@ -89,8 +89,9 @@ public class RelaxedPropertySource implements PropertySource {
 	 *
 	 * @param name The requested property name.
 	 * @return The candidate names to probe, in priority order.
+	 * @since 10.0.0
 	 */
-	static List<String> candidates(String name) {
+	public static List<String> candidates(String name) {
 		var out = new ArrayList<String>(3);
 		out.add(name);
 		var tokens = tokenize(name);

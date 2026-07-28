@@ -28,14 +28,16 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.*;
 
 /**
- * Acceptance tests for the {@code @Value}-driven env-default fields on {@link RestContext}.
+ * Acceptance tests for the env-driven {@code RestContext.*} default settings.
  *
  * <p>
- * 3-test triad per migrated field — system property set, unset (default), and
- * {@code Settings.setGlobal} override. Validates the {@code @Value} field receives the resolved
- * value at injection time. The downstream {@code mergeReplacedStringAttribute} pipeline applies
- * its own DefaultConfig-driven precedence on top of these fields and is exercised by the existing
- * {@code RestContext}-level tests; this class scopes coverage to the {@code @Value} seam itself.
+ * 3-test triad per setting — system property set, unset (default), and {@code Settings.setGlobal} override.
+ * Settings collapsed into {@link RestContextProperties} are read back through
+ * {@link RestContext#getRestContextProperties()}; the two {@code Optional<String>} outliers still carried as
+ * {@code @Value} fields on {@link RestContext} ({@code uriAuthority} / {@code uriContext}) are read back
+ * reflectively. The downstream {@code mergeReplacedStringAttribute} pipeline applies its own DefaultConfig-driven
+ * precedence on top of these values and is exercised by the existing {@code RestContext}-level tests; this class
+ * scopes coverage to the env-resolution seam itself.
  */
 @ResourceLock(Resources.SYSTEM_PROPERTIES)
 class RestContext_ValueAdoption_Test extends TestBase {
@@ -85,118 +87,118 @@ class RestContext_ValueAdoption_Test extends TestBase {
 		return (T)f.get(c);
 	}
 
-	// -------------------- defaultAllowedHeaderParams (String) --------------------
+	// -------------------- allowedHeaderParams (String) --------------------
 
 	@Test
 	void a01_allowedHeaderParams_set() throws Exception {
 		System.setProperty("RestContext.allowedHeaderParams", "X-Custom1,X-Custom2");
-		assertEquals("X-Custom1,X-Custom2", fld(ctx(), "defaultAllowedHeaderParams"));
+		assertEquals("X-Custom1,X-Custom2", ctx().getRestContextProperties().getAllowedHeaderParams());
 	}
 
 	@Test
 	void a02_allowedHeaderParams_unset() throws Exception {
-		assertEquals("Accept,Content-Type", fld(ctx(), "defaultAllowedHeaderParams"));
+		assertEquals("Accept,Content-Type", ctx().getRestContextProperties().getAllowedHeaderParams());
 	}
 
 	@Test
 	void a03_allowedHeaderParams_setGlobal() throws Exception {
 		Settings.get().setGlobal("RestContext.allowedHeaderParams", "X-Global");
-		assertEquals("X-Global", fld(ctx(), "defaultAllowedHeaderParams"));
+		assertEquals("X-Global", ctx().getRestContextProperties().getAllowedHeaderParams());
 	}
 
-	// -------------------- defaultAllowedMethodParams (String) --------------------
+	// -------------------- allowedMethodParams (String) --------------------
 
 	@Test
 	void b01_allowedMethodParams_set() throws Exception {
 		System.setProperty("RestContext.allowedMethodParams", "GET,POST");
-		assertEquals("GET,POST", fld(ctx(), "defaultAllowedMethodParams"));
+		assertEquals("GET,POST", ctx().getRestContextProperties().getAllowedMethodParams());
 	}
 
 	@Test
 	void b02_allowedMethodParams_unset() throws Exception {
-		assertEquals("HEAD,OPTIONS", fld(ctx(), "defaultAllowedMethodParams"));
+		assertEquals("HEAD,OPTIONS", ctx().getRestContextProperties().getAllowedMethodParams());
 	}
 
 	@Test
 	void b03_allowedMethodParams_setGlobal() throws Exception {
 		Settings.get().setGlobal("RestContext.allowedMethodParams", "PUT");
-		assertEquals("PUT", fld(ctx(), "defaultAllowedMethodParams"));
+		assertEquals("PUT", ctx().getRestContextProperties().getAllowedMethodParams());
 	}
 
-	// -------------------- defaultDisableContentParam (boolean) --------------------
+	// -------------------- disableContentParam (boolean) --------------------
 
 	@Test
 	void c01_disableContentParam_set() throws Exception {
 		System.setProperty("RestContext.disableContentParam", "true");
-		assertTrue(this.<Boolean>fld(ctx(), "defaultDisableContentParam"));
+		assertEquals("true", ctx().getRestContextProperties().getDisableContentParamRaw());
 	}
 
 	@Test
 	void c02_disableContentParam_unset() throws Exception {
-		assertFalse(this.<Boolean>fld(ctx(), "defaultDisableContentParam"));
+		assertEquals("false", ctx().getRestContextProperties().getDisableContentParamRaw());
 	}
 
 	@Test
 	void c03_disableContentParam_setGlobal() throws Exception {
 		Settings.get().setGlobal("RestContext.disableContentParam", "true");
-		assertTrue(this.<Boolean>fld(ctx(), "defaultDisableContentParam"));
+		assertEquals("true", ctx().getRestContextProperties().getDisableContentParamRaw());
 	}
 
-	// -------------------- defaultRenderResponseStackTraces (boolean) --------------------
+	// -------------------- renderResponseStackTraces (boolean) --------------------
 
 	@Test
 	void d01_renderResponseStackTraces_set() throws Exception {
 		System.setProperty("RestContext.renderResponseStackTraces", "true");
-		assertTrue(this.<Boolean>fld(ctx(), "defaultRenderResponseStackTraces"));
+		assertEquals("true", ctx().getRestContextProperties().getRenderResponseStackTracesRaw());
 	}
 
 	@Test
 	void d02_renderResponseStackTraces_unset() throws Exception {
-		assertFalse(this.<Boolean>fld(ctx(), "defaultRenderResponseStackTraces"));
+		assertEquals("false", ctx().getRestContextProperties().getRenderResponseStackTracesRaw());
 	}
 
 	@Test
 	void d03_renderResponseStackTraces_setGlobal() throws Exception {
 		Settings.get().setGlobal("RestContext.renderResponseStackTraces", "true");
-		assertTrue(this.<Boolean>fld(ctx(), "defaultRenderResponseStackTraces"));
+		assertEquals("true", ctx().getRestContextProperties().getRenderResponseStackTracesRaw());
 	}
 
-	// -------------------- defaultProblemDetails (boolean) --------------------
+	// -------------------- problemDetails (boolean) --------------------
 
 	@Test
 	void e01_problemDetails_set() throws Exception {
 		System.setProperty("RestContext.problemDetails", "true");
-		assertTrue(this.<Boolean>fld(ctx(), "defaultProblemDetails"));
+		assertEquals("true", ctx().getRestContextProperties().getProblemDetailsRaw());
 	}
 
 	@Test
 	void e02_problemDetails_unset() throws Exception {
-		assertFalse(this.<Boolean>fld(ctx(), "defaultProblemDetails"));
+		assertEquals("false", ctx().getRestContextProperties().getProblemDetailsRaw());
 	}
 
 	@Test
 	void e03_problemDetails_setGlobal() throws Exception {
 		Settings.get().setGlobal("RestContext.problemDetails", "true");
-		assertTrue(this.<Boolean>fld(ctx(), "defaultProblemDetails"));
+		assertEquals("true", ctx().getRestContextProperties().getProblemDetailsRaw());
 	}
 
-	// -------------------- defaultClientVersionHeader (String) --------------------
+	// -------------------- clientVersionHeader (String) --------------------
 
 	@Test
 	void f01_clientVersionHeader_set() throws Exception {
 		System.setProperty("RestContext.clientVersionHeader", "X-API-Version");
-		assertEquals("X-API-Version", fld(ctx(), "defaultClientVersionHeader"));
+		assertEquals("X-API-Version", ctx().getRestContextProperties().getClientVersionHeader());
 	}
 
 	@Test
 	void f02_clientVersionHeader_unset() throws Exception {
-		assertEquals("Client-Version", fld(ctx(), "defaultClientVersionHeader"));
+		assertEquals("Client-Version", ctx().getRestContextProperties().getClientVersionHeader());
 	}
 
 	@Test
 	void f03_clientVersionHeader_setGlobal() throws Exception {
 		Settings.get().setGlobal("RestContext.clientVersionHeader", "X-Global-Version");
-		assertEquals("X-Global-Version", fld(ctx(), "defaultClientVersionHeader"));
+		assertEquals("X-Global-Version", ctx().getRestContextProperties().getClientVersionHeader());
 	}
 
 	// -------------------- defaultUriAuthority (Optional<String>) --------------------

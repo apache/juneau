@@ -21,7 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Coverage-targeted tests for {@link RestContext} getter methods and Builder Setter methods.
@@ -288,5 +290,159 @@ class RestContext_Getters_Coverage_Test extends TestBase {
 		assertEquals(2, paths.length);
 		assertEquals("/svl-1", paths[0]);
 		assertEquals("/svl-2", paths[1]);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Env-driven getter delegation — each RestContext.* setting flows from its bound RestContextProperties into the
+	// resolved getter with a NON-default value, so a mis-wired delegation (e.g. reading a sibling setting) is caught.
+	// Uses system properties, so isolated under SYSTEM_PROPERTIES.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Nested
+	@ResourceLock(Resources.SYSTEM_PROPERTIES)
+	class X_envDrivenGetters extends TestBase {
+
+		@Rest
+		public static class X {}
+
+		private RestContext build() throws Exception {
+			var resource = new X();
+			return new RestContext(new RestContext.Args(X.class, null, null, () -> resource, "", null, null, null, RestContext.ContextKind.ROOT))
+				.postInit().postInitChildFirst();
+		}
+
+		@Test void x01_debugDefault() throws Exception {
+			System.setProperty("RestContext.debugDefault", "ALWAYS");
+			try {
+				var c = build();
+				assertEquals("ALWAYS", c.getRestContextProperties().getDebugDefault());
+				// debugDefault must actually reach the debugEnablement memoizer: forcing it publishes the resolved
+				// Enablement (ALWAYS) into the bean store, so a broken seam would leave NEVER (the @Rest(debug) fallback).
+				assertNotNull(c.getDebugEnablement());
+				assertEquals(Enablement.ALWAYS, c.getBeanStore().getBean(Enablement.class).orElse(null));
+			} finally {
+				System.clearProperty("RestContext.debugDefault");
+			}
+		}
+
+		@Test void x02_virtualThreads() throws Exception {
+			System.setProperty("RestContext.virtualThreads", "true");
+			try {
+				var c = build();
+				assertEquals("true", c.getRestContextProperties().getVirtualThreadsRaw());
+				assertTrue(c.isVirtualThreadsEnabled());
+			} finally {
+				System.clearProperty("RestContext.virtualThreads");
+			}
+		}
+
+		@Test void x03_responseTraceparent() throws Exception {
+			// Non-default (false); sibling mdcAsyncPropagation stays at its default (true) to catch a swap.
+			System.setProperty("RestContext.responseTraceparent", "false");
+			try {
+				var c = build();
+				assertFalse(c.isResponseTraceparent());
+				assertTrue(c.isMdcAsyncPropagation());
+			} finally {
+				System.clearProperty("RestContext.responseTraceparent");
+			}
+		}
+
+		@Test void x04_mdcAsyncPropagation() throws Exception {
+			// Non-default (false); sibling responseTraceparent stays at its default (true) to catch a swap.
+			System.setProperty("RestContext.mdcAsyncPropagation", "false");
+			try {
+				var c = build();
+				assertFalse(c.isMdcAsyncPropagation());
+				assertTrue(c.isResponseTraceparent());
+			} finally {
+				System.clearProperty("RestContext.mdcAsyncPropagation");
+			}
+		}
+
+		@Test void x05_uriResolution_enum() throws Exception {
+			// Non-default (ABSOLUTE); sibling uriRelativity stays at its default (RESOURCE) to catch a swap.
+			System.setProperty("RestContext.uriResolution", "ABSOLUTE");
+			try {
+				var c = build();
+				assertEquals(UriResolution.ABSOLUTE, c.getUriResolution());
+				assertEquals(UriRelativity.RESOURCE, c.getUriRelativity());
+			} finally {
+				System.clearProperty("RestContext.uriResolution");
+			}
+		}
+
+		@Test void x06_eagerInit() throws Exception {
+			// Non-default (true); sibling lazyChildren stays at its default (false) to catch a swap.
+			System.setProperty("RestContext.eagerInit", "true");
+			try {
+				var c = build();
+				assertTrue(c.isEagerInit());
+				assertFalse(c.isLazyChildren());
+			} finally {
+				System.clearProperty("RestContext.eagerInit");
+			}
+		}
+
+		@Test void x07_lazyChildren() throws Exception {
+			// Non-default (true); sibling eagerInit stays at its default (false) to catch a swap.
+			System.setProperty("RestContext.lazyChildren", "true");
+			try {
+				var c = build();
+				assertTrue(c.isLazyChildren());
+				assertFalse(c.isEagerInit());
+			} finally {
+				System.clearProperty("RestContext.lazyChildren");
+			}
+		}
+
+		// renderResponseStackTraces, disableContentParam, allowedHeaderParams and allowedMethodParams are all fixed by
+		// the framework DefaultConfig annotation chain, so their RestContext.* env value reaches the bound bean but is
+		// masked at the resolved RestContext getter. These assert the value is adopted into the correct bean accessor
+		// (with a sibling left at its default) so a delegation swap among them is caught at the bean seam.
+
+		@Test void x08_renderResponseStackTraces() throws Exception {
+			System.setProperty("RestContext.renderResponseStackTraces", "true");
+			try {
+				var p = build().getRestContextProperties();
+				assertEquals("true", p.getRenderResponseStackTracesRaw());
+				assertEquals("false", p.getDisableContentParamRaw());
+			} finally {
+				System.clearProperty("RestContext.renderResponseStackTraces");
+			}
+		}
+
+		@Test void x09_disableContentParam() throws Exception {
+			System.setProperty("RestContext.disableContentParam", "true");
+			try {
+				var p = build().getRestContextProperties();
+				assertEquals("true", p.getDisableContentParamRaw());
+				assertEquals("false", p.getRenderResponseStackTracesRaw());
+			} finally {
+				System.clearProperty("RestContext.disableContentParam");
+			}
+		}
+
+		@Test void x10_allowedHeaderParams() throws Exception {
+			System.setProperty("RestContext.allowedHeaderParams", "X-Custom-Hdr");
+			try {
+				var p = build().getRestContextProperties();
+				assertEquals("X-Custom-Hdr", p.getAllowedHeaderParams());
+				assertEquals("HEAD,OPTIONS", p.getAllowedMethodParams());
+			} finally {
+				System.clearProperty("RestContext.allowedHeaderParams");
+			}
+		}
+
+		@Test void x11_allowedMethodParams() throws Exception {
+			System.setProperty("RestContext.allowedMethodParams", "TRACE");
+			try {
+				var p = build().getRestContextProperties();
+				assertEquals("TRACE", p.getAllowedMethodParams());
+				assertEquals("Accept,Content-Type", p.getAllowedHeaderParams());
+			} finally {
+				System.clearProperty("RestContext.allowedMethodParams");
+			}
+		}
 	}
 }

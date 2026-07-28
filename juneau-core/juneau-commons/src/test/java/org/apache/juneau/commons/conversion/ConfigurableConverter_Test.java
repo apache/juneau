@@ -148,23 +148,27 @@ class ConfigurableConverter_Test {
 		var latch = new CountDownLatch(1);
 		var errors = new java.util.concurrent.atomic.AtomicInteger(0);
 		var pool = Executors.newFixedThreadPool(threads);
-		for (int i = 0; i < threads; i++) {
-			pool.submit(() -> {
-				try {
-					latch.await();
-					for (int j = 0; j < 100; j++) {
-						var result = c.to("21", Integer.class);
-						if (result != 42)
-							errors.incrementAndGet();
+		try {
+			for (int i = 0; i < threads; i++) {
+				pool.submit(() -> {
+					try {
+						latch.await();
+						for (int j = 0; j < 100; j++) {
+							var result = c.to("21", Integer.class);
+							if (result != 42)
+								errors.incrementAndGet();
+						}
+					} catch (Exception e) {
+						errors.incrementAndGet();
 					}
-				} catch (Exception e) {
-					errors.incrementAndGet();
-				}
-			});
+				});
+			}
+			latch.countDown();
+			pool.shutdown();
+			pool.awaitTermination(5, TimeUnit.SECONDS);
+			assertEquals(0, errors.get());
+		} finally {
+			pool.shutdownNow();
 		}
-		latch.countDown();
-		pool.shutdown();
-		pool.awaitTermination(5, TimeUnit.SECONDS);
-		assertEquals(0, errors.get());
 	}
 }

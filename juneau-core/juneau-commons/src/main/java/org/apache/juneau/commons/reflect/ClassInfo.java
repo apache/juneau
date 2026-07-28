@@ -3084,6 +3084,34 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * @throws ExecutableException If any field or method cannot be injected (e.g., required bean not found in the bean store).
 	 */
 	public <T> T inject(T bean, BeanStore beanStore) {
+		return inject(bean, beanStore, null);
+	}
+
+	/**
+	 * Same as {@link #inject(Object, BeanStore)} but runs an additional hook after all
+	 * {@code @Inject}/{@code @Autowired}/{@code @Value} field and method injection has completed but
+	 * <i>before</i> any {@code @PostConstruct} method is dispatched.
+	 *
+	 * <p>
+	 * This is the seam that lets a caller in another package (e.g. {@code BeanInstantiator} running a
+	 * whole-object {@code @ConfigProperties} bind) populate additional fields between field injection and
+	 * {@code @PostConstruct}, so that a {@code @PostConstruct} method observes the fully-populated object.
+	 * Keeping the hook here — rather than teaching {@code ClassInfo} about any specific binder — preserves the
+	 * {@code reflect} package's independence from the {@code inject} package's higher-level binders.
+	 *
+	 * <p>
+	 * Passing a {@code null} hook is exactly equivalent to {@link #inject(Object, BeanStore)}, which is the form
+	 * all existing callers use.
+	 *
+	 * @param <T> The bean type.
+	 * @param bean The object to inject beans into.
+	 * @param beanStore The bean store to resolve beans from.
+	 * @param afterFieldInjection A hook run after field/method injection and before {@code @PostConstruct} dispatch.  Can be <jk>null</jk> (no hook).
+	 * @return The same bean instance (for method chaining).
+	 * @throws ExecutableException If any field or method cannot be injected (e.g., required bean not found in the bean store).
+	 * @since 10.0.0
+	 */
+	public <T> T inject(T bean, BeanStore beanStore, Runnable afterFieldInjection) {
 		// Inject into fields.
 		getAllFields().stream()
 			.filter(x -> x.isNotFinal() && x.getAnnotations().stream().anyMatch(ClassInfo::isInjectOrValueAnnotation))
@@ -3093,6 +3121,11 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 		getAllMethods().stream()
 		.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0) && x.getAnnotations().stream().anyMatch(ClassInfo::isInjectOrValueAnnotation))
 			.forEach(x -> x.inject(beanStore, bean));
+
+		// Post-field-injection seam: bind whole-object config (@ConfigProperties) before @PostConstruct so
+		// that a @PostConstruct method observes the fully-bound fields.
+		if (afterFieldInjection != null)
+			afterFieldInjection.run();
 
 		// Call @PostConstruct methods after all injection is complete
 		// Use getAllMethodsTopDown() to ensure parent methods are called before child methods

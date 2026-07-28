@@ -1431,84 +1431,18 @@ public class RestContext extends Context {
 	});
 
 	//---------------------------------------------------------------------------------------------
-	// @Value-injected env-driven defaults
+	// Env-driven defaults
 	//
-	// Populated by ClassInfo.of(this).inject(this, beanStore) during construction; consumed by the
-	// memoizer lambdas below (which run lazily, i.e. after injection has completed). Each field
-	// is the env-driven default that flows into mergeReplacedStringAttribute / mergeReplacedBooleanAttribute
-	// as the initial value before the @Rest annotation chain is walked.
+	// The three @Value fields (debug level, uriAuthority, uriContext) are populated by
+	// ClassInfo.of(this).inject(this, beanStore) during construction; the remaining RestContext.* defaults are
+	// carried by the RestContextProperties bean (materialized once during construction — see the constructor).
+	// Together they supply the env-driven default that flows into mergeReplacedStringAttribute /
+	// mergeReplacedBooleanAttribute as the initial value before the @Rest annotation chain is walked.
 	//---------------------------------------------------------------------------------------------
-
-	/** Env-driven default for {@code @Rest(debugDefault)}; consumed by the {@link #debugEnablement} memoizer. */
-	@Value("${RestContext.debugDefault:}")
-	private String defaultDebugDefault;
 
 	/** Env-driven default for the call-logger debug level fallback in the {@link #debugConfig} memoizer. */
 	@Value("${juneau.restLogger.level:INFO}")
 	private String defaultDebugLevel;
-
-	/** Env-driven default for {@code @Rest(allowedHeaderParams)}. */
-	@Value("${RestContext.allowedHeaderParams:Accept,Content-Type}")
-	private String defaultAllowedHeaderParams;
-
-	/** Env-driven default for {@code @Rest(allowedMethodHeaders)}. */
-	@Value("${RestContext.allowedMethodHeaders:}")
-	private String defaultAllowedMethodHeaders;
-
-	/** Env-driven default for {@code @Rest(allowedMethodParams)}. */
-	@Value("${RestContext.allowedMethodParams:HEAD,OPTIONS}")
-	private String defaultAllowedMethodParams;
-
-	/** Env-driven default for {@code @Rest(disableContentParam)}. */
-	@Value("${RestContext.disableContentParam:false}")
-	private boolean defaultDisableContentParam;
-
-	/** Env-driven default for {@code @Rest(renderResponseStackTraces)}. */
-	@Value("${RestContext.renderResponseStackTraces:false}")
-	private boolean defaultRenderResponseStackTraces;
-
-	/** Env-driven default for {@code @Rest(problemDetails)}. */
-	@Value("${RestContext.problemDetails:false}")
-	private boolean defaultProblemDetails;
-
-	/** Env-driven default for {@code @Rest(virtualThreads)}. */
-	@Value("${RestContext.virtualThreads:false}")
-	private boolean defaultVirtualThreads;
-
-	/**
-	 * Env-driven default controlling whether the {@link TraceContextResponseProcessor} is registered so the
-	 * server writes W3C {@code traceparent} / {@code tracestate} response headers when a {@link TracerHook} is
-	 * active. Defaults to {@code true} (on-when-tracer); set {@code RestContext.responseTraceparent=false}
-	 * to keep the processor out of the chain entirely.
-	 */
-	@Value("${RestContext.responseTraceparent:true}")
-	private boolean defaultResponseTraceparent;
-
-	/**
-	 * Env-driven default controlling whether {@link MdcAsyncListener} propagates
-	 * the request thread's SLF4J MDC map to {@link CompletableFuture} completion threads
-	 * Defaults to {@code true} (on when SLF4J is detected). Set
-	 * {@code RestContext.mdcAsyncPropagation=false} to disable globally, or call
-	 * {@link Builder#mdcAsyncPropagation(boolean)} per resource.
-	 */
-	@Value("${RestContext.mdcAsyncPropagation:true}")
-	private boolean defaultMdcAsyncPropagation;
-
-	/** Env-driven default for {@code @Rest(eagerInit)}. */
-	@Value("${RestContext.eagerInit:false}")
-	private boolean defaultEagerInit;
-
-	/** Env-driven default for {@code @Rest(lazyChildren)}: deferred child construction opt-in. */
-	@Value("${RestContext.lazyChildren:false}")
-	private boolean defaultLazyChildren;
-
-	/** Env-driven default for {@code @Rest(clientVersionHeader)}. */
-	@Value("${RestContext.clientVersionHeader:Client-Version}")
-	private String defaultClientVersionHeader;
-
-	/** Env-driven default for {@code @Rest(uriRelativity)}; resolves to empty string when unset (treated as "no default"). */
-	@Value("${RestContext.uriRelativity:}")
-	private String defaultUriRelativity;
 
 	/** Env-driven default for {@code @Rest(uriAuthority)}; {@link Optional#empty()} when unset (preserves null-vs-empty distinction). */
 	@Value("${RestContext.uriAuthority}")
@@ -1518,9 +1452,20 @@ public class RestContext extends Context {
 	@Value("${RestContext.uriContext}")
 	private Optional<String> defaultUriContext;
 
-	/** Env-driven default for {@code @Rest(uriResolution)}; resolves to empty string when unset (treated as "no default"). */
-	@Value("${RestContext.uriResolution:}")
-	private String defaultUriResolution;
+	/**
+	 * The env-driven {@code RestContext.*} default properties for this resource.
+	 *
+	 * <p>
+	 * Materialized through {@link BeanInstantiator}, which runs the {@code @ConfigProperties} resolution hook and
+	 * auto-registers the bound instance into {@link #beanStore()}. The bind resolves each {@code RestContext.*} key
+	 * against the resource's per-resource {@link org.apache.juneau.commons.settings.PropertySource PropertySource}s
+	 * (including a {@code @Rest(config=...)} file) ahead of the global settings chain, so a config-file key takes
+	 * effect in the resolved defaults. This memoizer is forced exactly once during construction (after the
+	 * PropertySources are registered) so the single bound instance is the same one held in the bean store; see the
+	 * constructor for the ordering rationale.
+	 */
+	private final Memoizer<RestContextProperties> restContextProperties = memoizer(() ->
+		BeanInstantiator.of(RestContextProperties.class, beanStore()).run());
 
 	/**
 	 * The {@link DebugEnablement} for this resource.
@@ -1539,7 +1484,7 @@ public class RestContext extends Context {
 		// If neither a debugDefault annotation value NOR a pre-registered Enablement bean is present, fall back
 		// to the @Rest(debug=true|false) boolean flag — ALWAYS when set, NEVER otherwise.
 		var bs = beanStore();
-		String debugDefaultStr = mergeReplacedStringAttribute(PROPERTY_debugDefault, defaultDebugDefault);
+		String debugDefaultStr = mergeReplacedStringAttribute(PROPERTY_debugDefault, getRestContextProperties().getDebugDefault());
 		Enablement resolvedDebugDefault = null;
 		if (nn(debugDefaultStr) && !debugDefaultStr.isBlank())
 			resolvedDebugDefault = Enablement.fromString(debugDefaultStr);
@@ -2060,7 +2005,7 @@ public class RestContext extends Context {
 		// When enabled (default on-when-tracer), front-load the W3C trace-context processor so it
 		// writes traceparent/tracestate headers before the body-rendering processors run. It short-circuits
 		// at request time when no TracerHook stashed a trace context, so it's zero-cost on the no-tracer path.
-		if (defaultResponseTraceparent)
+		if (isResponseTraceparent())
 			b.add(TraceContextResponseProcessor.class);
 		// Front-load any module-contributed ResponseProcessors discovered via
 		// ServiceLoader (e.g. the opt-in juneau-rest-server-reactive module's ReactiveResponseProcessor,
@@ -2675,6 +2620,21 @@ public class RestContext extends Context {
 			// list grew unbounded). Per-resource isolation comes for free from the BeanStore scope.
 			registerRestConfigPropertySources();
 
+			// Materialize the RestContextProperties bean exactly once, now that the per-resource PropertySources are
+			// registered.  Forcing it here (rather than on first lazy .get()) is required for correctness:
+			//   1. Single instance / store identity — the materialization side effect (BeanInstantiator auto-registers
+			//      the bound bean into beanStore() via addDefaultSupplier) must run exactly once.  A lazy first-.get()
+			//      under concurrent access could run the memoizer supplier more than once (the memoizer is CAS-based and
+			//      does not cache the winner before running the supplier), registering two instances last-writer-wins and
+			//      breaking getRestContextProperties() == beanStore().getBean(RestContextProperties.class).
+			//   2. Mixin sub-context isolation — the auto-registration lands as a tier-4 default supplier on THIS store.
+			//      Forcing it before promoteDefaultsToLocalSuppliers() (below) lets a mixin sub-context promote its own
+			//      registration to a local (tier-2) entry, so the mixin's beanStore().getBean(RestContextProperties.class)
+			//      resolves ITS OWN bean instead of walking up to the parent-linked host's tier-4 default.
+			// Materialization must complete here so the bound bean is present and promotable before the @Bean /
+			// @RestInit walk (and the promoteDefaultsToLocalSuppliers() step below) run against this store.
+			getRestContextProperties();
+
 			// Register memoizer-backed defaults for every framework-managed type.  These sit at the
 			// bottom of the precedence order and only fire when no @Bean method, no programmatic
 			// add, and no Spring/overriding-parent bean has been registered for the type.  This is
@@ -2695,6 +2655,16 @@ public class RestContext extends Context {
 			// SerializerSet) still wins as it did before.
 			if (isMixinContext && beanStore instanceof BasicBeanStore beanStore2)
 				beanStore2.promoteDefaultsToLocalSuppliers();
+			else if (parentContext != null && parentContext.isMixinContext)
+				// A child-of-mixin sub-context's bean store is parent-linked to its parent (the mixin), but the
+				// mixin's OWN bootstrap layer is the host's full beanStore (see parentBs selection above), so the
+				// chain reaches the host's full store, whose tier-4 RestContextProperties default would otherwise
+				// resolve ahead of this child's own tier-4 default (children run no promotion). Pin this child's
+				// own bound instance as a local (tier-2) entry so that beanStore().getBean(RestContextProperties.class)
+				// matches getRestContextProperties(). This narrows the promotion to this single type and to the
+				// child-of-mixin case specifically, leaving ordinary (non-mixin-parented) children at normal
+				// tier-4 default / parent-wins semantics, so a Spring/parent-supplied bean still wins for them.
+				beanStore.addBean(RestContextProperties.class, getRestContextProperties());
 
 			var rci2 = ClassInfo.of(resourceClass);
 
@@ -2831,9 +2801,9 @@ public class RestContext extends Context {
 				.addBean(AnnotationWorkList.class, annotationWork);
 			// @formatter:on
 
-		// Inject @Value-annotated env-driven defaults onto this RestContext instance so that the
-		// memoizer lambdas below (which run lazily on first .get() call) read fully resolved values.
-		// Must run BEFORE isEagerInit() since the eagerInit memoizer itself reads defaultEagerInit.
+		// Inject the remaining @Value-annotated env-driven defaults (debug level, uriAuthority, uriContext) onto
+		// this RestContext instance so that the memoizer lambdas below (which run lazily on first .get() call)
+		// read fully resolved values.
 		ClassInfo.of(this).inject(this, beanStore);
 
 		// Startup-fail if @Rest(observability="true") is set but neither MetricsRecorder nor TracerHook is
@@ -3221,47 +3191,56 @@ public class RestContext extends Context {
 		return v.get();
 	}
 
+	// Resolves a raw RestContext.* boolean default carried on RestContextProperties: SVL variables in the raw seed
+	// are resolved recursively through the resource var resolver (so a value such as $S{flag} or $C{...} resolves to
+	// its target) before parsing to a boolean.  A blank or unresolved value parses to false.  This mirrors the enum
+	// treatment (getUriRelativityRaw()/getUriResolutionRaw()) — the bean carries the raw string and RestContext owns
+	// all SVL resolution and typing, since only RestContext holds the var resolver.
+	private boolean resolveBooleanDefault(String raw) {
+		return Boolean.parseBoolean(resolve(emptyIfNull(raw)));
+	}
+
 	/**
 	 * Header names that may be passed via URL query parameter; resolved from {@code @Rest(allowedHeaderParams)},
 	 * default {@code "Accept,Content-Type"}.
 	 */
 	private final Memoizer<Set<String>> allowedHeaderParams = memoizer(() ->
-		u(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedHeaderParams, defaultAllowedHeaderParams))));
+		u(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedHeaderParams, getRestContextProperties().getAllowedHeaderParams()))));
 
 	/**
 	 * HTTP method names that may be specified via a request header; resolved from {@code @Rest(allowedMethodHeaders)},
 	 * default empty.
 	 */
 	private final Memoizer<Set<String>> allowedMethodHeaders = memoizer(() ->
-		u(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodHeaders, defaultAllowedMethodHeaders))));
+		u(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodHeaders, getRestContextProperties().getAllowedMethodHeaders()))));
 
 	/**
 	 * HTTP method names that may be specified via URL query parameter; resolved from {@code @Rest(allowedMethodParams)},
 	 * default {@code "HEAD,OPTIONS"}.
 	 */
 	private final Memoizer<Set<String>> allowedMethodParams = memoizer(() ->
-		u(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodParams, defaultAllowedMethodParams))));
+		u(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodParams, getRestContextProperties().getAllowedMethodParams()))));
 
 	/**
 	 * Whether a {@code &content=} URL parameter may override the request body; inverse of
 	 * {@code @Rest(disableContentParam)}.
 	 */
 	private final Memoizer<Boolean> allowContentParam = memoizer(() ->
-		!mergeReplacedBooleanAttribute(PROPERTY_disableContentParam, defaultDisableContentParam));
+		!mergeReplacedBooleanAttribute(PROPERTY_disableContentParam, resolveBooleanDefault(getRestContextProperties().getDisableContentParamRaw())));
 
 	/**
 	 * Whether exception stack traces are rendered in error responses; resolved from
 	 * {@code @Rest(renderResponseStackTraces)}.
 	 */
 	private final Memoizer<Boolean> renderResponseStackTraces = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_renderResponseStackTraces, defaultRenderResponseStackTraces));
+		mergeReplacedBooleanAttribute(PROPERTY_renderResponseStackTraces, resolveBooleanDefault(getRestContextProperties().getRenderResponseStackTracesRaw())));
 
 	/**
 	 * Whether the resource emits RFC 7807 {@code application/problem+json} responses; resolved from
 	 * {@code @Rest(problemDetails)}.
 	 */
 	private final Memoizer<Boolean> problemDetails = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_problemDetails, defaultProblemDetails));
+		mergeReplacedBooleanAttribute(PROPERTY_problemDetails, resolveBooleanDefault(getRestContextProperties().getProblemDetailsRaw())));
 
 	/**
 	 * Whether the resource opts into per-request virtual-thread dispatch on Java 21+; resolved from
@@ -3272,7 +3251,23 @@ public class RestContext extends Context {
 	 * than Java 21 the flag is logged once and ignored — see {@link #virtualThreadExecutor}.
 	 */
 	private final Memoizer<Boolean> virtualThreadsEnabled = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_virtualThreads, defaultVirtualThreads));
+		mergeReplacedBooleanAttribute(PROPERTY_virtualThreads, resolveBooleanDefault(getRestContextProperties().getVirtualThreadsRaw())));
+
+	/**
+	 * Env-driven component of {@link #isResponseTraceparent()}; resolved from the {@code RestContext.responseTraceparent}
+	 * env-driven default (no {@code @Rest} annotation member backs this setting).
+	 */
+	private final Memoizer<Boolean> responseTraceparentDefault = memoizer(() ->
+		resolveBooleanDefault(getRestContextProperties().getResponseTraceparentRaw()));
+
+	/**
+	 * Env-driven component of {@link #isMdcAsyncPropagation()}; resolved from the {@code RestContext.mdcAsyncPropagation}
+	 * env-driven default. The programmatic {@link Builder#mdcAsyncPropagation(boolean)} knob is applied in
+	 * {@link #isMdcAsyncPropagation()} instead of here because blank-final-field rules prevent the memoizer lambda
+	 * from safely capturing {@link #builder}.
+	 */
+	private final Memoizer<Boolean> mdcAsyncPropagationDefault = memoizer(() ->
+		resolveBooleanDefault(getRestContextProperties().getMdcAsyncPropagationRaw()));
 
 	/**
 	 * Resource-level observability tri-state from {@code @Rest(observability)}: {@code "true"} (strict opt-in),
@@ -3374,7 +3369,7 @@ public class RestContext extends Context {
 	 * resolved from {@code @Rest(eagerInit)}.
 	 */
 	private final Memoizer<Boolean> eagerInit = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_eagerInit, defaultEagerInit));
+		mergeReplacedBooleanAttribute(PROPERTY_eagerInit, resolveBooleanDefault(getRestContextProperties().getEagerInitRaw())));
 
 	/**
 	 * Annotation + env-driven component of the lazy-children flag.
@@ -3386,14 +3381,14 @@ public class RestContext extends Context {
 	 * because blank-final-field rules prevent the memoizer lambda from safely capturing {@link #builder}.
 	 */
 	private final Memoizer<Boolean> lazyChildrenAnnotation = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_lazyChildren, defaultLazyChildren));
+		mergeReplacedBooleanAttribute(PROPERTY_lazyChildren, resolveBooleanDefault(getRestContextProperties().getLazyChildrenRaw())));
 
 	/**
 	 * The request header used for client-version matching; resolved from {@code @Rest(clientVersionHeader)},
 	 * default {@code "Client-Version"}.
 	 */
 	private final Memoizer<String> clientVersionHeader = memoizer(() ->
-		mergeReplacedStringAttribute(PROPERTY_clientVersionHeader, defaultClientVersionHeader));
+		mergeReplacedStringAttribute(PROPERTY_clientVersionHeader, getRestContextProperties().getClientVersionHeader()));
 
 	/**
 	 * The {@link UriRelativity} strategy for URI resolution in this resource.
@@ -3404,7 +3399,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<UriRelativity> uriRelativity = memoizer(() -> {
 		var v = new AtomicReference<>(
-			parseEnumConstant(UriRelativity.class, resolve(emptyIfNull(defaultUriRelativity)))
+			parseEnumConstant(UriRelativity.class, resolve(emptyIfNull(getRestContextProperties().getUriRelativityRaw())))
 				.orElse(UriRelativity.RESOURCE)
 		);
 		restAnnotationsForPropertySortedByRank(PROPERTY_uriRelativity).forEach(ai -> ai.getString(PROPERTY_uriRelativity).filter(StringUtils::isNotBlank).ifPresent(s ->
@@ -3452,7 +3447,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<UriResolution> uriResolution = memoizer(() -> {
 		var v = new AtomicReference<>(
-			parseEnumConstant(UriResolution.class, resolve(emptyIfNull(defaultUriResolution)))
+			parseEnumConstant(UriResolution.class, resolve(emptyIfNull(getRestContextProperties().getUriResolutionRaw())))
 				.orElse(UriResolution.ROOT_RELATIVE)
 		);
 		restAnnotationsForPropertySortedByRank(PROPERTY_uriResolution).forEach(ai -> ai.getString(PROPERTY_uriResolution).filter(StringUtils::isNotBlank).ifPresent(s ->
@@ -4650,7 +4645,7 @@ public class RestContext extends Context {
 	 *
 	 * @return <jk>true</jk> if trace-context response-header propagation is enabled on this resource.
 	 */
-	public boolean isResponseTraceparent() { return defaultResponseTraceparent; }
+	public boolean isResponseTraceparent() { return responseTraceparentDefault.get(); }
 
 	/**
 	 * Returns whether SLF4J MDC propagation is enabled for {@link CompletableFuture}
@@ -4667,7 +4662,26 @@ public class RestContext extends Context {
 	 * @return <jk>true</jk> if MDC async propagation is enabled on this resource.
 	 */
 	public boolean isMdcAsyncPropagation() {
-		return builder.mdcAsyncPropagation != null ? builder.mdcAsyncPropagation : defaultMdcAsyncPropagation;
+		return builder.mdcAsyncPropagation != null ? builder.mdcAsyncPropagation : mdcAsyncPropagationDefault.get();
+	}
+
+	/**
+	 * Returns the bound {@link RestContextProperties} for this resource.
+	 *
+	 * <p>
+	 * These are the env-driven {@code RestContext.*} defaults that seed this context's resolved settings before the
+	 * {@code @Rest} annotation chain is applied. The same instance is registered in this resource's bean store, so
+	 * it is also retrievable via {@code beanStore().getBean(RestContextProperties.class)} &mdash; unless the
+	 * resource registers its own {@code RestContextProperties} bean, in which case that bean wins in the store while
+	 * this method continues to return the instance bound for this context. For a
+	 * {@linkplain #isMixinContext() mixin sub-context}, this is the mixin's own bound instance, distinct from the
+	 * host resource's.
+	 *
+	 * @return The bound instance. Never <jk>null</jk>.
+	 * @since 10.0.0
+	 */
+	public RestContextProperties getRestContextProperties() {
+		return restContextProperties.get();
 	}
 
 	/**

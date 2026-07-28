@@ -2095,7 +2095,8 @@ public class BeanInstantiator<T> {
 	 */
 	@SuppressWarnings({
 		"unchecked",  // Type erasure requires cast to ClassInfo for builder type
-		"java:S3776"  // Cognitive complexity acceptable for multi-strategy builder-type resolution
+		"java:S3776",  // Cognitive complexity acceptable for multi-strategy builder-type resolution
+		"java:S6541"  // Brain-method metrics acceptable: linear, well-commented priority chain of builder-type resolution strategies
 	})
 	private ClassInfo findBuilderType() {
 		log("Finding builder type...");
@@ -2327,12 +2328,63 @@ public class BeanInstantiator<T> {
 	/**
 	 * Helper method to inject beans into an object instance.
 	 *
-	 * @param <T> The bean type.
+	 * <p>
+	 * If the instantiator's <b>declared target type</b> ({@code beanType.inner()}) carries a class-level
+	 * {@link ConfigProperties @ConfigProperties} annotation, also runs {@link ConfigPropertiesBinder} against
+	 * {@code bean} under the annotation's prefix. The bind is performed <i>between</i> {@code @Value}/{@code @Inject}
+	 * field-and-method injection and {@code @PostConstruct} dispatch (via
+	 * {@link ClassInfo#inject(Object, BeanStore, Runnable)}), so a {@code @PostConstruct} method observes the
+	 * fully-bound config fields. The instantiator's internal {@link #store} is handed to the binder so
+	 * caller-registered {@link org.apache.juneau.commons.settings.PropertySource PropertySource} beans participate
+	 * ahead of the global {@link org.apache.juneau.commons.settings.Settings Settings} chain.
+	 *
+	 * <p>
+	 * The bound instance is then auto-registered into the parent {@link BeanStore} — under the declared target type,
+	 * as a {@linkplain WritableBeanStore#addDefaultSupplier(Class, Supplier) tier-4 default supplier} so a caller's
+	 * explicit registration of the same type is never shadowed — when that store is a writable, non-shared store.
+	 * The annotation is <b>not inherited</b>: a subclass or interface implementor of an annotated type does not
+	 * trigger binding or registration.
+	 *
+	 * @param <T2> The bean type.
 	 * @param bean The object to inject beans into.
 	 * @return The same bean instance (for method chaining).
 	 */
 	private <T2> T2 inject(T2 bean) {
-		return ClassInfo.of(bean).inject(bean, store);
+		// Probe the DECLARED target type directly (not a stream over the inherited annotation set).
+		// @ConfigProperties is not @Inherited, so getAnnotation() on the declared type intentionally returns null for
+		// a subclass/implementor of an annotated type, and the isInstance() guard skips builders and other
+		// non-target objects that pass through this shared helper.
+		var cp = beanType.inner().getAnnotation(ConfigProperties.class);
+		if (cp == null || ! beanType.inner().isInstance(bean))
+			return ClassInfo.of(bean).inject(bean, store);
+		// Bind between field/method injection and @PostConstruct. The binder defaults to Settings.get() and
+		// sources the passed store's PropertySource beans ahead of it, so no explicit .settings(...) is needed.
+		var bean2 = ClassInfo.of(bean).inject(bean, store, () ->
+			ConfigPropertiesBinder.of(bean, cp.prefix())
+				.beanStore(store)
+				.relaxed(cp.relaxed())
+				.run());
+		registerConfigBean(bean2);
+		return bean2;
+	}
+
+	/**
+	 * Registers a freshly-bound {@code @ConfigProperties} instance under the instantiator's declared target type.
+	 *
+	 * <p>
+	 * Registration is a no-op when the parent store is <jk>null</jk> or read-only (not a
+	 * {@link WritableBeanStore}), or when it's the shared read-only {@link BasicBeanStore#INSTANCE} — binding
+	 * still occurs regardless. When it does register, it uses a
+	 * {@linkplain WritableBeanStore#addDefaultSupplier(Class, Supplier) default supplier} so a caller's explicit
+	 * same-type registration takes precedence, registered under the declared target type.
+	 *
+	 * @param bean The bound instance (guaranteed by the caller to be an instance of {@code beanType.inner()}).
+	 */
+	private void registerConfigBean(Object bean) {
+		if (parentStore instanceof WritableBeanStore ws && ws != BasicBeanStore.INSTANCE) {
+			var declaredType = beanType.inner();
+			ws.addDefaultSupplier(declaredType, () -> declaredType.cast(bean));
+		}
 	}
 
 	/**
