@@ -16,15 +16,15 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
-import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 
 /**
  * Handler for a single MCP resource.
  *
  * <p>
- * Implementations declare a {@link #descriptor() descriptor} (the {@link Resource} returned by {@code resources/list})
- * and a {@link #read(String, BeanStore) read} body invoked when the matching {@code resources/read} method runs.
+ * Implementations declare a {@link #descriptor() descriptor} (the {@link McpResourceSpec} returned by
+ * {@code resources/list}) and a {@link #read(String, BeanStore) read} body invoked when the matching
+ * {@code resources/read} method runs.
  */
 @FunctionalInterface
 public interface McpResourceHandler {
@@ -33,13 +33,13 @@ public interface McpResourceHandler {
 	 * Returns the static descriptor for this resource.
 	 *
 	 * <p>
-	 * The {@link Resource#getUri() uri} value is used by the bound {@link McpRevision} to route
+	 * The {@link McpResourceSpec#getUri() uri} value is used by the bound {@link McpRevision} to route
 	 * incoming {@code resources/read} requests, so each handler in an {@link McpServerConfig} must use
 	 * a unique URI.
 	 *
 	 * @return The resource descriptor. Never {@code null}.
 	 */
-	default Resource descriptor() {
+	default McpResourceSpec descriptor() {
 		throw new UnsupportedOperationException("descriptor() must be implemented by McpResourceHandler subclasses.");
 	}
 
@@ -50,5 +50,5 @@ public interface McpResourceHandler {
 	 * @param ctx Per-request bean store. Never {@code null}.
 	 * @return The resource contents. Never {@code null}.
 	 */
-	ReadResourceResult read(String uri, BeanStore ctx);
+	McpResourceOutcome read(String uri, BeanStore ctx);
 }

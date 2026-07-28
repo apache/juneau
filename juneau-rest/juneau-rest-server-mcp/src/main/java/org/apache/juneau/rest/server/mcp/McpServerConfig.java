@@ -20,8 +20,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
-import org.apache.juneau.bean.mcp.v20250618.*;
-
 /**
  * Aggregate configuration consumed by the bound {@link McpRevision}.
  *
@@ -29,58 +27,64 @@ import org.apache.juneau.bean.mcp.v20250618.*;
  * Applications register a single {@link McpServerConfig} (typically as a bean in their {@code RestContext}
  * bean store) listing the tools, prompts, and resources to expose, plus optional server metadata and a
  * pagination strategy.
+ *
+ * <p>
+ * This type is revision-neutral: it holds no field typed with any protocol revision's wire beans, and
+ * in particular holds no capabilities field in any form. The protocol version is owned by
+ * {@link McpRevision#protocolVersion()}, and an explicit capabilities advertisement is owned by a
+ * revision-specific hook on that revision's servlet or endpoint mixin.
  */
 public class McpServerConfig {
 
-	private Implementation serverInfo;
-	private String protocolVersion = McpProtocol.VERSION_2025_06_18;
+	private String name;
+	private String version;
 	private String instructions;
 	private List<McpToolHandler> tools = l();
 	private List<McpPromptHandler> prompts = l();
 	private List<McpResourceHandler> resources = l();
-	private ServerCapabilities capabilities;
 	private McpCursor cursor = McpCursor.SINGLE_PAGE;
 
 	/**
-	 * Server identity reported in {@code initialize}.
+	 * Server name reported in {@code initialize}.
 	 *
 	 * <p>
-	 * If {@code null}, the bound {@link McpRevision} fills in a default identity.
+	 * When both this and {@link #getVersion()} are {@code null}, the bound revision substitutes its
+	 * own default server identity.
 	 *
-	 * @return The server info, or {@code null} if not set.
+	 * @return The name, or {@code null} if not set.
 	 */
-	public Implementation getServerInfo() {
-		return serverInfo;
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * Sets the server identity.
+	 * Sets the server name.
 	 *
-	 * @param serverInfo The new value.
-	 * @return This object (for method chaining).
+	 * @param value The new value. Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public McpServerConfig setServerInfo(Implementation serverInfo) {
-		this.serverInfo = serverInfo;
+	public McpServerConfig setName(String value) {
+		name = value;
 		return this;
 	}
 
 	/**
-	 * MCP protocol revision returned by {@code initialize}.
+	 * Server version reported in {@code initialize}.
 	 *
-	 * @return The protocol version, or <jk>null</jk> if not set.
+	 * @return The version, or {@code null} if not set.
 	 */
-	public String getProtocolVersion() {
-		return protocolVersion;
+	public String getVersion() {
+		return version;
 	}
 
 	/**
-	 * Sets the protocol revision.
+	 * Sets the server version.
 	 *
-	 * @param protocolVersion The new value. Can be <jk>null</jk> to unset it.
-	 * @return This object (for method chaining).
+	 * @param value The new value. Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public McpServerConfig setProtocolVersion(String protocolVersion) {
-		this.protocolVersion = protocolVersion;
+	public McpServerConfig setVersion(String value) {
+		version = value;
 		return this;
 	}
 
@@ -194,29 +198,6 @@ public class McpServerConfig {
 	 */
 	public McpServerConfig addResource(McpResourceHandler... handlers) {
 		Collections.addAll(this.resources, handlers);
-		return this;
-	}
-
-	/**
-	 * Optional explicit capabilities advertisement.
-	 *
-	 * <p>
-	 * When {@code null}, the bound {@link McpRevision} synthesizes one from the registered handler lists.
-	 *
-	 * @return The override, or {@code null} if auto-derived.
-	 */
-	public ServerCapabilities getCapabilities() {
-		return capabilities;
-	}
-
-	/**
-	 * Sets the explicit capabilities advertisement.
-	 *
-	 * @param capabilities The new value.
-	 * @return This object (for method chaining).
-	 */
-	public McpServerConfig setCapabilities(ServerCapabilities capabilities) {
-		this.capabilities = capabilities;
 		return this;
 	}
 

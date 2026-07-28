@@ -18,19 +18,20 @@ package org.apache.juneau.rest.server.mcp;
 
 import java.util.*;
 
-import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 
 /**
  * Handler for a single MCP tool.
  *
  * <p>
- * Implementations declare a {@link #descriptor() descriptor} (the {@link Tool} returned by {@code tools/list})
- * and a {@link #call(Map, BeanStore) call} body invoked when the matching {@code tools/call} method runs.
+ * Implementations declare a {@link #descriptor() descriptor} (returned from {@code tools/list}) and
+ * a {@link #call(Map, BeanStore) call} body invoked when a matching {@code tools/call} arrives. Both
+ * use the revision-neutral model, so a handler compiles against exactly one protocol revision's
+ * worth of assumptions: none.
  *
  * <p>
- * The {@link BeanStore} argument is the per-request bean store, allowing handlers to look up additional
- * services (or the underlying {@code RestRequest}) without making this interface depend on REST runtime types.
+ * The {@link BeanStore} argument is the per-request bean store, letting handlers look up additional
+ * services (or the underlying {@code RestRequest}) without this interface depending on REST runtime types.
  */
 @FunctionalInterface
 public interface McpToolHandler {
@@ -39,13 +40,13 @@ public interface McpToolHandler {
 	 * Returns the static descriptor for this tool.
 	 *
 	 * <p>
-	 * The {@link Tool#getName() name} value is used by the bound {@link McpRevision} to route
+	 * The {@link McpToolSpec#getName() name} value is used by the bound {@link McpRevision} to route
 	 * incoming {@code tools/call} requests, so each handler in an {@link McpServerConfig} must use a
 	 * unique name.
 	 *
 	 * @return The tool descriptor. Never {@code null}.
 	 */
-	default Tool descriptor() {
+	default McpToolSpec descriptor() {
 		throw new UnsupportedOperationException("descriptor() must be implemented by McpToolHandler subclasses.");
 	}
 
@@ -56,5 +57,5 @@ public interface McpToolHandler {
 	 * @param ctx Per-request bean store. Never {@code null}.
 	 * @return The call result. Never {@code null}.
 	 */
-	CallToolResult call(Map<String,Object> arguments, BeanStore ctx);
+	McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx);
 }

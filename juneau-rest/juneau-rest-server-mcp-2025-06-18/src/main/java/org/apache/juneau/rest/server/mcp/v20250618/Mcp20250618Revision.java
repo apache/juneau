@@ -152,7 +152,7 @@ public final class Mcp20250618Revision implements McpRevision {
 	}
 
 	private InitializeResult initialize(McpServerConfig config) {
-		var caps = config.getCapabilities();
+		var caps = this.capabilities;
 		if (caps == null) {
 			caps = new ServerCapabilities();
 			if (! config.getTools().isEmpty())
@@ -162,20 +162,19 @@ public final class Mcp20250618Revision implements McpRevision {
 			if (! config.getResources().isEmpty())
 				caps.setResources(new ResourceCapability());
 		}
-		var info = config.getServerInfo();
-		if (info == null)
-			info = new Implementation().setName(DEFAULT_SERVER_NAME).setVersion("unknown");
 		return new InitializeResult()
-			.setProtocolVersion(config.getProtocolVersion())
+			.setProtocolVersion(protocolVersion())
 			.setCapabilities(caps)
-			.setServerInfo(info)
+			.setServerInfo(Mcp20250618Wire.serverInfo(config))
 			.setInstructions(config.getInstructions());
 	}
 
 	private static ListToolsResult listTools(McpServerConfig config, Object params, BeanStore ctx) {
 		var descriptors = config.getTools().stream().map(McpToolHandler::descriptor).toList();
 		var page = config.getCursor().page(descriptors, McpCursor.cursorOf(params), ctx);
-		return new ListToolsResult().setTools(page.items()).setNextCursor(page.nextCursor());
+		return new ListToolsResult()
+			.setTools(page.items().stream().map(Mcp20250618Wire::toWire).toList())
+			.setNextCursor(page.nextCursor());
 	}
 
 	private CallToolResult callTool(McpServerConfig config, Object params, BeanStore ctx) {
@@ -188,13 +187,15 @@ public final class Mcp20250618Revision implements McpRevision {
 			.findFirst()
 			.orElseThrow(() -> new McpException(errorCode(McpErrorKind.TOOL_NOT_FOUND), "Tool not found: " + name));
 		var args = McpParamUtils.mapParam(p, "arguments");
-		return handler.call(args, ctx);
+		return Mcp20250618Wire.toWire(handler.call(args, ctx));
 	}
 
 	private static ListPromptsResult listPrompts(McpServerConfig config, Object params, BeanStore ctx) {
 		var descriptors = config.getPrompts().stream().map(McpPromptHandler::descriptor).toList();
 		var page = config.getCursor().page(descriptors, McpCursor.cursorOf(params), ctx);
-		return new ListPromptsResult().setPrompts(page.items()).setNextCursor(page.nextCursor());
+		return new ListPromptsResult()
+			.setPrompts(page.items().stream().map(Mcp20250618Wire::toWire).toList())
+			.setNextCursor(page.nextCursor());
 	}
 
 	private GetPromptResult getPrompt(McpServerConfig config, Object params, BeanStore ctx) {
@@ -207,13 +208,15 @@ public final class Mcp20250618Revision implements McpRevision {
 			.findFirst()
 			.orElseThrow(() -> new McpException(errorCode(McpErrorKind.PROMPT_NOT_FOUND), "Prompt not found: " + name));
 		var args = McpParamUtils.mapParam(p, "arguments");
-		return handler.get(args, ctx);
+		return Mcp20250618Wire.toWire(handler.get(args, ctx));
 	}
 
 	private static ListResourcesResult listResources(McpServerConfig config, Object params, BeanStore ctx) {
 		var descriptors = config.getResources().stream().map(McpResourceHandler::descriptor).toList();
 		var page = config.getCursor().page(descriptors, McpCursor.cursorOf(params), ctx);
-		return new ListResourcesResult().setResources(page.items()).setNextCursor(page.nextCursor());
+		return new ListResourcesResult()
+			.setResources(page.items().stream().map(Mcp20250618Wire::toWire).toList())
+			.setNextCursor(page.nextCursor());
 	}
 
 	private ReadResourceResult readResource(McpServerConfig config, Object params, BeanStore ctx) {
@@ -225,6 +228,6 @@ public final class Mcp20250618Revision implements McpRevision {
 			.filter(h -> uri.equals(h.descriptor().getUri()))
 			.findFirst()
 			.orElseThrow(() -> new McpException(errorCode(McpErrorKind.RESOURCE_NOT_FOUND), "Resource not found: " + uri));
-		return handler.read(uri, ctx);
+		return Mcp20250618Wire.toWire(handler.read(uri, ctx));
 	}
 }

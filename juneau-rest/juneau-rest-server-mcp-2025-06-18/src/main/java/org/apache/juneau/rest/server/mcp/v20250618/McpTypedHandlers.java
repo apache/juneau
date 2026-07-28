@@ -56,15 +56,15 @@ public final class McpTypedHandlers {
 		assertArgNotNull("typed", typed);
 		return new McpToolHandler() {
 			@Override
-			public Tool descriptor() {
-				return typed.descriptor();
+			public McpToolSpec descriptor() {
+				return Mcp20250618Wire.toNeutral(typed.descriptor());
 			}
 
 			@Override
-			public CallToolResult call(Map<String,Object> arguments, BeanStore ctx) {
+			public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
 				A bound = bindArguments(arguments, typed.argumentType());
 				R result = typed.call(bound, ctx);
-				return wrapToolResult(result);
+				return Mcp20250618Wire.toNeutral(wrapToolResult(result));
 			}
 		};
 	}
@@ -84,14 +84,14 @@ public final class McpTypedHandlers {
 		assertArgNotNull("typed", typed);
 		return new McpPromptHandler() {
 			@Override
-			public Prompt descriptor() {
-				return typed.descriptor();
+			public McpPromptSpec descriptor() {
+				return Mcp20250618Wire.toNeutral(typed.descriptor());
 			}
 
 			@Override
-			public GetPromptResult get(Map<String,Object> arguments, BeanStore ctx) {
+			public McpPromptOutcome get(Map<String,Object> arguments, BeanStore ctx) {
 				A bound = bindArguments(arguments, typed.argumentType());
-				return typed.get(bound, ctx);
+				return Mcp20250618Wire.toNeutral(typed.get(bound, ctx));
 			}
 		};
 	}

@@ -35,43 +35,43 @@ class Mcp20250618Revision_Test {
 
 	private final BeanStore ctx = new BasicBeanStore();
 
-	private static McpToolHandler tool(String name, java.util.function.Function<Map<String,Object>,CallToolResult> fn) {
+	private static McpToolHandler tool(String name, java.util.function.Function<Map<String,Object>,McpToolOutcome> fn) {
 		return new McpToolHandler() {
 			@Override
-			public Tool descriptor() {
-				return new Tool().setName(name).setDescription("desc:" + name);
+			public McpToolSpec descriptor() {
+				return new McpToolSpec().setName(name).setDescription("desc:" + name);
 			}
 
 			@Override
-			public CallToolResult call(Map<String,Object> arguments, BeanStore ctx) {
+			public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
 				return fn.apply(arguments);
 			}
 		};
 	}
 
-	private static McpPromptHandler prompt(String name, java.util.function.Function<Map<String,Object>,GetPromptResult> fn) {
+	private static McpPromptHandler prompt(String name, java.util.function.Function<Map<String,Object>,McpPromptOutcome> fn) {
 		return new McpPromptHandler() {
 			@Override
-			public Prompt descriptor() {
-				return new Prompt().setName(name);
+			public McpPromptSpec descriptor() {
+				return new McpPromptSpec().setName(name);
 			}
 
 			@Override
-			public GetPromptResult get(Map<String,Object> arguments, BeanStore ctx) {
+			public McpPromptOutcome get(Map<String,Object> arguments, BeanStore ctx) {
 				return fn.apply(arguments);
 			}
 		};
 	}
 
-	private static McpResourceHandler resource(String uri, java.util.function.Function<String,ReadResourceResult> fn) {
+	private static McpResourceHandler resource(String uri, java.util.function.Function<String,McpResourceOutcome> fn) {
 		return new McpResourceHandler() {
 			@Override
-			public Resource descriptor() {
-				return new Resource().setUri(uri).setName("res");
+			public McpResourceSpec descriptor() {
+				return new McpResourceSpec().setUri(uri).setName("res");
 			}
 
 			@Override
-			public ReadResourceResult read(String u, BeanStore ctx) {
+			public McpResourceOutcome read(String u, BeanStore ctx) {
 				return fn.apply(u);
 			}
 		};
@@ -88,9 +88,9 @@ class Mcp20250618Revision_Test {
 	@Test
 	void a01_initialize_default_capabilities() {
 		var config = new McpServerConfig()
-			.addTool(tool("a", a -> new CallToolResult()))
-			.addPrompt(prompt("p", a -> new GetPromptResult()))
-			.addResource(resource("r://x", u -> new ReadResourceResult()));
+			.addTool(tool("a", a -> new McpToolOutcome()))
+			.addPrompt(prompt("p", a -> new McpPromptOutcome()))
+			.addResource(resource("r://x", u -> new McpResourceOutcome()));
 
 		var resp = send(config, req(1, McpMethods.INITIALIZE, null));
 		assertNotNull(resp);
@@ -103,14 +103,11 @@ class Mcp20250618Revision_Test {
 	}
 
 	@Test
-	void a02_initialize_explicit_capabilitiesAndServerInfo() {
-		var caps = new ServerCapabilities().setLogging(new LoggingCapability());
-		var info = new Implementation().setName("custom").setVersion("9.9");
-		var config = new McpServerConfig().setCapabilities(caps).setServerInfo(info).setInstructions("hi");
+	void a02_initialize_explicitServerInfoAndInstructions() {
+		var config = new McpServerConfig().setName("custom").setVersion("9.9").setInstructions("hi");
 		var resp = send(config, req(1, McpMethods.INITIALIZE, null));
 		var result = (InitializeResult) resp.getResult();
-		assertSame(caps, result.getCapabilities());
-		assertSame(info, result.getServerInfo());
+		assertBean(result.getServerInfo(), "name,version", "custom,9.9");
 		assertString("hi", result.getInstructions());
 	}
 
@@ -166,7 +163,7 @@ class Mcp20250618Revision_Test {
 
 	@Test
 	void b03_notification_returnsNullResponse() {
-		var config = new McpServerConfig().addTool(tool("a", args -> new CallToolResult()));
+		var config = new McpServerConfig().addTool(tool("a", args -> new McpToolOutcome()));
 		var notif = req(null, McpMethods.TOOLS_CALL, JsonMap.of("name", "a"));
 		assertNull(send(config, notif));
 	}
@@ -192,8 +189,8 @@ class Mcp20250618Revision_Test {
 	@Test
 	void c01_tools_list_singlePage() {
 		var config = new McpServerConfig()
-			.addTool(tool("a", args -> new CallToolResult()))
-			.addTool(tool("b", args -> new CallToolResult()));
+			.addTool(tool("a", args -> new McpToolOutcome()))
+			.addTool(tool("b", args -> new McpToolOutcome()));
 		var resp = send(config, req(1, McpMethods.TOOLS_LIST, null));
 		var result = (ListToolsResult) resp.getResult();
 		assertSize(2, result.getTools());
@@ -203,8 +200,8 @@ class Mcp20250618Revision_Test {
 	@Test
 	void c02_tools_list_paged() {
 		var config = new McpServerConfig().setCursor(McpCursor.fixedSize(1))
-			.addTool(tool("a", args -> new CallToolResult()))
-			.addTool(tool("b", args -> new CallToolResult()));
+			.addTool(tool("a", args -> new McpToolOutcome()))
+			.addTool(tool("b", args -> new McpToolOutcome()));
 		var first = (ListToolsResult) send(config, req(1, McpMethods.TOOLS_LIST, null)).getResult();
 		assertSize(1, first.getTools());
 		assertString("1", first.getNextCursor());
@@ -218,9 +215,9 @@ class Mcp20250618Revision_Test {
 	@Test
 	void d01_tools_call_routes_byName() {
 		var config = new McpServerConfig().addTool(tool("echo", args -> {
-			var ctr = new CallToolResult();
-			ctr.setContent(List.of(new TextContent().setText(String.valueOf(args.get("text")))));
-			return ctr;
+			var outcome = new McpToolOutcome();
+			outcome.setContent(List.of(McpContentBlock.text(String.valueOf(args.get("text")))));
+			return outcome;
 		}));
 		var resp = send(config, req(1, McpMethods.TOOLS_CALL, JsonMap.of("name", "echo", "arguments", JsonMap.of("text", "hi"))));
 		var ctr = (CallToolResult) resp.getResult();
@@ -241,14 +238,14 @@ class Mcp20250618Revision_Test {
 
 	@Test
 	void d04_tools_call_argumentsNotObject_throwsInvalidParams() {
-		var config = new McpServerConfig().addTool(tool("e", a -> new CallToolResult()));
+		var config = new McpServerConfig().addTool(tool("e", a -> new McpToolOutcome()));
 		var resp = send(config, req(1, McpMethods.TOOLS_CALL, JsonMap.of("name", "e", "arguments", "string-not-map")));
 		assertEquals(Mcp20250618Revision.CODE_INVALID_PARAMS, resp.getError().getCode());
 	}
 
 	@Test
 	void d05_tools_call_paramsNotMap_invalidParams() {
-		var config = new McpServerConfig().addTool(tool("e", a -> new CallToolResult()));
+		var config = new McpServerConfig().addTool(tool("e", a -> new McpToolOutcome()));
 		var resp = send(config, req(1, McpMethods.TOOLS_CALL, "not-a-map"));
 		assertEquals(Mcp20250618Revision.CODE_INVALID_PARAMS, resp.getError().getCode());
 	}
@@ -288,7 +285,7 @@ class Mcp20250618Revision_Test {
 
 	@Test
 	void e01_prompts_list_and_get() {
-		var config = new McpServerConfig().addPrompt(prompt("p", args -> new GetPromptResult().setDescription("ok")));
+		var config = new McpServerConfig().addPrompt(prompt("p", args -> new McpPromptOutcome().setDescription("ok")));
 		var list = (ListPromptsResult) send(config, req(1, McpMethods.PROMPTS_LIST, null)).getResult();
 		assertSize(1, list.getPrompts());
 		var get = (GetPromptResult) send(config, req(1, McpMethods.PROMPTS_GET, JsonMap.of("name", "p"))).getResult();
@@ -311,7 +308,7 @@ class Mcp20250618Revision_Test {
 
 	@Test
 	void f01_resources_list_and_read() {
-		var config = new McpServerConfig().addResource(resource("file://a", uri -> new ReadResourceResult().setContents(List.of(new TextResourceContents().setUri(uri).setText("ok")))));
+		var config = new McpServerConfig().addResource(resource("file://a", uri -> new McpResourceOutcome().setContents(List.of(McpResourceContents.text(uri, null, "ok")))));
 		var list = (ListResourcesResult) send(config, req(1, McpMethods.RESOURCES_LIST, null)).getResult();
 		assertSize(1, list.getResources());
 		var read = (ReadResourceResult) send(config, req(1, McpMethods.RESOURCES_READ, JsonMap.of("uri", "file://a"))).getResult();
@@ -334,7 +331,7 @@ class Mcp20250618Revision_Test {
 
 	@Test
 	void g01_cursor_paramsAreOptional() {
-		var config = new McpServerConfig().setCursor(McpCursor.fixedSize(1)).addPrompt(prompt("a", args -> new GetPromptResult())).addPrompt(prompt("b", args -> new GetPromptResult()));
+		var config = new McpServerConfig().setCursor(McpCursor.fixedSize(1)).addPrompt(prompt("a", args -> new McpPromptOutcome())).addPrompt(prompt("b", args -> new McpPromptOutcome()));
 		// params null
 		var resp = (ListPromptsResult) send(config, req(1, McpMethods.PROMPTS_LIST, null)).getResult();
 		assertSize(1, resp.getPrompts());

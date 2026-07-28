@@ -68,21 +68,18 @@ class Characterization_Test {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig()
-				.setServerInfo(new Implementation().setName("characterization").setVersion("1.0.0"))
+				.setName("characterization").setVersion("1.0.0")
 				.setInstructions("Be concise.")
-				.addTool(tool("echo", new JsonSchema().setType("object").setRequired("text"), a -> new CallToolResult()
-					.setContent(List.of(new TextContent().setText(String.valueOf(a.get("text")))))))
-				.addTool(tool("mixed", null, a -> new CallToolResult().setContent(List.of(
-					new TextContent().setText("t"),
-					new ImageContent().setData("AAA=").setMimeType("image/png"),
-					new EmbeddedResourceContent().setResource(
-						new TextResourceContents().setUri("file:///e").setMimeType("text/plain").setText("emb"))))))
-				.addTool(tool("failing", null, a -> new CallToolResult().setIsError(true)
-					.setContent(List.of(new TextContent().setText("nope")))))
-				.addPrompt(prompt("greet", a -> new GetPromptResult().setDescription("d").setMessages(List.of(
-					new PromptMessage().setRole(Role.USER).setContent(new TextContent().setText("hi " + a.get("who")))))))
-				.addResource(resource("file:///a", u -> new ReadResourceResult().setContents(List.of(
-					new TextResourceContents().setUri(u).setMimeType("text/plain").setText("body")))));
+				.addTool(tool("echo", McpSchema.of(JsonMap.of("type", "object", "required", List.of("text"))), a -> McpToolOutcome.text(String.valueOf(a.get("text")))))
+				.addTool(tool("mixed", null, a -> McpToolOutcome.of(
+					McpContentBlock.text("t"),
+					McpContentBlock.image("AAA=", "image/png"),
+					McpContentBlock.resource(McpResourceContents.text("file:///e", "text/plain", "emb")))))
+				.addTool(tool("failing", null, a -> McpToolOutcome.text("nope").setError(true)))
+				.addPrompt(prompt("greet", a -> new McpPromptOutcome().setDescription("d").setMessages(List.of(
+					new McpPromptMessage().setRole(McpRole.USER).setContent(McpContentBlock.text("hi " + a.get("who")))))))
+				.addResource(resource("file:///a", u -> new McpResourceOutcome().setContents(List.of(
+					McpResourceContents.text(u, "text/plain", "body")))));
 		}
 	}
 
@@ -90,11 +87,15 @@ class Characterization_Test {
 	public static class F_Caps extends McpRestServlet20250618 {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
-			return new McpServerConfig()
-				.setCapabilities(new ServerCapabilities()
-					.setLogging(new LoggingCapability().setLevel("info"))
-					.setResources(new ResourceCapability().setSubscribe(true).setListChanged(true))
-					.setExperimental(JsonMap.of("flag", 1)));
+			return new McpServerConfig();
+		}
+
+		@Override
+		protected ServerCapabilities capabilities() {
+			return new ServerCapabilities()
+				.setLogging(new LoggingCapability().setLevel("info"))
+				.setResources(new ResourceCapability().setSubscribe(true).setListChanged(true))
+				.setExperimental(JsonMap.of("flag", 1));
 		}
 	}
 
@@ -104,8 +105,8 @@ class Characterization_Test {
 		@Override protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig()
 				.setCursor(McpCursor.fixedSize(1))
-				.addTool(tool("t1", null, a -> new CallToolResult()))
-				.addTool(tool("t2", null, a -> new CallToolResult()));
+				.addTool(tool("t1", null, a -> new McpToolOutcome()))
+				.addTool(tool("t2", null, a -> new McpToolOutcome()));
 		}
 	}
 
@@ -122,24 +123,24 @@ class Characterization_Test {
 
 	// --- fixture handler factories ---------------------------------------------------------
 
-	private static McpToolHandler tool(String name, JsonSchema schema, Function<Map<String,Object>,CallToolResult> fn) {
+	private static McpToolHandler tool(String name, McpSchema schema, Function<Map<String,Object>,McpToolOutcome> fn) {
 		return new McpToolHandler() {
-			@Override public Tool descriptor() { return new Tool().setName(name).setDescription("desc:" + name).setInputSchema(schema); }
-			@Override public CallToolResult call(Map<String,Object> arguments, BeanStore ctx) { return fn.apply(arguments); }
+			@Override public McpToolSpec descriptor() { return new McpToolSpec().setName(name).setDescription("desc:" + name).setInputSchema(schema); }
+			@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) { return fn.apply(arguments); }
 		};
 	}
 
-	private static McpPromptHandler prompt(String name, Function<Map<String,Object>,GetPromptResult> fn) {
+	private static McpPromptHandler prompt(String name, Function<Map<String,Object>,McpPromptOutcome> fn) {
 		return new McpPromptHandler() {
-			@Override public Prompt descriptor() { return new Prompt().setName(name).setDescription("pd"); }
-			@Override public GetPromptResult get(Map<String,Object> arguments, BeanStore ctx) { return fn.apply(arguments); }
+			@Override public McpPromptSpec descriptor() { return new McpPromptSpec().setName(name).setDescription("pd"); }
+			@Override public McpPromptOutcome get(Map<String,Object> arguments, BeanStore ctx) { return fn.apply(arguments); }
 		};
 	}
 
-	private static McpResourceHandler resource(String uri, Function<String,ReadResourceResult> fn) {
+	private static McpResourceHandler resource(String uri, Function<String,McpResourceOutcome> fn) {
 		return new McpResourceHandler() {
-			@Override public Resource descriptor() { return new Resource().setUri(uri).setName("a").setMimeType("text/plain"); }
-			@Override public ReadResourceResult read(String u, BeanStore ctx) { return fn.apply(u); }
+			@Override public McpResourceSpec descriptor() { return new McpResourceSpec().setUri(uri).setName("a").setMimeType("text/plain"); }
+			@Override public McpResourceOutcome read(String u, BeanStore ctx) { return fn.apply(u); }
 		};
 	}
 

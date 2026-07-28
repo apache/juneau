@@ -115,7 +115,9 @@ class McpTypedHandlers_Test {
 			.setMethod(McpMethods.TOOLS_CALL)
 			.setParams(JsonMap.of("name", "d"));
 		var resp = dispatch(req, config);
-		assertSame(ctr, resp.getResult());
+		// The neutral/wire boundary always remaps the result, so only value equality survives here.
+		var result = (CallToolResult) resp.getResult();
+		assertString("direct", ((TextContent) result.getContent().get(0)).getText());
 	}
 
 	@Test
@@ -234,7 +236,7 @@ class McpTypedHandlers_Test {
 		};
 		var raw = McpTypedHandlers.adaptTool(typed);
 		var ctr = raw.call(null, ctx);
-		assertString("null", ((TextContent) ctr.getContent().get(0)).getText());
+		assertString("null", ctr.getContent().get(0).text());
 	}
 
 	@Test

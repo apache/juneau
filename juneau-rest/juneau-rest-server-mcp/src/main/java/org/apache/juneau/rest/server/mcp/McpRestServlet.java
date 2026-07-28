@@ -19,7 +19,6 @@ package org.apache.juneau.rest.server.mcp;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
-import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.Content;
 import org.apache.juneau.marshall.serializer.*;

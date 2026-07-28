@@ -16,7 +16,18 @@
  */
 
 /**
- * Stateless Model Context Protocol (MCP) endpoint built on {@code juneau-rest-server} using the
- * {@code juneau-bean-mcp} wire types.
+ * Revision-neutral core for MCP endpoints built on {@code juneau-rest-server}.
+ *
+ * <p>
+ * This package knows the shape of an MCP server — tools, prompts, resources, pagination, the
+ * JSON-RPC dispatch contract, and the two HTTP entry points — without knowing any MCP protocol
+ * revision. It has no compile dependency on any revision's wire beans, and that is enforced at
+ * build time. A protocol revision is supplied by an implementation of {@link McpRevision} living in
+ * its own module (for example {@code juneau-rest-server-mcp-2025-06-18}), and a consumer binds one
+ * at compile time by extending that revision's abstract servlet or composing its endpoint mixin.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerMcp">juneau-rest-server-mcp</a>
+ * </ul>
  */
 package org.apache.juneau.rest.server.mcp;

@@ -18,15 +18,15 @@ package org.apache.juneau.rest.server.mcp;
 
 import java.util.*;
 
-import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 
 /**
  * Handler for a single MCP prompt.
  *
  * <p>
- * Implementations declare a {@link #descriptor() descriptor} (the {@link Prompt} returned by {@code prompts/list})
- * and a {@link #get(Map, BeanStore) get} body invoked when the matching {@code prompts/get} method runs.
+ * Implementations declare a {@link #descriptor() descriptor} (the {@link McpPromptSpec} returned by
+ * {@code prompts/list}) and a {@link #get(Map, BeanStore) get} body invoked when the matching
+ * {@code prompts/get} method runs.
  */
 @FunctionalInterface
 public interface McpPromptHandler {
@@ -35,13 +35,13 @@ public interface McpPromptHandler {
 	 * Returns the static descriptor for this prompt.
 	 *
 	 * <p>
-	 * The {@link Prompt#getName() name} value is used by the bound {@link McpRevision} to route
+	 * The {@link McpPromptSpec#getName() name} value is used by the bound {@link McpRevision} to route
 	 * incoming {@code prompts/get} requests, so each handler in an {@link McpServerConfig} must use a
 	 * unique name.
 	 *
 	 * @return The prompt descriptor. Never {@code null}.
 	 */
-	default Prompt descriptor() {
+	default McpPromptSpec descriptor() {
 		throw new UnsupportedOperationException("descriptor() must be implemented by McpPromptHandler subclasses.");
 	}
 
@@ -52,5 +52,5 @@ public interface McpPromptHandler {
 	 * @param ctx Per-request bean store. Never {@code null}.
 	 * @return The rendered prompt. Never {@code null}.
 	 */
-	GetPromptResult get(Map<String,Object> arguments, BeanStore ctx);
+	McpPromptOutcome get(Map<String,Object> arguments, BeanStore ctx);
 }

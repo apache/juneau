@@ -19,7 +19,6 @@ package org.apache.juneau.rest.server.mcp.v20250618;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.*;
@@ -32,19 +31,19 @@ class McpHandlerDefaults_Test {
 
 	@Test
 	void toolHandler_defaultDescriptor_throws() {
-		McpToolHandler h = (args, ctx) -> new CallToolResult();
+		McpToolHandler h = (args, ctx) -> new McpToolOutcome();
 		assertThrows(UnsupportedOperationException.class, h::descriptor);
 	}
 
 	@Test
 	void promptHandler_defaultDescriptor_throws() {
-		McpPromptHandler h = (args, ctx) -> new GetPromptResult();
+		McpPromptHandler h = (args, ctx) -> new McpPromptOutcome();
 		assertThrows(UnsupportedOperationException.class, h::descriptor);
 	}
 
 	@Test
 	void resourceHandler_defaultDescriptor_throws() {
-		McpResourceHandler h = (uri, ctx) -> new ReadResourceResult();
+		McpResourceHandler h = (uri, ctx) -> new McpResourceOutcome();
 		assertThrows(UnsupportedOperationException.class, h::descriptor);
 	}
 

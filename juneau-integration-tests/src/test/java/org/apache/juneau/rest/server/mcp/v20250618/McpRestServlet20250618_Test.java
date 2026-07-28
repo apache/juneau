@@ -51,18 +51,16 @@ class McpRestServlet20250618_Test extends TestBase {
 		@Override
 		protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig()
-				.setServerInfo(new Implementation().setName("test").setVersion("1.0.0"))
+				.setName("test").setVersion("1.0.0")
 				.addTool(new McpToolHandler() {
 					@Override
-					public Tool descriptor() {
-						return new Tool().setName("echo").setDescription("Echoes back");
+					public McpToolSpec descriptor() {
+						return new McpToolSpec().setName("echo").setDescription("Echoes back");
 					}
 
 					@Override
-					public CallToolResult call(Map<String,Object> arguments, BeanStore ctx) {
-						var ctr = new CallToolResult();
-						ctr.setContent(List.of(new TextContent().setText(String.valueOf(arguments.get("text")))));
-						return ctr;
+					public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
+						return McpToolOutcome.text(String.valueOf(arguments.get("text")));
 					}
 				});
 		}
@@ -123,11 +121,11 @@ class McpRestServlet20250618_Test extends TestBase {
 		public McpServerConfig getMcpConfig() {
 			return new McpServerConfig().addTool(new McpToolHandler() {
 				@Override
-				public Tool descriptor() { return new Tool().setName("ping"); }
+				public McpToolSpec descriptor() { return new McpToolSpec().setName("ping"); }
 
 				@Override
-				public CallToolResult call(Map<String,Object> arguments, BeanStore ctx) {
-					return new CallToolResult().setContent(List.of(new TextContent().setText("pong")));
+				public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
+					return McpToolOutcome.text("pong");
 				}
 			});
 		}
