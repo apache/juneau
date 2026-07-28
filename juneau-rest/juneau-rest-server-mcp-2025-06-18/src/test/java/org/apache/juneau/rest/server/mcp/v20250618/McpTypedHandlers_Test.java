@@ -274,6 +274,70 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
+	void a08_typedTool_callToolResultWithImageAndResourceContent_roundTrips() {
+		var ctr = new CallToolResult().setContent(List.of(
+			new ImageContent().setData("aW1n").setMimeType("image/png"),
+			new EmbeddedResourceContent().setResource(new TextResourceContents().setUri("r://x").setMimeType("text/plain").setText("inline")),
+			new EmbeddedResourceContent().setResource(new BlobResourceContents().setUri("r://y").setMimeType("application/octet-stream").setBlob("QUJD"))));
+		var typed = new McpTypedToolHandler<EchoArgs,CallToolResult>() {
+			@Override
+			public Tool descriptor() { return new Tool().setName("m"); }
+			@Override
+			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
+			@Override
+			public CallToolResult call(EchoArgs args, BeanStore ctx) { return ctr; }
+		};
+		var config = new McpServerConfig().addTool(McpTypedHandlers.adaptTool(typed));
+		var resp = dispatch(new JsonRpcRequest()
+			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
+			.setMethod(McpMethods.TOOLS_CALL).setParams(JsonMap.of("name", "m")), config);
+		var result = (CallToolResult) resp.getResult();
+		assertSize(3, result.getContent());
+		assertString("aW1n", ((ImageContent) result.getContent().get(0)).getData());
+		var textResource = (EmbeddedResourceContent) result.getContent().get(1);
+		assertString("inline", ((TextResourceContents) textResource.getResource()).getText());
+		var blobResource = (EmbeddedResourceContent) result.getContent().get(2);
+		assertString("QUJD", ((BlobResourceContents) blobResource.getResource()).getBlob());
+	}
+
+	@Test
+	void b03_typedPrompt_descriptorArgumentsAndAllRoleMessages_roundTrip() {
+		var typed = new McpTypedPromptHandler<EchoArgs>() {
+			@Override
+			public Prompt descriptor() {
+				return new Prompt().setName("m").setArguments(List.of(new PromptArgument().setName("who").setRequired(true)));
+			}
+			@Override
+			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
+			@Override
+			public GetPromptResult get(EchoArgs args, BeanStore ctx) {
+				return new GetPromptResult().setMessages(List.of(
+					new PromptMessage().setRole(Role.USER).setContent(new TextContent().setText("hi")),
+					new PromptMessage().setRole(Role.ASSISTANT).setContent(new TextContent().setText("hello")),
+					new PromptMessage().setRole(Role.SYSTEM).setContent(new TextContent().setText("sys")),
+					new PromptMessage().setRole(Role.TOOL).setContent(new TextContent().setText("tool"))));
+			}
+		};
+		var raw = McpTypedHandlers.adaptPrompt(typed);
+		var config = new McpServerConfig().addPrompt(raw);
+
+		var list = (ListPromptsResult) dispatch(new JsonRpcRequest()
+			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
+			.setMethod(McpMethods.PROMPTS_LIST).setParams(null), config).getResult();
+		assertSize(1, list.getPrompts().get(0).getArguments());
+		assertString("who", list.getPrompts().get(0).getArguments().get(0).getName());
+
+		var pr = (GetPromptResult) dispatch(new JsonRpcRequest()
+			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
+			.setMethod(McpMethods.PROMPTS_GET).setParams(JsonMap.of("name", "m")), config).getResult();
+		assertSize(4, pr.getMessages());
+		assertEquals(Role.USER, pr.getMessages().get(0).getRole());
+		assertEquals(Role.ASSISTANT, pr.getMessages().get(1).getRole());
+		assertEquals(Role.SYSTEM, pr.getMessages().get(2).getRole());
+		assertEquals(Role.TOOL, pr.getMessages().get(3).getRole());
+	}
+
+	@Test
 	void b02_typedPrompt_argsBoundAndResult() {
 		var typed = new McpTypedPromptHandler<EchoArgs>() {
 			@Override

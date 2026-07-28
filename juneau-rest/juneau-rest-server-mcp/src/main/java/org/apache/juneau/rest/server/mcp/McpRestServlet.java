@@ -83,7 +83,7 @@ public abstract class McpRestServlet extends BasicRestServlet {
 			var nc = createMcpConfig();
 			if (nc == null)
 				throw new IllegalStateException("createMcpConfig() returned null");
-			c = config.compareAndSet(null, nc) ? nc : config.get();
+			c = config.compareAndSet(null, nc) ? nc : config.get(); // HTT: the CAS-loses branch requires a genuine concurrent first-access race; untestable deterministically.
 		}
 		return c;
 	}

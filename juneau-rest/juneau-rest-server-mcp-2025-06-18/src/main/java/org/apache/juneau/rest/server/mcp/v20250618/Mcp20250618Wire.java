@@ -188,7 +188,7 @@ final class Mcp20250618Wire {
 			return McpContentBlock.image(x2.getData(), x2.getMimeType());
 		if (x instanceof EmbeddedResourceContent x2)
 			return McpContentBlock.resource(toNeutral(x2.getResource()));
-		throw new McpException(Mcp20250618Revision.CODE_INTERNAL_ERROR, "Unsupported content type: " + x.getClass().getName());
+		throw new McpException(Mcp20250618Revision.CODE_INTERNAL_ERROR, "Unsupported content type: " + x.getClass().getName()); // HTT: the Content dictionary is closed to Text/Image/EmbeddedResource; a 4th implementation cannot occur through the public API.
 	}
 
 	static McpResourceContents toNeutral(ResourceContents x) {
@@ -198,7 +198,7 @@ final class Mcp20250618Wire {
 			return McpResourceContents.text(x2.getUri(), x2.getMimeType(), x2.getText());
 		if (x instanceof BlobResourceContents x2)
 			return McpResourceContents.blob(x2.getUri(), x2.getMimeType(), x2.getBlob());
-		throw new McpException(Mcp20250618Revision.CODE_INTERNAL_ERROR, "Unsupported resource contents type: " + x.getClass().getName());
+		throw new McpException(Mcp20250618Revision.CODE_INTERNAL_ERROR, "Unsupported resource contents type: " + x.getClass().getName()); // HTT: the ResourceContents dictionary is closed to Text/Blob; a 3rd implementation cannot occur through the public API.
 	}
 
 	static McpPromptSpec toNeutral(Prompt x) {
