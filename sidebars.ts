@@ -128,6 +128,11 @@ const sidebars: SidebarsConfig = {
 									id: 'topics/02.10.02.ValueFrameworkInternal',
 									label: '2.10.2. @Value Framework-Internal Adoption',
 								},
+								{
+									type: 'doc',
+									id: 'topics/02.10.03.ConfigProperties',
+									label: '2.10.3. @ConfigProperties Annotation Basics',
+								},
 							],
 						},
 						{
