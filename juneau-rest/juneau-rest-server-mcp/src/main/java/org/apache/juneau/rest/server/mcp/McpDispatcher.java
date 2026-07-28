@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.collections.*;

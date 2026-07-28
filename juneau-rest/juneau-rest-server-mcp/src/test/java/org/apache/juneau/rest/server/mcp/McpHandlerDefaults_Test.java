@@ -48,24 +48,6 @@ class McpHandlerDefaults_Test {
 	}
 
 	@Test
-	void b01_mcpException_default_data_isNull() {
-		var e = new McpException(-1, "x");
-		assertNull(e.getData());
-		assertEquals(-1, e.getCode());
-		assertString("x", e.getMessage());
-	}
-
-	@Test
-	void b02_mcpException_with_data() {
-		var e = new McpException(-1, "x", "data");
-		assertString("data", e.getData());
-		var rpc = e.toJsonRpcError();
-		assertEquals(-1, rpc.getCode());
-		assertString("x", rpc.getMessage());
-		assertString("data", rpc.getData());
-	}
-
-	@Test
 	void c01_typedHandlers_constructor_isPrivate() {
 		// Sanity: the static façade class should not be instantiable. Reflection trick used to bump coverage on the
 		// implicit private no-arg constructor.

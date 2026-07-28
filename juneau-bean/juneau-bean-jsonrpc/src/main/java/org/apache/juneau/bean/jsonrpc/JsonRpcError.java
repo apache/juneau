@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.bean.mcp;
+package org.apache.juneau.bean.jsonrpc;
 
 import org.apache.juneau.marshall.*;
 

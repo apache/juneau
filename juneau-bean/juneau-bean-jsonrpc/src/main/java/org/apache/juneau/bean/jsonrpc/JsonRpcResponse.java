@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.bean.mcp;
+package org.apache.juneau.bean.jsonrpc;
 
 import org.apache.juneau.marshall.*;
 
 /**
- * JSON-RPC 2.0 request envelope.
+ * JSON-RPC 2.0 success or error response envelope.
  *
  * <p>
- * The {@code id} field may be a {@link String}, integral {@link Number}, or {@code null} (notification).
+ * Exactly one of {@code result} or {@code error} should be present for a valid response.
  */
 @Marshalled
-public class JsonRpcRequest {
+public class JsonRpcResponse {
 
 	private String jsonrpc;
 	private Object id;
-	private String method;
-	private Object params;
+	private Object result;
+	private JsonRpcError error;
 
 	/**
-	 * JSON-RPC protocol version (typically {@value McpProtocol#JSON_RPC_2_0}).
+	 * JSON-RPC protocol version.
 	 *
 	 * @return The version token, or {@code null} if not set.
 	 */
@@ -47,13 +47,13 @@ public class JsonRpcRequest {
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public JsonRpcRequest setJsonrpc(String value) {
+	public JsonRpcResponse setJsonrpc(String value) {
 		jsonrpc = value;
 		return this;
 	}
 
 	/**
-	 * Request identifier (string, integer, or {@code null} for notifications).
+	 * Correlates to the {@link JsonRpcRequest#getId() request id}.
 	 *
 	 * @return The id, or {@code null} if not set.
 	 */
@@ -62,53 +62,53 @@ public class JsonRpcRequest {
 	}
 
 	/**
-	 * Sets the request id.
+	 * Sets the response id.
 	 *
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public JsonRpcRequest setId(Object value) {
+	public JsonRpcResponse setId(Object value) {
 		id = value;
 		return this;
 	}
 
 	/**
-	 * JSON-RPC method name (for example {@link McpMethods#TOOLS_LIST}).
+	 * Result payload on success.
 	 *
-	 * @return The method, or {@code null} if not set.
+	 * @return The result, or {@code null} if not set.
 	 */
-	public String getMethod() {
-		return method;
+	public Object getResult() {
+		return result;
 	}
 
 	/**
-	 * Sets the JSON-RPC method name.
+	 * Sets the result payload.
 	 *
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public JsonRpcRequest setMethod(String value) {
-		method = value;
+	public JsonRpcResponse setResult(Object value) {
+		result = value;
 		return this;
 	}
 
 	/**
-	 * Method parameters (object, array, or {@code null}).
+	 * Error payload on failure.
 	 *
-	 * @return The params payload, or {@code null} if not set.
+	 * @return The error, or {@code null} if not set.
 	 */
-	public Object getParams() {
-		return params;
+	public JsonRpcError getError() {
+		return error;
 	}
 
 	/**
-	 * Sets method parameters.
+	 * Sets the error payload.
 	 *
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public JsonRpcRequest setParams(Object value) {
-		params = value;
+	public JsonRpcResponse setError(JsonRpcError value) {
+		error = value;
 		return this;
 	}
 }

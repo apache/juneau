@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
-
+import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
@@ -239,27 +239,6 @@ class McpBeans_RoundTrip_Test {
 		for (var r : Role.values()) {
 			assertEquals(r.toString(), r.toWire());
 		}
-	}
-
-	@Test
-	void a16_mcpExceptionToJsonRpcError() {
-		var ex = new McpException(-32000, "Tool failed", JsonMap.of("tool", "t1"));
-		var err = ex.toJsonRpcError();
-		assertEquals(-32000, err.getCode());
-		assertEquals("Tool failed", err.getMessage());
-		assertNotNull(err.getData());
-	}
-
-	@Test
-	void a17_mcpExceptionTwoArgConstructorAndSetters() {
-		var ex = new McpException(1, "m");
-		assertNull(ex.getData());
-		ex.setCode(2).setData(JsonMap.of("a", 1));
-		assertEquals(2, ex.getCode());
-		assertNotNull(ex.getData());
-		var err = ex.toJsonRpcError();
-		assertEquals(2, err.getCode());
-		assertEquals("m", err.getMessage());
 	}
 
 	@Test

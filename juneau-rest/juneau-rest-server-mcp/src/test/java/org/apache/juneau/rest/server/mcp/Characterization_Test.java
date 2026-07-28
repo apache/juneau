@@ -22,6 +22,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.collections.*;
