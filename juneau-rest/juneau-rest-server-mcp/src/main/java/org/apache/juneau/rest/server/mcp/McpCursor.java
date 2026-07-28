@@ -100,4 +100,16 @@ public interface McpCursor {
 			return 0;
 		}
 	}
+
+	/**
+	 * Extracts the opaque pagination cursor from a JSON-RPC {@code params} value.
+	 *
+	 * @param params The raw params value from the request. Can be <jk>null</jk>.
+	 * @return The {@code cursor} parameter, or <jk>null</jk> if absent.
+	 * @throws org.apache.juneau.bean.jsonrpc.McpException If {@code params} is present but is not a
+	 * 	JSON object.
+	 */
+	static String cursorOf(Object params) {
+		return McpParamUtils.strParam(McpParamUtils.asMap(params), "cursor");
+	}
 }
