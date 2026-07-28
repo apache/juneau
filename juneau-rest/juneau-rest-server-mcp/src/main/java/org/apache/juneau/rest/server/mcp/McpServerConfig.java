@@ -23,7 +23,7 @@ import java.util.*;
 import org.apache.juneau.bean.mcp.v20250618.*;
 
 /**
- * Aggregate configuration consumed by {@link McpDispatcher}.
+ * Aggregate configuration consumed by the bound {@link McpRevision}.
  *
  * <p>
  * Applications register a single {@link McpServerConfig} (typically as a bean in their {@code RestContext}
@@ -45,7 +45,7 @@ public class McpServerConfig {
 	 * Server identity reported in {@code initialize}.
 	 *
 	 * <p>
-	 * If {@code null}, {@link McpDispatcher} fills in {@code "juneau-rest-server-mcp" / "unknown"}.
+	 * If {@code null}, the bound {@link McpRevision} fills in a default identity.
 	 *
 	 * @return The server info, or {@code null} if not set.
 	 */
@@ -201,7 +201,7 @@ public class McpServerConfig {
 	 * Optional explicit capabilities advertisement.
 	 *
 	 * <p>
-	 * When {@code null}, {@link McpDispatcher} synthesizes one from the registered handler lists.
+	 * When {@code null}, the bound {@link McpRevision} synthesizes one from the registered handler lists.
 	 *
 	 * @return The override, or {@code null} if auto-derived.
 	 */

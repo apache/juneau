@@ -14,49 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.mcp;
+package org.apache.juneau.rest.server.mcp.v20250618;
 
 import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.rest.server.mcp.*;
 
 /**
- * Typed variant of {@link McpToolHandler} where MCP {@code tools/call} arguments bind into a Juneau bean.
- *
- * <p>
- * Implementations declare a typed argument class {@code A} and a typed return type {@code R}. The dispatcher
- * (via {@link McpTypedHandlers#adaptTool(McpTypedToolHandler)}) handles map-to-bean conversion using the
- * default {@link org.apache.juneau.marshall.json.JsonParser} and wraps non-{@link CallToolResult} returns in a
- * single-{@link TextContent} {@link CallToolResult}.
+ * Typed variant of {@link McpPromptHandler} where MCP {@code prompts/get} arguments bind into a Juneau bean.
  *
  * @param <A> Argument bean type.
- * @param <R> Return type. If {@link CallToolResult}, the return value passes through unchanged.
  */
-public interface McpTypedToolHandler<A,R> {
+public interface McpTypedPromptHandler<A> {
 
 	/**
-	 * Returns the static descriptor for this tool.
+	 * Returns the static descriptor for this prompt.
 	 *
-	 * @return The tool descriptor. Never {@code null}.
+	 * @return The prompt descriptor. Never {@code null}.
 	 */
-	Tool descriptor();
+	Prompt descriptor();
 
 	/**
 	 * Returns the runtime argument class for binding.
-	 *
-	 * <p>
-	 * Defaults to introspecting the {@code A} type parameter on the implementation; lambdas / heavily-generic
-	 * implementations can override this method to provide it explicitly.
 	 *
 	 * @return The argument class. Never {@code null}.
 	 */
 	Class<A> argumentType();
 
 	/**
-	 * Invokes the tool with bound arguments.
+	 * Renders the prompt.
 	 *
 	 * @param arguments Bound argument bean (may be {@code null} when no arguments are supplied).
 	 * @param ctx Per-request bean store.
-	 * @return The call result.
+	 * @return The rendered prompt.
 	 */
-	R call(A arguments, BeanStore ctx);
+	GetPromptResult get(A arguments, BeanStore ctx);
 }

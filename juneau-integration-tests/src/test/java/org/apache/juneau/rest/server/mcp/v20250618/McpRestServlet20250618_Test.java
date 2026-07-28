@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.mcp;
+package org.apache.juneau.rest.server.mcp.v20250618;
 
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,15 +28,16 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.*;
 
 /**
- * End-to-end coverage for {@link McpRestServlet} via {@link MockRestClient}.
+ * End-to-end coverage for {@link McpRestServlet20250618} via {@link MockRestClient}.
  */
 @SuppressWarnings({
 	"resource" // Test helpers return Closeables; Eclipse JDT @Owning warning is by design.
 })
-class McpRestServlet_Test extends TestBase {
+class McpRestServlet20250618_Test extends TestBase {
 
 	private static final JsonParser PAR = JsonParser.create()
 		.typePropertyName(Content.class, "type")
@@ -44,7 +45,7 @@ class McpRestServlet_Test extends TestBase {
 		.build();
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class A extends McpRestServlet {
+	public static class A extends McpRestServlet20250618 {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -71,7 +72,7 @@ class McpRestServlet_Test extends TestBase {
 		return MockRestClient.create(A.class).json().contentType("application/json").accept("application/json").build();
 	}
 
-	@Test void a01_initialize_returnsServerInfo() throws Exception {
+	@Test void initialize_returnsServerInfo() throws Exception {
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(1)
@@ -81,7 +82,7 @@ class McpRestServlet_Test extends TestBase {
 		assertNotNull(parsed.getResult());
 	}
 
-	@Test void a02_toolsList_returnsRegisteredTool() throws Exception {
+	@Test void toolsList_returnsRegisteredTool() throws Exception {
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(1)
@@ -90,7 +91,7 @@ class McpRestServlet_Test extends TestBase {
 		assertContains("echo", resp);
 	}
 
-	@Test void a03_toolsCall_invokesHandler() throws Exception {
+	@Test void toolsCall_invokesHandler() throws Exception {
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(1)
@@ -101,7 +102,7 @@ class McpRestServlet_Test extends TestBase {
 		assertContains("\"type\":\"text\"", resp);
 	}
 
-	@Test void a04_unknown_methodReturnsErrorEnvelope() throws Exception {
+	@Test void unknown_methodReturnsErrorEnvelope() throws Exception {
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(1)
@@ -115,7 +116,7 @@ class McpRestServlet_Test extends TestBase {
 
 	@Rest(path = "/api", serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
 	@org.apache.juneau.marshall.serializer.SerializerConfig(addBeanTypes = "true")
-	public static class B extends org.apache.juneau.rest.server.servlet.BasicRestServlet implements McpEndpoint {
+	public static class B extends org.apache.juneau.rest.server.servlet.BasicRestServlet implements McpEndpoint20250618 {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -132,7 +133,7 @@ class McpRestServlet_Test extends TestBase {
 		}
 	}
 
-	@Test void b01_endpointMixin_dispatches() throws Exception {
+	@Test void endpointMixin_dispatches() throws Exception {
 		var c = MockRestClient.create(B.class).json().contentType("application/json").accept("application/json").build();
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
@@ -146,7 +147,7 @@ class McpRestServlet_Test extends TestBase {
 	// -------- failure modes --------
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class C extends McpRestServlet {
+	public static class C extends McpRestServlet20250618 {
 		private static final long serialVersionUID = 1L;
 		@Override
 		protected McpServerConfig createMcpConfig() {
@@ -154,19 +155,19 @@ class McpRestServlet_Test extends TestBase {
 		}
 	}
 
-	@Test void c01_servlet_getMcpConfig_cachesValue() {
+	@Test void servlet_getMcpConfig_cachesValue() {
 		var s = new A();
 		var c1 = s.getMcpConfig();
 		var c2 = s.getMcpConfig();
 		assertSame(c1, c2);
 	}
 
-	@Test void c02_servlet_getMcpConfig_nullThrows() {
+	@Test void servlet_getMcpConfig_nullThrows() {
 		var s = new C();
 		assertThrows(IllegalStateException.class, s::getMcpConfig);
 	}
 
-	@Test void c03_servlet_nullConfigCausesFailure() throws Exception {
+	@Test void servlet_nullConfigCausesFailure() throws Exception {
 		var c = MockRestClient.create(C.class).json().contentType("application/json").accept("application/json").ignoreErrors().build();
 		var req = new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1).setMethod(McpMethods.INITIALIZE);
 		c.post("/", req).run().assertStatus(500);

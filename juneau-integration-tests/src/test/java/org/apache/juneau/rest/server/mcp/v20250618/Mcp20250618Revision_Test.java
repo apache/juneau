@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.mcp;
+package org.apache.juneau.rest.server.mcp.v20250618;
 
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,14 +25,14 @@ import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Coverage for {@link McpDispatcher}.
+ * Coverage for {@link Mcp20250618Revision}.
  */
-class McpDispatcher_Test {
+class Mcp20250618Revision_Test {
 
-	private final McpDispatcher dispatcher = new McpDispatcher();
 	private final BeanStore ctx = new BasicBeanStore();
 
 	private static McpToolHandler tool(String name, java.util.function.Function<Map<String,Object>,CallToolResult> fn) {
@@ -82,11 +82,11 @@ class McpDispatcher_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, JsonRpcRequest r) {
-		return dispatcher.dispatch(r, config, ctx);
+		return new Mcp20250618Revision(null).dispatch(new McpExchange(r, n -> null), config, ctx);
 	}
 
 	@Test
-	void a01_initialize_default_capabilities() {
+	void initialize_default_capabilities() {
 		var config = new McpServerConfig()
 			.addTool(tool("a", a -> new CallToolResult()))
 			.addPrompt(prompt("p", a -> new GetPromptResult()))
@@ -99,11 +99,11 @@ class McpDispatcher_Test {
 		assertNotNull(result.getCapabilities().getTools());
 		assertNotNull(result.getCapabilities().getPrompts());
 		assertNotNull(result.getCapabilities().getResources());
-		assertString(McpDispatcher.DEFAULT_SERVER_NAME, result.getServerInfo().getName());
+		assertString(Mcp20250618Revision.DEFAULT_SERVER_NAME, result.getServerInfo().getName());
 	}
 
 	@Test
-	void a02_initialize_explicit_capabilitiesAndServerInfo() {
+	void initialize_explicit_capabilitiesAndServerInfo() {
 		var caps = new ServerCapabilities().setLogging(new LoggingCapability());
 		var info = new Implementation().setName("custom").setVersion("9.9");
 		var config = new McpServerConfig().setCapabilities(caps).setServerInfo(info).setInstructions("hi");
@@ -115,31 +115,31 @@ class McpDispatcher_Test {
 	}
 
 	@Test
-	void a03_ping_returns_emptyResult() {
+	void ping_returns_emptyResult() {
 		var resp = send(new McpServerConfig(), req(1, McpMethods.PING, null));
 		assertTrue(resp.getResult() instanceof JsonMap);
 	}
 
 	@Test
-	void a04_method_notFound() {
+	void method_notFound() {
 		var resp = send(new McpServerConfig(), req(1, "no/such/method", null));
-		assertEquals(McpDispatcher.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
 	}
 
 	@Test
-	void a05_missing_method() {
+	void missing_method() {
 		var resp = send(new McpServerConfig(), req(1, null, null));
-		assertEquals(McpDispatcher.CODE_INVALID_REQUEST, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_INVALID_REQUEST, resp.getError().getCode());
 	}
 
 	@Test
-	void a06_empty_method_string() {
+	void empty_method_string() {
 		var resp = send(new McpServerConfig(), req(1, "", null));
-		assertEquals(McpDispatcher.CODE_INVALID_REQUEST, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_INVALID_REQUEST, resp.getError().getCode());
 	}
 
 	@Test
-	void a07_initialize_emptyConfig_synthesizesEmptyCapabilities() {
+	void initialize_emptyConfig_synthesizesEmptyCapabilities() {
 		var resp = send(new McpServerConfig(), req(1, McpMethods.INITIALIZE, null));
 		var result = (InitializeResult) resp.getResult();
 		assertNotNull(result.getCapabilities());
@@ -149,7 +149,7 @@ class McpDispatcher_Test {
 	}
 
 	@Test
-	void b01_notification_runtimeException_returnsNullSilently() {
+	void notification_runtimeException_returnsNullSilently() {
 		var config = new McpServerConfig().addTool(tool("e", a -> {
 			throw new RuntimeException("boom");
 		}));
@@ -157,7 +157,7 @@ class McpDispatcher_Test {
 	}
 
 	@Test
-	void b02_notification_mcpException_returnsNullSilently() {
+	void notification_mcpException_returnsNullSilently() {
 		var config = new McpServerConfig().addTool(tool("e", a -> {
 			throw new McpException(-32000, "no");
 		}));
@@ -165,32 +165,32 @@ class McpDispatcher_Test {
 	}
 
 	@Test
-	void b03_notification_returnsNullResponse() {
+	void notification_returnsNullResponse() {
 		var config = new McpServerConfig().addTool(tool("a", args -> new CallToolResult()));
 		var notif = req(null, McpMethods.TOOLS_CALL, JsonMap.of("name", "a"));
 		assertNull(send(config, notif));
 	}
 
 	@Test
-	void b04_notification_methodNotFound_stillReturnsNull() {
+	void notification_methodNotFound_stillReturnsNull() {
 		assertNull(send(new McpServerConfig(), req(null, "missing", null)));
 	}
 
 	@Test
-	void b05_notification_invalidMethod_returnsNull() {
+	void notification_invalidMethod_returnsNull() {
 		assertNull(send(new McpServerConfig(), req(null, null, null)));
 	}
 
 	@Test
-	void a08_nullEnvelope_returnsInvalidRequest() {
-		var resp = dispatcher.dispatch(null, new McpServerConfig(), ctx);
-		assertEquals(McpDispatcher.CODE_INVALID_REQUEST, resp.getError().getCode());
+	void nullEnvelope_returnsInvalidRequest() {
+		var resp = new Mcp20250618Revision(null).dispatch(new McpExchange(null, n -> null), new McpServerConfig(), ctx);
+		assertEquals(Mcp20250618Revision.CODE_INVALID_REQUEST, resp.getError().getCode());
 	}
 
 	// -------- tools/list ---------
 
 	@Test
-	void c01_tools_list_singlePage() {
+	void tools_list_singlePage() {
 		var config = new McpServerConfig()
 			.addTool(tool("a", args -> new CallToolResult()))
 			.addTool(tool("b", args -> new CallToolResult()));
@@ -201,7 +201,7 @@ class McpDispatcher_Test {
 	}
 
 	@Test
-	void c02_tools_list_paged() {
+	void tools_list_paged() {
 		var config = new McpServerConfig().setCursor(McpCursor.fixedSize(1))
 			.addTool(tool("a", args -> new CallToolResult()))
 			.addTool(tool("b", args -> new CallToolResult()));
@@ -216,7 +216,7 @@ class McpDispatcher_Test {
 	// -------- tools/call ---------
 
 	@Test
-	void d01_tools_call_routes_byName() {
+	void tools_call_routes_byName() {
 		var config = new McpServerConfig().addTool(tool("echo", args -> {
 			var ctr = new CallToolResult();
 			ctr.setContent(List.of(new TextContent().setText(String.valueOf(args.get("text")))));
@@ -228,33 +228,33 @@ class McpDispatcher_Test {
 	}
 
 	@Test
-	void d02_tools_call_missingName_invalidParams() {
+	void tools_call_missingName_invalidParams() {
 		var resp = send(new McpServerConfig(), req(1, McpMethods.TOOLS_CALL, JsonMap.of("arguments", JsonMap.of())));
-		assertEquals(McpDispatcher.CODE_INVALID_PARAMS, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_INVALID_PARAMS, resp.getError().getCode());
 	}
 
 	@Test
-	void d03_tools_call_unknownTool_methodNotFound() {
+	void tools_call_unknownTool_methodNotFound() {
 		var resp = send(new McpServerConfig(), req(1, McpMethods.TOOLS_CALL, JsonMap.of("name", "missing")));
-		assertEquals(McpDispatcher.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
 	}
 
 	@Test
-	void d04_tools_call_argumentsNotObject_throwsInvalidParams() {
+	void tools_call_argumentsNotObject_throwsInvalidParams() {
 		var config = new McpServerConfig().addTool(tool("e", a -> new CallToolResult()));
 		var resp = send(config, req(1, McpMethods.TOOLS_CALL, JsonMap.of("name", "e", "arguments", "string-not-map")));
-		assertEquals(McpDispatcher.CODE_INVALID_PARAMS, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_INVALID_PARAMS, resp.getError().getCode());
 	}
 
 	@Test
-	void d05_tools_call_paramsNotMap_invalidParams() {
+	void tools_call_paramsNotMap_invalidParams() {
 		var config = new McpServerConfig().addTool(tool("e", a -> new CallToolResult()));
 		var resp = send(config, req(1, McpMethods.TOOLS_CALL, "not-a-map"));
-		assertEquals(McpDispatcher.CODE_INVALID_PARAMS, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_INVALID_PARAMS, resp.getError().getCode());
 	}
 
 	@Test
-	void d06_handler_throwingMcpException_propagatesCodeAndData() {
+	void handler_throwingMcpException_propagatesCodeAndData() {
 		var config = new McpServerConfig().addTool(tool("e", a -> {
 			throw new McpException(-32099, "nope", JsonMap.of("k", "v"));
 		}));
@@ -265,29 +265,29 @@ class McpDispatcher_Test {
 	}
 
 	@Test
-	void d07_handler_throwingRuntimeException_internalError() {
+	void handler_throwingRuntimeException_internalError() {
 		var config = new McpServerConfig().addTool(tool("e", a -> {
 			throw new RuntimeException("boom");
 		}));
 		var resp = send(config, req(1, McpMethods.TOOLS_CALL, JsonMap.of("name", "e")));
-		assertEquals(McpDispatcher.CODE_INTERNAL_ERROR, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_INTERNAL_ERROR, resp.getError().getCode());
 		assertString("boom", resp.getError().getMessage());
 	}
 
 	@Test
-	void d08_handler_throwingRuntimeExceptionWithoutMessage_usesClassName() {
+	void handler_throwingRuntimeExceptionWithoutMessage_usesClassName() {
 		var config = new McpServerConfig().addTool(tool("e", a -> {
 			throw new IllegalStateException();
 		}));
 		var resp = send(config, req(1, McpMethods.TOOLS_CALL, JsonMap.of("name", "e")));
-		assertEquals(McpDispatcher.CODE_INTERNAL_ERROR, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_INTERNAL_ERROR, resp.getError().getCode());
 		assertString("IllegalStateException", resp.getError().getMessage());
 	}
 
 	// -------- prompts ---------
 
 	@Test
-	void e01_prompts_list_and_get() {
+	void prompts_list_and_get() {
 		var config = new McpServerConfig().addPrompt(prompt("p", args -> new GetPromptResult().setDescription("ok")));
 		var list = (ListPromptsResult) send(config, req(1, McpMethods.PROMPTS_LIST, null)).getResult();
 		assertSize(1, list.getPrompts());
@@ -296,21 +296,21 @@ class McpDispatcher_Test {
 	}
 
 	@Test
-	void e02_prompts_get_missingName_invalidParams() {
+	void prompts_get_missingName_invalidParams() {
 		var resp = send(new McpServerConfig(), req(1, McpMethods.PROMPTS_GET, JsonMap.of()));
-		assertEquals(McpDispatcher.CODE_INVALID_PARAMS, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_INVALID_PARAMS, resp.getError().getCode());
 	}
 
 	@Test
-	void e03_prompts_get_unknown_methodNotFound() {
+	void prompts_get_unknown_methodNotFound() {
 		var resp = send(new McpServerConfig(), req(1, McpMethods.PROMPTS_GET, JsonMap.of("name", "missing")));
-		assertEquals(McpDispatcher.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
 	}
 
 	// -------- resources ---------
 
 	@Test
-	void f01_resources_list_and_read() {
+	void resources_list_and_read() {
 		var config = new McpServerConfig().addResource(resource("file://a", uri -> new ReadResourceResult().setContents(List.of(new TextResourceContents().setUri(uri).setText("ok")))));
 		var list = (ListResourcesResult) send(config, req(1, McpMethods.RESOURCES_LIST, null)).getResult();
 		assertSize(1, list.getResources());
@@ -319,21 +319,21 @@ class McpDispatcher_Test {
 	}
 
 	@Test
-	void f02_resources_read_missingUri_invalidParams() {
+	void resources_read_missingUri_invalidParams() {
 		var resp = send(new McpServerConfig(), req(1, McpMethods.RESOURCES_READ, JsonMap.of()));
-		assertEquals(McpDispatcher.CODE_INVALID_PARAMS, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_INVALID_PARAMS, resp.getError().getCode());
 	}
 
 	@Test
-	void f03_resources_read_unknown_methodNotFound() {
+	void resources_read_unknown_methodNotFound() {
 		var resp = send(new McpServerConfig(), req(1, McpMethods.RESOURCES_READ, JsonMap.of("uri", "ghost://")));
-		assertEquals(McpDispatcher.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
+		assertEquals(Mcp20250618Revision.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
 	}
 
 	// -------- pagination cursor passthrough ---------
 
 	@Test
-	void g01_cursor_paramsAreOptional() {
+	void cursor_paramsAreOptional() {
 		var config = new McpServerConfig().setCursor(McpCursor.fixedSize(1)).addPrompt(prompt("a", args -> new GetPromptResult())).addPrompt(prompt("b", args -> new GetPromptResult()));
 		// params null
 		var resp = (ListPromptsResult) send(config, req(1, McpMethods.PROMPTS_LIST, null)).getResult();
@@ -341,12 +341,19 @@ class McpDispatcher_Test {
 		assertString("1", resp.getNextCursor());
 	}
 
-	// -------- Mcp facade ---------
+	// -------- error code table ---------
 
 	@Test
-	void h01_facade_dispatches() {
-		var config = new McpServerConfig();
-		var resp = Mcp.handle(req(1, McpMethods.PING, null), config, ctx);
-		assertNotNull(resp);
+	void errorCode_tableIsComplete() {
+		var a = new Mcp20250618Revision(null);
+		assertEquals(-32600, a.errorCode(McpErrorKind.INVALID_REQUEST));
+		assertEquals(-32601, a.errorCode(McpErrorKind.UNKNOWN_METHOD));
+		assertEquals(-32601, a.errorCode(McpErrorKind.TOOL_NOT_FOUND), "known-wrong mapping, preserved deliberately");
+		assertEquals(-32601, a.errorCode(McpErrorKind.PROMPT_NOT_FOUND), "known-wrong mapping, preserved deliberately");
+		assertEquals(-32601, a.errorCode(McpErrorKind.RESOURCE_NOT_FOUND), "known-wrong mapping, preserved deliberately");
+		assertEquals(-32602, a.errorCode(McpErrorKind.INVALID_PARAMS));
+		assertEquals(-32603, a.errorCode(McpErrorKind.INTERNAL_ERROR));
+		assertEquals(-32700, a.errorCode(McpErrorKind.PARSE_ERROR));
+		assertEquals("2025-06-18", a.protocolVersion());
 	}
 }

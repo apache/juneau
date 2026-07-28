@@ -14,13 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.mcp;
+package org.apache.juneau.rest.server.mcp.v20250618;
 
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -30,25 +31,25 @@ import org.junit.jupiter.api.*;
 class McpHandlerDefaults_Test {
 
 	@Test
-	void a01_toolHandler_defaultDescriptor_throws() {
+	void toolHandler_defaultDescriptor_throws() {
 		McpToolHandler h = (args, ctx) -> new CallToolResult();
 		assertThrows(UnsupportedOperationException.class, h::descriptor);
 	}
 
 	@Test
-	void a02_promptHandler_defaultDescriptor_throws() {
+	void promptHandler_defaultDescriptor_throws() {
 		McpPromptHandler h = (args, ctx) -> new GetPromptResult();
 		assertThrows(UnsupportedOperationException.class, h::descriptor);
 	}
 
 	@Test
-	void a03_resourceHandler_defaultDescriptor_throws() {
+	void resourceHandler_defaultDescriptor_throws() {
 		McpResourceHandler h = (uri, ctx) -> new ReadResourceResult();
 		assertThrows(UnsupportedOperationException.class, h::descriptor);
 	}
 
 	@Test
-	void c01_typedHandlers_constructor_isPrivate() {
+	void typedHandlers_constructor_isPrivate() {
 		// Sanity: the static façade class should not be instantiable. Reflection trick used to bump coverage on the
 		// implicit private no-arg constructor.
 		assertDoesNotThrow(() -> {
@@ -56,30 +57,5 @@ class McpHandlerDefaults_Test {
 			ctor.setAccessible(true);
 			assertNotNull(ctor.newInstance());
 		});
-	}
-
-	@Test
-	void c02_mcp_facade_constructor_isPrivate() {
-		assertDoesNotThrow(() -> {
-			var ctor = Mcp.class.getDeclaredConstructor();
-			ctor.setAccessible(true);
-			assertNotNull(ctor.newInstance());
-		});
-	}
-
-	@Test
-	void d01_cursor_passes_ctx_to_strategy() {
-		// Verify ctx parameter reaches the cursor (covers the BeanStore parameter passthrough).
-		var bs = new BasicBeanStore();
-		var got = new Object[1];
-		McpCursor c = new McpCursor() {
-			@Override
-			public <T> McpPage<T> page(java.util.List<T> all, String cursor, BeanStore ctx) {
-				got[0] = ctx;
-				return new McpPage<>(all, null);
-			}
-		};
-		c.page(java.util.List.of(), null, bs);
-		assertSame(bs, got[0]);
 	}
 }

@@ -35,8 +35,9 @@ public interface McpPromptHandler {
 	 * Returns the static descriptor for this prompt.
 	 *
 	 * <p>
-	 * The {@link Prompt#getName() name} value is used by {@link McpDispatcher} to route incoming
-	 * {@code prompts/get} requests, so each handler in an {@link McpServerConfig} must use a unique name.
+	 * The {@link Prompt#getName() name} value is used by the bound {@link McpRevision} to route
+	 * incoming {@code prompts/get} requests, so each handler in an {@link McpServerConfig} must use a
+	 * unique name.
 	 *
 	 * @return The prompt descriptor. Never {@code null}.
 	 */

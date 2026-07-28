@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.server.mcp;
 
 import org.apache.juneau.bean.jsonrpc.*;
-import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.Content;
 import org.apache.juneau.rest.server.*;
@@ -26,14 +25,14 @@ import org.apache.juneau.rest.server.*;
  * Mixin interface that exposes an MCP JSON-RPC endpoint at {@code POST /mcp} on any Juneau REST resource.
  *
  * <p>
- * Implementing classes provide their {@link McpServerConfig} by implementing {@link #getMcpConfig()}; the
- * default {@link #handleMcpRequest(JsonRpcRequest, RestRequest)} method dispatches incoming requests through
- * {@link Mcp#handle(JsonRpcRequest, McpServerConfig, BeanStore)}.
+ * Implementing classes supply their {@link McpServerConfig} via {@link #getMcpConfig()} and their
+ * protocol revision via {@link #revision()}. In practice a consumer implements a revision-specific
+ * sub-interface (for example {@code McpEndpoint20250618}), which supplies {@link #revision()} for them.
  *
  * <h5 class='section'>Example:</h5>
  * <pre>
  * @Rest(path="/api")
- * public class MyResource extends BasicRestServlet implements McpEndpoint {
+ * public class MyResource extends BasicRestServlet implements McpEndpoint20250618 {
  *     @Override
  *     public McpServerConfig getMcpConfig() {
  *         return new McpServerConfig().addTool(new MyEchoTool());
@@ -51,11 +50,18 @@ public interface McpEndpoint {
 	McpServerConfig getMcpConfig();
 
 	/**
+	 * The MCP protocol revision this endpoint speaks.
+	 *
+	 * @return The bound revision. Never {@code null}.
+	 */
+	McpRevision revision();
+
+	/**
 	 * Default MCP JSON-RPC endpoint handler.
 	 *
 	 * <p>
-	 * Implementations may override this method to customize routing (path / annotations) but must still
-	 * call {@link Mcp#handle(JsonRpcRequest, McpServerConfig, BeanStore)} to dispatch.
+	 * Implementations may override this method to customize routing (path / annotations) but must
+	 * still dispatch through {@link #revision()}.
 	 *
 	 * @param req JSON-RPC request envelope.
 	 * @param restReq The current REST request.
@@ -68,6 +74,7 @@ public interface McpEndpoint {
 	default JsonRpcResponse handleMcpRequest(@Content JsonRpcRequest req, RestRequest restReq) {
 		var bs = new BasicBeanStore(restReq.getContext().getBeanStore())
 			.addBean(RestRequest.class, restReq);
-		return Mcp.handle(req, getMcpConfig(), bs);
+		var exchange = new McpExchange(req, n -> restReq.getHeaderParam(n).asString().orElse(null));
+		return revision().dispatch(exchange, getMcpConfig(), bs);
 	}
 }

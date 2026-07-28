@@ -16,56 +16,15 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Coverage for default {@code descriptor()} methods on the handler interfaces (which throw
- * {@link UnsupportedOperationException} unless overridden).
+ * Coverage for {@link McpCursor} bean-store passthrough.
  */
-class McpHandlerDefaults_Test {
-
-	@Test
-	void toolHandler_defaultDescriptor_throws() {
-		McpToolHandler h = (args, ctx) -> new CallToolResult();
-		assertThrows(UnsupportedOperationException.class, h::descriptor);
-	}
-
-	@Test
-	void promptHandler_defaultDescriptor_throws() {
-		McpPromptHandler h = (args, ctx) -> new GetPromptResult();
-		assertThrows(UnsupportedOperationException.class, h::descriptor);
-	}
-
-	@Test
-	void resourceHandler_defaultDescriptor_throws() {
-		McpResourceHandler h = (uri, ctx) -> new ReadResourceResult();
-		assertThrows(UnsupportedOperationException.class, h::descriptor);
-	}
-
-	@Test
-	void typedHandlers_constructor_isPrivate() {
-		// Sanity: the static façade class should not be instantiable. Reflection trick used to bump coverage on the
-		// implicit private no-arg constructor.
-		assertDoesNotThrow(() -> {
-			var ctor = McpTypedHandlers.class.getDeclaredConstructor();
-			ctor.setAccessible(true);
-			assertNotNull(ctor.newInstance());
-		});
-	}
-
-	@Test
-	void mcp_facade_constructor_isPrivate() {
-		assertDoesNotThrow(() -> {
-			var ctor = Mcp.class.getDeclaredConstructor();
-			ctor.setAccessible(true);
-			assertNotNull(ctor.newInstance());
-		});
-	}
+class McpCursorCtx_Test {
 
 	@Test
 	void cursor_passes_ctx_to_strategy() {

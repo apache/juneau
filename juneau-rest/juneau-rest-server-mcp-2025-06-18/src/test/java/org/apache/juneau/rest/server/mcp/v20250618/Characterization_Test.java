@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.mcp;
+package org.apache.juneau.rest.server.mcp.v20250618;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,6 +29,7 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -44,7 +45,7 @@ import org.junit.jupiter.params.provider.*;
  * <p>
  * Regenerate the {@code *.response.json} files (only ever against known-good code) with:
  * <p>
- * {@code mvn test -Drat.skip=true -pl juneau-rest/juneau-rest-server-mcp -Dtest=Characterization_Test -Djuneau.mcp.characterization.write=true}
+ * {@code mvn test -Drat.skip=true -pl juneau-rest/juneau-rest-server-mcp-2025-06-18 -Dtest=Characterization_Test -Djuneau.mcp.characterization.write=true}
  */
 @SuppressWarnings({
 	"resource" // MockRestClient is a Closeable test helper; lifetime is bounded by the test method.
@@ -57,13 +58,13 @@ class Characterization_Test {
 	// --- fixture servlets -------------------------------------------------------------------
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class F_Empty extends McpRestServlet {
+	public static class F_Empty extends McpRestServlet20250618 {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() { return new McpServerConfig(); }
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class F_Full extends McpRestServlet {
+	public static class F_Full extends McpRestServlet20250618 {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig()
@@ -86,7 +87,7 @@ class Characterization_Test {
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class F_Caps extends McpRestServlet {
+	public static class F_Caps extends McpRestServlet20250618 {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig()
@@ -98,7 +99,7 @@ class Characterization_Test {
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class F_Paged extends McpRestServlet {
+	public static class F_Paged extends McpRestServlet20250618 {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig()
@@ -109,7 +110,7 @@ class Characterization_Test {
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class F_Throw extends McpRestServlet {
+	public static class F_Throw extends McpRestServlet20250618 {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig()

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.mcp;
+package org.apache.juneau.rest.server.mcp.v20250618;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
@@ -24,10 +24,11 @@ import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.server.mcp.*;
 
 /**
  * Adapters that convert {@link McpTypedToolHandler} / {@link McpTypedPromptHandler} into the raw
- * {@link McpToolHandler} / {@link McpPromptHandler} interfaces consumed by {@link McpDispatcher}.
+ * {@link McpToolHandler} / {@link McpPromptHandler} interfaces consumed by {@link Mcp20250618Revision}.
  */
 public final class McpTypedHandlers {
 
@@ -102,7 +103,7 @@ public final class McpTypedHandlers {
 			var json = Json.of(arguments);
 			return Json.to(json, type);
 		} catch (Exception e) {
-			throw new McpException(McpDispatcher.CODE_INVALID_PARAMS, "Failed to bind arguments to " + type.getName() + ": " + e.getMessage());
+			throw new McpException(Mcp20250618Revision.CODE_INVALID_PARAMS, "Failed to bind arguments to " + type.getName() + ": " + e.getMessage());
 		}
 	}
 
@@ -118,7 +119,7 @@ public final class McpTypedHandlers {
 			try {
 				text = Json.of(result);
 			} catch (Exception e) {
-				throw new McpException(McpDispatcher.CODE_INTERNAL_ERROR, "Failed to serialize tool result: " + e.getMessage());
+				throw new McpException(Mcp20250618Revision.CODE_INTERNAL_ERROR, "Failed to serialize tool result: " + e.getMessage());
 			}
 		}
 		return new CallToolResult().setContent(List.of(new TextContent().setText(text)));

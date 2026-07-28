@@ -37,7 +37,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * <h5 class='section'>Example:</h5>
  * <pre>
  * @Rest(path="/mcp")
- * public class MyMcpServlet extends McpRestServlet {
+ * public class MyMcpServlet extends McpRestServlet20250618 {
  *     @Override
  *     protected McpServerConfig createMcpConfig() {
  *         return new McpServerConfig()
@@ -48,8 +48,9 @@ import org.apache.juneau.rest.server.servlet.*;
  * </pre>
  *
  * <p>
- * The servlet enables {@code addBeanTypes} on its serializer so {@link Content} and {@link ResourceContents}
- * polymorphic types are tagged with their {@code type} discriminator on the wire.
+ * The servlet enables {@code addBeanTypes} on its serializer so that polymorphic wire types a
+ * revision emits (content blocks, resource payloads) are tagged with their {@code type}
+ * discriminator.
  *
  * @serial exclude
  */
@@ -99,6 +100,17 @@ public abstract class McpRestServlet extends BasicRestServlet {
 	protected abstract McpServerConfig createMcpConfig();
 
 	/**
+	 * The MCP protocol revision this servlet speaks.
+	 *
+	 * <p>
+	 * Supplied by the revision-specific subclass a consumer extends (for example
+	 * {@code McpRestServlet20250618}); consumers do not normally implement this themselves.
+	 *
+	 * @return The bound revision. Never {@code null}.
+	 */
+	protected abstract McpRevision revision();
+
+	/**
 	 * MCP JSON-RPC endpoint.
 	 *
 	 * @param req The parsed JSON-RPC request envelope.
@@ -113,6 +125,7 @@ public abstract class McpRestServlet extends BasicRestServlet {
 	public JsonRpcResponse handleMcp(@Content JsonRpcRequest req, RestRequest restReq) {
 		var bs = new BasicBeanStore(restReq.getContext().getBeanStore())
 			.addBean(RestRequest.class, restReq);
-		return Mcp.handle(req, getMcpConfig(), bs);
+		var exchange = new McpExchange(req, n -> restReq.getHeaderParam(n).asString().orElse(null));
+		return revision().dispatch(exchange, getMcpConfig(), bs);
 	}
 }

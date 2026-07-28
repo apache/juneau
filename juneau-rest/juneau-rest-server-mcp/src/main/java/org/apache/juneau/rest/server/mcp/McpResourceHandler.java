@@ -33,8 +33,9 @@ public interface McpResourceHandler {
 	 * Returns the static descriptor for this resource.
 	 *
 	 * <p>
-	 * The {@link Resource#getUri() uri} value is used by {@link McpDispatcher} to route incoming
-	 * {@code resources/read} requests, so each handler in an {@link McpServerConfig} must use a unique URI.
+	 * The {@link Resource#getUri() uri} value is used by the bound {@link McpRevision} to route
+	 * incoming {@code resources/read} requests, so each handler in an {@link McpServerConfig} must use
+	 * a unique URI.
 	 *
 	 * @return The resource descriptor. Never {@code null}.
 	 */

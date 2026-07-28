@@ -39,8 +39,9 @@ public interface McpToolHandler {
 	 * Returns the static descriptor for this tool.
 	 *
 	 * <p>
-	 * The {@link Tool#getName() name} value is used by {@link McpDispatcher} to route incoming
-	 * {@code tools/call} requests, so each handler in an {@link McpServerConfig} must use a unique name.
+	 * The {@link Tool#getName() name} value is used by the bound {@link McpRevision} to route
+	 * incoming {@code tools/call} requests, so each handler in an {@link McpServerConfig} must use a
+	 * unique name.
 	 *
 	 * @return The tool descriptor. Never {@code null}.
 	 */

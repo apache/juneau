@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.mcp;
+package org.apache.juneau.rest.server.mcp.v20250618;
 
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -73,7 +74,7 @@ class McpServerConfig_Test {
 	}
 
 	@Test
-	void a01_defaults() {
+	void defaults() {
 		var c = new McpServerConfig();
 		assertNull(c.getServerInfo());
 		assertString(McpProtocol.VERSION_2025_06_18, c.getProtocolVersion());
@@ -86,7 +87,7 @@ class McpServerConfig_Test {
 	}
 
 	@Test
-	void a02_setters_and_addCalls() {
+	void setters_and_addCalls() {
 		var info = new Implementation().setName("x").setVersion("1");
 		var caps = new ServerCapabilities().setLogging(new LoggingCapability());
 		var c = new McpServerConfig()
@@ -110,7 +111,7 @@ class McpServerConfig_Test {
 	}
 
 	@Test
-	void a03_setLists_replacingAndNullClears() {
+	void setLists_replacingAndNullClears() {
 		var c = new McpServerConfig().addTool(dummyTool("t")).addPrompt(dummyPrompt("p")).addResource(dummyResource("r"));
 		c.setTools(null);
 		c.setPrompts(null);
@@ -128,7 +129,7 @@ class McpServerConfig_Test {
 	}
 
 	@Test
-	void a04_setCursor_nullResets() {
+	void setCursor_nullResets() {
 		var c = new McpServerConfig().setCursor(McpCursor.fixedSize(2));
 		c.setCursor(null);
 		assertSame(McpCursor.SINGLE_PAGE, c.getCursor());

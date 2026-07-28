@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.mcp;
+package org.apache.juneau.rest.server.mcp.v20250618;
 
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,6 +25,7 @@ import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -50,10 +51,14 @@ class McpTypedHandlers_Test {
 	}
 
 	private final BeanStore ctx = new BasicBeanStore();
-	private final McpDispatcher dispatcher = new McpDispatcher();
+	private final Mcp20250618Revision revision = new Mcp20250618Revision(null);
+
+	private JsonRpcResponse dispatch(JsonRpcRequest req, McpServerConfig config) {
+		return revision.dispatch(new McpExchange(req, n -> null), config, ctx);
+	}
 
 	@Test
-	void typedTool_argsBound_andResultWrappedAsText() {
+	void a01_typedTool_argsBound_andResultWrappedAsText() {
 		var typed = new McpTypedToolHandler<EchoArgs,EchoResult>() {
 			@Override
 			public Tool descriptor() {
@@ -78,14 +83,14 @@ class McpTypedHandlers_Test {
 			.setId(1)
 			.setMethod(McpMethods.TOOLS_CALL)
 			.setParams(JsonMap.of("name", "echo", "arguments", JsonMap.of("message", "hi", "repeat", 3)));
-		var resp = dispatcher.dispatch(req, config, ctx);
+		var resp = dispatch(req, config);
 		var ctr = (CallToolResult) resp.getResult();
 		var text = ((TextContent) ctr.getContent().get(0)).getText();
 		assertContains("\"text\":\"hi:3\"", text);
 	}
 
 	@Test
-	void typedTool_returningCallToolResult_passesThrough() {
+	void a02_typedTool_returningCallToolResult_passesThrough() {
 		var ctr = new CallToolResult().setContent(List.of(new TextContent().setText("direct")));
 		var typed = new McpTypedToolHandler<EchoArgs,CallToolResult>() {
 			@Override
@@ -109,12 +114,12 @@ class McpTypedHandlers_Test {
 			.setId(1)
 			.setMethod(McpMethods.TOOLS_CALL)
 			.setParams(JsonMap.of("name", "d"));
-		var resp = dispatcher.dispatch(req, config, ctx);
+		var resp = dispatch(req, config);
 		assertSame(ctr, resp.getResult());
 	}
 
 	@Test
-	void typedTool_returningString_wrapped() {
+	void a03_typedTool_returningString_wrapped() {
 		var typed = new McpTypedToolHandler<EchoArgs,String>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("s"); }
@@ -124,15 +129,15 @@ class McpTypedHandlers_Test {
 			public String call(EchoArgs args, BeanStore ctx) { return "hello"; }
 		};
 		var config = new McpServerConfig().addTool(McpTypedHandlers.adaptTool(typed));
-		var resp = dispatcher.dispatch(new JsonRpcRequest()
+		var resp = dispatch(new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
-			.setMethod(McpMethods.TOOLS_CALL).setParams(JsonMap.of("name", "s")), config, ctx);
+			.setMethod(McpMethods.TOOLS_CALL).setParams(JsonMap.of("name", "s")), config);
 		var ctr = (CallToolResult) resp.getResult();
 		assertString("hello", ((TextContent) ctr.getContent().get(0)).getText());
 	}
 
 	@Test
-	void typedTool_nullResult_wrappedAsEmpty() {
+	void a04_typedTool_nullResult_wrappedAsEmpty() {
 		var typed = new McpTypedToolHandler<EchoArgs,EchoResult>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("n"); }
@@ -142,15 +147,15 @@ class McpTypedHandlers_Test {
 			public EchoResult call(EchoArgs args, BeanStore ctx) { return null; }
 		};
 		var config = new McpServerConfig().addTool(McpTypedHandlers.adaptTool(typed));
-		var resp = dispatcher.dispatch(new JsonRpcRequest()
+		var resp = dispatch(new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
-			.setMethod(McpMethods.TOOLS_CALL).setParams(JsonMap.of("name", "n")), config, ctx);
+			.setMethod(McpMethods.TOOLS_CALL).setParams(JsonMap.of("name", "n")), config);
 		var ctr = (CallToolResult) resp.getResult();
 		assertString("", ((TextContent) ctr.getContent().get(0)).getText());
 	}
 
 	@Test
-	void typedTool_nullArgs_passNull() {
+	void a05_typedTool_nullArgs_passNull() {
 		var typed = new McpTypedToolHandler<EchoArgs,String>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("z"); }
@@ -162,15 +167,15 @@ class McpTypedHandlers_Test {
 			}
 		};
 		var config = new McpServerConfig().addTool(McpTypedHandlers.adaptTool(typed));
-		var resp = dispatcher.dispatch(new JsonRpcRequest()
+		var resp = dispatch(new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
-			.setMethod(McpMethods.TOOLS_CALL).setParams(JsonMap.of("name", "z")), config, ctx);
+			.setMethod(McpMethods.TOOLS_CALL).setParams(JsonMap.of("name", "z")), config);
 		var ctr = (CallToolResult) resp.getResult();
 		assertString("null", ((TextContent) ctr.getContent().get(0)).getText());
 	}
 
 	@Test
-	void typedTool_argBindingFailure_invalidParams() {
+	void a06_typedTool_argBindingFailure_invalidParams() {
 		var typed = new McpTypedToolHandler<EchoArgs,String>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("x"); }
@@ -181,15 +186,15 @@ class McpTypedHandlers_Test {
 		};
 		var config = new McpServerConfig().addTool(McpTypedHandlers.adaptTool(typed));
 		// Bad: 'repeat' should be int, supply a non-numeric value to trigger parser failure.
-		var resp = dispatcher.dispatch(new JsonRpcRequest()
+		var resp = dispatch(new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
 			.setMethod(McpMethods.TOOLS_CALL)
-			.setParams(JsonMap.of("name", "x", "arguments", JsonMap.of("repeat", "not-an-int"))), config, ctx);
-		assertEquals(McpDispatcher.CODE_INVALID_PARAMS, resp.getError().getCode());
+			.setParams(JsonMap.of("name", "x", "arguments", JsonMap.of("repeat", "not-an-int"))), config);
+		assertEquals(Mcp20250618Revision.CODE_INVALID_PARAMS, resp.getError().getCode());
 	}
 
 	@Test
-	void typedPrompt_nullArgs_passNull() {
+	void b01_typedPrompt_nullArgs_passNull() {
 		var typed = new McpTypedPromptHandler<EchoArgs>() {
 			@Override
 			public Prompt descriptor() { return new Prompt().setName("p"); }
@@ -202,9 +207,9 @@ class McpTypedHandlers_Test {
 		};
 		var raw = McpTypedHandlers.adaptPrompt(typed);
 		var config = new McpServerConfig().addPrompt(raw);
-		var resp = dispatcher.dispatch(new JsonRpcRequest()
+		var resp = dispatch(new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
-			.setMethod(McpMethods.PROMPTS_GET).setParams(JsonMap.of("name", "p")), config, ctx);
+			.setMethod(McpMethods.PROMPTS_GET).setParams(JsonMap.of("name", "p")), config);
 		var pr = (GetPromptResult) resp.getResult();
 		assertString("null", pr.getDescription());
 	}
@@ -216,7 +221,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void adaptTool_nullArgumentsMap_propagatesNull() {
+	void c01_adaptTool_nullArgumentsMap_propagatesNull() {
 		var typed = new McpTypedToolHandler<EchoArgs,String>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("z"); }
@@ -233,7 +238,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void adaptPrompt_nullArgumentsMap_propagatesNull() {
+	void c02_adaptPrompt_nullArgumentsMap_propagatesNull() {
 		var typed = new McpTypedPromptHandler<EchoArgs>() {
 			@Override
 			public Prompt descriptor() { return new Prompt().setName("p"); }
@@ -250,7 +255,7 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test
-	void typedTool_unserializableResult_internalError() {
+	void a07_typedTool_unserializableResult_internalError() {
 		var typed = new McpTypedToolHandler<EchoArgs,Unserializable>() {
 			@Override
 			public Tool descriptor() { return new Tool().setName("u"); }
@@ -260,14 +265,14 @@ class McpTypedHandlers_Test {
 			public Unserializable call(EchoArgs args, BeanStore ctx) { return new Unserializable(); }
 		};
 		var config = new McpServerConfig().addTool(McpTypedHandlers.adaptTool(typed));
-		var resp = dispatcher.dispatch(new JsonRpcRequest()
+		var resp = dispatch(new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
-			.setMethod(McpMethods.TOOLS_CALL).setParams(JsonMap.of("name", "u")), config, ctx);
-		assertEquals(McpDispatcher.CODE_INTERNAL_ERROR, resp.getError().getCode());
+			.setMethod(McpMethods.TOOLS_CALL).setParams(JsonMap.of("name", "u")), config);
+		assertEquals(Mcp20250618Revision.CODE_INTERNAL_ERROR, resp.getError().getCode());
 	}
 
 	@Test
-	void typedPrompt_argsBoundAndResult() {
+	void b02_typedPrompt_argsBoundAndResult() {
 		var typed = new McpTypedPromptHandler<EchoArgs>() {
 			@Override
 			public Prompt descriptor() { return new Prompt().setName("p"); }
@@ -280,10 +285,10 @@ class McpTypedHandlers_Test {
 		};
 		var raw = McpTypedHandlers.adaptPrompt(typed);
 		var config = new McpServerConfig().addPrompt(raw);
-		var resp = dispatcher.dispatch(new JsonRpcRequest()
+		var resp = dispatch(new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
 			.setMethod(McpMethods.PROMPTS_GET)
-			.setParams(JsonMap.of("name", "p", "arguments", JsonMap.of("message", "hello"))), config, ctx);
+			.setParams(JsonMap.of("name", "p", "arguments", JsonMap.of("message", "hello"))), config);
 		var pr = (GetPromptResult) resp.getResult();
 		assertString("hello", pr.getDescription());
 	}
