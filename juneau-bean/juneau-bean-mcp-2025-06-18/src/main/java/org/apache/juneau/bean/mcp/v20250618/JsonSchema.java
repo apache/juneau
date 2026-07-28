@@ -1,0 +1,226 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.bean.mcp.v20250618;
+
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
+import java.util.*;
+
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.marshall.*;
+
+/**
+ * JSON Schema subset used by MCP tool {@code inputSchema} objects.
+ */
+@Marshalled
+public class JsonSchema {
+
+	private String type;
+	private Map<String,JsonSchema> properties;
+	private List<String> required;
+	private Object additionalProperties;
+	private JsonSchema items;
+
+	@BeanProp(name="$defs")
+	private Map<String,JsonSchema> defs;
+
+	/**
+	 * Schema {@code type} keyword (for example {@code object}).
+	 *
+	 * @return The type, or {@code null} if not set.
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * Sets the schema type keyword.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema setType(String value) {
+		type = value;
+		return this;
+	}
+
+	/**
+	 * Object property schemas.
+	 *
+	 * @return The properties map, or {@code null} if not set.
+	 */
+	public Map<String,JsonSchema> getProperties() {
+		return u(properties);
+	}
+
+	/**
+	 * Sets object property schemas.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema setProperties(Map<String,JsonSchema> value) {
+		properties = value;
+		return this;
+	}
+
+	/**
+	 * Convenience method to add a single property schema.
+	 *
+	 * @param name The property name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The property schema.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema addProperty(String name, JsonSchema value) {
+		if (properties == null)
+			properties = map();
+		properties.put(name, value);
+		return this;
+	}
+
+	/**
+	 * Required property names.
+	 *
+	 * @return The required list, or {@code null} if not set.
+	 */
+	public List<String> getRequired() {
+		return u(required);
+	}
+
+	/**
+	 * Sets required property names.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema setRequired(List<String> value) {
+		required = value;
+		return this;
+	}
+
+	/**
+	 * Sets required property names.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema setRequired(String...value) {
+		required = list(value);
+		return this;
+	}
+
+	/**
+	 * Appends to the required property names.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema addRequired(String...value) {
+		if (required == null)
+			required = list();
+		Collections.addAll(required, value);
+		return this;
+	}
+
+	/**
+	 * Appends to the required property names.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema addRequired(Collection<String> value) {
+		if (required == null)
+			required = list();
+		required.addAll(value);
+		return this;
+	}
+
+	/**
+	 * {@code additionalProperties} keyword (boolean or nested schema).
+	 *
+	 * @return The value, or {@code null} if not set.
+	 */
+	public Object getAdditionalProperties() {
+		return additionalProperties;
+	}
+
+	/**
+	 * Sets {@code additionalProperties}.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema setAdditionalProperties(Object value) {
+		additionalProperties = value;
+		return this;
+	}
+
+	/**
+	 * Array {@code items} schema.
+	 *
+	 * @return The items schema, or {@code null} if not set.
+	 */
+	public JsonSchema getItems() {
+		return items;
+	}
+
+	/**
+	 * Sets array items schema.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema setItems(JsonSchema value) {
+		items = value;
+		return this;
+	}
+
+	/**
+	 * {@code $defs} map for reusable sub-schemas.
+	 *
+	 * @return The defs map, or {@code null} if not set.
+	 */
+	public Map<String,JsonSchema> getDefs() {
+		return u(defs);
+	}
+
+	/**
+	 * Sets {@code $defs}.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema setDefs(Map<String,JsonSchema> value) {
+		defs = value;
+		return this;
+	}
+
+	/**
+	 * Convenience method to add a single reusable sub-schema.
+	 *
+	 * @param name The sub-schema name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The sub-schema.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchema addDef(String name, JsonSchema value) {
+		if (defs == null)
+			defs = map();
+		defs.put(name, value);
+		return this;
+	}
+}

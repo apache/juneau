@@ -39,7 +39,7 @@
 		<module>juneau-bean-jsonpatch</module>
 		<module>juneau-bean-jsonrpc</module>
 		<module>juneau-bean-jsonschema</module>
-		<module>juneau-bean-mcp</module>
+		<module>juneau-bean-mcp-2025-06-18</module>
 		<module>juneau-bean-openapi-v3</module>
 		<module>juneau-bean-rfc7807</module>
 		<module>juneau-bean-swagger-v2</module>

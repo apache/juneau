@@ -119,7 +119,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-bean-mcp</artifactId>
+			<artifactId>juneau-bean-jsonrpc</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-mcp-2025-06-18</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -537,29 +543,54 @@
 									<destFileName>org.apache.juneau.bean.jsonschema_${project.version}.jar</destFileName>
 								</artifactItem>
 
-								<!-- juneau-bean-mcp -->
+								<!-- juneau-bean-jsonrpc -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-bean-mcp</artifactId>
+									<artifactId>juneau-bean-jsonrpc</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
-									<destFileName>apache-juneau-bean-mcp-${project.version}-sources.jar</destFileName>
+									<destFileName>apache-juneau-bean-jsonrpc-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-bean-mcp</artifactId>
+									<artifactId>juneau-bean-jsonrpc</artifactId>
 									<version>${project.version}</version>
-									<destFileName>apache-juneau-bean-mcp-${project.version}.jar</destFileName>
+									<destFileName>apache-juneau-bean-jsonrpc-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-bean-mcp</artifactId>
+									<artifactId>juneau-bean-jsonrpc</artifactId>
 									<version>${project.version}</version>
-									<destFileName>org.apache.juneau.bean.mcp_${project.version}.jar</destFileName>
+									<destFileName>org.apache.juneau.bean.jsonrpc_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-bean-mcp-2025-06-18 -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-mcp-2025-06-18</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-bean-mcp-2025-06-18-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-mcp-2025-06-18</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-bean-mcp-2025-06-18-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-mcp-2025-06-18</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.bean.mcp.v20250618_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<!-- juneau-bean-openapi-v3 -->

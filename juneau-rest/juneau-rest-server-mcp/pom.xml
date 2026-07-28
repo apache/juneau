@@ -42,7 +42,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-bean-mcp</artifactId>
+			<artifactId>juneau-bean-mcp-2025-06-18</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

@@ -23,7 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonrpc.*;
-import org.apache.juneau.bean.mcp.*;
+import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;

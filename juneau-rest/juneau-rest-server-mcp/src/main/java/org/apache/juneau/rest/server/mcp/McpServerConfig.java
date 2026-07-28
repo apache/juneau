@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
-import org.apache.juneau.bean.mcp.*;
+import org.apache.juneau.bean.mcp.v20250618.*;
 
 /**
  * Aggregate configuration consumed by {@link McpDispatcher}.

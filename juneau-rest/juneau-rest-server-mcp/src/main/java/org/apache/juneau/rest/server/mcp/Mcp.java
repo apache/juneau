@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.mcp;
 
 import org.apache.juneau.bean.jsonrpc.*;
-import org.apache.juneau.bean.mcp.*;
+import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 
 /**
