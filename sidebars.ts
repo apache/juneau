@@ -943,7 +943,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/05.07.JuneauBeanMcp',
-							label: '5.7. juneau-bean-mcp',
+							label: '5.7. juneau-bean-mcp-2025-06-18',
 						},
 						{
 							type: 'doc',
@@ -964,6 +964,11 @@ const sidebars: SidebarsConfig = {
 							type: 'doc',
 							id: 'topics/05.11.JuneauBeanJsonPatch',
 							label: '5.11. juneau-bean-jsonpatch',
+						},
+						{
+							type: 'doc',
+							id: 'topics/05.12.JuneauBeanJsonRpc',
+							label: '5.12. juneau-bean-jsonrpc',
 						},
 					],
 					link: {
