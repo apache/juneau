@@ -40,7 +40,7 @@ import org.apache.juneau.rest.server.servlet.*;
  *     @Override
  *     protected McpServerConfig createMcpConfig() {
  *         return new McpServerConfig()
- *             .setServerInfo(new Implementation().setName("my-server").setVersion("1.0.0"))
+ *             .setName("my-server").setVersion("1.0.0")
  *             .addTool(new MyEchoTool());
  *     }
  * }
