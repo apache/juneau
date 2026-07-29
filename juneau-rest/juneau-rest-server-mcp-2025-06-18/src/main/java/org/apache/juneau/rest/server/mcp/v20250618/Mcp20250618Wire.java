@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.server.mcp.v20250618;
 
-import java.util.*;
-
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.marshall.collections.*;
