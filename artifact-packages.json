@@ -6,7 +6,6 @@
   "juneau-bean-jsonapi": "org/apache/juneau/bean/jsonapi",
   "juneau-bean-jsonpatch": "org/apache/juneau/bean/jsonpatch",
   "juneau-bean-jsonschema": "org/apache/juneau/bean/jsonschema",
-  "juneau-bean-mcp": "org/apache/juneau/bean/mcp",
   "juneau-bean-openapi-v3": "org/apache/juneau/bean/openapi3",
   "juneau-bean-rfc7807": "org/apache/juneau/bean/rfc7807",
   "juneau-bean-swagger-v2": "org/apache/juneau/bean/swagger",
