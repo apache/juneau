@@ -18,6 +18,9 @@ package org.apache.juneau.bean.jsonrpc;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.*;
+import java.util.*;
+
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
@@ -90,5 +93,34 @@ class JsonRpcBeans_Test {
 		assertNull(a.getId());
 		assertEquals(-32600, a.getError().getCode());
 		assertNull(a.getError().getData());
+	}
+
+	@Test
+	void c01_requestMeta_roundTripsEveryJsonCategory() {
+		for (var value : List.of(JsonMap.of("p", "v"), JsonList.of(1, 2), "x", 7, true)) {
+			var json = JsonSerializer.DEFAULT.write(new JsonRpcRequest().setMeta(value));
+			var bean = JsonParser.DEFAULT.read(json, JsonRpcRequest.class);
+			assertEquals(JsonSerializer.DEFAULT.write(value), JsonSerializer.DEFAULT.write(bean.getMeta()));
+			assertTrue(json.contains("\"_meta\""));
+		}
+	}
+
+	@Test
+	void c02_responseMeta_roundTripsAndNullIsOmitted() {
+		var json = JsonSerializer.DEFAULT.write(new JsonRpcResponse().setMeta(JsonMap.of("x", 1)));
+		assertTrue(json.contains("\"_meta\""));
+		assertNotNull(JsonParser.DEFAULT.read(json, JsonRpcResponse.class).getMeta());
+		assertFalse(JsonSerializer.DEFAULT.write(new JsonRpcResponse().setMeta(null)).contains("_meta"));
+	}
+
+	@Test
+	void c03_envelopesRemainMcpNeutral() {
+		for (var type : List.of(JsonRpcRequest.class, JsonRpcResponse.class)) {
+			var names = Arrays.stream(type.getMethods()).map(Method::getName).toList();
+			assertFalse(names.contains("getProtocolVersion"));
+			assertFalse(names.contains("getClientCapabilities"));
+			assertEquals(List.of(Object.class), Arrays.stream(type.getDeclaredFields())
+				.filter(x -> x.getName().equals("meta")).map(Field::getType).toList());
+		}
 	}
 }

@@ -51,7 +51,7 @@ class McpTypedHandlers_Test {
 	}
 
 	private final BeanStore ctx = new BasicBeanStore();
-	private final Mcp20250618Revision revision = new Mcp20250618Revision(null);
+	private final McpRevision revision = new McpRevision(null);
 
 	private JsonRpcResponse dispatch(JsonRpcRequest req, McpServerConfig config) {
 		return revision.dispatch(new McpExchange(req, n -> null), config, ctx);
@@ -192,7 +192,7 @@ class McpTypedHandlers_Test {
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
 			.setMethod(McpMethods.TOOLS_CALL)
 			.setParams(JsonMap.of("name", "x", "arguments", JsonMap.of("repeat", "not-an-int"))), config);
-		assertEquals(Mcp20250618Revision.CODE_INVALID_PARAMS, resp.getError().getCode());
+		assertEquals(McpRevision.CODE_INVALID_PARAMS, resp.getError().getCode());
 	}
 
 	@Test
@@ -270,7 +270,7 @@ class McpTypedHandlers_Test {
 		var resp = dispatch(new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
 			.setMethod(McpMethods.TOOLS_CALL).setParams(JsonMap.of("name", "u")), config);
-		assertEquals(Mcp20250618Revision.CODE_INTERNAL_ERROR, resp.getError().getCode());
+		assertEquals(McpRevision.CODE_INTERNAL_ERROR, resp.getError().getCode());
 	}
 
 	@Test

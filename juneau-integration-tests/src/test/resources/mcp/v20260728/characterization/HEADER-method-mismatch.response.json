@@ -1,0 +1,1 @@
+{"error":{"code":-32600,"message":"Mcp-Method header 'pong' does not match request method 'ping'"},"id":1,"jsonrpc":"2.0"}

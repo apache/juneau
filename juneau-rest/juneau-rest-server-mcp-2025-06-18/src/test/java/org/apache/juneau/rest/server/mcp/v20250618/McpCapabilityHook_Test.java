@@ -59,13 +59,13 @@ class McpCapabilityHook_Test extends TestBase {
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class A_ServletDefault extends McpRestServlet20250618 {
+	public static class A_ServletDefault extends McpRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() { return new McpServerConfig().addTool(tool()); }
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class A_ServletOverride extends McpRestServlet20250618 {
+	public static class A_ServletOverride extends McpRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() { return new McpServerConfig().addTool(tool()); }
 		@Override protected ServerCapabilities capabilities() { return explicit(); }
@@ -73,14 +73,14 @@ class McpCapabilityHook_Test extends TestBase {
 
 	@Rest(path = "/api", serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
 	@org.apache.juneau.marshall.serializer.SerializerConfig(addBeanTypes = "true")
-	public static class B_MixinDefault extends BasicRestServlet implements McpEndpoint20250618 {
+	public static class B_MixinDefault extends BasicRestServlet implements McpEndpoint {
 		private static final long serialVersionUID = 1L;
 		@Override public McpServerConfig getMcpConfig() { return new McpServerConfig().addTool(tool()); }
 	}
 
 	@Rest(path = "/api", serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
 	@org.apache.juneau.marshall.serializer.SerializerConfig(addBeanTypes = "true")
-	public static class B_MixinOverride extends BasicRestServlet implements McpEndpoint20250618 {
+	public static class B_MixinOverride extends BasicRestServlet implements McpEndpoint {
 		private static final long serialVersionUID = 1L;
 		@Override public McpServerConfig getMcpConfig() { return new McpServerConfig().addTool(tool()); }
 		// public here is required by the JLS (an interface method, default or not, is always public;

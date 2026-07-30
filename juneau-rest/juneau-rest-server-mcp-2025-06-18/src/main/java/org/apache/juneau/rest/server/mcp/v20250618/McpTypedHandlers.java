@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.mcp.*;
 
 /**
  * Adapters that convert {@link McpTypedToolHandler} / {@link McpTypedPromptHandler} into the raw
- * {@link McpToolHandler} / {@link McpPromptHandler} interfaces consumed by {@link Mcp20250618Revision}.
+ * {@link McpToolHandler} / {@link McpPromptHandler} interfaces consumed by {@link McpRevision}.
  */
 public final class McpTypedHandlers {
 
@@ -57,14 +57,14 @@ public final class McpTypedHandlers {
 		return new McpToolHandler() {
 			@Override
 			public McpToolSpec descriptor() {
-				return Mcp20250618Wire.toNeutral(typed.descriptor());
+				return McpWire.toNeutral(typed.descriptor());
 			}
 
 			@Override
 			public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
 				A bound = bindArguments(arguments, typed.argumentType());
 				R result = typed.call(bound, ctx);
-				return Mcp20250618Wire.toNeutral(wrapToolResult(result));
+				return McpWire.toNeutral(wrapToolResult(result));
 			}
 		};
 	}
@@ -85,13 +85,13 @@ public final class McpTypedHandlers {
 		return new McpPromptHandler() {
 			@Override
 			public McpPromptSpec descriptor() {
-				return Mcp20250618Wire.toNeutral(typed.descriptor());
+				return McpWire.toNeutral(typed.descriptor());
 			}
 
 			@Override
 			public McpPromptOutcome get(Map<String,Object> arguments, BeanStore ctx) {
 				A bound = bindArguments(arguments, typed.argumentType());
-				return Mcp20250618Wire.toNeutral(typed.get(bound, ctx));
+				return McpWire.toNeutral(typed.get(bound, ctx));
 			}
 		};
 	}
@@ -103,7 +103,7 @@ public final class McpTypedHandlers {
 			var json = Json.of(arguments);
 			return Json.to(json, type);
 		} catch (Exception e) {
-			throw new McpException(Mcp20250618Revision.CODE_INVALID_PARAMS, "Failed to bind arguments to " + type.getName() + ": " + e.getMessage());
+			throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Failed to bind arguments to " + type.getName() + ": " + e.getMessage());
 		}
 	}
 
@@ -119,7 +119,7 @@ public final class McpTypedHandlers {
 			try {
 				text = Json.of(result);
 			} catch (Exception e) {
-				throw new McpException(Mcp20250618Revision.CODE_INTERNAL_ERROR, "Failed to serialize tool result: " + e.getMessage());
+				throw new McpException(McpRevision.CODE_INTERNAL_ERROR, "Failed to serialize tool result: " + e.getMessage());
 			}
 		}
 		return new CallToolResult().setContent(List.of(new TextContent().setText(text)));

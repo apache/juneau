@@ -121,7 +121,7 @@ class FakeMcpRevision_Test extends TestBase {
 	@Test
 	void a04_coreTestTreeSeesNoRevisionModule() {
 		assertThrows(ClassNotFoundException.class,
-			() -> Class.forName("org.apache.juneau.rest.server.mcp.v20250618.Mcp20250618Revision"),
+			() -> Class.forName("org.apache.juneau.rest.server.mcp.v20250618.McpRevision"),
 			"the core module's test classpath must not contain any revision adapter");
 		assertThrows(ClassNotFoundException.class,
 			() -> Class.forName("org.apache.juneau.bean.mcp.v20250618.Tool"),

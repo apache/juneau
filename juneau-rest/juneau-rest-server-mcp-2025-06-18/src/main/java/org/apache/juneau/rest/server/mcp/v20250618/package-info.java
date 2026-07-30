@@ -24,9 +24,9 @@
  * {@link org.apache.juneau.rest.server.mcp} and the wire beans in
  * {@link org.apache.juneau.bean.mcp.v20250618}, this revision's JSON-RPC error-code table, and the
  * two entry points a consumer binds against
- * ({@link org.apache.juneau.rest.server.mcp.v20250618.McpRestServlet20250618} for the
+ * ({@link org.apache.juneau.rest.server.mcp.v20250618.McpRestServlet} for the
  * servlet-subclass path and
- * {@link org.apache.juneau.rest.server.mcp.v20250618.McpEndpoint20250618} for the mixin path).
+ * {@link org.apache.juneau.rest.server.mcp.v20250618.McpEndpoint} for the mixin path).
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerMcp">juneau-rest-server-mcp</a>

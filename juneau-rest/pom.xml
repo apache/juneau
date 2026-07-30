@@ -37,6 +37,7 @@
 		<module>juneau-rest-server-rdf</module>
 		<module>juneau-rest-server-mcp</module>
 		<module>juneau-rest-server-mcp-2025-06-18</module>
+		<module>juneau-rest-server-mcp-2026-07-28</module>
 		<module>juneau-rest-server-auth-jwt</module>
 		<module>juneau-rest-server-auth-saml</module>
 		<module>juneau-rest-server-auth-oauth</module>

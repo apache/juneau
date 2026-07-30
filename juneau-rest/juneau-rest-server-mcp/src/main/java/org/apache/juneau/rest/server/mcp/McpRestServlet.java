@@ -36,7 +36,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * <h5 class='section'>Example:</h5>
  * <pre>
  * @Rest(path="/mcp")
- * public class MyMcpServlet extends McpRestServlet20250618 {
+ * public class MyMcpServlet extends org.apache.juneau.rest.server.mcp.v20250618.McpRestServlet {
  *     @Override
  *     protected McpServerConfig createMcpConfig() {
  *         return new McpServerConfig()
@@ -103,7 +103,7 @@ public abstract class McpRestServlet extends BasicRestServlet {
 	 *
 	 * <p>
 	 * Supplied by the revision-specific subclass a consumer extends (for example
-	 * {@code McpRestServlet20250618}); consumers do not normally implement this themselves.
+	 * {@code org.apache.juneau.rest.server.mcp.v20250618.McpRestServlet}); consumers do not normally implement this themselves.
 	 *
 	 * @return The bound revision. Never {@code null}.
 	 */

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.jsonrpc;
 
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 
 /**
@@ -33,6 +34,7 @@ public class JsonRpcResponse {
 	private Object id;
 	private Object result;
 	private JsonRpcError error;
+	private Object meta;
 
 	/**
 	 * JSON-RPC protocol version.
@@ -111,6 +113,28 @@ public class JsonRpcResponse {
 	 */
 	public JsonRpcResponse setError(JsonRpcError value) {
 		error = value;
+		return this;
+	}
+
+	/**
+	 * Opaque extension metadata.
+	 *
+	 * @return The metadata value, or <jk>null</jk> if absent.
+	 */
+	@BeanProp("_meta")
+	public Object getMeta() {
+		return meta;
+	}
+
+	/**
+	 * Sets opaque extension metadata.
+	 *
+	 * @param value Any JSON-compatible value. Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	@BeanProp("_meta")
+	public JsonRpcResponse setMeta(Object value) {
+		meta = value;
 		return this;
 	}
 

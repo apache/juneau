@@ -58,13 +58,13 @@ class Characterization_Test {
 	// --- fixture servlets -------------------------------------------------------------------
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class F_Empty extends McpRestServlet20250618 {
+	public static class F_Empty extends McpRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() { return new McpServerConfig(); }
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class F_Full extends McpRestServlet20250618 {
+	public static class F_Full extends McpRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig()
@@ -84,7 +84,7 @@ class Characterization_Test {
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class F_Caps extends McpRestServlet20250618 {
+	public static class F_Caps extends McpRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig();
@@ -100,7 +100,7 @@ class Characterization_Test {
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class F_Paged extends McpRestServlet20250618 {
+	public static class F_Paged extends McpRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig()
@@ -111,7 +111,7 @@ class Characterization_Test {
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class F_Throw extends McpRestServlet20250618 {
+	public static class F_Throw extends McpRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig()

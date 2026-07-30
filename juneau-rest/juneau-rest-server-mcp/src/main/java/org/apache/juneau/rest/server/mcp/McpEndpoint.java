@@ -27,12 +27,12 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * Implementing classes supply their {@link McpServerConfig} via {@link #getMcpConfig()} and their
  * protocol revision via {@link #revision()}. In practice a consumer implements a revision-specific
- * sub-interface (for example {@code McpEndpoint20250618}), which supplies {@link #revision()} for them.
+ * sub-interface (for example {@code org.apache.juneau.rest.server.mcp.v20250618.McpEndpoint}), which supplies {@link #revision()} for them.
  *
  * <h5 class='section'>Example:</h5>
  * <pre>
  * @Rest(path="/api")
- * public class MyResource extends BasicRestServlet implements McpEndpoint20250618 {
+ * public class MyResource extends BasicRestServlet implements org.apache.juneau.rest.server.mcp.v20250618.McpEndpoint {
  *     @Override
  *     public McpServerConfig getMcpConfig() {
  *         return new McpServerConfig().addTool(new MyEchoTool());

@@ -54,7 +54,7 @@ class McpSchemaCheck_Test {
 	void a01_unsupportedTopLevelKeyword_isRejectedNamingToolAndKeyword() {
 		var config = new McpServerConfig().addTool(tool("risky", JsonMap.of("type", "object", "oneOf", List.of())));
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new Mcp20250618Revision(null).dispatch(ping(), config, ctx));
+			() -> new McpRevision(null).dispatch(ping(), config, ctx));
 		assertTrue(e.getMessage().contains("risky"), e.getMessage());
 		assertTrue(e.getMessage().contains("oneOf"), e.getMessage());
 		assertTrue(e.getMessage().contains("2025-06-18"), e.getMessage());
@@ -65,7 +65,7 @@ class McpSchemaCheck_Test {
 		var nested = JsonMap.of("type", "object", "properties", JsonMap.of("a", JsonMap.of("$ref", "#/$defs/X")));
 		var config = new McpServerConfig().addTool(tool("nested", nested));
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new Mcp20250618Revision(null).dispatch(ping(), config, ctx));
+			() -> new McpRevision(null).dispatch(ping(), config, ctx));
 		assertTrue(e.getMessage().contains("nested"), e.getMessage());
 		assertTrue(e.getMessage().contains("$ref"), e.getMessage());
 	}
@@ -80,27 +80,27 @@ class McpSchemaCheck_Test {
 			"additionalProperties", false,
 			"$defs", JsonMap.of("IdString", JsonMap.of("type", "string")));
 		var config = new McpServerConfig().addTool(tool("ok", schema));
-		assertNotNull(new Mcp20250618Revision(null).dispatch(ping(), config, ctx));
+		assertNotNull(new McpRevision(null).dispatch(ping(), config, ctx));
 	}
 
 	@Test
 	void a04_nullAndEmptySchemas_startClean() {
 		var config = new McpServerConfig().addTool(tool("noSchema", null)).addTool(tool("emptySchema", new JsonMap()));
-		assertNotNull(new Mcp20250618Revision(null).dispatch(ping(), config, ctx));
+		assertNotNull(new McpRevision(null).dispatch(ping(), config, ctx));
 	}
 
 	@Test
 	void a05_checkRunsOncePerConfigInstance() {
-		// Deliberately two distinct Mcp20250618Revision instances (C8: no shared INSTANCE anymore) —
+		// Deliberately two distinct McpRevision instances (C8: no shared INSTANCE anymore) —
 		// this also proves VALIDATED is keyed by config identity, not by revision instance identity.
 		var config = new McpServerConfig().addTool(tool("ok", JsonMap.of("type", "object")));
-		assertNotNull(new Mcp20250618Revision(null).dispatch(ping(), config, ctx));
-		assertNotNull(new Mcp20250618Revision(null).dispatch(ping(), config, ctx));
+		assertNotNull(new McpRevision(null).dispatch(ping(), config, ctx));
+		assertNotNull(new McpRevision(null).dispatch(ping(), config, ctx));
 	}
 
 	@Test
 	void a06_validateSchemas_isDirectlyCallable() {
 		var bad = new McpServerConfig().addTool(tool("risky", JsonMap.of("enum", List.of("a"))));
-		assertThrows(IllegalArgumentException.class, () -> Mcp20250618Revision.validateSchemas(bad));
+		assertThrows(IllegalArgumentException.class, () -> McpRevision.validateSchemas(bad));
 	}
 }
