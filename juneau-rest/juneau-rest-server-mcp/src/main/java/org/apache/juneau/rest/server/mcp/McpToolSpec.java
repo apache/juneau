@@ -20,15 +20,17 @@ package org.apache.juneau.rest.server.mcp;
  * Revision-neutral tool descriptor returned from {@code tools/list}.
  *
  * <p>
- * Supersedes the wire-level {@code Tool} bean. Deliberately absent: {@code outputSchema} and
- * {@code title}, both of which are specific to later MCP revisions and belong on the revision-typed
- * side of the adapter boundary.
+ * Supersedes the wire-level {@code Tool} bean. {@code outputSchema} is revision-neutral: structured
+ * tool output was introduced in {@code 2025-06-18}, and adapters narrow its schema shape for earlier
+ * revisions. Deliberately absent: {@code title}, which is specific to later MCP revisions and belongs
+ * on the revision-typed side of the adapter boundary.
  */
 public class McpToolSpec {
 
 	private String name;
 	private String description;
 	private McpSchema inputSchema;
+	private McpSchema outputSchema;
 
 	/**
 	 * The tool name, used to route {@code tools/call} requests.
@@ -87,6 +89,26 @@ public class McpToolSpec {
 	 */
 	public McpToolSpec setInputSchema(McpSchema value) {
 		inputSchema = value;
+		return this;
+	}
+
+	/**
+	 * The tool's structured result schema.
+	 *
+	 * @return The schema, or <jk>null</jk> if not set.
+	 */
+	public McpSchema getOutputSchema() {
+		return outputSchema;
+	}
+
+	/**
+	 * Sets the tool's structured result schema.
+	 *
+	 * @param value The new value. Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public McpToolSpec setOutputSchema(McpSchema value) {
+		outputSchema = value;
 		return this;
 	}
 }

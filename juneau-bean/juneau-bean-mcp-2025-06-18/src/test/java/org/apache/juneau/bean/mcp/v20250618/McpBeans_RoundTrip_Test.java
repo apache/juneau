@@ -99,7 +99,8 @@ class McpBeans_RoundTrip_Test {
 				new TextContent().setText("err"),
 				new ImageContent().setData("AAA=").setMimeType("image/png"),
 				emb
-			));
+			))
+			.setStructuredContent(JsonMap.of("code", 7));
 		assertJsonRoundTrip(result, CallToolResult.class);
 	}
 
@@ -166,6 +167,11 @@ class McpBeans_RoundTrip_Test {
 					.setName("t1")
 					.setDescription("d1")
 					.setInputSchema(new JsonSchema().setType("object").setAdditionalProperties(true))
+					.setOutputSchema(new JsonSchema()
+						.setType("object")
+						.addProperty("code", new JsonSchema().setType("integer"))
+						.setRequired("code")
+						.setAdditionalProperties(false))
 			));
 		var res = new JsonRpcResponse()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
@@ -250,5 +256,14 @@ class McpBeans_RoundTrip_Test {
 				new PromptMessage().setRole(Role.TOOL).setContent(new TextContent().setText("tool"))
 			));
 		assertJsonRoundTrip(pr, GetPromptResult.class);
+	}
+
+	@Test void a19_structuredFieldsDefaultNullAndFluentSettersReturnThis() {
+		var a = new Tool();
+		var b = new CallToolResult();
+		assertNull(a.getOutputSchema());
+		assertNull(b.getStructuredContent());
+		assertSame(a, a.setOutputSchema(new JsonSchema().setType("object")));
+		assertSame(b, b.setStructuredContent(JsonMap.of("x", 1)));
 	}
 }

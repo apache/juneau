@@ -23,8 +23,6 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.bean.jsonrpc.*;
-import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
@@ -42,13 +40,6 @@ import org.junit.jupiter.params.provider.*;
  * accommodate a code change: if replay fails, the code change is wrong.
  *
  * <p>
- * Per Resolution B1, the {@code STRUCTURED-*} fixtures cannot be produced through an actual HTTP
- * dispatch: the revision-neutral {@link org.apache.juneau.rest.server.mcp.McpToolOutcome} has no
- * {@code structuredContent} field for a handler to populate. Those five fixtures are instead
- * replayed as a direct {@link CallToolResult} bean round-trip wrapped in a hand-built
- * {@link JsonRpcResponse}, proving the v2 wire shape without pretending the neutral core produces it.
- *
- * <p>
  * Regenerate the {@code *.response.json} files (only ever against known-good code) with:
  * <p>
  * {@code mvn test -Drat.skip=true -pl juneau-rest/juneau-rest-server-mcp-2026-07-28 -Dtest=Characterization_Test -Djuneau.mcp.characterization.write=true}
@@ -60,17 +51,6 @@ class Characterization_Test {
 
 	private static final Path DIR = Paths.get("src/test/resources/mcp/v20260728/characterization");
 	private static final boolean WRITE = Boolean.getBoolean("juneau.mcp.characterization.write");
-
-	private static final Set<String> STRUCTURED_DIRECT = Set.of(
-		"STRUCTURED-object", "STRUCTURED-array", "STRUCTURED-string", "STRUCTURED-boolean", "STRUCTURED-null");
-
-	/**
-	 * The servlet path applies {@code @SerializerConfig(addBeanTypes = "true")} (see the core
-	 * {@link org.apache.juneau.rest.server.mcp.McpRestServlet}) so polymorphic {@link Content} wire
-	 * types are tagged with their {@code type} discriminator. The {@code STRUCTURED-*} direct bean
-	 * round-trips bypass the servlet entirely, so they need the same serializer setting explicitly.
-	 */
-	private static final JsonSerializer DIRECT_SERIALIZER = JsonSerializer.create().addBeanTypes().build();
 
 	// --- fixture servlets -------------------------------------------------------------------
 
@@ -122,6 +102,19 @@ class Characterization_Test {
 		}
 	}
 
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class F_Structured extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Override protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig().addTool(new McpTypedToolHandler<JsonMap,Object>() {
+				@Override public McpToolSpec descriptor() { return new McpToolSpec().setName("echo"); }
+				@Override public java.lang.reflect.Type argumentType() { return JsonMap.class; }
+				@Override public java.lang.reflect.Type resultType() { return Object.class; }
+				@Override public Object call(JsonMap arguments, BeanStore ctx) { return arguments.get("value"); }
+			});
+		}
+	}
+
 	// --- fixture handler factories ---------------------------------------------------------
 
 	private static McpToolHandler tool(String name, McpSchema schema, Function<Map<String,Object>,McpToolOutcome> fn) {
@@ -159,6 +152,7 @@ class Characterization_Test {
 			case "SCHEMA-draft-2020-12" -> F_Schema.class;
 			case "FULL-tools-list", "FULL-tools-call", "FULL-prompts-list", "FULL-prompts-get",
 				"FULL-resources-list", "FULL-resources-read", "HEADER-valid-named", "STATELESS-repeat" -> F_Full.class;
+			case "STRUCTURED-object", "STRUCTURED-array", "STRUCTURED-string", "STRUCTURED-boolean", "STRUCTURED-null" -> F_Structured.class;
 			default -> F_Empty.class;
 		};
 	}
@@ -178,7 +172,7 @@ class Characterization_Test {
 	@ParameterizedTest
 	@MethodSource("fixtures")
 	void a01_wireIsUnchanged(String fixture) throws Exception {
-		var actual = STRUCTURED_DIRECT.contains(fixture) ? replayStructured(fixture) : replayHttp(fixture);
+		var actual = replayHttp(fixture);
 		var expected = DIR.resolve(fixture + ".response.json");
 		if (WRITE) {
 			Files.writeString(expected, actual);
@@ -198,24 +192,6 @@ class Characterization_Test {
 		var res = req.run();
 		assertEquals(200, res.getStatusCode(), () -> fixture + ": HTTP status changed");
 		return res.getContent().asString();
-	}
-
-	/**
-	 * Direct {@link CallToolResult} bean round-trip for the {@code STRUCTURED-*} fixtures (Resolution
-	 * B1). These do not dispatch through the servlet: the neutral {@link McpToolOutcome} has no
-	 * {@code structuredContent} field, so an actual HTTP call could never produce one. Instead the
-	 * wire bean is built directly from the request's {@code arguments.value} and wrapped in a
-	 * hand-built {@link JsonRpcResponse}, exercising exactly the wire contract the fixture encodes.
-	 */
-	private String replayStructured(String fixture) throws Exception {
-		var requestBody = Files.readString(DIR.resolve(fixture + ".request.json")).strip();
-		var top = JsonParser.DEFAULT.read(requestBody, JsonMap.class);
-		var id = top.get("id");
-		var params = (Map<?,?>) top.get("params");
-		var arguments = (Map<?,?>) params.get("arguments");
-		var value = arguments.get("value");
-		var result = new CallToolResult().setContent(new TextContent().setText("ok")).setStructuredContent(value);
-		return DIRECT_SERIALIZER.write(JsonRpcResponse.ok(id, result));
 	}
 
 	private static Map<String,String> loadHeaders(String fixture) throws IOException {

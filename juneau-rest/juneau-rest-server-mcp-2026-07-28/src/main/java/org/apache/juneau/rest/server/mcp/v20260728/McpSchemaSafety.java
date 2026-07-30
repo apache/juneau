@@ -24,6 +24,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.jsonschema.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.server.mcp.McpJsonValueSafety;
 import org.apache.juneau.rest.server.mcp.McpSchema;
 
 /**
@@ -33,9 +34,10 @@ import org.apache.juneau.rest.server.mcp.McpSchema;
  * <p>
  * The neutral {@link McpSchema} is an unconstrained JSON object carrier, and a client can send an
  * arbitrarily large or deep argument object. Before any validation runs, both the schema graph and the
- * argument graph are traversed <b>iteratively</b> (an explicit {@link ArrayDeque}, never recursion) with
- * identity tracking and depth/node counters, so a hostile or accidentally-huge input is rejected up front
- * rather than blowing the stack or spinning indefinitely.
+ * argument graph are checked against the shared {@link McpJsonValueSafety} depth/node/deadline bounds,
+ * so a hostile or accidentally-huge input is rejected up front rather than blowing the stack or spinning
+ * indefinitely. The two checks share a single deadline, so a slow schema graph cannot buy the argument
+ * graph extra time (or vice versa).
  *
  * <p>
  * <b>No external fetches.</b> The schema is converted to a {@link JsonSchema} bean and validated as-is. No
@@ -44,10 +46,9 @@ import org.apache.juneau.rest.server.mcp.McpSchema;
  * code path that opens a network connection or a file to dereference one.
  *
  * <p>
- * Validation itself runs on a fixed-size pool of daemon threads and is bounded by
- * {@link #MAX_VALIDATION_MILLIS}: if a pathological schema (for example a catastrophically-backtracking
- * {@code pattern}) fails to complete in time, the task is cancelled and a {@code -32602} error is raised
- * instead of hanging the request thread.
+ * Validation itself runs on a fixed-size pool of daemon threads and is bounded by the same deadline: if a
+ * pathological schema (for example a catastrophically-backtracking {@code pattern}) fails to complete in
+ * time, the task is cancelled and a {@code -32602} error is raised instead of hanging the request thread.
  */
 final class McpSchemaSafety {
 
@@ -83,55 +84,31 @@ final class McpSchemaSafety {
 		if (schema == null)
 			return;
 		var schemaMap = schema.toJsonMap();
-		checkBounds(schemaMap);
-		checkBounds(args);
-		var jsonSchema = Json.to(Json.of(schemaMap), JsonSchema.class);
-		validateBounded(jsonSchema, args);
-	}
-
-	/**
-	 * Iteratively walks a JSON value graph, enforcing the depth and node ceilings.
-	 *
-	 * <p>
-	 * Containers already visited (by object identity) are not re-walked, so a value graph that shares
-	 * sub-structures cannot inflate the node count or loop forever.
-	 */
-	private static void checkBounds(Object root) {
-		if (root == null)
-			return;
-		var seen = Collections.newSetFromMap(new IdentityHashMap<Object,Boolean>());
-		var stack = new ArrayDeque<Framed>();
-		stack.push(new Framed(root, 1));
-		var nodes = 0;
-		while (! stack.isEmpty()) {
-			var f = stack.pop();
-			if (f.depth() > MAX_DEPTH)
-				throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Tool input exceeds maximum nesting depth of " + MAX_DEPTH);
-			var value = f.value();
-			if ((value instanceof Map<?,?> || value instanceof Collection<?>) && ! seen.add(value))
-				continue;
-			if (++nodes > MAX_NODES)
-				throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Tool input exceeds maximum node count of " + MAX_NODES);
-			if (value instanceof Map<?,?> m) {
-				for (var v : m.values())
-					stack.push(new Framed(v, f.depth() + 1));
-			} else if (value instanceof Collection<?> c) {
-				for (var v : c)
-					stack.push(new Framed(v, f.depth() + 1));
-			}
+		var deadline = McpJsonValueSafety.deadlineNanos();
+		try {
+			McpJsonValueSafety.check(schemaMap, "Tool input schema", deadline);
+			McpJsonValueSafety.check(args, "Tool input", deadline);
+		} catch (IllegalArgumentException e) {
+			throw new McpException(McpRevision.CODE_INVALID_PARAMS, e.getMessage());
 		}
+		var jsonSchema = Json.to(Json.of(schemaMap), JsonSchema.class);
+		validateBounded(jsonSchema, args, deadline);
 	}
 
 	/**
-	 * Runs {@link JsonSchemaValidator} on a daemon thread and enforces the wall-clock deadline.
+	 * Runs {@link JsonSchemaValidator} on a daemon thread and enforces the remaining share of the
+	 * shared {@link McpJsonValueSafety} deadline.
 	 */
-	private static void validateBounded(JsonSchema<?> schema, Object value) {
+	private static void validateBounded(JsonSchema<?> schema, Object value, long deadlineNanos) {
+		var remaining = McpJsonValueSafety.remainingNanos(deadlineNanos);
+		if (remaining == 0)
+			throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Tool input schema validation exceeded " + MAX_VALIDATION_MILLIS + " ms");
 		var future = VALIDATION_POOL.submit(() -> {
 			JsonSchemaValidator.of(schema).validate(value);
 			return null;
 		});
 		try {
-			future.get(MAX_VALIDATION_MILLIS, MILLISECONDS);
+			future.get(remaining, NANOSECONDS);
 		} catch (TimeoutException e) {
 			future.cancel(true);
 			throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Tool input schema validation exceeded " + MAX_VALIDATION_MILLIS + " ms");
@@ -146,6 +123,4 @@ final class McpSchemaSafety {
 			throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Tool input schema validation was interrupted");
 		}
 	}
-
-	private record Framed(Object value, int depth) {}
 }

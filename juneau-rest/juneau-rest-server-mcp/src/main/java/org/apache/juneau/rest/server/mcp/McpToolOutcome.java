@@ -22,8 +22,8 @@ import java.util.*;
  * Revision-neutral result of a {@code tools/call} invocation.
  *
  * <p>
- * Supersedes the wire-level {@code CallToolResult} bean. Deliberately absent:
- * {@code structuredContent} and {@code cachePolicy}, both specific to later MCP revisions.
+ * Supersedes the wire-level {@code CallToolResult} bean. {@code structuredContent} is cross-revision.
+ * Deliberately absent: {@code cachePolicy}, which remains specific to later MCP revisions.
  *
  * <p>
  * Note the field is named {@code error}, while the {@code 2025-06-18} wire property is
@@ -34,6 +34,7 @@ public class McpToolOutcome {
 
 	private List<McpContentBlock> content;
 	private Boolean error;
+	private Object structuredContent;
 
 	/**
 	 * Creates an outcome carrying a single text block.
@@ -93,6 +94,26 @@ public class McpToolOutcome {
 	 */
 	public McpToolOutcome setError(Boolean value) {
 		error = value;
+		return this;
+	}
+
+	/**
+	 * The structured JSON result returned by the tool.
+	 *
+	 * @return The JSON value, or <jk>null</jk> if absent.
+	 */
+	public Object getStructuredContent() {
+		return structuredContent;
+	}
+
+	/**
+	 * Sets the structured JSON result.
+	 *
+	 * @param value Any JSON-compatible value. Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public McpToolOutcome setStructuredContent(Object value) {
+		structuredContent = value;
 		return this;
 	}
 }

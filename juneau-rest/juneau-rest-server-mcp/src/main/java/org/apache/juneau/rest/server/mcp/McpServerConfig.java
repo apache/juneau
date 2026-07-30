@@ -140,6 +140,25 @@ public class McpServerConfig {
 	}
 
 	/**
+	 * Convenience: adapt and append a single typed tool handler.
+	 *
+	 * <p>
+	 * The handler is bridged into a raw {@link McpToolHandler} via
+	 * {@link McpTypedHandlers#adaptTool(McpTypedToolHandler)} before it is stored. This overload is intentionally
+	 * singular: a typed varargs overload would make {@code addTool()} ambiguous. To register multiple typed
+	 * handlers, use chained {@code addTool(...)} calls, or adapt them explicitly with
+	 * {@link McpTypedHandlers#adaptTool(McpTypedToolHandler)} and pass the results to
+	 * {@link #addTool(McpToolHandler...)}.
+	 *
+	 * @param handler The typed handler to adapt and add.
+	 * @return This object (for method chaining).
+	 */
+	public McpServerConfig addTool(McpTypedToolHandler<?,?> handler) {
+		tools.add(McpTypedHandlers.adaptTool(handler));
+		return this;
+	}
+
+	/**
 	 * Registered prompt handlers.
 	 *
 	 * @return Mutable list of handlers. Never {@code null}.

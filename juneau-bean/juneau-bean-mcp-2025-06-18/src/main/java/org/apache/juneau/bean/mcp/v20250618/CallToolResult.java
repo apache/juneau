@@ -31,6 +31,7 @@ public class CallToolResult {
 
 	private List<Content> content;
 	private Boolean isError;
+	private Object structuredContent;
 
 	/**
 	 * Content blocks returned by the tool.
@@ -106,6 +107,29 @@ public class CallToolResult {
 	 */
 	public CallToolResult setIsError(Boolean value) {
 		isError = value;
+		return this;
+	}
+
+	/**
+	 * Structured result content, mirroring the {@link #getContent() content} in a machine-readable form.
+	 *
+	 * <p>MCP 2025-06-18 requires this, when present, to be a JSON object, but enforcement of that
+	 * constraint belongs to the REST adapter, not this DTO.
+	 *
+	 * @return The structured content, or {@code null} if not set.
+	 */
+	public Object getStructuredContent() {
+		return structuredContent;
+	}
+
+	/**
+	 * Sets the structured content.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public CallToolResult setStructuredContent(Object value) {
+		structuredContent = value;
 		return this;
 	}
 }

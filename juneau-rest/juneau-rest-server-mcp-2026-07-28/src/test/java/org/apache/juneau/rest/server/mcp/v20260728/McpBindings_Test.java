@@ -122,7 +122,6 @@ class McpBindings_Test extends TestBase {
 	// -------- endpoint mixin path (POST /mcp) ---------
 
 	@Rest(path = "/api", serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	@org.apache.juneau.marshall.serializer.SerializerConfig(addBeanTypes = "true")
 	public static class B extends BasicRestServlet implements McpEndpoint {
 		private static final long serialVersionUID = 1L;
 		@Override

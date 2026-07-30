@@ -60,7 +60,8 @@ final class McpWire {
 		return new Tool()
 			.setName(x.getName())
 			.setDescription(x.getDescription())
-			.setInputSchema(toWire(x.getInputSchema()));
+			.setInputSchema(toWire(x.getInputSchema()))
+			.setOutputSchema(toWire(x.getOutputSchema()));
 	}
 
 	static JsonSchema toWire(McpSchema x) {
@@ -70,7 +71,7 @@ final class McpWire {
 	static CallToolResult toWire(McpToolOutcome x) {
 		if (x == null)
 			return null;
-		var r = new CallToolResult().setIsError(x.getError());
+		var r = new CallToolResult().setIsError(x.getError()).setStructuredContent(x.getStructuredContent());
 		if (x.getContent() != null)
 			r.setContent(x.getContent().stream().map(McpWire::toWire).toList());
 		return r;
@@ -173,7 +174,8 @@ final class McpWire {
 		return new McpToolSpec()
 			.setName(x.getName())
 			.setDescription(x.getDescription())
-			.setInputSchema(toNeutral(x.getInputSchema()));
+			.setInputSchema(toNeutral(x.getInputSchema()))
+			.setOutputSchema(toNeutral(x.getOutputSchema()));
 	}
 
 	static McpSchema toNeutral(JsonSchema x) {
@@ -183,7 +185,7 @@ final class McpWire {
 	static McpToolOutcome toNeutral(CallToolResult x) {
 		if (x == null)
 			return null;
-		var r = new McpToolOutcome().setError(x.getIsError());
+		var r = new McpToolOutcome().setError(x.getIsError()).setStructuredContent(x.getStructuredContent());
 		if (x.getContent() != null)
 			r.setContent(x.getContent().stream().map(McpWire::toNeutral).toList());
 		return r;

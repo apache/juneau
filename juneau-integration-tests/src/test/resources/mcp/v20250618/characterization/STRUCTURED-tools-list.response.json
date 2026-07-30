@@ -1,0 +1,1 @@
+{"id":1,"jsonrpc":"2.0","result":{"tools":[{"description":"desc:structured","inputSchema":{"type":"object"},"name":"structured","outputSchema":{"additionalProperties":false,"properties":{"x":{"type":"integer"}},"required":["x"],"type":"object"}}]}}

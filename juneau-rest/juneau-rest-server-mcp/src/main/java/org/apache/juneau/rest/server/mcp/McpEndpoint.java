@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.mcp;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.Content;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
 
 /**
@@ -63,6 +64,10 @@ public interface McpEndpoint {
 	 * Implementations may override this method to customize routing (path / annotations) but must
 	 * still dispatch through {@link #revision()}.
 	 *
+	 * <p>
+	 * Applies the same serializer policy as {@link McpRestServlet} ({@code addBeanTypes} and
+	 * {@code uriResolution="NONE"}), so the two neutral HTTP entrypoints stay at parity.
+	 *
 	 * @param req JSON-RPC request envelope.
 	 * @param restReq The current REST request.
 	 * @return The response, or {@code null} for notifications.
@@ -70,6 +75,7 @@ public interface McpEndpoint {
 	@SuppressWarnings({
 		"resource" // Request-scoped scratch BasicBeanStore; lifetime is bounded by this handler invocation, no foreign resources are captured.
 	})
+	@SerializerConfig(addBeanTypes = "true", uriResolution = "NONE")
 	@RestPost(path = "/mcp")
 	default JsonRpcResponse handleMcpRequest(@Content JsonRpcRequest req, RestRequest restReq) {
 		var bs = new BasicBeanStore(restReq.getContext().getBeanStore())

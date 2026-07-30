@@ -31,10 +31,12 @@ class McpNeutralModel_Test {
 	@Test
 	void a01_toolSpec_fluentSetters() {
 		var a = McpSchema.of(JsonMap.of("type", "object"));
-		var b = new McpToolSpec().setName("echo").setDescription("d").setInputSchema(a);
-		assertEquals("echo", b.getName());
-		assertEquals("d", b.getDescription());
-		assertSame(a, b.getInputSchema());
+		var b = McpSchema.of(JsonMap.of("type", "string"));
+		var c = new McpToolSpec().setName("echo").setDescription("d").setInputSchema(a).setOutputSchema(b);
+		assertEquals("echo", c.getName());
+		assertEquals("d", c.getDescription());
+		assertSame(a, c.getInputSchema());
+		assertSame(b, c.getOutputSchema());
 	}
 
 	@Test
@@ -43,6 +45,7 @@ class McpNeutralModel_Test {
 		assertNull(a.getName());
 		assertNull(a.getDescription());
 		assertNull(a.getInputSchema());
+		assertNull(a.getOutputSchema());
 	}
 
 	@Test
@@ -64,11 +67,20 @@ class McpNeutralModel_Test {
 		var a = new McpToolOutcome();
 		assertNull(a.getContent(), "null content must stay null: an empty list would change the wire bytes");
 		assertNull(a.getError());
+		assertNull(a.getStructuredContent());
 	}
 
 	@Test
 	void b04_toolOutcome_errorFlag() {
 		assertEquals(Boolean.TRUE, new McpToolOutcome().setError(true).getError());
+	}
+
+	@Test
+	void b05_toolOutcome_structuredContent_preservesIdentityAndNull() {
+		var a = JsonMap.of("x", 1);
+		var b = new McpToolOutcome().setStructuredContent(a);
+		assertSame(a, b.getStructuredContent());
+		assertNull(new McpToolOutcome().getStructuredContent());
 	}
 
 	@Test

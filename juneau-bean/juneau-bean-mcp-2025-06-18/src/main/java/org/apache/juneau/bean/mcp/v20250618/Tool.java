@@ -27,6 +27,7 @@ public class Tool {
 	private String name;
 	private String description;
 	private JsonSchema inputSchema;
+	private JsonSchema outputSchema;
 
 	/**
 	 * Tool name.
@@ -85,6 +86,29 @@ public class Tool {
 	 */
 	public Tool setInputSchema(JsonSchema value) {
 		inputSchema = value;
+		return this;
+	}
+
+	/**
+	 * JSON Schema for the structured content returned by the tool.
+	 *
+	 * <p>MCP 2025-06-18 requires this, when present, to be an object schema, but enforcement of that
+	 * constraint belongs to the REST adapter, not this DTO.
+	 *
+	 * @return The output schema, or {@code null} if not set.
+	 */
+	public JsonSchema getOutputSchema() {
+		return outputSchema;
+	}
+
+	/**
+	 * Sets the output schema.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Tool setOutputSchema(JsonSchema value) {
+		outputSchema = value;
 		return this;
 	}
 }

@@ -49,12 +49,14 @@ import org.apache.juneau.rest.server.servlet.*;
  * <p>
  * The servlet enables {@code addBeanTypes} on its serializer so that polymorphic wire types a
  * revision emits (content blocks, resource payloads) are tagged with their {@code type}
- * discriminator.
+ * discriminator, and disables URI resolution ({@code uriResolution="NONE"}) so that JSON-Schema
+ * JSON-Pointer {@code $ref} values (e.g. {@code "#/$defs/text"}) and absolute URIs with fragments
+ * are emitted verbatim rather than rewritten against the servlet path.
  *
  * @serial exclude
  */
 @Rest
-@SerializerConfig(addBeanTypes = "true")
+@SerializerConfig(addBeanTypes = "true", uriResolution = "NONE")
 public abstract class McpRestServlet extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 

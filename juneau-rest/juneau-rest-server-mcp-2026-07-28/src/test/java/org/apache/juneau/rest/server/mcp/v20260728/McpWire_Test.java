@@ -97,14 +97,17 @@ class McpWire_Test {
 	// -------- tool descriptor + schema ---------
 
 	@Test
-	void c01_toWire_toolSpec_mapsFields_outputSchemaNull() {
-		var schema = McpSchema.of(JsonMap.of("type", "object", "properties", JsonMap.of("text", JsonMap.of("type", "string"))));
-		var tool = McpWire.toWire(new McpToolSpec().setName("echo").setDescription("d").setInputSchema(schema));
-		assertEquals("echo", tool.getName());
-		assertEquals("d", tool.getDescription());
-		assertNotNull(tool.getInputSchema());
-		assertTrue(Json.of(tool.getInputSchema()).contains("\"type\":\"object\""));
-		assertNull(tool.getOutputSchema(), "B1: output schema is not mapped by the neutral boundary");
+	void c01_toWire_toolSpec_mapsBothSchemasThroughWireSubtype() {
+		var a = McpSchema.of(JsonMap.of("type", "object"));
+		var b = McpSchema.of(JsonMap.of("$defs", JsonMap.of("X", JsonMap.of("type", "string")), "$id", "urn:test", "type", "object"));
+		var c = McpWire.toWire(new McpToolSpec().setName("echo").setDescription("d").setInputSchema(a).setOutputSchema(b));
+		assertNotNull(c.getInputSchema());
+		assertNotNull(c.getOutputSchema());
+		var d = Json.of(c.getOutputSchema());
+		assertTrue(d.contains("\"$defs\""));
+		assertTrue(d.contains("\"$id\""));
+		assertFalse(d.contains("\"definitions\""));
+		assertFalse(d.contains("\"id\""));
 	}
 
 	@Test
@@ -123,11 +126,13 @@ class McpWire_Test {
 	// -------- tool outcome ---------
 
 	@Test
-	void d01_toWire_toolOutcome_mapsContent_structuredContentNull() {
-		var outcome = new McpToolOutcome().setContent(List.of(McpContentBlock.text("hi")));
-		var result = McpWire.toWire(outcome);
-		assertEquals(1, result.getContent().size());
-		assertNull(result.getStructuredContent(), "B1: structured content is not mapped by the neutral boundary");
+	void d01_toWire_toolOutcome_mapsStructuredContentIdentity() {
+		var a = JsonMap.of("x", 1);
+		var b = McpWire.toWire(new McpToolOutcome()
+			.setContent(List.of(McpContentBlock.text("{\"x\":1}")))
+			.setStructuredContent(a));
+		assertSame(a, b.getStructuredContent());
+		assertEquals(1, b.getContent().size());
 	}
 
 	@Test

@@ -1,1 +1,1 @@
-{"id":1,"jsonrpc":"2.0","result":{"content":[{"type":"text","text":"ok"}],"structuredContent":[1,2]}}
+{"id":1,"jsonrpc":"2.0","result":{"content":[{"type":"text","text":"[1,2]"}],"structuredContent":[1,2]}}

@@ -75,7 +75,8 @@ final class McpWire {
 		return new Tool()
 			.setName(value.getName())
 			.setDescription(value.getDescription())
-			.setInputSchema(toWire(value.getInputSchema()));
+			.setInputSchema(toWire(value.getInputSchema()))
+			.setOutputSchema(toWire(value.getOutputSchema()));
 	}
 
 	static JsonSchema<?> toWire(McpSchema value) {
@@ -109,7 +110,7 @@ final class McpWire {
 	static CallToolResult toWire(McpToolOutcome value) {
 		if (value == null)
 			return null;
-		var result = new CallToolResult().setIsError(value.getError());
+		var result = new CallToolResult().setIsError(value.getError()).setStructuredContent(value.getStructuredContent());
 		if (value.getContent() != null)
 			result.setContent(value.getContent().stream().map(McpWire::toWire).toList());
 		return result;

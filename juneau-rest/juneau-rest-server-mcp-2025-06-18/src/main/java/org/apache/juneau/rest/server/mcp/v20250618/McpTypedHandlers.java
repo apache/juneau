@@ -21,53 +21,20 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
-import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.mcp.*;
 
 /**
- * Adapters that convert {@link McpTypedToolHandler} / {@link McpTypedPromptHandler} into the raw
- * {@link McpToolHandler} / {@link McpPromptHandler} interfaces consumed by {@link McpRevision}.
+ * Adapter that converts a {@link McpTypedPromptHandler} into the raw {@link McpPromptHandler} interface
+ * consumed by {@link McpRevision}.
+ *
+ * <p>
+ * Typed tool handling is revision-neutral and lives in the core module; this dated helper adapts prompts only.
  */
 public final class McpTypedHandlers {
 
 	private McpTypedHandlers() {}
-
-	/**
-	 * Converts a typed tool handler into a raw handler suitable for {@link McpServerConfig#addTool(McpToolHandler...)}.
-	 *
-	 * <p>
-	 * Conversion behavior:
-	 * <ul>
-	 * 	<li>The incoming {@code Map<String,Object>} arguments are serialized to JSON and re-parsed as
-	 * 	    {@link McpTypedToolHandler#argumentType()} via {@link Json#of(Object)} / {@link Json#to(String, Class)}.
-	 * 	<li>If the typed handler returns a {@link CallToolResult}, it is passed through unchanged.
-	 * 	<li>Otherwise, the return value is JSON-serialized and wrapped in a single {@link TextContent}
-	 * 	    inside a {@link CallToolResult}.
-	 * </ul>
-	 *
-	 * @param typed The typed handler. Never {@code null}.
-	 * @param <A> Argument type.
-	 * @param <R> Return type.
-	 * @return A raw handler delegating to {@code typed}.
-	 */
-	public static <A,R> McpToolHandler adaptTool(McpTypedToolHandler<A,R> typed) {
-		assertArgNotNull("typed", typed);
-		return new McpToolHandler() {
-			@Override
-			public McpToolSpec descriptor() {
-				return McpWire.toNeutral(typed.descriptor());
-			}
-
-			@Override
-			public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
-				A bound = bindArguments(arguments, typed.argumentType());
-				R result = typed.call(bound, ctx);
-				return McpWire.toNeutral(wrapToolResult(result));
-			}
-		};
-	}
 
 	/**
 	 * Converts a typed prompt handler into a raw handler suitable for {@link McpServerConfig#addPrompt(McpPromptHandler...)}.
@@ -90,13 +57,13 @@ public final class McpTypedHandlers {
 
 			@Override
 			public McpPromptOutcome get(Map<String,Object> arguments, BeanStore ctx) {
-				A bound = bindArguments(arguments, typed.argumentType());
+				A bound = bindPromptArguments(arguments, typed.argumentType());
 				return McpWire.toNeutral(typed.get(bound, ctx));
 			}
 		};
 	}
 
-	private static <T> T bindArguments(Map<String,Object> arguments, Class<T> type) {
+	private static <T> T bindPromptArguments(Map<String,Object> arguments, Class<T> type) {
 		if (arguments == null || arguments.isEmpty())
 			return null;
 		try {
@@ -105,23 +72,5 @@ public final class McpTypedHandlers {
 		} catch (Exception e) {
 			throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Failed to bind arguments to " + type.getName() + ": " + e.getMessage());
 		}
-	}
-
-	private static CallToolResult wrapToolResult(Object result) {
-		if (result instanceof CallToolResult result2)
-			return result2;
-		String text;
-		if (result == null)
-			text = "";
-		else if (result instanceof String result2)
-			text = result2;
-		else {
-			try {
-				text = Json.of(result);
-			} catch (Exception e) {
-				throw new McpException(McpRevision.CODE_INTERNAL_ERROR, "Failed to serialize tool result: " + e.getMessage());
-			}
-		}
-		return new CallToolResult().setContent(List.of(new TextContent().setText(text)));
 	}
 }

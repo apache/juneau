@@ -29,11 +29,13 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.mcp.McpCursor;
 import org.apache.juneau.rest.server.mcp.McpErrorKind;
 import org.apache.juneau.rest.server.mcp.McpExchange;
+import org.apache.juneau.rest.server.mcp.McpJsonValueSafety;
 import org.apache.juneau.rest.server.mcp.McpParamUtils;
 import org.apache.juneau.rest.server.mcp.McpPromptHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceHandler;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.apache.juneau.rest.server.mcp.McpToolHandler;
+import org.apache.juneau.rest.server.mcp.McpToolOutcome;
 
 /**
  * {@link org.apache.juneau.rest.server.mcp.McpRevision} implementation for MCP revision {@code 2026-07-28}.
@@ -255,7 +257,19 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			.orElseThrow(() -> new McpException(errorCode(McpErrorKind.TOOL_NOT_FOUND), "Tool not found: " + name));
 		var args = McpParamUtils.mapParam(p, "arguments");
 		McpSchemaSafety.validateInput(handler.descriptor().getInputSchema(), args);
-		return McpWire.toWire(handler.call(args, ctx));
+		var outcome = handler.call(args, ctx);
+		validateStructuredOutput(outcome);
+		return McpWire.toWire(outcome);
+	}
+
+	private static void validateStructuredOutput(McpToolOutcome outcome) {
+		if (outcome == null || outcome.getStructuredContent() == null)
+			return;
+		try {
+			McpJsonValueSafety.check(outcome.getStructuredContent(), "Tool structuredContent");
+		} catch (IllegalArgumentException e) {
+			throw new McpException(CODE_INTERNAL_ERROR, e.getMessage());
+		}
 	}
 
 	private static ListPromptsResult listPrompts(McpServerConfig config, Object params, BeanStore ctx) {

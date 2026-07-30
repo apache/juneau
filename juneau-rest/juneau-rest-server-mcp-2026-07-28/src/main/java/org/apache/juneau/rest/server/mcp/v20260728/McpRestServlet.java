@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.server.mcp.v20260728;
 
 import org.apache.juneau.bean.mcp.v20260728.*;
-import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
 
 /**
@@ -29,16 +28,12 @@ import org.apache.juneau.rest.server.*;
  * made by which class you extend.
  *
  * <p>
- * Overrides the inherited {@code @SerializerConfig} to also disable URI resolution
- * ({@code uriResolution="NONE"}, re-declaring {@code addBeanTypes} to preserve it). This tool's
- * {@code Tool.inputSchema} exposes the shared Draft-2020-12 {@link org.apache.juneau.bean.jsonschema.JsonSchema}
- * bean directly, whose {@code $ref} values are JSON Pointers (e.g. {@code "#/$defs/text"}), not web
- * URIs. The REST framework's default root-relative URI resolution would otherwise rewrite such a
- * fragment-only reference against the servlet path (e.g. into {@code "/#/$defs/text"}), corrupting
- * the JSON Schema wire contract.
+ * URI and polymorphic-type serializer policy ({@code addBeanTypes} and {@code uriResolution="NONE"}) is
+ * inherited centrally from the neutral {@link org.apache.juneau.rest.server.mcp.McpRestServlet}; the only
+ * revision-specific behavior added here is notification empty-body processing, below.
  *
  * <p>
- * Also registers {@link McpNotificationResponseProcessor} so a {@code null} dispatch result (a JSON-RPC
+ * Registers {@link McpNotificationResponseProcessor} so a {@code null} dispatch result (a JSON-RPC
  * notification) renders as a genuinely empty HTTP body instead of the framework's default four-byte
  * {@code null} JSON literal.
  *
@@ -56,7 +51,6 @@ import org.apache.juneau.rest.server.*;
  * @serial exclude
  */
 @Rest(responseProcessors = McpNotificationResponseProcessor.class)
-@SerializerConfig(addBeanTypes = "true", uriResolution = "NONE")
 public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.McpRestServlet {
 	private static final long serialVersionUID = 1L;
 

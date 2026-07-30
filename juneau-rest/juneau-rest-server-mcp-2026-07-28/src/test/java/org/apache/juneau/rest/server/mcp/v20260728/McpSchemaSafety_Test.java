@@ -169,6 +169,23 @@ class McpSchemaSafety_Test {
 		assertTrue(elapsedMs < McpSchemaSafety.MAX_VALIDATION_MILLIS + 5000, () -> "validation did not terminate promptly: elapsed=" + elapsedMs + "ms");
 	}
 
+	// -------- shared McpJsonValueSafety delegation now supports arrays ---------
+
+	@Test
+	void f01_argumentContainingList_passesUnderPermissiveSchema() {
+		var args = JsonMap.of("arr", JsonList.of(1, 2, 3));
+		assertDoesNotThrow(() -> McpSchemaSafety.validateInput(McpSchema.of(new JsonMap()), args));
+	}
+
+	@Test
+	void f02_argumentContainingPrimitiveArray_isWalkedWithoutError() {
+		// The old local checkBounds() only recursed into Map/Collection, never arrays; delegating to
+		// McpJsonValueSafety (which also walks java.lang.reflect.Array elements) must not regress this.
+		var args = new LinkedHashMap<String,Object>();
+		args.put("arr", new int[]{1, 2, 3});
+		assertDoesNotThrow(() -> McpSchemaSafety.validateInput(McpSchema.of(new JsonMap()), args));
+	}
+
 	// -------- v1 finiteness anchor is untouched ---------
 
 	@Test

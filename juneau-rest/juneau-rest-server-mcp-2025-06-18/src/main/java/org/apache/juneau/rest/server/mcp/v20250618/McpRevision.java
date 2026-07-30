@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
@@ -29,12 +30,14 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.mcp.McpCursor;
 import org.apache.juneau.rest.server.mcp.McpErrorKind;
 import org.apache.juneau.rest.server.mcp.McpExchange;
+import org.apache.juneau.rest.server.mcp.McpJsonValueSafety;
 import org.apache.juneau.rest.server.mcp.McpParamUtils;
 import org.apache.juneau.rest.server.mcp.McpPromptHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceHandler;
 import org.apache.juneau.rest.server.mcp.McpSchema;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.apache.juneau.rest.server.mcp.McpToolHandler;
+import org.apache.juneau.rest.server.mcp.McpToolOutcome;
 
 /**
  * {@link McpRevision} implementation for MCP revision {@code 2025-06-18}.
@@ -94,14 +97,22 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
 
 	/**
-	 * Verifies that every registered tool's input schema is expressible in this revision's wire
-	 * schema type.
+	 * Verifies that every registered tool's input <em>and</em> output schema is expressible in this
+	 * revision's wire schema type.
 	 *
 	 * <p>
 	 * The neutral {@link McpSchema} is an unconstrained JSON object carrier, but this revision's
-	 * {@code JsonSchema} bean supports exactly six keywords. Rather than silently dropping an
-	 * unsupported keyword on the wire, a config carrying one is rejected, naming both the tool and
-	 * the keyword.
+	 * {@code JsonSchema} bean supports exactly six keywords and models only object schemas. Each
+	 * schema role is therefore checked twice: its root must declare {@code "type":"object"}, and the
+	 * complete graph reachable from that root may use only this revision's six keywords. Rather than
+	 * silently dropping an unsupported keyword — or an incompatible root shape — on the wire, a config
+	 * carrying one is rejected, naming the tool, the offending role ({@code inputSchema} /
+	 * {@code outputSchema}), and the offending shape or keyword.
+	 *
+	 * <p>
+	 * Before walking, each schema is passed through {@link McpJsonValueSafety} to bound nesting depth,
+	 * node count, traversal time, and cyclic/shared references, so a pathological config cannot stall
+	 * or exhaust the walk.
 	 *
 	 * <p>
 	 * Note this cannot be a complete guarantee against every possible wire shape: {@code JsonSchema}
@@ -111,34 +122,62 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * through {@link McpSchema}, not what reflection can reach.
 	 *
 	 * @param config The config to validate. Never {@code null}.
-	 * @throws IllegalArgumentException If any tool's schema uses an unsupported keyword.
+	 * @throws IllegalArgumentException If any tool's input or output schema has a non-object root or uses an unsupported keyword.
 	 */
 	public static void validateSchemas(McpServerConfig config) {
-		config.getTools().forEach(x -> {
-			var spec = x.descriptor();
-			if (spec != null && spec.getInputSchema() != null)
-				checkKeywords(spec.getName(), spec.getInputSchema().toJsonMap());
+		config.getTools().forEach(handler -> {
+			var spec = handler.descriptor();
+			if (spec != null) {
+				validateSchema(spec.getName(), "inputSchema", spec.getInputSchema());
+				validateSchema(spec.getName(), "outputSchema", spec.getOutputSchema());
+			}
 		});
 	}
 
-	private static void checkKeywords(String toolName, Map<String,Object> schema) {
-		schema.forEach((k, v) -> {
-			if (! SUPPORTED_SCHEMA_KEYWORDS.contains(k))
-				throw iaex("Tool ''%s'' declares JSON Schema keyword ''%s'', which MCP revision 2025-06-18 cannot represent.", toolName, k);
-			if (v instanceof Map<?,?> v2)
-				v2.forEach((k2, v3) -> {
-					if (v3 instanceof Map<?,?> v4)
-						checkKeywords(toolName, asStringKeyed(v4));
-				});
-		});
+	private static void validateSchema(String toolName, String role, McpSchema schema) {
+		if (schema == null)
+			return;
+		var raw = schema.toJsonMap();
+		McpJsonValueSafety.check(raw, "Tool '" + toolName + "' " + role + " for MCP revision 2025-06-18");
+		if (! "object".equals(raw.get("type")))
+			throw iaex("Tool ''%s'' %s root type ''%s'' is not object; MCP revision 2025-06-18 requires object schemas.",
+				toolName, role, raw.get("type"));
+		checkKeywords(toolName, role, raw);
 	}
 
-	@SuppressWarnings({
-		"unchecked" // Cast is safe: JSON object keys are always strings.
-	})
-	private static Map<String,Object> asStringKeyed(Map<?,?> x) {
-		return (Map<String,Object>) x;
+	private static void checkKeywords(String toolName, String role, Object root) {
+		var seen = Collections.newSetFromMap(new IdentityHashMap<Object,Boolean>());
+		var stack = new ArrayDeque<SchemaValue>();
+		stack.push(new SchemaValue(root));
+		while (! stack.isEmpty()) {
+			var framed = stack.pop();
+			var value = framed.value();
+			if ((value instanceof Map<?,?> || value instanceof Collection<?> || value != null && value.getClass().isArray())
+				&& ! seen.add(value))
+				continue;
+			if (value instanceof Map<?,?> value2) {
+				for (var entry : value2.entrySet()) {
+					var keyword = String.valueOf(entry.getKey());
+					if (! SUPPORTED_SCHEMA_KEYWORDS.contains(keyword))
+						throw iaex("Tool ''%s'' %s declares JSON Schema keyword ''%s'', which MCP revision 2025-06-18 cannot represent.",
+							toolName, role, keyword);
+					var child = entry.getValue();
+					if (("properties".equals(keyword) || "$defs".equals(keyword)) && child instanceof Map<?,?> child2) {
+						for (var schema : child2.values())
+							stack.push(new SchemaValue(schema));
+					} else {
+						stack.push(new SchemaValue(child));
+					}
+				}
+			} else if (value instanceof Collection<?> value2)
+				value2.forEach(child -> stack.push(new SchemaValue(child)));
+			else if (value != null && value.getClass().isArray())
+				for (var i = 0; i < Array.getLength(value); i++)
+					stack.push(new SchemaValue(Array.get(value, i)));
+		}
 	}
+
+	private record SchemaValue(Object value) {}
 
 	@Override /* McpRevision */
 	public String protocolVersion() {
@@ -251,7 +290,22 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			.findFirst()
 			.orElseThrow(() -> new McpException(errorCode(McpErrorKind.TOOL_NOT_FOUND), "Tool not found: " + name));
 		var args = McpParamUtils.mapParam(p, "arguments");
-		return McpWire.toWire(handler.call(args, ctx));
+		var outcome = handler.call(args, ctx);
+		validateStructuredOutput(outcome);
+		return McpWire.toWire(outcome);
+	}
+
+	private static void validateStructuredOutput(McpToolOutcome outcome) {
+		if (outcome == null || outcome.getStructuredContent() == null)
+			return;
+		if (! (outcome.getStructuredContent() instanceof Map<?,?>))
+			throw new McpException(CODE_INTERNAL_ERROR,
+				"Tool structuredContent must be a JSON object for MCP revision 2025-06-18");
+		try {
+			McpJsonValueSafety.check(outcome.getStructuredContent(), "Tool structuredContent");
+		} catch (IllegalArgumentException e) {
+			throw new McpException(CODE_INTERNAL_ERROR, e.getMessage());
+		}
 	}
 
 	private static ListPromptsResult listPrompts(McpServerConfig config, Object params, BeanStore ctx) {

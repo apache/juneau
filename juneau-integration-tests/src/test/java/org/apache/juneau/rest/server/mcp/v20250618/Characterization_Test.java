@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.mcp.v20260728;
+package org.apache.juneau.rest.server.mcp.v20250618;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,10 +24,11 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
-import org.apache.juneau.bean.mcp.v20260728.*;
+import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.mcp.*;
@@ -35,23 +36,25 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Wire-compatibility characterization fixtures for the {@code 2026-07-28} MCP JSON-RPC endpoint.
+ * Wire-compatibility characterization fixtures for the MCP JSON-RPC endpoint.
  *
  * <p>
- * These fixtures encode <em>current</em> behavior. A fixture body must never be edited to
- * accommodate a code change: if replay fails, the code change is wrong.
+ * These fixtures encode <em>current</em> behavior, including behavior known to be wrong (all four
+ * "not found" kinds collapse to {@code -32601}). They are deliberately not named {@code golden/}.
+ * A fixture body must never be edited to accommodate a code change: if replay fails, the code
+ * change is wrong.
  *
  * <p>
  * Regenerate the {@code *.response.json} files (only ever against known-good code) with:
  * <p>
- * {@code mvn test -Drat.skip=true -pl juneau-rest/juneau-rest-server-mcp-2026-07-28 -Dtest=Characterization_Test -Djuneau.mcp.characterization.write=true}
+ * {@code mvn test -Drat.skip=true -pl juneau-rest/juneau-rest-server-mcp-2025-06-18 -Dtest=Characterization_Test -Djuneau.mcp.characterization.write=true}
  */
 @SuppressWarnings({
 	"resource" // MockRestClient is a Closeable test helper; lifetime is bounded by the test method.
 })
 class Characterization_Test {
 
-	private static final Path DIR = Paths.get("src/test/resources/characterization");
+	private static final Path DIR = Paths.get("src/test/resources/mcp/v20250618/characterization");
 	private static final boolean WRITE = Boolean.getBoolean("juneau.mcp.characterization.write");
 
 	// --- fixture servlets -------------------------------------------------------------------
@@ -67,7 +70,14 @@ class Characterization_Test {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig()
+				.setName("characterization").setVersion("1.0.0")
+				.setInstructions("Be concise.")
 				.addTool(tool("echo", McpSchema.of(JsonMap.of("type", "object", "required", List.of("text"))), a -> McpToolOutcome.text(String.valueOf(a.get("text")))))
+				.addTool(tool("mixed", null, a -> McpToolOutcome.of(
+					McpContentBlock.text("t"),
+					McpContentBlock.image("AAA=", "image/png"),
+					McpContentBlock.resource(McpResourceContents.text("file:///e", "text/plain", "emb")))))
+				.addTool(tool("failing", null, a -> McpToolOutcome.text("nope").setError(true)))
 				.addPrompt(prompt("greet", a -> new McpPromptOutcome().setDescription("d").setMessages(List.of(
 					new McpPromptMessage().setRole(McpRole.USER).setContent(McpContentBlock.text("hi " + a.get("who")))))))
 				.addResource(resource("file:///a", u -> new McpResourceOutcome().setContents(List.of(
@@ -76,31 +86,40 @@ class Characterization_Test {
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class F_Throw extends McpRestServlet {
+	public static class F_Caps extends McpRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
-			return new McpServerConfig()
-				.addTool(tool("echo", null, a -> { throw new RuntimeException("handler failed"); }));
+			return new McpServerConfig();
+		}
+
+		@Override
+		protected ServerCapabilities capabilities() {
+			return new ServerCapabilities()
+				.setLogging(new LoggingCapability().setLevel("info"))
+				.setResources(new ResourceCapability().setSubscribe(true).setListChanged(true))
+				.setExperimental(JsonMap.of("flag", 1));
 		}
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class F_Schema extends McpRestServlet {
+	public static class F_Paged extends McpRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
-			var schema = McpSchema.of(JsonMap.of(
-				"type", "object",
-				"required", List.of("text"),
-				"properties", JsonMap.of("text", JsonMap.of("$ref", "#/$defs/text")),
-				"$defs", JsonMap.of("text", JsonMap.of("type", "string")),
-				"$id", "https://example.com/schemas/echo-input",
-				"$schema", "https://json-schema.org/draft/2020-12/schema",
-				"$comment", "input schema",
-				"allOf", List.of(JsonMap.of("type", "object")),
-				"oneOf", List.of(JsonMap.of("required", List.of("text"))),
-				"if", JsonMap.of("properties", JsonMap.of("text", JsonMap.of("type", "string"))),
-				"else", JsonMap.of()));
-			return new McpServerConfig().addTool(tool("echo", schema, a -> new McpToolOutcome()));
+			return new McpServerConfig()
+				.setCursor(McpCursor.fixedSize(1))
+				.addTool(tool("t1", null, a -> new McpToolOutcome()))
+				.addTool(tool("t2", null, a -> new McpToolOutcome()));
+		}
+	}
+
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class F_Throw extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Override protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig()
+				.addTool(tool("mcpEx", null, a -> { throw new McpException(-32099, "nope", JsonMap.of("k", "v")); }))
+				.addTool(tool("boom", null, a -> { throw new RuntimeException("boom"); }))
+				.addTool(tool("silent", null, a -> { throw new IllegalStateException(); }));
 		}
 	}
 
@@ -108,11 +127,22 @@ class Characterization_Test {
 	public static class F_Structured extends McpRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() {
-			return new McpServerConfig().addTool(new McpTypedToolHandler<JsonMap,Object>() {
-				@Override public McpToolSpec descriptor() { return new McpToolSpec().setName("echo"); }
-				@Override public java.lang.reflect.Type argumentType() { return JsonMap.class; }
-				@Override public java.lang.reflect.Type resultType() { return Object.class; }
-				@Override public Object call(JsonMap arguments, BeanStore ctx) { return arguments.get("value"); }
+			return new McpServerConfig().addTool(new McpToolHandler() {
+				@Override public McpToolSpec descriptor() {
+					return new McpToolSpec().setName("structured").setDescription("desc:structured")
+						.setInputSchema(McpSchema.of(JsonMap.of("type", "object")))
+						.setOutputSchema(McpSchema.of(JsonMap.of(
+							"type", "object",
+							"properties", JsonMap.of("x", JsonMap.of("type", "integer")),
+							"required", List.of("x"),
+							"additionalProperties", false)));
+				}
+				@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
+					var value = arguments.get("value");
+					return new McpToolOutcome()
+						.setStructuredContent(value)
+						.setContent(List.of(McpContentBlock.text(Json.of(value))));
+				}
 			});
 		}
 	}
@@ -140,22 +170,16 @@ class Characterization_Test {
 		};
 	}
 
-	/**
-	 * Maps each fixture to the servlet whose tool/prompt/resource registrations it needs.
-	 *
-	 * <p>
-	 * Matched per literal fixture name, not by prefix: {@code ERROR-missing-tool} needs {@code echo}
-	 * <em>unregistered</em> while {@code ERROR-handler-failure} needs it registered and throwing, so
-	 * both share the {@code ERROR-} prefix but resolve to different servlets.
-	 */
 	private static Class<?> servletFor(String fixture) {
-		return switch (fixture) {
-			case "ERROR-handler-failure" -> F_Throw.class;
-			case "SCHEMA-draft-2020-12" -> F_Schema.class;
-			case "FULL-tools-list", "FULL-tools-call", "FULL-prompts-list", "FULL-prompts-get",
-				"FULL-resources-list", "FULL-resources-read", "HEADER-valid-named", "STATELESS-repeat" -> F_Full.class;
-			case "STRUCTURED-object", "STRUCTURED-array", "STRUCTURED-string", "STRUCTURED-boolean", "STRUCTURED-null" -> F_Structured.class;
-			default -> F_Empty.class;
+		var prefix = fixture.substring(0, fixture.indexOf('-'));
+		return switch (prefix) {
+			case "EMPTY" -> F_Empty.class;
+			case "FULL" -> F_Full.class;
+			case "CAPS" -> F_Caps.class;
+			case "PAGED" -> F_Paged.class;
+			case "THROW" -> F_Throw.class;
+			case "STRUCTURED" -> F_Structured.class;
+			default -> throw new IllegalArgumentException("Unknown fixture prefix: " + prefix);
 		};
 	}
 
@@ -174,7 +198,14 @@ class Characterization_Test {
 	@ParameterizedTest
 	@MethodSource("fixtures")
 	void a01_wireIsUnchanged(String fixture) throws Exception {
-		var actual = replayHttp(fixture);
+		var requestBody = Files.readString(DIR.resolve(fixture + ".request.json")).strip();
+		var client = MockRestClient.create(servletFor(fixture)).json()
+			.contentType("application/json").accept("application/json").ignoreErrors().build();
+		var req = client.post("/").contentString(requestBody);
+		loadHeaders(fixture).forEach(req::header);
+		var res = req.run();
+		assertEquals(200, res.getStatusCode(), () -> fixture + ": HTTP status changed");
+		var actual = res.getContent().asString();
 		var expected = DIR.resolve(fixture + ".response.json");
 		if (WRITE) {
 			Files.writeString(expected, actual);
@@ -184,24 +215,15 @@ class Characterization_Test {
 			() -> fixture + ": WIRE FORMAT CHANGED. Do not update the fixture — fix the code.");
 	}
 
-	private String replayHttp(String fixture) throws Exception {
-		var requestBody = Files.readString(DIR.resolve(fixture + ".request.json")).strip();
-		var headers = loadHeaders(fixture);
-		var client = MockRestClient.create(servletFor(fixture)).json()
-			.contentType("application/json").accept("application/json").ignoreErrors().build();
-		var req = client.post("/").contentString(requestBody);
-		headers.forEach(req::header);
-		var res = req.run();
-		assertEquals(200, res.getStatusCode(), () -> fixture + ": HTTP status changed");
-		return res.getContent().asString();
-	}
-
 	private static Map<String,String> loadHeaders(String fixture) throws IOException {
+		var m = new LinkedHashMap<String,String>();
+		var path = DIR.resolve(fixture + ".headers.properties");
+		if (! Files.exists(path))
+			return m;
 		var props = new Properties();
-		try (var in = Files.newBufferedReader(DIR.resolve(fixture + ".headers.properties"))) {
+		try (var in = Files.newBufferedReader(path)) {
 			props.load(in);
 		}
-		var m = new LinkedHashMap<String,String>();
 		for (var name : props.stringPropertyNames())
 			m.put(name, props.getProperty(name));
 		return m;

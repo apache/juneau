@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.mcp.v20250618;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.function.*;
@@ -27,6 +28,7 @@ import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.mcp.*;
@@ -121,6 +123,30 @@ class Characterization_Test {
 		}
 	}
 
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class F_Structured extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Override protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig().addTool(new McpToolHandler() {
+				@Override public McpToolSpec descriptor() {
+					return new McpToolSpec().setName("structured").setDescription("desc:structured")
+						.setInputSchema(McpSchema.of(JsonMap.of("type", "object")))
+						.setOutputSchema(McpSchema.of(JsonMap.of(
+							"type", "object",
+							"properties", JsonMap.of("x", JsonMap.of("type", "integer")),
+							"required", List.of("x"),
+							"additionalProperties", false)));
+				}
+				@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
+					var value = arguments.get("value");
+					return new McpToolOutcome()
+						.setStructuredContent(value)
+						.setContent(List.of(McpContentBlock.text(Json.of(value))));
+				}
+			});
+		}
+	}
+
 	// --- fixture handler factories ---------------------------------------------------------
 
 	private static McpToolHandler tool(String name, McpSchema schema, Function<Map<String,Object>,McpToolOutcome> fn) {
@@ -152,6 +178,7 @@ class Characterization_Test {
 			case "CAPS" -> F_Caps.class;
 			case "PAGED" -> F_Paged.class;
 			case "THROW" -> F_Throw.class;
+			case "STRUCTURED" -> F_Structured.class;
 			default -> throw new IllegalArgumentException("Unknown fixture prefix: " + prefix);
 		};
 	}
@@ -174,7 +201,9 @@ class Characterization_Test {
 		var requestBody = Files.readString(DIR.resolve(fixture + ".request.json")).strip();
 		var client = MockRestClient.create(servletFor(fixture)).json()
 			.contentType("application/json").accept("application/json").ignoreErrors().build();
-		var res = client.post("/").contentString(requestBody).run();
+		var req = client.post("/").contentString(requestBody);
+		loadHeaders(fixture).forEach(req::header);
+		var res = req.run();
 		assertEquals(200, res.getStatusCode(), () -> fixture + ": HTTP status changed");
 		var actual = res.getContent().asString();
 		var expected = DIR.resolve(fixture + ".response.json");
@@ -184,5 +213,19 @@ class Characterization_Test {
 		}
 		assertEquals(Files.readString(expected), actual,
 			() -> fixture + ": WIRE FORMAT CHANGED. Do not update the fixture — fix the code.");
+	}
+
+	private static Map<String,String> loadHeaders(String fixture) throws IOException {
+		var m = new LinkedHashMap<String,String>();
+		var path = DIR.resolve(fixture + ".headers.properties");
+		if (! Files.exists(path))
+			return m;
+		var props = new Properties();
+		try (var in = Files.newBufferedReader(path)) {
+			props.load(in);
+		}
+		for (var name : props.stringPropertyNames())
+			m.put(name, props.getProperty(name));
+		return m;
 	}
 }
