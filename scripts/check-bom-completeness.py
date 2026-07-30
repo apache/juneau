@@ -29,6 +29,7 @@ A module is "consumer-facing publishable" when it is a leaf artifact
   - juneau-test-marshall-utils           (test-only support, marshall-level fixtures)
   - juneau-shaded/*                      (uber-jars, not BOM-managed)
   - juneau-examples/*, juneau-petstore/* (sample apps, not published)
+  - juneau-microservice-examples         (sample/demo REST resources, not shipped)
   - juneau-integration-tests             (test-only)
   - juneau-distrib                       (assembly only)
 
@@ -57,6 +58,7 @@ EXCLUDED_ARTIFACTS = {
     "juneau-test-utils",         # test-only support module
     "juneau-test-marshall-utils",  # test-only support module (marshall-level fixtures)
     "juneau-integration-tests",  # cross-module test harness, not published
+    "juneau-microservice-examples",  # sample/demo REST resources, not shipped as a framework artifact
     "juneau",                    # reactor root (defensive; also an aggregator)
 }
 
