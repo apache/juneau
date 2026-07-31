@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * Result payload for {@value McpMethods#TOOLS_LIST}.
  */
 @Marshalled
-public class ListToolsResult {
+public class ListToolsResult extends CacheableResult<ListToolsResult> {
 
 	private List<Tool> tools;
 	private String nextCursor;

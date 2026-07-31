@@ -54,9 +54,11 @@ import org.apache.juneau.rest.server.*;
 public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.McpRestServlet {
 	private static final long serialVersionUID = 1L;
 
+	private transient volatile McpCacheConfig cacheConfig;
+
 	@Override /* McpRestServlet */
 	protected org.apache.juneau.rest.server.mcp.McpRevision revision() {
-		return new McpRevision(capabilities());
+		return new McpRevision(capabilities(), getCacheConfig());
 	}
 
 	/**
@@ -77,5 +79,44 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.M
 	 */
 	protected ServerCapabilities capabilities() {
 		return null;
+	}
+
+	/**
+	 * Creates the cache configuration published by {@link #getCacheConfig()}.
+	 *
+	 * <p>
+	 * Override to supply TTL/scope hints. The default returns an empty {@link McpCacheConfig} (no
+	 * cache hints emitted on any result).
+	 *
+	 * <p>
+	 * <b>Must be side-effect-free and idempotent.</b> Concurrent first access under {@link #getCacheConfig()}
+	 * may invoke this hook more than once before the published value settles; every invocation must return
+	 * an equivalent, independently valid configuration.
+	 *
+	 * @return The cache configuration. Must not be <jk>null</jk>.
+	 */
+	protected McpCacheConfig createCacheConfig() {
+		return new McpCacheConfig();
+	}
+
+	/**
+	 * Returns this servlet's lazily-published, binding-owned cache configuration.
+	 *
+	 * <p>
+	 * The first successful call publishes the result of {@link #createCacheConfig()}; every later call
+	 * returns the same instance. The published instance must not be mutated by callers.
+	 *
+	 * @return The cache configuration. Never <jk>null</jk>.
+	 * @throws IllegalStateException If {@link #createCacheConfig()} returns <jk>null</jk>.
+	 */
+	public McpCacheConfig getCacheConfig() {
+		var result = cacheConfig;
+		if (result == null) {
+			result = createCacheConfig();
+			if (result == null)
+				throw new IllegalStateException("createCacheConfig() returned null");
+			cacheConfig = result;
+		}
+		return result;
 	}
 }

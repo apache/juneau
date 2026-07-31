@@ -37,6 +37,7 @@ import org.apache.juneau.rest.server.mcp.McpResourceContents;
 import org.apache.juneau.rest.server.mcp.McpResourceHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceOutcome;
 import org.apache.juneau.rest.server.mcp.McpResourceSpec;
+import org.apache.juneau.rest.server.mcp.McpResourceTemplateSpec;
 import org.apache.juneau.rest.server.mcp.McpRole;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.junit.jupiter.api.*;
@@ -85,6 +86,15 @@ class McpPromptResource_Test {
 
 	private JsonRpcResponse send(McpServerConfig config, JsonRpcRequest r, Map<String,String> headers) {
 		return new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
+	}
+
+	private static McpResourceTemplateSpec template(String name) {
+		return new McpResourceTemplateSpec().setUriTemplate("file:///" + name + "/{x}").setName(name)
+			.setTitle(name + "-title").setDescription(name + "-desc").setMimeType("text/plain");
+	}
+
+	private static McpExchange exchangeFor(String method, Object params) {
+		return new McpExchange(req(1, method, params), hdrs(method, "")::get);
 	}
 
 	// -------- prompts/list + prompts/get ---------
@@ -202,5 +212,63 @@ class McpPromptResource_Test {
 		var result = (ReadResourceResult) send(config, req(1, "resources/read", JsonMap.of("uri", "file:///empty")), hdrs("resources/read", "file:///empty")).getResult();
 		assertNull(result.getContents());
 		assertFalse(Json.of(result).contains("contents"));
+	}
+
+	// -------- resources/templates/list ---------
+
+	@Test void e01_resourceTemplatesList_pagedInRegistrationOrder() {
+		var config = new McpServerConfig().setCursor(McpCursor.fixedSize(1))
+			.addResourceTemplate(template("a"), template("b"));
+		var first = (ListResourceTemplatesResult)send(config,
+			req(1, McpMethods.RESOURCES_TEMPLATES_LIST, null), hdrs(McpMethods.RESOURCES_TEMPLATES_LIST, "")).getResult();
+		var second = (ListResourceTemplatesResult)send(config,
+			req(2, McpMethods.RESOURCES_TEMPLATES_LIST, JsonMap.of("cursor", "1")), hdrs(McpMethods.RESOURCES_TEMPLATES_LIST, "")).getResult();
+		assertEquals("a", first.getResourceTemplates().get(0).getName());
+		assertEquals("1", first.getNextCursor());
+		assertEquals("b", second.getResourceTemplates().get(0).getName());
+		assertNull(second.getNextCursor());
+	}
+
+	@Test void e02_emptyTemplatesSucceedsWithEmptyListAndNamelessHeader() {
+		var result = (ListResourceTemplatesResult)send(new McpServerConfig(),
+			req(1, McpMethods.RESOURCES_TEMPLATES_LIST, null), hdrs(McpMethods.RESOURCES_TEMPLATES_LIST, "")).getResult();
+		assertTrue(result.getResourceTemplates().isEmpty());
+	}
+
+	@Test void e03_templateOnlyRegistrationAutoDerivesResourcesCapability() {
+		var config = new McpServerConfig().addResourceTemplate(template("a"));
+		var result = (ServerDiscoverResult)send(config, req(1, "server/discover", null), hdrs("server/discover", "")).getResult();
+		assertNotNull(result.getCapabilities().getResources());
+	}
+
+	@Test void e04_explicitCapabilitiesRemainAuthoritativeWithTemplates() {
+		var revision = new McpRevision(new ServerCapabilities().setPrompts(new PromptCapability()));
+		var result = (ServerDiscoverResult)revision.dispatch(exchangeFor("server/discover", null),
+			new McpServerConfig().addResourceTemplate(template("a")), ctx).getResult();
+		assertNotNull(result.getCapabilities().getPrompts());
+		assertNull(result.getCapabilities().getResources());
+	}
+
+	@Test void e05_templateCacheEndpointOverridesDefaultAtomically() {
+		var cache = new McpCacheConfig()
+			.setDefaultHint(new McpCacheHint().setTtlMs(99).setCacheScope(McpCacheScope.PRIVATE))
+			.setResourceTemplatesList(new McpCacheHint().setTtlMs(14));
+		var result = (ListResourceTemplatesResult)new McpRevision(null, cache).dispatch(
+			exchangeFor(McpMethods.RESOURCES_TEMPLATES_LIST, null),
+			new McpServerConfig().addResourceTemplate(template("a")), ctx).getResult();
+		assertEquals(14, result.getTtlMs());
+		assertNull(result.getCacheScope());
+	}
+
+	@Test void e06_templateCacheDefaultThenNone() {
+		var config = new McpServerConfig().addResourceTemplate(template("a"));
+		var withDefault = (ListResourceTemplatesResult)new McpRevision(null,
+			new McpCacheConfig().setDefaultHint(new McpCacheHint().setTtlMs(8)))
+			.dispatch(exchangeFor(McpMethods.RESOURCES_TEMPLATES_LIST, null), config, ctx).getResult();
+		var none = (ListResourceTemplatesResult)new McpRevision(null)
+			.dispatch(exchangeFor(McpMethods.RESOURCES_TEMPLATES_LIST, null), config, ctx).getResult();
+		assertEquals(8, withDefault.getTtlMs());
+		assertNull(none.getTtlMs());
+		assertNull(none.getCacheScope());
 	}
 }

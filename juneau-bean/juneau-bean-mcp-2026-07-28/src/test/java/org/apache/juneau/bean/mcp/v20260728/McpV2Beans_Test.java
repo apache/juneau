@@ -155,4 +155,36 @@ class McpV2Beans_Test {
 		var copy = JsonParser.DEFAULT.read(json, JsonSchema.class);
 		assertEquals(json, JsonSerializer.DEFAULT.write(copy));
 	}
+
+	@Test void b06_resourceTemplate_exactShapeAndOmission() {
+		var value = new ResourceTemplate().setUriTemplate("file:///{name}").setName("n");
+		assertEquals("{\"name\":\"n\",\"uriTemplate\":\"file:///{name}\"}", org.apache.juneau.marshall.marshaller.Json.of(value));
+		var all = value.setTitle("t").setDescription("d").setMimeType("text/plain");
+		var copy = JsonParser.DEFAULT.read(org.apache.juneau.marshall.marshaller.Json.of(all), ResourceTemplate.class);
+		assertEquals("file:///{name}", copy.getUriTemplate());
+		assertEquals("n", copy.getName());
+		assertEquals("t", copy.getTitle());
+		assertEquals("d", copy.getDescription());
+		assertEquals("text/plain", copy.getMimeType());
+		assertEquals(Set.of("uriTemplate", "name", "title", "description", "mimeType"),
+			Arrays.stream(ResourceTemplate.class.getDeclaredFields()).map(Field::getName).collect(Collectors.toSet()));
+	}
+
+	@Test void b07_listTemplateResult_contract() {
+		var a = new ResourceTemplate().setUriTemplate("a").setName("a");
+		var b = new ResourceTemplate().setUriTemplate("b").setName("b");
+		var result = new ListResourceTemplatesResult().setResourceTemplates(a).addResourceTemplates(b)
+			.setNextCursor("2").setTtlMs(0).setCacheScope(McpCacheScope.PUBLIC);
+		assertEquals(2, result.getResourceTemplates().size());
+		assertThrows(UnsupportedOperationException.class, () -> result.getResourceTemplates().add(a));
+		assertEquals("2", result.getNextCursor());
+		assertTrue(org.apache.juneau.marshall.marshaller.Json.of(result).contains("\"resourceTemplates\""));
+		assertFalse(org.apache.juneau.marshall.marshaller.Json.of(result).contains("\"templates\""));
+		var copy = JsonParser.DEFAULT.read(org.apache.juneau.marshall.marshaller.Json.of(result), ListResourceTemplatesResult.class);
+		assertEquals(org.apache.juneau.marshall.marshaller.Json.of(result), org.apache.juneau.marshall.marshaller.Json.of(copy));
+	}
+
+	@Test void b08_methodConstant() {
+		assertEquals("resources/templates/list", McpMethods.RESOURCES_TEMPLATES_LIST);
+	}
 }

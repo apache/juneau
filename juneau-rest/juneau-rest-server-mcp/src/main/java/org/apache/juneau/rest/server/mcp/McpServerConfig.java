@@ -25,8 +25,8 @@ import java.util.*;
  *
  * <p>
  * Applications register a single {@link McpServerConfig} (typically as a bean in their {@code RestContext}
- * bean store) listing the tools, prompts, and resources to expose, plus optional server metadata and a
- * pagination strategy.
+ * bean store) listing the tools, prompts, resources, and resource templates to expose, plus optional server
+ * metadata and a pagination strategy.
  *
  * <p>
  * This type is revision-neutral: it holds no field typed with any protocol revision's wire beans, and
@@ -42,6 +42,7 @@ public class McpServerConfig {
 	private List<McpToolHandler> tools = l();
 	private List<McpPromptHandler> prompts = l();
 	private List<McpResourceHandler> resources = l();
+	private List<McpResourceTemplateSpec> resourceTemplates = l();
 	private McpCursor cursor = McpCursor.SINGLE_PAGE;
 
 	/**
@@ -221,7 +222,38 @@ public class McpServerConfig {
 	}
 
 	/**
-	 * Pagination strategy for {@code list} dispatchers (tools / prompts / resources).
+	 * Registered resource-template descriptors.
+	 *
+	 * @return Mutable list of descriptors. Never {@code null}.
+	 */
+	public List<McpResourceTemplateSpec> getResourceTemplates() {
+		return resourceTemplates;
+	}
+
+	/**
+	 * Sets the resource-template descriptor list.
+	 *
+	 * @param value The new value (or {@code null} to clear).
+	 * @return This object (for method chaining).
+	 */
+	public McpServerConfig setResourceTemplates(List<McpResourceTemplateSpec> value) {
+		resourceTemplates = value == null ? l() : new ArrayList<>(value);
+		return this;
+	}
+
+	/**
+	 * Convenience: append one or more resource-template descriptors.
+	 *
+	 * @param values Descriptors to add.
+	 * @return This object (for method chaining).
+	 */
+	public McpServerConfig addResourceTemplate(McpResourceTemplateSpec... values) {
+		Collections.addAll(resourceTemplates, values);
+		return this;
+	}
+
+	/**
+	 * Pagination strategy for {@code list} dispatchers (tools / prompts / resources / resource templates).
 	 *
 	 * @return The cursor. Never {@code null} (defaults to {@link McpCursor#SINGLE_PAGE}).
 	 */

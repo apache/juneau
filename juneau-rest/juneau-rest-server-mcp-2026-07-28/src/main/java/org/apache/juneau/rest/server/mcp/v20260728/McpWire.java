@@ -31,6 +31,7 @@ import org.apache.juneau.rest.server.mcp.McpPromptSpec;
 import org.apache.juneau.rest.server.mcp.McpResourceContents;
 import org.apache.juneau.rest.server.mcp.McpResourceOutcome;
 import org.apache.juneau.rest.server.mcp.McpResourceSpec;
+import org.apache.juneau.rest.server.mcp.McpResourceTemplateSpec;
 import org.apache.juneau.rest.server.mcp.McpRole;
 import org.apache.juneau.rest.server.mcp.McpSchema;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
@@ -195,6 +196,28 @@ final class McpWire {
 		if (x.getContents() != null)
 			r.setContents(x.getContents().stream().map(McpWire::toWire).toList());
 		return r;
+	}
+
+	static ResourceTemplate toWire(McpResourceTemplateSpec value) {
+		if (value == null)
+			return null;
+		return new ResourceTemplate()
+			.setUriTemplate(value.getUriTemplate())
+			.setName(value.getName())
+			.setTitle(value.getTitle())
+			.setDescription(value.getDescription())
+			.setMimeType(value.getMimeType());
+	}
+
+	static McpResourceTemplateSpec toNeutral(ResourceTemplate value) {
+		if (value == null)
+			return null;
+		return new McpResourceTemplateSpec()
+			.setUriTemplate(value.getUriTemplate())
+			.setName(value.getName())
+			.setTitle(value.getTitle())
+			.setDescription(value.getDescription())
+			.setMimeType(value.getMimeType());
 	}
 
 	static Implementation serverInfo(McpServerConfig config) {

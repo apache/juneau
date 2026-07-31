@@ -23,7 +23,7 @@ import java.util.*;
 import org.apache.juneau.commons.inject.*;
 
 /**
- * Pagination strategy for MCP {@code list} dispatchers (tools / prompts / resources).
+ * Pagination strategy for MCP {@code list} dispatchers (tools / prompts / resources / resource templates).
  *
  * <p>
  * Built-in strategies:
@@ -36,8 +36,8 @@ import org.apache.juneau.commons.inject.*;
 public interface McpCursor {
 
 	/**
-	 * Slices a descriptor list into a page returned from {@code tools/list}, {@code prompts/list}, or
-	 * {@code resources/list}.
+	 * Slices a descriptor list into a page returned from {@code tools/list}, {@code prompts/list},
+	 * {@code resources/list}, or {@code resources/templates/list}.
 	 *
 	 * @param all The full list of descriptors. Never {@code null}.
 	 * @param cursor Opaque cursor from the request, or {@code null} for the first page.

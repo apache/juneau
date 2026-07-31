@@ -71,7 +71,29 @@ class Characterization_Test {
 				.addPrompt(prompt("greet", a -> new McpPromptOutcome().setDescription("d").setMessages(List.of(
 					new McpPromptMessage().setRole(McpRole.USER).setContent(McpContentBlock.text("hi " + a.get("who")))))))
 				.addResource(resource("file:///a", u -> new McpResourceOutcome().setContents(List.of(
-					McpResourceContents.text(u, "text/plain", "body")))));
+					McpResourceContents.text(u, "text/plain", "body")))))
+				.addResourceTemplate(new McpResourceTemplateSpec()
+					.setUriTemplate("file:///{name}")
+					.setName("templated")
+					.setTitle("Template title")
+					.setDescription("template description")
+					.setMimeType("text/plain"));
+		}
+	}
+
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class F_Cache extends F_Full {
+		private static final long serialVersionUID = 1L;
+
+		@Override protected McpCacheConfig createCacheConfig() {
+			return new McpCacheConfig()
+				.setDefaultHint(new McpCacheHint().setTtlMs(30000))
+				.setToolsList(new McpCacheHint().setTtlMs(5000).setCacheScope(McpCacheScope.PRIVATE))
+				.setPromptsList(new McpCacheHint().setTtlMs(0).setCacheScope(McpCacheScope.PUBLIC))
+				.setResourceTemplatesList(new McpCacheHint().setTtlMs(60000).setCacheScope(McpCacheScope.PRIVATE))
+				.setResourcesRead(new McpCacheHint().setTtlMs(2000))
+				.addResourceReadOverride("file:///a",
+					new McpCacheHint().setTtlMs(1000).setCacheScope(McpCacheScope.PRIVATE));
 		}
 	}
 
@@ -153,7 +175,10 @@ class Characterization_Test {
 			case "ERROR-handler-failure" -> F_Throw.class;
 			case "SCHEMA-draft-2020-12" -> F_Schema.class;
 			case "FULL-tools-list", "FULL-tools-call", "FULL-prompts-list", "FULL-prompts-get",
-				"FULL-resources-list", "FULL-resources-read", "HEADER-valid-named", "STATELESS-repeat" -> F_Full.class;
+				"FULL-resources-list", "FULL-resources-read", "FULL-resource-templates-list",
+				"HEADER-valid-named", "STATELESS-repeat" -> F_Full.class;
+			case "CACHE-tools-list", "CACHE-prompts-list", "CACHE-resources-list",
+				"CACHE-resource-templates-list", "CACHE-resources-read" -> F_Cache.class;
 			case "STRUCTURED-object", "STRUCTURED-array", "STRUCTURED-string", "STRUCTURED-boolean", "STRUCTURED-null" -> F_Structured.class;
 			default -> F_Empty.class;
 		};

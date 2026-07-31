@@ -32,6 +32,7 @@ import org.apache.juneau.rest.server.mcp.McpPromptSpec;
 import org.apache.juneau.rest.server.mcp.McpResourceContents;
 import org.apache.juneau.rest.server.mcp.McpResourceOutcome;
 import org.apache.juneau.rest.server.mcp.McpResourceSpec;
+import org.apache.juneau.rest.server.mcp.McpResourceTemplateSpec;
 import org.apache.juneau.rest.server.mcp.McpRole;
 import org.apache.juneau.rest.server.mcp.McpSchema;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
@@ -191,6 +192,26 @@ class McpWire_Test {
 
 		var outcome = McpWire.toWire(new McpResourceOutcome().setContents(List.of(McpResourceContents.text("file://a", "text/plain", "x"))));
 		assertEquals(1, outcome.getContents().size());
+	}
+
+	@Test
+	void f03_resourceTemplate_mapsAllFieldsBothWaysAndNull() {
+		var neutral = new McpResourceTemplateSpec().setUriTemplate("file:///{name}").setName("n")
+			.setTitle("t").setDescription("d").setMimeType("text/plain");
+		var wire = McpWire.toWire(neutral);
+		assertEquals("file:///{name}", wire.getUriTemplate());
+		assertEquals("n", wire.getName());
+		assertEquals("t", wire.getTitle());
+		assertEquals("d", wire.getDescription());
+		assertEquals("text/plain", wire.getMimeType());
+		var copy = McpWire.toNeutral(wire);
+		assertEquals(neutral.getUriTemplate(), copy.getUriTemplate());
+		assertEquals(neutral.getName(), copy.getName());
+		assertEquals(neutral.getTitle(), copy.getTitle());
+		assertEquals(neutral.getDescription(), copy.getDescription());
+		assertEquals(neutral.getMimeType(), copy.getMimeType());
+		assertNull(McpWire.toWire((McpResourceTemplateSpec) null));
+		assertNull(McpWire.toNeutral((ResourceTemplate) null));
 	}
 
 	// -------- discovery ---------

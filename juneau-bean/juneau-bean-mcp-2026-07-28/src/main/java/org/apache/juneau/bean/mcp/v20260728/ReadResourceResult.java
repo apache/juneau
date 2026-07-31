@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * Result payload for {@value McpMethods#RESOURCES_READ}.
  */
 @Marshalled
-public class ReadResourceResult {
+public class ReadResourceResult extends CacheableResult<ReadResourceResult> {
 
 	private List<ResourceContents> contents;
 

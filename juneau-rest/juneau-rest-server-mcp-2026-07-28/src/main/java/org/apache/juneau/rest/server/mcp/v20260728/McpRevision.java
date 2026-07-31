@@ -49,23 +49,39 @@ import org.apache.juneau.rest.server.mcp.McpToolOutcome;
  * <p>
  * <b>Constructed per binding, not shared as a singleton.</b> The bound servlet or mixin builds a
  * fresh instance on every {@code revision()} call, passing its own {@code capabilities()} hook
- * result into the constructor — see {@link McpRestServlet} and {@link McpEndpoint}. A {@code null}
- * override auto-derives {@code server/discover} capabilities from the registered
- * tool/prompt/resource lists; a non-{@code null} override is advertised as-is. The instance retains
- * no request-derived state.
+ * result and its published {@link McpCacheConfig} into the constructor — see {@link McpRestServlet}
+ * and {@link McpEndpoint}. A {@code null} capabilities override auto-derives {@code server/discover}
+ * capabilities from the registered tool/prompt/resource/resource-template lists; a non-{@code null}
+ * override is advertised as-is. The cache config is binding-owned: it is supplied once at
+ * construction, is never {@code null}, and is treated as static and request-independent for the
+ * lifetime of this instance — every page of a given list method resolves to identical cache values.
+ * The instance retains no request-derived state.
  */
 public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpRevision {
 
 	private final ServerCapabilities capabilities;
+	private final McpCacheConfig cacheConfig;
+
+	/**
+	 * Constructor. Uses an empty {@link McpCacheConfig} (no cache hints emitted on any result).
+	 *
+	 * @param capabilities Explicit capabilities to advertise on {@code server/discover}, or <jk>null</jk>
+	 * 	to auto-derive from the registered tool/prompt/resource lists.
+	 */
+	public McpRevision(ServerCapabilities capabilities) {
+		this(capabilities, new McpCacheConfig());
+	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param capabilities Explicit capabilities to advertise on {@code server/discover}, or <jk>null</jk>
 	 * 	to auto-derive from the registered tool/prompt/resource lists.
+	 * @param cacheConfig Binding-owned cache configuration. Must not be <jk>null</jk>.
 	 */
-	public McpRevision(ServerCapabilities capabilities) {
+	public McpRevision(ServerCapabilities capabilities, McpCacheConfig cacheConfig) {
 		this.capabilities = capabilities;
+		this.cacheConfig = Objects.requireNonNull(cacheConfig, "cacheConfig");
 	}
 
 	/** JSON-RPC error code: parse error. Never reported by this revision (see {@link McpErrorKind#PARSE_ERROR}). */
@@ -220,8 +236,31 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			case McpMethods.PROMPTS_GET -> getPrompt(config, params, ctx);
 			case McpMethods.RESOURCES_LIST -> listResources(config, params, ctx);
 			case McpMethods.RESOURCES_READ -> readResource(config, params, ctx);
+			case McpMethods.RESOURCES_TEMPLATES_LIST -> listResourceTemplates(config, params, ctx);
 			default -> throw new McpException(errorCode(McpErrorKind.UNKNOWN_METHOD), "Method not found: " + method);
 		};
+	}
+
+	// --- cache-hint precedence ---------------------------------------------------------------
+
+	private static McpCacheHint first(McpCacheHint... values) {
+		for (var value : values)
+			if (value != null)
+				return value;
+		return null;
+	}
+
+	private static <T extends CacheableResult<T>> T applyCache(T result, McpCacheHint hint) {
+		if (hint != null) {
+			result.setTtlMs(hint.getTtlMs());
+			result.setCacheScope(hint.getCacheScope());
+		}
+		return result;
+	}
+
+	private McpCacheHint readHint(String uri) {
+		return first(cacheConfig.getResourceReadOverrides().get(uri),
+			cacheConfig.getResourcesRead(), cacheConfig.getDefaultHint());
 	}
 
 	private ServerCapabilities discoverCapabilities(McpServerConfig config) {
@@ -232,18 +271,19 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 				caps.setTools(new ToolCapability());
 			if (! config.getPrompts().isEmpty())
 				caps.setPrompts(new PromptCapability());
-			if (! config.getResources().isEmpty())
+			if (! config.getResources().isEmpty() || ! config.getResourceTemplates().isEmpty())
 				caps.setResources(new ResourceCapability());
 		}
 		return caps;
 	}
 
-	private static ListToolsResult listTools(McpServerConfig config, Object params, BeanStore ctx) {
+	private ListToolsResult listTools(McpServerConfig config, Object params, BeanStore ctx) {
 		var descriptors = config.getTools().stream().map(McpToolHandler::descriptor).toList();
 		var page = config.getCursor().page(descriptors, McpCursor.cursorOf(params), ctx);
-		return new ListToolsResult()
+		return applyCache(new ListToolsResult()
 			.setTools(page.items().stream().map(McpWire::toWire).toList())
-			.setNextCursor(page.nextCursor());
+			.setNextCursor(page.nextCursor()),
+			first(cacheConfig.getToolsList(), cacheConfig.getDefaultHint()));
 	}
 
 	private CallToolResult callTool(McpServerConfig config, Object params, BeanStore ctx) {
@@ -272,12 +312,13 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		}
 	}
 
-	private static ListPromptsResult listPrompts(McpServerConfig config, Object params, BeanStore ctx) {
+	private ListPromptsResult listPrompts(McpServerConfig config, Object params, BeanStore ctx) {
 		var descriptors = config.getPrompts().stream().map(McpPromptHandler::descriptor).toList();
 		var page = config.getCursor().page(descriptors, McpCursor.cursorOf(params), ctx);
-		return new ListPromptsResult()
+		return applyCache(new ListPromptsResult()
 			.setPrompts(page.items().stream().map(McpWire::toWire).toList())
-			.setNextCursor(page.nextCursor());
+			.setNextCursor(page.nextCursor()),
+			first(cacheConfig.getPromptsList(), cacheConfig.getDefaultHint()));
 	}
 
 	private GetPromptResult getPrompt(McpServerConfig config, Object params, BeanStore ctx) {
@@ -293,12 +334,13 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		return McpWire.toWire(handler.get(args, ctx));
 	}
 
-	private static ListResourcesResult listResources(McpServerConfig config, Object params, BeanStore ctx) {
+	private ListResourcesResult listResources(McpServerConfig config, Object params, BeanStore ctx) {
 		var descriptors = config.getResources().stream().map(McpResourceHandler::descriptor).toList();
 		var page = config.getCursor().page(descriptors, McpCursor.cursorOf(params), ctx);
-		return new ListResourcesResult()
+		return applyCache(new ListResourcesResult()
 			.setResources(page.items().stream().map(McpWire::toWire).toList())
-			.setNextCursor(page.nextCursor());
+			.setNextCursor(page.nextCursor()),
+			first(cacheConfig.getResourcesList(), cacheConfig.getDefaultHint()));
 	}
 
 	private ReadResourceResult readResource(McpServerConfig config, Object params, BeanStore ctx) {
@@ -310,6 +352,14 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			.filter(h -> uri.equals(h.descriptor().getUri()))
 			.findFirst()
 			.orElseThrow(() -> new McpException(errorCode(McpErrorKind.RESOURCE_NOT_FOUND), "Resource not found: " + uri));
-		return McpWire.toWire(handler.read(uri, ctx));
+		return applyCache(McpWire.toWire(handler.read(uri, ctx)), readHint(uri));
+	}
+
+	private ListResourceTemplatesResult listResourceTemplates(McpServerConfig config, Object params, BeanStore ctx) {
+		var page = config.getCursor().page(config.getResourceTemplates(), McpCursor.cursorOf(params), ctx);
+		return applyCache(new ListResourceTemplatesResult()
+			.setResourceTemplates(page.items().stream().map(McpWire::toWire).toList())
+			.setNextCursor(page.nextCursor()),
+			first(cacheConfig.getResourceTemplatesList(), cacheConfig.getDefaultHint()));
 	}
 }

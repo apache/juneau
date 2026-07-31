@@ -49,4 +49,7 @@ public final class McpMethods {
 
 	/** Read a resource. */
 	public static final String RESOURCES_READ = "resources/read";
+
+	/** List resource templates. */
+	public static final String RESOURCES_TEMPLATES_LIST = "resources/templates/list";
 }

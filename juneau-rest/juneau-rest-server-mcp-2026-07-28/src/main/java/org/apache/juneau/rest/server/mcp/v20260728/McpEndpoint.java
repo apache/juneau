@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
+import java.util.*;
+
 import org.apache.juneau.bean.mcp.v20260728.*;
 
 /**
@@ -41,7 +43,7 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 
 	@Override /* McpEndpoint */
 	default org.apache.juneau.rest.server.mcp.McpRevision revision() {
-		return new McpRevision(capabilities());
+		return new McpRevision(capabilities(), Objects.requireNonNull(cacheConfig(), "cacheConfig"));
 	}
 
 	/**
@@ -55,5 +57,20 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 	 */
 	default ServerCapabilities capabilities() {
 		return null;
+	}
+
+	/**
+	 * Cache configuration for this endpoint's bound revision.
+	 *
+	 * <p>
+	 * The default returns an empty {@link McpCacheConfig} (no cache hints emitted on any result).
+	 * Override to supply TTL/scope hints. An overriding implementation must return a stable instance
+	 * that is not mutated after it is returned — this mixin does not lazily cache the result the way
+	 * the servlet-subclass path does.
+	 *
+	 * @return The cache configuration. Must not be <jk>null</jk>.
+	 */
+	default McpCacheConfig cacheConfig() {
+		return new McpCacheConfig();
 	}
 }

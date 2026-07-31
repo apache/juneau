@@ -1,0 +1,1 @@
+{"id":1,"jsonrpc":"2.0","result":{"cacheScope":"private","resourceTemplates":[{"description":"template description","mimeType":"text/plain","name":"templated","title":"Template title","uriTemplate":"file:///{name}"}],"ttlMs":60000}}

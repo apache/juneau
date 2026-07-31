@@ -18,12 +18,15 @@ package org.apache.juneau.rest.server.mcp.v20260728;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.bean.jsonschema.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.marshall.collections.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json.JsonParser;
+import org.apache.juneau.marshall.json.JsonSerializer;
+import org.apache.juneau.marshall.marshaller.Json;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -100,5 +103,39 @@ class McpV2BeanIntegration_Test {
 
 	static Stream<Object> structuredValues() {
 		return Stream.of(JsonMap.of("x", 1), JsonList.of(1, 2), "text", true, null);
+	}
+
+	@Test void b01_cacheScopeAndFiveCarriers_roundTrip() {
+		assertArrayEquals(new McpCacheScope[] { McpCacheScope.PUBLIC, McpCacheScope.PRIVATE }, McpCacheScope.values());
+		assertEquals("\"public\"", Json.of(McpCacheScope.PUBLIC));
+		assertEquals("\"private\"", Json.of(McpCacheScope.PRIVATE));
+		for (var value : List.<CacheableResult<?>>of(new ListToolsResult(), new ListPromptsResult(),
+			new ListResourcesResult(), new ListResourceTemplatesResult(), new ReadResourceResult())) {
+			assertFalse(Json.of(value).contains("ttlMs"));
+			assertFalse(Json.of(value).contains("cacheScope"));
+			value.setTtlMs(0).setCacheScope(McpCacheScope.PRIVATE);
+			assertTrue(Json.of(value).contains("\"ttlMs\":0"));
+			assertTrue(Json.of(value).contains("\"cacheScope\":\"private\""));
+			var copy = (CacheableResult<?>)JsonParser.DEFAULT.read(Json.of(value), value.getClass());
+			assertEquals(0, copy.getTtlMs());
+			assertEquals(McpCacheScope.PRIVATE, copy.getCacheScope());
+		}
+	}
+
+	@Test void b02_resourceTemplateAndList_publicContract() {
+		var template = new ResourceTemplate().setUriTemplate("file:///{name}").setName("n")
+			.setTitle("t").setDescription("d").setMimeType("text/plain");
+		var result = new ListResourceTemplatesResult().setResourceTemplates(template)
+			.setNextCursor("1").setTtlMs(5).setCacheScope(McpCacheScope.PUBLIC);
+		var copy = JsonParser.DEFAULT.read(Json.of(result), ListResourceTemplatesResult.class);
+		assertEquals("file:///{name}", copy.getResourceTemplates().get(0).getUriTemplate());
+		assertEquals("n", copy.getResourceTemplates().get(0).getName());
+		assertEquals("t", copy.getResourceTemplates().get(0).getTitle());
+		assertEquals("d", copy.getResourceTemplates().get(0).getDescription());
+		assertEquals("text/plain", copy.getResourceTemplates().get(0).getMimeType());
+		assertEquals("1", copy.getNextCursor());
+		assertThrows(UnsupportedOperationException.class,
+			() -> copy.getResourceTemplates().add(template));
+		assertEquals("resources/templates/list", McpMethods.RESOURCES_TEMPLATES_LIST);
 	}
 }

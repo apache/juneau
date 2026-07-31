@@ -21,7 +21,7 @@ import java.util.*;
 /**
  * Slice of MCP descriptors returned by {@link McpCursor#page(List, String, org.apache.juneau.commons.inject.BeanStore)}.
  *
- * @param <T> Descriptor element type ({@code Tool}, {@code Prompt}, or {@code Resource}).
+ * @param <T> Descriptor element type ({@code Tool}, {@code Prompt}, {@code Resource}, or {@code ResourceTemplate}).
  * @param items Items to return on the current page. Never {@code null}.
  * @param nextCursor Opaque cursor for the next page, or {@code null} to indicate end-of-results.
  */

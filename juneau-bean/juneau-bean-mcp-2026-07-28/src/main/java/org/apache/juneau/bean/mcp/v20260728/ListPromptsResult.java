@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * Result payload for {@value McpMethods#PROMPTS_LIST}.
  */
 @Marshalled
-public class ListPromptsResult {
+public class ListPromptsResult extends CacheableResult<ListPromptsResult> {
 
 	private List<Prompt> prompts;
 	private String nextCursor;

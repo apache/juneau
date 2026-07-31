@@ -19,7 +19,9 @@ package org.apache.juneau.rest.server.mcp;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
@@ -59,6 +61,7 @@ class McpConfigCore_Test {
 		assertNotNull(a.getTools());
 		assertNotNull(a.getPrompts());
 		assertNotNull(a.getResources());
+		assertNotNull(a.getResourceTemplates());
 		assertSame(McpCursor.SINGLE_PAGE, a.getCursor());
 	}
 
@@ -71,7 +74,8 @@ class McpConfigCore_Test {
 			.setCursor(McpCursor.fixedSize(5))
 			.addTool(dummyTool("t1"), dummyTool("t2"))
 			.addPrompt(dummyPrompt("p1"))
-			.addResource(dummyResource("r://a"));
+			.addResource(dummyResource("r://a"))
+			.addResourceTemplate(new McpResourceTemplateSpec().setName("rt1"));
 
 		assertString("x", a.getName());
 		assertString("1", a.getVersion());
@@ -80,24 +84,30 @@ class McpConfigCore_Test {
 		assertSize(2, a.getTools());
 		assertSize(1, a.getPrompts());
 		assertSize(1, a.getResources());
+		assertSize(1, a.getResourceTemplates());
 	}
 
 	@Test
 	void a03_setLists_replacingAndNullClears() {
-		var a = new McpServerConfig().addTool(dummyTool("t")).addPrompt(dummyPrompt("p")).addResource(dummyResource("r"));
+		var a = new McpServerConfig().addTool(dummyTool("t")).addPrompt(dummyPrompt("p")).addResource(dummyResource("r"))
+			.addResourceTemplate(new McpResourceTemplateSpec().setName("rt"));
 		a.setTools(null);
 		a.setPrompts(null);
 		a.setResources(null);
+		a.setResourceTemplates(null);
 		assertEmpty(a.getTools());
 		assertEmpty(a.getPrompts());
 		assertEmpty(a.getResources());
+		assertEmpty(a.getResourceTemplates());
 
 		a.setTools(List.of(dummyTool("a")));
 		a.setPrompts(List.of(dummyPrompt("a")));
 		a.setResources(List.of(dummyResource("a")));
+		a.setResourceTemplates(List.of(new McpResourceTemplateSpec().setName("a")));
 		assertSize(1, a.getTools());
 		assertSize(1, a.getPrompts());
 		assertSize(1, a.getResources());
+		assertSize(1, a.getResourceTemplates());
 	}
 
 	@Test
@@ -122,5 +132,36 @@ class McpConfigCore_Test {
 		assertNull(new McpToolOutcome().getContent());
 		assertNull(new McpPromptOutcome().getMessages());
 		assertNull(new McpResourceOutcome().getContents());
+	}
+
+	@Test void a07_resourceTemplateSpec() {
+		var a = new McpResourceTemplateSpec().setUriTemplate("file:///{name}").setName("n")
+			.setTitle("t").setDescription("d").setMimeType("text/plain");
+		assertEquals("file:///{name}", a.getUriTemplate());
+		assertEquals("n", a.getName());
+		assertEquals("t", a.getTitle());
+		assertEquals("d", a.getDescription());
+		assertEquals("text/plain", a.getMimeType());
+	}
+
+	@Test void a08_templateRegistrationOrderCopyAndNull() {
+		var a = new McpResourceTemplateSpec().setName("a");
+		var b = new McpResourceTemplateSpec().setName("b");
+		var source = new ArrayList<>(List.of(a));
+		var config = new McpServerConfig().setResourceTemplates(source).addResourceTemplate(b);
+		source.clear();
+		assertEquals(List.of(a, b), config.getResourceTemplates());
+		config.setResourceTemplates(null);
+		assertTrue(config.getResourceTemplates().isEmpty());
+		config.getResourceTemplates().add(a);
+		assertEquals(1, config.getResourceTemplates().size());
+	}
+
+	@Test void a09_templateSpecHasNoPolicySurface() {
+		var names = Arrays.stream(McpResourceTemplateSpec.class.getMethods())
+			.map(Method::getName).collect(Collectors.toSet());
+		assertFalse(names.stream().anyMatch(x -> x.contains("Cache") || x.contains("Ttl") || x.contains("Read")));
+		assertEquals(Set.of("uriTemplate", "name", "title", "description", "mimeType"),
+			Arrays.stream(McpResourceTemplateSpec.class.getDeclaredFields()).map(Field::getName).collect(Collectors.toSet()));
 	}
 }

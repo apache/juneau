@@ -20,6 +20,7 @@ import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonrpc.*;
@@ -160,5 +161,77 @@ class McpBindings_Test extends TestBase {
 
 	@Test void c02_endpointCapabilityHook_defaultsToNull() {
 		assertNull(new B().capabilities());
+	}
+
+	// -------- cache-config lifecycle hooks ---------
+
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class E extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+		static final AtomicInteger calls = new AtomicInteger();
+		@Override
+		protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig().addTool(echo());
+		}
+		@Override
+		protected McpCacheConfig createCacheConfig() {
+			calls.incrementAndGet();
+			return new McpCacheConfig().setToolsList(new McpCacheHint().setTtlMs(21));
+		}
+	}
+
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class F extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Override
+		protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig();
+		}
+		@Override
+		protected McpCacheConfig createCacheConfig() {
+			return null;
+		}
+	}
+
+	@Rest(path = "/api", serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class G extends BasicRestServlet implements McpEndpoint {
+		private static final long serialVersionUID = 1L;
+		@Override
+		public McpServerConfig getMcpConfig() {
+			return new McpServerConfig().addTool(echo());
+		}
+		@Override
+		public McpCacheConfig cacheConfig() {
+			return new McpCacheConfig().setToolsList(new McpCacheHint().setCacheScope(McpCacheScope.PRIVATE));
+		}
+	}
+
+	private static MockRestClient client(Class<?> c, String basePath) {
+		return MockRestClient.create(c).json().contentType("application/json").accept("application/json").build();
+	}
+
+	private MockRestClient clientBWithCache() {
+		return MockRestClient.create(G.class).json().contentType("application/json").accept("application/json").build();
+	}
+
+	@Test void d01_servletCacheConfig_isLazilyCachedAndInjected() throws Exception {
+		var servlet = new E();
+		assertSame(servlet.getCacheConfig(), servlet.getCacheConfig());
+		assertEquals(1, E.calls.get());
+		var body = client(E.class, "/").post("/").contentString(body(1, "tools/list", null))
+			.header("Mcp-Method", "tools/list").header("Mcp-Name", "").run().getContent().asString();
+		assertContains("\"ttlMs\":21", body);
+	}
+
+	@Test void d02_servletNullFactoryFailsFast() {
+		var e = assertThrows(IllegalStateException.class, () -> new F().getCacheConfig());
+		assertEquals("createCacheConfig() returned null", e.getMessage());
+	}
+
+	@Test void d03_endpointDefaultIsEmptyAndOverrideIsInjected() throws Exception {
+		assertNotNull(new B().cacheConfig());
+		var body = clientBWithCache().post("/mcp").contentString(body(1, "tools/list", null))
+			.header("Mcp-Method", "tools/list").header("Mcp-Name", "").run().getContent().asString();
+		assertContains("\"cacheScope\":\"private\"", body);
 	}
 }
