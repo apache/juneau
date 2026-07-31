@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":1,"method":"completion/complete","params":{"ref":{"type":"ref/prompt","name":"missing"},"argument":{"name":"who","value":""}}}

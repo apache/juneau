@@ -1,0 +1,122 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.bean.mcp.v20260728;
+
+import org.apache.juneau.bean.jsonschema.*;
+import org.apache.juneau.marshall.*;
+
+/**
+ * MCP tool descriptor ({@code tools/list} entry).
+ *
+ * <p>
+ * Input and output schemas are direct Draft-2020-12 {@link JsonSchema} beans; there is no MCP-specific schema
+ * wrapper type.
+ */
+@Marshalled
+public class Tool {
+
+	private String name;
+	private String description;
+	private JsonSchema<?> inputSchema;
+	private JsonSchema<?> outputSchema;
+
+	/**
+	 * Tool name.
+	 *
+	 * @return The name, or {@code null} if not set.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Sets the tool name.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Tool setName(String value) {
+		name = value;
+		return this;
+	}
+
+	/**
+	 * Human-readable description.
+	 *
+	 * @return The description, or {@code null} if not set.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Sets the description.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Tool setDescription(String value) {
+		description = value;
+		return this;
+	}
+
+	/**
+	 * Draft-2020-12 JSON Schema for tool arguments.
+	 *
+	 * @return The input schema, or {@code null} if not set.
+	 */
+	@SuppressWarnings({
+		"java:S1452" // Intentional public API return: the concrete JsonSchema<T> self-type is not known to this bean, and JsonSchema<?> is the only type that can expose the shared bean without binding callers to one subtype.
+	})
+	public JsonSchema<?> getInputSchema() {
+		return inputSchema;
+	}
+
+	/**
+	 * Sets the input schema.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Tool setInputSchema(JsonSchema<?> value) {
+		inputSchema = value;
+		return this;
+	}
+
+	/**
+	 * Draft-2020-12 JSON Schema for structured tool output.
+	 *
+	 * @return The output schema, or {@code null} if not set.
+	 */
+	@SuppressWarnings({
+		"java:S1452" // Intentional public API return: the concrete JsonSchema<T> self-type is not known to this bean, and JsonSchema<?> is the only type that can expose the shared bean without binding callers to one subtype.
+	})
+	public JsonSchema<?> getOutputSchema() {
+		return outputSchema;
+	}
+
+	/**
+	 * Sets the output schema.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Tool setOutputSchema(JsonSchema<?> value) {
+		outputSchema = value;
+		return this;
+	}
+}

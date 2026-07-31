@@ -90,4 +90,54 @@ public final class McpParamUtils {
 			return (Map<String,Object>) v;
 		throw new McpException(CODE_INVALID_PARAMS, "Param '" + key + "' must be an object");
 	}
+
+	/**
+	 * Reads a parameter as a string, rejecting any non-string JSON value rather than coercing it via
+	 * {@code toString()}.
+	 *
+	 * <p>
+	 * Unlike {@link #strParam(Map, String)}, which accepts any JSON scalar and stringifies it, this is for
+	 * parameters whose protocol contract requires the wire value to already be a JSON string - for example a
+	 * {@code completion/complete} argument value, where a numeric or boolean value must be rejected outright,
+	 * not silently stringified. Shared identically by both dated {@code completion/complete} dispatch arms.
+	 *
+	 * @param args The params map. Never <jk>null</jk>.
+	 * @param key The parameter name.
+	 * @return The string value, or <jk>null</jk> if absent.
+	 * @throws McpException If the parameter is present but is not a JSON string.
+	 */
+	public static String strictStrParam(Map<String,Object> args, String key) {
+		var v = args.get(key);
+		if (v == null)
+			return null;
+		if (v instanceof String v2)
+			return v2;
+		throw new McpException(CODE_INVALID_PARAMS, "Param '" + key + "' must be a string");
+	}
+
+	/**
+	 * Reads a parameter as a string-to-string map, rejecting any entry whose value is not a JSON string.
+	 *
+	 * <p>
+	 * Shared identically by both dated {@code completion/complete} dispatch arms to parse
+	 * {@code context.arguments}.
+	 *
+	 * @param args The params map. Never <jk>null</jk>.
+	 * @param key The parameter name.
+	 * @return The nested map with every value verified to be a string; an empty map when the parameter is
+	 * 	absent. Never <jk>null</jk>.
+	 * @throws McpException If the parameter is present but is not a JSON object, or if any of its values is
+	 * 	not a JSON string.
+	 */
+	public static Map<String,String> strictStrMapParam(Map<String,Object> args, String key) {
+		var nested = mapParam(args, key);
+		var result = new LinkedHashMap<String,String>();
+		for (var entry : nested.entrySet()) {
+			var value = entry.getValue();
+			if (! (value instanceof String value2))
+				throw new McpException(CODE_INVALID_PARAMS, "Param '" + key + "' values must be strings");
+			result.put(entry.getKey(), value2);
+		}
+		return result;
+	}
 }

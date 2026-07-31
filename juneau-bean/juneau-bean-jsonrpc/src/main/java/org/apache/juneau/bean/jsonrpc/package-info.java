@@ -21,7 +21,7 @@
  * <p>
  * Revision-neutral request/response/error framing plus the {@link org.apache.juneau.bean.jsonrpc.McpException}
  * error carrier. This module carries no protocol-specific knowledge of any kind: it is the shared
- * envelope layer beneath protocol-specific bean modules such as {@code juneau-bean-mcp-2025-06-18}.
+ * envelope layer beneath protocol-specific bean modules such as {@code juneau-bean-mcp-v20250618}.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonRpc">juneau-bean-jsonrpc</a>

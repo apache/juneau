@@ -207,6 +207,9 @@ public final class ConfigPropertiesBinder<T> {
 		validator.validate(target);
 	}
 
+	@SuppressWarnings({
+		"java:S107" // Internal recursive-bind helper; the parameters are the fixed bind context (target/key/field/settings/sources/relaxed/validator/path) threaded unchanged through bind()/bindNested()/hasResolvableKey() - a parameter object would just wrap them without reducing coupling.
+	})
 	private static void bindField(Object target, String prefix, FieldInfo field, Settings settings, PropertySource[] scopedSources, boolean relaxed, ConfigPropertiesValidator validator, Set<Class<?>> path) {
 		var key = prefix + "." + field.getName();
 		var fieldType = field.getFieldType();
@@ -230,6 +233,9 @@ public final class ConfigPropertiesBinder<T> {
 		// Bind-only-present: no candidate resolved anywhere in the chain, field initializer default stands.
 	}
 
+	@SuppressWarnings({
+		"java:S107" // Internal recursive-bind helper; the parameters are the fixed bind context (target/key/field/fieldType/settings/sources/relaxed/validator/path) threaded unchanged through bind()/bindField()/hasResolvableKey() - a parameter object would just wrap them without reducing coupling.
+	})
 	private static void bindNested(Object target, String key, FieldInfo field, ClassInfo fieldType, Settings settings, PropertySource[] scopedSources, boolean relaxed, ConfigPropertiesValidator validator, Set<Class<?>> path) {
 		if (! path.add(fieldType.inner()))
 			throw rex("Circular @ConfigProperties nesting detected at %s", field.getLabel());
@@ -259,6 +265,9 @@ public final class ConfigPropertiesBinder<T> {
 	 * {@code @ConfigProperties} fields — resolves to a present key under {@code prefix}, without binding
 	 * anything. Used to decide whether a <jk>null</jk> nested field should be materialized.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity from mirroring bind()'s recursive nested-field walk (without side effects) is inherent to the probe contract; standing project policy is to suppress rather than refactor for this metric alone.
+	})
 	private static boolean hasResolvableKey(ClassInfo type, String prefix, Settings settings, PropertySource[] scopedSources, boolean relaxed, Set<Class<?>> path) {
 		for (var field : type.getAllFields()) {
 			if (isBindable(field)) {

@@ -51,8 +51,8 @@
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-rdf</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-mcp</artifactId><version>${project.version}</version></dependency>
-			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-mcp-2025-06-18</artifactId><version>${project.version}</version></dependency>
-			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-mcp-2026-07-28</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-mcp-v20250618</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-mcp-v20260728</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-auth-jwt</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-auth-saml</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-auth-oauth</artifactId><version>${project.version}</version></dependency>
@@ -95,8 +95,8 @@
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-jsonapi</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-jsonschema</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-jsonrpc</artifactId><version>${project.version}</version></dependency>
-			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-mcp-2025-06-18</artifactId><version>${project.version}</version></dependency>
-			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-mcp-2026-07-28</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-mcp-v20250618</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-mcp-v20260728</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-openapi-v3</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-swagger-v2</artifactId><version>${project.version}</version></dependency>
 

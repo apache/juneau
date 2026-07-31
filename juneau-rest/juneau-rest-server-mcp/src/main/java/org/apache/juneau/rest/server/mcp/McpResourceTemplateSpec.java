@@ -20,9 +20,10 @@ package org.apache.juneau.rest.server.mcp;
  * Revision-neutral resource-template descriptor returned from {@code resources/templates/list}.
  *
  * <p>
- * This is a static descriptor, not a handler: it carries no read callback, template matcher, cache hint, or
- * dated-revision wire import. Template matching, URI-variable expansion, and template-backed
- * {@code resources/read} are cross-revision behavior owned outside this slice.
+ * This is a static descriptor: it carries no read callback, template matcher, cache hint, or dated-revision
+ * wire import. It is paired with a read callback and optional per-variable completers by
+ * {@link McpResourceTemplateHandler#descriptor()}, or registered on its own as a listing-only template via
+ * {@link McpServerConfig#addResourceTemplate(McpResourceTemplateSpec...)}.
  *
  * <p>
  * Supersedes the wire-level {@code ResourceTemplate} bean.

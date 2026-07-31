@@ -47,7 +47,7 @@ import org.junit.jupiter.params.provider.*;
  * <p>
  * Regenerate the {@code *.response.json} files (only ever against known-good code) with:
  * <p>
- * {@code mvn test -Drat.skip=true -pl juneau-rest/juneau-rest-server-mcp-2025-06-18 -Dtest=Characterization_Test -Djuneau.mcp.characterization.write=true}
+ * {@code mvn test -Drat.skip=true -pl juneau-rest/juneau-rest-server-mcp-v20250618 -Dtest=Characterization_Test -Djuneau.mcp.characterization.write=true}
  */
 @SuppressWarnings({
 	"resource" // MockRestClient is a Closeable test helper; lifetime is bounded by the test method.
@@ -147,6 +147,84 @@ class Characterization_Test {
 		}
 	}
 
+	/**
+	 * Backs every {@code TEMPLATE-*} fixture: one exact resource that always outranks any template match,
+	 * plus four resource-template registrations (in listing order) exercising decoded-scalar capture,
+	 * reserved/unencoded capture, a listing-only non-winning two-variable template, and literal-prefix
+	 * specificity. {@code TEMPLATE-read-unknown} deliberately reuses this template-registered servlet
+	 * (rather than {@link F_Empty}) so its "no match" outcome proves a real miss against a populated
+	 * registry, not a trivially empty one.
+	 */
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class F_Template extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Override protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig()
+				.addResource(resource("file:///a", u -> new McpResourceOutcome().setContents(List.of(
+					McpResourceContents.text(u, "text/plain", "exact-a")))))
+				.addResourceTemplate(
+					template("file:///{name}", "simple", "Simple template", "Captures one decoded path segment",
+						(uri, vars) -> new McpResourceOutcome().setContents(List.of(
+							McpResourceContents.text(uri, "text/plain", "name=" + vars.get("name"))))),
+					template("file:///r/{+name}", "reserved", "Reserved template", "Captures unencoded path segments",
+						(uri, vars) -> new McpResourceOutcome().setContents(List.of(
+							McpResourceContents.text(uri, "text/plain", "name=" + vars.get("name"))))))
+				.addResourceTemplate(new McpResourceTemplateSpec()
+					.setUriTemplate("file:///{a}/{b}").setName("twovar").setTitle("Two variable template")
+					.setDescription("Two single-segment variables").setMimeType("text/plain"))
+				.addResourceTemplate(
+					template("file:///fixed/{name}", "fixed", "Fixed-prefix template", "Fixed literal prefix with one variable",
+						(uri, vars) -> new McpResourceOutcome().setContents(List.of(
+							McpResourceContents.text(uri, "text/plain", "fixed name=" + vars.get("name"))))));
+		}
+	}
+
+	/**
+	 * Backs every {@code COMPLETE-*} fixture: a prompt whose two declared arguments each carry a
+	 * deterministic completer (one ignoring context, one consuming it), and a resource-template variable
+	 * completer whose current-value branches deterministically reproduce the small and the 101-value/capped
+	 * cases from one registration.
+	 */
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class F_Complete extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Override protected McpServerConfig createMcpConfig() {
+			var greet = new McpPromptSpec().setName("greet").setDescription("pd")
+				.setArguments(List.of(
+					new McpPromptArgument().setName("who")
+						.setCompleter((request, ctx) -> new McpCompletionResult().setValues(List.of("Bob", "Alice", "Bob"))),
+					new McpPromptArgument().setName("style")
+						.setCompleter((request, ctx) -> {
+							var greeting = request.getContextArguments().getOrDefault("greeting", "");
+							return new McpCompletionResult().setValues(List.of(greeting + " Alice", greeting + " Bob"));
+						})));
+			return new McpServerConfig()
+				.addPrompt(new McpPromptHandler() {
+					@Override public McpPromptSpec descriptor() { return greet; }
+					@Override public McpPromptOutcome get(Map<String,Object> arguments, BeanStore ctx) { return new McpPromptOutcome(); }
+				})
+				.addResourceTemplate(new McpResourceTemplateHandler() {
+					@Override public McpResourceTemplateSpec descriptor() {
+						return new McpResourceTemplateSpec().setUriTemplate("file:///{name}").setName("simple").setMimeType("text/plain");
+					}
+					@Override public McpResourceOutcome read(String uri, Map<String,String> variables, BeanStore ctx) { return null; }
+					@Override public McpCompleter completer(String variableName) {
+						if (! "name".equals(variableName))
+							return null;
+						return (request, ctx) -> {
+							if ("cap".equals(request.getValue())) {
+								var values = new ArrayList<String>();
+								for (var i = 0; i < 101; i++)
+									values.add("item" + i);
+								return new McpCompletionResult().setValues(values).setTotal(101);
+							}
+							return new McpCompletionResult().setValues(List.of("alpha", "beta"));
+						};
+					}
+				});
+		}
+	}
+
 	// --- fixture handler factories ---------------------------------------------------------
 
 	private static McpToolHandler tool(String name, McpSchema schema, Function<Map<String,Object>,McpToolOutcome> fn) {
@@ -170,6 +248,17 @@ class Characterization_Test {
 		};
 	}
 
+	private static McpResourceTemplateHandler template(String uriTemplate, String name, String title, String description,
+			BiFunction<String,Map<String,String>,McpResourceOutcome> fn) {
+		return new McpResourceTemplateHandler() {
+			@Override public McpResourceTemplateSpec descriptor() {
+				return new McpResourceTemplateSpec().setUriTemplate(uriTemplate).setName(name).setTitle(title)
+					.setDescription(description).setMimeType("text/plain");
+			}
+			@Override public McpResourceOutcome read(String uri, Map<String,String> variables, BeanStore ctx) { return fn.apply(uri, variables); }
+		};
+	}
+
 	private static Class<?> servletFor(String fixture) {
 		var prefix = fixture.substring(0, fixture.indexOf('-'));
 		return switch (prefix) {
@@ -179,6 +268,8 @@ class Characterization_Test {
 			case "PAGED" -> F_Paged.class;
 			case "THROW" -> F_Throw.class;
 			case "STRUCTURED" -> F_Structured.class;
+			case "TEMPLATE" -> F_Template.class;
+			case "COMPLETE" -> F_Complete.class;
 			default -> throw new IllegalArgumentException("Unknown fixture prefix: " + prefix);
 		};
 	}

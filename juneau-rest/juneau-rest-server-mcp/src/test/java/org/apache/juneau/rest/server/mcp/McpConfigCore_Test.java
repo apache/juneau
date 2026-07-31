@@ -75,7 +75,7 @@ class McpConfigCore_Test {
 			.addTool(dummyTool("t1"), dummyTool("t2"))
 			.addPrompt(dummyPrompt("p1"))
 			.addResource(dummyResource("r://a"))
-			.addResourceTemplate(new McpResourceTemplateSpec().setName("rt1"));
+			.addResourceTemplate(new McpResourceTemplateSpec().setUriTemplate("file:///rt1").setName("rt1"));
 
 		assertString("x", a.getName());
 		assertString("1", a.getVersion());
@@ -90,11 +90,11 @@ class McpConfigCore_Test {
 	@Test
 	void a03_setLists_replacingAndNullClears() {
 		var a = new McpServerConfig().addTool(dummyTool("t")).addPrompt(dummyPrompt("p")).addResource(dummyResource("r"))
-			.addResourceTemplate(new McpResourceTemplateSpec().setName("rt"));
+			.addResourceTemplate(new McpResourceTemplateSpec().setUriTemplate("file:///rt").setName("rt"));
 		a.setTools(null);
 		a.setPrompts(null);
 		a.setResources(null);
-		a.setResourceTemplates(null);
+		a.setResourceTemplateSpecs(null);
 		assertEmpty(a.getTools());
 		assertEmpty(a.getPrompts());
 		assertEmpty(a.getResources());
@@ -103,7 +103,7 @@ class McpConfigCore_Test {
 		a.setTools(List.of(dummyTool("a")));
 		a.setPrompts(List.of(dummyPrompt("a")));
 		a.setResources(List.of(dummyResource("a")));
-		a.setResourceTemplates(List.of(new McpResourceTemplateSpec().setName("a")));
+		a.setResourceTemplateSpecs(List.of(new McpResourceTemplateSpec().setUriTemplate("file:///a").setName("a")));
 		assertSize(1, a.getTools());
 		assertSize(1, a.getPrompts());
 		assertSize(1, a.getResources());
@@ -145,16 +145,24 @@ class McpConfigCore_Test {
 	}
 
 	@Test void a08_templateRegistrationOrderCopyAndNull() {
-		var a = new McpResourceTemplateSpec().setName("a");
-		var b = new McpResourceTemplateSpec().setName("b");
+		var a = new McpResourceTemplateSpec().setUriTemplate("file:///a").setName("a");
+		var b = new McpResourceTemplateSpec().setUriTemplate("file:///b").setName("b");
 		var source = new ArrayList<>(List.of(a));
-		var config = new McpServerConfig().setResourceTemplates(source).addResourceTemplate(b);
+		var config = new McpServerConfig().setResourceTemplateSpecs(source).addResourceTemplate(b);
 		source.clear();
-		assertEquals(List.of(a, b), config.getResourceTemplates());
-		config.setResourceTemplates(null);
+		assertEquals(List.of(a, b),
+			config.getResourceTemplates().stream().map(McpResourceTemplateHandler::descriptor).toList());
+		config.setResourceTemplateSpecs(null);
 		assertTrue(config.getResourceTemplates().isEmpty());
-		config.getResourceTemplates().add(a);
+		config.getResourceTemplates().add(listingHandler(a));
 		assertEquals(1, config.getResourceTemplates().size());
+	}
+
+	private static McpResourceTemplateHandler listingHandler(McpResourceTemplateSpec spec) {
+		return new McpResourceTemplateHandler() {
+			@Override public McpResourceTemplateSpec descriptor() { return spec; }
+			@Override public McpResourceOutcome read(String uri, Map<String,String> variables, BeanStore ctx) { return null; }
+		};
 	}
 
 	@Test void a09_templateSpecHasNoPolicySurface() {

@@ -33,7 +33,7 @@ import org.apache.juneau.bean.jsonrpc.*;
 public final class McpExchange {
 
 	private final JsonRpcRequest request;
-	private final Function<String,String> headers;
+	private final UnaryOperator<String> headers;
 
 	/**
 	 * Constructor.
@@ -43,7 +43,7 @@ public final class McpExchange {
 	 * @param headers Header lookup by name, returning <jk>null</jk> for an absent header. Must not
 	 * 	be <jk>null</jk>.
 	 */
-	public McpExchange(JsonRpcRequest request, Function<String,String> headers) {
+	public McpExchange(JsonRpcRequest request, UnaryOperator<String> headers) {
 		assertArgNotNull("headers", headers);
 		this.request = request;
 		this.headers = headers;

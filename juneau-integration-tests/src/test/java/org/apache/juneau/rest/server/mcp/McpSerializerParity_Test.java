@@ -78,7 +78,7 @@ class McpSerializerParity_Test extends TestBase {
 	 * by {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator} as a plain string schema, and any
 	 * non-empty bean class is wrapped by that generator's bean-defs mode into a top-level {@code $ref} carrying
 	 * an actual {@link URI} instance (not a JSON string) inside the schema map that
-	 * {@code McpSchemaSafety.validateInput} walks with {@code McpJsonValueSafety.check} — a pre-existing,
+	 * {@code McpSchemaSafety.validateInput} walks with {@code JsonValueSafety.check} — a pre-existing,
 	 * out-of-scope defect (affects any typed tool with a bean-shaped argument) that rejects the schema as
 	 * containing a "non-JSON value type". Using {@code Map.class} as the argument type exercises a real typed
 	 * tool without an argument schema shape that trips this unrelated bug, while {@link Result} (the type this

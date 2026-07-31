@@ -38,7 +38,7 @@ import org.junit.jupiter.api.*;
 /**
  * Cross-module coverage proving the servlet-subclass and endpoint-mixin cache-config lifecycle hooks
  * are consumable exactly as an external artifact consumer would use them, through the published
- * public API of {@code juneau-rest-server-mcp-2026-07-28}.
+ * public API of {@code juneau-rest-server-mcp-v20260728}.
  */
 @SuppressWarnings({
 	"resource" // Test helpers return Closeables; Eclipse JDT @Owning warning is by design.

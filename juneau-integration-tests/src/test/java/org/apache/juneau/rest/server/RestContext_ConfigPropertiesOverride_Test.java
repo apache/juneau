@@ -53,6 +53,9 @@ import org.junit.jupiter.api.parallel.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S5976" // Each d0x/e0x/i0x test pins a distinct named scenario (blank/invalid/mis-cased/whitespace/SVL) as its own discoverable, individually-runnable test; collapsing them into one @ParameterizedTest would trade per-scenario failure clarity for a marginal LOC reduction.
+})
 @ResourceLock(Resources.SYSTEM_PROPERTIES)
 class RestContext_ConfigPropertiesOverride_Test extends TestBase {
 

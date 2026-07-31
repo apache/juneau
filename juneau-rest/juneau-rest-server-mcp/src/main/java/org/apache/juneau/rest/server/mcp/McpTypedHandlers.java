@@ -23,10 +23,10 @@ import java.util.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.jsonschema.*;
-import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.marshaller.Json;
 
 /**
@@ -83,7 +83,7 @@ public final class McpTypedHandlers {
 				var result = typed.call(bound, ctx);
 				var tree = canonicalize(result);
 				try {
-					McpJsonValueSafety.check(tree, "Tool structuredContent");
+					JsonValueSafety.check(tree, "Tool structuredContent");
 				} catch (IllegalArgumentException e) {
 					throw new McpException(-32603, e.getMessage());
 				}

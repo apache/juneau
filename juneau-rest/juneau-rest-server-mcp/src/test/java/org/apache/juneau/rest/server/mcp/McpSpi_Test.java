@@ -88,6 +88,32 @@ class McpSpi_Test {
 	}
 
 	@Test
+	void c04a_paramUtils_strictStrParam() {
+		assertNull(McpParamUtils.strictStrParam(Map.of(), "value"));
+		assertEquals("x", McpParamUtils.strictStrParam(Map.of("value", "x"), "value"));
+		var e1 = assertThrows(McpException.class, () -> McpParamUtils.strictStrParam(Map.of("value", 7), "value"));
+		assertEquals(-32602, e1.getCode());
+		assertEquals("Param 'value' must be a string", e1.getMessage());
+		var e2 = assertThrows(McpException.class, () -> McpParamUtils.strictStrParam(Map.of("value", true), "value"));
+		assertEquals(-32602, e2.getCode());
+		assertEquals("Param 'value' must be a string", e2.getMessage());
+	}
+
+	@Test
+	void c04b_paramUtils_strictStrMapParam() {
+		assertTrue(McpParamUtils.strictStrMapParam(Map.of(), "arguments").isEmpty());
+		var result = McpParamUtils.strictStrMapParam(Map.of("arguments", JsonMap.of("k", "v")), "arguments");
+		assertEquals("v", result.get("k"));
+		var e1 = assertThrows(McpException.class, () -> McpParamUtils.strictStrMapParam(Map.of("arguments", "nope"), "arguments"));
+		assertEquals(-32602, e1.getCode());
+		assertEquals("Param 'arguments' must be an object", e1.getMessage());
+		var e2 = assertThrows(McpException.class,
+			() -> McpParamUtils.strictStrMapParam(Map.of("arguments", JsonMap.of("k", 7)), "arguments"));
+		assertEquals(-32602, e2.getCode());
+		assertEquals("Param 'arguments' values must be strings", e2.getMessage());
+	}
+
+	@Test
 	void c04_paramUtils_constructorIsPrivate() {
 		assertDoesNotThrow(() -> {
 			var ctor = McpParamUtils.class.getDeclaredConstructor();

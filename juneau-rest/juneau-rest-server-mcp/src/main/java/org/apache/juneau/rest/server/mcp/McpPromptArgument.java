@@ -27,6 +27,7 @@ public class McpPromptArgument {
 	private String name;
 	private String description;
 	private Boolean required;
+	private McpCompleter completer;
 
 	/**
 	 * The argument name.
@@ -85,6 +86,31 @@ public class McpPromptArgument {
 	 */
 	public McpPromptArgument setRequired(Boolean value) {
 		required = value;
+		return this;
+	}
+
+	/**
+	 * The completer invoked for a {@code completion/complete} request targeting this argument.
+	 *
+	 * <p>
+	 * This is server behavior only: it is never mapped into a dated {@code PromptArgument} wire bean. See
+	 * {@link McpServerConfig#promptCompleter(String, String)} for the neutral lookup path that resolves this
+	 * property by exact prompt/argument name.
+	 *
+	 * @return The completer, or <jk>null</jk> if not set.
+	 */
+	public McpCompleter getCompleter() {
+		return completer;
+	}
+
+	/**
+	 * Sets the completer invoked for a {@code completion/complete} request targeting this argument.
+	 *
+	 * @param value The new value. Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public McpPromptArgument setCompleter(McpCompleter value) {
+		completer = value;
 		return this;
 	}
 }
