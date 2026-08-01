@@ -45,6 +45,16 @@
 			<artifactId>juneau-bean-mcp-v20260728</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!--
+			Optional: backs the SpringMcpRestServlet convenience class. Marked optional so plain
+			(non-Spring) consumers of this module are not forced to pull Spring Boot transitively.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-springboot</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>

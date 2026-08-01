@@ -1,0 +1,1 @@
+{"id":1,"jsonrpc":"2.0","result":{"_meta":{"baggage":"sessionId=echo-session","io.modelcontextprotocol/serverInfo":{"name":"test","version":"1.0.0"},"traceparent":"00-060606060606060606060606060617-0707070707070707-01","tracestate":"vendor=echo-state"},"content":[{"type":"text","text":"hi"}],"resultType":"complete"}}

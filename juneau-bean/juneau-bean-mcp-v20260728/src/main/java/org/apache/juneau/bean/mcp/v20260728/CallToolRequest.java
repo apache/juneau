@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * Parameters for {@value McpMethods#TOOLS_CALL}.
  */
 @Marshalled
-public class CallToolRequest {
+public class CallToolRequest extends RequestParams<CallToolRequest> {
 
 	private String name;
 	private Map<String,Object> arguments;

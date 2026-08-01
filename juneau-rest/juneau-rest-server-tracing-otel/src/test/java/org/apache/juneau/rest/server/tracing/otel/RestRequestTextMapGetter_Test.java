@@ -24,7 +24,15 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.tracing.*;
 import org.junit.jupiter.api.*;
+
+import io.opentelemetry.api.trace.propagation.*;
+import io.opentelemetry.context.propagation.*;
+import io.opentelemetry.sdk.*;
+import io.opentelemetry.sdk.testing.exporter.*;
+import io.opentelemetry.sdk.trace.*;
+import io.opentelemetry.sdk.trace.export.*;
 
 /**
  * Exercises {@link RestRequestTextMapGetter} against a live {@link RestRequest} captured inside a
@@ -97,5 +105,44 @@ class RestRequestTextMapGetter_Test extends TestBase {
 
 	@Test void a06_singleton_isStable() {
 		assertSame(RestRequestTextMapGetter.INSTANCE, RestRequestTextMapGetter.INSTANCE);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// B: Regression — this getter remains the sole HTTP-header source OtelTracerHook falls back to for an
+	//    ordinary request that has no recognized non-HTTP TraceContextCarrier (no registered
+	//    TraceContextExtractor at all). Carrier-aware composite extraction (a registered extractor
+	//    supplying a non-HTTP carrier) is exercised in OtelTracerHook_Test.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	static final InMemorySpanExporter B_EXPORTER = InMemorySpanExporter.create();
+	static final OpenTelemetrySdk B_OTEL_SDK = OpenTelemetrySdk.builder()
+		.setTracerProvider(SdkTracerProvider.builder()
+			.addSpanProcessor(SimpleSpanProcessor.create(B_EXPORTER))
+			.build())
+		.setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
+		.build();
+
+	@Rest
+	public static class B extends RestServlet {
+		private static final long serialVersionUID = 1L;
+
+		@org.apache.juneau.commons.inject.Bean
+		public TracerHook tracer() { return new OtelTracerHook(B_OTEL_SDK); }
+
+		@RestGet("/op")
+		public String op() { return "ok"; }
+	}
+
+	private static final MockRestClient CB = MockRestClient.buildLax(B.class);
+
+	@Test void b01_noExtractorRegistered_httpHeaderStillFallsThroughThisGetter() throws Exception {
+		B_EXPORTER.reset();
+		String traceId = "0af7651916cd43dd8448eb211c80319c";
+		String spanId = "b7ad6b7169203331";
+		CB.get("/op").header("traceparent", "00-" + traceId + "-" + spanId + "-01").run().assertStatus(200);
+
+		var spans = B_EXPORTER.getFinishedSpanItems();
+		assertEquals(1, spans.size());
+		assertEquals(traceId, spans.get(0).getTraceId(), "with no TraceContextExtractor registered, the HTTP header read through this getter is the only trace-context source");
 	}
 }

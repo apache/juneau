@@ -49,13 +49,19 @@ class McpSerializerParity_Test extends TestBase {
 
 	private static Object validMeta() {
 		return JsonMap.of(
-			"protocolVersion", "2026-07-28",
-			"clientInfo", JsonMap.of("name", "fixture-client", "version", "1.0"),
-			"capabilities", JsonMap.of());
+			RequestMeta.KEY_PROTOCOL_VERSION, "2026-07-28",
+			RequestMeta.KEY_CLIENT_INFO, JsonMap.of("name", "fixture-client", "version", "1.0"),
+			RequestMeta.KEY_CLIENT_CAPABILITIES, JsonMap.of());
+	}
+
+	private static Object withMeta(Object baseParams) {
+		var p = baseParams instanceof Map<?,?> m ? new JsonMap(m) : new JsonMap();
+		p.put("_meta", validMeta());
+		return p;
 	}
 
 	private static String body(Object id, String method, Object params) {
-		return org.apache.juneau.marshall.marshaller.Json.of(new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(method).setParams(params).setMeta(validMeta()));
+		return org.apache.juneau.marshall.marshaller.Json.of(new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(method).setParams(withMeta(params)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -117,7 +123,10 @@ class McpSerializerParity_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 		@Override
 		public McpServerConfig getMcpConfig() {
-			return new McpServerConfig().addTool(xTool());
+			// Same server identity as Servlet's config: this fixture proves serializer-policy parity, not
+			// server-identity parity, and every success result now carries its own server identity per
+			// common result finalization.
+			return new McpServerConfig().setName("test").setVersion("1.0.0").addTool(xTool());
 		}
 	}
 

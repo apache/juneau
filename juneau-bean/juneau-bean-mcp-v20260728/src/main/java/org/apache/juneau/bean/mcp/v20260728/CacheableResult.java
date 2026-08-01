@@ -22,8 +22,9 @@ package org.apache.juneau.bean.mcp.v20260728;
  * {@code resources/read}).
  *
  * <p>
- * Owns two nullable, independent, top-level wire properties that are peers of each subclass's own payload
- * properties:
+ * Extends {@link Result} so every cacheable result also inherits the required {@code resultType} discriminator
+ * and optional {@code _meta}, alongside two nullable, independent, top-level cache-hint properties that are
+ * peers of each subclass's own payload properties:
  * <ul>
  * 	<li>{@code ttlMs} - Freshness duration in milliseconds ({@code Cache-Control: max-age} semantics).
  * 		{@code 0} means immediately stale.
@@ -39,12 +40,13 @@ package org.apache.juneau.bean.mcp.v20260728;
  * configuration, not by this bean.
  *
  * <p>
- * The CRTP type parameter lets each concrete subclass's cache setters return its own concrete type for fluent
- * chaining, without duplicating the two cache accessors in every subclass.
+ * The CRTP type parameter lets each concrete subclass's cache setters (and the inherited {@link Result}
+ * setters) return its own concrete type for fluent chaining, without duplicating those accessors in every
+ * subclass.
  *
  * @param <T> The concrete subclass, for fluent-setter self-typing.
  */
-public abstract class CacheableResult<T extends CacheableResult<T>> {
+public abstract class CacheableResult<T extends CacheableResult<T>> extends Result<T> {
 
 	private Integer ttlMs;
 	private McpCacheScope cacheScope;

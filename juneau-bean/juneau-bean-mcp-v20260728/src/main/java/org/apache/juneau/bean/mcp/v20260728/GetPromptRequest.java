@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * Parameters for {@value McpMethods#PROMPTS_GET}.
  */
 @Marshalled
-public class GetPromptRequest {
+public class GetPromptRequest extends RequestParams<GetPromptRequest> {
 
 	private String name;
 	private Map<String,Object> arguments;

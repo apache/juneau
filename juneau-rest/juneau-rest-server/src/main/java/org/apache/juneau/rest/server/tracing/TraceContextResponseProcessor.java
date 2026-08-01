@@ -90,6 +90,39 @@ public class TraceContextResponseProcessor implements ResponseProcessor {
 	 */
 	public static final String ATTR_TRACESTATE = "juneau.tracestate";
 
+	/**
+	 * Request-attribute key under which a {@link TracerHook} bridge stashes the rendered, non-empty W3C
+	 * {@code baggage} value.
+	 *
+	 * <p>
+	 * Unlike {@link #ATTR_TRACEPARENT} / {@link #ATTR_TRACESTATE}, this processor does <b>not</b> read
+	 * this attribute and never emits a {@code baggage} response header from it &mdash; {@code baggage} is
+	 * stashed purely so a dated MCP adapter can echo it into a successful result's {@code _meta} (added in
+	 * a later task). Ordinary HTTP response-header behavior for {@code traceparent} / {@code tracestate} is
+	 * unaffected by this constant's existence.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String ATTR_BAGGAGE = "juneau.baggage";
+
+	/**
+	 * Request-attribute key under which {@link RestOpInvoker} stashes the active {@link Scope} for the
+	 * duration of one {@code @RestOp} handler invocation.
+	 *
+	 * <p>
+	 * Populated only on the active-tracer path &mdash; see the no-tracer fast-path contract documented on
+	 * {@link TracerHook} &mdash; and cleared once that invocation's synchronous or deferred observability
+	 * lifecycle closes the scope. A dated MCP adapter running inside the handler already resolves this
+	 * same {@link RestRequest} through its own request-scoped {@code BeanStore} entry; reading this
+	 * attribute off that request lets it call {@link Scope#recordRpcError(int, String)} before returning a
+	 * JSON-RPC error response &mdash; a JSON-RPC error is dispatched over HTTP {@code 200}, so it never
+	 * otherwise reaches {@link Scope#setStatusCode(int)} with anything but the adapter's uniform success
+	 * status.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String ATTR_SCOPE = "juneau.tracerScope";
+
 	private static final String HEADER_TRACEPARENT = "traceparent";
 	private static final String HEADER_TRACESTATE = "tracestate";
 

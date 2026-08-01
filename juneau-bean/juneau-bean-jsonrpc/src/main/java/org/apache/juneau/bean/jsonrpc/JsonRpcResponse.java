@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.jsonrpc;
 
-import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 
 /**
@@ -24,6 +23,11 @@ import org.apache.juneau.marshall.*;
  *
  * <p>
  * Exactly one of {@code result} or {@code error} should be present for a valid response.
+ *
+ * <p>
+ * This envelope is generic JSON-RPC 2.0 and carries no {@code _meta} property: MCP-specific per-result
+ * metadata belongs under {@code result._meta}, not beside the envelope. See the {@code 2026-07-28} v2 bean
+ * package ({@code org.apache.juneau.bean.mcp.v20260728}) for the typed nested carrier.
  */
 @Marshalled
 public class JsonRpcResponse {
@@ -34,7 +38,6 @@ public class JsonRpcResponse {
 	private Object id;
 	private Object result;
 	private JsonRpcError error;
-	private Object meta;
 
 	/**
 	 * JSON-RPC protocol version.
@@ -113,28 +116,6 @@ public class JsonRpcResponse {
 	 */
 	public JsonRpcResponse setError(JsonRpcError value) {
 		error = value;
-		return this;
-	}
-
-	/**
-	 * Opaque extension metadata.
-	 *
-	 * @return The metadata value, or <jk>null</jk> if absent.
-	 */
-	@BeanProp("_meta")
-	public Object getMeta() {
-		return meta;
-	}
-
-	/**
-	 * Sets opaque extension metadata.
-	 *
-	 * @param value Any JSON-compatible value. Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	@BeanProp("_meta")
-	public JsonRpcResponse setMeta(Object value) {
-		meta = value;
 		return this;
 	}
 

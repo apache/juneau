@@ -22,7 +22,7 @@ import org.apache.juneau.marshall.*;
  * Result payload for {@value McpMethods#COMPLETION_COMPLETE}.
  */
 @Marshalled
-public class CompleteResult {
+public class CompleteResult extends Result<CompleteResult> {
 
 	private Completion completion;
 

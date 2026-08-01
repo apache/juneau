@@ -40,6 +40,7 @@ public class McpCacheConfig {
 	private McpCacheHint resourcesList;
 	private McpCacheHint resourceTemplatesList;
 	private McpCacheHint resourcesRead;
+	private McpCacheHint serverDiscover;
 	private Map<String,McpCacheHint> resourceReadOverrides = new LinkedHashMap<>();
 
 	private static McpCacheHint validate(McpCacheHint value) {
@@ -165,6 +166,26 @@ public class McpCacheConfig {
 	 */
 	public McpCacheConfig setResourcesRead(McpCacheHint value) {
 		resourcesRead = validate(value);
+		return this;
+	}
+
+	/**
+	 * The hint applied to {@code server/discover}.
+	 *
+	 * @return The hint, or {@code null} if not set.
+	 */
+	public McpCacheHint getServerDiscover() {
+		return serverDiscover;
+	}
+
+	/**
+	 * Sets the hint applied to {@code server/discover}.
+	 *
+	 * @param value The new value. Can be {@code null} to unset the property.
+	 * @return This object.
+	 */
+	public McpCacheConfig setServerDiscover(McpCacheHint value) {
+		serverDiscover = validate(value);
 		return this;
 	}
 

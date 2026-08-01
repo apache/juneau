@@ -1,1 +1,1 @@
-{"error":{"code":-32600,"message":"Request _meta must be an object"},"id":1,"jsonrpc":"2.0"}
+{"error":{"code":-32600,"message":"Request params._meta must be an object"},"id":1,"jsonrpc":"2.0"}

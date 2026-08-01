@@ -1,1 +1,1 @@
-{"jsonrpc":"2.0","id":1,"method":"server/discover","_meta":[1,2,3]}
+{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":[1,2,3]}}

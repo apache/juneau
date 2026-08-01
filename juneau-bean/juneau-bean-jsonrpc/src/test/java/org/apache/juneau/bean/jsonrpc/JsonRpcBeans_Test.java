@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
@@ -95,22 +96,21 @@ class JsonRpcBeans_Test {
 		assertNull(a.getError().getData());
 	}
 
-	@Test
-	void c01_requestMeta_roundTripsEveryJsonCategory() {
-		for (var value : List.of(JsonMap.of("p", "v"), JsonList.of(1, 2), "x", 7, true)) {
-			var json = JsonSerializer.DEFAULT.write(new JsonRpcRequest().setMeta(value));
-			var bean = JsonParser.DEFAULT.read(json, JsonRpcRequest.class);
-			assertEquals(JsonSerializer.DEFAULT.write(value), JsonSerializer.DEFAULT.write(bean.getMeta()));
-			assertTrue(json.contains("\"_meta\""));
-		}
+	private static Set<String> instanceFieldNames(Class<?> type) {
+		return Arrays.stream(type.getDeclaredFields())
+			.filter(f -> ! Modifier.isStatic(f.getModifiers()))
+			.map(Field::getName)
+			.collect(Collectors.toSet());
 	}
 
 	@Test
-	void c02_responseMeta_roundTripsAndNullIsOmitted() {
-		var json = JsonSerializer.DEFAULT.write(new JsonRpcResponse().setMeta(JsonMap.of("x", 1)));
-		assertTrue(json.contains("\"_meta\""));
-		assertNotNull(JsonParser.DEFAULT.read(json, JsonRpcResponse.class).getMeta());
-		assertFalse(JsonSerializer.DEFAULT.write(new JsonRpcResponse().setMeta(null)).contains("_meta"));
+	void c01_request_declaredFieldsAreExactlyJsonRpcEnvelope() {
+		assertEquals(Set.of("jsonrpc", "id", "method", "params"), instanceFieldNames(JsonRpcRequest.class));
+	}
+
+	@Test
+	void c02_response_declaredFieldsAreExactlyJsonRpcEnvelope() {
+		assertEquals(Set.of("jsonrpc", "id", "result", "error"), instanceFieldNames(JsonRpcResponse.class));
 	}
 
 	@Test
@@ -119,8 +119,16 @@ class JsonRpcBeans_Test {
 			var names = Arrays.stream(type.getMethods()).map(Method::getName).toList();
 			assertFalse(names.contains("getProtocolVersion"));
 			assertFalse(names.contains("getClientCapabilities"));
-			assertEquals(List.of(Object.class), Arrays.stream(type.getDeclaredFields())
-				.filter(x -> x.getName().equals("meta")).map(Field::getType).toList());
+			assertFalse(names.contains("getMeta"));
+			assertFalse(names.contains("setMeta"));
 		}
+	}
+
+	@Test
+	void c04_noTopLevelMetaIsEmitted() {
+		var reqJson = JsonSerializer.DEFAULT.write(new JsonRpcRequest().setJsonrpc("2.0").setId(1).setMethod("tools/list").setParams(JsonMap.of("cursor", "1")));
+		assertFalse(reqJson.contains("_meta"));
+		var respJson = JsonSerializer.DEFAULT.write(new JsonRpcResponse().setJsonrpc("2.0").setId(1).setResult(JsonMap.of("x", 1)));
+		assertFalse(respJson.contains("_meta"));
 	}
 }

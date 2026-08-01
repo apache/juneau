@@ -22,7 +22,7 @@ import org.apache.juneau.marshall.*;
  * Parameters for {@value McpMethods#COMPLETION_COMPLETE}.
  */
 @Marshalled
-public class CompleteRequest {
+public class CompleteRequest extends RequestParams<CompleteRequest> {
 
 	private CompletionReference ref;
 	private CompletionArgument argument;

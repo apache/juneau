@@ -48,13 +48,19 @@ class McpBindings_Test extends TestBase {
 
 	private static Object validMeta() {
 		return JsonMap.of(
-			"protocolVersion", "2026-07-28",
-			"clientInfo", JsonMap.of("name", "fixture-client", "version", "1.0"),
-			"capabilities", JsonMap.of());
+			RequestMeta.KEY_PROTOCOL_VERSION, "2026-07-28",
+			RequestMeta.KEY_CLIENT_INFO, JsonMap.of("name", "fixture-client", "version", "1.0"),
+			RequestMeta.KEY_CLIENT_CAPABILITIES, JsonMap.of());
+	}
+
+	private static Object withMeta(Object baseParams) {
+		var p = baseParams instanceof Map<?,?> m ? new JsonMap(m) : new JsonMap();
+		p.put("_meta", validMeta());
+		return p;
 	}
 
 	private static String body(Object id, String method, Object params) {
-		return org.apache.juneau.marshall.marshaller.Json.of(new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(method).setParams(params).setMeta(validMeta()));
+		return org.apache.juneau.marshall.marshaller.Json.of(new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(method).setParams(withMeta(params)));
 	}
 
 	private static McpToolHandler echo() {
@@ -83,7 +89,7 @@ class McpBindings_Test extends TestBase {
 		var resp = clientA().post("/").contentString(body(1, "server/discover", null))
 			.header("Mcp-Method", "server/discover").header("Mcp-Name", "")
 			.run().assertStatus(200).getContent().asString();
-		assertContains("\"serverInfo\"", resp);
+		assertContains("\"" + ResultMeta.KEY_SERVER_INFO + "\"", resp);
 		assertContains("\"test\"", resp);
 		assertContains("\"tools\"", resp);
 	}
@@ -142,7 +148,7 @@ class McpBindings_Test extends TestBase {
 		var resp = clientB().post("/mcp").contentString(body(1, "server/discover", null))
 			.header("Mcp-Method", "server/discover").header("Mcp-Name", "")
 			.run().assertStatus(200).getContent().asString();
-		assertContains("\"serverInfo\"", resp);
+		assertContains("\"" + ResultMeta.KEY_SERVER_INFO + "\"", resp);
 		assertContains("\"tools\"", resp);
 	}
 

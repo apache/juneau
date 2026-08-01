@@ -1,1 +1,1 @@
-{"id":1,"jsonrpc":"2.0","result":{"contents":[{"type":"resourceText","mimeType":"text/plain","text":"name=John Doe","uri":"file:///John%20Doe"}]}}
+{"id":1,"jsonrpc":"2.0","result":{"_meta":{"io.modelcontextprotocol/serverInfo":{"name":"juneau-rest-server-mcp","version":"unknown"}},"contents":[{"type":"resourceText","mimeType":"text/plain","text":"name=John Doe","uri":"file:///John%20Doe"}],"resultType":"complete"}}

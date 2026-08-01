@@ -30,6 +30,7 @@ import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.mcp.*;
+import org.apache.juneau.rest.server.tracing.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -217,6 +218,58 @@ class Characterization_Test {
 		}
 	}
 
+	/**
+	 * Backs every {@code TRACE-*} fixture: one {@code echo} tool plus a deterministic in-memory
+	 * {@link TracerHook} that consumes the real {@code 2026-07-28} {@link TraceContextCarrier}/
+	 * {@link TraceOperation} the module publishes (see {@code McpRevision.TRACE_CONTEXT_EXTRACTOR}),
+	 * so real dispatch exercises {@code params._meta}-vs-HTTP-header precedence and the
+	 * {@code result._meta} echo without any OpenTelemetry import in this module.
+	 */
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class F_Traced extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Override protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig().setName("test").setVersion("1.0.0")
+				.addTool(tool("echo", null, a -> McpToolOutcome.text(String.valueOf(a.get("text")))));
+		}
+		@Bean
+		public TracerHook tracer() {
+			return DeterministicTracer.INSTANCE;
+		}
+	}
+
+	/**
+	 * Deterministic, allocation-trivial {@link TracerHook}: renders the exact remote-parent value the
+	 * real composite carrier resolved (already {@code params._meta}-over-HTTP-header precedence,
+	 * applied by {@code McpRevision}'s {@code TraceContextExtractor}), or a fixed root {@code traceparent}
+	 * literal when the carrier recognizes no remote parent at all. Every rendered value is therefore
+	 * produced by executing this hook against the real carrier, never hand-invented per fixture.
+	 */
+	private static final class DeterministicTracer implements TracerHook {
+		static final TracerHook INSTANCE = new DeterministicTracer();
+		static final String ROOT_TRACEPARENT = "00-00000000000000000000000000000c-000000000000000c-01";
+
+		@Override public Scope startSpan(RestRequest request) {
+			return startSpan(request, null, TraceOperation.DEFAULT);
+		}
+
+		@Override public Scope startSpan(RestRequest request, TraceContextCarrier carrier, TraceOperation operation) {
+			var traceparent = carrier == null ? null : carrier.get(RequestMeta.KEY_TRACEPARENT);
+			request.setAttribute(TraceContextResponseProcessor.ATTR_TRACEPARENT, traceparent != null ? traceparent : ROOT_TRACEPARENT);
+			var tracestate = carrier == null ? null : carrier.get(RequestMeta.KEY_TRACESTATE);
+			if (tracestate != null)
+				request.setAttribute(TraceContextResponseProcessor.ATTR_TRACESTATE, tracestate);
+			var baggage = carrier == null ? null : carrier.get(RequestMeta.KEY_BAGGAGE);
+			if (baggage != null)
+				request.setAttribute(TraceContextResponseProcessor.ATTR_BAGGAGE, baggage);
+			return new Scope() {
+				@Override public void setStatusCode(int statusCode) { }
+				@Override public void setError(Throwable error) { }
+				@Override public void close() { }
+			};
+		}
+	}
+
 	// --- fixture handler factories ---------------------------------------------------------
 
 	private static McpToolHandler tool(String name, McpSchema schema, Function<Map<String,Object>,McpToolOutcome> fn) {
@@ -273,6 +326,8 @@ class Characterization_Test {
 				"TEMPLATE-most-specific", "TEMPLATE-read-unknown" -> F_Template.class;
 			case "COMPLETE-prompt", "COMPLETE-resource-template", "COMPLETE-context",
 				"COMPLETE-empty-unknown", "COMPLETE-capped" -> F_Complete.class;
+			case "TRACE-meta-parent", "TRACE-http-fallback", "TRACE-meta-wins",
+				"TRACE-tracestate-baggage", "TRACE-response-echo", "TRACE-jsonrpc-error" -> F_Traced.class;
 			default -> F_Empty.class;
 		};
 	}

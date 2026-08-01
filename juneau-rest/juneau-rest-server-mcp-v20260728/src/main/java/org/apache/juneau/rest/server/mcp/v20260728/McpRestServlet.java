@@ -17,7 +17,9 @@
 package org.apache.juneau.rest.server.mcp.v20260728;
 
 import org.apache.juneau.bean.mcp.v20260728.*;
+import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.tracing.TraceContextExtractor;
 
 /**
  * Abstract MCP servlet bound to protocol revision {@code 2026-07-28}.
@@ -66,7 +68,23 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.M
 
 	@Override /* McpRestServlet */
 	protected org.apache.juneau.rest.server.mcp.McpRevision revision() {
-		return new McpRevision(capabilities(), getCacheConfig());
+		return new McpRevision(capabilities(), getCacheConfig(), instructions());
+	}
+
+	/**
+	 * Publishes this revision's stable {@link TraceContextExtractor} so an active {@code TracerHook}
+	 * (via {@code RestOpInvoker}) recognizes this endpoint's resolved {@code JsonRpcRequest} argument
+	 * and its {@code params._meta} carrier before span creation.
+	 *
+	 * <p>
+	 * A no-op when no {@code TracerHook} bean is registered &mdash; see the no-tracer fast-path
+	 * contract documented on {@code TracerHook}.
+	 *
+	 * @return This revision's shared {@link TraceContextExtractor}. Never <jk>null</jk>.
+	 */
+	@Bean
+	public TraceContextExtractor mcpTraceContextExtractor() {
+		return McpRevision.TRACE_CONTEXT_EXTRACTOR;
 	}
 
 	/**
@@ -86,6 +104,19 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.M
 	 * @return The explicit capabilities, or <jk>null</jk> to auto-derive.
 	 */
 	protected ServerCapabilities capabilities() {
+		return null;
+	}
+
+	/**
+	 * Optional free-form {@code server/discover} usage instructions advertised to clients.
+	 *
+	 * <p>
+	 * Returning <jk>null</jk> (the default) omits the {@code instructions} member from the discovery
+	 * result.
+	 *
+	 * @return The instructions, or <jk>null</jk> to omit them.
+	 */
+	protected String instructions() {
 		return null;
 	}
 

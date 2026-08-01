@@ -32,6 +32,7 @@ public class ClientCapabilities {
 	private RootsCapability roots;
 	private Map<String,Object> sampling;
 	private Map<String,Object> experimental;
+	private Map<String,Object> extensions;
 
 	/**
 	 * Roots capability.
@@ -118,6 +119,43 @@ public class ClientCapabilities {
 		if (experimental == null)
 			experimental = map();
 		experimental.put(name, value);
+		return this;
+	}
+
+	/**
+	 * Schema-defined capability extensions (distinct from the free-form {@code experimental} bag).
+	 *
+	 * @return The extensions map, or {@code null} if not set.
+	 */
+	public Map<String,Object> getExtensions() {
+		return u(extensions);
+	}
+
+	/**
+	 * Sets capability extensions.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ClientCapabilities setExtensions(Map<String,Object> value) {
+		extensions = value;
+		return this;
+	}
+
+	/**
+	 * Convenience method to add a single capability extension entry.
+	 *
+	 * <p>
+	 * The extension map is lazily initialized on first use and preserves insertion order across repeated calls.
+	 *
+	 * @param name The extension name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
+	 * @param value The extension value.  Can be <jk>null</jk> (stored as <jk>null</jk>).
+	 * @return This object (for method chaining).
+	 */
+	public ClientCapabilities putExtensions(String name, Object value) {
+		if (extensions == null)
+			extensions = map();
+		extensions.put(name, value);
 		return this;
 	}
 }

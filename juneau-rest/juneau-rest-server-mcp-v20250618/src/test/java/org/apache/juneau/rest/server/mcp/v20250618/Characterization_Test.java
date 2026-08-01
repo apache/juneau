@@ -289,18 +289,20 @@ class Characterization_Test {
 		var requestBody = Files.readString(DIR.resolve(fixture + ".request.json")).strip();
 		try (var client = MockRestClient.create(servletFor(fixture)).json()
 				.contentType("application/json").accept("application/json").ignoreErrors().build()) {
-			var req = client.post("/").contentString(requestBody);
-			loadHeaders(fixture).forEach(req::header);
-			var res = req.run();
-			assertEquals(200, res.getStatusCode(), () -> fixture + ": HTTP status changed");
-			var actual = res.getContent().asString();
-			var expected = DIR.resolve(fixture + ".response.json");
-			if (WRITE) {
-				Files.writeString(expected, actual);
-				return;
+			try (var req = client.post("/").contentString(requestBody)) {
+				loadHeaders(fixture).forEach(req::header);
+				try (var res = req.run()) {
+					assertEquals(200, res.getStatusCode(), () -> fixture + ": HTTP status changed");
+					var actual = res.getContent().asString();
+					var expected = DIR.resolve(fixture + ".response.json");
+					if (WRITE) {
+						Files.writeString(expected, actual);
+						return;
+					}
+					assertEquals(Files.readString(expected), actual,
+						() -> fixture + ": WIRE FORMAT CHANGED. Do not update the fixture — fix the code.");
+				}
 			}
-			assertEquals(Files.readString(expected), actual,
-				() -> fixture + ": WIRE FORMAT CHANGED. Do not update the fixture — fix the code.");
 		}
 	}
 

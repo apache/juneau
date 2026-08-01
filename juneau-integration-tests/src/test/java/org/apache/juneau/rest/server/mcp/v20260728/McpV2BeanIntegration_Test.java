@@ -66,17 +66,17 @@ class McpV2BeanIntegration_Test {
 	void a01_metadataAndDiscoveryRoundTrip() {
 		var meta = new RequestMeta().setProtocolVersion("2026-07-28")
 			.setClientInfo(new Implementation().setName("c").setVersion("1"))
-			.setCapabilities(new ClientCapabilities());
+			.setClientCapabilities(new ClientCapabilities());
 		var metaCopy = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(meta), RequestMeta.class);
 		assertEquals("2026-07-28", metaCopy.getProtocolVersion());
 		assertEquals("c", metaCopy.getClientInfo().getName());
-		assertNotNull(metaCopy.getCapabilities());
+		assertNotNull(metaCopy.getClientCapabilities());
 
 		var result = new ServerDiscoverResult()
-			.setServerInfo(new Implementation().setName("s").setVersion("2"))
+			.setMeta(new ResultMeta().setServerInfo(new Implementation().setName("s").setVersion("2")))
 			.setCapabilities(new ServerCapabilities().setTools(new ToolCapability()));
 		var resultCopy = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(result), ServerDiscoverResult.class);
-		assertEquals("s", resultCopy.getServerInfo().getName());
+		assertEquals("s", resultCopy.getMeta().getServerInfo().getName());
 		assertNotNull(resultCopy.getCapabilities().getTools());
 	}
 
@@ -219,7 +219,7 @@ class McpV2BeanIntegration_Test {
 
 	@Test void c06_completeResult_emptyValuesRoundTrip() {
 		var result = new CompleteResult().setCompletion(new Completion().setValues(List.of()));
-		assertEquals("{\"completion\":{\"values\":[]}}", JsonSerializer.DEFAULT.write(result));
+		assertEquals("{\"completion\":{\"values\":[]},\"resultType\":\"complete\"}", JsonSerializer.DEFAULT.write(result));
 		var copy = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(result), CompleteResult.class);
 		assertEquals(JsonSerializer.DEFAULT.write(result), JsonSerializer.DEFAULT.write(copy));
 	}

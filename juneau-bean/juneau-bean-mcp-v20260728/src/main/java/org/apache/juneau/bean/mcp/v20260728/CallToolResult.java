@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * Result payload for {@value McpMethods#TOOLS_CALL}.
  */
 @Marshalled
-public class CallToolResult {
+public class CallToolResult extends Result<CallToolResult> {
 
 	private List<Content> content;
 	private Boolean isError;

@@ -1,0 +1,1 @@
+{"id":1,"jsonrpc":"2.0","result":{"_meta":{"io.modelcontextprotocol/serverInfo":{"name":"test","version":"1.0.0"},"traceparent":"00-c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2-d2d2d2d2d2d2d2d2-01"},"content":[{"type":"text","text":"hi"}],"resultType":"complete"}}

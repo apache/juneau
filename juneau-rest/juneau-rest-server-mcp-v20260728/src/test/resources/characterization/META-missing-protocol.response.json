@@ -1,1 +1,1 @@
-{"error":{"code":-32600,"message":"Missing required _meta.protocolVersion"},"id":1,"jsonrpc":"2.0"}
+{"error":{"code":-32600,"message":"Missing required params._meta.io.modelcontextprotocol/protocolVersion"},"id":1,"jsonrpc":"2.0"}

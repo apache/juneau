@@ -89,13 +89,15 @@ class McpCachePagination_Test {
 
 	private static Object validMeta() {
 		return JsonMap.of(
-			"protocolVersion", "2026-07-28",
-			"clientInfo", JsonMap.of("name", "fixture-client", "version", "1.0"),
-			"capabilities", JsonMap.of());
+			RequestMeta.KEY_PROTOCOL_VERSION, "2026-07-28",
+			RequestMeta.KEY_CLIENT_INFO, JsonMap.of("name", "fixture-client", "version", "1.0"),
+			RequestMeta.KEY_CLIENT_CAPABILITIES, JsonMap.of());
 	}
 
 	private static JsonRpcRequest req(Object id, String method, Object params) {
-		return new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(method).setParams(params).setMeta(validMeta());
+		var p = params instanceof Map<?,?> m ? new JsonMap(m) : new JsonMap();
+		p.put("_meta", validMeta());
+		return new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(method).setParams(p);
 	}
 
 	private static Map<String,String> hdrs(String method, String name) {
@@ -179,12 +181,15 @@ class McpCachePagination_Test {
 	@Test void b01_cacheFieldsAreTopLevelOnly() {
 		var config = fullTwoItemConfig();
 		var cache = endpointHint("tools/list", new McpCacheHint().setTtlMs(41));
-		var json = Json.of(send(config, cache, "tools/list", null));
-		var resultIndex = json.indexOf("\"result\":{");
-		assertTrue(resultIndex >= 0 && json.indexOf("\"ttlMs\":41", resultIndex) > resultIndex, json);
-		assertFalse(json.contains("\"_meta\""));
+		var result = result(send(config, cache, "tools/list", null));
+		var json = Json.of(result);
+		assertTrue(json.contains("\"ttlMs\":41"), json);
 		assertFalse(json.contains("Cache-Control"));
 		assertFalse(json.contains("\"cache\":{\""));
+		// Cache hints are direct result properties, not nested inside the unrelated result._meta carrier
+		// (which every success result now carries per common result finalization).
+		assertNotNull(result.getMeta());
+		assertFalse(Json.of(result.getMeta()).contains("ttlMs"));
 	}
 
 	@Test void b02_errorKindNamesUnchangedByC2() {

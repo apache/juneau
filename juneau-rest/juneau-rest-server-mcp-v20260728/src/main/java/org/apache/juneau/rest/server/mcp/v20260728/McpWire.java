@@ -48,9 +48,9 @@ import org.apache.juneau.rest.server.mcp.McpToolSpec;
  * typed-handler API, so no wire-to-neutral adaptation is needed.
  *
  * <p>
- * {@link #requestMeta(Object)} is the single opaque-to-typed conversion: the shared JSON-RPC
- * envelope carries {@code _meta} as an opaque {@link Object}, and this class parses it into the v2
- * {@link RequestMeta} bean at the boundary.
+ * {@link #requestMeta(Object)} is the single opaque-to-typed conversion: every v2 request carries its
+ * negotiation/trace metadata nested under {@code params._meta} (never beside the JSON-RPC envelope), and this
+ * class parses that opaque {@code _meta} member into the v2 {@link RequestMeta} bean at the boundary.
  *
  * <p>
  * <b>{@code null} is preserved as {@code null} throughout.</b> Juneau omits null bean properties, so
@@ -61,12 +61,51 @@ final class McpWire {
 
 	private McpWire() {}
 
-	// --- opaque _meta -> typed --------------------------------------------------------------
+	// --- opaque params._meta -> typed ------------------------------------------------------
 
-	static RequestMeta requestMeta(Object value) {
-		if (! (value instanceof Map<?,?>))
-			throw new McpException(McpRevision.CODE_INVALID_REQUEST, "Request _meta must be an object");
-		return Json.to(Json.of(value), RequestMeta.class);
+	/**
+	 * Parses the {@code _meta} member nested under an opaque {@code params} object into a typed
+	 * {@link RequestMeta}.
+	 *
+	 * <p>
+	 * Requires an object {@code params} containing an object {@code _meta}; the {@code 2026-07-28} schema puts
+	 * every request's negotiation/trace metadata under {@code params._meta}, never beside the JSON-RPC
+	 * envelope.
+	 *
+	 * @param params The opaque request params (the JSON-RPC {@code params} member). Can be <jk>null</jk>.
+	 * @return The parsed metadata. Never <jk>null</jk>.
+	 * @throws McpException If {@code params} or {@code params._meta} is absent or not an object.
+	 */
+	static RequestMeta requestMeta(Object params) {
+		if (! (params instanceof Map<?,?> p))
+			throw new McpException(McpRevision.CODE_INVALID_REQUEST, "Request params must be an object");
+		var meta = p.get("_meta");
+		if (! (meta instanceof Map<?,?>))
+			throw new McpException(McpRevision.CODE_INVALID_REQUEST, "Request params._meta must be an object");
+		return Json.to(Json.of(meta), RequestMeta.class);
+	}
+
+	/**
+	 * Returns the opaque {@code params._meta} member as a raw, string-keyed map, or an empty map if
+	 * {@code params} or {@code params._meta} is absent or malformed.
+	 *
+	 * <p>
+	 * Unlike {@link #requestMeta(Object)}, this never throws. A {@code TraceContextExtractor} runs
+	 * before {@link McpRevision#validateMeta(Object)} enforces the per-request {@code _meta} contract
+	 * (extraction happens once per operation invocation, valid or not), so it needs a defensive read
+	 * rather than one that raises {@link McpException} on a shape violation.
+	 *
+	 * @param params The opaque request params (the JSON-RPC {@code params} member). Can be <jk>null</jk>.
+	 * @return An unmodifiable, insertion-ordered map keyed by {@code String}. Never <jk>null</jk>;
+	 * 	empty when {@code params._meta} is absent or not an object.
+	 */
+	static Map<String,Object> metaMapOrEmpty(Object params) {
+		if (params instanceof Map<?,?> p && p.get("_meta") instanceof Map<?,?> m) {
+			var result = new LinkedHashMap<String,Object>();
+			m.forEach((k, v) -> result.put(String.valueOf(k), v));
+			return Collections.unmodifiableMap(result);
+		}
+		return Collections.emptyMap();
 	}
 
 	// --- neutral -> wire -------------------------------------------------------------------
@@ -242,9 +281,23 @@ final class McpWire {
 		return new Implementation().setName(config.getName()).setVersion(config.getVersion());
 	}
 
-	static ServerDiscoverResult discover(McpServerConfig config, ServerCapabilities capabilities) {
+	/**
+	 * Builds the {@code server/discover} result.
+	 *
+	 * <p>
+	 * Server identity is <b>not</b> set here: every successful result (including this one) receives its
+	 * {@link ResultMeta#getServerInfo() serverInfo} uniformly from {@link McpRevision}'s common result
+	 * finalization, so discovery does not special-case identity placement.
+	 *
+	 * @param capabilities The top-level capability advertisement. Can be <jk>null</jk>.
+	 * @param protocolVersion The single supported protocol version to advertise. Must not be <jk>null</jk>.
+	 * @param instructions Optional free-form usage instructions. Can be <jk>null</jk>.
+	 * @return A new discovery result. Never <jk>null</jk>.
+	 */
+	static ServerDiscoverResult discover(ServerCapabilities capabilities, String protocolVersion, String instructions) {
 		return new ServerDiscoverResult()
-			.setServerInfo(serverInfo(config))
-			.setCapabilities(capabilities);
+			.setSupportedVersions(protocolVersion)
+			.setCapabilities(capabilities)
+			.setInstructions(instructions);
 	}
 }

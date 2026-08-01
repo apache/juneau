@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * Result payload for {@value McpMethods#PROMPTS_GET}.
  */
 @Marshalled
-public class GetPromptResult {
+public class GetPromptResult extends Result<GetPromptResult> {
 
 	private String description;
 	private List<PromptMessage> messages;

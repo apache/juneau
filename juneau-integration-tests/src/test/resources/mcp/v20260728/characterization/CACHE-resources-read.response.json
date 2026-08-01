@@ -1,1 +1,1 @@
-{"id":1,"jsonrpc":"2.0","result":{"cacheScope":"private","contents":[{"type":"resourceText","mimeType":"text/plain","text":"body","uri":"file:///a"}],"ttlMs":1000}}
+{"id":1,"jsonrpc":"2.0","result":{"_meta":{"io.modelcontextprotocol/serverInfo":{"name":"juneau-rest-server-mcp","version":"unknown"}},"cacheScope":"private","contents":[{"type":"resourceText","mimeType":"text/plain","text":"body","uri":"file:///a"}],"resultType":"complete","ttlMs":1000}}

@@ -16,37 +16,84 @@
  */
 package org.apache.juneau.bean.mcp.v20260728;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
+import java.util.*;
+
 import org.apache.juneau.marshall.*;
 
 /**
  * Result payload for {@value McpMethods#SERVER_DISCOVER}.
  *
  * <p>
- * Carries only server identity and capabilities; there is no protocol version, session, or handshake state.
+ * Extends {@link CacheableResult} so discovery participates in the same SEP-2549 cache-hint machinery as the
+ * list/read results, and (transitively) {@link Result} so it inherits the required {@code resultType}
+ * discriminator plus {@code _meta}. Server identity belongs on the inherited {@code _meta} per the schema; there
+ * is no protocol version, session, or handshake state, and no top-level {@code serverInfo} member. Use the
+ * inherited {@link Result#getMeta()} server identity instead.
  */
 @Marshalled
-public class ServerDiscoverResult {
+public class ServerDiscoverResult extends CacheableResult<ServerDiscoverResult> {
 
-	private Implementation serverInfo;
+	private List<String> supportedVersions;
 	private ServerCapabilities capabilities;
+	private String instructions;
 
 	/**
-	 * Server implementation identity.
+	 * Protocol versions this server supports, in preference order.
 	 *
-	 * @return The server info, or {@code null} if not set.
+	 * @return The supported-versions list, or {@code null} if not set.
 	 */
-	public Implementation getServerInfo() {
-		return serverInfo;
+	public List<String> getSupportedVersions() {
+		return u(supportedVersions);
 	}
 
 	/**
-	 * Sets the server implementation identity.
+	 * Sets the supported protocol versions.
 	 *
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ServerDiscoverResult setServerInfo(Implementation value) {
-		serverInfo = value;
+	public ServerDiscoverResult setSupportedVersions(List<String> value) {
+		supportedVersions = value;
+		return this;
+	}
+
+	/**
+	 * Sets the supported protocol versions.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ServerDiscoverResult setSupportedVersions(String...value) {
+		supportedVersions = list(value);
+		return this;
+	}
+
+	/**
+	 * Appends to the supported protocol versions.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public ServerDiscoverResult addSupportedVersions(String...value) {
+		if (supportedVersions == null)
+			supportedVersions = list();
+		Collections.addAll(supportedVersions, value);
+		return this;
+	}
+
+	/**
+	 * Appends to the supported protocol versions.
+	 *
+	 * @param value The values to append.
+	 * @return This object (for method chaining).
+	 */
+	public ServerDiscoverResult addSupportedVersions(Collection<String> value) {
+		if (supportedVersions == null)
+			supportedVersions = list();
+		supportedVersions.addAll(value);
 		return this;
 	}
 
@@ -67,6 +114,26 @@ public class ServerDiscoverResult {
 	 */
 	public ServerDiscoverResult setCapabilities(ServerCapabilities value) {
 		capabilities = value;
+		return this;
+	}
+
+	/**
+	 * Optional free-form usage instructions for the client.
+	 *
+	 * @return The instructions, or {@code null} if not set.
+	 */
+	public String getInstructions() {
+		return instructions;
+	}
+
+	/**
+	 * Sets the usage instructions.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ServerDiscoverResult setInstructions(String value) {
+		instructions = value;
 		return this;
 	}
 }

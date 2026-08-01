@@ -46,38 +46,93 @@ import org.junit.jupiter.api.*;
  */
 class McpWire_Test {
 
-	// -------- opaque _meta -> RequestMeta ---------
+	// -------- opaque params._meta -> RequestMeta ---------
+
+	private static Object nestedMeta() {
+		return JsonMap.of(
+			RequestMeta.KEY_PROTOCOL_VERSION, "2026-07-28",
+			RequestMeta.KEY_CLIENT_INFO, JsonMap.of("name", "c", "version", "1"),
+			RequestMeta.KEY_CLIENT_CAPABILITIES, JsonMap.of());
+	}
 
 	@Test
 	void a01_requestMeta_opaqueMap_roundTrips() {
-		var meta = McpWire.requestMeta(JsonMap.of(
-			"protocolVersion", "2026-07-28",
-			"clientInfo", JsonMap.of("name", "c", "version", "1"),
-			"capabilities", JsonMap.of()));
+		var meta = McpWire.requestMeta(JsonMap.of("_meta", nestedMeta()));
 		assertEquals("2026-07-28", meta.getProtocolVersion());
 		assertEquals("c", meta.getClientInfo().getName());
 		assertEquals("1", meta.getClientInfo().getVersion());
-		assertNotNull(meta.getCapabilities());
+		assertNotNull(meta.getClientCapabilities());
 	}
 
 	@Test
-	void a02_requestMeta_scalar_rejected() {
+	void a02_requestMeta_scalarParams_rejected() {
 		var e = assertThrows(McpException.class, () -> McpWire.requestMeta("x"));
 		assertEquals(McpRevision.CODE_INVALID_REQUEST, e.getCode());
-		assertEquals("Request _meta must be an object", e.getMessage());
+		assertEquals("Request params must be an object", e.getMessage());
 	}
 
 	@Test
-	void a03_requestMeta_array_rejected() {
+	void a03_requestMeta_arrayParams_rejected() {
 		var e = assertThrows(McpException.class, () -> McpWire.requestMeta(JsonList.of(1, 2, 3)));
 		assertEquals(McpRevision.CODE_INVALID_REQUEST, e.getCode());
-		assertEquals("Request _meta must be an object", e.getMessage());
+		assertEquals("Request params must be an object", e.getMessage());
 	}
 
 	@Test
-	void a04_requestMeta_null_rejected() {
+	void a04_requestMeta_nullParams_rejected() {
 		var e = assertThrows(McpException.class, () -> McpWire.requestMeta(null));
 		assertEquals(McpRevision.CODE_INVALID_REQUEST, e.getCode());
+		assertEquals("Request params must be an object", e.getMessage());
+	}
+
+	@Test
+	void a05_requestMeta_missingNestedMeta_rejected() {
+		var e = assertThrows(McpException.class, () -> McpWire.requestMeta(JsonMap.of("name", "echo")));
+		assertEquals(McpRevision.CODE_INVALID_REQUEST, e.getCode());
+		assertEquals("Request params._meta must be an object", e.getMessage());
+	}
+
+	@Test
+	void a06_requestMeta_scalarNestedMeta_rejected() {
+		var e = assertThrows(McpException.class, () -> McpWire.requestMeta(JsonMap.of("_meta", "x")));
+		assertEquals(McpRevision.CODE_INVALID_REQUEST, e.getCode());
+		assertEquals("Request params._meta must be an object", e.getMessage());
+	}
+
+	// -------- opaque params._meta -> raw map (trace-context extraction) ---------
+
+	@Test
+	void a07_metaMapOrEmpty_returnsRawStringKeyedMap() {
+		var meta = McpWire.metaMapOrEmpty(JsonMap.of("_meta", nestedMeta()));
+		assertEquals("2026-07-28", meta.get(RequestMeta.KEY_PROTOCOL_VERSION));
+	}
+
+	@Test
+	void a08_metaMapOrEmpty_scalarParams_returnsEmpty() {
+		assertTrue(McpWire.metaMapOrEmpty("x").isEmpty());
+	}
+
+	@Test
+	void a09_metaMapOrEmpty_nullParams_returnsEmpty() {
+		assertTrue(McpWire.metaMapOrEmpty(null).isEmpty());
+	}
+
+	@Test
+	void a10_metaMapOrEmpty_missingNestedMeta_returnsEmpty() {
+		assertTrue(McpWire.metaMapOrEmpty(JsonMap.of("name", "echo")).isEmpty());
+	}
+
+	@Test
+	void a11_metaMapOrEmpty_scalarNestedMeta_returnsEmpty() {
+		assertTrue(McpWire.metaMapOrEmpty(JsonMap.of("_meta", "x")).isEmpty());
+	}
+
+	@Test
+	void a12_metaMapOrEmpty_neverThrows_unlikeRequestMeta() {
+		// requestMeta(...) rejects the same shapes metaMapOrEmpty(...) defensively tolerates - see a02-a06.
+		assertDoesNotThrow(() -> McpWire.metaMapOrEmpty("x"));
+		assertDoesNotThrow(() -> McpWire.metaMapOrEmpty(JsonList.of(1, 2, 3)));
+		assertDoesNotThrow(() -> McpWire.metaMapOrEmpty(null));
 	}
 
 	// -------- server identity ---------
@@ -140,7 +195,9 @@ class McpWire_Test {
 	@Test
 	void d02_toWire_toolOutcome_nullAndEmptyPreserved() {
 		assertNull(McpWire.toWire((McpToolOutcome) null));
-		assertEquals("{}", Json.of(McpWire.toWire(new McpToolOutcome())));
+		// resultType defaults to "complete" (inherited from Result); _meta is added only by McpRevision's
+		// common result finalization, not by this neutral-to-wire mapping.
+		assertEquals("{\"resultType\":\"complete\"}", Json.of(McpWire.toWire(new McpToolOutcome())));
 	}
 
 	// -------- content + resource-contents variants ---------
@@ -257,11 +314,11 @@ class McpWire_Test {
 
 	@Test
 	void g01_discover_buildsResult() {
-		var config = new McpServerConfig().setName("srv").setVersion("2.0");
 		var capabilities = new ServerCapabilities().setTools(new ToolCapability());
-		var result = McpWire.discover(config, capabilities);
-		assertEquals("srv", result.getServerInfo().getName());
-		assertEquals("2.0", result.getServerInfo().getVersion());
+		var result = McpWire.discover(capabilities, "2026-07-28", "call tools/list first");
+		assertEquals(List.of("2026-07-28"), result.getSupportedVersions());
+		assertEquals("call tools/list first", result.getInstructions());
 		assertNotNull(result.getCapabilities().getTools());
+		assertNull(result.getMeta());
 	}
 }

@@ -22,6 +22,9 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+import java.util.*;
+import java.util.concurrent.atomic.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.settings.*;
@@ -202,5 +205,95 @@ class TraceContextResponseProcessor_Test extends TestBase {
 		assertEquals(ResponseProcessor.FINISHED, rc);
 		// Committed ⇒ no header write attempted.
 		verify(res, never()).setHeader(eq("traceparent"), anyString());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// G: ATTR_BAGGAGE is a request-attribute-only stash — this processor never reads it and never emits a
+	// "baggage" HTTP response header, even when both traceparent (which drives the rest of the emission path)
+	// and baggage are present on the request.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_baggageAttribute_neverBecomesResponseHeader() {
+		var req = mock(RestRequest.class);
+		var res = mock(RestResponse.class);
+		var hsr = mock(jakarta.servlet.http.HttpServletResponse.class);
+		var opSession = mock(RestOpSession.class);
+
+		var tpAttr = mock(RequestAttribute.class);
+		when(tpAttr.as(String.class)).thenReturn(o("00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"));
+		when(req.getAttribute(TraceContextResponseProcessor.ATTR_TRACEPARENT)).thenReturn(tpAttr);
+
+		var tsAttr = mock(RequestAttribute.class);
+		when(tsAttr.as(String.class)).thenReturn(o(null));
+		when(req.getAttribute(TraceContextResponseProcessor.ATTR_TRACESTATE)).thenReturn(tsAttr);
+
+		var bgAttr = mock(RequestAttribute.class);
+		when(bgAttr.as(String.class)).thenReturn(o("userId=alice"));
+		when(req.getAttribute(TraceContextResponseProcessor.ATTR_BAGGAGE)).thenReturn(bgAttr);
+
+		when(opSession.getRequest()).thenReturn(req);
+		when(opSession.getResponse()).thenReturn(res);
+		when(res.getHttpServletResponse()).thenReturn(hsr);
+		when(hsr.isCommitted()).thenReturn(false);
+
+		var p = new TraceContextResponseProcessor();
+		var rc = assertDoesNotThrow(() -> p.process(opSession));
+		assertEquals(ResponseProcessor.NEXT, rc);
+		verify(res).setHeader(eq("traceparent"), anyString());
+		verify(res, never()).setHeader(eq("baggage"), anyString());
+		verify(req, never()).getAttribute(TraceContextResponseProcessor.ATTR_BAGGAGE);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// H: End-to-end — a non-HTTP TraceContextCarrier (standing in for a future MCP params._meta carrier)
+	// recognized by a registered TraceContextExtractor wins over a differing HTTP traceparent header, and
+	// that winning value is what this processor echoes back as the response header.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	private static final class H_MapCarrier implements TraceContextCarrier {
+		private final Map<String,String> map;
+		H_MapCarrier(Map<String,String> map) { this.map = map; }
+		@Override public String get(String key) { return map.get(key); }
+		@Override public Iterable<String> keys() { return map.keySet(); }
+		@Override public void set(String key, String value) { map.put(key, value); }
+	}
+
+	private static final AtomicReference<TraceContextCarrier> H_CARRIER = new AtomicReference<>();
+
+	public static final class H_Extractor implements TraceContextExtractor {
+		@Override
+		public Optional<TraceContextCarrier> extract(RestRequest request, Object[] resolvedArguments) {
+			return Optional.ofNullable(H_CARRIER.get());
+		}
+	}
+
+	@Rest
+	public static class H extends RestServlet {
+		private static final long serialVersionUID = 1L;
+
+		@Bean
+		public TracerHook tracer() { return new OtelTracerHook(OTEL_SDK); }
+
+		@Bean
+		public TraceContextExtractor extractor() { return new H_Extractor(); }
+
+		@RestGet("/op")
+		public String op() { return "ok"; }
+	}
+
+	private static final MockRestClient CH = MockRestClient.buildLax(H.class);
+
+	@Test void h01_metadataTraceparent_echoedOnResponseInsteadOfHttpHeader() throws Exception {
+		String metaTraceId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+		String metaSpanId = "aaaaaaaaaaaaaaaa";
+		H_CARRIER.set(new H_MapCarrier(new LinkedHashMap<>(Map.of("traceparent", "00-" + metaTraceId + "-" + metaSpanId + "-01"))));
+
+		var traceparent = CH.get("/op")
+			.header("traceparent", "00-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb-bbbbbbbbbbbbbbbb-01")
+			.run()
+			.assertStatus(200)
+			.getHeader("traceparent").asString().orElseThrow();
+
+		assertTrue(traceparent.contains(metaTraceId), "response traceparent must carry the params._meta trace id, not the HTTP header's");
 	}
 }

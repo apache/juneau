@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.jsonrpc;
 
-import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 
 /**
@@ -24,6 +23,11 @@ import org.apache.juneau.marshall.*;
  *
  * <p>
  * The {@code id} field may be a {@link String}, integral {@link Number}, or {@code null} (notification).
+ *
+ * <p>
+ * This envelope is generic JSON-RPC 2.0 and carries no {@code _meta} property: MCP-specific per-request
+ * metadata belongs under {@code params._meta}, not beside the envelope. See the {@code 2026-07-28} v2 bean
+ * package ({@code org.apache.juneau.bean.mcp.v20260728}) for the typed nested carrier.
  */
 @Marshalled
 public class JsonRpcRequest {
@@ -32,7 +36,6 @@ public class JsonRpcRequest {
 	private Object id;
 	private String method;
 	private Object params;
-	private Object meta;
 
 	/**
 	 * JSON-RPC protocol version (typically {@code "2.0"}).
@@ -111,28 +114,6 @@ public class JsonRpcRequest {
 	 */
 	public JsonRpcRequest setParams(Object value) {
 		params = value;
-		return this;
-	}
-
-	/**
-	 * Opaque extension metadata.
-	 *
-	 * @return The metadata value, or <jk>null</jk> if absent.
-	 */
-	@BeanProp("_meta")
-	public Object getMeta() {
-		return meta;
-	}
-
-	/**
-	 * Sets opaque extension metadata.
-	 *
-	 * @param value Any JSON-compatible value. Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	@BeanProp("_meta")
-	public JsonRpcRequest setMeta(Object value) {
-		meta = value;
 		return this;
 	}
 }

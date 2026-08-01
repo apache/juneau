@@ -52,7 +52,9 @@ final class McpNotificationResponseProcessor implements ViewRenderer {
 		var res = opSession.getResponse();
 		if (res.getContent(Object.class) != null)
 			return NEXT;
-		res.getNegotiatedOutputStream().finish();
+		try (var os = res.getNegotiatedOutputStream()) {
+			os.finish();
+		}
 		return FINISHED;
 	}
 }

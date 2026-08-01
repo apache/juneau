@@ -78,44 +78,69 @@ class McpCacheableResults_Test {
 	@Test void a05_wireBeanPreservesNegativeParsedTtl() {
 		var value = JsonParser.DEFAULT.read("{\"ttlMs\":-1,\"tools\":[]}", ListToolsResult.class);
 		assertEquals(-1, value.getTtlMs());
-		assertEquals("{\"tools\":[],\"ttlMs\":-1}", Json.of(value));
+		assertEquals("complete", value.getResultType());
+		assertEquals("{\"resultType\":\"complete\",\"tools\":[],\"ttlMs\":-1}", Json.of(value));
 	}
 
-	@Test void a06_oldPayloadOnly_listToolsResult_unchanged() {
+	@Test void a06_payloadPlusInheritedResultType_listToolsResult() {
 		var value = new ListToolsResult().setTools(new Tool().setName("t"));
 		var json = Json.of(value);
-		assertEquals("{\"tools\":[{\"name\":\"t\"}]}", json);
+		assertEquals("{\"resultType\":\"complete\",\"tools\":[{\"name\":\"t\"}]}", json);
 		var copy = JsonParser.DEFAULT.read(json, ListToolsResult.class);
 		assertEquals(json, Json.of(copy));
 		assertFalse(json.contains("ttlMs"));
 		assertFalse(json.contains("cacheScope"));
 	}
 
-	@Test void a07_oldPayloadOnly_listPromptsResult_unchanged() {
+	@Test void a07_payloadPlusInheritedResultType_listPromptsResult() {
 		var value = new ListPromptsResult().setPrompts(new Prompt().setName("p"));
 		var json = Json.of(value);
-		assertEquals("{\"prompts\":[{\"name\":\"p\"}]}", json);
+		assertEquals("{\"prompts\":[{\"name\":\"p\"}],\"resultType\":\"complete\"}", json);
 		var copy = JsonParser.DEFAULT.read(json, ListPromptsResult.class);
 		assertEquals(json, Json.of(copy));
 		assertFalse(json.contains("ttlMs"));
 		assertFalse(json.contains("cacheScope"));
 	}
 
-	@Test void a08_oldPayloadOnly_listResourcesResult_unchanged() {
+	@Test void a08_payloadPlusInheritedResultType_listResourcesResult() {
 		var value = new ListResourcesResult().setResources(new Resource().setUri("file:///a"));
 		var json = Json.of(value);
-		assertEquals("{\"resources\":[{\"uri\":\"file:///a\"}]}", json);
+		assertEquals("{\"resources\":[{\"uri\":\"file:///a\"}],\"resultType\":\"complete\"}", json);
 		var copy = JsonParser.DEFAULT.read(json, ListResourcesResult.class);
 		assertEquals(json, Json.of(copy));
 		assertFalse(json.contains("ttlMs"));
 		assertFalse(json.contains("cacheScope"));
 	}
 
-	@Test void a09_oldPayloadOnly_readResourceResult_unchanged() {
+	@Test void a09_payloadPlusInheritedResultType_readResourceResult() {
 		var value = new ReadResourceResult().setContents(new TextResourceContents().setUri("file:///a").setText("x"));
 		var json = Json.of(value);
-		assertEquals("{\"contents\":[{\"text\":\"x\",\"uri\":\"file:///a\"}]}", json);
+		assertEquals("{\"contents\":[{\"text\":\"x\",\"uri\":\"file:///a\"}],\"resultType\":\"complete\"}", json);
 		assertFalse(json.contains("ttlMs"));
 		assertFalse(json.contains("cacheScope"));
+	}
+
+	@ParameterizedTest @MethodSource("results")
+	void a10_cacheableResults_extendResult(CacheableResult<?> value) {
+		assertTrue(Result.class.isAssignableFrom(value.getClass()));
+		assertEquals("complete", value.getResultType());
+	}
+
+	@Test void a11_cacheableResult_classExtendsResult() {
+		assertTrue(Result.class.isAssignableFrom(CacheableResult.class));
+	}
+
+	@Test void a12_fluentChain_mixesOwnCacheAndInheritedResultSetters() {
+		var value = new ListToolsResult()
+			.setTools(new Tool().setName("t"))
+			.setTtlMs(5)
+			.setCacheScope(McpCacheScope.PUBLIC)
+			.setResultType("complete")
+			.setMeta(new ResultMeta().setServerInfo(new Implementation().setName("s").setVersion("1")));
+		assertEquals("t", value.getTools().get(0).getName());
+		assertEquals(5, value.getTtlMs());
+		assertEquals(McpCacheScope.PUBLIC, value.getCacheScope());
+		assertEquals("complete", value.getResultType());
+		assertEquals("s", value.getMeta().getServerInfo().getName());
 	}
 }

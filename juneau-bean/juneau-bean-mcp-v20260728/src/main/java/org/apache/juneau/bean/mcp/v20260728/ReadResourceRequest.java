@@ -22,7 +22,7 @@ import org.apache.juneau.marshall.*;
  * Parameters for {@value McpMethods#RESOURCES_READ}.
  */
 @Marshalled
-public class ReadResourceRequest {
+public class ReadResourceRequest extends RequestParams<ReadResourceRequest> {
 
 	private String uri;
 

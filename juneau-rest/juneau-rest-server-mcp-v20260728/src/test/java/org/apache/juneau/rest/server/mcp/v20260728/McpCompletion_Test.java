@@ -64,13 +64,25 @@ class McpCompletion_Test {
 
 	private static Object validMeta() {
 		return JsonMap.of(
-			"protocolVersion", "2026-07-28",
-			"clientInfo", JsonMap.of("name", "fixture-client", "version", "1.0"),
-			"capabilities", JsonMap.of());
+			RequestMeta.KEY_PROTOCOL_VERSION, "2026-07-28",
+			RequestMeta.KEY_CLIENT_INFO, JsonMap.of("name", "fixture-client", "version", "1.0"),
+			RequestMeta.KEY_CLIENT_CAPABILITIES, JsonMap.of());
 	}
 
+	/**
+	 * Builds a {@code completion/complete} request, nesting {@code meta} under {@code params._meta} when both
+	 * {@code params} is an object and {@code meta} is non-<jk>null</jk>. A non-object {@code params} (used by the
+	 * strict-params-validation scenarios below) is passed through as-is: it can carry no nested {@code _meta} and
+	 * is expected to fail generic {@code params} shape validation before reaching completion-specific logic.
+	 */
 	private static JsonRpcRequest req(Object id, Object params, Object meta) {
-		return new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(McpMethods.COMPLETION_COMPLETE).setParams(params).setMeta(meta);
+		Object merged = params;
+		if (meta != null && params instanceof Map<?,?> m) {
+			var p = new JsonMap(m);
+			p.put("_meta", meta);
+			merged = p;
+		}
+		return new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(McpMethods.COMPLETION_COMPLETE).setParams(merged);
 	}
 
 	private static Map<String,String> hdrs(String method, String name) {
@@ -161,9 +173,11 @@ class McpCompletion_Test {
 	// B: strict params validation -> -32602
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_paramsNotObject_invalidParams() {
+	@Test void b01_paramsNotObject_invalidRequest() {
+		// A non-object params can carry no nested `_meta`, so the generic params-shape check now rejects it
+		// (-32600) before completion-specific params validation (-32602) is ever reached.
 		var resp = send(new McpServerConfig(), "not-a-map");
-		assertEquals(McpRevision.CODE_INVALID_PARAMS, resp.getError().getCode());
+		assertEquals(McpRevision.CODE_INVALID_REQUEST, resp.getError().getCode());
 	}
 
 	@Test void b02_refNotObject_invalidParams() {

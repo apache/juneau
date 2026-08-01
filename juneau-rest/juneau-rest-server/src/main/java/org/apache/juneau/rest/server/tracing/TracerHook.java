@@ -73,6 +73,10 @@ import org.apache.juneau.rest.server.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link NoOpTracerHook}
  * 	<li class='jc'>{@link Scope}
+ * 	<li class='jc'>{@link TraceContextCarrier}
+ * 	<li class='jc'>{@link TraceContextExtractor}
+ * 	<li class='jc'>{@link TraceOperation}
+ * 	<li class='jc'>{@link TraceContexts}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.MetricsRecorder}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
  * </ul>
@@ -80,6 +84,9 @@ import org.apache.juneau.rest.server.*;
  * @since 10.0.0
  */
 @FunctionalInterface
+@SuppressWarnings({
+	"resource" // Scope is returned to the caller for try-with-resources/finally management, not closed here; Eclipse JDT @Owning warning is by design.
+})
 public interface TracerHook {
 
 	/**
@@ -116,5 +123,47 @@ public interface TracerHook {
 	 */
 	default Scope startSpan(String spanName) {
 		return NoOpTracerHook.NoOpScope.INSTANCE;
+	}
+
+	/**
+	 * Opens a new span for the in-flight request, given a pre-extracted non-HTTP
+	 * {@link TraceContextCarrier} and derived {@link TraceOperation}.
+	 *
+	 * <p>
+	 * Added as a source-compatible default overload so every existing {@link TracerHook}
+	 * implementation &mdash; including a bare lambda implementing only
+	 * {@link #startSpan(RestRequest)} &mdash; keeps compiling unchanged. The default implementation
+	 * simply delegates to {@link #startSpan(RestRequest)}, ignoring <c>carrier</c> and
+	 * <c>operation</c>; a bridge only needs to override this overload if it wants to honor a
+	 * non-HTTP carrier (for example MCP's {@code params._meta}) or name the span after
+	 * <c>operation</c> instead of its own HTTP-derived default.
+	 *
+	 * @param request The in-flight {@link RestRequest}. Never <jk>null</jk>.
+	 * @param carrier The {@link TraceContextCarrier} an active {@code TraceContextExtractor}
+	 * 	recognized among the resolved operation arguments, or <jk>null</jk> if none was recognized
+	 * 	(the bridge should then fall back to HTTP headers only).
+	 * @param operation The {@link TraceOperation} an active {@code TraceContextExtractor} derived
+	 * 	for this invocation. Never <jk>null</jk>; {@link TraceOperation#DEFAULT} when the extractor
+	 * 	supplied no override.
+	 * @return The opened {@link Scope}. Never <jk>null</jk>.
+	 */
+	default Scope startSpan(RestRequest request, TraceContextCarrier carrier, TraceOperation operation) {
+		return startSpan(request);
+	}
+
+	/**
+	 * Renders this hook's active trace context (if any) into <c>carrier</c>.
+	 *
+	 * <p>
+	 * The substrate for {@link TraceContexts#inject(TracerHook, TraceContextCarrier)}. The default
+	 * implementation is a no-op &mdash; {@link NoOpTracerHook} and any bridge that does not override
+	 * this method write nothing. A bridge with an actual trace context to render (for example the
+	 * OpenTelemetry bridge in {@code juneau-rest-server-tracing-otel}) overrides this to write
+	 * {@code traceparent} / {@code tracestate} / {@code baggage} keys via {@link TraceContextCarrier#set(String, String)}.
+	 *
+	 * @param carrier The {@link TraceContextCarrier} to write into. Never <jk>null</jk>.
+	 */
+	default void inject(TraceContextCarrier carrier) {
+		// Intentionally empty; see class-level javadoc.
 	}
 }

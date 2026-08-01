@@ -49,14 +49,20 @@ class McpTemplateCompletionIntegration_Test {
 
 	private static Object validMeta() {
 		return JsonMap.of(
-			"protocolVersion", "2026-07-28",
-			"clientInfo", JsonMap.of("name", "fixture-client", "version", "1.0"),
-			"capabilities", JsonMap.of());
+			RequestMeta.KEY_PROTOCOL_VERSION, "2026-07-28",
+			RequestMeta.KEY_CLIENT_INFO, JsonMap.of("name", "fixture-client", "version", "1.0"),
+			RequestMeta.KEY_CLIENT_CAPABILITIES, JsonMap.of());
+	}
+
+	private static Object withMeta(Object baseParams) {
+		var p = baseParams instanceof Map<?,?> m ? new JsonMap(m) : new JsonMap();
+		p.put("_meta", validMeta());
+		return p;
 	}
 
 	private static String body(Object id, String method, Object params) {
 		return org.apache.juneau.marshall.marshaller.Json.of(new JsonRpcRequest()
-			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(method).setParams(params).setMeta(validMeta()));
+			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(method).setParams(withMeta(params)));
 	}
 
 	private static McpResourceHandler resource(String uri, String bodyText) {

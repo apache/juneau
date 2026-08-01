@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.time.*;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
@@ -170,6 +171,7 @@ public class RestOpInvoker extends MethodInvoker {
 		long startNanos = 0L;
 		Throwable observed = null;
 		boolean observabilityDeferred = false;
+		boolean scopeStashed = false;
 		var opContext = opSession.getContext();
 		// observable=true means this is the @RestOp handler (not a pre/post call), AND observability is not
 		// explicitly disabled for this operation via @Rest(observability="false") or @RestOp(observability="false").
@@ -178,7 +180,30 @@ public class RestOpInvoker extends MethodInvoker {
 			var bs = opSession.getRestContext().getBeanStore();
 			recorder = bs.getBean(MetricsRecorder.class).orElse(NoOpMetricsRecorder.INSTANCE);
 			var tracer = bs.getBean(TracerHook.class).orElse(NoOpTracerHook.INSTANCE);
-			tracerScope = tracer.startSpan(req);
+			if (tracer == NoOpTracerHook.INSTANCE) {
+				// No-tracer fast path: resolve neither a TraceContextExtractor nor a carrier/operation, and
+				// touch no request-scoped tracing attribute — matches the pre-existing zero-allocation contract.
+				tracerScope = tracer.startSpan(req);
+			} else {
+				// Active tracer: an optional TraceContextExtractor gets a look at the fully-resolved operation
+				// arguments (parsed request body / params included) before span creation, so it can recognize a
+				// non-HTTP carrier (e.g. an MCP request's params._meta) that HTTP headers alone wouldn't expose.
+				Optional<TraceContextExtractor> extractor = bs.getBean(TraceContextExtractor.class);
+				TraceContextCarrier carrier = null;
+				TraceOperation operation = TraceOperation.DEFAULT;
+				if (extractor.isPresent()) {
+					carrier = extractor.get().extract(req, args).orElse(null);
+					operation = extractor.get().operation(req, args);
+				}
+				tracerScope = tracer.startSpan(req, carrier, operation);
+				// Stash the active Scope as a request-scoped neutral tracing observation so a dated MCP adapter
+				// running inside this handler invocation (and already holding this same RestRequest through its
+				// own request-scoped BeanStore entry) can call Scope#recordRpcError(int, String) before returning
+				// a JSON-RPC error response. Cleared below once this invocation's synchronous/deferred
+				// observability lifecycle closes the scope.
+				req.setAttribute(TraceContextResponseProcessor.ATTR_SCOPE, tracerScope);
+				scopeStashed = true;
+			}
 			startNanos = System.nanoTime();
 		}
 
@@ -201,7 +226,7 @@ public class RestOpInvoker extends MethodInvoker {
 
 			if (effectivelyObservable && output instanceof CompletionStage<?> output2) {
 				observabilityDeferred = true;
-				deferObservability(output2, recorder, tracerScope, startNanos, opSession, opContext.getMetricName(), opContext.getMetricTags());
+				deferObservability(output2, recorder, tracerScope, startNanos, opSession, opContext.getMetricName(), opContext.getMetricTags(), scopeStashed);
 			}
 
 		} catch (IllegalAccessException | IllegalArgumentException e) {
@@ -230,9 +255,11 @@ public class RestOpInvoker extends MethodInvoker {
 					try {
 						tracerScope.close();
 					} finally {
-					var elapsed = Duration.ofNanos(System.nanoTime() - startNanos);
-					var pathTemplate = resolveUriTemplate(opSession);
-					recorder.record(getFullName(), req.getMethod(), pathTemplate, status, elapsed, observed, opContext.getMetricName(), opContext.getMetricTags());
+						if (scopeStashed)
+							req.setAttribute(TraceContextResponseProcessor.ATTR_SCOPE, null);
+						var elapsed = Duration.ofNanos(System.nanoTime() - startNanos);
+						var pathTemplate = resolveUriTemplate(opSession);
+						recorder.record(getFullName(), req.getMethod(), pathTemplate, status, elapsed, observed, opContext.getMetricName(), opContext.getMetricTags());
 					}
 				}
 			}
@@ -240,9 +267,10 @@ public class RestOpInvoker extends MethodInvoker {
 	}
 
 	private void deferObservability(CompletionStage<?> stage, MetricsRecorder recorder, Scope tracerScope,
-			long startNanos, RestOpSession opSession, String metricName, String metricTags) {
+			long startNanos, RestOpSession opSession, String metricName, String metricTags, boolean scopeStashed) {
 		var fullName = getFullName();
-		var httpMethod = opSession.getRequest().getMethod();
+		var req = opSession.getRequest();
+		var httpMethod = req.getMethod();
 		var pathTemplate = resolveUriTemplate(opSession);
 		stage.whenComplete((value, error) -> {
 			Throwable err = unwrapCompletionError(error);
@@ -253,11 +281,13 @@ public class RestOpInvoker extends MethodInvoker {
 					tracerScope.setError(err);
 			} finally {
 				try {
-					tracerScope.close();
-				} finally {
+				tracerScope.close();
+			} finally {
+				if (scopeStashed)
+					req.setAttribute(TraceContextResponseProcessor.ATTR_SCOPE, null);
 				var elapsed = Duration.ofNanos(System.nanoTime() - startNanos);
 				recorder.record(fullName, httpMethod, pathTemplate, status, elapsed, err, metricName, metricTags);
-				}
+			}
 			}
 		});
 	}

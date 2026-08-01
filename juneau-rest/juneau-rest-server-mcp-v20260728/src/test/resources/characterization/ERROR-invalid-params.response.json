@@ -1,1 +1,1 @@
-{"error":{"code":-32602,"message":"Params must be an object"},"id":1,"jsonrpc":"2.0"}
+{"error":{"code":-32600,"message":"Request params must be an object"},"id":1,"jsonrpc":"2.0"}

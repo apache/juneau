@@ -1,1 +1,1 @@
-{"id":1,"jsonrpc":"2.0","result":{"completion":{"values":[]}}}
+{"id":1,"jsonrpc":"2.0","result":{"_meta":{"io.modelcontextprotocol/serverInfo":{"name":"juneau-rest-server-mcp","version":"unknown"}},"completion":{"values":[]},"resultType":"complete"}}

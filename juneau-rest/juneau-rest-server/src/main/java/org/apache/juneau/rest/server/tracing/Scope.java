@@ -75,4 +75,28 @@ public interface Scope extends AutoCloseable {
 	 */
 	@Override
 	void close();
+
+	/**
+	 * Records a JSON-RPC-level error outcome on this span.
+	 *
+	 * <p>
+	 * A dated MCP adapter dispatches every request over HTTP {@code 200}, so an application-level
+	 * JSON-RPC error (for example an unknown tool name) never reaches {@link #setStatusCode(int)}
+	 * with anything but {@code 200} and never throws into {@link #setError(Throwable)}. This method
+	 * gives such a caller a neutral way to observe that outcome on the span &mdash; called from the
+	 * request-scoped tracing observation before a JSON-RPC error response is returned, distinct from
+	 * both the HTTP status path and the thrown-exception path.
+	 *
+	 * <p>
+	 * Added as a source-compatible default so every existing {@link Scope} implementation keeps
+	 * compiling unchanged. The default implementation is a no-op; a bridge that wants to classify
+	 * JSON-RPC errors on the span (for example the OpenTelemetry bridge in
+	 * {@code juneau-rest-server-tracing-otel}) overrides it.
+	 *
+	 * @param code The JSON-RPC error code (e.g. {@code -32601}).
+	 * @param message The JSON-RPC error message. May be <jk>null</jk>.
+	 */
+	default void recordRpcError(int code, String message) {
+		// Intentionally empty; see method-level javadoc.
+	}
 }

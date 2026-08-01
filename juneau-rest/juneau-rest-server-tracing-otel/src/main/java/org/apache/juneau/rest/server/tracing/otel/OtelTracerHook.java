@@ -167,31 +167,68 @@ public class OtelTracerHook implements TracerHook {
 
 	@Override /* TracerHook */
 	public Scope startSpan(RestRequest request) {
-		Context extracted = propagator.extract(Context.current(), request, RestRequestTextMapGetter.INSTANCE);
+		return startSpan(request, null, TraceOperation.DEFAULT);
+	}
+
+	@Override /* TracerHook */
+	public Scope startSpan(RestRequest request, TraceContextCarrier carrier, TraceOperation operation) {
+		Context extracted = extractContext(request, carrier);
 
 		String httpMethod = defaultIfBlank(request.getMethod(), "UNKNOWN");
 		String route = resolveRoute(request);
+		String spanName = defaultIfBlank(operation.getSpanName(), httpMethod);
 
-		var spanBuilder = tracer.spanBuilder(httpMethod)
+		var spanBuilder = tracer.spanBuilder(spanName)
 			.setSpanKind(SpanKind.SERVER)
 			.setParent(extracted)
 			.setAttribute(ATTR_HTTP_REQUEST_METHOD, httpMethod);
 		if (! route.isEmpty())
 			spanBuilder.setAttribute(ATTR_HTTP_ROUTE, route);
+		operation.getAttributes().forEach((k, v) -> spanBuilder.setAttribute(AttributeKey.stringKey(k), v));
 
 		Span span = spanBuilder.startSpan();
 		Context spanContext = extracted.with(span);
 
-		// Render the W3C trace-context headers from the server-started span's context (the only
-		// point where it's reliably active) and stash them as request attributes for
-		// TraceContextResponseProcessor to write on the response. The configured propagator only injects
-		// traceparent when the span context is valid, and tracestate only when non-empty, so both guards are
-		// handled here for free.
+		// Render the W3C trace-context headers (and baggage, when a baggage propagator is configured)
+		// from the server-started span's context (the only point where it's reliably active) and stash
+		// them as request attributes for TraceContextResponseProcessor / a dated MCP result to read
+		// later. The configured propagator only injects traceparent when the span context is valid, and
+		// tracestate/baggage only when non-empty, so both guards are handled here for free.
 		stashTraceContext(request, spanContext);
 
 		io.opentelemetry.context.Scope otelScope = spanContext.makeCurrent();
 
 		return new OtelScope(span, otelScope);
+	}
+
+	/**
+	 * Builds the effective parent {@link Context} for a new server span, giving a non-HTTP
+	 * {@link TraceContextCarrier} &mdash; recognized by an active {@code TraceContextExtractor} among
+	 * the resolved operation arguments (for example an MCP request's {@code params._meta}) &mdash;
+	 * precedence over HTTP request headers.
+	 *
+	 * <p>
+	 * Extraction runs in up to two passes against the same configured {@link #propagator}: first
+	 * against ordinary HTTP headers (via {@link RestRequestTextMapGetter}), then &mdash; only when
+	 * <c>carrier</c> is non-<jk>null</jk> &mdash; a second pass against <c>carrier</c> (via
+	 * {@link TraceContextCarrierTextMapGetter}), seeded with the first pass's result. Per the
+	 * {@link TextMapPropagator} contract, extraction that finds nothing usable returns the given
+	 * {@link Context} unmodified, so an explicit carrier value wins while an absent or invalid one
+	 * falls back to whatever the HTTP pass already produced. This applies independently to the
+	 * {@code traceparent}/{@code tracestate} pair (extracted together as one {@code SpanContext}) and
+	 * to {@code baggage} (extracted separately whenever the configured propagator includes a baggage
+	 * propagator).
+	 *
+	 * @param request The in-flight request; source of the HTTP-header fallback. Never <jk>null</jk>.
+	 * @param carrier The extractor-recognized carrier, or <jk>null</jk> if none was recognized (HTTP
+	 * 	headers only).
+	 * @return The effective parent {@link Context}. Never <jk>null</jk>.
+	 */
+	private Context extractContext(RestRequest request, TraceContextCarrier carrier) {
+		Context httpContext = propagator.extract(Context.current(), request, RestRequestTextMapGetter.INSTANCE);
+		if (carrier == null)
+			return httpContext;
+		return propagator.extract(httpContext, carrier, TraceContextCarrierTextMapGetter.INSTANCE);
 	}
 
 	@Override /* TracerHook */
@@ -215,12 +252,20 @@ public class OtelTracerHook implements TracerHook {
 		var tracestate = carrier.get("tracestate");
 		if (nn(tracestate) && ! tracestate.isEmpty())
 			request.setAttribute(TraceContextResponseProcessor.ATTR_TRACESTATE, tracestate);
+		var baggage = carrier.get("baggage");
+		if (nn(baggage) && ! baggage.isEmpty())
+			request.setAttribute(TraceContextResponseProcessor.ATTR_BAGGAGE, baggage);
 	}
 
 	private static final TextMapSetter<HashMap<String,String>> MAP_SETTER = (carrier, key, value) -> {
 		if (nn(carrier))
 			carrier.put(key, value);
 	};
+
+	@Override /* TracerHook */
+	public void inject(TraceContextCarrier carrier) {
+		propagator.inject(Context.current(), carrier, TraceContextCarrierTextMapSetter.INSTANCE);
+	}
 
 	/**
 	 * Returns the {@link Tracer} this hook publishes spans to.
@@ -284,6 +329,39 @@ public class OtelTracerHook implements TracerHook {
 			} finally {
 				span.end();
 			}
+		}
+
+		@Override /* Scope */
+		public void recordRpcError(int code, String message) {
+			span.setAttribute(TraceOperation.ATTR_RPC_RESPONSE_STATUS_CODE, String.valueOf(code));
+			span.setAttribute(TraceOperation.ATTR_ERROR_TYPE, errorType(code));
+			span.setStatus(StatusCode.ERROR, message == null ? "" : message);
+		}
+	}
+
+	/**
+	 * Maps a JSON-RPC 2.0 error code to a low-cardinality {@code error.type} category.
+	 *
+	 * <p>
+	 * The five codes reserved by the JSON-RPC 2.0 specification map to their exact category name;
+	 * any code in the specification's reserved-for-implementation-defined-server-errors range
+	 * ({@code -32000} to {@code -32099}, inclusive) maps to the generic {@code "server_error"}
+	 * category. An application-defined code outside every reserved range falls back to its own
+	 * decimal string so the attribute stays populated (if not maximally low-cardinality) rather than
+	 * silently empty.
+	 *
+	 * @param code The JSON-RPC error code (e.g. {@code -32601}).
+	 * @return The {@code error.type} category. Never <jk>null</jk>.
+	 */
+	private static String errorType(int code) {
+		switch (code) {
+			case -32700: return "parse_error";
+			case -32600: return "invalid_request";
+			case -32601: return "method_not_found";
+			case -32602: return "invalid_params";
+			case -32603: return "internal_error";
+			default:
+				return (code <= -32000 && code >= -32099) ? "server_error" : String.valueOf(code);
 		}
 	}
 }

@@ -27,6 +27,8 @@ import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.JsonValueSafety;
 import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.rest.server.RestRequest;
+import org.apache.juneau.rest.server.tracing.*;
 import org.apache.juneau.rest.server.mcp.McpCompletionRef;
 import org.apache.juneau.rest.server.mcp.McpCompletionRequest;
 import org.apache.juneau.rest.server.mcp.McpCompletionResult;
@@ -68,9 +70,11 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 
 	private final ServerCapabilities capabilities;
 	private final McpCacheConfig cacheConfig;
+	private final String instructions;
 
 	/**
-	 * Constructor. Uses an empty {@link McpCacheConfig} (no cache hints emitted on any result).
+	 * Constructor. Uses an empty {@link McpCacheConfig} (no cache hints emitted on any result) and no
+	 * discovery instructions.
 	 *
 	 * @param capabilities Explicit capabilities to advertise on {@code server/discover}, or <jk>null</jk>
 	 * 	to auto-derive from the registered tool/prompt/resource lists.
@@ -80,15 +84,29 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor. Advertises no discovery instructions.
 	 *
 	 * @param capabilities Explicit capabilities to advertise on {@code server/discover}, or <jk>null</jk>
 	 * 	to auto-derive from the registered tool/prompt/resource lists.
 	 * @param cacheConfig Binding-owned cache configuration. Must not be <jk>null</jk>.
 	 */
 	public McpRevision(ServerCapabilities capabilities, McpCacheConfig cacheConfig) {
+		this(capabilities, cacheConfig, null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param capabilities Explicit capabilities to advertise on {@code server/discover}, or <jk>null</jk>
+	 * 	to auto-derive from the registered tool/prompt/resource lists.
+	 * @param cacheConfig Binding-owned cache configuration. Must not be <jk>null</jk>.
+	 * @param instructions Optional free-form {@code server/discover} usage instructions, or <jk>null</jk>
+	 * 	to omit them.
+	 */
+	public McpRevision(ServerCapabilities capabilities, McpCacheConfig cacheConfig, String instructions) {
 		this.capabilities = capabilities;
 		this.cacheConfig = Objects.requireNonNull(cacheConfig, "cacheConfig");
+		this.instructions = instructions;
 	}
 
 	/** JSON-RPC error code: parse error. Never reported by this revision (see {@link McpErrorKind#PARSE_ERROR}). */
@@ -109,7 +127,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	/** Default server name reported by {@code server/discover} when the config supplies no server identity. */
 	public static final String DEFAULT_SERVER_NAME = "juneau-rest-server-mcp";
 
-	private static final String META_CAPABILITIES = "capabilities";
+	private static final String META_KEY = "_meta";
 	private static final String PARAM_ARGUMENTS = "arguments";
 
 	@Override /* McpRevision */
@@ -136,22 +154,25 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 
 		var req = exchange.request();
 		if (req == null)
-			return JsonRpcResponse.errorResponse(null, errorCode(McpErrorKind.INVALID_REQUEST), "Request envelope is null");
+			return reportError(ctx, null, errorCode(McpErrorKind.INVALID_REQUEST), "Request envelope is null");
 
 		var id = req.getId();
 		var method = req.getMethod();
 
 		if (isEmpty(method))
 			return JsonRpcResponse.notification(id) ? null
-				: JsonRpcResponse.errorResponse(id, errorCode(McpErrorKind.INVALID_REQUEST), "Missing method");
+				: reportError(ctx, id, errorCode(McpErrorKind.INVALID_REQUEST), "Missing method");
 
 		try {
 			validateHeaders(exchange, req);
-			validateMeta(req.getMeta());
-			var result = invoke(method, req.getParams(), config, ctx);
+			validateMeta(req.getParams());
+			var result = finalizeResult(invoke(method, req.getParams(), config, ctx), config, ctx);
 			return JsonRpcResponse.notification(id) ? null : JsonRpcResponse.ok(id, result);
 		} catch (McpException e) {
-			return JsonRpcResponse.notification(id) ? null : new JsonRpcResponse()
+			if (JsonRpcResponse.notification(id))
+				return null;
+			recordRpcError(ctx, e.getCode(), e.getMessage());
+			return new JsonRpcResponse()
 				.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 				.setId(id)
 				.setError(e.toJsonRpcError());
@@ -159,8 +180,51 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			if (JsonRpcResponse.notification(id))
 				return null;
 			var message = e.getMessage() == null ? cns(e) : e.getMessage();
-			return JsonRpcResponse.errorResponse(id, errorCode(McpErrorKind.INTERNAL_ERROR), message, JsonMap.of("type", cn(e)));
+			var code = errorCode(McpErrorKind.INTERNAL_ERROR);
+			recordRpcError(ctx, code, message);
+			return JsonRpcResponse.errorResponse(id, code, message, JsonMap.of("type", cn(e)));
 		}
+	}
+
+	/**
+	 * Builds a JSON-RPC error response, first giving an active request-scoped tracing observation a
+	 * chance to record the outcome via {@link #recordRpcError(BeanStore, int, String)} &mdash; every
+	 * dated dispatch returns JSON-RPC errors over HTTP {@code 200}, so this is the only place such an
+	 * outcome reaches an active span.
+	 *
+	 * @param ctx The request-scoped bean store. Must not be <jk>null</jk>.
+	 * @param id The JSON-RPC request id, or <jk>null</jk> when the envelope itself could not be read.
+	 * @param code The JSON-RPC error code.
+	 * @param message The JSON-RPC error message.
+	 * @return The error response. Never <jk>null</jk>.
+	 */
+	private static JsonRpcResponse reportError(BeanStore ctx, Object id, int code, String message) {
+		recordRpcError(ctx, code, message);
+		return JsonRpcResponse.errorResponse(id, code, message);
+	}
+
+	/**
+	 * Records a JSON-RPC error outcome on the active request-scoped {@link Scope}, if any.
+	 *
+	 * <p>
+	 * A neutral no-op &mdash; no OpenTelemetry import involved &mdash; when no tracer is active for
+	 * this request (no {@link Scope} was stashed under {@link TraceContextResponseProcessor#ATTR_SCOPE}
+	 * by {@code RestOpInvoker}) or when the request-scoped {@link RestRequest} itself is unavailable
+	 * (for example, a unit test dispatching directly against a bare {@link BeanStore}).
+	 *
+	 * @param ctx The request-scoped bean store. Must not be <jk>null</jk>.
+	 * @param code The JSON-RPC error code.
+	 * @param message The JSON-RPC error message.
+	 */
+	@SuppressWarnings({
+		"resource" // scope is owned/closed by RestOpInvoker's finally block after the handler returns; reading it here must not close it early.
+	})
+	private static void recordRpcError(BeanStore ctx, int code, String message) {
+		ctx.getBean(RestRequest.class).ifPresent(request -> {
+			var scope = request.getAttribute(TraceContextResponseProcessor.ATTR_SCOPE).as(Scope.class).orElse(null);
+			if (scope != null)
+				scope.recordRpcError(code, message);
+		});
 	}
 
 	// --- SEP-2243 header/body agreement -----------------------------------------------------
@@ -204,44 +268,104 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		return null;
 	}
 
-	// --- per-request _meta negotiation ------------------------------------------------------
+	// --- per-request params._meta negotiation -----------------------------------------------
 
 	/**
-	 * Validates the opaque {@code _meta} shape directly.
+	 * Validates the opaque {@code params._meta} shape directly.
 	 *
 	 * <p>
-	 * The parsed {@link RequestMeta} bean cannot distinguish a malformed {@code capabilities} (a
+	 * The parsed {@link RequestMeta} bean cannot distinguish a malformed {@code clientCapabilities} (a
 	 * scalar/array) from an absent one — parsing either into {@code ClientCapabilities} raises a
 	 * generic parse error rather than a validation failure — so metadata shape is checked against
-	 * the opaque map to produce the exact per-field {@code -32600} messages.
+	 * the opaque map to produce the exact per-field {@code -32600} messages naming the exact wire path.
+	 *
+	 * @param params The opaque request params (the JSON-RPC {@code params} member). Can be <jk>null</jk>.
 	 */
-	private static void validateMeta(Object meta) {
+	private static void validateMeta(Object params) {
+		if (! (params instanceof Map<?,?> p))
+			throw new McpException(CODE_INVALID_REQUEST, "Request params must be an object");
+		var meta = p.get(META_KEY);
 		if (! (meta instanceof Map<?,?> m))
-			throw new McpException(CODE_INVALID_REQUEST, "Request _meta must be an object");
-		var protocolVersion = str(m.get("protocolVersion"));
+			throw new McpException(CODE_INVALID_REQUEST, "Request params._meta must be an object");
+		var protocolVersion = str(m.get(RequestMeta.KEY_PROTOCOL_VERSION));
 		if (isEmpty(protocolVersion))
-			throw new McpException(CODE_INVALID_REQUEST, "Missing required _meta.protocolVersion");
+			throw new McpException(CODE_INVALID_REQUEST, "Missing required params._meta." + RequestMeta.KEY_PROTOCOL_VERSION);
 		if (! McpProtocol.VERSION_2026_07_28.equals(protocolVersion))
 			throw new McpException(CODE_INVALID_REQUEST, "Unsupported protocol version: " + protocolVersion);
-		var clientInfo = m.get("clientInfo");
-		if (! (clientInfo instanceof Map<?,?> ci) || isEmpty(str(ci.get("name"))) || isEmpty(str(ci.get("version"))))
-			throw new McpException(CODE_INVALID_REQUEST, "Missing required _meta.clientInfo");
-		if (! m.containsKey(META_CAPABILITIES) || m.get(META_CAPABILITIES) == null)
-			throw new McpException(CODE_INVALID_REQUEST, "Missing required _meta.capabilities");
-		if (! (m.get(META_CAPABILITIES) instanceof Map<?,?>))
-			throw new McpException(CODE_INVALID_REQUEST, "_meta.capabilities must be an object");
+		var clientInfo = m.get(RequestMeta.KEY_CLIENT_INFO);
+		if (clientInfo != null && (! (clientInfo instanceof Map<?,?> ci) || isEmpty(str(ci.get("name"))) || isEmpty(str(ci.get("version")))))
+			throw new McpException(CODE_INVALID_REQUEST, "Malformed params._meta." + RequestMeta.KEY_CLIENT_INFO);
+		if (! m.containsKey(RequestMeta.KEY_CLIENT_CAPABILITIES) || m.get(RequestMeta.KEY_CLIENT_CAPABILITIES) == null)
+			throw new McpException(CODE_INVALID_REQUEST, "Missing required params._meta." + RequestMeta.KEY_CLIENT_CAPABILITIES);
+		if (! (m.get(RequestMeta.KEY_CLIENT_CAPABILITIES) instanceof Map<?,?>))
+			throw new McpException(CODE_INVALID_REQUEST, "params._meta." + RequestMeta.KEY_CLIENT_CAPABILITIES + " must be an object");
 	}
 
 	private static String str(Object value) {
 		return value == null ? null : value.toString();
 	}
 
+	/**
+	 * Attaches the common success-result finalization to every dispatched result: a {@code "complete"}
+	 * {@code resultType} (already the {@link Result} default) and {@link ResultMeta#getServerInfo() server
+	 * identity} under {@code _meta}, without disturbing cache hints or payload fields a method already set.
+	 *
+	 * @param result The neutral-to-wire result returned by {@link #invoke}. Can be any wire result type.
+	 * @param config The server configuration supplying server identity.
+	 * @return The same {@code result} instance, finalized in place.
+	 */
+	private static Object finalizeResult(Object result, McpServerConfig config, BeanStore ctx) {
+		if (result instanceof Result<?> r) {
+			var meta = r.getMeta();
+			if (meta == null)
+				meta = new ResultMeta();
+			meta.setServerInfo(McpWire.serverInfo(config));
+			echoTraceContext(meta, ctx);
+			r.setMeta(meta);
+		}
+		return result;
+	}
+
+	/**
+	 * Echoes the request-scoped W3C trace context into a successful result's {@code _meta}.
+	 *
+	 * <p>
+	 * At span-start time, an active {@code TracerHook} bridge (for example {@code OtelTracerHook})
+	 * stashes the rendered {@code traceparent} / {@code tracestate} / {@code baggage} values as
+	 * {@link RestRequest} attributes under {@link TraceContextResponseProcessor#ATTR_TRACEPARENT} /
+	 * {@code ATTR_TRACESTATE} / {@code ATTR_BAGGAGE}. This copies those same values &mdash; already
+	 * neutral strings, read here with no OpenTelemetry import &mdash; into <c>meta</c> so a caller can
+	 * read the server-started trace identifiers off the JSON-RPC result body, in addition to the HTTP
+	 * response headers {@link TraceContextResponseProcessor} emits from the same captured values.
+	 *
+	 * <p>
+	 * A no-op &mdash; no trace keys added &mdash; when no tracer is active (no {@code ATTR_TRACEPARENT}
+	 * was stashed) or when the request-scoped {@link RestRequest} itself is unavailable.
+	 *
+	 * @param meta The result metadata to enrich in place. Must not be <jk>null</jk>.
+	 * @param ctx The request-scoped bean store. Must not be <jk>null</jk>.
+	 */
+	private static void echoTraceContext(ResultMeta meta, BeanStore ctx) {
+		ctx.getBean(RestRequest.class).ifPresent(request -> {
+			var traceparent = request.getAttribute(TraceContextResponseProcessor.ATTR_TRACEPARENT).as(String.class).orElse(null);
+			if (isEmpty(traceparent))
+				return;
+			meta.setTraceparent(traceparent);
+			var tracestate = request.getAttribute(TraceContextResponseProcessor.ATTR_TRACESTATE).as(String.class).orElse(null);
+			if (! isEmpty(tracestate))
+				meta.setTracestate(tracestate);
+			var baggage = request.getAttribute(TraceContextResponseProcessor.ATTR_BAGGAGE).as(String.class).orElse(null);
+			if (! isEmpty(baggage))
+				meta.setBaggage(baggage);
+		});
+	}
+
 	// --- method table -----------------------------------------------------------------------
 
 	private Object invoke(String method, Object params, McpServerConfig config, BeanStore ctx) {
 		return switch (method) {
-			case McpMethods.SERVER_DISCOVER -> McpWire.discover(config, discoverCapabilities(config));
-			case McpMethods.PING -> new JsonMap();
+			case McpMethods.SERVER_DISCOVER -> discover(config);
+			case McpMethods.PING -> new PingResult();
 			case McpMethods.TOOLS_LIST -> listTools(config, params, ctx);
 			case McpMethods.TOOLS_CALL -> callTool(config, params, ctx);
 			case McpMethods.PROMPTS_LIST -> listPrompts(config, params, ctx);
@@ -274,6 +398,11 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	private McpCacheHint readHint(String uri) {
 		return first(cacheConfig.getResourceReadOverrides().get(uri),
 			cacheConfig.getResourcesRead(), cacheConfig.getDefaultHint());
+	}
+
+	private ServerDiscoverResult discover(McpServerConfig config) {
+		var result = McpWire.discover(discoverCapabilities(config), protocolVersion(), instructions);
+		return applyCache(result, first(cacheConfig.getServerDiscover(), cacheConfig.getDefaultHint()));
 	}
 
 	private ServerCapabilities discoverCapabilities(McpServerConfig config) {
@@ -426,5 +555,139 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			return McpCompletionRef.resource(uri);
 		}
 		throw new McpException(errorCode(McpErrorKind.INVALID_PARAMS), "Invalid or missing ref.type: " + type);
+	}
+
+	// --- trace-context extraction (Part B / trace-context propagation) ----------------------
+
+	/**
+	 * This revision's stable, stateless {@link TraceContextExtractor}, published as a {@code @Bean} by
+	 * both {@link McpRestServlet} and {@link McpEndpoint} so an active {@code TracerHook} can recognize
+	 * this revision's resolved {@link JsonRpcRequest} argument and its {@code params._meta} carrier
+	 * before span creation.
+	 *
+	 * <p>
+	 * Imports only the neutral {@code juneau-rest-server} tracing seam ({@link TraceContextExtractor},
+	 * {@link TraceContextCarrier}, {@link TraceOperation}) &mdash; never OpenTelemetry.
+	 */
+	static final TraceContextExtractor TRACE_CONTEXT_EXTRACTOR = new V2TraceContextExtractor();
+
+	/**
+	 * {@link TraceContextExtractor} implementation for revision {@code 2026-07-28}.
+	 *
+	 * <p>
+	 * Recognizes the resolved {@link JsonRpcRequest} among {@code @RestOp}-resolved arguments, reads
+	 * its opaque {@code params._meta} (via {@link McpWire#metaMapOrEmpty(Object)}, since extraction
+	 * runs before {@link #validateMeta(Object)} enforces the per-request contract on a request that
+	 * has not yet been validated), and derives a composite carrier plus a low-cardinality
+	 * {@link TraceOperation}.
+	 */
+	private static final class V2TraceContextExtractor implements TraceContextExtractor {
+
+		@Override /* TraceContextExtractor */
+		public Optional<TraceContextCarrier> extract(RestRequest request, Object[] resolvedArguments) {
+			var req = findRequest(resolvedArguments);
+			if (req == null)
+				return Optional.empty();
+			var meta = new LinkedHashMap<>(McpWire.metaMapOrEmpty(req.getParams()));
+			return Optional.of(new MetaCarrier(meta, request));
+		}
+
+		@Override /* TraceContextExtractor */
+		public TraceOperation operation(RestRequest request, Object[] resolvedArguments) {
+			var req = findRequest(resolvedArguments);
+			return req == null ? TraceOperation.DEFAULT : buildOperation(req);
+		}
+
+		private static JsonRpcRequest findRequest(Object[] resolvedArguments) {
+			for (var arg : resolvedArguments)
+				if (arg instanceof JsonRpcRequest r)
+					return r;
+			return null;
+		}
+
+		/**
+		 * Derives method, protocol version, request id, and tool/prompt/resource target into a
+		 * {@link TraceOperation}, following the exact pinned MCP/GenAI attribute and span-name mapping:
+		 * {@code "tools/call "+name}, {@code "prompts/get "+name}, bare {@code "resources/read"} (the
+		 * URI stays an attribute, never a span-name suffix), or the exact method name otherwise.
+		 */
+		private static TraceOperation buildOperation(JsonRpcRequest req) {
+			var method = req.getMethod();
+			if (isEmpty(method))
+				return TraceOperation.DEFAULT;
+			var meta = McpWire.metaMapOrEmpty(req.getParams());
+			var attrs = new LinkedHashMap<String,String>();
+			attrs.put(TraceOperation.ATTR_MCP_METHOD_NAME, method);
+			var protocolVersion = str(meta.get(RequestMeta.KEY_PROTOCOL_VERSION));
+			if (! isEmpty(protocolVersion))
+				attrs.put(TraceOperation.ATTR_MCP_PROTOCOL_VERSION, protocolVersion);
+			if (nn(req.getId()))
+				attrs.put(TraceOperation.ATTR_JSONRPC_REQUEST_ID, String.valueOf(req.getId()));
+
+			var spanName = method;
+			switch (method) {
+				case McpMethods.TOOLS_CALL -> {
+					var name = routingName(method, req.getParams());
+					if (! isEmpty(name)) {
+						attrs.put(TraceOperation.ATTR_GEN_AI_TOOL_NAME, name);
+						spanName = method + " " + name;
+					}
+					attrs.put(TraceOperation.ATTR_GEN_AI_OPERATION_NAME, "execute_tool");
+				}
+				case McpMethods.PROMPTS_GET -> {
+					var name = routingName(method, req.getParams());
+					if (! isEmpty(name)) {
+						attrs.put(TraceOperation.ATTR_GEN_AI_PROMPT_NAME, name);
+						spanName = method + " " + name;
+					}
+				}
+				case McpMethods.RESOURCES_READ -> {
+					var uri = routingName(method, req.getParams());
+					if (! isEmpty(uri))
+						attrs.put(TraceOperation.ATTR_MCP_RESOURCE_URI, uri);
+				}
+				default -> {
+					// Exact method name; no method-specific attributes.
+				}
+			}
+			return TraceOperation.of(spanName, attrs);
+		}
+	}
+
+	/**
+	 * Composite, per-request {@link TraceContextCarrier} giving an explicit {@code params._meta} value
+	 * precedence over the equivalent HTTP header, for any key &mdash; in practice the bare W3C
+	 * {@code traceparent} / {@code tracestate} / {@code baggage} keys, since those are the only names
+	 * both sides share: {@code lookup(key) = params._meta[key] if present, otherwise the HTTP header of
+	 * the same name}.
+	 */
+	private static final class MetaCarrier implements TraceContextCarrier {
+		private final Map<String,Object> meta;
+		private final RestRequest request;
+
+		MetaCarrier(Map<String,Object> meta, RestRequest request) {
+			this.meta = meta;
+			this.request = request;
+		}
+
+		@Override /* TraceContextCarrier */
+		public String get(String key) {
+			var value = meta.get(key);
+			if (nn(value))
+				return value.toString();
+			return request.getHeaderParam(key).orElse(null);
+		}
+
+		@Override /* TraceContextCarrier */
+		public Iterable<String> keys() {
+			var result = new LinkedHashSet<String>(meta.keySet());
+			result.addAll(request.getHeaders().getNames());
+			return result;
+		}
+
+		@Override /* TraceContextCarrier */
+		public void set(String key, String value) {
+			meta.put(key, value);
+		}
 	}
 }
