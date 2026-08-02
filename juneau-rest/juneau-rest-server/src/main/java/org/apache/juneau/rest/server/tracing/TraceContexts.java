@@ -18,6 +18,8 @@ package org.apache.juneau.rest.server.tracing;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import org.apache.juneau.http.tracing.TraceContextCarrier;
+
 /**
  * Neutral, dependency-free helper for stamping a caller's current trace context into an arbitrary
  * {@link TraceContextCarrier}.

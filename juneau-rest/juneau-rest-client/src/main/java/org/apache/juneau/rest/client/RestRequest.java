@@ -29,6 +29,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.marshall.sse.*;
 
 /**
  * Fluent builder for a single HTTP request.
@@ -482,6 +483,47 @@ public final class RestRequest {
 					.build();
 				client.logger.log(entry);
 			}
+		}
+	}
+
+	/**
+	 * Executes this request and opens a closeable, cancellable cursor over the response as a
+	 * <c>text/event-stream</c>.
+	 *
+	 * <p>
+	 * This executes {@link #run()}, asserts a 2xx response status, then opens the response body as an event stream.
+	 * Non-2xx responses throw {@link RestCallException} before the body is treated as SSE.
+	 *
+	 * <p>
+	 * The response content type is not validated. This is intentional so callers can branch on response type
+	 * (for example <c>application/json</c> vs <c>text/event-stream</c>) when protocols use both.
+	 *
+	 * <p>
+	 * Adds an {@code Accept: text/event-stream} header only when neither this request nor inherited client default
+	 * headers already include {@code Accept}.
+	 *
+	 * <p>
+	 * The caller owns the returned {@link SseEventReader}; closing it also closes the underlying
+	 * {@link RestResponse} (see {@link ResponseBody#asEventStream()}). If opening the event stream fails,
+	 * this method best-effort closes the response before propagating.
+	 *
+	 * @return A cursor over the live event stream. Never <jk>null</jk>.
+	 * @throws IOException If a transport-level error occurs (typically {@link TransportException}), if the response
+	 * 	could not be processed (typically {@link RestCallException}), or if the response has no body to open a
+	 * 	stream over.
+	 */
+	public SseEventReader openEventStream() throws IOException {
+		if (! hasHeader("Accept"))
+			header("Accept", "text/event-stream");
+		var res = run();
+		var opened = false;
+		try {
+			var r = res.assertOk().body().asEventStream();
+			opened = true;
+			return r;
+		} finally {
+			if (! opened)
+				quiet(res::close);
 		}
 	}
 

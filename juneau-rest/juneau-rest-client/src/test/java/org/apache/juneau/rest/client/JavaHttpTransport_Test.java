@@ -22,6 +22,14 @@ import java.io.*;
 import java.net.*;
 import java.net.http.*;
 import java.nio.charset.*;
+import java.security.*;
+import java.security.cert.*;
+import java.time.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+
+import javax.net.ssl.*;
 
 import org.apache.juneau.http.entity.*;
 import org.junit.jupiter.api.*;
@@ -271,5 +279,119 @@ class JavaHttpTransport_Test {
 		try (var transport = provider.create()) {
 			assertNotNull(transport);
 		}
+	}
+
+	// =================================================================================================================
+	// G — Response lifecycle
+	// =================================================================================================================
+
+	@Test
+	void g01_close_closesUnderlyingJdkBodyStream() throws Exception {
+		var bodyClosed = new AtomicBoolean();
+		var body = new ByteArrayInputStream("ignored".getBytes(StandardCharsets.UTF_8)) {
+			@Override /* ByteArrayInputStream */
+			public void close() throws IOException {
+				bodyClosed.set(true);
+				super.close();
+			}
+		};
+
+		var httpClient = new HttpClient() {
+			@Override /* HttpClient */
+			public <T> HttpResponse<T> send(HttpRequest request, HttpResponse.BodyHandler<T> responseBodyHandler) {
+				@SuppressWarnings({
+					"unchecked" // Body type is known by the JavaHttpTransport implementation.
+				})
+				var response = (HttpResponse<T>) new HttpResponse<InputStream>() {
+					@Override public int statusCode() { return 200; }
+					@Override public HttpRequest request() { return request; }
+					@Override public Optional<HttpResponse<InputStream>> previousResponse() { return Optional.empty(); }
+					@Override public HttpHeaders headers() { return HttpHeaders.of(Map.of("Content-Type", List.of("text/plain")), (a, b) -> true); }
+					@Override public InputStream body() { return body; }
+					@Override public Optional<SSLSession> sslSession() { return Optional.empty(); }
+					@Override public URI uri() { return request.uri(); }
+					@Override public HttpClient.Version version() { return HttpClient.Version.HTTP_1_1; }
+				};
+				return response;
+			}
+
+			@Override /* HttpClient */
+			public <T> CompletableFuture<HttpResponse<T>> sendAsync(HttpRequest request, HttpResponse.BodyHandler<T> responseBodyHandler) {
+				throw new UnsupportedOperationException();
+			}
+
+			@Override /* HttpClient */
+			public <T> CompletableFuture<HttpResponse<T>> sendAsync(HttpRequest request, HttpResponse.BodyHandler<T> responseBodyHandler, HttpResponse.PushPromiseHandler<T> pushPromiseHandler) {
+				throw new UnsupportedOperationException();
+			}
+
+			@Override /* HttpClient */
+			public Optional<CookieHandler> cookieHandler() {
+				return Optional.empty();
+			}
+
+			@Override /* HttpClient */
+			public Optional<Duration> connectTimeout() {
+				return Optional.empty();
+			}
+
+			@Override /* HttpClient */
+			public Redirect followRedirects() {
+				return Redirect.NEVER;
+			}
+
+			@Override /* HttpClient */
+			public Optional<ProxySelector> proxy() {
+				return Optional.empty();
+			}
+
+			@Override /* HttpClient */
+			public SSLContext sslContext() {
+				try {
+					var tm = new X509ExtendedTrustManager() {
+						@Override public void checkClientTrusted(X509Certificate[] chain, String authType, Socket socket) {}
+						@Override public void checkServerTrusted(X509Certificate[] chain, String authType, Socket socket) {}
+						@Override public void checkClientTrusted(X509Certificate[] chain, String authType, SSLEngine engine) {}
+						@Override public void checkServerTrusted(X509Certificate[] chain, String authType, SSLEngine engine) {}
+						@Override public void checkClientTrusted(X509Certificate[] chain, String authType) {}
+						@Override public void checkServerTrusted(X509Certificate[] chain, String authType) {}
+						@Override public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+					};
+					var x = SSLContext.getInstance("TLS");
+					x.init(null, new TrustManager[] { tm }, null);
+					return x;
+				} catch (GeneralSecurityException e) {
+					throw new RuntimeException(e);
+				}
+			}
+
+			@Override /* HttpClient */
+			public SSLParameters sslParameters() {
+				return new SSLParameters();
+			}
+
+			@Override /* HttpClient */
+			public Optional<java.net.Authenticator> authenticator() {
+				return Optional.empty();
+			}
+
+			@Override /* HttpClient */
+			public Version version() {
+				return Version.HTTP_1_1;
+			}
+
+			@Override /* HttpClient */
+			public Optional<Executor> executor() {
+				return Optional.empty();
+			}
+		};
+
+		var transport = JavaHttpTransport.builder().httpClient(httpClient).build();
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://localhost").build()) {
+			try (var res = client.get("/x").run()) {
+				assertEquals(200, res.getStatusCode());
+			}
+		}
+		assertTrue(bodyClosed.get());
 	}
 }

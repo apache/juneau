@@ -26,6 +26,7 @@ import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.JsonValueSafety;
+import org.apache.juneau.http.tracing.TraceContextCarrier;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.RestRequest;
 import org.apache.juneau.rest.server.tracing.*;
@@ -239,33 +240,9 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		var method = req.getMethod();
 		if (! headerMethod.equals(method))
 			throw new McpException(CODE_INVALID_REQUEST, "Mcp-Method header '" + headerMethod + "' does not match request method '" + method + "'");
-		var name = routingName(method, req.getParams());
+		var name = McpRoutingNames.routingName(method, req.getParams());
 		if (! headerName.equals(name))
 			throw new McpException(CODE_INVALID_REQUEST, "Mcp-Name header '" + headerName + "' does not match request name '" + name + "'");
-	}
-
-	/**
-	 * The routing name a request's {@code Mcp-Name} header must equal (SEP-2243 / Resolution B3):
-	 * {@code params.name} for {@code tools/call} and {@code prompts/get}, {@code params.uri} for
-	 * {@code resources/read}, and the empty string for every other method - including
-	 * {@code completion/complete}, whose target is nested under {@code params.ref} and never becomes a
-	 * routing name.
-	 */
-	private static String routingName(String method, Object params) {
-		var name = switch (method) {
-			case McpMethods.TOOLS_CALL, McpMethods.PROMPTS_GET -> paramValue(params, "name");
-			case McpMethods.RESOURCES_READ -> paramValue(params, "uri");
-			default -> "";
-		};
-		return name == null ? "" : name;
-	}
-
-	private static String paramValue(Object params, String key) {
-		if (params instanceof Map<?,?> m) {
-			var v = m.get(key);
-			return v == null ? null : v.toString();
-		}
-		return null;
 	}
 
 	// --- per-request params._meta negotiation -----------------------------------------------
@@ -627,7 +604,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			var spanName = method;
 			switch (method) {
 				case McpMethods.TOOLS_CALL -> {
-					var name = routingName(method, req.getParams());
+					var name = McpRoutingNames.routingName(method, req.getParams());
 					if (! isEmpty(name)) {
 						attrs.put(TraceOperation.ATTR_GEN_AI_TOOL_NAME, name);
 						spanName = method + " " + name;
@@ -635,14 +612,14 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 					attrs.put(TraceOperation.ATTR_GEN_AI_OPERATION_NAME, "execute_tool");
 				}
 				case McpMethods.PROMPTS_GET -> {
-					var name = routingName(method, req.getParams());
+					var name = McpRoutingNames.routingName(method, req.getParams());
 					if (! isEmpty(name)) {
 						attrs.put(TraceOperation.ATTR_GEN_AI_PROMPT_NAME, name);
 						spanName = method + " " + name;
 					}
 				}
 				case McpMethods.RESOURCES_READ -> {
-					var uri = routingName(method, req.getParams());
+					var uri = McpRoutingNames.routingName(method, req.getParams());
 					if (! isEmpty(uri))
 						attrs.put(TraceOperation.ATTR_MCP_RESOURCE_URI, uri);
 				}

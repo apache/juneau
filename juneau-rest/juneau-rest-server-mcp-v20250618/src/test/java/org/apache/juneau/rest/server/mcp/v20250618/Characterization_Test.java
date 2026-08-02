@@ -285,11 +285,13 @@ class Characterization_Test {
 
 	@ParameterizedTest
 	@MethodSource("fixtures")
+	@SuppressWarnings("resource") // Fluent builder returns 'this' (a Closeable) already owned by the enclosing try-with-resources; Eclipse JDT @Owning/resource warning is by design.
 	void a01_wireIsUnchanged(String fixture) throws Exception {
 		var requestBody = Files.readString(DIR.resolve(fixture + ".request.json")).strip();
 		try (var client = MockRestClient.create(servletFor(fixture)).json()
 				.contentType("application/json").accept("application/json").ignoreErrors().build()) {
-			try (var req = client.post("/").contentString(requestBody)) {
+			try (var req = client.post("/")) {
+				req.contentString(requestBody);
 				loadHeaders(fixture).forEach(req::header);
 				try (var res = req.run()) {
 					assertEquals(200, res.getStatusCode(), () -> fixture + ": HTTP status changed");

@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.http.tracing.TraceContextCarrier;
+
 /**
  * Immutable, low-cardinality description of the operation a {@code TracerHook} bridge should name a
  * span after, supplied to {@link TracerHook#startSpan(org.apache.juneau.rest.server.RestRequest, TraceContextCarrier, TraceOperation)}

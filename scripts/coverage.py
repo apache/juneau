@@ -45,6 +45,8 @@ Examples:
     ./scripts/coverage.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/marshall/BitSetFormat.java --run
 """
 
+from __future__ import annotations
+
 import os
 import re
 import subprocess

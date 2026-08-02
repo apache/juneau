@@ -18,7 +18,7 @@ package org.apache.juneau.rest.server.tracing.otel;
 
 import java.util.*;
 
-import org.apache.juneau.rest.server.tracing.*;
+import org.apache.juneau.http.tracing.TraceContextCarrier;
 
 import io.opentelemetry.context.propagation.*;
 

@@ -24,6 +24,7 @@ import java.nio.charset.*;
 
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.marshall.stream.*;
 
 /**
@@ -245,5 +246,62 @@ public final class ResponseBody {
 			throw ioex("Parser '%s' produced cursor type '%s' which is not assignable to the declared type '%s'.", parser.getClass().getName(), cursor == null ? "null" : cursor.getClass().getName(), type.getName());
 
 		return (T) cursor;
+	}
+
+	/**
+	 * Opens a closeable, cancellable cursor over a <c>text/event-stream</c> response body.
+	 *
+	 * <p>
+	 * Reads the live response body as UTF-8 and dispatches one {@link SseEvent} at a time via the returned
+	 * {@link SseEventReader}. The stream is not buffered into memory &mdash; events are parsed incrementally as bytes
+	 * arrive, which is required for a long-lived Streamable-HTTP channel (see {@code juneau-rest-client-mcp}).
+	 *
+	 * <p>
+	 * Closing the returned reader first closes the parent {@link RestResponse} (transport-layer cancel / release),
+	 * then closes the reader itself.  This ordering is what makes the cursor <i>cancellable</i>: callers can stop
+	 * consuming an open SSE channel at any time by calling {@link SseEventReader#close()}, including from another
+	 * thread, without waiting for the server to finish sending events.
+	 *
+	 * <p>
+	 * Transport-specific release behavior varies: this API guarantees that both the response and reader are closed in
+	 * the above order, but the exact connection-release mechanism is determined by the active transport.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li>This cursor is not thread-safe, except for using {@link SseEventReader#close()} as a cancellation signal from another thread.
+	 * 	<li>Mid-stream read failures are surfaced as {@link UncheckedIOException} from {@link SseEventReader#hasNext()} / {@link SseEventReader#next()} (per {@link SseEventReader} contract).
+	 * 	<li>Iterating after close throws.
+	 * </ul>
+	 *
+	 * @return A cursor over the live response body. Never <jk>null</jk>.
+	 * @throws IOException If the response has no body to open a stream over.
+	 */
+	public SseEventReader asEventStream() throws IOException {
+		var stream = response.getBodyStream();
+		if (stream == null)
+			throw ioex("Response has no body to open an event stream over.");
+		return new ClosingSseEventReader(new InputStreamReader(stream, StandardCharsets.UTF_8), response);
+	}
+
+	/**
+	 * An {@link SseEventReader} whose {@link #close()} also closes the parent {@link RestResponse}, so closing the
+	 * cursor releases the underlying transport connection (cancellation) rather than merely stopping local reads.
+	 */
+	private static final class ClosingSseEventReader extends SseEventReader {
+
+		private final RestResponse response;
+
+		ClosingSseEventReader(Reader in, RestResponse response) {
+			super(in);
+			this.response = response;
+		}
+
+		@Override /* Overridden from SseEventReader */
+		public void close() throws IOException {
+			try {
+				response.close();
+			} finally {
+				super.close();
+			}
+		}
 	}
 }

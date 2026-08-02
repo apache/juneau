@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.http.tracing.TraceContextCarrier;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.tracing.*;
 import org.apache.juneau.rest.server.tracing.Scope;

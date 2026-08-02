@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.jsonrpc;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import org.apache.juneau.marshall.*;
 
 /**
@@ -105,5 +107,16 @@ import org.apache.juneau.marshall.*;
 			.setCode(code)
 			.setMessage(getMessage())
 			.setData(data);
+	}
+
+	/**
+	 * Creates an {@link McpException} from a {@link JsonRpcError}.
+	 *
+	 * @param e The source error. Must not be <jk>null</jk>.
+	 * @return A new exception containing the same code, message, and data.
+	 */
+	public static McpException fromJsonRpcError(JsonRpcError e) {
+		var a = assertArgNotNull("error", e);
+		return new McpException(a.getCode(), a.getMessage(), a.getData());
 	}
 }

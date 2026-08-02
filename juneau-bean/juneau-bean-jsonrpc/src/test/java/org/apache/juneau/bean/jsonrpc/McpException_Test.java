@@ -65,4 +65,26 @@ class McpException_Test {
 		assertString("x", b.getMessage());
 		assertString("data", b.getData());
 	}
+
+	@Test
+	void a05_fromJsonRpcError_mapsCodeMessageAndData() {
+		var a = new JsonRpcError()
+			.setCode(-32601)
+			.setMessage("Method not found")
+			.setData(JsonMap.of("method", "tools/call"));
+
+		var b = McpException.fromJsonRpcError(a);
+		assertEquals(-32601, b.getCode());
+		assertEquals("Method not found", b.getMessage());
+		assertNotNull(b.getData());
+	}
+
+	@Test
+	void a06_fromJsonRpcError_roundTripWithToJsonRpcError_preservesFields() {
+		var a = new McpException(-32000, "Tool failed", JsonMap.of("tool", "t1"));
+		var b = McpException.fromJsonRpcError(a.toJsonRpcError());
+		assertEquals(-32000, b.getCode());
+		assertEquals("Tool failed", b.getMessage());
+		assertNotNull(b.getData());
+	}
 }

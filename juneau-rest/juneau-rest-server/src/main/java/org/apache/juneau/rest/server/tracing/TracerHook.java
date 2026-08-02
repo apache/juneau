@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.tracing;
 
+import org.apache.juneau.http.tracing.TraceContextCarrier;
 import org.apache.juneau.rest.server.*;
 
 /**

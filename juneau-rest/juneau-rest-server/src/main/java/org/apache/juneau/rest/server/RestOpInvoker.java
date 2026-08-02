@@ -25,6 +25,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.http.tracing.TraceContextCarrier;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.metrics.*;

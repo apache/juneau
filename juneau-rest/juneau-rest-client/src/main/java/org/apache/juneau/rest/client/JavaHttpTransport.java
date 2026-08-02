@@ -141,9 +141,11 @@ public final class JavaHttpTransport implements HttpTransport {
 	}
 
 	private static TransportResponse buildTransportResponse(HttpResponse<InputStream> jdkResponse) {
+		var body = jdkResponse.body();
 		var builder = TransportResponse.builder()
 			.statusCode(jdkResponse.statusCode())
-			.body(jdkResponse.body());
+			.body(body)
+			.closeCallback(body);
 		jdkResponse.headers().map().forEach((name, values) ->
 			values.forEach(value -> builder.header(name, value)));
 		return builder.build();

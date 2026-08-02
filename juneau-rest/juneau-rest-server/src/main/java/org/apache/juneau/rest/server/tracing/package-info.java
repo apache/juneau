@@ -46,6 +46,12 @@
  * Status code and exception are reported via {@link org.apache.juneau.rest.server.tracing.Scope#setStatusCode}
  * and {@link org.apache.juneau.rest.server.tracing.Scope#setError} before {@link org.apache.juneau.rest.server.tracing.Scope#close}.
  *
+ * <p>
+ * {@link org.apache.juneau.http.tracing.TraceContextCarrier} moved to {@code juneau-rest-common}
+ * ({@code org.apache.juneau.http.tracing}) so both REST server and REST client modules share one
+ * neutral carrier type. Server-only tracing SPI types ({@code TraceContextExtractor},
+ * {@code TraceOperation}, {@code TraceContexts}) remain in this package.
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.TracerHook}

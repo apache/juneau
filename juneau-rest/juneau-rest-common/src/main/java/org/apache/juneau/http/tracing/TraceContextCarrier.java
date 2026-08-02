@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.tracing;
+package org.apache.juneau.http.tracing;
 
 /**
  * Neutral, tracer-agnostic carrier of W3C trace-context fields ({@code traceparent} /
@@ -39,13 +39,13 @@ package org.apache.juneau.rest.server.tracing;
  * Implementations are read/write: {@link #get(String)} and {@link #keys()} support inbound context
  * extraction (a {@code TracerHook} bridge reading a remote parent out of the carrier);
  * {@link #set(String, String)} supports outbound context injection (a bridge or
- * {@link TraceContexts#inject(TracerHook, TraceContextCarrier)} writing the current trace context
+ * {@code TraceContexts#inject(TracerHook, TraceContextCarrier)} writing the current trace context
  * into the carrier for a caller to read back).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link TraceContextExtractor}
- * 	<li class='jc'>{@link TraceContexts}
- * 	<li class='jc'>{@link TracerHook}
+ * 	<li class='jc'>{@code org.apache.juneau.rest.server.tracing.TraceContextExtractor}
+ * 	<li class='jc'>{@code org.apache.juneau.rest.server.tracing.TraceContexts}
+ * 	<li class='jc'>{@code org.apache.juneau.rest.server.tracing.TracerHook}
  * 	<li class='link'><a class="doclink" href="https://www.w3.org/TR/trace-context/">W3C Trace Context</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
  * </ul>

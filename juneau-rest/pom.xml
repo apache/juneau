@@ -53,6 +53,9 @@
 		<module>juneau-rest-server-view-freemarker</module>
 		<module>juneau-rest-server-springboot</module>
 		<module>juneau-rest-client</module>
+		<module>juneau-rest-client-mcp</module>
+		<module>juneau-rest-client-mcp-v20250618</module>
+		<module>juneau-rest-client-mcp-v20260728</module>
 		<module>juneau-rest-client-classic</module>
 		<module>juneau-rest-mock</module>
 		<module>juneau-rest-client-apache-httpclient-45</module>
