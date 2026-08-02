@@ -1775,6 +1775,11 @@ const sidebars: SidebarsConfig = {
 				},
 				{
 					type: 'doc',
+					id: 'topics/11.01.juneau-rest-client-mcp',
+					label: '11.1. juneau-rest-client-mcp',
+				},
+				{
+					type: 'doc',
 					id: 'topics/11.juneau-rest-server-mcp',
 					label: '11. juneau-rest-server-mcp',
 				},
