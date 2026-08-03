@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.mcp.v20260728;
 
+import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -588,5 +590,124 @@ class McpV2Beans_Test {
 		assertEquals(Icon.Theme.DARK, JsonParser.DEFAULT.read("\"dark\"", Icon.Theme.class));
 		assertThrows(Exception.class, () -> JsonParser.DEFAULT.read("\"bogus\"", Icon.Theme.class));
 		assertArrayEquals(new Icon.Theme[] { Icon.Theme.LIGHT, Icon.Theme.DARK }, Icon.Theme.values());
+	}
+
+	@Test void f01_inputRequiredResult_defaultsResultTypeToInputRequired() {
+		assertBean(new InputRequiredResult(), "resultType", "input_required");
+	}
+
+	@Test void f02_inputRequiredResult_inputRequestsAreLosslessMapsAndRoundTrip() {
+		// Each inputRequests value is a raw sub-request object carried byte-for-byte (no {type,payload} envelope):
+		// every member the handler supplied survives at the top level of the sub-request.
+		var a = JsonMap.of("type", "elicitation", "message", "confirm?", "scope", "public");
+		var b = JsonMap.of("type", "sampling", "maxTokens", 100);
+		var result = new InputRequiredResult().putInputRequest("a", a).putInputRequest("b", b)
+			.setRequestState("opaque-token-1");
+		assertBean(result, "resultType,requestState,inputRequests{a{type,message,scope},b{type,maxTokens}}",
+			"input_required,opaque-token-1,{{elicitation,confirm?,public},{sampling,100}}");
+		var json = JsonSerializer.DEFAULT.write(result);
+		var copy = JsonParser.DEFAULT.read(json, InputRequiredResult.class);
+		assertEquals(json, JsonSerializer.DEFAULT.write(copy));
+		assertEquals(a, copy.getInputRequests().get("a"));
+		assertEquals(b, copy.getInputRequests().get("b"));
+	}
+
+	@Test void f02b_inputRequiredResult_wireShapeIsLosslessLiteral() {
+		// Pins the exact wire bytes (before Phase 4 freezes fixtures): the sub-request object reaches the wire
+		// intact, with no synthetic {type, payload} envelope. Nested keys are chosen so alphabetical and insertion
+		// order coincide, making this literal deterministic regardless of map-sorting policy.
+		var result = new InputRequiredResult()
+			.putInputRequest("q1", JsonMap.of("message", "Confirm?", "type", "elicitation"))
+			.setRequestState("tok");
+		assertEquals(
+			"{\"inputRequests\":{\"q1\":{\"message\":\"Confirm?\",\"type\":\"elicitation\"}},\"requestState\":\"tok\",\"resultType\":\"input_required\"}",
+			JsonSerializer.DEFAULT.write(result));
+	}
+
+	@Test void f03_inputRequiredResult_validateEnforcesAtLeastOneOfInvariant() {
+		assertThrowsWithMessage(IllegalStateException.class,
+			"InputRequiredResult requires at least one of inputRequests or requestState",
+			() -> new InputRequiredResult().validate());
+		assertThrowsWithMessage(IllegalStateException.class,
+			"InputRequiredResult requires at least one of inputRequests or requestState",
+			() -> new InputRequiredResult().setInputRequests(Map.of()).validate());
+		assertDoesNotThrow(() -> new InputRequiredResult().putInputRequest("a", JsonMap.of()).validate());
+		assertDoesNotThrow(() -> new InputRequiredResult().setRequestState("tok").validate());
+	}
+
+	@Test void f04_inputRequiredResult_inheritsResultMetaAndFluentChain() {
+		var result = new InputRequiredResult().setRequestState("tok")
+			.setMeta(new ResultMeta().setServerInfo(new Implementation().setName("s").setVersion("1")))
+			.setResultType("input_required");
+		assertBean(result, "resultType,requestState,meta{serverInfo{name,version}}",
+			"input_required,tok,{{s,1}}");
+	}
+
+	@Test void f05_inputRequiredResult_isNeverCacheable() {
+		// Invariant 8: InputRequiredResult is never a CacheableResult, so requestState can never appear in
+		// a cache hint.
+		assertFalse(CacheableResult.class.isAssignableFrom(InputRequiredResult.class));
+	}
+
+	@Test void g01_mrtrRequestBeans_inputResponsesAndRequestStateRoundTrip() {
+		// Compile-time-typed (no reflection): each bean is constructed and round-tripped as its own concrete type.
+		// JsonMap.of (not Map.of) is used so insertion order is preserved through the JSON round-trip.
+		var ctr = new CallToolRequest().setInputResponses(JsonMap.of("a", "answer-a", "b", 42)).setRequestState("opaque-token-2");
+		var gpr = new GetPromptRequest().setInputResponses(JsonMap.of("a", "answer-a", "b", 42)).setRequestState("opaque-token-2");
+		var rrr = new ReadResourceRequest().setInputResponses(JsonMap.of("a", "answer-a", "b", 42)).setRequestState("opaque-token-2");
+
+		var ctrCopy = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(ctr), CallToolRequest.class);
+		assertBean(ctrCopy, "inputResponses,requestState", "{a=answer-a,b=42},opaque-token-2");
+		var gprCopy = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(gpr), GetPromptRequest.class);
+		assertBean(gprCopy, "inputResponses,requestState", "{a=answer-a,b=42},opaque-token-2");
+		var rrrCopy = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(rrr), ReadResourceRequest.class);
+		assertBean(rrrCopy, "inputResponses,requestState", "{a=answer-a,b=42},opaque-token-2");
+	}
+
+	@Test void g02_mrtrRequestBeans_inputResponsesAndRequestStateOmittedWhenAbsent() {
+		// Compile-time-typed (no reflection); omitted-when-absent is still checked via raw JSON inspection
+		// since assertBean has nothing to assert against an absent property.
+		for (var bean : List.<Object>of(new CallToolRequest(), new GetPromptRequest(), new ReadResourceRequest())) {
+			var json = JsonSerializer.DEFAULT.write(bean);
+			assertFalse(json.contains("inputResponses"),
+				() -> bean.getClass().getSimpleName() + " must omit absent inputResponses: " + json);
+			assertFalse(json.contains("requestState"),
+				() -> bean.getClass().getSimpleName() + " must omit absent requestState: " + json);
+		}
+	}
+
+	@Test void g03_mrtrRequestBeans_settersReturnConcreteTypeAtCompileTime() {
+		// Compile-time proof: each assignment below only type-checks because setInputResponses(...) and
+		// setRequestState(...) are declared to return the concrete class, not a shared base type.
+		CallToolRequest ctr = new CallToolRequest().setInputResponses(Map.of("a", 1)).setRequestState("tok");
+		GetPromptRequest gpr = new GetPromptRequest().setInputResponses(Map.of("a", 1)).setRequestState("tok");
+		ReadResourceRequest rrr = new ReadResourceRequest().setInputResponses(Map.of("a", 1)).setRequestState("tok");
+		assertBean(ctr, "inputResponses,requestState", "{a=1},tok");
+		assertBean(gpr, "inputResponses,requestState", "{a=1},tok");
+		assertBean(rrr, "inputResponses,requestState", "{a=1},tok");
+	}
+
+	@Test void g04_completeRequest_gainsNoMrtrFields() {
+		assertEquals(Set.of("ref", "argument", "context"),
+			Arrays.stream(CompleteRequest.class.getDeclaredFields()).map(Field::getName).collect(Collectors.toSet()));
+		assertThrows(NoSuchMethodException.class, () -> CompleteRequest.class.getMethod("getInputResponses"));
+		assertThrows(NoSuchMethodException.class, () -> CompleteRequest.class.getMethod("getRequestState"));
+	}
+
+	@Test void h01_clientCapabilities_elicitationRoundTrip() {
+		var caps = new ClientCapabilities()
+			.setRoots(new RootsCapability().setListChanged(true))
+			.setSampling(Map.of("x", 1))
+			.setElicitation(new ElicitationCapability())
+			.setExperimental(Map.of("y", 2));
+		var copy = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(caps), ClientCapabilities.class);
+		assertBean(copy, "roots{listChanged},sampling,experimental", "{true},{x=1},{y=2}");
+		assertNotNull(copy.getElicitation(), () -> "must serialize elicitation: " + JsonSerializer.DEFAULT.write(copy));
+	}
+
+	@Test void h02_clientCapabilities_elicitationNullByDefaultAndOmittedFromJson() {
+		assertNull(new ClientCapabilities().getElicitation());
+		var json = JsonSerializer.DEFAULT.write(new ClientCapabilities());
+		assertFalse(json.contains("elicitation"), () -> "elicitation must be omitted when unset: " + json);
 	}
 }

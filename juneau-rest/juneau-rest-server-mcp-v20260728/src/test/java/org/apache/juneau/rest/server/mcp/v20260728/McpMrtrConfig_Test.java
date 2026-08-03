@@ -1,0 +1,111 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.rest.server.mcp.v20260728;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Map;
+
+import org.apache.juneau.bean.jsonrpc.JsonRpcRequest;
+import org.apache.juneau.bean.mcp.v20260728.McpProtocol;
+import org.apache.juneau.bean.mcp.v20260728.RequestMeta;
+import org.apache.juneau.commons.inject.BasicBeanStore;
+import org.apache.juneau.marshall.collections.JsonMap;
+import org.apache.juneau.rest.server.mcp.McpExchange;
+import org.apache.juneau.rest.server.mcp.McpServerConfig;
+import org.junit.jupiter.api.Test;
+
+/**
+ * Coverage for {@link McpMrtrConfig} and the {@link McpRevision} four-arg constructor that carries it.
+ */
+class McpMrtrConfig_Test {
+
+	@Test void a01_defaultsAreAeadCodecFiveMinuteTtlTenMaxRounds() {
+		var a = new McpMrtrConfig();
+		assertInstanceOf(AeadRequestStateCodec.class, a.getCodec());
+		assertEquals(McpMrtrConfig.DEFAULT_TTL_MS, a.getTtlMs());
+		assertEquals(5 * 60 * 1000L, a.getTtlMs());
+		assertEquals(McpMrtrConfig.DEFAULT_MAX_ROUNDS, a.getMaxRounds());
+		assertEquals(10, a.getMaxRounds());
+	}
+
+	@Test void a02_setCodecNullThrows() {
+		var e = assertThrows(IllegalArgumentException.class, () -> new McpMrtrConfig().setCodec(null));
+		assertEquals("codec must not be null", e.getMessage());
+	}
+
+	@Test void a03_setTtlMsZeroThrows() {
+		var e = assertThrows(IllegalArgumentException.class, () -> new McpMrtrConfig().setTtlMs(0));
+		assertEquals("ttlMs 0 must be > 0", e.getMessage());
+	}
+
+	@Test void a04_setTtlMsNegativeThrows() {
+		var e = assertThrows(IllegalArgumentException.class, () -> new McpMrtrConfig().setTtlMs(-1));
+		assertEquals("ttlMs -1 must be > 0", e.getMessage());
+	}
+
+	@Test void a05_setMaxRoundsZeroThrows() {
+		var e = assertThrows(IllegalArgumentException.class, () -> new McpMrtrConfig().setMaxRounds(0));
+		assertEquals("maxRounds 0 must be >= 1", e.getMessage());
+	}
+
+	@Test void a06_validChainRoundTripsThroughGetters() {
+		var codec = new AeadRequestStateCodec();
+		var a = new McpMrtrConfig().setCodec(codec).setTtlMs(60_000L).setMaxRounds(3);
+		assertSame(codec, a.getCodec());
+		assertEquals(60_000L, a.getTtlMs());
+		assertEquals(3, a.getMaxRounds());
+	}
+
+	// -------- McpRevision four-arg constructor wiring ---------
+
+	private static Object validMeta() {
+		return JsonMap.of(
+			RequestMeta.KEY_PROTOCOL_VERSION, "2026-07-28",
+			RequestMeta.KEY_CLIENT_CAPABILITIES, JsonMap.of());
+	}
+
+	private static Object withMeta(Object meta) {
+		var p = new JsonMap();
+		p.put("_meta", meta);
+		return p;
+	}
+
+	private static JsonRpcRequest discoverRequest() {
+		return new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
+			.setMethod("server/discover").setParams(withMeta(validMeta()));
+	}
+
+	@Test void b01_fourArgConstructorAcceptsMrtrConfigAndDispatchesNormally() {
+		var rev = new McpRevision(null, new McpCacheConfig(), "instructions", new McpMrtrConfig());
+		var headers = Map.of("Mcp-Method", "server/discover", "Mcp-Name", "");
+		var resp = rev.dispatch(new McpExchange(discoverRequest(), headers::get), new McpServerConfig(), new BasicBeanStore());
+		assertNull(resp.getError());
+	}
+
+	@Test void b02_threeArgConstructorStillCompilesAndDispatchesNormally() {
+		var rev = new McpRevision(null, new McpCacheConfig(), "instructions");
+		var headers = Map.of("Mcp-Method", "server/discover", "Mcp-Name", "");
+		var resp = rev.dispatch(new McpExchange(discoverRequest(), headers::get), new McpServerConfig(), new BasicBeanStore());
+		assertNull(resp.getError());
+	}
+
+	@Test void b03_fourArgConstructorNullMrtrConfigThrowsNpe() {
+		assertThrows(NullPointerException.class,
+			() -> new McpRevision(null, new McpCacheConfig(), "instructions", null));
+	}
+}

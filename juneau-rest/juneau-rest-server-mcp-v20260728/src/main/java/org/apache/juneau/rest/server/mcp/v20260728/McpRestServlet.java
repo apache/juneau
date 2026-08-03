@@ -66,9 +66,15 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.M
 	})
 	private transient volatile McpCacheConfig cacheConfig;
 
+	@SuppressWarnings({
+		"java:S2226", // Lazily-published, per-servlet-instance MRTR config; cannot be static (per-instance) or final (assigned after construction).
+		"java:S3077" // Volatile is required for the correct double-checked locking in getMrtrConfig(): unlike the cache config, two McpMrtrConfig instances are NOT equivalent (each holds a different random AES key), so exactly one config/key must ever be created and published or a requestState sealed against one key could never be unsealed against another.
+	})
+	private transient volatile McpMrtrConfig mrtrConfig;
+
 	@Override /* McpRestServlet */
 	protected org.apache.juneau.rest.server.mcp.McpRevision revision() {
-		return new McpRevision(capabilities(), getCacheConfig(), instructions());
+		return new McpRevision(capabilities(), getCacheConfig(), instructions(), getMrtrConfig());
 	}
 
 	/**
@@ -155,6 +161,57 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.M
 			if (result == null)
 				throw new IllegalStateException("createCacheConfig() returned null");
 			cacheConfig = result;
+		}
+		return result;
+	}
+
+	/**
+	 * Creates the MRTR (Multi-Round-Trip Request) configuration published by {@link #getMrtrConfig()}.
+	 *
+	 * <p>
+	 * Override to supply a custom {@link RequestStateCodec}, TTL, or max-rounds cap. The default returns a
+	 * new {@link McpMrtrConfig} (AES-GCM ephemeral codec, 5-minute {@code requestState} TTL, 10-round cap).
+	 *
+	 * <p>
+	 * <b>Must be side-effect-free.</b> {@link #getMrtrConfig()} calls this hook <b>exactly once</b> per servlet
+	 * instance under a lock, so &mdash; unlike {@link #createCacheConfig()} &mdash; the returned instance (and its
+	 * single random AES key) is the one and only config ever published; it must not depend on being called more
+	 * than once.
+	 *
+	 * @return The MRTR configuration. Must not be <jk>null</jk>.
+	 */
+	protected McpMrtrConfig createMrtrConfig() {
+		return new McpMrtrConfig();
+	}
+
+	/**
+	 * Returns this servlet's lazily-published, binding-owned MRTR configuration.
+	 *
+	 * <p>
+	 * The first call publishes the result of {@link #createMrtrConfig()} under a lock; every later call returns
+	 * that same instance. Publication is done with double-checked locking (not the plain lazy read
+	 * {@link #getCacheConfig()} uses) on purpose: two {@link McpMrtrConfig} instances are <b>not</b> equivalent
+	 * &mdash; each {@link AeadRequestStateCodec} generates a distinct random AES key at construction time &mdash;
+	 * so a benign publication race that let two threads each create and publish a config would leave a
+	 * {@code requestState} sealed against one key impossible to unseal against the other, failing RESUME. The lock
+	 * guarantees exactly one config/key is ever created and published. The published instance must not be mutated
+	 * by callers.
+	 *
+	 * @return The MRTR configuration. Never <jk>null</jk>.
+	 * @throws IllegalStateException If {@link #createMrtrConfig()} returns <jk>null</jk>.
+	 */
+	public McpMrtrConfig getMrtrConfig() {
+		var result = mrtrConfig;
+		if (result == null) {
+			synchronized (this) {
+				result = mrtrConfig;
+				if (result == null) {
+					result = createMrtrConfig();
+					if (result == null)
+						throw new IllegalStateException("createMrtrConfig() returned null");
+					mrtrConfig = result;
+				}
+			}
 		}
 		return result;
 	}

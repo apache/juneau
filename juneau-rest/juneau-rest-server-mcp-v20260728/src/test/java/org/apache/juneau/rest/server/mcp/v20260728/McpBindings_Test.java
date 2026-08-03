@@ -20,6 +20,7 @@ import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
@@ -239,5 +240,127 @@ class McpBindings_Test extends TestBase {
 		var body = clientBWithCache().post("/mcp").contentString(body(1, "tools/list", null))
 			.header("Mcp-Method", "tools/list").header("Mcp-Name", "").run().getContent().asString();
 		assertContains("\"cacheScope\":\"private\"", body);
+	}
+
+	// -------- mrtr-config lifecycle hooks ---------
+
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class H extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Override
+		protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig();
+		}
+		@Override
+		protected McpMrtrConfig createMrtrConfig() {
+			return null;
+		}
+	}
+
+	@Test void e01_servletMrtrConfig_isLazilyCachedAcrossCalls() {
+		var servlet = new A();
+		assertSame(servlet.getMrtrConfig(), servlet.getMrtrConfig());
+	}
+
+	@Test void e02_servletNullMrtrFactoryFailsFast() {
+		var e = assertThrows(IllegalStateException.class, () -> new H().getMrtrConfig());
+		assertEquals("createMrtrConfig() returned null", e.getMessage());
+	}
+
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class I extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+		final AtomicInteger createCalls = new AtomicInteger();
+		@Override
+		protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig();
+		}
+		@Override
+		protected McpMrtrConfig createMrtrConfig() {
+			createCalls.incrementAndGet();
+			return new McpMrtrConfig();
+		}
+	}
+
+	/**
+	 * H2 regression: {@link McpRestServlet#getMrtrConfig()} must publish exactly one {@link McpMrtrConfig} (and
+	 * thus one AES key) even under a concurrent cold-start race. A plain lazy read would let two racing threads
+	 * each create and publish a distinct config, so a {@code requestState} sealed against one key could never be
+	 * unsealed against the other. Every concurrent first-access caller must observe the same instance and
+	 * {@link #createMrtrConfig()} must run exactly once.
+	 */
+	@Test void e06_servletMrtrConfig_concurrentFirstAccessPublishesExactlyOneInstance() throws Exception {
+		var servlet = new I();
+		var threads = 16;
+		var pool = Executors.newFixedThreadPool(threads);
+		try {
+			var start = new CountDownLatch(1);
+			var results = new ArrayList<Future<McpMrtrConfig>>();
+			for (var i = 0; i < threads; i++)
+				results.add(pool.submit(() -> { start.await(); return servlet.getMrtrConfig(); }));
+			start.countDown();
+			var first = results.get(0).get();
+			for (var f : results)
+				assertSame(first, f.get(), "every concurrent first-access caller must observe the same published config");
+			assertEquals(1, servlet.createCalls.get(), "createMrtrConfig() must be invoked exactly once under the lock");
+		} finally {
+			pool.shutdownNow();
+		}
+	}
+
+	@Test void e03_endpointMrtrConfigHook_defaultsToNonNull() {
+		assertNotNull(new B().mrtrConfig());
+	}
+
+	/**
+	 * CRITICAL regression: two {@link McpRevision} instances built from the SAME servlet binding &mdash;
+	 * exactly as {@link McpRestServlet#revision()} constructs a fresh one per dispatched request &mdash;
+	 * must share the same binding-owned {@link McpMrtrConfig}/{@link RequestStateCodec}, so a
+	 * {@code requestState} sealed on a PAUSE request can be unsealed on a later RESUME request. A
+	 * single-{@link McpRevision}-instance test would mask this: the bug only manifests across the
+	 * per-request re-construction {@link McpRestServlet#revision()} performs on every dispatch.
+	 */
+	@Test void e04_mrtrConfigIsStableAcrossSeparateRevisionInstancesFromSameBinding() {
+		var servlet = new A();
+		var rev1 = (McpRevision)servlet.revision();
+		var rev2 = (McpRevision)servlet.revision();
+		assertNotSame(rev1, rev2, "revision() must construct a fresh McpRevision per call (per-request)");
+		assertSame(rev1.mrtrConfig(), rev2.mrtrConfig(), "the MRTR config must be memoized at the binding level");
+
+		var codec1 = rev1.mrtrConfig().getCodec();
+		var codec2 = rev2.mrtrConfig().getCodec();
+		assertSame(codec1, codec2, "the codec (and its AES key) must be memoized at the binding level");
+
+		var state = new McpRequestState("resume-here", "tools/call", 1, System.currentTimeMillis() + 60_000L);
+		var token = codec1.seal(state, "tools/call" + '\u0000' + "2026-07-28");
+		var unsealed = codec2.unseal(token, "tools/call" + '\u0000' + "2026-07-28");
+		assertTrue(unsealed.isPresent(), "a requestState sealed on one request must unseal on the next");
+		assertEquals(state, unsealed.get());
+	}
+
+	/**
+	 * Mixin-path analogue of {@link #e04_mrtrConfigIsStableAcrossSeparateRevisionInstancesFromSameBinding}: two
+	 * {@link McpRevision}s built through the {@link McpEndpoint} mixin default share the per-process
+	 * {@link McpMrtrConfig}/{@link RequestStateCodec}, so a {@code requestState} sealed on a PAUSE request unseals
+	 * on a later RESUME request. The mixin default returns a single JVM-wide shared config (see
+	 * {@link SharedMrtrConfig}), so the sharing holds even across two distinct endpoint instances &mdash; not just
+	 * repeated {@code revision()} calls on one instance &mdash; which is what makes the common mixin case resumable
+	 * with no override.
+	 */
+	@Test void e05_mixinMrtrConfigIsStableAndSharedAcrossEndpointInstances() {
+		var rev1 = (McpRevision)new B().revision();
+		var rev2 = (McpRevision)new B().revision();
+		assertNotSame(rev1, rev2, "revision() must construct a fresh McpRevision per call (per-request)");
+		assertSame(rev1.mrtrConfig(), rev2.mrtrConfig(), "the mixin default MRTR config must be a per-process shared instance");
+
+		var codec1 = rev1.mrtrConfig().getCodec();
+		var codec2 = rev2.mrtrConfig().getCodec();
+		assertSame(codec1, codec2, "the codec (and its AES key) must be the per-process shared instance");
+
+		var state = new McpRequestState("resume-here", "tools/call", 1, System.currentTimeMillis() + 60_000L);
+		var token = codec1.seal(state, "tools/call" + '\u0000' + "2026-07-28");
+		var unsealed = codec2.unseal(token, "tools/call" + '\u0000' + "2026-07-28");
+		assertTrue(unsealed.isPresent(), "a requestState sealed on one request must unseal on the next");
+		assertEquals(state, unsealed.get());
 	}
 }

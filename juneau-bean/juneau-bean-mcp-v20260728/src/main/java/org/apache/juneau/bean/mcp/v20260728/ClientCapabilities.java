@@ -30,6 +30,7 @@ import org.apache.juneau.marshall.*;
 public class ClientCapabilities {
 
 	private RootsCapability roots;
+	private ElicitationCapability elicitation;
 	private Map<String,Object> sampling;
 	private Map<String,Object> experimental;
 	private Map<String,Object> extensions;
@@ -51,6 +52,26 @@ public class ClientCapabilities {
 	 */
 	public ClientCapabilities setRoots(RootsCapability value) {
 		roots = value;
+		return this;
+	}
+
+	/**
+	 * Elicitation capability.
+	 *
+	 * @return The capability, or {@code null} if not set.
+	 */
+	public ElicitationCapability getElicitation() {
+		return elicitation;
+	}
+
+	/**
+	 * Sets elicitation capability.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ClientCapabilities setElicitation(ElicitationCapability value) {
+		elicitation = value;
 		return this;
 	}
 

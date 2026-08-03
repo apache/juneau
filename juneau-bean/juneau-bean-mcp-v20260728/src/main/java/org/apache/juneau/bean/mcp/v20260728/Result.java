@@ -23,10 +23,12 @@ import org.apache.juneau.commons.bean.*;
  * discriminator and optional {@link ResultMeta} under the reserved {@code _meta} wire key.
  *
  * <p>
- * The {@code 2026-07-28} schema declares {@code resultType} as an open string union: {@code "complete"} is the
- * only value this server emits (MRTR / {@code "input_required"} is out of scope), but parsing remains lossless
- * and accepts any string a peer might send. The field therefore defaults to {@code "complete"} rather than
- * being validated against a closed enumeration.
+ * The {@code 2026-07-28} schema declares {@code resultType} as an open string union: {@code "complete"} and
+ * {@code "input_required"} ({@link InputRequiredResult}, MRTR / SEP-2322) are the values this bean model
+ * permits. Only {@code "complete"} is emitted by any dispatch path today; {@code "input_required"} becomes
+ * reachable once MRTR pause/resume dispatch wiring is in place. Parsing remains lossless regardless and
+ * accepts any string a peer might send. The field therefore defaults to {@code "complete"} rather than being
+ * validated against a closed enumeration.
  *
  * <p>
  * {@link CacheableResult} extends this base so the five cacheable list/read results inherit {@code resultType}

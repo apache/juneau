@@ -48,7 +48,8 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 
 	@Override /* McpEndpoint */
 	default org.apache.juneau.rest.server.mcp.McpRevision revision() {
-		return new McpRevision(capabilities(), Objects.requireNonNull(cacheConfig(), "cacheConfig"), instructions());
+		return new McpRevision(capabilities(), Objects.requireNonNull(cacheConfig(), "cacheConfig"), instructions(),
+			Objects.requireNonNull(mrtrConfig(), "mrtrConfig"));
 	}
 
 	/**
@@ -106,5 +107,30 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 	 */
 	default McpCacheConfig cacheConfig() {
 		return new McpCacheConfig();
+	}
+
+	/**
+	 * MRTR (Multi-Round-Trip Request) configuration for this endpoint's bound revision.
+	 *
+	 * <p>
+	 * The default returns a <b>per-process shared</b> {@link McpMrtrConfig} (AES-GCM ephemeral codec, 5-minute
+	 * {@code requestState} TTL, 10-round cap) &mdash; a single JVM-wide instance holding one ephemeral AES key,
+	 * lazily created on first use (see {@link SharedMrtrConfig}). Because {@link #revision()} constructs a fresh
+	 * {@link McpRevision} on every request, returning that same shared instance from every call is what lets a
+	 * {@code requestState} sealed on a PAUSE request be unsealed on the follow-up RESUME request; a fresh
+	 * {@link McpMrtrConfig} per call would mint a fresh AES key per request and make every RESUME fail. So the
+	 * common mixin case is resumable out of the box with no override.
+	 *
+	 * <p>
+	 * Override to supply a custom {@link RequestStateCodec}, TTL, or max-rounds cap. <b>An overriding
+	 * implementation must return a stable instance</b> (e.g. stored in a field) that is not mutated after it is
+	 * returned — this mixin does not lazily cache an override the way the servlet-subclass path
+	 * ({@link McpRestServlet#getMrtrConfig()}) does, and returning a fresh custom instance per call would
+	 * reintroduce the per-request-key RESUME failure the default avoids.
+	 *
+	 * @return The MRTR configuration. Must not be <jk>null</jk>.
+	 */
+	default McpMrtrConfig mrtrConfig() {
+		return SharedMrtrConfig.get();
 	}
 }

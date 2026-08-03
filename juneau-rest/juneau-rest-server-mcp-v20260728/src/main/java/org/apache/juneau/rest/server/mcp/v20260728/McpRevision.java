@@ -72,6 +72,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	private final ServerCapabilities capabilities;
 	private final McpCacheConfig cacheConfig;
 	private final String instructions;
+	private final McpMrtrConfig mrtrConfig;
 
 	/**
 	 * Constructor. Uses an empty {@link McpCacheConfig} (no cache hints emitted on any result) and no
@@ -96,7 +97,8 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor. Uses a default {@link McpMrtrConfig} (AES-GCM ephemeral codec, 5-minute
+	 * {@code requestState} TTL, 10-round cap).
 	 *
 	 * @param capabilities Explicit capabilities to advertise on {@code server/discover}, or <jk>null</jk>
 	 * 	to auto-derive from the registered tool/prompt/resource lists.
@@ -105,9 +107,24 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * 	to omit them.
 	 */
 	public McpRevision(ServerCapabilities capabilities, McpCacheConfig cacheConfig, String instructions) {
+		this(capabilities, cacheConfig, instructions, new McpMrtrConfig());
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param capabilities Explicit capabilities to advertise on {@code server/discover}, or <jk>null</jk>
+	 * 	to auto-derive from the registered tool/prompt/resource lists.
+	 * @param cacheConfig Binding-owned cache configuration. Must not be <jk>null</jk>.
+	 * @param instructions Optional free-form {@code server/discover} usage instructions, or <jk>null</jk>
+	 * 	to omit them.
+	 * @param mrtrConfig Binding-owned MRTR (Multi-Round-Trip Request) configuration. Must not be <jk>null</jk>.
+	 */
+	public McpRevision(ServerCapabilities capabilities, McpCacheConfig cacheConfig, String instructions, McpMrtrConfig mrtrConfig) {
 		this.capabilities = capabilities;
 		this.cacheConfig = Objects.requireNonNull(cacheConfig, "cacheConfig");
 		this.instructions = instructions;
+		this.mrtrConfig = Objects.requireNonNull(mrtrConfig, "mrtrConfig");
 	}
 
 	/** JSON-RPC error code: parse error. Never reported by this revision (see {@link McpErrorKind#PARSE_ERROR}). */
@@ -125,11 +142,47 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	/** JSON-RPC error code: internal error. */
 	public static final int CODE_INTERNAL_ERROR = -32603;
 
+	/**
+	 * SEP-2322 error code: the client did not advertise a capability ({@code elicitation}) required to receive an
+	 * {@code input_required} result. Pinned directly by the SEP-2322 schema (spec Open item #3).
+	 */
+	public static final int CODE_MISSING_REQUIRED_CLIENT_CAPABILITY = -32021;
+
+	/**
+	 * MRTR error code: the echoed {@code requestState} has expired (past its sealed {@code expiresAtMs}). This
+	 * plan's own pin, chosen from the JSON-RPC-reserved {@code -32000}..{@code -32099} server-error range adjacent
+	 * to the schema-pinned {@code -32021}; not a SEP-2322-sourced value.
+	 */
+	public static final int CODE_REQUEST_STATE_EXPIRED = -32022;
+
+	/**
+	 * MRTR error code: the echoed {@code requestState}'s embedded round counter is at or above the configured
+	 * max-rounds cap. This plan's own pin (same range/rationale as {@link #CODE_REQUEST_STATE_EXPIRED}).
+	 */
+	public static final int CODE_MAX_ROUNDS_EXCEEDED = -32023;
+
 	/** Default server name reported by {@code server/discover} when the config supplies no server identity. */
 	public static final String DEFAULT_SERVER_NAME = "juneau-rest-server-mcp";
 
 	private static final String META_KEY = "_meta";
 	private static final String PARAM_ARGUMENTS = "arguments";
+
+	/**
+	 * This revision instance's binding-owned MRTR (Multi-Round-Trip Request) configuration, as supplied at
+	 * construction time.
+	 *
+	 * <p>
+	 * Package-visible so tests can confirm the binding-level memoization contract documented on
+	 * {@link McpRestServlet#getMrtrConfig()} / {@link McpEndpoint#mrtrConfig()}: two {@link McpRevision}
+	 * instances built from the same binding must share the same {@link McpMrtrConfig} (and therefore the
+	 * same {@link RequestStateCodec}), even though each dispatched request constructs its own
+	 * {@link McpRevision}.
+	 *
+	 * @return The MRTR configuration. Never <jk>null</jk>.
+	 */
+	McpMrtrConfig mrtrConfig() {
+		return mrtrConfig;
+	}
 
 	@Override /* McpRevision */
 	public String protocolVersion() {
@@ -407,7 +460,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			first(cacheConfig.getToolsList(), cacheConfig.getDefaultHint()));
 	}
 
-	private CallToolResult callTool(McpServerConfig config, Object params, BeanStore ctx) {
+	private Object callTool(McpServerConfig config, Object params, BeanStore ctx) {
 		var p = McpParamUtils.asMap(params);
 		var name = McpParamUtils.strParam(p, "name");
 		if (name == null)
@@ -418,9 +471,14 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			.orElseThrow(() -> new McpException(errorCode(McpErrorKind.TOOL_NOT_FOUND), "Tool not found: " + name));
 		var args = McpParamUtils.mapParam(p, PARAM_ARGUMENTS);
 		McpSchemaSafety.validateInput(handler.descriptor().getInputSchema(), args);
-		var outcome = handler.call(args, ctx);
-		validateStructuredOutput(outcome);
-		return McpWire.toWire(outcome);
+		var mrtr = resolveMrtrContext(McpMethods.TOOLS_CALL, p, ctx);
+		try (var store = mrtr.store()) {
+			var outcome = handler.call(args, store);
+			validateStructuredOutput(outcome);
+			return McpWire.toWire(outcome);
+		} catch (McpInputRequiredSignal signal) {
+			return pause(signal, McpMethods.TOOLS_CALL, p, mrtr.currentRound());
+		}
 	}
 
 	private static void validateStructuredOutput(McpToolOutcome outcome) {
@@ -442,7 +500,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			first(cacheConfig.getPromptsList(), cacheConfig.getDefaultHint()));
 	}
 
-	private GetPromptResult getPrompt(McpServerConfig config, Object params, BeanStore ctx) {
+	private Object getPrompt(McpServerConfig config, Object params, BeanStore ctx) {
 		var p = McpParamUtils.asMap(params);
 		var name = McpParamUtils.strParam(p, "name");
 		if (name == null)
@@ -452,7 +510,12 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			.findFirst()
 			.orElseThrow(() -> new McpException(errorCode(McpErrorKind.PROMPT_NOT_FOUND), "Prompt not found: " + name));
 		var args = McpParamUtils.mapParam(p, PARAM_ARGUMENTS);
-		return McpWire.toWire(handler.get(args, ctx));
+		var mrtr = resolveMrtrContext(McpMethods.PROMPTS_GET, p, ctx);
+		try (var store = mrtr.store()) {
+			return McpWire.toWire(handler.get(args, store));
+		} catch (McpInputRequiredSignal signal) {
+			return pause(signal, McpMethods.PROMPTS_GET, p, mrtr.currentRound());
+		}
 	}
 
 	private ListResourcesResult listResources(McpServerConfig config, Object params, BeanStore ctx) {
@@ -464,7 +527,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			first(cacheConfig.getResourcesList(), cacheConfig.getDefaultHint()));
 	}
 
-	private ReadResourceResult readResource(McpServerConfig config, Object params, BeanStore ctx) {
+	private Object readResource(McpServerConfig config, Object params, BeanStore ctx) {
 		var p = McpParamUtils.asMap(params);
 		var uri = McpParamUtils.strParam(p, "uri");
 		if (uri == null)
@@ -472,8 +535,17 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		var exact = config.getResources().stream()
 			.filter(h -> uri.equals(h.descriptor().getUri()))
 			.findFirst();
-		if (exact.isPresent())
-			return applyCache(McpWire.toWire(exact.get().read(uri, ctx)), readHint(uri));
+		if (exact.isPresent()) {
+			// MRTR PAUSE/RESUME applies only to the exact-resource path; C4's resource-template branch below is
+			// untouched (spec rule 5). A PAUSE returns before applyCache(...), so a pending result never gets a
+			// cache hint.
+			var mrtr = resolveMrtrContext(McpMethods.RESOURCES_READ, p, ctx);
+			try (var store = mrtr.store()) {
+				return applyCache(McpWire.toWire(exact.get().read(uri, store)), readHint(uri));
+			} catch (McpInputRequiredSignal signal) {
+				return pause(signal, McpMethods.RESOURCES_READ, p, mrtr.currentRound());
+			}
+		}
 		var match = config.resolveResourceTemplate(uri);
 		var outcome = match == null ? null : match.handler().read(uri, match.variables(), ctx);
 		if (outcome == null)
@@ -532,6 +604,118 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			return McpCompletionRef.resource(uri);
 		}
 		throw new McpException(errorCode(McpErrorKind.INVALID_PARAMS), "Invalid or missing ref.type: " + type);
+	}
+
+	// --- MRTR (Multi-Round-Trip Request) pause/resume ---------------------------------------
+
+	/**
+	 * The per-request MRTR resolution result: the {@link WritableBeanStore} a handler is invoked with (always
+	 * carrying {@link McpMrtrCapabilityContext}, and on a RESUME also {@link McpMrtrResumeContext}) plus the
+	 * current round decoded from the echoed {@code requestState} (0 on a first-round call), threaded to
+	 * {@link #pause} so it can increment without a second unseal.
+	 *
+	 * <p>
+	 * {@code store} is typed {@link WritableBeanStore} (rather than the narrower {@link BeanStore}) specifically
+	 * so call sites can close it in a try-with-resources block: any bean a handler resolves through it is tracked
+	 * for {@code @PreDestroy} cleanup on <i>this</i> store, not the caller-owned {@code ctx} it wraps (see
+	 * {@link BasicBeanStore#close()}), so it must be closed once the handler invocation completes.
+	 */
+	private record MrtrContext(WritableBeanStore store, int currentRound) {}
+
+	/**
+	 * Builds the {@link BeanStore} an in-scope handler receives and, on a RESUME, validates the echoed
+	 * {@code requestState} before the handler runs.
+	 *
+	 * <p>
+	 * Always wraps {@code ctx} with a {@link McpMrtrCapabilityContext} so a handler can pre-check the client's
+	 * advertised {@code elicitation} capability (spec &sect;4). When the request carries a {@code requestState}
+	 * (a RESUME), it is unsealed under the canonical AAD and validated for integrity, method agreement, expiry,
+	 * and the max-rounds cap &mdash; any failure raises the mapped {@link McpException} <i>before</i> the handler
+	 * is re-invoked &mdash; then the decoded continuation and the client's {@code inputResponses} are exposed via
+	 * {@link McpMrtrResumeContext}.
+	 *
+	 * @param method The in-scope JSON-RPC method. Must not be <jk>null</jk>.
+	 * @param params The request params map. Must not be <jk>null</jk>.
+	 * @param ctx The request-scoped bean store to wrap. Must not be <jk>null</jk>.
+	 * @return The resolved MRTR context. Never <jk>null</jk>.
+	 */
+	private MrtrContext resolveMrtrContext(String method, Map<String,Object> params, BeanStore ctx) {
+		var wrapped = new BasicBeanStore(ctx)
+			.addBean(McpMrtrCapabilityContext.class, new McpMrtrCapabilityContext(clientElicitationSupported(params)));
+		var requestState = McpParamUtils.strParam(params, "requestState");
+		if (requestState == null)
+			return new MrtrContext(wrapped, 0);
+		var sealed = mrtrConfig.getCodec().unseal(requestState, aad(method))
+			.orElseThrow(() -> new McpException(CODE_INVALID_PARAMS, "Invalid or tampered requestState"));
+		if (! method.equals(sealed.method()))
+			throw new McpException(CODE_INVALID_PARAMS, "requestState method mismatch");
+		if (sealed.expiresAtMs() <= System.currentTimeMillis())
+			throw new McpException(CODE_REQUEST_STATE_EXPIRED, "requestState has expired");
+		if (sealed.round() >= mrtrConfig.getMaxRounds())
+			// Client-facing message deliberately omits the configured cap value so server config is not leaked.
+			throw new McpException(CODE_MAX_ROUNDS_EXCEEDED, "Max MRTR rounds exceeded");
+		var inputResponses = McpParamUtils.mapParam(params, "inputResponses");
+		var store = wrapped.addBean(McpMrtrResumeContext.class, new McpMrtrResumeContext(sealed.continuation(), inputResponses));
+		return new MrtrContext(store, sealed.round());
+	}
+
+	/**
+	 * Turns a caught {@link McpInputRequiredSignal} into a wire {@link InputRequiredResult}: capability-gates the
+	 * client, seals a fresh {@code requestState} carrying the incremented round counter, and assembles the
+	 * requested-inputs map.
+	 *
+	 * <p>
+	 * The capability gate runs <i>before</i> any token is minted &mdash; a client that never advertised
+	 * {@code elicitation} causes no seal at all, only a {@link #CODE_MISSING_REQUIRED_CLIENT_CAPABILITY} error.
+	 *
+	 * @param signal The signal thrown by the handler. Must not be <jk>null</jk>.
+	 * @param method The in-scope JSON-RPC method this pause is for. Must not be <jk>null</jk>.
+	 * @param params The request params map. Must not be <jk>null</jk>.
+	 * @param currentRound The round decoded on RESUME (0 on a first-round pause), incremented into the new token.
+	 * @return The assembled, validated {@code input_required} result. Never <jk>null</jk>.
+	 */
+	private InputRequiredResult pause(McpInputRequiredSignal signal, String method, Map<String,Object> params, int currentRound) {
+		if (! clientElicitationSupported(params))
+			throw new McpException(CODE_MISSING_REQUIRED_CLIENT_CAPABILITY,
+				"Client does not advertise the elicitation capability required for input_required");
+		var state = new McpRequestState(signal.getContinuation(), method, currentRound + 1, System.currentTimeMillis() + mrtrConfig.getTtlMs());
+		var result = new InputRequiredResult().setRequestState(mrtrConfig.getCodec().seal(state, aad(method)));
+		// Each inputRequests value is carried to the wire byte-for-byte as a raw sub-request object (see
+		// McpInputRequiredSignal). The pinned schema models every value as an object; a non-map handler value is a
+		// programming error that surfaces (as a ClassCastException here) via dispatch's -32603 fail-safe.
+		signal.getInputRequests().forEach((id, raw) -> result.putInputRequest(id, new JsonMap((Map<?,?>) raw)));
+		result.validate();
+		return result;
+	}
+
+	/**
+	 * The canonical MRTR AAD binding a sealed {@code requestState} to the request that produced it:
+	 * {@code method + '\u0000' + protocolVersion} (NUL-separated; see {@link RequestStateCodec}). NUL cannot
+	 * appear in a method name or protocol-version literal, so the concatenation is unambiguous.
+	 *
+	 * @param method The in-scope JSON-RPC method. Must not be <jk>null</jk>.
+	 * @return The AAD string. Never <jk>null</jk>.
+	 */
+	private String aad(String method) {
+		return method + '\u0000' + protocolVersion();
+	}
+
+	/**
+	 * Reads whether the request advertised the client {@code elicitation} capability, from the opaque
+	 * {@code _meta.clientCapabilities} map directly (mirroring {@link #validateMeta}'s opaque-map style rather than
+	 * re-parsing a full {@code RequestMeta}/{@code ClientCapabilities} bean for one key).
+	 *
+	 * @param params The request params map. Must not be <jk>null</jk>.
+	 * <p>
+	 * {@link #validateMeta} has already run for every dispatched request and rejects a missing or non-{@code Map}
+	 * {@code clientCapabilities} with {@link #CODE_INVALID_REQUEST}, so {@code caps} is always a non-<jk>null</jk>
+	 * {@code Map} here &mdash; no defensive type guard is needed.
+	 *
+	 * @return <jk>true</jk> if {@code _meta.clientCapabilities.elicitation} is present and non-<jk>null</jk>.
+	 */
+	private static boolean clientElicitationSupported(Map<String,Object> params) {
+		var caps = (Map<?,?>) McpWire.metaMapOrEmpty(params).get(RequestMeta.KEY_CLIENT_CAPABILITIES);
+		return caps.get("elicitation") != null;
 	}
 
 	// --- trace-context extraction (Part B / trace-context propagation) ----------------------
