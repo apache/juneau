@@ -223,6 +223,34 @@ public final class McpClient extends AbstractMcpClient {
 	}
 
 	/**
+	 * Performs a JSON-RPC call using a caller-supplied, fully-populated request bean, returning the raw result
+	 * payload without deserializing into a specific {@link Result} subtype.
+	 *
+	 * <p>
+	 * Every convenience method on this class ({@link #callTool}, {@link #getPrompt}, {@link #readResource}, etc.)
+	 * both builds its own request bean internally and deserializes strictly into one known result type, so none of
+	 * them can represent a paused {@code input_required} response (MCP {@code 2026-07-28} SEP-2322 Multi-Round-Trip
+	 * Requests) or carry the {@code requestState}/{@code inputResponses} fields a resume call needs to set. This
+	 * method exists specifically for MRTR-aware callers that must both populate those fields on the request (e.g.
+	 * on a {@link CallToolRequest}) and branch on the response's
+	 * {@code resultType} themselves, decoding into a typed result only once {@code resultType} reads
+	 * {@code "complete"}.
+	 *
+	 * @param method The JSON-RPC method (e.g. {@link McpMethods#TOOLS_CALL}).
+	 * @param params The fully-populated request bean.
+	 * @return The raw result as a generic {@link Map}, exactly as received over the wire, before any
+	 * 	subclass-specific deserialization. Never <jk>null</jk> on a successful JSON-RPC response.
+	 * @throws IOException On a transport failure.
+	 * @throws McpException If the server returns a JSON-RPC error.
+	 */
+	@SuppressWarnings({
+		"unchecked" // Map.class.cast(...) below always yields a raw Map from JSON deserialization.
+	})
+	public Map<String,Object> callRaw(String method, RequestParams<?> params) throws IOException {
+		return call(method, params, Map.class, false);
+	}
+
+	/**
 	 * Returns this instance's cache-partition prefix used to namespace {@link McpResponseCache#SCOPE_PRIVATE}
 	 * entries so two client instances sharing the same {@link McpResponseCache} never see each other's
 	 * private-scope results.
@@ -275,19 +303,36 @@ public final class McpClient extends AbstractMcpClient {
 		}
 	}
 
-	// TODO C5/C6: finalize duplex return-channel header contract. Mcp-Name is always empty here because
-	// DUPLEX_RETURN_METHOD has no routing-name mapping in McpRoutingNames; it is unclear whether the real
-	// contract instead wants it to echo the correlated inbound request's tool/prompt/resource name.
+	// C5/C6 duplex return-channel header contract remains unsettled: Mcp-Name is always empty here because
+	// DUPLEX_RETURN_METHOD has no routing-name mapping in McpRoutingNames. It is unclear whether the real
+	// contract instead wants it to echo the correlated inbound request's tool/prompt/resource name; that
+	// requires spec clarification and is deliberately left open rather than guessed at here.
 	private void postClientResult(Object id, JsonRpcResponse payload) throws IOException {
 		var headers = Map.of("Mcp-Method", DUPLEX_RETURN_METHOD, "Mcp-Name", McpRoutingNames.routingName(DUPLEX_RETURN_METHOD, payload));
 		send(new JsonRpcRequest().setJsonrpc("2.0").setId(id).setMethod(DUPLEX_RETURN_METHOD).setParams(payload), headers);
 	}
 
 	private <T> T call(String method, RequestParams<?> params, Class<T> resultType) throws IOException {
+		return call(method, params, resultType, true);
+	}
+
+	/**
+	 * Shared wire implementation for every typed method and {@link #callRaw}.
+	 *
+	 * <p>
+	 * {@code useCache=false} (used only by {@link #callRaw}) skips the cache READ so a {@code callRaw} call never
+	 * retrieves a differently-typed cached result (e.g. a {@link CallToolResult} primed by {@link #callTool}) under
+	 * the same cache key, which would otherwise throw a {@link ClassCastException} on the subsequent {@code cast}.
+	 * The cache WRITE at the end is unaffected by this flag: it is already a no-op for {@code callRaw} because a
+	 * plain {@link Map} result is never a {@link CacheableResult}.
+	 */
+	private <T> T call(String method, RequestParams<?> params, Class<T> resultType, boolean useCache) throws IOException {
 		var cacheKey = cacheKey(method, params);
-		var cached = readCache(cacheKey);
-		if (cached != null)
-			return resultType.cast(cached);
+		if (useCache) {
+			var cached = readCache(cacheKey);
+			if (cached != null)
+				return resultType.cast(cached);
+		}
 		stampMeta(params.getMeta() == null ? params.setMeta(new RequestMeta()).getMeta() : params.getMeta());
 		var wireParams = toWireParams(params);
 		var headers = Map.of("Mcp-Method", method, "Mcp-Name", McpRoutingNames.routingName(method, wireParams));
@@ -377,7 +422,7 @@ public final class McpClient extends AbstractMcpClient {
 				case RequestMeta.KEY_TRACEPARENT -> meta.setTraceparent(value);
 				case RequestMeta.KEY_TRACESTATE -> meta.setTracestate(value);
 				case RequestMeta.KEY_BAGGAGE -> meta.setBaggage(value);
-				default -> { }
+				default -> { /* Unknown trace-context key: no corresponding RequestMeta field to set. */ }
 			}
 		}
 	}

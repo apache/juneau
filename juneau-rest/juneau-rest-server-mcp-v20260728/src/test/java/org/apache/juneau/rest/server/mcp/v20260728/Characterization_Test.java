@@ -19,19 +19,25 @@ package org.apache.juneau.rest.server.mcp.v20260728;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.function.*;
+
+import javax.crypto.*;
+import javax.crypto.spec.*;
 
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.tracing.TraceContextCarrier;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.mcp.*;
 import org.apache.juneau.rest.server.tracing.*;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -273,6 +279,84 @@ class Characterization_Test {
 		}
 	}
 
+	/**
+	 * Backs every {@code MRTR-*} fixture (SEP-2322 Multi-Round-Trip Requests): one {@code ask} tool that pauses
+	 * (throws {@link McpInputRequiredSignal}) on a first-round call, and on RESUME either completes (echoing the
+	 * client's {@code inputResponses}) or pauses a second time &mdash; branched on the decoded continuation so a
+	 * single handler drives the complete / pause-again / max-rounds fixtures.
+	 *
+	 * <p>
+	 * Wires a <b>deterministic, fixed-key</b> {@link FixedKeyGcmCodec} instead of the production ephemeral-key
+	 * {@link AeadRequestStateCodec}, so a {@code requestState} the harness seals for a RESUME fixture (see
+	 * {@link #mrtrToken(String)}) is unsealable by this servlet across a fresh process &mdash; a property the
+	 * random-per-process production key deliberately does <b>not</b> have. The opaque token minted <em>into</em> a
+	 * PAUSE response still embeds a wall-clock expiry, so responses are compared with the token value redacted (see
+	 * {@link #normalizeRequestState(String)}); the fixtures pin the wire <em>shape</em>, never the opaque bytes.
+	 */
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class F_Mrtr extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Override protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig().addTool(new McpToolHandler() {
+				@Override public McpToolSpec descriptor() { return new McpToolSpec().setName("ask").setDescription("desc:ask"); }
+				@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
+					var resume = ctx.getBean(McpMrtrResumeContext.class);
+					if (resume.isEmpty())
+						throw new McpInputRequiredSignal(Map.of("q1", Map.of("type", "elicitation")), "cont-1");
+					if ("pause-again".equals(resume.get().continuation()))
+						throw new McpInputRequiredSignal(Map.of("q2", Map.of("type", "elicitation")), "cont-2");
+					return McpToolOutcome.text("resumed:" + resume.get().inputResponses().get("q1"));
+				}
+			});
+		}
+		@Override protected McpMrtrConfig createMrtrConfig() {
+			return new McpMrtrConfig().setCodec(new FixedKeyGcmCodec());
+		}
+	}
+
+	/**
+	 * Test-only deterministic {@link RequestStateCodec}: AES-256-GCM with a <b>hardcoded</b> key and nonce.
+	 *
+	 * <p>
+	 * Unlike the production {@link AeadRequestStateCodec} (random per-process key + random per-seal nonce), this
+	 * codec produces identical ciphertext for identical {@code (state, aad)} inputs and can unseal a token sealed by
+	 * any other instance &mdash; exactly the reproducibility a committed characterization fixture needs. It is still
+	 * genuinely tamper-evident (the GCM auth tag rejects the {@code MRTR-tampered-request-state} corruption) and
+	 * honors the AAD binding. Fixed-nonce AES-GCM is catastrophically insecure for real traffic; it is used here
+	 * <em>solely</em> because determinism, not confidentiality, is the goal in a fixture.
+	 */
+	static final class FixedKeyGcmCodec implements RequestStateCodec {
+		private static final SecretKey KEY = new SecretKeySpec(new byte[32], "AES");
+		private static final byte[] NONCE = new byte[12];
+		private static final Base64.Encoder B64 = Base64.getUrlEncoder().withoutPadding();
+
+		@Override public String seal(McpRequestState state, String aad) {
+			try {
+				var cipher = Cipher.getInstance("AES/GCM/NoPadding");
+				cipher.init(Cipher.ENCRYPT_MODE, KEY, new GCMParameterSpec(128, NONCE));
+				cipher.updateAAD(aad.getBytes(StandardCharsets.UTF_8));
+				var ciphertext = cipher.doFinal(Json.of(state).getBytes(StandardCharsets.UTF_8));
+				return B64.encodeToString(NONCE) + "." + B64.encodeToString(ciphertext);
+			} catch (Exception e) {
+				throw new RuntimeException("Fixture codec seal failed", e);
+			}
+		}
+
+		@Override public Optional<McpRequestState> unseal(String token, String aad) {
+			try {
+				var parts = token.split("\\.", 2);
+				var nonce = Base64.getUrlDecoder().decode(parts[0]);
+				var ciphertext = Base64.getUrlDecoder().decode(parts[1]);
+				var cipher = Cipher.getInstance("AES/GCM/NoPadding");
+				cipher.init(Cipher.DECRYPT_MODE, KEY, new GCMParameterSpec(128, nonce));
+				cipher.updateAAD(aad.getBytes(StandardCharsets.UTF_8));
+				return Optional.of(Json.to(new String(cipher.doFinal(ciphertext), StandardCharsets.UTF_8), McpRequestState.class));
+			} catch (@SuppressWarnings("unused") Exception e) {
+				return Optional.empty();
+			}
+		}
+	}
+
 	// --- fixture handler factories ---------------------------------------------------------
 
 	private static McpToolHandler tool(String name, McpSchema schema, Function<Map<String,Object>,McpToolOutcome> fn) {
@@ -331,8 +415,72 @@ class Characterization_Test {
 				"COMPLETE-empty-unknown", "COMPLETE-capped" -> F_Complete.class;
 			case "TRACE-meta-parent", "TRACE-http-fallback", "TRACE-meta-wins",
 				"TRACE-tracestate-baggage", "TRACE-response-echo", "TRACE-jsonrpc-error" -> F_Traced.class;
+			case "MRTR-input-required-response", "MRTR-resume-complete", "MRTR-resume-input-required-again",
+				"MRTR-tampered-request-state", "MRTR-expired-request-state", "MRTR-unsupported-capability",
+				"MRTR-max-rounds-exceeded" -> F_Mrtr.class;
 			default -> F_Empty.class;
 		};
+	}
+
+	// --- MRTR requestState sealing/redaction ------------------------------------------------
+
+	/** Placeholder in an {@code MRTR-*} resume fixture's committed request body, replaced at replay time. */
+	private static final String TOKEN_PLACEHOLDER = "__REQUEST_STATE__";
+
+	// Fixed expiry constants embedded in a sealed requestState so a RESUME fixture's token is reproducible
+	// (never "now + ttl"): far-future for a still-valid token, a fixed past instant for the expired fixture.
+	private static final long FAR_FUTURE_MS = 32503680000000L; // ~ year 3000
+	private static final long PAST_MS = 1000L;
+
+	private static String aad(String method) {
+		return method + '\u0000' + McpProtocol.VERSION_2026_07_28;
+	}
+
+	/**
+	 * The {@code requestState} the harness seals (with {@link FixedKeyGcmCodec}, matching {@link F_Mrtr}'s codec)
+	 * for each RESUME-family fixture. Substituted into the committed request in place of {@link #TOKEN_PLACEHOLDER}
+	 * so the token stays framework-owned/opaque while the request pins the surrounding wire shape.
+	 *
+	 * <p>
+	 * {@code MRTR-resume-complete} and {@code MRTR-resume-input-required-again} have byte-identical committed
+	 * request files by design: the behavioral difference between the two fixtures lives entirely inside the sealed
+	 * opaque token's continuation value ({@code "complete-me"} vs {@code "pause-again"}), not in anything visible
+	 * on the wire request body.
+	 *
+	 * <p>
+	 * The plan's original "commit the corrupted requestState as a frozen literal" constraint for
+	 * {@code MRTR-tampered-request-state} was consciously superseded: because {@link FixedKeyGcmCodec} makes
+	 * {@code seal(...)} fully deterministic (fixed key, fixed nonce), regenerating the tampered token on every run
+	 * via {@code tamper(codec.seal(...))} is equally reproducible and avoids hand-maintaining opaque ciphertext.
+	 */
+	private static String mrtrToken(String fixture) {
+		var codec = new FixedKeyGcmCodec();
+		return switch (fixture) {
+			case "MRTR-resume-complete" -> codec.seal(new McpRequestState("complete-me", "tools/call", 1, FAR_FUTURE_MS), aad("tools/call"));
+			case "MRTR-resume-input-required-again" -> codec.seal(new McpRequestState("pause-again", "tools/call", 1, FAR_FUTURE_MS), aad("tools/call"));
+			case "MRTR-expired-request-state" -> codec.seal(new McpRequestState("cont-1", "tools/call", 1, PAST_MS), aad("tools/call"));
+			case "MRTR-max-rounds-exceeded" -> codec.seal(new McpRequestState("cont-1", "tools/call", McpMrtrConfig.DEFAULT_MAX_ROUNDS, FAR_FUTURE_MS), aad("tools/call"));
+			case "MRTR-tampered-request-state" -> tamper(codec.seal(new McpRequestState("cont-1", "tools/call", 1, FAR_FUTURE_MS), aad("tools/call")));
+			default -> throw new IllegalArgumentException("No MRTR token mapping for fixture: " + fixture);
+		};
+	}
+
+	/** Flips one ciphertext byte of a valid token so its GCM tag fails verification (the tamper fixture). */
+	private static String tamper(String token) {
+		var parts = token.split("\\.", 2);
+		var ciphertext = Base64.getUrlDecoder().decode(parts[1]);
+		ciphertext[0] ^= 1;
+		return parts[0] + "." + Base64.getUrlEncoder().withoutPadding().encodeToString(ciphertext);
+	}
+
+	/**
+	 * Redacts the opaque {@code requestState} token value in a response body to a fixed placeholder before
+	 * comparison. The token is per-process-nondeterministic ciphertext (production uses a random key and embeds a
+	 * wall-clock expiry), so pinning its exact bytes is neither possible nor meaningful; the fixture pins its
+	 * presence and the surrounding wire shape instead.
+	 */
+	private static String normalizeRequestState(String responseBody) {
+		return responseBody.replaceAll("\"requestState\":\"[^\"]+\"", "\"requestState\":\"<sealed>\"");
 	}
 
 	// --- replay ----------------------------------------------------------------------------
@@ -350,7 +498,7 @@ class Characterization_Test {
 	@ParameterizedTest
 	@MethodSource("fixtures")
 	void a01_wireIsUnchanged(String fixture) throws Exception {
-		var actual = replayHttp(fixture);
+		var actual = normalizeRequestState(replayHttp(fixture));
 		var expected = DIR.resolve(fixture + ".response.json");
 		if (WRITE) {
 			Files.writeString(expected, actual);
@@ -360,8 +508,27 @@ class Characterization_Test {
 			() -> fixture + ": WIRE FORMAT CHANGED. Do not update the fixture — fix the code.");
 	}
 
+	/**
+	 * The opaque {@code requestState} minted into {@code MRTR-resume-input-required-again}'s second PAUSE is
+	 * redacted for {@code a01}'s byte comparison, so its embedded round counter is verified here instead: unseal
+	 * the live token with the same fixed-key codec {@link F_Mrtr} uses and assert the round advanced to 2 (plan
+	 * Phase 4 Task 12 decode-and-check).
+	 */
+	@Test
+	void a02_resumeInputRequiredAgain_sealedRoundIsTwo() throws Exception {
+		var raw = replayHttp("MRTR-resume-input-required-again");
+		var envelope = Json.to(raw, JsonMap.class);
+		var result = (Map<?,?>) envelope.get("result");
+		var token = (String) result.get("requestState");
+		var state = new FixedKeyGcmCodec().unseal(token, aad("tools/call")).orElseThrow();
+		assertEquals(2, state.round());
+		assertEquals("cont-2", state.continuation());
+	}
+
 	private String replayHttp(String fixture) throws Exception {
 		var requestBody = Files.readString(DIR.resolve(fixture + ".request.json")).strip();
+		if (requestBody.contains(TOKEN_PLACEHOLDER))
+			requestBody = requestBody.replace(TOKEN_PLACEHOLDER, mrtrToken(fixture));
 		var headers = loadHeaders(fixture);
 		var client = MockRestClient.create(servletFor(fixture)).json()
 			.contentType("application/json").accept("application/json").ignoreErrors().build();

@@ -640,11 +640,15 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * @return The resolved MRTR context. Never <jk>null</jk>.
 	 */
 	private MrtrContext resolveMrtrContext(String method, Map<String,Object> params, BeanStore ctx) {
-		var wrapped = new BasicBeanStore(ctx)
-			.addBean(McpMrtrCapabilityContext.class, new McpMrtrCapabilityContext(clientElicitationSupported(params)));
 		var requestState = McpParamUtils.strParam(params, "requestState");
-		if (requestState == null)
+		if (requestState == null) {
+			var wrapped = new BasicBeanStore(ctx)
+				.addBean(McpMrtrCapabilityContext.class, new McpMrtrCapabilityContext(clientElicitationSupported(params)));
 			return new MrtrContext(wrapped, 0);
+		}
+		// Validate the echoed requestState before constructing the BasicBeanStore below: every failure here
+		// throws, and a BasicBeanStore built earlier would never reach a caller's try-with-resources to be
+		// closed (java:S2095). Deferring construction until validation succeeds means no path leaks it.
 		var sealed = mrtrConfig.getCodec().unseal(requestState, aad(method))
 			.orElseThrow(() -> new McpException(CODE_INVALID_PARAMS, "Invalid or tampered requestState"));
 		if (! method.equals(sealed.method()))
@@ -655,8 +659,10 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			// Client-facing message deliberately omits the configured cap value so server config is not leaked.
 			throw new McpException(CODE_MAX_ROUNDS_EXCEEDED, "Max MRTR rounds exceeded");
 		var inputResponses = McpParamUtils.mapParam(params, "inputResponses");
-		var store = wrapped.addBean(McpMrtrResumeContext.class, new McpMrtrResumeContext(sealed.continuation(), inputResponses));
-		return new MrtrContext(store, sealed.round());
+		var wrapped = new BasicBeanStore(ctx)
+			.addBean(McpMrtrCapabilityContext.class, new McpMrtrCapabilityContext(clientElicitationSupported(params)))
+			.addBean(McpMrtrResumeContext.class, new McpMrtrResumeContext(sealed.continuation(), inputResponses));
+		return new MrtrContext(wrapped, sealed.round());
 	}
 
 	/**
