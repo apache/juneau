@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.mcp.v20260728;
 
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -697,11 +698,12 @@ class McpV2Beans_Test {
 	@Test void h01_clientCapabilities_elicitationRoundTrip() {
 		var caps = new ClientCapabilities()
 			.setRoots(new RootsCapability().setListChanged(true))
-			.setSampling(Map.of("x", 1))
+			.setSampling(new SamplingCapability())
 			.setElicitation(new ElicitationCapability())
 			.setExperimental(Map.of("y", 2));
 		var copy = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(caps), ClientCapabilities.class);
-		assertBean(copy, "roots{listChanged},sampling,experimental", "{true},{x=1},{y=2}");
+		assertBean(copy, "roots{listChanged},experimental", "{true},{y=2}");
+		assertNotNull(copy.getSampling(), () -> "must serialize sampling: " + JsonSerializer.DEFAULT.write(copy));
 		assertNotNull(copy.getElicitation(), () -> "must serialize elicitation: " + JsonSerializer.DEFAULT.write(copy));
 	}
 
@@ -709,5 +711,195 @@ class McpV2Beans_Test {
 		assertNull(new ClientCapabilities().getElicitation());
 		var json = JsonSerializer.DEFAULT.write(new ClientCapabilities());
 		assertFalse(json.contains("elicitation"), () -> "elicitation must be omitted when unset: " + json);
+	}
+
+	@Test void i01_elicitAction_wireValuesRoundTrip() {
+		assertEquals("\"accept\"", JsonSerializer.DEFAULT.write(ElicitAction.ACCEPT));
+		assertEquals("\"decline\"", JsonSerializer.DEFAULT.write(ElicitAction.DECLINE));
+		assertEquals("\"cancel\"", JsonSerializer.DEFAULT.write(ElicitAction.CANCEL));
+		assertEquals(ElicitAction.ACCEPT, JsonParser.DEFAULT.read("\"accept\"", ElicitAction.class));
+		assertEquals(ElicitAction.DECLINE, JsonParser.DEFAULT.read("\"decline\"", ElicitAction.class));
+		assertEquals(ElicitAction.CANCEL, JsonParser.DEFAULT.read("\"cancel\"", ElicitAction.class));
+		assertEquals("accept", ElicitAction.ACCEPT.toWire());
+		assertEquals("decline", ElicitAction.DECLINE.toWire());
+		assertEquals("cancel", ElicitAction.CANCEL.toWire());
+	}
+
+	@Test void i02_elicitRequest_roundTrip() {
+		var request = new ElicitRequest().setMessage("Confirm?")
+			.setRequestedSchema(JsonMap.of("type", "object", "properties",
+				JsonMap.of("confirm", JsonMap.of("type", "boolean"))));
+		assertJsonRoundTrip(request, ElicitRequest.class);
+		assertBean(request, "message,requestedSchema{type,properties{confirm{type}}}",
+			"Confirm?,{object,{{boolean}}}");
+	}
+
+	@Test void i02b_elicitRequest_getRequestedSchema_matchesSiblingUnmodifiableViewContract() {
+		// getRequestedSchema()'s contract is pinned to match its siblings ElicitResult.getContent() and
+		// InputRequiredResult.getInputRequests(): a shallow Collections.unmodifiableMap(...) VIEW over the
+		// live backing map (blocks top-level mutation), not a defensive deep copy - so a nested structure
+		// (here "properties") remains mutable through the returned reference, same as those siblings.
+		var schema = JsonMap.of("type", "object", "properties",
+			JsonMap.of("confirm", JsonMap.of("type", "boolean")));
+		var request = new ElicitRequest().setRequestedSchema(schema);
+
+		var view = request.getRequestedSchema();
+		assertThrows(UnsupportedOperationException.class, () -> view.put("type", "array"));
+
+		@SuppressWarnings("unchecked")
+		var properties = (Map<String,Object>) view.get("properties");
+		properties.put("extra", "leaked");
+		@SuppressWarnings("unchecked")
+		var propertiesAgain = (Map<String,Object>) request.getRequestedSchema().get("properties");
+		assertTrue(propertiesAgain.containsKey("extra"),
+			() -> "nested map must remain mutable through the view, matching sibling getters' shallow contract");
+	}
+
+	@Test void i03_elicitResult_acceptRoundTrip() {
+		var result = new ElicitResult().setAction(ElicitAction.ACCEPT)
+			.putContent("confirm", true).putContent("name", "al");
+		var json = JsonSerializer.DEFAULT.write(result);
+		assertTrue(json.contains("\"action\":\"accept\""));
+		assertTrue(json.contains("\"content\":{\"confirm\":true,\"name\":\"al\"}"));
+		var copy = JsonParser.DEFAULT.read(json, ElicitResult.class);
+		assertEquals(json, JsonSerializer.DEFAULT.write(copy));
+		assertEquals(ElicitAction.ACCEPT, copy.getAction());
+		assertEquals(Map.of("confirm", true, "name", "al"), copy.getContent());
+	}
+
+	@Test void i04_elicitResult_declineOmitsContent() {
+		var json = JsonSerializer.DEFAULT.write(new ElicitResult().setAction(ElicitAction.DECLINE));
+		assertEquals("{\"action\":\"decline\"}", json);
+		assertFalse(json.contains("content"), () -> "content must be omitted when unset: " + json);
+	}
+
+	@Test void i05_audioContent_roundTrip() {
+		var audio = new AudioContent().setData("QUJD").setMimeType("audio/wav");
+		assertJsonRoundTrip(audio, AudioContent.class);
+		assertBean(audio, "data,mimeType", "QUJD,audio/wav");
+	}
+
+	@Test void i06_contentDictionary_typeAudioDeserializesToAudioContent() {
+		var json = "{\"type\":\"audio\",\"data\":\"QUJD\",\"mimeType\":\"audio/wav\"}";
+		var copy = MCP_JSON_PARSER.read(json, Content.class);
+		assertTrue(copy instanceof AudioContent, () -> "must deserialize to AudioContent: " + copy);
+		assertBean((AudioContent)copy, "data,mimeType", "QUJD,audio/wav");
+	}
+
+	@Test void j01_modelHint_roundTrip() {
+		var hint = new ModelHint().setName("claude");
+		assertJsonRoundTrip(hint, ModelHint.class);
+		assertBean(hint, "name", "claude");
+	}
+
+	@Test void j02_modelPreferences_roundTripAllFields() {
+		var prefs = new ModelPreferences()
+			.setHints(new ModelHint().setName("claude"), new ModelHint().setName("gpt"))
+			.setCostPriority(0.3).setSpeedPriority(0.5).setIntelligencePriority(0.9);
+		assertJsonRoundTrip(prefs, ModelPreferences.class);
+		assertBean(prefs, "hints{#{name}},costPriority,speedPriority,intelligencePriority",
+			"{[{claude},{gpt}]},0.3,0.5,0.9");
+	}
+
+	@Test void j03_modelPreferences_collectionSettersAndVarargAdders() {
+		var a = new ModelPreferences().setHints(list(new ModelHint().setName("claude"), new ModelHint().setName("gpt")));
+		assertBean(a, "hints{#{name}}", "{[{claude},{gpt}]}");
+		var b = new ModelPreferences().addHints(new ModelHint().setName("claude")).addHints(new ModelHint().setName("gpt"));
+		assertBean(b, "hints{#{name}}", "{[{claude},{gpt}]}");
+		var c = new ModelPreferences().addHints(list(new ModelHint().setName("claude")))
+			.addHints(list(new ModelHint().setName("gpt")));
+		assertBean(c, "hints{#{name}}", "{[{claude},{gpt}]}");
+	}
+
+	@Test void k01_samplingMessage_textContentRoundTrip() {
+		var msg = new SamplingMessage().setRole(Role.USER).setContent(new TextContent().setText("hi"));
+		assertJsonRoundTrip(msg, SamplingMessage.class);
+		assertBean(msg, "role,content{text}", "USER,{hi}");
+	}
+
+	@Test void k02_samplingMessage_audioContentRoundTrip() {
+		var msg = new SamplingMessage().setRole(Role.ASSISTANT)
+			.setContent(new AudioContent().setData("QUJD").setMimeType("audio/wav"));
+		assertJsonRoundTrip(msg, SamplingMessage.class);
+		assertBean(msg, "role,content{data,mimeType}", "ASSISTANT,{QUJD,audio/wav}");
+		assertTrue(MCP_JSON.write(msg).contains("\"type\":\"audio\""));
+	}
+
+	@Test void k03_createMessageRequest_allFieldsRoundTrip() {
+		var req = new CreateMessageRequest()
+			.setMessages(
+				new SamplingMessage().setRole(Role.USER).setContent(new TextContent().setText("hi")),
+				new SamplingMessage().setRole(Role.ASSISTANT).setContent(new TextContent().setText("hey")))
+			.setModelPreferences(new ModelPreferences().addHints(new ModelHint().setName("claude")))
+			.setSystemPrompt("be terse")
+			.setIncludeContext("thisServer")
+			.setTemperature(0.7)
+			.setMaxTokens(100)
+			.setStopSequences("STOP1", "STOP2")
+			.putMetadata("k", "v").putMetadata("k2", "v2");
+		assertJsonRoundTrip(req, CreateMessageRequest.class);
+		assertBean(req,
+			"messages{#{role,content{text}}},modelPreferences{hints{#{name}}},systemPrompt,includeContext,"
+				+ "temperature,maxTokens,stopSequences,metadata",
+			"{[{USER,{hi}},{ASSISTANT,{hey}}]},{{[{claude}]}},be terse,thisServer,0.7,100,[STOP1,STOP2],{k=v,k2=v2}");
+	}
+
+	@Test void k04_createMessageRequest_collectionSettersAndVarargAdders() {
+		var a = new CreateMessageRequest().setMessages(list(
+			new SamplingMessage().setRole(Role.USER).setContent(new TextContent().setText("hi")),
+			new SamplingMessage().setRole(Role.ASSISTANT).setContent(new TextContent().setText("hey"))))
+			.setStopSequences(list("STOP1", "STOP2"));
+		assertBean(a, "messages{#{role}},stopSequences", "{[{USER},{ASSISTANT}]},[STOP1,STOP2]");
+		var b = new CreateMessageRequest()
+			.addMessages(new SamplingMessage().setRole(Role.USER).setContent(new TextContent().setText("hi")))
+			.addMessages(new SamplingMessage().setRole(Role.ASSISTANT).setContent(new TextContent().setText("hey")))
+			.addStopSequences("STOP1").addStopSequences("STOP2");
+		assertBean(b, "messages{#{role}},stopSequences", "{[{USER},{ASSISTANT}]},[STOP1,STOP2]");
+		var c = new CreateMessageRequest()
+			.addMessages(list(new SamplingMessage().setRole(Role.USER).setContent(new TextContent().setText("hi"))))
+			.addMessages(list(new SamplingMessage().setRole(Role.ASSISTANT).setContent(new TextContent().setText("hey"))))
+			.addStopSequences(list("STOP1")).addStopSequences(list("STOP2"));
+		assertBean(c, "messages{#{role}},stopSequences", "{[{USER},{ASSISTANT}]},[STOP1,STOP2]");
+	}
+
+	@Test void k05_createMessageResult_audioContentRoundTrip() {
+		var result = new CreateMessageResult().setRole(Role.ASSISTANT)
+			.setContent(new AudioContent().setData("QUJD").setMimeType("audio/wav"))
+			.setModel("m").setStopReason("endTurn");
+		assertJsonRoundTrip(result, CreateMessageResult.class);
+		assertBean(result, "role,content{data,mimeType},model,stopReason",
+			"ASSISTANT,{QUJD,audio/wav},m,endTurn");
+		assertTrue(MCP_JSON.write(result).contains("\"type\":\"audio\""));
+	}
+
+	@Test void k06_samplingBeans_doNotExtendRequestParamsOrResult() {
+		assertEquals(Object.class, CreateMessageRequest.class.getSuperclass());
+		assertEquals(Object.class, CreateMessageResult.class.getSuperclass());
+		assertEquals(Object.class, SamplingMessage.class.getSuperclass());
+		assertEquals(Object.class, ModelPreferences.class.getSuperclass());
+		assertEquals(Object.class, ModelHint.class.getSuperclass());
+	}
+
+	@Test void l01_samplingCapability_roundTrip() {
+		assertEquals("{}", JsonSerializer.DEFAULT.write(new SamplingCapability()));
+	}
+
+	@Test void l02_samplingCreateMessageMethodConstant() {
+		assertEquals("sampling/createMessage", McpMethods.SAMPLING_CREATE_MESSAGE);
+	}
+
+	@Test void l03_clientCapabilities_samplingIsTypedCapability() {
+		var caps = new ClientCapabilities().setSampling(new SamplingCapability());
+		var copy = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(caps), ClientCapabilities.class);
+		assertTrue(copy.getSampling() instanceof SamplingCapability);
+	}
+
+	@Test void l09_roundTripsStillWorkForRootsAndLoggingCapabilities() {
+		var roots = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(new RootsCapability().setListChanged(true)),
+			RootsCapability.class);
+		assertBean(roots, "listChanged", "true");
+		var logging = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(new LoggingCapability().setLevel("info")),
+			LoggingCapability.class);
+		assertBean(logging, "level", "info");
 	}
 }
