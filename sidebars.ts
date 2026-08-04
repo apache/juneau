@@ -1774,14 +1774,40 @@ const sidebars: SidebarsConfig = {
 					},
 				},
 				{
-					type: 'doc',
-					id: 'topics/11.01.juneau-rest-client-mcp',
-					label: '11.1. juneau-rest-client-mcp',
-				},
-				{
-					type: 'doc',
-					id: 'topics/11.juneau-rest-server-mcp',
-					label: '11. juneau-rest-server-mcp',
+					type: 'category',
+					label: '11. MCP (Model Context Protocol)',
+					collapsed: true,
+					items: [
+						{
+							type: 'doc',
+							id: 'topics/11.01.JuneauMcpQuickstart',
+							label: '11.1. Quickstart',
+						},
+						{
+							type: 'doc',
+							id: 'topics/11.02.JuneauMcpChoosingSetup',
+							label: '11.2. Choosing your setup',
+						},
+						{
+							type: 'doc',
+							id: 'topics/11.03.JuneauMcpRecipes',
+							label: '11.3. Recipes',
+						},
+						{
+							type: 'doc',
+							id: 'topics/11.04.juneau-rest-server-mcp',
+							label: '11.4. juneau-rest-server-mcp (reference)',
+						},
+						{
+							type: 'doc',
+							id: 'topics/11.05.juneau-rest-client-mcp',
+							label: '11.5. juneau-rest-client-mcp (reference)',
+						},
+					],
+					link: {
+						type: 'doc',
+						id: 'topics/11.juneau-mcp',
+					},
 				},
 				{
 					type: 'category',
