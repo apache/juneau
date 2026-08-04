@@ -38,12 +38,9 @@ import org.apache.juneau.bean.mcp.v20250618.*;
  * }
  * </pre>
  */
-@SuppressWarnings({
-	"java:S2176" // Intentional: dated adapter binding classes are de-versioned and differentiated by package (see TODO-312).
-})
-public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoint {
+public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpointMixin {
 
-	@Override /* McpEndpoint */
+	@Override /* McpEndpointMixin */
 	default McpRevision revision() {
 		return new McpRevision(capabilities());
 	}

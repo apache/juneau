@@ -95,7 +95,7 @@ class McpResourceTemplate_Test {
 	}
 
 	private JsonRpcResponse readResponse(McpServerConfig config, String uri) {
-		return new McpRevision(null).dispatch(
+		return (JsonRpcResponse) new McpRevision(null).dispatch(
 			new McpExchange(req(1, McpMethods.RESOURCES_READ, JsonMap.of("uri", uri)), hdrs(McpMethods.RESOURCES_READ, uri)::get),
 			config, ctx);
 	}
@@ -156,7 +156,7 @@ class McpResourceTemplate_Test {
 			return text("ok");
 		}));
 		var marker = new BasicBeanStore();
-		var resp = new McpRevision(null).dispatch(
+		var resp = (JsonRpcResponse) new McpRevision(null).dispatch(
 			new McpExchange(req(1, McpMethods.RESOURCES_READ, JsonMap.of("uri", "file:///Caf%C3%A9/two")),
 				hdrs(McpMethods.RESOURCES_READ, "file:///Caf%C3%A9/two")::get),
 			config, marker);
@@ -222,9 +222,9 @@ class McpResourceTemplate_Test {
 
 	@Test void d03_validNonMatchableTemplateListsButNeverReadMatches() {
 		var config = new McpServerConfig().addResourceTemplate(template("file:///{x,y}", (u, v) -> text("should-not-run")));
-		var list = (ListResourceTemplatesResult) new McpRevision(null).dispatch(
+		var list = (ListResourceTemplatesResult) ((JsonRpcResponse) new McpRevision(null).dispatch(
 			new McpExchange(req(1, McpMethods.RESOURCES_TEMPLATES_LIST, null), hdrs(McpMethods.RESOURCES_TEMPLATES_LIST, "")::get),
-			config, ctx).getResult();
+			config, ctx)).getResult();
 		assertEquals(1, list.getResourceTemplates().size());
 		var resp = readResponse(config, "file:///a,b");
 		assertEquals(McpRevision.CODE_INVALID_PARAMS, resp.getError().getCode());

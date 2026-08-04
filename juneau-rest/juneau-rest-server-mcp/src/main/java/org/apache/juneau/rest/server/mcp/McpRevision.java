@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
-import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.commons.inject.*;
 
 /**
@@ -51,10 +50,12 @@ public interface McpRevision {
 	 * @param exchange The inbound envelope plus header access. Never <jk>null</jk>.
 	 * @param config The neutral handler registry and pagination strategy. Never <jk>null</jk>.
 	 * @param ctx The per-request bean store, passed through to handlers. Never <jk>null</jk>.
-	 * @return The response, or <jk>null</jk> for a notification request (which the HTTP layer renders
-	 * 	as an empty body).
+	 * @return A {@code JsonRpcResponse} for a normal request, a revision-specific streaming publisher
+	 * 	(for example a {@code Flow.Publisher} produced by a v2-only method) for a request whose response
+	 * 	is not a single JSON-RPC envelope, or <jk>null</jk> for a notification request (which the HTTP
+	 * 	layer renders as an empty body).
 	 */
-	JsonRpcResponse dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx);
+	Object dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx);
 
 	/**
 	 * Maps a neutral failure classification to this revision's JSON-RPC error code.

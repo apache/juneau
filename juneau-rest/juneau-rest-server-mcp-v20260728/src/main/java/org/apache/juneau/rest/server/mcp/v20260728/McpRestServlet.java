@@ -19,19 +19,21 @@ package org.apache.juneau.rest.server.mcp.v20260728;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.mcp.BasicMcpSubscriptionBroker;
+import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
 import org.apache.juneau.rest.server.tracing.TraceContextExtractor;
 
 /**
  * Abstract MCP servlet bound to protocol revision {@code 2026-07-28}.
  *
  * <p>
- * Subclass this (rather than the neutral {@link org.apache.juneau.rest.server.mcp.McpRestServlet}) to
+ * Subclass this (rather than the neutral {@link org.apache.juneau.rest.server.mcp.AbstractMcpRestServlet}) to
  * expose a {@code 2026-07-28} endpoint at {@code POST /}; the revision binding is a compile-time choice
  * made by which class you extend.
  *
  * <p>
  * URI and polymorphic-type serializer policy ({@code addBeanTypes} and {@code uriResolution="NONE"}) is
- * inherited centrally from the neutral {@link org.apache.juneau.rest.server.mcp.McpRestServlet}; the only
+ * inherited centrally from the neutral {@link org.apache.juneau.rest.server.mcp.AbstractMcpRestServlet}; the only
  * revision-specific behavior added here is notification empty-body processing, below.
  *
  * <p>
@@ -53,11 +55,10 @@ import org.apache.juneau.rest.server.tracing.TraceContextExtractor;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S2176", // Intentional: dated adapter binding classes are de-versioned and differentiated by package (see TODO-312).
 	"java:S110" // Inherent to extending the RestServlet hierarchy.
 })
 @Rest(responseProcessors = McpNotificationResponseProcessor.class)
-public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.McpRestServlet {
+public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.AbstractMcpRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings({
@@ -72,7 +73,18 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.M
 	})
 	private transient volatile McpMrtrConfig mrtrConfig;
 
-	@Override /* McpRestServlet */
+	@SuppressWarnings({
+		"java:S2226", // Lazily-published, per-servlet-instance subscriptions config; cannot be static (per-instance) or final (assigned after construction).
+	})
+	private transient volatile McpSubscriptionsConfig subscriptionsConfig;
+
+	@SuppressWarnings({
+		"java:S2226", // Lazily-published, per-servlet-instance subscription broker; cannot be static (per-instance) or final (assigned after construction).
+		"java:S3077" // Volatile is required for correct double-checked locking in getSubscriptionBroker(): unlike the plain-read cache config, two BasicMcpSubscriptionBroker instances are NOT equivalent (each holds distinct live per-connection subscription state), so exactly one broker must ever be created and published or a subscription registered against one instance would never be visible to a publish call against the other.
+	})
+	private transient volatile McpSubscriptionBroker subscriptionBroker;
+
+	@Override /* AbstractMcpRestServlet */
 	protected org.apache.juneau.rest.server.mcp.McpRevision revision() {
 		return new McpRevision(capabilities(), getCacheConfig(), instructions(), getMrtrConfig());
 	}
@@ -210,6 +222,110 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.M
 					if (result == null)
 						throw new IllegalStateException("createMrtrConfig() returned null");
 					mrtrConfig = result;
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Creates the subscriptions configuration published by {@link #getSubscriptionsConfig()}.
+	 *
+	 * <p>
+	 * Override to supply custom concurrency/queue/heartbeat/idle-timeout knobs. The default returns a plain
+	 * {@link McpSubscriptionsConfig} (all defaults).
+	 *
+	 * @return The subscriptions configuration. Must not be <jk>null</jk>.
+	 */
+	protected McpSubscriptionsConfig createSubscriptionsConfig() {
+		return new McpSubscriptionsConfig();
+	}
+
+	/**
+	 * Returns this servlet's lazily-published, binding-owned subscriptions configuration.
+	 *
+	 * <p>
+	 * Knobs-only (no live/broker state), so — unlike {@link #getSubscriptionBroker()} — this uses the same
+	 * plain lazy-read strategy as {@link #getCacheConfig()}: a benign publication race is harmless because any
+	 * two {@link McpSubscriptionsConfig} instances built by an idempotent {@link #createSubscriptionsConfig()}
+	 * are equivalent.
+	 *
+	 * @return The subscriptions configuration. Never <jk>null</jk>.
+	 * @throws IllegalStateException If {@link #createSubscriptionsConfig()} returns <jk>null</jk>.
+	 */
+	public McpSubscriptionsConfig getSubscriptionsConfig() {
+		var result = subscriptionsConfig;
+		if (result == null) {
+			result = createSubscriptionsConfig();
+			if (result == null)
+				throw new IllegalStateException("createSubscriptionsConfig() returned null");
+			subscriptionsConfig = result;
+		}
+		return result;
+	}
+
+	/**
+	 * Publishes {@link #getSubscriptionsConfig()} into this servlet's {@code RestContext} bean store
+	 * (the parent store {@link org.apache.juneau.rest.server.mcp.AbstractMcpRestServlet#handleMcp} wraps its
+	 * per-request {@code BeanStore} with), the same {@code @Bean}-method mechanism already used by
+	 * {@link #mcpTraceContextExtractor()}.
+	 *
+	 * <p>
+	 * This is what lets {@code McpRevision.dispatch(...)}'s {@code subscriptions/listen} branch resolve
+	 * the real, possibly-overridden config via {@code ctx.getBean(McpSubscriptionsConfig.class)} instead
+	 * of always falling through to that call's defensive {@code new McpSubscriptionsConfig()} default —
+	 * the neutral core cannot add this bean itself ({@code McpSubscriptionsConfig} is a v2 type, and the
+	 * neutral module must not import it), so this v2-side {@code @Bean} method is the wiring's only seam.
+	 *
+	 * @return This servlet's subscriptions configuration. Never <jk>null</jk>.
+	 */
+	@Bean
+	public McpSubscriptionsConfig subscriptionsConfigBean() {
+		return getSubscriptionsConfig();
+	}
+
+	/**
+	 * Creates the subscription broker published by {@link #getSubscriptionBroker()}.
+	 *
+	 * <p>
+	 * Override to supply a custom {@link McpSubscriptionBroker} implementation. The default returns a new
+	 * {@link BasicMcpSubscriptionBroker} sized from {@link #getSubscriptionsConfig()}'s queue bound.
+	 *
+	 * <p>
+	 * <b>Must be side-effect-free.</b> {@link #getSubscriptionBroker()} calls this hook <b>exactly once</b>
+	 * per servlet instance under a lock: the returned instance is the one and only broker (and its live
+	 * subscription registry) ever published.
+	 *
+	 * @return The subscription broker. Must not be <jk>null</jk>.
+	 */
+	protected McpSubscriptionBroker createSubscriptionBroker() {
+		return new BasicMcpSubscriptionBroker(getSubscriptionsConfig().getQueueSize());
+	}
+
+	/**
+	 * Returns this servlet's lazily-published, binding-owned subscription broker.
+	 *
+	 * <p>
+	 * The first call publishes the result of {@link #createSubscriptionBroker()} under a lock; every later
+	 * call returns that same instance. Publication is double-checked locking (MRTR-grade, not the plain lazy
+	 * read {@link #getSubscriptionsConfig()} uses) on purpose: two {@link BasicMcpSubscriptionBroker}
+	 * instances are <b>not</b> equivalent — each holds distinct, live per-connection subscription state — so a
+	 * benign publication race would silently split subscribers and publishers across two unrelated registries.
+	 *
+	 * @return The subscription broker. Never <jk>null</jk>.
+	 * @throws IllegalStateException If {@link #createSubscriptionBroker()} returns <jk>null</jk>.
+	 */
+	@Override
+	public McpSubscriptionBroker getSubscriptionBroker() {
+		var result = subscriptionBroker;
+		if (result == null) {
+			synchronized (this) {
+				result = subscriptionBroker;
+				if (result == null) {
+					result = createSubscriptionBroker();
+					if (result == null)
+						throw new IllegalStateException("createSubscriptionBroker() returned null");
+					subscriptionBroker = result;
 				}
 			}
 		}

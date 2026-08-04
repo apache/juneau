@@ -64,6 +64,14 @@ public class RequestMeta {
 	/** Bare (unprefixed) W3C baggage key. */
 	public static final String KEY_BAGGAGE = "baggage";
 
+	/**
+	 * Exact wire key carrying the JSON-RPC id of the {@code subscriptions/listen} request on every
+	 * notification frame's {@code _meta} on that stream. The terminal {@link SubscriptionsListenResult}
+	 * frame carries {@link ResultMeta} (not this type) instead but reuses the same wire key via its
+	 * untyped {@code set(String, Object)} extension.
+	 */
+	public static final String KEY_SUBSCRIPTION_ID = "io.modelcontextprotocol/subscriptionId";
+
 	private String protocolVersion;
 	private Implementation clientInfo;
 	private ClientCapabilities clientCapabilities;

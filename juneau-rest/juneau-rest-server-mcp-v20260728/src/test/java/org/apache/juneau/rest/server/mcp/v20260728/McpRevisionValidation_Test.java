@@ -100,7 +100,7 @@ class McpRevisionValidation_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, JsonRpcRequest r, Map<String,String> headers) {
-		return new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
+		return (JsonRpcResponse) new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
 	}
 
 	// -------- protocol + error table + envelope ---------
@@ -125,7 +125,7 @@ class McpRevisionValidation_Test {
 
 	@Test
 	void a03_nullEnvelope_invalidRequest() {
-		var resp = new McpRevision(null).dispatch(new McpExchange(null, n -> null), new McpServerConfig(), ctx);
+		var resp = (JsonRpcResponse) new McpRevision(null).dispatch(new McpExchange(null, n -> null), new McpServerConfig(), ctx);
 		assertEquals(McpRevision.CODE_INVALID_REQUEST, resp.getError().getCode());
 	}
 
@@ -329,7 +329,7 @@ class McpRevisionValidation_Test {
 	void e03_serverDiscover_explicitCapabilitiesReturnedAsIs() {
 		var explicit = new ServerCapabilities().setPrompts(new PromptCapability());
 		var rev = new McpRevision(explicit);
-		var resp = rev.dispatch(new McpExchange(req(1, "server/discover", withMeta(null, validMeta())), hdrs("server/discover", "")::get), new McpServerConfig(), ctx);
+		var resp = (JsonRpcResponse) rev.dispatch(new McpExchange(req(1, "server/discover", withMeta(null, validMeta())), hdrs("server/discover", "")::get), new McpServerConfig(), ctx);
 		var result = (ServerDiscoverResult) resp.getResult();
 		assertNotNull(result.getCapabilities().getPrompts());
 		assertNull(result.getCapabilities().getTools());

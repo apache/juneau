@@ -40,8 +40,15 @@ import org.apache.juneau.rest.server.*;
  *     }
  * }
  * </pre>
+ *
+ * <p>
+ * Named {@code *Mixin} (not {@code Abstract*}) because this is an interface, not an abstract class -
+ * {@code Abstract*} is this repo's naming convention for abstract classes only. {@link McpRevision}, the
+ * other core type dated subclasses de-versioning-shadow, deliberately keeps its plain name: end-users
+ * never implement it directly (only a bound revision's own subclass does), so it never faces the
+ * same-simple-name collision this mixin interface was renamed to avoid.
  */
-public interface McpEndpoint {
+public interface McpEndpointMixin {
 
 	/**
 	 * Returns the {@link McpServerConfig} backing this endpoint.
@@ -58,6 +65,25 @@ public interface McpEndpoint {
 	McpRevision revision();
 
 	/**
+	 * Optional subscription broker backing this endpoint's {@code subscriptions/listen} support.
+	 *
+	 * <p>
+	 * Returning <jk>null</jk> (the default) means this endpoint does not support subscriptions: no
+	 * {@link McpSubscriptionBroker} or {@link McpSubscriptions} bean is added to the request-scoped
+	 * {@link BeanStore} that {@link #handleMcpRequest} builds.
+	 *
+	 * <p>
+	 * A revision binding that implements {@code subscriptions/listen} (for example
+	 * {@code org.apache.juneau.rest.server.mcp.v20260728.McpEndpoint}) overrides this to return a
+	 * per-process shared broker instance.
+	 *
+	 * @return The subscription broker, or <jk>null</jk> if this endpoint does not support subscriptions.
+	 */
+	default McpSubscriptionBroker subscriptionBroker() {
+		return null;
+	}
+
+	/**
 	 * Default MCP JSON-RPC endpoint handler.
 	 *
 	 * <p>
@@ -65,7 +91,7 @@ public interface McpEndpoint {
 	 * still dispatch through {@link #revision()}.
 	 *
 	 * <p>
-	 * Applies the same serializer policy as {@link McpRestServlet} ({@code addBeanTypes} and
+	 * Applies the same serializer policy as {@link AbstractMcpRestServlet} ({@code addBeanTypes} and
 	 * {@code uriResolution="NONE"}), so the two neutral HTTP entrypoints stay at parity.
 	 *
 	 * @param req JSON-RPC request envelope.
@@ -77,9 +103,12 @@ public interface McpEndpoint {
 	})
 	@SerializerConfig(addBeanTypes = "true", uriResolution = "NONE")
 	@RestPost(path = "/mcp")
-	default JsonRpcResponse handleMcpRequest(@Content JsonRpcRequest req, RestRequest restReq) {
+	default Object handleMcpRequest(@Content JsonRpcRequest req, RestRequest restReq) {
 		var bs = new BasicBeanStore(restReq.getContext().getBeanStore())
 			.addBean(RestRequest.class, restReq);
+		var broker = subscriptionBroker();
+		if (broker != null)
+			bs.addBean(McpSubscriptionBroker.class, broker).addBean(McpSubscriptions.class, broker);
 		var exchange = new McpExchange(req, n -> restReq.getHeaderParam(n).asString().orElse(null));
 		return revision().dispatch(exchange, getMcpConfig(), bs);
 	}

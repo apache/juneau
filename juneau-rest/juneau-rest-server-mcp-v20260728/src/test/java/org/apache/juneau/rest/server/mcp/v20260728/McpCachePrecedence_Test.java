@@ -93,7 +93,7 @@ class McpCachePrecedence_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, McpCacheConfig cache, JsonRpcRequest r, Map<String,String> headers) {
-		return new McpRevision(null, cache).dispatch(new McpExchange(r, headers::get), config, ctx);
+		return (JsonRpcResponse) new McpRevision(null, cache).dispatch(new McpExchange(r, headers::get), config, ctx);
 	}
 
 	// -------- list precedence ---------

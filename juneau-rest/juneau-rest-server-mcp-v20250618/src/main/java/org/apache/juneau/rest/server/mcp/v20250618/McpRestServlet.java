@@ -39,13 +39,12 @@ import org.apache.juneau.bean.mcp.v20250618.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S2176", // Intentional: dated adapter binding classes are de-versioned and differentiated by package (see TODO-312).
 	"java:S110" // Inherent to extending the RestServlet hierarchy.
 })
-public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.McpRestServlet {
+public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.AbstractMcpRestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@Override /* McpRestServlet */
+	@Override /* AbstractMcpRestServlet */
 	protected McpRevision revision() {
 		return new McpRevision(capabilities());
 	}

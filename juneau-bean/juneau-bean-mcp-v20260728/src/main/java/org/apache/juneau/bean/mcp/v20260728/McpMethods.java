@@ -61,4 +61,25 @@ public final class McpMethods {
 	 * {@code McpRevision} — flows over the {@code McpDuplexDispatcher}/{@code McpServerRequestHandler} seam.
 	 */
 	public static final String SAMPLING_CREATE_MESSAGE = "sampling/createMessage";
+
+	/**
+	 * Start a held-open notification stream (SEP-2575). Replaces {@code resources/subscribe}/
+	 * {@code resources/unsubscribe} and the old HTTP GET SSE endpoint.
+	 */
+	public static final String SUBSCRIPTIONS_LISTEN = "subscriptions/listen";
+
+	/** Notification: a subscribed resource's content changed. Only deliverable inside a {@link #SUBSCRIPTIONS_LISTEN} stream. */
+	public static final String NOTIFICATIONS_RESOURCES_UPDATED = "notifications/resources/updated";
+
+	/** Notification: the resource list changed. Only deliverable inside a {@link #SUBSCRIPTIONS_LISTEN} stream. */
+	public static final String NOTIFICATIONS_RESOURCES_LIST_CHANGED = "notifications/resources/list_changed";
+
+	/** Notification: the tool list changed. Only deliverable inside a {@link #SUBSCRIPTIONS_LISTEN} stream. */
+	public static final String NOTIFICATIONS_TOOLS_LIST_CHANGED = "notifications/tools/list_changed";
+
+	/** Notification: the prompt list changed. Only deliverable inside a {@link #SUBSCRIPTIONS_LISTEN} stream. */
+	public static final String NOTIFICATIONS_PROMPTS_LIST_CHANGED = "notifications/prompts/list_changed";
+
+	/** Mandatory first frame on every {@link #SUBSCRIPTIONS_LISTEN} stream, echoing the honored filter. */
+	public static final String NOTIFICATIONS_SUBSCRIPTIONS_ACKNOWLEDGED = "notifications/subscriptions/acknowledged";
 }

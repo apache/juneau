@@ -36,6 +36,10 @@ public class SseSubscription implements AutoCloseable, Iterable<SseEvent> {
 	private final LinkedBlockingDeque<SseEvent> queue;
 	private final AtomicBoolean closed;
 	private final Consumer<String> closeCallback;
+	// Serializes the drop-oldest retry loop in offer() across concurrent producers, so one producer's
+	// pollFirst()/offerLast() retry can't interleave with another's and evict a just-inserted event instead
+	// of the true oldest one.
+	private final Object offerLock = new Object();
 
 	SseSubscription(String id, int queueSize, Consumer<String> closeCallback) {
 		if (isEmpty(id))
@@ -67,12 +71,14 @@ public class SseSubscription implements AutoCloseable, Iterable<SseEvent> {
 	boolean offer(SseEvent event) {
 		if (isClosed())
 			return false;
-		var dropped = false;
-		while (! queue.offerLast(event)) {
-			queue.pollFirst();
-			dropped = true;
+		synchronized (offerLock) {
+			var dropped = false;
+			while (! queue.offerLast(event)) {
+				queue.pollFirst();
+				dropped = true;
+			}
+			return dropped;
 		}
-		return dropped;
 	}
 
 	/**

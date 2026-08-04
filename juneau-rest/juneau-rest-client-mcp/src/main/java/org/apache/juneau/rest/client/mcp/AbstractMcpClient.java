@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.juneau.bean.jsonrpc.*;
@@ -147,6 +148,88 @@ public abstract class AbstractMcpClient implements Closeable {
 	 */
 	protected SseEventReader openEventStream() throws IOException {
 		return restClient.post(endpoint).openEventStream();
+	}
+
+	/**
+	 * Opens a Server-Sent-Events stream on the configured endpoint by first POSTing {@code request} as the request
+	 * body — for a revision-specific method (e.g. {@code subscriptions/listen}) whose held-open SSE response is
+	 * itself the answer to one specific JSON-RPC request, as opposed to {@link #openEventStream()}'s body-less
+	 * open used by the duplex server-push channel.
+	 *
+	 * @param request The JSON-RPC request to POST as the body that opens the stream. Must not be <jk>null</jk>.
+	 * @return A reader over the opened event stream. Never <jk>null</jk>. Callers are responsible for closing it.
+	 * @throws IOException If a transport-level or (de)serialization error occurs opening the stream.
+	 */
+	protected SseEventReader openEventStream(JsonRpcRequest request) throws IOException {
+		return openEventStream(request, Map.of());
+	}
+
+	/**
+	 * Opens a Server-Sent-Events stream on the configured endpoint by first POSTing {@code request} as the request
+	 * body, with additional HTTP headers on the opening request — for a revision-specific method whose held-open
+	 * SSE response must agree with a header-based method/name contract (e.g. SEP-2243's {@code Mcp-Method}/
+	 * {@code Mcp-Name}) the same way {@link #send(JsonRpcRequest, Map)} already does for the ordinary
+	 * request/response path.
+	 *
+	 * <p>
+	 * Unlike the body-less {@link #openEventStream()}, this opening POST is itself the answer to one specific
+	 * JSON-RPC request, so the server may reject it with a JSON-RPC error envelope instead of opening the stream
+	 * (e.g. a capability, {@code Accept}-header, or over-limit gate) — on any HTTP status, not just 2xx. Rather
+	 * than handing that envelope to an {@link SseEventReader} (which would see zero events and eventually look
+	 * like an indistinguishable transport failure), this checks the response {@code Content-Type} first: only a
+	 * body reporting {@code text/event-stream} is opened as a stream. Anything else is parsed as a
+	 * {@link JsonRpcResponse}; a non-<jk>null</jk> {@link JsonRpcResponse#getError() error} is thrown synchronously
+	 * as an {@link McpException} carrying the server's code/message/data, matching the way mid-stream JSON-RPC
+	 * errors are already surfaced to a stream's listener. A response that is neither {@code text/event-stream} nor
+	 * a JSON-RPC error envelope still fails as a plain {@link IOException} (or the underlying
+	 * {@link RestCallException} from a non-2xx status), never silently masquerading as an opened stream.
+	 *
+	 * @param request The JSON-RPC request to POST as the body that opens the stream. Must not be <jk>null</jk>.
+	 * @param httpHeaders Optional additional HTTP headers to add on this request. Can be <jk>null</jk>.
+	 * @return A reader over the opened event stream. Never <jk>null</jk>. Callers are responsible for closing it.
+	 * @throws IOException If a transport-level or (de)serialization error occurs opening the stream, or the
+	 * 	response was neither an SSE stream nor a JSON-RPC error envelope.
+	 * @throws McpException If the server rejected {@code request} with a JSON-RPC error instead of opening the
+	 * 	stream.
+	 */
+	protected SseEventReader openEventStream(JsonRpcRequest request, Map<String,String> httpHeaders) throws IOException {
+		assertArgNotNull(ARG_REQUEST, request);
+		var req = restClient.post(endpoint).body(request);
+		if (httpHeaders != null) {
+			for (var e : httpHeaders.entrySet())
+				req.header(e.getKey(), e.getValue());
+		}
+		if (! req.hasHeader("Accept"))
+			req.header("Accept", "text/event-stream");
+		var res = req.run();
+		var opened = false;
+		try {
+			if (isEventStream(res)) {
+				res.assertOk();
+				var r = res.body().asEventStream();
+				opened = true;
+				return r;
+			}
+			var parsed = res.body().as(JsonRpcResponse.class);
+			if (parsed != null && parsed.getError() != null)
+				throw McpException.fromJsonRpcError(parsed.getError());
+			res.assertOk(); // not a JSON-RPC error envelope either: fall back to the ordinary status diagnostic
+			throw ioex("Expected a text/event-stream response opening %s, but got Content-Type '%s'.",
+				request.getMethod(), contentTypeOf(res));
+		} finally {
+			if (! opened)
+				quiet(res::close);
+		}
+	}
+
+	private static boolean isEventStream(RestResponse res) {
+		var contentType = contentTypeOf(res);
+		return contentType != null && contentType.toLowerCase(Locale.ROOT).contains("text/event-stream");
+	}
+
+	private static String contentTypeOf(RestResponse res) {
+		var h = res.getFirstHeader("Content-Type");
+		return h == null ? null : h.value();
 	}
 
 	@Override /* Overridden from Closeable */

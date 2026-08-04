@@ -87,7 +87,7 @@ class McpPromptResource_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, JsonRpcRequest r, Map<String,String> headers) {
-		return new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
+		return (JsonRpcResponse) new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
 	}
 
 	private static McpResourceTemplateSpec template(String name) {
@@ -284,8 +284,8 @@ class McpPromptResource_Test {
 
 	@Test void e04_explicitCapabilitiesRemainAuthoritativeWithTemplates() {
 		var revision = new McpRevision(new ServerCapabilities().setPrompts(new PromptCapability()));
-		var result = (ServerDiscoverResult)revision.dispatch(exchangeFor("server/discover", null),
-			new McpServerConfig().addResourceTemplate(template("a")), ctx).getResult();
+		var result = (ServerDiscoverResult)((JsonRpcResponse) revision.dispatch(exchangeFor("server/discover", null),
+			new McpServerConfig().addResourceTemplate(template("a")), ctx)).getResult();
 		assertNotNull(result.getCapabilities().getPrompts());
 		assertNull(result.getCapabilities().getResources());
 	}
@@ -330,7 +330,7 @@ class McpPromptResource_Test {
 	@Test void e04g_explicitOverride_withCompleterRegistered_doesNotMergeAutoDerivedCompletions() {
 		var revision = new McpRevision(new ServerCapabilities().setPrompts(new PromptCapability()));
 		var config = new McpServerConfig().addPrompt(promptWithCompleter());
-		var result = (ServerDiscoverResult)revision.dispatch(exchangeFor("server/discover", null), config, ctx).getResult();
+		var result = (ServerDiscoverResult)((JsonRpcResponse) revision.dispatch(exchangeFor("server/discover", null), config, ctx)).getResult();
 		assertNotNull(result.getCapabilities().getPrompts());
 		assertNull(result.getCapabilities().getCompletions());
 	}
@@ -339,20 +339,20 @@ class McpPromptResource_Test {
 		var cache = new McpCacheConfig()
 			.setDefaultHint(new McpCacheHint().setTtlMs(99).setCacheScope(McpCacheScope.PRIVATE))
 			.setResourceTemplatesList(new McpCacheHint().setTtlMs(14));
-		var result = (ListResourceTemplatesResult)new McpRevision(null, cache).dispatch(
+		var result = (ListResourceTemplatesResult)((JsonRpcResponse) new McpRevision(null, cache).dispatch(
 			exchangeFor(McpMethods.RESOURCES_TEMPLATES_LIST, null),
-			new McpServerConfig().addResourceTemplate(template("a")), ctx).getResult();
+			new McpServerConfig().addResourceTemplate(template("a")), ctx)).getResult();
 		assertEquals(14, result.getTtlMs());
 		assertNull(result.getCacheScope());
 	}
 
 	@Test void e06_templateCacheDefaultThenNone() {
 		var config = new McpServerConfig().addResourceTemplate(template("a"));
-		var withDefault = (ListResourceTemplatesResult)new McpRevision(null,
+		var withDefault = (ListResourceTemplatesResult)((JsonRpcResponse) new McpRevision(null,
 			new McpCacheConfig().setDefaultHint(new McpCacheHint().setTtlMs(8)))
-			.dispatch(exchangeFor(McpMethods.RESOURCES_TEMPLATES_LIST, null), config, ctx).getResult();
-		var none = (ListResourceTemplatesResult)new McpRevision(null)
-			.dispatch(exchangeFor(McpMethods.RESOURCES_TEMPLATES_LIST, null), config, ctx).getResult();
+			.dispatch(exchangeFor(McpMethods.RESOURCES_TEMPLATES_LIST, null), config, ctx)).getResult();
+		var none = (ListResourceTemplatesResult)((JsonRpcResponse) new McpRevision(null)
+			.dispatch(exchangeFor(McpMethods.RESOURCES_TEMPLATES_LIST, null), config, ctx)).getResult();
 		assertEquals(8, withDefault.getTtlMs());
 		assertNull(none.getTtlMs());
 		assertNull(none.getCacheScope());

@@ -57,7 +57,7 @@ import org.apache.juneau.rest.server.servlet.*;
  */
 @Rest
 @SerializerConfig(addBeanTypes = "true", uriResolution = "NONE")
-public abstract class McpRestServlet extends BasicRestServlet {
+public abstract class AbstractMcpRestServlet extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	private final transient AtomicReference<McpServerConfig> config = new AtomicReference<>();
@@ -112,6 +112,26 @@ public abstract class McpRestServlet extends BasicRestServlet {
 	protected abstract McpRevision revision();
 
 	/**
+	 * Optional subscription broker backing this servlet's {@code subscriptions/listen} support.
+	 *
+	 * <p>
+	 * Returning <jk>null</jk> (the default) means this servlet does not support subscriptions: no
+	 * {@link McpSubscriptionBroker} or {@link McpSubscriptions} bean is added to the request-scoped
+	 * {@link BeanStore} that {@link #handleMcp} builds, so any handler or dispatch branch that looks one up
+	 * via {@code ctx.getBean(McpSubscriptionBroker.class)} sees {@link java.util.Optional#empty()}.
+	 *
+	 * <p>
+	 * A revision binding that implements {@code subscriptions/listen} (for example
+	 * {@code org.apache.juneau.rest.server.mcp.v20260728.McpRestServlet}) overrides this to return a
+	 * memoized broker instance so every request sees the same live subscription registry.
+	 *
+	 * @return The subscription broker, or <jk>null</jk> if this servlet does not support subscriptions.
+	 */
+	protected McpSubscriptionBroker getSubscriptionBroker() {
+		return null;
+	}
+
+	/**
 	 * MCP JSON-RPC endpoint.
 	 *
 	 * @param req The parsed JSON-RPC request envelope.
@@ -123,9 +143,12 @@ public abstract class McpRestServlet extends BasicRestServlet {
 		"resource" // Request-scoped scratch BasicBeanStore; lifetime is bounded by this handler invocation, no foreign resources are captured.
 	})
 	@RestPost(path = "/")
-	public JsonRpcResponse handleMcp(@Content JsonRpcRequest req, RestRequest restReq) {
+	public Object handleMcp(@Content JsonRpcRequest req, RestRequest restReq) {
 		var bs = new BasicBeanStore(restReq.getContext().getBeanStore())
 			.addBean(RestRequest.class, restReq);
+		var broker = getSubscriptionBroker();
+		if (broker != null)
+			bs.addBean(McpSubscriptionBroker.class, broker).addBean(McpSubscriptions.class, broker);
 		var exchange = new McpExchange(req, n -> restReq.getHeaderParam(n).asString().orElse(null));
 		return revision().dispatch(exchange, getMcpConfig(), bs);
 	}

@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
+import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;
 
@@ -47,6 +48,14 @@ class AbstractMcpClient_Test {
 
 		static Builder builder() {
 			return new Builder();
+		}
+
+		SseEventReader openStream(JsonRpcRequest req) throws IOException {
+			return openEventStream(req);
+		}
+
+		SseEventReader openStream(JsonRpcRequest req, Map<String,String> headers) throws IOException {
+			return openEventStream(req, headers);
 		}
 	}
 
@@ -318,6 +327,160 @@ class AbstractMcpClient_Test {
 			var res = client.send(req, null);
 			assertNotNull(res);
 			assertEquals("14", res.getId());
+		}
+	}
+
+	@Test
+	void c01_openEventStream_withRequestBody_postsBodyAndOpensStream() throws Exception {
+		var seenBody = new AtomicReference<String>();
+		HttpTransport transport = tReq -> {
+			try {
+				var out = new ByteArrayOutputStream();
+				tReq.getBody().writeTo(out);
+				seenBody.set(out.toString(StandardCharsets.UTF_8));
+			} catch (IOException e) {
+				throw new TransportException(e.getMessage(), e);
+			}
+			return TransportResponse.builder().statusCode(200).header("Content-Type", "text/event-stream")
+				.body(new ByteArrayInputStream("data: {\"ok\":true}\n\n".getBytes(StandardCharsets.UTF_8))).build();
+		};
+		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
+			try (var reader = client.openStream(req)) {
+				assertTrue(reader.hasNext());
+				assertEquals("{\"ok\":true}", reader.next().getData());
+			}
+			assertNotNull(seenBody.get());
+			assertTrue(seenBody.get().contains("\"method\":\"subscriptions/listen\""));
+		}
+	}
+
+	@Test
+	void c02_openEventStream_nullRequest_throwsIllegalArgumentException() throws Exception {
+		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();
+		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var e = assertThrows(IllegalArgumentException.class, () -> client.openStream(null));
+			assertEquals("Argument 'request' cannot be null.", e.getMessage());
+		}
+	}
+
+	@Test
+	void c03_openEventStream_withHeaders_setsHeadersOnTransportRequest() throws Exception {
+		var seenMethod = new AtomicReference<String>();
+		var seenName = new AtomicReference<String>();
+		HttpTransport transport = tReq -> {
+			var m = tReq.getFirstHeader("Mcp-Method");
+			var n = tReq.getFirstHeader("Mcp-Name");
+			seenMethod.set(m == null ? null : m.value());
+			seenName.set(n == null ? null : n.value());
+			return TransportResponse.builder().statusCode(200).header("Content-Type", "text/event-stream")
+				.body(new ByteArrayInputStream("data: {\"ok\":true}\n\n".getBytes(StandardCharsets.UTF_8))).build();
+		};
+		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
+			try (var reader = client.openStream(req, Map.of("Mcp-Method", "subscriptions/listen", "Mcp-Name", ""))) {
+				assertTrue(reader.hasNext());
+			}
+			assertEquals("subscriptions/listen", seenMethod.get());
+			assertEquals("", seenName.get());
+		}
+	}
+
+	@Test
+	void c04_openEventStream_nullHeaders_behavesLikeNoHeadersOverload() throws Exception {
+		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).header("Content-Type", "text/event-stream")
+			.body(new ByteArrayInputStream("data: {\"ok\":true}\n\n".getBytes(StandardCharsets.UTF_8))).build();
+		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
+			try (var reader = client.openStream(req, null)) {
+				assertTrue(reader.hasNext());
+			}
+		}
+	}
+
+	// I4 follow-up: a real server commonly qualifies its Content-Type with a charset parameter
+	// (e.g. "text/event-stream;charset=utf-8"). isEventStream()'s substring-contains check must still
+	// recognize this as SSE and open the stream, not fall through to the JSON-RPC-error/IOException paths
+	// that a non-SSE Content-Type would trigger.
+	@Test
+	void c09_openEventStream_eventStreamContentTypeWithCharsetParam_stillOpensStream() throws Exception {
+		HttpTransport transport = tReq -> TransportResponse.builder()
+			.statusCode(200)
+			.header("Content-Type", "text/event-stream;charset=utf-8")
+			.body(new ByteArrayInputStream("data: {\"ok\":true}\n\n".getBytes(StandardCharsets.UTF_8)))
+			.build();
+		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
+			try (var reader = client.openStream(req)) {
+				assertTrue(reader.hasNext());
+				assertEquals("{\"ok\":true}", reader.next().getData());
+			}
+		}
+	}
+
+	// I4: the opening subscriptions/listen POST can return HTTP 200 with a JSON-RPC error envelope instead
+	// of an SSE stream (e.g. a capability/Accept-header/over-limit gate rejecting the request). This must
+	// surface as a synchronously-thrown McpException carrying the server's code/message, not be handed to
+	// the SSE reader (which would see zero events and eventually look like a generic transport failure).
+	@Test
+	void c06_openEventStream_jsonRpcErrorEnvelope_throwsMcpExceptionWithServerCodeAndMessage() throws Exception {
+		HttpTransport transport = tReq -> TransportResponse.builder()
+			.statusCode(200)
+			.header("Content-Type", "application/json")
+			.body(new ByteArrayInputStream(
+				"{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"error\":{\"code\":-32600,\"message\":\"subscriptions/listen requires Accept: text/event-stream\"}}"
+					.getBytes(StandardCharsets.UTF_8)))
+			.build();
+		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
+			var e = assertThrows(McpException.class, () -> client.openStream(req));
+			assertEquals(-32600, e.getCode());
+			assertEquals("subscriptions/listen requires Accept: text/event-stream", e.getMessage());
+		}
+	}
+
+	// I4 follow-up: the same JSON-RPC-error-instead-of-SSE shape must also be caught when the response
+	// arrives with a non-2xx HTTP status (some gates might reject at the HTTP layer instead of 200+error).
+	@Test
+	void c07_openEventStream_jsonRpcErrorEnvelope_non2xxStatus_stillThrowsMcpException() throws Exception {
+		HttpTransport transport = tReq -> TransportResponse.builder()
+			.statusCode(429)
+			.header("Content-Type", "application/json")
+			.body(new ByteArrayInputStream(
+				"{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"error\":{\"code\":-32000,\"message\":\"Too many concurrent subscriptions\"}}"
+					.getBytes(StandardCharsets.UTF_8)))
+			.build();
+		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
+			var e = assertThrows(McpException.class, () -> client.openStream(req));
+			assertEquals(-32000, e.getCode());
+			assertEquals("Too many concurrent subscriptions", e.getMessage());
+		}
+	}
+
+	// I4: a non-SSE response that is ALSO not a JSON-RPC error envelope (e.g. an unexpected plain-text 500
+	// from an intermediary proxy) must still fail loudly as an IOException, not silently masquerade as SSE.
+	@Test
+	void c08_openEventStream_non2xxNonEnvelopeNonEventStream_throwsIOException() throws Exception {
+		HttpTransport transport = tReq -> TransportResponse.builder()
+			.statusCode(502)
+			.header("Content-Type", "text/plain")
+			.body(new ByteArrayInputStream("bad gateway".getBytes(StandardCharsets.UTF_8)))
+			.build();
+		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
+			// assertThrows(IOException.class, ...) itself proves this wasn't McpException (a RuntimeException,
+			// not an IOException) - a wrong-type throw would fail this assertion with "unexpected exception type".
+			assertThrows(IOException.class, () -> client.openStream(req));
+		}
+	}
+
+	@Test
+	void c05_openEventStream_headersOverload_nullRequest_throwsIllegalArgumentException() throws Exception {
+		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();
+		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var e = assertThrows(IllegalArgumentException.class, () -> client.openStream(null, Map.of()));
+			assertEquals("Argument 'request' cannot be null.", e.getMessage());
 		}
 	}
 

@@ -108,7 +108,7 @@ class McpCachePagination_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, McpCacheConfig cache, String method, Object params) {
-		return new McpRevision(null, cache).dispatch(new McpExchange(req(1, method, params), hdrs(method, "")::get), config, ctx);
+		return (JsonRpcResponse) new McpRevision(null, cache).dispatch(new McpExchange(req(1, method, params), hdrs(method, "")::get), config, ctx);
 	}
 
 	private static McpCacheConfig endpointHint(String method, McpCacheHint hint) {

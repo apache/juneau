@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Map;
 
 import org.apache.juneau.bean.jsonrpc.JsonRpcRequest;
+import org.apache.juneau.bean.jsonrpc.JsonRpcResponse;
 import org.apache.juneau.bean.mcp.v20260728.McpProtocol;
 import org.apache.juneau.bean.mcp.v20260728.RequestMeta;
 import org.apache.juneau.commons.inject.BasicBeanStore;
@@ -93,14 +94,14 @@ class McpMrtrConfig_Test {
 	@Test void b01_fourArgConstructorAcceptsMrtrConfigAndDispatchesNormally() {
 		var rev = new McpRevision(null, new McpCacheConfig(), "instructions", new McpMrtrConfig());
 		var headers = Map.of("Mcp-Method", "server/discover", "Mcp-Name", "");
-		var resp = rev.dispatch(new McpExchange(discoverRequest(), headers::get), new McpServerConfig(), new BasicBeanStore());
+		var resp = (JsonRpcResponse) rev.dispatch(new McpExchange(discoverRequest(), headers::get), new McpServerConfig(), new BasicBeanStore());
 		assertNull(resp.getError());
 	}
 
 	@Test void b02_threeArgConstructorStillCompilesAndDispatchesNormally() {
 		var rev = new McpRevision(null, new McpCacheConfig(), "instructions");
 		var headers = Map.of("Mcp-Method", "server/discover", "Mcp-Name", "");
-		var resp = rev.dispatch(new McpExchange(discoverRequest(), headers::get), new McpServerConfig(), new BasicBeanStore());
+		var resp = (JsonRpcResponse) rev.dispatch(new McpExchange(discoverRequest(), headers::get), new McpServerConfig(), new BasicBeanStore());
 		assertNull(resp.getError());
 	}
 

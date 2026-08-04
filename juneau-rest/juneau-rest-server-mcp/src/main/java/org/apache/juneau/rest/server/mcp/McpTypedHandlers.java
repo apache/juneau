@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.commons.inject.*;
@@ -93,6 +94,48 @@ public final class McpTypedHandlers {
 				return outcome;
 			}
 		};
+	}
+
+	/**
+	 * Builds a typed tool from a name, description, argument/result types, and a {@code call} lambda, then adapts
+	 * it into a raw {@link McpToolHandler} via {@link #adaptTool(McpTypedToolHandler)}.
+	 *
+	 * <p>
+	 * The sanctioned one-expression path for the common case: declaring a typed tool no longer requires a named
+	 * class implementing {@link McpTypedToolHandler}. Schema derivation, argument binding, and result
+	 * canonicalization are exactly what {@link #adaptTool(McpTypedToolHandler)} already does.
+	 *
+	 * @param <A> The tool argument type.
+	 * @param <R> The tool result type.
+	 * @param name The tool name. Must not be <jk>null</jk>.
+	 * @param description The human-readable tool description. Can be <jk>null</jk>.
+	 * @param argumentType The tool argument class, used for both schema derivation and argument binding. Must not be <jk>null</jk>.
+	 * @param resultType The tool result class, used for schema derivation. Must not be <jk>null</jk>.
+	 * @param call The call body, invoked with the bound argument and the per-request bean store. Must not be <jk>null</jk>.
+	 * @return A raw handler that derives schemas, binds arguments, and canonicalizes results. Never <jk>null</jk>.
+	 */
+	public static <A,R> McpToolHandler tool(String name, String description, Class<A> argumentType, Class<R> resultType, BiFunction<A,BeanStore,R> call) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("argumentType", argumentType);
+		assertArgNotNull("resultType", resultType);
+		assertArgNotNull("call", call);
+		return adaptTool(new McpTypedToolHandler<A,R>() {
+			@Override public McpToolSpec descriptor() {
+				return new McpToolSpec().setName(name).setDescription(description);
+			}
+
+			@Override public Type argumentType() {
+				return argumentType;
+			}
+
+			@Override public Type resultType() {
+				return resultType;
+			}
+
+			@Override public R call(A arguments, BeanStore ctx) {
+				return call.apply(arguments, ctx);
+			}
+		});
 	}
 
 	/**

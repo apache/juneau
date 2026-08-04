@@ -22,31 +22,21 @@ import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Coverage for default {@code descriptor()} methods on the handler interfaces (which throw
- * {@link UnsupportedOperationException} unless overridden).
+ * Coverage for {@code v20250618.McpTypedHandlers}'s private constructor.
+ *
+ * <p>
+ * Previously also covered default {@code descriptor()} methods on {@link McpPromptHandler} and
+ * {@link McpResourceHandler} that threw {@link UnsupportedOperationException} unless overridden. Both
+ * interfaces (like {@link McpToolHandler} before them) now declare {@code descriptor()} abstract instead
+ * (not a throwing default), specifically so a bare lambda can no longer compile into a handler with no
+ * usable descriptor - see {@code McpToolHandler_Test}, {@code McpPromptHandler_Test}, and
+ * {@code McpResourceHandler_Test} in the core module for each interface's {@code of(...)}-factory
+ * coverage.
  */
-class McpHandlerDefaults_Test {
+class McpTypedHandlersConstructor_Test {
 
 	@Test
-	void a01_toolHandler_defaultDescriptor_throws() {
-		McpToolHandler h = (args, ctx) -> new McpToolOutcome();
-		assertThrows(UnsupportedOperationException.class, h::descriptor);
-	}
-
-	@Test
-	void a02_promptHandler_defaultDescriptor_throws() {
-		McpPromptHandler h = (args, ctx) -> new McpPromptOutcome();
-		assertThrows(UnsupportedOperationException.class, h::descriptor);
-	}
-
-	@Test
-	void a03_resourceHandler_defaultDescriptor_throws() {
-		McpResourceHandler h = (uri, ctx) -> new McpResourceOutcome();
-		assertThrows(UnsupportedOperationException.class, h::descriptor);
-	}
-
-	@Test
-	void c01_typedHandlers_constructor_isPrivate() {
+	void typedHandlers_constructor_isPrivate() {
 		// Sanity: the static façade class should not be instantiable. Reflection trick used to bump coverage on the
 		// implicit private no-arg constructor.
 		assertDoesNotThrow(() -> {

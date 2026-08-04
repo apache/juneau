@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
@@ -28,6 +29,8 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.tracing.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.Json;
+import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.client.mcp.*;
 
 /**
@@ -73,6 +76,7 @@ public final class McpClient extends AbstractMcpClient {
 	private final McpResponseCache responseCache;
 	private final String privateScopePartitionPrefix;
 	private final McpDuplexDispatcher duplexDispatcher = new McpDuplexDispatcher();
+	private volatile ServerDiscoverResult discoveredServer;
 
 	private McpClient(Builder builder) {
 		super(builder);
@@ -93,7 +97,80 @@ public final class McpClient extends AbstractMcpClient {
 	}
 
 	/**
+	 * Builds a client for {@code endpoint} with default settings and performs its one mandatory handshake call,
+	 * returning a ready-to-use client.
+	 *
+	 * <p>
+	 * {@code 2026-07-28} has no {@code initialize} method - {@link #serverDiscover()} is this revision's
+	 * handshake - so unlike {@code v20250618}'s {@code McpClient}, forgetting it is a real footgun: nothing in
+	 * this class's type system forces a caller to call it before {@link #callTool}, {@link #listTools}, etc. This
+	 * is the sanctioned one-expression path for the common case of connecting with default settings; use
+	 * {@link #connect(Builder)} to customize the transport, interceptors, or other builder settings first.
+	 *
+	 * @param endpoint The absolute endpoint URL (e.g. {@code "http://localhost:8080/mcp"}). Must not be <jk>null</jk>.
+	 * @return A new client that has already completed {@link #serverDiscover()} exactly once. Never <jk>null</jk>.
+	 * @throws IOException If a transport-level or (de)serialization error occurs opening the connection.
+	 * @throws McpException If the server returned a JSON-RPC error for {@value McpMethods#SERVER_DISCOVER}.
+	 */
+	public static McpClient connect(String endpoint) throws IOException {
+		return connect(builder().endpoint(endpoint));
+	}
+
+	/**
+	 * Builds a client from a caller-configured builder and performs its one mandatory handshake call, returning a
+	 * ready-to-use client.
+	 *
+	 * <p>
+	 * If {@link #serverDiscover()} fails, the just-built client is closed before the exception propagates - a
+	 * caller that only ever sees an exception from {@code connect(...)} never ends up owning a client (and its
+	 * underlying transport resources) it has no reference to.
+	 *
+	 * @param builder The configured builder to build from. Must not be <jk>null</jk>.
+	 * @return A new client that has already completed {@link #serverDiscover()} exactly once. Never <jk>null</jk>.
+	 * @throws IOException If a transport-level or (de)serialization error occurs opening the connection.
+	 * @throws McpException If the server returned a JSON-RPC error for {@value McpMethods#SERVER_DISCOVER}.
+	 */
+	public static McpClient connect(Builder builder) throws IOException {
+		assertArgNotNull("builder", builder);
+		var client = builder.build();
+		try {
+			client.serverDiscover();
+		} catch (Throwable e) {
+			// Catches Throwable (not just IOException/RuntimeException): a client that only ever surfaces a
+			// thrown Throwable from connect(...) must never end up leaking its transport resources just
+			// because the handshake failed with something other than a checked/runtime exception (e.g. a
+			// StackOverflowError decoding a pathological response). javac's "more precise rethrow" analysis
+			// (JLS 11.2.2) sees that only IOException/RuntimeException/Error can reach this catch from the
+			// try block, so rethrowing this effectively-final `e` still satisfies this method's declared
+			// "throws IOException" without widening to "throws Throwable".
+			closeQuietly(client, e);
+			throw e;
+		}
+		return client;
+	}
+
+	/**
+	 * Closes {@code client}, adding any close failure as a suppressed exception on {@code primary} rather than
+	 * letting it mask the handshake failure that is the actual reason {@link #connect(Builder)} is failing.
+	 */
+	private static void closeQuietly(McpClient client, Throwable primary) {
+		try {
+			client.close();
+		} catch (Throwable e) {
+			// Catches Throwable, mirroring the outer catch in connect(Builder): a caller-supplied
+			// HttpTransport.close() throwing an unchecked failure (RuntimeException/Error) must be recorded
+			// as suppressed, not allowed to propagate from here and replace the handshake failure (primary)
+			// this method exists to preserve.
+			primary.addSuppressed(e);
+		}
+	}
+
+	/**
 	 * Sends {@value McpMethods#SERVER_DISCOVER}.
+	 *
+	 * <p>
+	 * Caches its result, so a subsequent {@link #discoveredServer()} call (including one following the mandatory
+	 * discovery {@link #connect(Builder)} already performs) does not need a repeat round trip.
 	 *
 	 * @return The server-discover result. Never <jk>null</jk> on success unless the server returns a
 	 * 	<jk>null</jk> result.
@@ -101,7 +178,24 @@ public final class McpClient extends AbstractMcpClient {
 	 * @throws McpException If the server returned a JSON-RPC error.
 	 */
 	public ServerDiscoverResult serverDiscover() throws IOException {
-		return call(McpMethods.SERVER_DISCOVER, new RequestParamsOnly(), ServerDiscoverResult.class);
+		var result = call(McpMethods.SERVER_DISCOVER, new RequestParamsOnly(), ServerDiscoverResult.class);
+		discoveredServer = result;
+		return result;
+	}
+
+	/**
+	 * Returns the {@link ServerDiscoverResult} cached from the most recent {@link #serverDiscover()} call.
+	 *
+	 * <p>
+	 * A client built via {@link #connect(String)}/{@link #connect(Builder)} already has this populated from the
+	 * mandatory handshake call, so a caller that only needs the discovery info (server capabilities, supported
+	 * versions, etc.) does not need to invoke {@link #serverDiscover()} again just to read it.
+	 *
+	 * @return The most recently discovered server info, or <jk>null</jk> if {@link #serverDiscover()} has not
+	 * 	been called on this client, or the most recent call returned a <jk>null</jk> result.
+	 */
+	public ServerDiscoverResult discoveredServer() {
+		return discoveredServer;
 	}
 
 	/**
@@ -248,6 +342,219 @@ public final class McpClient extends AbstractMcpClient {
 	})
 	public Map<String,Object> callRaw(String method, RequestParams<?> params) throws IOException {
 		return call(method, params, Map.class, false);
+	}
+
+	/**
+	 * Sends {@value McpMethods#SUBSCRIPTIONS_LISTEN}, opening a managed, held-open notification stream on a
+	 * background thread and dispatching decoded frames to {@code listener} until the returned handle is closed,
+	 * the server completes gracefully, or the connection drops.
+	 *
+	 * <p>
+	 * Only the initial {@value McpMethods#SUBSCRIPTIONS_LISTEN} POST (opening the stream) is synchronous — a
+	 * transport-level failure at that point surfaces here as a thrown {@link IOException}. Every frame after that
+	 * (the mandatory {@code acknowledged} frame, zero or more change notifications, and the eventual terminal
+	 * frame) is decoded on a dedicated background thread and delivered to {@code listener}; frame-processing
+	 * failures surface via {@link McpSubscriptionListener#onError(Throwable)}, never as a thrown exception from
+	 * this method. This does not reuse {@link #pumpNextServerMessage()} (single-shot, closes its stream after at
+	 * most one event) or {@link McpDuplexDispatcher} (request/response-shaped, single registration) — {@code
+	 * listen(...)} needs its own long-lived, multi-frame decode loop.
+	 *
+	 * @param filter The subscription filter (toolsListChanged/promptsListChanged/resourcesListChanged/resourceSubscriptions). Must not be <jk>null</jk>.
+	 * @param listener The typed callback sink. Must not be <jk>null</jk>.
+	 * @return A handle to cancel/close the subscription. Never <jk>null</jk>.
+	 * @throws IOException If the initial listen request/stream-open fails.
+	 */
+	public McpSubscriptionHandle listen(SubscriptionFilter filter, McpSubscriptionListener listener) throws IOException {
+		assertArgNotNull("filter", filter);
+		assertArgNotNull("listener", listener);
+		var params = new SubscriptionsListenRequest().setNotifications(filter);
+		stampMeta(params.getMeta() == null ? params.setMeta(new RequestMeta()).getMeta() : params.getMeta());
+		var wireParams = toWireParams(params);
+		var req = new JsonRpcRequest()
+			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
+			.setId(UUID.randomUUID().toString())
+			.setMethod(McpMethods.SUBSCRIPTIONS_LISTEN)
+			.setParams(wireParams);
+		// SEP-2243 Mcp-Method/Mcp-Name headers, stamped exactly like every typed call(...) (see #call) - the v2
+		// server's McpRevision.dispatch() runs validateHeaders(...) unconditionally before branching on the
+		// method, so the opening subscriptions/listen POST is rejected with -32600 without these.
+		var headers = Map.of("Mcp-Method", McpMethods.SUBSCRIPTIONS_LISTEN, "Mcp-Name", McpRoutingNames.routingName(McpMethods.SUBSCRIPTIONS_LISTEN, wireParams));
+		var reader = openEventStream(req, headers);
+		var pump = new SubscriptionPump(req.getId().toString(), reader, listener);
+		try {
+			pump.start();
+		} catch (RuntimeException e) {
+			// Thread.start() failing (e.g. IllegalThreadStateException, or a resource-exhaustion error from
+			// the JVM/OS) must not leak the already-opened stream: nothing else owns it yet.
+			pump.closeReaderQuietly();
+			throw e;
+		}
+		return pump;
+	}
+
+	/**
+	 * Background decode loop + closeable handle for one
+	 * {@link #listen(SubscriptionFilter, McpSubscriptionListener)} subscription.
+	 *
+	 * <p>
+	 * Every frame is decoded generically first (into a {@link JsonMap}) to tell a notification (has a
+	 * {@code "method"} key) apart from the terminal JSON-RPC response (no {@code "method"} key) before committing
+	 * to a strongly-typed re-parse — {@link JsonRpcRequest} and {@link JsonRpcResponse} share no common base type
+	 * to parse into speculatively.
+	 *
+	 * <p>
+	 * A named {@code "ping"} SSE event (the real transport's heartbeat, carrying no {@code data:} payload — see
+	 * {@code SubscriptionsListenPublisher.HEARTBEAT_EVENT_NAME}) is recognized by event name and skipped
+	 * <i>before</i> any attempt to inspect its (always <jk>null</jk>) data, so a heartbeat can never be mistaken
+	 * for, or misreported as, a malformed JSON-RPC frame.
+	 *
+	 * <p>
+	 * Package-private (rather than {@code private}) solely so tests in this package can observe the background
+	 * thread's actual lifecycle (see {@code pumpThread}) — production code only ever sees this through the
+	 * {@link McpSubscriptionHandle} interface {@link #listen} returns.
+	 */
+	static final class SubscriptionPump implements McpSubscriptionHandle, Runnable {
+		private static final String EVENT_PING = "ping";
+		private static final AtomicLong THREAD_SEQ = new AtomicLong();
+
+		private final String id;
+		private final SseEventReader reader;
+		private final McpSubscriptionListener listener;
+		final Thread pumpThread;
+		private final AtomicBoolean closed = new AtomicBoolean(false);
+		private volatile boolean open = true;
+
+		SubscriptionPump(String id, SseEventReader reader, McpSubscriptionListener listener) {
+			this.id = id;
+			this.reader = reader;
+			this.listener = listener;
+			this.pumpThread = new Thread(this, "mcp-subscriptions-listen-" + THREAD_SEQ.incrementAndGet());
+			this.pumpThread.setDaemon(true);
+		}
+
+		@Override
+		public String id() {
+			return id;
+		}
+
+		void start() {
+			pumpThread.start();
+		}
+
+		@Override
+		public void run() {
+			var reachedTerminal = false;
+			try {
+				while (open && reader.hasNext()) {
+					var event = reader.next();
+					if (EVENT_PING.equals(event.getEvent()))
+						continue;
+					if (event.getData() == null || event.getData().isEmpty())
+						continue;
+					if (! dispatch(event.getData())) {
+						reachedTerminal = true;
+						break;
+					}
+				}
+				// The stream ended (clean EOF, reader.hasNext() == false) without ever reaching a terminal
+				// frame, and the caller did not initiate this close (open is still true): an abrupt drop the
+				// listener must be told about, not silent - it is otherwise indistinguishable from a hang.
+				if (open && ! reachedTerminal)
+					invokeListener(() -> listener.onError(new EOFException(
+						"Subscription stream closed before a terminal frame was received.")));
+			} catch (Exception e) {
+				if (open)
+					invokeListener(() -> listener.onError(e));
+			} finally {
+				open = false;
+				closeReaderQuietly();
+			}
+		}
+
+		/**
+		 * Decodes one frame and invokes the matching listener callback.
+		 *
+		 * @return <jk>false</jk> if this was the terminal frame (the loop must stop); <jk>true</jk> to keep reading.
+		 */
+		private boolean dispatch(String data) {
+			var tree = JsonParser.DEFAULT.read(data, JsonMap.class);
+			if (tree.containsKey("method")) {
+				dispatchNotification(JsonParser.DEFAULT.read(data, JsonRpcRequest.class));
+				return true;
+			}
+			var res = JsonParser.DEFAULT.read(data, JsonRpcResponse.class);
+			if (res.getError() != null) {
+				var mcpException = McpException.fromJsonRpcError(res.getError());
+				invokeListener(() -> listener.onError(mcpException));
+			} else {
+				invokeListener(listener::onComplete);
+			}
+			return false;
+		}
+
+		private void dispatchNotification(JsonRpcRequest notif) {
+			var method = notif.getMethod();
+			var rawParams = notif.getParams();
+			if (McpMethods.NOTIFICATIONS_SUBSCRIPTIONS_ACKNOWLEDGED.equals(method)) {
+				var decoded = Json.to(Json.of(rawParams), SubscriptionsAcknowledgedNotification.class);
+				invokeListener(() -> listener.onAcknowledged(decoded.getNotifications()));
+			} else if (McpMethods.NOTIFICATIONS_RESOURCES_UPDATED.equals(method)) {
+				var decoded = Json.to(Json.of(rawParams), ResourceUpdatedNotification.class);
+				invokeListener(() -> listener.onResourceUpdated(decoded.getUri()));
+			} else if (McpMethods.NOTIFICATIONS_RESOURCES_LIST_CHANGED.equals(method)) {
+				invokeListener(() -> listener.onListChanged(McpListChangedKind.RESOURCES));
+			} else if (McpMethods.NOTIFICATIONS_TOOLS_LIST_CHANGED.equals(method)) {
+				invokeListener(() -> listener.onListChanged(McpListChangedKind.TOOLS));
+			} else if (McpMethods.NOTIFICATIONS_PROMPTS_LIST_CHANGED.equals(method)) {
+				invokeListener(() -> listener.onListChanged(McpListChangedKind.PROMPTS));
+			}
+			// Unknown method: forward-compatible no-op, not an error - a future notification kind this
+			// client version doesn't know about must not tear down an otherwise-healthy subscription.
+		}
+
+		/**
+		 * Invokes one listener callback in isolation, so a bug in caller-supplied listener code can never be
+		 * mistaken for (and re-routed through) a transport/decode failure, and can never itself crash the
+		 * pump or escape this method - including a second throw from {@code onError} itself, which must not
+		 * re-enter this same path.
+		 *
+		 * @param callback The single listener callback invocation to contain (e.g. {@code () -> listener.onComplete()}).
+		 */
+		private void invokeListener(Runnable callback) {
+			try {
+				callback.run();
+			} catch (@SuppressWarnings("unused") RuntimeException e) {
+				// Contained by design: this is the caller's own listener code, not this pump's transport/decode
+				// path, so its exception must never surface as (or trigger) this pump's onError, and must never
+				// tear down an otherwise-healthy subscription.
+			}
+		}
+
+		@Override
+		public void cancel() {
+			if (closed.compareAndSet(false, true)) {
+				open = false;
+				closeReaderQuietly();
+			}
+		}
+
+		@Override
+		public void close() {
+			cancel();
+		}
+
+		@Override
+		public boolean isOpen() {
+			return open;
+		}
+
+		private void closeReaderQuietly() {
+			try {
+				reader.close();
+			} catch (@SuppressWarnings("unused") IOException e) {
+				// Best-effort close: the stream may already be closed by the peer/EOF.
+			}
+		}
 	}
 
 	/**

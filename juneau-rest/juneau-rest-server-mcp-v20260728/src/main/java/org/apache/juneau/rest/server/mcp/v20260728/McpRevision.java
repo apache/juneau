@@ -30,6 +30,7 @@ import org.apache.juneau.http.tracing.TraceContextCarrier;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.RestRequest;
 import org.apache.juneau.rest.server.tracing.*;
+import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.rest.server.mcp.McpCompletionRef;
 import org.apache.juneau.rest.server.mcp.McpCompletionRequest;
 import org.apache.juneau.rest.server.mcp.McpCompletionResult;
@@ -41,6 +42,7 @@ import org.apache.juneau.rest.server.mcp.McpPromptHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceTemplateHandler;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
+import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
 import org.apache.juneau.rest.server.mcp.McpToolHandler;
 import org.apache.juneau.rest.server.mcp.McpToolOutcome;
 
@@ -161,6 +163,14 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 */
 	public static final int CODE_MAX_ROUNDS_EXCEEDED = -32023;
 
+	/**
+	 * C8 error code: the server already has {@code maxConcurrentSubscriptions} live {@code
+	 * subscriptions/listen} streams. This plan's own pin (same {@code -32000}..{@code -32099}
+	 * server-error range and rationale as {@link #CODE_REQUEST_STATE_EXPIRED} / {@link #CODE_MAX_ROUNDS_EXCEEDED});
+	 * not sourced from SEP-2575.
+	 */
+	public static final int CODE_TOO_MANY_SUBSCRIPTIONS = -32024;
+
 	/** Default server name reported by {@code server/discover} when the config supplies no server identity. */
 	public static final String DEFAULT_SERVER_NAME = "juneau-rest-server-mcp";
 
@@ -201,7 +211,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	}
 
 	@Override /* McpRevision */
-	public JsonRpcResponse dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
+	public Object dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
 		assertArgNotNull("exchange", exchange);
 		assertArgNotNull("config", config);
 		assertArgNotNull("ctx", ctx);
@@ -220,6 +230,8 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		try {
 			validateHeaders(exchange, req);
 			validateMeta(req.getParams());
+			if (McpMethods.SUBSCRIPTIONS_LISTEN.equals(method))
+				return JsonRpcResponse.notification(id) ? null : dispatchSubscriptionsListen(exchange, id, req.getParams(), config, ctx);
 			var result = finalizeResult(invoke(method, req.getParams(), config, ctx), config, ctx);
 			return JsonRpcResponse.notification(id) ? null : JsonRpcResponse.ok(id, result);
 		} catch (McpException e) {
@@ -238,6 +250,105 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			recordRpcError(ctx, code, message);
 			return JsonRpcResponse.errorResponse(id, code, message, JsonMap.of("type", cn(e)));
 		}
+	}
+
+	/**
+	 * Capability-gates, limit-checks, registers, and constructs the streaming publisher for {@code
+	 * subscriptions/listen}. Bypasses {@link #finalizeResult} / {@link JsonRpcResponse#ok}: the successful
+	 * result is a {@code Flow.Publisher<SseEvent>}, not a JSON-RPC envelope. A thrown {@link McpException}
+	 * (for example the over-limit case) is caught by {@link #dispatch}'s existing {@code McpException}
+	 * handler, which builds the normal JSON-RPC error envelope.
+	 *
+	 * @param exchange The transport-neutral request/header accessor, used to enforce the SSE {@code Accept}
+	 * 	gate below before any broker registration happens.
+	 * @param id The JSON-RPC request id. Never <jk>null</jk> (this method is never called for a notification).
+	 * @param params The opaque request params. Must decode to a {@code SubscriptionsListenRequest}.
+	 * @param config The neutral handler registry, used to auto-derive capabilities when none were set explicitly.
+	 * @param ctx The per-request bean store, expected to carry a bound {@link McpSubscriptionBroker}
+	 * 	(Phase 1-3 wiring) and a bound {@link McpSubscriptionsConfig}. In production the config bean is
+	 * 	normally present — {@code McpRestServlet#subscriptionsConfigBean()} / {@code McpEndpoint#subscriptionsConfigBean()}
+	 * 	(Task 3.3/3.4) publish it into the {@code RestContext} bean store that this request-scoped {@code ctx}
+	 * 	wraps as its parent, since the neutral core cannot add it directly ({@code McpSubscriptionsConfig} is a
+	 * 	v2 type). The {@code orElseGet(McpSubscriptionsConfig::new)} fallback below is defense-in-depth only
+	 * 	(e.g. a hand-built {@code ctx} in a direct-dispatch test that omits it).
+	 * <p>
+	 * <b>SSE negotiation gate (checked first, before any broker registration):</b> every MCP servlet binding
+	 * defaults an unqualified request to {@code Accept: application/json}. A {@code subscriptions/listen}
+	 * call that never negotiated {@code text/event-stream} would still register with the broker and hand
+	 * back a real {@code Flow.Publisher}, but {@code ReactiveResponseProcessor} would then render it in its
+	 * BUFFER shape (unbounded {@code request(Long.MAX_VALUE)} demand, collected into a list that is only
+	 * flushed once the publisher completes — which, for a live subscription, is never, until the connection
+	 * itself drops). Because this dead-client cleanup is write-failure-driven (see the class javadoc), a
+	 * BUFFER-shape stream never even attempts a write, so the broker slot, the pump thread, and the
+	 * heartbeat executor all leak permanently, and any caller can trigger this for free. Checking {@code
+	 * exchange.header("Accept")} here, before {@link McpSubscriptionBroker#registerIfUnder} is ever called,
+	 * closes that hole at zero cost to a well-behaved caller (see {@code McpClient#listen} /
+	 * {@code AbstractMcpClient#openEventStream}, which already always negotiate SSE on this call).
+	 *
+	 * <p>
+	 * {@code maxConcurrentSubscriptions} is enforced as a hard cap, not an advisory one: the admission check
+	 * and the registration are one atomic step via {@link McpSubscriptionBroker#registerIfUnder}, so
+	 * concurrent {@code subscriptions/listen} calls (in particular against the JVM-wide {@code
+	 * SharedSubscriptionBroker} multiple mixin resources can share) cannot all observe room under the cap
+	 * and all register, which a separate {@code activeCount()} check followed by a separate {@code
+	 * register(...)} call would allow.
+	 *
+	 * <p>
+	 * The broker registers under a fresh {@link UUID}, never under the client-supplied JSON-RPC request
+	 * {@code id}: the broker's registry is process-wide (see {@link McpEndpoint#subscriptionBroker()}), so
+	 * two unrelated concurrent listens that happen to share the same client id would otherwise evict each
+	 * other's stream (the second {@code register(...)} call under a shared key closes whichever
+	 * subscription is already registered there). The client's original {@code id} is passed to
+	 * {@link SubscriptionsListenPublisher} unchanged and is still what every ack/notification frame on that
+	 * client's own stream carries as its {@code _meta.subscriptionId} — this only decouples the *internal*
+	 * registry key from the *wire* id, which stays exactly as the spec expects.
+	 *
+	 * @return The {@code Flow.Publisher<SseEvent>} for the newly registered subscription.
+	 * @throws McpException If the caller never negotiated {@code text/event-stream}, the broker bean is
+	 * 	missing, or {@code maxConcurrentSubscriptions} is reached.
+	 */
+	private Object dispatchSubscriptionsListen(McpExchange exchange, Object id, Object params, McpServerConfig config, BeanStore ctx) {
+		requireEventStreamAccept(exchange);
+		var request = Json.to(Json.of(params), SubscriptionsListenRequest.class);
+		var caps = discoverCapabilities(config);
+		var honoredFilter = SubscriptionCapabilityGate.honor(request.getNotifications(), caps);
+
+		var broker = ctx.getBean(McpSubscriptionBroker.class)
+			.orElseThrow(() -> new McpException(CODE_INTERNAL_ERROR, "McpSubscriptionBroker not bound in BeanStore"));
+		var subscriptionsConfig = ctx.getBean(McpSubscriptionsConfig.class).orElseGet(McpSubscriptionsConfig::new);
+		// registerIfUnder admission-checks and registers as one atomic step (hard cap, not advisory) — a
+		// separate activeCount() check followed by a separate register() call would leave a TOCTOU window
+		// open for concurrent listen requests racing the same (possibly JVM-wide shared) broker. The
+		// registry key is a server-minted UUID, deliberately NOT String.valueOf(id): see the javadoc above.
+		var subscription = broker.registerIfUnder(subscriptionsConfig.getMaxConcurrentSubscriptions(), UUID.randomUUID().toString(), honoredFilter)
+			.orElseThrow(() -> new McpException(CODE_TOO_MANY_SUBSCRIPTIONS, "Maximum concurrent subscriptions exceeded"));
+		var honoredWireFilter = SubscriptionCapabilityGate.toWireFilter(honoredFilter);
+		return new SubscriptionsListenPublisher(id, honoredWireFilter, subscription, subscriptionsConfig.getHeartbeatIntervalMs(), subscriptionsConfig.getIdleTimeoutMs());
+	}
+
+	/**
+	 * C1: rejects a {@code subscriptions/listen} call that never negotiated {@code text/event-stream},
+	 * before any broker registration happens (see {@link #dispatchSubscriptionsListen}'s javadoc).
+	 *
+	 * <p>
+	 * A bare {@code Accept: * / *} (every media type acceptable) is rejected exactly like an absent
+	 * {@code Accept} header: this endpoint requires the caller to have explicitly negotiated
+	 * {@code text/event-stream}, not merely to be willing to accept it among everything else. Without this,
+	 * a wildcard-accepting request would fall into {@code ReactiveResponseProcessor}'s non-streaming BUFFER
+	 * shape (the same permanent-leak hole C1 closes for a missing header), rather than the STREAM shape
+	 * this method exists to require. A well-behaved caller is unaffected: both {@code McpClient#listen} and
+	 * the underlying {@code AbstractMcpClient#openEventStream} already always send the explicit
+	 * {@code text/event-stream} value on this call.
+	 *
+	 * @param exchange The transport-neutral request/header accessor. Must not be <jk>null</jk>.
+	 * @throws McpException If the {@code Accept} header is absent or does not contain {@code text/event-stream}
+	 * 	(case-insensitive, substring match — a real client's {@code Accept} header is commonly a
+	 * 	comma-separated list of media-type ranges, not the bare value alone).
+	 */
+	private static void requireEventStreamAccept(McpExchange exchange) {
+		var accept = exchange.header("Accept");
+		if (accept == null || ! accept.toLowerCase(Locale.ROOT).contains("text/event-stream"))
+			throw new McpException(CODE_INVALID_REQUEST, "subscriptions/listen requires Accept: text/event-stream");
 	}
 
 	/**
@@ -642,6 +753,9 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	private MrtrContext resolveMrtrContext(String method, Map<String,Object> params, BeanStore ctx) {
 		var requestState = McpParamUtils.strParam(params, "requestState");
 		if (requestState == null) {
+			@SuppressWarnings({
+				"resource" // Ownership transfers to the returned MrtrContext; the caller closes it via mrtr.store() in try-with-resources (see MrtrContext's javadoc above). Eclipse JDT @Owning warning is by design.
+			})
 			var wrapped = new BasicBeanStore(ctx)
 				.addBean(McpMrtrCapabilityContext.class, new McpMrtrCapabilityContext(clientElicitationSupported(params)));
 			return new MrtrContext(wrapped, 0);
@@ -659,6 +773,9 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			// Client-facing message deliberately omits the configured cap value so server config is not leaked.
 			throw new McpException(CODE_MAX_ROUNDS_EXCEEDED, "Max MRTR rounds exceeded");
 		var inputResponses = McpParamUtils.mapParam(params, "inputResponses");
+		@SuppressWarnings({
+			"resource" // Ownership transfers to the returned MrtrContext; the caller closes it via mrtr.store() in try-with-resources (see MrtrContext's javadoc above). Eclipse JDT @Owning warning is by design.
+		})
 		var wrapped = new BasicBeanStore(ctx)
 			.addBean(McpMrtrCapabilityContext.class, new McpMrtrCapabilityContext(clientElicitationSupported(params)))
 			.addBean(McpMrtrResumeContext.class, new McpMrtrResumeContext(sealed.continuation(), inputResponses));

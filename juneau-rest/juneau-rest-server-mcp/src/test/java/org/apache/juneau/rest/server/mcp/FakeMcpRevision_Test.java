@@ -75,14 +75,14 @@ class FakeMcpRevision_Test extends TestBase {
 	static final FakeRevision MIXIN_REVISION = new FakeRevision();
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class A extends McpRestServlet {
+	public static class A extends AbstractMcpRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() { return new McpServerConfig().setInstructions("fake"); }
 		@Override protected McpRevision revision() { return SERVLET_REVISION; }
 	}
 
 	@Rest(path = "/api", serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class B extends BasicRestServlet implements McpEndpoint {
+	public static class B extends BasicRestServlet implements McpEndpointMixin {
 		private static final long serialVersionUID = 1L;
 		@Override public McpServerConfig getMcpConfig() { return new McpServerConfig().setInstructions("fake-mixin"); }
 		@Override public McpRevision revision() { return MIXIN_REVISION; }

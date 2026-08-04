@@ -196,4 +196,42 @@ class McpTypedHandlers_Test {
 		assertEquals(-32603, b.getCode());
 		assertContains("structuredContent", b.getMessage());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// tool(...) lambda-friendly factory
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_toolFactoryDeclaresInOneExpressionAndRoundTripsSchemaAndCall() {
+		var a = McpTypedHandlers.tool("typed", "typed result", Args.class, Result.class,
+			(args, ctx) -> new Result());
+		var b = a.descriptor();
+		assertEquals("typed", b.getName());
+		assertEquals("typed result", b.getDescription());
+		assertContains("\"type\":\"object\"", Json.of(b.getInputSchema().toJsonMap()));
+		assertContains("\"$defs\"", Json.of(b.getOutputSchema().toJsonMap()));
+		var c = a.call(Map.of("value", "ok"), new BasicBeanStore());
+		assertEquals("{\"nested\":{}}", Json.of(c.getStructuredContent()));
+		assertEquals(Json.of(c.getStructuredContent()), c.getContent().get(0).text());
+	}
+
+	@Test void d02_toolFactoryDelegatesArgumentsAndContextToTheLambda() {
+		var seen = new AtomicReference<Args>();
+		var seenCtx = new AtomicReference<BeanStore>();
+		var a = McpTypedHandlers.tool("typed", null, Args.class, Result.class, (args, ctx) -> {
+			seen.set(args);
+			seenCtx.set(ctx);
+			return new Result();
+		});
+		var ctx = new BasicBeanStore();
+		a.call(Map.of("value", "ok"), ctx);
+		assertEquals("ok", seen.get().value);
+		assertSame(ctx, seenCtx.get());
+	}
+
+	@Test void d03_toolFactoryRejectsNullRequiredArguments() {
+		assertThrows(IllegalArgumentException.class, () -> McpTypedHandlers.tool(null, "d", Args.class, Result.class, (args, ctx) -> new Result()));
+		assertThrows(IllegalArgumentException.class, () -> McpTypedHandlers.tool("typed", "d", null, Result.class, (args, ctx) -> new Result()));
+		assertThrows(IllegalArgumentException.class, () -> McpTypedHandlers.tool("typed", "d", Args.class, null, (args, ctx) -> new Result()));
+		assertThrows(IllegalArgumentException.class, () -> McpTypedHandlers.tool("typed", "d", Args.class, Result.class, null));
+	}
 }

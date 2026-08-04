@@ -76,7 +76,7 @@ class McpSchemaSafety_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, JsonRpcRequest r, Map<String,String> headers) {
-		return new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
+		return (JsonRpcResponse) new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
 	}
 
 	private static Map<String,Object> nest(int depth) {

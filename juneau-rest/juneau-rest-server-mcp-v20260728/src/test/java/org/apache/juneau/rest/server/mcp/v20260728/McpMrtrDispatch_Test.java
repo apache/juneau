@@ -79,7 +79,7 @@ class McpMrtrDispatch_Test {
 	}
 
 	private JsonRpcResponse send(McpRevision rev, McpServerConfig config, JsonRpcRequest r, Map<String,String> headers) {
-		return rev.dispatch(new McpExchange(r, headers::get), config, ctx);
+		return (JsonRpcResponse) rev.dispatch(new McpExchange(r, headers::get), config, ctx);
 	}
 
 	private static McpMrtrConfig mrtr(RequestStateCodec codec) {

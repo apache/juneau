@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.inject.*;
@@ -34,8 +36,64 @@ import org.apache.juneau.commons.inject.*;
  * {@link McpUriTemplateMatcher}'s reverse-matchable forms remains listable and completable but is never
  * selected for a template-backed read. Use {@link McpServerConfig#addResourceTemplate(McpResourceTemplateSpec...)}
  * to register a listing-only template without implementing this interface.
+ *
+ * <p>
+ * Use {@link #of(McpResourceTemplateSpec, ReadFunction)} for the common case of wiring both
+ * {@link #descriptor()} and {@link #read(String, Map, BeanStore)} in a single expression.
  */
 public interface McpResourceTemplateHandler {
+
+	/**
+	 * A three-argument function from ({@code uri}, {@code variables}, {@code ctx}) to a
+	 * {@link McpResourceOutcome}, matching {@link #read(String, Map, BeanStore)}'s signature.
+	 *
+	 * <p>
+	 * A dedicated functional interface rather than {@link java.util.function.BiFunction} because
+	 * {@code read(...)} takes three parameters, not two.
+	 */
+	@FunctionalInterface
+	interface ReadFunction {
+		/**
+		 * Reads the resource body for a concrete URI matched against the template.
+		 *
+		 * @param uri The original concrete URI from the {@code resources/read} request.
+		 * @param variables An immutable, insertion-ordered map of the template's declared variables to their
+		 * 	decoded values, captured from {@code uri}.
+		 * @param ctx Per-request bean store. Never {@code null}.
+		 * @return The resource contents, or {@code null} if this template does not serve {@code uri}.
+		 */
+		McpResourceOutcome read(String uri, Map<String,String> variables, BeanStore ctx);
+	}
+
+	/**
+	 * Builds a handler from a fixed descriptor and a {@code read} lambda.
+	 *
+	 * <p>
+	 * The sanctioned one-expression path for registering a resource template: wires both
+	 * {@link #descriptor()} and {@link #read(String, Map, BeanStore)} from a single call.
+	 *
+	 * @param descriptor The static descriptor returned from every {@link #descriptor()} call. Must not be
+	 * 	<jk>null</jk> and must carry a non-blank {@link McpResourceTemplateSpec#getUriTemplate() uriTemplate}
+	 * 	(routing and {@code completion/complete} both match on it, so a templateless registration would be
+	 * 	silently unreachable). Must not be <jk>null</jk>.
+	 * @param read The read body, invoked with the concrete URI, its captured template variables, and the
+	 * 	per-request bean store. Must not be <jk>null</jk>.
+	 * @return A new handler wiring both. Never <jk>null</jk>.
+	 */
+	static McpResourceTemplateHandler of(McpResourceTemplateSpec descriptor, ReadFunction read) {
+		assertArgNotNull("descriptor", descriptor);
+		assertArgNotNullOrBlank("descriptor.getUriTemplate()", descriptor.getUriTemplate());
+		assertArgNotNull("read", read);
+		return new McpResourceTemplateHandler() {
+			@Override public McpResourceTemplateSpec descriptor() {
+				return descriptor;
+			}
+
+			@Override public McpResourceOutcome read(String uri, Map<String,String> variables, BeanStore ctx) {
+				return read.read(uri, variables, ctx);
+			}
+		};
+	}
 
 	/**
 	 * Returns the static descriptor for this resource template.

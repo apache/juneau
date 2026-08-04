@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.Bean;
+import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
 import org.apache.juneau.rest.server.tracing.TraceContextExtractor;
 
 /**
@@ -41,12 +42,9 @@ import org.apache.juneau.rest.server.tracing.TraceContextExtractor;
  * }
  * </pre>
  */
-@SuppressWarnings({
-	"java:S2176" // Intentional: dated adapter binding classes are de-versioned and differentiated by package (see TODO-312).
-})
-public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoint {
+public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpointMixin {
 
-	@Override /* McpEndpoint */
+	@Override /* McpEndpointMixin */
 	default org.apache.juneau.rest.server.mcp.McpRevision revision() {
 		return new McpRevision(capabilities(), Objects.requireNonNull(cacheConfig(), "cacheConfig"), instructions(),
 			Objects.requireNonNull(mrtrConfig(), "mrtrConfig"));
@@ -132,5 +130,74 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 	 */
 	default McpMrtrConfig mrtrConfig() {
 		return SharedMrtrConfig.get();
+	}
+
+	/**
+	 * Subscriptions configuration for this endpoint's bound revision.
+	 *
+	 * <p>
+	 * The default returns a fresh {@link McpSubscriptionsConfig} (all defaults) on every call — knobs-only, so
+	 * unlike {@link #subscriptionBroker()} there is no live state a fresh instance could split, matching
+	 * {@link #cacheConfig()}'s precedent exactly. Override to supply custom
+	 * concurrency/queue/heartbeat/idle-timeout knobs.
+	 *
+	 * <p>
+	 * <b>Warning:</b> overriding {@link McpSubscriptionsConfig#getQueueSize() queueSize} here has <b>no
+	 * effect</b> on the JVM-wide default shared broker {@link #subscriptionBroker()} returns — that broker is
+	 * already sized from {@link McpSubscriptionsConfig#DEFAULT_QUEUE_SIZE} the first time it is lazily created
+	 * (see {@link SharedSubscriptionBroker}), before this method's returned queue size could ever be read. A
+	 * non-default queue size only takes effect if {@link #subscriptionBroker()} is also overridden to size a
+	 * broker from it.
+	 *
+	 * @return The subscriptions configuration. Must not be <jk>null</jk>.
+	 */
+	default McpSubscriptionsConfig subscriptionsConfig() {
+		return new McpSubscriptionsConfig();
+	}
+
+	/**
+	 * Publishes {@link #subscriptionsConfig()} into this resource's {@code RestContext} bean store, the
+	 * same {@code @Bean}-method mechanism already used by {@link #mcpTraceContextExtractor()}.
+	 *
+	 * <p>
+	 * This is what lets {@code McpRevision.dispatch(...)}'s {@code subscriptions/listen} branch resolve
+	 * the real, possibly-overridden config via {@code ctx.getBean(McpSubscriptionsConfig.class)} instead
+	 * of always falling through to that call's defensive {@code new McpSubscriptionsConfig()} default —
+	 * the neutral core cannot add this bean itself ({@code McpSubscriptionsConfig} is a v2 type, and the
+	 * neutral module must not import it), so this v2-side {@code @Bean} method is the wiring's only seam.
+	 *
+	 * @return This endpoint's subscriptions configuration. Never <jk>null</jk>.
+	 */
+	@Bean
+	default McpSubscriptionsConfig subscriptionsConfigBean() {
+		return subscriptionsConfig();
+	}
+
+	/**
+	 * Subscription broker for this endpoint's bound revision.
+	 *
+	 * <p>
+	 * The default returns a <b>per-process shared</b> {@link McpSubscriptionBroker} (see
+	 * {@link SharedSubscriptionBroker}) — a single JVM-wide registry, lazily created on first use — since a
+	 * fresh broker per call (unlike the knobs-only {@link #subscriptionsConfig()}) would silently split live
+	 * subscribers and publishers across unrelated registries. Override to supply a custom broker; an
+	 * overriding implementation must return a stable instance (this mixin does not lazily cache an override
+	 * the way {@link McpRestServlet#getSubscriptionBroker()} does).
+	 *
+	 * <p>
+	 * Because this registry is shared JVM-wide, every live subscription still shares one namespace across
+	 * however many mixin resources bind this same broker — but {@code subscriptions/listen}'s dispatch
+	 * branch registers each stream under a fresh server-minted key (a random {@code UUID}, not the
+	 * client-supplied JSON-RPC request id), so distinct listens can never collide and evict each other's
+	 * stream merely because two unrelated clients (or the same client, twice) happened to reuse the same
+	 * id. The only thing still shared process-wide is capacity: {@code maxConcurrentSubscriptions} is
+	 * enforced against this one registry's total active count, mirroring the same per-process-sharing
+	 * trade-off {@link #mrtrConfig()} documents for its shared AES key.
+	 *
+	 * @return The subscription broker. Must not be <jk>null</jk>.
+	 */
+	@Override
+	default McpSubscriptionBroker subscriptionBroker() {
+		return SharedSubscriptionBroker.get();
 	}
 }

@@ -16,7 +16,10 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
 
@@ -27,9 +30,46 @@ import org.apache.juneau.commons.inject.*;
  * Implementations declare a {@link #descriptor() descriptor} (the {@link McpPromptSpec} returned by
  * {@code prompts/list}) and a {@link #get(Map, BeanStore) get} body invoked when the matching
  * {@code prompts/get} method runs.
+ *
+ * <p>
+ * This is a genuine two-method contract, not a single-method one: both {@link #descriptor()} and
+ * {@link #get(Map, BeanStore)} are abstract, so it is deliberately <b>not</b> annotated
+ * {@code @FunctionalInterface} and a bare lambda cannot implement it. Routing calls {@link #descriptor()}
+ * on every registered handler for both {@code prompts/list} and {@code prompts/get}, so a handler with no
+ * usable descriptor is not a valid handler; making {@link #descriptor()} abstract catches that at compile
+ * time instead of the first request to reach it at runtime. Use {@link #of(McpPromptSpec, BiFunction)} for
+ * the common case of wiring both in a single expression.
  */
-@FunctionalInterface
 public interface McpPromptHandler {
+
+	/**
+	 * Builds a handler from a fixed descriptor and a {@code get} lambda.
+	 *
+	 * <p>
+	 * The sanctioned one-expression path for registering a prompt: unlike a bare lambda (which cannot
+	 * satisfy this two-method interface at all), this factory wires both {@link #descriptor()} and
+	 * {@link #get(Map, BeanStore)} from a single call.
+	 *
+	 * @param descriptor The static descriptor returned from every {@link #descriptor()} call. Must not be
+	 * 	<jk>null</jk> and must carry a non-blank {@link McpPromptSpec#getName() name} (routing matches
+	 * 	incoming {@code prompts/get} requests on name, so a nameless prompt would be silently unreachable).
+	 * @param get The get body, invoked with the incoming arguments and the per-request bean store. Must not be <jk>null</jk>.
+	 * @return A new handler wiring both. Never <jk>null</jk>.
+	 */
+	static McpPromptHandler of(McpPromptSpec descriptor, BiFunction<Map<String,Object>,BeanStore,McpPromptOutcome> get) {
+		assertArgNotNull("descriptor", descriptor);
+		assertArgNotNullOrBlank("descriptor.getName()", descriptor.getName());
+		assertArgNotNull("get", get);
+		return new McpPromptHandler() {
+			@Override public McpPromptSpec descriptor() {
+				return descriptor;
+			}
+
+			@Override public McpPromptOutcome get(Map<String,Object> arguments, BeanStore ctx) {
+				return get.apply(arguments, ctx);
+			}
+		};
+	}
 
 	/**
 	 * Returns the static descriptor for this prompt.
@@ -41,9 +81,7 @@ public interface McpPromptHandler {
 	 *
 	 * @return The prompt descriptor. Never {@code null}.
 	 */
-	default McpPromptSpec descriptor() {
-		throw new UnsupportedOperationException("descriptor() must be implemented by McpPromptHandler subclasses.");
-	}
+	McpPromptSpec descriptor();
 
 	/**
 	 * Renders the prompt.
