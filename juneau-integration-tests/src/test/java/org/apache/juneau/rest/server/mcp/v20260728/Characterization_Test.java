@@ -313,6 +313,58 @@ class Characterization_Test {
 	}
 
 	/**
+	 * Backs every {@code ELICIT-*} fixture (SEP-2322 elicitation, built on the same PAUSE/RESUME mechanism
+	 * {@link F_Mrtr} exercises generically). Unlike {@link F_Mrtr}'s placeholder {@code Map.of("type","elicitation")},
+	 * this servlet's tools pause and resume through the real typed path ({@link ElicitationRequests}/
+	 * {@link ElicitationResponses}, {@link ElicitRequest}/{@link ElicitResult}/{@link ElicitSchema}), so these
+	 * fixtures characterize the actual elicitation wire shape, not just the generic MRTR envelope.
+	 */
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class F_Elicit extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+
+		private static ElicitRequest confirmQuestion() {
+			return new ElicitRequest()
+				.setMessage("Proceed with deletion?")
+				.setRequestedSchema(ElicitSchema.create().booleanField("confirm").title("Confirm").build());
+		}
+
+		@Override protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig()
+				.addTool(new McpToolHandler() {
+					@Override public McpToolSpec descriptor() { return new McpToolSpec().setName("confirm").setDescription("desc:confirm"); }
+					@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
+						var resume = ctx.getBean(McpMrtrResumeContext.class);
+						if (resume.isEmpty())
+							throw ElicitationRequests.of("confirm", confirmQuestion(), "cont-1");
+						var answer = ElicitationResponses.get(resume.get(), "confirm");
+						return McpToolOutcome.text("action:" + answer.getAction());
+					}
+				})
+				.addTool(new McpToolHandler() {
+					@Override public McpToolSpec descriptor() { return new McpToolSpec().setName("confirmTwo").setDescription("desc:confirmTwo"); }
+					@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
+						var resume = ctx.getBean(McpMrtrResumeContext.class);
+						if (resume.isEmpty()) {
+							var requests = new LinkedHashMap<String,ElicitRequest>();
+							requests.put("confirm", confirmQuestion());
+							requests.put("reason", new ElicitRequest().setMessage("Why?")
+								.setRequestedSchema(ElicitSchema.create().stringField("reason").build()));
+							throw ElicitationRequests.of(requests, "cont-multi");
+						}
+						var answers = ElicitationResponses.all(resume.get());
+						return McpToolOutcome.text("confirm:" + answers.get("confirm").getAction()
+							+ ",reason:" + answers.get("reason").getAction());
+					}
+				});
+		}
+
+		@Override protected McpMrtrConfig createMrtrConfig() {
+			return new McpMrtrConfig().setCodec(new FixedKeyGcmCodec());
+		}
+	}
+
+	/**
 	 * Test-only deterministic {@link RequestStateCodec}: AES-256-GCM with a <b>hardcoded</b> key and nonce.
 	 *
 	 * <p>
@@ -416,6 +468,8 @@ class Characterization_Test {
 			case "MRTR-input-required-response", "MRTR-resume-complete", "MRTR-resume-input-required-again",
 				"MRTR-tampered-request-state", "MRTR-expired-request-state", "MRTR-unsupported-capability",
 				"MRTR-max-rounds-exceeded" -> F_Mrtr.class;
+			case "ELICIT-single-request-pause", "ELICIT-multi-request-pause", "ELICIT-resume-accept-complete",
+				"ELICIT-resume-decline", "ELICIT-resume-cancel" -> F_Elicit.class;
 			default -> F_Empty.class;
 		};
 	}
@@ -459,6 +513,8 @@ class Characterization_Test {
 			case "MRTR-expired-request-state" -> codec.seal(new McpRequestState("cont-1", "tools/call", 1, PAST_MS), aad("tools/call"));
 			case "MRTR-max-rounds-exceeded" -> codec.seal(new McpRequestState("cont-1", "tools/call", McpMrtrConfig.DEFAULT_MAX_ROUNDS, FAR_FUTURE_MS), aad("tools/call"));
 			case "MRTR-tampered-request-state" -> tamper(codec.seal(new McpRequestState("cont-1", "tools/call", 1, FAR_FUTURE_MS), aad("tools/call")));
+			case "ELICIT-resume-accept-complete", "ELICIT-resume-decline", "ELICIT-resume-cancel" ->
+				codec.seal(new McpRequestState("cont-1", "tools/call", 1, FAR_FUTURE_MS), aad("tools/call"));
 			default -> throw new IllegalArgumentException("No MRTR token mapping for fixture: " + fixture);
 		};
 	}

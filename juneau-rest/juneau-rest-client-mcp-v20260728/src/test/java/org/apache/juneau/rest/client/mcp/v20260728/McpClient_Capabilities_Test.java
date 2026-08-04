@@ -47,7 +47,7 @@ class McpClient_Capabilities_Test {
 		};
 		var caps = new ClientCapabilities()
 			.setRoots(new RootsCapability().setListChanged(true))
-			.putSampling("supported", true)
+			.setSampling(new SamplingCapability())
 			.putExperimental("x-flag", "on")
 			.putExtensions("x-ext", 1);
 		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).clientCapabilities(caps).build()) {

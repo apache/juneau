@@ -307,9 +307,19 @@ public final class McpClient extends AbstractMcpClient {
 	// DUPLEX_RETURN_METHOD has no routing-name mapping in McpRoutingNames. It is unclear whether the real
 	// contract instead wants it to echo the correlated inbound request's tool/prompt/resource name; that
 	// requires spec clarification and is deliberately left open rather than guessed at here.
+	//
+	// payload must be routed through toWireParams(...) exactly like every other outbound envelope (see #call):
+	// AbstractMcpClient.send(...) posts through restClient, whose serializer is JsonSerializer.DEFAULT
+	// (addBeanTypes=false) - handed the payload's typed beans directly, a polymorphic Content field (e.g.
+	// CreateMessageResult.content holding a TextContent) would be serialized without its "type" discriminator,
+	// since addBeanTypes is what drives whether SerializerSession writes bean-dictionary type names at all.
+	// toWireParams(...) pre-flattens through REQUEST_SERIALIZER (addBeanTypes=true) into a generic Map/List
+	// tree with the discriminator already baked in as literal data, so the final JsonSerializer.DEFAULT pass
+	// re-emits it verbatim.
 	private void postClientResult(Object id, JsonRpcResponse payload) throws IOException {
-		var headers = Map.of("Mcp-Method", DUPLEX_RETURN_METHOD, "Mcp-Name", McpRoutingNames.routingName(DUPLEX_RETURN_METHOD, payload));
-		send(new JsonRpcRequest().setJsonrpc("2.0").setId(id).setMethod(DUPLEX_RETURN_METHOD).setParams(payload), headers);
+		var wire = toWireParams(payload);
+		var headers = Map.of("Mcp-Method", DUPLEX_RETURN_METHOD, "Mcp-Name", McpRoutingNames.routingName(DUPLEX_RETURN_METHOD, wire));
+		send(new JsonRpcRequest().setJsonrpc("2.0").setId(id).setMethod(DUPLEX_RETURN_METHOD).setParams(wire), headers);
 	}
 
 	private <T> T call(String method, RequestParams<?> params, Class<T> resultType) throws IOException {

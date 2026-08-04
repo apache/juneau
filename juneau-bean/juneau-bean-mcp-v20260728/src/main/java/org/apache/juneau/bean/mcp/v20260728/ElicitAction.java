@@ -16,17 +16,37 @@
  */
 package org.apache.juneau.bean.mcp.v20260728;
 
-import org.apache.juneau.marshall.*;
-
 /**
- * Polymorphic MCP content block (tool results, prompt messages).
- *
- * <p>
- * Wire objects carry a {@code type} discriminator with values {@code text}, {@code image}, {@code audio}, or
- * {@code resource}.
+ * Closed action set for an elicitation answer (MCP {@code 2026-07-28} SEP-2322).
  */
-@Marshalled(
-	typePropertyName = "type",
-	dictionary = { TextContent.class, ImageContent.class, AudioContent.class, EmbeddedResourceContent.class }
-)
-public interface Content {}
+public enum ElicitAction {
+
+	/** The end user accepted and supplied {@link ElicitResult#getContent()}. */
+	ACCEPT("accept"),
+
+	/** The end user explicitly declined to answer. */
+	DECLINE("decline"),
+
+	/** The end user cancelled the interaction entirely. */
+	CANCEL("cancel");
+
+	private final String wire;
+
+	ElicitAction(String wire) {
+		this.wire = wire;
+	}
+
+	/**
+	 * Wire token for JSON payloads.
+	 *
+	 * @return Lowercase MCP action string.
+	 */
+	public String toWire() {
+		return wire;
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return wire;
+	}
+}

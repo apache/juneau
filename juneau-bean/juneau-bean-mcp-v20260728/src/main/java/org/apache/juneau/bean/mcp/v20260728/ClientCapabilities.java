@@ -31,7 +31,7 @@ public class ClientCapabilities {
 
 	private RootsCapability roots;
 	private ElicitationCapability elicitation;
-	private Map<String,Object> sampling;
+	private SamplingCapability sampling;
 	private Map<String,Object> experimental;
 	private Map<String,Object> extensions;
 
@@ -76,12 +76,12 @@ public class ClientCapabilities {
 	}
 
 	/**
-	 * Sampling capability (free-form map for forward compatibility).
+	 * Sampling capability.
 	 *
-	 * @return The sampling map, or {@code null} if not set.
+	 * @return The capability, or {@code null} if not set.
 	 */
-	public Map<String,Object> getSampling() {
-		return u(sampling);
+	public SamplingCapability getSampling() {
+		return sampling;
 	}
 
 	/**
@@ -90,22 +90,8 @@ public class ClientCapabilities {
 	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ClientCapabilities setSampling(Map<String,Object> value) {
+	public ClientCapabilities setSampling(SamplingCapability value) {
 		sampling = value;
-		return this;
-	}
-
-	/**
-	 * Convenience method to add a single sampling capability entry.
-	 *
-	 * @param name The entry name.  Can be <jk>null</jk> ({@link LinkedHashMap} tolerates a <jk>null</jk> key).
-	 * @param value The entry value.  Can be <jk>null</jk> (stored as <jk>null</jk>).
-	 * @return This object (for method chaining).
-	 */
-	public ClientCapabilities putSampling(String name, Object value) {
-		if (sampling == null)
-			sampling = map();
-		sampling.put(name, value);
 		return this;
 	}
 

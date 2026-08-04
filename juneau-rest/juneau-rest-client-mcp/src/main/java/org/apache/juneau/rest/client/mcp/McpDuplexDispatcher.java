@@ -28,8 +28,8 @@ import org.apache.juneau.commons.inject.*;
  * <p>
  * Requests are handed to the registered handler untouched, with their {@code params} left as the generic,
  * revision-neutral wire representation - never projected into a typed request bean - since the set of
- * server-initiated methods (for example {@code sampling/createMessage}, {@code elicitation/create}) is
- * revision- and deployment-specific and this dispatcher has no knowledge of it.
+ * server-initiated methods (for example {@code sampling/createMessage}; illustrative only, as sampling is
+ * deprecated per SEP-2577) is revision- and deployment-specific and this dispatcher has no knowledge of it.
  *
  * @since 10.0.0
  */

@@ -21,8 +21,8 @@ import org.apache.juneau.commons.inject.*;
 
 /**
  * Callback invoked by {@link McpDuplexDispatcher} to handle a single server-initiated JSON-RPC request
- * delivered over an MCP client's duplex event-stream channel (for example {@code sampling/createMessage} or
- * {@code elicitation/create}).
+ * delivered over an MCP client's duplex event-stream channel (for example {@code sampling/createMessage};
+ * illustrative only, as sampling is deprecated per SEP-2577).
  *
  * @since 10.0.0
  */

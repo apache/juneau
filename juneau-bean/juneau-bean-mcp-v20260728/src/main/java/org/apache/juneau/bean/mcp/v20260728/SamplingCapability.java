@@ -19,14 +19,13 @@ package org.apache.juneau.bean.mcp.v20260728;
 import org.apache.juneau.marshall.*;
 
 /**
- * Polymorphic MCP content block (tool results, prompt messages).
+ * Client sampling capability marker (MCP sampling): presence on
+ * {@link ClientCapabilities#getSampling()} signals the client understands {@value McpMethods#SAMPLING_CREATE_MESSAGE}.
  *
  * <p>
- * Wire objects carry a {@code type} discriminator with values {@code text}, {@code image}, {@code audio}, or
- * {@code resource}.
+ * Deliberately empty, mirroring {@link ElicitationCapability}'s shape — the pinned schema defines no sub-fields
+ * for this capability.
  */
-@Marshalled(
-	typePropertyName = "type",
-	dictionary = { TextContent.class, ImageContent.class, AudioContent.class, EmbeddedResourceContent.class }
-)
-public interface Content {}
+@Marshalled
+public class SamplingCapability {
+}

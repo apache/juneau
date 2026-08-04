@@ -39,8 +39,8 @@ import org.apache.juneau.marshall.collections.*;
  * models it (a sampling/roots/elicitation sub-request), typed as a raw {@link JsonMap} so a handler-supplied map
  * reaches the wire byte-for-byte &mdash; there is no synthetic {@code {type, payload}} envelope, and no member is
  * relocated or dropped. Concrete sub-request shapes are owned by the eventual consumers of this mechanism (C5
- * sampling, C6 elicitation), both out of this TODO's scope. This mirrors the equally free-form shapes of the
- * request-side {@code inputResponses} and {@link ClientCapabilities#getSampling() sampling} maps.
+ * sampling, C6 elicitation), both out of this TODO's scope. This mirrors the equally free-form shape of the
+ * request-side {@code inputResponses} map.
  */
 @Marshalled
 public class InputRequiredResult extends Result<InputRequiredResult> {

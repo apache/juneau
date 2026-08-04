@@ -55,4 +55,10 @@ public final class McpMethods {
 
 	/** Complete a prompt argument or resource-template variable. */
 	public static final String COMPLETION_COMPLETE = "completion/complete";
+
+	/**
+	 * Server-to-client duplex sampling request (MCP sampling). Never dispatched through
+	 * {@code McpRevision} — flows over the {@code McpDuplexDispatcher}/{@code McpServerRequestHandler} seam.
+	 */
+	public static final String SAMPLING_CREATE_MESSAGE = "sampling/createMessage";
 }

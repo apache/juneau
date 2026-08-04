@@ -19,14 +19,31 @@ package org.apache.juneau.bean.mcp.v20260728;
 import org.apache.juneau.marshall.*;
 
 /**
- * Polymorphic MCP content block (tool results, prompt messages).
- *
- * <p>
- * Wire objects carry a {@code type} discriminator with values {@code text}, {@code image}, {@code audio}, or
- * {@code resource}.
+ * A model family/name hint for {@link ModelPreferences#getHints()} (MCP sampling).
  */
-@Marshalled(
-	typePropertyName = "type",
-	dictionary = { TextContent.class, ImageContent.class, AudioContent.class, EmbeddedResourceContent.class }
-)
-public interface Content {}
+@Marshalled
+public class ModelHint {
+
+	private String name;
+
+	/**
+	 * A model family/name substring the server should prefer (fuzzy match; the schema explicitly allows
+	 * partial matches, e.g. {@code "claude"}).
+	 *
+	 * @return The hint name, or {@code null} if not set.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Sets the hint name.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ModelHint setName(String value) {
+		name = value;
+		return this;
+	}
+}

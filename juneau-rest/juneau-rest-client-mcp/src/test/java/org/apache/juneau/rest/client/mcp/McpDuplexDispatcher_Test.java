@@ -60,7 +60,7 @@ class McpDuplexDispatcher_Test {
 			"nested", JsonMap.of("a", 1, "b", JsonList.of(2, 3)),
 			"experimental", JsonMap.of("x-key", "x-value"));
 		var before = params.toString();
-		var req = new JsonRpcRequest().setJsonrpc("2.0").setId("44").setMethod("elicitation/create").setParams(params);
+		var req = new JsonRpcRequest().setJsonrpc("2.0").setId("44").setMethod("sampling/createMessage").setParams(params);
 		d.dispatch(req, BasicBeanStore.INSTANCE);
 		var after = req.getParams().toString();
 
