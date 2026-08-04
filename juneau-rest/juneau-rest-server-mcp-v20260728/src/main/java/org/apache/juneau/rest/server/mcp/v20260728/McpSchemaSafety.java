@@ -20,6 +20,7 @@ import static java.util.concurrent.TimeUnit.*;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.jsonschema.*;
@@ -46,9 +47,14 @@ import org.apache.juneau.rest.server.mcp.McpSchema;
  * code path that opens a network connection or a file to dereference one.
  *
  * <p>
- * Validation itself runs on a fixed-size pool of daemon threads and is bounded by the same deadline: if a
- * pathological schema (for example a catastrophically-backtracking {@code pattern}) fails to complete in
- * time, the task is cancelled and a {@code -32602} error is raised instead of hanging the request thread.
+ * Validation itself runs on a fixed-size pool of daemon threads and is bounded by the same overall budget: if
+ * a pathological schema (for example a catastrophically-backtracking {@code pattern}) fails to complete in
+ * time, the task is cancelled and a {@code -32602} error is raised instead of hanging the request thread. That
+ * compute budget is measured from the moment the task actually starts running, not from the moment it is
+ * submitted: time spent waiting for a free thread in {@link #VALIDATION_POOL} (for example under heavy
+ * concurrent build/test load) is scheduling latency, not validation cost, so it is never charged against
+ * {@link #MAX_VALIDATION_MILLIS}. A separate, much more generous {@link #MAX_SCHEDULING_MILLIS} backstop still
+ * bounds the scheduling wait itself, purely so a wedged or saturated pool cannot block the caller forever.
  */
 final class McpSchemaSafety {
 
@@ -58,16 +64,38 @@ final class McpSchemaSafety {
 	/** Maximum number of nodes permitted in either the schema graph or the argument graph. */
 	static final int MAX_NODES = 10_000;
 
-	/** Maximum wall-clock time permitted for a single schema validation, in milliseconds. */
+	/**
+	 * Maximum compute time permitted for a single schema validation, in milliseconds, measured from the
+	 * moment the validation task actually starts running on {@link #VALIDATION_POOL} (not from submission).
+	 * This is the DoS bound: it caps how much CPU a pathological schema can burn, and is deliberately
+	 * unaffected by how long the task had to wait for a free thread.
+	 */
 	static final long MAX_VALIDATION_MILLIS = 100;
 
-	private static final ExecutorService VALIDATION_POOL = Executors.newFixedThreadPool(
-		Math.max(2, Runtime.getRuntime().availableProcessors()),
-		r -> {
-			var t = new Thread(r, "mcp-2026-07-28-schema-validation");
-			t.setDaemon(true);
-			return t;
-		});
+	/**
+	 * Maximum time permitted for a submitted validation task to begin executing on {@link #VALIDATION_POOL},
+	 * in milliseconds. This is a generous circuit breaker against a wedged or fully-saturated pool - not part
+	 * of the {@link #MAX_VALIDATION_MILLIS} DoS budget - so ordinary scheduling delay (queueing behind other
+	 * validations under heavy concurrent load) never gets mistaken for an expensive schema.
+	 */
+	static final long MAX_SCHEDULING_MILLIS = 2_000;
+
+	private static final ExecutorService VALIDATION_POOL = newValidationPool();
+
+	private static ExecutorService newValidationPool() {
+		var pool = new ThreadPoolExecutor(
+			Math.max(2, Runtime.getRuntime().availableProcessors()),
+			Math.max(2, Runtime.getRuntime().availableProcessors()),
+			0, MILLISECONDS,
+			new LinkedBlockingQueue<>(),
+			r -> {
+				var t = new Thread(r, "mcp-2026-07-28-schema-validation");
+				t.setDaemon(true);
+				return t;
+			});
+		pool.prestartAllCoreThreads(); // Warm the pool so the first validation after startup doesn't pay thread-creation cost.
+		return pool;
+	}
 
 	private McpSchemaSafety() {}
 
@@ -96,22 +124,60 @@ final class McpSchemaSafety {
 	}
 
 	/**
-	 * Runs {@link JsonSchemaValidator} on a daemon thread and enforces the remaining share of the
-	 * shared {@link JsonValueSafety} deadline.
+	 * Runs {@link JsonSchemaValidator} on a daemon thread and enforces the remaining share of the shared
+	 * {@link JsonValueSafety} deadline against the task's own compute time - never against however long it
+	 * had to wait in {@link #VALIDATION_POOL} for a free thread.
 	 */
 	private static void validateBounded(JsonSchema<?> schema, Object value, long deadlineNanos) {
 		var remaining = JsonValueSafety.remainingNanos(deadlineNanos);
 		if (remaining == 0)
-			throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Tool input schema validation exceeded " + MAX_VALIDATION_MILLIS + " ms");
+			throw validationTimeoutException();
+		var started = new CountDownLatch(1);
+		var startedAtNanos = new AtomicLong();
 		var future = VALIDATION_POOL.submit(() -> {
+			startedAtNanos.set(System.nanoTime());
+			started.countDown();
 			JsonSchemaValidator.of(schema).validate(value);
 			return null;
 		});
+		awaitBounded(future, started, startedAtNanos, remaining);
+	}
+
+	/**
+	 * Waits for a submitted validation task to complete, charging only its own compute time - measured from
+	 * {@code startedAtNanos}, which the task sets as its first instruction - against {@code remaining}, the
+	 * caller's share of the shared {@link JsonValueSafety} deadline.
+	 *
+	 * <p>
+	 * This waits in two phases. First, {@code started} is awaited so the calling thread learns exactly when
+	 * the task begins running; this wait is bounded only by the generous {@link #MAX_SCHEDULING_MILLIS}
+	 * backstop, since scheduling delay under load (queueing behind other work in {@link #VALIDATION_POOL})
+	 * is not the thing being defended against. Second, once running, the task is given the full
+	 * {@code remaining} share of the deadline as its own fresh compute window - anchored to its actual start
+	 * time rather than to submission time - so a busy pool cannot eat into the budget that is meant to cap
+	 * the validator's own work.
+	 *
+	 * <p>
+	 * Package-private (rather than private) purely so this can be exercised directly against a test-local
+	 * {@link Future}/latch pair - deterministically simulating scheduling delay - without needing to saturate
+	 * the shared {@link #VALIDATION_POOL}.
+	 *
+	 * @param future The in-flight (or already-complete) validation task.
+	 * @param started Counted down by the task as its first instruction, once it actually begins running.
+	 * @param startedAtNanos Set by the task (before counting down {@code started}) to {@link System#nanoTime()}.
+	 * @param remaining The caller's remaining share of the shared deadline, in nanoseconds, captured before submission.
+	 */
+	static void awaitBounded(Future<?> future, CountDownLatch started, AtomicLong startedAtNanos, long remaining) {
 		try {
-			future.get(remaining, NANOSECONDS);
+			if (! started.await(MAX_SCHEDULING_MILLIS, MILLISECONDS)) {
+				future.cancel(true);
+				throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Tool input schema validation could not be scheduled within " + MAX_SCHEDULING_MILLIS + " ms");
+			}
+			var computeRemainingNanos = remaining - (System.nanoTime() - startedAtNanos.get());
+			future.get(Math.max(0, computeRemainingNanos), NANOSECONDS);
 		} catch (TimeoutException e) {
 			future.cancel(true);
-			throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Tool input schema validation exceeded " + MAX_VALIDATION_MILLIS + " ms");
+			throw validationTimeoutException();
 		} catch (ExecutionException e) {
 			var cause = e.getCause();
 			if (cause instanceof McpException me)
@@ -122,5 +188,9 @@ final class McpSchemaSafety {
 			Thread.currentThread().interrupt();
 			throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Tool input schema validation was interrupted");
 		}
+	}
+
+	private static McpException validationTimeoutException() {
+		return new McpException(McpRevision.CODE_INVALID_PARAMS, "Tool input schema validation exceeded " + MAX_VALIDATION_MILLIS + " ms");
 	}
 }

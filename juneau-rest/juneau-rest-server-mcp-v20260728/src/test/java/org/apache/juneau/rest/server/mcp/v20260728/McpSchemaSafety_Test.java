@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.jsonschema.*;
@@ -169,6 +171,36 @@ class McpSchemaSafety_Test {
 		assertEquals(-32602, e.getCode());
 		assertContains("exceeded " + McpSchemaSafety.MAX_VALIDATION_MILLIS + " ms", e.getMessage());
 		assertTrue(elapsedMs < McpSchemaSafety.MAX_VALIDATION_MILLIS + 5000, () -> "validation did not terminate promptly: elapsed=" + elapsedMs + "ms");
+	}
+
+	@Test
+	void d02_schedulingLatency_notCountedAgainstComputeBudget() throws Exception {
+		// Exercises McpSchemaSafety.awaitBounded() directly (rather than saturating the shared
+		// VALIDATION_POOL, which other tests in this class can leave with a permanently-stuck thread since a
+		// catastrophically-backtracking regex match is not interruptible) with a task-local executor that
+		// deliberately delays counting down `started` well past MAX_VALIDATION_MILLIS before doing its
+		// (instantaneous) "work". If scheduling latency were - the regression this guards against - counted
+		// against the compute budget, awaitBounded() would throw a timeout error despite the task's own
+		// work costing nothing; with the root-cause fix, only compute time (measured from `started`) counts.
+		var schedulingDelayMillis = 3 * McpSchemaSafety.MAX_VALIDATION_MILLIS;
+		assertTrue(schedulingDelayMillis < McpSchemaSafety.MAX_SCHEDULING_MILLIS, "test fixture assumption");
+
+		var started = new CountDownLatch(1);
+		var startedAtNanos = new AtomicLong();
+		var executor = Executors.newSingleThreadExecutor();
+		try {
+			var future = executor.submit(() -> {
+				Thread.sleep(schedulingDelayMillis);  // simulates thread-pool queueing/scheduling delay
+				startedAtNanos.set(System.nanoTime());
+				started.countDown();
+				return null;  // the "validation" work itself is instantaneous
+			});
+
+			assertDoesNotThrow(() -> McpSchemaSafety.awaitBounded(
+				future, started, startedAtNanos, TimeUnit.MILLISECONDS.toNanos(McpSchemaSafety.MAX_VALIDATION_MILLIS)));
+		} finally {
+			executor.shutdownNow();
+		}
 	}
 
 	// -------- shared JsonValueSafety delegation now supports arrays ---------
