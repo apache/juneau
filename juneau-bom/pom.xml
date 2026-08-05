@@ -71,6 +71,7 @@
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-client-mcp</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-client-mcp-v20250618</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-client-mcp-v20260728</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-client-mcp-auth</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-client-classic</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-mock</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-client-apache-httpclient-45</artifactId><version>${project.version}</version></dependency>

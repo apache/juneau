@@ -227,6 +227,11 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			return JsonRpcResponse.notification(id) ? null
 				: reportError(ctx, id, errorCode(McpErrorKind.INVALID_REQUEST), "Missing method");
 
+		// SEP-2350 per-operation step-up enforcement at the POST-parse point (method now known).  Deliberately OUTSIDE
+		// the try below: an insufficient-scope 403 (with its WWW-Authenticate step-up challenge) must propagate as a real
+		// HTTP 403 through the response processors, not be caught and folded into a JSON-RPC error over HTTP 200.
+		enforceStepUpScopes(method, req.getParams(), ctx);
+
 		try {
 			validateHeaders(exchange, req);
 			validateMeta(req.getParams());
@@ -250,6 +255,42 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			recordRpcError(ctx, code, message);
 			return JsonRpcResponse.errorResponse(id, code, message, JsonMap.of("type", cn(e)));
 		}
+	}
+
+	/**
+	 * Enforces SEP-2350 per-operation step-up scopes for a dispatched request (the POST-parse enforcement point).
+	 *
+	 * <p>
+	 * A no-op unless an {@link McpOptions} bean is bound and its {@link McpResourceServerConfig} is
+	 * {@link McpResourceServerConfig#isEnabled() enabled} with a per-operation scope configured for this operation.  The
+	 * MCP method &mdash; and thus the operation identity ({@link McpRoutingNames#routingName routing name}) &mdash; is
+	 * known here (unlike the pre-parse {@code @RestStartCall} bearer gate), so a scoped {@code 403 insufficient_scope}
+	 * step-up challenge naming exactly this operation's required scopes can be emitted.  Delegates the actual
+	 * granted-vs-required comparison and challenge construction to {@link McpResourceServerSupport#enforceOperationScopes}.
+	 *
+	 * @param method The resolved JSON-RPC method.  Never <jk>null</jk>/empty at the call site.
+	 * @param params The raw JSON-RPC request params (used to derive the operation name and passed through verbatim as
+	 * 	the {@link McpOperationContext#params() resolver seam}).
+	 * @param ctx The per-request bean store (carries the bound {@link McpOptions} and {@link RestRequest}).
+	 */
+	private static void enforceStepUpScopes(String method, Object params, BeanStore ctx) {
+		var opt = ctx.getBean(McpOptions.class).orElse(null);
+		if (opt == null)
+			return;
+		var cfg = opt.getResourceServer();
+		if (!cfg.isEnabled())
+			return;
+		var granted = McpResourceServerSupport.grantedScopes(
+			ctx.getBean(RestRequest.class).map(RestRequest::getHttpServletRequest).orElse(null));
+		var rn = McpRoutingNames.routingName(method, params);
+		var name = isEmpty(rn) ? null : rn;
+		var rawParams = params instanceof Map<?,?> m ? castParams(m) : Map.<String,Object>of();
+		McpResourceServerSupport.enforceOperationScopes(cfg, granted, new McpOperationContext(method, name, rawParams));
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Map<String,Object> castParams(Map<?,?> m) {
+		return (Map<String,Object>)m;
 	}
 
 	/**

@@ -25,6 +25,9 @@ import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
 import org.apache.juneau.rest.server.tracing.TraceContextExtractor;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 /**
  * Abstract MCP servlet bound to protocol revision {@code 2026-07-28}.
  *
@@ -156,5 +159,53 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.A
 	@Override
 	public final McpSubscriptionBroker getSubscriptionBroker() {
 		return getMcpOptions().resolveSubscriptionBroker();
+	}
+
+	/**
+	 * OAuth 2.1 resource-server bearer gate for the MCP {@code POST /} endpoint (READY-312f F2).
+	 *
+	 * <p>
+	 * A no-op unless {@link McpResourceServerConfig#isEnabled() RS auth is enabled}; when enabled, every request the
+	 * router resolves to a {@code POST} (the dedicated MCP servlet's only writable surface) must present a valid bearer
+	 * token or it is rejected with {@code 401} / {@code 403} and a {@code WWW-Authenticate: Bearer ...} challenge (see
+	 * {@link McpResourceServerSupport#gateMcpServlet(McpResourceServerConfig, HttpServletRequest, HttpServletResponse)}).
+	 * The gate reads the router-<i>resolved</i> method (honoring {@code ?method=}/{@code X-Method} overrides) rather than
+	 * the raw servlet method, so a method-override cannot slip past it (H3).  The well-known {@code GET} routes below are
+	 * intentionally left unauthenticated so a client can discover the PRM document.
+	 *
+	 * @param req The raw HTTP request.
+	 * @param res The raw HTTP response (used to emit the challenge header on rejection).
+	 */
+	@RestStartCall
+	public final void mcpResourceServerAuth(HttpServletRequest req, HttpServletResponse res) {
+		McpResourceServerSupport.gateMcpServlet(getMcpOptions().getResourceServer(), req, res);
+	}
+
+	/**
+	 * Serves the RFC 9728 Protected Resource Metadata document at the root well-known location (SEP-2351 fallback).
+	 *
+	 * <p>
+	 * This route (and its path-inserted sibling) is registered unconditionally, but returns {@code 404} whenever RS auth
+	 * is {@link McpResourceServerConfig#isEnabled() disabled} &mdash; so a non-opted-in servlet claims the well-known
+	 * namespace but exposes no observable metadata (READY-312f F2, M7).
+	 *
+	 * @param req The REST request.
+	 * @return The PRM document.
+	 */
+	@RestGet(path = "/.well-known/oauth-protected-resource")
+	public McpProtectedResourceMetadata mcpProtectedResourceMetadataRoot(RestRequest req) {
+		return McpResourceServerSupport.metadataForWellKnownRoot(getMcpOptions().getResourceServer(), req);
+	}
+
+	/**
+	 * Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but
+	 * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404} (M5).
+	 *
+	 * @param req The REST request.
+	 * @return The PRM document.
+	 */
+	@RestGet(path = "/.well-known/oauth-protected-resource/*")
+	public McpProtectedResourceMetadata mcpProtectedResourceMetadataPathInserted(RestRequest req) {
+		return McpResourceServerSupport.metadataForWellKnownPathInserted(getMcpOptions().getResourceServer(), req);
 	}
 }

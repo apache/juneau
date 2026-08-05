@@ -39,8 +39,9 @@ import org.junit.jupiter.params.provider.*;
  * Wire-compatibility characterization fixtures for the MCP JSON-RPC endpoint.
  *
  * <p>
- * These fixtures encode <em>current</em> behavior, including behavior known to be wrong (all four
- * "not found" kinds collapse to {@code -32601}). They are deliberately not named {@code golden/}.
+ * These fixtures encode <em>current</em> behavior, including behavior known to be wrong (three of the
+ * four "not found" kinds collapse to {@code -32601}; only {@code RESOURCE_NOT_FOUND} correctly reports
+ * {@code -32002} per the {@code 2025-06-18} spec). They are deliberately not named {@code golden/}.
  * A fixture body must never be edited to accommodate a code change: if replay fails, the code
  * change is wrong.
  *

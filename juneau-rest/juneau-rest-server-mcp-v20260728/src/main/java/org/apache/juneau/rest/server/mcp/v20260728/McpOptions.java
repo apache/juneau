@@ -75,6 +75,7 @@ public class McpOptions {
 	private String instructions;
 	private McpCacheConfig cache = new McpCacheConfig();
 	private McpMrtrConfig mrtr = new McpMrtrConfig();
+	private McpResourceServerConfig resourceServer = new McpResourceServerConfig();
 	private McpSubscriptionsConfig subscriptions = new McpSubscriptionsConfig();
 	private McpSubscriptionBroker subscriptionBroker;
 
@@ -204,6 +205,44 @@ public class McpOptions {
 		if (consumer == null)
 			throw iaex("consumer must not be null");
 		consumer.accept(mrtr);
+		return this;
+	}
+
+	/**
+	 * This binding's OAuth 2.1 resource-server (RS) configuration (READY-312f F2).
+	 *
+	 * @return The framework-owned RS configuration. Never <jk>null</jk>.  Disabled by default.
+	 */
+	public McpResourceServerConfig getResourceServer() {
+		return resourceServer;
+	}
+
+	/**
+	 * Replaces this binding's resource-server configuration outright.
+	 *
+	 * @param value The new value. Must not be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
+	 */
+	public McpOptions setResourceServer(McpResourceServerConfig value) {
+		if (value == null)
+			throw iaex("resourceServer must not be null");
+		resourceServer = value;
+		return this;
+	}
+
+	/**
+	 * Mutates this binding's resource-server configuration in place.
+	 *
+	 * @param consumer Callback invoked with the framework-owned {@link McpResourceServerConfig}. Must not be
+	 * 	<jk>null</jk>.
+	 * @return This object (for method chaining).
+	 * @throws IllegalArgumentException If {@code consumer} is <jk>null</jk>.
+	 */
+	public McpOptions resourceServer(Consumer<McpResourceServerConfig> consumer) {
+		if (consumer == null)
+			throw iaex("consumer must not be null");
+		consumer.accept(resourceServer);
 		return this;
 	}
 

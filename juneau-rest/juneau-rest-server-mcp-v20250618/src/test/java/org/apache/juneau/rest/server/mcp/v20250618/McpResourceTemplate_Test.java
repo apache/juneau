@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
 /**
  * Coverage for template-backed {@code resources/read} dispatch and {@code resources/templates/list} on the
  * {@code 2025-06-18} adapter: exact-before-template precedence, the deterministic literal/variable/registration
- * specificity ranking, the preserved known-wrong {@code -32601} not-found mapping, handler-exception mapping,
+ * specificity ranking, the {@code -32002} resource-not-found mapping, handler-exception mapping,
  * malformed-escape/non-matchable-template boundaries, and list wire mapping/capability derivation.
  */
 class McpResourceTemplate_Test {
@@ -147,16 +147,16 @@ class McpResourceTemplate_Test {
 	// C: not-found / no-fallthrough / handler exceptions
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_noCandidateIsKnownWrongMethodNotFound() {
+	@Test void c01_noCandidateIsResourceNotFound() {
 		var resp = readResponse(new McpServerConfig(), "file:///ghost");
-		assertEquals(McpRevision.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
+		assertEquals(McpRevision.CODE_RESOURCE_NOT_FOUND, resp.getError().getCode());
 	}
 
 	@Test void c02_listingOnlyWinnerIsNotFound() {
 		var config = new McpServerConfig().addResourceTemplate(
 			new McpResourceTemplateSpec().setUriTemplate("file:///{x}").setName("listing-only"));
 		var resp = readResponse(config, "file:///a");
-		assertEquals(McpRevision.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
+		assertEquals(McpRevision.CODE_RESOURCE_NOT_FOUND, resp.getError().getCode());
 	}
 
 	@Test void c03_nullOutcomeIsNotFoundWithNoFallthrough() {
@@ -166,7 +166,7 @@ class McpResourceTemplate_Test {
 			.addResourceTemplate(template("file:///{+full}", (u, v) -> text("fallback-should-not-run")))
 			.addResourceTemplate(template("file:///a/{x}", (u, v) -> null));
 		var resp = readResponse(config, "file:///a/one");
-		assertEquals(McpRevision.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
+		assertEquals(McpRevision.CODE_RESOURCE_NOT_FOUND, resp.getError().getCode());
 	}
 
 	@Test void c04_handlerExceptionIsInternalError() {
@@ -190,7 +190,7 @@ class McpResourceTemplate_Test {
 	@Test void d02_malformedEscapeNeverTemplateMatches() {
 		var config = new McpServerConfig().addResourceTemplate(template("file:///{x}", (u, v) -> text("template")));
 		var resp = readResponse(config, "file:///a%zzb");
-		assertEquals(McpRevision.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
+		assertEquals(McpRevision.CODE_RESOURCE_NOT_FOUND, resp.getError().getCode());
 	}
 
 	@Test void d03_validNonMatchableTemplateListsButNeverReadMatches() {
@@ -198,7 +198,7 @@ class McpResourceTemplate_Test {
 		var list = (ListResourceTemplatesResult) send(config, req(1, McpMethods.RESOURCES_TEMPLATES_LIST, null)).getResult();
 		assertEquals(1, list.getResourceTemplates().size());
 		var resp = readResponse(config, "file:///a,b");
-		assertEquals(McpRevision.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
+		assertEquals(McpRevision.CODE_RESOURCE_NOT_FOUND, resp.getError().getCode());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

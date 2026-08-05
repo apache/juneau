@@ -51,6 +51,30 @@
 			<version>${project.version}</version>
 		</dependency>
 		<!--
+			READY-312f F2: OAuth 2.1 resource-server baseline.  juneau-rest-server-auth-oauth provides the reusable
+			OAuthFilter (RFC 6750 bearer extraction) + OAuthIntrospectionValidator (RFC 7662) the v2 RS gate wires.
+			Compile scope: the adapter references OAuthFilter directly.  Auth remains opt-in at runtime (off by default
+			via McpResourceServerConfig), so this dependency does not change the behavior of a non-authenticating
+			endpoint.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-auth-oauth</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
+			The JWT validator (JwtTokenValidator, JWKS-backed) is the alternate token-validation mode.  Provided +
+			optional so JWT users opt in explicitly without forcing the Nimbus JOSE stack on introspection-only
+			consumers.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-auth-jwt</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
+		<!--
 			Optional: backs the SpringMcpRestServlet convenience class. Marked optional so plain
 			(non-Spring) consumers of this module are not forced to pull Spring Boot transitively.
 		-->

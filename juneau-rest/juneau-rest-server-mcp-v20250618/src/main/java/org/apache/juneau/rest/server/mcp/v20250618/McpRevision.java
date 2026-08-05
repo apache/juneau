@@ -49,10 +49,11 @@ import org.apache.juneau.rest.server.mcp.McpToolOutcome;
  * <p>
  * Owns this revision's JSON-RPC method table and error-code table. Note the error-code table
  * deliberately reproduces a known-wrong mapping: {@link McpErrorKind#UNKNOWN_METHOD},
- * {@link McpErrorKind#TOOL_NOT_FOUND}, {@link McpErrorKind#PROMPT_NOT_FOUND} and
- * {@link McpErrorKind#RESOURCE_NOT_FOUND} all report {@code -32601}, which is only actually correct
- * for the first. Preserving that is intentional — the corrective fix is tracked separately and is
- * not part of this re-layering.
+ * {@link McpErrorKind#TOOL_NOT_FOUND} and {@link McpErrorKind#PROMPT_NOT_FOUND} all report
+ * {@code -32601}, which is only actually correct for the first. Preserving that is intentional —
+ * the corrective fix for those two is tracked separately and is not part of this re-layering.
+ * {@link McpErrorKind#RESOURCE_NOT_FOUND} is not part of that known-wrong grouping: it correctly
+ * reports {@code -32002}, the {@code 2025-06-18} spec's dedicated missing-resource error code.
  *
  * <p>
  * <b>Constructed per binding, not shared as a singleton (Correction C8).</b> The bound servlet or
@@ -93,6 +94,9 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 
 	/** JSON-RPC error code: internal error. */
 	public static final int CODE_INTERNAL_ERROR = -32603;
+
+	/** JSON-RPC error code: resource not found (MCP-specific, per the {@code 2025-06-18} spec). */
+	public static final int CODE_RESOURCE_NOT_FOUND = -32002;
 
 	/** Default server name reported by {@code initialize} when the config supplies no server identity. */
 	public static final String DEFAULT_SERVER_NAME = "juneau-rest-server-mcp";
@@ -197,7 +201,8 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	public int errorCode(McpErrorKind kind) {
 		return switch (kind) {
 			case INVALID_REQUEST -> CODE_INVALID_REQUEST;
-			case UNKNOWN_METHOD, TOOL_NOT_FOUND, PROMPT_NOT_FOUND, RESOURCE_NOT_FOUND -> CODE_METHOD_NOT_FOUND;
+			case UNKNOWN_METHOD, TOOL_NOT_FOUND, PROMPT_NOT_FOUND -> CODE_METHOD_NOT_FOUND;
+			case RESOURCE_NOT_FOUND -> CODE_RESOURCE_NOT_FOUND;
 			case INVALID_PARAMS -> CODE_INVALID_PARAMS;
 			case INTERNAL_ERROR -> CODE_INTERNAL_ERROR;
 			case PARSE_ERROR -> CODE_PARSE_ERROR;

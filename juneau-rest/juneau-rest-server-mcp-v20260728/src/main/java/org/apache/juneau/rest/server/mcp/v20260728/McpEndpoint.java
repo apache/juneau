@@ -17,8 +17,13 @@
 package org.apache.juneau.rest.server.mcp.v20260728;
 
 import org.apache.juneau.commons.inject.Bean;
+import org.apache.juneau.rest.server.RestGet;
+import org.apache.juneau.rest.server.RestStartCall;
 import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
 import org.apache.juneau.rest.server.tracing.TraceContextExtractor;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Mixin interface that exposes a {@code 2026-07-28} MCP endpoint at {@code POST /mcp} on any Juneau REST
@@ -124,5 +129,55 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 	@Override
 	default McpSubscriptionBroker subscriptionBroker() {
 		return McpEndpointOptionsCache.resolve(this).resolveSubscriptionBroker();
+	}
+
+	/**
+	 * OAuth 2.1 resource-server bearer gate for the mixin's MCP {@code POST /mcp} endpoint (READY-312f F2).
+	 *
+	 * <p>
+	 * A no-op unless {@link McpResourceServerConfig#isEnabled() RS auth is enabled}; when enabled, a request that
+	 * <b>the router resolves</b> to the MCP {@code POST /mcp} dispatch operation must present a valid bearer token or it is
+	 * rejected with {@code 401} / {@code 403} and a {@code WWW-Authenticate: Bearer ...} challenge.  The gate is scoped to
+	 * the MCP dispatch <i>operation</i> (identified by resolved-operation identity, or by that operation's own router
+	 * matchers &mdash; see {@link McpResourceServerSupport#resolvesToMcpDispatch}) so other {@code POST} operations on the
+	 * host resource are unaffected, and it cannot drift from the router: a trailing slash, percent-encoding, a
+	 * {@code ?method=}/{@code X-Method} override, or a host-chosen {@code @Mixin(path/paths)} re-mount cannot slip past it
+	 * (B1/H3).  The well-known {@code GET} routes are left unauthenticated for PRM discovery.
+	 *
+	 * @param ctx The host {@link org.apache.juneau.rest.server.RestContext} handling this request.
+	 * @param req The raw HTTP request.
+	 * @param res The raw HTTP response (used to emit the challenge header on rejection).
+	 */
+	@RestStartCall
+	default void mcpResourceServerAuth(org.apache.juneau.rest.server.RestContext ctx, HttpServletRequest req, HttpServletResponse res) {
+		McpResourceServerSupport.gateMcpEndpoint(McpEndpointOptionsCache.resolve(this).getResourceServer(), ctx, req, res);
+	}
+
+	/**
+	 * Serves the RFC 9728 Protected Resource Metadata document at the root well-known location (SEP-2351 fallback).
+	 *
+	 * <p>
+	 * This route (and its path-inserted sibling) is registered unconditionally, but returns {@code 404} whenever RS auth
+	 * is {@link McpResourceServerConfig#isEnabled() disabled} &mdash; so a non-opted-in endpoint claims the well-known
+	 * namespace but exposes no observable metadata (READY-312f F2, M7).
+	 *
+	 * @param req The REST request.
+	 * @return The PRM document.
+	 */
+	@RestGet(path = "/.well-known/oauth-protected-resource")
+	default McpProtectedResourceMetadata mcpProtectedResourceMetadataRoot(org.apache.juneau.rest.server.RestRequest req) {
+		return McpResourceServerSupport.metadataForWellKnownRoot(McpEndpointOptionsCache.resolve(this).getResourceServer(), req);
+	}
+
+	/**
+	 * Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but
+	 * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404} (M5).
+	 *
+	 * @param req The REST request.
+	 * @return The PRM document.
+	 */
+	@RestGet(path = "/.well-known/oauth-protected-resource/*")
+	default McpProtectedResourceMetadata mcpProtectedResourceMetadataPathInserted(org.apache.juneau.rest.server.RestRequest req) {
+		return McpResourceServerSupport.metadataForWellKnownPathInserted(McpEndpointOptionsCache.resolve(this).getResourceServer(), req);
 	}
 }

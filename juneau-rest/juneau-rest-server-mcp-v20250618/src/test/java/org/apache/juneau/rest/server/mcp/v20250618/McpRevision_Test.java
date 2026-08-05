@@ -322,9 +322,9 @@ class McpRevision_Test {
 	}
 
 	@Test
-	void f03_resources_read_unknown_methodNotFound() {
+	void f03_resources_read_unknown_resourceNotFound() {
 		var resp = send(new McpServerConfig(), req(1, McpMethods.RESOURCES_READ, JsonMap.of("uri", "ghost://")));
-		assertEquals(McpRevision.CODE_METHOD_NOT_FOUND, resp.getError().getCode());
+		assertEquals(McpRevision.CODE_RESOURCE_NOT_FOUND, resp.getError().getCode());
 	}
 
 	@Test
@@ -364,7 +364,7 @@ class McpRevision_Test {
 		assertEquals(-32601, a.errorCode(McpErrorKind.UNKNOWN_METHOD));
 		assertEquals(-32601, a.errorCode(McpErrorKind.TOOL_NOT_FOUND), "known-wrong mapping, preserved deliberately");
 		assertEquals(-32601, a.errorCode(McpErrorKind.PROMPT_NOT_FOUND), "known-wrong mapping, preserved deliberately");
-		assertEquals(-32601, a.errorCode(McpErrorKind.RESOURCE_NOT_FOUND), "known-wrong mapping, preserved deliberately");
+		assertEquals(-32002, a.errorCode(McpErrorKind.RESOURCE_NOT_FOUND), "corrected per 2025-06-18 spec's missing-resource error code");
 		assertEquals(-32602, a.errorCode(McpErrorKind.INVALID_PARAMS));
 		assertEquals(-32603, a.errorCode(McpErrorKind.INTERNAL_ERROR));
 		assertEquals(-32700, a.errorCode(McpErrorKind.PARSE_ERROR));
