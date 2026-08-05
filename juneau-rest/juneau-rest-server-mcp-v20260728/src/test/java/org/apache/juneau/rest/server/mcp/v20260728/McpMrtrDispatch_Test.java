@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.mcp.v20260728;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.security.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
@@ -202,8 +203,8 @@ class McpMrtrDispatch_Test {
 		final RequestStateCodec delegate = new AeadRequestStateCodec();
 		int sealCalls;
 
-		@Override public String seal(McpRequestState state, String aad) { sealCalls++; return delegate.seal(state, aad); }
-		@Override public Optional<McpRequestState> unseal(String token, String aad) { return delegate.unseal(token, aad); }
+		@Override public String seal(McpRequestState state, String aad, Principal principal) { sealCalls++; return delegate.seal(state, aad, principal); }
+		@Override public Optional<McpRequestState> unseal(String token, String aad, Principal principal) { return delegate.unseal(token, aad, principal); }
 	}
 
 	@Test void b01_pauseWithoutElicitationCapability_rejectedAndNothingSealed() {
@@ -332,8 +333,8 @@ class McpMrtrDispatch_Test {
 	// A codec that ignores AAD, so a sealed method survives unseal and the dispatcher's own sealed.method()
 	// equality check (isolated from the codec's AAD binding) is exercised directly.
 	static final class C07_NoAadCodec implements RequestStateCodec {
-		@Override public String seal(McpRequestState state, String aad) { return Json.of(state); }
-		@Override public Optional<McpRequestState> unseal(String token, String aad) {
+		@Override public String seal(McpRequestState state, String aad, Principal principal) { return Json.of(state); }
+		@Override public Optional<McpRequestState> unseal(String token, String aad, Principal principal) {
 			try {
 				return Optional.of(Json.to(token, McpRequestState.class));
 			} catch (@SuppressWarnings("unused") Exception e) {
@@ -491,6 +492,52 @@ class McpMrtrDispatch_Test {
 		var resp = send(revB, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
 		assertEquals(-32602, resp.getError().getCode());
 		assertEquals(0, calls.get());
+	}
+
+	// -------- F4 (READY-312f): principal exposure to the codec seam ---------
+
+	// Records the principal (and whether it was called at all) the dispatcher threads into seal/unseal.
+	static final class E_PrincipalCapturingCodec implements RequestStateCodec {
+		final RequestStateCodec delegate = new AeadRequestStateCodec();
+		boolean sealCalled;
+		boolean unsealCalled;
+		Principal sealPrincipal;
+		Principal unsealPrincipal;
+
+		@Override public String seal(McpRequestState state, String aad, Principal principal) {
+			sealCalled = true;
+			sealPrincipal = principal;
+			return delegate.seal(state, aad, principal);
+		}
+
+		@Override public Optional<McpRequestState> unseal(String token, String aad, Principal principal) {
+			unsealCalled = true;
+			unsealPrincipal = principal;
+			return delegate.unseal(token, aad, principal);
+		}
+	}
+
+	@Test void e01_noBoundRestRequest_principalIsNullAtSealAndUnsealAndStillRoundTrips() {
+		// The direct-dispatch harness binds no RestRequest, so the dispatcher resolves NO principal (anonymous /
+		// RS-auth-disabled path).  seal and unseal must both be invoked with a null principal and the token must
+		// still round-trip cleanly (no NPE) -- the contract the F4 seam must preserve.
+		var codec = new E_PrincipalCapturingCodec();
+		var rev = revision(mrtr(codec));
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> {
+			if (c.getBean(McpMrtrResumeContext.class).isPresent())
+				return text("done");
+			throw new McpInputRequiredSignal(Map.of("q1", reqEntry("elicitation")), "cont-1");
+		}));
+		var paused = (InputRequiredResult) send(rev, config, req(1, "tools/call", JsonMap.of("name", "ask"), true), hdrs("tools/call", "ask")).getResult();
+		assertTrue(codec.sealCalled);
+		assertNull(codec.sealPrincipal);
+		assertNotNull(paused.getRequestState());
+
+		var resumeParams = JsonMap.of("name", "ask", "requestState", paused.getRequestState(), "inputResponses", JsonMap.of("q1", "answer"));
+		var result = (CallToolResult) send(rev, config, req(1, "tools/call", resumeParams, true), hdrs("tools/call", "ask")).getResult();
+		assertEquals("done", ((TextContent) result.getContent().get(0)).getText());
+		assertTrue(codec.unsealCalled);
+		assertNull(codec.unsealPrincipal);
 	}
 
 	@Test void d04_sharedStaticKeyProviderResumeSucceedsAcrossIndependentRevisions() {

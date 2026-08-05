@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.mcp.v20260728;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Optional;
@@ -55,6 +56,14 @@ import org.apache.juneau.marshall.marshaller.Json;
  * form as the caller-supplied AAD (see {@code McpRevision#aad}); this codec appends {@code '\u0000' + keyId}
  * to that value before passing it to the cipher, per {@link KeyProvider}'s implicit {@code keyId}-authentication
  * contract.
+ *
+ * <p>
+ * <b>Authenticated principal (READY-312f F4).</b> {@link #seal}/{@link #unseal} receive the caller's authenticated
+ * {@link Principal} (nullable) per the {@link RequestStateCodec} contract, but this built-in codec does <b>not</b>
+ * yet fold it into the AEAD's authenticated data &mdash; the token is not principal-bound. Adding that binding
+ * (and choosing which identity attribute to bind) is owned by TODO-325; the {@code seal}/{@code unseal} bodies
+ * carry a {@code TODO-325} marker at the exact fold point. F4's guarantee is only that the principal reaches the
+ * codec at both seal and unseal.
  *
  * <p>
  * Random per-seal nonces are safe up to roughly 2^32 seals under a single key (the AES-GCM birthday bound). The
@@ -121,7 +130,7 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 	}
 
 	@Override /* RequestStateCodec */
-	public String seal(McpRequestState state, String aad) {
+	public String seal(McpRequestState state, String aad, Principal principal) {
 		try {
 			var ks = keyProvider.currentKey();
 			// Random 96-bit nonce per seal. AES-GCM's birthday bound makes random nonces safe up to roughly 2^32
@@ -131,6 +140,9 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 			random.nextBytes(nonce);
 			var cipher = Cipher.getInstance(ALGORITHM);
 			cipher.init(Cipher.ENCRYPT_MODE, ks.key(), new GCMParameterSpec(GCM_TAG_BITS, nonce));
+			// TODO-325: the authenticated principal is exposed here (READY-312f F4) but not yet folded into the AEAD's
+			// authenticated data. Binding it (e.g. appending a chosen identity attribute to the updateAAD(...) input
+			// below, mirroring the keyId append) is owned by TODO-325, along with the choice of which identity to bind.
 			cipher.updateAAD((aad + '\u0000' + ks.keyId()).getBytes(StandardCharsets.UTF_8));
 			var plaintext = Json.of(state).getBytes(StandardCharsets.UTF_8);
 			var ciphertext = cipher.doFinal(plaintext);
@@ -142,7 +154,7 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 	}
 
 	@Override /* RequestStateCodec */
-	public Optional<McpRequestState> unseal(String token, String aad) {
+	public Optional<McpRequestState> unseal(String token, String aad, Principal principal) {
 		try {
 			if (token.length() < MIN_TOKEN_CHARS || token.length() > MAX_TOKEN_CHARS)
 				return Optional.empty();
@@ -162,6 +174,9 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 				return Optional.empty();
 			var cipher = Cipher.getInstance(ALGORITHM);
 			cipher.init(Cipher.DECRYPT_MODE, resolved.get(), new GCMParameterSpec(GCM_TAG_BITS, nonce));
+			// TODO-325: the authenticated principal is exposed here (READY-312f F4) but not yet folded into the AEAD's
+			// authenticated data. When TODO-325 binds it at seal time, this call site must fold the SAME identity into
+			// updateAAD(...) below so a token minted for principal A fails the GCM tag check under principal B.
 			cipher.updateAAD((aad + '\u0000' + keyId).getBytes(StandardCharsets.UTF_8));
 			var plaintext = cipher.doFinal(ciphertext);
 			return Optional.of(Json.to(new String(plaintext, StandardCharsets.UTF_8), McpRequestState.class));

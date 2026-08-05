@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.mcp.v20260728;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.util.Base64;
 import java.util.Map;
 
@@ -276,5 +277,37 @@ class AeadRequestStateCodec_Test {
 		var c = a.unseal(token, AAD);
 		assertTrue(c.isPresent());
 		assertEquals(b, c.get());
+	}
+
+	/**
+	 * Pins the current (READY-312f F4) contract documented on {@link AeadRequestStateCodec}'s class Javadoc and at
+	 * the {@code TODO-325} markers in {@link AeadRequestStateCodec#seal} / {@link AeadRequestStateCodec#unseal}: the
+	 * principal reaches the codec at both seal and unseal, but is <b>not yet</b> folded into the AEAD's authenticated
+	 * data. A real {@link AeadRequestStateCodec} seal uses a random per-seal nonce (see the class Javadoc), so two
+	 * {@code seal} calls are never byte-identical even with everything else held fixed &mdash; the built-in codec has
+	 * no fixed-nonce affordance (unlike {@code Characterization_Test.FixedKeyGcmCodec}, a wholly separate, hardcoded
+	 * fixture implementation, not this class). So this proves the equivalent invariant directly on ONE sealed token:
+	 * it unseals successfully under the sealing principal, under a completely different principal, and under a
+	 * <jk>null</jk> (anonymous) principal alike &mdash; i.e. the principal has no bearing on seal/unseal validity yet.
+	 * Once TODO-325 binds the principal into the AAD, unsealing under {@code bob} or <jk>null</jk> here must start
+	 * failing, which is exactly the regression this test is meant to catch.
+	 */
+	@Test void a15_principalIsNotYetBoundSoTokenUnsealsUnderAnyPrincipal() {
+		var a = new AeadRequestStateCodec();
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		Principal alice = () -> "alice";
+		Principal bob = () -> "bob";
+		var token = a.seal(state, AAD, alice);
+		var underSamePrincipal = a.unseal(token, AAD, alice);
+		var underDifferentPrincipal = a.unseal(token, AAD, bob);
+		var underNullPrincipal = a.unseal(token, AAD, null);
+		assertTrue(underSamePrincipal.isPresent(), "round trip under the sealing principal must still succeed");
+		assertEquals(state, underSamePrincipal.get());
+		assertTrue(underDifferentPrincipal.isPresent(),
+			"principal is not yet bound to the AAD (TODO-325), so a different principal must still unseal");
+		assertEquals(state, underDifferentPrincipal.get());
+		assertTrue(underNullPrincipal.isPresent(),
+			"principal is not yet bound to the AAD (TODO-325), so a null (anonymous) principal must still unseal");
+		assertEquals(state, underNullPrincipal.get());
 	}
 }

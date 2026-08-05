@@ -44,7 +44,8 @@ import jakarta.servlet.http.*;
  * driven by an {@link McpResourceServerConfig}.
  *
  * <p>
- * Bearer extraction and token validation are delegated to the reusable {@link OAuthFilter} (RFC 6750) from
+ * Bearer extraction and token validation are delegated to the reusable
+ * {@link org.apache.juneau.rest.server.auth.oauth.OAuthFilter} (RFC 6750) from
  * {@code juneau-rest-server-auth-oauth}; this class layers on the MCP-specific {@code resource_metadata} challenge
  * parameter, RFC 8707 audience matching ({@link McpAudienceValidator}), and baseline required-scope enforcement.
  *
@@ -430,6 +431,31 @@ public final class McpResourceServerSupport {
 			return Set.of();
 		var v = req.getAttribute(GRANTED_SCOPES_ATTR);
 		return v instanceof Set ? (Set<String>)v : Set.of();
+	}
+
+	/**
+	 * Returns the authenticated {@link Principal} {@link #authenticate} stashed for this request (READY-312f F4).
+	 *
+	 * <p>
+	 * Reads the same framework-standard {@link RestServerConstants#PRINCIPAL_ATTR} attribute {@link #authenticate}
+	 * writes on success, so this is the single source of truth for "who is calling this MCP request".  It is the seam
+	 * the {@code 2026-07-28} dispatcher threads into {@link RequestStateCodec#seal}/{@link RequestStateCodec#unseal}
+	 * to unblock TODO-325's principal-bound {@code requestState} AAD.  Mirrors {@link #grantedScopes(HttpServletRequest)}:
+	 * a <jk>null</jk> request, an absent attribute, or a non-{@link Principal} value all return <jk>null</jk> &mdash; the
+	 * anonymous / RS-auth-disabled path, which every caller must handle without an NPE.  Unlike
+	 * {@link #grantedScopes(HttpServletRequest)}, which falls back to an empty {@link Set} in that same situation, this
+	 * returns <jk>null</jk> rather than an empty value in that case; the divergence is intentional &mdash; a scalar
+	 * identity has no natural "empty" representative the way a collection does.
+	 *
+	 * @param req The HTTP request.  May be <jk>null</jk>.
+	 * @return The authenticated principal, or <jk>null</jk> when none was stashed (RS auth disabled / gate not run /
+	 * 	anonymous caller).
+	 */
+	public static Principal principal(HttpServletRequest req) {
+		if (req == null)
+			return null;
+		var v = req.getAttribute(RestServerConstants.PRINCIPAL_ATTR);
+		return v instanceof Principal p ? p : null;
 	}
 
 	/**

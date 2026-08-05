@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.charset.*;
 import java.nio.file.*;
+import java.security.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -380,7 +381,7 @@ class Characterization_Test {
 		private static final byte[] NONCE = new byte[12];
 		private static final Base64.Encoder B64 = Base64.getUrlEncoder().withoutPadding();
 
-		@Override public String seal(McpRequestState state, String aad) {
+		@Override public String seal(McpRequestState state, String aad, Principal principal) {
 			try {
 				var cipher = Cipher.getInstance("AES/GCM/NoPadding");
 				cipher.init(Cipher.ENCRYPT_MODE, KEY, new GCMParameterSpec(128, NONCE));
@@ -392,7 +393,7 @@ class Characterization_Test {
 			}
 		}
 
-		@Override public Optional<McpRequestState> unseal(String token, String aad) {
+		@Override public Optional<McpRequestState> unseal(String token, String aad, Principal principal) {
 			try {
 				var parts = token.split("\\.", 2);
 				var nonce = Base64.getUrlDecoder().decode(parts[0]);

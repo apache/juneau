@@ -330,6 +330,95 @@ class McpResourceServerBinding_Test extends TestBase {
 	}
 
 	// ---------------------------------------------------------------------------------------------
+	// F4 (READY-312f): the F2-authenticated principal is threaded into the RequestStateCodec seal/unseal seam so
+	// TODO-325 can later bind the requestState to who requested it.  A capturing codec records the principal it
+	// receives; an end-to-end pause (seal) then resume (unseal), both under the same bearer token, proves the
+	// authenticated principal reaches the codec at BOTH points.
+	// ---------------------------------------------------------------------------------------------
+
+	static final class J_CapturingCodec implements RequestStateCodec {
+		final RequestStateCodec delegate = new AeadRequestStateCodec();
+		final AtomicReference<String> sealPrincipal = new AtomicReference<>("<unset>");
+		final AtomicReference<String> unsealPrincipal = new AtomicReference<>("<unset>");
+
+		@Override public String seal(McpRequestState state, String aad, Principal principal) {
+			sealPrincipal.set(principal == null ? null : principal.getName());
+			return delegate.seal(state, aad, principal);
+		}
+
+		@Override public Optional<McpRequestState> unseal(String token, String aad, Principal principal) {
+			unsealPrincipal.set(principal == null ? null : principal.getName());
+			return delegate.unseal(token, aad, principal);
+		}
+	}
+
+	static final J_CapturingCodec J_CODEC = new J_CapturingCodec();
+
+	private static Object validMetaElicit() {
+		return JsonMap.of(
+			RequestMeta.KEY_PROTOCOL_VERSION, "2026-07-28",
+			RequestMeta.KEY_CLIENT_INFO, JsonMap.of("name", "fixture-client", "version", "1.0"),
+			RequestMeta.KEY_CLIENT_CAPABILITIES, JsonMap.of("elicitation", JsonMap.of()));
+	}
+
+	private static String bodyElicit(Object id, String method, Object params) {
+		var p = params instanceof Map<?,?> m ? new JsonMap(m) : new JsonMap();
+		p.put("_meta", validMetaElicit());
+		return org.apache.juneau.marshall.marshaller.Json.of(new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(method).setParams(p));
+	}
+
+	// Pauses on the first call (emits input_required -> seals) and completes on resume (unseals first, then returns).
+	private static McpToolHandler pausingAsk() {
+		return new McpToolHandler() {
+			@Override public McpToolSpec descriptor() { return new McpToolSpec().setName("ask"); }
+			@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
+				if (ctx.getBean(McpMrtrResumeContext.class).isPresent())
+					return McpToolOutcome.text("done");
+				throw new McpInputRequiredSignal(Map.of("q1", Map.of("type", "elicitation")), "cont-1");
+			}
+		};
+	}
+
+	private static McpOptions rsEnabledWithCapturingCodec() {
+		return rsEnabled().mrtr(m -> m.setCodec(J_CODEC));
+	}
+
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class J extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Override protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig().setName("test").setVersion("1.0.0").addTool(pausingAsk());
+		}
+		@Override protected McpOptions createMcpOptions() { return rsEnabledWithCapturingCodec(); }
+	}
+
+	private MockRestClient clientJ() {
+		return MockRestClient.create(J.class).json().contentType("application/json").accept("application/json").ignoreErrors().build();
+	}
+
+	@Test void j01_authenticatedPrincipalReachesCodecAtSealAndUnseal() throws Exception {
+		J_CODEC.sealPrincipal.set("<unset>");
+		J_CODEC.unsealPrincipal.set("<unset>");
+
+		// Round 1: pause -> seal.  The bearer 'good' authenticates as principal 'alice' (see VALIDATOR).
+		var pauseJson = clientJ().post("/").contentString(bodyElicit(1, "tools/call", JsonMap.of("name", "ask")))
+			.header("Mcp-Method", "tools/call").header("Mcp-Name", "ask")
+			.header("Authorization", "Bearer good")
+			.run().assertStatus(200).getContent().asString();
+		var token = org.apache.juneau.marshall.marshaller.Json.to(pauseJson, JsonMap.class).getMap("result").getString("requestState");
+		assertNotNull(token);
+		assertEquals("alice", J_CODEC.sealPrincipal.get());  // the authenticated principal reached seal
+
+		// Round 2: resume -> unseal, same bearer token / same principal.
+		var resumeParams = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		clientJ().post("/").contentString(bodyElicit(2, "tools/call", resumeParams))
+			.header("Mcp-Method", "tools/call").header("Mcp-Name", "ask")
+			.header("Authorization", "Bearer good")
+			.run().assertStatus(200);
+		assertEquals("alice", J_CODEC.unsealPrincipal.get());  // the authenticated principal reached unseal
+	}
+
+	// ---------------------------------------------------------------------------------------------
 	// Servlet path with RS auth DISABLED (default) - behavior unchanged.
 	// ---------------------------------------------------------------------------------------------
 

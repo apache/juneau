@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.mcp.v20260728;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -40,13 +41,13 @@ class RequestStateCodec_Test {
 	private static final class FakeCodec implements RequestStateCodec {
 
 		@Override /* RequestStateCodec */
-		public String seal(McpRequestState state, String aad) {
+		public String seal(McpRequestState state, String aad, Principal principal) {
 			var plaintext = aad + "\u0000" + Json.of(state);
 			return Base64.getEncoder().encodeToString(plaintext.getBytes(StandardCharsets.UTF_8));
 		}
 
 		@Override /* RequestStateCodec */
-		public Optional<McpRequestState> unseal(String token, String aad) {
+		public Optional<McpRequestState> unseal(String token, String aad, Principal principal) {
 			byte[] decoded;
 			try {
 				decoded = Base64.getDecoder().decode(token);
@@ -87,5 +88,32 @@ class RequestStateCodec_Test {
 		var a = new FakeCodec();
 		var c = a.unseal("!!!not-base64!!!", "tools/call:2026-07-28");
 		assertTrue(c.isEmpty());
+	}
+
+	// F4 (READY-312f): the principal-bearing 3-arg methods are the canonical SPI; the 2-arg convenience overloads
+	// delegate to them with a null (no-principal) identity, and an explicit principal is passed through verbatim.
+	private static final class B_CapturingCodec implements RequestStateCodec {
+		Principal sealPrincipal = () -> "<unset>";
+		Principal unsealPrincipal = () -> "<unset>";
+
+		@Override public String seal(McpRequestState state, String aad, Principal principal) { sealPrincipal = principal; return "t"; }
+		@Override public Optional<McpRequestState> unseal(String token, String aad, Principal principal) { unsealPrincipal = principal; return Optional.empty(); }
+	}
+
+	@Test void b01_twoArgOverloadsDelegateWithNullPrincipal() {
+		var a = new B_CapturingCodec();
+		a.seal(new McpRequestState("c", "tools/call", 1, 1L), "aad");
+		a.unseal("t", "aad");
+		assertNull(a.sealPrincipal);
+		assertNull(a.unsealPrincipal);
+	}
+
+	@Test void b02_threeArgMethodsReceiveTheSuppliedPrincipal() {
+		var a = new B_CapturingCodec();
+		Principal p = () -> "carol";
+		a.seal(new McpRequestState("c", "tools/call", 1, 1L), "aad", p);
+		a.unseal("t", "aad", p);
+		assertSame(p, a.sealPrincipal);
+		assertSame(p, a.unsealPrincipal);
 	}
 }

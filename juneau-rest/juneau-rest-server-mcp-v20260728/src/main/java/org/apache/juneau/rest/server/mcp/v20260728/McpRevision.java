@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
+import java.security.Principal;
 import java.util.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
@@ -630,7 +631,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			validateStructuredOutput(outcome);
 			return McpWire.toWire(outcome);
 		} catch (McpInputRequiredSignal signal) {
-			return pause(signal, McpMethods.TOOLS_CALL, p, mrtr.currentRound());
+			return pause(signal, McpMethods.TOOLS_CALL, p, mrtr.currentRound(), ctx);
 		}
 	}
 
@@ -667,7 +668,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		try (var store = mrtr.store()) {
 			return McpWire.toWire(handler.get(args, store));
 		} catch (McpInputRequiredSignal signal) {
-			return pause(signal, McpMethods.PROMPTS_GET, p, mrtr.currentRound());
+			return pause(signal, McpMethods.PROMPTS_GET, p, mrtr.currentRound(), ctx);
 		}
 	}
 
@@ -696,7 +697,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			try (var store = mrtr.store()) {
 				return applyCache(McpWire.toWire(exact.get().read(uri, store)), readHint(uri));
 			} catch (McpInputRequiredSignal signal) {
-				return pause(signal, McpMethods.RESOURCES_READ, p, mrtr.currentRound());
+				return pause(signal, McpMethods.RESOURCES_READ, p, mrtr.currentRound(), ctx);
 			}
 		}
 		var match = config.resolveResourceTemplate(uri);
@@ -805,7 +806,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		// Validate the echoed requestState before constructing the BasicBeanStore below: every failure here
 		// throws, and a BasicBeanStore built earlier would never reach a caller's try-with-resources to be
 		// closed (java:S2095). Deferring construction until validation succeeds means no path leaks it.
-		var sealed = mrtrConfig.getCodec().unseal(requestState, aad(method))
+		var sealed = mrtrConfig.getCodec().unseal(requestState, aad(method), principal(ctx))
 			.orElseThrow(() -> new McpException(CODE_INVALID_PARAMS, "Invalid or tampered requestState"));
 		if (! method.equals(sealed.method()))
 			throw new McpException(CODE_INVALID_PARAMS, "requestState method mismatch");
@@ -837,14 +838,16 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * @param method The in-scope JSON-RPC method this pause is for. Must not be <jk>null</jk>.
 	 * @param params The request params map. Must not be <jk>null</jk>.
 	 * @param currentRound The round decoded on RESUME (0 on a first-round pause), incremented into the new token.
+	 * @param ctx The per-request bean store, used to resolve the authenticated {@link #principal(BeanStore)} threaded
+	 * 	into the codec's {@link RequestStateCodec#seal seal} (READY-312f F4). Must not be <jk>null</jk>.
 	 * @return The assembled, validated {@code input_required} result. Never <jk>null</jk>.
 	 */
-	private InputRequiredResult pause(McpInputRequiredSignal signal, String method, Map<String,Object> params, int currentRound) {
+	private InputRequiredResult pause(McpInputRequiredSignal signal, String method, Map<String,Object> params, int currentRound, BeanStore ctx) {
 		if (! clientElicitationSupported(params))
 			throw new McpException(CODE_MISSING_REQUIRED_CLIENT_CAPABILITY,
 				"Client does not advertise the elicitation capability required for input_required");
 		var state = new McpRequestState(signal.getContinuation(), method, currentRound + 1, System.currentTimeMillis() + mrtrConfig.getTtlMs());
-		var result = new InputRequiredResult().setRequestState(mrtrConfig.getCodec().seal(state, aad(method)));
+		var result = new InputRequiredResult().setRequestState(mrtrConfig.getCodec().seal(state, aad(method), principal(ctx)));
 		// Each inputRequests value is carried to the wire byte-for-byte as a raw sub-request object (see
 		// McpInputRequiredSignal). The pinned schema models every value as an object; a non-map handler value is a
 		// programming error that surfaces (as a ClassCastException here) via dispatch's -32603 fail-safe.
@@ -863,6 +866,28 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 */
 	private String aad(String method) {
 		return method + '\u0000' + protocolVersion();
+	}
+
+	/**
+	 * Resolves the authenticated caller {@link Principal} for the current request, threaded into the
+	 * {@link RequestStateCodec} at seal and unseal so a hardened codec can bind the {@code requestState} to who
+	 * requested it (READY-312f F4; unblocks TODO-325's principal-bound AAD).
+	 *
+	 * <p>
+	 * Reads the F2 resource-server principal via {@link McpResourceServerSupport#principal} &mdash; the same
+	 * {@code RestRequest -> HttpServletRequest} lookup {@link #enforceStepUpScopes} uses for granted scopes, so the
+	 * two stay in lock-step. Returns <jk>null</jk> when there is no bound {@link RestRequest} (a direct-dispatch unit
+	 * test), when RS auth is disabled, or when the caller is anonymous &mdash; the codec must seal/unseal cleanly in
+	 * that case.
+	 *
+	 * @param ctx The per-request bean store. Must not be <jk>null</jk>.
+	 * @return The authenticated principal, or <jk>null</jk> when none is available.
+	 */
+	private static Principal principal(BeanStore ctx) {
+		return ctx.getBean(RestRequest.class)
+			.map(RestRequest::getHttpServletRequest)
+			.map(McpResourceServerSupport::principal)
+			.orElse(null);
 	}
 
 	/**

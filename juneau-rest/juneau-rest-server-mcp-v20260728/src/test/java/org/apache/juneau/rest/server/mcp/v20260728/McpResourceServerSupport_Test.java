@@ -29,6 +29,7 @@ import org.apache.juneau.http.response.Forbidden;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.rest.mock.MockServletRequest;
 import org.apache.juneau.rest.server.RestRequest;
+import org.apache.juneau.rest.server.RestServerConstants;
 import org.apache.juneau.rest.server.auth.TokenValidator;
 import org.apache.juneau.rest.server.mcp.McpEndpointMixin;
 import org.apache.juneau.rest.server.util.UrlPath;
@@ -266,5 +267,32 @@ class McpResourceServerSupport_Test {
 	@Test void f11_grantedScopes_absentAttributeIsEmpty() {
 		assertTrue(McpResourceServerSupport.grantedScopes(MockServletRequest.create()).isEmpty());
 		assertTrue(McpResourceServerSupport.grantedScopes(null).isEmpty());
+	}
+
+	// ---------------------------------------------------------------------------------------------
+	// F4 (TODO-312f): principal(req) exposes the F2-authenticated principal (stashed under PRINCIPAL_ATTR by
+	// authenticate(...)) so the dispatcher can thread it into the RequestStateCodec seal/unseal seam (unblocking
+	// TODO-325's principal-bound AAD).  Mirrors grantedScopes(req): present -> the principal; absent/null/wrong-type
+	// -> null (the anonymous / RS-auth-disabled path).
+	// ---------------------------------------------------------------------------------------------
+
+	@Test void g01_principal_presentReturnsStashedPrincipal() {
+		Principal p = () -> "bob";
+		var req = MockServletRequest.create().attribute(RestServerConstants.PRINCIPAL_ATTR, p);
+		assertSame(p, McpResourceServerSupport.principal(req));
+	}
+
+	@Test void g02_principal_absentAttributeIsNull() {
+		assertNull(McpResourceServerSupport.principal(MockServletRequest.create()));
+	}
+
+	@Test void g03_principal_nullRequestIsNull() {
+		assertNull(McpResourceServerSupport.principal(null));
+	}
+
+	@Test void g04_principal_nonPrincipalAttributeIsNull() {
+		// Defensive: a stashed value that is not a Principal must not be cast/returned.
+		var req = MockServletRequest.create().attribute(RestServerConstants.PRINCIPAL_ATTR, "not-a-principal");
+		assertNull(McpResourceServerSupport.principal(req));
 	}
 }
