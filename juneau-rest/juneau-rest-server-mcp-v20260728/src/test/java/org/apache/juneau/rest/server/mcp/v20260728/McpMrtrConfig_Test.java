@@ -72,6 +72,37 @@ class McpMrtrConfig_Test {
 		assertEquals(3, a.getMaxRounds());
 	}
 
+	@Test void a07_setKeyProviderWiresAeadCodecSharingTheProvider() {
+		// "behaves": prove the KeyProvider is actually threaded through, not just type-checked -- two
+		// independently-constructed McpMrtrConfig instances sharing one StaticKeyProvider unseal each other's
+		// tokens, the config-level analog of the dispatch-level d04 test added in Task 11.
+		var provider = StaticKeyProvider.of("k1", StaticKeyProvider.aesKey(new byte[32]));
+		var a = new McpMrtrConfig().setKeyProvider(provider);
+		assertInstanceOf(AeadRequestStateCodec.class, a.getCodec());
+		var b = new McpMrtrConfig().setKeyProvider(provider);
+		var state = new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L);
+		var token = a.getCodec().seal(state, "aad");
+		var unsealed = b.getCodec().unseal(token, "aad").orElseThrow();
+		assertEquals("cont-1", unsealed.continuation());
+	}
+
+	@Test void a08_setKeyProviderAndSetCodecAreLastWins() {
+		var provider = StaticKeyProvider.of("k1", StaticKeyProvider.aesKey(new byte[32]));
+		var explicitCodec = new AeadRequestStateCodec();
+		// setCodec(...) called after setKeyProvider(...): the explicit codec wins.
+		var a = new McpMrtrConfig().setKeyProvider(provider).setCodec(explicitCodec);
+		assertSame(explicitCodec, a.getCodec());
+		// setKeyProvider(...) called after setCodec(...): the provider-wrapping codec wins.
+		var b = new McpMrtrConfig().setCodec(explicitCodec).setKeyProvider(provider);
+		assertNotSame(explicitCodec, b.getCodec());
+		assertInstanceOf(AeadRequestStateCodec.class, b.getCodec());
+	}
+
+	@Test void a09_setKeyProviderNullThrows() {
+		var e = assertThrows(IllegalArgumentException.class, () -> new McpMrtrConfig().setKeyProvider(null));
+		assertEquals("keyProvider must not be null", e.getMessage());
+	}
+
 	// -------- McpRevision four-arg constructor wiring ---------
 
 	private static Object validMeta() {

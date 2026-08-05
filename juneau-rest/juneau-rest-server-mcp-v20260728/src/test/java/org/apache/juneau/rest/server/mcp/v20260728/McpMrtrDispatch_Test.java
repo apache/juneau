@@ -280,10 +280,11 @@ class McpMrtrDispatch_Test {
 		var calls = new AtomicInteger();
 		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
 		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L), aad("tools/call"));
-		var parts = token.split("\\.", 2);
-		var ciphertext = Base64.getUrlDecoder().decode(parts[1]);
+		var parts = token.split("\\.", 4);
+		var ciphertext = Base64.getUrlDecoder().decode(parts[3]);
 		ciphertext[0] ^= 1;
-		var tampered = parts[0] + "." + Base64.getUrlEncoder().withoutPadding().encodeToString(ciphertext);
+		var tampered = parts[0] + "." + parts[1] + "." + parts[2] + "."
+			+ Base64.getUrlEncoder().withoutPadding().encodeToString(ciphertext);
 		var params = JsonMap.of("name", "ask", "requestState", tampered);
 		var resp = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
 		assertEquals(-32602, resp.getError().getCode());
@@ -490,5 +491,31 @@ class McpMrtrDispatch_Test {
 		var resp = send(revB, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
 		assertEquals(-32602, resp.getError().getCode());
 		assertEquals(0, calls.get());
+	}
+
+	@Test void d04_sharedStaticKeyProviderResumeSucceedsAcrossIndependentRevisions() {
+		// Direct contrast to d03: two independently-constructed McpRevision instances (via two independently-
+		// constructed McpMrtrConfig -> AeadRequestStateCodec instances) wired to the SAME StaticKeyProvider DO
+		// resume each other's tokens -- the horizontal-scaling proof design.md §2/§7 exists to enable.
+		var sharedKeyProvider = StaticKeyProvider.of("2026-08-d04", StaticKeyProvider.aesKey(new byte[32]));
+		var revA = revision(new McpMrtrConfig().setKeyProvider(sharedKeyProvider));
+		var revB = revision(new McpMrtrConfig().setKeyProvider(sharedKeyProvider));
+
+		// Pause dispatched through revision A: mints a requestState sealed by A's own, independently-constructed
+		// codec instance.
+		var pauseConfig = new McpServerConfig().addTool(tool("ask",
+			(args, c) -> { throw new McpInputRequiredSignal(Map.of("q1", reqEntry("elicitation")), "cont-1"); }));
+		var paused = (InputRequiredResult) send(revA, pauseConfig, req(1, "tools/call", JsonMap.of("name", "ask"), true), hdrs("tools/call", "ask")).getResult();
+		var token = paused.getRequestState();
+		assertNotNull(token);
+
+		// Resume dispatched through revision B (a DIFFERENT McpRevision, DIFFERENT McpMrtrConfig, DIFFERENT
+		// AeadRequestStateCodec instance -- sharing only sharedKeyProvider) succeeds.
+		var resumeConfig = new McpServerConfig().addTool(tool("ask", (args, c) -> text("done")));
+		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		var resp = send(revB, resumeConfig, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
+		assertNull(resp.getError());
+		var result = (CallToolResult) resp.getResult();
+		assertEquals("done", ((TextContent) result.getContent().get(0)).getText());
 	}
 }

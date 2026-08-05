@@ -18,8 +18,11 @@ package org.apache.juneau.rest.server.mcp.v20260728;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Map;
+
+import javax.crypto.KeyGenerator;
 
 import org.apache.juneau.marshall.collections.JsonMap;
 import org.junit.jupiter.api.Test;
@@ -36,6 +39,8 @@ class AeadRequestStateCodec_Test {
 		var a = new AeadRequestStateCodec();
 		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
 		var token = a.seal(b, AAD);
+		assertEquals(4, token.split("\\.", 4).length, "wire format must be version.keyId.nonce.ciphertext");
+		assertTrue(token.startsWith("1."), "version segment must be the literal \"1\"");
 		var c = a.unseal(token, AAD);
 		assertTrue(c.isPresent());
 		assertEquals(b, c.get());
@@ -45,10 +50,11 @@ class AeadRequestStateCodec_Test {
 		var a = new AeadRequestStateCodec();
 		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
 		var token = a.seal(b, AAD);
-		var parts = token.split("\\.", 2);
-		var ciphertext = Base64.getUrlDecoder().decode(parts[1]);
+		var parts = token.split("\\.", 4);
+		var ciphertext = Base64.getUrlDecoder().decode(parts[3]);
 		ciphertext[0] ^= 1;
-		var tampered = parts[0] + "." + Base64.getUrlEncoder().withoutPadding().encodeToString(ciphertext);
+		var tampered = parts[0] + "." + parts[1] + "." + parts[2] + "."
+			+ Base64.getUrlEncoder().withoutPadding().encodeToString(ciphertext);
 		var c = a.unseal(tampered, AAD);
 		assertTrue(c.isEmpty());
 	}
@@ -62,24 +68,27 @@ class AeadRequestStateCodec_Test {
 	}
 
 	@Test void a04_malformedTokenMissingSeparatorFailsUnseal() {
-		// Long enough (>= MIN_TOKEN_CHARS) to clear the length guard and actually reach the separator check.
+		// Long enough (>= MIN_TOKEN_CHARS) to clear the length guard and actually reach the segment-count check.
 		var a = new AeadRequestStateCodec();
-		var c = a.unseal("a".repeat(40), AAD);
+		var c = a.unseal("a".repeat(50), AAD);
 		assertTrue(c.isEmpty());
 	}
 
 	@Test void a05_malformedTokenInvalidBase64FailsUnseal() {
-		// A correctly-shaped token (16-char nonce part '.' body, >= MIN_TOKEN_CHARS) whose nonce part is not valid
-		// base64url: clears the length and separator/nonce-length guards and fails inside the base64 decode.
+		// A correctly-shaped token (version '.' keyId '.' 16-char nonce '.' body, >= MIN_TOKEN_CHARS) whose nonce
+		// segment is not valid base64url: clears the length, segment-count, and nonce-length guards and fails
+		// inside the base64 decode.
 		var a = new AeadRequestStateCodec();
-		var c = a.unseal("!".repeat(16) + "." + "a".repeat(22), AAD);
+		var keyId = Base64.getUrlEncoder().withoutPadding().encodeToString("k".getBytes(StandardCharsets.UTF_8));
+		var c = a.unseal("1." + keyId + "." + "!".repeat(16) + "." + "a".repeat(22), AAD);
 		assertTrue(c.isEmpty());
 	}
 
 	@Test void a05b_malformedTokenWrongNonceLengthFailsUnseal() {
-		// Long enough to clear the length guard and reach the nonce-length check, with a nonce part != 16 chars.
+		// Long enough to clear the length guard and reach the nonce-length check, with a nonce segment != 16 chars.
 		var a = new AeadRequestStateCodec();
-		var c = a.unseal("aaaa" + "." + "a".repeat(40), AAD);
+		var keyId = Base64.getUrlEncoder().withoutPadding().encodeToString("k".getBytes(StandardCharsets.UTF_8));
+		var c = a.unseal("1." + keyId + "." + "aaaa" + "." + "a".repeat(40), AAD);
 		assertTrue(c.isEmpty());
 	}
 
@@ -87,7 +96,7 @@ class AeadRequestStateCodec_Test {
 		// Below MIN_TOKEN_CHARS: rejected by the defensive length guard before any split/decode allocation.
 		var a = new AeadRequestStateCodec();
 		assertTrue(a.unseal("short", AAD).isEmpty());
-		assertTrue(a.unseal("!!!.!!!", AAD).isEmpty());
+		assertTrue(a.unseal("1.a.bbbb.cccc", AAD).isEmpty());
 	}
 
 	@Test void a06_perProcessEphemeralKeyPreventsCrossInstanceUnseal() {
@@ -97,6 +106,93 @@ class AeadRequestStateCodec_Test {
 		var token = a.seal(state, AAD);
 		var c = b.unseal(token, AAD);
 		assertTrue(c.isEmpty());
+	}
+
+	@Test void a09_sharedKeyProviderAllowsCrossInstanceUnseal() throws Exception {
+		var gen = KeyGenerator.getInstance("AES");
+		gen.init(256);
+		var sharedKey = gen.generateKey();
+		var keyProvider = StaticKeyProvider.of("2026-08-a", sharedKey);
+		var a = new AeadRequestStateCodec(keyProvider);
+		var b = new AeadRequestStateCodec(keyProvider);
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var token = a.seal(state, AAD);
+		var c = b.unseal(token, AAD);
+		assertTrue(c.isPresent(), "two codecs sharing one StaticKeyProvider must unseal each other's tokens");
+		assertEquals(state, c.get());
+	}
+
+	@Test void a10_rotatingKeyProviderUnsealsRetiredKeyAndSealsUnderNewCurrent() throws Exception {
+		var gen = KeyGenerator.getInstance("AES");
+		gen.init(256);
+		var keyA = gen.generateKey();
+		var keyB = gen.generateKey();
+		var providerBeforeRotation = StaticKeyProvider.of("2026-07-z", keyA);
+		var codecBeforeRotation = new AeadRequestStateCodec(providerBeforeRotation);
+		var oldState = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var oldToken = codecBeforeRotation.seal(oldState, AAD);
+
+		var providerAfterRotation = StaticKeyProvider.create()
+			.addKey("2026-07-z", keyA)
+			.addKey("2026-08-a", keyB)
+			.current("2026-08-a")
+			.build();
+		var codecAfterRotation = new AeadRequestStateCodec(providerAfterRotation);
+
+		var recoveredOld = codecAfterRotation.unseal(oldToken, AAD);
+		assertTrue(recoveredOld.isPresent(), "a token sealed under a still-resolvable retired key must still unseal after rotation");
+		assertEquals(oldState, recoveredOld.get());
+
+		var newState = new McpRequestState("continuation-value-2", "tools/call", 1, 123456789L);
+		var newToken = codecAfterRotation.seal(newState, AAD);
+		var newKeyId = new String(Base64.getUrlDecoder().decode(newToken.split("\\.", 4)[1]), StandardCharsets.UTF_8);
+		assertEquals("2026-08-a", newKeyId, "new tokens must seal under the new current key's keyId");
+	}
+
+	@Test void a11_swappedKeyIdSegmentFailsUnseal() throws Exception {
+		var gen = KeyGenerator.getInstance("AES");
+		gen.init(256);
+		var keyA = gen.generateKey();
+		var keyB = gen.generateKey();
+		var provider = StaticKeyProvider.create()
+			.addKey("2026-08-a", keyA)
+			.addKey("2026-08-b", keyB)
+			.current("2026-08-a")
+			.build();
+		var a = new AeadRequestStateCodec(provider);
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var token = a.seal(state, AAD);
+		var parts = token.split("\\.", 4);
+		var swappedKeyId = Base64.getUrlEncoder().withoutPadding().encodeToString("2026-08-b".getBytes(StandardCharsets.UTF_8));
+		var tampered = parts[0] + "." + swappedKeyId + "." + parts[2] + "." + parts[3];
+		var c = a.unseal(tampered, AAD);
+		assertTrue(c.isEmpty(), "swapping the keyId wire segment selects the wrong key and AAD, so the GCM tag check must fail");
+	}
+
+	@Test void a12_unknownVersionSegmentFailsUnseal() {
+		var a = new AeadRequestStateCodec();
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var token = a.seal(state, AAD);
+		var parts = token.split("\\.", 4);
+		var tampered = "2." + parts[1] + "." + parts[2] + "." + parts[3];
+		var c = a.unseal(tampered, AAD);
+		assertTrue(c.isEmpty(), "an unrecognized version literal must fail closed");
+	}
+
+	@Test void a13_unknownKeyIdFailsUnseal() throws Exception {
+		var gen = KeyGenerator.getInstance("AES");
+		gen.init(256);
+		var keyA = gen.generateKey();
+		var sealingProvider = StaticKeyProvider.of("2026-08-a", keyA);
+		var sealingCodec = new AeadRequestStateCodec(sealingProvider);
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var token = sealingCodec.seal(state, AAD);
+
+		var keyB = gen.generateKey();
+		var unsealingProvider = StaticKeyProvider.of("2026-08-b", keyB); // does not know "2026-08-a"
+		var unsealingCodec = new AeadRequestStateCodec(unsealingProvider);
+		var c = unsealingCodec.unseal(token, AAD);
+		assertTrue(c.isEmpty(), "a keyId the provider cannot resolve must fail closed");
 	}
 
 	/**
@@ -161,5 +257,24 @@ class AeadRequestStateCodec_Test {
 		var recoveredMap = (JsonMap)recovered;
 		assertEquals(2, recoveredMap.get("step"));
 		assertEquals("resume", recoveredMap.get("note"));
+	}
+
+	/**
+	 * Pins the fix for the latent {@code MAX_KEY_ID_B64_CHARS} bug: a legitimately-issued keyId at
+	 * {@code KeyedSecret}'s max length (128 UTF-16 code units), made entirely of non-ASCII, 3-byte-UTF-8
+	 * characters, must still round-trip through {@code seal}/{@code unseal} rather than getting rejected by
+	 * the keyId-segment length guard before {@code resolveKey} is ever consulted.
+	 */
+	@Test void a14_maxLengthNonAsciiKeyIdRoundTrips() throws Exception {
+		var keyId = "\u4e2d".repeat(128);
+		var keyGen = KeyGenerator.getInstance("AES");
+		keyGen.init(256);
+		var provider = StaticKeyProvider.of(keyId, keyGen.generateKey());
+		var a = new AeadRequestStateCodec(provider);
+		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var token = a.seal(b, AAD);
+		var c = a.unseal(token, AAD);
+		assertTrue(c.isPresent());
+		assertEquals(b, c.get());
 	}
 }

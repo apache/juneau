@@ -84,6 +84,26 @@ public class McpMrtrConfig {
 	}
 
 	/**
+	 * Sets the key provider, wrapping it in a fresh {@link AeadRequestStateCodec}.
+	 *
+	 * <p>
+	 * Sugar for the common "keep AES-GCM, just supply my keys" case &mdash; equivalent to
+	 * {@code setCodec(new AeadRequestStateCodec(value))}. {@link #setKeyProvider} and {@link #setCodec} are
+	 * last-wins: both assign the same {@code codec} field, so whichever is called more recently determines the
+	 * effective codec. There is no getter for the provider itself &mdash; {@link #getCodec()} remains the sole
+	 * accessor, since the codec (not the provider) is the source of truth once either setter has been called.
+	 *
+	 * @param value The new value. Must not be {@code null}.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is {@code null}.
+	 */
+	public McpMrtrConfig setKeyProvider(KeyProvider value) {
+		if (value == null)
+			throw new IllegalArgumentException("keyProvider must not be null");
+		return setCodec(new AeadRequestStateCodec(value));
+	}
+
+	/**
 	 * The {@code requestState} time-to-live in milliseconds.
 	 *
 	 * @return The TTL. Always {@code > 0}.

@@ -122,6 +122,12 @@ class McpOptions_Test {
 		assertEquals("consumer must not be null", e.getMessage());
 	}
 
+	@Test void c06_mrtrConsumer_setKeyProviderReachableThroughConfigureBlock() {
+		var provider = StaticKeyProvider.of("k1", StaticKeyProvider.aesKey(new byte[32]));
+		var o = new McpOptions().mrtr(m -> m.setKeyProvider(provider));
+		assertInstanceOf(AeadRequestStateCodec.class, o.getMrtr().getCodec());
+	}
+
 	// -------- subscriptions: nested config, replace-outright, and Consumer configure-block ---------
 
 	@Test void d01_subscriptions_defaultsToNonNullFrameworkOwnedInstance() {

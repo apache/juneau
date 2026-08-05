@@ -18,6 +18,7 @@ package org.apache.juneau.rest.client.mcp.v20260728;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.security.SecureRandom;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -66,6 +67,18 @@ class McpMrtrIntegration_Test extends TestBase {
 
 	static final AeadRequestStateCodec CODEC = new AeadRequestStateCodec();
 
+	// A 32-byte AES-256 key shared by exactly the two fixture bindings below (KeyProviderFixtureA/B) -- the
+	// live-wire analog of the in-process McpMrtrDispatch_Test#d04 proof: two independently-constructed
+	// AeadRequestStateCodec instances (one per binding, each built fresh by its own createMcpOptions() call)
+	// share only this KeyProvider object, never the codec object.
+	static final KeyProvider SHARED_KEY_PROVIDER = StaticKeyProvider.of("2026-08-it", StaticKeyProvider.aesKey(randomAesKeyBytes()));
+
+	private static byte[] randomAesKeyBytes() {
+		var bytes = new byte[32];
+		new SecureRandom().nextBytes(bytes);
+		return bytes;
+	}
+
 	private static String aad(String method) {
 		return method + '\u0000' + McpProtocol.VERSION_2026_07_28;
 	}
@@ -111,9 +124,56 @@ class McpMrtrIntegration_Test extends TestBase {
 		}
 	}
 
+	private static McpToolHandler askShared() {
+		return new McpToolHandler() {
+			@Override public McpToolSpec descriptor() { return new McpToolSpec().setName("askShared").setDescription("Pauses once under a shared KeyProvider, then completes"); }
+			@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
+				var resume = ctx.getBean(McpMrtrResumeContext.class);
+				if (resume.isEmpty())
+					throw new McpInputRequiredSignal(Map.of("q1", Map.of("type", "elicitation")), "cont-shared");
+				return McpToolOutcome.text("resumed-shared:" + resume.get().inputResponses().get("q1"));
+			}
+		};
+	}
+
+	// Two independently-constructed bindings sharing only SHARED_KEY_PROVIDER: each createMcpOptions() call below
+	// constructs its own fresh AeadRequestStateCodec (via setKeyProvider's "return setCodec(new
+	// AeadRequestStateCodec(value))"), so /kp-a and /kp-b never share a codec instance, only the key material.
+	@Rest(path="/kp-a", serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class KeyProviderFixtureA extends org.apache.juneau.rest.server.mcp.v20260728.McpRestServlet {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig().setName("it-mrtr-kp-a").setVersion("1.0.0").addTool(askShared());
+		}
+
+		@Override
+		protected McpOptions createMcpOptions() {
+			return new McpOptions().mrtr(m -> m.setKeyProvider(SHARED_KEY_PROVIDER));
+		}
+	}
+
+	@Rest(path="/kp-b", serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class KeyProviderFixtureB extends org.apache.juneau.rest.server.mcp.v20260728.McpRestServlet {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig().setName("it-mrtr-kp-b").setVersion("1.0.0").addTool(askShared());
+		}
+
+		@Override
+		protected McpOptions createMcpOptions() {
+			return new McpOptions().mrtr(m -> m.setKeyProvider(SHARED_KEY_PROVIDER));
+		}
+	}
+
 	@Configuration
 	public static class FixtureConfig {
-		@Bean public Servlet mcpServlet() { return new Fixture(); }
+		@Bean(name="mcpServlet") public Servlet mcpServlet() { return new Fixture(); }
+		@Bean(name="mcpKeyProviderServletA") public Servlet mcpKeyProviderServletA() { return new KeyProviderFixtureA(); }
+		@Bean(name="mcpKeyProviderServletB") public Servlet mcpKeyProviderServletB() { return new KeyProviderFixtureB(); }
 	}
 
 	@RegisterExtension
@@ -126,6 +186,15 @@ class McpMrtrIntegration_Test extends TestBase {
 			caps.setElicitation(new ElicitationCapability());
 		return McpClient.builder()
 			.endpoint(fixture.getRootUrl() + "/")
+			.clientCapabilities(caps);
+	}
+
+	private static McpClient.Builder clientBuilderAt(String path, boolean withElicitation) {
+		var caps = new ClientCapabilities();
+		if (withElicitation)
+			caps.setElicitation(new ElicitationCapability());
+		return McpClient.builder()
+			.endpoint(fixture.getRootUrl() + path)
 			.clientCapabilities(caps);
 	}
 
@@ -188,14 +257,40 @@ class McpMrtrIntegration_Test extends TestBase {
 			var token = (String) paused.get("requestState");
 			// Flip one ciphertext byte to corrupt the AEAD tag; a final-character flip can land on an unpadded
 			// base64url "don't-care" low bit and decode to identical bytes, leaving the tag (and test) flaky.
-			var parts = token.split("\\.", 2);
-			var ciphertext = Base64.getUrlDecoder().decode(parts[1]);
+			var parts = token.split("\\.", 4);
+			var ciphertext = Base64.getUrlDecoder().decode(parts[3]);
 			ciphertext[0] ^= 1;
-			var tampered = parts[0] + "." + Base64.getUrlEncoder().withoutPadding().encodeToString(ciphertext);
+			var tampered = parts[0] + "." + parts[1] + "." + parts[2] + "."
+				+ Base64.getUrlEncoder().withoutPadding().encodeToString(ciphertext);
 			var e = assertThrows(McpException.class,
 				() -> client.callRaw(McpMethods.TOOLS_CALL,
 					new CallToolRequest().setName("ask").setRequestState(tampered).setInputResponses(Map.of("q1", "answer"))));
 			assertEquals(org.apache.juneau.rest.server.mcp.v20260728.McpRevision.CODE_INVALID_PARAMS, e.getCode());
+		}
+	}
+
+	// =================================================================================================================
+	// C: shared KeyProvider (TODO-324) -- resume succeeds across two independently-constructed server bindings.
+	// =================================================================================================================
+
+	@Test void c01_sharedKeyProviderResume_succeedsAcrossIndependentBindings() throws Exception {
+		String token;
+		try (var clientA = clientBuilderAt("/kp-a/", true).build()) {
+			var paused = clientA.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("askShared").setArguments(Map.of()));
+			assertEquals("input_required", paused.get("resultType"));
+			token = (String) paused.get("requestState");
+			assertNotNull(token);
+		}
+
+		// Resume against a DIFFERENT binding (/kp-b), backed by an independently-constructed
+		// AeadRequestStateCodec that shares only SHARED_KEY_PROVIDER with /kp-a's codec, never the codec object
+		// itself -- the live-wire analog of McpMrtrDispatch_Test#d04.
+		try (var clientB = clientBuilderAt("/kp-b/", true).build()) {
+			var completed = clientB.callRaw(McpMethods.TOOLS_CALL,
+				new CallToolRequest().setName("askShared").setRequestState(token).setInputResponses(Map.of("q1", "answer")));
+			assertEquals("complete", completed.get("resultType"));
+			var result = Json.to(Json.of(completed), CallToolResult.class);
+			assertEquals("resumed-shared:answer", ((TextContent) result.getContent().get(0)).getText());
 		}
 	}
 }
