@@ -61,6 +61,15 @@ class McpResourceServerBinding_Test extends TestBase {
 	 */
 	private static final TokenValidator VALIDATOR = token -> switch (token) {
 		case "good" -> new ClaimsPrincipal("alice", Map.of("aud", RESOURCE, "scope", "mcp.read mcp.write"));
+		// TODO-325 cross-identity fixture: a DIFFERENT authenticated principal (bob) with the same audience + baseline
+		// scope, so it clears the gate but binds a different requestState identity than 'good' (alice).
+		case "good2" -> new ClaimsPrincipal("bob", Map.of("aud", RESOURCE, "scope", "mcp.read mcp.write"));
+		// TODO-325 real iss|sub claim fixtures: 'good'/'good2' above carry no iss/sub claims, so the requestState
+		// binding they exercise end-to-end is only the getName() fallback. 'good3'/'good4' carry the SAME subject
+		// (alice) but a DIFFERENT issuer, so they exercise the actual, primary iss|sub claim-read path (settled
+		// decision 1) end-to-end, not the fallback.
+		case "good3" -> new ClaimsPrincipal("alice", Map.of("aud", RESOURCE, "scope", "mcp.read mcp.write", "iss", "https://idp-a", "sub", "alice"));
+		case "good4" -> new ClaimsPrincipal("alice", Map.of("aud", RESOURCE, "scope", "mcp.read mcp.write", "iss", "https://idp-b", "sub", "alice"));
 		case "noscope" -> new ClaimsPrincipal("alice", Map.of("aud", RESOURCE, "scope", "other"));
 		case "wrongaud" -> new ClaimsPrincipal("alice", Map.of("aud", "http://evil.example.com", "scope", "mcp.read"));
 		// SEP-2350 step-up fixtures: baseline mcp.read + the per-operation tools.exec (exact and hierarchical grants).
@@ -416,6 +425,62 @@ class McpResourceServerBinding_Test extends TestBase {
 			.header("Authorization", "Bearer good")
 			.run().assertStatus(200);
 		assertEquals("alice", J_CODEC.unsealPrincipal.get());  // the authenticated principal reached unseal
+	}
+
+	// TODO-325: a requestState sealed under one authenticated identity (alice, bearer 'good') cannot be resumed under
+	// a DIFFERENT authenticated identity (bob, bearer 'good2'); the principal is folded into the AAD, so unseal fails
+	// GCM tag verification and surfaces as a JSON-RPC -32602 invalid-params error rather than re-invoking the handler.
+	@Test void j02_crossIdentityResumeIsRejected() throws Exception {
+		// Round 1: pause -> seal under alice.
+		var pauseJson = clientJ().post("/").contentString(bodyElicit(1, "tools/call", JsonMap.of("name", "ask")))
+			.header("Mcp-Method", "tools/call").header("Mcp-Name", "ask")
+			.header("Authorization", "Bearer good")
+			.run().assertStatus(200).getContent().asString();
+		var token = org.apache.juneau.marshall.marshaller.Json.to(pauseJson, JsonMap.class).getMap("result").getString("requestState");
+		assertNotNull(token);
+
+		// Round 2: resume the SAME token under a different bearer -> different principal (bob) -> unseal rejects it.
+		var resumeParams = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		var resumeJson = clientJ().post("/").contentString(bodyElicit(2, "tools/call", resumeParams))
+			.header("Mcp-Method", "tools/call").header("Mcp-Name", "ask")
+			.header("Authorization", "Bearer good2")
+			.run().assertStatus(200).getContent().asString();
+		var resp = org.apache.juneau.marshall.marshaller.Json.to(resumeJson, JsonMap.class);
+		assertNull(resp.get("result"), "a cross-identity resume must not produce a successful result");
+		assertEquals(-32602, resp.getMap("error").getInt("code"), "a cross-identity resume must be rejected as invalid params");
+	}
+
+	// TODO-325: end-to-end proof of the PRIMARY iss|sub claim-bound path (not the getName() fallback j01/j02
+	// exercise). 'good3' (iss-a|alice) and 'good4' (iss-b|alice) are real ClaimsPrincipal fixtures carrying iss/sub
+	// claims: same subject, different issuer. A requestState sealed under good3 must not be resumable under good4
+	// (cross-IdP), proving the codec actually reads and binds iss|sub over real HTTP dispatch, and the SAME token
+	// still round-trips when resumed under the original issuer/subject.
+	@Test void j03_crossIssuerResumeIsRejected() throws Exception {
+		// Round 1: pause -> seal under good3 (iss-a|alice).
+		var pauseJson = clientJ().post("/").contentString(bodyElicit(1, "tools/call", JsonMap.of("name", "ask")))
+			.header("Mcp-Method", "tools/call").header("Mcp-Name", "ask")
+			.header("Authorization", "Bearer good3")
+			.run().assertStatus(200).getContent().asString();
+		var token = org.apache.juneau.marshall.marshaller.Json.to(pauseJson, JsonMap.class).getMap("result").getString("requestState");
+		assertNotNull(token);
+
+		// Round 2: resume the SAME token under good4 -> same sub (alice) but a DIFFERENT iss (idp-b) -> a different
+		// bound identity -> unseal rejects it (GCM tag mismatch surfaced as -32602 invalid params).
+		var resumeParams = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		var resumeJson = clientJ().post("/").contentString(bodyElicit(2, "tools/call", resumeParams))
+			.header("Mcp-Method", "tools/call").header("Mcp-Name", "ask")
+			.header("Authorization", "Bearer good4")
+			.run().assertStatus(200).getContent().asString();
+		var resp = org.apache.juneau.marshall.marshaller.Json.to(resumeJson, JsonMap.class);
+		assertNull(resp.get("result"), "a cross-issuer resume must not produce a successful result");
+		assertEquals(-32602, resp.getMap("error").getInt("code"), "a cross-issuer resume must be rejected as invalid params");
+
+		// Round 3: the SAME token resumed under the ORIGINAL issuer/subject (good3) still round-trips cleanly -
+		// the rejection above is specific to the mismatched iss, not a side effect on the token itself.
+		clientJ().post("/").contentString(bodyElicit(3, "tools/call", resumeParams))
+			.header("Mcp-Method", "tools/call").header("Mcp-Name", "ask")
+			.header("Authorization", "Bearer good3")
+			.run().assertStatus(200);
 	}
 
 	// ---------------------------------------------------------------------------------------------

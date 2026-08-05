@@ -26,6 +26,7 @@ import java.util.Map;
 import javax.crypto.KeyGenerator;
 
 import org.apache.juneau.marshall.collections.JsonMap;
+import org.apache.juneau.rest.server.auth.ClaimsPrincipal;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -280,19 +281,19 @@ class AeadRequestStateCodec_Test {
 	}
 
 	/**
-	 * Pins the current (READY-312f F4) contract documented on {@link AeadRequestStateCodec}'s class Javadoc and at
-	 * the {@code TODO-325} markers in {@link AeadRequestStateCodec#seal} / {@link AeadRequestStateCodec#unseal}: the
-	 * principal reaches the codec at both seal and unseal, but is <b>not yet</b> folded into the AEAD's authenticated
-	 * data. A real {@link AeadRequestStateCodec} seal uses a random per-seal nonce (see the class Javadoc), so two
-	 * {@code seal} calls are never byte-identical even with everything else held fixed &mdash; the built-in codec has
-	 * no fixed-nonce affordance (unlike {@code Characterization_Test.FixedKeyGcmCodec}, a wholly separate, hardcoded
-	 * fixture implementation, not this class). So this proves the equivalent invariant directly on ONE sealed token:
-	 * it unseals successfully under the sealing principal, under a completely different principal, and under a
-	 * <jk>null</jk> (anonymous) principal alike &mdash; i.e. the principal has no bearing on seal/unseal validity yet.
-	 * Once TODO-325 binds the principal into the AAD, unsealing under {@code bob} or <jk>null</jk> here must start
-	 * failing, which is exactly the regression this test is meant to catch.
+	 * Pins the TODO-325 principal-bound-AAD contract: the caller's authenticated identity is folded into the AEAD's
+	 * authenticated data at seal, so a token minted for one principal cannot be resumed by another. A real
+	 * {@link AeadRequestStateCodec} seal uses a random per-seal nonce (see the class Javadoc), so two {@code seal}
+	 * calls are never byte-identical even with everything else held fixed; this proves the binding invariant directly
+	 * on ONE sealed token: it unseals successfully under the sealing principal, but fails ({@link Optional#empty()})
+	 * under a completely different principal and under a <jk>null</jk> (anonymous) principal alike.
+	 *
+	 * <p>
+	 * This is the inversion of the READY-312f F4 tripwire (formerly {@code a15_principalIsNotYetBoundSo...}): before
+	 * TODO-325 landed, all three unseals succeeded; binding the identity into the AAD is exactly the change that flips
+	 * the {@code bob} / <jk>null</jk> cases to failure.
 	 */
-	@Test void a15_principalIsNotYetBoundSoTokenUnsealsUnderAnyPrincipal() {
+	@Test void a15_principalIsBoundSoTokenRejectsDifferentPrincipal() {
 		var a = new AeadRequestStateCodec();
 		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
 		Principal alice = () -> "alice";
@@ -301,13 +302,129 @@ class AeadRequestStateCodec_Test {
 		var underSamePrincipal = a.unseal(token, AAD, alice);
 		var underDifferentPrincipal = a.unseal(token, AAD, bob);
 		var underNullPrincipal = a.unseal(token, AAD, null);
-		assertTrue(underSamePrincipal.isPresent(), "round trip under the sealing principal must still succeed");
+		assertTrue(underSamePrincipal.isPresent(), "round trip under the sealing principal must succeed");
 		assertEquals(state, underSamePrincipal.get());
-		assertTrue(underDifferentPrincipal.isPresent(),
-			"principal is not yet bound to the AAD (TODO-325), so a different principal must still unseal");
-		assertEquals(state, underDifferentPrincipal.get());
-		assertTrue(underNullPrincipal.isPresent(),
-			"principal is not yet bound to the AAD (TODO-325), so a null (anonymous) principal must still unseal");
-		assertEquals(state, underNullPrincipal.get());
+		assertTrue(underDifferentPrincipal.isEmpty(),
+			"principal is bound to the AAD (TODO-325), so a different principal must fail GCM tag verification");
+		assertTrue(underNullPrincipal.isEmpty(),
+			"principal is bound to the AAD (TODO-325), so a null (anonymous) principal must not unseal an authenticated-sealed token");
+	}
+
+	/**
+	 * Pins the TODO-325 anonymous-caller policy (settled decision 2 &mdash; fail-closed with a fixed sentinel): a
+	 * <jk>null</jk> principal binds to a constant sentinel identity rather than "skip binding", so anonymous&harr;
+	 * anonymous round-trips while anonymous&harr;authenticated is rejected in BOTH directions.
+	 */
+	@Test void a16_anonymousSentinelRoundTripsButNeverCrossesAuthenticatedBoundary() {
+		var a = new AeadRequestStateCodec();
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		Principal alice = () -> "alice";
+
+		// Anonymous -> anonymous round-trips (the null sentinel is deterministic).
+		var anonToken = a.seal(state, AAD, null);
+		var anonUnderNull = a.unseal(anonToken, AAD, null);
+		assertTrue(anonUnderNull.isPresent(), "anonymous seal must unseal under a null (anonymous) principal");
+		assertEquals(state, anonUnderNull.get());
+
+		// Anonymous-sealed token must NOT unseal under an authenticated principal.
+		assertTrue(a.unseal(anonToken, AAD, alice).isEmpty(),
+			"an anonymous-sealed token must not be resumable by an authenticated principal");
+
+		// Authenticated-sealed token must NOT unseal anonymously (already covered by a15's null case; asserted here
+		// from the opposite starting point for symmetry).
+		var aliceToken = a.seal(state, AAD, alice);
+		assertTrue(a.unseal(aliceToken, AAD, null).isEmpty(),
+			"an authenticated-sealed token must not be resumable anonymously");
+	}
+
+	/**
+	 * Pins cross-IdP collision safety at the codec level (settled decision 1 &mdash; the bound identity is
+	 * {@code iss|sub}, not a bare {@code sub}): two {@link ClaimsPrincipal}s sharing the same {@code sub} but issued by
+	 * different {@code iss} are distinct identities, so a token sealed under one does not unseal under the other. Also
+	 * confirms the exact-match case still round-trips.
+	 */
+	@Test void a17_claimsPrincipalIssuerScopingPreventsCrossIdpResume() {
+		var a = new AeadRequestStateCodec();
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		Principal idpA = new ClaimsPrincipal("user-1", Map.of("iss", "https://idp-a.example.com", "sub", "user-1"));
+		Principal idpB = new ClaimsPrincipal("user-1", Map.of("iss", "https://idp-b.example.com", "sub", "user-1"));
+
+		var token = a.seal(state, AAD, idpA);
+		var sameIdp = a.unseal(token, AAD, idpA);
+		assertTrue(sameIdp.isPresent(), "same iss+sub must round-trip");
+		assertEquals(state, sameIdp.get());
+		assertTrue(a.unseal(token, AAD, idpB).isEmpty(),
+			"same sub but a different iss is a different identity (cross-IdP collision safety), so unseal must fail");
+	}
+
+	// ---------------------------------------------------------------------------------------------
+	// principalIdentity(...) helper (TODO-325): pins the exact canonical string for each derivation path so the
+	// AAD-bound identity shape is locked down independent of the seal/unseal round-trip above.
+	// ---------------------------------------------------------------------------------------------
+
+	@Test void b01_identity_nullPrincipalIsFixedSentinel() {
+		assertEquals("anonymous", AeadRequestStateCodec.principalIdentity(null));
+	}
+
+	@Test void b02_identity_claimsPrincipalUsesLengthPrefixedIssAndSub() {
+		var p = new ClaimsPrincipal("ignored-name", Map.of("iss", "i", "sub", "s"));
+		// len(iss)=1 NUL iss NUL len(sub)=1 NUL sub
+		assertEquals("1\u0000i\u00001\u0000s", AeadRequestStateCodec.principalIdentity(p));
+	}
+
+	@Test void b03_identity_barePrincipalFallsBackToNameAsSubjectWithEmptyIssuer() {
+		Principal p = () -> "alice";
+		// iss empty (len 0), sub=name "alice" (len 5)
+		assertEquals("0\u0000\u00005\u0000alice", AeadRequestStateCodec.principalIdentity(p));
+	}
+
+	@Test void b04_identity_claimsPrincipalMissingSubFallsBackToName() {
+		// No sub claim -> getName() ("alice") is used as the subject; iss claim still honored.
+		var p = new ClaimsPrincipal("alice", Map.of("iss", "https://idp"));
+		var iss = "https://idp";
+		assertEquals(iss.length() + "\u0000" + iss + "\u0000" + "5\u0000alice", AeadRequestStateCodec.principalIdentity(p));
+	}
+
+	@Test void b05_identity_differsByIssuerOnly() {
+		var a = new ClaimsPrincipal("n", Map.of("iss", "https://idp-a", "sub", "same"));
+		var b = new ClaimsPrincipal("n", Map.of("iss", "https://idp-b", "sub", "same"));
+		assertNotEquals(AeadRequestStateCodec.principalIdentity(a), AeadRequestStateCodec.principalIdentity(b),
+			"two principals differing only in issuer must produce different identities (cross-IdP collision safety)");
+	}
+
+	@Test void b06_identity_differsBySubjectOnly() {
+		var a = new ClaimsPrincipal("n", Map.of("iss", "https://idp", "sub", "user-1"));
+		var b = new ClaimsPrincipal("n", Map.of("iss", "https://idp", "sub", "user-2"));
+		assertNotEquals(AeadRequestStateCodec.principalIdentity(a), AeadRequestStateCodec.principalIdentity(b),
+			"two principals differing only in subject must produce different identities");
+	}
+
+	@Test void b07_identity_lengthPrefixDefeatsDelimiterCollision() {
+		// Without length-prefixing, (iss="a", sub="\u0000b") and (iss="a\u0000", sub="b") would both join to
+		// "a\u0000\u0000b" and collide.  The length prefixes keep them distinct.
+		var p1 = new ClaimsPrincipal("n", Map.of("iss", "a", "sub", "\u0000b"));
+		var p2 = new ClaimsPrincipal("n", Map.of("iss", "a\u0000", "sub", "b"));
+		assertNotEquals(AeadRequestStateCodec.principalIdentity(p1), AeadRequestStateCodec.principalIdentity(p2),
+			"length-prefixed encoding must not let a NUL-bearing iss/sub collide two distinct identities");
+	}
+
+	// ---------------------------------------------------------------------------------------------
+	// lengthPrefixJoin(...) helper: pins the shared framing seal/unseal use to compose the OUTER
+	// aad/keyId/identity AAD triple (the same self-delimiting scheme principalIdentity uses for iss|sub, above).
+	// ---------------------------------------------------------------------------------------------
+
+	@Test void b08_lengthPrefixJoin_defeatsFieldBoundaryCollisionAcrossThreeFields() {
+		// Mirrors b07 one level up, at the outer 3-field (aad, keyId, identity) composition: without
+		// length-prefixing, ("a", "b", "\u0000c") and ("a", "b\u0000", "c") would both naively join to
+		// "a\u0000b\u0000\u0000c". The length prefixes keep them distinct.
+		var t1 = AeadRequestStateCodec.lengthPrefixJoin("a", "b", "\u0000c");
+		var t2 = AeadRequestStateCodec.lengthPrefixJoin("a", "b\u0000", "c");
+		assertNotEquals(t1, t2,
+			"length-prefixed outer AAD composition must not let a NUL-bearing aad/keyId/identity field collide two distinct triples");
+	}
+
+	@Test void b09_lengthPrefixJoin_matchesExpectedEncodingForThreeFields() {
+		// Pins the exact wire shape: len(f0) NUL f0 NUL len(f1) NUL f1 NUL len(f2) NUL f2.
+		assertEquals("2\u0000ab\u00000\u0000\u00001\u0000c", AeadRequestStateCodec.lengthPrefixJoin("ab", "", "c"));
 	}
 }
