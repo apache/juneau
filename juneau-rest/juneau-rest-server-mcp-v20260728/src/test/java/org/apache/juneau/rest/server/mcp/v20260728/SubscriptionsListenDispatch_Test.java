@@ -68,7 +68,8 @@ class SubscriptionsListenDispatch_Test {
 		"resource" // Returned BeanStore is owned by the caller (a fresh per-test fixture, GC'd with the test); Eclipse JDT @Owning warning is by design.
 	})
 	private static BasicBeanStore ctxWith(McpSubscriptionBroker broker, McpSubscriptionsConfig config) {
-		return new BasicBeanStore().addBean(McpSubscriptionBroker.class, broker).addBean(McpSubscriptionsConfig.class, config);
+		return new BasicBeanStore().addBean(McpSubscriptionBroker.class, broker)
+			.addBean(McpOptions.class, new McpOptions().setSubscriptions(config));
 	}
 
 	// C1: a subscriptions/listen request that never negotiated SSE (Accept missing, or some other media type)

@@ -64,6 +64,9 @@ class McpSubscriptionsEndToEnd_Test {
 		return Map.of("Mcp-Method", "tools/call", "Mcp-Name", toolName);
 	}
 
+	@SuppressWarnings({
+		"resource" // Each .addBean(...) link returns 'this' (a Closeable) already owned by the enclosing try-with-resources; Eclipse JDT @Owning warning on the intermediate chain links is by design.
+	})
 	@Test void a01_toolHandler_publishReachesSubscriptionRegisteredThroughTheSameRequestScopedBroker() throws Exception {
 		var broker = new BasicMcpSubscriptionBroker(4);
 		var capturedSub = new AtomicReference<McpSubscription>();

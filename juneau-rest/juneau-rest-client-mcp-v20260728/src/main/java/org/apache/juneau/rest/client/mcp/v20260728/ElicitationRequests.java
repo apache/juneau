@@ -21,26 +21,33 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.v20260728.*;
-import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
 
 /**
- * Static helper for driving MCP {@code 2026-07-28} SEP-2322 elicitation over {@link McpClient#callRaw}'s raw
- * {@code Map<String,Object>} result (MRTR, TODO-318's Multi-Round-Trip Requests loop, client side).
+ * Static helper for reading server&rarr;client MCP {@code 2026-07-28} SEP-2322 elicitation requests out of
+ * {@link McpClient#callRaw}'s raw {@code Map<String,Object>} result (MRTR, TODO-318's Multi-Round-Trip Requests
+ * loop, client side).
+ *
+ * <p>
+ * Paired with {@link ElicitationResponses}, which encodes the client's answers back into the wire shape a resume
+ * call expects &mdash; the same {@code ElicitationRequests}/{@code ElicitationResponses} split the server side
+ * already uses (server {@code ElicitationRequests} builds the pause signal; server {@code ElicitationResponses}
+ * reads the resumed answers).
  *
  * <p>
  * Works at the raw map/JSON level rather than exposing typed overloads per concrete request bean, because
  * {@code CallToolRequest}/{@code GetPromptRequest}/{@code ReadResourceRequest} share no common
  * "has-inputResponses-and-requestState" interface (each independently declares its own pair of fields; their
  * actual common base, {@code RequestParams<T>}, carries only {@code _meta}). A caller resuming, say, a
- * {@code CallToolRequest} calls {@link #toInputResponses(Map)} for the raw payload, then makes its own
- * {@code .setInputResponses(...).setRequestState(...)} call on the concrete bean it already knows it holds.
+ * {@code CallToolRequest} calls {@link ElicitationResponses#toInputResponses(Map)} for the raw payload, then
+ * makes its own {@code .setInputResponses(...).setRequestState(...)} call on the concrete bean it already knows
+ * it holds.
  *
  * @since 10.0.0
  */
-public final class ElicitationAccess {
+public final class ElicitationRequests {
 
-	private ElicitationAccess() {}
+	private ElicitationRequests() {}
 
 	/**
 	 * Whether a {@link McpClient#callRaw} result represents a paused elicitation (or any other MRTR pause).
@@ -105,51 +112,5 @@ public final class ElicitationAccess {
 	public static String requestState(Map<String,Object> raw) {
 		assertArgNotNull("raw", raw);
 		return (String) raw.get("requestState");
-	}
-
-	/**
-	 * Encodes a single typed {@link ElicitResult} into the raw {@code inputResponses} payload shape.
-	 *
-	 * @param id The server-assigned id this answer responds to.  Must not be <jk>null</jk>.
-	 * @param result The typed answer.  Must not be <jk>null</jk>.
-	 * @return A single-entry map ready to pass to {@link #toInputResponses(Map)}'s multi-answer form, or to hand
-	 * 	directly to a concrete request bean's {@code setInputResponses(...)} after merging with other answers.
-	 * @throws IllegalArgumentException If {@code id} or {@code result} is <jk>null</jk>.
-	 */
-	public static Map<String,Object> toInputResponse(String id, ElicitResult result) {
-		assertArgNotNull("id", id);
-		assertArgNotNull("result", result);
-		return toInputResponses(Map.of(id, result));
-	}
-
-	/**
-	 * Encodes several typed {@link ElicitResult}s into the raw {@code inputResponses} payload shape a resume
-	 * call's request bean expects (e.g. {@code CallToolRequest.setInputResponses(...)}).
-	 *
-	 * <p>
-	 * Unlike {@code ElicitationRequests.of(Map,Object)} (server side), an empty {@code results} map is accepted (returning
-	 * an empty map), not rejected &mdash; deliberately asymmetric, since a caller may legitimately resume with
-	 * zero elicitation answers if a round only carried non-elicitation MRTR pauses, whereas building a signal
-	 * with zero questions server-side would be a pointless pause.
-	 *
-	 * @param results Server-assigned-id-keyed typed answers.  Must not be <jk>null</jk>, and no value may be
-	 * 	<jk>null</jk>.  Output iteration order mirrors this map's order, so a caller wanting deterministic
-	 * 	ordering should pass a {@link LinkedHashMap}.
-	 * @return A keyed map of raw, wire-shaped answers.  Never <jk>null</jk> (empty if {@code results} was empty).
-	 * @throws IllegalArgumentException If {@code results} is <jk>null</jk>, or any value in it is <jk>null</jk>.
-	 */
-	public static Map<String,Object> toInputResponses(Map<String,ElicitResult> results) {
-		assertArgNotNull("results", results);
-		Map<String,Object> out = new LinkedHashMap<>();
-		results.forEach((id, result) -> {
-			assertArgNotNull("results[" + id + "]", result);
-			// Pre-marshalled to JsonMap here (rather than left as the typed ElicitResult for McpClient.call's
-			// own toWireParams flattening) so that (a) a null-check on the encoded shape is meaningful even
-			// when this helper is used standalone, outside McpClient.call's flow, and (b) the returned map is
-			// immediately wire-ready for a caller who hands it straight to a concrete request bean's
-			// setInputResponses(...) without ever going through McpClient at all.
-			out.put(id, Json.to(Json.of(result), JsonMap.class));
-		});
-		return out;
 	}
 }

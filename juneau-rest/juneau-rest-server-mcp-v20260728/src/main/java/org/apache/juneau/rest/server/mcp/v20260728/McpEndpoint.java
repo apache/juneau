@@ -16,9 +16,6 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
-import java.util.*;
-
-import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
 import org.apache.juneau.rest.server.tracing.TraceContextExtractor;
@@ -28,8 +25,9 @@ import org.apache.juneau.rest.server.tracing.TraceContextExtractor;
  * resource.
  *
  * <p>
- * The mixin path and the servlet-subclass path ({@link McpRestServlet}) are at parity: both bind the
- * revision at compile time and both expose the same {@link #capabilities()} hook.
+ * The mixin path and the servlet-subclass path ({@link McpRestServlet}) are at parity: both bind the revision
+ * at compile time and both read the same {@link McpOptions} shape for behavior configuration
+ * (capabilities/instructions/cache/mrtr/subscriptions/broker) via a single override.
  *
  * <h5 class='section'>Example:</h5>
  * <pre>
@@ -39,6 +37,10 @@ import org.apache.juneau.rest.server.tracing.TraceContextExtractor;
  *     public McpServerConfig getMcpConfig() {
  *         return new McpServerConfig().addTool(new MyEchoTool());
  *     }
+ *     @Override                                        // optional
+ *     public McpOptions getMcpOptions() {
+ *         return new McpOptions().mrtr(m -&gt; m.setTtlMs(600_000));
+ *     }
  * }
  * </pre>
  */
@@ -46,8 +48,8 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 
 	@Override /* McpEndpointMixin */
 	default org.apache.juneau.rest.server.mcp.McpRevision revision() {
-		return new McpRevision(capabilities(), Objects.requireNonNull(cacheConfig(), "cacheConfig"), instructions(),
-			Objects.requireNonNull(mrtrConfig(), "mrtrConfig"));
+		var o = McpEndpointOptionsCache.resolve(this);
+		return new McpRevision(o.getCapabilities(), o.getCache(), o.getInstructions(), o.getMrtr());
 	}
 
 	/**
@@ -67,137 +69,60 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 	}
 
 	/**
-	 * Optional explicit capabilities advertisement for {@code server/discover}.
+	 * This endpoint's behavior configuration &mdash; capabilities, instructions, cache hints, MRTR, subscriptions,
+	 * and the subscription broker, all in one place.
 	 *
 	 * <p>
-	 * Returning <jk>null</jk> (the default) leaves capabilities auto-derived from the registered
-	 * tool / prompt / resource lists; a non-<jk>null</jk> value bypasses auto-derivation.
+	 * The default returns a per-binding-fresh {@link McpOptions} (all defaults; no live-state sharing across
+	 * endpoint instances). Override to customize any of the six concepts.
 	 *
-	 * @return The explicit capabilities, or <jk>null</jk> to auto-derive.
+	 * <p>
+	 * <b>This method is invoked exactly once per endpoint instance</b> and the result is memoized for that
+	 * instance's lifetime by the framework internals that read it ({@link #revision()},
+	 * {@link #subscriptionBroker()}, the {@code @Bean}-published accessor) &mdash; so an override may freely
+	 * construct and configure a fresh instance on every call, exactly as shown above; it never needs to cache the
+	 * result itself, and returning a fresh instance per call cannot reintroduce the "must return a stable
+	 * instance" footgun the pre-consolidation per-concept hooks warned about.
+	 *
+	 * @return This endpoint's options. Must not be <jk>null</jk>.
 	 */
-	default ServerCapabilities capabilities() {
-		return null;
+	default McpOptions getMcpOptions() {
+		return new McpOptions();
 	}
 
 	/**
-	 * Optional free-form {@code server/discover} usage instructions advertised to clients.
+	 * Publishes this endpoint's memoized {@link McpOptions} into this resource's {@code RestContext} bean store,
+	 * the same {@code @Bean}-method mechanism already used by {@link #mcpTraceContextExtractor()}.
 	 *
 	 * <p>
-	 * Returning <jk>null</jk> (the default) omits the {@code instructions} member from the discovery
-	 * result.
+	 * This is what lets {@code McpRevision.dispatch(...)}'s {@code subscriptions/listen} branch resolve the
+	 * real, possibly-overridden subscriptions configuration via {@code ctx.getBean(McpOptions.class)} instead of
+	 * always falling through to that call's defensive {@code new McpSubscriptionsConfig()} default &mdash; the
+	 * neutral core cannot add this bean itself ({@code McpOptions} is a v2 type, and the neutral module must not
+	 * import it), so this v2-side {@code @Bean} method is the wiring's only seam.
 	 *
-	 * @return The instructions, or <jk>null</jk> to omit them.
-	 */
-	default String instructions() {
-		return null;
-	}
-
-	/**
-	 * Cache configuration for this endpoint's bound revision.
-	 *
-	 * <p>
-	 * The default returns an empty {@link McpCacheConfig} (no cache hints emitted on any result).
-	 * Override to supply TTL/scope hints. An overriding implementation must return a stable instance
-	 * that is not mutated after it is returned — this mixin does not lazily cache the result the way
-	 * the servlet-subclass path does.
-	 *
-	 * @return The cache configuration. Must not be <jk>null</jk>.
-	 */
-	default McpCacheConfig cacheConfig() {
-		return new McpCacheConfig();
-	}
-
-	/**
-	 * MRTR (Multi-Round-Trip Request) configuration for this endpoint's bound revision.
-	 *
-	 * <p>
-	 * The default returns a <b>per-process shared</b> {@link McpMrtrConfig} (AES-GCM ephemeral codec, 5-minute
-	 * {@code requestState} TTL, 10-round cap) &mdash; a single JVM-wide instance holding one ephemeral AES key,
-	 * lazily created on first use (see {@link SharedMrtrConfig}). Because {@link #revision()} constructs a fresh
-	 * {@link McpRevision} on every request, returning that same shared instance from every call is what lets a
-	 * {@code requestState} sealed on a PAUSE request be unsealed on the follow-up RESUME request; a fresh
-	 * {@link McpMrtrConfig} per call would mint a fresh AES key per request and make every RESUME fail. So the
-	 * common mixin case is resumable out of the box with no override.
-	 *
-	 * <p>
-	 * Override to supply a custom {@link RequestStateCodec}, TTL, or max-rounds cap. <b>An overriding
-	 * implementation must return a stable instance</b> (e.g. stored in a field) that is not mutated after it is
-	 * returned — this mixin does not lazily cache an override the way the servlet-subclass path
-	 * ({@link McpRestServlet#getMrtrConfig()}) does, and returning a fresh custom instance per call would
-	 * reintroduce the per-request-key RESUME failure the default avoids.
-	 *
-	 * @return The MRTR configuration. Must not be <jk>null</jk>.
-	 */
-	default McpMrtrConfig mrtrConfig() {
-		return SharedMrtrConfig.get();
-	}
-
-	/**
-	 * Subscriptions configuration for this endpoint's bound revision.
-	 *
-	 * <p>
-	 * The default returns a fresh {@link McpSubscriptionsConfig} (all defaults) on every call — knobs-only, so
-	 * unlike {@link #subscriptionBroker()} there is no live state a fresh instance could split, matching
-	 * {@link #cacheConfig()}'s precedent exactly. Override to supply custom
-	 * concurrency/queue/heartbeat/idle-timeout knobs.
-	 *
-	 * <p>
-	 * <b>Warning:</b> overriding {@link McpSubscriptionsConfig#getQueueSize() queueSize} here has <b>no
-	 * effect</b> on the JVM-wide default shared broker {@link #subscriptionBroker()} returns — that broker is
-	 * already sized from {@link McpSubscriptionsConfig#DEFAULT_QUEUE_SIZE} the first time it is lazily created
-	 * (see {@link SharedSubscriptionBroker}), before this method's returned queue size could ever be read. A
-	 * non-default queue size only takes effect if {@link #subscriptionBroker()} is also overridden to size a
-	 * broker from it.
-	 *
-	 * @return The subscriptions configuration. Must not be <jk>null</jk>.
-	 */
-	default McpSubscriptionsConfig subscriptionsConfig() {
-		return new McpSubscriptionsConfig();
-	}
-
-	/**
-	 * Publishes {@link #subscriptionsConfig()} into this resource's {@code RestContext} bean store, the
-	 * same {@code @Bean}-method mechanism already used by {@link #mcpTraceContextExtractor()}.
-	 *
-	 * <p>
-	 * This is what lets {@code McpRevision.dispatch(...)}'s {@code subscriptions/listen} branch resolve
-	 * the real, possibly-overridden config via {@code ctx.getBean(McpSubscriptionsConfig.class)} instead
-	 * of always falling through to that call's defensive {@code new McpSubscriptionsConfig()} default —
-	 * the neutral core cannot add this bean itself ({@code McpSubscriptionsConfig} is a v2 type, and the
-	 * neutral module must not import it), so this v2-side {@code @Bean} method is the wiring's only seam.
-	 *
-	 * @return This endpoint's subscriptions configuration. Never <jk>null</jk>.
+	 * @return This endpoint's memoized options. Never <jk>null</jk>.
 	 */
 	@Bean
-	default McpSubscriptionsConfig subscriptionsConfigBean() {
-		return subscriptionsConfig();
+	default McpOptions mcpOptionsBean() {
+		return McpEndpointOptionsCache.resolve(this);
 	}
 
 	/**
 	 * Subscription broker for this endpoint's bound revision.
 	 *
 	 * <p>
-	 * The default returns a <b>per-process shared</b> {@link McpSubscriptionBroker} (see
-	 * {@link SharedSubscriptionBroker}) — a single JVM-wide registry, lazily created on first use — since a
-	 * fresh broker per call (unlike the knobs-only {@link #subscriptionsConfig()}) would silently split live
-	 * subscribers and publishers across unrelated registries. Override to supply a custom broker; an
-	 * overriding implementation must return a stable instance (this mixin does not lazily cache an override
-	 * the way {@link McpRestServlet#getSubscriptionBroker()} does).
+	 * Reads {@link #getMcpOptions()}'s memoized {@link McpOptions#getSubscriptionBroker()}: an explicitly
+	 * configured broker is returned as-is; otherwise one is derived and memoized per-binding, sized from
+	 * {@link McpOptions#getSubscriptions()}'s queue bound (see {@link McpOptions#resolveSubscriptionBroker()}).
+	 * Because {@link McpOptions} itself is memoized once per endpoint instance ({@link McpEndpointOptionsCache}),
+	 * two distinct endpoint instances resolve to two distinct broker registries by default &mdash; there is no
+	 * accidental JVM-wide sharing the way the pre-consolidation mixin default had.
 	 *
-	 * <p>
-	 * Because this registry is shared JVM-wide, every live subscription still shares one namespace across
-	 * however many mixin resources bind this same broker — but {@code subscriptions/listen}'s dispatch
-	 * branch registers each stream under a fresh server-minted key (a random {@code UUID}, not the
-	 * client-supplied JSON-RPC request id), so distinct listens can never collide and evict each other's
-	 * stream merely because two unrelated clients (or the same client, twice) happened to reuse the same
-	 * id. The only thing still shared process-wide is capacity: {@code maxConcurrentSubscriptions} is
-	 * enforced against this one registry's total active count, mirroring the same per-process-sharing
-	 * trade-off {@link #mrtrConfig()} documents for its shared AES key.
-	 *
-	 * @return The subscription broker. Must not be <jk>null</jk>.
+	 * @return The subscription broker. Never <jk>null</jk>.
 	 */
 	@Override
 	default McpSubscriptionBroker subscriptionBroker() {
-		return SharedSubscriptionBroker.get();
+		return McpEndpointOptionsCache.resolve(this).resolveSubscriptionBroker();
 	}
 }

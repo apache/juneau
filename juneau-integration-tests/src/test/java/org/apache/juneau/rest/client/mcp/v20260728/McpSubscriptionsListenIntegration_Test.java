@@ -101,18 +101,15 @@ class McpSubscriptionsListenIntegration_Test extends TestBase {
 				.addTool(publishTool()).addTool(activeCountTool());
 		}
 
-		@Override
-		protected ServerCapabilities capabilities() {
-			return new ServerCapabilities()
-				.setResources(new ResourceCapability().setSubscribe(true).setListChanged(true))
-				.setTools(new ToolCapability().setListChanged(true));
-		}
-
 		// Short heartbeat so c01 (below) can observe repeated "ping" frames over a real held-open connection
 		// without waiting through the 15s production default.
 		@Override
-		protected McpSubscriptionsConfig createSubscriptionsConfig() {
-			return new McpSubscriptionsConfig().setHeartbeatIntervalMs(HEARTBEAT_INTERVAL_MS);
+		protected McpOptions createMcpOptions() {
+			return new McpOptions()
+				.setCapabilities(new ServerCapabilities()
+					.setResources(new ResourceCapability().setSubscribe(true).setListChanged(true))
+					.setTools(new ToolCapability().setListChanged(true)))
+				.subscriptions(s -> s.setHeartbeatIntervalMs(HEARTBEAT_INTERVAL_MS));
 		}
 	}
 

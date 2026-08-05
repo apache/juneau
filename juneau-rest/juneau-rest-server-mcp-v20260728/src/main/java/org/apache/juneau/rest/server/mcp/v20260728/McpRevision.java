@@ -57,7 +57,7 @@ import org.apache.juneau.rest.server.mcp.McpToolOutcome;
  *
  * <p>
  * <b>Constructed per binding, not shared as a singleton.</b> The bound servlet or mixin builds a
- * fresh instance on every {@code revision()} call, passing its own {@code capabilities()} hook
+ * fresh instance on every {@code revision()} call, passing its {@link McpOptions#getCapabilities()}
  * result and its published {@link McpCacheConfig} into the constructor — see {@link McpRestServlet}
  * and {@link McpEndpoint}. A {@code null} capabilities override auto-derives {@code server/discover}
  * capabilities from the registered tool/prompt/resource/resource-template lists; a non-{@code null}
@@ -183,7 +183,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 *
 	 * <p>
 	 * Package-visible so tests can confirm the binding-level memoization contract documented on
-	 * {@link McpRestServlet#getMrtrConfig()} / {@link McpEndpoint#mrtrConfig()}: two {@link McpRevision}
+	 * {@link McpRestServlet#getMcpOptions()} / {@link McpEndpoint#getMcpOptions()}: two {@link McpRevision}
 	 * instances built from the same binding must share the same {@link McpMrtrConfig} (and therefore the
 	 * same {@link RequestStateCodec}), even though each dispatched request constructs its own
 	 * {@link McpRevision}.
@@ -265,12 +265,12 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * @param params The opaque request params. Must decode to a {@code SubscriptionsListenRequest}.
 	 * @param config The neutral handler registry, used to auto-derive capabilities when none were set explicitly.
 	 * @param ctx The per-request bean store, expected to carry a bound {@link McpSubscriptionBroker}
-	 * 	(Phase 1-3 wiring) and a bound {@link McpSubscriptionsConfig}. In production the config bean is
-	 * 	normally present — {@code McpRestServlet#subscriptionsConfigBean()} / {@code McpEndpoint#subscriptionsConfigBean()}
-	 * 	(Task 3.3/3.4) publish it into the {@code RestContext} bean store that this request-scoped {@code ctx}
-	 * 	wraps as its parent, since the neutral core cannot add it directly ({@code McpSubscriptionsConfig} is a
-	 * 	v2 type). The {@code orElseGet(McpSubscriptionsConfig::new)} fallback below is defense-in-depth only
-	 * 	(e.g. a hand-built {@code ctx} in a direct-dispatch test that omits it).
+	 * 	(Phase 1-3 wiring) and a bound {@link McpOptions}. In production the options bean is normally present —
+	 * 	{@code McpRestServlet#getMcpOptions()} / {@code McpEndpoint#mcpOptionsBean()} (TODO-330) publish it into
+	 * 	the {@code RestContext} bean store that this request-scoped {@code ctx} wraps as its parent, since the
+	 * 	neutral core cannot add it directly ({@code McpOptions} is a v2 type). The
+	 * 	{@code orElseGet(McpSubscriptionsConfig::new)} fallback below is defense-in-depth only (e.g. a
+	 * 	hand-built {@code ctx} in a direct-dispatch test that omits it).
 	 * <p>
 	 * <b>SSE negotiation gate (checked first, before any broker registration):</b> every MCP servlet binding
 	 * defaults an unqualified request to {@code Accept: application/json}. A {@code subscriptions/listen}
@@ -288,10 +288,10 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * <p>
 	 * {@code maxConcurrentSubscriptions} is enforced as a hard cap, not an advisory one: the admission check
 	 * and the registration are one atomic step via {@link McpSubscriptionBroker#registerIfUnder}, so
-	 * concurrent {@code subscriptions/listen} calls (in particular against the JVM-wide {@code
-	 * SharedSubscriptionBroker} multiple mixin resources can share) cannot all observe room under the cap
-	 * and all register, which a separate {@code activeCount()} check followed by a separate {@code
-	 * register(...)} call would allow.
+	 * concurrent {@code subscriptions/listen} calls against the same broker (e.g. a custom broker explicitly
+	 * shared across multiple bindings via {@link McpOptions#setSubscriptionBroker}) cannot all observe room
+	 * under the cap and all register, which a separate {@code activeCount()} check followed by a separate
+	 * {@code register(...)} call would allow.
 	 *
 	 * <p>
 	 * The broker registers under a fresh {@link UUID}, never under the client-supplied JSON-RPC request
@@ -315,11 +315,12 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 
 		var broker = ctx.getBean(McpSubscriptionBroker.class)
 			.orElseThrow(() -> new McpException(CODE_INTERNAL_ERROR, "McpSubscriptionBroker not bound in BeanStore"));
-		var subscriptionsConfig = ctx.getBean(McpSubscriptionsConfig.class).orElseGet(McpSubscriptionsConfig::new);
+		var subscriptionsConfig = ctx.getBean(McpOptions.class).map(McpOptions::getSubscriptions).orElseGet(McpSubscriptionsConfig::new);
 		// registerIfUnder admission-checks and registers as one atomic step (hard cap, not advisory) — a
 		// separate activeCount() check followed by a separate register() call would leave a TOCTOU window
-		// open for concurrent listen requests racing the same (possibly JVM-wide shared) broker. The
-		// registry key is a server-minted UUID, deliberately NOT String.valueOf(id): see the javadoc above.
+		// open for concurrent listen requests racing the same per-binding broker (see
+		// McpOptions#resolveSubscriptionBroker()). The registry key is a server-minted UUID, deliberately
+		// NOT String.valueOf(id): see the javadoc above.
 		var subscription = broker.registerIfUnder(subscriptionsConfig.getMaxConcurrentSubscriptions(), UUID.randomUUID().toString(), honoredFilter)
 			.orElseThrow(() -> new McpException(CODE_TOO_MANY_SUBSCRIPTIONS, "Maximum concurrent subscriptions exceeded"));
 		var honoredWireFilter = SubscriptionCapabilityGate.toWireFilter(honoredFilter);

@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.rest.mock.classic.MockRestClient;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
@@ -28,6 +29,9 @@ import org.apache.juneau.rest.server.mcp.McpSubscriptionFilter;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // MockRestClient is a Closeable test helper; lifetime is bounded by the test method.
+})
 class McpSubscriptionBrokerMixin_Test {
 
 	@Rest(path = "/api", serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
@@ -40,37 +44,71 @@ class McpSubscriptionBrokerMixin_Test {
 		assertNotNull(new A().subscriptionBroker());
 	}
 
-	@Test void a02_mixinDefault_returnsSharedInstanceAcrossSeparateEndpointInstances() {
-		var broker1 = new A().subscriptionBroker();
-		var broker2 = new A().subscriptionBroker();
-		assertSame(broker1, broker2, "the mixin default broker must be a per-process shared instance");
+	@Test void a02_mixinDefault_isStableAcrossCallsOnSameInstance() {
+		var a = new A();
+		assertSame(a.subscriptionBroker(), a.subscriptionBroker(), "the mixin default broker must be memoized per-binding");
 	}
 
-	@Test void a03_mixinDefault_subscriptionRegisteredOnOneInstanceVisibleOnAnother() {
+	/**
+	 * TODO-330 regression: the pre-consolidation mixin default accidentally shared its broker JVM-wide
+	 * ({@code SharedSubscriptionBroker}) across every distinct endpoint instance. Post-consolidation, the
+	 * broker is derived per-binding (memoized via {@link McpEndpointOptionsCache}): two distinct endpoint
+	 * instances must resolve to two distinct brokers, proving the accidental JVM-wide sharing is gone.
+	 */
+	@Test void a03_mixinDefault_distinctAcrossDistinctEndpointInstances() {
+		var broker1 = new A().subscriptionBroker();
+		var broker2 = new A().subscriptionBroker();
+		assertNotSame(broker1, broker2, "two distinct endpoint instances must NOT share the same broker (no JVM-wide sharing)");
+	}
+
+	@Test void a04_mixinDefault_subscriptionRegisteredOnOneInstanceNotVisibleOnAnother() {
 		McpSubscriptionBroker broker1 = new A().subscriptionBroker();
 		McpSubscriptionBroker broker2 = new A().subscriptionBroker();
 		var before = broker2.activeCount();
-		var sub = broker1.register("mixin-shared-test-s1", new McpSubscriptionFilter(true, true, true, Set.of()));
-		assertEquals(before + 1, broker2.activeCount(), "a subscription registered via one mixin instance's "
-			+ "broker must be visible via another instance's broker, since both share the JVM-wide default");
+		var sub = broker1.register("mixin-isolated-test-s1", new McpSubscriptionFilter(true, true, true, Set.of()));
+		assertEquals(before, broker2.activeCount(), "a subscription registered via one mixin instance's "
+			+ "broker must NOT be visible via another instance's broker, since each binding now derives its own");
 		sub.close();
 	}
 
-	@Test void a04_mixinDefault_subscriptionsConfigIsFreshPerCallAndEquivalent() {
+	@Test void a05_mixinDefault_subscriptionsConfigIsStableAcrossCallsOnSameInstance() {
 		var a = new A();
-		var config1 = a.subscriptionsConfig();
-		var config2 = a.subscriptionsConfig();
-		assertNotSame(config1, config2, "unlike the broker, the knobs-only config has no live state to "
-			+ "share, so the mixin default (matching cacheConfig()'s precedent) returns a fresh instance");
-		assertEquals(config1.getQueueSize(), config2.getQueueSize());
+		var config1 = a.mcpOptionsBean().getSubscriptions();
+		var config2 = a.mcpOptionsBean().getSubscriptions();
+		assertSame(config1, config2, "McpOptions (and its nested subscriptions config) is memoized per-binding via "
+			+ "the mcpOptionsBean()/McpEndpointOptionsCache seam, so repeated access on the same endpoint instance "
+			+ "returns the identical instance, even though the raw getMcpOptions() override point may return a "
+			+ "fresh instance per call");
 	}
 
-	@Test void a05_subscriptionsConfigBean_isAnnotatedAndDelegatesToSubscriptionsConfig() throws Exception {
+	@Test void a06_mcpOptionsBean_isAnnotatedAndMemoizedPerInstance() throws Exception {
 		var a = new A();
-		var m = McpEndpoint.class.getMethod("subscriptionsConfigBean");
+		var m = McpEndpoint.class.getMethod("mcpOptionsBean");
 		assertTrue(m.isAnnotationPresent(org.apache.juneau.commons.inject.Bean.class),
-			"subscriptionsConfigBean() must be @Bean-annotated so the RestContext bean store discovers it, "
+			"mcpOptionsBean() must be @Bean-annotated so the RestContext bean store discovers it, "
 			+ "the same mechanism already used by mcpTraceContextExtractor()");
-		assertNotNull(a.subscriptionsConfigBean());
+		assertSame(a.mcpOptionsBean(), a.mcpOptionsBean(),
+			"mcpOptionsBean() must return the SAME memoized McpOptions on every call for a given endpoint instance");
+		assertNotSame(a.mcpOptionsBean(), new A().mcpOptionsBean(),
+			"a distinct endpoint instance must resolve to a distinct memoized McpOptions");
+	}
+
+	/**
+	 * IMPORTANT-5 code-review regression: {@code a06} above only checks the {@code @Bean} annotation
+	 * reflectively, which would NOT catch a future break in interface-default {@code @Bean} discovery (for
+	 * example, if the {@code RestContext} bean-collection walk stopped considering default methods on mixin
+	 * interfaces). This test proves the wiring end-to-end through a real {@code RestContext}: the resource's
+	 * bean store must resolve {@link McpOptions} to the exact SAME instance {@link McpEndpoint#mcpOptionsBean()}
+	 * returns, so {@code subscriptions/listen} dispatch (which reads {@code McpOptions} from the bean store,
+	 * not by calling {@code mcpOptionsBean()} directly) never silently falls back to defaults.
+	 */
+	@Test void a07_mcpOptionsBean_isPublishedInRestContextBeanStore_sameInstanceAsMemoized() {
+		var a = new A();
+		MockRestClient.create(a).json().contentType("application/json").accept("application/json").build();
+		var fromBeanStore = a.getContext().getBeanStore().getBean(McpOptions.class)
+			.orElseThrow(() -> new AssertionError("McpOptions bean not found in RestContext's bean store"));
+		assertSame(a.mcpOptionsBean(), fromBeanStore,
+			"the RestContext bean store's published McpOptions must be the SAME instance as the mixin's memoized "
+			+ "mcpOptionsBean(), proving the @Bean interface-default discovery wires the memoized instance end-to-end");
 	}
 }

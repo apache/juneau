@@ -34,7 +34,8 @@ import org.apache.juneau.rest.server.springboot.*;
  *
  * <p>
  * Subclasses supply their {@link org.apache.juneau.rest.server.mcp.McpServerConfig} by implementing
- * {@link #getMcpConfig()}.
+ * {@link #getMcpConfig()}, and may optionally override {@link McpEndpoint#getMcpOptions()} to customize
+ * capabilities/instructions/cache/mrtr/subscriptions/broker behavior.
  *
  * <h5 class='section'>Example:</h5>
  * <pre>
@@ -43,6 +44,10 @@ import org.apache.juneau.rest.server.springboot.*;
  * 	@Override
  * 	public McpServerConfig getMcpConfig() {
  * 		return new McpServerConfig().addTool(new MySpringAwareTool());
+ * 	}
+ * 	@Override                                        // optional
+ * 	public McpOptions getMcpOptions() {
+ * 		return new McpOptions().mrtr(m -&gt; m.setTtlMs(600_000));
  * 	}
  * }
  * </pre>

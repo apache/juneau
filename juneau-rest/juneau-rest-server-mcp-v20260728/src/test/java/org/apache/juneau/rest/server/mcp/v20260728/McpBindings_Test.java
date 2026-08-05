@@ -103,7 +103,7 @@ class McpBindings_Test extends TestBase {
 		assertContains("hello", resp);
 	}
 
-	// -------- servlet with explicit capability override ---------
+	// -------- servlet with explicit capability override (via McpOptions) ---------
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
 	public static class D extends McpRestServlet {
@@ -113,8 +113,8 @@ class McpBindings_Test extends TestBase {
 			return new McpServerConfig().setName("override").setVersion("1.0.0").addTool(echo());
 		}
 		@Override
-		protected ServerCapabilities capabilities() {
-			return new ServerCapabilities().setPrompts(new PromptCapability());
+		protected McpOptions createMcpOptions() {
+			return new McpOptions().setCapabilities(new ServerCapabilities().setPrompts(new PromptCapability()));
 		}
 	}
 
@@ -160,17 +160,17 @@ class McpBindings_Test extends TestBase {
 		assertContains("pong", resp);
 	}
 
-	// -------- default null capability hooks ---------
+	// -------- default null capability hooks (now read through McpOptions) ---------
 
 	@Test void c01_servletCapabilityHook_defaultsToNull() {
-		assertNull(new A().capabilities());
+		assertNull(new A().createMcpOptions().getCapabilities());
 	}
 
 	@Test void c02_endpointCapabilityHook_defaultsToNull() {
-		assertNull(new B().capabilities());
+		assertNull(new B().getMcpOptions().getCapabilities());
 	}
 
-	// -------- cache-config lifecycle hooks ---------
+	// -------- cache-config lifecycle, now folded into McpOptions ---------
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
 	public static class E extends McpRestServlet {
@@ -181,9 +181,9 @@ class McpBindings_Test extends TestBase {
 			return new McpServerConfig().addTool(echo());
 		}
 		@Override
-		protected McpCacheConfig createCacheConfig() {
+		protected McpOptions createMcpOptions() {
 			calls.incrementAndGet();
-			return new McpCacheConfig().setToolsList(new McpCacheHint().setTtlMs(21));
+			return new McpOptions().cache(c -> c.setToolsList(new McpCacheHint().setTtlMs(21)));
 		}
 	}
 
@@ -195,7 +195,7 @@ class McpBindings_Test extends TestBase {
 			return new McpServerConfig();
 		}
 		@Override
-		protected McpCacheConfig createCacheConfig() {
+		protected McpOptions createMcpOptions() {
 			return null;
 		}
 	}
@@ -208,8 +208,8 @@ class McpBindings_Test extends TestBase {
 			return new McpServerConfig().addTool(echo());
 		}
 		@Override
-		public McpCacheConfig cacheConfig() {
-			return new McpCacheConfig().setToolsList(new McpCacheHint().setCacheScope(McpCacheScope.PRIVATE));
+		public McpOptions getMcpOptions() {
+			return new McpOptions().cache(c -> c.setToolsList(new McpCacheHint().setCacheScope(McpCacheScope.PRIVATE)));
 		}
 	}
 
@@ -221,50 +221,32 @@ class McpBindings_Test extends TestBase {
 		return MockRestClient.create(G.class).json().contentType("application/json").accept("application/json").build();
 	}
 
-	@Test void d01_servletCacheConfig_isLazilyCachedAndInjected() throws Exception {
+	@Test void d01_servletOptions_isLazilyCachedAndInjected() throws Exception {
 		var servlet = new E();
-		assertSame(servlet.getCacheConfig(), servlet.getCacheConfig());
+		assertSame(servlet.getMcpOptions(), servlet.getMcpOptions());
 		assertEquals(1, E.calls.get());
 		var body = client(E.class).post("/").contentString(body(1, "tools/list", null))
 			.header("Mcp-Method", "tools/list").header("Mcp-Name", "").run().getContent().asString();
 		assertContains("\"ttlMs\":21", body);
 	}
 
-	@Test void d02_servletNullFactoryFailsFast() {
-		var e = assertThrows(IllegalStateException.class, () -> new F().getCacheConfig());
-		assertEquals("createCacheConfig() returned null", e.getMessage());
+	@Test void d02_servletNullOptionsFactoryFailsFast() {
+		var e = assertThrows(IllegalStateException.class, () -> new F().getMcpOptions());
+		assertEquals("createMcpOptions() returned null", e.getMessage());
 	}
 
 	@Test void d03_endpointDefaultIsEmptyAndOverrideIsInjected() throws Exception {
-		assertNotNull(new B().cacheConfig());
+		assertNotNull(new B().getMcpOptions().getCache());
 		var body = clientBWithCache().post("/mcp").contentString(body(1, "tools/list", null))
 			.header("Mcp-Method", "tools/list").header("Mcp-Name", "").run().getContent().asString();
 		assertContains("\"cacheScope\":\"private\"", body);
 	}
 
-	// -------- mrtr-config lifecycle hooks ---------
+	// -------- MRTR lifecycle, now folded into McpOptions ---------
 
-	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class H extends McpRestServlet {
-		private static final long serialVersionUID = 1L;
-		@Override
-		protected McpServerConfig createMcpConfig() {
-			return new McpServerConfig();
-		}
-		@Override
-		protected McpMrtrConfig createMrtrConfig() {
-			return null;
-		}
-	}
-
-	@Test void e01_servletMrtrConfig_isLazilyCachedAcrossCalls() {
+	@Test void e01_servletOptions_isLazilyCachedAcrossCalls() {
 		var servlet = new A();
-		assertSame(servlet.getMrtrConfig(), servlet.getMrtrConfig());
-	}
-
-	@Test void e02_servletNullMrtrFactoryFailsFast() {
-		var e = assertThrows(IllegalStateException.class, () -> new H().getMrtrConfig());
-		assertEquals("createMrtrConfig() returned null", e.getMessage());
+		assertSame(servlet.getMcpOptions(), servlet.getMcpOptions());
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
@@ -276,40 +258,42 @@ class McpBindings_Test extends TestBase {
 			return new McpServerConfig();
 		}
 		@Override
-		protected McpMrtrConfig createMrtrConfig() {
+		protected McpOptions createMcpOptions() {
 			createCalls.incrementAndGet();
-			return new McpMrtrConfig();
+			return new McpOptions();
 		}
 	}
 
 	/**
-	 * H2 regression: {@link McpRestServlet#getMrtrConfig()} must publish exactly one {@link McpMrtrConfig} (and
-	 * thus one AES key) even under a concurrent cold-start race. A plain lazy read would let two racing threads
-	 * each create and publish a distinct config, so a {@code requestState} sealed against one key could never be
-	 * unsealed against the other. Every concurrent first-access caller must observe the same instance and
-	 * {@link #createMrtrConfig()} must run exactly once.
+	 * H2 regression: {@link McpRestServlet#getMcpOptions()} must publish exactly one {@link McpOptions} (and
+	 * thus one MRTR AES key) even under a concurrent cold-start race, even though (mirroring
+	 * {@code AbstractMcpRestServlet#getMcpConfig()}'s lock-free {@link java.util.concurrent.atomic.AtomicReference}
+	 * pattern) {@link McpRestServlet#createMcpOptions()} itself MAY run more than once under that race: a
+	 * losing thread's locally-computed instance (and its distinct, never-otherwise-used MRTR key) is simply
+	 * discarded, never published, and never returned to any caller. Every concurrent first-access caller must
+	 * observe the SAME published options instance regardless of how many times the factory itself ran.
 	 */
-	@Test void e06_servletMrtrConfig_concurrentFirstAccessPublishesExactlyOneInstance() throws Exception {
+	@Test void e02_servletOptions_concurrentFirstAccessPublishesExactlyOneInstance() throws Exception {
 		var servlet = new I();
 		var threads = 16;
 		var pool = Executors.newFixedThreadPool(threads);
 		try {
 			var start = new CountDownLatch(1);
-			var results = new ArrayList<Future<McpMrtrConfig>>();
+			var results = new ArrayList<Future<McpOptions>>();
 			for (var i = 0; i < threads; i++)
-				results.add(pool.submit(() -> { start.await(); return servlet.getMrtrConfig(); }));
+				results.add(pool.submit(() -> { start.await(); return servlet.getMcpOptions(); }));
 			start.countDown();
 			var first = results.get(0).get();
 			for (var f : results)
-				assertSame(first, f.get(), "every concurrent first-access caller must observe the same published config");
-			assertEquals(1, servlet.createCalls.get(), "createMrtrConfig() must be invoked exactly once under the lock");
+				assertSame(first, f.get(), "every concurrent first-access caller must observe the same published options");
+			assertTrue(servlet.createCalls.get() >= 1, "createMcpOptions() must run at least once");
 		} finally {
 			pool.shutdownNow();
 		}
 	}
 
-	@Test void e03_endpointMrtrConfigHook_defaultsToNonNull() {
-		assertNotNull(new B().mrtrConfig());
+	@Test void e03_endpointOptionsHook_defaultsToNonNull() {
+		assertNotNull(new B().getMcpOptions().getMrtr());
 	}
 
 	/**
@@ -340,27 +324,42 @@ class McpBindings_Test extends TestBase {
 
 	/**
 	 * Mixin-path analogue of {@link #e04_mrtrConfigIsStableAcrossSeparateRevisionInstancesFromSameBinding}: two
-	 * {@link McpRevision}s built through the {@link McpEndpoint} mixin default share the per-process
-	 * {@link McpMrtrConfig}/{@link RequestStateCodec}, so a {@code requestState} sealed on a PAUSE request unseals
-	 * on a later RESUME request. The mixin default returns a single JVM-wide shared config (see
-	 * {@link SharedMrtrConfig}), so the sharing holds even across two distinct endpoint instances &mdash; not just
-	 * repeated {@code revision()} calls on one instance &mdash; which is what makes the common mixin case resumable
-	 * with no override.
+	 * {@link McpRevision}s built through the SAME {@link McpEndpoint} instance's mixin default share the
+	 * per-binding {@link McpMrtrConfig}/{@link RequestStateCodec} (memoized by {@link McpEndpointOptionsCache}),
+	 * so a {@code requestState} sealed on a PAUSE request unseals on a later RESUME request &mdash; without ever
+	 * standing up a full {@code RestContext} (bare construction).
 	 */
-	@Test void e05_mixinMrtrConfigIsStableAndSharedAcrossEndpointInstances() {
-		var rev1 = (McpRevision)new B().revision();
-		var rev2 = (McpRevision)new B().revision();
+	@Test void e05_mixinMrtrConfigIsStableAcrossSeparateRevisionInstancesFromSameEndpoint() {
+		var b = new B();
+		var rev1 = (McpRevision)b.revision();
+		var rev2 = (McpRevision)b.revision();
 		assertNotSame(rev1, rev2, "revision() must construct a fresh McpRevision per call (per-request)");
-		assertSame(rev1.mrtrConfig(), rev2.mrtrConfig(), "the mixin default MRTR config must be a per-process shared instance");
+		assertSame(rev1.mrtrConfig(), rev2.mrtrConfig(), "the mixin MRTR config must be memoized at the binding level");
 
 		var codec1 = rev1.mrtrConfig().getCodec();
 		var codec2 = rev2.mrtrConfig().getCodec();
-		assertSame(codec1, codec2, "the codec (and its AES key) must be the per-process shared instance");
+		assertSame(codec1, codec2, "the codec (and its AES key) must be memoized at the binding level");
 
 		var state = new McpRequestState("resume-here", "tools/call", 1, System.currentTimeMillis() + 60_000L);
 		var token = codec1.seal(state, "tools/call" + '\u0000' + "2026-07-28");
 		var unsealed = codec2.unseal(token, "tools/call" + '\u0000' + "2026-07-28");
 		assertTrue(unsealed.isPresent(), "a requestState sealed on one request must unseal on the next");
 		assertEquals(state, unsealed.get());
+	}
+
+	/**
+	 * TODO-330 regression: the pre-consolidation mixin default accidentally shared its MRTR key/broker
+	 * JVM-wide ({@code SharedMrtrConfig}/{@code SharedSubscriptionBroker}) across every distinct endpoint
+	 * instance. Post-consolidation, {@link McpEndpoint#getMcpOptions()}'s default is per-binding: two distinct
+	 * endpoint instances must resolve to two distinct {@link McpOptions} (and therefore distinct MRTR keys),
+	 * proving the accidental JVM-wide sharing is gone.
+	 */
+	@Test void e06_mixinMrtrConfig_distinctAcrossDistinctEndpointInstances() {
+		var rev1 = (McpRevision)new B().revision();
+		var rev2 = (McpRevision)new B().revision();
+		assertNotSame(rev1.mrtrConfig(), rev2.mrtrConfig(),
+			"two distinct endpoint instances must NOT share the same MRTR config (no JVM-wide sharing)");
+		assertNotSame(rev1.mrtrConfig().getCodec(), rev2.mrtrConfig().getCodec(),
+			"two distinct endpoint instances must NOT share the same AES key (no JVM-wide sharing)");
 	}
 }

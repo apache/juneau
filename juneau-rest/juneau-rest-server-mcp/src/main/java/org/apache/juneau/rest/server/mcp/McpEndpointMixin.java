@@ -75,7 +75,8 @@ public interface McpEndpointMixin {
 	 * <p>
 	 * A revision binding that implements {@code subscriptions/listen} (for example
 	 * {@code org.apache.juneau.rest.server.mcp.v20260728.McpEndpoint}) overrides this to return a
-	 * per-process shared broker instance.
+	 * binding-owned broker instance (its own per-binding vs. shared-instance semantics are that
+	 * revision's own choice — see its Javadoc).
 	 *
 	 * @return The subscription broker, or <jk>null</jk> if this endpoint does not support subscriptions.
 	 */

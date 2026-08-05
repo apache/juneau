@@ -459,13 +459,29 @@ public final class McpClient extends AbstractMcpClient {
 				// The stream ended (clean EOF, reader.hasNext() == false) without ever reaching a terminal
 				// frame, and the caller did not initiate this close (open is still true): an abrupt drop the
 				// listener must be told about, not silent - it is otherwise indistinguishable from a hang.
-				if (open && ! reachedTerminal)
+				//
+				// open is flipped to false BEFORE invoking the listener (guarded on the pre-read value so a
+				// concurrent cancel() can't cause a double-fire), not after in the finally block below: the
+				// terminal callback is very often the exact synchronization point (a latch/future countdown,
+				// or a direct isOpen() read from inside the callback itself) a caller relies on to learn the
+				// pump is done, and CountDownLatch/Future's happens-before is one-directional (it orders the
+				// signal before the waiter's wakeup, never the reverse) - so this volatile write must
+				// happen-before that signal, not after it, or a woken caller can transiently observe open
+				// still true.
+				if (open && ! reachedTerminal) {
+					open = false;
 					invokeListener(() -> listener.onError(new EOFException(
 						"Subscription stream closed before a terminal frame was received.")));
+				}
 			} catch (Exception e) {
-				if (open)
+				if (open) {
+					open = false;
 					invokeListener(() -> listener.onError(e));
+				}
 			} finally {
+				// Idempotent safety net: open is already false on every path above that invoked a terminal
+				// callback, and closeReaderQuietly() must run unconditionally regardless of which path (if
+				// any) was taken - including a plain open cancel()/close() with no callback at all.
 				open = false;
 				closeReaderQuietly();
 			}
@@ -483,6 +499,9 @@ public final class McpClient extends AbstractMcpClient {
 				return true;
 			}
 			var res = JsonParser.DEFAULT.read(data, JsonRpcResponse.class);
+			// open is flipped to false BEFORE invoking either terminal callback below, not after in run()'s
+			// finally block - see the longer rationale on the abrupt-EOF branch in run().
+			open = false;
 			if (res.getError() != null) {
 				var mcpException = McpException.fromJsonRpcError(res.getError());
 				invokeListener(() -> listener.onError(mcpException));

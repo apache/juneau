@@ -41,10 +41,11 @@ import jakarta.servlet.*;
 
 /**
  * End-to-end coverage for MCP {@code 2026-07-28} SEP-2322 elicitation (C6), driven through the real
- * {@link McpClient} and its {@link ElicitationAccess} typed helper against a live embedded-Jetty server whose
- * tools pause/resume via {@link ElicitationRequests}/{@link ElicitationResponses} &mdash; proving the full typed
- * path works across a real wire boundary, complementing {@link McpMrtrIntegration_Test}'s generic (untyped)
- * PAUSE/RESUME coverage and Phase 7's {@code Characterization_Test} in-process replay fixtures.
+ * {@link McpClient} and its client-side {@link ElicitationRequests}/{@link ElicitationResponses} typed helpers
+ * against a live embedded-Jetty server whose tools pause/resume via the server-side (same-named)
+ * {@code ElicitationRequests}/{@code ElicitationResponses} &mdash; proving the full typed path works across a
+ * real wire boundary, complementing {@link McpMrtrIntegration_Test}'s generic (untyped) PAUSE/RESUME coverage
+ * and Phase 7's {@code Characterization_Test} in-process replay fixtures.
  */
 @org.apache.juneau.testing.JettyMicroserviceTest
 class McpElicitationIntegration_Test extends TestBase {
@@ -55,14 +56,19 @@ class McpElicitationIntegration_Test extends TestBase {
 			.setRequestedSchema(ElicitSchema.create().booleanField("confirm").title("Confirm").build());
 	}
 
+	// The server-side org.apache.juneau.rest.server.mcp.v20260728.ElicitationRequests/ElicitationResponses
+	// (wildcard-imported above) share their simple names with this test's own client-side package
+	// (org.apache.juneau.rest.client.mcp.v20260728.ElicitationRequests/ElicitationResponses), where same-package
+	// visibility wins over a wildcard import - so every server-side call below is qualified with its full
+	// package to disambiguate, while every client-side call in the test bodies below stays unqualified.
 	private static McpToolHandler confirm() {
 		return new McpToolHandler() {
 			@Override public McpToolSpec descriptor() { return new McpToolSpec().setName("confirm").setDescription("Pauses for one confirmation"); }
 			@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
 				var resume = ctx.getBean(McpMrtrResumeContext.class);
 				if (resume.isEmpty())
-					throw ElicitationRequests.of("confirm", confirmQuestion(), "cont-1");
-				var answer = ElicitationResponses.get(resume.get(), "confirm");
+					throw org.apache.juneau.rest.server.mcp.v20260728.ElicitationRequests.of("confirm", confirmQuestion(), "cont-1");
+				var answer = org.apache.juneau.rest.server.mcp.v20260728.ElicitationResponses.get(resume.get(), "confirm");
 				// Echoes the answer's content (not just its action) and the continuation this tool paused
 				// with, so the assertions below actually exercise ElicitResult.content marshalling and prove
 				// the continuation round-trips through McpMrtrResumeContext, instead of only the action enum.
@@ -83,9 +89,9 @@ class McpElicitationIntegration_Test extends TestBase {
 					requests.put("confirm", confirmQuestion());
 					requests.put("reason", new ElicitRequest().setMessage("Why?")
 						.setRequestedSchema(ElicitSchema.create().stringField("reason").build()));
-					throw ElicitationRequests.of(requests, "cont-multi");
+					throw org.apache.juneau.rest.server.mcp.v20260728.ElicitationRequests.of(requests, "cont-multi");
 				}
-				var answers = ElicitationResponses.all(resume.get());
+				var answers = org.apache.juneau.rest.server.mcp.v20260728.ElicitationResponses.all(resume.get());
 				var confirmAnswer = answers.get("confirm");
 				var reasonAnswer = answers.get("reason");
 				var confirmValue = confirmAnswer.getContent() == null ? null : confirmAnswer.getContent().get("confirm");
@@ -135,14 +141,14 @@ class McpElicitationIntegration_Test extends TestBase {
 	}
 
 	// =================================================================================================================
-	// A: single-question pause -> resume -> complete, driven entirely through ElicitationAccess.
+	// A: single-question pause -> resume -> complete, driven entirely through the client-side ElicitationRequests/ElicitationResponses.
 	// =================================================================================================================
 
 	@Test void a01_singleQuestion_pauseResumeAccept_fullLoop() throws Exception {
 		try (var client = clientBuilder(true).build()) {
 			var paused = client.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("confirm").setArguments(Map.of()));
-			assertTrue(ElicitationAccess.isInputRequired(paused));
-			var requests = ElicitationAccess.requests(paused);
+			assertTrue(ElicitationRequests.isInputRequired(paused));
+			var requests = ElicitationRequests.requests(paused);
 			assertEquals("Proceed with deletion?", requests.get("confirm").getMessage());
 			// The requestedSchema (built via ElicitSchema.booleanField("confirm").title("Confirm")) must survive
 			// the wire intact, not just the message - otherwise a real client could not render the right input
@@ -152,9 +158,9 @@ class McpElicitationIntegration_Test extends TestBase {
 
 			var answer = new ElicitResult().setAction(ElicitAction.ACCEPT).putContent("confirm", true);
 			var completed = client.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("confirm")
-				.setRequestState(ElicitationAccess.requestState(paused))
-				.setInputResponses(ElicitationAccess.toInputResponse("confirm", answer)));
-			assertFalse(ElicitationAccess.isInputRequired(completed));
+				.setRequestState(ElicitationRequests.requestState(paused))
+				.setInputResponses(ElicitationResponses.toInputResponse("confirm", answer)));
+			assertFalse(ElicitationRequests.isInputRequired(completed));
 			assertEquals("complete", completed.get("resultType"));
 			assertEquals("action:accept,confirm:true,cont:cont-1", firstText(completed));
 		}
@@ -167,7 +173,7 @@ class McpElicitationIntegration_Test extends TestBase {
 	@Test void b01_multiQuestion_pauseResumeBoth_singleRoundTrip() throws Exception {
 		try (var client = clientBuilder(true).build()) {
 			var paused = client.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("confirmTwo").setArguments(Map.of()));
-			var requests = ElicitationAccess.requests(paused);
+			var requests = ElicitationRequests.requests(paused);
 			assertEquals(2, requests.size());
 			assertTrue(requests.containsKey("confirm"));
 			assertTrue(requests.containsKey("reason"));
@@ -176,8 +182,8 @@ class McpElicitationIntegration_Test extends TestBase {
 			answers.put("confirm", new ElicitResult().setAction(ElicitAction.ACCEPT).putContent("confirm", true));
 			answers.put("reason", new ElicitResult().setAction(ElicitAction.ACCEPT).putContent("reason", "cleanup"));
 			var completed = client.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("confirmTwo")
-				.setRequestState(ElicitationAccess.requestState(paused))
-				.setInputResponses(ElicitationAccess.toInputResponses(answers)));
+				.setRequestState(ElicitationRequests.requestState(paused))
+				.setInputResponses(ElicitationResponses.toInputResponses(answers)));
 			assertEquals("complete", completed.get("resultType"));
 			assertEquals("confirm:accept=true,reason:accept=cleanup,cont:cont-multi", firstText(completed));
 		}
@@ -190,12 +196,12 @@ class McpElicitationIntegration_Test extends TestBase {
 	@Test void c01_decline_resumeCarriesDeclineAction() throws Exception {
 		try (var client = clientBuilder(true).build()) {
 			var paused = client.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("confirm").setArguments(Map.of()));
-			assertTrue(ElicitationAccess.isInputRequired(paused));
-			assertNotNull(ElicitationAccess.requestState(paused));
+			assertTrue(ElicitationRequests.isInputRequired(paused));
+			assertNotNull(ElicitationRequests.requestState(paused));
 			var answer = new ElicitResult().setAction(ElicitAction.DECLINE);
 			var completed = client.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("confirm")
-				.setRequestState(ElicitationAccess.requestState(paused))
-				.setInputResponses(ElicitationAccess.toInputResponse("confirm", answer)));
+				.setRequestState(ElicitationRequests.requestState(paused))
+				.setInputResponses(ElicitationResponses.toInputResponse("confirm", answer)));
 			assertEquals("complete", completed.get("resultType"));
 			assertEquals("action:decline,confirm:null,cont:cont-1", firstText(completed));
 		}
@@ -204,12 +210,12 @@ class McpElicitationIntegration_Test extends TestBase {
 	@Test void c02_cancel_resumeCarriesCancelAction() throws Exception {
 		try (var client = clientBuilder(true).build()) {
 			var paused = client.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("confirm").setArguments(Map.of()));
-			assertTrue(ElicitationAccess.isInputRequired(paused));
-			assertNotNull(ElicitationAccess.requestState(paused));
+			assertTrue(ElicitationRequests.isInputRequired(paused));
+			assertNotNull(ElicitationRequests.requestState(paused));
 			var answer = new ElicitResult().setAction(ElicitAction.CANCEL);
 			var completed = client.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("confirm")
-				.setRequestState(ElicitationAccess.requestState(paused))
-				.setInputResponses(ElicitationAccess.toInputResponse("confirm", answer)));
+				.setRequestState(ElicitationRequests.requestState(paused))
+				.setInputResponses(ElicitationResponses.toInputResponse("confirm", answer)));
 			assertEquals("complete", completed.get("resultType"));
 			assertEquals("action:cancel,confirm:null,cont:cont-1", firstText(completed));
 		}
@@ -221,7 +227,7 @@ class McpElicitationIntegration_Test extends TestBase {
 
 	/**
 	 * Delta vs {@link McpMrtrIntegration_Test#b01_unsupportedCapability_rejectedOverTheWire()}: proves the same
-	 * capability gate fires for a signal built via the typed {@code ElicitationRequests.of(...)} helper (not a
+	 * capability gate fires for a signal built via the typed server-side {@code ElicitationRequests.of(...)} helper (not a
 	 * hand-built {@code McpInputRequiredSignal}) — i.e. the helper yields a gate-recognized signal.
 	 */
 	@Test void d01_unsupportedCapability_typedHelperPauseStillRejectedOverTheWire() throws Exception {

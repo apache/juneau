@@ -216,7 +216,7 @@ class McpTemplateCompletionIntegration_Test {
 	public static class C_OverrideWithCompleterRegistered extends McpRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Override protected McpServerConfig createMcpConfig() { return new McpServerConfig().addPrompt(promptWithCompleter()); }
-		@Override protected ServerCapabilities capabilities() { return explicit(); }
+		@Override protected McpOptions createMcpOptions() { return new McpOptions().setCapabilities(explicit()); }
 	}
 
 	private static String discover(Class<?> servlet) throws Exception {

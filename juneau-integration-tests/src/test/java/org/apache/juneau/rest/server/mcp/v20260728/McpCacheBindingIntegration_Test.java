@@ -36,8 +36,8 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Cross-module coverage proving the servlet-subclass and endpoint-mixin cache-config lifecycle hooks
- * are consumable exactly as an external artifact consumer would use them, through the published
+ * Cross-module coverage proving the servlet-subclass and endpoint-mixin {@link McpOptions} cache configuration
+ * seams are consumable exactly as an external artifact consumer would use them, through the published
  * public API of {@code juneau-rest-server-mcp-v20260728}.
  */
 @SuppressWarnings({
@@ -77,9 +77,9 @@ class McpCacheBindingIntegration_Test {
 		@Override protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig().addTool(echo());
 		}
-		@Override protected McpCacheConfig createCacheConfig() {
-			return new McpCacheConfig().setToolsList(
-				new McpCacheHint().setTtlMs(77).setCacheScope(McpCacheScope.PRIVATE));
+		@Override protected McpOptions createMcpOptions() {
+			return new McpOptions().cache(c -> c.setToolsList(
+				new McpCacheHint().setTtlMs(77).setCacheScope(McpCacheScope.PRIVATE)));
 		}
 	}
 
@@ -91,9 +91,9 @@ class McpCacheBindingIntegration_Test {
 		@Override public McpServerConfig getMcpConfig() {
 			return new McpServerConfig().addTool(echo());
 		}
-		@Override public McpCacheConfig cacheConfig() {
-			return new McpCacheConfig().setToolsList(
-				new McpCacheHint().setTtlMs(77).setCacheScope(McpCacheScope.PRIVATE));
+		@Override public McpOptions getMcpOptions() {
+			return new McpOptions().cache(c -> c.setToolsList(
+				new McpCacheHint().setTtlMs(77).setCacheScope(McpCacheScope.PRIVATE)));
 		}
 	}
 

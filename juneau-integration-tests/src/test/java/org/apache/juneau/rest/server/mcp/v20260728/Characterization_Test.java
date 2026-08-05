@@ -92,15 +92,15 @@ class Characterization_Test {
 	public static class F_Cache extends F_Full {
 		private static final long serialVersionUID = 1L;
 
-		@Override protected McpCacheConfig createCacheConfig() {
-			return new McpCacheConfig()
+		@Override protected McpOptions createMcpOptions() {
+			return new McpOptions().cache(c -> c
 				.setDefaultHint(new McpCacheHint().setTtlMs(30000))
 				.setToolsList(new McpCacheHint().setTtlMs(5000).setCacheScope(McpCacheScope.PRIVATE))
 				.setPromptsList(new McpCacheHint().setTtlMs(0).setCacheScope(McpCacheScope.PUBLIC))
 				.setResourceTemplatesList(new McpCacheHint().setTtlMs(60000).setCacheScope(McpCacheScope.PRIVATE))
 				.setResourcesRead(new McpCacheHint().setTtlMs(2000))
 				.addResourceReadOverride("file:///a",
-					new McpCacheHint().setTtlMs(1000).setCacheScope(McpCacheScope.PRIVATE));
+					new McpCacheHint().setTtlMs(1000).setCacheScope(McpCacheScope.PRIVATE)));
 		}
 	}
 
@@ -307,8 +307,8 @@ class Characterization_Test {
 				}
 			});
 		}
-		@Override protected McpMrtrConfig createMrtrConfig() {
-			return new McpMrtrConfig().setCodec(new FixedKeyGcmCodec());
+		@Override protected McpOptions createMcpOptions() {
+			return new McpOptions().mrtr(m -> m.setCodec(new FixedKeyGcmCodec()));
 		}
 	}
 
@@ -359,8 +359,8 @@ class Characterization_Test {
 				});
 		}
 
-		@Override protected McpMrtrConfig createMrtrConfig() {
-			return new McpMrtrConfig().setCodec(new FixedKeyGcmCodec());
+		@Override protected McpOptions createMcpOptions() {
+			return new McpOptions().mrtr(m -> m.setCodec(new FixedKeyGcmCodec()));
 		}
 	}
 

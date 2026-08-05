@@ -198,12 +198,10 @@ class BasicMcpSubscriptionBroker_Test {
 	@Test void a11_registerIfUnder_underCap_registersAndReturnsPresent() {
 		var broker = new BasicMcpSubscriptionBroker(4);
 		var result = broker.registerIfUnder(2, "s1", new McpSubscriptionFilter(true, true, true, Set.of()));
-		try {
-			assertTrue(result.isPresent());
+		assertTrue(result.isPresent());
+		try (var sub = result.get()) {
 			assertEquals(1, broker.activeCount());
-			assertFalse(result.get().isClosed());
-		} finally {
-			result.ifPresent(McpSubscription::close);
+			assertFalse(sub.isClosed());
 		}
 	}
 
@@ -223,13 +221,11 @@ class BasicMcpSubscriptionBroker_Test {
 		try {
 			// At cap (1 active, max 1): re-registering the SAME id must still succeed since it replaces, not grows.
 			var second = broker.registerIfUnder(1, "s1", new McpSubscriptionFilter(false, false, false, Set.of()));
-			try {
-				assertTrue(second.isPresent());
+			assertTrue(second.isPresent());
+			try (var sub = second.get()) {
 				assertTrue(first.isClosed());
-				assertFalse(second.get().isClosed());
+				assertFalse(sub.isClosed());
 				assertEquals(1, broker.activeCount());
-			} finally {
-				second.ifPresent(McpSubscription::close);
 			}
 		} finally {
 			first.close();

@@ -325,6 +325,181 @@ class McpClientSubscriptionsListen_Test {
 	}
 
 	/**
+	 * Blocks on {@code latch} swallowing {@link InterruptedException} (re-asserting the interrupt flag), so
+	 * the {@link McpSubscriptionListener} callbacks below - which override interfaces methods that declare no
+	 * checked exception - can wait on it inline.
+	 */
+	private static void awaitUninterruptibly(CountDownLatch latch) {
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+	}
+
+	/**
+	 * Regression coverage for the happens-before race root-caused from a CI flake in {@link #a01_listen_singleStream_deliversAckThenNotificationsThenComplete_inOrder()}:
+	 * {@code assertFalse(handle.isOpen())} right after {@code done.await()} intermittently saw {@code true}
+	 * because {@code SubscriptionPump} used to flip its {@code open} flag to <jk>false</jk> in the
+	 * {@code finally} block - i.e. AFTER invoking the terminal listener callback - so a caller thread woken
+	 * from a latch/future the callback itself completes could observe the callback's effects while
+	 * {@code open} was still <jk>true</jk> ({@code CountDownLatch}'s happens-before is one-directional: it
+	 * only orders {@code countDown()} before the matching {@code await()} return, not the reverse).
+	 *
+	 * <p>
+	 * Rather than reproduce that as a timing-dependent flake, {@code b01}-{@code b04} below observe
+	 * {@code isOpen()} from a place where the ordering is no longer a race at all: <i>from inside the
+	 * terminal callback itself</i>, which always runs on the pump thread strictly before the pump thread
+	 * reaches its {@code finally} block. By the time {@code onComplete()}/{@code onError(Throwable)} starts
+	 * running, the pump has therefore already made its "did I flip {@code open} before or after invoking
+	 * this callback" decision - reading {@code isOpen()} from inside the callback can only ever observe
+	 * whichever the pump did first, deterministically:
+	 * <ul>
+	 * 	<li>Buggy ({@code open=false} only in {@code finally}): the callback observes {@code open==true}.
+	 * 	<li>Fixed ({@code open=false} immediately before {@code invokeListener(...)} at each terminal site):
+	 * 		the callback observes {@code open==false}.
+	 * </ul>
+	 *
+	 * <p>
+	 * The one wrinkle is that the callback needs a reference to the handle {@link McpClient#listen} returns,
+	 * and that return does not happen until after the pump thread has already been started - so the pump
+	 * thread could reach the callback before the test thread has published the handle. Each test below closes
+	 * that window with a small handoff gate ({@code handleReady}): the callback blocks on it before reading
+	 * {@code isOpen()}. That gate only delays <i>when</i> {@code isOpen()} is read, never <i>what</i> it
+	 * reads - the buggy-vs-fixed ordering decision the assertion is pinning was already made by the pump
+	 * before it ever called into the callback, so blocking briefly inside the callback cannot change it.
+	 */
+	@Test
+	void b01_isOpenObservedFromWithinOnComplete_isFalse_notTrueEvenThoughFinallyHasNotRunYet() throws Exception {
+		var ack = new SubscriptionsAcknowledgedNotification().setNotifications(new SubscriptionFilter())
+			.setMeta(new RequestMeta().set(RequestMeta.KEY_SUBSCRIPTION_ID, "sub-b1"));
+		var inbound =
+			"data: {\"jsonrpc\":\"2.0\",\"method\":\"" + McpMethods.NOTIFICATIONS_SUBSCRIPTIONS_ACKNOWLEDGED + "\",\"params\":" + JsonSerializer.DEFAULT.write(ack) + "}\n\n"
+			+ "data: {\"jsonrpc\":\"2.0\",\"id\":\"sub-b1\",\"result\":{\"resultType\":\"complete\"}}\n\n";
+		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200)
+			.header("Content-Type", "text/event-stream")
+			.body(new ByteArrayInputStream(inbound.getBytes(StandardCharsets.UTF_8))).build();
+
+		var handleRef = new AtomicReference<McpSubscriptionHandle>();
+		var handleReady = new CountDownLatch(1);
+		var capturedOpen = new AtomicBoolean(true);
+		var done = new CountDownLatch(1);
+		var listener = new McpSubscriptionListener() {
+			@Override public void onComplete() {
+				awaitUninterruptibly(handleReady);
+				capturedOpen.set(handleRef.get().isOpen());
+				done.countDown();
+			}
+		};
+
+		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var handle = client.listen(new SubscriptionFilter(), listener);
+			handleRef.set(handle);
+			handleReady.countDown();
+			assertTrue(done.await(5, TimeUnit.SECONDS), "onComplete never fired");
+			assertFalse(capturedOpen.get(),
+				"isOpen() read from inside onComplete() itself must already be false - open must be flipped "
+				+ "before the terminal callback is invoked, not after, in the finally block");
+		}
+	}
+
+	@Test
+	void b02_isOpenObservedFromWithinOnError_forServerErrorFrame_isFalse_notTrueEvenThoughFinallyHasNotRunYet() throws Exception {
+		var inbound = "data: {\"jsonrpc\":\"2.0\",\"id\":\"sub-b2\",\"error\":{\"code\":-32000,\"message\":\"boom\"}}\n\n";
+		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200)
+			.header("Content-Type", "text/event-stream")
+			.body(new ByteArrayInputStream(inbound.getBytes(StandardCharsets.UTF_8))).build();
+
+		var handleRef = new AtomicReference<McpSubscriptionHandle>();
+		var handleReady = new CountDownLatch(1);
+		var capturedOpen = new AtomicBoolean(true);
+		var done = new CountDownLatch(1);
+		var listener = new McpSubscriptionListener() {
+			@Override public void onError(Throwable t) {
+				awaitUninterruptibly(handleReady);
+				capturedOpen.set(handleRef.get().isOpen());
+				done.countDown();
+			}
+		};
+
+		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var handle = client.listen(new SubscriptionFilter(), listener);
+			handleRef.set(handle);
+			handleReady.countDown();
+			assertTrue(done.await(5, TimeUnit.SECONDS), "onError never fired for a server JSON-RPC error terminal frame");
+			assertFalse(capturedOpen.get(),
+				"isOpen() read from inside onError() itself must already be false for the dispatch(...) "
+				+ "error-terminal-frame branch");
+		}
+	}
+
+	@Test
+	void b03_isOpenObservedFromWithinOnError_forAbruptEof_isFalse_notTrueEvenThoughFinallyHasNotRunYet() throws Exception {
+		var ack = new SubscriptionsAcknowledgedNotification().setNotifications(new SubscriptionFilter())
+			.setMeta(new RequestMeta().set(RequestMeta.KEY_SUBSCRIPTION_ID, "sub-b3"));
+		// Deliberately no terminal frame, exactly like a04: the stream just ends (clean EOF).
+		var inbound =
+			"data: {\"jsonrpc\":\"2.0\",\"method\":\"" + McpMethods.NOTIFICATIONS_SUBSCRIPTIONS_ACKNOWLEDGED + "\",\"params\":" + JsonSerializer.DEFAULT.write(ack) + "}\n\n";
+		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200)
+			.header("Content-Type", "text/event-stream")
+			.body(new ByteArrayInputStream(inbound.getBytes(StandardCharsets.UTF_8))).build();
+
+		var handleRef = new AtomicReference<McpSubscriptionHandle>();
+		var handleReady = new CountDownLatch(1);
+		var capturedOpen = new AtomicBoolean(true);
+		var done = new CountDownLatch(1);
+		var listener = new McpSubscriptionListener() {
+			@Override public void onError(Throwable t) {
+				awaitUninterruptibly(handleReady);
+				capturedOpen.set(handleRef.get().isOpen());
+				done.countDown();
+			}
+		};
+
+		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var handle = client.listen(new SubscriptionFilter(), listener);
+			handleRef.set(handle);
+			handleReady.countDown();
+			assertTrue(done.await(5, TimeUnit.SECONDS), "onError never fired for an abrupt EOF with no terminal frame");
+			assertFalse(capturedOpen.get(),
+				"isOpen() read from inside onError() itself must already be false for run()'s abrupt-EOF "
+				+ "(reached-terminal==false) branch");
+		}
+	}
+
+	@Test
+	void b04_isOpenObservedFromWithinOnError_forMalformedFrameDecodeException_isFalse_notTrueEvenThoughFinallyHasNotRunYet() throws Exception {
+		// Same malformed payload as a03, but this exercises run()'s catch (Exception e) branch specifically
+		// (the decode failure is thrown out of dispatch(...) itself, not returned as a JSON-RPC error frame).
+		var inbound = "data: {not valid json\n\n";
+		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200)
+			.header("Content-Type", "text/event-stream")
+			.body(new ByteArrayInputStream(inbound.getBytes(StandardCharsets.UTF_8))).build();
+
+		var handleRef = new AtomicReference<McpSubscriptionHandle>();
+		var handleReady = new CountDownLatch(1);
+		var capturedOpen = new AtomicBoolean(true);
+		var done = new CountDownLatch(1);
+		var listener = new McpSubscriptionListener() {
+			@Override public void onError(Throwable t) {
+				awaitUninterruptibly(handleReady);
+				capturedOpen.set(handleRef.get().isOpen());
+				done.countDown();
+			}
+		};
+
+		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+			var handle = client.listen(new SubscriptionFilter(), listener);
+			handleRef.set(handle);
+			handleReady.countDown();
+			assertTrue(done.await(5, TimeUnit.SECONDS), "onError never fired for a malformed frame");
+			assertFalse(capturedOpen.get(),
+				"isOpen() read from inside onError() itself must already be false for run()'s catch "
+				+ "(Exception e) decode-failure branch");
+		}
+	}
+
+	/**
 	 * A genuinely blocking {@link InputStream}: {@link #read()} parks on a latch (no busy-polling) until
 	 * {@link #release()} is called from another thread, then throws — modeling a real closed-socket read
 	 * failure so {@link McpClientSubscriptionsListen_Test#a06_cancelWhileBlockedInRead_terminatesPumpThread_andClosesStream}

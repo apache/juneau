@@ -63,7 +63,7 @@ public final class ElicitationRequests {
 	 * elicitations paused on together, resumed together).
 	 *
 	 * <p>
-	 * Unlike {@code ElicitationAccess.toInputResponses(Map)} (client side), an empty {@code requests} map is
+	 * Unlike {@code ElicitationResponses.toInputResponses(Map)} (client side), an empty {@code requests} map is
 	 * rejected, not accepted &mdash; deliberately asymmetric, since a signal built with zero questions would be
 	 * a pointless pause, whereas a caller resuming may legitimately have zero elicitation answers on hand if
 	 * the round it is resuming only carried non-elicitation MRTR pauses.

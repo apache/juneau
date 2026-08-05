@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.server.*;
@@ -50,79 +49,53 @@ class McpSubscriptionBrokerBinding_Test {
 
 	@Test void a03_servletSubscriptionsConfig_isLazilyCachedAcrossCalls() {
 		var servlet = new A();
-		assertSame(servlet.getSubscriptionsConfig(), servlet.getSubscriptionsConfig());
+		assertSame(servlet.getMcpOptions().getSubscriptions(), servlet.getMcpOptions().getSubscriptions());
 	}
 
-	@Test void a03b_subscriptionsConfigBean_isAnnotatedAndDelegatesToGetSubscriptionsConfig() throws Exception {
-		var servlet = new A();
-		var m = McpRestServlet.class.getMethod("subscriptionsConfigBean");
+	@Test void a03b_getMcpOptions_isAnnotatedAsBean() throws Exception {
+		var m = McpRestServlet.class.getMethod("getMcpOptions");
 		assertTrue(m.isAnnotationPresent(org.apache.juneau.commons.inject.Bean.class),
-			"subscriptionsConfigBean() must be @Bean-annotated so the RestContext bean store discovers it, "
+			"getMcpOptions() must be @Bean-annotated so the RestContext bean store discovers it, "
 			+ "the same mechanism already used by mcpTraceContextExtractor()");
-		assertSame(servlet.getSubscriptionsConfig(), servlet.subscriptionsConfigBean());
-	}
-
-	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class B extends McpRestServlet {
-		private static final long serialVersionUID = 1L;
-		@Override protected org.apache.juneau.rest.server.mcp.McpServerConfig createMcpConfig() {
-			return new org.apache.juneau.rest.server.mcp.McpServerConfig();
-		}
-		@Override protected McpSubscriptionsConfig createSubscriptionsConfig() { return null; }
-	}
-
-	@Test void a04_servletNullSubscriptionsConfigFactoryFailsFast() {
-		var e = assertThrows(IllegalStateException.class, () -> new B().getSubscriptionsConfig());
-		assertEquals("createSubscriptionsConfig() returned null", e.getMessage());
-	}
-
-	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	public static class C extends McpRestServlet {
-		private static final long serialVersionUID = 1L;
-		@Override protected org.apache.juneau.rest.server.mcp.McpServerConfig createMcpConfig() {
-			return new org.apache.juneau.rest.server.mcp.McpServerConfig();
-		}
-		@Override protected McpSubscriptionBroker createSubscriptionBroker() { return null; }
-	}
-
-	@Test void a05_servletNullBrokerFactoryFailsFast() {
-		var e = assertThrows(IllegalStateException.class, () -> new C().getSubscriptionBroker());
-		assertEquals("createSubscriptionBroker() returned null", e.getMessage());
 	}
 
 	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
 	public static class D extends McpRestServlet {
 		private static final long serialVersionUID = 1L;
-		final AtomicInteger createCalls = new AtomicInteger();
 		@Override protected org.apache.juneau.rest.server.mcp.McpServerConfig createMcpConfig() {
 			return new org.apache.juneau.rest.server.mcp.McpServerConfig();
 		}
-		@Override protected McpSubscriptionBroker createSubscriptionBroker() {
-			createCalls.incrementAndGet();
-			return new BasicMcpSubscriptionBroker(getSubscriptionsConfig().getQueueSize());
+		@Override protected McpOptions createMcpOptions() {
+			return new McpOptions().setSubscriptionBroker(new BasicMcpSubscriptionBroker(42));
 		}
 	}
 
-	/**
-	 * Mirrors {@code McpBindings_Test#e06_servletMrtrConfig_concurrentFirstAccessPublishesExactlyOneInstance}:
-	 * a plain lazy read would let two racing threads each publish a distinct broker, silently splitting live
-	 * subscription state across two registries. Every concurrent first-access caller must observe the same
-	 * instance and {@code createSubscriptionBroker()} must run exactly once.
-	 */
-	@Test void a06_servletBroker_concurrentFirstAccessPublishesExactlyOneInstance() throws Exception {
+	@Test void a04_servletExplicitBroker_isReturnedAsIs() {
 		var servlet = new D();
+		var broker = servlet.getSubscriptionBroker();
+		assertSame(servlet.getMcpOptions().getSubscriptionBroker(), broker);
+	}
+
+	/**
+	 * Mirrors {@code McpBindings_Test#e02_servletOptions_concurrentFirstAccessPublishesExactlyOneInstance}, but
+	 * exercises {@link McpOptions#resolveSubscriptionBroker()}'s own inner double-checked-locking directly: a
+	 * plain lazy read would let two racing threads each publish a distinct derived broker, silently splitting
+	 * live subscription state across two registries. Every concurrent first-access caller must observe the same
+	 * derived instance.
+	 */
+	@Test void a05_derivedBroker_concurrentFirstAccessPublishesExactlyOneInstance() throws Exception {
+		var options = new McpOptions();
 		var threads = 16;
 		var pool = Executors.newFixedThreadPool(threads);
 		try {
 			var start = new CountDownLatch(1);
 			var results = new ArrayList<Future<McpSubscriptionBroker>>();
 			for (var i = 0; i < threads; i++)
-				results.add(pool.submit(() -> { start.await(); return servlet.getSubscriptionBroker(); }));
+				results.add(pool.submit(() -> { start.await(); return options.resolveSubscriptionBroker(); }));
 			start.countDown();
 			var first = results.get(0).get();
 			for (var f : results)
-				assertSame(first, f.get(), "every concurrent first-access caller must observe the same published broker");
-			assertEquals(1, servlet.createCalls.get(), "createSubscriptionBroker() must be invoked exactly once under the lock");
+				assertSame(first, f.get(), "every concurrent first-access caller must observe the same derived broker");
 		} finally {
 			pool.shutdownNow();
 		}

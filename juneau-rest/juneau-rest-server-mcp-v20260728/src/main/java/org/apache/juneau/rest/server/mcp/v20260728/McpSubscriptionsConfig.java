@@ -32,9 +32,10 @@ package org.apache.juneau.rest.server.mcp.v20260728;
  * <p>
  * Unlike the {@code org.apache.juneau.rest.server.mcp.McpSubscriptionBroker} singleton (which holds live
  * per-connection state), this type is knobs-only — every field is a tunable numeric limit with no embedded
- * broker reference — so a servlet binding may memoize it with a plain lazy read (see
- * {@link McpRestServlet#getSubscriptionsConfig()}) rather than the MRTR-grade double-checked lock the broker
- * itself requires (see {@link McpRestServlet#getSubscriptionBroker()}).
+ * broker reference. It is one of {@link McpOptions}'s nested configs (see {@link McpOptions#getSubscriptions()}),
+ * memoized once per binding along with the rest of {@link McpOptions}; the broker itself is derived and
+ * memoized separately, sized from this config's {@link #getQueueSize() queueSize} (see
+ * {@link McpOptions#resolveSubscriptionBroker()}).
  */
 public class McpSubscriptionsConfig {
 

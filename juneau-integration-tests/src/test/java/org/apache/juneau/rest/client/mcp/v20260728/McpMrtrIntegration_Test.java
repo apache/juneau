@@ -106,8 +106,8 @@ class McpMrtrIntegration_Test extends TestBase {
 		}
 
 		@Override
-		protected McpMrtrConfig createMrtrConfig() {
-			return new McpMrtrConfig().setCodec(CODEC);
+		protected McpOptions createMcpOptions() {
+			return new McpOptions().mrtr(m -> m.setCodec(CODEC));
 		}
 	}
 
