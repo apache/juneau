@@ -345,6 +345,198 @@ public final class McpClient extends AbstractMcpClient {
 	}
 
 	/**
+	 * Default maximum number of {@code input_required} resume rounds the {@code *WithElicitation} helpers will
+	 * drive before throwing {@link McpElicitationLimitException}.
+	 */
+	public static final int DEFAULT_MAX_ELICITATION_ROUNDS = 8;
+
+	/**
+	 * Invokes {@value McpMethods#TOOLS_CALL}, transparently answering any MCP {@code 2026-07-28} SEP-2322
+	 * {@code input_required} elicitation pauses via {@code handler} until a terminal result is reached, using the
+	 * {@link #DEFAULT_MAX_ELICITATION_ROUNDS default} max-rounds bound.
+	 *
+	 * <p>
+	 * This is the ergonomic counterpart to hand-driving the resume loop with {@link #callRaw},
+	 * {@link ElicitationRequests}, and {@link ElicitationResponses}: it detects each pause, decodes that round's
+	 * requests, calls {@code handler} for the answers, echoes them back with the carried {@code requestState},
+	 * and repeats until the server returns a non-{@code input_required} result, which is decoded into a typed
+	 * {@link CallToolResult}. {@link #callRaw} remains available as the low-level escape hatch.
+	 *
+	 * @param name The tool name to invoke.
+	 * @param arguments The tool arguments. Can be <jk>null</jk> (sent as an empty object).
+	 * @param handler The elicitation answer callback, invoked once per pause. Must not be <jk>null</jk>.
+	 * @return The terminal call-tool result. Never <jk>null</jk> on success unless the server returns a
+	 * 	<jk>null</jk> result.
+	 * @throws IllegalArgumentException If {@code handler} is <jk>null</jk>, or {@code handler} returns a
+	 * 	<jk>null</jk> result or a result map containing a <jk>null</jk> value for a requested id.
+	 * @throws IOException If a transport-level or (de)serialization error occurs, or {@code handler} throws it.
+	 * @throws McpException If the server returned a JSON-RPC error.
+	 * @throws McpElicitationLimitException If the server keeps pausing past {@link #DEFAULT_MAX_ELICITATION_ROUNDS}.
+	 */
+	public CallToolResult callToolWithElicitation(String name, Map<String,Object> arguments, McpElicitationHandler handler) throws IOException {
+		return callToolWithElicitation(name, arguments, handler, DEFAULT_MAX_ELICITATION_ROUNDS);
+	}
+
+	/**
+	 * Invokes {@value McpMethods#TOOLS_CALL}, transparently answering any {@code input_required} elicitation
+	 * pauses via {@code handler} until a terminal result is reached, bounded by {@code maxRounds}.
+	 *
+	 * @param name The tool name to invoke.
+	 * @param arguments The tool arguments. Can be <jk>null</jk> (sent as an empty object).
+	 * @param handler The elicitation answer callback, invoked once per pause. Must not be <jk>null</jk>.
+	 * @param maxRounds The maximum number of resume rounds before {@link McpElicitationLimitException} is thrown. Must be &ge; 1.
+	 * @return The terminal call-tool result. Never <jk>null</jk> on success unless the server returns a
+	 * 	<jk>null</jk> result.
+	 * @throws IllegalArgumentException If {@code handler} is <jk>null</jk>, {@code maxRounds} is not &ge; 1, or
+	 * 	{@code handler} returns a <jk>null</jk> result or a result map containing a <jk>null</jk> value for a
+	 * 	requested id.
+	 * @throws IOException If a transport-level or (de)serialization error occurs, or {@code handler} throws it.
+	 * @throws McpException If the server returned a JSON-RPC error.
+	 * @throws McpElicitationLimitException If the server keeps pausing past {@code maxRounds}.
+	 */
+	public CallToolResult callToolWithElicitation(String name, Map<String,Object> arguments, McpElicitationHandler handler, int maxRounds) throws IOException {
+		var params = new CallToolRequest().setName(name).setArguments(arguments == null ? JsonMap.of() : new JsonMap(arguments));
+		var raw = driveElicitation(McpMethods.TOOLS_CALL, params, (responses, state) -> params.setInputResponses(responses).setRequestState(state), handler, maxRounds);
+		return decodeResult(raw, CallToolResult.class);
+	}
+
+	/**
+	 * Invokes {@value McpMethods#PROMPTS_GET}, transparently answering any {@code input_required} elicitation
+	 * pauses via {@code handler} until a terminal result is reached, using the
+	 * {@link #DEFAULT_MAX_ELICITATION_ROUNDS default} max-rounds bound.
+	 *
+	 * @param name The prompt name to fetch.
+	 * @param arguments The prompt argument values. Can be <jk>null</jk> (sent as an empty object).
+	 * @param handler The elicitation answer callback, invoked once per pause. Must not be <jk>null</jk>.
+	 * @return The terminal get-prompt result. Never <jk>null</jk> on success unless the server returns a
+	 * 	<jk>null</jk> result.
+	 * @throws IllegalArgumentException If {@code handler} is <jk>null</jk>, or {@code handler} returns a
+	 * 	<jk>null</jk> result or a result map containing a <jk>null</jk> value for a requested id.
+	 * @throws IOException If a transport-level or (de)serialization error occurs, or {@code handler} throws it.
+	 * @throws McpException If the server returned a JSON-RPC error.
+	 * @throws McpElicitationLimitException If the server keeps pausing past {@link #DEFAULT_MAX_ELICITATION_ROUNDS}.
+	 */
+	public GetPromptResult getPromptWithElicitation(String name, Map<String,Object> arguments, McpElicitationHandler handler) throws IOException {
+		return getPromptWithElicitation(name, arguments, handler, DEFAULT_MAX_ELICITATION_ROUNDS);
+	}
+
+	/**
+	 * Invokes {@value McpMethods#PROMPTS_GET}, transparently answering any {@code input_required} elicitation
+	 * pauses via {@code handler} until a terminal result is reached, bounded by {@code maxRounds}.
+	 *
+	 * @param name The prompt name to fetch.
+	 * @param arguments The prompt argument values. Can be <jk>null</jk> (sent as an empty object).
+	 * @param handler The elicitation answer callback, invoked once per pause. Must not be <jk>null</jk>.
+	 * @param maxRounds The maximum number of resume rounds before {@link McpElicitationLimitException} is thrown. Must be &ge; 1.
+	 * @return The terminal get-prompt result. Never <jk>null</jk> on success unless the server returns a
+	 * 	<jk>null</jk> result.
+	 * @throws IllegalArgumentException If {@code handler} is <jk>null</jk>, {@code maxRounds} is not &ge; 1, or
+	 * 	{@code handler} returns a <jk>null</jk> result or a result map containing a <jk>null</jk> value for a
+	 * 	requested id.
+	 * @throws IOException If a transport-level or (de)serialization error occurs, or {@code handler} throws it.
+	 * @throws McpException If the server returned a JSON-RPC error.
+	 * @throws McpElicitationLimitException If the server keeps pausing past {@code maxRounds}.
+	 */
+	public GetPromptResult getPromptWithElicitation(String name, Map<String,Object> arguments, McpElicitationHandler handler, int maxRounds) throws IOException {
+		var params = new GetPromptRequest().setName(name).setArguments(arguments == null ? JsonMap.of() : new JsonMap(arguments));
+		var raw = driveElicitation(McpMethods.PROMPTS_GET, params, (responses, state) -> params.setInputResponses(responses).setRequestState(state), handler, maxRounds);
+		return decodeResult(raw, GetPromptResult.class);
+	}
+
+	/**
+	 * Invokes {@value McpMethods#RESOURCES_READ}, transparently answering any {@code input_required} elicitation
+	 * pauses via {@code handler} until a terminal result is reached, using the
+	 * {@link #DEFAULT_MAX_ELICITATION_ROUNDS default} max-rounds bound.
+	 *
+	 * @param uri The resource URI to read.
+	 * @param handler The elicitation answer callback, invoked once per pause. Must not be <jk>null</jk>.
+	 * @return The terminal read-resource result. Never <jk>null</jk> on success unless the server returns a
+	 * 	<jk>null</jk> result.
+	 * @throws IllegalArgumentException If {@code handler} is <jk>null</jk>, or {@code handler} returns a
+	 * 	<jk>null</jk> result or a result map containing a <jk>null</jk> value for a requested id.
+	 * @throws IOException If a transport-level or (de)serialization error occurs, or {@code handler} throws it.
+	 * @throws McpException If the server returned a JSON-RPC error.
+	 * @throws McpElicitationLimitException If the server keeps pausing past {@link #DEFAULT_MAX_ELICITATION_ROUNDS}.
+	 */
+	public ReadResourceResult readResourceWithElicitation(String uri, McpElicitationHandler handler) throws IOException {
+		return readResourceWithElicitation(uri, handler, DEFAULT_MAX_ELICITATION_ROUNDS);
+	}
+
+	/**
+	 * Invokes {@value McpMethods#RESOURCES_READ}, transparently answering any {@code input_required} elicitation
+	 * pauses via {@code handler} until a terminal result is reached, bounded by {@code maxRounds}.
+	 *
+	 * @param uri The resource URI to read.
+	 * @param handler The elicitation answer callback, invoked once per pause. Must not be <jk>null</jk>.
+	 * @param maxRounds The maximum number of resume rounds before {@link McpElicitationLimitException} is thrown. Must be &ge; 1.
+	 * @return The terminal read-resource result. Never <jk>null</jk> on success unless the server returns a
+	 * 	<jk>null</jk> result.
+	 * @throws IllegalArgumentException If {@code handler} is <jk>null</jk>, {@code maxRounds} is not &ge; 1, or
+	 * 	{@code handler} returns a <jk>null</jk> result or a result map containing a <jk>null</jk> value for a
+	 * 	requested id.
+	 * @throws IOException If a transport-level or (de)serialization error occurs, or {@code handler} throws it.
+	 * @throws McpException If the server returned a JSON-RPC error.
+	 * @throws McpElicitationLimitException If the server keeps pausing past {@code maxRounds}.
+	 */
+	public ReadResourceResult readResourceWithElicitation(String uri, McpElicitationHandler handler, int maxRounds) throws IOException {
+		var params = new ReadResourceRequest().setUri(uri);
+		var raw = driveElicitation(McpMethods.RESOURCES_READ, params, (responses, state) -> params.setInputResponses(responses).setRequestState(state), handler, maxRounds);
+		return decodeResult(raw, ReadResourceResult.class);
+	}
+
+	/**
+	 * Shared MRTR (SEP-2322) auto-resume loop backing every {@code *WithElicitation} method.
+	 *
+	 * <p>
+	 * Issues the initial {@link #callRaw} for {@code params}, then while the raw result is an
+	 * {@code input_required} pause: decodes the round's requests, invokes {@code handler} for the answers,
+	 * applies them plus the pause's echoed {@code requestState} onto {@code params} via {@code applyResume} (each
+	 * concrete request bean knows its own {@code setInputResponses}/{@code setRequestState}, which have no shared
+	 * interface — see {@link ElicitationRequests}), and re-issues. A decline/cancel answer is not short-circuited
+	 * locally: it is echoed back like any other answer, leaving the terminal outcome of a refused elicitation to
+	 * the server. The loop is bounded by {@code maxRounds} so a server (or handler) that never converges surfaces
+	 * as a typed {@link McpElicitationLimitException} rather than hanging.
+	 */
+	private Map<String,Object> driveElicitation(String method, RequestParams<?> params, ResumeApplier applyResume, McpElicitationHandler handler, int maxRounds) throws IOException {
+		assertArgNotNull("handler", handler);
+		assertArg(maxRounds >= 1, "maxRounds must be >= 1 (was %s).", maxRounds);
+		var raw = callRaw(method, params);
+		var rounds = 0;
+		while (ElicitationRequests.isInputRequired(raw)) {
+			if (++rounds > maxRounds)
+				throw new McpElicitationLimitException(maxRounds);
+			var requests = ElicitationRequests.requests(raw);
+			var requestState = ElicitationRequests.requestState(raw);
+			var answers = assertArgNotNull("handler result", handler.elicit(requests));
+			applyResume.apply(ElicitationResponses.toInputResponses(answers), requestState);
+			raw = callRaw(method, params);
+		}
+		return raw;
+	}
+
+	/**
+	 * Decodes a terminal raw result {@link Map} into its typed result bean the same way {@link #call} decodes a
+	 * live wire result, so a polymorphic field (e.g. a {@link CallToolResult}'s {@code content} entries) keeps
+	 * the {@code type} discriminator it already carries in the raw tree.
+	 */
+	private static <T> T decodeResult(Map<String,Object> raw, Class<T> resultType) {
+		return JsonMap.of("value", raw).get("value", resultType);
+	}
+
+	/**
+	 * Applies one round's collected answers and carried continuation token onto the concrete resume request bean.
+	 *
+	 * <p>
+	 * Exists (rather than a {@code BiConsumer}) so each {@code *WithElicitation} method can bind its own concrete
+	 * bean's {@code setInputResponses}/{@code setRequestState} pair, which — unlike {@code RequestParams} — share
+	 * no common interface across {@code CallToolRequest}/{@code GetPromptRequest}/{@code ReadResourceRequest}.
+	 */
+	@FunctionalInterface
+	private interface ResumeApplier {
+		void apply(Map<String,Object> inputResponses, String requestState);
+	}
+
+	/**
 	 * Sends {@value McpMethods#SUBSCRIPTIONS_LISTEN}, opening a managed, held-open notification stream on a
 	 * background thread and dispatching decoded frames to {@code listener} until the returned handle is closed,
 	 * the server completes gracefully, or the connection drops.
