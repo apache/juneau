@@ -16,7 +16,12 @@ timestamps {
 	node ('ubuntu') { 
 	
 		stage ('Juneau-Java-17 - Checkout') {
-			checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/apache/juneau']]]) 
+			// CleanBeforeCheckout runs 'git clean -fdx' prior to checkout so untracked build byproduct left on this
+			// long-lived reused agent workspace is purged.  Without it, module directories that were renamed via
+			// 'git mv' (e.g. the juneau-*-mcp-* family) leave orphaned target/surefire-reports/*.xml behind that
+			// 'mvn clean' never revisits, which the unscoped junit '**/target/surefire-reports/*.xml' step below
+			// then re-discovers on every build -- marking an otherwise-green build UNSTABLE indefinitely.
+			checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/apache/juneau']]]) 
 		}
 		
 		stage ('Juneau-Java-17 - Build') {
