@@ -34,6 +34,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Default exec:java target; override with -Dexec.mainClass=... for ExampleClient or the Spring launcher. -->
 		<exec.mainClass>org.apache.juneau.examples.mcp.ExampleServer</exec.mainClass>
+		<!-- Pins mirror juneau-rest-server-auth-jwt / juneau-rest-client-mcp-auth's own <properties> exactly -
+			both declare their Nimbus dependency 'provided' (non-transitive), so a consumer that actually runs
+			JWT validation or the OAuth client flows (as the secured example does) must re-declare them itself. -->
+		<nimbus-jose-jwt.version>10.3</nimbus-jose-jwt.version>
+		<nimbus-oauth2-oidc-sdk.version>11.37.2</nimbus-oauth2-oidc-sdk.version>
 	</properties>
 
 	<dependencies>
@@ -85,6 +90,47 @@
 					<artifactId>spring-boot-starter-logging</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<!--
+			Backs the OAuth 2.1-secured variant (org.apache.juneau.examples.mcp.secured):  JwtTokenValidator,
+			the JWKS-backed TokenValidator the RS config wires in.  Declared explicitly because it is marked
+			<optional> (provided) in juneau-rest-server-mcp-v20260728, so it does not transit to consumers.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-auth-jwt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!--
+			juneau-rest-server-auth-jwt's sole runtime dependency, deliberately declared <provided> (non-transitive)
+			upstream so JWT support stays opt-in.  The secured example DOES use JWT validation, so it must pull
+			this in itself (pinned to the same version juneau-rest-server-auth-jwt itself uses).
+		-->
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>${nimbus-jose-jwt.version}</version>
+		</dependency>
+
+		<!-- Client-side OAuth 2.1 token acquisition (McpTokenProvider, McpProtectedResourceMetadataClient, ...)
+			backing the secured client demo. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-client-mcp-auth</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!--
+			juneau-rest-client-mcp-auth's sole runtime dependency, also <provided> (non-transitive) upstream for
+			the same opt-in reason as nimbus-jose-jwt above; the secured client demo exercises the real
+			client-credentials flow, so this must be declared explicitly too.
+		-->
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>oauth2-oidc-sdk</artifactId>
+			<version>${nimbus-oauth2-oidc-sdk.version}</version>
 		</dependency>
 
 		<!-- Test: JUnit Jupiter, for the in-process end-to-end test. -->

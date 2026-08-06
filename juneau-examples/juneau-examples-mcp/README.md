@@ -46,6 +46,7 @@ A single domain — an in-memory `title → body` note store (`NoteStore`) — i
 | [`spring/SpringExampleMcpServer.java`](src/main/java/org/apache/juneau/examples/mcp/spring/SpringExampleMcpServer.java) | Spring Boot variant using `SpringMcpRestServlet` |
 | [`spring/SpringExampleApplication.java`](src/main/java/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.java) | `@SpringBootApplication` launcher |
 | [`ExampleMcpEndToEnd_Test.java`](src/test/java/org/apache/juneau/examples/mcp/ExampleMcpEndToEnd_Test.java) | In-process end-to-end proof |
+| [`secured/`](src/main/java/org/apache/juneau/examples/mcp/secured/) | The OAuth 2.1-secured variant — see [below](#4-the-oauth-21-secured-variant) |
 
 ## Run it
 
@@ -111,6 +112,60 @@ mvn -f juneau-examples/juneau-examples-mcp/pom.xml test
 `ExampleMcpEndToEnd_Test` boots the server in-process on an ephemeral port and drives the real
 client through every surface, asserting each outcome.
 
+### 4. The OAuth 2.1-secured variant
+
+`org.apache.juneau.examples.mcp.secured` wraps the exact same notes service in an OAuth 2.1
+resource-server gate — every JSON-RPC call now requires a valid bearer token, and the two
+mutating tools (`publishNote`/`deleteNote`) additionally require a step-up `mcp.write` scope on
+top of the baseline `mcp.read` (see below). It is entirely **self-contained and
+offline-runnable**: alongside the secured server, an in-process
+[`OfflineAuthorizationServer.java`](src/main/java/org/apache/juneau/examples/mcp/secured/OfflineAuthorizationServer.java)
+stands in for a real authorization server (AS) — it generates its own RSA signing key, publishes
+the public half of it directly to the validator (no JWKS HTTP fetch needed), and answers a real
+RFC 6749 §4.4 client-credentials token request, as well as a real RFC 8414 authorization-server
+metadata discovery request. Nothing here talks to the network or requires any setup; see that
+class's javadoc for the full design rationale, including exactly what this offline stand-in does
+**not** implement (no real scope-authorization decision beyond a fixed allowlist, no refresh
+tokens, no user auth).
+
+> **Client secrets don't belong on a command line.** `SecuredExampleServer.main` prints the demo
+> client secret to the console purely so this walkthrough has something to copy/paste. A real
+> client should read its secret from an environment variable or a file it controls, never accept
+> it as a CLI argument (`argv` is visible to every other process on the host via `/proc` or `ps`).
+
+Start the secured server (defaults to port `5001`; pass a port to override). It prints a startup
+banner with everything the client needs — copy those three values:
+
+```bash
+mvn -f juneau-examples/juneau-examples-mcp/pom.xml exec:java \
+  -Dexec.mainClass=org.apache.juneau.examples.mcp.secured.SecuredExampleServer
+```
+
+In another terminal, paste the three printed values into the secured client walkthrough:
+
+```bash
+mvn -f juneau-examples/juneau-examples-mcp/pom.xml exec:java \
+  -Dexec.mainClass=org.apache.juneau.examples.mcp.secured.SecuredExampleClient \
+  -Dexec.args="<endpoint> <clientId> <clientSecret>"
+```
+
+The client walks through seven beats: (1) a raw, header-level HTTP call showing the exact `401` +
+`WWW-Authenticate: Bearer ...` challenge (including the RFC 9728 `resource_metadata` pointer) an
+unauthenticated request gets; (2) the same call again, this time through the real `McpClient` SDK,
+showing the ergonomic failure mode (a bare `IOException`, since the gate's rejection body is
+plain text, not a JSON-RPC envelope `McpClient` can parse into a typed result); (3) fetching the
+RFC 9728 Protected Resource Metadata document the challenge pointed at;
+(4) RFC 8414 discovery against the authorization server the PRM document named, resolving its
+`token_endpoint` (the token endpoint is never hardcoded or passed on the command line); (5)
+acquiring a real `mcp.read`-scoped bearer token and successfully reading a resource with it; (6)
+the SAME read-only token attempting `publishNote` — a scoped `403 insufficient_scope` step-up
+challenge naming `mcp.write`; (7) acquiring a second token carrying both `mcp.read` and
+`mcp.write` and successfully publishing a note with it.
+
+[`SecuredExampleMcpEndToEnd_Test.java`](src/test/java/org/apache/juneau/examples/mcp/secured/SecuredExampleMcpEndToEnd_Test.java)
+boots both servers in-process on ephemeral ports and asserts the same rejected/accepted paths
+without needing two terminals — run it the same way as `ExampleMcpEndToEnd_Test` (part 3 above).
+
 ## How the wiring works
 
 - **Server:** `ExampleMcpServer extends McpRestServlet` (the v2 base). `createMcpConfig()` lists
@@ -120,3 +175,9 @@ client through every surface, asserting each outcome.
   a `Microservice` with `JettyConfiguration`, which auto-mounts the `@Rest` servlet at `/`.
 - **Client:** `McpClient` (v2) — `connect()` does the mandatory `server/discover` handshake;
   `callTool`/`readResource`/`getPrompt`/`complete`/`listen`/`callToolWithElicitation` do the rest.
+- **Security (part 4):** `SecuredExampleMcpServer extends ExampleMcpServer`, overriding only
+  `createMcpOptions()` to add `.resourceServer(rs -> rs.setEnabled(true)...)` — a `JwtTokenValidator`
+  (from `juneau-rest-server-auth-jwt`) validates the bearer, and the RFC 9728 well-known metadata
+  route is served automatically once RS auth is enabled. The client side uses
+  `juneau-rest-client-mcp-auth`'s `McpTokenProvider.clientCredentials()` to acquire a token and
+  `McpAuthInterceptor` (via `.interceptor(tokens.interceptor())`) to attach it to every request.
