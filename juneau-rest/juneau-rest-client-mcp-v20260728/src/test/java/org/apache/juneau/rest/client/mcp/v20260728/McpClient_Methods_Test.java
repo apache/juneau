@@ -76,6 +76,32 @@ class McpClient_Methods_Test {
 	}
 
 	@Test
+	void c02_callToolText_returnsFirstTextContentText() throws Exception {
+		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"hello\"}]}}";
+		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(ok(wire)).build()) {
+			assertEquals("hello", c.callToolText("echo", Map.of("text", "hello")));
+		}
+	}
+
+	@Test
+	void c03_callToolText_nonTextFirstBlock_returnsNull() throws Exception {
+		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"content\":[{\"type\":\"audio\",\"data\":\"QUJD\",\"mimeType\":\"audio/wav\"}]}}";
+		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(ok(wire)).build()) {
+			assertNull(c.callToolText("echo", Map.of()));
+		}
+	}
+
+	@Test
+	void c04_callToolText_nullResult_returnsNullNotNpe() throws Exception {
+		// The server returning "result":null is a documented, legal callTool() outcome; callToolText must
+		// not NPE dereferencing it.
+		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":null}";
+		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(ok(wire)).build()) {
+			assertNull(c.callToolText("echo", Map.of()));
+		}
+	}
+
+	@Test
 	void d01_callTool_traceEchoEnabled_readsMetaPath() throws Exception {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"_meta\":{\"traceparent\":\"00-parent-01\",\"tracestate\":\"v=x\",\"baggage\":\"u=42\"},\"content\":[{\"type\":\"text\",\"text\":\"ok\"}]}}";
 		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(ok(wire)).build()) {

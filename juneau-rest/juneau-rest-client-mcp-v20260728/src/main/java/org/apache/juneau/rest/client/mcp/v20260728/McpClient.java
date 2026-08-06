@@ -235,6 +235,26 @@ public final class McpClient extends AbstractMcpClient {
 	}
 
 	/**
+	 * Convenience for {@link #callTool} followed by {@link CallToolResult#firstText()}.
+	 *
+	 * <p>
+	 * Kills the {@code ((TextContent)result.getContent().get(i)).getText()} cast-and-scan that a caller who
+	 * only wants the tool's text result would otherwise repeat at every call site.
+	 *
+	 * @param name The tool name to invoke.
+	 * @param arguments The tool arguments. Can be <jk>null</jk> (sent as an empty object).
+	 * @return The first {@link TextContent} block's text found while scanning the result's content list in
+	 * 	order, or <jk>null</jk> if the content list is empty or unset, it contains no {@link TextContent}
+	 * 	block, or {@link #callTool} itself returned a <jk>null</jk> result.
+	 * @throws IOException If a transport-level or (de)serialization error occurs.
+	 * @throws McpException If the server returned a JSON-RPC error.
+	 */
+	public String callToolText(String name, Map<String,Object> arguments) throws IOException {
+		var r = callTool(name, arguments);
+		return r == null ? null : r.firstText();
+	}
+
+	/**
 	 * Sends {@value McpMethods#PROMPTS_LIST}.
 	 *
 	 * @return The prompts-list result. Never <jk>null</jk> on success unless the server returns a <jk>null</jk> result.

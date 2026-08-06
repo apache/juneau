@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 
 /**
@@ -135,5 +136,24 @@ public class ServerDiscoverResult extends CacheableResult<ServerDiscoverResult> 
 	public ServerDiscoverResult setInstructions(String value) {
 		instructions = value;
 		return this;
+	}
+
+	/**
+	 * Returns this result's server identity, if present.
+	 *
+	 * <p>
+	 * Null-safe shortcut for {@code getMeta() == null ? null : getMeta().getServerInfo()}, so a caller does not
+	 * have to null-check the intermediate {@link #getMeta()} just to reach the server's {@link Implementation}.
+	 *
+	 * @return The server identity, or {@code null} if {@link #getMeta()} is unset, or its
+	 * 	{@link ResultMeta#getServerInfo()} is unset.
+	 */
+	// @BeanIgnore keeps this convenience getter from being (re)discovered as its own bean property, which
+	// would add a second, top-level "serverInfo" member to the server/discover wire format - identity
+	// belongs solely under the inherited _meta envelope (see the class javadoc).
+	@BeanIgnore
+	public Implementation getServerInfo() {
+		var m = getMeta();
+		return m == null ? null : m.getServerInfo();
 	}
 }

@@ -302,6 +302,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-examples-mcp</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-petstore-jetty</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
@@ -1270,6 +1276,17 @@
 									<type>zip</type>
 									<version>${project.version}</version>
 									<destFileName>apache-juneau-examples-core-${project.version}.zip</destFileName>
+								</artifactItem>
+
+								<!-- juneau-examples-mcp -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-examples-mcp</artifactId>
+									<classifier>bin</classifier>
+									<type>zip</type>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-examples-mcp-${project.version}.zip</destFileName>
 								</artifactItem>
 
 								<!-- juneau-petstore-jetty -->

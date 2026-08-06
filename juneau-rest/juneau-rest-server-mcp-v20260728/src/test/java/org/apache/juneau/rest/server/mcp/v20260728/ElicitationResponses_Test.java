@@ -92,4 +92,117 @@ class ElicitationResponses_Test {
 		var ctx = new McpMrtrResumeContext(null, responses);
 		assertThrows(RuntimeException.class, () -> ElicitationResponses.get(ctx, "q1"));
 	}
+
+	@Test void a10_getBoolean_acceptedTrueContent_returnsTrue() {
+		var responses = Map.<String,Object>of("q1", JsonMap.of("action", "accept", "content", JsonMap.of("confirm", true)));
+		var ctx = new McpMrtrResumeContext(null, responses);
+		assertTrue(ElicitationResponses.getBoolean(ctx, "q1", "confirm"));
+	}
+
+	@Test void a11_getBoolean_acceptedFalseContent_returnsFalse() {
+		var responses = Map.<String,Object>of("q1", JsonMap.of("action", "accept", "content", JsonMap.of("confirm", false)));
+		var ctx = new McpMrtrResumeContext(null, responses);
+		assertFalse(ElicitationResponses.getBoolean(ctx, "q1", "confirm"));
+	}
+
+	@Test void a12_getBoolean_declinedAction_returnsFalse() {
+		var responses = Map.<String,Object>of("q1", JsonMap.of("action", "decline"));
+		var ctx = new McpMrtrResumeContext(null, responses);
+		assertFalse(ElicitationResponses.getBoolean(ctx, "q1", "confirm"));
+	}
+
+	@Test void a13_getBoolean_missingId_returnsFalse() {
+		var ctx = new McpMrtrResumeContext(null, Map.of());
+		assertFalse(ElicitationResponses.getBoolean(ctx, "missing", "confirm"));
+	}
+
+	@Test void a14_getBoolean_missingField_returnsFalse() {
+		var responses = Map.<String,Object>of("q1", JsonMap.of("action", "accept", "content", JsonMap.of()));
+		var ctx = new McpMrtrResumeContext(null, responses);
+		assertFalse(ElicitationResponses.getBoolean(ctx, "q1", "confirm"));
+	}
+
+	@Test void a15_getBoolean_nullFieldThrows() {
+		var ctx = new McpMrtrResumeContext(null, Map.of());
+		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationResponses.getBoolean(ctx, "q1", null));
+		assertEquals("Argument 'field' cannot be null.", e.getMessage());
+	}
+
+	@Test void a16_getString_acceptedContent_returnsValue() {
+		var responses = Map.<String,Object>of("q1", JsonMap.of("action", "accept", "content", JsonMap.of("name", "al")));
+		var ctx = new McpMrtrResumeContext(null, responses);
+		assertEquals("al", ElicitationResponses.getString(ctx, "q1", "name"));
+	}
+
+	@Test void a17_getString_declinedAction_returnsNull() {
+		var responses = Map.<String,Object>of("q1", JsonMap.of("action", "decline"));
+		var ctx = new McpMrtrResumeContext(null, responses);
+		assertNull(ElicitationResponses.getString(ctx, "q1", "name"));
+	}
+
+	@Test void a18_getString_missingId_returnsNull() {
+		var ctx = new McpMrtrResumeContext(null, Map.of());
+		assertNull(ElicitationResponses.getString(ctx, "missing", "name"));
+	}
+
+	@Test void a19_getString_nonStringValue_returnsNull() {
+		var responses = Map.<String,Object>of("q1", JsonMap.of("action", "accept", "content", JsonMap.of("name", 42)));
+		var ctx = new McpMrtrResumeContext(null, responses);
+		assertNull(ElicitationResponses.getString(ctx, "q1", "name"));
+	}
+
+	@Test void a20_getString_nullFieldThrows() {
+		var ctx = new McpMrtrResumeContext(null, Map.of());
+		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationResponses.getString(ctx, "q1", null));
+		assertEquals("Argument 'field' cannot be null.", e.getMessage());
+	}
+
+	@Test void a21_getString_acceptedMissingField_returnsNull() {
+		var responses = Map.<String,Object>of("q1", JsonMap.of("action", "accept", "content", JsonMap.of()));
+		var ctx = new McpMrtrResumeContext(null, responses);
+		assertNull(ElicitationResponses.getString(ctx, "q1", "name"));
+	}
+
+	@Test void a22_getBoolean_nonBooleanStringValue_returnsFalseSafely() {
+		// L-3: a string "true" is not Boolean.TRUE - getBoolean must not do a lenient/truthy coercion.
+		var responses = Map.<String,Object>of("q1", JsonMap.of("action", "accept", "content", JsonMap.of("confirm", "true")));
+		var ctx = new McpMrtrResumeContext(null, responses);
+		assertFalse(ElicitationResponses.getBoolean(ctx, "q1", "confirm"));
+	}
+
+	@Test void a23_getBoolean_cancelledAction_returnsFalse() {
+		// L-3: cancel (not just decline) is also a non-ACCEPT action that must be treated as false.
+		var responses = Map.<String,Object>of("q1", JsonMap.of("action", "cancel"));
+		var ctx = new McpMrtrResumeContext(null, responses);
+		assertFalse(ElicitationResponses.getBoolean(ctx, "q1", "confirm"));
+	}
+
+	@Test void a24_getString_cancelledAction_returnsNull() {
+		var responses = Map.<String,Object>of("q1", JsonMap.of("action", "cancel"));
+		var ctx = new McpMrtrResumeContext(null, responses);
+		assertNull(ElicitationResponses.getString(ctx, "q1", "name"));
+	}
+
+	@Test void a25_getBoolean_nullCtxBlamesCtxBeforeField() {
+		// L-2: ctx/id must be validated before field, so an all-null call blames "ctx", not "field".
+		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationResponses.getBoolean(null, null, null));
+		assertEquals("Argument 'ctx' cannot be null.", e.getMessage());
+	}
+
+	@Test void a26_getBoolean_nullIdBlamesIdBeforeField() {
+		var ctx = new McpMrtrResumeContext(null, Map.of());
+		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationResponses.getBoolean(ctx, null, null));
+		assertEquals("Argument 'id' cannot be null.", e.getMessage());
+	}
+
+	@Test void a27_getString_nullCtxBlamesCtxBeforeField() {
+		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationResponses.getString(null, null, null));
+		assertEquals("Argument 'ctx' cannot be null.", e.getMessage());
+	}
+
+	@Test void a28_getString_nullIdBlamesIdBeforeField() {
+		var ctx = new McpMrtrResumeContext(null, Map.of());
+		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationResponses.getString(ctx, null, null));
+		assertEquals("Argument 'id' cannot be null.", e.getMessage());
+	}
 }

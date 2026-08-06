@@ -91,6 +91,28 @@ public class CallToolResult extends Result<CallToolResult> {
 	}
 
 	/**
+	 * Returns the text of the first {@link TextContent} block anywhere in the content list.
+	 *
+	 * <p>
+	 * Convenience for the common case of a tool that returns text (possibly alongside other blocks, e.g. an
+	 * image with a caption): scans past any leading non-text blocks instead of only ever looking at index 0,
+	 * and avoids the {@code ((TextContent)result.getContent().get(i)).getText()} cast every such caller would
+	 * otherwise repeat.
+	 *
+	 * @return The first {@link TextContent} block's text found while scanning the content list in order, or
+	 * 	{@code null} if the content list is empty or unset, or it contains no {@link TextContent} block.
+	 */
+	public String firstText() {
+		var c = getContent();
+		if (c == null)
+			return null;
+		for (var b : c)
+			if (b instanceof TextContent t)
+				return t.getText();
+		return null;
+	}
+
+	/**
 	 * When {@code true}, the tool reported an application-level error.
 	 *
 	 * @return The flag, or {@code null} if not set.

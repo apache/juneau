@@ -72,4 +72,60 @@ public final class ElicitationResponses {
 		ctx.inputResponses().keySet().forEach(id -> out.put(id, get(ctx, id)));
 		return out;
 	}
+
+	/**
+	 * Returns a boolean field's value from a single question's answer, decline-safe.
+	 *
+	 * <p>
+	 * Treats a missing id, a missing field, or a non-{@link ElicitAction#ACCEPT} action (declined, cancelled)
+	 * as <jk>false</jk> rather than requiring the caller to null-check {@link #get} and its content map by
+	 * hand &mdash; the safe default for a confirmation question is to never proceed on ambiguity.
+	 *
+	 * @param ctx The resume context.  Must not be <jk>null</jk>.
+	 * @param id The server-assigned id this question was posed under.  Must not be <jk>null</jk>.
+	 * @param field The field name within the answer's content map.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> only if {@code id} is present, the action is {@link ElicitAction#ACCEPT}, and
+	 * 	{@code field} is present in the content map with value {@link Boolean#TRUE}. <jk>false</jk> in every
+	 * 	other case.
+	 * @throws IllegalArgumentException If {@code ctx}, {@code id}, or {@code field} is <jk>null</jk>.
+	 * @throws RuntimeException If the answer's decoded shape cannot be converted to {@link ElicitResult}.
+	 */
+	public static boolean getBoolean(McpMrtrResumeContext ctx, String id, String field) {
+		assertArgNotNull("ctx", ctx);
+		assertArgNotNull("id", id);
+		assertArgNotNull("field", field);
+		var answer = get(ctx, id);
+		if (answer == null || answer.getAction() != ElicitAction.ACCEPT)
+			return false;
+		var content = answer.getContent();
+		return content != null && Boolean.TRUE.equals(content.get(field));
+	}
+
+	/**
+	 * Returns a string field's value from a single question's answer, decline-safe.
+	 *
+	 * <p>
+	 * Treats a missing id, a missing field, or a non-{@link ElicitAction#ACCEPT} action (declined, cancelled)
+	 * as <jk>null</jk> rather than requiring the caller to null-check {@link #get} and its content map by hand.
+	 *
+	 * @param ctx The resume context.  Must not be <jk>null</jk>.
+	 * @param id The server-assigned id this question was posed under.  Must not be <jk>null</jk>.
+	 * @param field The field name within the answer's content map.  Must not be <jk>null</jk>.
+	 * @return The field's value as a {@link String}, or <jk>null</jk> if {@code id} is absent, the action is
+	 * 	not {@link ElicitAction#ACCEPT}, {@code field} is absent, or its value is not a {@link String}.
+	 * @throws IllegalArgumentException If {@code ctx}, {@code id}, or {@code field} is <jk>null</jk>.
+	 * @throws RuntimeException If the answer's decoded shape cannot be converted to {@link ElicitResult}.
+	 */
+	public static String getString(McpMrtrResumeContext ctx, String id, String field) {
+		assertArgNotNull("ctx", ctx);
+		assertArgNotNull("id", id);
+		assertArgNotNull("field", field);
+		var answer = get(ctx, id);
+		if (answer == null || answer.getAction() != ElicitAction.ACCEPT)
+			return null;
+		var content = answer.getContent();
+		if (content == null)
+			return null;
+		return content.get(field) instanceof String s ? s : null;
+	}
 }

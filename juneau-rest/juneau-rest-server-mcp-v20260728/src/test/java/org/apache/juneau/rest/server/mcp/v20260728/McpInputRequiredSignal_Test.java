@@ -112,6 +112,29 @@ class McpInputRequiredSignal_Test {
 		assertThrows(RuntimeException.class, () -> a.continuationAs(B04_Continuation.class));
 	}
 
+	@Test void b08_continuationAsStringReturnsStringContinuation() {
+		var a = new McpMrtrResumeContext("hello", Map.of());
+		assertEquals("hello", a.continuationAsString());
+	}
+
+	@Test void b09_continuationAsStringNullContinuationReturnsNull() {
+		var a = new McpMrtrResumeContext(null, Map.of());
+		assertNull(a.continuationAsString());
+	}
+
+	@Test void b10_continuationAsStringNumericContinuationThrows() {
+		// L-4: empirically, Json.to(Json.of(42), String.class) throws rather than stringifying - String
+		// conversion requires an already-quoted JSON string literal, so a bare number does not convert.
+		var a = new McpMrtrResumeContext(42, Map.of());
+		assertThrows(RuntimeException.class, a::continuationAsString);
+	}
+
+	@Test void b11_continuationAsStringJsonMapContinuationThrows() {
+		// L-4: a JsonMap continuation is likewise structurally incompatible with String.
+		var a = new McpMrtrResumeContext(JsonMap.of("step", 1), Map.of());
+		assertThrows(RuntimeException.class, a::continuationAsString);
+	}
+
 	// -------- McpMrtrCapabilityContext ---------
 
 	@Test void c01_recordAccessorReturnsConstructedValue() {

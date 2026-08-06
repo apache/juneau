@@ -90,4 +90,26 @@ public record McpMrtrResumeContext(Object continuation, Map<String,Object> input
 			return null;
 		return Json.to(Json.of(continuation), type);
 	}
+
+	/**
+	 * Returns the continuation as a {@link String}.
+	 *
+	 * <p>
+	 * Convenience for the common case documented on {@link #continuationAs(Class)}: a handler that pauses with
+	 * a plain {@code String} continuation can call this instead of spelling out {@code continuationAs(String.class)}
+	 * at the headline pause/resume call site.
+	 *
+	 * <p>
+	 * <b>Conversion is not lenient.</b> {@code continuationAs(String.class)} routes through the JSON marshaller,
+	 * which parses {@code String} the same as any other target type &mdash; it requires a quoted JSON string
+	 * literal, so a continuation that decoded to anything else (a bare number, a {@code JsonMap}, a
+	 * {@code JsonList}, a boolean) throws below rather than being stringified. Only a continuation whose
+	 * decoded shape is already a {@link String} converts successfully.
+	 *
+	 * @return The continuation as a {@link String}, or <jk>null</jk> if the continuation is <jk>null</jk>.
+	 * @throws RuntimeException If the continuation's decoded shape is not already a {@link String}.
+	 */
+	public String continuationAsString() {
+		return continuationAs(String.class);
+	}
 }

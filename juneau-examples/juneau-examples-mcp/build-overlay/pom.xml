@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.apache.juneau</groupId>
+	<artifactId>juneau-examples-mcp</artifactId>
+	<version>${project.version}</version>
+	<name>Apache Juneau MCP Examples</name>
+	<description>Runnable first-party example of a Juneau MCP (Model Context Protocol) server and client (revision 2026-07-28).</description>
+	<packaging>jar</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- This standalone project has no <parent>, so it inherits nothing from the reactor root pom.xml
+			(which sets this same property) - every example source uses `var`, so without this the
+			maven-compiler-plugin default (1.8) fails the build. -->
+		<maven.compiler.release>17</maven.compiler.release>
+		<!-- Default exec:java target; override with -Dexec.mainClass=... for ExampleClient or the Spring launcher. -->
+		<exec.mainClass>org.apache.juneau.examples.mcp.ExampleServer</exec.mainClass>
+	</properties>
+
+	<dependencies>
+
+		<!--
+			The v2 (2026-07-28) MCP server adapter.  Transitively brings the revision-neutral MCP server core,
+			the v2 wire beans, JSON-RPC beans, and (importantly) juneau-rest-server-reactive, which powers the
+			held-open-SSE subscriptions/listen response.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-mcp-v20260728</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- The v2 MCP client facade used by ExampleClient. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-client-mcp-v20260728</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Embedded Jetty launcher (Microservice + JettyConfiguration).  Brings jetty-server / jetty-ee11-servlet. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-microservice-jetty</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!--
+			Backs the Spring Boot variant (SpringMcpRestServlet's BasicSpringRestServlet base).  Declared
+			explicitly because it is marked <optional> in juneau-rest-server-mcp-v20260728, so it does not
+			transit to consumers of that module.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-springboot</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Spring Boot itself, for the @SpringBootApplication launcher (embedded Tomcat). -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- Test: JUnit Jupiter, for the in-process end-to-end test. -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Test: TestBase, per repo test conventions. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-test-utils</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Test: assertBean(...), per repo test conventions. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-test</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- Lets the README's `mvn exec:java -Dexec.mainClass=...` walkthrough commands run the example's
+				main classes directly. No <configuration> block here (unlike the in-repo pom.xml): this whole
+				build-overlay/ directory is filtered by the assembly plugin (see src/assembly/bin.xml), so a
+				literal <mainClass> value here would get ${exec.mainClass} baked in at package time to
+				whichever class happened to be the reactor's default - and an explicit XML <mainClass> always
+				wins over a same-named -Dexec.mainClass= command-line property regardless. With no XML
+				configuration at all, exec-maven-plugin reads exec.mainClass directly from the -D system
+				property the README's commands pass. -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.3.0</version>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

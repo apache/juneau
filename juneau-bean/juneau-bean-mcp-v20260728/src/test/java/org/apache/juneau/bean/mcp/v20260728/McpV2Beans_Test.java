@@ -902,4 +902,56 @@ class McpV2Beans_Test {
 			LoggingCapability.class);
 		assertBean(logging, "level", "info");
 	}
+
+	@Test void m01_firstText_returnsFirstTextContentText() {
+		var result = new CallToolResult().setContent(new TextContent().setText("hi"),
+			new AudioContent().setData("QUJD").setMimeType("audio/wav"));
+		assertEquals("hi", result.firstText());
+	}
+
+	@Test void m02_firstText_emptyContentList_returnsNull() {
+		assertNull(new CallToolResult().setContent(List.of()).firstText());
+	}
+
+	@Test void m03_firstText_unsetContent_returnsNull() {
+		assertNull(new CallToolResult().firstText());
+	}
+
+	@Test void m04_firstText_noTextContentAnywhere_returnsNull() {
+		var result = new CallToolResult().setContent(new AudioContent().setData("QUJD").setMimeType("audio/wav"));
+		assertNull(result.firstText());
+	}
+
+	@Test void m05_firstText_scansPastLeadingNonTextBlocks() {
+		// M-1: firstText() scans the whole list (not just index 0) - the common image+caption ordering.
+		var result = new CallToolResult().setContent(
+			new ImageContent().setData("aW1n").setMimeType("image/png"),
+			new TextContent().setText("caption"));
+		assertEquals("caption", result.firstText());
+	}
+
+	@Test void n01_getServerInfo_returnsImplementationFromMeta() {
+		var result = new ServerDiscoverResult()
+			.setMeta(new ResultMeta().setServerInfo(new Implementation().setName("s").setVersion("1")));
+		assertBean(result.getServerInfo(), "name,version", "s,1");
+	}
+
+	@Test void n02_getServerInfo_unsetMeta_returnsNull() {
+		assertNull(new ServerDiscoverResult().getServerInfo());
+	}
+
+	@Test void n03_getServerInfo_metaWithoutServerInfo_returnsNull() {
+		assertNull(new ServerDiscoverResult().setMeta(new ResultMeta()).getServerInfo());
+	}
+
+	@Test void n04_getServerInfo_isBeanIgnored_noTopLevelServerInfoInWireFormat() {
+		// H-4: guards the @BeanIgnore on getServerInfo(). Parse (don't substring-match) since _meta itself
+		// legitimately nests a "serverInfo" key one level down - only the top level must never carry one.
+		var result = new ServerDiscoverResult()
+			.setMeta(new ResultMeta().setServerInfo(new Implementation().setName("s").setVersion("1")));
+		var json = JsonSerializer.DEFAULT.write(result);
+		var m = JsonParser.DEFAULT.read(json, JsonMap.class);
+		assertFalse(m.containsKey("serverInfo"), () -> "must not add a top-level serverInfo member: " + json);
+		assertTrue(((JsonMap)m.get("_meta")).containsKey(ResultMeta.KEY_SERVER_INFO));
+	}
 }
