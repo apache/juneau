@@ -87,12 +87,14 @@ public final class JsonValueSafety {
 		stack.push(new Framed(root, 1));
 		var nodes = 0;
 		while (! stack.isEmpty()) {
-			if (System.nanoTime() >= deadlineNanos)
-				throw iaex("%s traversal exceeded %s ms", label, MAX_TRAVERSAL_MILLIS);
+			// Bounded per-iteration work runs before the deadline check so a structurally-oversized input
+			// deterministically reports its depth/node-count violation instead of racing the wall clock.
 			var frame = stack.pop();
 			if (frame.depth() > MAX_DEPTH)
 				throw iaex("%s exceeds maximum nesting depth of %s", label, MAX_DEPTH);
 			nodes = visitFrame(frame, label, seen, stack, nodes);
+			if (System.nanoTime() >= deadlineNanos)
+				throw iaex("%s traversal exceeded %s ms", label, MAX_TRAVERSAL_MILLIS);
 		}
 	}
 
