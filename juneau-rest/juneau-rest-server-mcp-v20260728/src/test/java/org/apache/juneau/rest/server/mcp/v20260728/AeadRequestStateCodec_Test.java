@@ -39,7 +39,7 @@ class AeadRequestStateCodec_Test {
 
 	@Test void a01_roundTripWithMatchingAadRecoversOriginalState() {
 		var a = new AeadRequestStateCodec();
-		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var token = a.seal(b, AAD);
 		assertEquals(4, token.split("\\.", 4).length, "wire format must be version.keyId.nonce.ciphertext");
 		assertTrue(token.startsWith("1."), "version segment must be the literal \"1\"");
@@ -50,7 +50,7 @@ class AeadRequestStateCodec_Test {
 
 	@Test void a02_tamperedCiphertextByteFailsUnseal() {
 		var a = new AeadRequestStateCodec();
-		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var token = a.seal(b, AAD);
 		var parts = token.split("\\.", 4);
 		var ciphertext = Base64.getUrlDecoder().decode(parts[3]);
@@ -63,7 +63,7 @@ class AeadRequestStateCodec_Test {
 
 	@Test void a03_aadMismatchFailsUnseal() {
 		var a = new AeadRequestStateCodec();
-		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var token = a.seal(b, AAD);
 		var c = a.unseal(token, "prompts/get" + '\u0000' + "2026-07-28");  // a valid token under a mismatched AAD
 		assertTrue(c.isEmpty());
@@ -104,7 +104,7 @@ class AeadRequestStateCodec_Test {
 	@Test void a06_perProcessEphemeralKeyPreventsCrossInstanceUnseal() {
 		var a = new AeadRequestStateCodec();
 		var b = new AeadRequestStateCodec();
-		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var token = a.seal(state, AAD);
 		var c = b.unseal(token, AAD);
 		assertTrue(c.isEmpty());
@@ -117,7 +117,7 @@ class AeadRequestStateCodec_Test {
 		var keyProvider = StaticKeyProvider.of("2026-08-a", sharedKey);
 		var a = new AeadRequestStateCodec(keyProvider);
 		var b = new AeadRequestStateCodec(keyProvider);
-		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var token = a.seal(state, AAD);
 		var c = b.unseal(token, AAD);
 		assertTrue(c.isPresent(), "two codecs sharing one StaticKeyProvider must unseal each other's tokens");
@@ -131,7 +131,7 @@ class AeadRequestStateCodec_Test {
 		var keyB = gen.generateKey();
 		var providerBeforeRotation = StaticKeyProvider.of("2026-07-z", keyA);
 		var codecBeforeRotation = new AeadRequestStateCodec(providerBeforeRotation);
-		var oldState = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var oldState = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var oldToken = codecBeforeRotation.seal(oldState, AAD);
 
 		var providerAfterRotation = StaticKeyProvider.create()
@@ -145,7 +145,7 @@ class AeadRequestStateCodec_Test {
 		assertTrue(recoveredOld.isPresent(), "a token sealed under a still-resolvable retired key must still unseal after rotation");
 		assertEquals(oldState, recoveredOld.get());
 
-		var newState = new McpRequestState("continuation-value-2", "tools/call", 1, 123456789L);
+		var newState = new McpRequestState("continuation-value-2", "tools/call", 1, 123456789L, "jti-2", "args-hash-1");
 		var newToken = codecAfterRotation.seal(newState, AAD);
 		var newKeyId = new String(Base64.getUrlDecoder().decode(newToken.split("\\.", 4)[1]), StandardCharsets.UTF_8);
 		assertEquals("2026-08-a", newKeyId, "new tokens must seal under the new current key's keyId");
@@ -162,7 +162,7 @@ class AeadRequestStateCodec_Test {
 			.current("2026-08-a")
 			.build();
 		var a = new AeadRequestStateCodec(provider);
-		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var token = a.seal(state, AAD);
 		var parts = token.split("\\.", 4);
 		var swappedKeyId = Base64.getUrlEncoder().withoutPadding().encodeToString("2026-08-b".getBytes(StandardCharsets.UTF_8));
@@ -173,7 +173,7 @@ class AeadRequestStateCodec_Test {
 
 	@Test void a12_unknownVersionSegmentFailsUnseal() {
 		var a = new AeadRequestStateCodec();
-		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var token = a.seal(state, AAD);
 		var parts = token.split("\\.", 4);
 		var tampered = "2." + parts[1] + "." + parts[2] + "." + parts[3];
@@ -187,7 +187,7 @@ class AeadRequestStateCodec_Test {
 		var keyA = gen.generateKey();
 		var sealingProvider = StaticKeyProvider.of("2026-08-a", keyA);
 		var sealingCodec = new AeadRequestStateCodec(sealingProvider);
-		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var token = sealingCodec.seal(state, AAD);
 
 		var keyB = gen.generateKey();
@@ -204,7 +204,7 @@ class AeadRequestStateCodec_Test {
 	@Test void a07_mapValuedContinuationRoundTripsAsGenericJsonMapNotOriginalType() {
 		var a = new AeadRequestStateCodec();
 		var continuation = Map.of("step", 2, "cursor", "abc");
-		var b = new McpRequestState(continuation, "tools/call", 1, 123456789L);
+		var b = new McpRequestState(continuation, "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var token = a.seal(b, AAD);
 		var c = a.unseal(token, AAD);
 		assertTrue(c.isPresent());
@@ -249,7 +249,7 @@ class AeadRequestStateCodec_Test {
 	@Test void a08_beanValuedContinuationRoundTripsAsGenericJsonMapNotOriginalBeanType() {
 		var a = new AeadRequestStateCodec();
 		var continuation = new A08_Continuation().setStep(2).setNote("resume");
-		var b = new McpRequestState(continuation, "tools/call", 1, 123456789L);
+		var b = new McpRequestState(continuation, "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var token = a.seal(b, AAD);
 		var c = a.unseal(token, AAD);
 		assertTrue(c.isPresent());
@@ -273,7 +273,7 @@ class AeadRequestStateCodec_Test {
 		keyGen.init(256);
 		var provider = StaticKeyProvider.of(keyId, keyGen.generateKey());
 		var a = new AeadRequestStateCodec(provider);
-		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var token = a.seal(b, AAD);
 		var c = a.unseal(token, AAD);
 		assertTrue(c.isPresent());
@@ -295,7 +295,7 @@ class AeadRequestStateCodec_Test {
 	 */
 	@Test void a15_principalIsBoundSoTokenRejectsDifferentPrincipal() {
 		var a = new AeadRequestStateCodec();
-		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		Principal alice = () -> "alice";
 		Principal bob = () -> "bob";
 		var token = a.seal(state, AAD, alice);
@@ -317,7 +317,7 @@ class AeadRequestStateCodec_Test {
 	 */
 	@Test void a16_anonymousSentinelRoundTripsButNeverCrossesAuthenticatedBoundary() {
 		var a = new AeadRequestStateCodec();
-		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		Principal alice = () -> "alice";
 
 		// Anonymous -> anonymous round-trips (the null sentinel is deterministic).
@@ -345,7 +345,7 @@ class AeadRequestStateCodec_Test {
 	 */
 	@Test void a17_claimsPrincipalIssuerScopingPreventsCrossIdpResume() {
 		var a = new AeadRequestStateCodec();
-		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var state = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		Principal idpA = new ClaimsPrincipal("user-1", Map.of("iss", "https://idp-a.example.com", "sub", "user-1"));
 		Principal idpB = new ClaimsPrincipal("user-1", Map.of("iss", "https://idp-b.example.com", "sub", "user-1"));
 

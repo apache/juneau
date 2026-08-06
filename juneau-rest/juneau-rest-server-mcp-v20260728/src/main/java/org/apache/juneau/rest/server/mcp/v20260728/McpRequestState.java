@@ -53,6 +53,18 @@ package org.apache.juneau.rest.server.mcp.v20260728;
  * 	by the dispatcher against the follow-up request's own method as an extra sanity check.
  * @param round The 1-based round counter: 1 on the first PAUSE, incremented on every subsequent PAUSE.
  * @param expiresAtMs Absolute expiry timestamp in epoch milliseconds.
+ * @param jti A fresh, per-token random identifier minted on every PAUSE (see {@code McpRevision#pause}), used
+ * 	only to detect replay of THIS exact token. Opt-in: consulted by the dispatcher only when an operator has
+ * 	wired a {@link ReplayCache} via {@link McpMrtrConfig#setReplayCache(ReplayCache)}; otherwise it rides in the
+ * 	sealed plaintext unused. Not wire-visible on its own &mdash; like every other field on this record, it only
+ * 	ever travels inside the opaque, AEAD-sealed {@code requestState} string.
+ * @param argumentsHash A canonical hash of the original request's {@code arguments} (RFC 8785 JSON
+ * 	Canonicalization Scheme, then SHA-256, then base64url), captured at PAUSE time and re-verified against the
+ * 	RESUME request's own {@code arguments} on every subsequent round (see {@code McpRevision#resolveMrtrContext}).
+ * 	Always populated (unlike {@link #jti()}, this check is not opt-in): a call with absent or empty
+ * 	{@code arguments} (for example {@code resources/read}'s exact-path branch, which takes none) hashes the
+ * 	canonical empty object {@code "{}"} rather than leaving this field unset, so PAUSE and RESUME agree even when
+ * 	there is nothing to hash.
  */
-public record McpRequestState(Object continuation, String method, int round, long expiresAtMs) {
+public record McpRequestState(Object continuation, String method, int round, long expiresAtMs, String jti, String argumentsHash) {
 }

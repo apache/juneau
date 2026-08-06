@@ -39,30 +39,41 @@ import java.util.*;
  * <b>Trust model &mdash; {@code requestState} is a bearer token.</b> The sealed token is a replayable credential:
  * anyone who holds it can resume the paused operation until it expires, and it carries no caller identity. A
  * codec (and every call site) must treat it accordingly &mdash; transport only over authenticated TLS, and
- * <b>never log</b> a {@code requestState}. Because a captured token can be replayed any number of times within
- * its TTL, resume side effects must be idempotent; the max-rounds cap bounds chain depth, not replay count (see
- * {@link McpMrtrConfig}).
+ * <b>never log</b> a {@code requestState}. <b>Multi-use within TTL by default:</b> a captured token can be
+ * replayed any number of times within its TTL unless an operator configures a {@link ReplayCache} (see
+ * {@link McpMrtrConfig#setReplayCache(ReplayCache)}) to enforce single-use &mdash; the built-in
+ * {@link InMemoryReplayCache} is per-process only, so cross-node single-use requires a shared implementation. A
+ * handler must still write idempotent resume side effects unless it knows a single-use {@link ReplayCache} is in
+ * effect; the max-rounds cap bounds chain depth, not replay count (see {@link McpMrtrConfig}).
  *
  * <p>
  * <b>Canonical AAD format.</b> The dispatcher binds each token to the request that produced it by passing a
- * single canonical AAD string: {@code method + '\u0000' + protocolVersion} &mdash; the JSON-RPC method name and
- * the negotiated protocol version joined by a NUL ({@code U+0000}) separator (see {@code McpRevision#aad}). NUL
- * is chosen because it can never appear in a method name or a protocol-version literal, so the concatenation is
- * unambiguous. An implementation only needs to treat the AAD as opaque bytes; the format is documented here so
- * seal and unseal call sites (and any custom codec) agree on exactly what is authenticated.
+ * single canonical AAD string: {@code method + '\u0000' + protocolVersion + '\u0000' + target} &mdash; the
+ * JSON-RPC method name, the negotiated protocol version, and the operation target (the tool {@code name} for
+ * {@code tools/call}, the prompt {@code name} for {@code prompts/get}, or the resource {@code uri} for
+ * {@code resources/read}; empty for any other method), all NUL ({@code U+0000})-separated (see
+ * {@code McpRevision#aad}). NUL is chosen because it can never appear in a method name, a protocol-version
+ * literal, or the trailing target field, so the concatenation is unambiguous. The trailing target field binds
+ * the token to the specific operation it paused against, not merely the method, so a token minted while paused
+ * on one tool/prompt/resource cannot be resumed against a different one of the same kind. An implementation
+ * only needs to treat the AAD as opaque bytes; the format is documented here so seal and unseal call sites (and
+ * any custom codec) agree on exactly what is authenticated.
  *
  * <p>
  * <b>Authenticated principal (READY-312f F4).</b> Both {@link #seal(McpRequestState, String, Principal)} and
  * {@link #unseal(String, String, Principal)} receive the caller's authenticated {@link Principal} &mdash; the same
  * identity the F2 resource-server layer establishes (see {@code McpResourceServerSupport#principal}). This is the
- * <i>seam</i> that unblocks TODO-325's principal-bound AAD: a hardened codec can fold the caller identity into its
- * authenticated data so a {@code requestState} minted for principal A cannot be resumed by principal B. The
- * built-in {@link AeadRequestStateCodec} does <b>not</b> bind the principal yet (that binding, plus the choice of
- * <i>which</i> identity attribute to bind &mdash; subject claim, issuer+subject, full claim set &mdash; is owned by
- * TODO-325); F4 only guarantees the principal is delivered to the codec at both seal and unseal. The principal is
- * <b>nullable</b>: when RS auth is disabled or the caller is anonymous it is <jk>null</jk>, and every codec must
- * seal/unseal cleanly (no NPE) in that case. The two-argument {@link #seal(McpRequestState, String)} /
- * {@link #unseal(String, String)} convenience overloads simply pass a <jk>null</jk> (no-principal) identity.
+ * <i>seam</i> a hardened codec uses to fold the caller identity into its authenticated data, so a
+ * {@code requestState} minted for principal A cannot be resumed by principal B. The built-in
+ * {@link AeadRequestStateCodec} binds exactly that: it folds a canonical, deterministic {@code iss|sub} identity
+ * (see {@link AeadRequestStateCodec#principalIdentity(Principal)}) into its AEAD authenticated data, so a
+ * mismatched principal fails the GCM tag check and {@link #unseal} returns {@link Optional#empty()}. F4 is what
+ * guarantees the principal is delivered to the codec at both seal and unseal in the first place; a custom codec
+ * remains free to bind a different identity attribute (subject claim, issuer+subject, full claim set) or none at
+ * all. The principal is <b>nullable</b>: when RS auth is disabled or the caller is anonymous it is <jk>null</jk>,
+ * and every codec must seal/unseal cleanly (no NPE) in that case. The two-argument
+ * {@link #seal(McpRequestState, String)} / {@link #unseal(String, String)} convenience overloads simply pass a
+ * <jk>null</jk> (no-principal) identity.
  */
 public interface RequestStateCodec {
 
@@ -71,7 +82,8 @@ public interface RequestStateCodec {
 	 *
 	 * @param state The payload to seal. Must not be <jk>null</jk>.
 	 * @param aad Additional authenticated data (the dispatcher passes the canonical
-	 * 	{@code method + '\u0000' + protocolVersion} form &mdash; see the class Javadoc). Must not be <jk>null</jk>.
+	 * 	{@code method + '\u0000' + protocolVersion + '\u0000' + target} form &mdash; see the class Javadoc). Must
+	 * 	not be <jk>null</jk>.
 	 * @param principal The authenticated caller (see the class Javadoc). May be <jk>null</jk> for an anonymous
 	 * 	caller or when resource-server auth is disabled.
 	 * @return The opaque token. Never <jk>null</jk>.

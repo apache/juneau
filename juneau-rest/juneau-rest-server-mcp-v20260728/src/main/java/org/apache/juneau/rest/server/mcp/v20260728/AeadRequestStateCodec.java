@@ -53,13 +53,15 @@ import org.apache.juneau.rest.server.auth.ClaimsPrincipal;
  *
  * <p>
  * The AAD passed to {@link #seal}/{@link #unseal} is authenticated but never encrypted (standard AES-GCM AAD
- * semantics). The dispatcher passes the canonical {@code method + '\u0000' + protocolVersion} (NUL-separated)
- * form as the caller-supplied AAD (see {@code McpRevision#aad}); this codec composes the caller-supplied
- * {@code aad}, the {@link KeyProvider}'s {@code keyId} (per its implicit {@code keyId}-authentication contract),
- * and {@code principalIdentity(principal)} (the TODO-325 principal binding, below) into the cipher's actual AAD
- * using the same self-delimiting, length-prefixed framing described on {@link #principalIdentity(Principal)}
- * &mdash; so the three-field outer composition is unambiguous exactly as the two-field inner one is, even if a
- * field happened to contain a NUL.
+ * semantics). The dispatcher passes the canonical {@code method + '\u0000' + protocolVersion() + '\u0000' +
+ * target} (NUL-separated) form as the caller-supplied AAD (see {@code McpRevision#aad}) &mdash; the trailing
+ * {@code target} field (the tool/prompt {@code name} or resource {@code uri}) binds the token to the specific
+ * operation it paused against, not merely the method, so it can't be resumed against a different
+ * tool/prompt/resource. This codec composes that caller-supplied {@code aad}, the {@link KeyProvider}'s
+ * {@code keyId} (per its implicit {@code keyId}-authentication contract), and {@code principalIdentity(principal)}
+ * (the principal binding described below) into the cipher's actual AAD using the same self-delimiting,
+ * length-prefixed framing described on {@link #principalIdentity(Principal)} &mdash; so the three-field outer
+ * composition is unambiguous exactly as the two-field inner one is, even if a field happened to contain a NUL.
  *
  * <p>
  * <b>Principal-bound AAD (TODO-325).</b> {@link #seal}/{@link #unseal} fold the caller's authenticated

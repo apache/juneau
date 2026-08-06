@@ -315,7 +315,7 @@ class McpBindings_Test extends TestBase {
 		var codec2 = rev2.mrtrConfig().getCodec();
 		assertSame(codec1, codec2, "the codec (and its AES key) must be memoized at the binding level");
 
-		var state = new McpRequestState("resume-here", "tools/call", 1, System.currentTimeMillis() + 60_000L);
+		var state = new McpRequestState("resume-here", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", "args-hash-1");
 		var token = codec1.seal(state, "tools/call" + '\u0000' + "2026-07-28");
 		var unsealed = codec2.unseal(token, "tools/call" + '\u0000' + "2026-07-28");
 		assertTrue(unsealed.isPresent(), "a requestState sealed on one request must unseal on the next");
@@ -340,7 +340,7 @@ class McpBindings_Test extends TestBase {
 		var codec2 = rev2.mrtrConfig().getCodec();
 		assertSame(codec1, codec2, "the codec (and its AES key) must be memoized at the binding level");
 
-		var state = new McpRequestState("resume-here", "tools/call", 1, System.currentTimeMillis() + 60_000L);
+		var state = new McpRequestState("resume-here", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", "args-hash-1");
 		var token = codec1.seal(state, "tools/call" + '\u0000' + "2026-07-28");
 		var unsealed = codec2.unseal(token, "tools/call" + '\u0000' + "2026-07-28");
 		assertTrue(unsealed.isPresent(), "a requestState sealed on one request must unseal on the next");

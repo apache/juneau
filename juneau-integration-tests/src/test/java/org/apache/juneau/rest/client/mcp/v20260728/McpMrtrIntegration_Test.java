@@ -28,6 +28,7 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.client.RestCallInterceptor;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.mcp.*;
 import org.apache.juneau.rest.server.mcp.v20260728.*;
@@ -79,8 +80,10 @@ class McpMrtrIntegration_Test extends TestBase {
 		return bytes;
 	}
 
-	private static String aad(String method) {
-		return method + '\u0000' + McpProtocol.VERSION_2026_07_28;
+	// Mirror of McpRevision#aad(method, target): the sealed AAD binds the operation target (here the tool name)
+	// in addition to method+version, so an unseal must supply the same target the server sealed with.
+	private static String aad(String method, String target) {
+		return method + '\u0000' + McpProtocol.VERSION_2026_07_28 + '\u0000' + (target == null ? "" : target);
 	}
 
 	private static McpToolHandler ask() {
@@ -180,13 +183,24 @@ class McpMrtrIntegration_Test extends TestBase {
 	static MicroserviceTestFixture fixture = MicroserviceTestFixture.create()
 		.configurations(FixtureConfig.class);
 
+	// Forces a fresh TCP connection per request instead of reusing a pooled keep-alive one: a client that
+	// issues two or more requests (every test below does) can otherwise race the embedded Jetty fixture
+	// tearing down/resetting an idle pooled connection between calls, surfacing as a spurious
+	// NoHttpResponseException instead of the response the test actually expects.
+	private static final RestCallInterceptor CLOSE_CONNECTION_PER_REQUEST = new RestCallInterceptor() {
+		@Override public void onInit(org.apache.juneau.rest.client.RestRequest req) {
+			req.header("Connection", "close");
+		}
+	};
+
 	private static McpClient.Builder clientBuilder(boolean withElicitation) {
 		var caps = new ClientCapabilities();
 		if (withElicitation)
 			caps.setElicitation(new ElicitationCapability());
 		return McpClient.builder()
 			.endpoint(fixture.getRootUrl() + "/")
-			.clientCapabilities(caps);
+			.clientCapabilities(caps)
+			.interceptor(CLOSE_CONNECTION_PER_REQUEST);
 	}
 
 	private static McpClient.Builder clientBuilderAt(String path, boolean withElicitation) {
@@ -195,7 +209,8 @@ class McpMrtrIntegration_Test extends TestBase {
 			caps.setElicitation(new ElicitationCapability());
 		return McpClient.builder()
 			.endpoint(fixture.getRootUrl() + path)
-			.clientCapabilities(caps);
+			.clientCapabilities(caps)
+			.interceptor(CLOSE_CONNECTION_PER_REQUEST);
 	}
 
 	// =================================================================================================================
@@ -233,7 +248,7 @@ class McpMrtrIntegration_Test extends TestBase {
 			var token2 = (String) paused2.get("requestState");
 
 			// Unseal via the same codec instance the server used (round counter lives inside the sealed token).
-			var state = CODEC.unseal(token2, aad(McpMethods.TOOLS_CALL)).orElseThrow();
+			var state = CODEC.unseal(token2, aad(McpMethods.TOOLS_CALL, "askTwice")).orElseThrow();
 			assertEquals(2, state.round());
 			assertEquals("cont-2", state.continuation());
 		}

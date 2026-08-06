@@ -80,7 +80,7 @@ class McpMrtrConfig_Test {
 		var a = new McpMrtrConfig().setKeyProvider(provider);
 		assertInstanceOf(AeadRequestStateCodec.class, a.getCodec());
 		var b = new McpMrtrConfig().setKeyProvider(provider);
-		var state = new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L);
+		var state = new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", "args-hash-1");
 		var token = a.getCodec().seal(state, "aad");
 		var unsealed = b.getCodec().unseal(token, "aad").orElseThrow();
 		assertEquals("cont-1", unsealed.continuation());
@@ -101,6 +101,24 @@ class McpMrtrConfig_Test {
 	@Test void a09_setKeyProviderNullThrows() {
 		var e = assertThrows(IllegalArgumentException.class, () -> new McpMrtrConfig().setKeyProvider(null));
 		assertEquals("keyProvider must not be null", e.getMessage());
+	}
+
+	@Test void a10_defaultReplayCacheIsNull() {
+		// D1 (opt-in): replay rejection must be disabled by default -- no ReplayCache is auto-wired.
+		assertNull(new McpMrtrConfig().getReplayCache());
+	}
+
+	@Test void a11_setReplayCacheRoundTripsThroughGetter() {
+		var cache = new InMemoryReplayCache();
+		var a = new McpMrtrConfig().setReplayCache(cache);
+		assertSame(cache, a.getReplayCache());
+	}
+
+	@Test void a12_setReplayCacheNullExplicitlyDisablesIt() {
+		// Unlike setCodec/setKeyProvider, null is a legal (and the default) value here -- it explicitly
+		// disables replay rejection rather than being a programming error.
+		var a = new McpMrtrConfig().setReplayCache(new InMemoryReplayCache()).setReplayCache(null);
+		assertNull(a.getReplayCache());
 	}
 
 	// -------- McpRevision four-arg constructor wiring ---------

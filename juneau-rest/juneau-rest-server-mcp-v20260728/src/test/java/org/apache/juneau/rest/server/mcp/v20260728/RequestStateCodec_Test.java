@@ -66,7 +66,7 @@ class RequestStateCodec_Test {
 
 	@Test void a01_roundTripWithMatchingAadRecoversOriginalState() {
 		var a = new FakeCodec();
-		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		// NOTE: FakeCodec uses '\u0000' as its own internal aad/payload framing separator, so this SPI-contract
 		// fake deliberately uses a NUL-free AAD literal (the real canonical NUL-separated form is exercised by
 		// AeadRequestStateCodec_Test).
@@ -78,7 +78,7 @@ class RequestStateCodec_Test {
 
 	@Test void a02_unsealWithMismatchedAadReturnsEmpty() {
 		var a = new FakeCodec();
-		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L);
+		var b = new McpRequestState("continuation-value", "tools/call", 1, 123456789L, "jti-1", "args-hash-1");
 		var token = a.seal(b, "tools/call:2026-07-28");
 		var c = a.unseal(token, "prompts/get:2026-07-28");
 		assertTrue(c.isEmpty());
@@ -102,7 +102,7 @@ class RequestStateCodec_Test {
 
 	@Test void b01_twoArgOverloadsDelegateWithNullPrincipal() {
 		var a = new B_CapturingCodec();
-		a.seal(new McpRequestState("c", "tools/call", 1, 1L), "aad");
+		a.seal(new McpRequestState("c", "tools/call", 1, 1L, "jti-1", "args-hash-1"), "aad");
 		a.unseal("t", "aad");
 		assertNull(a.sealPrincipal);
 		assertNull(a.unsealPrincipal);
@@ -111,7 +111,7 @@ class RequestStateCodec_Test {
 	@Test void b02_threeArgMethodsReceiveTheSuppliedPrincipal() {
 		var a = new B_CapturingCodec();
 		Principal p = () -> "carol";
-		a.seal(new McpRequestState("c", "tools/call", 1, 1L), "aad", p);
+		a.seal(new McpRequestState("c", "tools/call", 1, 1L, "jti-1", "args-hash-1"), "aad", p);
 		a.unseal("t", "aad", p);
 		assertSame(p, a.sealPrincipal);
 		assertSame(p, a.unsealPrincipal);

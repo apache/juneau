@@ -33,8 +33,9 @@ package org.apache.juneau.rest.server.mcp.v20260728;
  *
  * <p>
  * Defaults: {@link AeadRequestStateCodec} (a fresh instance per {@link McpMrtrConfig}), a 5-minute
- * {@code requestState} TTL, and a max-rounds cap of 10. Operators inject a shared/rotating-key
- * {@link RequestStateCodec} here for multi-instance or restart-durable resumption.
+ * {@code requestState} TTL, a max-rounds cap of 10, and no {@link ReplayCache} (replay rejection is opt-in; see
+ * {@link #setReplayCache(ReplayCache)}). Operators inject a shared/rotating-key {@link RequestStateCodec} here
+ * for multi-instance or restart-durable resumption.
  *
  * <h5 class='section'>Trust model:</h5>
  * <ul>
@@ -42,10 +43,13 @@ package org.apache.juneau.rest.server.mcp.v20260728;
  * 		the paused operation until it expires; the token is not bound to a caller identity. It must be
  * 		transported only over authenticated TLS and <b>never logged</b> (it is opaque ciphertext, but logging
  * 		it hands a replayable credential to anyone with log access). See {@link RequestStateCodec}.
- * 	<li><b>Resume side effects must be idempotent.</b> A captured token can be replayed any number of times
- * 		within its {@link #getTtlMs() TTL}. The {@link #getMaxRounds() max-rounds cap} bounds the <i>depth</i> of
- * 		a single resume chain, not the total number of times a given token can be re-submitted, so a handler
- * 		must not treat a resume as a once-only event.
+ * 	<li><b>Resume side effects must be idempotent by default.</b> A captured token can be replayed any number
+ * 		of times within its {@link #getTtlMs() TTL} <i>unless</i> a {@link ReplayCache} is configured (see
+ * 		{@link #setReplayCache(ReplayCache)}) to enforce single-use &mdash; the built-in
+ * 		{@link InMemoryReplayCache} is per-process only, so cross-node single-use requires a shared
+ * 		implementation. The {@link #getMaxRounds() max-rounds cap} bounds the <i>depth</i> of a single resume
+ * 		chain, not the total number of times a given token can be re-submitted, so a handler must not treat a
+ * 		resume as a once-only event unless it knows single-use is enforced.
  * </ul>
  */
 public class McpMrtrConfig {
@@ -59,6 +63,7 @@ public class McpMrtrConfig {
 	private RequestStateCodec codec = new AeadRequestStateCodec();
 	private long ttlMs = DEFAULT_TTL_MS;
 	private int maxRounds = DEFAULT_MAX_ROUNDS;
+	private ReplayCache replayCache;
 
 	/**
 	 * The codec used to seal/unseal {@code requestState} tokens.
@@ -150,6 +155,38 @@ public class McpMrtrConfig {
 		if (value < 1)
 			throw new IllegalArgumentException("maxRounds " + value + " must be >= 1");
 		maxRounds = value;
+		return this;
+	}
+
+	/**
+	 * The {@link ReplayCache} used to reject reuse of a consumed {@code requestState} token, or <jk>null</jk> if
+	 * none is configured.
+	 *
+	 * <p>
+	 * <b>Unset (<jk>null</jk>) by default &mdash; replay rejection is opt-in.</b> A dispatcher only performs a
+	 * replay check when this returns non-<jk>null</jk> (see {@code McpRevision#resolveMrtrContext}); with no
+	 * {@link ReplayCache} configured, a {@code requestState} token remains multi-use within its TTL, exactly as
+	 * documented on {@link RequestStateCodec}.
+	 *
+	 * @return The configured replay cache, or <jk>null</jk> if replay rejection is disabled (the default).
+	 */
+	public ReplayCache getReplayCache() {
+		return replayCache;
+	}
+
+	/**
+	 * Sets the replay cache, enabling replay rejection.
+	 *
+	 * <p>
+	 * Passing <jk>null</jk> is allowed and explicitly reverts to the default, opt-out behavior (no replay check;
+	 * a token stays multi-use within its TTL) &mdash; unlike {@link #setCodec(RequestStateCodec)}, there is no
+	 * always-non-null invariant to preserve here, since "no replay cache" is itself the documented default.
+	 *
+	 * @param value The replay cache to use, or <jk>null</jk> to disable replay rejection.
+	 * @return This object.
+	 */
+	public McpMrtrConfig setReplayCache(ReplayCache value) {
+		replayCache = value;
 		return this;
 	}
 }

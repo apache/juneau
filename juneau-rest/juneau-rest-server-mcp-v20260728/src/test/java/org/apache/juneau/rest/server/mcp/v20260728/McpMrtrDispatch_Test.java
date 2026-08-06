@@ -91,9 +91,18 @@ class McpMrtrDispatch_Test {
 		return new McpRevision(null, new McpCacheConfig(), null, mrtrConfig);
 	}
 
-	private static String aad(String method) {
-		return method + '\u0000' + "2026-07-28";
+	// Mirror of McpRevision#aad(method, target): the sealed AAD now binds the operation target (tool/prompt
+	// name or resource uri) in addition to method+version, so every hand-sealed fixture below must seal under
+	// the same target it will be resumed against or the GCM tag check fails on unseal.
+	private static String aad(String method, String target) {
+		return method + '\u0000' + "2026-07-28" + '\u0000' + (target == null ? "" : target);
 	}
+
+	// The empty-arguments sentinel hash (see McpRevision#argumentsHash): every fixture below that seals a
+	// McpRequestState directly (bypassing pause(...)) and then resumes with no "arguments" member in its params
+	// must seal this same sentinel, or the always-on argument-hash check added alongside replay-cache support
+	// would newly reject it as a mismatch.
+	private static final String NO_ARGS_HASH = McpRevision.argumentsHash(Map.of());
 
 	// -------- handler fixtures ---------
 
@@ -164,7 +173,7 @@ class McpMrtrDispatch_Test {
 		var config = new McpServerConfig().addTool(tool("ask",
 			(args, c) -> { throw new McpInputRequiredSignal(Map.of("q1", reqEntry("elicitation")), "cont-1"); }));
 		var result = (InputRequiredResult) send(rev, config, req(1, "tools/call", JsonMap.of("name", "ask"), true), hdrs("tools/call", "ask")).getResult();
-		var state = codec.unseal(result.getRequestState(), aad("tools/call")).orElseThrow();
+		var state = codec.unseal(result.getRequestState(), aad("tools/call", "ask")).orElseThrow();
 		assertEquals(1, state.round());
 		assertEquals("cont-1", state.continuation());
 		assertEquals("tools/call", state.method());
@@ -249,7 +258,7 @@ class McpMrtrDispatch_Test {
 			seen.set(c.getBean(McpMrtrResumeContext.class).orElse(null));
 			return text("done");
 		}));
-		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L), aad("tools/call"));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
 		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
 		var result = (CallToolResult) send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask")).getResult();
 		assertEquals("done", ((TextContent) result.getContent().get(0)).getText());
@@ -267,10 +276,10 @@ class McpMrtrDispatch_Test {
 				throw new McpInputRequiredSignal(Map.of("q2", reqEntry("elicitation")), "cont-2");
 			throw new McpInputRequiredSignal(Map.of("q1", reqEntry("elicitation")), "cont-1");
 		}));
-		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L), aad("tools/call"));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
 		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
 		var result = (InputRequiredResult) send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask")).getResult();
-		var state = codec.unseal(result.getRequestState(), aad("tools/call")).orElseThrow();
+		var state = codec.unseal(result.getRequestState(), aad("tools/call", "ask")).orElseThrow();
 		assertEquals(2, state.round());
 		assertEquals("cont-2", state.continuation());
 	}
@@ -280,7 +289,7 @@ class McpMrtrDispatch_Test {
 		var rev = revision(mrtr(codec));
 		var calls = new AtomicInteger();
 		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
-		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L), aad("tools/call"));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
 		var parts = token.split("\\.", 4);
 		var ciphertext = Base64.getUrlDecoder().decode(parts[3]);
 		ciphertext[0] ^= 1;
@@ -297,7 +306,7 @@ class McpMrtrDispatch_Test {
 		var rev = revision(mrtr(codec));
 		var calls = new AtomicInteger();
 		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
-		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() - 1000L), aad("tools/call"));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() - 1000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
 		var params = JsonMap.of("name", "ask", "requestState", token);
 		var resp = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
 		assertEquals(-32022, resp.getError().getCode());
@@ -309,7 +318,7 @@ class McpMrtrDispatch_Test {
 		var rev = revision(mrtr(codec).setMaxRounds(10));
 		var calls = new AtomicInteger();
 		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
-		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 10, System.currentTimeMillis() + 60_000L), aad("tools/call"));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 10, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
 		var params = JsonMap.of("name", "ask", "requestState", token);
 		var resp = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
 		assertEquals(-32023, resp.getError().getCode());
@@ -323,7 +332,7 @@ class McpMrtrDispatch_Test {
 		var rev = revision(mrtr(codec));
 		var calls = new AtomicInteger();
 		var config = new McpServerConfig().addPrompt(prompt("ask", (args, c) -> { calls.incrementAndGet(); return new McpPromptOutcome(); }));
-		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L), aad("tools/call"));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
 		var params = JsonMap.of("name", "ask", "requestState", token);
 		var resp = send(rev, config, req(1, "prompts/get", params, true), hdrs("prompts/get", "ask"));
 		assertEquals(-32602, resp.getError().getCode());
@@ -348,7 +357,7 @@ class McpMrtrDispatch_Test {
 		var rev = revision(mrtr(codec));
 		var calls = new AtomicInteger();
 		var config = new McpServerConfig().addPrompt(prompt("ask", (args, c) -> { calls.incrementAndGet(); return new McpPromptOutcome(); }));
-		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L), "ignored");
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), "ignored");
 		var params = JsonMap.of("name", "ask", "requestState", token);
 		var resp = send(rev, config, req(1, "prompts/get", params, true), hdrs("prompts/get", "ask"));
 		assertEquals(-32602, resp.getError().getCode());
@@ -366,7 +375,7 @@ class McpMrtrDispatch_Test {
 			return text("done");
 		}));
 		var continuation = new C08_Continuation().setStep(3).setNote("resume-me");
-		var token = codec.seal(new McpRequestState(continuation, "tools/call", 1, System.currentTimeMillis() + 60_000L), aad("tools/call"));
+		var token = codec.seal(new McpRequestState(continuation, "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
 		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
 		send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
 		assertEquals(3, seen.get().getStep());
@@ -383,27 +392,19 @@ class McpMrtrDispatch_Test {
 		public C08_Continuation setNote(String value) { note = value; return this; }
 	}
 
-	@Test void c09_resumeWithAlteredArgumentsIsAcceptedAtMrtrLayer() {
-		// MRTR seals nothing about the per-round arguments, so a resume whose arguments differ from the original
-		// round is accepted at the MRTR layer; the handler sees the client-supplied arguments while the sealed
-		// continuation stays intact. Pins the trust contract documented on McpMrtrResumeContext / McpRequestState
-		// (an args-hash binding is deliberately NOT applied).
+	@Test void c09_resumeWithAlteredArgumentsIsRejectedAsArgumentsMismatch() {
+		// The sealed McpRequestState carries an argumentsHash computed from the original round's arguments; a
+		// resume whose arguments differ from that sealed hash is hard-rejected before the handler is re-invoked.
 		var codec = new AeadRequestStateCodec();
 		var rev = revision(mrtr(codec));
-		var seenArgs = new AtomicReference<Map<String,Object>>();
-		var seen = new AtomicReference<McpMrtrResumeContext>();
-		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> {
-			seenArgs.set(args);
-			seen.set(c.getBean(McpMrtrResumeContext.class).orElse(null));
-			return text("done");
-		}));
-		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L), aad("tools/call"));
+		var calls = new AtomicInteger();
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
 		var params = JsonMap.of("name", "ask", "arguments", JsonMap.of("altered", "value"),
 			"requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
-		var result = (CallToolResult) send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask")).getResult();
-		assertEquals("done", ((TextContent) result.getContent().get(0)).getText());
-		assertEquals("value", seenArgs.get().get("altered"));  // altered per-round args reach the handler unchanged
-		assertEquals("cont-1", seen.get().continuation());     // the sealed continuation is intact
+		var resp = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
+		assertEquals(-32026, resp.getError().getCode());
+		assertEquals(0, calls.get());
 	}
 
 	@Test void c10_promptsGet_resumeToComplete_reInvokesHandlerWithResumeContext() {
@@ -414,7 +415,7 @@ class McpMrtrDispatch_Test {
 			seen.set(c.getBean(McpMrtrResumeContext.class).orElse(null));
 			return new McpPromptOutcome().setDescription("done");
 		}));
-		var token = codec.seal(new McpRequestState("cont-1", "prompts/get", 1, System.currentTimeMillis() + 60_000L), aad("prompts/get"));
+		var token = codec.seal(new McpRequestState("cont-1", "prompts/get", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("prompts/get", "ask"));
 		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
 		var result = (GetPromptResult) send(rev, config, req(1, "prompts/get", params, true), hdrs("prompts/get", "ask")).getResult();
 		assertEquals("done", result.getDescription());
@@ -434,7 +435,7 @@ class McpMrtrDispatch_Test {
 			seen.set(c.getBean(McpMrtrResumeContext.class).orElse(null));
 			return new McpResourceOutcome();
 		}));
-		var token = codec.seal(new McpRequestState("cont-1", "resources/read", 1, System.currentTimeMillis() + 60_000L), aad("resources/read"));
+		var token = codec.seal(new McpRequestState("cont-1", "resources/read", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("resources/read", "file:///a"));
 		var params = JsonMap.of("uri", "file:///a", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
 		var result = (ReadResourceResult) send(rev, config, req(1, "resources/read", params, true), hdrs("resources/read", "file:///a")).getResult();
 		assertNotNull(seen.get());
@@ -487,7 +488,7 @@ class McpMrtrDispatch_Test {
 		var revB = revision(mrtr(codecB));
 		var calls = new AtomicInteger();
 		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
-		var token = codecA.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L), aad("tools/call"));
+		var token = codecA.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
 		var params = JsonMap.of("name", "ask", "requestState", token);
 		var resp = send(revB, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
 		assertEquals(-32602, resp.getError().getCode());
@@ -564,5 +565,344 @@ class McpMrtrDispatch_Test {
 		assertNull(resp.getError());
 		var result = (CallToolResult) resp.getResult();
 		assertEquals("done", ((TextContent) result.getContent().get(0)).getText());
+	}
+
+	// -------- replay cache + argument-hash sealing ---------
+
+	@Test void f01_replayOfConsumedToken_rejectedWithWiredReplayCache() {
+		// A wired ReplayCache narrows the documented default multi-use tolerance to single-use: resubmitting a
+		// token already consumed by an earlier resume is rejected, and the handler is not re-invoked a second time.
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec).setReplayCache(new InMemoryReplayCache()));
+		var calls = new AtomicInteger();
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
+		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+
+		var first = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
+		assertNull(first.getError());
+		assertEquals(1, calls.get());
+
+		var second = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
+		assertEquals(-32025, second.getError().getCode());
+		assertEquals(1, calls.get());  // not re-invoked a second time
+	}
+
+	@Test void f02_sameTokenDoubleSubmit_secondRejectedEvenAfterAdvancingToNextRound() {
+		// The same wired ReplayCache also catches a stale round-N token being resubmitted after the client has
+		// already legitimately advanced past it to a later round's token -- replay detection is per-jti, not
+		// merely "is this the current round's token".
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec).setReplayCache(new InMemoryReplayCache()));
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> {
+			if (c.getBean(McpMrtrResumeContext.class).isPresent())
+				throw new McpInputRequiredSignal(Map.of("q2", reqEntry("elicitation")), "cont-2");
+			throw new McpInputRequiredSignal(Map.of("q1", reqEntry("elicitation")), "cont-1");
+		}));
+		var token1 = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
+		var params1 = JsonMap.of("name", "ask", "requestState", token1, "inputResponses", JsonMap.of("q1", "answer"));
+
+		// Legitimate first use of token1 consumes it and advances to round 2.
+		var pausedAgain = (InputRequiredResult) send(rev, config, req(1, "tools/call", params1, true), hdrs("tools/call", "ask")).getResult();
+		assertNotNull(pausedAgain.getRequestState());
+
+		// A second submission of the SAME (now-stale) round-1 token is a replay.
+		var resp = send(rev, config, req(1, "tools/call", params1, true), hdrs("tools/call", "ask"));
+		assertEquals(-32025, resp.getError().getCode());
+	}
+
+	@Test void f03_defaultConfigWithoutReplayCache_doesNotRejectReplay() {
+		// Pins D1 (opt-in): with no ReplayCache wired (the default), a requestState token remains the documented
+		// multi-use bearer credential -- the exact same token may be resubmitted repeatedly within its TTL.
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec));  // no ReplayCache wired
+		var calls = new AtomicInteger();
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
+		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+
+		for (var i = 0; i < 3; i++)
+			assertNull(send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask")).getError());
+		assertEquals(3, calls.get());
+	}
+
+	// A ReplayCache whose checkAndRecord always throws (after counting the call), proving the dispatcher's
+	// fail-open contract AND that the cache was actually consulted (so f04 cannot pass vacuously).
+	static final class F04_ThrowingReplayCache implements ReplayCache {
+		final AtomicInteger calls = new AtomicInteger();
+		@Override public boolean checkAndRecord(String jti, long expiresAtMs) {
+			calls.incrementAndGet();
+			throw new RuntimeException("simulated replay-store outage");
+		}
+	}
+
+	@Test void f04_replayCacheThatThrows_failsOpenAndResumeProceeds() {
+		// A ReplayCache that throws is fail-open by contract: the dispatcher catches the exception, logs it, and
+		// treats the token as first-seen -- degrading to the same behavior as if no ReplayCache were wired at all,
+		// rather than rejecting the resume. An operator who wants fail-closed-on-outage must return false instead
+		// of throwing (see ReplayCache's javadoc); the framework applies no such policy itself.
+		var codec = new AeadRequestStateCodec();
+		var replayCache = new F04_ThrowingReplayCache();
+		var rev = revision(mrtr(codec).setReplayCache(replayCache));
+		var calls = new AtomicInteger();
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
+		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		var resp = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
+		assertNull(resp.getError());
+		assertEquals(1, calls.get());
+		assertEquals(1, replayCache.calls.get());  // the throwing cache WAS consulted -- fail-open is not vacuous
+	}
+
+	@Test void f05_argumentsMutatedBetweenRounds_rejectedAsArgumentsMismatch() {
+		// End-to-end (via pause(...) itself, not a hand-built fixture): round 1 is paused and resumed with
+		// faithful arguments, advancing to round 2 -- whose sealed argumentsHash is computed from THAT resume
+		// request's arguments. Resuming round 2 with DIFFERENT arguments than that round actually saw is rejected.
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec));
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> {
+			if (c.getBean(McpMrtrResumeContext.class).isPresent())
+				throw new McpInputRequiredSignal(Map.of("q2", reqEntry("elicitation")), "cont-2");
+			throw new McpInputRequiredSignal(Map.of("q1", reqEntry("elicitation")), "cont-1");
+		}));
+
+		var initialParams = JsonMap.of("name", "ask", "arguments", JsonMap.of("x", 1));
+		var paused = (InputRequiredResult) send(rev, config, req(1, "tools/call", initialParams, true), hdrs("tools/call", "ask")).getResult();
+
+		// Faithful round-1 resume (same arguments as the original request) advances to round 2; round 2's
+		// argumentsHash is sealed from THIS request's arguments.
+		var resume1Params = JsonMap.of("name", "ask", "arguments", JsonMap.of("x", 1),
+			"requestState", paused.getRequestState(), "inputResponses", JsonMap.of("q1", "answer"));
+		var pausedAgain = (InputRequiredResult) send(rev, config, req(1, "tools/call", resume1Params, true), hdrs("tools/call", "ask")).getResult();
+		assertNotNull(pausedAgain.getRequestState());
+
+		// Round-2 resume with arguments that differ from what round 2 actually saw is rejected before the
+		// handler is re-invoked.
+		var resume2Params = JsonMap.of("name", "ask", "arguments", JsonMap.of("x", 2),
+			"requestState", pausedAgain.getRequestState(), "inputResponses", JsonMap.of("q2", "answer"));
+		var resp = send(rev, config, req(1, "tools/call", resume2Params, true), hdrs("tools/call", "ask"));
+		assertEquals(-32026, resp.getError().getCode());
+	}
+
+	@Test void f06_happyPath_faithfulResendUnaffectedByEitherCheck() {
+		// A faithful client that never reuses a token and always resends identical arguments sees zero
+		// behavioral change with a ReplayCache AND the always-on argument-hash check both engaged at once.
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec).setReplayCache(new InMemoryReplayCache()));
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> {
+			if (c.getBean(McpMrtrResumeContext.class).isPresent())
+				return text("done:" + args.get("x"));
+			throw new McpInputRequiredSignal(Map.of("q1", reqEntry("elicitation")), "cont-1");
+		}));
+
+		var initialParams = JsonMap.of("name", "ask", "arguments", JsonMap.of("x", 1));
+		var paused = (InputRequiredResult) send(rev, config, req(1, "tools/call", initialParams, true), hdrs("tools/call", "ask")).getResult();
+
+		var resumeParams = JsonMap.of("name", "ask", "arguments", JsonMap.of("x", 1),
+			"requestState", paused.getRequestState(), "inputResponses", JsonMap.of("q1", "answer"));
+		var result = (CallToolResult) send(rev, config, req(1, "tools/call", resumeParams, true), hdrs("tools/call", "ask")).getResult();
+		assertEquals("done:1", ((TextContent) result.getContent().get(0)).getText());
+	}
+
+	@Test void f07_sharedReplayCache_detectsReplayAcrossIndependentRevisions() {
+		// Direct analog to d04 (shared KeyProvider), but for the ReplayCache SPI: a store shared across every
+		// node catches a token replayed against a DIFFERENT McpRevision instance than the one that consumed it
+		// first -- the cross-node single-use enforcement design.md documents as needing a shared impl.
+		var sharedKeyProvider = StaticKeyProvider.of("2026-08-f07", StaticKeyProvider.aesKey(new byte[32]));
+		var sharedReplayCache = new InMemoryReplayCache();
+		var revA = revision(new McpMrtrConfig().setKeyProvider(sharedKeyProvider).setReplayCache(sharedReplayCache));
+		var revB = revision(new McpMrtrConfig().setKeyProvider(sharedKeyProvider).setReplayCache(sharedReplayCache));
+
+		var pauseConfig = new McpServerConfig().addTool(tool("ask",
+			(args, c) -> { throw new McpInputRequiredSignal(Map.of("q1", reqEntry("elicitation")), "cont-1"); }));
+		var paused = (InputRequiredResult) send(revA, pauseConfig, req(1, "tools/call", JsonMap.of("name", "ask"), true), hdrs("tools/call", "ask")).getResult();
+		var token = paused.getRequestState();
+		assertNotNull(token);
+
+		var resumeConfig = new McpServerConfig().addTool(tool("ask", (args, c) -> text("done")));
+		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+
+		// First resume, dispatched through the OTHER revision instance, consumes the token via the shared cache.
+		var first = send(revB, resumeConfig, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
+		assertNull(first.getError());
+
+		// Replaying the same token back through revision A (the one that minted it) is still caught: the
+		// ReplayCache -- shared across both instances -- is what recorded the jti as seen, not either revision's
+		// own in-process state.
+		var second = send(revA, resumeConfig, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
+		assertEquals(-32025, second.getError().getCode());
+	}
+
+	@Test void f08_argumentsHashIsPinnedJcsSha256Base64Url() {
+		// Algorithm-pinning: the hash is base64url(SHA-256(JCS-canonical UTF-8 bytes)). These literals are the
+		// externally-computed digests of the canonical bytes {"a":1,"b":2} and {} respectively -- passing keys
+		// out of order proves JCS key-sorting, and the exact bytes pin JCS + SHA-256 + base64url as a unit. This
+		// MUST fail if someone swaps the JCS canonicalizer for a plain (insertion-order) serializer.
+		assertEquals("QyWM_3g_5wNtikMDP4MK38YOwDc4JHNUisdCuIgpJ3c", McpRevision.argumentsHash(JsonMap.of("b", 2, "a", 1)));
+		assertEquals("RBNvo1WzZ4oRRq0W9-hknpT7T8If536DEMBg9hyq_4o", McpRevision.argumentsHash(Map.of()));
+		// The empty-object literal is exactly the sentinel every no-argument fixture seals.
+		assertEquals("RBNvo1WzZ4oRRq0W9-hknpT7T8If536DEMBg9hyq_4o", NO_ARGS_HASH);
+	}
+
+	@Test void f09_resumeReorderingArgumentKeysSucceeds() {
+		// JCS sorts keys, so a resume that reorders argument keys hashes identically to the sealed round and is
+		// NOT a mismatch -- the handler is re-invoked normally.
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec));
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> text("done")));
+		var sealedHash = McpRevision.argumentsHash(JsonMap.of("a", 1, "b", 2));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", sealedHash), aad("tools/call", "ask"));
+		var params = JsonMap.of("name", "ask", "arguments", JsonMap.of("b", 2, "a", 1),
+			"requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		var resp = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
+		assertNull(resp.getError());
+		assertEquals("done", ((TextContent) ((CallToolResult) resp.getResult()).getContent().get(0)).getText());
+	}
+
+	@Test void f10_typeCoercionArgumentsRejected() {
+		// Canonicalization is type-faithful: a number-vs-string coercion (1 vs "1") and a scalar-vs-array
+		// coercion (1 vs [1]) both hash differently from the sealed {"x":1} and are rejected as -32026.
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec));
+		var calls = new AtomicInteger();
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
+		var sealedHash = McpRevision.argumentsHash(JsonMap.of("x", 1));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", sealedHash), aad("tools/call", "ask"));
+
+		var stringParams = JsonMap.of("name", "ask", "arguments", JsonMap.of("x", "1"),
+			"requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		assertEquals(-32026, send(rev, config, req(1, "tools/call", stringParams, true), hdrs("tools/call", "ask")).getError().getCode());
+
+		var arrayParams = JsonMap.of("name", "ask", "arguments", JsonMap.of("x", List.of(1)),
+			"requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		assertEquals(-32026, send(rev, config, req(1, "tools/call", arrayParams, true), hdrs("tools/call", "ask")).getError().getCode());
+
+		assertEquals(0, calls.get());  // neither coercion re-invoked the handler
+	}
+
+	@Test void f11_absentNullEmptyArgumentsAreInterchangeable() {
+		// absent "arguments", an explicit null "arguments", and an empty {} all resolve to Map.of() and hash to
+		// the same sentinel, so all three faithfully resume a token sealed with the sentinel hash. No replay
+		// cache is wired, so the single token stays usable across all three submissions.
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec));
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> text("done")));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
+
+		var absent = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		var explicitNull = JsonMap.of("name", "ask", "arguments", null, "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		var empty = JsonMap.of("name", "ask", "arguments", JsonMap.of(), "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		assertNull(send(rev, config, req(1, "tools/call", absent, true), hdrs("tools/call", "ask")).getError());
+		assertNull(send(rev, config, req(1, "tools/call", explicitNull, true), hdrs("tools/call", "ask")).getError());
+		assertNull(send(rev, config, req(1, "tools/call", empty, true), hdrs("tools/call", "ask")).getError());
+	}
+
+	@Test void f12_tokenPausedForToolAResumedAgainstToolBRejected() {
+		// H2: the operation target (tool name) is bound into the AAD, so a token paused for tool A cannot be
+		// resumed against tool B -- the differing target fails the GCM tag check, surfacing as -32602. This also
+		// proves the no-argument sentinel no longer lets a token cross tools (both seal NO_ARGS_HASH).
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec));
+		var calls = new AtomicInteger();
+		var config = new McpServerConfig()
+			.addTool(tool("toolA", (args, c) -> { calls.incrementAndGet(); return text("a"); }))
+			.addTool(tool("toolB", (args, c) -> { calls.incrementAndGet(); return text("b"); }));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "toolA"));
+		var params = JsonMap.of("name", "toolB", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		var resp = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "toolB"));
+		assertEquals(-32602, resp.getError().getCode());
+		assertEquals(0, calls.get());
+	}
+
+	@Test void f13_tokenPausedForResourceUriAResumedAgainstUriBRejected() {
+		// H2, resource variant: the resource uri is the bound target for resources/read, so a token paused for
+		// uri A cannot be resumed against uri B.
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec));
+		var calls = new AtomicInteger();
+		var config = new McpServerConfig()
+			.addResource(resource("file:///a", (u, c) -> { calls.incrementAndGet(); return new McpResourceOutcome(); }))
+			.addResource(resource("file:///b", (u, c) -> { calls.incrementAndGet(); return new McpResourceOutcome(); }));
+		var token = codec.seal(new McpRequestState("cont-1", "resources/read", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("resources/read", "file:///a"));
+		var params = JsonMap.of("uri", "file:///b", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		var resp = send(rev, config, req(1, "resources/read", params, true), hdrs("resources/read", "file:///b"));
+		assertEquals(-32602, resp.getError().getCode());
+		assertEquals(0, calls.get());
+	}
+
+	@Test void f14_mismatchedArgumentsLeavesTokenUsableForLaterFaithfulResume() {
+		// H3: the stateless argument-hash check runs BEFORE the stateful replay checkAndRecord, so a submission
+		// with wrong arguments is rejected WITHOUT consuming the token's jti. A subsequent faithful resume of the
+		// same token therefore still succeeds -- an attacker with only a leaked token cannot burn a victim's
+		// in-flight resume, and an honest client's typo does not destroy its own token.
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec).setReplayCache(new InMemoryReplayCache()));
+		var calls = new AtomicInteger();
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
+		var sealedHash = McpRevision.argumentsHash(JsonMap.of("x", 1));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", sealedHash), aad("tools/call", "ask"));
+
+		var wrongArgs = JsonMap.of("name", "ask", "arguments", JsonMap.of("x", 2),
+			"requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		assertEquals(-32026, send(rev, config, req(1, "tools/call", wrongArgs, true), hdrs("tools/call", "ask")).getError().getCode());
+		assertEquals(0, calls.get());  // rejected before the handler, and before the jti was recorded
+
+		var faithful = JsonMap.of("name", "ask", "arguments", JsonMap.of("x", 1),
+			"requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		assertNull(send(rev, config, req(1, "tools/call", faithful, true), hdrs("tools/call", "ask")).getError());
+		assertEquals(1, calls.get());  // token was NOT burned by the earlier mismatch
+	}
+
+	@Test void f15_nonFiniteNumberArgumentsRejectedAsInvalidParamsNotInternalError() {
+		// M3: a hostile-but-syntactically-legal value (a non-finite number, here 1e999 -> +Infinity) makes the
+		// JCS canonicalizer throw; that is mapped to -32602 (invalid params) rather than surfacing as a generic
+		// -32603 internal error. The hash is computed before the handler runs, so it is never invoked.
+		var rev = revision(mrtr(new AeadRequestStateCodec()));
+		var calls = new AtomicInteger();
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
+		var params = JsonMap.of("name", "ask", "arguments", JsonMap.of("x", Double.POSITIVE_INFINITY));
+		var resp = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
+		assertEquals(-32602, resp.getError().getCode());
+		assertEquals(0, calls.get());
+	}
+
+	@Test void f16_nullJtiFailsClosedWithWiredReplayCache() {
+		// M4: a null jti reaching a wired ReplayCache is a codec/contract violation, not a store outage -- it
+		// fails CLOSED with -32602 rather than inheriting checkReplay's fail-open policy (which a downstream NPE
+		// would otherwise trigger, silently disabling replay protection).
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec).setReplayCache(new InMemoryReplayCache()));
+		var calls = new AtomicInteger();
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
+		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, null, NO_ARGS_HASH), aad("tools/call", "ask"));
+		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		var resp = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
+		assertEquals(-32602, resp.getError().getCode());
+		assertEquals(0, calls.get());
+	}
+
+	// A custom RequestStateCodec whose unseal() always succeeds with a sealed argumentsHash that is not valid
+	// base64url -- a codec/contract violation distinct from f16's null-jti case, exercised the same way (a
+	// hand-built codec double, not a real AEAD token).
+	static final class F17_MalformedArgumentsHashCodec implements RequestStateCodec {
+		@Override public String seal(McpRequestState state, String aad, Principal principal) {
+			throw new UnsupportedOperationException("not exercised by f17 -- the fixture token is opaque to this codec");
+		}
+		@Override public Optional<McpRequestState> unseal(String token, String aad, Principal principal) {
+			return Optional.of(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", "not!valid-base64url"));
+		}
+	}
+
+	@Test void f17_malformedSealedArgumentsHashFailsClosedWithInvalidParamsNotInternalError() {
+		// Low3: a sealed argumentsHash that isn't valid base64url (a custom codec's contract violation, mirroring
+		// f16's null-jti case) must fail CLOSED with -32602, not let B64URL_DECODER.decode(...)'s raw
+		// IllegalArgumentException surface as a generic -32603 internal error.
+		var rev = revision(mrtr(new F17_MalformedArgumentsHashCodec()));
+		var calls = new AtomicInteger();
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
+		var params = JsonMap.of("name", "ask", "requestState", "opaque-token", "inputResponses", JsonMap.of("q1", "answer"));
+		var resp = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
+		assertEquals(-32602, resp.getError().getCode());
+		assertEquals(0, calls.get());
 	}
 }

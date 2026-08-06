@@ -20,8 +20,11 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
-import java.security.Principal;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
@@ -31,7 +34,11 @@ import org.apache.juneau.http.tracing.TraceContextCarrier;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.RestRequest;
 import org.apache.juneau.rest.server.tracing.*;
+import org.apache.juneau.marshall.jcs.JcsSerializer;
+import org.apache.juneau.marshall.json.JsonParser;
+import org.apache.juneau.marshall.marshaller.Jcs;
 import org.apache.juneau.marshall.marshaller.Json;
+import org.apache.juneau.marshall.serializer.SerializeException;
 import org.apache.juneau.rest.server.mcp.McpCompletionRef;
 import org.apache.juneau.rest.server.mcp.McpCompletionRequest;
 import org.apache.juneau.rest.server.mcp.McpCompletionResult;
@@ -172,11 +179,46 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 */
 	public static final int CODE_TOO_MANY_SUBSCRIPTIONS = -32024;
 
+	/**
+	 * MRTR error code: an operator-configured {@link ReplayCache} reports that the echoed {@code requestState}
+	 * has already been consumed once before. Only ever thrown when {@link McpMrtrConfig#getReplayCache()} is
+	 * non-<jk>null</jk> &mdash; replay rejection is opt-in (same range/rationale as
+	 * {@link #CODE_REQUEST_STATE_EXPIRED}).
+	 */
+	public static final int CODE_REQUEST_STATE_REPLAYED = -32025;
+
+	/**
+	 * MRTR error code: the current request's {@code arguments} do not hash to the same value as the arguments
+	 * sealed at PAUSE time &mdash; the client has resumed with a different argument set than the one the paused
+	 * operation originally authorized. Always checked, unlike {@link #CODE_REQUEST_STATE_REPLAYED} (same
+	 * range/rationale as {@link #CODE_REQUEST_STATE_EXPIRED}).
+	 */
+	public static final int CODE_REQUEST_STATE_ARGUMENTS_MISMATCH = -32026;
+
 	/** Default server name reported by {@code server/discover} when the config supplies no server identity. */
 	public static final String DEFAULT_SERVER_NAME = "juneau-rest-server-mcp";
 
 	private static final String META_KEY = "_meta";
 	private static final String PARAM_ARGUMENTS = "arguments";
+
+	private static final Logger LOG = Logger.getLogger(McpRevision.class.getName());
+
+	// 16 random bytes -> 22 base64url chars (unpadded): matches EphemeralKeyProvider's keyId minting pattern,
+	// sized generously since a jti only ever travels inside the AEAD-sealed plaintext, never on its own.
+	private static final int JTI_BYTES = 16;
+	private static final SecureRandom JTI_RANDOM = new SecureRandom();
+	private static final Base64.Encoder B64URL = Base64.getUrlEncoder().withoutPadding();
+	private static final Base64.Decoder B64URL_DECODER = Base64.getUrlDecoder();
+
+	// RFC 8785 canonicalizer for the argument hash, deliberately configured for UNBOUNDED depth with recursion
+	// detection: JcsSerializer's inherited maxDepth default (100) SILENTLY truncates over-depth nodes to null,
+	// which would let two argument sets differing only below the limit hash identically while the handler still
+	// received the divergent subtree. maxDepth(Integer.MAX_VALUE) makes the hash cover the full subtree, and
+	// detectRecursions() fails-fast (rather than looping) on a pathological cyclic structure. The complementary
+	// JsonValueSafety.check in argumentsHash(...) is what actually bounds attacker-controlled depth/size/CPU;
+	// this canonicalizer only guarantees that whatever passes that guard is hashed in full.
+	private static final Jcs JCS = new Jcs(
+		JcsSerializer.create().maxDepth(Integer.MAX_VALUE).detectRecursions().build(), JsonParser.DEFAULT);
 
 	/**
 	 * This revision instance's binding-owned MRTR (Multi-Round-Trip Request) configuration, as supplied at
@@ -631,7 +673,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			validateStructuredOutput(outcome);
 			return McpWire.toWire(outcome);
 		} catch (McpInputRequiredSignal signal) {
-			return pause(signal, McpMethods.TOOLS_CALL, p, mrtr.currentRound(), ctx);
+			return pause(signal, McpMethods.TOOLS_CALL, p, mrtr.currentRound(), mrtr.argumentsHash(), mrtr.target(), ctx);
 		}
 	}
 
@@ -668,7 +710,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		try (var store = mrtr.store()) {
 			return McpWire.toWire(handler.get(args, store));
 		} catch (McpInputRequiredSignal signal) {
-			return pause(signal, McpMethods.PROMPTS_GET, p, mrtr.currentRound(), ctx);
+			return pause(signal, McpMethods.PROMPTS_GET, p, mrtr.currentRound(), mrtr.argumentsHash(), mrtr.target(), ctx);
 		}
 	}
 
@@ -697,7 +739,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			try (var store = mrtr.store()) {
 				return applyCache(McpWire.toWire(exact.get().read(uri, store)), readHint(uri));
 			} catch (McpInputRequiredSignal signal) {
-				return pause(signal, McpMethods.RESOURCES_READ, p, mrtr.currentRound(), ctx);
+				return pause(signal, McpMethods.RESOURCES_READ, p, mrtr.currentRound(), mrtr.argumentsHash(), mrtr.target(), ctx);
 			}
 		}
 		var match = config.resolveResourceTemplate(uri);
@@ -773,8 +815,21 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * so call sites can close it in a try-with-resources block: any bean a handler resolves through it is tracked
 	 * for {@code @PreDestroy} cleanup on <i>this</i> store, not the caller-owned {@code ctx} it wraps (see
 	 * {@link BasicBeanStore#close()}), so it must be closed once the handler invocation completes.
+	 *
+	 * <p>
+	 * {@code argumentsHash} is the canonical hash of the current request's {@code arguments} (see
+	 * {@link #argumentsHash(Map)}), computed <i>once</i> here &mdash; before the handler runs &mdash; and threaded
+	 * to {@link #pause} so the next token seals the hash of what the client actually sent, not a hash recomputed
+	 * from the live {@code arguments} map after a handler may have mutated it in place.
+	 *
+	 * <p>
+	 * {@code target} is the operation target resolved by {@link #mrtrTarget(String, Map)} (the tool/prompt
+	 * {@code name} or resource {@code uri}), captured at the same pre-handler point as {@code argumentsHash} and
+	 * for the same reason: {@link #pause} seals it into the next token's {@link #aad(String, String) AAD}
+	 * unchanged, so a handler that mutates the live {@code params} map in place cannot shift which
+	 * tool/prompt/resource the next token is bound to.
 	 */
-	private record MrtrContext(WritableBeanStore store, int currentRound) {}
+	private record MrtrContext(WritableBeanStore store, int currentRound, String argumentsHash, String target) {}
 
 	/**
 	 * Builds the {@link BeanStore} an in-scope handler receives and, on a RESUME, validates the echoed
@@ -784,9 +839,19 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * Always wraps {@code ctx} with a {@link McpMrtrCapabilityContext} so a handler can pre-check the client's
 	 * advertised {@code elicitation} capability (spec &sect;4). When the request carries a {@code requestState}
 	 * (a RESUME), it is unsealed under the canonical AAD and validated for integrity, method agreement, expiry,
-	 * and the max-rounds cap &mdash; any failure raises the mapped {@link McpException} <i>before</i> the handler
-	 * is re-invoked &mdash; then the decoded continuation and the client's {@code inputResponses} are exposed via
+	 * the max-rounds cap, argument-hash agreement (always; see {@link #argumentsHash(Map)}), and replay (only when
+	 * {@link McpMrtrConfig#getReplayCache()} is configured; see {@link #checkReplay(ReplayCache, String, long)})
+	 * &mdash; any failure raises the mapped {@link McpException} <i>before</i> the handler is re-invoked &mdash;
+	 * then the decoded continuation and the client's {@code inputResponses} are exposed via
 	 * {@link McpMrtrResumeContext}.
+	 *
+	 * <p>
+	 * <b>Check ordering is deliberate.</b> The stateless argument-hash comparison runs <i>before</i> the
+	 * (stateful) replay {@code checkAndRecord}, so a submission carrying the wrong {@code arguments} is rejected
+	 * without ever consuming the token's {@code jti} &mdash; an attacker holding only a leaked token (but not the
+	 * arguments) cannot burn a victim's in-flight resume, and an honest client that sends slightly-wrong arguments
+	 * does not destroy its own token. The argument hash is also computed <i>once</i> here, before the handler
+	 * runs, and threaded to {@link #pause} (see {@link MrtrContext}).
 	 *
 	 * @param method The in-scope JSON-RPC method. Must not be <jk>null</jk>.
 	 * @param params The request params map. Must not be <jk>null</jk>.
@@ -794,6 +859,17 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * @return The resolved MRTR context. Never <jk>null</jk>.
 	 */
 	private MrtrContext resolveMrtrContext(String method, Map<String,Object> params, BeanStore ctx) {
+		// Computed once, up front, from the CURRENT request's arguments: reused both for the RESUME-time
+		// comparison below and (threaded through MrtrContext) for the hash pause(...) seals into the next token,
+		// so a handler that mutates the live arguments map in place cannot make the next token seal a hash the
+		// client can no longer reproduce. Also applies the bounded-traversal + canonicalization guards (see
+		// argumentsHash), so structurally-hostile arguments become a -32602 here on both first-round and RESUME.
+		var argumentsHash = argumentsHash(McpParamUtils.mapParam(params, PARAM_ARGUMENTS));
+		// Captured once, up front, alongside argumentsHash and for the same reason: threaded through MrtrContext
+		// to pause(...) so the AAD sealed into the next token binds the target actually resolved for THIS
+		// request, immune to a handler mutating params in place before pause(...) runs (see MrtrContext's
+		// javadoc above).
+		var target = mrtrTarget(method, params);
 		var requestState = McpParamUtils.strParam(params, "requestState");
 		if (requestState == null) {
 			@SuppressWarnings({
@@ -801,12 +877,12 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			})
 			var wrapped = new BasicBeanStore(ctx)
 				.addBean(McpMrtrCapabilityContext.class, new McpMrtrCapabilityContext(clientElicitationSupported(params)));
-			return new MrtrContext(wrapped, 0);
+			return new MrtrContext(wrapped, 0, argumentsHash, target);
 		}
 		// Validate the echoed requestState before constructing the BasicBeanStore below: every failure here
 		// throws, and a BasicBeanStore built earlier would never reach a caller's try-with-resources to be
 		// closed (java:S2095). Deferring construction until validation succeeds means no path leaks it.
-		var sealed = mrtrConfig.getCodec().unseal(requestState, aad(method), principal(ctx))
+		var sealed = mrtrConfig.getCodec().unseal(requestState, aad(method, target), principal(ctx))
 			.orElseThrow(() -> new McpException(CODE_INVALID_PARAMS, "Invalid or tampered requestState"));
 		if (! method.equals(sealed.method()))
 			throw new McpException(CODE_INVALID_PARAMS, "requestState method mismatch");
@@ -815,6 +891,26 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		if (sealed.round() >= mrtrConfig.getMaxRounds())
 			// Client-facing message deliberately omits the configured cap value so server config is not leaked.
 			throw new McpException(CODE_MAX_ROUNDS_EXCEEDED, "Max MRTR rounds exceeded");
+		// Stateless argument-hash agreement BEFORE the stateful replay record (see the ordering note above). A
+		// null sealed hash (e.g. a custom codec that dropped the field) fails closed as an ordinary mismatch
+		// here; a malformed (non-base64url) sealed hash is a codec-contract violation and argumentsMatch itself
+		// throws CODE_INVALID_PARAMS for it (mirroring the null-jti fail-closed check below), rather than
+		// reaching this mismatch branch.
+		if (! argumentsMatch(argumentsHash, sealed.argumentsHash()))
+			throw new McpException(CODE_REQUEST_STATE_ARGUMENTS_MISMATCH, "resumed arguments do not match the original request");
+		var replayCache = mrtrConfig.getReplayCache();
+		if (replayCache != null) {
+			// A null/empty jti reaching the cache is a codec/contract violation (a custom RequestStateCodec that
+			// dropped the field, or a pre-jti in-flight token during a rolling deploy), NOT a store outage: fail
+			// CLOSED here rather than letting a downstream NPE be swallowed by checkReplay's fail-OPEN catch,
+			// which would silently disable replay protection.
+			if (isEmpty(sealed.jti()))
+				throw new McpException(CODE_INVALID_PARAMS, "Invalid or tampered requestState");
+			if (! checkReplay(replayCache, sealed.jti(), sealed.expiresAtMs()))
+				// Client-facing message deliberately omits any cache/backend detail, mirroring the max-rounds
+				// message's "don't leak server config" caution above.
+				throw new McpException(CODE_REQUEST_STATE_REPLAYED, "requestState has already been used");
+		}
 		var inputResponses = McpParamUtils.mapParam(params, "inputResponses");
 		@SuppressWarnings({
 			"resource" // Ownership transfers to the returned MrtrContext; the caller closes it via mrtr.store() in try-with-resources (see MrtrContext's javadoc above). Eclipse JDT @Owning warning is by design.
@@ -822,13 +918,14 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		var wrapped = new BasicBeanStore(ctx)
 			.addBean(McpMrtrCapabilityContext.class, new McpMrtrCapabilityContext(clientElicitationSupported(params)))
 			.addBean(McpMrtrResumeContext.class, new McpMrtrResumeContext(sealed.continuation(), inputResponses));
-		return new MrtrContext(wrapped, sealed.round());
+		return new MrtrContext(wrapped, sealed.round(), argumentsHash, target);
 	}
 
 	/**
 	 * Turns a caught {@link McpInputRequiredSignal} into a wire {@link InputRequiredResult}: capability-gates the
-	 * client, seals a fresh {@code requestState} carrying the incremented round counter, and assembles the
-	 * requested-inputs map.
+	 * client, seals a fresh {@code requestState} carrying the incremented round counter, a fresh {@code jti} (see
+	 * {@link #mintJti()}), and the {@code argumentsHash} of the current request's {@code arguments} (see
+	 * {@link #argumentsHash(Map)}), and assembles the requested-inputs map.
 	 *
 	 * <p>
 	 * The capability gate runs <i>before</i> any token is minted &mdash; a client that never advertised
@@ -836,18 +933,27 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 *
 	 * @param signal The signal thrown by the handler. Must not be <jk>null</jk>.
 	 * @param method The in-scope JSON-RPC method this pause is for. Must not be <jk>null</jk>.
-	 * @param params The request params map. Must not be <jk>null</jk>.
+	 * @param params The request params map, used only for {@link #clientElicitationSupported(Map)} here &mdash;
+	 * 	the AAD's operation target is the caller-supplied {@code target}, below, not re-derived from this map.
 	 * @param currentRound The round decoded on RESUME (0 on a first-round pause), incremented into the new token.
+	 * @param argumentsHash The hash of the current request's {@code arguments}, computed by
+	 * 	{@link #resolveMrtrContext} <i>before</i> the handler ran and threaded here (see {@link MrtrContext}), so a
+	 * 	handler that mutated the live {@code arguments} map cannot make this token seal an unreproducible hash.
+	 * @param target The operation target sealed into the next token's {@link #aad(String, String) AAD}, resolved
+	 * 	by {@link #resolveMrtrContext} <i>before</i> the handler ran and threaded here (see {@link MrtrContext}),
+	 * 	so a handler that mutated the live {@code params} map cannot shift which tool/prompt/resource the next
+	 * 	token is bound to.
 	 * @param ctx The per-request bean store, used to resolve the authenticated {@link #principal(BeanStore)} threaded
 	 * 	into the codec's {@link RequestStateCodec#seal seal} (READY-312f F4). Must not be <jk>null</jk>.
 	 * @return The assembled, validated {@code input_required} result. Never <jk>null</jk>.
 	 */
-	private InputRequiredResult pause(McpInputRequiredSignal signal, String method, Map<String,Object> params, int currentRound, BeanStore ctx) {
+	private InputRequiredResult pause(McpInputRequiredSignal signal, String method, Map<String,Object> params, int currentRound, String argumentsHash, String target, BeanStore ctx) {
 		if (! clientElicitationSupported(params))
 			throw new McpException(CODE_MISSING_REQUIRED_CLIENT_CAPABILITY,
 				"Client does not advertise the elicitation capability required for input_required");
-		var state = new McpRequestState(signal.getContinuation(), method, currentRound + 1, System.currentTimeMillis() + mrtrConfig.getTtlMs());
-		var result = new InputRequiredResult().setRequestState(mrtrConfig.getCodec().seal(state, aad(method), principal(ctx)));
+		var state = new McpRequestState(signal.getContinuation(), method, currentRound + 1, System.currentTimeMillis() + mrtrConfig.getTtlMs(),
+			mintJti(), argumentsHash);
+		var result = new InputRequiredResult().setRequestState(mrtrConfig.getCodec().seal(state, aad(method, target), principal(ctx)));
 		// Each inputRequests value is carried to the wire byte-for-byte as a raw sub-request object (see
 		// McpInputRequiredSignal). The pinned schema models every value as an object; a non-map handler value is a
 		// programming error that surfaces (as a ClassCastException here) via dispatch's -32603 fail-safe.
@@ -858,14 +964,190 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 
 	/**
 	 * The canonical MRTR AAD binding a sealed {@code requestState} to the request that produced it:
-	 * {@code method + '\u0000' + protocolVersion} (NUL-separated; see {@link RequestStateCodec}). NUL cannot
-	 * appear in a method name or protocol-version literal, so the concatenation is unambiguous.
+	 * {@code method + '\u0000' + protocolVersion + '\u0000' + target} (NUL-separated; see
+	 * {@link RequestStateCodec}).
+	 *
+	 * <p>
+	 * <b>The operation {@code target} is folded in so a token is bound to the specific tool/prompt/resource it
+	 * paused against, not merely the method.</b> Without it, a token paused for tool A could be resumed against
+	 * tool B (or resource {@code uri} A against {@code uri} B) &mdash; both are {@code tools/call} (or
+	 * {@code resources/read}), so the method-only AAD verified identically. The {@code target} is the tool
+	 * {@code name} for {@code tools/call}, the prompt {@code name} for {@code prompts/get}, and the {@code uri}
+	 * for {@code resources/read} (see {@link #mrtrTarget(String, Map)}); a mismatch now fails the GCM tag check,
+	 * surfacing as the existing "invalid or tampered requestState" {@link #CODE_INVALID_PARAMS}. Neither
+	 * {@code method} nor {@code protocolVersion} can contain a NUL, and {@code target} is the terminal field, so
+	 * the three-field NUL join is unambiguous (distinct {@code (method, version, target)} tuples never collide)
+	 * &mdash; the same injectivity property the two-field form relied on, extended by one trailing field. The
+	 * codec treats this whole string as one opaque AAD field, framing it against {@code keyId}/principal with its
+	 * own length-prefixed join (see {@link AeadRequestStateCodec#lengthPrefixJoin}).
 	 *
 	 * @param method The in-scope JSON-RPC method. Must not be <jk>null</jk>.
+	 * @param target The operation target (tool/prompt {@code name} or resource {@code uri}); coalesced to empty
+	 * 	when <jk>null</jk> (only the three MRTR-wired methods reach here, and each has already validated its
+	 * 	target as non-null at the call site).
 	 * @return The AAD string. Never <jk>null</jk>.
 	 */
-	private String aad(String method) {
-		return method + '\u0000' + protocolVersion();
+	private String aad(String method, String target) {
+		return method + '\u0000' + protocolVersion() + '\u0000' + ein(target);
+	}
+
+	/**
+	 * Derives the operation target folded into the {@link #aad(String, String) AAD}: the tool {@code name} for
+	 * {@code tools/call}, the prompt {@code name} for {@code prompts/get}, and the resource {@code uri} for
+	 * {@code resources/read}. Any other method (none of which reach the MRTR pause/resume path) yields
+	 * <jk>null</jk>.
+	 *
+	 * @param method The in-scope JSON-RPC method. Must not be <jk>null</jk>.
+	 * @param params The request params map. Must not be <jk>null</jk>.
+	 * @return The operation target, or <jk>null</jk> for a non-MRTR method.
+	 */
+	private static String mrtrTarget(String method, Map<String,Object> params) {
+		return switch (method) {
+			case McpMethods.TOOLS_CALL, McpMethods.PROMPTS_GET -> McpParamUtils.strParam(params, "name");
+			case McpMethods.RESOURCES_READ -> McpParamUtils.strParam(params, "uri");
+			default -> null;
+		};
+	}
+
+	/**
+	 * Mints a fresh, per-token random {@code jti} for a newly-sealed {@code requestState}, used only to detect
+	 * replay of this exact token (see {@link #checkReplay(ReplayCache, String, long)}).
+	 *
+	 * <p>
+	 * 16 random bytes, base64url-encoded &mdash; the same minting pattern {@link EphemeralKeyProvider} already
+	 * uses for its own {@code keyId}. Collision probability is negligible (128 bits of entropy) and, in any
+	 * case, is not a security property this identifier depends on: it rides inside the AEAD-sealed plaintext, so
+	 * a client can neither forge nor read it without first breaking the GCM tag.
+	 *
+	 * @return A fresh {@code jti}. Never <jk>null</jk>.
+	 */
+	private static String mintJti() {
+		var bytes = new byte[JTI_BYTES];
+		JTI_RANDOM.nextBytes(bytes);
+		return B64URL.encodeToString(bytes);
+	}
+
+	/**
+	 * Computes the canonical hash of a request's {@code arguments}, sealed at PAUSE time and re-verified at
+	 * RESUME time (see {@code McpRequestState#argumentsHash()}).
+	 *
+	 * <p>
+	 * First runs the module's shared bounded-traversal guard ({@link JsonValueSafety#check(Object, String)}:
+	 * {@code MAX_DEPTH=64}, {@code MAX_NODES}, a traversal-time deadline) so structurally-hostile {@code arguments}
+	 * (excessive depth or node count &mdash; reachable via {@code prompts/get}, which has no other input-shape
+	 * guard, and schemaless {@code tools/call}) become a deterministic {@link #CODE_INVALID_PARAMS} rejection on
+	 * BOTH PAUSE and RESUME, rather than a silent hash collision (the JCS canonicalizer's inherited depth limit
+	 * would otherwise truncate over-depth nodes to {@code null}). It then canonicalizes {@code arguments} per RFC
+	 * 8785 (JSON Canonicalization Scheme) using an <b>unbounded-depth</b> serializer (see {@link #JCS}), SHA-256s
+	 * the canonical UTF-8 bytes, and base64url-encodes the digest (mirroring {@link EphemeralKeyProvider}'s
+	 * existing {@code keyId} encoding convention). An absent or empty {@code arguments} map canonicalizes to the
+	 * empty JSON object {@code "{}"}, giving a single, consistent sentinel hash for calls that take no arguments
+	 * (for example {@code resources/read}'s exact-path branch), so PAUSE and RESUME agree even when there is
+	 * nothing to hash.
+	 *
+	 * <p>
+	 * By design, RFC 8785 canonical equivalences are treated as equal &mdash; for example {@code 1} and
+	 * {@code 1.0} canonicalize identically, so they hash the same and a resume switching between them is not a
+	 * mismatch. A canonicalization failure on a hostile-but-syntactically-legal value (a non-finite number such
+	 * as {@code 1e999}, a lone UTF-16 surrogate, or a {@code BigDecimal}/{@code BigInteger} outside IEEE-754
+	 * range) is mapped to {@link #CODE_INVALID_PARAMS} rather than surfacing as a generic internal error.
+	 *
+	 * <p>
+	 * Package-visible so tests can construct {@link McpRequestState} fixtures whose {@code argumentsHash} agrees
+	 * with a given (or absent) {@code arguments} map without duplicating this derivation.
+	 *
+	 * @param arguments The request's {@code arguments} map, as returned by
+	 * 	{@code McpParamUtils.mapParam(params, "arguments")}. Never <jk>null</jk> (empty when absent).
+	 * @return The canonical hash. Never <jk>null</jk>.
+	 * @throws McpException ({@link #CODE_INVALID_PARAMS}) if {@code arguments} violates the structural safety
+	 * 	limits or cannot be canonicalized.
+	 */
+	static String argumentsHash(Map<String,Object> arguments) {
+		try {
+			JsonValueSafety.check(arguments, "arguments");
+		} catch (IllegalArgumentException e) {
+			throw new McpException(CODE_INVALID_PARAMS, e.getMessage());
+		}
+		String canonical;
+		try {
+			canonical = JCS.write(arguments);
+		} catch (SerializeException e) {
+			// Message deliberately generic (no echo of the offending value), mirroring the other MRTR "don't leak"
+			// messages: a hostile-but-legal input (non-finite number, lone surrogate, out-of-IEEE BigDecimal) must
+			// not surface as a -32603 internal error.
+			throw new McpException(CODE_INVALID_PARAMS, "Invalid arguments: not canonicalizable");
+		}
+		return B64URL.encodeToString(sha256(canonical.getBytes(StandardCharsets.UTF_8)));
+	}
+
+	/**
+	 * Constant-time comparison of the current request's {@code argumentsHash} against the one sealed into the
+	 * echoed token. Both operands are base64url of a SHA-256 digest; they are decoded to their raw digest bytes
+	 * and compared with {@link MessageDigest#isEqual(byte[], byte[])}. A <jk>null</jk> sealed hash (for example a
+	 * custom codec that dropped the field) fails closed (returns <jk>false</jk>, surfacing as the ordinary
+	 * {@link #CODE_REQUEST_STATE_ARGUMENTS_MISMATCH} at the call site).
+	 *
+	 * <p>
+	 * A non-<jk>null</jk> sealed hash that is not valid base64url (for example a custom codec that computed
+	 * {@code argumentsHash} some other way) is a codec-contract violation rather than an ordinary mismatch, and
+	 * fails closed the same way the null-{@code jti} codec-contract violation does at the call site: a thrown
+	 * {@link McpException} ({@link #CODE_INVALID_PARAMS}), not a propagated {@link IllegalArgumentException}
+	 * from {@link Base64.Decoder#decode(String)} surfacing as a generic {@link #CODE_INTERNAL_ERROR}.
+	 *
+	 * @param currentHash The hash recomputed from the current request's {@code arguments}. Never <jk>null</jk>.
+	 * @param sealedHash The hash sealed into the echoed token, or <jk>null</jk>.
+	 * @return <jk>true</jk> if the two hashes match.
+	 * @throws McpException ({@link #CODE_INVALID_PARAMS}) if {@code sealedHash} is non-<jk>null</jk> but not
+	 * 	valid base64url.
+	 */
+	private static boolean argumentsMatch(String currentHash, String sealedHash) {
+		if (sealedHash == null)
+			return false;
+		byte[] sealedBytes;
+		try {
+			sealedBytes = B64URL_DECODER.decode(sealedHash);
+		} catch (IllegalArgumentException e) {
+			// Same fail-closed contract as the null-jti check below: an untrusted or misbehaving codec must
+			// never turn into a raw exception bubbling up as -32603 (see resolveMrtrContext's ordering note
+			// on why this stateless check runs before the stateful replay record).
+			throw new McpException(CODE_INVALID_PARAMS, "Invalid or tampered requestState");
+		}
+		return MessageDigest.isEqual(B64URL_DECODER.decode(currentHash), sealedBytes);
+	}
+
+	private static byte[] sha256(byte[] input) {
+		try {
+			return MessageDigest.getInstance("SHA-256").digest(input);
+		} catch (NoSuchAlgorithmException e) { // HTT every JDK guarantees SHA-256 via the standard JCE provider
+			throw rex(e, "SHA-256 not available");
+		}
+	}
+
+	/**
+	 * Invokes an operator-configured {@link ReplayCache}, applying the fail-open policy documented on that SPI:
+	 * a thrown exception is logged and treated as first-seen, so a store outage degrades to today's
+	 * already-documented multi-use-tolerant behavior rather than rejecting all MRTR resume traffic.
+	 *
+	 * <p>
+	 * An operator who wants fail-closed-on-store-outage instead must implement that themselves by returning
+	 * <jk>false</jk> from their own {@link ReplayCache#checkAndRecord(String, long)} rather than throwing (see
+	 * the SPI's own Javadoc) &mdash; this method applies no policy beyond "don't let an unexpected exception take
+	 * down resume traffic".
+	 *
+	 * @param replayCache The configured replay cache. Must not be <jk>null</jk> (callers only invoke this when
+	 * 	{@link McpMrtrConfig#getReplayCache()} is non-<jk>null</jk>).
+	 * @param jti The token identifier to check. Must not be <jk>null</jk>.
+	 * @param expiresAtMs The sealed token's own absolute expiry, passed through unchanged.
+	 * @return <jk>true</jk> if the cache reports first-seen (or itself failed, fail-open); <jk>false</jk> only
+	 * 	when the cache affirmatively reports a replay.
+	 */
+	private static boolean checkReplay(ReplayCache replayCache, String jti, long expiresAtMs) {
+		try {
+			return replayCache.checkAndRecord(jti, expiresAtMs);
+		} catch (Exception e) {
+			LOG.log(Level.WARNING, e, () -> "ReplayCache.checkAndRecord failed; treating requestState as first-seen (fail-open).");
+			return true;
+		}
 	}
 
 	/**

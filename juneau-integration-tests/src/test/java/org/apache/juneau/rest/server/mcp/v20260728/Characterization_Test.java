@@ -485,9 +485,26 @@ class Characterization_Test {
 	private static final long FAR_FUTURE_MS = 32503680000000L; // ~ year 3000
 	private static final long PAST_MS = 1000L;
 
-	private static String aad(String method) {
-		return method + '\u0000' + McpProtocol.VERSION_2026_07_28;
+	// Mirror of McpRevision#aad(method, target): the sealed AAD binds the operation target (tool name / resource
+	// uri) in addition to method+version, so every fixture token below must seal under the same target its
+	// resume request names or the GCM tag check fails on unseal.
+	private static String aad(String method, String target) {
+		return method + '\u0000' + McpProtocol.VERSION_2026_07_28 + '\u0000' + (target == null ? "" : target);
 	}
+
+	/**
+	 * The canonical {@code argumentsHash} for every RESUME-family fixture below. Every {@code ask}/{@code confirm}
+	 * resume request in this harness (see the {@code *.request.json} fixtures under
+	 * {@code MRTR-resume-*}/{@code MRTR-expired-*}/{@code MRTR-max-rounds-*}/{@code MRTR-tampered-*}/
+	 * {@code ELICIT-resume-*}) carries no {@code arguments} member at all &mdash; and the original PAUSE-triggering
+	 * call in {@code MRTR-input-required-response.request.json} sends an explicit empty {@code "arguments":{}}
+	 * &mdash; so every sealed fixture token here must embed the same canonical-empty-object hash that
+	 * {@code McpRevision#resolveMrtrContext} recomputes from the RESUME request's (absent) {@code arguments} on
+	 * every replay. Delegates to the real package-private {@link McpRevision#argumentsHash(Map)} (this test class
+	 * shares its package) rather than re-deriving the RFC-8785/SHA-256/base64url pipeline by hand, so the fixture
+	 * hash can never drift from what the dispatcher actually computes.
+	 */
+	private static final String EMPTY_ARGS_HASH = McpRevision.argumentsHash(Map.of());
 
 	/**
 	 * The {@code requestState} the harness seals (with {@link FixedKeyGcmCodec}, matching {@link F_Mrtr}'s codec)
@@ -505,17 +522,25 @@ class Characterization_Test {
 	 * {@code MRTR-tampered-request-state} was consciously superseded: because {@link FixedKeyGcmCodec} makes
 	 * {@code seal(...)} fully deterministic (fixed key, fixed nonce), regenerating the tampered token on every run
 	 * via {@code tamper(codec.seal(...))} is equally reproducible and avoids hand-maintaining opaque ciphertext.
+	 *
+	 * <p>
+	 * Every branch below passes {@link #EMPTY_ARGS_HASH} as {@code argumentsHash} (see its javadoc: every resume
+	 * request in this fixture set carries no {@code arguments}, so this is always the value
+	 * {@code McpRevision#resolveMrtrContext}'s always-on argument-binding check recomputes and compares against).
+	 * {@code jti} is a stable, per-branch literal purely for readability: none of these fixtures wire a
+	 * {@link ReplayCache} into {@link F_Mrtr}/{@link F_Elicit}'s {@code McpMrtrConfig}, so the dispatcher's
+	 * opt-in replay check never runs and the exact {@code jti} value is otherwise inert.
 	 */
 	private static String mrtrToken(String fixture) {
 		var codec = new FixedKeyGcmCodec();
 		return switch (fixture) {
-			case "MRTR-resume-complete" -> codec.seal(new McpRequestState("complete-me", "tools/call", 1, FAR_FUTURE_MS), aad("tools/call"));
-			case "MRTR-resume-input-required-again" -> codec.seal(new McpRequestState("pause-again", "tools/call", 1, FAR_FUTURE_MS), aad("tools/call"));
-			case "MRTR-expired-request-state" -> codec.seal(new McpRequestState("cont-1", "tools/call", 1, PAST_MS), aad("tools/call"));
-			case "MRTR-max-rounds-exceeded" -> codec.seal(new McpRequestState("cont-1", "tools/call", McpMrtrConfig.DEFAULT_MAX_ROUNDS, FAR_FUTURE_MS), aad("tools/call"));
-			case "MRTR-tampered-request-state" -> tamper(codec.seal(new McpRequestState("cont-1", "tools/call", 1, FAR_FUTURE_MS), aad("tools/call")));
+			case "MRTR-resume-complete" -> codec.seal(new McpRequestState("complete-me", "tools/call", 1, FAR_FUTURE_MS, "jti-resume-complete", EMPTY_ARGS_HASH), aad("tools/call", "ask"));
+			case "MRTR-resume-input-required-again" -> codec.seal(new McpRequestState("pause-again", "tools/call", 1, FAR_FUTURE_MS, "jti-resume-pause-again", EMPTY_ARGS_HASH), aad("tools/call", "ask"));
+			case "MRTR-expired-request-state" -> codec.seal(new McpRequestState("cont-1", "tools/call", 1, PAST_MS, "jti-expired", EMPTY_ARGS_HASH), aad("tools/call", "ask"));
+			case "MRTR-max-rounds-exceeded" -> codec.seal(new McpRequestState("cont-1", "tools/call", McpMrtrConfig.DEFAULT_MAX_ROUNDS, FAR_FUTURE_MS, "jti-max-rounds", EMPTY_ARGS_HASH), aad("tools/call", "ask"));
+			case "MRTR-tampered-request-state" -> tamper(codec.seal(new McpRequestState("cont-1", "tools/call", 1, FAR_FUTURE_MS, "jti-tampered", EMPTY_ARGS_HASH), aad("tools/call", "ask")));
 			case "ELICIT-resume-accept-complete", "ELICIT-resume-decline", "ELICIT-resume-cancel" ->
-				codec.seal(new McpRequestState("cont-1", "tools/call", 1, FAR_FUTURE_MS), aad("tools/call"));
+				codec.seal(new McpRequestState("cont-1", "tools/call", 1, FAR_FUTURE_MS, "jti-elicit-resume", EMPTY_ARGS_HASH), aad("tools/call", "confirm"));
 			default -> throw new IllegalArgumentException("No MRTR token mapping for fixture: " + fixture);
 		};
 	}
@@ -575,7 +600,7 @@ class Characterization_Test {
 		var envelope = Json.to(raw, JsonMap.class);
 		var result = (Map<?,?>) envelope.get("result");
 		var token = (String) result.get("requestState");
-		var state = new FixedKeyGcmCodec().unseal(token, aad("tools/call")).orElseThrow();
+		var state = new FixedKeyGcmCodec().unseal(token, aad("tools/call", "ask")).orElseThrow();
 		assertEquals(2, state.round());
 		assertEquals("cont-2", state.continuation());
 	}
