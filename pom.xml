@@ -48,7 +48,7 @@
 		<jetty.version>12.1.9</jetty.version>
 		<jetty.ee.version>11</jetty.ee.version>
 		<tomcat.version>11.0.21</tomcat.version>
-		<spring.version>4.0.6</spring.version>
+		<spring.version>4.1.0</spring.version>
 		<sonar.organization>apache</sonar.organization>
 		<!-- javadoc.css uses custom HTML element selectors (ja, jc, jd, ...) for Javadoc syntax highlighting; css:S4670 false positives. -->
 		<sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
