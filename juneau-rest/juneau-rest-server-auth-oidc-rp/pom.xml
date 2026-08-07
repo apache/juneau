@@ -36,7 +36,7 @@
 			Nimbus OAuth 2.0 SDK pin - kept on the same 11.37.2 line as juneau-rest-server-auth-oauth
 			(see FINISHED-94c).  A future bump must re-run the dependency:tree containment check.
 		-->
-		<nimbus-oauth2-oidc-sdk.version>11.37.2</nimbus-oauth2-oidc-sdk.version>
+		<nimbus-oauth2-oidc-sdk.version>11.38.2</nimbus-oauth2-oidc-sdk.version>
 	</properties>
 
 	<dependencies>
