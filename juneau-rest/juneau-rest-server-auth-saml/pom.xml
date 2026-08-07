@@ -37,7 +37,7 @@
 			latest stable 5.x release; avoid 5.0.0 (typical x.0.0 rough edges).  5.2.2 (May 2026) is
 			the current stable as of land time.
 		-->
-		<opensaml.version>5.2.2</opensaml.version>
+		<opensaml.version>5.2.3</opensaml.version>
 	</properties>
 
 	<!--
