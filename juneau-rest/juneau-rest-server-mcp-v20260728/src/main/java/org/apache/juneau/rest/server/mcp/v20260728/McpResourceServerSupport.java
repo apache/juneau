@@ -440,7 +440,7 @@ public final class McpResourceServerSupport {
 	 * Reads the same framework-standard {@link RestServerConstants#PRINCIPAL_ATTR} attribute {@link #authenticate}
 	 * writes on success, so this is the single source of truth for "who is calling this MCP request".  It is the seam
 	 * the {@code 2026-07-28} dispatcher threads into {@link RequestStateCodec#seal}/{@link RequestStateCodec#unseal}
-	 * to unblock TODO-325's principal-bound {@code requestState} AAD.  Mirrors {@link #grantedScopes(HttpServletRequest)}:
+	 * for principal-bound {@code requestState} AAD.  Mirrors {@link #grantedScopes(HttpServletRequest)}:
 	 * a <jk>null</jk> request, an absent attribute, or a non-{@link Principal} value all return <jk>null</jk> &mdash; the
 	 * anonymous / RS-auth-disabled path, which every caller must handle without an NPE.  Unlike
 	 * {@link #grantedScopes(HttpServletRequest)}, which falls back to an empty {@link Set} in that same situation, this

@@ -231,7 +231,8 @@ class McpBindings_Test extends TestBase {
 	}
 
 	@Test void d02_servletNullOptionsFactoryFailsFast() {
-		var e = assertThrows(IllegalStateException.class, () -> new F().getMcpOptions());
+		var f = new F();
+		var e = assertThrows(IllegalStateException.class, f::getMcpOptions);
 		assertEquals("createMcpOptions() returned null", e.getMessage());
 	}
 
@@ -348,7 +349,7 @@ class McpBindings_Test extends TestBase {
 	}
 
 	/**
-	 * TODO-330 regression: the pre-consolidation mixin default accidentally shared its MRTR key/broker
+	 * Regression: the pre-consolidation mixin default accidentally shared its MRTR key/broker
 	 * JVM-wide ({@code SharedMrtrConfig}/{@code SharedSubscriptionBroker}) across every distinct endpoint
 	 * instance. Post-consolidation, {@link McpEndpoint#getMcpOptions()}'s default is per-binding: two distinct
 	 * endpoint instances must resolve to two distinct {@link McpOptions} (and therefore distinct MRTR keys),

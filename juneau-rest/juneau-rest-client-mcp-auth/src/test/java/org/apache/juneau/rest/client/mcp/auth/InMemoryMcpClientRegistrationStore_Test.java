@@ -83,7 +83,8 @@ class InMemoryMcpClientRegistrationStore_Test extends TestBase {
 	@Test void b02_nullArgsRejected() {
 		var s = new InMemoryMcpClientRegistrationStore();
 		assertThrows(IllegalArgumentException.class, () -> s.find(null));
-		assertThrows(IllegalArgumentException.class, () -> s.put(null, reg(A, "c", "s")));
+		var registration = reg(A, "c", "s");
+		assertThrows(IllegalArgumentException.class, () -> s.put(null, registration));
 		assertThrows(IllegalArgumentException.class, () -> s.put(A, null));
 		assertThrows(IllegalArgumentException.class, () -> s.remove(null));
 	}

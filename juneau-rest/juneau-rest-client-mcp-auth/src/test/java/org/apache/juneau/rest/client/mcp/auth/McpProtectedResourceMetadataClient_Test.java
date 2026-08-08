@@ -151,7 +151,8 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 		// B1 (RFC 9728 3.3): the PRM document's resource field must match the resource the client was talking to.
 		var client = McpProtectedResourceMetadataClient.create()
 			.expectedResource(URI.create("https://different.example.com")).build();
-		var e = assertThrows(McpAuthException.class, () -> client.parse(prmJson(), null));
+		var json = prmJson();
+		var e = assertThrows(McpAuthException.class, () -> client.parse(json, null));
 		assertTrue(e.getMessage().contains("9728"), e::getMessage);
 	}
 

@@ -35,6 +35,7 @@ import org.apache.juneau.rest.server.mcp.McpPromptSpec;
 import org.apache.juneau.rest.server.mcp.McpResourceHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceOutcome;
 import org.apache.juneau.rest.server.mcp.McpResourceSpec;
+import org.apache.juneau.rest.server.mcp.McpResponseResult;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.apache.juneau.rest.server.mcp.McpToolHandler;
 import org.apache.juneau.rest.server.mcp.McpToolOutcome;
@@ -100,7 +101,8 @@ class McpRevisionValidation_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, JsonRpcRequest r, Map<String,String> headers) {
-		return (JsonRpcResponse) new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
+		var result = new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
+		return result instanceof McpResponseResult mrr ? mrr.response() : null;
 	}
 
 	// -------- protocol + error table + envelope ---------
@@ -125,7 +127,8 @@ class McpRevisionValidation_Test {
 
 	@Test
 	void a03_nullEnvelope_invalidRequest() {
-		var resp = (JsonRpcResponse) new McpRevision(null).dispatch(new McpExchange(null, n -> null), new McpServerConfig(), ctx);
+		var result = new McpRevision(null).dispatch(new McpExchange(null, n -> null), new McpServerConfig(), ctx);
+		var resp = result instanceof McpResponseResult mrr ? mrr.response() : null;
 		assertEquals(McpRevision.CODE_INVALID_REQUEST, resp.getError().getCode());
 	}
 
@@ -329,7 +332,8 @@ class McpRevisionValidation_Test {
 	void e03_serverDiscover_explicitCapabilitiesReturnedAsIs() {
 		var explicit = new ServerCapabilities().setPrompts(new PromptCapability());
 		var rev = new McpRevision(explicit);
-		var resp = (JsonRpcResponse) rev.dispatch(new McpExchange(req(1, "server/discover", withMeta(null, validMeta())), hdrs("server/discover", "")::get), new McpServerConfig(), ctx);
+		var dispatchResult = rev.dispatch(new McpExchange(req(1, "server/discover", withMeta(null, validMeta())), hdrs("server/discover", "")::get), new McpServerConfig(), ctx);
+		var resp = dispatchResult instanceof McpResponseResult mrr ? mrr.response() : null;
 		var result = (ServerDiscoverResult) resp.getResult();
 		assertNotNull(result.getCapabilities().getPrompts());
 		assertNull(result.getCapabilities().getTools());

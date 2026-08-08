@@ -69,10 +69,10 @@ final class SubscriptionCapabilityGate {
 	 */
 	static SubscriptionFilter toWireFilter(McpSubscriptionFilter honored) {
 		return new SubscriptionFilter()
-			.setToolsListChanged(honored.isToolsListChanged())
-			.setPromptsListChanged(honored.isPromptsListChanged())
-			.setResourcesListChanged(honored.isResourcesListChanged())
-			.setResourceSubscriptions(new ArrayList<>(honored.getResourceUris()));
+			.setToolsListChanged(honored.toolsListChanged())
+			.setPromptsListChanged(honored.promptsListChanged())
+			.setResourcesListChanged(honored.resourcesListChanged())
+			.setResourceSubscriptions(new ArrayList<>(honored.resourceUris()));
 	}
 
 	private static boolean truthy(Boolean value) {

@@ -103,7 +103,8 @@ class McpClient_Connect_Test {
 				closed.set(true);
 			}
 		};
-		var ex = assertThrows(IOException.class, () -> McpClient.connect(McpClient.builder().endpoint("http://x/mcp").transport(failing)));
+		var builder = McpClient.builder().endpoint("http://x/mcp").transport(failing);
+		var ex = assertThrows(IOException.class, () -> McpClient.connect(builder));
 		assertEquals("boom", ex.getMessage());
 		assertTrue(closed.get());
 	}
@@ -119,7 +120,8 @@ class McpClient_Connect_Test {
 				throw new IOException("close-boom");
 			}
 		};
-		var ex = assertThrows(IOException.class, () -> McpClient.connect(McpClient.builder().endpoint("http://x/mcp").transport(failing)));
+		var builder = McpClient.builder().endpoint("http://x/mcp").transport(failing);
+		var ex = assertThrows(IOException.class, () -> McpClient.connect(builder));
 		assertEquals("boom", ex.getMessage());
 		assertEquals(1, ex.getSuppressed().length);
 		assertEquals("close-boom", ex.getSuppressed()[0].getMessage());
@@ -136,7 +138,8 @@ class McpClient_Connect_Test {
 				throw new RuntimeException("close-boom");
 			}
 		};
-		var ex = assertThrows(IOException.class, () -> McpClient.connect(McpClient.builder().endpoint("http://x/mcp").transport(failing)));
+		var builder = McpClient.builder().endpoint("http://x/mcp").transport(failing);
+		var ex = assertThrows(IOException.class, () -> McpClient.connect(builder));
 		assertEquals("boom", ex.getMessage());
 		assertEquals(1, ex.getSuppressed().length);
 		assertEquals("close-boom", ex.getSuppressed()[0].getMessage());
@@ -154,7 +157,8 @@ class McpClient_Connect_Test {
 				closed.set(true);
 			}
 		};
-		var err = assertThrows(StackOverflowError.class, () -> McpClient.connect(McpClient.builder().endpoint("http://x/mcp").transport(failing)));
+		var builder = McpClient.builder().endpoint("http://x/mcp").transport(failing);
+		var err = assertThrows(StackOverflowError.class, () -> McpClient.connect(builder));
 		assertEquals("boom", err.getMessage());
 		assertTrue(closed.get());
 	}

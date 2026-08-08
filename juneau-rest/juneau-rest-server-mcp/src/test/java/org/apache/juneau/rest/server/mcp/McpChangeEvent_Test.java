@@ -24,14 +24,14 @@ class McpChangeEvent_Test {
 
 	@Test void a01_resourceUpdated_carriesUri() {
 		var event = new McpChangeEvent(McpChangeKind.RESOURCE_UPDATED, "file:///a.txt");
-		assertEquals(McpChangeKind.RESOURCE_UPDATED, event.getKind());
-		assertEquals("file:///a.txt", event.getResourceUri());
+		assertEquals(McpChangeKind.RESOURCE_UPDATED, event.kind());
+		assertEquals("file:///a.txt", event.resourceUri());
 	}
 
 	@Test void a02_listChangedKinds_uriIsNull() {
-		assertNull(new McpChangeEvent(McpChangeKind.TOOLS_LIST_CHANGED, null).getResourceUri());
-		assertNull(new McpChangeEvent(McpChangeKind.PROMPTS_LIST_CHANGED, null).getResourceUri());
-		assertNull(new McpChangeEvent(McpChangeKind.RESOURCES_LIST_CHANGED, null).getResourceUri());
+		assertNull(new McpChangeEvent(McpChangeKind.TOOLS_LIST_CHANGED, null).resourceUri());
+		assertNull(new McpChangeEvent(McpChangeKind.PROMPTS_LIST_CHANGED, null).resourceUri());
+		assertNull(new McpChangeEvent(McpChangeKind.RESOURCES_LIST_CHANGED, null).resourceUri());
 	}
 
 	@Test void a03_nullKindThrows() {

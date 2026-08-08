@@ -466,6 +466,16 @@ public final class RestRequest {
 		} finally {
 			var elapsed = Duration.between(start, Instant.now());
 			RestResponse finalResponse = response;
+			if (error != null && finalResponse != null) {
+				// The response was assigned but an error after that point (e.g. a throwing onConnect
+				// interceptor) means it is never returned to the caller, so the caller can never close it
+				// themselves — close it here to avoid leaking the underlying connection/body.
+				try {
+					finalResponse.close();
+				} catch (IOException closeError) { // HTT: close() failing on an already-broken response is not reliably reproducible
+					// suppress — best effort, and the original error is what propagates
+				}
+			}
 			for (var interceptor : effectiveInterceptors) {
 				try {
 					interceptor.onClose(this, finalResponse);

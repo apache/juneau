@@ -62,7 +62,13 @@ import com.nimbusds.oauth2.sdk.pkce.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value)
+})
 public class McpAuthorizationCodeAcquirer {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
 
 	/**
 	 * Static creator.
@@ -87,7 +93,7 @@ public class McpAuthorizationCodeAcquirer {
 		private URI expectedIssuer;
 		private boolean skipIssuerValidation;
 		private boolean requireIssuerResponseParameter;
-		private String redirectPath = "/callback";
+		private String redirectPath = DEFAULT_REDIRECT_PATH;
 		private int redirectPort;  // 0 == ephemeral / port-agnostic (the default).
 		private Consumer<URI> browserLauncher = McpAuthorizationCodeAcquirer::printAuthorizationUrl;
 		private EphemeralStore store;
@@ -104,7 +110,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder authorizationEndpoint(URI value) {
-			authorizationEndpoint = assertArgNotNull("value", value);
+			authorizationEndpoint = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -115,7 +121,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder tokenEndpoint(URI value) {
-			tokenEndpoint = assertArgNotNull("value", value);
+			tokenEndpoint = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -126,7 +132,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder clientId(String value) {
-			clientId = assertArgNotNullOrBlank("value", value);
+			clientId = assertArgNotNullOrBlank(ARG_value, value);
 			return this;
 		}
 
@@ -137,7 +143,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder clientSecret(String value) {
-			assertArgNotNullOrBlank("value", value);
+			assertArgNotNullOrBlank(ARG_value, value);
 			clientSecretSupplier = () -> value;
 			return this;
 		}
@@ -175,7 +181,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder resource(URI value) {
-			resource = assertArgNotNull("value", value);
+			resource = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -190,7 +196,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder expectedIssuer(URI value) {
-			expectedIssuer = assertArgNotNull("value", value);
+			expectedIssuer = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -232,7 +238,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder redirectPath(String value) {
-			redirectPath = assertArgNotNullOrBlank("value", value);
+			redirectPath = assertArgNotNullOrBlank(ARG_value, value);
 			assertArg(redirectPath.startsWith("/"), "redirectPath must start with '/' (was '%s')", redirectPath);
 			return this;
 		}
@@ -263,7 +269,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder browserLauncher(Consumer<URI> value) {
-			browserLauncher = assertArgNotNull("value", value);
+			browserLauncher = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -274,7 +280,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder store(EphemeralStore value) {
-			store = assertArgNotNull("value", value);
+			store = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -285,7 +291,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder httpTimeout(Duration value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
 			httpTimeout = value;
 			return this;
@@ -298,7 +304,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -326,6 +332,20 @@ public class McpAuthorizationCodeAcquirer {
 
 	/** Default connect/read timeout applied to the token-exchange request when the caller sets none. */
 	static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(10);
+
+	/**
+	 * Default loopback callback path.  Not RFC 8252-mandated (only the loopback address itself is spec-mandated) and
+	 * already fully caller-overridable via {@link Builder#redirectPath(String)}; this is merely the conventional
+	 * default.
+	 */
+	@SuppressWarnings({
+		"java:S1075" // Default value for an already caller-configurable Builder#redirectPath(String); not a hardcoded endpoint.
+	})
+	static final String DEFAULT_REDIRECT_PATH = "/callback";
+
+	/** Default HTML body served on the loopback callback so the browser tab shows a friendly confirmation. */
+	private static final String DEFAULT_CALLBACK_HTML =
+		"<html><body><h3>Authorization received</h3><p>You may close this window and return to the application.</p></body></html>";
 
 	private final URI authorizationEndpoint;
 	private final URI tokenEndpoint;
@@ -396,7 +416,7 @@ public class McpAuthorizationCodeAcquirer {
 		assertArgNotNull("timeout", timeout);
 		LoopbackRedirectReceiver receiver;
 		try {
-			receiver = new LoopbackRedirectReceiver(redirectPath, redirectPort, defaultHtml());
+			receiver = new LoopbackRedirectReceiver(redirectPath, redirectPort, DEFAULT_CALLBACK_HTML);
 		} catch (IOException e) {
 			throw new McpAuthException("Failed to start the loopback redirect listener", e);
 		}
@@ -421,9 +441,6 @@ public class McpAuthorizationCodeAcquirer {
 	 * @param verifier The PKCE verifier.  Must not be <jk>null</jk>.
 	 * @return The authorization URL.
 	 */
-	@SuppressWarnings({
-		"deprecation" // Nimbus CodeChallenge overload is deprecated; no simpler alternative yet.
-	})
 	public URI buildAuthorizationUrl(OAuthAuthorizationCodeFlow flow, String state, CodeVerifier verifier) {
 		assertArgNotNull("flow", flow);
 		assertArgNotNull("verifier", verifier);
@@ -545,10 +562,6 @@ public class McpAuthorizationCodeAcquirer {
 		if (httpRequestConfigurator != null)
 			b.httpRequestConfigurator(httpRequestConfigurator);
 		return b.build();
-	}
-
-	private static String defaultHtml() {
-		return "<html><body><h3>Authorization received</h3><p>You may close this window and return to the application.</p></body></html>";
 	}
 
 	/**

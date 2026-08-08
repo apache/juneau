@@ -33,26 +33,32 @@ import java.util.concurrent.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_issuer)
+})
 public class InMemoryMcpClientRegistrationStore implements McpClientRegistrationStore {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_issuer = "issuer";
 
 	private final ConcurrentMap<String,McpClientRegistration> byIssuer = new ConcurrentHashMap<>();
 
 	@Override /* McpClientRegistrationStore */
 	public Optional<McpClientRegistration> find(URI issuer) {
-		assertArgNotNull("issuer", issuer);
+		assertArgNotNull(ARG_issuer, issuer);
 		return o(byIssuer.get(issuer.toString()));
 	}
 
 	@Override /* McpClientRegistrationStore */
 	public void put(URI issuer, McpClientRegistration registration) {
-		assertArgNotNull("issuer", issuer);
+		assertArgNotNull(ARG_issuer, issuer);
 		assertArgNotNull("registration", registration);
 		byIssuer.put(issuer.toString(), registration);
 	}
 
 	@Override /* McpClientRegistrationStore */
 	public void remove(URI issuer) {
-		assertArgNotNull("issuer", issuer);
+		assertArgNotNull(ARG_issuer, issuer);
 		byIssuer.remove(issuer.toString());
 	}
 

@@ -47,7 +47,8 @@ class McpTypedHandlers_Test {
 	private final McpRevision revision = new McpRevision(null);
 
 	private JsonRpcResponse dispatch(JsonRpcRequest req, McpServerConfig config) {
-		return revision.dispatch(new McpExchange(req, n -> null), config, ctx);
+		var result = revision.dispatch(new McpExchange(req, n -> null), config, ctx);
+		return result instanceof McpResponseResult mrr ? mrr.response() : null;
 	}
 
 	@Test

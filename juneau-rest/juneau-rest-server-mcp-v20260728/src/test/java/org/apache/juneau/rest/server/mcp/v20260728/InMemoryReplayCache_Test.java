@@ -97,7 +97,8 @@ class InMemoryReplayCache_Test {
 		// with IllegalArgumentException rather than letting it reach putIfAbsent (which would NPE and, via the
 		// dispatcher's fail-open catch, silently disable replay protection).
 		var cache = new InMemoryReplayCache();
-		assertThrows(IllegalArgumentException.class, () -> cache.checkAndRecord(null, System.currentTimeMillis() + 60_000L));
+		var expiresAtMs = System.currentTimeMillis() + 60_000L;
+		assertThrows(IllegalArgumentException.class, () -> cache.checkAndRecord(null, expiresAtMs));
 	}
 
 	@Test void a07_evictionIsThrottledExpiredRecordSurvivesUntilSweepWindow() {

@@ -59,11 +59,13 @@ class McpResourceTemplateHandler_Test {
 	}
 
 	@Test void c02_ofRejectsNullRead() {
-		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(new McpResourceTemplateSpec().setUriTemplate("file:///{name}"), null));
+		var spec = new McpResourceTemplateSpec().setUriTemplate("file:///{name}");
+		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(spec, null));
 	}
 
 	@Test void c03_ofRejectsBlankUriTemplate() {
 		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(new McpResourceTemplateSpec(), (uri, variables, ctx) -> new McpResourceOutcome()));
-		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(new McpResourceTemplateSpec().setUriTemplate(" "), (uri, variables, ctx) -> new McpResourceOutcome()));
+		var spec = new McpResourceTemplateSpec().setUriTemplate(" ");
+		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(spec, (uri, variables, ctx) -> new McpResourceOutcome()));
 	}
 }

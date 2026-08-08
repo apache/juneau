@@ -26,6 +26,7 @@ import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.mcp.McpExchange;
+import org.apache.juneau.rest.server.mcp.McpResponseResult;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.apache.juneau.rest.server.mcp.McpToolHandler;
 import org.apache.juneau.rest.server.mcp.McpToolOutcome;
@@ -74,7 +75,8 @@ class McpStructuredOutputSafety_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, JsonRpcRequest r, Map<String,String> headers) {
-		return (JsonRpcResponse) new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
+		var result = new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
+		return result instanceof McpResponseResult mrr ? mrr.response() : null;
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, JsonRpcRequest r) {

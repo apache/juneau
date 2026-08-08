@@ -28,6 +28,7 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.mcp.BasicMcpSubscriptionBroker;
 import org.apache.juneau.rest.server.mcp.McpChangeKind;
 import org.apache.juneau.rest.server.mcp.McpExchange;
+import org.apache.juneau.rest.server.mcp.McpResponseResult;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.apache.juneau.rest.server.mcp.McpSubscription;
 import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
@@ -98,22 +99,24 @@ class McpSubscriptionsEndToEnd_Test {
 				.addBean(McpSubscriptionBroker.class, broker)
 				.addBean(McpSubscriptions.class, broker)) {
 
-			var subscribeResp = (JsonRpcResponse) rev.dispatch(
+			var subscribeResult = rev.dispatch(
 				new McpExchange(toolCallRequest("subscribe", Map.of("uri", "file:///a.txt")), toolCallHeaders("subscribe")::get),
 				config, ctx);
-			assertNull(subscribeResp.getError());
+			assertInstanceOf(McpResponseResult.class, subscribeResult);
+			assertNull(((McpResponseResult) subscribeResult).response().getError());
 			var sub = capturedSub.get();
 			assertNotNull(sub);
 			assertEquals(1, broker.activeCount());
 			try {
-				var touchResp = (JsonRpcResponse) rev.dispatch(
+				var touchResult = rev.dispatch(
 					new McpExchange(toolCallRequest("touch", Map.of("uri", "file:///a.txt")), toolCallHeaders("touch")::get),
 					config, ctx);
-				assertNull(touchResp.getError());
+				assertInstanceOf(McpResponseResult.class, touchResult);
+				assertNull(((McpResponseResult) touchResult).response().getError());
 
 				var event = sub.take();
-				assertEquals(McpChangeKind.RESOURCE_UPDATED, event.getKind());
-				assertEquals("file:///a.txt", event.getResourceUri());
+				assertEquals(McpChangeKind.RESOURCE_UPDATED, event.kind());
+				assertEquals("file:///a.txt", event.resourceUri());
 			} finally {
 				sub.close();
 			}

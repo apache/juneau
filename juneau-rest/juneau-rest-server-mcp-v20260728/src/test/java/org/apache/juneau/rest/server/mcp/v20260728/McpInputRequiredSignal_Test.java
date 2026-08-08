@@ -32,7 +32,8 @@ class McpInputRequiredSignal_Test {
 	// -------- McpInputRequiredSignal ---------
 
 	@Test void a01_emptyInputRequestsThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpInputRequiredSignal(Map.of(), "cont"));
+		Map<String,Object> emptyRequests = Map.of();
+		var e = assertThrows(IllegalArgumentException.class, () -> new McpInputRequiredSignal(emptyRequests, "cont"));
 		assertEquals("inputRequests must not be null or empty", e.getMessage());
 	}
 

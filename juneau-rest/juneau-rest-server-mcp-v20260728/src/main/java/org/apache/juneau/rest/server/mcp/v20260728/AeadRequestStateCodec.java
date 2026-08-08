@@ -64,7 +64,7 @@ import org.apache.juneau.rest.server.auth.ClaimsPrincipal;
  * composition is unambiguous exactly as the two-field inner one is, even if a field happened to contain a NUL.
  *
  * <p>
- * <b>Principal-bound AAD (TODO-325).</b> {@link #seal}/{@link #unseal} fold the caller's authenticated
+ * <b>Principal-bound AAD.</b> {@link #seal}/{@link #unseal} fold the caller's authenticated
  * {@link Principal} identity into the AEAD's authenticated data, so a {@code requestState} minted for one caller
  * cannot be resumed by another: a mismatched principal fails the GCM tag check and {@link #unseal} returns
  * {@link Optional#empty()}. The bound identity is a canonical, deterministic {@code iss|sub} (issuer + subject)
@@ -114,7 +114,7 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 	private static final int MIN_TOKEN_CHARS = VERSION.length() + 1 + 2 + 1 + NONCE_B64_CHARS + 1 + 22;
 	private static final int MAX_TOKEN_CHARS = 64 * 1024;
 
-	// TODO-325 anonymous-caller sentinel (settled decision 2). A null principal binds fail-closed to this fixed
+	// Anonymous-caller sentinel (settled decision 2). A null principal binds fail-closed to this fixed
 	// identity rather than skipping the binding. It is intentionally a plain literal with no NUL: a real
 	// principalIdentity(...) is always length-prefixed and begins with a decimal digit and contains NULs, so the
 	// sentinel can never collide with any derived identity.
@@ -155,7 +155,7 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 			random.nextBytes(nonce);
 			var cipher = Cipher.getInstance(ALGORITHM);
 			cipher.init(Cipher.ENCRYPT_MODE, ks.key(), new GCMParameterSpec(GCM_TAG_BITS, nonce));
-			// TODO-325: fold the authenticated caller identity into the AEAD's authenticated data, so a token
+			// Fold the authenticated caller identity into the AEAD's authenticated data, so a token
 			// minted for one principal cannot be resumed by another. unseal derives the SAME identity below; a
 			// mismatch fails the GCM tag check there. The three fields are framed with lengthPrefixJoin (same
 			// self-delimiting scheme as principalIdentity's iss|sub) so the outer composition is unambiguous too.
@@ -190,7 +190,7 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 				return Optional.empty();
 			var cipher = Cipher.getInstance(ALGORITHM);
 			cipher.init(Cipher.DECRYPT_MODE, resolved.get(), new GCMParameterSpec(GCM_TAG_BITS, nonce));
-			// TODO-325: fold the SAME caller identity seal bound in, so a token minted for principal A fails the GCM
+			// Fold the SAME caller identity seal bound in, so a token minted for principal A fails the GCM
 			// tag check (and returns Optional.empty() below) when replayed under principal B or anonymously. Same
 			// lengthPrefixJoin framing as seal, above.
 			cipher.updateAAD(lengthPrefixJoin(aad, keyId, principalIdentity(principal)).getBytes(StandardCharsets.UTF_8));
@@ -206,7 +206,7 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 
 	/**
 	 * Derives the canonical, deterministic identity string this codec folds into the AEAD's authenticated data to
-	 * bind a sealed {@code requestState} to its caller (TODO-325).
+	 * bind a sealed {@code requestState} to its caller.
 	 *
 	 * <p>
 	 * <b>Bound identity (settled decision 1): {@code iss|sub}.</b> When {@code principal} is a {@link ClaimsPrincipal}
@@ -266,7 +266,7 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 	static String lengthPrefixJoin(String... fields) {
 		var sb = new StringBuilder();
 		for (var f : fields) {
-			if (sb.length() > 0)
+			if (!sb.isEmpty())
 				sb.append('\u0000');
 			sb.append(f.length()).append('\u0000').append(f);
 		}

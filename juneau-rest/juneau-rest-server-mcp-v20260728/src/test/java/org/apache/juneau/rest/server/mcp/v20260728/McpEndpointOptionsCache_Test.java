@@ -22,7 +22,7 @@ import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.junit.jupiter.api.Test;
 
 /**
- * TODO-330 code-review regression coverage: {@link McpEndpointOptionsCache} must key by reference
+ * Regression coverage: {@link McpEndpointOptionsCache} must key by reference
  * <b>identity</b>, never by an endpoint's own {@code equals()}/{@code hashCode()}.
  */
 class McpEndpointOptionsCache_Test {
@@ -36,7 +36,7 @@ class McpEndpointOptionsCache_Test {
 	 * A {@code WeakHashMap}-backed cache (keyed by {@code equals()}/{@code hashCode()}) collapses distinct
 	 * instances of this class onto ONE cache entry, so a second instance would silently observe the FIRST
 	 * instance's memoized {@link McpOptions} (and thus its MRTR AES key and subscription broker) &mdash;
-	 * exactly the JVM-wide sharing regression TODO-330 set out to eliminate.
+	 * exactly the JVM-wide sharing regression this cache's reference-identity keying eliminates.
 	 */
 	public static class EqualsOverridingEndpoint implements McpEndpoint {
 		@Override public McpServerConfig getMcpConfig() { return new McpServerConfig(); }

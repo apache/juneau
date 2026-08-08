@@ -36,6 +36,9 @@ class BasicMcpSubscription_Test {
 	 * blocking call, so tests that exercise {@code close()}/{@code unregister()} racing a blocked
 	 * {@code take()} are deterministic rather than timing-dependent.
 	 */
+	@SuppressWarnings({
+		"java:S2925" // The sleep is the poll interval of this bounded-deadline poll loop, not a fixed wait-and-hope delay.
+	})
 	private static void awaitParked(Thread thread) throws InterruptedException {
 		var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(2);
 		while (thread.getState() != Thread.State.WAITING && thread.getState() != Thread.State.TIMED_WAITING) {
@@ -74,8 +77,9 @@ class BasicMcpSubscription_Test {
 	}
 
 	@Test void a02_constructorRejectsNullOrEmptyId() {
-		assertThrows(IllegalArgumentException.class, () -> new BasicMcpSubscription(null, allFilter(), 4, s -> {}));
-		assertThrows(IllegalArgumentException.class, () -> new BasicMcpSubscription("", allFilter(), 4, s -> {}));
+		var filter = allFilter();
+		assertThrows(IllegalArgumentException.class, () -> new BasicMcpSubscription(null, filter, 4, s -> {}));
+		assertThrows(IllegalArgumentException.class, () -> new BasicMcpSubscription("", filter, 4, s -> {}));
 	}
 
 	@Test void a03_offerAndTake_fifoOrder() throws Exception {
@@ -122,7 +126,7 @@ class BasicMcpSubscription_Test {
 			});
 			thread.start();
 			assertTrue(started.await(2, TimeUnit.SECONDS));
-			Thread.sleep(100);
+			awaitParked(thread);
 			var event = new McpChangeEvent(McpChangeKind.RESOURCES_LIST_CHANGED, null);
 			sub.offer(event);
 			thread.join(2000);
@@ -168,8 +172,9 @@ class BasicMcpSubscription_Test {
 	}
 
 	@Test void a10_constructorRejectsNonPositiveQueueSize() {
-		assertThrows(IllegalArgumentException.class, () -> new BasicMcpSubscription("s1", allFilter(), 0, s -> {}));
-		assertThrows(IllegalArgumentException.class, () -> new BasicMcpSubscription("s1", allFilter(), -1, s -> {}));
+		var filter = allFilter();
+		assertThrows(IllegalArgumentException.class, () -> new BasicMcpSubscription("s1", filter, 0, s -> {}));
+		assertThrows(IllegalArgumentException.class, () -> new BasicMcpSubscription("s1", filter, -1, s -> {}));
 	}
 
 	@Test void a11_concurrentOffers_atCapacity_neverThrowsAndRespectsCapacity() throws Exception {

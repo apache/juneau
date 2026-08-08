@@ -37,7 +37,7 @@ class McpClient_ErrorHandling_Test {
 				.build();
 		};
 		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
-			var ex = assertThrows(McpException.class, () -> c.ping());
+			var ex = assertThrows(McpException.class, c::ping);
 			assertEquals(-32601, ex.getCode());
 			assertTrue(ex.getMessage().contains("Method not found"));
 		}

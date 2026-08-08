@@ -32,6 +32,7 @@ import org.apache.juneau.rest.server.mcp.McpResourceOutcome;
 import org.apache.juneau.rest.server.mcp.McpResourceSpec;
 import org.apache.juneau.rest.server.mcp.McpResourceTemplateHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceTemplateSpec;
+import org.apache.juneau.rest.server.mcp.McpResponseResult;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.junit.jupiter.api.*;
 
@@ -95,9 +96,10 @@ class McpResourceTemplate_Test {
 	}
 
 	private JsonRpcResponse readResponse(McpServerConfig config, String uri) {
-		return (JsonRpcResponse) new McpRevision(null).dispatch(
+		var result = new McpRevision(null).dispatch(
 			new McpExchange(req(1, McpMethods.RESOURCES_READ, JsonMap.of("uri", uri)), hdrs(McpMethods.RESOURCES_READ, uri)::get),
 			config, ctx);
+		return result instanceof McpResponseResult mrr ? mrr.response() : null;
 	}
 
 	private ReadResourceResult read(McpServerConfig config, String uri) {
@@ -156,11 +158,12 @@ class McpResourceTemplate_Test {
 			return text("ok");
 		}));
 		var marker = new BasicBeanStore();
-		var resp = (JsonRpcResponse) new McpRevision(null).dispatch(
+		var result = new McpRevision(null).dispatch(
 			new McpExchange(req(1, McpMethods.RESOURCES_READ, JsonMap.of("uri", "file:///Caf%C3%A9/two")),
 				hdrs(McpMethods.RESOURCES_READ, "file:///Caf%C3%A9/two")::get),
 			config, marker);
-		assertNull(resp.getError());
+		assertInstanceOf(McpResponseResult.class, result);
+		assertNull(((McpResponseResult) result).response().getError());
 		assertEquals("file:///Caf%C3%A9/two", captured.get("uri"));
 		@SuppressWarnings("unchecked")
 		var variables = (Map<String,String>) captured.get("variables");
@@ -222,9 +225,11 @@ class McpResourceTemplate_Test {
 
 	@Test void d03_validNonMatchableTemplateListsButNeverReadMatches() {
 		var config = new McpServerConfig().addResourceTemplate(template("file:///{x,y}", (u, v) -> text("should-not-run")));
-		var list = (ListResourceTemplatesResult) ((JsonRpcResponse) new McpRevision(null).dispatch(
+		var listResult = new McpRevision(null).dispatch(
 			new McpExchange(req(1, McpMethods.RESOURCES_TEMPLATES_LIST, null), hdrs(McpMethods.RESOURCES_TEMPLATES_LIST, "")::get),
-			config, ctx)).getResult();
+			config, ctx);
+		assertInstanceOf(McpResponseResult.class, listResult);
+		var list = (ListResourceTemplatesResult) ((McpResponseResult) listResult).response().getResult();
 		assertEquals(1, list.getResourceTemplates().size());
 		var resp = readResponse(config, "file:///a,b");
 		assertEquals(McpRevision.CODE_INVALID_PARAMS, resp.getError().getCode());

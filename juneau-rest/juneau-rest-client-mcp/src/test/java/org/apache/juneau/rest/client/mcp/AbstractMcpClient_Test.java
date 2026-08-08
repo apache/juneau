@@ -508,6 +508,36 @@ class AbstractMcpClient_Test {
 		assertEquals("Argument 'endpoint' cannot be blank.", e.getMessage());
 	}
 
+	/** TODO-323 N8: a non-http(s)-scheme endpoint is now rejected at construction, not just non-blank. */
+	@Test
+	void b08_build_ftpSchemeEndpoint_throwsIllegalArgumentException() {
+		var e = assertThrows(IllegalArgumentException.class, () -> TestClient.builder().endpoint("ftp://x/mcp").build());
+		assertTrue(e.getMessage().contains("http or https"), e.getMessage());
+	}
+
+	/** TODO-323 N8: a scheme-less (relative) endpoint is rejected at construction. */
+	@Test
+	void b09_build_schemelessEndpoint_throwsIllegalArgumentException() {
+		var e = assertThrows(IllegalArgumentException.class, () -> TestClient.builder().endpoint("x/mcp").build());
+		assertTrue(e.getMessage().contains("http or https"), e.getMessage());
+	}
+
+	/** TODO-323 N8: a syntactically malformed endpoint is rejected at construction with a clear message. */
+	@Test
+	void b10_build_malformedEndpoint_throwsIllegalArgumentException() {
+		var e = assertThrows(IllegalArgumentException.class, () -> TestClient.builder().endpoint("http://x y/mcp").build());
+		assertTrue(e.getMessage().contains("Invalid MCP endpoint URL"), e.getMessage());
+	}
+
+	/** TODO-323 N8: https is accepted alongside http. */
+	@Test
+	void b11_build_httpsSchemeEndpoint_isAccepted() throws Exception {
+		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
+			assertNotNull(client);
+		}
+	}
+
 	@Test
 	void b05_send_nullRequest_throwsIllegalArgumentException() throws Exception {
 		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();

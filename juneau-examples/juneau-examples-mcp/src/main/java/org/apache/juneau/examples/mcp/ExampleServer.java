@@ -38,10 +38,13 @@ import jakarta.servlet.*;
  * <p>
  * The wiring mirrors Juneau's own test fixture: a Jetty {@link Server} plus the {@link ExampleMcpServer}
  * servlet are placed in a {@link BasicBeanStore}, and {@link JettyConfiguration} (added via
- * {@link Microservice.Builder#configurations(Class...)}) auto-mounts the {@link org.apache.juneau.rest.server.Rest @Rest}
+ * {@link org.apache.juneau.microservice.Microservice.Builder#configurations(Class...)}) auto-mounts the {@link org.apache.juneau.rest.server.Rest @Rest}
  * servlet at {@code "/"} and drives the server lifecycle. Because the {@code Server} is supplied as a bean,
  * we control the listen port directly &mdash; no {@code jetty.xml} required.
  */
+@SuppressWarnings({
+	"java:S106" // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.
+})
 public final class ExampleServer implements AutoCloseable {
 
 	/** Default listen port used by {@link #main(String[])} when none is supplied. */
@@ -103,6 +106,7 @@ public final class ExampleServer implements AutoCloseable {
 	 * @param args Optional single argument: the port to listen on (defaults to {@link #DEFAULT_PORT}).
 	 * @throws Exception If the server fails to start.
 	 */
+	@SuppressWarnings("resource") // example server runs for the JVM lifetime; closed on process exit.
 	public static void main(String[] args) throws Exception {
 		var port = args.length > 0 ? Integer.parseInt(args[0]) : DEFAULT_PORT;
 		var server = start(port);

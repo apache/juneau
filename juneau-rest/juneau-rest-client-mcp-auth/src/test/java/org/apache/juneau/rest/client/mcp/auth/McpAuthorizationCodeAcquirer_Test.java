@@ -157,7 +157,8 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 			.expectedIssuer(ISSUER)
 			.browserLauncher(authUrl -> { /* never completes the callback */ })
 			.build();
-		assertThrows(McpAuthException.class, () -> acquirer.acquire(Duration.ofMillis(100)));
+		var timeout = Duration.ofMillis(100);
+		assertThrows(McpAuthException.class, () -> acquirer.acquire(timeout));
 	}
 
 	/** H6: calling handleCallback twice with the same state must reject the second (state + PKCE verifier single-use). */

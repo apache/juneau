@@ -60,7 +60,13 @@ import com.nimbusds.oauth2.sdk.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value)
+})
 public class McpTokenProvider implements Supplier<String> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
 
 	private enum Mode { STATIC, CLIENT_CREDENTIALS, REFRESH }
 
@@ -138,7 +144,7 @@ public class McpTokenProvider implements Supplier<String> {
 		 * @return This object.
 		 */
 		public Builder tokenEndpoint(URI value) {
-			tokenEndpoint = assertArgNotNull("value", value);
+			tokenEndpoint = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -149,7 +155,7 @@ public class McpTokenProvider implements Supplier<String> {
 		 * @return This object.
 		 */
 		public Builder clientId(String value) {
-			clientId = assertArgNotNullOrBlank("value", value);
+			clientId = assertArgNotNullOrBlank(ARG_value, value);
 			return this;
 		}
 
@@ -160,7 +166,7 @@ public class McpTokenProvider implements Supplier<String> {
 		 * @return This object.
 		 */
 		public Builder clientSecret(String value) {
-			assertArgNotNullOrBlank("value", value);
+			assertArgNotNullOrBlank(ARG_value, value);
 			clientSecretSupplier = () -> value;
 			return this;
 		}
@@ -172,7 +178,7 @@ public class McpTokenProvider implements Supplier<String> {
 		 * @return This object.
 		 */
 		public Builder clientSecretSupplier(Supplier<String> value) {
-			clientSecretSupplier = assertArgNotNull("value", value);
+			clientSecretSupplier = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -198,7 +204,7 @@ public class McpTokenProvider implements Supplier<String> {
 		 * @return This object.
 		 */
 		public Builder resource(URI value) {
-			resource = assertArgNotNull("value", value);
+			resource = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -209,7 +215,7 @@ public class McpTokenProvider implements Supplier<String> {
 		 * @return This object.
 		 */
 		public Builder expirySkew(Duration value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			assertArg(!value.isNegative(), "expirySkew must be non-negative (was %s)", value);
 			expirySkew = value;
 			return this;
@@ -222,7 +228,7 @@ public class McpTokenProvider implements Supplier<String> {
 		 * @return This object.
 		 */
 		public Builder clock(Clock value) {
-			clock = assertArgNotNull("value", value);
+			clock = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -233,7 +239,7 @@ public class McpTokenProvider implements Supplier<String> {
 		 * @return This object.
 		 */
 		public Builder httpTimeout(Duration value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
 			httpTimeout = value;
 			return this;
@@ -246,7 +252,7 @@ public class McpTokenProvider implements Supplier<String> {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 

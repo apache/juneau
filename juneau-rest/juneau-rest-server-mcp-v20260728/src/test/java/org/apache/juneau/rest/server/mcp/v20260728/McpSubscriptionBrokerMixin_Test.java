@@ -50,7 +50,7 @@ class McpSubscriptionBrokerMixin_Test {
 	}
 
 	/**
-	 * TODO-330 regression: the pre-consolidation mixin default accidentally shared its broker JVM-wide
+	 * Regression: the pre-consolidation mixin default accidentally shared its broker JVM-wide
 	 * ({@code SharedSubscriptionBroker}) across every distinct endpoint instance. Post-consolidation, the
 	 * broker is derived per-binding (memoized via {@link McpEndpointOptionsCache}): two distinct endpoint
 	 * instances must resolve to two distinct brokers, proving the accidental JVM-wide sharing is gone.

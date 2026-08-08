@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 /**
  * Coverage for the ergonomic client-side MRTR (SEP-2322) auto-resume helpers
  * {@link McpClient#callToolWithElicitation}, {@link McpClient#getPromptWithElicitation}, and
- * {@link McpClient#readResourceWithElicitation} (TODO-326): the caller supplies an
+ * {@link McpClient#readResourceWithElicitation}: the caller supplies an
  * {@link McpElicitationHandler} and the client auto-detects each {@code input_required} pause, invokes the
  * handler for the round's requests, and re-issues the call with the collected {@code inputResponses} and carried
  * {@code requestState} until a terminal result is reached.
@@ -85,7 +85,7 @@ class McpClient_Elicitation_Test {
 	private static String inputRequired(String requestState, String... requestIds) {
 		var sb = new StringBuilder();
 		for (var id : requestIds) {
-			if (sb.length() > 0)
+			if (!sb.isEmpty())
 				sb.append(',');
 			sb.append('"').append(id).append("\":{\"message\":\"Pick ").append(id).append("\",\"requestedSchema\":{\"type\":\"object\"}}");
 		}
@@ -254,8 +254,9 @@ class McpClient_Elicitation_Test {
 		// Server never terminates: every response is another input_required pause.
 		var t = new Recorder(inputRequired("tok", "q1"));
 		try (var c = client(t)) {
+			var handler = acceptAll();
 			var e = assertThrows(McpElicitationLimitException.class,
-				() -> c.callToolWithElicitation("ask", null, acceptAll(), 2));
+				() -> c.callToolWithElicitation("ask", null, handler, 2));
 			assertEquals(2, e.getMaxRounds());
 		}
 		// 1 initial call + exactly maxRounds resume attempts, then the guard trips before a further re-issue.
@@ -265,7 +266,8 @@ class McpClient_Elicitation_Test {
 	@Test void c02_callTool_defaultMaxRoundsGuardsRunawayServer() throws Exception {
 		var t = new Recorder(inputRequired("tok", "q1"));
 		try (var c = client(t)) {
-			assertThrows(McpElicitationLimitException.class, () -> c.callToolWithElicitation("ask", null, acceptAll()));
+			var handler = acceptAll();
+			assertThrows(McpElicitationLimitException.class, () -> c.callToolWithElicitation("ask", null, handler));
 		}
 		// Bounded by the default, not infinite: 1 initial + DEFAULT_MAX_ELICITATION_ROUNDS resume attempts.
 		assertEquals(1 + McpClient.DEFAULT_MAX_ELICITATION_ROUNDS, t.requests.size());
@@ -284,9 +286,10 @@ class McpClient_Elicitation_Test {
 
 	@Test void d02_nonPositiveMaxRoundsThrows() throws Exception {
 		try (var c = client(new Recorder(completeTool("done")))) {
-			var eZero = assertThrows(IllegalArgumentException.class, () -> c.callToolWithElicitation("ask", null, acceptAll(), 0));
+			var handler = acceptAll();
+			var eZero = assertThrows(IllegalArgumentException.class, () -> c.callToolWithElicitation("ask", null, handler, 0));
 			assertEquals("maxRounds must be >= 1 (was 0).", eZero.getMessage());
-			var eNegative = assertThrows(IllegalArgumentException.class, () -> c.callToolWithElicitation("ask", null, acceptAll(), -1));
+			var eNegative = assertThrows(IllegalArgumentException.class, () -> c.callToolWithElicitation("ask", null, handler, -1));
 			assertEquals("maxRounds must be >= 1 (was -1).", eNegative.getMessage());
 		}
 	}

@@ -55,6 +55,9 @@ public record McpClientRegistration(
 		McpApplicationType applicationType,
 		Map<String,Object> extras) {
 
+	/** Placeholder shown for an absent secret-bearing / optional field in {@link #toString()}. */
+	private static final String NONE = "<none>";
+
 	/**
 	 * Compact constructor enforcing non-null fields and defensively copying the collections.
 	 */
@@ -92,10 +95,10 @@ public record McpClientRegistration(
 			+ ", issuer=" + issuer
 			+ ", applicationType=" + applicationType
 			+ ", redirectUris=" + redirectUris
-			+ ", clientSecret=" + (clientSecret.isPresent() ? "<redacted>" : "<none>")
-			+ ", clientSecretExpiresAt=" + clientSecretExpiresAt.map(Object::toString).orElse("<none>")
-			+ ", registrationAccessToken=" + (registrationAccessToken.isPresent() ? "<redacted>" : "<none>")
-			+ ", registrationClientUri=" + registrationClientUri.map(Object::toString).orElse("<none>")
+			+ ", clientSecret=" + (clientSecret.isPresent() ? "<redacted>" : NONE)
+			+ ", clientSecretExpiresAt=" + clientSecretExpiresAt.map(Object::toString).orElse(NONE)
+			+ ", registrationAccessToken=" + (registrationAccessToken.isPresent() ? "<redacted>" : NONE)
+			+ ", registrationClientUri=" + registrationClientUri.map(Object::toString).orElse(NONE)
 			+ ", extras=" + extras
 			+ "]";
 	}

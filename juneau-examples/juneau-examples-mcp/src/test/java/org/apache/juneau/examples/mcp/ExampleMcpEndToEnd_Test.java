@@ -40,7 +40,9 @@ import org.junit.jupiter.api.*;
  */
 class ExampleMcpEndToEnd_Test extends TestBase {
 
+	@SuppressWarnings("resource") // opened in setUp() and closed in tearDown(); lifecycle spans the whole test class.
 	private static ExampleServer server;
+	@SuppressWarnings("resource") // opened in setUp() and closed in tearDown(); lifecycle spans the whole test class.
 	private static McpClient client;
 
 	@BeforeAll

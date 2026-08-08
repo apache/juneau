@@ -32,12 +32,14 @@ import org.apache.juneau.rest.server.mcp.McpCompletionRef;
 import org.apache.juneau.rest.server.mcp.McpCompletionRequest;
 import org.apache.juneau.rest.server.mcp.McpCompletionResult;
 import org.apache.juneau.rest.server.mcp.McpCursor;
+import org.apache.juneau.rest.server.mcp.McpDispatchResult;
 import org.apache.juneau.rest.server.mcp.McpErrorKind;
 import org.apache.juneau.rest.server.mcp.McpExchange;
 import org.apache.juneau.rest.server.mcp.McpParamUtils;
 import org.apache.juneau.rest.server.mcp.McpPromptHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceTemplateHandler;
+import org.apache.juneau.rest.server.mcp.McpResponseResult;
 import org.apache.juneau.rest.server.mcp.McpSchema;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.apache.juneau.rest.server.mcp.McpToolHandler;
@@ -64,7 +66,11 @@ import org.apache.juneau.rest.server.mcp.McpToolOutcome;
  * constructing a new one per call costs nothing.
  */
 @SuppressWarnings({
-	"java:S2176" // Intentional: dated adapter binding classes are de-versioned and differentiated by package (see TODO-312).
+	// Settled, intentional name shadow against the neutral org.apache.juneau.rest.server.mcp.McpRevision SPI
+	// (evaluated and rejected renaming this to e.g. AbstractMcpRevision): every dated adapter binding
+	// class is deliberately de-versioned to plain "McpRevision" and differentiated from its siblings only by
+	// package, matching the revision-string-free naming already used throughout each vNNNNNNNN module.
+	"java:S2176"
 })
 public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpRevision {
 
@@ -158,6 +164,9 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		checkKeywords(toolName, role, raw);
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for an explicit-stack JSON-schema tree walk; splitting the per-shape branches would fragment a single cohesive traversal.
+	})
 	private static void checkKeywords(String toolName, String role, Object root) {
 		var seen = Collections.newSetFromMap(new IdentityHashMap<Object,Boolean>());
 		var stack = new ArrayDeque<SchemaValue>();
@@ -210,7 +219,16 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	}
 
 	@Override /* McpRevision */
-	public JsonRpcResponse dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
+	public McpDispatchResult dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
+		var response = dispatchResponse(exchange, config, ctx);
+		return response == null ? null : new McpResponseResult(response);
+	}
+
+	/**
+	 * Does the actual dispatch work. This revision never streams, so every non-notification outcome is a
+	 * single {@link JsonRpcResponse}; {@link #dispatch} wraps it in a {@link McpResponseResult}.
+	 */
+	private JsonRpcResponse dispatchResponse(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
 		assertArgNotNull("exchange", exchange);
 		assertArgNotNull("config", config);
 		assertArgNotNull("ctx", ctx);

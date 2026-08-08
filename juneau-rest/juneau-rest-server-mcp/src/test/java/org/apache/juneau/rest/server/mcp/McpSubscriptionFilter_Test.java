@@ -58,15 +58,16 @@ class McpSubscriptionFilter_Test {
 
 	@Test void a03_getResourceUris_isUnmodifiableAndDefaultsEmpty() {
 		var filter = new McpSubscriptionFilter(false, false, false, null);
-		assertTrue(filter.getResourceUris().isEmpty());
-		assertThrows(UnsupportedOperationException.class, () -> filter.getResourceUris().add("x"));
+		assertTrue(filter.resourceUris().isEmpty());
+		var resourceUris = filter.resourceUris();
+		assertThrows(UnsupportedOperationException.class, () -> resourceUris.add("x"));
 	}
 
 	@Test void a04_gettersReflectConstructorArgs() {
 		var filter = new McpSubscriptionFilter(true, false, true, Set.of("u1"));
-		assertTrue(filter.isToolsListChanged());
-		assertFalse(filter.isPromptsListChanged());
-		assertTrue(filter.isResourcesListChanged());
-		assertEquals(Set.of("u1"), filter.getResourceUris());
+		assertTrue(filter.toolsListChanged());
+		assertFalse(filter.promptsListChanged());
+		assertTrue(filter.resourcesListChanged());
+		assertEquals(Set.of("u1"), filter.resourceUris());
 	}
 }

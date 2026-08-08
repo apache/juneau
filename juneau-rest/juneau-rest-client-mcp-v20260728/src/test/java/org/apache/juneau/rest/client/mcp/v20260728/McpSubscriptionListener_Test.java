@@ -26,11 +26,13 @@ class McpSubscriptionListener_Test {
 	@Test
 	void a01_defaultMethods_areNoOpsAndDoNotThrow() {
 		McpSubscriptionListener listener = new McpSubscriptionListener() {};
-		listener.onAcknowledged(new SubscriptionFilter());
-		listener.onResourceUpdated("file:///a.txt");
-		listener.onListChanged(McpListChangedKind.TOOLS);
-		listener.onComplete();
-		listener.onError(new RuntimeException("boom"));
+		var filter = new SubscriptionFilter();
+		var error = new RuntimeException("boom");
+		assertDoesNotThrow(() -> listener.onAcknowledged(filter));
+		assertDoesNotThrow(() -> listener.onResourceUpdated("file:///a.txt"));
+		assertDoesNotThrow(() -> listener.onListChanged(McpListChangedKind.TOOLS));
+		assertDoesNotThrow(listener::onComplete);
+		assertDoesNotThrow(() -> listener.onError(error));
 	}
 
 	@Test

@@ -73,7 +73,8 @@ class McpWire_Test {
 
 	@Test
 	void a03_requestMeta_arrayParams_rejected() {
-		var e = assertThrows(McpException.class, () -> McpWire.requestMeta(JsonList.of(1, 2, 3)));
+		var params = JsonList.of(1, 2, 3);
+		var e = assertThrows(McpException.class, () -> McpWire.requestMeta(params));
 		assertEquals(McpRevision.CODE_INVALID_REQUEST, e.getCode());
 		assertEquals("Request params must be an object", e.getMessage());
 	}
@@ -87,14 +88,16 @@ class McpWire_Test {
 
 	@Test
 	void a05_requestMeta_missingNestedMeta_rejected() {
-		var e = assertThrows(McpException.class, () -> McpWire.requestMeta(JsonMap.of("name", "echo")));
+		var params = JsonMap.of("name", "echo");
+		var e = assertThrows(McpException.class, () -> McpWire.requestMeta(params));
 		assertEquals(McpRevision.CODE_INVALID_REQUEST, e.getCode());
 		assertEquals("Request params._meta must be an object", e.getMessage());
 	}
 
 	@Test
 	void a06_requestMeta_scalarNestedMeta_rejected() {
-		var e = assertThrows(McpException.class, () -> McpWire.requestMeta(JsonMap.of("_meta", "x")));
+		var params = JsonMap.of("_meta", "x");
+		var e = assertThrows(McpException.class, () -> McpWire.requestMeta(params));
 		assertEquals(McpRevision.CODE_INVALID_REQUEST, e.getCode());
 		assertEquals("Request params._meta must be an object", e.getMessage());
 	}

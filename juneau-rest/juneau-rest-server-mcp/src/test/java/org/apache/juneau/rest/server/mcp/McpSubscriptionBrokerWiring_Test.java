@@ -42,9 +42,9 @@ class McpSubscriptionBrokerWiring_Test {
 	static class RecordingRevision implements McpRevision {
 		BeanStore lastCtx;
 		@Override public String protocolVersion() { return "0000-00-00"; }
-		@Override public JsonRpcResponse dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
+		@Override public McpDispatchResult dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
 			lastCtx = ctx;
-			return JsonRpcResponse.ok(exchange.request().getId(), Map.of("ok", true));
+			return new McpResponseResult(JsonRpcResponse.ok(exchange.request().getId(), Map.of("ok", true)));
 		}
 		@Override public int errorCode(McpErrorKind kind) { return -1; }
 	}

@@ -105,13 +105,21 @@ public final class OfflineAuthorizationServer implements AutoCloseable {
 	 * set is rejected with RFC 6749 &sect;5.2 {@code invalid_scope}, rather than being handed back whatever it
 	 * asked for.
 	 */
-	public static final Set<String> GRANTABLE_SCOPES = Set.of("mcp.read", "mcp.write");
+	public static final Set<String> GRANTABLE_SCOPES = Set.of(DEFAULT_SCOPE, "mcp.write");
+
+	/** The RFC 6749 {@code scope} form parameter / JWT claim name, minted access tokens carry as {@code scope}. */
+	private static final String SCOPE_PARAM = "scope";
 
 	/** How long a minted access token is valid for. */
 	private static final Duration TOKEN_TTL = Duration.ofMinutes(5);
 
 	/** RFC 8414 Authorization Server Metadata well-known path. */
 	private static final String WELL_KNOWN_AUTHORIZATION_SERVER = "/.well-known/oauth-authorization-server";
+
+	// S2119: a single reused instance, not one per randomSecret() call - repeatedly constructing SecureRandom
+	// re-seeds it from the OS entropy source every time, which is wasteful and provides no security benefit
+	// over reusing one properly-seeded instance.
+	private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
 	private final RSAKey signingKey;
 	private final String clientId;
@@ -135,6 +143,10 @@ public final class OfflineAuthorizationServer implements AutoCloseable {
 	 * @return A running instance. Close it (or call {@link #close()}) to stop the HTTP endpoint.
 	 * @throws Exception If key generation or the HTTP endpoint fails to start.
 	 */
+	@SuppressWarnings({
+		"java:S112", // throws Exception intentional - example lifecycle method kept simple for demo readability
+		"resource" // returned instance is owned and closed by the caller (see SecuredExampleServer.start()).
+	})
 	public static OfflineAuthorizationServer start() throws Exception {
 		var signingKey = new RSAKeyGenerator(2048).keyID("demo-key-1").algorithm(JWSAlgorithm.RS256).generate();
 		var clientId = "demo-client";
@@ -156,7 +168,7 @@ public final class OfflineAuthorizationServer implements AutoCloseable {
 	/** Generates a random, never-checked-in demo client secret (32 bytes, URL-safe base64). */
 	private static String randomSecret() {
 		var bytes = new byte[32];
-		new SecureRandom().nextBytes(bytes);
+		SECURE_RANDOM.nextBytes(bytes);
 		return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
 	}
 
@@ -256,7 +268,7 @@ public final class OfflineAuthorizationServer implements AutoCloseable {
 				sendJson(exchange, 400, error("invalid_target", "a resource indicator (RFC 8707) is required"));
 				return;
 			}
-			var scope = form.getOrDefault("scope", DEFAULT_SCOPE);
+			var scope = form.getOrDefault(SCOPE_PARAM, DEFAULT_SCOPE);
 			if (! isGrantable(scope)) {
 				sendJson(exchange, 400, error("invalid_scope", "requested scope must be a subset of " + GRANTABLE_SCOPES));
 				return;
@@ -268,7 +280,7 @@ public final class OfflineAuthorizationServer implements AutoCloseable {
 				"access_token", token,
 				"token_type", "Bearer",
 				"expires_in", TOKEN_TTL.toSeconds(),
-				"scope", scope)));
+				SCOPE_PARAM, scope)));
 		} catch (RuntimeException | JOSEException e) {
 			sendJson(exchange, 500, error("server_error", e.getMessage() == null ? "internal error" : e.getMessage()));
 		}
@@ -312,11 +324,12 @@ public final class OfflineAuthorizationServer implements AutoCloseable {
 			return false;
 		var presentedId = URLDecoder.decode(decoded.substring(0, sep), StandardCharsets.UTF_8);
 		var presentedSecret = URLDecoder.decode(decoded.substring(sep + 1), StandardCharsets.UTF_8);
-		// M6: constant-time comparison (both operands, combined with '&' rather than '&&') so neither the
-		// id nor the secret check can leak timing information about how many leading bytes matched.
+		// M6: constant-time comparison - both MessageDigest.isEqual() calls below are unconditionally evaluated
+		// (regardless of the '&&' below) so neither the id nor the secret check can leak timing information
+		// about how many leading bytes matched. The boolean combinator itself has no side effects either way.
 		var idMatches = MessageDigest.isEqual(clientId.getBytes(StandardCharsets.UTF_8), presentedId.getBytes(StandardCharsets.UTF_8));
 		var secretMatches = MessageDigest.isEqual(clientSecret.getBytes(StandardCharsets.UTF_8), presentedSecret.getBytes(StandardCharsets.UTF_8));
-		return idMatches & secretMatches;
+		return idMatches && secretMatches;
 	}
 
 	/**
@@ -341,7 +354,7 @@ public final class OfflineAuthorizationServer implements AutoCloseable {
 			.subject(clientId)
 			.issuer(issuer.toString())
 			.audience(audience)
-			.claim("scope", scope)
+			.claim(SCOPE_PARAM, scope)
 			.issueTime(Date.from(issuedAt))
 			.notBeforeTime(Date.from(issuedAt))
 			.expirationTime(Date.from(issuedAt.plus(ttl)))

@@ -41,6 +41,9 @@ class SubscriptionsListenPublisher_Test {
 	}
 
 	/** Polls {@code condition} until it is {@code true} (or the timeout elapses), for state with no completion signal. */
+	@SuppressWarnings({
+		"java:S2925" // The sleep is the poll interval of this bounded-deadline poll loop, not a fixed wait-and-hope delay.
+	})
 	private static boolean awaitTrue(java.util.function.BooleanSupplier condition, Duration timeout) throws InterruptedException {
 		var deadline = System.nanoTime() + timeout.toNanos();
 		do {
@@ -323,6 +326,9 @@ class SubscriptionsListenPublisher_Test {
 	}
 
 	// I4: request(n) with a non-positive n must deliver onError(IllegalArgumentException), not silently no-op.
+	@SuppressWarnings({
+		"java:S2925" // Thread.sleep bounds a window to confirm no delayed second signal arrives; there is no state to poll for since the assertion is on absence.
+	})
 	@Test
 	void requestWithNonPositiveNDeliversIllegalArgumentExceptionOnce() throws Exception {
 		var subscription = new FakeSubscription();

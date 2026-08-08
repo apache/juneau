@@ -82,7 +82,8 @@ class McpSpi_Test {
 	void c03_paramUtils_mapParam() {
 		assertTrue(McpParamUtils.mapParam(Map.of(), "arguments").isEmpty());
 		assertEquals("v", McpParamUtils.mapParam(Map.of("arguments", JsonMap.of("k", "v")), "arguments").get("k"));
-		var e = assertThrows(McpException.class, () -> McpParamUtils.mapParam(Map.of("arguments", "nope"), "arguments"));
+		Map<String,Object> badParams = Map.of("arguments", "nope");
+		var e = assertThrows(McpException.class, () -> McpParamUtils.mapParam(badParams, "arguments"));
 		assertEquals(-32602, e.getCode());
 		assertEquals("Param 'arguments' must be an object", e.getMessage());
 	}
@@ -91,10 +92,12 @@ class McpSpi_Test {
 	void c04a_paramUtils_strictStrParam() {
 		assertNull(McpParamUtils.strictStrParam(Map.of(), "value"));
 		assertEquals("x", McpParamUtils.strictStrParam(Map.of("value", "x"), "value"));
-		var e1 = assertThrows(McpException.class, () -> McpParamUtils.strictStrParam(Map.of("value", 7), "value"));
+		Map<String,Object> numericValue = Map.of("value", 7);
+		var e1 = assertThrows(McpException.class, () -> McpParamUtils.strictStrParam(numericValue, "value"));
 		assertEquals(-32602, e1.getCode());
 		assertEquals("Param 'value' must be a string", e1.getMessage());
-		var e2 = assertThrows(McpException.class, () -> McpParamUtils.strictStrParam(Map.of("value", true), "value"));
+		Map<String,Object> booleanValue = Map.of("value", true);
+		var e2 = assertThrows(McpException.class, () -> McpParamUtils.strictStrParam(booleanValue, "value"));
 		assertEquals(-32602, e2.getCode());
 		assertEquals("Param 'value' must be a string", e2.getMessage());
 	}
@@ -104,11 +107,13 @@ class McpSpi_Test {
 		assertTrue(McpParamUtils.strictStrMapParam(Map.of(), "arguments").isEmpty());
 		var result = McpParamUtils.strictStrMapParam(Map.of("arguments", JsonMap.of("k", "v")), "arguments");
 		assertEquals("v", result.get("k"));
-		var e1 = assertThrows(McpException.class, () -> McpParamUtils.strictStrMapParam(Map.of("arguments", "nope"), "arguments"));
+		Map<String,Object> nonObjectArguments = Map.of("arguments", "nope");
+		var e1 = assertThrows(McpException.class, () -> McpParamUtils.strictStrMapParam(nonObjectArguments, "arguments"));
 		assertEquals(-32602, e1.getCode());
 		assertEquals("Param 'arguments' must be an object", e1.getMessage());
+		Map<String,Object> nonStringValues = Map.of("arguments", JsonMap.of("k", 7));
 		var e2 = assertThrows(McpException.class,
-			() -> McpParamUtils.strictStrMapParam(Map.of("arguments", JsonMap.of("k", 7)), "arguments"));
+			() -> McpParamUtils.strictStrMapParam(nonStringValues, "arguments"));
 		assertEquals(-32602, e2.getCode());
 		assertEquals("Param 'arguments' values must be strings", e2.getMessage());
 	}

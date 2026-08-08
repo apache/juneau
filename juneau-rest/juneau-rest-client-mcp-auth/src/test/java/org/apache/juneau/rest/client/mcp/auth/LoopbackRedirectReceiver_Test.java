@@ -55,7 +55,8 @@ class LoopbackRedirectReceiver_Test extends TestBase {
 
 	@Test void b01_timeoutThrows() throws IOException {
 		try (var r = LoopbackRedirectReceiver.open()) {
-			assertThrows(McpAuthException.class, () -> r.awaitCallback(Duration.ofMillis(50)));
+			var timeout = Duration.ofMillis(50);
+			assertThrows(McpAuthException.class, () -> r.awaitCallback(timeout));
 		}
 	}
 

@@ -21,12 +21,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Map;
 
 import org.apache.juneau.bean.jsonrpc.JsonRpcRequest;
-import org.apache.juneau.bean.jsonrpc.JsonRpcResponse;
 import org.apache.juneau.bean.mcp.v20260728.McpProtocol;
 import org.apache.juneau.bean.mcp.v20260728.RequestMeta;
 import org.apache.juneau.commons.inject.BasicBeanStore;
 import org.apache.juneau.marshall.collections.JsonMap;
 import org.apache.juneau.rest.server.mcp.McpExchange;
+import org.apache.juneau.rest.server.mcp.McpResponseResult;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.junit.jupiter.api.Test;
 
@@ -45,22 +45,26 @@ class McpMrtrConfig_Test {
 	}
 
 	@Test void a02_setCodecNullThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpMrtrConfig().setCodec(null));
+		var config = new McpMrtrConfig();
+		var e = assertThrows(IllegalArgumentException.class, () -> config.setCodec(null));
 		assertEquals("codec must not be null", e.getMessage());
 	}
 
 	@Test void a03_setTtlMsZeroThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpMrtrConfig().setTtlMs(0));
+		var config = new McpMrtrConfig();
+		var e = assertThrows(IllegalArgumentException.class, () -> config.setTtlMs(0));
 		assertEquals("ttlMs 0 must be > 0", e.getMessage());
 	}
 
 	@Test void a04_setTtlMsNegativeThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpMrtrConfig().setTtlMs(-1));
+		var config = new McpMrtrConfig();
+		var e = assertThrows(IllegalArgumentException.class, () -> config.setTtlMs(-1));
 		assertEquals("ttlMs -1 must be > 0", e.getMessage());
 	}
 
 	@Test void a05_setMaxRoundsZeroThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpMrtrConfig().setMaxRounds(0));
+		var config = new McpMrtrConfig();
+		var e = assertThrows(IllegalArgumentException.class, () -> config.setMaxRounds(0));
 		assertEquals("maxRounds 0 must be >= 1", e.getMessage());
 	}
 
@@ -99,7 +103,8 @@ class McpMrtrConfig_Test {
 	}
 
 	@Test void a09_setKeyProviderNullThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpMrtrConfig().setKeyProvider(null));
+		var config = new McpMrtrConfig();
+		var e = assertThrows(IllegalArgumentException.class, () -> config.setKeyProvider(null));
 		assertEquals("keyProvider must not be null", e.getMessage());
 	}
 
@@ -143,19 +148,22 @@ class McpMrtrConfig_Test {
 	@Test void b01_fourArgConstructorAcceptsMrtrConfigAndDispatchesNormally() {
 		var rev = new McpRevision(null, new McpCacheConfig(), "instructions", new McpMrtrConfig());
 		var headers = Map.of("Mcp-Method", "server/discover", "Mcp-Name", "");
-		var resp = (JsonRpcResponse) rev.dispatch(new McpExchange(discoverRequest(), headers::get), new McpServerConfig(), new BasicBeanStore());
-		assertNull(resp.getError());
+		var result = rev.dispatch(new McpExchange(discoverRequest(), headers::get), new McpServerConfig(), new BasicBeanStore());
+		assertInstanceOf(McpResponseResult.class, result);
+		assertNull(((McpResponseResult) result).response().getError());
 	}
 
 	@Test void b02_threeArgConstructorStillCompilesAndDispatchesNormally() {
 		var rev = new McpRevision(null, new McpCacheConfig(), "instructions");
 		var headers = Map.of("Mcp-Method", "server/discover", "Mcp-Name", "");
-		var resp = (JsonRpcResponse) rev.dispatch(new McpExchange(discoverRequest(), headers::get), new McpServerConfig(), new BasicBeanStore());
-		assertNull(resp.getError());
+		var result = rev.dispatch(new McpExchange(discoverRequest(), headers::get), new McpServerConfig(), new BasicBeanStore());
+		assertInstanceOf(McpResponseResult.class, result);
+		assertNull(((McpResponseResult) result).response().getError());
 	}
 
 	@Test void b03_fourArgConstructorNullMrtrConfigThrowsNpe() {
+		var cacheConfig = new McpCacheConfig();
 		assertThrows(NullPointerException.class,
-			() -> new McpRevision(null, new McpCacheConfig(), "instructions", null));
+			() -> new McpRevision(null, cacheConfig, "instructions", null));
 	}
 }

@@ -76,6 +76,7 @@ class McpAudienceValidator_Test extends TestBase {
 	}
 
 	@Test void d01_blankExpectedAudienceRejected() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "expectedAudience", () -> McpAudienceValidator.matches(cp("aud", RES), "  ", true));
+		var principal = cp("aud", RES);
+		assertThrowsWithMessage(IllegalArgumentException.class, "expectedAudience", () -> McpAudienceValidator.matches(principal, "  ", true));
 	}
 }

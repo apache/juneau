@@ -86,8 +86,8 @@ class SubscriptionsListenDispatch_Test {
 
 		var result = revision.dispatch(exchangeFor(listenRequest(7, JsonMap.of()), null), config, ctx);
 
-		assertTrue(result instanceof JsonRpcResponse, "expected a JsonRpcResponse error, got: " + result);
-		var resp = (JsonRpcResponse) result;
+		assertTrue(result instanceof McpResponseResult, "expected a McpResponseResult error, got: " + result);
+		var resp = ((McpResponseResult) result).response();
 		assertNotNull(resp.getError());
 		assertEquals(McpRevision.CODE_INVALID_REQUEST, resp.getError().getCode());
 		assertEquals(0, broker.activeCount(), "a rejected non-SSE request must not consume a broker slot");
@@ -103,8 +103,8 @@ class SubscriptionsListenDispatch_Test {
 
 		var result = revision.dispatch(exchangeFor(listenRequest(7, JsonMap.of()), "application/json"), config, ctx);
 
-		assertTrue(result instanceof JsonRpcResponse, "expected a JsonRpcResponse error, got: " + result);
-		var resp = (JsonRpcResponse) result;
+		assertTrue(result instanceof McpResponseResult, "expected a McpResponseResult error, got: " + result);
+		var resp = ((McpResponseResult) result).response();
 		assertNotNull(resp.getError());
 		assertEquals(McpRevision.CODE_INVALID_REQUEST, resp.getError().getCode());
 		assertEquals(0, broker.activeCount(), "a rejected non-SSE request must not consume a broker slot");
@@ -122,7 +122,7 @@ class SubscriptionsListenDispatch_Test {
 
 		var result = revision.dispatch(exchangeFor(listenRequest(7, JsonMap.of()), "text/html, text/event-stream;q=0.9, */*;q=0.8"), config, ctx);
 
-		assertTrue(result instanceof Flow.Publisher, "expected a Flow.Publisher, got: " + result);
+		assertTrue(result instanceof McpStreamResult, "expected a McpStreamResult, got: " + result);
 		assertEquals(1, broker.activeCount());
 	}
 
@@ -136,7 +136,7 @@ class SubscriptionsListenDispatch_Test {
 
 		var result = revision.dispatch(exchangeFor(listenRequest(7, JsonMap.of()), "TEXT/EVENT-STREAM"), config, ctx);
 
-		assertTrue(result instanceof Flow.Publisher, "expected a Flow.Publisher, got: " + result);
+		assertTrue(result instanceof McpStreamResult, "expected a McpStreamResult, got: " + result);
 		assertEquals(1, broker.activeCount());
 	}
 
@@ -168,7 +168,7 @@ class SubscriptionsListenDispatch_Test {
 		var notifications = JsonMap.of("resourceSubscriptions", List.of("file:///a"), "toolsListChanged", true);
 		var result = revision.dispatch(exchangeFor(listenRequest(7, notifications)), config, ctx);
 
-		assertTrue(result instanceof Flow.Publisher, "expected a Flow.Publisher, got: " + result);
+		assertTrue(result instanceof McpStreamResult, "expected a McpStreamResult, got: " + result);
 		assertEquals(1, broker.activeCount());
 	}
 
@@ -184,7 +184,7 @@ class SubscriptionsListenDispatch_Test {
 		var notifications = JsonMap.of("resourceSubscriptions", List.of("file:///a"), "toolsListChanged", true);
 		var result = revision.dispatch(exchangeFor(listenRequest(7, notifications)), config, ctx);
 
-		var publisher = (SubscriptionsListenPublisher) result;
+		var publisher = (SubscriptionsListenPublisher) ((McpStreamResult) result).stream();
 		var honoredWire = publisher.honoredFilter();
 		assertNotEquals(Boolean.TRUE, honoredWire.getToolsListChanged());
 		assertEquals(List.of("file:///a"), honoredWire.getResourceSubscriptions());
@@ -202,8 +202,8 @@ class SubscriptionsListenDispatch_Test {
 
 			var result = revision.dispatch(exchangeFor(listenRequest(7, JsonMap.of())), config, ctx);
 
-			assertTrue(result instanceof JsonRpcResponse, "expected a JsonRpcResponse error, got: " + result);
-			var resp = (JsonRpcResponse) result;
+			assertTrue(result instanceof McpResponseResult, "expected a McpResponseResult error, got: " + result);
+			var resp = ((McpResponseResult) result).response();
 			assertNotNull(resp.getError());
 			assertEquals(McpRevision.CODE_TOO_MANY_SUBSCRIPTIONS, resp.getError().getCode());
 			assertEquals(1, broker.activeCount(), "the rejected request must not register a new subscription");
@@ -242,7 +242,7 @@ class SubscriptionsListenDispatch_Test {
 					return;
 				}
 				var result = revision.dispatch(exchangeFor(listenRequest(id, JsonMap.of())), config, ctx);
-				(result instanceof Flow.Publisher ? accepted : rejected).incrementAndGet();
+				(result instanceof McpStreamResult ? accepted : rejected).incrementAndGet();
 				done.countDown();
 			});
 			threads.add(t);
@@ -283,20 +283,24 @@ class SubscriptionsListenDispatch_Test {
 		var result1 = revision.dispatch(exchangeFor(listenRequest(7, JsonMap.of())), config, ctx);
 		var result2 = revision.dispatch(exchangeFor(listenRequest(7, JsonMap.of())), config, ctx);
 
-		assertTrue(result1 instanceof SubscriptionsListenPublisher, "expected a SubscriptionsListenPublisher, got: " + result1);
-		assertTrue(result2 instanceof SubscriptionsListenPublisher, "expected a SubscriptionsListenPublisher, got: " + result2);
+		assertTrue(result1 instanceof McpStreamResult, "expected a McpStreamResult, got: " + result1);
+		assertTrue(result2 instanceof McpStreamResult, "expected a McpStreamResult, got: " + result2);
+		var publisher1 = ((McpStreamResult) result1).stream();
+		var publisher2 = ((McpStreamResult) result2).stream();
+		assertTrue(publisher1 instanceof SubscriptionsListenPublisher, "expected a SubscriptionsListenPublisher, got: " + publisher1);
+		assertTrue(publisher2 instanceof SubscriptionsListenPublisher, "expected a SubscriptionsListenPublisher, got: " + publisher2);
 		assertEquals(2, broker.activeCount(),
 			"two distinct streams sharing the same client id must both remain registered, not evict each other");
 
 		var sub1 = new CapturingSubscriber();
-		((SubscriptionsListenPublisher) result1).subscribe(sub1);
+		((SubscriptionsListenPublisher) publisher1).subscribe(sub1);
 		var ack1 = sub1.events.poll(2, TimeUnit.SECONDS);
 		assertNotNull(ack1, "expected the first stream's ack frame");
 		assertTrue(ack1.getData().contains("\"" + RequestMeta.KEY_SUBSCRIPTION_ID + "\":7"),
 			"the first stream must still echo the CLIENT's original id in its ack frame, not the internal registry key");
 
 		var sub2 = new CapturingSubscriber();
-		((SubscriptionsListenPublisher) result2).subscribe(sub2);
+		((SubscriptionsListenPublisher) publisher2).subscribe(sub2);
 		var ack2 = sub2.events.poll(2, TimeUnit.SECONDS);
 		assertNotNull(ack2, "expected the second stream's ack frame");
 		assertTrue(ack2.getData().contains("\"" + RequestMeta.KEY_SUBSCRIPTION_ID + "\":7"),

@@ -56,7 +56,8 @@ class KeyedSecret_Test {
 
 	@Test void a04_overLongKeyIdThrows() throws Exception {
 		var a = aesKey();
-		assertThrows(IllegalArgumentException.class, () -> new KeyedSecret("x".repeat(129), a));
+		var overLongKeyId = "x".repeat(129);
+		assertThrows(IllegalArgumentException.class, () -> new KeyedSecret(overLongKeyId, a));
 	}
 
 	@Test void a05_nullKeyThrows() {

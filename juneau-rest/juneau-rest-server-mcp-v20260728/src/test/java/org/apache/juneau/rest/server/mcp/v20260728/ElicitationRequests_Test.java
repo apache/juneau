@@ -54,7 +54,8 @@ class ElicitationRequests_Test {
 	}
 
 	@Test void a03_of_singleQuestion_nullIdThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationRequests.of(null, new ElicitRequest(), "cont"));
+		var request = new ElicitRequest();
+		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationRequests.of(null, request, "cont"));
 		assertEquals("Argument 'id' cannot be null.", e.getMessage());
 	}
 
@@ -69,7 +70,8 @@ class ElicitationRequests_Test {
 	}
 
 	@Test void a06_of_multiQuestion_emptyMapThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationRequests.of(Map.of(), "cont"));
+		Map<String,ElicitRequest> emptyRequests = Map.of();
+		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationRequests.of(emptyRequests, "cont"));
 		assertEquals("requests must not be empty", e.getMessage());
 	}
 

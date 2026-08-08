@@ -39,6 +39,9 @@ import org.apache.juneau.rest.server.mcp.v20260728.*;
  * @serial exclude
  */
 @Rest(serializers = {JsonSerializer.class, SseSerializer.class}, parsers = JsonParser.class, defaultAccept = "application/json")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth is inherent to extending the Juneau REST server hierarchy.
+})
 public class SpringExampleMcpServer extends SpringMcpRestServlet {
 
 	private static final long serialVersionUID = 1L;

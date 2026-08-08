@@ -30,6 +30,7 @@ import org.apache.juneau.rest.mock.classic.MockRestClient;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestRequest;
 import org.apache.juneau.rest.server.mcp.AbstractMcpRestServlet;
+import org.apache.juneau.rest.server.mcp.McpDispatchResult;
 import org.apache.juneau.rest.server.mcp.McpEndpointMixin;
 import org.apache.juneau.rest.server.mcp.McpExchange;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
@@ -39,23 +40,24 @@ import org.apache.juneau.rest.server.mcp.McpToolSpec;
 import org.junit.jupiter.api.Test;
 
 /**
- * Confirms the C8 return-type widening ({@code JsonRpcResponse} to {@code Object}) landed on all four
- * pinned signatures, and that it does not disturb serialization of a normal (non-streaming) dispatch.
+ * Confirms the C8 return-type widening ({@code JsonRpcResponse} to {@code Object}, later narrowed
+ * to the sealed {@code McpDispatchResult}) landed on all four pinned signatures, and that it does
+ * not disturb serialization of a normal (non-streaming) dispatch.
  */
 @SuppressWarnings({"resource"})
 class McpRevisionReturnTypeWidening_Test {
 
 	@Test
-	void neutralInterfaceDispatchReturnsObject() throws NoSuchMethodException {
+	void neutralInterfaceDispatchReturnsDispatchResult() throws NoSuchMethodException {
 		var m = org.apache.juneau.rest.server.mcp.McpRevision.class
 			.getMethod("dispatch", McpExchange.class, McpServerConfig.class, BeanStore.class);
-		assertEquals(Object.class, m.getReturnType());
+		assertEquals(McpDispatchResult.class, m.getReturnType());
 	}
 
 	@Test
-	void v2RevisionDispatchReturnsObject() throws NoSuchMethodException {
+	void v2RevisionDispatchReturnsDispatchResult() throws NoSuchMethodException {
 		var m = McpRevision.class.getMethod("dispatch", McpExchange.class, McpServerConfig.class, BeanStore.class);
-		assertEquals(Object.class, m.getReturnType());
+		assertEquals(McpDispatchResult.class, m.getReturnType());
 	}
 
 	@Test

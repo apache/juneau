@@ -37,7 +37,8 @@ class McpCacheConfig_Test {
 	}
 
 	@Test void a02_hintRejectsNegativeDeterministically() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpCacheHint().setTtlMs(-7));
+		var hint = new McpCacheHint();
+		var e = assertThrows(IllegalArgumentException.class, () -> hint.setTtlMs(-7));
 		assertEquals("ttlMs -7 is below minimum 0", e.getMessage());
 	}
 
@@ -72,8 +73,10 @@ class McpCacheConfig_Test {
 			x -> new McpCacheConfig().addResourceReadOverride("file:///a", x));
 		setters.forEach(x -> assertEquals("ttlMs -9 is below minimum 0",
 			assertThrows(IllegalArgumentException.class, () -> x.accept(bad)).getMessage()));
+		var config = new McpCacheConfig();
+		Map<String,McpCacheHint> overrides = Map.of("file:///a", bad);
 		assertThrows(IllegalArgumentException.class,
-			() -> new McpCacheConfig().setResourceReadOverrides(Map.of("file:///a", bad)));
+			() -> config.setResourceReadOverrides(overrides));
 	}
 
 	@Test void b02_overrideMapCopiesPreservesOrderAndNullFallbackEntries() {
@@ -84,13 +87,17 @@ class McpCacheConfig_Test {
 		source.clear();
 		assertEquals(List.of("a", "b"), new ArrayList<>(config.getResourceReadOverrides().keySet()));
 		assertNull(config.getResourceReadOverrides().get("b"));
+		var overrides = config.getResourceReadOverrides();
+		var extraHint = new McpCacheHint();
 		assertThrows(UnsupportedOperationException.class,
-			() -> config.getResourceReadOverrides().put("c", new McpCacheHint()));
+			() -> overrides.put("c", extraHint));
 	}
 
 	@Test void b03_nullUriRejected() {
+		var config = new McpCacheConfig();
+		var hint = new McpCacheHint();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new McpCacheConfig().addResourceReadOverride(null, new McpCacheHint()));
+			() -> config.addResourceReadOverride(null, hint));
 		assertEquals("resourceReadOverrides URI must not be null", e.getMessage());
 	}
 }

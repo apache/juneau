@@ -272,10 +272,12 @@ class Characterization_Test {
 			var baggage = carrier == null ? null : carrier.get(RequestMeta.KEY_BAGGAGE);
 			if (baggage != null)
 				request.setAttribute(TraceContextResponseProcessor.ATTR_BAGGAGE, baggage);
+			// This deterministic fixture hook only needs startSpan(...)'s attribute-setting side effect;
+			// the remaining Scope contract methods are intentionally no-ops.
 			return new Scope() {
-				@Override public void setStatusCode(int statusCode) { }
-				@Override public void setError(Throwable error) { }
-				@Override public void close() { }
+				@Override public void setStatusCode(int statusCode) { /* no-op: fixture does not observe status codes */ }
+				@Override public void setError(Throwable error) { /* no-op: fixture does not observe errors */ }
+				@Override public void close() { /* no-op: fixture holds no resources to release */ }
 			};
 		}
 	}

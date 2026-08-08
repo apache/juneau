@@ -60,7 +60,13 @@ import com.nimbusds.openid.connect.sdk.op.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value)
+})
 public class OidcDiscoveryClient {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
 
 	/**
 	 * Static creator.
@@ -89,7 +95,7 @@ public class OidcDiscoveryClient {
 		 * @return This object.
 		 */
 		public Builder issuer(URI value) {
-			issuer = assertArgNotNull("value", value);
+			issuer = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -100,7 +106,7 @@ public class OidcDiscoveryClient {
 		 * @return This object.
 		 */
 		public Builder httpTimeout(Duration value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
 			httpTimeout = value;
 			return this;
@@ -113,7 +119,7 @@ public class OidcDiscoveryClient {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -165,18 +171,19 @@ public class OidcDiscoveryClient {
 	 */
 	public OidcMetadata discover() throws IOException, OidcDiscoveryException {
 		var iss = new Issuer(issuer.toString());
-		HTTPRequestConfigurator cfg = http -> {
+		HTTPRequestModifier cfg = http -> {
 			http.setConnectTimeout((int) httpTimeout.toMillis());
 			http.setReadTimeout((int) httpTimeout.toMillis());
 			if (httpRequestConfigurator != null)
 				httpRequestConfigurator.accept(http);
+			return http;
 		};
 		// RFC 8414 OAuth Authorization Server Metadata first, OIDC Discovery as fallback (spec requires both).
 		try {
-			return toMetadata(AuthorizationServerMetadata.resolve(iss, cfg));
+			return toMetadata(AuthorizationServerMetadata.resolve(iss, null, cfg, false));
 		} catch (IOException | GeneralException asFailure) {
 			try {
-				return toMetadata(OIDCProviderMetadata.resolve(iss, cfg));
+				return toMetadata(OIDCProviderMetadata.resolve(iss, null, cfg, false));
 			} catch (GeneralException oidcFailure) {
 				throw new OidcDiscoveryException("Failed to resolve authorization-server metadata for " + issuer
 					+ " via RFC 8414 or OIDC Discovery", oidcFailure);

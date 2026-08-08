@@ -73,7 +73,8 @@ class McpOptions_Test {
 	}
 
 	@Test void b03_setCache_nullThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpOptions().setCache(null));
+		var o = new McpOptions();
+		var e = assertThrows(IllegalArgumentException.class, () -> o.setCache(null));
 		assertEquals("cache must not be null", e.getMessage());
 	}
 
@@ -87,7 +88,8 @@ class McpOptions_Test {
 	}
 
 	@Test void b05_cacheConsumer_nullThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpOptions().cache(null));
+		var o = new McpOptions();
+		var e = assertThrows(IllegalArgumentException.class, () -> o.cache(null));
 		assertEquals("consumer must not be null", e.getMessage());
 	}
 
@@ -104,7 +106,8 @@ class McpOptions_Test {
 	}
 
 	@Test void c03_setMrtr_nullThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpOptions().setMrtr(null));
+		var o = new McpOptions();
+		var e = assertThrows(IllegalArgumentException.class, () -> o.setMrtr(null));
 		assertEquals("mrtr must not be null", e.getMessage());
 	}
 
@@ -118,7 +121,8 @@ class McpOptions_Test {
 	}
 
 	@Test void c05_mrtrConsumer_nullThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpOptions().mrtr(null));
+		var o = new McpOptions();
+		var e = assertThrows(IllegalArgumentException.class, () -> o.mrtr(null));
 		assertEquals("consumer must not be null", e.getMessage());
 	}
 
@@ -141,7 +145,8 @@ class McpOptions_Test {
 	}
 
 	@Test void d03_setSubscriptions_nullThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpOptions().setSubscriptions(null));
+		var o = new McpOptions();
+		var e = assertThrows(IllegalArgumentException.class, () -> o.setSubscriptions(null));
 		assertEquals("subscriptions must not be null", e.getMessage());
 	}
 
@@ -155,7 +160,8 @@ class McpOptions_Test {
 	}
 
 	@Test void d05_subscriptionsConsumer_nullThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpOptions().subscriptions(null));
+		var o = new McpOptions();
+		var e = assertThrows(IllegalArgumentException.class, () -> o.subscriptions(null));
 		assertEquals("consumer must not be null", e.getMessage());
 	}
 

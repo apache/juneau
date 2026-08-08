@@ -55,6 +55,9 @@ import org.apache.juneau.rest.server.auth.oauth.OAuthFilter;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_scopeMustNotBeNullOrBlank)
+})
 public class McpResourceServerConfig {
 
 	/** Default challenge realm. */
@@ -62,6 +65,9 @@ public class McpResourceServerConfig {
 
 	/** Default advertised/accepted bearer method. */
 	public static final String DEFAULT_BEARER_METHOD = "header";
+
+	// Error message constant (reused by every scope-mutation entry point below).
+	private static final String MSG_scopeMustNotBeNullOrBlank = "scope must not be null or blank";
 
 	private boolean enabled;
 	private URI resource;
@@ -81,7 +87,7 @@ public class McpResourceServerConfig {
 	private McpOperationScopeResolver operationScopeResolver;
 
 	@SuppressWarnings("java:S3077") // OAuthFilter is an effectively-immutable, thread-safe holder; volatile publication of the memoized instance is sufficient.
-	private transient volatile OAuthFilter oauthFilter;
+	private volatile OAuthFilter oauthFilter;
 
 	/**
 	 * Whether RS authentication is enabled for this binding.
@@ -257,7 +263,7 @@ public class McpResourceServerConfig {
 	 */
 	public McpResourceServerConfig addScopeSupported(String value) {
 		if (value == null || value.isBlank())
-			throw iaex("scope must not be null or blank");
+			throw iaex(MSG_scopeMustNotBeNullOrBlank);
 		scopesSupported.add(value);
 		return this;
 	}
@@ -280,7 +286,7 @@ public class McpResourceServerConfig {
 	 */
 	public McpResourceServerConfig addRequiredScope(String value) {
 		if (value == null || value.isBlank())
-			throw iaex("scope must not be null or blank");
+			throw iaex(MSG_scopeMustNotBeNullOrBlank);
 		requiredScopes.add(value);
 		scopesSupported.add(value);
 		return this;
@@ -322,7 +328,7 @@ public class McpResourceServerConfig {
 		var set = new LinkedHashSet<String>();
 		for (var s : scopes) {
 			if (s == null || s.isBlank())
-				throw iaex("scope must not be null or blank");
+				throw iaex(MSG_scopeMustNotBeNullOrBlank);
 			set.add(s);
 		}
 		scopesSupported.addAll(set);

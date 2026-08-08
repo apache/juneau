@@ -220,29 +220,32 @@ class McpTokenProvider_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_clientCredentialsRequiredFields() {
-		assertThrows(IllegalStateException.class, () -> McpTokenProvider.clientCredentials().build());
-		assertThrows(IllegalStateException.class,
-			() -> McpTokenProvider.clientCredentials().tokenEndpoint(tokenEndpoint()).build());
-		assertThrows(IllegalStateException.class,
-			() -> McpTokenProvider.clientCredentials().tokenEndpoint(tokenEndpoint()).clientId("id").build());
+		var b1 = McpTokenProvider.clientCredentials();
+		assertThrows(IllegalStateException.class, b1::build);
+		var b2 = McpTokenProvider.clientCredentials().tokenEndpoint(tokenEndpoint());
+		assertThrows(IllegalStateException.class, b2::build);
+		var b3 = McpTokenProvider.clientCredentials().tokenEndpoint(tokenEndpoint()).clientId("id");
+		assertThrows(IllegalStateException.class, b3::build);
 		// H3: resource() is mandatory on the MCP-facing entry point.
-		assertThrows(IllegalStateException.class,
-			() -> McpTokenProvider.clientCredentials().tokenEndpoint(tokenEndpoint()).clientId("id").clientSecret("s").build());
+		var b4 = McpTokenProvider.clientCredentials().tokenEndpoint(tokenEndpoint()).clientId("id").clientSecret("s");
+		assertThrows(IllegalStateException.class, b4::build);
 	}
 
 	@Test void d02_refreshRequiredFields() {
 		assertThrows(IllegalArgumentException.class, () -> McpTokenProvider.refreshToken(" "));
-		assertThrows(IllegalStateException.class, () -> McpTokenProvider.refreshToken("rt").build());
+		var b = McpTokenProvider.refreshToken("rt");
+		assertThrows(IllegalStateException.class, b::build);
 	}
 
 	@Test void d03_negativeSkewRejected() {
-		assertThrows(IllegalArgumentException.class,
-			() -> McpTokenProvider.clientCredentials().expirySkew(Duration.ofSeconds(-1)));
+		var b = McpTokenProvider.clientCredentials();
+		var skew = Duration.ofSeconds(-1);
+		assertThrows(IllegalArgumentException.class, () -> b.expirySkew(skew));
 	}
 
 	@Test void d04_toStringRedactsSecrets() {
 		var p = McpTokenProvider.ofStaticToken("super-secret-token");
-		assertFalse(p.toString().contains("super-secret-token"), () -> p.toString());
+		assertFalse(p.toString().contains("super-secret-token"), p::toString);
 		assertTrue(p.toString().contains("<redacted>"));
 	}
 

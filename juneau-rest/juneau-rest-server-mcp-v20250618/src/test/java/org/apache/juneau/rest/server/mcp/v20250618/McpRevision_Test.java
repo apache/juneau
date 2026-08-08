@@ -82,7 +82,8 @@ class McpRevision_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, JsonRpcRequest r) {
-		return new McpRevision(null).dispatch(new McpExchange(r, n -> null), config, ctx);
+		var result = new McpRevision(null).dispatch(new McpExchange(r, n -> null), config, ctx);
+		return result instanceof McpResponseResult mrr ? mrr.response() : null;
 	}
 
 	@Test
@@ -180,8 +181,9 @@ class McpRevision_Test {
 
 	@Test
 	void a08_nullEnvelope_returnsInvalidRequest() {
-		var resp = new McpRevision(null).dispatch(new McpExchange(null, n -> null), new McpServerConfig(), ctx);
-		assertEquals(McpRevision.CODE_INVALID_REQUEST, resp.getError().getCode());
+		var result = new McpRevision(null).dispatch(new McpExchange(null, n -> null), new McpServerConfig(), ctx);
+		assertInstanceOf(McpResponseResult.class, result);
+		assertEquals(McpRevision.CODE_INVALID_REQUEST, ((McpResponseResult) result).response().getError().getCode());
 	}
 
 	// -------- tools/list ---------

@@ -115,51 +115,6 @@ final class SubscriptionsListenPublisher implements Flow.Publisher<SseEvent> {
 		subscriber.onSubscribe(new Pump(subscriber));
 	}
 
-	private SseEvent acknowledgedFrame() {
-		var notification = new SubscriptionsAcknowledgedNotification()
-			.setNotifications(honoredWireFilter)
-			.setMeta(new RequestMeta().set(RequestMeta.KEY_SUBSCRIPTION_ID, listenId));
-		var frame = new JsonRpcRequest()
-			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
-			.setId(null)
-			.setMethod(McpMethods.NOTIFICATIONS_SUBSCRIPTIONS_ACKNOWLEDGED)
-			.setParams(notification);
-		return new SseEvent().setData(Json.of(frame));
-	}
-
-	private SseEvent changeFrame(McpChangeEvent event) {
-		var meta = new RequestMeta().set(RequestMeta.KEY_SUBSCRIPTION_ID, listenId);
-		String method;
-		Object params;
-		switch (event.getKind()) {
-			case RESOURCE_UPDATED -> {
-				method = McpMethods.NOTIFICATIONS_RESOURCES_UPDATED;
-				params = new ResourceUpdatedNotification().setUri(event.getResourceUri()).setMeta(meta);
-			}
-			case TOOLS_LIST_CHANGED -> {
-				method = McpMethods.NOTIFICATIONS_TOOLS_LIST_CHANGED;
-				params = new ToolsListChangedNotification().setMeta(meta);
-			}
-			case PROMPTS_LIST_CHANGED -> {
-				method = McpMethods.NOTIFICATIONS_PROMPTS_LIST_CHANGED;
-				params = new PromptsListChangedNotification().setMeta(meta);
-			}
-			case RESOURCES_LIST_CHANGED -> {
-				method = McpMethods.NOTIFICATIONS_RESOURCES_LIST_CHANGED;
-				params = new ResourcesListChangedNotification().setMeta(meta);
-			}
-			default -> throw new IllegalStateException("Unhandled McpChangeKind: " + event.getKind());
-		}
-		var frame = new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(null).setMethod(method).setParams(params);
-		return new SseEvent().setData(Json.of(frame));
-	}
-
-	private SseEvent terminalFrame() {
-		var result = new SubscriptionsListenResult()
-			.setMeta(new ResultMeta().set(RequestMeta.KEY_SUBSCRIPTION_ID, listenId));
-		return new SseEvent().setData(Json.of(JsonRpcResponse.ok(listenId, result)));
-	}
-
 	/**
 	 * Bridges {@link McpSubscription#take()}'s blocking queue to {@code Flow.Subscriber} calls on a
 	 * single dedicated daemon thread, honoring one-at-a-time backpressure via a {@link Semaphore} of
@@ -192,9 +147,9 @@ final class SubscriptionsListenPublisher implements Flow.Publisher<SseEvent> {
 		 */
 		private final Object startupLock = new Object();
 		private volatile boolean terminated;
-		private volatile Thread worker;
-		private volatile ScheduledExecutorService heartbeatExecutor;
-		private volatile ScheduledExecutorService idleWatchdogExecutor;
+		private final AtomicReference<Thread> worker = new AtomicReference<>();
+		private final AtomicReference<ScheduledExecutorService> heartbeatExecutor = new AtomicReference<>();
+		private final AtomicReference<ScheduledExecutorService> idleWatchdogExecutor = new AtomicReference<>();
 		/**
 		 * Nanosecond-clock ({@link System#nanoTime()}) activity stamp, deliberately not wall-clock
 		 * ({@link System#currentTimeMillis()}): a wall-clock stamp is vulnerable to NTP/clock-step
@@ -237,9 +192,10 @@ final class SubscriptionsListenPublisher implements Flow.Publisher<SseEvent> {
 					if (terminated)
 						return; // cancel() already ran (holding the same lock) and found nothing to shut down
 					lastActivityAtNanos.set(System.nanoTime());
-					worker = new Thread(this::run, "mcp-subscriptions-listen-" + listenId);
-					worker.setDaemon(true);
-					worker.start();
+					var w = new Thread(this::run, "mcp-subscriptions-listen-" + listenId);
+					w.setDaemon(true);
+					worker.set(w);
+					w.start();
 					if (heartbeatIntervalMs > 0) {
 						var executor = Executors.newSingleThreadScheduledExecutor(r -> {
 							var t = new Thread(r, "mcp-subscriptions-heartbeat-" + listenId);
@@ -247,7 +203,7 @@ final class SubscriptionsListenPublisher implements Flow.Publisher<SseEvent> {
 							return t;
 						});
 						executor.scheduleAtFixedRate(this::sendHeartbeat, heartbeatIntervalMs, heartbeatIntervalMs, TimeUnit.MILLISECONDS);
-						heartbeatExecutor = executor;
+						heartbeatExecutor.set(executor);
 					}
 					if (idleTimeoutMs > 0) {
 						var checkPeriodMs = Math.max(idleTimeoutMs / 4, 10L);
@@ -257,7 +213,7 @@ final class SubscriptionsListenPublisher implements Flow.Publisher<SseEvent> {
 							return t;
 						});
 						executor.scheduleAtFixedRate(this::checkIdle, checkPeriodMs, checkPeriodMs, TimeUnit.MILLISECONDS);
-						idleWatchdogExecutor = executor;
+						idleWatchdogExecutor.set(executor);
 					}
 				}
 			}
@@ -289,7 +245,7 @@ final class SubscriptionsListenPublisher implements Flow.Publisher<SseEvent> {
 				return;
 			subscription.close();
 			if (parkedOnDemand) {
-				var w = worker;
+				var w = worker.get();
 				if (w != null)
 					w.interrupt();
 			}
@@ -308,10 +264,10 @@ final class SubscriptionsListenPublisher implements Flow.Publisher<SseEvent> {
 		 */
 		private void shutdownExecutors() {
 			synchronized (startupLock) {
-				var executor = heartbeatExecutor;
+				var executor = heartbeatExecutor.get();
 				if (executor != null)
 					executor.shutdownNow();
-				var idle = idleWatchdogExecutor;
+				var idle = idleWatchdogExecutor.get();
 				if (idle != null)
 					idle.shutdownNow();
 			}
@@ -327,7 +283,7 @@ final class SubscriptionsListenPublisher implements Flow.Publisher<SseEvent> {
 				terminated = true;
 				shutdownExecutors();
 			}
-			var w = worker;
+			var w = worker.get();
 			if (w != null)
 				w.interrupt();
 			subscription.close();
@@ -358,7 +314,7 @@ final class SubscriptionsListenPublisher implements Flow.Publisher<SseEvent> {
 				subscriber.onError(t);
 			}
 			synchronized (startupLock) {
-				var w = worker;
+				var w = worker.get();
 				if (w != null && w != Thread.currentThread())
 					w.interrupt();
 				shutdownExecutors();
@@ -403,24 +359,14 @@ final class SubscriptionsListenPublisher implements Flow.Publisher<SseEvent> {
 		 */
 		private void run() {
 			try {
-				if (!awaitDemandThenEmit(SubscriptionsListenPublisher.this::acknowledgedFrame)) {
+				if (!awaitDemandThenEmit(this::acknowledgedFrame)) {
 					shutdownExecutors();
 					return;
 				}
 				while (!terminated) {
-					McpChangeEvent event;
-					try {
-						event = subscription.take();
-					} catch (InterruptedException e) {
-						// Deliberately do NOT restore the interrupt flag before this call: awaitDemandThenComplete()
-						// still needs to perform a legitimate blocking wait on this same thread to await permission
-						// to emit the terminal frame, and a pre-set interrupt flag would make that wait return
-						// immediately regardless of real demand, silently dropping the terminal frame. The flag is
-						// restored afterward, just before this (dying) thread returns.
-						awaitDemandThenComplete();
-						Thread.currentThread().interrupt();
-						return;
-					}
+					var event = takeNextEvent();
+					if (event == null)
+						return; // interrupted; takeNextEvent() already ran awaitDemandThenComplete() and restored the interrupt flag
 					if (subscription.isClosed()) {
 						awaitDemandThenComplete();
 						return;
@@ -435,6 +381,27 @@ final class SubscriptionsListenPublisher implements Flow.Publisher<SseEvent> {
 				// subscription.take()/isClosed()), in addition to propagating frame-construction/onNext
 				// failures from awaitDemandThenEmit's own emitLock block once its monitor unwinds.
 				terminateWithError(e);
+			}
+		}
+
+		/**
+		 * Drains one event from {@code subscription}, or performs the on-interrupt shutdown sequence and
+		 * returns <jk>null</jk> if the wait was interrupted (including by a concurrent {@code close()}).
+		 *
+		 * <p>
+		 * Deliberately does NOT restore the interrupt flag before calling {@code awaitDemandThenComplete()}:
+		 * that call still needs to perform a legitimate blocking wait on this same thread to await permission
+		 * to emit the terminal frame, and a pre-set interrupt flag would make that wait return immediately
+		 * regardless of real demand, silently dropping the terminal frame. The flag is restored afterward,
+		 * just before this method returns to the (dying) {@link #run()} caller.
+		 */
+		private McpChangeEvent takeNextEvent() {
+			try {
+				return subscription.take();
+			} catch (InterruptedException e) {
+				awaitDemandThenComplete();
+				Thread.currentThread().interrupt();
+				return null;
 			}
 		}
 
@@ -512,6 +479,63 @@ final class SubscriptionsListenPublisher implements Flow.Publisher<SseEvent> {
 
 		private long completionAwaitTimeoutMs() {
 			return heartbeatIntervalMs > 0 ? heartbeatIntervalMs * COMPLETION_AWAIT_TIMEOUT_MULTIPLIER : DEFAULT_COMPLETION_AWAIT_TIMEOUT_MS;
+		}
+
+		/**
+		 * Builds the initial acknowledged-subscription frame. Used only from {@link #run()}, so it lives
+		 * here rather than on the enclosing publisher.
+		 */
+		private SseEvent acknowledgedFrame() {
+			var notification = new SubscriptionsAcknowledgedNotification()
+				.setNotifications(honoredWireFilter)
+				.setMeta(new RequestMeta().set(RequestMeta.KEY_SUBSCRIPTION_ID, listenId));
+			var frame = new JsonRpcRequest()
+				.setJsonrpc(McpProtocol.JSON_RPC_2_0)
+				.setId(null)
+				.setMethod(McpMethods.NOTIFICATIONS_SUBSCRIPTIONS_ACKNOWLEDGED)
+				.setParams(notification);
+			return new SseEvent().setData(Json.of(frame));
+		}
+
+		/**
+		 * Builds the terminal completion frame. Used only from {@link #awaitDemandThenComplete()}, so it
+		 * lives here rather than on the enclosing publisher.
+		 */
+		private SseEvent terminalFrame() {
+			var result = new SubscriptionsListenResult()
+				.setMeta(new ResultMeta().set(RequestMeta.KEY_SUBSCRIPTION_ID, listenId));
+			return new SseEvent().setData(Json.of(JsonRpcResponse.ok(listenId, result)));
+		}
+
+		/**
+		 * Maps a drained {@link McpChangeEvent} to its wire notification frame. Used only from {@link #run()},
+		 * so it lives here rather than on the enclosing publisher.
+		 */
+		private SseEvent changeFrame(McpChangeEvent event) {
+			var meta = new RequestMeta().set(RequestMeta.KEY_SUBSCRIPTION_ID, listenId);
+			String method;
+			Object params;
+			switch (event.kind()) {
+				case RESOURCE_UPDATED -> {
+					method = McpMethods.NOTIFICATIONS_RESOURCES_UPDATED;
+					params = new ResourceUpdatedNotification().setUri(event.resourceUri()).setMeta(meta);
+				}
+				case TOOLS_LIST_CHANGED -> {
+					method = McpMethods.NOTIFICATIONS_TOOLS_LIST_CHANGED;
+					params = new ToolsListChangedNotification().setMeta(meta);
+				}
+				case PROMPTS_LIST_CHANGED -> {
+					method = McpMethods.NOTIFICATIONS_PROMPTS_LIST_CHANGED;
+					params = new PromptsListChangedNotification().setMeta(meta);
+				}
+				case RESOURCES_LIST_CHANGED -> {
+					method = McpMethods.NOTIFICATIONS_RESOURCES_LIST_CHANGED;
+					params = new ResourcesListChangedNotification().setMeta(meta);
+				}
+				default -> throw new IllegalStateException("Unhandled McpChangeKind: " + event.kind());
+			}
+			var frame = new JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(null).setMethod(method).setParams(params);
+			return new SseEvent().setData(Json.of(frame));
 		}
 	}
 }

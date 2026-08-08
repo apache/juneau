@@ -66,6 +66,9 @@ class BasicMcpSubscriptionBroker_Test {
 	 * blocking call, so tests that exercise {@code close()}/{@code unregister()} racing a blocked
 	 * {@code take()} are deterministic rather than timing-dependent.
 	 */
+	@SuppressWarnings({
+		"java:S2925" // The sleep is the poll interval of this bounded-deadline poll loop, not a fixed wait-and-hope delay.
+	})
 	private static void awaitParked(Thread thread) throws InterruptedException {
 		var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(2);
 		while (thread.getState() != Thread.State.WAITING && thread.getState() != Thread.State.TIMED_WAITING) {
@@ -105,15 +108,15 @@ class BasicMcpSubscriptionBroker_Test {
 			broker.resourceUpdated("file:///b.txt");
 			broker.promptsListChanged();
 
-			assertEquals(McpChangeKind.TOOLS_LIST_CHANGED, toolsOnly.take().getKind());
+			assertEquals(McpChangeKind.TOOLS_LIST_CHANGED, toolsOnly.take().kind());
 			assertNull(pollNoWait(toolsOnly), "toolsOnly must not receive resourceUpdated or promptsListChanged");
 
-			assertEquals("file:///a.txt", uriOnly.take().getResourceUri());
+			assertEquals("file:///a.txt", uriOnly.take().resourceUri());
 			assertNull(pollNoWait(uriOnly), "uriOnly must not receive the non-matching URI or list-changed events");
 
-			assertEquals(McpChangeKind.TOOLS_LIST_CHANGED, everything.take().getKind());
-			assertEquals("file:///a.txt", everything.take().getResourceUri());
-			assertEquals(McpChangeKind.PROMPTS_LIST_CHANGED, everything.take().getKind());
+			assertEquals(McpChangeKind.TOOLS_LIST_CHANGED, everything.take().kind());
+			assertEquals("file:///a.txt", everything.take().resourceUri());
+			assertEquals(McpChangeKind.PROMPTS_LIST_CHANGED, everything.take().kind());
 		}
 	}
 
@@ -122,7 +125,7 @@ class BasicMcpSubscriptionBroker_Test {
 		try (var sub = broker.register("s1", new McpSubscriptionFilter(true, true, true, Set.of()))) {
 			broker.toolsListChanged();
 			broker.promptsListChanged();
-			assertEquals(McpChangeKind.PROMPTS_LIST_CHANGED, sub.take().getKind());
+			assertEquals(McpChangeKind.PROMPTS_LIST_CHANGED, sub.take().kind());
 		}
 	}
 
@@ -141,11 +144,11 @@ class BasicMcpSubscriptionBroker_Test {
 			});
 			thread.start();
 			assertTrue(started.await(2, TimeUnit.SECONDS));
-			Thread.sleep(100);
+			awaitParked(thread);
 			broker.resourcesListChanged();
 			thread.join(2000);
 			assertFalse(thread.isAlive());
-			assertEquals(McpChangeKind.RESOURCES_LIST_CHANGED, received.get().getKind());
+			assertEquals(McpChangeKind.RESOURCES_LIST_CHANGED, received.get().kind());
 		}
 	}
 

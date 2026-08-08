@@ -68,11 +68,13 @@ class StaticKeyProvider_Test {
 	}
 
 	@Test void c01_buildRejectsMissingCurrent() {
-		assertThrows(IllegalArgumentException.class, () -> StaticKeyProvider.create().addKey("2026-08-a", randomAesKey()).build());
+		var builder = StaticKeyProvider.create().addKey("2026-08-a", randomAesKey());
+		assertThrows(IllegalArgumentException.class, builder::build);
 	}
 
 	@Test void c02_buildRejectsDanglingCurrent() {
-		assertThrows(IllegalArgumentException.class, () -> StaticKeyProvider.create().addKey("2026-08-a", randomAesKey()).current("does-not-exist").build());
+		var builder = StaticKeyProvider.create().addKey("2026-08-a", randomAesKey()).current("does-not-exist");
+		assertThrows(IllegalArgumentException.class, builder::build);
 	}
 
 	@Test void c03_addKeyRejectsNullOrBlankKeyId() {

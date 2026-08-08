@@ -60,6 +60,9 @@ import org.apache.juneau.rest.client.mcp.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // WRAP_KEY_value mirrors the JsonMap key literal it wraps; a conventional UPPER_SNAKE_CASE name would obscure that.
+})
 public final class McpClient extends AbstractMcpClient {
 
 	private static final JsonSerializer REQUEST_SERIALIZER = JsonSerializer.create()
@@ -70,13 +73,22 @@ public final class McpClient extends AbstractMcpClient {
 	/** JSON-RPC method name used for the client-to-server duplex return-channel POST. */
 	private static final String DUPLEX_RETURN_METHOD = "mcp/clientResult";
 
+	/** SEP-2243 request-routing header carrying the JSON-RPC method name. */
+	private static final String HEADER_MCP_METHOD = "Mcp-Method";
+
+	/** SEP-2243 request-routing header carrying the tool/prompt/resource routing name for the call. */
+	private static final String HEADER_MCP_NAME = "Mcp-Name";
+
+	/** JsonMap wrapper key used to route a single value through {@link JsonMap}'s typed bean-dictionary decode. */
+	private static final String WRAP_KEY_value = "value";
+
 	private final ClientCapabilities clientCapabilities;
 	private final Implementation clientInfo;
 	private final Supplier<Map<String,String>> traceFieldsSupplier;
 	private final McpResponseCache responseCache;
 	private final String privateScopePartitionPrefix;
 	private final McpDuplexDispatcher duplexDispatcher = new McpDuplexDispatcher();
-	private volatile ServerDiscoverResult discoveredServer;
+	private final AtomicReference<ServerDiscoverResult> discoveredServer = new AtomicReference<>();
 
 	private McpClient(Builder builder) {
 		super(builder);
@@ -130,6 +142,9 @@ public final class McpClient extends AbstractMcpClient {
 	 * @throws IOException If a transport-level or (de)serialization error occurs opening the connection.
 	 * @throws McpException If the server returned a JSON-RPC error for {@value McpMethods#SERVER_DISCOVER}.
 	 */
+	@SuppressWarnings({
+		"java:S1181" // Must run the close-and-rethrow cleanup below even on Error, not just checked/runtime exceptions.
+	})
 	public static McpClient connect(Builder builder) throws IOException {
 		assertArgNotNull("builder", builder);
 		var client = builder.build();
@@ -153,6 +168,9 @@ public final class McpClient extends AbstractMcpClient {
 	 * Closes {@code client}, adding any close failure as a suppressed exception on {@code primary} rather than
 	 * letting it mask the handshake failure that is the actual reason {@link #connect(Builder)} is failing.
 	 */
+	@SuppressWarnings({
+		"java:S1181" // Must record even an Error from close() as suppressed rather than let it replace the handshake failure.
+	})
 	private static void closeQuietly(McpClient client, Throwable primary) {
 		try {
 			client.close();
@@ -179,7 +197,7 @@ public final class McpClient extends AbstractMcpClient {
 	 */
 	public ServerDiscoverResult serverDiscover() throws IOException {
 		var result = call(McpMethods.SERVER_DISCOVER, new RequestParamsOnly(), ServerDiscoverResult.class);
-		discoveredServer = result;
+		discoveredServer.set(result);
 		return result;
 	}
 
@@ -195,7 +213,7 @@ public final class McpClient extends AbstractMcpClient {
 	 * 	been called on this client, or the most recent call returned a <jk>null</jk> result.
 	 */
 	public ServerDiscoverResult discoveredServer() {
-		return discoveredServer;
+		return discoveredServer.get();
 	}
 
 	/**
@@ -540,7 +558,7 @@ public final class McpClient extends AbstractMcpClient {
 	 * the {@code type} discriminator it already carries in the raw tree.
 	 */
 	private static <T> T decodeResult(Map<String,Object> raw, Class<T> resultType) {
-		return JsonMap.of("value", raw).get("value", resultType);
+		return JsonMap.of(WRAP_KEY_value, raw).get(WRAP_KEY_value, resultType);
 	}
 
 	/**
@@ -590,7 +608,7 @@ public final class McpClient extends AbstractMcpClient {
 		// SEP-2243 Mcp-Method/Mcp-Name headers, stamped exactly like every typed call(...) (see #call) - the v2
 		// server's McpRevision.dispatch() runs validateHeaders(...) unconditionally before branching on the
 		// method, so the opening subscriptions/listen POST is rejected with -32600 without these.
-		var headers = Map.of("Mcp-Method", McpMethods.SUBSCRIPTIONS_LISTEN, "Mcp-Name", McpRoutingNames.routingName(McpMethods.SUBSCRIPTIONS_LISTEN, wireParams));
+		var headers = Map.of(HEADER_MCP_METHOD, McpMethods.SUBSCRIPTIONS_LISTEN, HEADER_MCP_NAME, McpRoutingNames.routingName(McpMethods.SUBSCRIPTIONS_LISTEN, wireParams));
 		var reader = openEventStream(req, headers);
 		var pump = new SubscriptionPump(req.getId().toString(), reader, listener);
 		try {
@@ -654,6 +672,9 @@ public final class McpClient extends AbstractMcpClient {
 		}
 
 		@Override
+		@SuppressWarnings({
+			"java:S135" // Multiple break/continue are the clearest expression of this SSE-frame decode loop; splitting them out would obscure the pump's state machine.
+		})
 		public void run() {
 			var reachedTerminal = false;
 			try {
@@ -789,7 +810,7 @@ public final class McpClient extends AbstractMcpClient {
 	}
 
 	/**
-	 * Returns this instance's cache-partition prefix used to namespace {@link McpResponseCache#SCOPE_PRIVATE}
+	 * Returns this instance's cache-partition prefix used to namespace {@link McpCacheScope#PRIVATE}
 	 * entries so two client instances sharing the same {@link McpResponseCache} never see each other's
 	 * private-scope results.
 	 *
@@ -856,7 +877,7 @@ public final class McpClient extends AbstractMcpClient {
 	// re-emits it verbatim.
 	private void postClientResult(Object id, JsonRpcResponse payload) throws IOException {
 		var wire = toWireParams(payload);
-		var headers = Map.of("Mcp-Method", DUPLEX_RETURN_METHOD, "Mcp-Name", McpRoutingNames.routingName(DUPLEX_RETURN_METHOD, wire));
+		var headers = Map.of(HEADER_MCP_METHOD, DUPLEX_RETURN_METHOD, HEADER_MCP_NAME, McpRoutingNames.routingName(DUPLEX_RETURN_METHOD, wire));
 		send(new JsonRpcRequest().setJsonrpc("2.0").setId(id).setMethod(DUPLEX_RETURN_METHOD).setParams(wire), headers);
 	}
 
@@ -883,7 +904,7 @@ public final class McpClient extends AbstractMcpClient {
 		}
 		stampMeta(params.getMeta() == null ? params.setMeta(new RequestMeta()).getMeta() : params.getMeta());
 		var wireParams = toWireParams(params);
-		var headers = Map.of("Mcp-Method", method, "Mcp-Name", McpRoutingNames.routingName(method, wireParams));
+		var headers = Map.of(HEADER_MCP_METHOD, method, HEADER_MCP_NAME, McpRoutingNames.routingName(method, wireParams));
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(UUID.randomUUID().toString())
@@ -892,7 +913,7 @@ public final class McpClient extends AbstractMcpClient {
 		var res = send(req, headers);
 		if (res.getError() != null)
 			throw McpException.fromJsonRpcError(res.getError());
-		var result = JsonMap.of("value", res.getResult()).get("value", resultType);
+		var result = JsonMap.of(WRAP_KEY_value, res.getResult()).get(WRAP_KEY_value, resultType);
 		writeCache(cacheKey, result);
 		return result;
 	}
@@ -937,8 +958,8 @@ public final class McpClient extends AbstractMcpClient {
 	private Object readCache(String key) {
 		if (responseCache == null)
 			return null;
-		return responseCache.get(privateScopePartitionPrefix + McpResponseCache.SCOPE_PRIVATE, key)
-			.or(() -> responseCache.get(McpResponseCache.SCOPE_PUBLIC, key))
+		return responseCache.get(privateScopePartitionPrefix + McpCacheScope.PRIVATE.toWire(), key)
+			.or(() -> responseCache.get(McpCacheScope.PUBLIC.toWire(), key))
 			.orElse(null);
 	}
 
@@ -947,8 +968,8 @@ public final class McpClient extends AbstractMcpClient {
 			return;
 		if (result instanceof CacheableResult<?> c && c.getTtlMs() != null) {
 			var scope = c.getCacheScope() == McpCacheScope.PRIVATE
-				? privateScopePartitionPrefix + McpResponseCache.SCOPE_PRIVATE
-				: McpResponseCache.SCOPE_PUBLIC;
+				? privateScopePartitionPrefix + McpCacheScope.PRIVATE.toWire()
+				: McpCacheScope.PUBLIC.toWire();
 			responseCache.put(scope, key, result, c.getTtlMs());
 		}
 	}

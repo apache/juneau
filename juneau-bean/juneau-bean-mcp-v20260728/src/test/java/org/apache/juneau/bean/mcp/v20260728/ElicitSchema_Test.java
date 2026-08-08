@@ -86,177 +86,209 @@ class ElicitSchema_Test {
 	}
 
 	@Test void b01_format_onNonStringField_throwsAtBuildTime() {
+		var builder = ElicitSchema.create().integerField("age").format("email");
 		assertThrowsWithMessage(IllegalStateException.class,
 			"Field ''age'': format is only valid on string fields",
-			() -> ElicitSchema.create().integerField("age").format("email").build());
+			builder::build);
 	}
 
 	@Test void b02_minMax_onNonNumericField_throwsAtBuildTime() {
+		var builder1 = ElicitSchema.create().stringField("name").min(0);
 		assertThrowsWithMessage(IllegalStateException.class,
 			"Field ''name'': min/max are only valid on number/integer fields",
-			() -> ElicitSchema.create().stringField("name").min(0).build());
+			builder1::build);
+		var builder2 = ElicitSchema.create().booleanField("flag").max(1);
 		assertThrowsWithMessage(IllegalStateException.class,
 			"Field ''flag'': min/max are only valid on number/integer fields",
-			() -> ElicitSchema.create().booleanField("flag").max(1).build());
+			builder2::build);
 	}
 
 	@Test void b03_enumNames_withoutEnumValues_throwsAtBuildTime() {
+		var builder = ElicitSchema.create().stringField("name").enumNames("A");
 		assertThrowsWithMessage(IllegalStateException.class,
 			"Field ''name'': enumNames requires enum values",
-			() -> ElicitSchema.create().stringField("name").enumNames("A").build());
+			builder::build);
 	}
 
 	@Test void b04_noFieldStarted_modifierThrowsIllegalStateException() {
+		var builder = ElicitSchema.create();
 		assertThrowsWithMessage(IllegalStateException.class,
 			"No field has been started yet; call stringField(...)/numberField(...)/etc. first",
-			() -> ElicitSchema.create().title("x"));
+			() -> builder.title("x"));
 	}
 
 	@Test void b05_enumField_nullValues_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create();
 		assertThrowsWithMessage(IllegalArgumentException.class,
 			"Field ''color'': enumField values must not be null or empty",
-			() -> ElicitSchema.create().enumField("color", (String[])null));
+			() -> builder.enumField("color", (String[])null));
 	}
 
 	@Test void b06_enumField_emptyValues_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create();
 		assertThrowsWithMessage(IllegalArgumentException.class,
 			"Field ''color'': enumField values must not be null or empty",
-			() -> ElicitSchema.create().enumField("color"));
+			() -> builder.enumField("color"));
 	}
 
 	@Test void b07_title_null_throwsIllegalArgumentException() {
-		assertThrows(IllegalArgumentException.class, () -> ElicitSchema.create().stringField("name").title(null));
+		var builder = ElicitSchema.create().stringField("name");
+		assertThrows(IllegalArgumentException.class, () -> builder.title(null));
 	}
 
 	@Test void b08_description_null_throwsIllegalArgumentException() {
-		assertThrows(IllegalArgumentException.class,
-			() -> ElicitSchema.create().stringField("name").description(null));
+		var builder = ElicitSchema.create().stringField("name");
+		assertThrows(IllegalArgumentException.class, () -> builder.description(null));
 	}
 
 	@Test void b09_format_null_throwsIllegalArgumentException() {
-		assertThrows(IllegalArgumentException.class, () -> ElicitSchema.create().stringField("name").format(null));
+		var builder = ElicitSchema.create().stringField("name");
+		assertThrows(IllegalArgumentException.class, () -> builder.format(null));
 	}
 
 	@Test void b10_enumNames_null_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create().enumField("color", "r", "g");
 		assertThrowsWithMessage(IllegalArgumentException.class, "enumNames values must not be null or empty",
-			() -> ElicitSchema.create().enumField("color", "r", "g").enumNames((String[])null));
+			() -> builder.enumNames((String[])null));
 	}
 
 	@Test void b11_enumNames_empty_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create().enumField("color", "r", "g");
 		assertThrowsWithMessage(IllegalArgumentException.class, "enumNames values must not be null or empty",
-			() -> ElicitSchema.create().enumField("color", "r", "g").enumNames());
+			builder::enumNames);
 	}
 
 	@Test void b12_enumNames_lengthMismatch_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create().enumField("color", "r", "g");
 		assertThrowsWithMessage(IllegalArgumentException.class, "enumNames length (1) must match enum length (2)",
-			() -> ElicitSchema.create().enumField("color", "r", "g").enumNames("Red"));
+			() -> builder.enumNames("Red"));
 	}
 
 	@Test void b13_emptyBuilder_throwsAtBuildTime() {
+		var builder = ElicitSchema.create();
 		assertThrowsWithMessage(IllegalStateException.class,
 			"ElicitSchema requires at least one field (an empty requestedSchema is unanswerable)",
-			() -> ElicitSchema.create().build());
+			builder::build);
 	}
 
 	@Test void b14_required_unknownFieldName_throwsAtBuildTime() {
+		var builder = ElicitSchema.create().stringField("name").required("age");
 		assertThrowsWithMessage(IllegalStateException.class,
 			"required(...) names field ''age'', which was never added",
-			() -> ElicitSchema.create().stringField("name").required("age").build());
+			builder::build);
 	}
 
 	@Test void b15_required_nullOrEmptyNames_throwsIllegalArgumentException() {
+		var builder1 = ElicitSchema.create().stringField("name");
 		assertThrowsWithMessage(IllegalArgumentException.class, "required field names must not be null or empty",
-			() -> ElicitSchema.create().stringField("name").required((String[])null));
+			() -> builder1.required((String[])null));
+		var builder2 = ElicitSchema.create().stringField("name");
 		assertThrowsWithMessage(IllegalArgumentException.class, "required field names must not be null or empty",
-			() -> ElicitSchema.create().stringField("name").required());
+			builder2::required);
 	}
 
 	@Test void b16_minLength_onNonStringField_throwsAtBuildTime() {
+		var builder = ElicitSchema.create().integerField("age").minLength(1);
 		assertThrowsWithMessage(IllegalStateException.class,
 			"Field ''age'': minLength/maxLength are only valid on string fields",
-			() -> ElicitSchema.create().integerField("age").minLength(1).build());
+			builder::build);
 	}
 
 	@Test void b17_maxLength_onNonStringField_throwsAtBuildTime() {
+		var builder = ElicitSchema.create().integerField("age").maxLength(1);
 		assertThrowsWithMessage(IllegalStateException.class,
 			"Field ''age'': minLength/maxLength are only valid on string fields",
-			() -> ElicitSchema.create().integerField("age").maxLength(1).build());
+			builder::build);
 	}
 
 	@Test void b18_minLength_negative_throwsAtBuildTime() {
+		var builder = ElicitSchema.create().stringField("name").minLength(-1);
 		assertThrowsWithMessage(IllegalStateException.class,
 			"Field ''name'': minLength must not be negative",
-			() -> ElicitSchema.create().stringField("name").minLength(-1).build());
+			builder::build);
 	}
 
 	@Test void b19_maxLength_negative_throwsAtBuildTime() {
+		var builder = ElicitSchema.create().stringField("name").maxLength(-1);
 		assertThrowsWithMessage(IllegalStateException.class,
 			"Field ''name'': maxLength must not be negative",
-			() -> ElicitSchema.create().stringField("name").maxLength(-1).build());
+			builder::build);
 	}
 
 	@Test void b20_minLength_exceedsMaxLength_throwsAtBuildTime() {
+		var builder = ElicitSchema.create().stringField("name").minLength(5).maxLength(2);
 		assertThrowsWithMessage(IllegalStateException.class,
 			"Field ''name'': minLength must not exceed maxLength",
-			() -> ElicitSchema.create().stringField("name").minLength(5).maxLength(2).build());
+			builder::build);
 	}
 
 	@Test void b21_stringField_nullName_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create();
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'name' cannot be null.",
-			() -> ElicitSchema.create().stringField(null));
+			() -> builder.stringField(null));
 	}
 
 	@Test void b22_stringField_emptyName_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create();
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'name' cannot be blank.",
-			() -> ElicitSchema.create().stringField(""));
+			() -> builder.stringField(""));
 	}
 
 	@Test void b23_enumField_nullName_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create();
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'name' cannot be null.",
-			() -> ElicitSchema.create().enumField(null, "r", "g"));
+			() -> builder.enumField(null, "r", "g"));
 	}
 
 	@Test void b24_enumField_emptyName_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create();
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'name' cannot be blank.",
-			() -> ElicitSchema.create().enumField("", "r", "g"));
+			() -> builder.enumField("", "r", "g"));
 	}
 
 	@Test void b25_enumField_nullElementValue_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create();
 		assertThrowsWithMessage(IllegalArgumentException.class,
 			"Field ''color'': enumField values must not contain a null element",
-			() -> ElicitSchema.create().enumField("color", "r", null, "g"));
+			() -> builder.enumField("color", "r", null, "g"));
 	}
 
 	@Test void b26_enumNames_nullElementValue_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create().enumField("color", "r", "g");
 		assertThrowsWithMessage(IllegalArgumentException.class, "enumNames values must not contain a null element",
-			() -> ElicitSchema.create().enumField("color", "r", "g").enumNames("Red", null));
+			() -> builder.enumNames("Red", null));
 	}
 
 	@Test void b27_required_nullElementName_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create().stringField("a").stringField("b");
 		assertThrowsWithMessage(IllegalArgumentException.class, "required field names must not contain a null element",
-			() -> ElicitSchema.create().stringField("a").stringField("b").required("a", (String)null));
+			() -> builder.required("a", (String)null));
 	}
 
 	@Test void b28_min_null_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create().integerField("age");
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'value' cannot be null.",
-			() -> ElicitSchema.create().integerField("age").min(null));
+			() -> builder.min(null));
 	}
 
 	@Test void b29_max_null_throwsIllegalArgumentException() {
+		var builder = ElicitSchema.create().integerField("age");
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'value' cannot be null.",
-			() -> ElicitSchema.create().integerField("age").max(null));
+			() -> builder.max(null));
 	}
 
 	@Test void b30_minLength_onEnumField_throwsAtBuildTime() {
+		var builder = ElicitSchema.create().enumField("color", "r", "g").minLength(1);
 		assertThrowsWithMessage(IllegalStateException.class,
 			"Field ''color'': minLength/maxLength are not valid on an enum (closed-choice) field",
-			() -> ElicitSchema.create().enumField("color", "r", "g").minLength(1).build());
+			builder::build);
 	}
 
 	@Test void b31_maxLength_onEnumField_throwsAtBuildTime() {
+		var builder = ElicitSchema.create().enumField("color", "r", "g").maxLength(1);
 		assertThrowsWithMessage(IllegalStateException.class,
 			"Field ''color'': minLength/maxLength are not valid on an enum (closed-choice) field",
-			() -> ElicitSchema.create().enumField("color", "r", "g").maxLength(1).build());
+			builder::build);
 	}
 
 	@Test void c01_noObjectOrArrayFieldMethodExists() {

@@ -50,6 +50,10 @@ public class McpServerConfig {
 		"java:S3077" // Safe-publication snapshot only: written solely via publishResourceTemplates()/ensureResourceTemplatesValid() after the resourceTemplates write it guards, so a racing re-validation is at worst redundant (idempotent), never corrupting.
 	})
 	private volatile List<McpResourceTemplateHandler> validatedResourceTemplatesSnapshot = List.of();
+	@SuppressWarnings({
+		"java:S3077" // Safe-publication snapshot only: written in lockstep with validatedResourceTemplatesSnapshot (same guard), so a racing re-validation is at worst a redundant recompile, never a corrupt/mismatched read.
+	})
+	private volatile Map<McpResourceTemplateHandler, McpUriTemplateMatcher> compiledResourceTemplateMatchers = Map.of();
 	private McpCursor cursor = McpCursor.SINGLE_PAGE;
 
 	/**
@@ -408,9 +412,10 @@ public class McpServerConfig {
 	 * performed here). On failure the previously published registry is left untouched.
 	 */
 	private void publishResourceTemplates(List<McpResourceTemplateHandler> candidate) {
-		validateResourceTemplates(candidate);
+		var compiled = validateResourceTemplates(candidate);
 		resourceTemplates = candidate;
 		validatedResourceTemplatesSnapshot = List.copyOf(candidate);
+		compiledResourceTemplateMatchers = compiled;
 	}
 
 	/**
@@ -423,17 +428,27 @@ public class McpServerConfig {
 		var current = resourceTemplates;
 		if (validatedResourceTemplatesSnapshot.equals(current))
 			return;
-		validateResourceTemplates(current);
+		var compiled = validateResourceTemplates(current);
 		validatedResourceTemplatesSnapshot = List.copyOf(current);
+		compiledResourceTemplateMatchers = compiled;
 	}
 
 	/**
 	 * Validates one candidate resource-template registry in full, throwing {@link IllegalArgumentException}
 	 * on the first invalid entry. See {@link #addResourceTemplate(McpResourceTemplateHandler...)} for the
 	 * validated conditions.
+	 *
+	 * <p>
+	 * As a side benefit of validation already compiling every entry's {@link McpUriTemplateMatcher} once,
+	 * this returns an identity-keyed map from each validated handler to its compiled matcher, so callers can
+	 * publish it as {@link #compiledResourceTemplateMatchers} and reuse the compiled matcher on the
+	 * per-request paths ({@link #resolveResourceTemplate(String)}, {@link #hasAnyCompleter()},
+	 * {@link #templateCompleter(String, String)}) instead of recompiling from the {@code uriTemplate} string
+	 * on every call.
 	 */
-	private static void validateResourceTemplates(List<McpResourceTemplateHandler> candidate) {
+	private static Map<McpResourceTemplateHandler, McpUriTemplateMatcher> validateResourceTemplates(List<McpResourceTemplateHandler> candidate) {
 		var seenTemplates = new HashSet<String>();
+		var compiled = new IdentityHashMap<McpResourceTemplateHandler, McpUriTemplateMatcher>();
 		for (var i = 0; i < candidate.size(); i++) {
 			var handler = candidate.get(i);
 			if (handler == null)
@@ -445,14 +460,17 @@ public class McpServerConfig {
 			if (uriTemplate == null || uriTemplate.isBlank())
 				throw iaex("Invalid resource-template registration at index %s (template '%s'): uriTemplate must not be null or blank",
 					i, uriTemplate);
+			McpUriTemplateMatcher matcher;
 			try {
-				McpUriTemplateMatcher.compile(uriTemplate);
+				matcher = McpUriTemplateMatcher.compile(uriTemplate);
 			} catch (IllegalArgumentException e) {
 				throw iaex(e, "Invalid resource-template registration at index %s (template '%s'): %s", i, uriTemplate, e.getMessage());
 			}
 			if (! seenTemplates.add(uriTemplate))
 				throw iaex("Invalid resource-template registration at index %s (template '%s'): duplicate uriTemplate", i, uriTemplate);
+			compiled.put(handler, matcher);
 		}
+		return Collections.unmodifiableMap(compiled);
 	}
 
 	/**
@@ -468,7 +486,16 @@ public class McpServerConfig {
 	 * 	the template or the handler supplies no completer for it.
 	 */
 	static McpCompleter resourceTemplateCompleter(McpResourceTemplateHandler handler, String variableName) {
-		var declared = McpUriTemplateMatcher.compile(handler.descriptor().getUriTemplate()).variableNames();
+		return resourceTemplateCompleter(handler, variableName, McpUriTemplateMatcher.compile(handler.descriptor().getUriTemplate()));
+	}
+
+	/**
+	 * Same contract as {@link #resourceTemplateCompleter(McpResourceTemplateHandler, String)}, but takes an
+	 * already-compiled {@code matcher} (typically the one cached in {@link #compiledResourceTemplateMatchers}
+	 * for a registered handler) instead of recompiling the template from its {@code uriTemplate} string.
+	 */
+	static McpCompleter resourceTemplateCompleter(McpResourceTemplateHandler handler, String variableName, McpUriTemplateMatcher matcher) {
+		var declared = matcher.variableNames();
 		return declared.contains(variableName) ? handler.completer(variableName) : null;
 	}
 
@@ -512,13 +539,17 @@ public class McpServerConfig {
 		McpResourceTemplateHandler winner = null;
 		Map<String,String> winnerVariables = null;
 		McpUriTemplateMatcher winnerMatcher = null;
-		for (var handler : getResourceTemplates()) {
+		var templates = getResourceTemplates();
+		var matchers = compiledResourceTemplateMatchers;
+		for (var handler : templates) {
 			if (handler == null)
 				continue;
 			var descriptor = handler.descriptor();
 			if (descriptor == null)
 				continue;
-			var matcher = McpUriTemplateMatcher.compile(descriptor.getUriTemplate());
+			var matcher = matchers.get(handler);
+			if (matcher == null)
+				matcher = McpUriTemplateMatcher.compile(descriptor.getUriTemplate());
 			if (! matcher.isReverseMatchable())
 				continue;
 			var variables = matcher.match(uri);
@@ -575,13 +606,20 @@ public class McpServerConfig {
 			if (descriptor == null || ! promptName.equals(descriptor.getName()))
 				continue;
 			var arguments = descriptor.getArguments();
-			if (arguments == null)
-				return null;
-			for (var argument : arguments)
-				if (argument != null && argumentName.equals(argument.getName()))
-					return argument.getCompleter();
-			return null;
+			return arguments == null ? null : completerForArgument(arguments, argumentName);
 		}
+		return null;
+	}
+
+	/**
+	 * Scans one prompt's declared arguments for the exact-named argument's completer, extracted from
+	 * {@link #promptCompleter(String, String)} to keep that method's cognitive complexity within the
+	 * project's guard-clause-density threshold.
+	 */
+	private static McpCompleter completerForArgument(List<McpPromptArgument> arguments, String argumentName) {
+		for (var argument : arguments)
+			if (argument != null && argumentName.equals(argument.getName()))
+				return argument.getCompleter();
 		return null;
 	}
 
@@ -611,13 +649,16 @@ public class McpServerConfig {
 	public McpCompleter templateCompleter(String uriTemplate, String variableName) {
 		if (uriTemplate == null || variableName == null)
 			return null;
-		for (var handler : getResourceTemplates()) {
+		var templates = getResourceTemplates();
+		var matchers = compiledResourceTemplateMatchers;
+		for (var handler : templates) {
 			if (handler == null)
 				continue;
 			var descriptor = handler.descriptor();
 			if (descriptor == null || ! uriTemplate.equals(descriptor.getUriTemplate()))
 				continue;
-			return resourceTemplateCompleter(handler, variableName);
+			var matcher = matchers.get(handler);
+			return matcher != null ? resourceTemplateCompleter(handler, variableName, matcher) : resourceTemplateCompleter(handler, variableName);
 		}
 		return null;
 	}
@@ -674,14 +715,18 @@ public class McpServerConfig {
 				if (argument != null && argument.getCompleter() != null)
 					return true;
 		}
-		for (var handler : getResourceTemplates()) {
+		var templates = getResourceTemplates();
+		var matchers = compiledResourceTemplateMatchers;
+		for (var handler : templates) {
 			if (handler == null)
 				continue;
 			var descriptor = handler.descriptor();
 			var uriTemplate = descriptor == null ? null : descriptor.getUriTemplate();
 			if (uriTemplate == null)
 				continue;
-			for (var variableName : McpUriTemplateMatcher.compile(uriTemplate).variableNames())
+			var matcher = matchers.get(handler);
+			var variableNames = matcher != null ? matcher.variableNames() : McpUriTemplateMatcher.compile(uriTemplate).variableNames();
+			for (var variableName : variableNames)
 				if (handler.completer(variableName) != null)
 					return true;
 		}

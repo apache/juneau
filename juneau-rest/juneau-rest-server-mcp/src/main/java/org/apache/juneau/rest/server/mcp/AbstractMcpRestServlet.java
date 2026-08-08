@@ -150,6 +150,11 @@ public abstract class AbstractMcpRestServlet extends BasicRestServlet {
 		if (broker != null)
 			bs.addBean(McpSubscriptionBroker.class, broker).addBean(McpSubscriptions.class, broker);
 		var exchange = new McpExchange(req, n -> restReq.getHeaderParam(n).asString().orElse(null));
-		return revision().dispatch(exchange, getMcpConfig(), bs);
+		var result = revision().dispatch(exchange, getMcpConfig(), bs);
+		if (result instanceof McpResponseResult r)
+			return r.response();
+		if (result instanceof McpStreamResult r)
+			return r.stream();
+		return null;
 	}
 }

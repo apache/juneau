@@ -57,12 +57,12 @@ class FakeMcpRevision_Test extends TestBase {
 		}
 
 		@Override
-		public JsonRpcResponse dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
+		public McpDispatchResult dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
 			calls++;
 			lastExchange = exchange;
 			lastConfig = config;
 			lastCtx = ctx;
-			return JsonRpcResponse.ok(exchange.request().getId(), Map.of("fake", protocolVersion()));
+			return new McpResponseResult(JsonRpcResponse.ok(exchange.request().getId(), Map.of("fake", protocolVersion())));
 		}
 
 		@Override

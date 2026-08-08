@@ -69,7 +69,13 @@ import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
  *     .subscriptions(<jv>s</jv> -&gt; <jv>s</jv>.setQueueSize(2048));
  * </pre>
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_consumerMustNotBeNull)
+})
 public class McpOptions {
+
+	// Error message constant (reused across the cache/mrtr/subscriptions/resourceServer configure-blocks below).
+	private static final String MSG_consumerMustNotBeNull = "consumer must not be null";
 
 	private ServerCapabilities capabilities;
 	private String instructions;
@@ -166,7 +172,7 @@ public class McpOptions {
 	 */
 	public McpOptions cache(Consumer<McpCacheConfig> consumer) {
 		if (consumer == null)
-			throw iaex("consumer must not be null");
+			throw iaex(MSG_consumerMustNotBeNull);
 		consumer.accept(cache);
 		return this;
 	}
@@ -203,7 +209,7 @@ public class McpOptions {
 	 */
 	public McpOptions mrtr(Consumer<McpMrtrConfig> consumer) {
 		if (consumer == null)
-			throw iaex("consumer must not be null");
+			throw iaex(MSG_consumerMustNotBeNull);
 		consumer.accept(mrtr);
 		return this;
 	}
@@ -241,7 +247,7 @@ public class McpOptions {
 	 */
 	public McpOptions resourceServer(Consumer<McpResourceServerConfig> consumer) {
 		if (consumer == null)
-			throw iaex("consumer must not be null");
+			throw iaex(MSG_consumerMustNotBeNull);
 		consumer.accept(resourceServer);
 		return this;
 	}
@@ -279,7 +285,7 @@ public class McpOptions {
 	 */
 	public McpOptions subscriptions(Consumer<McpSubscriptionsConfig> consumer) {
 		if (consumer == null)
-			throw iaex("consumer must not be null");
+			throw iaex(MSG_consumerMustNotBeNull);
 		consumer.accept(subscriptions);
 		return this;
 	}

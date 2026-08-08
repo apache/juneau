@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.Map;
 
@@ -68,14 +70,45 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * Constructor.
 	 *
 	 * @param builder The builder supplying this client's configuration. Must not be <jk>null</jk>.
+	 * @throws IllegalArgumentException If {@code builder} is <jk>null</jk>, or its endpoint is <jk>null</jk>/blank
+	 * 	or is not a syntactically valid absolute {@code http}/{@code https} URL (see
+	 * 	{@link #validateEndpoint(String)}).
 	 */
 	protected AbstractMcpClient(Builder<?> builder) {
 		assertArgNotNull(ARG_BUILDER, builder);
-		this.endpoint = assertArgNotNullOrBlank(ARG_ENDPOINT, builder.endpoint);
+		this.endpoint = validateEndpoint(builder.endpoint);
 		this.restClient = builder.restClientBuilder
 			.defaultSerializer(JsonSerializer.DEFAULT)
 			.defaultParser(JsonParser.DEFAULT)
 			.build();
+	}
+
+	/**
+	 * Validates the configured endpoint: non-<jk>null</jk>/non-blank (as before), and additionally that it
+	 * parses as a syntactically valid, absolute URL using the {@code http} or {@code https} scheme.
+	 *
+	 * <p>
+	 * Rejecting a malformed or non-http(s) endpoint here, at construction, is preferable to letting it surface
+	 * later as an opaque transport failure on the first {@link #send(JsonRpcRequest)} call.
+	 *
+	 * @param value The candidate endpoint. Must not be <jk>null</jk>/blank.
+	 * @return {@code value}, unchanged, once validated.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>/blank, is not a syntactically valid URI,
+	 * 	has no scheme, or has a scheme other than {@code http}/{@code https} (case-insensitive).
+	 */
+	private static String validateEndpoint(String value) {
+		var endpointValue = assertArgNotNullOrBlank(ARG_ENDPOINT, value);
+		URI uri;
+		try {
+			uri = new URI(endpointValue);
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException("Invalid MCP endpoint URL '" + endpointValue + "': " + e.getMessage(), e);
+		}
+		var scheme = uri.getScheme();
+		if (scheme == null || ! (scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https")))
+			throw new IllegalArgumentException(
+				"Invalid MCP endpoint URL '" + endpointValue + "': must be an absolute http or https URL, but scheme was '" + scheme + "'.");
+		return endpointValue;
 	}
 
 	/**

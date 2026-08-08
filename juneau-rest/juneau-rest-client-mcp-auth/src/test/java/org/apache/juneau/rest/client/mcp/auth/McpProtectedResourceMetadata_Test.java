@@ -57,11 +57,16 @@ class McpProtectedResourceMetadata_Test extends TestBase {
 		var prm = new McpProtectedResourceMetadata(URI.create("https://mcp.example.com"), servers, Set.of(), Map.of());
 		servers.add(URI.create("https://as2.example.com"));
 		assertEquals(1, prm.authorizationServers().size());
-		assertThrows(UnsupportedOperationException.class, () -> prm.authorizationServers().add(URI.create("https://x")));
+		var authServers = prm.authorizationServers();
+		var extra = URI.create("https://x");
+		assertThrows(UnsupportedOperationException.class, () -> authServers.add(extra));
 	}
 
 	@Test void b01_nullResourceRejected() {
+		List<URI> noServers = List.of();
+		Set<String> noScopes = Set.of();
+		Map<String,Object> noExtras = Map.of();
 		assertThrows(NullPointerException.class,
-			() -> new McpProtectedResourceMetadata(null, List.of(), Set.of(), Map.of()));
+			() -> new McpProtectedResourceMetadata(null, noServers, noScopes, noExtras));
 	}
 }

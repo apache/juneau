@@ -180,8 +180,9 @@ class McpBeans_AddXNullInit_Test {
 
 	@Test void a26_listResourceTemplatesResult_getResourceTemplates_isUnmodifiableView() {
 		var x = new ListResourceTemplatesResult().setResourceTemplates(new ResourceTemplate().setUriTemplate("a"));
-		assertThrows(UnsupportedOperationException.class,
-			() -> x.getResourceTemplates().add(new ResourceTemplate().setUriTemplate("b")));
+		var list = x.getResourceTemplates();
+		var b = new ResourceTemplate().setUriTemplate("b");
+		assertThrows(UnsupportedOperationException.class, () -> list.add(b));
 	}
 
 	@Test void a27_completionContext_putArgument_nullInit() {

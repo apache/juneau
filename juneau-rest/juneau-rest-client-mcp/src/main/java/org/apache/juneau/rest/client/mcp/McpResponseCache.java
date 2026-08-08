@@ -24,9 +24,11 @@ import org.apache.juneau.bean.jsonrpc.*;
  * An opt-in, off-by-default response cache for MCP client results.
  *
  * <p>
- * Keyed by an opaque {@code scope} (a partition key — e.g. {@code "private"}/{@code "public"} per the
- * {@code 2026-07-28} cache-hint wire values, though this neutral core treats the string as fully opaque) plus a
- * {@code key} (typically method + canonical params, computed by the caller).
+ * Keyed by an opaque {@code scope} (a partition key — a revision-specific adapter defines its own scope wire
+ * vocabulary, e.g. the {@code 2026-07-28} adapter's {@code org.apache.juneau.bean.mcp.v20260728.McpCacheScope}
+ * {@code "private"}/{@code "public"} cache-hint values; this neutral core treats the string as fully opaque and
+ * defines no scope constants of its own) plus a {@code key} (typically method + canonical params, computed by
+ * the caller).
  *
  * <p>
  * <b>Stored value shape:</b> this SPI makes no assumption about what a cached {@code value} is — a caller may
@@ -50,12 +52,6 @@ import org.apache.juneau.bean.jsonrpc.*;
  * @since 10.0.0
  */
 public interface McpResponseCache {
-
-	/** Cache-scope wire value for a per-client-instance-private cache partition. */
-	String SCOPE_PRIVATE = "private";
-
-	/** Cache-scope wire value for a cache partition shareable across client instances. */
-	String SCOPE_PUBLIC = "public";
 
 	/**
 	 * Looks up a cached value.

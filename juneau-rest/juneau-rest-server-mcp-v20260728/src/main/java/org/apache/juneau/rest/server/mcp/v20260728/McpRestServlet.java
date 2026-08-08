@@ -105,6 +105,14 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.A
 	 * default returns a plain {@link McpOptions} (all defaults).
 	 *
 	 * <p>
+	 * Runs <b>eagerly during servlet/{@code RestContext} initialization, not lazily on first request</b>:
+	 * {@link #getMcpOptions()} is itself a {@code @Bean} hook, so {@code RestContext}'s constructor invokes it
+	 * &mdash; and therefore this method &mdash; while walking the resource's {@code @Bean} methods at startup,
+	 * strictly before the embedded server's {@code start()} returns. Do not write an override that depends on
+	 * runtime request state or on a port/address only known after {@code start()} (e.g. a Jetty ephemeral
+	 * port); that state does not exist yet when this hook runs.
+	 *
+	 * <p>
 	 * <b>Must be side-effect-free and idempotent</b>, exactly like
 	 * {@link org.apache.juneau.rest.server.mcp.AbstractMcpRestServlet#createMcpConfig()}: {@link #getMcpOptions()}
 	 * calls this hook at most once per servlet instance and publishes the result via a lock-free
@@ -118,12 +126,18 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.A
 	}
 
 	/**
-	 * Returns this servlet's lazily-published, binding-owned {@link McpOptions}.
+	 * Returns this servlet's binding-owned {@link McpOptions}, built eagerly during initialization.
 	 *
 	 * <p>
-	 * The first successful call publishes the result of {@link #createMcpOptions()}; every later call returns
-	 * the same instance, mirroring exactly how
-	 * {@link org.apache.juneau.rest.server.mcp.AbstractMcpRestServlet#getMcpConfig() getMcpConfig()} memoizes.
+	 * Because this method is annotated {@code @Bean}, {@code RestContext}'s constructor invokes it (and
+	 * therefore {@link #createMcpOptions()}) while the servlet is initializing &mdash; strictly before the
+	 * embedded server's {@code start()} returns. This is <b>not</b> deferred to the first incoming HTTP
+	 * request, despite the internal caching below; a {@link #createMcpOptions()} override must not depend on
+	 * runtime request/port state, since none exists yet at that point. The {@link AtomicReference}-backed
+	 * publish below exists only to make repeat/racing invocations of this {@code @Bean} method idempotent
+	 * &mdash; every call after the first returns the same instance, mirroring exactly how
+	 * {@link org.apache.juneau.rest.server.mcp.AbstractMcpRestServlet#getMcpConfig() getMcpConfig()} memoizes
+	 * &mdash; not to defer construction itself.
 	 * Also published as a {@code @Bean} so downstream plumbing ({@link #getSubscriptionBroker()},
 	 * {@code subscriptions/listen} dispatch) can resolve it uniformly through the {@code BeanStore}. This
 	 * {@code @Bean} publication is authoritative and takes precedence over any Spring {@code @Bean McpOptions}

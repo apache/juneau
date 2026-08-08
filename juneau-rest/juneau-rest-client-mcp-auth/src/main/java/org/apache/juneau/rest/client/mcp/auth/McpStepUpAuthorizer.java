@@ -53,7 +53,14 @@ import java.util.concurrent.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value)
+})
 public class McpStepUpAuthorizer {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_operation = "operation";
 
 	/** A caller-supplied MCP call that throws {@link McpInsufficientScopeException} on a step-up challenge. */
 	@FunctionalInterface
@@ -109,7 +116,7 @@ public class McpStepUpAuthorizer {
 		 * @return This object.
 		 */
 		public Builder resource(URI value) {
-			resource = assertArgNotNull("value", value);
+			resource = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -120,7 +127,7 @@ public class McpStepUpAuthorizer {
 		 * @return This object.
 		 */
 		public Builder issuer(URI value) {
-			issuer = assertArgNotNull("value", value);
+			issuer = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -131,7 +138,7 @@ public class McpStepUpAuthorizer {
 		 * @return This object.
 		 */
 		public Builder accumulator(McpScopeAccumulator value) {
-			accumulator = assertArgNotNull("value", value);
+			accumulator = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -142,7 +149,7 @@ public class McpStepUpAuthorizer {
 		 * @return This object.
 		 */
 		public Builder reauthorizer(Reauthorizer value) {
-			reauthorizer = assertArgNotNull("value", value);
+			reauthorizer = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -241,7 +248,7 @@ public class McpStepUpAuthorizer {
 	 * @throws McpAuthException If step-up is disabled, or the attempt cap is exceeded (permanent authorization failure).
 	 */
 	public <T> T execute(String operation, ScopedCall<T> call) {
-		assertArgNotNullOrBlank("operation", operation);
+		assertArgNotNullOrBlank(ARG_operation, operation);
 		assertArgNotNull("call", call);
 		var opKey = opKey(operation);
 		while (true) {
@@ -272,7 +279,7 @@ public class McpStepUpAuthorizer {
 	 * @return The recorded attempt count.
 	 */
 	public int attempts(String operation) {
-		assertArgNotNullOrBlank("operation", operation);
+		assertArgNotNullOrBlank(ARG_operation, operation);
 		return attemptsByOperation.getOrDefault(opKey(operation), 0);
 	}
 
@@ -283,7 +290,7 @@ public class McpStepUpAuthorizer {
 	 * @param operation The operation identifier.  Must not be <jk>null</jk> or blank.
 	 */
 	public void reset(String operation) {
-		assertArgNotNullOrBlank("operation", operation);
+		assertArgNotNullOrBlank(ARG_operation, operation);
 		attemptsByOperation.remove(opKey(operation));
 	}
 

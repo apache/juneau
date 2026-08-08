@@ -50,6 +50,7 @@ class McpClient_CacheHints_Test {
 
 		@Override
 		public void clear() {
+			// Intentional no-op: this test double only records put() calls; clear() is never exercised here.
 		}
 	}
 

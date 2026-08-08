@@ -56,6 +56,9 @@ import org.apache.juneau.marshall.collections.*;
  * 		.build();
  * </p>
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_minLength, ARG_value)
+})
 public class ElicitSchema {
 
 	private static final String TYPE_STRING = "string";
@@ -65,6 +68,13 @@ public class ElicitSchema {
 	private static final String TYPE_OBJECT = "object";
 
 	private static final Set<String> NUMERIC_TYPES = Set.of(TYPE_NUMBER, TYPE_INTEGER);
+
+	// Property name constants (wire JSON-schema keys)
+	private static final String PROP_minLength = "minLength";
+	private static final String PROP_maxLength = "maxLength";
+
+	// Argument name constant for assertArgNotNull
+	private static final String ARG_value = "value";
 
 	private final Map<String,JsonMap> properties = map();
 	private final Set<String> required = new LinkedHashSet<>();
@@ -167,7 +177,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public ElicitSchema title(String value) {
-		currentProperty().put("title", assertArgNotNull("value", value));
+		currentProperty().put("title", assertArgNotNull(ARG_value, value));
 		return this;
 	}
 
@@ -179,7 +189,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public ElicitSchema description(String value) {
-		currentProperty().put("description", assertArgNotNull("value", value));
+		currentProperty().put("description", assertArgNotNull(ARG_value, value));
 		return this;
 	}
 
@@ -192,7 +202,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public ElicitSchema format(String value) {
-		currentProperty().put("format", assertArgNotNull("value", value));
+		currentProperty().put("format", assertArgNotNull(ARG_value, value));
 		return this;
 	}
 
@@ -206,7 +216,7 @@ public class ElicitSchema {
 	 * @return This object (for method chaining).
 	 */
 	public ElicitSchema minLength(int value) {
-		currentProperty().put("minLength", value);
+		currentProperty().put(PROP_minLength, value);
 		return this;
 	}
 
@@ -220,7 +230,7 @@ public class ElicitSchema {
 	 * @return This object (for method chaining).
 	 */
 	public ElicitSchema maxLength(int value) {
-		currentProperty().put("maxLength", value);
+		currentProperty().put(PROP_maxLength, value);
 		return this;
 	}
 
@@ -233,7 +243,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public ElicitSchema min(Number value) {
-		currentProperty().put("minimum", assertArgNotNull("value", value));
+		currentProperty().put("minimum", assertArgNotNull(ARG_value, value));
 		return this;
 	}
 
@@ -246,7 +256,7 @@ public class ElicitSchema {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public ElicitSchema max(Number value) {
-		currentProperty().put("maximum", assertArgNotNull("value", value));
+		currentProperty().put("maximum", assertArgNotNull(ARG_value, value));
 		return this;
 	}
 
@@ -336,29 +346,8 @@ public class ElicitSchema {
 	public JsonMap build() {
 		if (properties.isEmpty())
 			throw isex("ElicitSchema requires at least one field (an empty requestedSchema is unanswerable)");
-		properties.forEach((name, p) -> {
-			var type = (String)p.get("type");
-			if (p.containsKey("format") && ! TYPE_STRING.equals(type))
-				throw isex("Field ''%s'': format is only valid on string fields", name);
-			if ((p.containsKey("minimum") || p.containsKey("maximum")) && ! NUMERIC_TYPES.contains(type))
-				throw isex("Field ''%s'': min/max are only valid on number/integer fields", name);
-			if ((p.containsKey("minLength") || p.containsKey("maxLength")) && ! TYPE_STRING.equals(type))
-				throw isex("Field ''%s'': minLength/maxLength are only valid on string fields", name);
-			if ((p.containsKey("minLength") || p.containsKey("maxLength")) && p.containsKey("enum"))
-				throw isex("Field ''%s'': minLength/maxLength are not valid on an enum (closed-choice) field", name);
-			if (p.containsKey("minLength") && (int)p.get("minLength") < 0)
-				throw isex("Field ''%s'': minLength must not be negative", name);
-			if (p.containsKey("maxLength") && (int)p.get("maxLength") < 0)
-				throw isex("Field ''%s'': maxLength must not be negative", name);
-			if (p.containsKey("minLength") && p.containsKey("maxLength") && (int)p.get("minLength") > (int)p.get("maxLength"))
-				throw isex("Field ''%s'': minLength must not exceed maxLength", name);
-			if (p.containsKey("enumNames") && ! p.containsKey("enum"))
-				throw isex("Field ''%s'': enumNames requires enum values (use enumField(...))", name);
-		});
-		required.forEach(name -> {
-			if (! properties.containsKey(name))
-				throw isex("required(...) names field ''%s'', which was never added", name);
-		});
+		properties.forEach(this::validateField);
+		required.forEach(this::validateRequiredName);
 		var schema = new JsonMap();
 		schema.put("type", TYPE_OBJECT);
 		// Deep-copy each per-field map so a caller who keeps the builder and applies further modifiers after
@@ -369,5 +358,54 @@ public class ElicitSchema {
 		if (! required.isEmpty())
 			schema.put("required", List.copyOf(required));
 		return schema;
+	}
+
+	/**
+	 * Validates a single field's modifier combination.
+	 *
+	 * @param name The field name (used only for the exception message).
+	 * @param p The field's per-property {@link JsonMap}.
+	 * @throws IllegalStateException If the field carries a structurally-invalid modifier combination.
+	 */
+	private void validateField(String name, JsonMap p) {
+		var type = (String)p.get("type");
+		validateFormat(name, p, type);
+		validateMinMax(name, p, type);
+		validateLength(name, p, type);
+		validateEnumNames(name, p);
+	}
+
+	private void validateFormat(String name, JsonMap p, String type) {
+		if (p.containsKey("format") && ! TYPE_STRING.equals(type))
+			throw isex("Field ''%s'': format is only valid on string fields", name);
+	}
+
+	private void validateMinMax(String name, JsonMap p, String type) {
+		if ((p.containsKey("minimum") || p.containsKey("maximum")) && ! NUMERIC_TYPES.contains(type))
+			throw isex("Field ''%s'': min/max are only valid on number/integer fields", name);
+	}
+
+	private void validateLength(String name, JsonMap p, String type) {
+		if ((p.containsKey(PROP_minLength) || p.containsKey(PROP_maxLength)) && ! TYPE_STRING.equals(type))
+			throw isex("Field ''%s'': minLength/maxLength are only valid on string fields", name);
+		if ((p.containsKey(PROP_minLength) || p.containsKey(PROP_maxLength)) && p.containsKey("enum"))
+			throw isex("Field ''%s'': minLength/maxLength are not valid on an enum (closed-choice) field", name);
+		if (p.containsKey(PROP_minLength) && (int)p.get(PROP_minLength) < 0)
+			throw isex("Field ''%s'': minLength must not be negative", name);
+		if (p.containsKey(PROP_maxLength) && (int)p.get(PROP_maxLength) < 0)
+			throw isex("Field ''%s'': maxLength must not be negative", name);
+		if (p.containsKey(PROP_minLength) && p.containsKey(PROP_maxLength)
+			&& (int)p.get(PROP_minLength) > (int)p.get(PROP_maxLength))
+			throw isex("Field ''%s'': minLength must not exceed maxLength", name);
+	}
+
+	private void validateEnumNames(String name, JsonMap p) {
+		if (p.containsKey("enumNames") && ! p.containsKey("enum"))
+			throw isex("Field ''%s'': enumNames requires enum values (use enumField(...))", name);
+	}
+
+	private void validateRequiredName(String name) {
+		if (! properties.containsKey(name))
+			throw isex("required(...) names field ''%s'', which was never added", name);
 	}
 }

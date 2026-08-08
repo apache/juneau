@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Static helper that parses typed {@link ElicitResult}s out of an {@link McpMrtrResumeContext} (MCP
- * {@code 2026-07-28} SEP-2322 elicitation, riding TODO-318's Multi-Round-Trip Requests loop).
+ * {@code 2026-07-28} SEP-2322 elicitation, riding the Multi-Round-Trip Requests loop).
  *
  * <p>
  * {@link McpMrtrResumeContext#inputResponses()} values are generic JSON (a {@code JsonMap}/{@code JsonList}/

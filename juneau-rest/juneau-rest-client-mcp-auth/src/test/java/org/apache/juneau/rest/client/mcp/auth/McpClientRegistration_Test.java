@@ -87,7 +87,9 @@ class McpClientRegistration_Test extends TestBase {
 			Optional.empty(), ISSUER, src, McpApplicationType.NATIVE, Map.of());
 		src.add(URI.create("http://evil/callback"));
 		assertEquals(1, r.redirectUris().size(), "mutating the source list must not affect the record");
-		assertThrows(UnsupportedOperationException.class, () -> r.redirectUris().add(URI.create("http://x/y")));
+		var uris = r.redirectUris();
+		var extra = URI.create("http://x/y");
+		assertThrows(UnsupportedOperationException.class, () -> uris.add(extra));
 	}
 
 	@Test void b02_extrasAreDefensivelyCopiedAndUnmodifiable() {
@@ -97,14 +99,21 @@ class McpClientRegistration_Test extends TestBase {
 			Optional.empty(), ISSUER, List.of(), McpApplicationType.NATIVE, src);
 		src.put("b", 2);
 		assertEquals(1, r.extras().size());
-		assertThrows(UnsupportedOperationException.class, () -> r.extras().put("c", 3));
+		var extras = r.extras();
+		assertThrows(UnsupportedOperationException.class, () -> extras.put("c", 3));
 	}
 
 	@Test void b03_nullRequiredFieldsRejected() {
-		assertThrows(NullPointerException.class, () -> new McpClientRegistration(null, Optional.empty(), Optional.empty(),
-			Optional.empty(), Optional.empty(), ISSUER, List.of(), McpApplicationType.NATIVE, Map.of()));
-		assertThrows(NullPointerException.class, () -> new McpClientRegistration("c", Optional.empty(), Optional.empty(),
-			Optional.empty(), Optional.empty(), null, List.of(), McpApplicationType.NATIVE, Map.of()));
+		Optional<String> noSecret = Optional.empty();
+		Optional<Instant> noExpiry = Optional.empty();
+		Optional<String> noRegToken = Optional.empty();
+		Optional<URI> noRegUri = Optional.empty();
+		List<URI> noRedirects = List.of();
+		Map<String,Object> noExtras = Map.of();
+		assertThrows(NullPointerException.class, () -> new McpClientRegistration(null, noSecret, noExpiry,
+			noRegToken, noRegUri, ISSUER, noRedirects, McpApplicationType.NATIVE, noExtras));
+		assertThrows(NullPointerException.class, () -> new McpClientRegistration("c", noSecret, noExpiry,
+			noRegToken, noRegUri, null, noRedirects, McpApplicationType.NATIVE, noExtras));
 	}
 
 	// LoopbackRedirectUris

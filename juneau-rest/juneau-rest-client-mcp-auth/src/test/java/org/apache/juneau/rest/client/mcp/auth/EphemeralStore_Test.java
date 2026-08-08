@@ -125,11 +125,13 @@ class EphemeralStore_Test extends TestBase {
 	}
 
 	@Test void d02_rejectsNegativeTtl() {
-		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ofSeconds(-1), 100, CLOCK));
+		var negativeTtl = Duration.ofSeconds(-1);
+		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(negativeTtl, 100, CLOCK));
 	}
 
 	@Test void d03_rejectsTtlAboveMax() {
-		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(EphemeralStore.MAX_TTL.plusSeconds(1), 100, CLOCK));
+		var aboveMaxTtl = EphemeralStore.MAX_TTL.plusSeconds(1);
+		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(aboveMaxTtl, 100, CLOCK));
 	}
 
 	@Test void d04_ttlAtMaxAllowed() {
@@ -139,7 +141,8 @@ class EphemeralStore_Test extends TestBase {
 	}
 
 	@Test void d05_rejectsNonPositiveMaxEntries() {
-		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ofMinutes(5), 0, CLOCK));
+		var ttl = Duration.ofMinutes(5);
+		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(ttl, 0, CLOCK));
 	}
 
 	@Test void d06_rejectsBlankStateOnStore() {

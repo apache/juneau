@@ -82,45 +82,74 @@ public class WwwAuthenticateChallenge implements Serializable {
 
 	private static Map<String,String> parseParams(String s) {
 		var out = new LinkedHashMap<String,String>();
-		var i = 0;
 		var n = s.length();
-		while (i < n) {
-			// Skip leading whitespace and separator commas.
-			while (i < n && (Character.isWhitespace(s.charAt(i)) || s.charAt(i) == ','))
-				i++;
-			if (i >= n)
-				break;
-			var keyStart = i;
-			while (i < n && s.charAt(i) != '=' && s.charAt(i) != ',')
-				i++;
-			if (i >= n || s.charAt(i) == ',')
-				continue; // key with no value (e.g. bare token68); skip
-			var key = s.substring(keyStart, i).strip().toLowerCase(Locale.ROOT);
-			i++; // consume '='
-			String value;
-			if (i < n && s.charAt(i) == '"') {
-				i++; // consume opening quote
-				var sb = new StringBuilder();
-				while (i < n && s.charAt(i) != '"') {
-					if (s.charAt(i) == '\\' && i + 1 < n) // handle escaped chars inside quoted-string
-						i++;
-					sb.append(s.charAt(i));
-					i++;
-				}
-				if (i < n)
-					i++; // consume closing quote
-				value = sb.toString();
-			} else {
-				var valStart = i;
-				while (i < n && s.charAt(i) != ',')
-					i++;
-				value = s.substring(valStart, i).strip();
-			}
-			if (!key.isEmpty())
-				out.putIfAbsent(key, value);
+		var i = 0;
+		while ((i = skipSeparators(s, i, n)) < n) {
+			var param = parseParam(s, i, n);
+			i = param.nextIndex();
+			if (param.key() != null && !param.key().isEmpty())
+				out.putIfAbsent(param.key(), param.value());
 		}
 		return out;
 	}
+
+	/** Advances past whitespace and separator commas, returning the index of the next non-separator char (or {@code n}). */
+	private static int skipSeparators(String s, int i, int n) {
+		while (i < n && (Character.isWhitespace(s.charAt(i)) || s.charAt(i) == ','))
+			i++;
+		return i;
+	}
+
+	/**
+	 * Parses a single {@code key=value} auth-param starting at {@code i} (which must not point at a separator).
+	 *
+	 * <p>
+	 * Returns a {@code null} key when {@code i} points at a bare token with no {@code =value} (e.g. {@code token68});
+	 * the caller skips such a param.  {@code nextIndex()} always advances past the scanned key (and value, if any),
+	 * so the outer loop makes forward progress without a {@code break}/{@code continue}.
+	 */
+	private static ParsedParam parseParam(String s, int i, int n) {
+		var keyStart = i;
+		while (i < n && s.charAt(i) != '=' && s.charAt(i) != ',')
+			i++;
+		if (i >= n || s.charAt(i) == ',')
+			return new ParsedParam(null, null, i);
+		var key = s.substring(keyStart, i).strip().toLowerCase(Locale.ROOT);
+		i++; // consume '='
+		var value = parseValue(s, i, n);
+		return new ParsedParam(key, value.value(), value.nextIndex());
+	}
+
+	/** Parses a quoted-string or bare-token auth-param value starting at {@code i}. */
+	private static ParsedValue parseValue(String s, int i, int n) {
+		if (i < n && s.charAt(i) == '"')
+			return parseQuotedValue(s, i, n);
+		var valStart = i;
+		while (i < n && s.charAt(i) != ',')
+			i++;
+		return new ParsedValue(s.substring(valStart, i).strip(), i);
+	}
+
+	/** Parses a quoted-string value starting at the opening-quote index {@code i}, honoring {@code \}-escaped chars. */
+	private static ParsedValue parseQuotedValue(String s, int i, int n) {
+		i++; // consume opening quote
+		var sb = new StringBuilder();
+		while (i < n && s.charAt(i) != '"') {
+			if (s.charAt(i) == '\\' && i + 1 < n) // handle escaped chars inside quoted-string
+				i++;
+			sb.append(s.charAt(i));
+			i++;
+		}
+		if (i < n)
+			i++; // consume closing quote
+		return new ParsedValue(sb.toString(), i);
+	}
+
+	/** A parsed auth-param; {@code key} is {@code null} for a skipped bare token with no value. */
+	private record ParsedParam(String key, String value, int nextIndex) {}
+
+	/** A parsed auth-param value and the index immediately following it. */
+	private record ParsedValue(String value, int nextIndex) {}
 
 	/**
 	 * Returns the auth scheme.

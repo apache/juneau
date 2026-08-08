@@ -18,6 +18,7 @@ package org.apache.juneau.petstore.springboot;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.net.*;
 import java.net.http.*;
 import java.net.http.HttpResponse.*;
@@ -59,6 +60,9 @@ class PetstoreSpringboot_Test {
 
 	private static volatile boolean warmedUp;
 
+	private static final int READY_TIMEOUT_SECONDS = Integer.parseInt(
+		System.getProperty("juneau.petstore.springboot.readyTimeoutSeconds", "180"));
+
 	/**
 	 * Primes the root endpoint before the timed test methods run.
 	 *
@@ -70,18 +74,25 @@ class PetstoreSpringboot_Test {
 	 * the per-request timeout the test methods use (it has timed out at exactly 10s under a loaded CI run before). Absorbing that
 	 * startup cost here once (with a generous budget + retry) removes the race from {@code a01} while keeping the
 	 * per-test timeouts tight. Mirrors the same guard in {@code PetstoreJetty_Test}.
+	 *
+	 * <p>
+	 * The overall deadline is deliberately generous (default {@value #READY_TIMEOUT_SECONDS}s, configurable via the
+	 * {@code juneau.petstore.springboot.readyTimeoutSeconds} system property) because under a full-reactor build the
+	 * whole JVM fleet is CPU-starved and Spring Boot startup itself can take far longer than it does in isolation.
+	 * Each probe still uses a short per-attempt request timeout so a slow-to-bind server fails fast and gets retried
+	 * instead of burning the whole budget on one stuck request.
 	 */
 	@BeforeEach
 	void warmUpServer() throws Exception {
 		if (warmedUp)
 			return;
-		var deadline = Instant.now().plusSeconds(30);
+		var deadline = Instant.now().plusSeconds(READY_TIMEOUT_SECONDS);
 		Exception last = null;
 		while (Instant.now().isBefore(deadline)) {
 			try {
 				var req = HttpRequest.newBuilder()
 					.uri(URI.create("http://localhost:" + port + "/"))
-					.timeout(Duration.ofSeconds(20))
+					.timeout(Duration.ofSeconds(5))
 					.header("Accept", "text/html")
 					.GET()
 					.build();
@@ -89,12 +100,13 @@ class PetstoreSpringboot_Test {
 					warmedUp = true;
 					return;
 				}
-			} catch (HttpTimeoutException | ConnectException e) {
+			} catch (IOException e) {
 				last = e;
 			}
-			Thread.sleep(250);
+			Thread.sleep(500);
 		}
-		throw new IllegalStateException("Petstore Spring Boot server did not become ready within 30s", last);
+		throw new IllegalStateException(
+			"Petstore Spring Boot server did not become ready within " + READY_TIMEOUT_SECONDS + "s", last);
 	}
 
 	private HttpResponse<String> get(String path, String accept) throws Exception {

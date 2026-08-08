@@ -73,15 +73,18 @@ class McpResourceServerConfig_Test {
 	}
 
 	@Test void b01_blankRealmRejected() {
-		assertThrows(IllegalArgumentException.class, () -> new McpResourceServerConfig().setRealm("  "));
+		var c = new McpResourceServerConfig();
+		assertThrows(IllegalArgumentException.class, () -> c.setRealm("  "));
 	}
 
 	@Test void b02_nullAuthorizationServerRejected() {
-		assertThrows(IllegalArgumentException.class, () -> new McpResourceServerConfig().addAuthorizationServer(null));
+		var c = new McpResourceServerConfig();
+		assertThrows(IllegalArgumentException.class, () -> c.addAuthorizationServer(null));
 	}
 
 	@Test void b03_blankScopeRejected() {
-		assertThrows(IllegalArgumentException.class, () -> new McpResourceServerConfig().addScopeSupported(" "));
+		var c = new McpResourceServerConfig();
+		assertThrows(IllegalArgumentException.class, () -> c.addScopeSupported(" "));
 	}
 
 	@Test void c01_validateDisabledIsNoOp() {
@@ -169,7 +172,8 @@ class McpResourceServerConfig_Test {
 	}
 
 	@Test void d09_requiredScopesForNullCtxRejected() {
-		assertThrows(IllegalArgumentException.class, () -> new McpResourceServerConfig().requiredScopesFor(null));
+		var c = new McpResourceServerConfig();
+		assertThrows(IllegalArgumentException.class, () -> c.requiredScopesFor(null));
 	}
 
 	// LOW: addOperationScope validates the WHOLE scopes array before mutating scopesSupported, so a throw on a later

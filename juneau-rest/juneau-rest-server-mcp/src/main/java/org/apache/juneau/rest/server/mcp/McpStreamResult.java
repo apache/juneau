@@ -16,25 +16,16 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import java.util.concurrent.Flow;
+
+import org.apache.juneau.marshall.sse.SseEvent;
+
 /**
- * The kind of change a neutral MCP subscription can be notified about.
+ * A {@link McpDispatchResult} wrapping a held-open streaming publisher, for a revision-specific method
+ * whose successful result is not a single JSON-RPC envelope (for example the {@code 2026-07-28}
+ * {@code subscriptions/listen} method).
  *
- * <p>
- * Mirrors the four notification shapes SEP-2575 defines for {@code subscriptions/listen}: one per-resource
- * change and three list-changed signals. {@link #RESOURCE_UPDATED} is the only kind that carries a resource
- * URI (see {@link McpChangeEvent#resourceUri()}).
+ * @param stream The event-stream publisher. Never <jk>null</jk>.
+ * @since 10.0.0
  */
-public enum McpChangeKind {
-
-	/** A specific subscribed resource's content changed. */
-	RESOURCE_UPDATED,
-
-	/** The tool list changed. */
-	TOOLS_LIST_CHANGED,
-
-	/** The prompt list changed. */
-	PROMPTS_LIST_CHANGED,
-
-	/** The resource list changed. */
-	RESOURCES_LIST_CHANGED
-}
+public record McpStreamResult(Flow.Publisher<SseEvent> stream) implements McpDispatchResult {}

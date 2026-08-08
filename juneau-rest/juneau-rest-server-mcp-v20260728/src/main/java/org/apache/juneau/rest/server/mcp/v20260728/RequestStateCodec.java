@@ -105,7 +105,7 @@ public interface RequestStateCodec {
 	 * @param aad The AAD to verify against. Must match the value passed to
 	 * 	{@link #seal(McpRequestState, String, Principal)} exactly, or verification fails.
 	 * @param principal The authenticated caller (see the class Javadoc). May be <jk>null</jk> for an anonymous
-	 * 	caller or when resource-server auth is disabled. A codec that binds the principal (TODO-325) must fail
+	 * 	caller or when resource-server auth is disabled. A codec that binds the principal must fail
 	 * 	verification when it differs from the sealing principal.
 	 * @return The original payload, or {@link Optional#empty()} if verification fails for any reason (tamper,
 	 * 	AAD mismatch, malformed token, principal mismatch).

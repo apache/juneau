@@ -74,6 +74,7 @@ public class SpringExampleApplication {
 	 *
 	 * @param args Standard Spring Boot arguments.
 	 */
+	@SuppressWarnings("resource") // the returned application context intentionally lives for the app's lifetime.
 	public static void main(String[] args) {
 		SpringApplication.run(SpringExampleApplication.class, args);
 	}

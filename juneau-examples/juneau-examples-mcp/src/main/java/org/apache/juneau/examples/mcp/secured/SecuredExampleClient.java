@@ -45,7 +45,21 @@ import org.apache.juneau.rest.client.mcp.v20260728.*;
  *
  * @serial exclude
  */
+@SuppressWarnings({
+	"java:S106" // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.
+})
 public final class SecuredExampleClient {
+
+	/** The demo client's advertised {@code clientInfo.name}, shared by every {@link McpClient} connection below. */
+	private static final String CLIENT_NAME = "juneau-secured-notes-example-client";
+
+	/** The demo client's advertised {@code clientInfo.version}, shared by every {@link McpClient} connection below. */
+	private static final String CLIENT_VERSION = "1.0.0";
+
+	// Shared across calls rather than one HttpClient per request (S2095): HttpClient instances are heavyweight
+	// (they own a connection pool and a selector thread), and the JDK explicitly recommends reusing a single
+	// instance for the lifetime of the application rather than churning through short-lived ones.
+	private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
 
 	private SecuredExampleClient() {}
 
@@ -56,6 +70,9 @@ public final class SecuredExampleClient {
 	 * 	{@link SecuredExampleServer#main(String[])}'s startup banner.
 	 * @throws Exception If any step fails unexpectedly (a REJECTED call is expected and handled, not thrown).
 	 */
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - example main() kept simple for demo readability
+	})
 	public static void main(String[] args) throws Exception {
 		if (args.length < 3) {
 			System.out.println("Usage: SecuredExampleClient <endpoint> <clientId> <clientSecret>");
@@ -73,6 +90,9 @@ public final class SecuredExampleClient {
 	 * @param clientSecret The demo OAuth client secret.
 	 * @throws Exception If an unexpected (non-auth-related) failure occurs.
 	 */
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - example walkthrough kept simple for demo readability
+	})
 	public static void run(String endpoint, String clientId, String clientSecret) throws Exception {
 
 		section("1. Unauthenticated call, at the raw wire level — a 401 challenge");
@@ -83,8 +103,13 @@ public final class SecuredExampleClient {
 
 		section("3. RFC 9728 discovery — fetch the Protected Resource Metadata the 401 pointed at");
 		McpProtectedResourceMetadata prm = null;
-		if (challenge != null && challenge.resourceMetadata().isPresent())
-			prm = discoverProtectedResourceMetadata(endpoint, challenge.resourceMetadata().get());
+		// javabugs:S6416/java:S3655 fix: capture the Optional ONCE and guard/read the SAME instance. The
+		// original code called challenge.resourceMetadata() a second time inside the if-block to call get() -
+		// a fresh Optional the isPresent() check above never actually guarded, which is exactly the discovery-
+		// driven "get() without a proven-present check on that instance" pattern the bug engine flagged.
+		var resourceMetadata = challenge == null ? Optional.<URI>empty() : challenge.resourceMetadata();
+		if (resourceMetadata.isPresent())
+			prm = discoverProtectedResourceMetadata(endpoint, resourceMetadata.get());
 		else
 			System.out.println("   (no resource_metadata pointer found on the challenge; skipping)");
 
@@ -120,7 +145,7 @@ public final class SecuredExampleClient {
 			.header("Mcp-Name", "")
 			.POST(HttpRequest.BodyPublishers.ofString(discoverRequestBody()))
 			.build();
-		var response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+		var response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 		System.out.println("   HTTP status: " + response.statusCode());
 		var header = response.headers().firstValue("WWW-Authenticate").orElse(null);
 		System.out.println("   WWW-Authenticate: " + header);
@@ -188,7 +213,7 @@ public final class SecuredExampleClient {
 		var tokens = readOnlyTokenProvider(endpoint, tokenEndpoint, clientId, clientSecret);
 		try (var client = McpClient.connect(McpClient.builder()
 				.endpoint(endpoint)
-				.clientInfo(new Implementation().setName("juneau-secured-notes-example-client").setVersion("1.0.0"))
+				.clientInfo(new Implementation().setName(CLIENT_NAME).setVersion(CLIENT_VERSION))
 				.interceptor(tokens.interceptor()))) {
 			System.out.println("   server/discover succeeded: " + Json.of(client.discoveredServer().getServerInfo()));
 			var read = client.readResource(NoteStore.SCHEME + "index");
@@ -203,11 +228,11 @@ public final class SecuredExampleClient {
 	 * rejected with a {@code 403} naming the missing {@code mcp.write} scope, not silently allowed. As with
 	 * step 1/2 above, the 403's plain-text body surfaces as a bare {@link IOException}, not a typed exception.
 	 */
-	private static void insufficientScopeCall(String endpoint, URI tokenEndpoint, String clientId, String clientSecret) throws IOException {
+	private static void insufficientScopeCall(String endpoint, URI tokenEndpoint, String clientId, String clientSecret) {
 		var tokens = readOnlyTokenProvider(endpoint, tokenEndpoint, clientId, clientSecret);
 		try (var client = McpClient.connect(McpClient.builder()
 				.endpoint(endpoint)
-				.clientInfo(new Implementation().setName("juneau-secured-notes-example-client").setVersion("1.0.0"))
+				.clientInfo(new Implementation().setName(CLIENT_NAME).setVersion(CLIENT_VERSION))
 				.interceptor(tokens.interceptor()))) {
 			client.callToolText("publishNote", Map.of("title", "should-fail", "body", "should never be stored"));
 			throw new IllegalStateException("expected the write with a read-only token to fail, but it succeeded");
@@ -231,7 +256,7 @@ public final class SecuredExampleClient {
 
 		try (var client = McpClient.connect(McpClient.builder()
 				.endpoint(endpoint)
-				.clientInfo(new Implementation().setName("juneau-secured-notes-example-client").setVersion("1.0.0"))
+				.clientInfo(new Implementation().setName(CLIENT_NAME).setVersion(CLIENT_VERSION))
 				.interceptor(tokens.interceptor()))) {
 			System.out.println("   -> " + client.callToolText("publishNote",
 				Map.of("title", "secured", "body", "Hello from behind OAuth 2.1")));
@@ -261,7 +286,7 @@ public final class SecuredExampleClient {
 	private static String discoverRequestBody() {
 		var params = new RequestParamsOnly().setMeta(new RequestMeta()
 			.setProtocolVersion(McpProtocol.VERSION_2026_07_28)
-			.setClientInfo(new Implementation().setName("juneau-secured-notes-example-client").setVersion("1.0.0"))
+			.setClientInfo(new Implementation().setName(CLIENT_NAME).setVersion(CLIENT_VERSION))
 			.setClientCapabilities(new ClientCapabilities()));
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)

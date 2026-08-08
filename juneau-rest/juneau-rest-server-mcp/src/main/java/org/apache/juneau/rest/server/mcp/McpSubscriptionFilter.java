@@ -26,66 +26,25 @@ import java.util.*;
  * Concrete (not an interface) on purpose: a v2 adapter reads the honored values back off this type to
  * build the {@code notifications/subscriptions/acknowledged} frame, so it needs field-level accessors, not
  * just the {@link #matches(McpChangeEvent)} predicate.
+ *
+ * @param toolsListChanged Whether the tool list-changed signal is honored.
+ * @param promptsListChanged Whether the prompt list-changed signal is honored.
+ * @param resourcesListChanged Whether the resource list-changed signal is honored.
+ * @param resourceUris The exact resource URIs subscribed to for {@code resourceUpdated} events. Can be
+ * 	{@code null} (treated as empty).
  */
-public final class McpSubscriptionFilter {
-
-	private final boolean toolsListChanged;
-	private final boolean promptsListChanged;
-	private final boolean resourcesListChanged;
-	private final Set<String> resourceUris;
+public record McpSubscriptionFilter(boolean toolsListChanged, boolean promptsListChanged, boolean resourcesListChanged,
+		Set<String> resourceUris) {
 
 	/**
-	 * Creates a new filter.
+	 * Canonical constructor.
 	 *
-	 * @param toolsListChanged Whether the tool list-changed signal is honored.
-	 * @param promptsListChanged Whether the prompt list-changed signal is honored.
-	 * @param resourcesListChanged Whether the resource list-changed signal is honored.
-	 * @param resourceUris The exact resource URIs subscribed to for {@code resourceUpdated} events. Can be
-	 * 	{@code null} (treated as empty).
+	 * <p>
+	 * Normalizes {@code resourceUris} to an unmodifiable, insertion-ordered copy (empty when {@code null}).
 	 */
-	public McpSubscriptionFilter(boolean toolsListChanged, boolean promptsListChanged, boolean resourcesListChanged,
-			Set<String> resourceUris) {
-		this.toolsListChanged = toolsListChanged;
-		this.promptsListChanged = promptsListChanged;
-		this.resourcesListChanged = resourcesListChanged;
-		this.resourceUris = resourceUris == null ? Collections.emptySet()
+	public McpSubscriptionFilter {
+		resourceUris = resourceUris == null ? Collections.emptySet()
 			: Collections.unmodifiableSet(new LinkedHashSet<>(resourceUris));
-	}
-
-	/**
-	 * Whether the tool list-changed signal is honored.
-	 *
-	 * @return {@code true} if honored.
-	 */
-	public boolean isToolsListChanged() {
-		return toolsListChanged;
-	}
-
-	/**
-	 * Whether the prompt list-changed signal is honored.
-	 *
-	 * @return {@code true} if honored.
-	 */
-	public boolean isPromptsListChanged() {
-		return promptsListChanged;
-	}
-
-	/**
-	 * Whether the resource list-changed signal is honored.
-	 *
-	 * @return {@code true} if honored.
-	 */
-	public boolean isResourcesListChanged() {
-		return resourcesListChanged;
-	}
-
-	/**
-	 * The exact resource URIs subscribed to for {@code resourceUpdated} events.
-	 *
-	 * @return An unmodifiable set, in insertion order. Never {@code null}; empty if none.
-	 */
-	public Set<String> getResourceUris() {
-		return resourceUris;
 	}
 
 	/**
@@ -98,11 +57,11 @@ public final class McpSubscriptionFilter {
 	public boolean matches(McpChangeEvent event) {
 		if (event == null)
 			return false;
-		return switch (event.getKind()) {
+		return switch (event.kind()) {
 			case TOOLS_LIST_CHANGED -> toolsListChanged;
 			case PROMPTS_LIST_CHANGED -> promptsListChanged;
 			case RESOURCES_LIST_CHANGED -> resourcesListChanged;
-			case RESOURCE_UPDATED -> resourceUris.contains(event.getResourceUri());
+			case RESOURCE_UPDATED -> resourceUris.contains(event.resourceUri());
 		};
 	}
 }

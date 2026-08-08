@@ -80,8 +80,8 @@ class McpClient_CallRaw_Test {
 	void a03_callRaw_jsonRpcError_throwsMcpExceptionLikeEveryTypedMethod() throws Exception {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"error\":{\"code\":-32602,\"message\":\"bad params\"}}";
 		try (var c = client(ok(wire))) {
-			var e = assertThrows(McpException.class,
-				() -> c.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("ask").setRequestState("stale")));
+			var params = new CallToolRequest().setName("ask").setRequestState("stale");
+			var e = assertThrows(McpException.class, () -> c.callRaw(McpMethods.TOOLS_CALL, params));
 			assertEquals(-32602, e.getCode());
 		}
 	}
@@ -121,7 +121,8 @@ class McpClient_CallRaw_Test {
 
 			// callRaw on the same method+params must not retrieve the cached ReadResourceResult and must not throw
 			// ClassCastException; it goes to the wire instead, proven by the second (distinct) wire body winning.
-			var raw = assertDoesNotThrow(() -> c.callRaw(McpMethods.RESOURCES_READ, new ReadResourceRequest().setUri("file:///a")));
+			var params = new ReadResourceRequest().setUri("file:///a");
+			var raw = assertDoesNotThrow(() -> c.callRaw(McpMethods.RESOURCES_READ, params));
 			assertEquals(2, calls.get());
 			var contents = (List<?>) raw.get("contents");
 			var content = (Map<?,?>) contents.get(0);

@@ -74,8 +74,10 @@ class McpSchemaCheck_Test {
 	@Test
 	void a01_unsupportedTopLevelKeyword_isRejectedNamingToolAndKeyword() {
 		var config = new McpServerConfig().addTool(tool("risky", JsonMap.of("type", "object", "oneOf", List.of()), null));
+		var revision = new McpRevision(null);
+		var exchange = ping();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new McpRevision(null).dispatch(ping(), config, ctx));
+			() -> revision.dispatch(exchange, config, ctx));
 		assertTrue(e.getMessage().contains("risky"), e.getMessage());
 		assertTrue(e.getMessage().contains("inputSchema"), e.getMessage());
 		assertTrue(e.getMessage().contains("oneOf"), e.getMessage());
@@ -86,8 +88,10 @@ class McpSchemaCheck_Test {
 	void a02_unsupportedNestedKeyword_isRejected() {
 		var nested = JsonMap.of("type", "object", "properties", JsonMap.of("a", JsonMap.of("$ref", "#/$defs/X")));
 		var config = new McpServerConfig().addTool(tool("nested", nested, null));
+		var revision = new McpRevision(null);
+		var exchange = ping();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new McpRevision(null).dispatch(ping(), config, ctx));
+			() -> revision.dispatch(exchange, config, ctx));
 		assertTrue(e.getMessage().contains("nested"), e.getMessage());
 		assertTrue(e.getMessage().contains("$ref"), e.getMessage());
 	}
@@ -111,8 +115,10 @@ class McpSchemaCheck_Test {
 		assertNotNull(new McpRevision(null).dispatch(ping(), okConfig, ctx));
 
 		var badConfig = new McpServerConfig().addTool(tool("emptySchema", new JsonMap(), null));
+		var revision = new McpRevision(null);
+		var exchange = ping();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new McpRevision(null).dispatch(ping(), badConfig, ctx));
+			() -> revision.dispatch(exchange, badConfig, ctx));
 		assertTrue(e.getMessage().contains("emptySchema"), e.getMessage());
 		assertTrue(e.getMessage().contains("inputSchema"), e.getMessage());
 		assertTrue(e.getMessage().contains("2025-06-18"), e.getMessage());
@@ -140,8 +146,10 @@ class McpSchemaCheck_Test {
 	@Test
 	void b01_inputRootNotObject_rejected() {
 		var config = new McpServerConfig().addTool(tool("risky", JsonMap.of("type", "string"), null));
+		var revision = new McpRevision(null);
+		var exchange = ping();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new McpRevision(null).dispatch(ping(), config, ctx));
+			() -> revision.dispatch(exchange, config, ctx));
 		assertTrue(e.getMessage().contains("risky"), e.getMessage());
 		assertTrue(e.getMessage().contains("inputSchema"), e.getMessage());
 		assertTrue(e.getMessage().contains("string"), e.getMessage());
@@ -151,8 +159,10 @@ class McpSchemaCheck_Test {
 	@Test
 	void b02_outputRootNotObject_rejected() {
 		var config = new McpServerConfig().addTool(tool("risky", JsonMap.of("type", "object"), JsonMap.of("type", "array")));
+		var revision = new McpRevision(null);
+		var exchange = ping();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new McpRevision(null).dispatch(ping(), config, ctx));
+			() -> revision.dispatch(exchange, config, ctx));
 		assertTrue(e.getMessage().contains("risky"), e.getMessage());
 		assertTrue(e.getMessage().contains("outputSchema"), e.getMessage());
 		assertTrue(e.getMessage().contains("array"), e.getMessage());
@@ -165,8 +175,10 @@ class McpSchemaCheck_Test {
 
 	private void assertOutputRejects(JsonMap output, String keyword) {
 		var config = new McpServerConfig().addTool(tool("risky", JsonMap.of("type", "object"), output));
+		var revision = new McpRevision(null);
+		var exchange = ping();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new McpRevision(null).dispatch(ping(), config, ctx));
+			() -> revision.dispatch(exchange, config, ctx));
 		assertTrue(e.getMessage().contains("risky"), e.getMessage());
 		assertTrue(e.getMessage().contains("outputSchema"), e.getMessage());
 		assertTrue(e.getMessage().contains(keyword), e.getMessage());
@@ -221,8 +233,10 @@ class McpSchemaCheck_Test {
 	@Test
 	void d02_depth65_rejected() {
 		var config = new McpServerConfig().addTool(tool("deep", JsonMap.of("type", "object"), nested(65)));
+		var revision = new McpRevision(null);
+		var exchange = ping();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new McpRevision(null).dispatch(ping(), config, ctx));
+			() -> revision.dispatch(exchange, config, ctx));
 		assertTrue(e.getMessage().contains("nesting depth"), e.getMessage());
 		assertTrue(e.getMessage().contains("2025-06-18"), e.getMessage());
 	}
@@ -233,8 +247,10 @@ class McpSchemaCheck_Test {
 		for (var i = 0; i < 10001; i++)
 			props.put("x" + i, JsonMap.of("type", "string"));
 		var config = new McpServerConfig().addTool(tool("wide", JsonMap.of("type", "object"), JsonMap.of("type", "object", "properties", props)));
+		var revision = new McpRevision(null);
+		var exchange = ping();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new McpRevision(null).dispatch(ping(), config, ctx));
+			() -> revision.dispatch(exchange, config, ctx));
 		assertTrue(e.getMessage().contains("node count"), e.getMessage());
 	}
 

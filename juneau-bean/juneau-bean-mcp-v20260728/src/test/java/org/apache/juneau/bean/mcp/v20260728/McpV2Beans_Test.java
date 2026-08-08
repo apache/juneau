@@ -222,7 +222,8 @@ class McpV2Beans_Test {
 		var result = new ListResourceTemplatesResult().setResourceTemplates(a).addResourceTemplates(b)
 			.setNextCursor("2").setTtlMs(0).setCacheScope(McpCacheScope.PUBLIC);
 		assertEquals(2, result.getResourceTemplates().size());
-		assertThrows(UnsupportedOperationException.class, () -> result.getResourceTemplates().add(a));
+		var resourceTemplates = result.getResourceTemplates();
+		assertThrows(UnsupportedOperationException.class, () -> resourceTemplates.add(a));
 		assertEquals("2", result.getNextCursor());
 		assertTrue(org.apache.juneau.marshall.marshaller.Json.of(result).contains("\"resourceTemplates\""));
 		assertFalse(org.apache.juneau.marshall.marshaller.Json.of(result).contains("\"templates\""));
@@ -552,7 +553,9 @@ class McpV2Beans_Test {
 			.setIcons(new Icon().setSrc("https://example.com/a.png"))
 			.addIcons(new Icon().setSrc("https://example.com/b.png"));
 		assertEquals(2, impl.getIcons().size());
-		assertThrows(UnsupportedOperationException.class, () -> impl.getIcons().add(new Icon().setSrc("x")));
+		var icons = impl.getIcons();
+		var extraIcon = new Icon().setSrc("x");
+		assertThrows(UnsupportedOperationException.class, () -> icons.add(extraIcon));
 		var json = JsonSerializer.DEFAULT.write(impl);
 		var copy = JsonParser.DEFAULT.read(json, Implementation.class);
 		assertEquals(json, JsonSerializer.DEFAULT.write(copy));
@@ -626,12 +629,14 @@ class McpV2Beans_Test {
 	}
 
 	@Test void f03_inputRequiredResult_validateEnforcesAtLeastOneOfInvariant() {
+		var empty = new InputRequiredResult();
 		assertThrowsWithMessage(IllegalStateException.class,
 			"InputRequiredResult requires at least one of inputRequests or requestState",
-			() -> new InputRequiredResult().validate());
+			empty::validate);
+		var emptyInputRequests = new InputRequiredResult().setInputRequests(Map.of());
 		assertThrowsWithMessage(IllegalStateException.class,
 			"InputRequiredResult requires at least one of inputRequests or requestState",
-			() -> new InputRequiredResult().setInputRequests(Map.of()).validate());
+			emptyInputRequests::validate);
 		assertDoesNotThrow(() -> new InputRequiredResult().putInputRequest("a", JsonMap.of()).validate());
 		assertDoesNotThrow(() -> new InputRequiredResult().setRequestState("tok").validate());
 	}

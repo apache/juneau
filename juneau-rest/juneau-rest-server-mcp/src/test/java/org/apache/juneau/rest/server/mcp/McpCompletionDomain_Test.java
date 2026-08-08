@@ -88,7 +88,8 @@ class McpCompletionDomain_Test {
 
 		@Test void b04_contextIsImmutable() {
 			var req = new McpCompletionRequest().setContextArguments(Map.of("a", "1"));
-			assertThrows(UnsupportedOperationException.class, () -> req.getContextArguments().put("b", "2"));
+			var contextArguments = req.getContextArguments();
+			assertThrows(UnsupportedOperationException.class, () -> contextArguments.put("b", "2"));
 		}
 
 		@Test void b05_contextPreservesInsertionOrderIndependentOfSourceMap() {
@@ -176,7 +177,8 @@ class McpCompletionDomain_Test {
 		@Test void d06_normalizedValuesAreImmutable() {
 			var raw = new McpCompletionResult().setValues(new ArrayList<>(List.of("a", "b")));
 			var n = McpCompletionResult.normalize(raw);
-			assertThrows(UnsupportedOperationException.class, () -> n.values().add("c"));
+			var values = n.values();
+			assertThrows(UnsupportedOperationException.class, () -> values.add("c"));
 		}
 
 		@Test void d07_nullElementIsInternalFailure() {

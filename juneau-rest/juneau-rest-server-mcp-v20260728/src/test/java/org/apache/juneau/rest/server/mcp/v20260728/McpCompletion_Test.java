@@ -95,11 +95,13 @@ class McpCompletion_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, Object params) {
-		return (JsonRpcResponse) new McpRevision(null).dispatch(new McpExchange(req(1, params, validMeta()), hdrs(McpMethods.COMPLETION_COMPLETE, "")::get), config, ctx);
+		var result = new McpRevision(null).dispatch(new McpExchange(req(1, params, validMeta()), hdrs(McpMethods.COMPLETION_COMPLETE, "")::get), config, ctx);
+		return result instanceof McpResponseResult r ? r.response() : null;
 	}
 
 	private JsonRpcResponse sendNotification(McpServerConfig config, Object params) {
-		return (JsonRpcResponse) new McpRevision(null).dispatch(new McpExchange(req(null, params, validMeta()), hdrs(McpMethods.COMPLETION_COMPLETE, "")::get), config, ctx);
+		var result = new McpRevision(null).dispatch(new McpExchange(req(null, params, validMeta()), hdrs(McpMethods.COMPLETION_COMPLETE, "")::get), config, ctx);
+		return result instanceof McpResponseResult r ? r.response() : null;
 	}
 
 	private static JsonMap promptRef(String name) {
@@ -148,9 +150,10 @@ class McpCompletion_Test {
 		}));
 		var params = JsonMap.of("ref", promptRef("greet"), "argument", argument("style", "partial"),
 			"context", JsonMap.of("arguments", JsonMap.of("name", "Alice")));
-		var resp = (JsonRpcResponse) new McpRevision(null).dispatch(
+		var result = new McpRevision(null).dispatch(
 			new McpExchange(req(1, params, validMeta()), hdrs(McpMethods.COMPLETION_COMPLETE, "")::get), config, marker);
-		assertNull(resp.getError());
+		assertInstanceOf(McpResponseResult.class, result);
+		assertNull(((McpResponseResult) result).response().getError());
 		var request = captured.get();
 		assertEquals(McpCompletionRef.Kind.PROMPT, request.getRef().getKind());
 		assertEquals("greet", request.getRef().getTarget());
@@ -399,16 +402,20 @@ class McpCompletion_Test {
 		var invoked = new AtomicInteger();
 		var config = new McpServerConfig().addPrompt(promptWithCompleter("greet", "style", (r, c) -> { invoked.incrementAndGet(); return McpCompletionResult.empty(); }));
 		var params = JsonMap.of("ref", promptRef("greet"), "argument", argument("style", "v"));
-		var resp = (JsonRpcResponse) new McpRevision(null).dispatch(
+		var result = new McpRevision(null).dispatch(
 			new McpExchange(req(1, params, null), hdrs(McpMethods.COMPLETION_COMPLETE, "")::get), config, ctx);
+		assertInstanceOf(McpResponseResult.class, result);
+		var resp = ((McpResponseResult) result).response();
 		assertEquals(McpRevision.CODE_INVALID_REQUEST, resp.getError().getCode());
 		assertEquals(0, invoked.get());
 	}
 
 	@Test void g02_nonEmptyMcpName_headerMismatch_invalidRequest() {
 		var params = JsonMap.of("ref", promptRef("greet"), "argument", argument("style", "v"));
-		var resp = (JsonRpcResponse) new McpRevision(null).dispatch(
+		var result = new McpRevision(null).dispatch(
 			new McpExchange(req(1, params, validMeta()), hdrs(McpMethods.COMPLETION_COMPLETE, "greet")::get), new McpServerConfig(), ctx);
+		assertInstanceOf(McpResponseResult.class, result);
+		var resp = ((McpResponseResult) result).response();
 		assertEquals(McpRevision.CODE_INVALID_REQUEST, resp.getError().getCode());
 		assertEquals("Mcp-Name header 'greet' does not match request name ''", resp.getError().getMessage());
 	}
@@ -424,8 +431,9 @@ class McpCompletion_Test {
 		// this proves it never is one for completion/complete, whose Mcp-Name is always the empty string.
 		var config = new McpServerConfig().addPrompt(promptWithCompleter("greet", "style", (r, c) -> new McpCompletionResult().setValues(List.of("x"))));
 		var params = JsonMap.of("ref", promptRef("greet"), "argument", argument("style", "v"));
-		var resp = (JsonRpcResponse) new McpRevision(null).dispatch(
+		var result = new McpRevision(null).dispatch(
 			new McpExchange(req(1, params, validMeta()), hdrs(McpMethods.COMPLETION_COMPLETE, "")::get), config, ctx);
-		assertNull(resp.getError());
+		assertInstanceOf(McpResponseResult.class, result);
+		assertNull(((McpResponseResult) result).response().getError());
 	}
 }

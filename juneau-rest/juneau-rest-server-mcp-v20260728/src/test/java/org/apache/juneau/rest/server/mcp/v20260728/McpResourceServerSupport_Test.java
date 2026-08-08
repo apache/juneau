@@ -253,8 +253,10 @@ class McpResourceServerSupport_Test {
 
 	@Test void f10_enforce_insufficientThrows403WithScopedChallenge() {
 		var c = cfg().addOperationScope("tools/call", "delete_repo", "repo.delete");
+		var grantedScopes = Set.of("mcp.read");
+		var ctx = op("tools/call", "delete_repo");
 		var e = assertThrows(Forbidden.class,
-			() -> McpResourceServerSupport.enforceOperationScopes(c, Set.of("mcp.read"), op("tools/call", "delete_repo")));
+			() -> McpResourceServerSupport.enforceOperationScopes(c, grantedScopes, ctx));
 		assertEquals(403, e.getStatusCode());
 		var challenge = e.getHeaders().stream()
 			.filter(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName()))
@@ -270,9 +272,9 @@ class McpResourceServerSupport_Test {
 	}
 
 	// ---------------------------------------------------------------------------------------------
-	// F4 (TODO-312f): principal(req) exposes the F2-authenticated principal (stashed under PRINCIPAL_ATTR by
-	// authenticate(...)) so the dispatcher can thread it into the RequestStateCodec seal/unseal seam (unblocking
-	// TODO-325's principal-bound AAD).  Mirrors grantedScopes(req): present -> the principal; absent/null/wrong-type
+	// F4: principal(req) exposes the F2-authenticated principal (stashed under PRINCIPAL_ATTR by
+	// authenticate(...)) so the dispatcher can thread it into the RequestStateCodec seal/unseal seam, enabling
+	// principal-bound AAD.  Mirrors grantedScopes(req): present -> the principal; absent/null/wrong-type
 	// -> null (the anonymous / RS-auth-disabled path).
 	// ---------------------------------------------------------------------------------------------
 

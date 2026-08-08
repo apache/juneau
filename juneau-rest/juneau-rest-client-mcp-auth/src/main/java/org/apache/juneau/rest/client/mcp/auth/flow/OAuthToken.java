@@ -29,8 +29,8 @@ import java.util.*;
  *
  * <p>
  * <b>Never log {@code accessToken} / {@code refreshToken} / {@code idToken}.</b>  {@link #toString()} redacts the
- * secret-bearing fields (mirrors the {@code KeyedSecret} redaction prior art from TODO-324) so token material never
- * reaches logs via this record's auto-generated form.
+ * secret-bearing fields (mirroring the {@code KeyedSecret} redaction discipline used elsewhere in this module) so
+ * token material never reaches logs via this record's auto-generated form.
  *
  * @param accessToken The opaque or JWT access-token string.  Never {@code null}.
  * @param tokenType The token type per RFC 6749 &sect;5.1 (typically {@code "Bearer"}).  Never {@code null}.

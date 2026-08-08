@@ -66,11 +66,13 @@ class McpCompletion_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, Object params) {
-		return new McpRevision(null).dispatch(new McpExchange(req(1, params), n -> null), config, ctx);
+		var result = new McpRevision(null).dispatch(new McpExchange(req(1, params), n -> null), config, ctx);
+		return result instanceof McpResponseResult r ? r.response() : null;
 	}
 
 	private JsonRpcResponse sendNotification(McpServerConfig config, Object params) {
-		return new McpRevision(null).dispatch(new McpExchange(req(null, params), n -> null), config, ctx);
+		var result = new McpRevision(null).dispatch(new McpExchange(req(null, params), n -> null), config, ctx);
+		return result instanceof McpResponseResult r ? r.response() : null;
 	}
 
 	private static JsonMap promptRef(String name) {
@@ -119,8 +121,9 @@ class McpCompletion_Test {
 		}));
 		var params = JsonMap.of("ref", promptRef("greet"), "argument", argument("style", "partial"),
 			"context", JsonMap.of("arguments", JsonMap.of("name", "Alice")));
-		var resp = new McpRevision(null).dispatch(new McpExchange(req(1, params), n -> null), config, marker);
-		assertNull(resp.getError());
+		var result = new McpRevision(null).dispatch(new McpExchange(req(1, params), n -> null), config, marker);
+		assertInstanceOf(McpResponseResult.class, result);
+		assertNull(((McpResponseResult) result).response().getError());
 		var request = captured.get();
 		assertEquals(McpCompletionRef.Kind.PROMPT, request.getRef().getKind());
 		assertEquals("greet", request.getRef().getTarget());

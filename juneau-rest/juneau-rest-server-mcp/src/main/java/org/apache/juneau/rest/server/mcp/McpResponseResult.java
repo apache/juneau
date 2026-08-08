@@ -16,25 +16,13 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import org.apache.juneau.bean.jsonrpc.*;
+
 /**
- * The kind of change a neutral MCP subscription can be notified about.
+ * A {@link McpDispatchResult} wrapping a complete JSON-RPC response envelope — the common (non-streaming)
+ * {@link McpRevision#dispatch} outcome.
  *
- * <p>
- * Mirrors the four notification shapes SEP-2575 defines for {@code subscriptions/listen}: one per-resource
- * change and three list-changed signals. {@link #RESOURCE_UPDATED} is the only kind that carries a resource
- * URI (see {@link McpChangeEvent#resourceUri()}).
+ * @param response The JSON-RPC response envelope. Never <jk>null</jk>.
+ * @since 10.0.0
  */
-public enum McpChangeKind {
-
-	/** A specific subscribed resource's content changed. */
-	RESOURCE_UPDATED,
-
-	/** The tool list changed. */
-	TOOLS_LIST_CHANGED,
-
-	/** The prompt list changed. */
-	PROMPTS_LIST_CHANGED,
-
-	/** The resource list changed. */
-	RESOURCES_LIST_CHANGED
-}
+public record McpResponseResult(JsonRpcResponse response) implements McpDispatchResult {}

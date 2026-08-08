@@ -30,6 +30,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.mcp.McpContentBlock;
 import org.apache.juneau.rest.server.mcp.McpCursor;
 import org.apache.juneau.rest.server.mcp.McpExchange;
+import org.apache.juneau.rest.server.mcp.McpResponseResult;
 import org.apache.juneau.rest.server.mcp.McpSchema;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.apache.juneau.rest.server.mcp.McpToolHandler;
@@ -83,7 +84,8 @@ class McpTools_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, JsonRpcRequest r, Map<String,String> headers) {
-		return (JsonRpcResponse) new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
+		var result = new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
+		return result instanceof McpResponseResult mrr ? mrr.response() : null;
 	}
 
 	// -------- tools/list ---------

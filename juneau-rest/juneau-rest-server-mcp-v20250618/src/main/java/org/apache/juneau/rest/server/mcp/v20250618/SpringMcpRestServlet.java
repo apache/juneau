@@ -50,7 +50,8 @@ import org.apache.juneau.rest.server.springboot.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S2176" // Intentional: dated adapter binding classes are de-versioned and differentiated by package (see TODO-312).
+	"java:S2176", // Intentional: dated adapter binding classes are de-versioned and differentiated by package.
+	"java:S110" // Inheritance depth is inherent to the Juneau Spring REST servlet hierarchy.
 })
 public abstract class SpringMcpRestServlet extends BasicSpringRestServlet implements McpEndpoint {
 	private static final long serialVersionUID = 1L;

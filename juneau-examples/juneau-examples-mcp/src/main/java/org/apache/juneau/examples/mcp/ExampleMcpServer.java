@@ -66,9 +66,21 @@ import org.apache.juneau.rest.server.mcp.v20260728.*;
  * @serial exclude
  */
 @Rest(serializers = {JsonSerializer.class, SseSerializer.class}, parsers = JsonParser.class, defaultAccept = "application/json")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth is inherent to extending the Juneau REST server hierarchy.
+})
 public class ExampleMcpServer extends McpRestServlet {
 
 	private static final long serialVersionUID = 1L;
+
+	/** The {@code title} argument/variable name shared by the tools, prompt, and resource template below. */
+	private static final String TITLE_ARG = "title";
+
+	/** The MIME type of every note resource this server serves. */
+	private static final String TEXT_PLAIN = "text/plain";
+
+	/** Prefix of the {@code deleteNote} MRTR continuation token, encoding the note title being deleted. */
+	private static final String DELETE_CONTINUATION_PREFIX = "delete:";
 
 	// The entire domain state. Handlers below close over this instance, so there is no DI ceremony to
 	// follow: the server object owns its notes, and every MCP surface is a thin view over them.
@@ -131,7 +143,7 @@ public class ExampleMcpServer extends McpRestServlet {
 					.setDescription("Stores a note under the given title and notifies subscribers of the change.");
 			}
 			@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {
-				var title = String.valueOf(arguments.getOrDefault("title", ""));
+				var title = String.valueOf(arguments.getOrDefault(TITLE_ARG, ""));
 				var body = String.valueOf(arguments.getOrDefault("body", ""));
 				notes.put(title, body);
 				ctx.getBean(McpSubscriptions.class).ifPresent(s -> s.resourceUpdated(NoteStore.uriFor(title)));
@@ -174,18 +186,18 @@ public class ExampleMcpServer extends McpRestServlet {
 				var resume = ctx.getBean(McpMrtrResumeContext.class);
 				if (resume.isEmpty()) {
 					// PAUSE: ask the caller to confirm. Execution stops here and control returns to the client.
-					var title = String.valueOf(arguments.getOrDefault("title", ""));
+					var title = String.valueOf(arguments.getOrDefault(TITLE_ARG, ""));
 					var question = new ElicitRequest()
 						.setMessage("Really delete note '" + title + "'?")
 						.setRequestedSchema(ElicitSchema.create().booleanField("confirm").title("Confirm deletion").build());
-					throw ElicitationRequests.of("confirmDelete", question, "delete:" + title);
+					throw ElicitationRequests.of("confirmDelete", question, DELETE_CONTINUATION_PREFIX + title);
 				}
 				// RESUME: the caller answered (or didn't). Recover state from the continuation; a missing
 				// continuation or a missing/declined "confirm" answer both cleanly mean "cancelled".
 				var rc = resume.get();
 				var continuation = rc.continuationAsString();
-				var title = continuation != null && continuation.startsWith("delete:")
-					? continuation.substring("delete:".length()) : "";
+				var title = continuation != null && continuation.startsWith(DELETE_CONTINUATION_PREFIX)
+					? continuation.substring(DELETE_CONTINUATION_PREFIX.length()) : "";
 				if (ElicitationResponses.getBoolean(rc, "confirmDelete", "confirm")) {
 					var removed = notes.remove(title);
 					return McpToolOutcome.text(removed
@@ -210,14 +222,14 @@ public class ExampleMcpServer extends McpRestServlet {
 			.setName("summarize")
 			.setDescription("Builds a prompt asking a model to summarize a stored note.")
 			.setArguments(List.of(new McpPromptArgument()
-				.setName("title")
+				.setName(TITLE_ARG)
 				.setDescription("The title of the note to summarize.")
 				.setRequired(true)
 				.setCompleter(noteTitleCompleter(notes))));
 		return new McpPromptHandler() {
 			@Override public McpPromptSpec descriptor() { return spec; }
 			@Override public McpPromptOutcome get(Map<String,Object> arguments, BeanStore ctx) {
-				var title = String.valueOf(arguments.getOrDefault("title", ""));
+				var title = String.valueOf(arguments.getOrDefault(TITLE_ARG, ""));
 				var body = notes.get(title);
 				var text = body == null
 					? "There is no note titled '" + title + "'."
@@ -242,13 +254,13 @@ public class ExampleMcpServer extends McpRestServlet {
 			.setUri(NoteStore.SCHEME + "index")
 			.setName("note-index")
 			.setDescription("A plain-text list of all note titles.")
-			.setMimeType("text/plain");
+			.setMimeType(TEXT_PLAIN);
 		return new McpResourceHandler() {
 			@Override public McpResourceSpec descriptor() { return spec; }
 			@Override public McpResourceOutcome read(String uri, BeanStore ctx) {
 				var titles = notes.titles();
 				var text = titles.isEmpty() ? "(no notes yet)" : String.join("\n", titles);
-				return new McpResourceOutcome().setContents(List.of(McpResourceContents.text(uri, "text/plain", text)));
+				return new McpResourceOutcome().setContents(List.of(McpResourceContents.text(uri, TEXT_PLAIN, text)));
 			}
 		};
 	}
@@ -266,18 +278,18 @@ public class ExampleMcpServer extends McpRestServlet {
 			.setUriTemplate(NoteStore.SCHEME + "{title}")
 			.setName("note")
 			.setDescription("Reads a single note by title.")
-			.setMimeType("text/plain");
+			.setMimeType(TEXT_PLAIN);
 		var completer = noteTitleCompleter(notes);
 		return new McpResourceTemplateHandler() {
 			@Override public McpResourceTemplateSpec descriptor() { return spec; }
 			@Override public McpResourceOutcome read(String uri, Map<String,String> variables, BeanStore ctx) {
-				var title = variables.get("title");
+				var title = variables.get(TITLE_ARG);
 				var body = notes.get(title);
 				var text = body == null ? "(no note titled '" + title + "')" : body;
-				return new McpResourceOutcome().setContents(List.of(McpResourceContents.text(uri, "text/plain", text)));
+				return new McpResourceOutcome().setContents(List.of(McpResourceContents.text(uri, TEXT_PLAIN, text)));
 			}
 			@Override public McpCompleter completer(String variableName) {
-				return "title".equals(variableName) ? completer : null;
+				return TITLE_ARG.equals(variableName) ? completer : null;
 			}
 		};
 	}

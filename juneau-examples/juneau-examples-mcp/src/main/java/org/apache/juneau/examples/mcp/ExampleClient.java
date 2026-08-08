@@ -43,7 +43,16 @@ import org.apache.juneau.rest.client.mcp.v20260728.*;
  * the polymorphic content-block {@code "type"} discriminator (e.g. {@code "text"}/{@code "audio"}) the real
  * wire format carries, so what you see here is not byte-for-byte what came off the wire.
  */
+@SuppressWarnings({
+	"java:S106" // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.
+})
 public final class ExampleClient {
+
+	/** The {@code title} argument/variable name shared by the tool, prompt, and resource-template calls below. */
+	private static final String TITLE_ARG = "title";
+
+	/** The sample note title used throughout this walkthrough. */
+	private static final String GROCERIES_NOTE_TITLE = "groceries";
 
 	private ExampleClient() {}
 
@@ -53,6 +62,9 @@ public final class ExampleClient {
 	 * @param args Optional single argument: the server endpoint (defaults to {@code http://localhost:5000/}).
 	 * @throws Exception If any step fails.
 	 */
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - example main() kept simple for demo readability
+	})
 	public static void main(String[] args) throws Exception {
 		var endpoint = args.length > 0 ? args[0] : "http://localhost:" + ExampleServer.DEFAULT_PORT + "/";
 		try (var client = connect(endpoint)) {
@@ -67,6 +79,7 @@ public final class ExampleClient {
 	 * @return A connected client (its mandatory {@code server/discover} handshake already done).
 	 * @throws IOException If the connection or handshake fails.
 	 */
+	@SuppressWarnings("resource") // returned client is owned and closed by the caller (see main() above).
 	public static McpClient connect(String endpoint) throws IOException {
 		return McpClient.connect(McpClient.builder()
 			.endpoint(endpoint)
@@ -82,6 +95,9 @@ public final class ExampleClient {
 	 * @param client The connected MCP client.
 	 * @throws Exception If any step fails.
 	 */
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - example walkthrough kept simple for demo readability
+	})
 	public static void run(McpClient client) throws Exception {
 
 		section("1. server/discover — who are we talking to?");
@@ -98,10 +114,10 @@ public final class ExampleClient {
 		System.out.println("   resourceTemplates: " + Json.of(client.listResourceTemplates().getResourceTemplates()));
 
 		section("3. tools/call publishNote — store a note (and notify subscribers)");
-		System.out.println("   -> " + client.callToolText("publishNote", Map.of("title", "groceries", "body", "Milk, eggs, bread")));
+		System.out.println("   -> " + client.callToolText("publishNote", Map.of(TITLE_ARG, GROCERIES_NOTE_TITLE, "body", "Milk, eggs, bread")));
 
 		section("4. resources/read note:///groceries — read it back via the template");
-		var read = client.readResource(NoteStore.uriFor("groceries"));
+		var read = client.readResource(NoteStore.uriFor(GROCERIES_NOTE_TITLE));
 		System.out.println("   " + Json.of(read.getContents()));
 
 		section("5. resources/read note:///index — the fixed index resource");
@@ -109,18 +125,18 @@ public final class ExampleClient {
 
 		section("6. completion/complete — complete the template's {title} variable for prefix 'gr'");
 		var ref = new ResourceTemplateReference().setUri(NoteStore.SCHEME + "{title}");
-		var completion = client.complete(ref, "title", "gr", null);
+		var completion = client.complete(ref, TITLE_ARG, "gr", null);
 		System.out.println("   suggestions: " + Json.of(completion.getCompletion()));
 
 		section("7. prompts/get summarize — render a prompt from the stored note");
-		var prompt = client.getPrompt("summarize", Map.of("title", "groceries"));
+		var prompt = client.getPrompt("summarize", Map.of(TITLE_ARG, GROCERIES_NOTE_TITLE));
 		System.out.println("   " + Json.of(prompt.getMessages()));
 
 		section("8. subscriptions/listen — receive a live change notification");
 		runSubscriptionDemo(client);
 
 		section("9. tools/call deleteNote — an elicitation (confirm) round-trip, auto-answered");
-		var deleted = client.callToolWithElicitation("deleteNote", Map.of("title", "groceries"), requests -> {
+		var deleted = client.callToolWithElicitation("deleteNote", Map.of(TITLE_ARG, GROCERIES_NOTE_TITLE), requests -> {
 			// The server asked one or more questions; answer each with ACCEPT + confirm=true. A real client
 			// would present these to a user (the schema in each request says how to render the control).
 			System.out.println("   server asked: " + Json.of(requests));
@@ -141,6 +157,9 @@ public final class ExampleClient {
 	 * Subscribes for changes to a note URI, publishes that note, and prints the change frame that arrives
 	 * over the held-open SSE stream.
 	 */
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - example walkthrough kept simple for demo readability
+	})
 	private static void runSubscriptionDemo(McpClient client) throws Exception {
 		var noteUri = NoteStore.uriFor("todo");
 		var updates = new LinkedBlockingQueue<String>();
@@ -159,7 +178,7 @@ public final class ExampleClient {
 			else
 				System.out.println("   subscription acknowledged; publishing '" + noteUri + "' ...");
 
-			client.callTool("publishNote", Map.of("title", "todo", "body", "Write MCP example"));
+			client.callTool("publishNote", Map.of(TITLE_ARG, "todo", "body", "Write MCP example"));
 
 			var updatedUri = updates.poll(10, TimeUnit.SECONDS);
 			if (updatedUri == null)

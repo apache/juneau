@@ -23,6 +23,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.*;
+import java.util.concurrent.Flow;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,6 +33,7 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.JsonValueSafety;
 import org.apache.juneau.http.tracing.TraceContextCarrier;
 import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.sse.SseEvent;
 import org.apache.juneau.rest.server.RestRequest;
 import org.apache.juneau.rest.server.tracing.*;
 import org.apache.juneau.marshall.jcs.JcsSerializer;
@@ -43,13 +45,16 @@ import org.apache.juneau.rest.server.mcp.McpCompletionRef;
 import org.apache.juneau.rest.server.mcp.McpCompletionRequest;
 import org.apache.juneau.rest.server.mcp.McpCompletionResult;
 import org.apache.juneau.rest.server.mcp.McpCursor;
+import org.apache.juneau.rest.server.mcp.McpDispatchResult;
 import org.apache.juneau.rest.server.mcp.McpErrorKind;
 import org.apache.juneau.rest.server.mcp.McpExchange;
 import org.apache.juneau.rest.server.mcp.McpParamUtils;
 import org.apache.juneau.rest.server.mcp.McpPromptHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceTemplateHandler;
+import org.apache.juneau.rest.server.mcp.McpResponseResult;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
+import org.apache.juneau.rest.server.mcp.McpStreamResult;
 import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
 import org.apache.juneau.rest.server.mcp.McpToolHandler;
 import org.apache.juneau.rest.server.mcp.McpToolOutcome;
@@ -75,7 +80,11 @@ import org.apache.juneau.rest.server.mcp.McpToolOutcome;
  * The instance retains no request-derived state.
  */
 @SuppressWarnings({
-	"java:S2176" // Intentional: dated adapter binding classes are de-versioned and differentiated by package (see TODO-312).
+	// Settled, intentional name shadow against the neutral org.apache.juneau.rest.server.mcp.McpRevision SPI
+	// (renaming this to e.g. AbstractMcpRevision was evaluated and rejected): every dated adapter binding
+	// class is deliberately de-versioned to plain "McpRevision" and differentiated from its siblings only by
+	// package, matching the revision-string-free naming already used throughout each vNNNNNNNN module.
+	"java:S2176"
 })
 public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpRevision {
 
@@ -254,21 +263,24 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	}
 
 	@Override /* McpRevision */
-	public Object dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for the single JSON-RPC dispatch entry point; splitting the notification/response/stream branching and the McpException/Exception recovery paths would fragment one cohesive request-to-result routine without real clarity gain.
+	})
+	public McpDispatchResult dispatch(McpExchange exchange, McpServerConfig config, BeanStore ctx) {
 		assertArgNotNull("exchange", exchange);
 		assertArgNotNull("config", config);
 		assertArgNotNull("ctx", ctx);
 
 		var req = exchange.request();
 		if (req == null)
-			return reportError(ctx, null, errorCode(McpErrorKind.INVALID_REQUEST), "Request envelope is null");
+			return new McpResponseResult(reportError(ctx, null, errorCode(McpErrorKind.INVALID_REQUEST), "Request envelope is null"));
 
 		var id = req.getId();
 		var method = req.getMethod();
 
 		if (isEmpty(method))
 			return JsonRpcResponse.notification(id) ? null
-				: reportError(ctx, id, errorCode(McpErrorKind.INVALID_REQUEST), "Missing method");
+				: new McpResponseResult(reportError(ctx, id, errorCode(McpErrorKind.INVALID_REQUEST), "Missing method"));
 
 		// SEP-2350 per-operation step-up enforcement at the POST-parse point (method now known).  Deliberately OUTSIDE
 		// the try below: an insufficient-scope 403 (with its WWW-Authenticate step-up challenge) must propagate as a real
@@ -279,24 +291,25 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			validateHeaders(exchange, req);
 			validateMeta(req.getParams());
 			if (McpMethods.SUBSCRIPTIONS_LISTEN.equals(method))
-				return JsonRpcResponse.notification(id) ? null : dispatchSubscriptionsListen(exchange, id, req.getParams(), config, ctx);
+				return JsonRpcResponse.notification(id) ? null
+					: new McpStreamResult(dispatchSubscriptionsListen(exchange, id, req.getParams(), config, ctx));
 			var result = finalizeResult(invoke(method, req.getParams(), config, ctx), config, ctx);
-			return JsonRpcResponse.notification(id) ? null : JsonRpcResponse.ok(id, result);
+			return JsonRpcResponse.notification(id) ? null : new McpResponseResult(JsonRpcResponse.ok(id, result));
 		} catch (McpException e) {
 			if (JsonRpcResponse.notification(id))
 				return null;
 			recordRpcError(ctx, e.getCode(), e.getMessage());
-			return new JsonRpcResponse()
+			return new McpResponseResult(new JsonRpcResponse()
 				.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 				.setId(id)
-				.setError(e.toJsonRpcError());
+				.setError(e.toJsonRpcError()));
 		} catch (Exception e) {
 			if (JsonRpcResponse.notification(id))
 				return null;
 			var message = e.getMessage() == null ? cns(e) : e.getMessage();
 			var code = errorCode(McpErrorKind.INTERNAL_ERROR);
 			recordRpcError(ctx, code, message);
-			return JsonRpcResponse.errorResponse(id, code, message, JsonMap.of("type", cn(e)));
+			return new McpResponseResult(JsonRpcResponse.errorResponse(id, code, message, JsonMap.of("type", cn(e))));
 		}
 	}
 
@@ -350,7 +363,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * @param config The neutral handler registry, used to auto-derive capabilities when none were set explicitly.
 	 * @param ctx The per-request bean store, expected to carry a bound {@link McpSubscriptionBroker}
 	 * 	(Phase 1-3 wiring) and a bound {@link McpOptions}. In production the options bean is normally present —
-	 * 	{@code McpRestServlet#getMcpOptions()} / {@code McpEndpoint#mcpOptionsBean()} (TODO-330) publish it into
+	 * 	{@code McpRestServlet#getMcpOptions()} / {@code McpEndpoint#mcpOptionsBean()} publish it into
 	 * 	the {@code RestContext} bean store that this request-scoped {@code ctx} wraps as its parent, since the
 	 * 	neutral core cannot add it directly ({@code McpOptions} is a v2 type). The
 	 * 	{@code orElseGet(McpSubscriptionsConfig::new)} fallback below is defense-in-depth only (e.g. a
@@ -391,7 +404,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * @throws McpException If the caller never negotiated {@code text/event-stream}, the broker bean is
 	 * 	missing, or {@code maxConcurrentSubscriptions} is reached.
 	 */
-	private Object dispatchSubscriptionsListen(McpExchange exchange, Object id, Object params, McpServerConfig config, BeanStore ctx) {
+	private Flow.Publisher<SseEvent> dispatchSubscriptionsListen(McpExchange exchange, Object id, Object params, McpServerConfig config, BeanStore ctx) {
 		requireEventStreamAccept(exchange);
 		var request = Json.to(Json.of(params), SubscriptionsListenRequest.class);
 		var caps = discoverCapabilities(config);
@@ -1064,7 +1077,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 */
 	static String argumentsHash(Map<String,Object> arguments) {
 		try {
-			JsonValueSafety.check(arguments, "arguments");
+			JsonValueSafety.check(arguments, PARAM_ARGUMENTS);
 		} catch (IllegalArgumentException e) {
 			throw new McpException(CODE_INVALID_PARAMS, e.getMessage());
 		}
@@ -1153,7 +1166,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	/**
 	 * Resolves the authenticated caller {@link Principal} for the current request, threaded into the
 	 * {@link RequestStateCodec} at seal and unseal so a hardened codec can bind the {@code requestState} to who
-	 * requested it (READY-312f F4; unblocks TODO-325's principal-bound AAD).
+	 * requested it (READY-312f F4; enables principal-bound AAD).
 	 *
 	 * <p>
 	 * Reads the F2 resource-server principal via {@link McpResourceServerSupport#principal} &mdash; the same

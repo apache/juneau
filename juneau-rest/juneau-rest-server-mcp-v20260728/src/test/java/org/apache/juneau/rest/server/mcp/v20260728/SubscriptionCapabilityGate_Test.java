@@ -37,10 +37,10 @@ class SubscriptionCapabilityGate_Test {
 
 		var honored = SubscriptionCapabilityGate.honor(requested, caps);
 
-		assertTrue(honored.isToolsListChanged());
-		assertFalse(honored.isPromptsListChanged());
-		assertFalse(honored.isResourcesListChanged());
-		assertTrue(honored.getResourceUris().isEmpty());
+		assertTrue(honored.toolsListChanged());
+		assertFalse(honored.promptsListChanged());
+		assertFalse(honored.resourcesListChanged());
+		assertTrue(honored.resourceUris().isEmpty());
 	}
 
 	@Test
@@ -57,10 +57,10 @@ class SubscriptionCapabilityGate_Test {
 
 		var honored = SubscriptionCapabilityGate.honor(requested, caps);
 
-		assertTrue(honored.isToolsListChanged());
-		assertTrue(honored.isPromptsListChanged());
-		assertTrue(honored.isResourcesListChanged());
-		assertEquals(Set.of("file:///a", "file:///b"), honored.getResourceUris());
+		assertTrue(honored.toolsListChanged());
+		assertTrue(honored.promptsListChanged());
+		assertTrue(honored.resourcesListChanged());
+		assertEquals(Set.of("file:///a", "file:///b"), honored.resourceUris());
 	}
 
 	@Test
@@ -72,25 +72,25 @@ class SubscriptionCapabilityGate_Test {
 
 		var honored = SubscriptionCapabilityGate.honor(requested, caps);
 
-		assertTrue(honored.getResourceUris().isEmpty());
+		assertTrue(honored.resourceUris().isEmpty());
 	}
 
 	@Test
 	void nullCapabilitiesHonorNothing() {
 		var requested = new SubscriptionFilter().setToolsListChanged(true).setResourceSubscriptions(List.of("file:///a"));
 		var honored = SubscriptionCapabilityGate.honor(requested, null);
-		assertFalse(honored.isToolsListChanged());
-		assertFalse(honored.isPromptsListChanged());
-		assertFalse(honored.isResourcesListChanged());
-		assertTrue(honored.getResourceUris().isEmpty());
+		assertFalse(honored.toolsListChanged());
+		assertFalse(honored.promptsListChanged());
+		assertFalse(honored.resourcesListChanged());
+		assertTrue(honored.resourceUris().isEmpty());
 	}
 
 	@Test
 	void nullRequestedFilterHonorsNothing() {
 		var caps = new ServerCapabilities().setTools(new ToolCapability().setListChanged(true));
 		var honored = SubscriptionCapabilityGate.honor(null, caps);
-		assertFalse(honored.isToolsListChanged());
-		assertTrue(honored.getResourceUris().isEmpty());
+		assertFalse(honored.toolsListChanged());
+		assertTrue(honored.resourceUris().isEmpty());
 	}
 
 	@Test

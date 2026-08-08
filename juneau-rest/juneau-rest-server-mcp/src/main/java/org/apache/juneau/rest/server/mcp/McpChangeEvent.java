@@ -23,44 +23,22 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * {@link McpSubscriptionBroker} to every matching {@link McpSubscription}.
  *
  * <p>
- * Immutable value carrier. {@link #getResourceUri()} is only ever non-{@code null} when {@link #getKind()}
- * is {@link McpChangeKind#RESOURCE_UPDATED}; this is a documented contract of the four
- * {@link McpSubscriptions} publish methods, not an invariant enforced by this constructor.
+ * Immutable value carrier. {@link #resourceUri()} is only ever non-{@code null} when {@link #kind()} is
+ * {@link McpChangeKind#RESOURCE_UPDATED}; this is a documented contract of the four {@link McpSubscriptions}
+ * publish methods, not an invariant enforced by this constructor.
+ *
+ * @param kind The change kind. Never {@code null}.
+ * @param resourceUri The affected resource URI, or {@code null} for a list-changed kind.
  */
-public final class McpChangeEvent {
-
-	private final McpChangeKind kind;
-	private final String resourceUri;
+public record McpChangeEvent(McpChangeKind kind, String resourceUri) {
 
 	/**
-	 * Creates a new change event.
+	 * Canonical constructor.
 	 *
-	 * @param kind The change kind. Must not be {@code null}.
-	 * @param resourceUri The affected resource URI, or {@code null} for a list-changed kind.
 	 * @throws IllegalArgumentException If {@code kind} is {@code null}.
 	 */
-	public McpChangeEvent(McpChangeKind kind, String resourceUri) {
+	public McpChangeEvent {
 		if (kind == null)
 			throw iaex("kind must not be null");
-		this.kind = kind;
-		this.resourceUri = resourceUri;
-	}
-
-	/**
-	 * The change kind.
-	 *
-	 * @return The kind. Never {@code null}.
-	 */
-	public McpChangeKind getKind() {
-		return kind;
-	}
-
-	/**
-	 * The affected resource URI.
-	 *
-	 * @return The URI, or {@code null} unless {@link #getKind()} is {@link McpChangeKind#RESOURCE_UPDATED}.
-	 */
-	public String getResourceUri() {
-		return resourceUri;
 	}
 }

@@ -68,7 +68,14 @@ import com.nimbusds.openid.connect.sdk.rp.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value)
+})
 public class McpDynamicClientRegistrar {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_values = "values";
 
 	/**
 	 * Static creator.
@@ -107,7 +114,7 @@ public class McpDynamicClientRegistrar {
 		 * @return This object.
 		 */
 		public Builder registrationEndpoint(URI value) {
-			registrationEndpoint = assertArgNotNull("value", value);
+			registrationEndpoint = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -121,7 +128,7 @@ public class McpDynamicClientRegistrar {
 		 * @return This object.
 		 */
 		public Builder issuer(URI value) {
-			issuer = assertArgNotNull("value", value);
+			issuer = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -132,7 +139,7 @@ public class McpDynamicClientRegistrar {
 		 * @return This object.
 		 */
 		public Builder applicationType(McpApplicationType value) {
-			applicationType = assertArgNotNull("value", value);
+			applicationType = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -143,7 +150,7 @@ public class McpDynamicClientRegistrar {
 		 * @return This object.
 		 */
 		public Builder addRedirectUri(URI... values) {
-			assertArgNotNull("values", values);
+			assertArgNotNull(ARG_values, values);
 			for (var v : values)
 				redirectUris.add(assertArgNotNull("redirectUri", v));
 			return this;
@@ -156,7 +163,7 @@ public class McpDynamicClientRegistrar {
 		 * @return This object.
 		 */
 		public Builder addRedirectUris(List<URI> values) {
-			assertArgNotNull("values", values);
+			assertArgNotNull(ARG_values, values);
 			for (var v : values)
 				redirectUris.add(assertArgNotNull("redirectUri", v));
 			return this;
@@ -169,7 +176,7 @@ public class McpDynamicClientRegistrar {
 		 * @return This object.
 		 */
 		public Builder scope(String... values) {
-			assertArgNotNull("values", values);
+			assertArgNotNull(ARG_values, values);
 			for (var v : values) {
 				assertArgNotNullOrBlank("scope", v);
 				scopes.add(v);
@@ -185,7 +192,7 @@ public class McpDynamicClientRegistrar {
 		 * @return This object.
 		 */
 		public Builder addGrantType(String... values) {
-			assertArgNotNull("values", values);
+			assertArgNotNull(ARG_values, values);
 			for (var v : values) {
 				assertArgNotNullOrBlank("grantType", v);
 				grantTypes.add(v);
@@ -201,7 +208,7 @@ public class McpDynamicClientRegistrar {
 		 * @return This object.
 		 */
 		public Builder addResponseType(String... values) {
-			assertArgNotNull("values", values);
+			assertArgNotNull(ARG_values, values);
 			for (var v : values) {
 				assertArgNotNullOrBlank("responseType", v);
 				responseTypes.add(v);
@@ -228,7 +235,7 @@ public class McpDynamicClientRegistrar {
 		 * @return This object.
 		 */
 		public Builder clientName(String value) {
-			clientName = assertArgNotNullOrBlank("value", value);
+			clientName = assertArgNotNullOrBlank(ARG_value, value);
 			return this;
 		}
 
@@ -240,7 +247,7 @@ public class McpDynamicClientRegistrar {
 		 * @return This object.
 		 */
 		public Builder initialAccessToken(String value) {
-			assertArgNotNullOrBlank("value", value);
+			assertArgNotNullOrBlank(ARG_value, value);
 			initialAccessTokenSupplier = () -> value;
 			return this;
 		}
@@ -263,7 +270,7 @@ public class McpDynamicClientRegistrar {
 		 * @return This object.
 		 */
 		public Builder httpTimeout(Duration value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
 			httpTimeout = value;
 			return this;
@@ -276,7 +283,7 @@ public class McpDynamicClientRegistrar {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 

@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Static helper that builds an {@link McpInputRequiredSignal} from one or more typed {@link ElicitRequest}s (MCP
- * {@code 2026-07-28} SEP-2322 elicitation, riding TODO-318's Multi-Round-Trip Requests loop).
+ * {@code 2026-07-28} SEP-2322 elicitation, riding the Multi-Round-Trip Requests loop).
  *
  * <p>
  * {@link McpInputRequiredSignal}'s constructor takes {@code Map<String,Object>} whose values must be {@code Map}

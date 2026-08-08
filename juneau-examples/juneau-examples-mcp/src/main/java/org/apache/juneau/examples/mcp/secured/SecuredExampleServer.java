@@ -47,12 +47,16 @@ import jakarta.servlet.*;
  * immediately &mdash; before building {@link SecuredExampleMcpServer} or starting the {@link Microservice} at
  * all. Jetty's own {@code Server.start()} then finds the connector already open and skips rebinding it.
  */
+@SuppressWarnings({
+	"java:S106" // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.
+})
 public final class SecuredExampleServer implements AutoCloseable {
 
 	/** Default listen port used by {@link #main(String[])} when none is supplied. */
 	public static final int DEFAULT_PORT = 5001;
 
 	private final Microservice microservice;
+	@SuppressWarnings("resource") // closed in close(); this field's lifecycle is fully managed by this class.
 	private final OfflineAuthorizationServer authServer;
 	private final URI rootUrl;
 
@@ -155,6 +159,7 @@ public final class SecuredExampleServer implements AutoCloseable {
 	 * @param args Optional single argument: the port the MCP server listens on (defaults to {@link #DEFAULT_PORT}).
 	 * @throws Exception If either server fails to start.
 	 */
+	@SuppressWarnings("resource") // example server (and its auth server) run for the JVM lifetime; closed on process exit.
 	public static void main(String[] args) throws Exception {
 		var port = args.length > 0 ? Integer.parseInt(args[0]) : DEFAULT_PORT;
 		var server = start(port);

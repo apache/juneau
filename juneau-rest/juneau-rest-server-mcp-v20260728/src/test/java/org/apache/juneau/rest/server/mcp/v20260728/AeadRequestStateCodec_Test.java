@@ -281,7 +281,7 @@ class AeadRequestStateCodec_Test {
 	}
 
 	/**
-	 * Pins the TODO-325 principal-bound-AAD contract: the caller's authenticated identity is folded into the AEAD's
+	 * Pins the principal-bound-AAD contract: the caller's authenticated identity is folded into the AEAD's
 	 * authenticated data at seal, so a token minted for one principal cannot be resumed by another. A real
 	 * {@link AeadRequestStateCodec} seal uses a random per-seal nonce (see the class Javadoc), so two {@code seal}
 	 * calls are never byte-identical even with everything else held fixed; this proves the binding invariant directly
@@ -290,8 +290,8 @@ class AeadRequestStateCodec_Test {
 	 *
 	 * <p>
 	 * This is the inversion of the READY-312f F4 tripwire (formerly {@code a15_principalIsNotYetBoundSo...}): before
-	 * TODO-325 landed, all three unseals succeeded; binding the identity into the AAD is exactly the change that flips
-	 * the {@code bob} / <jk>null</jk> cases to failure.
+	 * the principal binding landed, all three unseals succeeded; binding the identity into the AAD is exactly the
+	 * change that flips the {@code bob} / <jk>null</jk> cases to failure.
 	 */
 	@Test void a15_principalIsBoundSoTokenRejectsDifferentPrincipal() {
 		var a = new AeadRequestStateCodec();
@@ -305,13 +305,13 @@ class AeadRequestStateCodec_Test {
 		assertTrue(underSamePrincipal.isPresent(), "round trip under the sealing principal must succeed");
 		assertEquals(state, underSamePrincipal.get());
 		assertTrue(underDifferentPrincipal.isEmpty(),
-			"principal is bound to the AAD (TODO-325), so a different principal must fail GCM tag verification");
+			"principal is bound to the AAD, so a different principal must fail GCM tag verification");
 		assertTrue(underNullPrincipal.isEmpty(),
-			"principal is bound to the AAD (TODO-325), so a null (anonymous) principal must not unseal an authenticated-sealed token");
+			"principal is bound to the AAD, so a null (anonymous) principal must not unseal an authenticated-sealed token");
 	}
 
 	/**
-	 * Pins the TODO-325 anonymous-caller policy (settled decision 2 &mdash; fail-closed with a fixed sentinel): a
+	 * Pins the anonymous-caller policy (settled decision 2 &mdash; fail-closed with a fixed sentinel): a
 	 * <jk>null</jk> principal binds to a constant sentinel identity rather than "skip binding", so anonymous&harr;
 	 * anonymous round-trips while anonymous&harr;authenticated is rejected in BOTH directions.
 	 */
@@ -358,7 +358,7 @@ class AeadRequestStateCodec_Test {
 	}
 
 	// ---------------------------------------------------------------------------------------------
-	// principalIdentity(...) helper (TODO-325): pins the exact canonical string for each derivation path so the
+	// principalIdentity(...) helper: pins the exact canonical string for each derivation path so the
 	// AAD-bound identity shape is locked down independent of the seal/unseal round-trip above.
 	// ---------------------------------------------------------------------------------------------
 

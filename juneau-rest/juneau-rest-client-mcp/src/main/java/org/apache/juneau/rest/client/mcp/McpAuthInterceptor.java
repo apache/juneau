@@ -32,9 +32,15 @@ import org.apache.juneau.rest.client.*;
  * token); this class implements no OAuth/OIDC flow itself.
  *
  * <p>
- * If the supplied token is <jk>null</jk>, no {@code Authorization} header is set for that request (the call
- * proceeds unauthenticated). If the token supplier itself throws, {@link RestRequest#run()}'s documented
- * interceptor-exception handling aborts the call before it is sent.
+ * If the supplied token is <jk>null</jk> <b>or blank</b> (empty or all-whitespace), no {@code Authorization}
+ * header is set for that request (the call proceeds unauthenticated) - a blank token is never sent as a
+ * credential-less {@code Authorization: Bearer } header. If the token supplier itself throws,
+ * {@link RestRequest#run()}'s documented interceptor-exception handling aborts the call before it is sent.
+ *
+ * <p>
+ * <b>Note:</b> when a token is set, {@link RestRequest#debug()} logs the full outgoing request including all
+ * headers, so enabling debug logging on a client using this interceptor will log the {@code Authorization}
+ * header (and therefore the bearer token) in plain text.
  *
  * @since 10.0.0
  */
@@ -69,7 +75,7 @@ public class McpAuthInterceptor implements RestCallInterceptor {
 	@Override /* Overridden from RestCallInterceptor */
 	public void onInit(RestRequest req) throws Exception {
 		var token = tokenSupplier.get();
-		if (token != null)
+		if (token != null && ! token.isBlank())
 			req.header("Authorization", "Bearer " + token);
 	}
 }

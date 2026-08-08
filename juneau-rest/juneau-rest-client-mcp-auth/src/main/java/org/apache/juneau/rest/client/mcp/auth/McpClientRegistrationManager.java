@@ -51,7 +51,13 @@ import com.nimbusds.oauth2.sdk.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value)
+})
 public class McpClientRegistrationManager {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
 
 	/**
 	 * Static creator.
@@ -89,7 +95,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder store(McpClientRegistrationStore value) {
-			store = assertArgNotNull("value", value);
+			store = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -100,7 +106,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder preRegistered(McpClientRegistration value) {
-			preRegistered = assertArgNotNull("value", value);
+			preRegistered = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -111,7 +117,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder applicationType(McpApplicationType value) {
-			applicationType = assertArgNotNull("value", value);
+			applicationType = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -138,7 +144,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder redirectUrisSupplier(Supplier<List<URI>> value) {
-			redirectUrisSupplier = assertArgNotNull("value", value);
+			redirectUrisSupplier = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -175,7 +181,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder clientName(String value) {
-			clientName = assertArgNotNullOrBlank("value", value);
+			clientName = assertArgNotNullOrBlank(ARG_value, value);
 			return this;
 		}
 
@@ -186,7 +192,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder initialAccessToken(String value) {
-			assertArgNotNullOrBlank("value", value);
+			assertArgNotNullOrBlank(ARG_value, value);
 			initialAccessTokenSupplier = () -> value;
 			return this;
 		}
@@ -198,7 +204,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder httpTimeout(Duration value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
 			httpTimeout = value;
 			return this;
@@ -211,7 +217,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -227,7 +233,7 @@ public class McpClientRegistrationManager {
 		 * @return This object.
 		 */
 		public Builder registrarFunction(Function<OidcMetadata,McpClientRegistration> value) {
-			dcrOverride = assertArgNotNull("value", value);
+			dcrOverride = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 

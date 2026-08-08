@@ -34,6 +34,7 @@ import org.apache.juneau.rest.server.mcp.McpResourceOutcome;
 import org.apache.juneau.rest.server.mcp.McpResourceSpec;
 import org.apache.juneau.rest.server.mcp.McpResourceTemplateHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceTemplateSpec;
+import org.apache.juneau.rest.server.mcp.McpResponseResult;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.apache.juneau.rest.server.mcp.McpToolHandler;
 import org.apache.juneau.rest.server.mcp.McpToolOutcome;
@@ -93,7 +94,8 @@ class McpCachePrecedence_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, McpCacheConfig cache, JsonRpcRequest r, Map<String,String> headers) {
-		return (JsonRpcResponse) new McpRevision(null, cache).dispatch(new McpExchange(r, headers::get), config, ctx);
+		var result = new McpRevision(null, cache).dispatch(new McpExchange(r, headers::get), config, ctx);
+		return result instanceof McpResponseResult mrr ? mrr.response() : null;
 	}
 
 	// -------- list precedence ---------

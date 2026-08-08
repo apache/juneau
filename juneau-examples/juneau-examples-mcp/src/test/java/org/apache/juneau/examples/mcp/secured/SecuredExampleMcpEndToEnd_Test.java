@@ -55,6 +55,7 @@ import com.nimbusds.jwt.*;
  */
 class SecuredExampleMcpEndToEnd_Test extends TestBase {
 
+	@SuppressWarnings("resource") // opened in setUp() and closed in tearDown(); lifecycle spans the whole test class.
 	private static SecuredExampleServer server;
 	private static HttpClient http;
 
@@ -140,6 +141,7 @@ class SecuredExampleMcpEndToEnd_Test extends TestBase {
 		// A token minted for a DIFFERENT resource must be rejected even though it is otherwise perfectly
 		// valid and correctly signed by the trusted offline authorization server - RFC 8707 audience
 		// enforcement (the confused-deputy defense).
+		@SuppressWarnings("resource") // alias of server's shared authServer, owned/closed via tearDown(); not a new resource.
 		var auth = server.getAuthServer();
 		var wrongAudienceToken = McpTokenProvider.clientCredentials()
 			.tokenEndpoint(auth.tokenEndpoint())
@@ -158,6 +160,7 @@ class SecuredExampleMcpEndToEnd_Test extends TestBase {
 	void a04_expiredToken_401WithInvalidTokenError() throws Exception {
 		// H4 test seam: mintAccessToken(...) lets us mint an already-expired token directly, without a real
 		// clock needing to actually elapse five minutes.
+		@SuppressWarnings("resource") // alias of server's shared authServer, owned/closed via tearDown(); not a new resource.
 		var auth = server.getAuthServer();
 		var expiredToken = auth.mintAccessToken(server.getRootUrl().toString(), SecuredExampleMcpServer.READ_SCOPE,
 			Instant.now().minus(Duration.ofHours(1)), Duration.ofMinutes(5));
@@ -193,6 +196,7 @@ class SecuredExampleMcpEndToEnd_Test extends TestBase {
 	void a06_algNoneToken_401WithInvalidTokenError() throws Exception {
 		// N5 (teaching artifact): JwtTokenValidator explicitly rejects unsigned/alg=none JWTs outright (it
 		// never reaches signature verification), regardless of how plausible the claims otherwise look.
+		@SuppressWarnings("resource") // alias of server's shared authServer, owned/closed via tearDown(); not a new resource.
 		var auth = server.getAuthServer();
 		var claims = new JWTClaimsSet.Builder()
 			.subject(auth.clientId())
@@ -211,6 +215,9 @@ class SecuredExampleMcpEndToEnd_Test extends TestBase {
 
 	// -------- b: RFC 9728 Protected Resource Metadata --------
 
+	// getAuthServer() below returns a reference to the shared server's authorization server, not a new
+	// resource; ownership stays with `server`, which is closed in tearDown().
+	@SuppressWarnings("resource")
 	@Test
 	void b01_wellKnownPrm_advertisesResourceAndOfflineAuthorizationServer() throws Exception {
 		var prmUrl = server.getRootUrl().resolve(".well-known/oauth-protected-resource");
@@ -229,6 +236,7 @@ class SecuredExampleMcpEndToEnd_Test extends TestBase {
 	void c01_insufficientBaselineScope_403WithInsufficientScopeError() throws Exception {
 		// A token that is otherwise perfectly valid but was never granted the endpoint-wide mcp.read
 		// baseline is 403'd before any JSON-RPC method (even server/discover) dispatches.
+		@SuppressWarnings("resource") // alias of server's shared authServer, owned/closed via tearDown(); not a new resource.
 		var auth = server.getAuthServer();
 		var noBaselineToken = McpTokenProvider.clientCredentials()
 			.tokenEndpoint(auth.tokenEndpoint())
@@ -248,6 +256,7 @@ class SecuredExampleMcpEndToEnd_Test extends TestBase {
 
 	@Test
 	void c02_readOnlyToken_canReadButCannotWrite() throws Exception {
+		@SuppressWarnings("resource") // alias of server's shared authServer, owned/closed via tearDown(); not a new resource.
 		var auth = server.getAuthServer();
 
 		// The mcp.read baseline alone is enough to discover the server and read a resource.
@@ -285,6 +294,7 @@ class SecuredExampleMcpEndToEnd_Test extends TestBase {
 		// deleteNote advertises an elicitation (confirm) round trip, so the client must both advertise the
 		// elicitation capability and answer it - unrelated to the OAuth scoping this test targets, but
 		// required for the call to reach a successful outcome at all.
+		@SuppressWarnings("resource") // alias of server's shared authServer, owned/closed via tearDown(); not a new resource.
 		var auth = server.getAuthServer();
 		var tokens = McpTokenProvider.clientCredentials()
 			.tokenEndpoint(auth.tokenEndpoint())
@@ -314,6 +324,7 @@ class SecuredExampleMcpEndToEnd_Test extends TestBase {
 
 	@Test
 	void d01_validToken_dispatchesAndRoundTripsANote() throws Exception {
+		@SuppressWarnings("resource") // alias of server's shared authServer, owned/closed via tearDown(); not a new resource.
 		var auth = server.getAuthServer();
 		var tokens = McpTokenProvider.clientCredentials()
 			.tokenEndpoint(auth.tokenEndpoint())
@@ -342,6 +353,7 @@ class SecuredExampleMcpEndToEnd_Test extends TestBase {
 		// dispatches on the same connection, by counting actual /token HTTP round trips on the offline AS -
 		// not merely asserting the calls happen to succeed (which would also be true of a provider that
 		// re-requested a token on every single call).
+		@SuppressWarnings("resource") // alias of server's shared authServer, owned/closed via tearDown(); not a new resource.
 		var auth = server.getAuthServer();
 		var before = auth.tokenRequestCount();
 		var tokens = McpTokenProvider.clientCredentials()
@@ -373,6 +385,7 @@ class SecuredExampleMcpEndToEnd_Test extends TestBase {
 		// this walkthrough - which publishes/reads its own notes and deliberately triggers a rejected call -
 		// cannot collide with any test above sharing the class-level fixture.
 		try (var standalone = SecuredExampleServer.start(0)) {
+			@SuppressWarnings("resource") // alias of standalone's authServer, owned/closed by the enclosing try-with-resources.
 			var auth = standalone.getAuthServer();
 			assertDoesNotThrow(() -> SecuredExampleClient.run(standalone.getRootUrl().toString(), auth.clientId(), auth.clientSecret()));
 		}

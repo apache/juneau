@@ -214,8 +214,9 @@ class McpResourceTemplateRegistry_Test {
 
 		@Test void c09_setResourceTemplatesValidatesTheCompleteReplacementList() {
 			var config = new McpServerConfig().addResourceTemplate(handler("file:///a"));
+			var replacement = Arrays.asList(handler("file:///b"), null);
 			assertThrows(IllegalArgumentException.class,
-				() -> config.setResourceTemplates(Arrays.asList(handler("file:///b"), null)));
+				() -> config.setResourceTemplates(replacement));
 			// Failure must leave the previous registry untouched.
 			assertEquals(List.of("file:///a"), config.getResourceTemplates().stream()
 				.map(h -> h.descriptor().getUriTemplate()).toList());
@@ -330,6 +331,78 @@ class McpResourceTemplateRegistry_Test {
 		@Test void f03_handlerWithNoCompleterResolvesToNullForDeclaredVariable() {
 			var h = handler("file:///{name}");
 			assertNull(McpServerConfig.resourceTemplateCompleter(h, "name"));
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// G: coverage for work item 316 - the per-handler compiled McpUriTemplateMatcher cache
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Nested class G_compiledMatcherCache {
+
+		@SuppressWarnings("unchecked")
+		private Map<McpResourceTemplateHandler,McpUriTemplateMatcher> compiledMatchers(McpServerConfig config) {
+			try {
+				var f = McpServerConfig.class.getDeclaredField("compiledResourceTemplateMatchers");
+				f.setAccessible(true);
+				return (Map<McpResourceTemplateHandler,McpUriTemplateMatcher>) f.get(config);
+			} catch (ReflectiveOperationException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		@Test void g01_registrationPopulatesACompiledMatcherPerHandler() {
+			var a = handler("file:///a/{x}");
+			var b = handler("file:///b/{y}");
+			var config = new McpServerConfig().addResourceTemplate(a, b);
+			var matchers = compiledMatchers(config);
+			assertEquals(Set.of(a, b), matchers.keySet());
+			assertEquals(List.of("x"), matchers.get(a).variableNames());
+			assertEquals(List.of("y"), matchers.get(b).variableNames());
+		}
+
+		@Test void g02_resolveHasAnyCompleterAndTemplateCompleterReuseTheCachedMatcherWithoutRebuildingIt() {
+			var h = handler("file:///a/{x}");
+			var config = new McpServerConfig().addResourceTemplate(h);
+			var matchers = compiledMatchers(config);
+			var cached = matchers.get(h);
+			assertNotNull(cached);
+
+			config.resolveResourceTemplate("file:///a/1");
+			config.hasAnyCompleter();
+			config.templateCompleter("file:///a/{x}", "x");
+
+			// None of the per-request read paths may rebuild the cache: same map, same compiled matcher instance.
+			assertSame(matchers, compiledMatchers(config));
+			assertSame(cached, compiledMatchers(config).get(h));
+		}
+
+		@Test void g03_reRegistrationRefreshesTheCacheRatherThanGoingStale() {
+			var a = handler("file:///a/{x}");
+			var config = new McpServerConfig().addResourceTemplate(a);
+			var b = handler("file:///b/{y}");
+			config.addResourceTemplate(b);
+
+			var matchers = compiledMatchers(config);
+			assertEquals(Set.of(a, b), matchers.keySet());
+
+			// End-to-end: both templates remain correctly resolvable after the cache refresh.
+			assertSame(a, config.resolveResourceTemplate("file:///a/1").handler());
+			assertSame(b, config.resolveResourceTemplate("file:///b/1").handler());
+		}
+
+		@Test void g04_directListMutationRevalidationRefreshesTheMatcherCacheToo() {
+			var a = handler("file:///a/{x}");
+			var config = new McpServerConfig().addResourceTemplate(a);
+			var b = handler("file:///b/{y}");
+			// Bypass the validated add surface, mirroring D_mutationDetectionAndStability.
+			config.getResourceTemplates().add(b);
+
+			// First consumption after the direct mutation must revalidate and (re)compile, picking up b.
+			var match = config.resolveResourceTemplate("file:///b/1");
+			assertNotNull(match);
+			assertSame(b, match.handler());
+			assertEquals(Set.of(a, b), compiledMatchers(config).keySet());
 		}
 	}
 }

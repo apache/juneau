@@ -197,7 +197,7 @@ public class McpClient extends AbstractMcpClient {
 	 */
 	public CompleteResult complete(CompletionReference ref, CompletionArgument argument) throws IOException {
 		var params = new CompleteRequest().setRef(ref).setArgument(argument);
-		return call(McpMethods.COMPLETION_COMPLETE, toWireParams(params), CompleteResult.class);
+		return call(McpMethods.COMPLETION_COMPLETE, params, CompleteResult.class);
 	}
 
 	private static Object toWireParams(Object params) {
@@ -207,6 +207,14 @@ public class McpClient extends AbstractMcpClient {
 	/**
 	 * Builds and sends a JSON-RPC request for {@code method}, mapping a JSON-RPC {@code error} to a thrown
 	 * {@link McpException} and a non-<jk>null</jk> {@code result} to {@code resultType} via {@link #RESULT_PARSER}.
+	 *
+	 * <p>
+	 * {@code params}, if non-<jk>null</jk>, is uniformly pre-flattened through {@link #toWireParams(Object)}
+	 * before being placed on the request - the same shape the v2 ({@code 2026-07-28}) adapter's {@code call(...)}
+	 * applies unconditionally, so a param bean with a polymorphic field (e.g. {@link CompletionReference}) is
+	 * never accidentally sent through {@link org.apache.juneau.rest.client.RestClient}'s
+	 * {@code addBeanTypes=false} default serializer without its type discriminator, regardless of which typed
+	 * method call reaches this shared path.
 	 *
 	 * @param <T> The typed v1 result bean type.
 	 * @param method The JSON-RPC method name (see {@link McpMethods}).
@@ -221,7 +229,7 @@ public class McpClient extends AbstractMcpClient {
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(nextId.getAndIncrement())
 			.setMethod(method)
-			.setParams(params);
+			.setParams(params == null ? null : toWireParams(params));
 		var response = send(request);
 		var error = response.getError();
 		if (error != null)

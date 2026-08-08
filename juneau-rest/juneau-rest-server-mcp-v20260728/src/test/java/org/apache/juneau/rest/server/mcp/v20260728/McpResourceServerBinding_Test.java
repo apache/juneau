@@ -61,10 +61,10 @@ class McpResourceServerBinding_Test extends TestBase {
 	 */
 	private static final TokenValidator VALIDATOR = token -> switch (token) {
 		case "good" -> new ClaimsPrincipal("alice", Map.of("aud", RESOURCE, "scope", "mcp.read mcp.write"));
-		// TODO-325 cross-identity fixture: a DIFFERENT authenticated principal (bob) with the same audience + baseline
+		// Cross-identity fixture: a DIFFERENT authenticated principal (bob) with the same audience + baseline
 		// scope, so it clears the gate but binds a different requestState identity than 'good' (alice).
 		case "good2" -> new ClaimsPrincipal("bob", Map.of("aud", RESOURCE, "scope", "mcp.read mcp.write"));
-		// TODO-325 real iss|sub claim fixtures: 'good'/'good2' above carry no iss/sub claims, so the requestState
+		// Real iss|sub claim fixtures: 'good'/'good2' above carry no iss/sub claims, so the requestState
 		// binding they exercise end-to-end is only the getName() fallback. 'good3'/'good4' carry the SAME subject
 		// (alice) but a DIFFERENT issuer, so they exercise the actual, primary iss|sub claim-read path (settled
 		// decision 1) end-to-end, not the fallback.
@@ -340,7 +340,7 @@ class McpResourceServerBinding_Test extends TestBase {
 
 	// ---------------------------------------------------------------------------------------------
 	// F4 (READY-312f): the F2-authenticated principal is threaded into the RequestStateCodec seal/unseal seam so
-	// TODO-325 can later bind the requestState to who requested it.  A capturing codec records the principal it
+	// a hardened codec can bind the requestState to who requested it.  A capturing codec records the principal it
 	// receives; an end-to-end pause (seal) then resume (unseal), both under the same bearer token, proves the
 	// authenticated principal reaches the codec at BOTH points.
 	// ---------------------------------------------------------------------------------------------
@@ -427,7 +427,7 @@ class McpResourceServerBinding_Test extends TestBase {
 		assertEquals("alice", J_CODEC.unsealPrincipal.get());  // the authenticated principal reached unseal
 	}
 
-	// TODO-325: a requestState sealed under one authenticated identity (alice, bearer 'good') cannot be resumed under
+	// A requestState sealed under one authenticated identity (alice, bearer 'good') cannot be resumed under
 	// a DIFFERENT authenticated identity (bob, bearer 'good2'); the principal is folded into the AAD, so unseal fails
 	// GCM tag verification and surfaces as a JSON-RPC -32602 invalid-params error rather than re-invoking the handler.
 	@Test void j02_crossIdentityResumeIsRejected() throws Exception {
@@ -450,7 +450,7 @@ class McpResourceServerBinding_Test extends TestBase {
 		assertEquals(-32602, resp.getMap("error").getInt("code"), "a cross-identity resume must be rejected as invalid params");
 	}
 
-	// TODO-325: end-to-end proof of the PRIMARY iss|sub claim-bound path (not the getName() fallback j01/j02
+	// End-to-end proof of the PRIMARY iss|sub claim-bound path (not the getName() fallback j01/j02
 	// exercise). 'good3' (iss-a|alice) and 'good4' (iss-b|alice) are real ClaimsPrincipal fixtures carrying iss/sub
 	// claims: same subject, different issuer. A requestState sealed under good3 must not be resumable under good4
 	// (cross-IdP), proving the codec actually reads and binds iss|sub over real HTTP dispatch, and the SAME token

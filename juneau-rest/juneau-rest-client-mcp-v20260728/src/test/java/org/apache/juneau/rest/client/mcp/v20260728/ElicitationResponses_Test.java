@@ -53,7 +53,8 @@ class ElicitationResponses_Test {
 	}
 
 	@Test void a03_toInputResponse_nullIdThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationResponses.toInputResponse(null, new ElicitResult()));
+		var result = new ElicitResult();
+		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationResponses.toInputResponse(null, result));
 		assertEquals("Argument 'id' cannot be null.", e.getMessage());
 	}
 

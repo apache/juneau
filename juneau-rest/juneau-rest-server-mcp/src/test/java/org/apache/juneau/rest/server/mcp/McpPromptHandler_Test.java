@@ -67,11 +67,13 @@ class McpPromptHandler_Test {
 	}
 
 	@Test void c02_ofRejectsNullGet() {
-		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(new McpPromptSpec().setName("x"), null));
+		var spec = new McpPromptSpec().setName("x");
+		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(spec, null));
 	}
 
 	@Test void c03_ofRejectsBlankName() {
 		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(new McpPromptSpec(), (arguments, ctx) -> new McpPromptOutcome()));
-		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(new McpPromptSpec().setName(" "), (arguments, ctx) -> new McpPromptOutcome()));
+		var spec = new McpPromptSpec().setName(" ");
+		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(spec, (arguments, ctx) -> new McpPromptOutcome()));
 	}
 }

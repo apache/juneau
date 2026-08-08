@@ -81,6 +81,40 @@ class McpAuthInterceptor_Test {
 		assertFalse(sawHeader.get());
 	}
 
+	/** TODO-323 N9: a blank (empty) token is treated like a null token, not sent as a credential-less header. */
+	@Test
+	void a04_onInit_emptyToken_omitsAuthorizationHeader() throws Exception {
+		var sawHeader = new AtomicBoolean(true);
+		HttpTransport transport = tReq -> {
+			sawHeader.set(tReq.getFirstHeader("Authorization") != null);
+			return TransportResponse.builder().statusCode(204).build();
+		};
+		var interceptor = new McpAuthInterceptor(() -> "");
+		try (var client = RestClient.builder().transport(transport).interceptors(interceptor).build()) {
+			try (var res = client.get("http://x/ping").run()) {
+				assertEquals(204, res.getStatusCode());
+			}
+		}
+		assertFalse(sawHeader.get());
+	}
+
+	/** TODO-323 N9: a whitespace-only token is treated like a null token, not sent as a credential-less header. */
+	@Test
+	void a05_onInit_whitespaceOnlyToken_omitsAuthorizationHeader() throws Exception {
+		var sawHeader = new AtomicBoolean(true);
+		HttpTransport transport = tReq -> {
+			sawHeader.set(tReq.getFirstHeader("Authorization") != null);
+			return TransportResponse.builder().statusCode(204).build();
+		};
+		var interceptor = new McpAuthInterceptor(() -> "   ");
+		try (var client = RestClient.builder().transport(transport).interceptors(interceptor).build()) {
+			try (var res = client.get("http://x/ping").run()) {
+				assertEquals(204, res.getStatusCode());
+			}
+		}
+		assertFalse(sawHeader.get());
+	}
+
 	@Test
 	void b01_constructor_nullTokenSupplier_throwsIllegalArgumentException() {
 		assertThrows(IllegalArgumentException.class, () -> new McpAuthInterceptor(null));

@@ -46,7 +46,14 @@ import java.util.concurrent.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_resource)
+})
 public class McpScopeAccumulator {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_resource = "resource";
+	private static final String ARG_issuer = "issuer";
 
 	private final ConcurrentMap<String,Set<String>> byKey = new ConcurrentHashMap<>();
 
@@ -101,8 +108,8 @@ public class McpScopeAccumulator {
 	 * @return This object.
 	 */
 	public McpScopeAccumulator seed(URI resource, URI issuer, Collection<String> previouslyRequested) {
-		assertArgNotNull("resource", resource);
-		assertArgNotNull("issuer", issuer);
+		assertArgNotNull(ARG_resource, resource);
+		assertArgNotNull(ARG_issuer, issuer);
 		byKey.merge(key(resource, issuer), union(previouslyRequested, null), McpScopeAccumulator::union);
 		return this;
 	}
@@ -118,8 +125,8 @@ public class McpScopeAccumulator {
 	 * @return A copy of the updated accumulated union for the key.  Never {@code null}.
 	 */
 	public Set<String> accumulate(URI resource, URI issuer, Collection<String> challengeScopes) {
-		assertArgNotNull("resource", resource);
-		assertArgNotNull("issuer", issuer);
+		assertArgNotNull(ARG_resource, resource);
+		assertArgNotNull(ARG_issuer, issuer);
 		var updated = byKey.compute(key(resource, issuer), (k, existing) -> union(existing, challengeScopes));
 		return new LinkedHashSet<>(updated);
 	}
@@ -132,8 +139,8 @@ public class McpScopeAccumulator {
 	 * @return A copy of the current accumulated union (empty if the key was never seeded/accumulated).
 	 */
 	public Set<String> current(URI resource, URI issuer) {
-		assertArgNotNull("resource", resource);
-		assertArgNotNull("issuer", issuer);
+		assertArgNotNull(ARG_resource, resource);
+		assertArgNotNull(ARG_issuer, issuer);
 		return new LinkedHashSet<>(byKey.getOrDefault(key(resource, issuer), Set.of()));
 	}
 

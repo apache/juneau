@@ -63,11 +63,13 @@ class McpToolHandler_Test {
 	}
 
 	@Test void c02_ofRejectsNullCall() {
-		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(new McpToolSpec().setName("x"), null));
+		var spec = new McpToolSpec().setName("x");
+		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(spec, null));
 	}
 
 	@Test void c03_ofRejectsBlankName() {
 		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(new McpToolSpec(), (arguments, ctx) -> McpToolOutcome.text("x")));
-		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(new McpToolSpec().setName(" "), (arguments, ctx) -> McpToolOutcome.text("x")));
+		var spec = new McpToolSpec().setName(" ");
+		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(spec, (arguments, ctx) -> McpToolOutcome.text("x")));
 	}
 }

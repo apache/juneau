@@ -88,6 +88,7 @@ class McpWellKnownRouting_Test {
 	}
 
 	@Test void e02_nonAbsoluteResourceRejected() {
-		assertThrows(IllegalArgumentException.class, () -> McpWellKnownRouting.metadataUri(URI.create("/mcp")));
+		var relative = URI.create("/mcp");
+		assertThrows(IllegalArgumentException.class, () -> McpWellKnownRouting.metadataUri(relative));
 	}
 }

@@ -35,24 +35,28 @@ class McpSubscriptionsConfig_Test {
 	}
 
 	@Test void a02_setMaxConcurrentSubscriptionsZeroThrows() {
+		var config = new McpSubscriptionsConfig();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new McpSubscriptionsConfig().setMaxConcurrentSubscriptions(0));
+			() -> config.setMaxConcurrentSubscriptions(0));
 		assertEquals("maxConcurrentSubscriptions 0 must be > 0", e.getMessage());
 	}
 
 	@Test void a03_setQueueSizeNegativeThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpSubscriptionsConfig().setQueueSize(-1));
+		var config = new McpSubscriptionsConfig();
+		var e = assertThrows(IllegalArgumentException.class, () -> config.setQueueSize(-1));
 		assertEquals("queueSize -1 must be > 0", e.getMessage());
 	}
 
 	@Test void a04_setHeartbeatIntervalMsZeroThrows() {
+		var config = new McpSubscriptionsConfig();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> new McpSubscriptionsConfig().setHeartbeatIntervalMs(0));
+			() -> config.setHeartbeatIntervalMs(0));
 		assertEquals("heartbeatIntervalMs 0 must be > 0", e.getMessage());
 	}
 
 	@Test void a05_setIdleTimeoutMsNegativeThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new McpSubscriptionsConfig().setIdleTimeoutMs(-1));
+		var config = new McpSubscriptionsConfig();
+		var e = assertThrows(IllegalArgumentException.class, () -> config.setIdleTimeoutMs(-1));
 		assertEquals("idleTimeoutMs -1 must be >= 0", e.getMessage());
 	}
 

@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.client.mcp.auth;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.net.*;
@@ -57,10 +56,21 @@ import net.minidev.json.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value, PROP_resource)
+})
 public class McpProtectedResourceMetadataClient {
 
 	/** Default connect/read timeout applied to a PRM fetch / AS discovery when the caller sets none. */
 	static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(10);
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+
+	// PRM document property name constants (RFC 9728)
+	private static final String PROP_resource = "resource";
+	private static final String PROP_authorizationServers = "authorization_servers";
+	private static final String PROP_scopesSupported = "scopes_supported";
 
 	/**
 	 * Static creator.
@@ -95,7 +105,7 @@ public class McpProtectedResourceMetadataClient {
 		 * @return This object.
 		 */
 		public Builder expectedResource(URI value) {
-			expectedResource = assertArgNotNull("value", value);
+			expectedResource = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -106,7 +116,7 @@ public class McpProtectedResourceMetadataClient {
 		 * @return This object.
 		 */
 		public Builder httpTimeout(Duration value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
 			httpTimeout = value;
 			return this;
@@ -130,7 +140,7 @@ public class McpProtectedResourceMetadataClient {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -240,14 +250,14 @@ public class McpProtectedResourceMetadataClient {
 		}
 		McpProtectedResourceMetadata prm;
 		try {
-			var resource = JSONObjectUtils.getURI(o, "resource");
+			var resource = JSONObjectUtils.getURI(o, PROP_resource);
 			var authServers = new ArrayList<URI>();
-			if (o.containsKey("authorization_servers"))
-				for (var v : JSONObjectUtils.getStringList(o, "authorization_servers"))
+			if (o.containsKey(PROP_authorizationServers))
+				for (var v : JSONObjectUtils.getStringList(o, PROP_authorizationServers))
 					authServers.add(URI.create(v));
 			var scopes = new LinkedHashSet<String>();
-			if (o.containsKey("scopes_supported"))
-				scopes.addAll(JSONObjectUtils.getStringList(o, "scopes_supported"));
+			if (o.containsKey(PROP_scopesSupported))
+				scopes.addAll(JSONObjectUtils.getStringList(o, PROP_scopesSupported));
 			var extras = new LinkedHashMap<String,Object>();
 			for (var e : o.entrySet())
 				if (!STANDARD_FIELDS.contains(e.getKey()))
@@ -311,6 +321,6 @@ public class McpProtectedResourceMetadataClient {
 	}
 
 	private static final Set<String> STANDARD_FIELDS = Set.of(
-		"resource", "authorization_servers", "scopes_supported"
+		PROP_resource, PROP_authorizationServers, PROP_scopesSupported
 	);
 }

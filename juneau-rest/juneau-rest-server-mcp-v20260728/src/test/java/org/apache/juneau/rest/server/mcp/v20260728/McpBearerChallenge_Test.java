@@ -86,6 +86,7 @@ class McpBearerChallenge_Test {
 	}
 
 	@Test void c02_blankParamNameRejected() {
-		assertThrows(IllegalArgumentException.class, () -> McpBearerChallenge.create().param("  ", "x"));
+		var builder = McpBearerChallenge.create();
+		assertThrows(IllegalArgumentException.class, () -> builder.param("  ", "x"));
 	}
 }

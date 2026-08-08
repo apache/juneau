@@ -185,14 +185,17 @@ class McpTypedHandlers_Test {
 
 	@Test void c01_bindingFailureIsInvalidParams() {
 		var a = McpTypedHandlers.adaptTool(handler(Args.class, Result.class, x -> new Result()));
-		var b = assertThrows(McpException.class, () -> a.call(Map.of("value", JsonMap.of()), new BasicBeanStore()));
+		Map<String,Object> arguments = Map.of("value", JsonMap.of());
+		var ctx = new BasicBeanStore();
+		var b = assertThrows(McpException.class, () -> a.call(arguments, ctx));
 		assertEquals(-32602, b.getCode());
 		assertContains(Args.class.getTypeName(), b.getMessage());
 	}
 
 	@Test void c02_resultCanonicalizationAndBoundsAreInternalErrors() {
 		var a = McpTypedHandlers.adaptTool(handler(Args.class, Object.class, x -> nest(65)));
-		var b = assertThrows(McpException.class, () -> a.call(Map.of(), new BasicBeanStore()));
+		Map<String,Object> arguments = Map.of();
+		var b = assertThrows(McpException.class, () -> a.call(arguments, new BasicBeanStore()));
 		assertEquals(-32603, b.getCode());
 		assertContains("structuredContent", b.getMessage());
 	}

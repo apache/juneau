@@ -35,6 +35,7 @@ import org.apache.juneau.rest.server.mcp.McpResourceHandler;
 import org.apache.juneau.rest.server.mcp.McpResourceOutcome;
 import org.apache.juneau.rest.server.mcp.McpResourceSpec;
 import org.apache.juneau.rest.server.mcp.McpResourceTemplateSpec;
+import org.apache.juneau.rest.server.mcp.McpResponseResult;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.apache.juneau.rest.server.mcp.McpToolHandler;
 import org.apache.juneau.rest.server.mcp.McpToolOutcome;
@@ -108,7 +109,8 @@ class McpCachePagination_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, McpCacheConfig cache, String method, Object params) {
-		return (JsonRpcResponse) new McpRevision(null, cache).dispatch(new McpExchange(req(1, method, params), hdrs(method, "")::get), config, ctx);
+		var result = new McpRevision(null, cache).dispatch(new McpExchange(req(1, method, params), hdrs(method, "")::get), config, ctx);
+		return result instanceof McpResponseResult mrr ? mrr.response() : null;
 	}
 
 	private static McpCacheConfig endpointHint(String method, McpCacheHint hint) {

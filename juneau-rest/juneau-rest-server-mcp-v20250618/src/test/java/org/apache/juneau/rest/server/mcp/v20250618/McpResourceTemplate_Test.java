@@ -67,7 +67,8 @@ class McpResourceTemplate_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, JsonRpcRequest r) {
-		return new McpRevision(null).dispatch(new McpExchange(r, n -> null), config, ctx);
+		var result = new McpRevision(null).dispatch(new McpExchange(r, n -> null), config, ctx);
+		return result instanceof McpResponseResult mrr ? mrr.response() : null;
 	}
 
 	private JsonRpcResponse readResponse(McpServerConfig config, String uri) {
@@ -130,10 +131,11 @@ class McpResourceTemplate_Test {
 			return text("ok");
 		}));
 		var marker = new BasicBeanStore();
-		var resp = new McpRevision(null).dispatch(
+		var result = new McpRevision(null).dispatch(
 			new McpExchange(req(1, McpMethods.RESOURCES_READ, JsonMap.of("uri", "file:///Caf%C3%A9/two")), n -> null),
 			config, marker);
-		assertNull(resp.getError());
+		assertInstanceOf(McpResponseResult.class, result);
+		assertNull(((McpResponseResult) result).response().getError());
 		assertEquals("file:///Caf%C3%A9/two", captured.get("uri"));
 		@SuppressWarnings("unchecked")
 		var variables = (Map<String,String>) captured.get("variables");
@@ -249,8 +251,9 @@ class McpResourceTemplate_Test {
 	@Test void e05_explicitCapabilitiesRemainAuthoritativeWithTemplates() {
 		var revision = new McpRevision(new ServerCapabilities().setPrompts(new PromptCapability()));
 		var config = new McpServerConfig().addResourceTemplate(spec("a"));
-		var resp = revision.dispatch(new McpExchange(req(1, McpMethods.INITIALIZE, null), n -> null), config, ctx);
-		var result = (InitializeResult) resp.getResult();
+		var dispatchResult = revision.dispatch(new McpExchange(req(1, McpMethods.INITIALIZE, null), n -> null), config, ctx);
+		assertInstanceOf(McpResponseResult.class, dispatchResult);
+		var result = (InitializeResult) ((McpResponseResult) dispatchResult).response().getResult();
 		assertNotNull(result.getCapabilities().getPrompts());
 		assertNull(result.getCapabilities().getResources());
 	}

@@ -31,6 +31,7 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.mcp.McpExchange;
+import org.apache.juneau.rest.server.mcp.McpResponseResult;
 import org.apache.juneau.rest.server.mcp.McpSchema;
 import org.apache.juneau.rest.server.mcp.McpServerConfig;
 import org.apache.juneau.rest.server.mcp.McpToolHandler;
@@ -76,7 +77,8 @@ class McpSchemaSafety_Test {
 	}
 
 	private JsonRpcResponse send(McpServerConfig config, JsonRpcRequest r, Map<String,String> headers) {
-		return (JsonRpcResponse) new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
+		var result = new McpRevision(null).dispatch(new McpExchange(r, headers::get), config, ctx);
+		return result instanceof McpResponseResult mrr ? mrr.response() : null;
 	}
 
 	private static Map<String,Object> nest(int depth) {
@@ -134,7 +136,9 @@ class McpSchemaSafety_Test {
 
 	@Test
 	void b02_depth65_fails() {
-		var e = assertThrows(McpException.class, () -> McpSchemaSafety.validateInput(McpSchema.of(new JsonMap()), nest(McpSchemaSafety.MAX_DEPTH + 1)));
+		var schema = McpSchema.of(new JsonMap());
+		var args = nest(McpSchemaSafety.MAX_DEPTH + 1);
+		var e = assertThrows(McpException.class, () -> McpSchemaSafety.validateInput(schema, args));
 		assertEquals(-32602, e.getCode());
 		assertContains("nesting depth", e.getMessage());
 	}
@@ -148,7 +152,9 @@ class McpSchemaSafety_Test {
 
 	@Test
 	void c02_nodes10001_fails() {
-		var e = assertThrows(McpException.class, () -> McpSchemaSafety.validateInput(McpSchema.of(new JsonMap()), flat(McpSchemaSafety.MAX_NODES + 1)));
+		var schema = McpSchema.of(new JsonMap());
+		var args = flat(McpSchemaSafety.MAX_NODES + 1);
+		var e = assertThrows(McpException.class, () -> McpSchemaSafety.validateInput(schema, args));
 		assertEquals(-32602, e.getCode());
 		assertContains("node count", e.getMessage());
 	}
@@ -173,8 +179,11 @@ class McpSchemaSafety_Test {
 		assertTrue(elapsedMs < McpSchemaSafety.MAX_VALIDATION_MILLIS + 5000, () -> "validation did not terminate promptly: elapsed=" + elapsedMs + "ms");
 	}
 
+	@SuppressWarnings({
+		"java:S2925" // Thread.sleep here simulates the deterministic scheduling latency under test, not a wait-and-hope synchronization delay.
+	})
 	@Test
-	void d02_schedulingLatency_notCountedAgainstComputeBudget() throws Exception {
+	void d02_schedulingLatency_notCountedAgainstComputeBudget() {
 		// Exercises McpSchemaSafety.awaitBounded() directly (rather than saturating the shared
 		// VALIDATION_POOL, which other tests in this class can leave with a permanently-stuck thread since a
 		// catastrophically-backtracking regex match is not interruptible) with a task-local executor that
