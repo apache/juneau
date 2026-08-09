@@ -89,6 +89,9 @@ public class SseBroadcaster {
 		});
 	}
 
+	@SuppressWarnings({
+		"resource" // Not a leak: this callback runs from SseSubscription.close() itself (closed==true already), or from subscribe()'s replace path where the caller closes 'removed' directly above; the isClosed() guard just prevents a redundant close(), which the static analysis can't see through.
+	})
 	void removeSubscriber(String id) {
 		var removed = subscriptions.remove(id);
 		if (removed != null && ! removed.isClosed())

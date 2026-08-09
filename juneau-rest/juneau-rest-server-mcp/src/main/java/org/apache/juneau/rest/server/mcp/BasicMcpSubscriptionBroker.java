@@ -75,7 +75,11 @@ public class BasicMcpSubscriptionBroker implements McpSubscriptionBroker {
 		synchronized (admissionLock) {
 			if (! subscriptions.containsKey(subscriptionId) && subscriptions.size() >= max)
 				return Optional.empty();
-			return Optional.of(doRegister(subscriptionId, honoredFilter));
+			@SuppressWarnings({
+				"resource" // Returned subscription is caller-owned and closed by the caller/framework; Eclipse JDT @Owning warning is by design.
+			})
+			var sub = doRegister(subscriptionId, honoredFilter);
+			return Optional.of(sub);
 		}
 	}
 

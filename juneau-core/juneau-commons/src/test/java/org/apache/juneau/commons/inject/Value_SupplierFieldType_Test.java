@@ -40,6 +40,9 @@ import org.junit.jupiter.api.*;
  * 		{@code .get()} returns the same cached string with no SVL work).
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // BasicBeanStore is a test-only fluent AutoCloseable with no real resources to release
+})
 class Value_SupplierFieldType_Test extends TestBase {
 
 	private static final String P_KEY = "Value_SupplierFieldType_Test.key";

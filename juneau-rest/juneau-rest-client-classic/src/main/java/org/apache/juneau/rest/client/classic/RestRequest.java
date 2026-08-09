@@ -2203,8 +2203,9 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 			}
 
 			if (errorCodes.test(sc) && ! ignoreErrors) {
-				throw new RestCallException(response, null, "HTTP method '%s' call to '%s' caused response code '%s, %s'.\nResponse: \n%s", method, getURI(), sc, response.getReasonPhrase(),
-					response.getContent().asAbbreviatedString(1000));
+				// Surface the server-reported exception detail from the Thrown header (authoritative and independent of the response body) so callers still see the original failure detail.
+				throw new RestCallException(response, null, "HTTP method '%s' call to '%s' caused response code '%s, %s'.\nResponse: \n%s%s", method, getURI(), sc, response.getReasonPhrase(),
+					response.getContent().asAbbreviatedString(1000), getThrownDetailSuffix(thrown));
 			}
 
 		} catch (RuntimeException | RestCallException e) {
@@ -2218,6 +2219,25 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		}
 
 		return this.response;
+	}
+
+	/**
+	 * Returns a message suffix describing the first entry of the given {@link Thrown} header, if present and
+	 * non-blank, or an empty string otherwise.
+	 *
+	 * @param thrown The parsed {@code Thrown} response header.
+	 * @return A <js>"\nThrown: &lt;className&gt;: &lt;message&gt;"</js> suffix, or an empty string.
+	 */
+	private static String getThrownDetailSuffix(Thrown thrown) {
+		if (thrown.isPresent()) {
+			var partsOpt = thrown.asParts();
+			if (partsOpt.isPresent() && ! partsOpt.get().isEmpty()) {
+				var part = partsOpt.get().get(0);
+				if (inb(part.getClassName()) && inb(part.getMessage()))
+					return "\nThrown: " + part.getClassName() + ": " + part.getMessage();
+			}
+		}
+		return "";
 	}
 
 	/**

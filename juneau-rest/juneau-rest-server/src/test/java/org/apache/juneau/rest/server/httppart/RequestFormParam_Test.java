@@ -35,6 +35,7 @@ import org.junit.jupiter.api.*;
  * the {@code getValue()}/{@code getStream()} lazy-read-from-part branches) require a real multipart request and
  * are left to the higher-level {@code MockRestClient} integration tests per this module's established scope.
  */
+@SuppressWarnings("resource") // getStream() returns an in-memory string-backed stream; a short-lived test fixture with nothing to leak.
 class RequestFormParam_Test {
 
 	private static RequestFormParam formParam(String name, String value) {

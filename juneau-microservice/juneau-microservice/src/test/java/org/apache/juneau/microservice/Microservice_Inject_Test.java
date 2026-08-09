@@ -37,6 +37,9 @@ import org.junit.jupiter.api.*;
  * {@link Microservice#stop()} so <c>@PreDestroy</c> hooks fire.
  */
 @org.apache.juneau.testing.JettyMicroserviceTest
+@SuppressWarnings({
+	"resource" // Test-only Microservice/BeanStore instances are stopped via ms.stop() in try/finally; JDT's local closeable analysis does not recognize stop() as closing them.
+})
 class Microservice_Inject_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -51,9 +54,6 @@ class Microservice_Inject_Test extends TestBase {
 			ms.stop();
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void a02_beanStore_containsMicroserviceItself() throws Exception {
 		var ms = Microservice.create().build();
 		try {
@@ -62,9 +62,6 @@ class Microservice_Inject_Test extends TestBase {
 			ms.stop();
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void a03_beanStore_containsResolvedArgs() throws Exception {
 		var args = new Args(new String[]{"--port", "8080"});
 		var ms = Microservice.create().args(args).build();
@@ -113,9 +110,6 @@ class Microservice_Inject_Test extends TestBase {
 	@Test void b01_configuration_beanIsRegistered() throws Exception {
 		var ms = Microservice.create().configurations(B_SimpleConfig.class).build();
 		try {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var svc = ms.getBeanStore().getBean(MyService.class).orElse(null);
 			assertNotNull(svc);
 			assertEquals("from-config", svc.tag);
@@ -123,9 +117,6 @@ class Microservice_Inject_Test extends TestBase {
 			ms.stop();
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b02_configurations_noneRegistered_emptyStore() throws Exception {
 		var ms = Microservice.create().build();
 		try {
@@ -143,9 +134,6 @@ class Microservice_Inject_Test extends TestBase {
 	static class C_ArgsConfig {
 		@Bean Args args() { return new Args(new String[]{"--from", "config"}); }
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void c01_builderArgs_beatsConfigurationArgs() throws Exception {
 		var builderArgs = new Args(new String[]{"--from", "builder"});
 		var ms = Microservice.create()
@@ -223,9 +211,6 @@ class Microservice_Inject_Test extends TestBase {
 		// @PostConstruct does NOT fire for beans returned from @Bean methods unless they pass through
 		// BeanInstantiator (which @Bean returns don't).  This test pins the documented behavior:
 		// @PreDestroy fires when the bean has been resolved + the store is closed.
-		@SuppressWarnings({
-			"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-		})
 		var bean = ms.getBeanStore().getBean(LifecycleBean.class).orElse(null);
 		assertNotNull(bean);
 		ms.stop();

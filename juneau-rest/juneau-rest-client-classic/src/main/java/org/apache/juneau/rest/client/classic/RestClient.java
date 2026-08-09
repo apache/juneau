@@ -5885,6 +5885,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			if (connectionManager == null)
 				connectionManager = createConnectionManager();
 			httpClientBuilder().setConnectionManager(connectionManager);
+			httpClientBuilder().addInterceptorLast(new ClassicRedirectCredentialGuard());
 			return httpClientBuilder().build();
 		}
 

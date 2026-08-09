@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
@@ -28,6 +29,9 @@ import org.junit.jupiter.api.*;
  * Coverage for {@link McpToolHandler#of(McpToolSpec, java.util.function.BiFunction)} and the
  * two-abstract-method contract that replaced the misleading {@code @FunctionalInterface} annotation.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class McpToolHandler_Test {
 
 	@Test void a01_interfaceIsNoLongerAnnotatedFunctional() {
@@ -59,7 +63,8 @@ class McpToolHandler_Test {
 	}
 
 	@Test void c01_ofRejectsNullDescriptor() {
-		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(null, (arguments, ctx) -> McpToolOutcome.text("x")));
+		BiFunction<Map<String,Object>,BeanStore,McpToolOutcome> call = (arguments, ctx) -> McpToolOutcome.text("x");
+		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(null, call));
 	}
 
 	@Test void c02_ofRejectsNullCall() {
@@ -68,8 +73,9 @@ class McpToolHandler_Test {
 	}
 
 	@Test void c03_ofRejectsBlankName() {
-		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(new McpToolSpec(), (arguments, ctx) -> McpToolOutcome.text("x")));
+		BiFunction<Map<String,Object>,BeanStore,McpToolOutcome> call = (arguments, ctx) -> McpToolOutcome.text("x");
+		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(new McpToolSpec(), call));
 		var spec = new McpToolSpec().setName(" ");
-		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(spec, (arguments, ctx) -> McpToolOutcome.text("x")));
+		assertThrows(IllegalArgumentException.class, () -> McpToolHandler.of(spec, call));
 	}
 }

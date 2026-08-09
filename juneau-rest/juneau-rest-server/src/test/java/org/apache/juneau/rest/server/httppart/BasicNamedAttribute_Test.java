@@ -90,7 +90,8 @@ class BasicNamedAttribute_Test {
 	}
 
 	@Test void c02_get_absent_throws() {
-		assertThrows(NoSuchElementException.class, () -> BasicNamedAttribute.of("foo", (Object)null).get());
+		var absent = BasicNamedAttribute.of("foo", (Object)null);
+		assertThrows(NoSuchElementException.class, absent::get);
 	}
 
 	@Test void c03_isPresent() {

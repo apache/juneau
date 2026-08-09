@@ -260,8 +260,8 @@ class McpMrtrIntegration_Test extends TestBase {
 
 	@Test void b01_unsupportedCapability_rejectedOverTheWire() throws Exception {
 		try (var client = clientBuilder(false).build()) {
-			var e = assertThrows(McpException.class,
-				() -> client.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("ask").setArguments(Map.of())));
+			var request = new CallToolRequest().setName("ask").setArguments(Map.of());
+			var e = assertThrows(McpException.class, () -> client.callRaw(McpMethods.TOOLS_CALL, request));
 			assertEquals(org.apache.juneau.rest.server.mcp.v20260728.McpRevision.CODE_MISSING_REQUIRED_CLIENT_CAPABILITY, e.getCode());
 		}
 	}
@@ -277,15 +277,14 @@ class McpMrtrIntegration_Test extends TestBase {
 			ciphertext[0] ^= 1;
 			var tampered = parts[0] + "." + parts[1] + "." + parts[2] + "."
 				+ Base64.getUrlEncoder().withoutPadding().encodeToString(ciphertext);
-			var e = assertThrows(McpException.class,
-				() -> client.callRaw(McpMethods.TOOLS_CALL,
-					new CallToolRequest().setName("ask").setRequestState(tampered).setInputResponses(Map.of("q1", "answer"))));
+			var tamperedRequest = new CallToolRequest().setName("ask").setRequestState(tampered).setInputResponses(Map.of("q1", "answer"));
+			var e = assertThrows(McpException.class, () -> client.callRaw(McpMethods.TOOLS_CALL, tamperedRequest));
 			assertEquals(org.apache.juneau.rest.server.mcp.v20260728.McpRevision.CODE_INVALID_PARAMS, e.getCode());
 		}
 	}
 
 	// =================================================================================================================
-	// C: shared KeyProvider (TODO-324) -- resume succeeds across two independently-constructed server bindings.
+	// C: shared KeyProvider -- resume succeeds across two independently-constructed server bindings.
 	// =================================================================================================================
 
 	@Test void c01_sharedKeyProviderResume_succeedsAcrossIndependentBindings() throws Exception {

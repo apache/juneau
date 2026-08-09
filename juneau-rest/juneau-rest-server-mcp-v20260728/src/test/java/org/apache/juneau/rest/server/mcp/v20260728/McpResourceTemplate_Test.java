@@ -47,6 +47,9 @@ import org.junit.jupiter.api.*;
  * already covered by {@link McpPromptResource_Test} and {@link McpWire_Test} (Task 5); this class does not
  * duplicate that coverage.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class McpResourceTemplate_Test {
 
 	private final BeanStore ctx = new BasicBeanStore();

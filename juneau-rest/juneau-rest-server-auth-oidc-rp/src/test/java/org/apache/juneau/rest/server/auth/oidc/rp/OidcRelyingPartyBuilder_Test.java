@@ -115,4 +115,23 @@ class OidcRelyingPartyBuilder_Test extends TestBase {
 	@Test void d02_userInfoClaims_validAccumulates() {
 		assertDoesNotThrow(() -> base().userInfoClaims("email", "name"));
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// E: issuer transport guard — https/loopback required, plaintext http to a remote host rejected.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_issuer_plaintextHttpNonLoopback_rejected() {
+		assertThrows(IllegalArgumentException.class, () ->
+			OidcRelyingParty.create().issuer(URI.create("http://idp.example.com")));
+	}
+
+	@Test void e02_issuer_loopbackHttp_allowed() {
+		var rp = OidcRelyingParty.create()
+			.issuer(URI.create("http://127.0.0.1:8080"))
+			.clientId("app")
+			.redirectUri(URI.create("https://app.example.com/cb"))
+			.sessionStore(InMemorySessionStore.create())
+			.build();
+		assertNotNull(rp);
+	}
 }

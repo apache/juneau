@@ -68,6 +68,17 @@ public @interface CborConfig {
 	String useTags() default "";
 
 	/**
+	 * Maximum allowed wire-declared length for CBOR byte/text strings and array/map element counts when parsing.
+	 *
+	 * <p>
+	 * Guards against malformed or adversarial input where a small payload declares a huge length or element count.
+	 * Default is <js>"16777216"</js> (16 MiB). A value of <js>"0"</js> or less disables the cap.
+	 *
+	 * @return The annotation value.
+	 */
+	String maxLength() default "";
+
+	/**
 	 * Optional rank for this config.
 	 *
 	 * @return The annotation value.

@@ -29,6 +29,9 @@ import org.junit.jupiter.api.*;
 /**
  * Golden-byte tests for {@link ProtobufWriter} wire primitives.
  */
+@SuppressWarnings({
+	"resource" // w wraps an in-memory ByteArrayOutputStream fixture; flush() is sufficient and closure is irrelevant to these golden-byte assertions
+})
 class ProtobufWriter_Test extends TestBase {
 
 	private static String write(ThrowingConsumer<ProtobufWriter> c) {

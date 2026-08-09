@@ -620,38 +620,21 @@ class TomlTokenizer_Test extends TestBase {
 		assertEquals(Boolean.FALSE, t("false").readBoolean());
 	}
 
-	@Test
-	void m03_booleanInvalid() {
-		var tok = t("xyz");
-		assertThrows(ParseException.class, tok::readBoolean);
-	}
-
-	@Test
-	void m04_booleanWrongPrefix() {
-		// starts with 't' but not "true"
-		var tok = t("trxx");
-		assertThrows(ParseException.class, tok::readBoolean);
-	}
-
-	@Test
-	void m05_booleanWrongFalsePrefix() {
-		var tok = t("flxxx");
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"xyz",    // m03: not a boolean literal at all
+		"trxx",   // m04: starts with 't' but not "true"
+		"flxxx",  // m05: starts with 'f' but not "false"
+		"tru"     // n01 (expect): EOF mid-word before "true" completes
+	})
+	void m03_booleanInvalidInputsThrow(String input) {
+		var tok = t(input);
 		assertThrows(ParseException.class, tok::readBoolean);
 	}
 
 	@Test
 	void m06_booleanLeadingWhitespace() throws Exception {
 		assertEquals(Boolean.TRUE, t("  true").readBoolean());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// expect
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	void n01_expectEofMidWordThrows() {
-		var tok = t("tru");
-		assertThrows(ParseException.class, tok::readBoolean);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

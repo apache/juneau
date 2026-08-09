@@ -77,7 +77,7 @@ class RrpcInterfaceMethodMeta_Test extends TestBase {
 
 	@Test void b06_policy_equals_wrongType() {
 		var p = new RrpcInterfaceMethodMeta.Policy(new Class<?>[0], "", 0, false, false);
-		assertNotEquals(p, "not a policy");
+		assertNotEquals("not a policy", p);
 	}
 
 	@Test void b07_policy_equals_sameValues() {

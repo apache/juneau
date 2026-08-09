@@ -84,6 +84,9 @@ public class ContentArg implements RestOpArg {
 		this.validate = BeanValidator.isValidationRequested(paramInfo);
 	}
 
+	@SuppressWarnings({
+		"resource" // as(Type,Type...) is generic and its inferred type is conservatively treated as Closeable; the returned content (e.g. an InputStream) is container-managed and handed to the invoked op method, not owned/closed here.
+	})
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		var bean = opSession.getRequest().getContent().setSchema(schema).as(type);

@@ -115,7 +115,7 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 
 	@Test
 	void a09_nativeTimeLeaf_localTimeAndOffsetTime() {
-		// nativeLogicalTypes && (inner==LocalTime || inner==OffsetTime) -> TIME_MICROS (line 404/406, both operands).
+		// Native temporal handling maps LocalTime or OffsetTime to TIME_MICROS (line 404/406, both operands).
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, true);
 		assertTrue(hasConverted(b.buildSchema(MC.getClassMeta(LocalTime.class)), ParquetSchemaElement.CONVERTED_TIME_MICROS));
 		assertTrue(hasConverted(b.buildSchema(MC.getClassMeta(OffsetTime.class)), ParquetSchemaElement.CONVERTED_TIME_MICROS));

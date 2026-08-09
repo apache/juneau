@@ -59,6 +59,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	public static class Builder extends InputStreamParserSession.Builder<Builder> {
 
 		final boolean nativeMode;
+		final int maxLength;
 
 		/**
 		 * Constructor
@@ -69,6 +70,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 		protected Builder(CborParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
 			this.nativeMode = ctx.isNativeMode();
+			this.maxLength = ctx.getMaxLength();
 		}
 
 		@Override
@@ -90,6 +92,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	}
 
 	private final boolean nativeMode;
+	private final int maxLength;
 
 	/**
 	 * Constructor.
@@ -99,6 +102,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	protected CborParserSession(Builder builder) {
 		super(builder);
 		this.nativeMode = builder.nativeMode;
+		this.maxLength = builder.maxLength;
 	}
 
 	/**
@@ -126,7 +130,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	@Override /* TokenReadable */
 	public TokenReader readTokens(Object input) throws IOException {
 		var pipe = new ParserPipe(input, isDebug(), isAutoCloseStreams(), isUnbuffered(), null);
-		return new CborTokenReader(pipe, this).setNativeMode(nativeMode);
+		return new CborTokenReader(pipe, this).setNativeMode(nativeMode).setMaxLength(maxLength);
 	}
 
 	/**
@@ -175,13 +179,22 @@ public class CborParserSession extends InputStreamParserSession implements Token
 
 		Object o = null;
 		DataType dt = is.readDataType();
-		long len = is.readLength();
+		var indefinite = is.isIndefinite();
+		long len = indefinite ? -1 : is.readLength();
 
 		// Handle CBOR semantic tags: skip tag, parse following data item
 		while (dt == TAG) {
 			dt = is.readDataType();
-			len = is.readLength();
+			indefinite = is.isIndefinite();
+			len = indefinite ? -1 : is.readLength();
 		}
+
+		// Bound a definite array/map element count up front.  This is the databind path (elements
+		// accumulate into a collection below); the O(1)-memory streaming cursor is intentionally exempt so
+		// it can still emit tokens for large definite-length containers.  A definite container whose
+		// declared count is negative (e.g. an 8-byte 0xFFFFFFFFFFFFFFFF argument) is rejected here too.
+		if ((dt == ARRAY || dt == MAP) && !indefinite)
+			is.checkLength(len, dt == ARRAY ? "array" : "map");
 
 		if (dt != NULL) {
 			if (dt == BOOLEAN)
@@ -338,6 +351,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	@Override /* Overridden from ParserSession */
 	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (CborInputStream is = new CborInputStream(pipe)) {
+			is.setMaxLength(maxLength);
 			return readAnything(type, is, getOuter(), null);
 		}
 	}
@@ -349,11 +363,14 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	 * For definite-length containers (<c>len &gt;= 0</c>) returns <jk>true</jk> while
 	 * <c>i &lt; len</c>.  For indefinite-length containers (<c>len == -1</c>) peeks for the BREAK
 	 * marker and returns <jk>false</jk> when found (consuming the BREAK byte), <jk>true</jk>
-	 * otherwise.
+	 * otherwise.  In the indefinite case the accumulated element count is bounded by the configured
+	 * maximum so a never-terminating stream of elements cannot grow the collection without limit.
 	 */
 	private static boolean shouldContinueContainer(CborInputStream is, long len, int i) throws IOException {
-		if (len == -1)
+		if (len == -1) {
+			is.checkLength(i, "container");
 			return !is.peekBreak();
+		}
 		return i < len;
 	}
 }

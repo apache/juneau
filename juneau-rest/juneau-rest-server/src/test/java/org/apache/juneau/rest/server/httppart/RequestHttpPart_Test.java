@@ -61,7 +61,8 @@ class RequestHttpPart_Test {
 
 	@Test void a04_get() {
 		assertEquals("bar", part("foo", "bar").get());
-		assertThrows(NoSuchElementException.class, () -> part("foo", null).get());
+		var absent = part("foo", null);
+		assertThrows(NoSuchElementException.class, absent::get);
 	}
 
 	@Test void a05_def_onlyAppliesWhenValueAbsent() {
@@ -216,14 +217,19 @@ class RequestHttpPart_Test {
 
 	@Test void j01_equals_httpPart() {
 		var p = part("foo", "bar");
-		assertEquals(p, org.apache.juneau.http.part.HttpPartBean.of("foo", "bar"));
-		assertNotEquals(p, org.apache.juneau.http.part.HttpPartBean.of("foo", "baz"));
-		assertNotEquals(p, "not a part");
+		// p.equals(Object) is the overridden side of this comparison (it cross-checks HttpPart/HttpHeader);
+		// the counterpart is widened to Object so the assertion isn't comparing statically-unrelated types.
+		Object matchingPart = org.apache.juneau.http.part.HttpPartBean.of("foo", "bar");
+		Object differentPart = org.apache.juneau.http.part.HttpPartBean.of("foo", "baz");
+		assertEquals(p, matchingPart);
+		assertNotEquals(p, differentPart);
+		assertNotEquals("not a part", p);
 	}
 
 	@Test void j02_equals_httpHeader() {
 		var p = part("foo", "bar");
-		assertEquals(p, org.apache.juneau.http.header.HttpStringHeader.of("foo", "bar"));
+		Object matchingHeader = org.apache.juneau.http.header.HttpStringHeader.of("foo", "bar");
+		assertEquals(p, matchingHeader);
 	}
 
 	@Test void j03_hashCode() {

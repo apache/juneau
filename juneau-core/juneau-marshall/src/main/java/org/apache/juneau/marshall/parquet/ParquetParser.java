@@ -48,6 +48,10 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 
 	private static final String ARG_copyFrom = "copyFrom";
 
+	private static final int DEFAULT_MAX_LENGTH = ParquetParserSession.DEFAULT_MAX_LENGTH;
+	private static final int DEFAULT_MAX_COUNT = ParquetParserSession.DEFAULT_MAX_COUNT;
+	private static final int DEFAULT_MAX_INPUT_LENGTH = ParquetParserSession.DEFAULT_MAX_INPUT_LENGTH;
+
 	private final Map<BeanPropertyMeta,ParquetBeanPropertyMeta> parquetBeanPropertyMetas = new ConcurrentHashMap<>();
 	private final Map<ClassMeta<?>,ParquetClassMeta> parquetClassMetas = new ConcurrentHashMap<>();
 
@@ -62,6 +66,9 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 		private static final Cache<HashKey,ParquetParser> CACHE = Cache.of(HashKey.class, ParquetParser.class).build();
 
 		private String nullKeyString;
+		private int maxLength = DEFAULT_MAX_LENGTH;
+		private int maxCount = DEFAULT_MAX_COUNT;
+		private int maxInputLength = DEFAULT_MAX_INPUT_LENGTH;
 
 		/**
 		 * Constructor, default settings.
@@ -69,16 +76,25 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 		protected Builder() {
 			consumes("application/vnd.apache.parquet");
 			nullKeyString = env("ParquetParser.nullKeyString", "<NULL>");
+			maxLength = env("ParquetParser.maxLength", DEFAULT_MAX_LENGTH);
+			maxCount = env("ParquetParser.maxCount", DEFAULT_MAX_COUNT);
+			maxInputLength = env("ParquetParser.maxInputLength", DEFAULT_MAX_INPUT_LENGTH);
 		}
 
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			nullKeyString = copyFrom.nullKeyString;
+			maxLength = copyFrom.maxLength;
+			maxCount = copyFrom.maxCount;
+			maxInputLength = copyFrom.maxInputLength;
 		}
 
 		protected Builder(ParquetParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			nullKeyString = copyFrom.nullKeyString;
+			maxLength = copyFrom.maxLength;
+			maxCount = copyFrom.maxCount;
+			maxInputLength = copyFrom.maxInputLength;
 		}
 
 		/**
@@ -95,6 +111,56 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 			return this;
 		}
 
+		/**
+		 * The maximum allowed wire-declared length (in bytes) for a single Parquet page (compressed or
+		 * uncompressed).
+		 *
+		 * <p>
+		 * Guards against malformed or adversarial input where a small file declares a huge per-page byte
+		 * size, which would otherwise trigger {@link OutOfMemoryError}.  Malformed page headers are
+		 * reported as a clean parse error instead.
+		 *
+		 * @param value The maximum length in bytes.  Default is 256 MiB.  Values &le; 0 disable the cap.
+		 * @return This object.
+		 */
+		public Builder maxLength(int value) {
+			maxLength = value;
+			return this;
+		}
+
+		/**
+		 * The maximum allowed wire-declared element count (file/row-group row counts, column-chunk value
+		 * counts).
+		 *
+		 * <p>
+		 * Guards against malformed or adversarial input where a small footer declares a huge row or value
+		 * count, which would otherwise drive a huge {@code ArrayList} pre-allocation.  Malformed counts are
+		 * reported as a clean parse error instead.
+		 *
+		 * @param value The maximum count.  Default is 10 million.  Values &le; 0 disable the cap.
+		 * @return This object.
+		 */
+		public Builder maxCount(int value) {
+			maxCount = value;
+			return this;
+		}
+
+		/**
+		 * The maximum allowed size (in bytes) of the whole Parquet input buffered into memory before parsing.
+		 *
+		 * <p>
+		 * Parquet's end-of-file footer and column-major layout require the entire input to be buffered before
+		 * any record can be reconstructed.  This cap rejects an oversized input with a clean parse error
+		 * instead of buffering an unbounded body into memory.
+		 *
+		 * @param value The maximum input size in bytes.  Default is 256 MiB.  Values &le; 0 disable the cap.
+		 * @return This object.
+		 */
+		public Builder maxInputLength(int value) {
+			maxInputLength = value;
+			return this;
+		}
+
 		@Override /* InputStreamParser.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
@@ -107,7 +173,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 
 		@Override
 		public HashKey hashKey() {
-			return HashKey.of(super.hashKey(), nullKeyString);
+			return HashKey.of(super.hashKey(), nullKeyString, maxLength, maxCount, maxInputLength);
 		}
 	}
 
@@ -121,6 +187,9 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 	}
 
 	final String nullKeyString;
+	private final int maxLength;
+	private final int maxCount;
+	private final int maxInputLength;
 
 	/**
 	 * Constructor.
@@ -130,6 +199,36 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 	public ParquetParser(Builder builder) {
 		super(builder);
 		nullKeyString = builder.nullKeyString;
+		maxLength = builder.maxLength;
+		maxCount = builder.maxCount;
+		maxInputLength = builder.maxInputLength;
+	}
+
+	/**
+	 * Returns the maximum allowed wire-declared length (in bytes) for a single Parquet page.
+	 *
+	 * @return The maximum length in bytes.
+	 */
+	public int getMaxLength() {
+		return maxLength;
+	}
+
+	/**
+	 * Returns the maximum allowed wire-declared element count (row/value counts).
+	 *
+	 * @return The maximum count.
+	 */
+	public int getMaxCount() {
+		return maxCount;
+	}
+
+	/**
+	 * Returns the maximum allowed size (in bytes) of the whole Parquet input buffered before parsing.
+	 *
+	 * @return The maximum input size in bytes.
+	 */
+	public int getMaxInputLength() {
+		return maxInputLength;
 	}
 
 	@Override /* Overridden from Context */

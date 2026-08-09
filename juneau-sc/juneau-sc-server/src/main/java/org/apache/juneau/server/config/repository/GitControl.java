@@ -78,6 +78,9 @@ public class GitControl implements AutoCloseable {
 	 * 	<br>Force-push is opt-in; defaults to <jk>false</jk> in the other constructors.
 	 * @throws IOException If the repository cannot be opened.
 	 */
+	@SuppressWarnings({
+		"resource" // localRepo (FileRepository) and git (Git) are long-lived fields closed in close(); Git wraps the externally-created Repository without closing it, so both are released there. Warnings surface at the constructor assignments (lines 84/87).
+	})
 	public GitControl(String localPath, String remotePath, String username, String password, boolean forcePush) throws IOException {
 		this.localPath = localPath;
 		this.remotePath = remotePath;

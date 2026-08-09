@@ -47,8 +47,8 @@ import org.apache.juneau.rest.client.*;
 public class McpAuthInterceptor implements RestCallInterceptor {
 
 	// Argument name constants for assertArgNotNull
-	private static final String ARG_tokenSupplier = "tokenSupplier";
-	private static final String ARG_token = "token";
+	private static final String ARG_TOKEN_SUPPLIER = "tokenSupplier";
+	private static final String ARG_TOKEN = "token";
 
 	private final Supplier<String> tokenSupplier;
 
@@ -58,7 +58,7 @@ public class McpAuthInterceptor implements RestCallInterceptor {
 	 * @param tokenSupplier Supplies the bearer token for each request. Must not be <jk>null</jk>.
 	 */
 	public McpAuthInterceptor(Supplier<String> tokenSupplier) {
-		this.tokenSupplier = assertArgNotNull(ARG_tokenSupplier, tokenSupplier);
+		this.tokenSupplier = assertArgNotNull(ARG_TOKEN_SUPPLIER, tokenSupplier);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class McpAuthInterceptor implements RestCallInterceptor {
 	 * @return A new interceptor. Never <jk>null</jk>.
 	 */
 	public static McpAuthInterceptor ofStaticBearer(String token) {
-		assertArgNotNull(ARG_token, token);
+		assertArgNotNull(ARG_TOKEN, token);
 		return new McpAuthInterceptor(() -> token);
 	}
 

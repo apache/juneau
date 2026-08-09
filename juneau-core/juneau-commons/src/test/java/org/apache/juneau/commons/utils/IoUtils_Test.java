@@ -33,7 +33,8 @@ import org.junit.jupiter.api.*;
  * Tests {@link IoUtils}.
  */
 @SuppressWarnings({
-	"java:S1186" // Empty test method intentional for framework testing
+	"java:S1186", // Empty test method intentional for framework testing
+	"resource" // Test streams/readers/writers are throwaway fixtures whose closure is exercised by the assertions themselves
 })
 class IoUtils_Test extends TestBase {
 

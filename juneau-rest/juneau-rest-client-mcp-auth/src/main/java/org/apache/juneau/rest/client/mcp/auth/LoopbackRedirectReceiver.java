@@ -61,6 +61,7 @@ public class LoopbackRedirectReceiver implements AutoCloseable {
 	 * @return A started receiver.
 	 * @throws IOException If the loopback server could not be started.
 	 */
+	@SuppressWarnings("resource") // factory hands the started receiver (and its bound socket) to the caller, who must close it (see class javadoc).
 	public static LoopbackRedirectReceiver open() throws IOException {
 		return new LoopbackRedirectReceiver(DEFAULT_PATH, DEFAULT_HTML);
 	}

@@ -72,6 +72,23 @@ class SamlMetadataResolvers_Test extends TestBase {
 		assertTrue(ex.getMessage().contains("null"));
 	}
 
+	@Test void b02_url_plaintextHttpNonLoopback_rejected() {
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> SamlMetadataResolvers.url("http://idp.example.com/metadata"));
+		assertTrue(ex.getMessage().contains("https") || ex.getMessage().contains("loopback"));
+	}
+
+	@Test void b03_url_pinnedCertOverload_plaintextHttpNonLoopback_rejected() {
+		// The transport guard runs before any fetch or signature check, so the pinned-cert overload rejects too.
+		assertThrows(IllegalArgumentException.class,
+			() -> SamlMetadataResolvers.url("http://idp.example.com/metadata", null));
+	}
+
+	@Test void b04_url_httpsHost_passesTransportGuard() {
+		// https passes the guard, then fails at fetch time against a non-routable host — proving the guard let it through.
+		assertThrows(IOException.class, () -> SamlMetadataResolvers.url("https://127.0.0.1:1/metadata"));
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// C: file(Path) — null guard and delegation.
 	// -----------------------------------------------------------------------------------------------------------------

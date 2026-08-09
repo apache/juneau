@@ -24,6 +24,9 @@ import org.junit.jupiter.api.*;
 /**
  * Coverage for {@link McpCursor} bean-store passthrough.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class McpCursorCtx_Test {
 
 	@Test

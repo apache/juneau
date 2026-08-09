@@ -152,8 +152,8 @@ class McpV2BeanIntegration_Test {
 		assertEquals("d", copy.getResourceTemplates().get(0).getDescription());
 		assertEquals("text/plain", copy.getResourceTemplates().get(0).getMimeType());
 		assertEquals("1", copy.getNextCursor());
-		assertThrows(UnsupportedOperationException.class,
-			() -> copy.getResourceTemplates().add(template));
+		var templates = copy.getResourceTemplates();
+		assertThrows(UnsupportedOperationException.class, () -> templates.add(template));
 		assertEquals("resources/templates/list", McpMethods.RESOURCES_TEMPLATES_LIST);
 	}
 

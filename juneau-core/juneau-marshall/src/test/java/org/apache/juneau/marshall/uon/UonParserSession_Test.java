@@ -47,7 +47,8 @@ import org.junit.jupiter.api.*;
 	"rawtypes",
 	"unchecked",
 	"java:S5961",
-	"java:S5976" // SSLLC test naming convention requires individual methods, not parameterized tests
+	"java:S5976", // SSLLC test naming convention requires individual methods, not parameterized tests
+	"resource" // Pipe/UonReader fixtures wrap in-memory Strings; closure is exercised elsewhere and irrelevant to these assertions
 })
 class UonParserSession_Test extends TestBase {
 

@@ -29,6 +29,9 @@ import org.apache.juneau.marshall.sse.SseEvent;
 import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings({
+	"resource" // Fake/real subscriptions and broker registrations in tests are intentionally unassigned/unclosed; closing is handled by test infrastructure.
+})
 class SubscriptionsListenPublisher_Test {
 
 	/**

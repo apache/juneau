@@ -176,9 +176,10 @@ class MsgPackConformance_Test extends TestBase {
 		"resource" // The token cursor's pipe is closed by try-with-resources; JDT mis-flags the chained factory call.
 	})
 	@Test void d04_tokenCursorBinLengthAbove2pow31Rejected() throws Exception {
-		// The token-cursor BIN path reads through readBinary(), which carries its own length guard.
+		// The token-cursor BIN path reads through readBinary(), whose length cap rejects a declared length
+		// above the configured maximum (and, implicitly, above Integer.MAX_VALUE).
 		try (var r = MsgPackParser.DEFAULT.readTokens(fromSpacedHex("C6 80 00 00 00"))) {
-			assertThrowsWithMessage(IOException.class, "exceeds the maximum supported size", r::next);
+			assertThrowsWithMessage(IOException.class, "exceeds maximum allowed", r::next);
 		}
 	}
 

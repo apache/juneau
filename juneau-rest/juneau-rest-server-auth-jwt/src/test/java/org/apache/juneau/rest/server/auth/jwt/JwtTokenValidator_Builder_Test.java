@@ -21,9 +21,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
 import java.time.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.function.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 import com.nimbusds.jose.*;
 
@@ -105,45 +109,26 @@ class JwtTokenValidator_Builder_Test extends TestBase {
 		);
 	}
 
-	@Test void b02_negativeClockSkew_rejected() {
-		assertThrows(IllegalArgumentException.class, () ->
-			JwtTokenValidator.create().clockSkew(Duration.ofSeconds(-1))
+	@ParameterizedTest(name = "[{index}] {0}")
+	@MethodSource("invalidDurationArguments")
+	void b02_invalidDurationArgument_rejected(String label, Executable action) {
+		assertThrows(IllegalArgumentException.class, action, label);
+	}
+
+	static Stream<Arguments> invalidDurationArguments() {
+		return Stream.of(
+			Arguments.of("negativeClockSkew", (Executable)() -> JwtTokenValidator.create().clockSkew(Duration.ofSeconds(-1))),
+			Arguments.of("clockSkewOverMax", (Executable)() -> JwtTokenValidator.create().clockSkew(Duration.ofMinutes(6))),
+			Arguments.of("zeroJwksCacheTtl", (Executable)() -> JwtTokenValidator.create().jwksCacheTtl(Duration.ZERO)),
+			Arguments.of("negativeJwksCacheTtl", (Executable)() -> JwtTokenValidator.create().jwksCacheTtl(Duration.ofSeconds(-1)))
 		);
 	}
 
-	@Test void b03_clockSkewOverMax_rejected() {
+	@ParameterizedTest(name = "[{index}] cooldownSeconds={0}")
+	@ValueSource(longs = {0, -1, 61})
+	void b06_invalidEagerRefreshCooldown_rejected(long cooldownSeconds) {
 		assertThrows(IllegalArgumentException.class, () ->
-			JwtTokenValidator.create().clockSkew(Duration.ofMinutes(6))
-		);
-	}
-
-	@Test void b04_zeroJwksCacheTtl_rejected() {
-		assertThrows(IllegalArgumentException.class, () ->
-			JwtTokenValidator.create().jwksCacheTtl(Duration.ZERO)
-		);
-	}
-
-	@Test void b05_negativeJwksCacheTtl_rejected() {
-		assertThrows(IllegalArgumentException.class, () ->
-			JwtTokenValidator.create().jwksCacheTtl(Duration.ofSeconds(-1))
-		);
-	}
-
-	@Test void b06_zeroEagerRefreshCooldown_rejected() {
-		assertThrows(IllegalArgumentException.class, () ->
-			JwtTokenValidator.create().jwksEagerRefreshCooldown(Duration.ZERO)
-		);
-	}
-
-	@Test void b07_negativeEagerRefreshCooldown_rejected() {
-		assertThrows(IllegalArgumentException.class, () ->
-			JwtTokenValidator.create().jwksEagerRefreshCooldown(Duration.ofSeconds(-1))
-		);
-	}
-
-	@Test void b08_eagerRefreshCooldownOverSixtySeconds_rejected() {
-		assertThrows(IllegalArgumentException.class, () ->
-			JwtTokenValidator.create().jwksEagerRefreshCooldown(Duration.ofSeconds(61))
+			JwtTokenValidator.create().jwksEagerRefreshCooldown(Duration.ofSeconds(cooldownSeconds))
 		);
 	}
 
@@ -202,5 +187,33 @@ class JwtTokenValidator_Builder_Test extends TestBase {
 			.jwkSource(fixed(rsa))
 			.build();
 		assertThrows(UnsupportedOperationException.class, () -> v.getAlgorithms().clear());
+	}
+
+	// -----------------------------------------------------------------------------------------
+	// jwksUrl transport guard — https/loopback required, plaintext http to a remote host rejected.
+	// -----------------------------------------------------------------------------------------
+
+	@Test void d01_jwksUrl_plaintextHttpNonLoopback_rejected() {
+		assertThrows(IllegalArgumentException.class, () ->
+			JwtTokenValidator.create().jwksUrl(URI.create("http://issuer.example.com/.well-known/jwks.json"))
+		);
+	}
+
+	@Test void d02_jwksUrl_loopbackHttp_allowed() {
+		var v = JwtTokenValidator.create()
+			.issuer(DEFAULT_ISSUER)
+			.audience(DEFAULT_AUDIENCE)
+			.jwksUrl(URI.create("http://127.0.0.1:8080/.well-known/jwks.json"))
+			.build();
+		assertNotNull(v);
+	}
+
+	@Test void d03_jwksUrl_localhostHttp_allowed() {
+		var v = JwtTokenValidator.create()
+			.issuer(DEFAULT_ISSUER)
+			.audience(DEFAULT_AUDIENCE)
+			.jwksUrl(URI.create("http://localhost:8080/.well-known/jwks.json"))
+			.build();
+		assertNotNull(v);
 	}
 }

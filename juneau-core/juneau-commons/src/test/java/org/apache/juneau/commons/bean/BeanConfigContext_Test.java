@@ -28,7 +28,8 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
-	"java:S5961" // Comprehensive single-feature coverage test exceeds the per-method assertion threshold.
+	"java:S5961", // Comprehensive single-feature coverage test exceeds the per-method assertion threshold.
+	"resource" // BasicBeanStore is a test-only fluent AutoCloseable with no real resources to release
 })
 class BeanConfigContext_Test extends TestBase {
 

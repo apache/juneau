@@ -122,6 +122,35 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	}
 
 	/**
+	 * Resolves the configured {@link ParquetParser#getMaxLength()} to an effective bound, translating
+	 * the "disabled" sentinel (values &le; 0) to {@link Integer#MAX_VALUE}.
+	 */
+	private int effectiveMaxLength() {
+		var v = ctx.getMaxLength();
+		return v <= 0 ? Integer.MAX_VALUE : v;
+	}
+
+	/**
+	 * Resolves the configured {@link ParquetParser#getMaxCount()} to an effective bound, translating
+	 * the "disabled" sentinel (values &le; 0) to {@link Long#MAX_VALUE}.
+	 */
+	private long effectiveMaxCount() {
+		var v = ctx.getMaxCount();
+		return v <= 0 ? Long.MAX_VALUE : v;
+	}
+
+	/**
+	 * Resolves the configured {@link ParquetParser#getMaxInputLength()} to an effective bound, translating
+	 * the {@code <= 0} "disabled" sentinel to {@link Long#MAX_VALUE}.
+	 *
+	 * @return The effective whole-input byte cap.
+	 */
+	private long effectiveMaxInputLength() {
+		var v = ctx.getMaxInputLength();
+		return v <= 0 ? Long.MAX_VALUE : v;
+	}
+
+	/**
 	 * Opens a whole-value pull-parser cursor over a Parquet document, bound to this live session.
 	 * {@link RecordReader#read(Class) read(...)} delegates to the polymorphic
 	 * {@link ParserSession#read(Object, Class)} entry point.
@@ -192,7 +221,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		"unchecked" // Generic (T) casts required due to type erasure in doRead
 	})
 	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
-		var bytes = readAllBytes(pipe);
+		var bytes = readAllBytes(pipe, effectiveMaxInputLength());
 		if (bytes.length < 12)
 			throw new ParseException("Parquet file too small");
 		if (!startsWith(bytes, MAGIC, 0) || !startsWith(bytes, MAGIC, bytes.length - 4))
@@ -203,7 +232,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			throw new ParseException("Invalid footer length");
 		var footer = Arrays.copyOfRange(bytes, footerStart, bytes.length - 8);
 		var meta = readFileMetaData(footer);
-		if (meta.numRows() < 0 || meta.numRows() > MAX_NUM_ROWS)
+		if (meta.numRows() < 0 || meta.numRows() > effectiveMaxCount())
 			throw new ParseException("Invalid numRows: %s", meta.numRows());
 		ClassMeta<?> effectiveType = type;
 		if (type.isOptional())
@@ -304,13 +333,19 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return (T)rows;
 	}
 
-	private static byte[] readAllBytes(ParserPipe pipe) throws IOException {
+	private static byte[] readAllBytes(ParserPipe pipe, long maxInputLength) throws IOException, ParseException {
+		var cap = maxInputLength <= 0 ? Long.MAX_VALUE : maxInputLength;
 		try (var is = pipe.getInputStream()) {
 			var baos = new ByteArrayOutputStream();
 			var buf = new byte[8192];
 			int n;
-			while ((n = is.read(buf)) >= 0)
+			long total = 0;
+			while ((n = is.read(buf)) >= 0) {
+				total += n;
+				if (total > cap)
+					throw new ParseException("Parquet input length exceeds maximum allowed %s bytes", cap);
 				baos.write(buf, 0, n);
+			}
 			return baos.toByteArray();
 		}
 	}
@@ -325,8 +360,56 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return (b[off] & 0xFF) | ((b[off + 1] & 0xFF) << 8) | ((b[off + 2] & 0xFF) << 16) | ((b[off + 3] & 0xFF) << 24);
 	}
 
-	private static final long MAX_NUM_ROWS = 10_000_000;
-	private static final long MAX_NUM_VALUES = 10_000_000;
+	/**
+	 * Default cap on wire-declared row/element counts (file/row-group row counts, column-chunk value
+	 * counts), used when {@link ParquetParser#getMaxCount()} has not been explicitly configured.
+	 */
+	static final int DEFAULT_MAX_COUNT = 10_000_000;
+
+	/**
+	 * Default cap (256 MiB) on the whole Parquet input buffered into memory before parsing, used when
+	 * {@link ParquetParser#getMaxInputLength()} has not been explicitly configured.
+	 */
+	static final int DEFAULT_MAX_INPUT_LENGTH = 256 * 1024 * 1024;
+
+	/**
+	 * Clamps an untrusted row-count to a sane initial-capacity ceiling before it is handed to an
+	 * {@link ArrayList} constructor.  Defense in depth: the count is already bounded upstream (see
+	 * {@link #readAllRows}), but sizing every reassembly buffer through this guard keeps a stray value
+	 * from ever driving a huge pre-allocation.
+	 *
+	 * @param numRows The row count.
+	 * @param maxCount The configured maximum count (see {@link ParquetParser.Builder#maxCount(int)}).
+	 * @return {@code numRows} clamped to {@code [0, maxCount]}.
+	 */
+	// Package-private for focused unit testing of the capacity clamp.
+	static int clampCapacity(int numRows, long maxCount) {
+		return (int)Math.max(0L, Math.min(numRows, maxCount));
+	}
+
+	/**
+	 * Validates a length prefix read from a (decompressed) page body before it is used to size an
+	 * allocation.
+	 *
+	 * <p>
+	 * Guards against malformed/adversarial pages where a tiny page body declares a huge rep/def-level
+	 * length that would otherwise drive {@link Arrays#copyOfRange} to allocate far beyond the actual page
+	 * size.  Mirrors {@code BsonInputStream.checkLength} semantics (reject negative, reject beyond the
+	 * bytes actually available).
+	 *
+	 * @param len The declared length read from the page body.
+	 * @param available The number of bytes actually available for this length's payload.
+	 * @param what A short description of the field being read (for the error message).
+	 * @param columnPath The column path (for the error message only).
+	 * @return The validated length.
+	 * @throws ParseException If the length is negative or exceeds the available bytes.
+	 */
+	// Package-private for focused unit testing of the page-length bound.
+	static int checkPageLength(int len, int available, String what, String columnPath) throws ParseException {
+		if (len < 0 || len > available)
+			throw new ParseException("Invalid Parquet %s length for column '%s': %s (available: %s)", what, columnPath, len, available);
+		return len;
+	}
 
 	/** Sentinel for a null intermediate OPTIONAL group at the given def level (GAP-14 multi-level nesting). */
 	private record GroupNull(int defLevel) {}
@@ -358,7 +441,11 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 */
 	private record PageHeaderInfo(int pageType, int uncompressedSize, int compressedSize, int numValues, int encoding, int bodyStart) {}
 
-	private static final int MAX_PAGE_SIZE = 256 * 1024 * 1024;
+	/**
+	 * Default cap (256 MiB) on a single Parquet page's declared byte size (compressed or uncompressed),
+	 * used when {@link ParquetParser#getMaxLength()} has not been explicitly configured.
+	 */
+	static final int DEFAULT_MAX_LENGTH = 256 * 1024 * 1024;
 
 	/**
 	 * Reads a single Parquet {@code PageHeader} Thrift struct starting at {@code off} in {@code fileBytes}.
@@ -366,6 +453,9 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * @param fileBytes The whole file.
 	 * @param off Offset of the page header.
 	 * @param columnPath Column path (for error messages only).
+	 * @param maxLength The configured maximum page byte size (see {@link ParquetParser.Builder#maxLength(int)}).
+	 * @param maxCount The configured maximum count, applied to the page's own {@code num_values} sub-header field
+	 * 	(see {@link ParquetParser.Builder#maxCount(int)}).
 	 * @return The decoded header plus the offset where the page body begins.
 	 * @throws ParseException If the header is malformed or declares out-of-range sizes.
 	 * @throws IOException If the underlying Thrift decode fails.
@@ -373,7 +463,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	@SuppressWarnings({
 		"resource" // bais is an in-memory ByteArrayInputStream; no OS resource to close.
 	})
-	private static PageHeaderInfo readPageHeader(byte[] fileBytes, int off, String columnPath) throws ParseException, IOException {
+	private static PageHeaderInfo readPageHeader(byte[] fileBytes, int off, String columnPath, int maxLength, long maxCount) throws ParseException, IOException {
 		var bais = new ByteArrayInputStream(fileBytes, off, fileBytes.length - off);
 		var dec = new ThriftCompactDecoder(bais);
 		dec.readStructBegin();
@@ -407,12 +497,12 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		dec.readStructEnd();
 		int headerConsumed = (fileBytes.length - off) - bais.available();
 		int bodyStart = off + headerConsumed;
-		if (uncompressedSize < 0 || uncompressedSize > MAX_PAGE_SIZE
-			|| compressedSize < 0 || compressedSize > MAX_PAGE_SIZE
+		if (uncompressedSize < 0 || uncompressedSize > maxLength
+			|| compressedSize < 0 || compressedSize > maxLength
 			|| bodyStart + compressedSize > fileBytes.length)
 			throw new ParseException("Invalid page header for column '%s': uncompressed='%s', compressed='%s'",
 				columnPath, uncompressedSize, compressedSize);
-		if (numValues < 0 || numValues > MAX_NUM_VALUES)
+		if (numValues < 0 || numValues > maxCount)
 			throw new ParseException("Invalid page num_values for column '%s': %s", columnPath, numValues);
 		return new PageHeaderInfo(pageType, uncompressedSize, compressedSize, numValues, encoding, bodyStart);
 	}
@@ -422,8 +512,8 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * {@code DICTIONARY_PAGE} if one is present.  Used by the repeated (list/map) chunk readers, which
 	 * decode a single data page but must still tolerate a dictionary page in front of it.
 	 */
-	private static int skipToDataPage(byte[] fileBytes, int off, String columnPath) throws ParseException, IOException {
-		var ph = readPageHeader(fileBytes, off, columnPath);
+	private static int skipToDataPage(byte[] fileBytes, int off, String columnPath, int maxLength, long maxCount) throws ParseException, IOException {
+		var ph = readPageHeader(fileBytes, off, columnPath, maxLength, maxCount);
 		if (ph.pageType() == PAGE_DICTIONARY)
 			return ph.bodyStart() + ph.compressedSize();
 		return off;
@@ -684,8 +774,19 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		// Multi-row-group (GAP-2): read every row group and concatenate its reassembled rows in order.
 		// Each group declares its own num_rows; fall back to the file total only for a lone group whose
 		// per-group count wasn't recorded (older Juneau-written files).
-		var allRows = new ArrayList<Object>((int)Math.min(meta.numRows(), MAX_NUM_ROWS));
+		var maxCount = effectiveMaxCount();
+		var allRows = new ArrayList<Object>((int)Math.min(meta.numRows(), maxCount));
+		// Each per-row-group num_rows is untrusted and drives ArrayList pre-allocation and reassembly loops
+		// downstream.  Bound every group count (and the running total) against the same configured ceiling
+		// used for the file-level total above, before it is used to size anything, so a tiny footer
+		// declaring a huge per-group count cannot force a giant allocation.
+		long totalGroupRows = 0;
 		for (var group : meta.rowGroups()) {
+			if (group.numRows() < 0 || group.numRows() > maxCount)
+				throw new ParseException("Invalid row group numRows: %s", group.numRows());
+			totalGroupRows += group.numRows();
+			if (totalGroupRows > maxCount)
+				throw new ParseException("Total row group numRows %s exceeds maximum allowed %s", totalGroupRows, maxCount);
 			int groupRows = (int)group.numRows();
 			allRows.addAll(readRowGroupRows(fileBytes, group, groupRows, elementType, schemaRepetition, rawByteArrayPaths, uuidPaths, columnLogical));
 		}
@@ -697,16 +798,18 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	})
 	private List<?> readRowGroupRows(byte[] fileBytes, RowGroupMeta group, int numRows, ClassMeta<?> elementType, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical) throws ParseException {
 		var columnData = new LinkedHashMap<String,List<Object>>();
+		var maxLength = effectiveMaxLength();
+		var maxCount = effectiveMaxCount();
 		for (var cc : group.columns()) {
 			var path = String.join(".", cc.pathInSchema());
 			List<Object> values;
 			var trim = isTrimStrings();
 			if (isListColumnPath(path))
-				values = readListColumnChunk(fileBytes, cc, numRows, trim);
+				values = readListColumnChunk(fileBytes, cc, numRows, trim, maxLength, maxCount);
 			else if (isMapKeyValueColumnPath(path))
-				values = readMapKeyValueColumnChunk(fileBytes, cc, numRows, trim);
+				values = readMapKeyValueColumnChunk(fileBytes, cc, numRows, trim, maxLength, maxCount);
 			else
-				values = readColumnChunk(fileBytes, cc, numRows, schemaRepetition, rawByteArrayPaths, uuidPaths, columnLogical, trim);
+				values = readColumnChunk(fileBytes, cc, numRows, schemaRepetition, rawByteArrayPaths, uuidPaths, columnLogical, trim, maxLength, maxCount);
 			columnData.put(path, values);
 		}
 		if (parquetDebug()) {
@@ -749,7 +852,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return idx < 0 ? listColumnPath : listColumnPath.substring(0, idx);
 	}
 
-	private static List<Object> readListColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, boolean trimStrings) throws ParseException {
+	private static List<Object> readListColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, boolean trimStrings, int maxLength, long maxCount) throws ParseException {
 		try {
 			var path = String.join(".", cc.pathInSchema());
 			var rowRelPath = rowRelativePath(path);
@@ -759,7 +862,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			int defBitWidth = 32 - Integer.numberOfLeadingZeros(maxDef);
 			int repBitWidth = 32 - Integer.numberOfLeadingZeros(maxRep);
 
-			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
+			if (cc.numValues() < 0 || cc.numValues() > maxCount)
 				throw new ParseException("Invalid numValues for column '%s': %s", String.join(".", cc.pathInSchema()), cc.numValues());
 			var codec = CompressionCodec.fromThrift(cc.codec());
 			// Skip a leading dictionary page if present, then read the single data page.  Repeated
@@ -767,19 +870,25 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			// data page, and dictionary-encoded repeated columns are not produced here, so a single-data-page
 			// decode (via the shared page-header reader for Snappy + validation) is sufficient.
 			var chunkPath = String.join(".", cc.pathInSchema());
-			int dataPageOff = skipToDataPage(fileBytes, (int)cc.dataPageOffset(), chunkPath);
-			var ph = readPageHeader(fileBytes, dataPageOff, chunkPath);
+			int dataPageOff = skipToDataPage(fileBytes, (int)cc.dataPageOffset(), chunkPath, maxLength, maxCount);
+			var ph = readPageHeader(fileBytes, dataPageOff, chunkPath, maxLength, maxCount);
 			var compressedData = Arrays.copyOfRange(fileBytes, ph.bodyStart(), ph.bodyStart() + ph.compressedSize());
 			var decompressed = codec.decompress(compressedData, ph.uncompressedSize());
 
 			int numValues = (int)cc.numValues();
+			// The rep-level and def-level length prefixes are untrusted LE4 values read from the (decompressed)
+			// page body; bound each against the bytes actually available before it is used to size an
+			// Arrays.copyOfRange allocation, so a tiny page cannot declare a huge length and force a giant
+			// buffer.
+			if (decompressed.length < 4)
+				throw new ParseException("Invalid Parquet list page for column '%s': too small for rep-level length", chunkPath);
 			int off2 = 0;
-			int repLen = (decompressed[off2] & 0xFF) | ((decompressed[off2 + 1] & 0xFF) << 8)
-				| ((decompressed[off2 + 2] & 0xFF) << 16) | ((decompressed[off2 + 3] & 0xFF) << 24);
+			int repLen = checkPageLength(readLe4(decompressed, off2), decompressed.length - 4, "list rep-level", chunkPath);
 			off2 += 4 + repLen;
 			int defStart = off2;
-			int defLen = (decompressed[off2] & 0xFF) | ((decompressed[off2 + 1] & 0xFF) << 8)
-				| ((decompressed[off2 + 2] & 0xFF) << 16) | ((decompressed[off2 + 3] & 0xFF) << 24);
+			if (defStart + 4 > decompressed.length)
+				throw new ParseException("Invalid Parquet list page for column '%s': truncated def-level length", chunkPath);
+			int defLen = checkPageLength(readLe4(decompressed, defStart), decompressed.length - defStart - 4, "list def-level", chunkPath);
 			off2 += 4 + defLen;
 			var valueBytes = Arrays.copyOfRange(decompressed, off2, decompressed.length);
 			var repBytes = Arrays.copyOfRange(decompressed, 4, 4 + repLen);
@@ -797,8 +906,8 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			}
 
 			if (listDepth == 1)
-				return reconstructRowsFromListColumn(flattened, numRows, maxDef);
-			return reconstructNestedListColumn(flattened, numRows, listDepth, maxDef);
+				return reconstructRowsFromListColumn(flattened, numRows, maxDef, maxCount);
+			return reconstructNestedListColumn(flattened, numRows, listDepth, maxDef, maxCount);
 		} catch (IOException e) {
 			throw new ParseException(e);
 		}
@@ -832,8 +941,8 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	@SuppressWarnings({
 		"unchecked" // Generic array creation for stacks.
 	})
-	private static List<Object> reconstructNestedListColumn(List<Object[]> flattened, int numRows, int depth, int maxDef) {
-		var result = new ArrayList<>(numRows);
+	private static List<Object> reconstructNestedListColumn(List<Object[]> flattened, int numRows, int depth, int maxDef, long maxCount) {
+		var result = new ArrayList<>(clampCapacity(numRows, maxCount));
 		var stacks = new ArrayList[depth];
 
 		for (var e : flattened) {
@@ -912,14 +1021,14 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	private static final int MAP_MAX_DEF = 2;
 	private static final int MAP_MAX_REP = 1;
 
-	private static List<Object> readMapKeyValueColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, boolean trimStrings) throws ParseException {
+	private static List<Object> readMapKeyValueColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, boolean trimStrings, int maxLength, long maxCount) throws ParseException {
 		try {
 			int maxDef = MAP_MAX_DEF;
 			int maxRep = MAP_MAX_REP;
 			int defBitWidth = 32 - Integer.numberOfLeadingZeros(maxDef);
 			int repBitWidth = 32 - Integer.numberOfLeadingZeros(maxRep);
 
-			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
+			if (cc.numValues() < 0 || cc.numValues() > maxCount)
 				throw new ParseException("Invalid numValues for column '%s': %s", String.join(".", cc.pathInSchema()), cc.numValues());
 			var codec = CompressionCodec.fromThrift(cc.codec());
 			// Skip a leading dictionary page if present, then read the single data page.  Repeated
@@ -927,19 +1036,25 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			// data page, and dictionary-encoded repeated columns are not produced here, so a single-data-page
 			// decode (via the shared page-header reader for Snappy + validation) is sufficient.
 			var chunkPath = String.join(".", cc.pathInSchema());
-			int dataPageOff = skipToDataPage(fileBytes, (int)cc.dataPageOffset(), chunkPath);
-			var ph = readPageHeader(fileBytes, dataPageOff, chunkPath);
+			int dataPageOff = skipToDataPage(fileBytes, (int)cc.dataPageOffset(), chunkPath, maxLength, maxCount);
+			var ph = readPageHeader(fileBytes, dataPageOff, chunkPath, maxLength, maxCount);
 			var compressedData = Arrays.copyOfRange(fileBytes, ph.bodyStart(), ph.bodyStart() + ph.compressedSize());
 			var decompressed = codec.decompress(compressedData, ph.uncompressedSize());
 
 			int numValues = (int)cc.numValues();
+			// The rep-level and def-level length prefixes are untrusted LE4 values read from the (decompressed)
+			// page body; bound each against the bytes actually available before it is used to size an
+			// Arrays.copyOfRange allocation, so a tiny page cannot declare a huge length and force a giant
+			// buffer.
+			if (decompressed.length < 4)
+				throw new ParseException("Invalid Parquet map page for column '%s': too small for rep-level length", chunkPath);
 			int off2 = 0;
-			int repLen = (decompressed[off2] & 0xFF) | ((decompressed[off2 + 1] & 0xFF) << 8)
-				| ((decompressed[off2 + 2] & 0xFF) << 16) | ((decompressed[off2 + 3] & 0xFF) << 24);
+			int repLen = checkPageLength(readLe4(decompressed, off2), decompressed.length - 4, "map rep-level", chunkPath);
 			off2 += 4 + repLen;
 			int defStart = off2;
-			int defLen = (decompressed[off2] & 0xFF) | ((decompressed[off2 + 1] & 0xFF) << 8)
-				| ((decompressed[off2 + 2] & 0xFF) << 16) | ((decompressed[off2 + 3] & 0xFF) << 24);
+			if (defStart + 4 > decompressed.length)
+				throw new ParseException("Invalid Parquet map page for column '%s': truncated def-level length", chunkPath);
+			int defLen = checkPageLength(readLe4(decompressed, defStart), decompressed.length - defStart - 4, "map def-level", chunkPath);
 			off2 += 4 + defLen;
 			var repBytes = Arrays.copyOfRange(decompressed, 4, 4 + repLen);
 			var defBytes = Arrays.copyOfRange(decompressed, defStart + 4, defStart + 4 + defLen);
@@ -956,14 +1071,14 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				flattened.add(new Object[] { val, rep, def });
 			}
 
-			return reconstructRowsFromListColumn(flattened, numRows, maxDef);
+			return reconstructRowsFromListColumn(flattened, numRows, maxDef, maxCount);
 		} catch (IOException e) {
 			throw new ParseException(e);
 		}
 	}
 
-	private static List<Object> reconstructRowsFromListColumn(List<Object[]> flattened, int numRows, int maxDef) {
-		var result = new ArrayList<>(numRows);
+	private static List<Object> reconstructRowsFromListColumn(List<Object[]> flattened, int numRows, int maxDef, long maxCount) {
+		var result = new ArrayList<>(clampCapacity(numRows, maxCount));
 		var current = l();
 		// def=0: list null; def=1: list present empty; def>=maxDef-1: element slot (value can be null)
 		int elemPresentDef = Math.max(0, maxDef - 1);
@@ -996,9 +1111,9 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	@SuppressWarnings({
 		"java:S107" // Parser-internal method threads decode state (column paths, schema repetition, logical types); parameter count is intentional.
 	})
-	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical, boolean trimStrings) throws ParseException {
+	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical, boolean trimStrings, int maxLength, long maxCount) throws ParseException {
 		try {
-			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
+			if (cc.numValues() < 0 || cc.numValues() > maxCount)
 				throw new ParseException("Invalid numValues for column '%s': %s", String.join(".", cc.pathInSchema()), cc.numValues());
 			var codec = CompressionCodec.fromThrift(cc.codec());
 			var path = String.join(".", cc.pathInSchema());
@@ -1031,7 +1146,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			while (consumed < valuesToRead && pageOff < fileBytes.length) {
 				if (++pageGuard > MAX_PAGES_PER_CHUNK)
 					throw new ParseException("Column '%s' exceeds the maximum of %s pages per chunk", path, MAX_PAGES_PER_CHUNK);
-				var ph = readPageHeader(fileBytes, pageOff, path);
+				var ph = readPageHeader(fileBytes, pageOff, path, maxLength, maxCount);
 				var compressedData = Arrays.copyOfRange(fileBytes, ph.bodyStart(), ph.bodyStart() + ph.compressedSize());
 				var decompressed = codec.decompress(compressedData, ph.uncompressedSize());
 				if (ph.pageType() == PAGE_DICTIONARY) {
@@ -1291,7 +1406,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	}
 
 	private List<Object> reassembleRows(Map<String,List<Object>> columnData, int numRows, ClassMeta<?> elementType) throws ParseException {
-		var result = new ArrayList<>(numRows);
+		var result = new ArrayList<>(clampCapacity(numRows, effectiveMaxCount()));
 		var listBeanColumns = groupListBeanColumns(columnData.keySet(), elementType);
 		var mapColumns = groupMapColumns(columnData.keySet());
 		for (int i = 0; i < numRows; i++) {

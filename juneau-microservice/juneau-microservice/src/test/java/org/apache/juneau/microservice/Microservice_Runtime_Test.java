@@ -48,6 +48,9 @@ import org.junit.jupiter.api.*;
  * {@code Microservice_OverridingBeanStore_Test} / {@code Microservice_PushPopOverlay_Test}).
  */
 @org.apache.juneau.testing.JettyMicroserviceTest
+@SuppressWarnings({
+	"resource" // Test-only Microservice/Scanner instances are stopped/closed in try/finally; JDT's local closeable analysis does not recognize ms.stop() as closing them.
+})
 class Microservice_Runtime_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

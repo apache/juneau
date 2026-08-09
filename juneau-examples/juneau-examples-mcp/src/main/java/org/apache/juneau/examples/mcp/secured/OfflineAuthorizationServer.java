@@ -258,7 +258,10 @@ public final class OfflineAuthorizationServer implements AutoCloseable {
 				sendJson(exchange, 401, error("invalid_client", "unknown client id or secret"));
 				return;
 			}
-			var form = parseForm(exchange.getRequestBody());
+			Map<String,String> form;
+			try (var body = exchange.getRequestBody()) {
+				form = parseForm(body);
+			}
 			if (! "client_credentials".equals(form.get("grant_type"))) {
 				sendJson(exchange, 400, error("unsupported_grant_type", "only client_credentials is supported"));
 				return;

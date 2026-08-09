@@ -167,4 +167,20 @@ class IdTokenValidatorAdapter_Test extends TestBase {
 		var jwt = signIdToken(key, ISS, CID, "alice", null, null, now, Duration.ofMinutes(5), null);
 		assertDoesNotThrow(() -> validator().validate(jwt, null));
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// G: jwksUri transport guard — https/loopback required, plaintext http to a remote host rejected.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_jwksUri_plaintextHttpNonLoopback_rejected() {
+		assertThrows(IllegalArgumentException.class, () ->
+			IdTokenValidatorAdapter.create().jwksUri(URI.create("http://idp.example.com/.well-known/jwks.json")));
+	}
+
+	@Test void g02_jwksUri_loopbackHttp_allowed() {
+		assertDoesNotThrow(() -> IdTokenValidatorAdapter.create()
+			.issuer(ISS).clientId(CID)
+			.jwksUri(URI.create("http://127.0.0.1:8080/.well-known/jwks.json"))
+			.build());
+	}
 }

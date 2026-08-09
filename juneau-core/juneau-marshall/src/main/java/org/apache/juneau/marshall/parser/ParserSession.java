@@ -688,6 +688,8 @@ public class ParserSession extends MarshallingSession {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
+		} catch (@SuppressWarnings("unused") OutOfMemoryError e) {
+			throw new ParseException(this, "Out of memory occurred.  Input too large to parse.");
 		} catch (IOException e) {
 			throw new ParseException(this, e, "I/O exception occurred.  exception=%s, message=%s.", cns(e), localizedMessage(e));
 		} catch (Exception e) {
@@ -723,6 +725,8 @@ public class ParserSession extends MarshallingSession {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
+		} catch (@SuppressWarnings("unused") OutOfMemoryError e) {
+			throw new ParseException(this, "Out of memory occurred.  Input too large to parse.");
 		} catch (IOException e) {
 			throw new ParseException(this, e, "I/O exception occurred.  exception=%s, message=%s.", cns(e), localizedMessage(e));
 		} catch (Exception e) {
@@ -799,6 +803,8 @@ public class ParserSession extends MarshallingSession {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
+		} catch (@SuppressWarnings("unused") OutOfMemoryError e) {
+			throw new ParseException(this, "Out of memory occurred.  Input too large to parse.");
 		} catch (Exception e) {
 			throw new ParseException(this, e, "Exception occurred.  exception=%s, message=%s.", cns(e), localizedMessage(e));
 		} finally {
@@ -838,6 +844,8 @@ public class ParserSession extends MarshallingSession {
 	public final <T> void readToBeanConsumer(Object input, BeanConsumer<T> consumer, Class<T> elementType) throws ParseException, IOException {
 		try (var p = createPipe(input)) {
 			doReadToBeanConsumer(p, consumer, elementType);
+		} catch (@SuppressWarnings("unused") OutOfMemoryError e) {
+			throw new ParseException(this, "Out of memory occurred.  Input too large to parse.");
 		}
 	}
 

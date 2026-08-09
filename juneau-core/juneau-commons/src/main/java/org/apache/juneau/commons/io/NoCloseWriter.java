@@ -100,6 +100,9 @@ public class NoCloseWriter extends Writer {
 	 *
 	 * @param w The Writer to wrap. Must not be <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"resource" // Intentionally not owned; this wrapper deliberately does not close the underlying writer
+	})
 	public NoCloseWriter(Writer w) {
 		this.w = assertArgNotNull(ARG_w, w);
 	}

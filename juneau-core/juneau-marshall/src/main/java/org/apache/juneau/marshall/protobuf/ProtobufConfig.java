@@ -72,6 +72,17 @@ public @interface ProtobufConfig {
 	String nativeTypes() default "";
 
 	/**
+	 * Maximum allowed wire-declared length (in bytes) for protobuf length-delimited blocks when parsing.
+	 *
+	 * <p>
+	 * Guards against malformed or adversarial input where a small payload declares a huge length.
+	 * Default is <js>"16777216"</js> (16 MiB). A value of <js>"0"</js> or less disables the cap.
+	 *
+	 * @return The annotation value.
+	 */
+	String maxLength() default "";
+
+	/**
 	 * Optional rank for this config.
 	 *
 	 * @return The annotation value.

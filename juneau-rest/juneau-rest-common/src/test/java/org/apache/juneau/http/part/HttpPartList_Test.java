@@ -305,7 +305,8 @@ class HttpPartList_Test extends TestBase {
 		var p = HttpPartBean.of("b", "2");
 		assertThrows(UnsupportedOperationException.class, () -> u.append(p));
 		assertThrows(UnsupportedOperationException.class, () -> u.append(p, p));
-		assertThrows(UnsupportedOperationException.class, () -> u.append(List.of(p)));
+		var pList = List.<HttpPart>of(p);
+		assertThrows(UnsupportedOperationException.class, () -> u.append(pList));
 		assertThrows(UnsupportedOperationException.class, () -> u.append("c", "3"));
 		assertThrows(UnsupportedOperationException.class, () -> u.set(p));
 		assertThrows(UnsupportedOperationException.class, () -> u.set(p, p));

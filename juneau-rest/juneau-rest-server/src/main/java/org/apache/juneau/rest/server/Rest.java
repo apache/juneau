@@ -779,13 +779,27 @@ public @interface Rest {
 	 * Disable content URL parameter.
 	 *
 	 * <p>
-	 * When enabled, the HTTP content content on PUT and POST requests can be passed in as text using the <js>"content"</js>
-	 * URL parameter.
+	 * When enabled (the default &mdash; this attribute is <jk>false</jk> unless explicitly set), the HTTP request
+	 * content on PUT and POST requests can be passed in as text using the <js>"content"</js> URL parameter, letting
+	 * a caller exercise an endpoint's body-consuming logic straight from a URL (handy for a quick manual test or a
+	 * bookmarked link) without an actual PUT/POST body.
 	 * <br>
 	 * For example:
 	 * <p class='burlenc'>
 	 *  ?content=(name='John%20Smith',age=45)
 	 * </p>
+	 *
+	 * <p>
+	 * Because the override is on by default, treat it the same way as any other feature that lets untrusted URL
+	 * content reach parsing/business logic: a link to a PUT/POST endpoint with a crafted <js>"content"</js>
+	 * parameter is just as reproducible by a third party (e.g. embedded in a page that an authenticated user
+	 * happens to load) as the equivalent real request body would be. The override is deliberately restricted to
+	 * <c>PUT</c>/<c>POST</c> methods so that a simple cross-origin <c>GET</c> (the kind a browser issues with no
+	 * preflight and no caller-controlled header for something as ordinary as an <code>&lt;img src=...&gt;</code>
+	 * tag) can never trigger it this way, but resources that don't already validate that PUT/POST submissions are
+	 * same-site in origin (e.g. with a token check, a custom-header check, or <c>SameSite</c> cookies) gain no
+	 * additional protection here. Set this to <jk>true</jk> to disable the override entirely on any resource
+	 * where it isn't a deliberate feature.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
@@ -1122,6 +1136,11 @@ public @interface Rest {
 	 * <p>
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
+	 *
+	 * <p>
+	 * Applies uniformly across body-reading paths, including {@code multipart/form-data} uploads: a request whose
+	 * declared {@code Content-Length} or parsed part sizes exceed this ceiling is rejected with a {@code 413}
+	 * response before (or as soon as) the oversized content would otherwise be buffered.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
@@ -1492,6 +1511,15 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
+	 *
+	 * <p>
+	 * Off by default. Besides the stack trace itself, this same setting also determines whether the
+	 * {@code Thrown} response header is set and whether an error whose exception type wasn't deliberately
+	 * thrown by application code (i.e. not a {@link org.apache.juneau.http.response.BasicHttpException
+	 * BasicHttpException} or one of its subclasses) has its class name/message echoed into the error body.
+	 * Leave this off in production so that an unplanned exception type (a database driver error, a
+	 * file-system exception, and the like) can't incidentally leak implementation detail to the caller;
+	 * turn it on only for local debugging.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>

@@ -48,7 +48,6 @@ public class BsonInputStream extends ParserInputStream {
 	static final int DEFAULT_MAX_LENGTH = 16 * 1024 * 1024;
 
 	private int pushback = -1;
-	private int maxLength = DEFAULT_MAX_LENGTH;
 
 	/**
 	 * Constructor.
@@ -58,36 +57,6 @@ public class BsonInputStream extends ParserInputStream {
 	 */
 	protected BsonInputStream(ParserPipe pipe) throws IOException {
 		super(pipe);
-	}
-
-	/**
-	 * Sets the maximum allowed wire-declared length (in bytes) for strings, binary payloads, and document/array
-	 * size prefixes.
-	 *
-	 * <p>
-	 * Guards against malformed/adversarial input where a small payload declares a huge or negative length that
-	 * would otherwise trigger {@link OutOfMemoryError} or {@link NegativeArraySizeException}.
-	 *
-	 * @param value The maximum length in bytes.  Values &le; 0 disable the cap (only the negative-length check remains).
-	 */
-	void setMaxLength(int value) {
-		maxLength = value <= 0 ? Integer.MAX_VALUE : value;
-	}
-
-	/**
-	 * Validates a wire-declared length against sane bounds before it is used to allocate a buffer.
-	 *
-	 * @param len The declared length read off the wire.
-	 * @param what A short description of the field being read (for the error message).
-	 * @return The validated length.
-	 * @throws IOException If the length is negative or exceeds the configured maximum.
-	 */
-	private int checkLength(int len, String what) throws IOException {
-		if (len < 0)
-			throw ioex("Invalid BSON %s length (negative): %s", what, len);
-		if (len > maxLength)
-			throw ioex("BSON %s length %s exceeds maximum allowed %s", what, len, maxLength);
-		return len;
 	}
 
 	@Override

@@ -267,6 +267,7 @@ public class RestOpInvoker extends MethodInvoker {
 		}
 	}
 
+	@SuppressWarnings("java:S107") // Parameter list is fixed by the framework invocation contract; grouping into a holder would not improve clarity.
 	private void deferObservability(CompletionStage<?> stage, MetricsRecorder recorder, Scope tracerScope,
 			long startNanos, RestOpSession opSession, String metricName, String metricTags, boolean scopeStashed) {
 		var fullName = getFullName();

@@ -33,7 +33,8 @@ import org.junit.jupiter.api.*;
  */
 @org.apache.juneau.testing.JettyMicroserviceTest
 @SuppressWarnings({
-	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"resource" // Test-only Scanner/PrintWriter/Microservice instances are never dispatched against; not a leak.
 })
 class Microservice_Builder_Test extends TestBase {
 

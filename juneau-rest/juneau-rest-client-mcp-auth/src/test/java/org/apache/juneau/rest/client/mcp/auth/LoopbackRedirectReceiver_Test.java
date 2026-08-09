@@ -88,7 +88,9 @@ class LoopbackRedirectReceiver_Test extends TestBase {
 			var c = (HttpURLConnection) uri.toURL().openConnection();
 			c.setRequestMethod("GET");
 			c.getResponseCode();
-			c.getInputStream().readAllBytes();
+			try (var in = c.getInputStream()) {
+				in.readAllBytes();
+			}
 			c.disconnect();
 		} catch (IOException e) { // HTT: loopback GET failure not expected in test
 			throw new RuntimeException(e);

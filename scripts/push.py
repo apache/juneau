@@ -26,6 +26,7 @@ This script automates the build, test, and deployment workflow:
 
 Usage: python3 push.py "commit message"
        python3 push.py "commit message" --skip-tests
+       python3 push.py "commit message" --sonarqube
 """
 
 # Sound file paths
@@ -37,6 +38,7 @@ LINUX_FAILURE_SOUND = "/usr/share/sounds/freedesktop/stereo/dialog-error.oga"
 import argparse
 import os
 import platform
+import shutil
 import subprocess
 import sys
 import time
@@ -164,70 +166,82 @@ def play_sound(success=True):  # NOSONAR python:S3776 -- Cognitive complexity is
         pass
 
 
-def play_sound(success=True):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
+def _python310():
     """
-    Play a system sound to indicate success or failure.
-    
+    Locate a Python >= 3.10 interpreter, regardless of how push.py itself was launched.
+
+    scripts/sonarqube.py uses 3.10+ syntax (e.g. `dict | None`), so this can't just
+    reuse sys.executable when push.py was invoked under an older interpreter (e.g. the
+    macOS system /usr/bin/python3, which is 3.9).
+
+    Returns:
+        Path to a suitable interpreter (str), or None if none could be found.
+    """
+    if sys.version_info >= (3, 10):
+        return sys.executable
+
+    for name in ("python3.13", "python3.12", "python3.11", "python3.10", "python3"):
+        candidate = shutil.which(name)
+        if not candidate:
+            continue
+        try:
+            probe = subprocess.run(
+                [candidate, "-c", "import sys;print(1 if sys.version_info>=(3,10) else 0)"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+                check=False
+            )
+            if probe.returncode == 0 and probe.stdout.strip() == "1":
+                return candidate
+        except Exception:
+            continue
+
+    fallback = "/opt/homebrew/bin/python3"
+    if os.path.exists(fallback):
+        return fallback
+
+    return None
+
+
+def run_sonarqube_gate(juneau_root, step_num):
+    """
+    Run scripts/sonarqube.py in whole-repo fresh-fetch mode and block the push if
+    SonarCloud currently reports ANY issue (all severities).
+
+    This is a REPORT gate, not a diff gate: it reflects SonarCloud's last
+    CI-analyzed commit, not the local working tree — i.e. it's a ratchet against
+    the project's overall issue count. Honors SONAR_TOKEN from the environment
+    if set (sonarqube.py reads it directly).
+
     Args:
-        success: True for success sound, False for failure sound
+        juneau_root: Repository root (cwd for the subprocess).
+        step_num: The current step number (for output formatting).
+
+    Returns:
+        True if SonarCloud currently reports zero issues (clean); False if the
+        gate is blocked by open issues, or if no suitable interpreter was found.
     """
-    try:
-        system = platform.system()
-        if system == "Darwin":  # macOS
-            if success:
-                # Success sound
-                sound_path = MACOS_SUCCESS_SOUND
-            else:
-                # Failure sound
-                sound_path = MACOS_FAILURE_SOUND
-            
-            if os.path.exists(sound_path):
-                subprocess.run(
-                    ["afplay", sound_path],
-                    capture_output=True,
-                    timeout=5
-                )
-        elif system == "Linux":
-            # Try to use paplay (PulseAudio) or aplay (ALSA)
-            if success:
-                # Try to play a beep or use speaker-test
-                try:
-                    subprocess.run(
-                        ["paplay", LINUX_SUCCESS_SOUND],
-                        capture_output=True,
-                        timeout=5
-                    )
-                except OSError:
-                    # Fallback to speaker-test
-                    subprocess.run(
-                        ["speaker-test", "-t", "sine", "-f", "1000", "-l", "1"],
-                        capture_output=True,
-                        timeout=2
-                    )
-            else:
-                try:
-                    subprocess.run(
-                        ["paplay", LINUX_FAILURE_SOUND],
-                        capture_output=True,
-                        timeout=5
-                    )
-                except OSError:
-                    # Fallback to speaker-test with lower frequency
-                    subprocess.run(
-                        ["speaker-test", "-t", "sine", "-f", "400", "-l", "1"],
-                        capture_output=True,
-                        timeout=2
-                    )
-        elif system == "Windows":
-            # Use winsound module
-            import winsound
-            if success:
-                winsound.MessageBeep(winsound.MB_OK)
-            else:
-                winsound.MessageBeep(winsound.MB_ICONHAND)
-    except Exception:
-        # Silently fail if sound can't be played
-        pass
+    print(f"\n🔎 Step {step_num}: Running SonarQube gate (scripts/sonarqube.py --all --run --fail-on-issues)...")
+    print("   ⚠ Caveat: this reflects SonarCloud's last CI-analyzed commit, NOT your local diff (it's a ratchet).")
+
+    py310 = _python310()
+    if not py310:
+        print(
+            "\n❌ Could not find a Python >= 3.10 interpreter to run scripts/sonarqube.py "
+            "(requires 3.10+; e.g. the macOS system python3 is too old). Install one "
+            "(e.g. `brew install python3`) so it's discoverable as python3.1x/python3 on "
+            "PATH, or make sure /opt/homebrew/bin/python3 exists, then retry."
+        )
+        return False
+
+    sonarqube_script = Path(__file__).parent / "sonarqube.py"
+    result = subprocess.run(
+        [py310, str(sonarqube_script), "--all", "--run", "--fail-on-issues"],
+        cwd=juneau_root,
+        check=False
+    )
+    return result.returncode == 0
 
 
 def check_git_status(repo_dir):
@@ -334,72 +348,6 @@ def timing_log_path(repo_dir):
     return Path.home() / ".cache" / "juneau-push-timings" / f"{branch}.jsonl"
 
 
-def play_sound(success=True):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
-    """
-    Play a system sound to indicate success or failure.
-    
-    Args:
-        success: True for success sound, False for failure sound
-    """
-    try:
-        system = platform.system()
-        if system == "Darwin":  # macOS
-            if success:
-                # Success sound
-                sound_path = MACOS_SUCCESS_SOUND
-            else:
-                # Failure sound
-                sound_path = MACOS_FAILURE_SOUND
-            
-            if os.path.exists(sound_path):
-                subprocess.run(
-                    ["afplay", sound_path],
-                    capture_output=True,
-                    timeout=5
-                )
-        elif system == "Linux":
-            # Try to use paplay (PulseAudio) or aplay (ALSA)
-            if success:
-                # Try to play a beep or use speaker-test
-                try:
-                    subprocess.run(
-                        ["paplay", LINUX_SUCCESS_SOUND],
-                        capture_output=True,
-                        timeout=5
-                    )
-                except OSError:
-                    # Fallback to speaker-test
-                    subprocess.run(
-                        ["speaker-test", "-t", "sine", "-f", "1000", "-l", "1"],
-                        capture_output=True,
-                        timeout=2
-                    )
-            else:
-                try:
-                    subprocess.run(
-                        ["paplay", LINUX_FAILURE_SOUND],
-                        capture_output=True,
-                        timeout=5
-                    )
-                except OSError:
-                    # Fallback to speaker-test with lower frequency
-                    subprocess.run(
-                        ["speaker-test", "-t", "sine", "-f", "400", "-l", "1"],
-                        capture_output=True,
-                        timeout=2
-                    )
-        elif system == "Windows":
-            # Use winsound module
-            import winsound
-            if success:
-                winsound.MessageBeep(winsound.MB_OK)
-            else:
-                winsound.MessageBeep(winsound.MB_ICONHAND)
-    except Exception:
-        # Silently fail if sound can't be played
-        pass
-
-
 def _collect_surefire_stats(juneau_root: Path):
     """Aggregate tests/failures/errors/skipped from all Surefire XML files under juneau-integration-tests."""
     reports = juneau_root / "juneau-integration-tests" / "target" / "surefire-reports"
@@ -489,6 +437,7 @@ Examples:
   python3 push.py "Fixed bug in RestClient"
   python3 push.py "Updated documentation" --skip-tests
   python3 push.py "Quick fix" --skip-tests
+  python3 push.py "Fixed bug in RestClient" --sonarqube
         """
     )
     
@@ -508,6 +457,17 @@ Examples:
         action="store_true",
         help="Show what would be done without actually doing it"
     )
+
+    parser.add_argument(
+        "--sonarqube", "--sonar",
+        action="store_true",
+        dest="sonarqube",
+        help=(
+            "Opt-in gate: run scripts/sonarqube.py in whole-repo fresh-fetch mode and "
+            "block the push if SonarCloud currently reports any issue (all severities). "
+            "Reflects SonarCloud's last CI-analyzed commit, not the local diff (a ratchet)."
+        )
+    )
     
     args = parser.parse_args()
     
@@ -522,6 +482,8 @@ Examples:
     print(f"Commit message: '{args.message}'")
     if args.skip_tests:
         print("⚠ Tests will be SKIPPED")
+    if args.sonarqube:
+        print("🔎 SonarQube gate ENABLED (--sonarqube)")
     if args.dry_run:
         print("🔍 DRY RUN MODE - No actual changes will be made")
     print("=" * 70)
@@ -529,6 +491,9 @@ Examples:
     if args.dry_run:
         print("\nSteps that would be executed:")
         step_num = 1
+        if args.sonarqube:
+            print(f"  {step_num}. Run SonarQube gate: python3 scripts/sonarqube.py --all --run --fail-on-issues (blocks push if any issues)")
+            step_num += 1
         print(f"  {step_num}. Prompt for PGP passphrase (dummy call)")
         step_num += 1
         if not args.skip_tests:
@@ -549,7 +514,21 @@ Examples:
         print(f"  {step_num}. Push to remote: git push")
         print("\nDry run complete. Use without --dry-run to execute.")
         return 0
-    
+
+    step_num = 1
+
+    # Step 0 (opt-in, --sonarqube/--sonar): SonarQube report gate. Runs first so it
+    # aborts cheaply, before the container-tags/BOM checks, tests, and build.
+    if args.sonarqube:
+        if not run_sonarqube_gate(juneau_root, step_num):
+            print("\n❌ Push aborted: SonarCloud currently reports open issues for this project.")
+            print("   Note: this reflects SonarCloud's last CI-analyzed commit (a ratchet), not your local diff.")
+            print("   Resolve/triage the reported issues, or omit --sonarqube to push without this gate.")
+            play_sound(success=False)
+            return 1
+        print(f"✅ Step {step_num}: SonarQube gate passed — SonarCloud reports zero issues.")
+        step_num += 1
+
     # Prompt for PGP passphrase early (before any time-consuming operations)
     prompt_script = script_dir / 'prompt-pgp-passphrase.py'
     if prompt_script.exists():
@@ -560,8 +539,6 @@ Examples:
             )
         except Exception as e:
             print(f"⚠ Could not run PGP passphrase prompt: {e}")
-    
-    step_num = 1
     
     # Step 1: Run tests (optional)
     if not args.skip_tests:

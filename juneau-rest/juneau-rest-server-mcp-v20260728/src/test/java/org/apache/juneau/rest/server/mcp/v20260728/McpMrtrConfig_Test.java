@@ -23,6 +23,7 @@ import java.util.Map;
 import org.apache.juneau.bean.jsonrpc.JsonRpcRequest;
 import org.apache.juneau.bean.mcp.v20260728.McpProtocol;
 import org.apache.juneau.bean.mcp.v20260728.RequestMeta;
+import org.apache.juneau.commons.concurrent.InMemoryReplayCache;
 import org.apache.juneau.commons.inject.BasicBeanStore;
 import org.apache.juneau.marshall.collections.JsonMap;
 import org.apache.juneau.rest.server.mcp.McpExchange;
@@ -33,6 +34,9 @@ import org.junit.jupiter.api.Test;
 /**
  * Coverage for {@link McpMrtrConfig} and the {@link McpRevision} four-arg constructor that carries it.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class McpMrtrConfig_Test {
 
 	@Test void a01_defaultsAreAeadCodecFiveMinuteTtlTenMaxRounds() {

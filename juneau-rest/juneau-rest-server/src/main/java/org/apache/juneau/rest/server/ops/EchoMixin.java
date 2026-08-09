@@ -114,6 +114,11 @@ import org.apache.juneau.rest.server.*;
  * Override the default list via {@link Builder#redactedHeaders(String...)} (replaces) or extend
  * via {@link Builder#redactHeader(String)} (additive).
  *
+ * <p>
+ * {@link #REDACTED} and {@link #DEFAULT_REDACTED_HEADERS} are re-exports of
+ * {@link RedactedHeaders#REDACTED} and {@link RedactedHeaders#DEFAULT} respectively; masking is
+ * performed by delegating to {@link RedactedHeaders#redact(String, String, java.util.Collection)}.
+ *
  * <h5 class='section'>Body capture and truncation:</h5>
  *
  * <p>
@@ -156,8 +161,8 @@ import org.apache.juneau.rest.server.*;
 @Rest
 public class EchoMixin {
 
-	/** Sentinel value emitted in place of redacted header values. */
-	public static final String REDACTED = "[REDACTED]";
+	/** Sentinel value emitted in place of redacted header values. Re-exports {@link RedactedHeaders#REDACTED}. */
+	public static final String REDACTED = RedactedHeaders.REDACTED;
 
 	/** Default body capture cap, in bytes (1&nbsp;MB). */
 	public static final long DEFAULT_BODY_LIMIT = 1_048_576L;
@@ -165,9 +170,8 @@ public class EchoMixin {
 	/** Default body capture cap rendered for the class-level javadoc &mdash; do not use programmatically. */
 	static final String DEFAULT_BODY_LIMIT_DOC = "1048576";
 
-	/** Default redacted-header set (case-insensitive lookup). */
-	public static final Set<String> DEFAULT_REDACTED_HEADERS = Set.of(
-		"Authorization", "Cookie", "Set-Cookie", "Proxy-Authorization", "X-API-Key");
+	/** Default redacted-header set (case-insensitive lookup). Re-exports {@link RedactedHeaders#DEFAULT}. */
+	protected static final Set<String> DEFAULT_REDACTED_HEADERS = RedactedHeaders.DEFAULT;
 
 	/**
 	 * Creates a new builder.
@@ -179,6 +183,7 @@ public class EchoMixin {
 	}
 
 	private final long bodyLimit;
+	private final Set<String> redactedHeaders;
 	private final Set<String> redactedHeadersLower;
 
 	/** No-arg constructor &mdash; uses {@link #DEFAULT_BODY_LIMIT} and {@link #DEFAULT_REDACTED_HEADERS}. */
@@ -193,6 +198,7 @@ public class EchoMixin {
 	 */
 	protected EchoMixin(Builder builder) {
 		bodyLimit = builder.bodyLimit;
+		redactedHeaders = u(new LinkedHashSet<>(builder.redactedHeaders));
 		var s = new LinkedHashSet<String>();
 		for (var h : builder.redactedHeaders)
 			s.add(h.toLowerCase(Locale.ROOT));
@@ -218,6 +224,9 @@ public class EchoMixin {
 		description="Round-trip introspection of the inbound request. Debug-gated.",
 		swagger=@OpSwagger(ignore=true)
 	)
+	@SuppressWarnings({
+		"resource" // sreq.getInputStream() is the servlet container's request body stream; it must not be closed by application code (lifecycle is tied to the request, not this handler).
+	})
 	public void echo(RestRequest req, RestResponse res, @Path("/*") String remainder) throws IOException {
 		var ctx = req.getContext();
 		var de = ctx.getDebugEnablement();
@@ -229,8 +238,7 @@ public class EchoMixin {
 		var names = sreq.getHeaderNames();
 		while (names != null && names.hasMoreElements()) {
 			var name = names.nextElement();
-			var key = name.toLowerCase(Locale.ROOT);
-			headers.put(name, redactedHeadersLower.contains(key) ? REDACTED : sreq.getHeader(name));
+			headers.put(name, RedactedHeaders.redact(name, sreq.getHeader(name), redactedHeaders));
 		}
 
 		var queryParams = new LinkedHashMap<String,String>();

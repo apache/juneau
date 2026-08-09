@@ -232,8 +232,8 @@ class McpElicitationIntegration_Test extends TestBase {
 	 */
 	@Test void d01_unsupportedCapability_typedHelperPauseStillRejectedOverTheWire() throws Exception {
 		try (var client = clientBuilder(false).build()) {
-			var e = assertThrows(McpException.class,
-				() -> client.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("confirm").setArguments(Map.of())));
+			var request = new CallToolRequest().setName("confirm").setArguments(Map.of());
+			var e = assertThrows(McpException.class, () -> client.callRaw(McpMethods.TOOLS_CALL, request));
 			assertEquals(McpRevision.CODE_MISSING_REQUIRED_CLIENT_CAPABILITY, e.getCode());
 		}
 	}

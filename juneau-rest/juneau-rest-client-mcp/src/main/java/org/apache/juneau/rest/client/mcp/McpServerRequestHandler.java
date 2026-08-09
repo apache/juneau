@@ -26,6 +26,9 @@ import org.apache.juneau.commons.inject.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S112" // This SPI callback intentionally declares 'throws Exception' so handler implementations can throw any exception type, which the dispatcher wraps.
+})
 @FunctionalInterface
 public interface McpServerRequestHandler {
 

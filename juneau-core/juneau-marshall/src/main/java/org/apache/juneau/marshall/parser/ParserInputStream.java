@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.parser;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 
 /**
@@ -40,6 +42,8 @@ public class ParserInputStream extends InputStream implements Positionable {
 
 	private final InputStream is;
 	int pos = 0;
+	// Default cap (16 MiB) for wire-declared lengths; overridable via setMaxLength.
+	private int maxLength = 16 * 1024 * 1024;
 
 	/**
 	 * Constructor.
@@ -51,6 +55,57 @@ public class ParserInputStream extends InputStream implements Positionable {
 	protected ParserInputStream(ParserPipe pipe) throws IOException {
 		this.is = pipe.getInputStream();
 		pipe.setPositionable(this);
+	}
+
+	/**
+	 * Sets the maximum allowed wire-declared length (in bytes) for payloads and element counts read off the
+	 * stream before they are used to size an allocation or drive a container loop.
+	 *
+	 * <p>
+	 * Guards against malformed input where a small payload declares a huge or negative length that would
+	 * otherwise trigger {@link OutOfMemoryError} or {@link NegativeArraySizeException}.
+	 *
+	 * @param value The maximum length in bytes.  Values &le; 0 disable the cap (only the negative-length check remains).
+	 */
+	public void setMaxLength(int value) {
+		maxLength = value <= 0 ? Integer.MAX_VALUE : value;
+	}
+
+	/**
+	 * Validates a wire-declared length/count against sane bounds before it is used to size an allocation or
+	 * drive a container loop, using this stream's configured maximum.
+	 *
+	 * @param len The declared length/count read off the wire.
+	 * @param what A short description of the field being read (for the error message).
+	 * @return The validated length as an int.
+	 * @throws IOException If the length is negative (or beyond int range) or exceeds the configured maximum.
+	 */
+	public int checkLength(long len, String what) throws IOException {
+		return checkLength(len, maxLength, what);
+	}
+
+	/**
+	 * Validates a wire-declared length/count against sane bounds before it is used to size an allocation or
+	 * drive a container loop.
+	 *
+	 * <p>
+	 * Shared bounds-check used by the stream-based parsers and by other low-level readers (such as the
+	 * Protobuf reader) that do not extend this class but need the same guard.
+	 *
+	 * @param len The declared length/count read off the wire.
+	 * @param maxLength The maximum allowed length.  Values &le; 0 are treated as {@link Integer#MAX_VALUE}
+	 * 	(only the negative-length check applies).
+	 * @param what A short description of the field being read (for the error message).
+	 * @return The validated length as an int.
+	 * @throws IOException If the length is negative (or beyond int range) or exceeds the configured maximum.
+	 */
+	public static int checkLength(long len, long maxLength, String what) throws IOException {
+		var max = maxLength <= 0 ? Integer.MAX_VALUE : maxLength;
+		if (len < 0)
+			throw ioex("Invalid %s length (negative): %s", what, len);
+		if (len > max)
+			throw ioex("%s length %s exceeds maximum allowed %s", what, len, max);
+		return (int)len;
 	}
 
 	@Override /* Overridden from Positionable */

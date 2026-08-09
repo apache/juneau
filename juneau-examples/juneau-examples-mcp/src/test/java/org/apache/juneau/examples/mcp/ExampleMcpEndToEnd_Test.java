@@ -38,11 +38,12 @@ import org.junit.jupiter.api.*;
  * being tested. Each test publishes its own distinctly-titled note (rather than relying on notes published by
  * other tests), so tests remain independent even though the server/client pair is shared across the class.
  */
+@SuppressWarnings({
+	"resource" // server/client are opened in setUp() and closed in tearDown(); lifecycle spans the whole test class.
+})
 class ExampleMcpEndToEnd_Test extends TestBase {
 
-	@SuppressWarnings("resource") // opened in setUp() and closed in tearDown(); lifecycle spans the whole test class.
 	private static ExampleServer server;
-	@SuppressWarnings("resource") // opened in setUp() and closed in tearDown(); lifecycle spans the whole test class.
 	private static McpClient client;
 
 	@BeforeAll

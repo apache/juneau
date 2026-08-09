@@ -30,6 +30,9 @@ import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Mock HttpTransport lambdas (`transport`) and the client `c` are short-lived test fixtures; `c` is deliberately left open (no try-with-resources) across these tests since only pumpNextServerMessage()'s single-shot duplex behavior is under test, not client lifecycle.
+})
 class McpDuplexChannel_Test {
 
 	@Test

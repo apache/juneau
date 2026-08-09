@@ -34,6 +34,9 @@ import org.junit.jupiter.api.*;
  * caches the compiled {@link VarTemplate} and subsequent lookups return the same
  * instance, skipping the tokenizer + var-registry-lookup pipeline.
  */
+@SuppressWarnings({
+	"resource" // BasicBeanStore is a test-only fluent AutoCloseable with no real resources to release
+})
 class Value_PrecompiledTemplate_Test extends TestBase {
 
 	private static final String P_KEY = "Value_PrecompiledTemplate_Test.key";

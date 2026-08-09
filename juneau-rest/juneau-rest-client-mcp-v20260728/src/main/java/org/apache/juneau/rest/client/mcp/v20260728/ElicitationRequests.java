@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Static helper for reading server&rarr;client MCP {@code 2026-07-28} SEP-2322 elicitation requests out of
- * {@link McpClient#callRaw}'s raw {@code Map<String,Object>} result (MRTR, TODO-318's Multi-Round-Trip Requests
+ * {@link McpClient#callRaw}'s raw {@code Map<String,Object>} result (MRTR, the Multi-Round-Trip Requests
  * loop, client side).
  *
  * <p>

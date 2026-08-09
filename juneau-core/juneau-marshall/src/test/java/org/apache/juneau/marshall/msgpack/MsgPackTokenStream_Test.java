@@ -63,7 +63,7 @@ class MsgPackTokenStream_Test extends TestBase {
 		}
 
 		@Test void a04_simpleMap() throws Exception {
-			// Bytes 0x82 0xA1 'a' 0x01 0xA1 'b' 0x02 encode a fixmap with entries a-to-one and b-to-two.
+			// Encodes a two-entry fixmap header followed by the a-to-one and b-to-two key/value pairs.
 			var bytes = new byte[]{(byte) 0x82, (byte) 0xA1, 'a', 0x01, (byte) 0xA1, 'b', 0x02};
 			try (var r = MsgPackParser.DEFAULT.readTokens(bytes)) {
 				assertEquals(TokenType.START_OBJECT, r.next());
@@ -229,8 +229,8 @@ class MsgPackTokenStream_Test extends TestBase {
 				w.object(b);
 			}
 
-			// Round-trip via MsgPackParser (the cursor walks the bean alphabetically by BeanMap;
-			// canonical MsgPackSerializer also alphabetical).  Compare the parsed Bean.
+			// Round-trip via MsgPackParser: the cursor walks the bean alphabetically by BeanMap, matching the
+			// canonical MsgPackSerializer's own alphabetical ordering.  Compare the parsed Bean.
 			var fromWalker = MsgPackParser.DEFAULT.read(bos.toByteArray(), Bean.class);
 			assertEquals("alice", fromWalker.name);
 			assertEquals(30, fromWalker.age);

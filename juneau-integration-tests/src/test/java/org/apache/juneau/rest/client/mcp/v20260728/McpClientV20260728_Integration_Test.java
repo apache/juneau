@@ -87,7 +87,7 @@ class McpClientV20260728_Integration_Test extends TestBase {
 
 			var call = client.callTool("echo", Map.of("text", "hello"));
 			assertNotNull(call);
-			assertFalse(Boolean.TRUE.equals(call.getIsError()));
+			assertNotEquals(Boolean.TRUE, call.getIsError());
 			assertEquals(1, call.getContent().size());
 			assertEquals("hello", ((TextContent)call.getContent().get(0)).getText());
 		}

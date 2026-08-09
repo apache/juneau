@@ -61,6 +61,9 @@ public class SseHeartbeat implements Runnable, AutoCloseable {
 	 *
 	 * @param writer The writer. Must not be <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"resource" // assertArgNotNull(...) is generic and its inferred type is conservatively treated as Closeable; the writer is caller-owned (response lifecycle) and stored for later use, not closed here.
+	})
 	public SseHeartbeat(Writer writer) {
 		this.writer = assertArgNotNull("writer", writer);
 		closed = new AtomicBoolean();

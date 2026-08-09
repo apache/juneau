@@ -233,7 +233,7 @@ class NoInherit_Test extends TestBase {
 		var o = new MaxNoInheritPlain();
 		var ctx = new RestContext(new RestContext.Args(MaxNoInheritPlain.class, null, null, () -> o, "", null, null, null, RestContext.ContextKind.ROOT)).postInit().postInitChildFirst();
 		var op = ctx.getRestOperations().getOpContexts().get(0);
-		var expected = env("RestContext.maxInput").map(x -> parseLongWithSuffix(x)).orElse(100_000_000L);
+		var expected = env("RestContext.maxInput").map(x -> parseLongWithSuffix(x)).orElse(1_000_000L);
 		assertEquals(expected, op.getMaxInput());
 		assertNotEquals(parseLongWithSuffix("7M"), op.getMaxInput());
 	}

@@ -21,6 +21,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
+import org.apache.juneau.marshall.parser.*;
+
 /**
  * Low-level byte reader for the protobuf binary wire format.
  *
@@ -52,7 +54,11 @@ public class ProtobufReader {
 	/** Sentinel returned by {@link #readTag()} when the stream is exhausted. */
 	public static final long EOF = -1L;
 
+	/** Default cap (16 MiB) for wire-declared length-delimited block sizes. */
+	static final int DEFAULT_MAX_LENGTH = 16 * 1024 * 1024;
+
 	private final InputStream is;
+	private int maxLength = DEFAULT_MAX_LENGTH;
 
 	/**
 	 * Constructor.
@@ -70,6 +76,19 @@ public class ProtobufReader {
 	 */
 	public ProtobufReader(byte[] bytes) {
 		this(new ByteArrayInputStream(bytes));
+	}
+
+	/**
+	 * Sets the maximum allowed wire-declared length (in bytes) for length-delimited blocks.
+	 *
+	 * <p>
+	 * Guards against malformed input where a small payload declares a huge length that would otherwise
+	 * trigger {@link OutOfMemoryError} or {@link NegativeArraySizeException}.
+	 *
+	 * @param value The maximum length in bytes.  Values &le; 0 disable the cap (only the negative-length check remains).
+	 */
+	public void setMaxLength(int value) {
+		maxLength = value <= 0 ? Integer.MAX_VALUE : value;
 	}
 
 	private int read() throws IOException {
@@ -211,11 +230,16 @@ public class ProtobufReader {
 	/**
 	 * Reads a length-delimited block:  a varint length followed by that many bytes.
 	 *
+	 * <p>
+	 * The declared length is validated against the configured maximum before any buffer is allocated, so a
+	 * small payload declaring a huge (or wrapped-negative) length is rejected up front rather than driving a
+	 * large allocation.
+	 *
 	 * @return The block bytes.
-	 * @throws IOException If the stream ends early or the underlying stream fails.
+	 * @throws IOException If the stream ends early, the declared length is out of bounds, or the underlying stream fails.
 	 */
 	public byte[] readLenDelimited() throws IOException {
-		var len = (int)readVarint();
+		var len = ParserInputStream.checkLength(readVarint(), maxLength, "protobuf field");
 		var b = new byte[len];
 		var off = 0;
 		while (off < len) {
@@ -225,6 +249,19 @@ public class ProtobufReader {
 			off += r;
 		}
 		return b;
+	}
+
+	/**
+	 * Reads a length-delimited block and returns a new reader over those bytes, propagating this reader's
+	 * configured maximum length so nested length-delimited fields remain bounded.
+	 *
+	 * @return A new reader over the block bytes.
+	 * @throws IOException If the stream ends early, the declared length is out of bounds, or the underlying stream fails.
+	 */
+	public ProtobufReader readLenDelimitedReader() throws IOException {
+		var r = new ProtobufReader(readLenDelimited());
+		r.maxLength = maxLength;
+		return r;
 	}
 
 	/**

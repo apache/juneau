@@ -74,6 +74,9 @@ public class Log4j2LogBackend implements LogBackend {
 	 *
 	 * @param context The Log4j2 logger context. Must not be <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"resource" // The LoggerContext is externally owned (by Log4j2 LogManager) and must not be closed by this backend; the requireNonNull assignment on line 78 is a Closeable value ECJ flags.
+	})
 	public Log4j2LogBackend(LoggerContext context) {
 		this.context = Objects.requireNonNull(context, "context");
 	}

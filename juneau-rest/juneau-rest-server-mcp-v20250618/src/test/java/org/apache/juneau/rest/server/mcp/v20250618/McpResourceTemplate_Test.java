@@ -34,6 +34,9 @@ import org.junit.jupiter.api.*;
  * specificity ranking, the {@code -32002} resource-not-found mapping, handler-exception mapping,
  * malformed-escape/non-matchable-template boundaries, and list wire mapping/capability derivation.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class McpResourceTemplate_Test {
 
 	private final BeanStore ctx = new BasicBeanStore();

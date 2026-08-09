@@ -196,6 +196,9 @@ public class AdminProvider {
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 * @throws NotFound If no {@link RateLimitGuard} bean is registered on the importer's bean store.
 	 */
+	@SuppressWarnings({
+		"resource" // The context's WritableBeanStore is shared, long-lived infrastructure owned by RestContext; a per-request handler must never close it.
+	})
 	public void serveRateLimit(RestRequest req, RestResponse res) throws IOException {
 		var bs = req.getContext().getBeanStore();
 		var guards = collectRateLimitGuards(bs);

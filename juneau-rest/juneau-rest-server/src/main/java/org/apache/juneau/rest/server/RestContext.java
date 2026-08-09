@@ -4552,7 +4552,12 @@ public class RestContext extends Context {
 	public VarResolver getBootstrapVarResolver() { return bootstrapVarResolver.get(); }
 
 	/**
-	 * Returns whether it's safe to pass the HTTP content as a <js>"content"</js> GET parameter.
+	 * Returns whether the <js>"content"</js> URL parameter may be used to supply the request body.
+	 *
+	 * <p>
+	 * When this returns <jk>true</jk> (the default), {@link RestRequest} still only honors the parameter on
+	 * <c>PUT</c>/<c>POST</c> requests, so a simple cross-origin <c>GET</c> can't use it to smuggle a body past
+	 * an endpoint's real <c>Content-Type</c> gate.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Rest#disableContentParam()}
@@ -4564,6 +4569,14 @@ public class RestContext extends Context {
 
 	/**
 	 * Returns whether it's safe to render stack traces in HTTP responses.
+	 *
+	 * <p>
+	 * Besides the full stack trace, this setting also gates the {@code Thrown} error-response header and the
+	 * message text of any error-body exception that wasn't itself deliberately thrown by application code as a
+	 * {@link org.apache.juneau.http.response.BasicHttpException BasicHttpException} (see
+	 * {@link #handleError(RestSession, Throwable)}). Leave this off (the default) outside of local debugging so
+	 * that unplanned exception types (a database driver error, a file-system exception, and the like) don't
+	 * incidentally echo their class name or message back to the caller.
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
 	 */
@@ -5089,6 +5102,24 @@ public class RestContext extends Context {
 	 * <p>
 	 * Subclasses can override this method to provide their own custom error response handling.
 	 *
+	 * <p>
+	 * The {@code Thrown} response header and the cause-chain detail normally appended to the error body are both
+	 * gated behind {@link #isRenderResponseStackTraces()} (see {@code @Rest(renderResponseStackTraces)}), which is
+	 * off by default. With that flag off, only a message the calling code deliberately supplied via a thrown
+	 * {@link BasicHttpException} (its subclasses, e.g. {@code NotFound} or {@code BadRequest}) is echoed back;
+	 * the class name and message text of any other, unplanned exception type bubbling up from application code
+	 * is kept out of both the header and the body, since that text was never authored with a client audience in
+	 * mind and may otherwise incidentally carry implementation detail (file paths, driver/database error text,
+	 * and the like). Turn the flag on for local debugging to get the full detail back.
+	 *
+	 * <p>
+	 * The {@code Thrown} header is still always set for RRPC dispatch responses (an operation invoked through
+	 * {@code @RestOp(method=HttpMethod.RRPC)}), regardless of {@link #isRenderResponseStackTraces()}. The RRPC/
+	 * {@code @Remote} client stub has no other channel for learning the server-side exception's class in order to
+	 * reconstruct and rethrow the equivalent type locally, so that one header is part of the RPC contract rather
+	 * than incidental debug detail. The error body's cause-chain message is unaffected by this exemption and
+	 * remains suppressed the same as any other operation.
+	 *
 	 * @param session The rest call.
 	 * @param e The exception that occurred.
 	 * @throws IOException Can be thrown if a problem occurred trying to write to the output stream.
@@ -5107,16 +5138,15 @@ public class RestContext extends Context {
 		if (nn(r) && r.value().length > 0)
 			code = r.value()[0];
 
+		var appThrown = e instanceof BasicHttpException;
 		var e2 = (e instanceof BasicHttpException e3 ? e3 : new BasicHttpException(code, null, e));
 
 		var req = session.getRequest();
 		var res = session.getResponse();
 
-		Throwable t = e2.getRootCause();
-		if (nn(t)) {
-			Thrown t2 = Thrown.of(t);
+		var t2 = resolveThrownHeader(e2, isRenderResponseStackTraces(), isRpcDispatch(session));
+		if (nn(t2))
 			res.setHeader(t2.getName(), t2.getValue());
-		}
 
 		try {
 			var statusCode = e2.getStatusLine().getStatusCode();
@@ -5140,12 +5170,80 @@ public class RestContext extends Context {
 				if (isRenderResponseStackTraces())
 					e.printStackTrace(w2);
 				else
-					w2.append(e2.getFullStackMessage(true));
+					w2.append(suppressedErrorBodyMessage(e2, appThrown));
 			}
 
 		} catch (Exception e1) {
 			req.setAttribute("Exception", e1);
 		}
+	}
+
+	/**
+	 * Determines the {@code Thrown} response header to set for a reported error, if any.
+	 *
+	 * <p>
+	 * Package-private (rather than folded directly into {@link #handleError(RestSession, Throwable)}) so the
+	 * gating decision can be exercised directly in unit tests without standing up a full request/response cycle.
+	 *
+	 * @param e2 The (possibly wrapped) exception being reported. Must not be {@code null}.
+	 * @param renderResponseStackTraces The resolved {@code renderResponseStackTraces} setting for the call.
+	 * @param rpcDispatch {@code true} if the call being reported on is an RRPC dispatch (see
+	 * 	{@link #isRpcDispatch(RestSession)}), in which case the header is included even when
+	 * 	{@code renderResponseStackTraces} is off, since the RRPC/{@code @Remote} client depends on it to
+	 * 	reconstruct the original exception type.
+	 * @return The header to set, or {@code null} if none should be set (neither condition permits it, or
+	 * 	there's no distinct root cause to report).
+	 */
+	static Thrown resolveThrownHeader(BasicHttpException e2, boolean renderResponseStackTraces, boolean rpcDispatch) {
+		if (!renderResponseStackTraces && !rpcDispatch)
+			return null;
+		var t = e2.getRootCause();
+		return nn(t) ? Thrown.of(t) : null;
+	}
+
+	/**
+	 * Determines whether the operation matched for the given session is an RRPC dispatch target (an operation
+	 * declared with {@code @RestOp(method=HttpMethod.RRPC)}, backing a {@code getRrpcInterface()}/{@code @Remote}
+	 * client proxy).
+	 *
+	 * <p>
+	 * Used by {@link #handleError(RestSession, Throwable)} to decide whether the {@code Thrown} header should be
+	 * included regardless of {@link #isRenderResponseStackTraces()}; see {@link #resolveThrownHeader}.
+	 *
+	 * @param session The rest call. Must not be {@code null}.
+	 * @return {@code true} if the matched operation (if any) is an RRPC dispatch target.
+	 */
+	static boolean isRpcDispatch(RestSession session) {
+		var opSession = session.getOpSessionOrNull();
+		return nn(opSession) && opSession.getContext() instanceof RrpcRestOpContext;
+	}
+
+	/**
+	 * Determines the message written to the plain-text error response body when
+	 * {@code renderResponseStackTraces} is off.
+	 *
+	 * <p>
+	 * Package-private for the same unit-testability reason as {@link #resolveThrownHeader(BasicHttpException, boolean)}.
+	 *
+	 * @param e2 The (possibly wrapped) exception being reported. Must not be {@code null}.
+	 * @param appThrown {@code true} if the original, unwrapped exception was itself a {@link BasicHttpException}
+	 * 	(i.e. deliberately thrown by application code with a client-facing message in mind).
+	 * @return The scrubbed message to write, or an empty string if nothing should be written (the exception
+	 * 	wasn't application-authored, so its message is treated as internal detail).
+	 */
+	static String suppressedErrorBodyMessage(BasicHttpException e2, boolean appThrown) {
+		return appThrown ? scrubForXss(e2.getMessage()) : "";
+	}
+
+	/**
+	 * Replaces {@code <}, {@code >}, and {@code &} in a message about to be written into a {@code text/plain}
+	 * error response body, as a simple defense against the body being reflected into an HTML context downstream.
+	 *
+	 * @param msg The message to scrub. Can be {@code null}.
+	 * @return The scrubbed message, or an empty string if {@code msg} was {@code null}.
+	 */
+	private static String scrubForXss(String msg) {
+		return msg == null ? "" : msg.replace('<', ' ').replace('>', ' ').replace('&', ' ');
 	}
 
 	/**

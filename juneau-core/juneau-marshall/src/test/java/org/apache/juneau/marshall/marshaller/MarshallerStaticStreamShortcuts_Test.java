@@ -41,6 +41,9 @@ import org.junit.jupiter.api.*;
  * 		no-checked-exception contract.
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // badIn/badOut/badReader/badWriter are deliberately-broken anonymous test fixtures whose IOException is the assertion target
+})
 class MarshallerStaticStreamShortcuts_Test extends TestBase {
 
 	@Test void a01_charReaderWriterRoundTrip() throws Exception {

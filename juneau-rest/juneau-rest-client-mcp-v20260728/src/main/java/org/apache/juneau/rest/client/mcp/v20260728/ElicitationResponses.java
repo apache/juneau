@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.marshaller.*;
 /**
  * Static helper for encoding the client's answers to server&rarr;client MCP {@code 2026-07-28} SEP-2322
  * elicitation requests back into the raw {@code inputResponses} wire shape a resume call expects (MRTR,
- * TODO-318's Multi-Round-Trip Requests loop, client side).
+ * the Multi-Round-Trip Requests loop, client side).
  *
  * <p>
  * Paired with {@link ElicitationRequests}, which reads the server's questions out of a paused

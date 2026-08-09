@@ -124,6 +124,9 @@ public class ReaderInputStream extends InputStream {
 	 * @param charset the charset encoding.  Must not be <jk>null</jk>.
 	 * @param bufferSize the size of the input buffer in number of characters.  Must be positive.
 	 */
+	@SuppressWarnings({
+		"resource" // Intentionally not owned; caller retains responsibility for closing the underlying Reader
+	})
 	public ReaderInputStream(Reader reader, Charset charset, int bufferSize) {
 		// @formatter:off
 		this(assertArgNotNull(ARG_reader, reader),
@@ -153,6 +156,9 @@ public class ReaderInputStream extends InputStream {
 	 * @param encoder the charset encoder.  Must not be <jk>null</jk>.
 	 * @param bufferSize the size of the input buffer in number of characters.  Must be positive.
 	 */
+	@SuppressWarnings({
+		"resource" // Intentionally not owned; caller retains responsibility for closing the underlying Reader
+	})
 	public ReaderInputStream(Reader reader, CharsetEncoder encoder, int bufferSize) {
 		this.reader = assertArgNotNull(ARG_reader, reader);
 		this.encoder = assertArgNotNull(ARG_encoder, encoder);

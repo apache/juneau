@@ -35,6 +35,9 @@ import org.junit.jupiter.api.parallel.*;
  * env vars and manifest files are environment-dependent.
  */
 @ResourceLock(Resources.SYSTEM_PROPERTIES)
+@SuppressWarnings({
+	"resource" // BasicBeanStore is a test-only fluent AutoCloseable with no real resources to release
+})
 class Value_StableFolding_Test extends TestBase {
 
 	public static class SysPropBean {

@@ -119,6 +119,7 @@ public final class ExampleServer implements AutoCloseable {
 	}
 
 	/** Builds a Jetty server with a single connector on {@code port} and a root servlet context. */
+	@SuppressWarnings("resource") // connector is added to and owned by the server; closed when the server stops.
 	private static Server buildServer(int port) {
 		var server = new Server();
 		var connector = new ServerConnector(server);

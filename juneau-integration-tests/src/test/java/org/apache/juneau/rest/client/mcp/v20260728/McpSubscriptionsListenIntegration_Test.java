@@ -129,6 +129,23 @@ class McpSubscriptionsListenIntegration_Test extends TestBase {
 		return McpClient.builder().endpoint(fixture.getRootUrl() + "/");
 	}
 
+	/**
+	 * Bounded polling await shared by a01 and z01's server-side cleanup checks: cleanup is write-failure/close
+	 * driven on the server side (it only notices a disconnect on its next write attempt), not proactive, so there
+	 * is no push notification to await deterministically - only the real {@code activeCount} condition, polled on
+	 * a bounded schedule. Returns the last observed count once it reads {@code "0"} or the deadline elapses.
+	 */
+	@SuppressWarnings("java:S2925") // pacing delay between condition polls; no push notification exists for this rollup
+	private static String awaitActiveCountZero(McpClient client, long timeoutMs, long pollMs) throws Exception {
+		var deadline = System.currentTimeMillis() + timeoutMs;
+		String count;
+		do {
+			Thread.sleep(pollMs);
+			count = ((TextContent) client.callTool("activeCount", Map.of()).getContent().get(0)).getText();
+		} while (! "0".equals(count) && System.currentTimeMillis() < deadline);
+		return count;
+	}
+
 	// =================================================================================================================
 	// A: acknowledged -> published notification round-trip -> server-side cleanup on close (assertions 1, 2, 4).
 	// =================================================================================================================
@@ -193,12 +210,7 @@ class McpSubscriptionsListenIntegration_Test extends TestBase {
 			// or otherwise), so poll rather than assert immediately. Bounded poll loop, not a fixed sleep for
 			// synchronization: each iteration's brief sleep is only the between-poll delay, gated by the outer
 			// deadline.
-			var deadline = System.currentTimeMillis() + 15_000;
-			String countAfter;
-			do {
-				Thread.sleep(200);
-				countAfter = ((TextContent) client.callTool("activeCount", Map.of()).getContent().get(0)).getText();
-			} while (! "0".equals(countAfter) && System.currentTimeMillis() < deadline);
+			var countAfter = awaitActiveCountZero(client, 15_000, 200);
 			assertEquals("0", countAfter);
 		}
 	}
@@ -330,12 +342,7 @@ class McpSubscriptionsListenIntegration_Test extends TestBase {
 		resp.body().close();
 
 		try (var probe = clientBuilder().build()) {
-			var deadline = System.currentTimeMillis() + 15_000;
-			String countAfter;
-			do {
-				Thread.sleep(200);
-				countAfter = ((TextContent) probe.callTool("activeCount", Map.of()).getContent().get(0)).getText();
-			} while (! "0".equals(countAfter) && System.currentTimeMillis() < deadline);
+			var countAfter = awaitActiveCountZero(probe, 15_000, 200);
 			assertEquals("0", countAfter);
 		}
 	}

@@ -35,7 +35,8 @@ import org.junit.jupiter.api.*;
  * agreement.
  */
 @SuppressWarnings({
-	"java:S5976" // Each aNN/bNN/... test pins a distinct named dispatch scenario as its own discoverable, individually-runnable test (per project SSLLC convention); collapsing similar-shaped groups (e.g. the b0x invalid-params cases) into @ParameterizedTest would trade per-scenario failure clarity for a marginal LOC reduction.
+	"java:S5976", // Each aNN/bNN/... test pins a distinct named dispatch scenario as its own discoverable, individually-runnable test (per project SSLLC convention); collapsing similar-shaped groups (e.g. the b0x invalid-params cases) into @ParameterizedTest would trade per-scenario failure clarity for a marginal LOC reduction.
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class McpCompletion_Test {
 

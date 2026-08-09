@@ -138,9 +138,10 @@ class McpCapabilityHook_Test extends TestBase {
 	public static class B_MixinOverride extends BasicRestServlet implements McpEndpoint {
 		private static final long serialVersionUID = 1L;
 		@Override public McpServerConfig getMcpConfig() { return new McpServerConfig().addTool(tool()); }
-		// public here is required by the JLS (an interface method, default or not, is always public;
-		// an overriding class member cannot narrow that) — it is not a departure from C8's "no public
-		// hook" ruling, which is about McpRevision never having cross-package access to the hook.
+		// The public modifier here is mandated by the JLS: an interface method, default or not, is
+		// always exposed publicly, and an overriding class member cannot narrow that visibility. This
+		// does not depart from C8's "no public hook" ruling, which concerns McpRevision never having
+		// cross-package access to the hook.
 		@Override public ServerCapabilities capabilities() { return explicit(); }
 	}
 

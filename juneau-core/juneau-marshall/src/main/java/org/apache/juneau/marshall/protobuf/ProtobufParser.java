@@ -78,6 +78,8 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 	// Property name constants
 	private static final String PROP_nativeTypes = "nativeTypes";
 
+	private static final int DEFAULT_MAX_LENGTH = ProtobufReader.DEFAULT_MAX_LENGTH;
+
 	/**
 	 * Builder class.
 	 */
@@ -86,6 +88,7 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 		private static final Cache<HashKey,ProtobufParser> CACHE = Cache.of(HashKey.class, ProtobufParser.class).build();
 
 		private boolean nativeTypes;
+		private int maxLength = DEFAULT_MAX_LENGTH;
 
 		/**
 		 * Constructor, default settings.
@@ -93,6 +96,7 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 		protected Builder() {
 			consumes("application/protobuf,application/x-protobuf");
 			nativeTypes = env("ProtobufParser.nativeTypes", false);
+			maxLength = env("ProtobufParser.maxLength", DEFAULT_MAX_LENGTH);
 		}
 
 		/**
@@ -104,6 +108,7 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			nativeTypes = copyFrom.nativeTypes;
+			maxLength = copyFrom.maxLength;
 		}
 
 		/**
@@ -115,6 +120,7 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 		protected Builder(ProtobufParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			nativeTypes = copyFrom.nativeTypes;
+			maxLength = copyFrom.maxLength;
 		}
 
 		/**
@@ -140,6 +146,22 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 			return this;
 		}
 
+		/**
+		 * The maximum allowed wire-declared length (in bytes) for protobuf length-delimited blocks when parsing.
+		 *
+		 * <p>
+		 * Guards against malformed or adversarial input where a small payload declares a huge length, which
+		 * would otherwise trigger {@link OutOfMemoryError}.  Malformed lengths are reported as a clean parse
+		 * error instead.
+		 *
+		 * @param value The maximum length in bytes.  Default is 16 MiB.  Values &le; 0 disable the cap.
+		 * @return This object.
+		 */
+		public Builder maxLength(int value) {
+			maxLength = value;
+			return this;
+		}
+
 		@Override /* Overridden from Context.Builder<?> */
 		public ProtobufParser build() {
 			return cache(CACHE).build(ProtobufParser.class);
@@ -152,7 +174,7 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 
 		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
-			return HashKey.of(super.hashKey(), nativeTypes);
+			return HashKey.of(super.hashKey(), nativeTypes, maxLength);
 		}
 	}
 
@@ -170,6 +192,8 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 
 	final boolean nativeTypes;
 
+	private final int maxLength;
+
 	private final Map<ClassMeta<?>,ProtobufClassMeta> protobufClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,ProtobufBeanPropertyMeta> protobufBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -181,6 +205,16 @@ public class ProtobufParser extends InputStreamParser implements ProtobufMetaPro
 	public ProtobufParser(Builder builder) {
 		super(builder);
 		this.nativeTypes = builder.nativeTypes;
+		this.maxLength = builder.maxLength;
+	}
+
+	/**
+	 * Returns the maximum allowed wire-declared length (in bytes) for length-delimited blocks.
+	 *
+	 * @return The maximum length in bytes.
+	 */
+	public int getMaxLength() {
+		return maxLength;
 	}
 
 	@Override /* Overridden from Context */

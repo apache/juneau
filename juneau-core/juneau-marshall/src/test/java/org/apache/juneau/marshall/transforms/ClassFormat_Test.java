@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.transforms;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
@@ -269,5 +270,50 @@ class ClassFormat_Test {
 		// Non-primitive leaf — exercises the 'default -> null' arm of the primitiveByName switch; // NOSONAR
 		// resolveLeaf then falls through to Class.forName which resolves the class normally.
 		assertEquals(String.class, ClassFormat.parse("java.lang.String", ClassFormat.FQCN, null));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Non-initializing resolution + class-name guard
+	//------------------------------------------------------------------------------------------------------------------
+
+	static final AtomicBoolean PROBE_INITIALIZED = new AtomicBoolean(false);
+
+	/** Probe whose static initializer records that it ran; used to confirm the parser resolves without initializing. */
+	public static class InitProbe {
+		static {
+			PROBE_INITIALIZED.set(true);
+		}
+	}
+
+	@AfterEach void resetGuard() {
+		ClassFormat.setClassNameGuard(null);
+	}
+
+	@Test void h01_parse_doesNotInitializeResolvedClass() {
+		// Referencing the class literal / getName() does not initialize the class; parse must not either.
+		assertFalse(PROBE_INITIALIZED.get());
+		var name = InitProbe.class.getName();
+		var c = ClassFormat.parse(name, ClassFormat.BINARY_NAME, InitProbe.class.getClassLoader());
+		assertEquals(InitProbe.class, c);
+		assertFalse(PROBE_INITIALIZED.get(), "Parsing a class name must not trigger its static initializer");
+	}
+
+	@Test void h02_classNameGuard_blocksDisallowedName() {
+		ClassFormat.setClassNameGuard("java.lang.String"::equals);
+		assertEquals(String.class, ClassFormat.parse("java.lang.String", ClassFormat.FQCN, null));
+		assertThrows(IllegalArgumentException.class, () -> ClassFormat.parse("java.util.Date", ClassFormat.FQCN, null));
+	}
+
+	@Test void h03_classNameGuard_blocksNestedRewrite() {
+		// The dotted FQCN nested form only resolves via the $-rewritten candidate, which the guard blocks.
+		ClassFormat.setClassNameGuard(n -> ! n.contains("$"));
+		assertThrows(IllegalArgumentException.class, () -> ClassFormat.parse("java.util.Map.Entry", ClassFormat.FQCN, null));
+		assertEquals(String.class, ClassFormat.parse("java.lang.String", ClassFormat.FQCN, null));
+	}
+
+	@Test void h04_classNameGuard_nullAllowsAll() {
+		ClassFormat.setClassNameGuard(null);
+		assertEquals(String.class, ClassFormat.parse("java.lang.String", ClassFormat.FQCN, null));
+		assertEquals(Map.Entry.class, ClassFormat.parse("java.util.Map.Entry", ClassFormat.FQCN, null));
 	}
 }

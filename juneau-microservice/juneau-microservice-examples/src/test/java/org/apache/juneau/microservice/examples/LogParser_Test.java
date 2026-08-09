@@ -31,6 +31,9 @@ import org.junit.jupiter.api.io.*;
 /**
  * Tests for {@link LogParser}.
  */
+@SuppressWarnings({
+	"resource" // Test-only LogParser instances are always closed via p.close()/try-with-resources; a few paths close only indirectly (e.g. via assertDoesNotThrow(p::close)), which JDT's local closeable analysis does not recognize.
+})
 class LogParser_Test extends TestBase {
 
 	private static final String DATE_FORMAT = "yyyy.MM.dd hh:mm:ss";
@@ -166,9 +169,6 @@ class LogParser_Test extends TestBase {
 			assertDoesNotThrow(e::getThread);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void a11_entry_appendHtml(@TempDir Path tempDir) throws Exception {
 		var r = new LogRecord(Level.INFO, "HTML <test> message");
 		var f = createLogFile(tempDir, formatter.format(r));
@@ -242,9 +242,6 @@ class LogParser_Test extends TestBase {
 			assertNotNull(text);
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void a16_appendHtml_withAdditionalText(@TempDir Path tempDir) throws Exception {
 		// Test appendHtml() when entry has additional text lines
 		var r1 = new LogRecord(Level.WARNING, "Main entry");

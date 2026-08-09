@@ -60,6 +60,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	public static class Builder extends InputStreamParserSession.Builder<Builder> {
 
 		final boolean nativeMode;
+		final int maxLength;
 
 		/**
 		 * Constructor
@@ -70,6 +71,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 		protected Builder(MsgPackParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
 			this.nativeMode = ctx.isNativeMode();
+			this.maxLength = ctx.getMaxLength();
 		}
 
 		@Override
@@ -102,6 +104,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	private static final int MAX_PARSE_DEPTH = 1000;
 
 	private final boolean nativeMode;
+	private final int maxLength;
 
 	private int parseDepth;
 
@@ -113,6 +116,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	protected MsgPackParserSession(Builder builder) {
 		super(builder);
 		this.nativeMode = builder.nativeMode;
+		this.maxLength = builder.maxLength;
 	}
 
 	/**
@@ -134,7 +138,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	@Override /* TokenReadable */
 	public TokenReader readTokens(Object input) throws IOException {
 		var pipe = new ParserPipe(input, isDebug(), isAutoCloseStreams(), isUnbuffered(), null);
-		return new MsgPackTokenReader(pipe, this).setNativeMode(nativeMode);
+		return new MsgPackTokenReader(pipe, this).setNativeMode(nativeMode).setMaxLength(maxLength);
 	}
 
 	/**
@@ -209,6 +213,13 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 		if (rawLength > Integer.MAX_VALUE)
 			throw new ParseException(this, "MessagePack length %s exceeds the maximum supported size of %s.", rawLength, Integer.MAX_VALUE);
 		int length = (int)rawLength;
+
+		// Bound a definite array/map element count up front.  This is the databind path (elements
+		// accumulate into a collection below); the O(1)-memory streaming cursor (MsgPackTokenReader) is
+		// intentionally exempt so it can still emit tokens for large length-prefixed containers.  Byte/
+		// text-string LENGTH caps remain active on every path via readBinary.
+		if (dt == ARRAY || dt == MAP)
+			is.checkLength(length, dt == ARRAY ? "array" : "map");
 
 		if (dt != DataType.NULL) {
 			if (dt == BOOLEAN)
@@ -367,6 +378,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	@Override /* Overridden from ParserSession */
 	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (MsgPackInputStream is = new MsgPackInputStream(pipe)) {
+			is.setMaxLength(maxLength);
 			return readAnything(type, is, getOuter(), null);
 		}
 	}

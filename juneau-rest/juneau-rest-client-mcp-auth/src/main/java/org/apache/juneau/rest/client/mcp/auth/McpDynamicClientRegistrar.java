@@ -25,6 +25,8 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.commons.utils.UriUtils;
+
 import com.nimbusds.oauth2.sdk.*;
 import com.nimbusds.oauth2.sdk.auth.*;
 import com.nimbusds.oauth2.sdk.client.*;
@@ -477,11 +479,7 @@ public class McpDynamicClientRegistrar {
 
 	/** Whether the URI is {@code https} or targets a loopback host (exempt from the https requirement). */
 	static boolean isSecureOrLoopback(URI uri) {
-		var scheme = uri.getScheme();
-		if ("https".equalsIgnoreCase(scheme))
-			return true;
-		var host = uri.getHost();
-		return host != null && (host.equals("127.0.0.1") || host.equalsIgnoreCase("localhost") || host.equals("[::1]") || host.equals("::1"));
+		return UriUtils.isSecureOrLoopback(uri);
 	}
 
 	@Override /* Object */

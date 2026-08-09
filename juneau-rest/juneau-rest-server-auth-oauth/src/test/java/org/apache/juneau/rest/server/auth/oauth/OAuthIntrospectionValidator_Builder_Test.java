@@ -91,4 +91,20 @@ class OAuthIntrospectionValidator_Builder_Test extends TestBase {
 	@Test void d01_clientSecret_blankRejected() {
 		assertThrows(IllegalArgumentException.class, () -> OAuthIntrospectionValidator.create().clientSecret(""));
 	}
+
+	// -----------------------------------------------------------------------------------------
+	// introspectionEndpoint transport guard — https/loopback required, plaintext http remote rejected.
+	// -----------------------------------------------------------------------------------------
+
+	@Test void e01_introspectionEndpoint_plaintextHttpNonLoopback_rejected() {
+		assertThrows(IllegalArgumentException.class, () ->
+			OAuthIntrospectionValidator.create().introspectionEndpoint(URI.create("http://idp.example.com/oauth2/introspect")));
+	}
+
+	@Test void e02_introspectionEndpoint_loopbackHttp_allowed() {
+		var v = OAuthIntrospectionValidator.create()
+			.introspectionEndpoint(URI.create("http://127.0.0.1:9000/oauth2/introspect"))
+			.clientId("api-server").clientSecret("secret").build();
+		assertNotNull(v);
+	}
 }

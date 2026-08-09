@@ -50,6 +50,7 @@ public class EphemeralJettyServerConfig {
 	 * @return A configured {@link Server} bound to port 0 (OS-assigned ephemeral port).
 	 */
 	@Bean
+	@SuppressWarnings("resource") // connector is added to and owned by the server; closed when the server stops.
 	public Server jettyServer() {
 		var server = new Server();
 		var connector = new ServerConnector(server);

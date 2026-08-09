@@ -113,6 +113,23 @@ public class MsgPackTokenReader implements TokenReader {
 		return this;
 	}
 
+	/**
+	 * Sets the maximum allowed wire-declared length (in bytes) for binary/string payloads read by this cursor.
+	 *
+	 * <p>
+	 * The cursor is intentionally NOT bounded by an element-count cap for arrays/maps &mdash; it is an
+	 * O(1)-memory streaming cursor and never materializes containers, so it accepts large length-prefixed
+	 * containers.  Values {@code <= 0} disable the maximum-length cap (the negative-length check still
+	 * applies).
+	 *
+	 * @param value The maximum length in bytes.
+	 * @return This object.
+	 */
+	public MsgPackTokenReader setMaxLength(int value) {
+		is.setMaxLength(value);
+		return this;
+	}
+
 	// ==============================================================================================
 	// State-machine summary.  MsgPack containers are length-prefixed (no indefinite-length
 	// encoding), so next() reads the data-type tag via MsgPackInputStream.readDataType() and
@@ -169,7 +186,12 @@ public class MsgPackTokenReader implements TokenReader {
 			}
 			case MAP -> {
 				var n = is.readLength();
-				pushContainer(true, n * 2);  // pair-count -> element-count
+				// Pair-count -> element-count.  Guard the doubling so a malformed/overflowing count cannot
+				// wrap the element-count bookkeeping negative (the streaming cursor is intentionally exempt
+				// from the maxLength element-count cap, which is enforced on the databind path).
+				if (n < 0 || n > Long.MAX_VALUE / 2)
+					throw new ParseException("Invalid MessagePack map length: %s", n);
+				pushContainer(true, n * 2);
 				currentToken = TokenType.START_OBJECT;
 			}
 			case INT -> {

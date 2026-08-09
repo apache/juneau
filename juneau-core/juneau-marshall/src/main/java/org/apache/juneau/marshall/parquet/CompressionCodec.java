@@ -74,19 +74,23 @@ public enum CompressionCodec {
 
 		@Override
 		byte[] decompress(byte[] data, int uncompressedSize) throws IOException {
-			var result = new byte[uncompressedSize];
+			// Decode incrementally into a buffer that grows with the bytes actually produced, rather than
+			// pre-allocating the declared uncompressedSize up front.  A header may declare a large size it
+			// cannot actually deliver; growing on demand means such a mismatch is detected after allocating
+			// only what was really produced, not the (possibly huge) declared amount.
+			var out = new ByteArrayOutputStream(Math.min(Math.max(uncompressedSize, 0), 8192));
+			var buf = new byte[8192];
 			try (var gzip = new GZIPInputStream(new ByteArrayInputStream(data))) {
-				int n = 0;
-				while (n < uncompressedSize) {
-					int r = gzip.read(result, n, uncompressedSize - n);
-					if (r <= 0)
-						break;
-					n += r;
+				var total = 0;
+				int r;
+				while (total < uncompressedSize && (r = gzip.read(buf, 0, Math.min(buf.length, uncompressedSize - total))) > 0) {
+					out.write(buf, 0, r);
+					total += r;
 				}
-				if (n < uncompressedSize)
+				if (total < uncompressedSize)
 					throw new IOException("GZIP decompression produced fewer bytes than expected");
 			}
-			return result;
+			return out.toByteArray();
 		}
 	};
 

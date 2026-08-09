@@ -99,6 +99,9 @@ public class NoCloseOutputStream extends OutputStream {
 	 *
 	 * @param os The OutputStream to wrap. Must not be <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"resource" // Intentionally not owned; this wrapper deliberately does not close the underlying stream
+	})
 	public NoCloseOutputStream(OutputStream os) {
 		this.os = assertArgNotNull(ARG_os, os);
 	}

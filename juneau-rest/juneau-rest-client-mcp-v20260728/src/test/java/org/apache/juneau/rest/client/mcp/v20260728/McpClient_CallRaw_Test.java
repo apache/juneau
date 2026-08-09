@@ -34,6 +34,9 @@ import org.junit.jupiter.api.*;
  * Multi-Round-Trip-Request (SEP-2322) caller needs to receive an {@code input_required} response and echo its
  * {@code requestState}/{@code inputResponses} on a resume call (plan Phase 5, Task 14).
  */
+@SuppressWarnings({
+	"resource" // Mock HttpTransport lambdas and the client(...) test-helper factory (@Owning; callers close via try-with-resources) are short-lived test fixtures.
+})
 class McpClient_CallRaw_Test {
 
 	private static HttpTransport ok(String wireJson) {

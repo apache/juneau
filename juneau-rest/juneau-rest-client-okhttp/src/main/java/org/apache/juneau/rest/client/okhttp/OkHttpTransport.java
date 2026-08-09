@@ -64,7 +64,13 @@ public final class OkHttpTransport implements HttpTransport {
 	private final OkHttpClient httpClient;
 
 	OkHttpTransport(OkHttpTransportBuilder builder) {
-		this.httpClient = builder.httpClient != null ? builder.httpClient : new OkHttpClient();
+		this.httpClient = builder.httpClient != null ? builder.httpClient : createDefaultHttpClient();
+	}
+
+	private static OkHttpClient createDefaultHttpClient() {
+		return new OkHttpClient.Builder()
+			.addNetworkInterceptor(new OkHttpRedirectCredentialGuard())
+			.build();
 	}
 
 	/**

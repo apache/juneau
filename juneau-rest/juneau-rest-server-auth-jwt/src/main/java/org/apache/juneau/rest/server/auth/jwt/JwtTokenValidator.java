@@ -27,6 +27,7 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.server.auth.*;
 
 import com.nimbusds.jose.*;
@@ -181,11 +182,16 @@ public class JwtTokenValidator implements TokenValidator {
 		 * <p>
 		 * Mutually exclusive with {@link #jwkSource(JWKSource)} — set one or the other.
 		 *
-		 * @param value The JWKS URL. Must not be <jk>null</jk>.
+		 * <p>
+		 * The URL must use <js>"https"</js> or target a loopback host; the signing-key material fetched from
+		 * this endpoint is the trust anchor for every token, so a plaintext transport to a non-loopback host
+		 * is rejected.
+		 *
+		 * @param value The JWKS URL. Must not be <jk>null</jk> and must use HTTPS or target a loopback host.
 		 * @return This object.
 		 */
 		public Builder jwksUrl(URI value) {
-			jwksUrl = assertArgNotNull("value", value);
+			jwksUrl = UriUtils.assertSecureOrLoopback(assertArgNotNull("value", value));
 			return this;
 		}
 

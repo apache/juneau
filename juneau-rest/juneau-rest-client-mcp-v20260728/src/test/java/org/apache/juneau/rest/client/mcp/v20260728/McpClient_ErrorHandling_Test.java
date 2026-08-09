@@ -24,6 +24,9 @@ import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Mock HttpTransport lambda is a short-lived test fixture whose client is already closed via try-with-resources.
+})
 class McpClient_ErrorHandling_Test {
 
 	@Test

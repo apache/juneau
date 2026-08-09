@@ -60,7 +60,11 @@ public final class ApacheHc45Transport implements HttpTransport {
 	private final CloseableHttpClient httpClient;
 
 	ApacheHc45Transport(ApacheHc45TransportBuilder builder) {
-		this.httpClient = builder.httpClient != null ? builder.httpClient : HttpClients.createDefault();
+		this.httpClient = builder.httpClient != null ? builder.httpClient : createDefaultHttpClient();
+	}
+
+	private static CloseableHttpClient createDefaultHttpClient() {
+		return HttpClients.custom().addInterceptorLast(new Hc45RedirectCredentialGuard()).build();
 	}
 
 	/**

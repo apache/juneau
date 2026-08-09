@@ -157,6 +157,7 @@ public class FormDataArg implements RestOpArg {
 	@SuppressWarnings({
 		"rawtypes", // Raw types necessary for REST argument resolution with generic types
 		"unchecked", // Type erasure requires unchecked casts in REST argument parsing
+		"resource", // as(Class)/as(Type,Type...) calls below are generic and conservatively treated as Closeable; the resolved form value is handed to the invoked op method, not owned/closed here.
 	})
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {

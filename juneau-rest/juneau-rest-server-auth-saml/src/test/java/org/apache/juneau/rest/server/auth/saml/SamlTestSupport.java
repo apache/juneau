@@ -111,6 +111,37 @@ final class SamlTestSupport {
 		return sub;
 	}
 
+	/** Builds a bearer {@code <SubjectConfirmation>} carrying a {@code <SubjectConfirmationData>}. */
+	static SubjectConfirmation bearerConfirmation(String recipient, Instant notBefore, Instant notOnOrAfter,
+			String inResponseTo, String address) {
+		var bf = bf();
+		var scb = (SAMLObjectBuilder<SubjectConfirmation>) bf.getBuilder(SubjectConfirmation.DEFAULT_ELEMENT_NAME);
+		var scdb = (SAMLObjectBuilder<SubjectConfirmationData>) bf.getBuilder(SubjectConfirmationData.DEFAULT_ELEMENT_NAME);
+		var sc = scb.buildObject();
+		sc.setMethod(SubjectConfirmation.METHOD_BEARER);
+		var scd = scdb.buildObject();
+		if (recipient != null)
+			scd.setRecipient(recipient);
+		if (notBefore != null)
+			scd.setNotBefore(notBefore);
+		if (notOnOrAfter != null)
+			scd.setNotOnOrAfter(notOnOrAfter);
+		if (inResponseTo != null)
+			scd.setInResponseTo(inResponseTo);
+		if (address != null)
+			scd.setAddress(address);
+		sc.setSubjectConfirmationData(scd);
+		return sc;
+	}
+
+	/** Builds a Subject with the given NameID value plus the supplied {@code <SubjectConfirmation>} elements. */
+	static Subject subjectWithConfirmations(String subjectName, SubjectConfirmation... confirmations) {
+		var sub = subject(subjectName);
+		for (var sc : confirmations)
+			sub.getSubjectConfirmations().add(sc);
+		return sub;
+	}
+
 	/** Builds a Subject with a NameID whose value is explicitly null. */
 	static Subject subjectWithNullNameIdValue() {
 		var bf = bf();

@@ -159,6 +159,24 @@ public class CborTokenReader implements TokenReader {
 		return this;
 	}
 
+	/**
+	 * Sets the maximum allowed wire-declared length (in bytes) for byte/text strings read by this cursor.
+	 *
+	 * <p>
+	 * Applies to the length caps enforced while decoding definite- and indefinite-length strings.  The
+	 * cursor is intentionally NOT bounded by an element-count cap for arrays/maps &mdash; it is an
+	 * O(1)-memory streaming cursor and never materializes containers, so it accepts large definite-length
+	 * containers.  Values {@code <= 0} disable the maximum-length cap (the negative-length check still
+	 * applies).
+	 *
+	 * @param value The maximum length in bytes.
+	 * @return This object.
+	 */
+	public CborTokenReader setMaxLength(int value) {
+		is.setMaxLength(value);
+		return this;
+	}
+
 	// ==============================================================================================
 	// State-machine summary.  CBOR is already a token-shaped wire format (RFC 8949 major types), so
 	// next() reads the next data-type tag via CborInputStream.readDataType() and dispatches based
@@ -231,13 +249,21 @@ public class CborTokenReader implements TokenReader {
 		// Value position (in array, in map after key, or at root).
 		switch (dt) {
 			case ARRAY -> {
-				pushContainer(false, is.readLength());
+				pushContainer(false, is.isIndefinite() ? INDEFINITE : is.readLength());
 				currentToken = TokenType.START_ARRAY;
 			}
 			case MAP -> {
-				var n = is.readLength();
-				// MAP length is pair-count; track it as 2*n element-counts.
-				pushContainer(true, n == INDEFINITE ? INDEFINITE : n * 2);
+				if (is.isIndefinite()) {
+					pushContainer(true, INDEFINITE);
+				} else {
+					var n = is.readLength();
+					// MAP length is pair-count; track it as 2*n element-counts.  Guard the doubling so a
+					// malformed/overflowing count (e.g. a negative 8-byte 0xFFFFFFFFFFFFFFFF argument)
+					// cannot wrap the element-count bookkeeping negative.
+					if (n < 0 || n > Long.MAX_VALUE / 2)
+						throw new ParseException("Invalid CBOR map length: %s", n);
+					pushContainer(true, n * 2);
+				}
 				currentToken = TokenType.START_OBJECT;
 				// First emit inside the map will be a key; pushContainer already set this
 				// for map-level entries.

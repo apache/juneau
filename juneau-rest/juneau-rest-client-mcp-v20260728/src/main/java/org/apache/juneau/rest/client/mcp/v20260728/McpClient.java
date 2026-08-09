@@ -124,6 +124,9 @@ public final class McpClient extends AbstractMcpClient {
 	 * @throws IOException If a transport-level or (de)serialization error occurs opening the connection.
 	 * @throws McpException If the server returned a JSON-RPC error for {@value McpMethods#SERVER_DISCOVER}.
 	 */
+	@SuppressWarnings({
+		"resource" // @Owning: returns the newly-built, already-handshaked client to the caller, which owns and must close it.
+	})
 	public static McpClient connect(String endpoint) throws IOException {
 		return connect(builder().endpoint(endpoint));
 	}
@@ -143,7 +146,8 @@ public final class McpClient extends AbstractMcpClient {
 	 * @throws McpException If the server returned a JSON-RPC error for {@value McpMethods#SERVER_DISCOVER}.
 	 */
 	@SuppressWarnings({
-		"java:S1181" // Must run the close-and-rethrow cleanup below even on Error, not just checked/runtime exceptions.
+		"java:S1181", // Must run the close-and-rethrow cleanup below even on Error, not just checked/runtime exceptions.
+		"resource" // client is already closed via closeQuietly(client, e) before the rethrow on the failure path below; the success-path return is @Owning - the caller owns and must close the returned client.
 	})
 	public static McpClient connect(Builder builder) throws IOException {
 		assertArgNotNull("builder", builder);
@@ -594,6 +598,9 @@ public final class McpClient extends AbstractMcpClient {
 	 * @return A handle to cancel/close the subscription. Never <jk>null</jk>.
 	 * @throws IOException If the initial listen request/stream-open fails.
 	 */
+	@SuppressWarnings({
+		"resource" // reader/pump are @Owning: reader's ownership passes to pump immediately; on pump.start() failure the reader is closed via pump.closeReaderQuietly() before the rethrow; on success pump is returned to the caller as the McpSubscriptionHandle (which owns close()/cancel()), and the pump thread's run() finally closes the reader unconditionally. Warnings surface at the throw/return exit points, so suppress at method scope.
+	})
 	public McpSubscriptionHandle listen(SubscriptionFilter filter, McpSubscriptionListener listener) throws IOException {
 		assertArgNotNull("filter", filter);
 		assertArgNotNull("listener", listener);
@@ -648,6 +655,9 @@ public final class McpClient extends AbstractMcpClient {
 		private static final AtomicLong THREAD_SEQ = new AtomicLong();
 
 		private final String id;
+		@SuppressWarnings({
+			"resource" // Owned by this pump's lifecycle: closed via closeReaderQuietly() from cancel()/close(), and unconditionally in run()'s finally block once the decode loop ends.
+		})
 		private final SseEventReader reader;
 		private final McpSubscriptionListener listener;
 		final Thread pumpThread;
@@ -1068,6 +1078,9 @@ public final class McpClient extends AbstractMcpClient {
 		 *
 		 * @return A new {@link McpClient}. Never <jk>null</jk>.
 		 */
+		@SuppressWarnings({
+			"resource" // @Owning: returns a newly-constructed client to the caller, which owns and must close it.
+		})
 		public McpClient build() {
 			return new McpClient(this);
 		}

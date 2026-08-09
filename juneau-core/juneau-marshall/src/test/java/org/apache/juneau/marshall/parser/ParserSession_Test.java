@@ -974,4 +974,41 @@ class ParserSession_Test extends TestBase {
 		var s = new ExposingSession(JsonParser.DEFAULT);
 		assertThrows(UnsupportedOperationException.class, s::doParseIntoCollection_callDirect);
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// t - allocation-failure guard: OutOfMemoryError from within a parse degrades to a bounded ParseException
+	// -----------------------------------------------------------------------------------------------------------------
+
+	/** Test session whose parse paths always fail with an OutOfMemoryError, to exercise the allocation-failure guard. */
+	public static class OomSession extends ParserSession {
+		OomSession(JsonParser p) {
+			super(create(p));
+		}
+		@Override
+		protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) {
+			throw new OutOfMemoryError("simulated");
+		}
+		@Override
+		protected <E> Collection<E> doReadIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) {
+			throw new OutOfMemoryError("simulated");
+		}
+	}
+
+	@Test void t01_readInner_outOfMemoryProducesParseException() {
+		var s = new OomSession(JsonParser.DEFAULT);
+		var e = assertThrows(ParseException.class, () -> s.read("{}", Object.class));
+		assertTrue(e.getMessage().contains("Out of memory"), e.getMessage());
+	}
+
+	@Test void t02_readArgs_outOfMemoryProducesParseException() {
+		var s = new OomSession(JsonParser.DEFAULT);
+		var e = assertThrows(ParseException.class, () -> s.readArgs("[]", new Type[]{Object.class}));
+		assertTrue(e.getMessage().contains("Out of memory"), e.getMessage());
+	}
+
+	@Test void t03_readIntoCollection_outOfMemoryProducesParseException() {
+		var s = new OomSession(JsonParser.DEFAULT);
+		var e = assertThrows(ParseException.class, () -> s.readIntoCollection("[]", new ArrayList<>(), Object.class));
+		assertTrue(e.getMessage().contains("Out of memory"), e.getMessage());
+	}
 }

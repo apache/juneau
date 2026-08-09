@@ -4352,39 +4352,62 @@ public class HttpPartSchema {
 		// RFC 3339 date-time with time zone (programmatic to avoid regex recompilation per HTTP-part value).
 		// Mirrors full match ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$ (\d = ASCII [0-9]).
 		var len = x.length();
-		var i = scanDigits(x, 0, 4);
-		if (i < 0 || ! charIs(x, i, '-'))
-			return false;
-		i = scanDigits(x, i + 1, 2);
-		if (i < 0 || ! charIs(x, i, '-'))
-			return false;
-		i = scanDigits(x, i + 1, 2);
-		if (i < 0 || ! charIs(x, i, 'T'))
-			return false;
-		i = scanDigits(x, i + 1, 2);
-		if (i < 0 || ! charIs(x, i, ':'))
-			return false;
-		i = scanDigits(x, i + 1, 2);
-		if (i < 0 || ! charIs(x, i, ':'))
-			return false;
-		i = scanDigits(x, i + 1, 2);
+		var i = scanDateTimeCore(x);
 		if (i < 0)
 			return false;
-		if (i < len && x.charAt(i) == '.') {  // (\.\d+)? - the '.' requires at least one following digit
-			var f = i + 1;
-			i = f;
-			while (i < len && isAsciiDigit(x.charAt(i)))
-				i++;
-			if (i == f)
-				return false;
-		}
-		if (i >= len || (x.charAt(i) != '+' && x.charAt(i) != '-'))
+		i = scanOptionalFractionalSeconds(x, i, len);
+		if (i < 0)
 			return false;
+		return scanTimezoneOffset(x, i, len) == len;
+	}
+
+	// Mirrors \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2} - the date/time core consumed by isValidDateTimeZone. Returns
+	// the index after the seconds field, or -1 if any component or separator is missing/malformed.
+	private static int scanDateTimeCore(String x) {
+		var i = scanDigits(x, 0, 4);
+		if (i < 0 || ! charIs(x, i, '-'))
+			return -1;
+		i = scanDigits(x, i + 1, 2);
+		if (i < 0 || ! charIs(x, i, '-'))
+			return -1;
+		i = scanDigits(x, i + 1, 2);
+		if (i < 0 || ! charIs(x, i, 'T'))
+			return -1;
 		i = scanDigits(x, i + 1, 2);
 		if (i < 0 || ! charIs(x, i, ':'))
-			return false;
+			return -1;
 		i = scanDigits(x, i + 1, 2);
-		return i == len;
+		if (i < 0 || ! charIs(x, i, ':'))
+			return -1;
+		return scanDigits(x, i + 1, 2);
+	}
+
+	// Mirrors the optional group (\.\d+)? shared by isValidDateTimeZone and isValidTime: consumes '.' followed
+	// by one-or-more ASCII digits.  Returns i unchanged if no '.' is present at i, the index after the digits
+	// if one is, or -1 if '.' is present with no following digit.
+	private static int scanOptionalFractionalSeconds(String x, int i, int len) {
+		if (i < len && x.charAt(i) == '.') {
+			var f = i + 1;
+			var j = f;
+			while (j < len && isAsciiDigit(x.charAt(j)))
+				j++;
+			if (j == f)
+				return -1;
+			return j;
+		}
+		return i;
+	}
+
+	// Mirrors [+-]\d{2}:\d{2}, the mandatory zone-offset suffix of isValidDateTimeZone and the offset branch of
+	// isValidTime's optional zone group.  Returns the index after the offset, or -1 if the sign, digits, or
+	// separator are missing/malformed.
+	private static int scanTimezoneOffset(String x, int i, int len) {
+		if (i >= len || (x.charAt(i) != '+' && x.charAt(i) != '-'))
+			return -1;
+		i = scanDigits(x, i + 1, 2);
+		if (i < 0 || ! charIs(x, i, ':'))
+			return -1;
+		return scanDigits(x, i + 1, 2);
 	}
 
 	private static boolean isValidDuration(String x) {
@@ -4926,34 +4949,29 @@ public class HttpPartSchema {
 		// RFC 3339 time (programmatic to avoid regex recompilation per HTTP-part value).
 		// Mirrors full match ^\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?$ (\d = ASCII [0-9]).
 		var len = x.length();
-		var i = scanDigits(x, 0, 2);
-		if (i < 0 || ! charIs(x, i, ':'))
-			return false;
-		i = scanDigits(x, i + 1, 2);
-		if (i < 0 || ! charIs(x, i, ':'))
-			return false;
-		i = scanDigits(x, i + 1, 2);
+		var i = scanTimeCore(x);
 		if (i < 0)
 			return false;
-		if (i < len && x.charAt(i) == '.') {  // (\.\d+)? - the '.' requires at least one following digit
-			var f = i + 1;
-			i = f;
-			while (i < len && isAsciiDigit(x.charAt(i)))
-				i++;
-			if (i == f)
-				return false;
-		}
+		i = scanOptionalFractionalSeconds(x, i, len);
+		if (i < 0)
+			return false;
 		if (i == len)
 			return true;  // (Z|[+-]\d{2}:\d{2})? matched empty
 		if (x.charAt(i) == 'Z')
 			return i + 1 == len;
-		if (x.charAt(i) != '+' && x.charAt(i) != '-')
-			return false;
+		return scanTimezoneOffset(x, i, len) == len;
+	}
+
+	// Mirrors \d{2}:\d{2}:\d{2} - the time core consumed by isValidTime. Returns the index after the seconds
+	// field, or -1 if any component or separator is missing/malformed.
+	private static int scanTimeCore(String x) {
+		var i = scanDigits(x, 0, 2);
+		if (i < 0 || ! charIs(x, i, ':'))
+			return -1;
 		i = scanDigits(x, i + 1, 2);
 		if (i < 0 || ! charIs(x, i, ':'))
-			return false;
-		i = scanDigits(x, i + 1, 2);
-		return i == len;
+			return -1;
+		return scanDigits(x, i + 1, 2);
 	}
 
 	private boolean isValidUniqueItems(Collection<?> x) {

@@ -131,6 +131,33 @@ class OidcRelyingParty_Test extends TestBase {
 		assertTrue(auth.get().getRoles().contains("profile"));
 	}
 
+	@Test void a01b_metadataWithPlaintextTokenEndpoint_rejectedAtUse() {
+		// Metadata resolved from discovery/explicit config must carry https/loopback endpoints; a plaintext
+		// remote token endpoint is rejected the moment the flow first consults the metadata.
+		var badMetadata = new OidcMetadata(
+			URI.create("https://stub-idp.example.com"),
+			URI.create("http://idp.example.com/token"),
+			AUTHZ,
+			null,
+			URI.create("https://stub-idp.example.com/jwks"),
+			null,
+			END_SESSION,
+			Set.of("openid"),
+			Map.of());
+		var rp = OidcRelyingParty.create()
+			.metadata(badMetadata)
+			.clientId(CID)
+			.clientSecret("client-secret")
+			.redirectUri(REDIRECT_URI)
+			.scope("openid")
+			.sessionStore(InMemorySessionStore.create())
+			.jwkSet(publicJwks(key))
+			.build();
+		var req = MockServletRequest.create("GET", "/auth/login");
+		var res = MockServletResponse.create();
+		assertThrows(IllegalArgumentException.class, () -> rp.startLogin(req, res));
+	}
+
 	@Test void a02_fullLoginFlow_signedCookieStore() throws Exception {
 		var rp = rp(SignedCookieSessionStore.create().signingKey("0123456789abcdef0123456789abcdef").build());
 		var cookie = login(rp, "alice", "sess-1", null);

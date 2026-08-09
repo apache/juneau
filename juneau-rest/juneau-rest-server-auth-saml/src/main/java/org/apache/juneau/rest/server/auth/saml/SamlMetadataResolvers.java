@@ -22,12 +22,21 @@ import java.io.*;
 import java.net.*;
 import java.net.http.*;
 import java.nio.file.*;
+import java.security.cert.*;
 import java.time.*;
 
 import javax.xml.parsers.*;
 
+import org.apache.juneau.commons.utils.*;
 import org.opensaml.saml.metadata.resolver.*;
+import org.opensaml.saml.metadata.resolver.filter.*;
+import org.opensaml.saml.metadata.resolver.filter.impl.*;
 import org.opensaml.saml.metadata.resolver.impl.*;
+import org.opensaml.security.credential.impl.*;
+import org.opensaml.security.criteria.*;
+import org.opensaml.security.x509.*;
+import org.opensaml.xmlsec.config.impl.*;
+import org.opensaml.xmlsec.signature.support.impl.*;
 import org.w3c.dom.*;
 
 import net.shibboleth.shared.component.*;
@@ -105,13 +114,43 @@ public final class SamlMetadataResolvers {
 	 * periodic refresh should construct an OpenSAML {@code HTTPMetadataResolver} directly with an Apache
 	 * HttpClient.
 	 *
-	 * @param url The metadata URL.  Must be an absolute HTTPS or HTTP URL.
+	 * <h5 class='section'>Transport:</h5>
+	 * <p>
+	 * The metadata blob supplies the trust-anchor signing certificate, so the transport must not be
+	 * downgradeable by a network intermediary.  The URL must therefore use <js>"https"</js> or target a
+	 * loopback host (<js>"localhost"</js>/<js>"127.0.0.1"</js>/<js>"::1"</js>, for local development); a
+	 * plaintext <js>"http"</js> URL aimed at any other host is rejected.  When the IdP offers signed metadata,
+	 * prefer {@link #url(String, X509Certificate)} so the metadata's own XML signature is verified against a
+	 * pinned certificate independently of the transport.
+	 *
+	 * @param url The metadata URL.  Must use HTTPS or target a loopback host.
 	 * @return An initialized {@link MetadataResolver}.
 	 * @throws IOException If the URL cannot be fetched or the metadata is malformed.
 	 */
 	public static MetadataResolver url(String url) throws IOException {
+		return url(url, null);
+	}
+
+	/**
+	 * Creates a {@link MetadataResolver} that fetches SAML 2.0 metadata from the given URL and verifies the
+	 * metadata's XML signature against the supplied pinned certificate before trusting it.
+	 *
+	 * <p>
+	 * This is the strongest option: the metadata document's own enveloped signature is validated against
+	 * <jv>metadataSigningCert</jv>, so a substituted or tampered metadata blob is rejected regardless of the
+	 * transport used to fetch it.  The same transport rule as {@link #url(String)} still applies.
+	 *
+	 * @param url The metadata URL.  Must use HTTPS or target a loopback host.
+	 * @param metadataSigningCert The certificate whose public key signed the metadata document.  When
+	 * 	<jk>null</jk>, no signature validation is performed (equivalent to {@link #url(String)}).
+	 * @return An initialized {@link MetadataResolver}.
+	 * @throws IOException If the URL cannot be fetched, the metadata is malformed, or its signature does not
+	 * 	verify against the pinned certificate.
+	 */
+	public static MetadataResolver url(String url, X509Certificate metadataSigningCert) throws IOException {
 		if (url == null)
 			throw new IllegalArgumentException("url must not be null");
+		UriUtils.assertSecureOrLoopback(URI.create(url));
 
 		OpenSamlBootstrap.ensureInitialized();
 		try {
@@ -140,6 +179,8 @@ public final class SamlMetadataResolvers {
 			var resolver = new DOMMetadataResolver(root);
 			resolver.setId(url);
 			resolver.setRequireValidMetadata(true);
+			if (metadataSigningCert != null)
+				resolver.setMetadataFilter(signatureValidationFilter(metadataSigningCert));
 			resolver.initialize();
 			return resolver;
 		} catch (InterruptedException e) {
@@ -149,6 +190,17 @@ public final class SamlMetadataResolvers {
 				| org.xml.sax.SAXException e) {
 			throw ioex(e, "Failed to initialize DOMMetadataResolver for %s", url);
 		}
+	}
+
+	private static MetadataFilter signatureValidationFilter(X509Certificate cert) throws ComponentInitializationException {
+		var credential = new BasicX509Credential(cert);
+		var trustEngine = new ExplicitKeySignatureTrustEngine(
+			new StaticCredentialResolver(credential),
+			DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver());
+		var filter = new SignatureValidationFilter(trustEngine);
+		filter.setDefaultCriteria(new CriteriaSet(new UsageCriterion(org.opensaml.security.credential.UsageType.SIGNING)));
+		filter.initialize();
+		return filter;
 	}
 
 	/**

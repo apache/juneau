@@ -31,6 +31,7 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link AbstractMcpClient#send(JsonRpcRequest)}.
  */
+@SuppressWarnings("resource") // mock transports/clients are in-memory no-op closeables; test bodies close what matters via try-with-resources.
 class AbstractMcpClient_Test {
 
 	/** Minimal concrete subclass so the abstract neutral core can be instantiated for testing. */
@@ -492,44 +493,50 @@ class AbstractMcpClient_Test {
 
 	@Test
 	void b02_builder_endpoint_null_throwsIllegalArgumentException() {
-		var e = assertThrows(IllegalArgumentException.class, () -> TestClient.builder().endpoint(null));
+		var builder = TestClient.builder();
+		var e = assertThrows(IllegalArgumentException.class, () -> builder.endpoint(null));
 		assertEquals("Argument 'endpoint' cannot be null.", e.getMessage());
 	}
 
 	@Test
 	void b03_builder_noEndpoint_throwsIllegalArgumentException() {
-		var e = assertThrows(IllegalArgumentException.class, () -> TestClient.builder().build());
+		var builder = TestClient.builder();
+		var e = assertThrows(IllegalArgumentException.class, () -> builder.build());
 		assertEquals("Argument 'endpoint' cannot be null.", e.getMessage());
 	}
 
 	@Test
 	void b04_builder_endpoint_blank_throwsIllegalArgumentException() {
-		var e = assertThrows(IllegalArgumentException.class, () -> TestClient.builder().endpoint(""));
+		var builder = TestClient.builder();
+		var e = assertThrows(IllegalArgumentException.class, () -> builder.endpoint(""));
 		assertEquals("Argument 'endpoint' cannot be blank.", e.getMessage());
 	}
 
-	/** TODO-323 N8: a non-http(s)-scheme endpoint is now rejected at construction, not just non-blank. */
+	/** A non-http(s)-scheme endpoint is rejected at construction, not just non-blank. */
 	@Test
 	void b08_build_ftpSchemeEndpoint_throwsIllegalArgumentException() {
-		var e = assertThrows(IllegalArgumentException.class, () -> TestClient.builder().endpoint("ftp://x/mcp").build());
+		var builder = TestClient.builder().endpoint("ftp://x/mcp");
+		var e = assertThrows(IllegalArgumentException.class, () -> builder.build());
 		assertTrue(e.getMessage().contains("http or https"), e.getMessage());
 	}
 
-	/** TODO-323 N8: a scheme-less (relative) endpoint is rejected at construction. */
+	/** A scheme-less (relative) endpoint is rejected at construction. */
 	@Test
 	void b09_build_schemelessEndpoint_throwsIllegalArgumentException() {
-		var e = assertThrows(IllegalArgumentException.class, () -> TestClient.builder().endpoint("x/mcp").build());
+		var builder = TestClient.builder().endpoint("x/mcp");
+		var e = assertThrows(IllegalArgumentException.class, () -> builder.build());
 		assertTrue(e.getMessage().contains("http or https"), e.getMessage());
 	}
 
-	/** TODO-323 N8: a syntactically malformed endpoint is rejected at construction with a clear message. */
+	/** A syntactically malformed endpoint is rejected at construction with a clear message. */
 	@Test
 	void b10_build_malformedEndpoint_throwsIllegalArgumentException() {
-		var e = assertThrows(IllegalArgumentException.class, () -> TestClient.builder().endpoint("http://x y/mcp").build());
+		var builder = TestClient.builder().endpoint("http://x y/mcp");
+		var e = assertThrows(IllegalArgumentException.class, () -> builder.build());
 		assertTrue(e.getMessage().contains("Invalid MCP endpoint URL"), e.getMessage());
 	}
 
-	/** TODO-323 N8: https is accepted alongside http. */
+	/** https is accepted alongside http. */
 	@Test
 	void b11_build_httpsSchemeEndpoint_isAccepted() throws Exception {
 		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();
@@ -582,7 +589,8 @@ class AbstractMcpClient_Test {
 
 	@Test
 	void b08_builder_interceptor_null_throwsIllegalArgumentException() {
-		var e = assertThrows(IllegalArgumentException.class, () -> TestClient.builder().interceptor(null));
+		var builder = TestClient.builder();
+		var e = assertThrows(IllegalArgumentException.class, () -> builder.interceptor(null));
 		assertEquals("Argument 'interceptor' cannot be null.", e.getMessage());
 	}
 

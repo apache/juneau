@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
@@ -29,6 +30,9 @@ import org.junit.jupiter.api.*;
  * Coverage for {@link McpPromptHandler#of(McpPromptSpec, java.util.function.BiFunction)} and the
  * two-abstract-method contract that replaced the misleading {@code @FunctionalInterface} annotation.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class McpPromptHandler_Test {
 
 	@Test void a01_interfaceIsNoLongerAnnotatedFunctional() {
@@ -63,7 +67,8 @@ class McpPromptHandler_Test {
 	}
 
 	@Test void c01_ofRejectsNullDescriptor() {
-		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(null, (arguments, ctx) -> new McpPromptOutcome()));
+		BiFunction<Map<String,Object>,BeanStore,McpPromptOutcome> get = (arguments, ctx) -> new McpPromptOutcome();
+		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(null, get));
 	}
 
 	@Test void c02_ofRejectsNullGet() {
@@ -72,8 +77,9 @@ class McpPromptHandler_Test {
 	}
 
 	@Test void c03_ofRejectsBlankName() {
-		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(new McpPromptSpec(), (arguments, ctx) -> new McpPromptOutcome()));
+		BiFunction<Map<String,Object>,BeanStore,McpPromptOutcome> get = (arguments, ctx) -> new McpPromptOutcome();
+		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(new McpPromptSpec(), get));
 		var spec = new McpPromptSpec().setName(" ");
-		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(spec, (arguments, ctx) -> new McpPromptOutcome()));
+		assertThrows(IllegalArgumentException.class, () -> McpPromptHandler.of(spec, get));
 	}
 }

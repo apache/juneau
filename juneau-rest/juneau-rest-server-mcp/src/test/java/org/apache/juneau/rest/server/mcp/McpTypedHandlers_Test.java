@@ -33,6 +33,9 @@ import org.junit.jupiter.api.*;
 /**
  * Coverage for typed schema derivation, argument binding, one-pass canonicalization, and registration.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class McpTypedHandlers_Test {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -195,7 +198,8 @@ class McpTypedHandlers_Test {
 	@Test void c02_resultCanonicalizationAndBoundsAreInternalErrors() {
 		var a = McpTypedHandlers.adaptTool(handler(Args.class, Object.class, x -> nest(65)));
 		Map<String,Object> arguments = Map.of();
-		var b = assertThrows(McpException.class, () -> a.call(arguments, new BasicBeanStore()));
+		var ctx = new BasicBeanStore();
+		var b = assertThrows(McpException.class, () -> a.call(arguments, ctx));
 		assertEquals(-32603, b.getCode());
 		assertContains("structuredContent", b.getMessage());
 	}
@@ -232,9 +236,10 @@ class McpTypedHandlers_Test {
 	}
 
 	@Test void d03_toolFactoryRejectsNullRequiredArguments() {
-		assertThrows(IllegalArgumentException.class, () -> McpTypedHandlers.tool(null, "d", Args.class, Result.class, (args, ctx) -> new Result()));
-		assertThrows(IllegalArgumentException.class, () -> McpTypedHandlers.tool("typed", "d", null, Result.class, (args, ctx) -> new Result()));
-		assertThrows(IllegalArgumentException.class, () -> McpTypedHandlers.tool("typed", "d", Args.class, null, (args, ctx) -> new Result()));
+		BiFunction<Args,BeanStore,Result> call = (args, ctx) -> new Result();
+		assertThrows(IllegalArgumentException.class, () -> McpTypedHandlers.tool(null, "d", Args.class, Result.class, call));
+		assertThrows(IllegalArgumentException.class, () -> McpTypedHandlers.tool("typed", "d", null, Result.class, call));
+		assertThrows(IllegalArgumentException.class, () -> McpTypedHandlers.tool("typed", "d", Args.class, null, call));
 		assertThrows(IllegalArgumentException.class, () -> McpTypedHandlers.tool("typed", "d", Args.class, Result.class, null));
 	}
 }

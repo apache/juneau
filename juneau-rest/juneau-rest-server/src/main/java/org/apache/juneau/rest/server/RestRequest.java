@@ -202,6 +202,24 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public static final String CSP_NONCE_ATTR = "CspNonce";
 
+	/**
+	 * Returns {@code true} if {@code method} is one of the methods the {@code content} URL-parameter body
+	 * override (see {@link Rest#disableContentParam()}) is documented to apply to.
+	 *
+	 * <p>
+	 * Package-private for direct unit-test coverage. Restricting the override to {@code PUT}/{@code POST} (its
+	 * documented scope all along) keeps a plain cross-origin {@code GET} &mdash; the kind a browser will issue
+	 * with no preflight and no custom header for something as simple as an <code>&lt;img src=...&gt;</code> tag
+	 * &mdash; from ever having its body-carrying {@code Content-Type} gate bypassed via a query string, without
+	 * touching the {@link Rest#disableContentParam()} default itself.
+	 *
+	 * @param method The request's HTTP method. Can be {@code null} (returns {@code false}).
+	 * @return {@code true} if {@code method} is {@code PUT} or {@code POST}, case-insensitively.
+	 */
+	static boolean isContentParamMethod(String method) {
+		return "PUT".equalsIgnoreCase(method) || "POST".equalsIgnoreCase(method);
+	}
+
 	/*
 	 * Converts an Accept-Language value entry to a Locale.
 	 */
@@ -268,7 +286,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		content = new RequestContent(this);
 
-		if (context.isAllowContentParam()) {
+		if (context.isAllowContentParam() && isContentParamMethod(inner.getMethod())) {
 			var b = queryParams.get("content").asString().orElse(null);
 			if (b != null) {
 				headers.set("Content-Type", UonSerializer.DEFAULT.getResponseContentType());

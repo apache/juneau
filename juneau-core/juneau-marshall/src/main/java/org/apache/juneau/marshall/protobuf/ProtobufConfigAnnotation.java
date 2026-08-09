@@ -54,6 +54,7 @@ public class ProtobufConfigAnnotation {
 			ProtobufConfig a = ai.inner();
 
 			bool(a.nativeTypes()).ifPresent(b::nativeTypes);
+			integer(a.maxLength(), "maxLength").ifPresent(b::maxLength);
 		}
 	}
 

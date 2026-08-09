@@ -62,6 +62,17 @@ class CompressionCodec_Test extends TestBase {
 	}
 
 	@Test
+	void a04b_gzipDeclaredSizeSmallerReturnsExactPrefix() throws Exception {
+		// The decode is bounded by the declared size: a smaller declared size yields exactly that many
+		// bytes (the leading prefix), never over-allocating to the stream's full expansion.
+		var data = "the quick brown fox".getBytes(StandardCharsets.UTF_8);
+		var compressed = CompressionCodec.GZIP.compress(data);
+		var decompressed = CompressionCodec.GZIP.decompress(compressed, 9);
+		assertEquals(9, decompressed.length);
+		assertArrayEquals("the quick".getBytes(StandardCharsets.UTF_8), decompressed);
+	}
+
+	@Test
 	void a05_snappyResolvesGzipAndUncompressedResolve() throws Exception {
 		assertEquals(CompressionCodec.UNCOMPRESSED, CompressionCodec.fromThrift(0));
 		assertEquals(CompressionCodec.SNAPPY, CompressionCodec.fromThrift(1));

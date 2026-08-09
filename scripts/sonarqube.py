@@ -16,15 +16,25 @@ SonarQube/SonarCloud findings reporter for Apache Juneau.
 
 Shows per-file SonarCloud findings (rule id, severity, line, message) for a
 source file, package directory, or Maven module. Mirrors scripts/coverage.py.
+Also supports a whole-repo mode that summarizes findings across every
+module in a single pass.
 
 Usage:
     ./scripts/sonarqube.py <path> [options]
+    ./scripts/sonarqube.py --all [options]
+    ./scripts/sonarqube.py [options]           (no path => whole-repo mode)
 
 Arguments:
     path    A source file (.java), package directory under src/main/java or
             src/test/java, or Maven module root. Absolute or repo-relative.
+            Optional: omitting it (or passing --all) switches to whole-repo
+            mode, which reports totals and a per-module breakdown instead
+            of per-file findings.
 
 Options:
+    --all                            Whole-repo mode: report findings across
+                                    every module instead of a single path.
+                                    Implied when no <path> is given.
     --run, -r                       Re-fetch issues from SonarCloud Web API
                                     and overwrite the local cache.
     --severity SEV[,SEV...]         Filter by severity. Comma-separated.
@@ -34,7 +44,17 @@ Options:
                                     CODE_SMELL,BUG,VULNERABILITY,SECURITY_HOTSPOT
     --branch <branch>               SonarCloud branch (default: master).
     --with-suppress-hint            Append @SuppressWarnings hint per finding.
+    --detail                        Whole-repo mode only: also print the
+                                    per-file findings blocks after the
+                                    summary (module table + top rules).
     --max <N>                       Cap printed findings (default 200).
+    --fail-on-issues                After applying all filters above, exit
+                                    with code 2 if any matched issues remain
+                                    (exit 0 if none). All normal stdout
+                                    reporting is unchanged; this only
+                                    affects the process exit code. Intended
+                                    for use as a CI/pre-push gate primitive,
+                                    e.g. `--all --run --fail-on-issues`.
     --help, -h                      Show this help message.
 
 Authentication:
@@ -49,6 +69,11 @@ Examples:
     ./scripts/sonarqube.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/sse/ --rule java:S3776
     ./scripts/sonarqube.py path/to/file.java --with-suppress-hint
     ./scripts/sonarqube.py path/to/folder/ --run
+    ./scripts/sonarqube.py --all --run
+    ./scripts/sonarqube.py --all --severity BLOCKER,CRITICAL
+    ./scripts/sonarqube.py --all --rule java:S3776 --detail
+    ./scripts/sonarqube.py --all --run --fail-on-issues
+    ./scripts/sonarqube.py --all --severity BLOCKER,CRITICAL --fail-on-issues
 """
 
 import json
@@ -255,11 +280,22 @@ def matches_path(issue_path: str, target: str, is_file: bool) -> bool:
     return (issue_path + "/").startswith(target_norm)
 
 
+def passes_filters(iss: dict, severities: set, rules: set, types: set) -> bool:
+    """Check a single issue against the severity/rule/type filters."""
+    if severities and iss.get("severity") not in severities:
+        return False
+    if rules and iss.get("rule") not in rules:
+        return False
+    if types and iss.get("type") not in types:
+        return False
+    return True
+
+
 def filter_issues(
     issues, target_path: str, is_file: bool,
     severities: set, rules: set, types: set
 ):
-    """Apply all client-side filters and return a list of matching issues."""
+    """Apply the path scope plus client-side filters and return matching issues."""
     out = []
     for iss in issues:
         ipath = extract_path(iss)
@@ -267,11 +303,20 @@ def filter_issues(
             continue
         if not matches_path(ipath, target_path, is_file):
             continue
-        if severities and iss.get("severity") not in severities:
+        if not passes_filters(iss, severities, rules, types):
             continue
-        if rules and iss.get("rule") not in rules:
+        out.append(iss)
+    return out
+
+
+def filter_issues_all(issues, severities: set, rules: set, types: set):
+    """Apply severity/rule/type filters across ALL cached issues (no path scope)."""
+    out = []
+    for iss in issues:
+        ipath = extract_path(iss)
+        if not ipath:
             continue
-        if types and iss.get("type") not in types:
+        if not passes_filters(iss, severities, rules, types):
             continue
         out.append(iss)
     return out
@@ -301,6 +346,64 @@ def fmt_counts(counts):
         if counts[s]:
             parts.append(f"{counts[s]} {s.lower()}")
     return ", ".join(parts) if parts else "none"
+
+
+_MODULE_CACHE: dict = {}
+
+
+def resolve_module_cached(issue_path: str) -> Path | None:
+    """
+    Resolve a repo-relative issue path to its Maven module directory.
+
+    Memoized by the file's parent directory so whole-repo mode (~3000
+    issues) doesn't re-stat the filesystem for every issue in the same
+    package.
+    """
+    file_path = REPO_ROOT / issue_path
+    parent = file_path.parent
+    if parent not in _MODULE_CACHE:
+        _MODULE_CACHE[parent] = find_maven_module(file_path)
+    return _MODULE_CACHE[parent]
+
+
+def group_by_module(issues):
+    """Return {module_label: [issues...]}, bucketing unresolvable paths under '(unresolved)'."""
+    out = {}
+    for iss in issues:
+        ipath = extract_path(iss)
+        module = resolve_module_cached(ipath) if ipath else None
+        label = repo_relative(module) if module else "(unresolved)"
+        out.setdefault(label, []).append(iss)
+    return out
+
+
+def print_module_table(matched):
+    """Print one row per Maven module: total + per-severity counts, sorted by severity."""
+    by_module = group_by_module(matched)
+    rows = []
+    for label, iss_list in by_module.items():
+        counts = severity_counts(iss_list)
+        rows.append((label, len(iss_list), counts))
+    rows.sort(key=lambda r: (-(r[2]["BLOCKER"] + r[2]["CRITICAL"]), -r[1], r[0]))
+
+    label_width = max([len(r[0]) for r in rows] + [len("Module")])
+
+    print()
+    print("=" * 70)
+    print("  BY MODULE")
+    print("=" * 70)
+    header = (
+        f"  {'Module':<{label_width}}  {'Total':>5}  {'Blocker':>7}  "
+        f"{'Critical':>8}  {'Major':>5}  {'Minor':>5}  {'Info':>4}"
+    )
+    print(header)
+    print(f"  {'-' * (label_width + 46)}")
+    for label, total, counts in rows:
+        cols = "  ".join(
+            color(f"{counts[s]:>{len(s.title())}}", severity_color(s))
+            for s in ("BLOCKER", "CRITICAL", "MAJOR", "MINOR", "INFO")
+        )
+        print(f"  {label:<{label_width}}  {total:>5}  {cols}")
 
 
 def print_findings_for_file(  # NOSONAR java:S3776 -- table-style formatter; cognitive complexity is acceptable for I/O code paths
@@ -391,7 +494,7 @@ def report(  # NOSONAR java:S3776 -- top-level report orchestrator; complexity t
     if total_matched == 0:
         print()
         print("No findings for this scope/filter combination.")
-        return
+        return total_matched
 
     by_file = group_by_file(matched)
     remaining = max_print
@@ -421,6 +524,79 @@ def report(  # NOSONAR java:S3776 -- top-level report orchestrator; complexity t
                 print(f"    {r:<14}  {n}")
         print()
 
+    return total_matched
+
+
+def report_whole_repo(  # NOSONAR java:S3776 -- top-level report orchestrator; complexity tracks the spec layout
+    payload: dict,
+    severities: set,
+    rules: set,
+    types: set,
+    with_suppress_hint: bool,
+    max_print: int,
+    branch: str,
+    detail: bool,
+):
+    issues = payload.get("issues", [])
+    matched = filter_issues_all(issues, severities, rules, types)
+
+    total_in_cache = len(issues)
+    total_matched = len(matched)
+    counts = severity_counts(matched)
+
+    print(f"Project:  {SONAR_PROJECT_KEY}  (branch: {branch})")
+    print("Scope:    WHOLE REPO")
+    print(f"Cache:    {CACHE_PATH.relative_to(REPO_ROOT)}")
+    flt_parts = []
+    if severities and severities != set(SEVERITIES):
+        flt_parts.append(f"severity={','.join(sorted(severities, key=SEVERITY_RANK.get))}")
+    if rules:
+        flt_parts.append(f"rule={','.join(sorted(rules))}")
+    if types and types != set(ISSUE_TYPES):
+        flt_parts.append(f"type={','.join(sorted(types))}")
+    if flt_parts:
+        print(f"Filters:  {'; '.join(flt_parts)}")
+    print(
+        f"Findings: {total_matched} matched of {total_in_cache} in cache  "
+        f"({fmt_counts(counts)})"
+    )
+
+    if total_matched == 0:
+        print()
+        print("No findings for this filter combination.")
+        return total_matched
+
+    print_module_table(matched)
+
+    rule_counter = {}
+    for iss in matched:
+        rule_counter[iss.get("rule", "?")] = rule_counter.get(iss.get("rule", "?"), 0) + 1
+    top_rules = sorted(rule_counter.items(), key=lambda kv: -kv[1])[:15]
+    if top_rules:
+        print()
+        print("=" * 70)
+        print("  TOP RULES")
+        print("=" * 70)
+        for r, n in top_rules:
+            print(f"    {r:<14}  {n}")
+        print()
+
+    if not detail:
+        return total_matched
+
+    by_file = group_by_file(matched)
+    remaining = max_print
+    for fpath in sorted(by_file.keys()):
+        if remaining <= 0:
+            print(f"\n... {sum(len(v) for v in by_file.values()) - max_print} more findings hidden (raise --max).")
+            break
+        printed = print_findings_for_file(
+            fpath, by_file[fpath], with_suppress_hint, remaining
+        )
+        remaining -= printed
+
+    return total_matched
+
 
 def parse_csv_arg(raw: str, valid: list, label: str) -> set:
     out = set()
@@ -442,18 +618,27 @@ def parse_args(argv):  # NOSONAR java:S3776 -- argparse-by-hand mirror of covera
 
     path_arg = None
     do_run = False
+    do_all = False
+    detail = False
     severities = set()
     rules = set()
     types = set()
     branch = "master"
     with_suppress_hint = False
     max_print = 200
+    fail_on_issues = False
 
     i = 0
     while i < len(args):
         a = args[i]
         if a in ("--run", "-r"):
             do_run = True
+        elif a == "--all":
+            do_all = True
+        elif a == "--detail":
+            detail = True
+        elif a == "--fail-on-issues":
+            fail_on_issues = True
         elif a == "--severity":
             i += 1
             if i >= len(args):
@@ -499,37 +684,43 @@ def parse_args(argv):  # NOSONAR java:S3776 -- argparse-by-hand mirror of covera
             path_arg = a
         i += 1
 
-    if not path_arg:
-        die("No path specified.")
+    whole_repo = do_all or not path_arg
 
     return {
         "path_arg": path_arg,
+        "whole_repo": whole_repo,
         "do_run": do_run,
+        "detail": detail,
         "severities": severities,
         "rules": rules,
         "types": types,
         "branch": branch,
         "with_suppress_hint": with_suppress_hint,
         "max_print": max_print,
+        "fail_on_issues": fail_on_issues,
     }
 
 
 def main():  # NOSONAR java:S3776 -- thin orchestrator with simple branching
     opts = parse_args(sys.argv)
+    whole_repo = opts["whole_repo"]
 
-    path = Path(opts["path_arg"])
-    if not path.is_absolute():
-        path = REPO_ROOT / path
-    path = path.resolve()
-    if not path.exists():
-        die(f"Path does not exist: {path}")
+    rel_path = None
+    is_file = False
+    if not whole_repo:
+        path = Path(opts["path_arg"])
+        if not path.is_absolute():
+            path = REPO_ROOT / path
+        path = path.resolve()
+        if not path.exists():
+            die(f"Path does not exist: {path}")
 
-    rel_path = repo_relative(path)
-    is_file = path.is_file()
+        rel_path = repo_relative(path)
+        is_file = path.is_file()
 
-    module = find_maven_module(path) if path.is_dir() or path.is_file() else None
-    if path.is_file() and not module:
-        die(f"Could not determine Maven module for path: {path}")
+        module = find_maven_module(path) if path.is_dir() or path.is_file() else None
+        if path.is_file() and not module:
+            die(f"Could not determine Maven module for path: {path}")
 
     payload = None
     if not opts["do_run"]:
@@ -560,17 +751,32 @@ def main():  # NOSONAR java:S3776 -- thin orchestrator with simple branching
                 f"branch={cached_branch}). Use --run to refresh."
             )
 
-    report(
-        payload,
-        rel_path,
-        is_file,
-        opts["severities"],
-        opts["rules"],
-        opts["types"],
-        opts["with_suppress_hint"],
-        opts["max_print"],
-        opts["branch"],
-    )
+    if whole_repo:
+        total_matched = report_whole_repo(
+            payload,
+            opts["severities"],
+            opts["rules"],
+            opts["types"],
+            opts["with_suppress_hint"],
+            opts["max_print"],
+            opts["branch"],
+            opts["detail"],
+        )
+    else:
+        total_matched = report(
+            payload,
+            rel_path,
+            is_file,
+            opts["severities"],
+            opts["rules"],
+            opts["types"],
+            opts["with_suppress_hint"],
+            opts["max_print"],
+            opts["branch"],
+        )
+
+    if opts["fail_on_issues"] and (total_matched or 0) > 0:
+        return 2
     return 0
 
 

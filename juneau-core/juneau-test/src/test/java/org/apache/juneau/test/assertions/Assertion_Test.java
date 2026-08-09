@@ -23,7 +23,8 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"serial" // Serialization not relevant in test code
+	"serial", // Serialization not relevant in test code
+	"resource" // Test-only CapturingPrintStream is not closed; capturing System-stream stand-ins carry no OS resource to release.
 })
 class Assertion_Test extends TestBase {
 

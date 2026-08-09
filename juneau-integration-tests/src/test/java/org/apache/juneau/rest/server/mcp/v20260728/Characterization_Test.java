@@ -29,6 +29,7 @@ import javax.crypto.*;
 import javax.crypto.spec.*;
 
 import org.apache.juneau.bean.mcp.v20260728.*;
+import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.tracing.TraceContextCarrier;
 import org.apache.juneau.marshall.collections.*;
@@ -271,9 +272,9 @@ class Characterization_Test {
 			if (baggage != null)
 				request.setAttribute(TraceContextResponseProcessor.ATTR_BAGGAGE, baggage);
 			return new Scope() {
-				@Override public void setStatusCode(int statusCode) { }
-				@Override public void setError(Throwable error) { }
-				@Override public void close() { }
+				@Override public void setStatusCode(int statusCode) { /* no fixture asserts on a recorded status code */ }
+				@Override public void setError(Throwable error) { /* no fixture asserts on a recorded error */ }
+				@Override public void close() { /* nothing to release; this scope only writes request attributes above */ }
 			};
 		}
 	}

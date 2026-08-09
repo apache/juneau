@@ -33,6 +33,11 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@link BasicRestResource} so the returned beans serialize via the {@code BasicUniversalConfig} set
  * (mirrors {@code HealthResource}).
  *
+ * <p>
+ * As with the mixin flavor, the {@code GET} endpoints carry no built-in guard of their own &mdash; mount this
+ * resource only under a subtree that's already covered by whatever authentication/authorization the app applies
+ * to its management endpoints generally. See {@link LoggersMixin} for details.
+ *
  * <h5 class='section'>Backend:</h5><ul>
  * 	<li>Drives {@link JulLogBackend java.util.logging} by default; declare a Logback / Log4j2 backend
  * 		explicitly via {@link LoggersSettings.Builder#backend(LogBackend)} &mdash; see {@link LogBackend}.

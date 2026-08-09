@@ -63,6 +63,7 @@ public abstract class AbstractMcpClient implements Closeable {
 	private static final String ARG_INTERCEPTOR = "interceptor";
 	private static final String ARG_REQUEST = "request";
 
+	@SuppressWarnings("resource") // closed by this.close() (Closeable); Eclipse can't trace field-scoped ownership across construction and close().
 	private final RestClient restClient;
 	private final String endpoint;
 
@@ -74,6 +75,7 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * 	or is not a syntactically valid absolute {@code http}/{@code https} URL (see
 	 * 	{@link #validateEndpoint(String)}).
 	 */
+	@SuppressWarnings("resource") // the built RestClient is stored in the final restClient field and closed by close(); not leaked.
 	protected AbstractMcpClient(Builder<?> builder) {
 		assertArgNotNull(ARG_BUILDER, builder);
 		this.endpoint = validateEndpoint(builder.endpoint);
@@ -179,6 +181,7 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * @return A reader over the opened event stream. Never <jk>null</jk>. Callers are responsible for closing it.
 	 * @throws IOException If a transport-level error occurs opening the stream.
 	 */
+	@SuppressWarnings("resource") // returned SseEventReader wraps the opened stream; ownership transfers to the caller, who must close it (see javadoc).
 	protected SseEventReader openEventStream() throws IOException {
 		return restClient.post(endpoint).openEventStream();
 	}
@@ -193,6 +196,7 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * @return A reader over the opened event stream. Never <jk>null</jk>. Callers are responsible for closing it.
 	 * @throws IOException If a transport-level or (de)serialization error occurs opening the stream.
 	 */
+	@SuppressWarnings("resource") // delegates to the 3-arg overload, which transfers stream ownership to the caller.
 	protected SseEventReader openEventStream(JsonRpcRequest request) throws IOException {
 		return openEventStream(request, Map.of());
 	}
@@ -225,6 +229,7 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * @throws McpException If the server rejected {@code request} with a JSON-RPC error instead of opening the
 	 * 	stream.
 	 */
+	@SuppressWarnings("resource") // 'res' is closed in the finally block via quiet(res::close) on every non-return path (Eclipse doesn't trace closes made through a method reference); the returned SseEventReader wraps 'res' and transfers ownership to the caller when opened.
 	protected SseEventReader openEventStream(JsonRpcRequest request, Map<String,String> httpHeaders) throws IOException {
 		assertArgNotNull(ARG_REQUEST, request);
 		var req = restClient.post(endpoint).body(request);

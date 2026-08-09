@@ -558,7 +558,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	@Test void j_beanListProperty_noListSyntax() throws Exception {
 		// Bean property with List<Map> → writeCollection: elementIsBeanOrMap=true, useListSyntaxForBeans=false (default)
-		// Exercises the else-if(nn(fieldName)) path in writeBeanMap for collection-of-maps
+		// Exercises the non-null-field-name else-if path in writeBeanMap for collection-of-maps
 		var root = new BeanWithBeanListProp();
 		var item1 = new LinkedHashMap<String,Object>();
 		item1.put("name", "alice");

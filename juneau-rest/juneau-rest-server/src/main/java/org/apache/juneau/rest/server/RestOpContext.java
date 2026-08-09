@@ -109,9 +109,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/**
 	 * Env-driven default max-input string for this operation, populated by {@link ClassInfo#inject(Object, BeanStore)}
 	 * before the {@link #maxInput} memoizer fires; resolved from {@code RestContext.maxInput} or
-	 * {@code "100000000"}.
+	 * {@code "1000000"} &mdash; matching the {@code @Rest}-level fallback in
+	 * {@link org.apache.juneau.rest.server.config.DefaultConfig DefaultConfig} so an operation that falls all the
+	 * way through to this last-resort default doesn't end up with a substantially larger effective ceiling than
+	 * the class-level default.
 	 */
-	@Value("${RestContext.maxInput:100000000}")
+	@Value("${RestContext.maxInput:1000000}")
 	private String defaultMaxInputString;
 
 	/**

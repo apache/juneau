@@ -37,6 +37,9 @@ import org.junit.jupiter.api.*;
  * handler for the round's requests, and re-issues the call with the collected {@code inputResponses} and carried
  * {@code requestState} until a terminal result is reached.
  */
+@SuppressWarnings({
+	"resource" // The Recorder HttpTransport test double (`t`) and the client(...) test-helper factory (@Owning; callers close via try-with-resources) are short-lived test fixtures.
+})
 class McpClient_Elicitation_Test {
 
 	/**

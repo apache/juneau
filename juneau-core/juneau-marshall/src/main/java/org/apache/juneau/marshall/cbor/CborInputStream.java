@@ -46,12 +46,22 @@ import org.apache.juneau.marshall.parser.*;
  */
 public class CborInputStream extends ParserInputStream {
 
+	/** Default cap (16 MiB) for wire-declared lengths, mirroring {@code BsonInputStream}. */
+	static final int DEFAULT_MAX_LENGTH = 16 * 1024 * 1024;
+
+	// checkLength's "what" label for byte/text-string length checks (definite-length and reassembled indefinite-length).
+	private static final String WHAT_STRING = "string";
+
 	private long length;
 	private int lastInitialByte;
 	private DataType lastDataType;
 	// Single-byte pushback for indefinite-length container loops that need to peek for BREAK
 	// without consuming the next data item.  -1 means no pushback present.
 	private int pushedBackByte = -1;
+	// True when the last-read data item carried additional-info 31 (indefinite-length array/map/string).
+	// Tracked separately from length so a definite value whose argument happens to be -1 (an 8-byte
+	// 0xFFFFFFFFFFFFFFFF) is NOT mistaken for an indefinite item.
+	private boolean indefinite;
 
 	/**
 	 * Constructor.
@@ -240,6 +250,7 @@ public class CborInputStream extends ParserInputStream {
 		}
 
 		lastDataType = dt;
+		indefinite = false;
 		if (dt == FLOAT) {
 			if (additionalInfo == 25)
 				length = 2;
@@ -248,16 +259,32 @@ public class CborInputStream extends ParserInputStream {
 			else
 				length = 8;
 		} else if ((dt == ARRAY || dt == MAP || dt == STRING || dt == BINARY) && additionalInfo == 31) {
-			// Indefinite-length container or string.  Sentinel: length = -1.  Containers are driven by
-			// the BREAK-aware loop (shouldContinueContainer / peekBreak); indefinite text/byte strings
-			// are reassembled from their chunks in readBinary (RFC 8949 §3.2.3).
-			length = -1;
-		} else if (dt != BOOLEAN && dt != NULL && dt != UNDEFINED && dt != BREAK)
+			// Indefinite-length container or string (RFC 8949 §3.2).  Flagged via 'indefinite' rather than
+			// overloading length so callers distinguish it from a definite item whose 8-byte argument is
+			// 0xFFFFFFFFFFFFFFFF.  Containers are driven by the BREAK-aware loop (shouldContinueContainer /
+			// peekBreak); indefinite text/byte strings are reassembled from their chunks in readBinary.
+			indefinite = true;
+			length = 0;
+		} else if (dt != BOOLEAN && dt != NULL && dt != UNDEFINED && dt != BREAK) {
+			// NOTE: element-COUNT caps for arrays/maps are intentionally NOT applied here.  This method is
+			// shared by the O(1)-memory streaming cursor (CborTokenReader), which must accept large
+			// definite-length containers.  The count cap is enforced only on the databind path
+			// (CborParserSession), where elements actually accumulate into a collection.  Byte/text-string
+			// LENGTH caps remain active on every path via readBinary/readIndefiniteString.
 			length = readArgument(additionalInfo);
-		else
+		} else
 			length = dt == BOOLEAN ? -1 : 0;
 
 		return dt;
+	}
+
+	/**
+	 * Returns whether the last-read data item used indefinite-length encoding (additional-info 31).
+	 *
+	 * @return <jk>true</jk> if the last {@link #readDataType()} returned an indefinite-length array, map, or string.
+	 */
+	boolean isIndefinite() {
+		return indefinite;
 	}
 
 	/**
@@ -391,13 +418,15 @@ public class CborInputStream extends ParserInputStream {
 	 *
 	 * <p>
 	 * Handles both definite-length strings and indefinite-length strings (RFC 8949 §3.2.3): when the
-	 * head carried additional-info 31 ({@code length == -1}) the chunked definite-length pieces are
-	 * reassembled until the BREAK marker.
+	 * head carried additional-info 31 ({@link #isIndefinite()}) the chunked definite-length pieces are
+	 * reassembled until the BREAK marker.  A definite-length string whose declared length is out of
+	 * bounds (negative, e.g. an 8-byte 0xFFFFFFFFFFFFFFFF argument, or beyond the configured maximum)
+	 * is rejected here via {@link #checkLength(long, String)}.
 	 */
 	byte[] readBinary() throws IOException {
-		if (length == -1)
+		if (indefinite)
 			return readIndefiniteString();
-		var b = new byte[(int)length];
+		var b = new byte[checkLength(length, WHAT_STRING)];
 		var bytesRead = read(b);
 		if (bytesRead != b.length)
 			throw ioex("Expected to read %s bytes but only read %s", b.length, bytesRead);
@@ -416,6 +445,7 @@ public class CborInputStream extends ParserInputStream {
 	private byte[] readIndefiniteString() throws IOException {
 		var expectedMajorType = getMajorType(lastInitialByte);
 		var baos = new ByteArrayOutputStream();
+		var total = 0L;
 		while (true) {
 			int ib = read();
 			if (ib == -1)
@@ -429,7 +459,11 @@ public class CborInputStream extends ParserInputStream {
 				throw ioex("Invalid chunk major type %s in indefinite-length string (expected %s)", chunkMajorType, expectedMajorType);
 			if (chunkInfo == 31)
 				throw ioex("Nested indefinite-length string chunk not allowed");
-			var chunkLen = (int)readArgument(chunkInfo);
+			var chunkLen = checkLength(readArgument(chunkInfo), WHAT_STRING);
+			// Bound the reassembled aggregate, not just each chunk, so the returned byte[] cannot exceed
+			// the configured maximum regardless of how the payload is split across chunks.
+			total += chunkLen;
+			checkLength(total, WHAT_STRING);
 			var chunk = new byte[chunkLen];
 			var bytesRead = read(chunk);
 			if (bytesRead != chunk.length)

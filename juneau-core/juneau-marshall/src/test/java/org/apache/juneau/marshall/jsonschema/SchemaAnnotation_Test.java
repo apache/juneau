@@ -479,13 +479,13 @@ class SchemaAnnotation_Test extends TestBase {
 	}
 
 	@Test void i04_asMap_exclusiveMaximumEmaxAlias() throws Exception {
-		// Forces the `else if (a.emax())` short-circuit branch.
+		// Forces the exclusiveMaximum alias's else-if short-circuit branch.
 		var a = SchemaAnnotation.create().emax(true).build();
 		assertEquals("true", SchemaAnnotation.asMap(a).get("exclusiveMaximum"));
 	}
 
 	@Test void i06_asMap_exclusiveMinimumEminAlias() throws Exception {
-		// Forces the `else if (a.emin())` short-circuit branch.
+		// Forces the exclusiveMinimum alias's else-if short-circuit branch.
 		var a = SchemaAnnotation.create().emin(true).build();
 		assertEquals("true", SchemaAnnotation.asMap(a).get("exclusiveMinimum"));
 	}

@@ -38,6 +38,7 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings("resource") // Mock HttpServletResponse stubs return 'new PrintWriter(sw)' directly; these are in-memory test doubles never actually flushed/closed by production code.
 class AuthFilterChain_Test extends TestBase {
 
 	private static final Principal ALICE = () -> "alice";

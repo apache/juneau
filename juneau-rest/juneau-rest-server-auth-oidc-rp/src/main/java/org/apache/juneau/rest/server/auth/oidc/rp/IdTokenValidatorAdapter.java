@@ -23,6 +23,7 @@ import java.net.*;
 import java.text.*;
 import java.util.*;
 
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.server.auth.*;
 
 import com.nimbusds.jose.*;
@@ -114,11 +115,16 @@ public class IdTokenValidatorAdapter {
 		 * Sets the JWKS endpoint URI the validator fetches signing keys from.  Mutually exclusive with
 		 * {@link #jwkSet(JWKSet)} / {@link #jwkSource(JWKSource)}.
 		 *
-		 * @param value The JWKS URI.  Must not be <jk>null</jk>.
+		 * <p>
+		 * The URI must use <js>"https"</js> or target a loopback host; the signing-key material fetched from
+		 * this endpoint is the trust anchor for every ID token, so a plaintext transport to a non-loopback host
+		 * is rejected.
+		 *
+		 * @param value The JWKS URI.  Must not be <jk>null</jk> and must use HTTPS or target a loopback host.
 		 * @return This object.
 		 */
 		public Builder jwksUri(URI value) {
-			jwksUri = assertArgNotNull("value", value);
+			jwksUri = UriUtils.assertSecureOrLoopback(assertArgNotNull("value", value));
 			return this;
 		}
 

@@ -23,10 +23,12 @@ import java.io.*;
 import java.security.*;
 import java.time.*;
 import java.util.*;
+import java.util.logging.*;
 
 import javax.xml.namespace.*;
 import javax.xml.parsers.*;
 
+import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.opensaml.core.criterion.*;
 import org.opensaml.core.xml.io.*;
@@ -59,12 +61,25 @@ import net.shibboleth.shared.resolver.*;
  * The validator enforces:
  *
  * <ul>
- * 	<li><b>Mandatory signature</b> on every assertion (or, optionally, on the {@code <Response>} envelope).
+ * 	<li><b>Mandatory assertion signature</b> &mdash; every assertion must carry its own enveloped signature.
+ * 		A response that signs only the {@code <Response>} envelope (and not the assertion) is rejected as
+ * 		unsigned; response-envelope-level signatures are not supported.
  * 	<li><b>Strict signature-algorithm allowlist</b> &mdash; only {@code rsa-sha256} and
- * 		{@code ecdsa-sha256} are accepted out of the box.  SHA-1 is permanently rejected.
+ * 		{@code ecdsa-sha256} are accepted out of the box.  SHA-1 is permanently rejected.  The reference
+ * 		{@code DigestMethod} is separately allowlisted (SHA-256/384/512), so a SHA-1 digest is rejected even
+ * 		under a SHA-256 signature.
+ * 	<li><b>Response status</b> &mdash; the {@code <samlp:Status>} must report the {@code Success} status code.
  * 	<li><b>Clock skew</b> &mdash; defaults to 60 seconds tolerance on {@code NotBefore} /
  * 		{@code NotOnOrAfter}; capped at 300 seconds.
  * 	<li><b>Audience restriction</b> &mdash; {@code <AudienceRestriction>} must list the configured SP entity ID.
+ * 	<li><b>Bearer subject confirmation</b> &mdash; when a {@link Builder#recipient(String) recipient} (the SP
+ * 		ACS URL) is configured, the assertion must carry a {@code bearer} {@code <SubjectConfirmation>} whose
+ * 		{@code <SubjectConfirmationData>} matches the expected {@code Recipient}, is within its
+ * 		{@code NotBefore}/{@code NotOnOrAfter} window, and satisfies the configured
+ * 		{@code InResponseTo}/{@code Address} expectations.
+ * 	<li><b>One-time use</b> &mdash; each assertion ID is recorded in a {@link ReplayCache} and a second
+ * 		presentation of the same ID is rejected.  The check is fail-closed: if the cache cannot answer, the
+ * 		assertion is rejected.
  * 	<li><b>Encrypted assertions</b> &mdash; if the response contains
  * 		{@code <EncryptedAssertion>}, a {@code decryptionCredential} must be configured.
  * </ul>
@@ -105,6 +120,8 @@ import net.shibboleth.shared.resolver.*;
 })
 public class SamlAssertionValidator {
 
+	private static final Logger LOG = Logger.getLogger(SamlAssertionValidator.class.getName());
+
 	/** Marker claim name on the returned {@link ClaimsPrincipal}. */
 	public static final String ISSUER_TYPE_CLAIM = "issuerType";
 
@@ -114,10 +131,26 @@ public class SamlAssertionValidator {
 	/** Maximum clock-skew tolerance the builder will accept (5 minutes). */
 	private static final Duration MAX_CLOCK_SKEW = Duration.ofSeconds(300);
 
+	/** XML-DSig namespace URI, used when scanning the signature DOM for reference digest methods. */
+	private static final String XMLSIG_NS = "http://www.w3.org/2000/09/xmldsig#";
+
+	/**
+	 * Retention window applied to a one-time-use cache entry when the assertion carries no
+	 * {@code Conditions/NotOnOrAfter} to bound it (5 minutes).
+	 */
+	private static final Duration DEFAULT_REPLAY_RETENTION = Duration.ofMinutes(5);
+
 	/** Default allowlist of XML signature algorithms. */
 	private static final Set<String> DEFAULT_ALGORITHMS = Set.of(
 		SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256,
 		SignatureConstants.ALGO_ID_SIGNATURE_ECDSA_SHA256
+	);
+
+	/** Default allowlist of XML reference digest algorithms.  SHA-1 is deliberately excluded. */
+	private static final Set<String> DEFAULT_DIGEST_ALGORITHMS = Set.of(
+		SignatureConstants.ALGO_ID_DIGEST_SHA256,
+		SignatureConstants.ALGO_ID_DIGEST_SHA384,
+		SignatureConstants.ALGO_ID_DIGEST_SHA512
 	);
 
 	/**
@@ -138,9 +171,14 @@ public class SamlAssertionValidator {
 		private Credential decryptionCredential;
 		private String spEntityId;
 		private String expectedIssuer;
+		private String recipient;
+		private String expectedInResponseTo;
+		private String expectedAddress;
 		private Set<String> algorithms = new LinkedHashSet<>(DEFAULT_ALGORITHMS);
+		private Set<String> digestAlgorithms = new LinkedHashSet<>(DEFAULT_DIGEST_ALGORITHMS);
 		private Duration clockSkew = Duration.ofSeconds(60);
 		private Clock clock = Clock.systemUTC();
+		private ReplayCache replayCache = new InMemoryReplayCache();
 
 		/** Constructor. */
 		protected Builder() {}
@@ -235,6 +273,104 @@ public class SamlAssertionValidator {
 		}
 
 		/**
+		 * Replaces the default reference-digest allowlist with the supplied URIs.
+		 *
+		 * <p>
+		 * The reference {@code DigestMethod} of the enveloped signature must appear in this set.  SHA-1
+		 * algorithms are silently filtered out (permanent rejection), mirroring {@link #algorithms(String...)}.
+		 *
+		 * @param values The XML-DSig digest algorithm URIs to allow.  Must contain at least one non-SHA-1 entry.
+		 * @return This object.
+		 */
+		public Builder digestAlgorithms(String... values) {
+			assertArgNotNull("values", values);
+			if (values.length == 0)
+				throw iaex("digest allowlist must be non-empty");
+			var next = new LinkedHashSet<String>();
+			for (var a : values) {
+				assertArgNotNull("digestAlgorithm", a);
+				if (a.toLowerCase(Locale.ROOT).contains("sha1"))
+					throw iaex("SHA-1 digest algorithms are permanently rejected: %s", a);
+				next.add(a);
+			}
+			digestAlgorithms = next;
+			return this;
+		}
+
+		/**
+		 * Sets the expected {@code Recipient} (this SP's Assertion Consumer Service URL) and, by doing so,
+		 * enables bearer {@code <SubjectConfirmation>} validation.
+		 *
+		 * <p>
+		 * When set, every validated assertion must carry a {@code bearer} {@code <SubjectConfirmation>} whose
+		 * {@code <SubjectConfirmationData>} names this exact {@code Recipient}, is within its
+		 * {@code NotBefore}/{@code NotOnOrAfter} window, and satisfies the {@link #expectedInResponseTo(String)}
+		 * / {@link #subjectAddress(String)} expectations.  When left unset (the default), subject-confirmation
+		 * validation is skipped &mdash; operators consuming bearer assertions from a browser SSO flow should
+		 * configure this.
+		 *
+		 * @param value The expected ACS URL.  Must not be <jk>null</jk> or blank.
+		 * @return This object.
+		 */
+		public Builder recipient(String value) {
+			recipient = assertArgNotNullOrBlank("value", value);
+			return this;
+		}
+
+		/**
+		 * Sets the request ID a bearer {@code <SubjectConfirmationData>} must echo in its {@code InResponseTo}
+		 * attribute.
+		 *
+		 * <p>
+		 * Only consulted when {@link #recipient(String)} is configured.  When set, the confirmation's
+		 * {@code InResponseTo} must equal this value (a solicited, SP-initiated flow).  When left unset (the
+		 * default), the confirmation must <i>not</i> carry an {@code InResponseTo} at all (an unsolicited,
+		 * IdP-initiated flow) &mdash; a captured solicited assertion cannot be injected into the unsolicited
+		 * path.
+		 *
+		 * @param value The expected request ID.  Must not be <jk>null</jk> or blank.
+		 * @return This object.
+		 */
+		public Builder expectedInResponseTo(String value) {
+			expectedInResponseTo = assertArgNotNullOrBlank("value", value);
+			return this;
+		}
+
+		/**
+		 * Sets the client address a bearer {@code <SubjectConfirmationData>} must name in its {@code Address}
+		 * attribute.
+		 *
+		 * <p>
+		 * Only consulted when {@link #recipient(String)} is configured.  When set, the confirmation's
+		 * {@code Address} must equal this value; when unset (the default) the {@code Address} attribute is not
+		 * checked.
+		 *
+		 * @param value The expected client address.  Must not be <jk>null</jk> or blank.
+		 * @return This object.
+		 */
+		public Builder subjectAddress(String value) {
+			expectedAddress = assertArgNotNullOrBlank("value", value);
+			return this;
+		}
+
+		/**
+		 * Overrides the {@link ReplayCache} used to enforce one-time use of each assertion ID.
+		 *
+		 * <p>
+		 * Defaults to a per-process {@link InMemoryReplayCache}, which enforces single-use within one JVM.
+		 * Multi-node deployments should inject a {@link ReplayCache} backed by a store shared across every node
+		 * so an assertion consumed against one node cannot be replayed against another.  The check is always
+		 * fail-closed: a cache that cannot answer causes the assertion to be rejected.
+		 *
+		 * @param value The replay cache.  Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder replayCache(ReplayCache value) {
+			replayCache = assertArgNotNull("value", value);
+			return this;
+		}
+
+		/**
 		 * Sets the clock-skew tolerance for {@code NotBefore} / {@code NotOnOrAfter} validation.
 		 *
 		 * @param value The tolerance.  Must be non-negative and not exceed 5 minutes.
@@ -284,9 +420,14 @@ public class SamlAssertionValidator {
 	private final Credential decryptionCredential;
 	private final String spEntityId;
 	private final String expectedIssuer;
+	private final String recipient;
+	private final String expectedInResponseTo;
+	private final String expectedAddress;
 	private final Set<String> algorithms;
+	private final Set<String> digestAlgorithms;
 	private final Duration clockSkew;
 	private final Clock clock;
+	private final ReplayCache replayCache;
 
 	/**
 	 * Constructor.
@@ -300,9 +441,14 @@ public class SamlAssertionValidator {
 		this.decryptionCredential = b.decryptionCredential;
 		this.spEntityId = b.spEntityId;
 		this.expectedIssuer = b.expectedIssuer;
+		this.recipient = b.recipient;
+		this.expectedInResponseTo = b.expectedInResponseTo;
+		this.expectedAddress = b.expectedAddress;
 		this.algorithms = u(cp(b.algorithms));
+		this.digestAlgorithms = u(cp(b.digestAlgorithms));
 		this.clockSkew = b.clockSkew;
 		this.clock = b.clock;
+		this.replayCache = b.replayCache;
 	}
 
 	/**
@@ -353,11 +499,23 @@ public class SamlAssertionValidator {
 	public Principal validate(String xml) throws AuthenticationException {
 		assertArgNotNullOrBlank("xml", xml);
 		var response = parseResponse(xml);
+		validateStatus(response);
 		var assertion = extractAndDecryptAssertion(response);
 		verifySignature(assertion);
 		var claims = buildClaims(response, assertion);
+		validateSubjectConfirmation(assertion);
+		recordSingleUse(assertion);
 		var subject = nameId(assertion);
 		return new ClaimsPrincipal(subject, claims);
+	}
+
+	private void validateStatus(Response response) throws AuthenticationException {
+		var status = response.getStatus();
+		var code = status == null ? null : status.getStatusCode();
+		var value = code == null ? null : code.getValue();
+		if (! StatusCode.SUCCESS.equals(value))
+			throw new AuthenticationException("SAML response status is not Success: " + value)
+				.wwwAuthenticate("SAML error=\"invalid_response\"");
 	}
 
 	private Response parseResponse(String xml) throws AuthenticationException {
@@ -425,6 +583,8 @@ public class SamlAssertionValidator {
 			throw new AuthenticationException("SAML signature algorithm not allowlisted: " + alg)
 				.wwwAuthenticate("SAML error=\"signature_algorithm_rejected\"");
 
+		validateDigestAlgorithms(signature);
+
 		// First, run the SAML signature profile validator to catch wrapping/structural attacks.
 		try {
 			new SAMLSignatureProfileValidator().validate(signature);
@@ -474,7 +634,7 @@ public class SamlAssertionValidator {
 		}
 	}
 
-	private static Credential extractSigningCredential(IDPSSODescriptor idp) {
+	private Credential extractSigningCredential(IDPSSODescriptor idp) {
 		for (KeyDescriptor kd : idp.getKeyDescriptors()) {
 			var credential = credentialFromKeyDescriptor(kd);
 			if (credential != null) // HTT: true branch (successful credential extraction) requires real X.509 metadata; covered by integration tests
@@ -483,7 +643,7 @@ public class SamlAssertionValidator {
 		return null;
 	}
 
-	private static Credential credentialFromKeyDescriptor(KeyDescriptor kd) {
+	private Credential credentialFromKeyDescriptor(KeyDescriptor kd) {
 		if (!isSigningKey(kd))
 			return null;
 		var keyInfo = kd.getKeyInfo();
@@ -497,13 +657,13 @@ public class SamlAssertionValidator {
 		return null;
 	}
 
-	private static Credential credentialFromX509Data(X509Data x509) {
+	private Credential credentialFromX509Data(X509Data x509) {
 		for (var cert : x509.getX509Certificates()) {
 			var base64 = cert.getValue();
 			if (base64 == null)
 				continue;
 			var credential = parseX509Credential(base64);
-			if (credential != null) // HTT: true branch requires valid X.509 DER bytes; covered by integration tests
+			if (credential != null) // HTT: true branch requires valid, in-window X.509 DER bytes; covered by integration tests
 				return credential;
 		}
 		return null;
@@ -513,14 +673,17 @@ public class SamlAssertionValidator {
 		return kd.getUse() == null || kd.getUse() == UsageType.SIGNING || kd.getUse() == UsageType.UNSPECIFIED;
 	}
 
-	private static BasicX509Credential parseX509Credential(String base64) {
+	private BasicX509Credential parseX509Credential(String base64) {
 		try {
 			var bytes = Base64.getMimeDecoder().decode(base64);
 			var cf = java.security.cert.CertificateFactory.getInstance("X.509");
 			var certificate = (java.security.cert.X509Certificate) cf.generateCertificate(new ByteArrayInputStream(bytes));
+			// The metadata signing cert is the trust anchor; reject one outside its validity window so an
+			// expired (or not-yet-valid) cert can no longer be used to verify assertions.
+			certificate.checkValidity(Date.from(clock.instant()));
 			return new BasicX509Credential(certificate);
 		} catch (java.security.cert.CertificateException | IllegalArgumentException e) {
-			return null;  // Caller tries the next certificate.
+			return null;  // Expired/not-yet-valid or malformed cert: caller tries the next certificate.
 		}
 	}
 
@@ -583,6 +746,87 @@ public class SamlAssertionValidator {
 		var respIssuer = response.getIssuer();
 		if (respIssuer != null && !expectedIssuer.equals(respIssuer.getValue()))
 			throw rejectAssertion("response <Issuer> does not match expected issuer");
+	}
+
+	private void validateDigestAlgorithms(org.opensaml.xmlsec.signature.Signature signature) throws AuthenticationException {
+		var dom = signature.getDOM();
+		if (dom == null) // HTT: null DOM unreachable; a verifiable signature is always marshalled to DOM
+			return;
+		var digestNodes = dom.getElementsByTagNameNS(XMLSIG_NS, "DigestMethod");
+		for (var i = 0; i < digestNodes.getLength(); i++) {
+			var alg = ((Element) digestNodes.item(i)).getAttribute("Algorithm");
+			if (alg == null || alg.isEmpty() || alg.toLowerCase(Locale.ROOT).contains("sha1") || !digestAlgorithms.contains(alg))
+				throw new AuthenticationException("SAML signature digest algorithm not allowlisted: " + alg)
+					.wwwAuthenticate("SAML error=\"signature_algorithm_rejected\"");
+		}
+	}
+
+	private void validateSubjectConfirmation(Assertion assertion) throws AuthenticationException {
+		if (recipient == null)  // Bearer subject-confirmation validation is enabled by configuring recipient(...).
+			return;
+		var subject = assertion.getSubject();
+		if (subject == null)
+			throw rejectAssertion("missing <Subject> for bearer confirmation");
+		String failure = null;
+		var sawBearer = false;
+		for (var sc : subject.getSubjectConfirmations()) {
+			if (! SubjectConfirmation.METHOD_BEARER.equals(sc.getMethod()))
+				continue;
+			sawBearer = true;
+			var reason = confirmationFailureReason(sc);
+			if (reason == null)
+				return;  // A valid bearer confirmation was found.
+			failure = reason;
+		}
+		if (! sawBearer)
+			throw rejectAssertion("missing bearer <SubjectConfirmation>");
+		throw rejectAssertion(failure);
+	}
+
+	private String confirmationFailureReason(SubjectConfirmation sc) {
+		var data = sc.getSubjectConfirmationData();
+		if (data == null)
+			return "bearer <SubjectConfirmationData> is missing";
+		if (! recipient.equals(data.getRecipient()))
+			return "bearer confirmation <Recipient> does not match the expected ACS URL";
+		var now = clock.instant();
+		var noa = data.getNotOnOrAfter();
+		if (noa == null)
+			return "bearer confirmation is missing NotOnOrAfter";
+		if (! noa.plus(clockSkew).isAfter(now))
+			return "bearer confirmation has expired";
+		var nbf = data.getNotBefore();
+		if (nbf != null && nbf.minus(clockSkew).isAfter(now))
+			return "bearer confirmation is not yet valid";
+		var inResponseTo = data.getInResponseTo();
+		if (expectedInResponseTo != null) {
+			if (! expectedInResponseTo.equals(inResponseTo))
+				return "bearer confirmation <InResponseTo> does not match the expected request ID";
+		} else if (inResponseTo != null && ! inResponseTo.isEmpty()) {
+			return "unsolicited bearer confirmation must not carry <InResponseTo>";
+		}
+		if (expectedAddress != null && ! expectedAddress.equals(data.getAddress()))
+			return "bearer confirmation <Address> does not match the expected client address";
+		return null;
+	}
+
+	private void recordSingleUse(Assertion assertion) throws AuthenticationException {
+		var id = assertion.getID();
+		if (id == null || id.isEmpty())
+			throw rejectAssertion("assertion has no ID for single-use enforcement");
+		var expiresAtMs = singleUseExpiry(assertion);
+		var firstSeen = replayCache.checkAndRecord(id, expiresAtMs, ReplayCache.FailMode.FAIL_CLOSED,
+			e -> LOG.log(Level.WARNING, e, () -> "SAML assertion single-use check failed; rejecting (fail-closed)."));
+		if (! firstSeen)
+			throw new AuthenticationException("SAML assertion has already been presented")
+				.wwwAuthenticate("SAML error=\"assertion_replayed\"");
+	}
+
+	private long singleUseExpiry(Assertion assertion) {
+		var conditions = assertion.getConditions();
+		if (conditions != null && conditions.getNotOnOrAfter() != null)
+			return conditions.getNotOnOrAfter().plus(clockSkew).toEpochMilli();
+		return clock.instant().plus(DEFAULT_REPLAY_RETENTION).toEpochMilli();
 	}
 
 	private static String extractStringValue(org.opensaml.core.xml.XMLObject av) {

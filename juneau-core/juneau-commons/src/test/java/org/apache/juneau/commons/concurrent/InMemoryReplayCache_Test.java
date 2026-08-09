@@ -14,43 +14,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.mcp.v20260728;
+package org.apache.juneau.commons.concurrent;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.commons.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Coverage for {@link InMemoryReplayCache}: first-seen/replay outcomes, atomicity under concurrent submission of
- * the same {@code jti}, and self-eviction of already-expired records.
+ * the same identifier, and self-eviction of already-expired records.
  */
-class InMemoryReplayCache_Test {
+class InMemoryReplayCache_Test extends TestBase {
 
-	@Test void a01_firstSeenJtiReturnsTrue() {
+	@Test void a01_firstSeenIdReturnsTrue() {
 		var cache = new InMemoryReplayCache();
-		assertTrue(cache.checkAndRecord("jti-1", System.currentTimeMillis() + 60_000L));
+		assertTrue(cache.checkAndRecord("id-1", System.currentTimeMillis() + 60_000L));
 	}
 
-	@Test void a02_replayOfUnexpiredJtiReturnsFalse() {
-		var cache = new InMemoryReplayCache();
-		var expiresAtMs = System.currentTimeMillis() + 60_000L;
-		assertTrue(cache.checkAndRecord("jti-1", expiresAtMs));
-		assertFalse(cache.checkAndRecord("jti-1", expiresAtMs));
-	}
-
-	@Test void a03_distinctJtisAreIndependent() {
+	@Test void a02_replayOfUnexpiredIdReturnsFalse() {
 		var cache = new InMemoryReplayCache();
 		var expiresAtMs = System.currentTimeMillis() + 60_000L;
-		assertTrue(cache.checkAndRecord("jti-1", expiresAtMs));
-		assertTrue(cache.checkAndRecord("jti-2", expiresAtMs));
+		assertTrue(cache.checkAndRecord("id-1", expiresAtMs));
+		assertFalse(cache.checkAndRecord("id-1", expiresAtMs));
 	}
 
-	@Test void a04_concurrentSubmitOfSameJti_exactlyOneReturnsTrue() throws InterruptedException {
-		// Atomic check-and-record: of many concurrent calls racing on the same jti, exactly one must observe
+	@Test void a03_distinctIdsAreIndependent() {
+		var cache = new InMemoryReplayCache();
+		var expiresAtMs = System.currentTimeMillis() + 60_000L;
+		assertTrue(cache.checkAndRecord("id-1", expiresAtMs));
+		assertTrue(cache.checkAndRecord("id-2", expiresAtMs));
+	}
+
+	@Test void a04_concurrentSubmitOfSameId_exactlyOneReturnsTrue() throws InterruptedException {
+		// Atomic check-and-record: of many concurrent calls racing on the same id, exactly one must observe
 		// first-seen (true) -- proves the ConcurrentHashMap#putIfAbsent-based implementation has no TOCTOU window.
 		var cache = new InMemoryReplayCache();
 		var expiresAtMs = System.currentTimeMillis() + 60_000L;
@@ -66,7 +67,7 @@ class InMemoryReplayCache_Test {
 					Thread.currentThread().interrupt();
 					return;
 				}
-				if (cache.checkAndRecord("jti-race", expiresAtMs))
+				if (cache.checkAndRecord("id-race", expiresAtMs))
 					firstSeenCount.incrementAndGet();
 			});
 			threads.add(t);
@@ -79,23 +80,20 @@ class InMemoryReplayCache_Test {
 	}
 
 	@Test void a05_alreadyExpiredRecordIsEvictedAndResubmissionIsFirstSeenAgain() {
-		// A record's own expiresAtMs bounds its retention: once expired it is swept out by a later call, and a
-		// jti resubmitted after that sweep is observed as first-seen again rather than as a replay. Correctness
-		// does not depend on this -- an expired token is separately rejected by the dispatcher's own expiry
-		// check before a ReplayCache is ever consulted -- eviction exists purely to bound memory. Uses a
+		// A record's own expiresAtMs bounds its retention: once expired it is swept out by a later call, and an
+		// id resubmitted after that sweep is observed as first-seen again rather than as a replay. Uses a
 		// sweep-every-call cache (interval 0) so the eviction is deterministic in-test.
 		var cache = new InMemoryReplayCache(0);
 		var now = System.currentTimeMillis();
-		assertTrue(cache.checkAndRecord("jti-1", now - 1_000L));  // recorded already-expired
+		assertTrue(cache.checkAndRecord("id-1", now - 1_000L));  // recorded already-expired
 		// With interval 0 every later call sweeps expired records before recording its own.
-		assertTrue(cache.checkAndRecord("jti-2", now + 60_000L));
-		assertTrue(cache.checkAndRecord("jti-1", now - 1_000L));  // jti-1 was evicted; this is first-seen again
+		assertTrue(cache.checkAndRecord("id-2", now + 60_000L));
+		assertTrue(cache.checkAndRecord("id-1", now - 1_000L));  // id-1 was evicted; this is first-seen again
 	}
 
-	@Test void a06_nullJtiRejected() {
-		// A null jti is a codec/contract violation, never a legitimate token: the cache rejects it at the door
-		// with IllegalArgumentException rather than letting it reach putIfAbsent (which would NPE and, via the
-		// dispatcher's fail-open catch, silently disable replay protection).
+	@Test void a06_nullIdRejected() {
+		// A null id is a contract violation, never a legitimate identifier: the cache rejects it at the door with
+		// IllegalArgumentException rather than letting it reach putIfAbsent (which would NPE).
 		var cache = new InMemoryReplayCache();
 		var expiresAtMs = System.currentTimeMillis() + 60_000L;
 		assertThrows(IllegalArgumentException.class, () -> cache.checkAndRecord(null, expiresAtMs));
@@ -103,12 +101,15 @@ class InMemoryReplayCache_Test {
 
 	@Test void a07_evictionIsThrottledExpiredRecordSurvivesUntilSweepWindow() {
 		// The sweep is throttled: with a large interval, an expired record is NOT swept on the immediately
-		// following call, so a still-recorded (though expired) jti is observed as a replay until the window
-		// elapses. This documents the throttle honestly -- eviction bounds memory opportunistically, it is not a
-		// per-call correctness mechanism (the dispatcher's own expiry check is).
+		// following call, so a still-recorded (though expired) id is observed as a replay until the window
+		// elapses. This documents the throttle honestly -- eviction bounds memory opportunistically.
 		var cache = new InMemoryReplayCache(600_000L);  // 10-minute sweep window: no sweep will fire during this test
 		var now = System.currentTimeMillis();
-		assertTrue(cache.checkAndRecord("jti-1", now - 1_000L));  // first call arms the window (sweeps an empty map)
-		assertFalse(cache.checkAndRecord("jti-1", now - 1_000L));  // still present: throttle suppressed the sweep
+		assertTrue(cache.checkAndRecord("id-1", now - 1_000L));  // first call arms the window (sweeps an empty map)
+		assertFalse(cache.checkAndRecord("id-1", now - 1_000L));  // still present: throttle suppressed the sweep
+	}
+
+	@Test void a08_negativeSweepIntervalRejected() {
+		assertThrows(IllegalArgumentException.class, () -> new InMemoryReplayCache(-1L));
 	}
 }

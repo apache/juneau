@@ -67,6 +67,9 @@ import org.junit.jupiter.api.io.*;
  */
 @org.apache.juneau.testing.JettyMicroserviceTest
 @ResourceLock(Resources.SYSTEM_PROPERTIES)
+@SuppressWarnings({
+	"resource" // Test-only Microservice/store instances are stopped via ms.stop() in try/finally; JDT's local closeable analysis does not recognize stop() as closing them.
+})
 class Microservice_Lifecycle_Test extends TestBase {
 
 	// =================================================================================================================
@@ -148,9 +151,6 @@ class Microservice_Lifecycle_Test extends TestBase {
 	// B.  Constructor: configStore branches and workingDir-scoped FileStore.
 	// =================================================================================================================
 
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void b01_explicitConfigStore_hit() throws Exception {
 		var store = MemoryStore.create().build();
 		store.update("test.cfg", "[MySec]\nkey = found\n");
@@ -407,9 +407,6 @@ class Microservice_Lifecycle_Test extends TestBase {
 			ms.stop();
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void g02_init_logFile_buildsHandlers(@TempDir Path tmp) throws Exception {
 		// Configure a log file so the FileHandler / ConsoleHandler / LogEntryFormatter wiring path runs.
 		// Use LogConfig overrides so we don't pollute the global log manager beyond this test.
@@ -476,9 +473,6 @@ class Microservice_Lifecycle_Test extends TestBase {
 	public static class ThrowingPreDestroyConfig {
 		@Bean public ThrowingPreDestroyBean throwingBean() { return new ThrowingPreDestroyBean(); }
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void i01_stop_swallowsBeanStoreCloseFailures() throws Exception {
 		var ms = Microservice.create().configurations(ThrowingPreDestroyConfig.class).build();
 		// Force resolution so the bean is registered + will be visited by close().

@@ -34,6 +34,9 @@ import org.apache.juneau.marshall.sse.SseEvent;
 import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings({
+	"resource" // Closeable resources (BeanStore/broker fixtures) in tests are intentionally unassigned/unclosed; closing is handled by test infrastructure.
+})
 class SubscriptionsListenDispatch_Test {
 
 	private static Object validMeta() {

@@ -77,6 +77,9 @@ public class RequestBeanArg implements RestOpArg {
 		this.validate = BeanValidator.isValidationRequested(paramInfo);
 	}
 
+	@SuppressWarnings({
+		"resource" // getRequest(meta) may back a property with a request content stream; that stream is container-managed and handed to the invoked op method, not owned/closed here.
+	})
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		var bean = opSession.getRequest().getRequest(meta);

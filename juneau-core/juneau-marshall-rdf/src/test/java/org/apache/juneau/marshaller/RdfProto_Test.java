@@ -28,6 +28,9 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.jena.marshaller.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // baos1/baos2 are in-memory ByteArrayOutputStream fixtures; closure is a no-op and irrelevant to these assertions
+})
 class RdfProto_Test extends TestBase {
 
 	@Test void a01_to() throws Exception {

@@ -29,6 +29,9 @@ import org.junit.jupiter.api.*;
  * resolve before locally-registered beans during the microservice's startup-time injection
  */
 @org.apache.juneau.testing.JettyMicroserviceTest
+@SuppressWarnings({
+	"resource" // Test-only Microservice/BeanStore overlay instances are stopped via ms.stop() in try/finally; JDT's local closeable analysis does not recognize stop() as closing them.
+})
 class Microservice_OverridingBeanStore_Test extends TestBase {
 
 	interface ExternalApi {
@@ -42,9 +45,6 @@ class Microservice_OverridingBeanStore_Test extends TestBase {
 
 	@Test
 	void a01_overlay_winsOverConfigurationBean() throws Exception {
-		@SuppressWarnings({
-			"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-		})
 		var overlay = new TestBeanStore().override(ExternalApi.class, () -> "test-overlay");
 
 		var ms = Microservice.create()
@@ -52,9 +52,6 @@ class Microservice_OverridingBeanStore_Test extends TestBase {
 			.overridingBeanStore(overlay)
 			.build();
 		try {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resolved = ms.getBeanStore().getBean(ExternalApi.class).orElseThrow();
 			assertEquals("test-overlay", resolved.describe(),
 				"Overlay installed via overridingBeanStore must win over @Bean factory contributions");
@@ -71,9 +68,6 @@ class Microservice_OverridingBeanStore_Test extends TestBase {
 			.overridingBeanStore(overlay)
 			.build();
 		try {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resolved = ms.getBeanStore().getBean(ExternalApi.class).orElseThrow();
 			assertEquals("production", resolved.describe(),
 				"Empty overlay must fall through to the @Bean-supplied production value");
@@ -81,9 +75,6 @@ class Microservice_OverridingBeanStore_Test extends TestBase {
 			ms.stop();
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test
 	void a03_nullOverlay_isAccepted() throws Exception {
 		var ms = Microservice.create()
@@ -96,17 +87,11 @@ class Microservice_OverridingBeanStore_Test extends TestBase {
 			ms.stop();
 		}
 	}
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test
 	void a04_overlay_composesWithExternalBeanStore() throws Exception {
 		WritableBeanStore external = new BasicBeanStore();
 		external.addBean(ExternalApi.class, () -> "from-external");
 
-		@SuppressWarnings({
-			"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-		})
 		var overlay = new TestBeanStore().override(ExternalApi.class, () -> "from-overlay");
 
 		var ms = Microservice.create()

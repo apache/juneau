@@ -27,6 +27,9 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.mcp.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Mock HttpTransport lambdas are short-lived test fixtures whose clients are already closed via try-with-resources at each call site.
+})
 class McpClient_CacheHints_Test {
 
 	static final class RecordingCache implements McpResponseCache {

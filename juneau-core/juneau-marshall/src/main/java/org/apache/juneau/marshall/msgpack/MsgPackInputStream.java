@@ -60,6 +60,10 @@ public class MsgPackInputStream extends ParserInputStream {
 		/*0xF?*/ INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT
 	};
 	// @formatter:on
+
+	/** Default cap (16 MiB) for wire-declared lengths, mirroring {@code BsonInputStream}. */
+	static final int DEFAULT_MAX_LENGTH = 16 * 1024 * 1024;
+
 	private long length;
 	private int lastByte;
 	private int extType;
@@ -124,11 +128,10 @@ public class MsgPackInputStream extends ParserInputStream {
 	 * Read a binary field from the stream.
 	 */
 	byte[] readBinary() throws IOException {
-		// Java arrays/collections are int-indexed; a 32-bit MessagePack length in [2^31, 2^32-1] would
-		// otherwise truncate to a negative int and allocate the wrong size (G8).
-		if (length > Integer.MAX_VALUE)
-			throw ioex("MessagePack length %s exceeds the maximum supported size of %s.", length, Integer.MAX_VALUE);
-		var b = new byte[(int)length];
+		// checkLength bounds the declared length against the configured maximum (always <= Integer.MAX_VALUE),
+		// so a 32-bit MessagePack length in [2^31, 2^32-1] is rejected here rather than truncating to a
+		// negative int and allocating the wrong size.
+		var b = new byte[checkLength(length, "binary")];
 		var bytesRead = read(b);
 		if (bytesRead != b.length)
 			throw ioex("Expected to read %s bytes but only read %s", b.length, bytesRead);

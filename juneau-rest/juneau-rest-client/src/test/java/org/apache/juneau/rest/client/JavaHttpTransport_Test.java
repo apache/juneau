@@ -349,12 +349,12 @@ class JavaHttpTransport_Test {
 			public SSLContext sslContext() {
 				try {
 					var tm = new X509ExtendedTrustManager() {
-						@Override public void checkClientTrusted(X509Certificate[] chain, String authType, Socket socket) {}
-						@Override public void checkServerTrusted(X509Certificate[] chain, String authType, Socket socket) {}
-						@Override public void checkClientTrusted(X509Certificate[] chain, String authType, SSLEngine engine) {}
-						@Override public void checkServerTrusted(X509Certificate[] chain, String authType, SSLEngine engine) {}
-						@Override public void checkClientTrusted(X509Certificate[] chain, String authType) {}
-						@Override public void checkServerTrusted(X509Certificate[] chain, String authType) {}
+						@Override public void checkClientTrusted(X509Certificate[] chain, String authType, Socket socket) { /* intentionally empty: test-only trust manager accepts any certificate */ }
+						@Override public void checkServerTrusted(X509Certificate[] chain, String authType, Socket socket) { /* intentionally empty: test-only trust manager accepts any certificate */ }
+						@Override public void checkClientTrusted(X509Certificate[] chain, String authType, SSLEngine engine) { /* intentionally empty: test-only trust manager accepts any certificate */ }
+						@Override public void checkServerTrusted(X509Certificate[] chain, String authType, SSLEngine engine) { /* intentionally empty: test-only trust manager accepts any certificate */ }
+						@Override public void checkClientTrusted(X509Certificate[] chain, String authType) { /* intentionally empty: test-only trust manager accepts any certificate */ }
+						@Override public void checkServerTrusted(X509Certificate[] chain, String authType) { /* intentionally empty: test-only trust manager accepts any certificate */ }
 						@Override public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
 					};
 					var x = SSLContext.getInstance("TLS");

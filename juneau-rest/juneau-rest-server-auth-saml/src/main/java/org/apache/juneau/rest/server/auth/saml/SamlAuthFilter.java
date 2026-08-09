@@ -24,8 +24,8 @@ import java.io.*;
 import java.nio.charset.*;
 import java.security.*;
 import java.util.*;
-import java.util.zip.*;
 
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.server.auth.*;
 
 import jakarta.servlet.http.*;
@@ -91,6 +91,18 @@ public class SamlAuthFilter extends AuthFilter {
 	private static final String SAML_RESPONSE_PARAM = "SAMLResponse";
 
 	/**
+	 * Default ceiling on the number of decompressed bytes accepted from a REDIRECT-binding
+	 * {@code SAMLResponse} (1 MiB).
+	 */
+	public static final long DEFAULT_MAX_INFLATED_BYTES = 1L * 1024 * 1024;
+
+	/**
+	 * Default ceiling on the decompressed-to-compressed size ratio accepted from a REDIRECT-binding
+	 * {@code SAMLResponse}.
+	 */
+	public static final int DEFAULT_MAX_INFLATE_RATIO = 100;
+
+	/**
 	 * Static creator.
 	 *
 	 * @return A new builder.
@@ -108,6 +120,8 @@ public class SamlAuthFilter extends AuthFilter {
 		private String consumerPath = DEFAULT_CONSUMER_PATH;
 		private String rolesClaim = DEFAULT_ROLES_CLAIM;
 		private String realm = "saml";
+		private long maxInflatedBytes = DEFAULT_MAX_INFLATED_BYTES;
+		private int maxInflateRatio = DEFAULT_MAX_INFLATE_RATIO;
 
 		/** Constructor. */
 		protected Builder() {}
@@ -168,6 +182,41 @@ public class SamlAuthFilter extends AuthFilter {
 		}
 
 		/**
+		 * Sets the ceiling on the number of decompressed bytes accepted from a {@link SamlBinding#REDIRECT}
+		 * {@code SAMLResponse}.  Defaults to {@link SamlAuthFilter#DEFAULT_MAX_INFLATED_BYTES}.
+		 *
+		 * <p>
+		 * A REDIRECT-binding {@code SAMLResponse} is DEFLATE-compressed in transit, so a small query-string
+		 * payload can expand to a much larger document.  Decompression stops and the request is rejected once
+		 * the running output exceeds this cap, so a highly-compressible payload cannot drive an unbounded
+		 * allocation.  A value {@code <= 0} disables the absolute cap (the ratio guard still applies).
+		 *
+		 * @param value The maximum decompressed size in bytes.
+		 * @return This object.
+		 */
+		public Builder maxInflatedBytes(long value) {
+			maxInflatedBytes = value;
+			return this;
+		}
+
+		/**
+		 * Sets the ceiling on the decompressed-to-compressed size ratio accepted from a
+		 * {@link SamlBinding#REDIRECT} {@code SAMLResponse}.  Defaults to
+		 * {@link SamlAuthFilter#DEFAULT_MAX_INFLATE_RATIO}.
+		 *
+		 * <p>
+		 * This guard catches a highly-compressible payload even when the absolute
+		 * {@link #maxInflatedBytes(long) byte cap} is generous.  A value {@code <= 0} disables the ratio guard.
+		 *
+		 * @param value The maximum output-to-input ratio.
+		 * @return This object.
+		 */
+		public Builder maxInflateRatio(int value) {
+			maxInflateRatio = value;
+			return this;
+		}
+
+		/**
 		 * Builds the filter.
 		 *
 		 * @return A new {@link SamlAuthFilter}.
@@ -184,6 +233,8 @@ public class SamlAuthFilter extends AuthFilter {
 	private final String consumerPath;
 	private final String rolesClaim;
 	private final String challenge;
+	private final long maxInflatedBytes;
+	private final int maxInflateRatio;
 
 	/**
 	 * Constructor.
@@ -196,6 +247,8 @@ public class SamlAuthFilter extends AuthFilter {
 		this.consumerPath = b.consumerPath;
 		this.rolesClaim = b.rolesClaim;
 		this.challenge = "SAML realm=\"" + b.realm + "\"";
+		this.maxInflatedBytes = b.maxInflatedBytes;
+		this.maxInflateRatio = b.maxInflateRatio;
 	}
 
 	@Override /* Overridden from AuthFilter */
@@ -220,8 +273,9 @@ public class SamlAuthFilter extends AuthFilter {
 		try {
 			byte[] decoded = Base64.getMimeDecoder().decode(raw);
 			return switch (binding) {
-				// Per SAML 2.0 Redirect binding: deflate using raw DEFLATE (no zlib wrapper).
-				case REDIRECT -> inflate(decoded);
+				// Per SAML 2.0 Redirect binding: raw DEFLATE (no zlib wrapper), decompressed under a hard
+				// output-size cap and ratio guard so a compressible payload cannot force an unbounded allocation.
+				case REDIRECT -> new String(IoUtils.inflate(decoded, true, maxInflatedBytes, maxInflateRatio), StandardCharsets.UTF_8);
 				// Per SAML 2.0 POST binding: the base64-decoded bytes are the raw XML document.
 				case POST -> new String(decoded, StandardCharsets.UTF_8);
 			};
@@ -232,29 +286,6 @@ public class SamlAuthFilter extends AuthFilter {
 			throw new AuthenticationException(e, "SAMLResponse parameter could not be inflated (REDIRECT binding)")
 				.wwwAuthenticate(challenge);
 		}
-	}
-
-	private static String inflate(byte[] data) throws IOException {
-		var inflater = new Inflater(true);  // nowrap=true: raw DEFLATE per SAML Redirect.
-		inflater.setInput(data);
-		var out = new ByteArrayOutputStream();
-		var buf = new byte[4096];
-		try {
-			while (!inflater.finished()) {
-				int n = inflater.inflate(buf);
-				if (n == 0) { // HTT: n==0 without finished=true requires a crafted partial DEFLATE stream (all bytes consumed but stream not closed)
-					if (inflater.needsInput() || inflater.needsDictionary()) // HTT: requires carefully crafted incomplete DEFLATE that exhausts input without DataFormatException
-						throw new IOException("SAMLResponse: DEFLATE stream truncated");
-					break;
-				}
-				out.write(buf, 0, n);
-			}
-		} catch (DataFormatException e) {
-			throw ioex(e, "SAMLResponse: malformed DEFLATE");
-		} finally {
-			inflater.end();
-		}
-		return out.toString(StandardCharsets.UTF_8);
 	}
 
 	private Principal runValidator(String xml) throws AuthenticationException {

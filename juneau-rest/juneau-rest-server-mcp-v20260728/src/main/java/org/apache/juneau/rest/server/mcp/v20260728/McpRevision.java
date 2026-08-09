@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
+import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.JsonValueSafety;
 import org.apache.juneau.http.tracing.TraceContextCarrier;
@@ -220,12 +221,13 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	private static final Base64.Decoder B64URL_DECODER = Base64.getUrlDecoder();
 
 	// RFC 8785 canonicalizer for the argument hash, deliberately configured for UNBOUNDED depth with recursion
-	// detection: JcsSerializer's inherited maxDepth default (100) SILENTLY truncates over-depth nodes to null,
-	// which would let two argument sets differing only below the limit hash identically while the handler still
-	// received the divergent subtree. maxDepth(Integer.MAX_VALUE) makes the hash cover the full subtree, and
-	// detectRecursions() fails-fast (rather than looping) on a pathological cyclic structure. The complementary
-	// JsonValueSafety.check in argumentsHash(...) is what actually bounds attacker-controlled depth/size/CPU;
-	// this canonicalizer only guarantees that whatever passes that guard is hashed in full.
+	// detection: JcsSerializer's inherited depth-limit default of 100 SILENTLY truncates over-depth nodes to
+	// null, which would let two argument sets differing only below the limit hash identically while the handler
+	// still received the divergent subtree. Configuring an unbounded max-depth here makes the hash cover the
+	// full subtree, and enabling recursion detection fails fast, rather than looping, on a pathological cyclic
+	// structure. The complementary JSON value-safety check performed as part of the arguments-hash step is what
+	// actually bounds attacker-controlled depth, size, and CPU: this canonicalizer only guarantees that whatever
+	// passes that guard is hashed in full.
 	private static final Jcs JCS = new Jcs(
 		JcsSerializer.create().maxDepth(Integer.MAX_VALUE).detectRecursions().build(), JsonParser.DEFAULT);
 
@@ -404,6 +406,9 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * @throws McpException If the caller never negotiated {@code text/event-stream}, the broker bean is
 	 * 	missing, or {@code maxConcurrentSubscriptions} is reached.
 	 */
+	@SuppressWarnings({
+		"resource" // subscription's ownership transfers to the returned SubscriptionsListenPublisher, which closes it in every terminal path (cancel(), terminateWithError(), checkIdle(), run()'s completion - see its own @Owning-suppressed field). Eclipse JDT @Owning warning is by design; it surfaces at the return statement, so suppress at method scope.
+	})
 	private Flow.Publisher<SseEvent> dispatchSubscriptionsListen(McpExchange exchange, Object id, Object params, McpServerConfig config, BeanStore ctx) {
 		requireEventStreamAccept(exchange);
 		var request = Json.to(Json.of(params), SubscriptionsListenRequest.class);
@@ -871,6 +876,9 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * @param ctx The request-scoped bean store to wrap. Must not be <jk>null</jk>.
 	 * @return The resolved MRTR context. Never <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"resource" // wrapped (both branches) is @Owning: ownership transfers to the returned MrtrContext, which the caller closes via mrtr.store() in try-with-resources (see MrtrContext's javadoc above). Eclipse JDT @Owning warning is by design; it surfaces at the two `return new MrtrContext(wrapped, ...)` statements, so suppress at method scope.
+	})
 	private MrtrContext resolveMrtrContext(String method, Map<String,Object> params, BeanStore ctx) {
 		// Computed once, up front, from the CURRENT request's arguments: reused both for the RESUME-time
 		// comparison below and (threaded through MrtrContext) for the hash pause(...) seals into the next token,
@@ -885,9 +893,6 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		var target = mrtrTarget(method, params);
 		var requestState = McpParamUtils.strParam(params, "requestState");
 		if (requestState == null) {
-			@SuppressWarnings({
-				"resource" // Ownership transfers to the returned MrtrContext; the caller closes it via mrtr.store() in try-with-resources (see MrtrContext's javadoc above). Eclipse JDT @Owning warning is by design.
-			})
 			var wrapped = new BasicBeanStore(ctx)
 				.addBean(McpMrtrCapabilityContext.class, new McpMrtrCapabilityContext(clientElicitationSupported(params)));
 			return new MrtrContext(wrapped, 0, argumentsHash, target);
@@ -925,9 +930,6 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 				throw new McpException(CODE_REQUEST_STATE_REPLAYED, "requestState has already been used");
 		}
 		var inputResponses = McpParamUtils.mapParam(params, "inputResponses");
-		@SuppressWarnings({
-			"resource" // Ownership transfers to the returned MrtrContext; the caller closes it via mrtr.store() in try-with-resources (see MrtrContext's javadoc above). Eclipse JDT @Owning warning is by design.
-		})
 		var wrapped = new BasicBeanStore(ctx)
 			.addBean(McpMrtrCapabilityContext.class, new McpMrtrCapabilityContext(clientElicitationSupported(params)))
 			.addBean(McpMrtrResumeContext.class, new McpMrtrResumeContext(sealed.continuation(), inputResponses));
@@ -1155,12 +1157,10 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * 	when the cache affirmatively reports a replay.
 	 */
 	private static boolean checkReplay(ReplayCache replayCache, String jti, long expiresAtMs) {
-		try {
-			return replayCache.checkAndRecord(jti, expiresAtMs);
-		} catch (Exception e) {
-			LOG.log(Level.WARNING, e, () -> "ReplayCache.checkAndRecord failed; treating requestState as first-seen (fail-open).");
-			return true;
-		}
+		// MCP deliberately opts into fail-open: a thrown failure is logged and treated as first-seen, degrading a
+		// transient store outage to the same multi-use-tolerant behavior seen when no ReplayCache is wired at all.
+		return replayCache.checkAndRecord(jti, expiresAtMs, ReplayCache.FailMode.FAIL_OPEN,
+			e -> LOG.log(Level.WARNING, e, () -> "ReplayCache.checkAndRecord failed; treating requestState as first-seen (fail-open)."));
 	}
 
 	/**

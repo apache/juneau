@@ -37,6 +37,9 @@ import org.junit.jupiter.api.*;
  */
 @JettyMicroserviceTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings({
+	"resource" // microservice is a test-only Closeable stopped via stopMicroservice()/@AfterAll; JDT's local closeable analysis does not recognize stop() as closing it.
+})
 class ConfigCommand_Test extends TestBase {
 
 	private Microservice microservice;

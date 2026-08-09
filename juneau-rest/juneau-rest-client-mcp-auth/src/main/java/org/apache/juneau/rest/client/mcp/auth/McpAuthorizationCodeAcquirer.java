@@ -18,6 +18,7 @@ package org.apache.juneau.rest.client.mcp.auth;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.UriUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -110,7 +111,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder authorizationEndpoint(URI value) {
-			authorizationEndpoint = assertArgNotNull(ARG_value, value);
+			authorizationEndpoint = assertSecureOrLoopback(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -121,7 +122,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * @return This object.
 		 */
 		public Builder tokenEndpoint(URI value) {
-			tokenEndpoint = assertArgNotNull(ARG_value, value);
+			tokenEndpoint = assertSecureOrLoopback(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 

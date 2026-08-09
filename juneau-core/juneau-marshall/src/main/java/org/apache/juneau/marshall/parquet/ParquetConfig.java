@@ -49,6 +49,41 @@ public @interface ParquetConfig {
 	/** Add bean types column. */
 	String addBeanTypes() default "";
 
+	/**
+	 * Maximum allowed wire-declared length (in bytes) for a single Parquet page (compressed or
+	 * uncompressed) when parsing.
+	 *
+	 * <p>
+	 * Guards against malformed or adversarial input where a small file declares a huge per-page byte
+	 * size. Default is <js>"268435456"</js> (256 MiB). A value of <js>"0"</js> or less disables the cap.
+	 *
+	 * @return The annotation value.
+	 */
+	String maxLength() default "";
+
+	/**
+	 * Maximum allowed wire-declared element count (file/row-group row counts, column-chunk value counts)
+	 * when parsing.
+	 *
+	 * <p>
+	 * Guards against malformed or adversarial input where a small footer declares a huge row or value
+	 * count. Default is <js>"10000000"</js> (10 million). A value of <js>"0"</js> or less disables the cap.
+	 *
+	 * @return The annotation value.
+	 */
+	String maxCount() default "";
+
+	/**
+	 * Maximum allowed size (in bytes) of the whole Parquet input buffered into memory before parsing.
+	 *
+	 * <p>
+	 * Guards against an oversized input being buffered unbounded into memory. Default is
+	 * <js>"268435456"</js> (256 MiB). A value of <js>"0"</js> or less disables the cap.
+	 *
+	 * @return The annotation value.
+	 */
+	String maxInputLength() default "";
+
 	/** Rank for application order. */
 	int rank() default 0;
 }

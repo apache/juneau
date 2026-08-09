@@ -18,6 +18,9 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.util.concurrent.atomic.*;
+import java.util.function.*;
+
 /**
  * Supported wire formats for {@link Class} values.
  *
@@ -143,6 +146,37 @@ public enum ClassFormat {
 	 */
 	SIMPLE_NAME;
 
+	// Optional global guard vetting class names before the parser path resolves them.  null == allow all.
+	private static final AtomicReference<Predicate<String>> classNameGuard = new AtomicReference<>();
+
+	/**
+	 * Installs a global guard that vets class names before the parser path resolves them to a {@link Class}.
+	 *
+	 * <p>
+	 * The guard is consulted for every candidate name (including the nested-type <c>$</c>-rewritten forms)
+	 * before it is passed to {@link Class#forName(String, boolean, ClassLoader)}.  Names the guard rejects are
+	 * treated as unresolvable.  This lets a deployment restrict which types may be materialized from parsed
+	 * input to an explicit allow-list.
+	 *
+	 * @param value The guard predicate returning <jk>true</jk> for permitted class names, or <jk>null</jk> to
+	 * 	allow all names (the default).
+	 */
+	@SuppressWarnings("java:S3066") // Public setter is the documented deployment-configuration entry point (see Javadoc above); it is also exercised directly from ClassFormat_Test in another package, so visibility cannot be narrowed without breaking that call site.
+	public static void setClassNameGuard(Predicate<String> value) {
+		classNameGuard.set(value);
+	}
+
+	/**
+	 * Returns whether the specified candidate class name is permitted by the installed guard.
+	 *
+	 * @param name The candidate class name.
+	 * @return <jk>true</jk> if no guard is installed or the guard permits the name.
+	 */
+	static boolean isClassNameAllowed(String name) {
+		var g = classNameGuard.get();
+		return g == null || g.test(name);
+	}
+
 	/**
 	 * Formats the specified {@link Class} using this format.
 	 *
@@ -263,8 +297,11 @@ public enum ClassFormat {
 		var prim = primitiveByName(s);
 		if (prim != null)
 			return prim;
+		if (! isClassNameAllowed(s))
+			throw new ClassNotFoundException(s);
 		try {
-			return Class.forName(s, true, cl);
+			// Resolve without initializing — a parsed name must never trigger a target type's static initializer.
+			return Class.forName(s, false, cl);
 		} catch (ClassNotFoundException firstAttempt) {
 			var nested = nestedTypeFallback(s, cl);
 			if (nested != null)
@@ -288,8 +325,11 @@ public enum ClassFormat {
 		for (var i = chars.length - 1; i > 0; i--) {
 			if (chars[i] == '.' && i + 1 < chars.length && Character.isUpperCase(chars[i + 1])) {
 				chars[i] = '$';
+				var candidate = new String(chars);
+				if (! isClassNameAllowed(candidate))
+					continue;
 				try {
-					return Class.forName(new String(chars), true, cl);
+					return Class.forName(candidate, false, cl);
 				} catch (@SuppressWarnings("unused") ClassNotFoundException ignored) {
 					// Keep walking; the previous-dot replacement persists in chars so deeper nesting can resolve.
 				}

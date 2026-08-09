@@ -77,6 +77,8 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	// Property name constants
 	private static final String PROP_nativeMode = "nativeMode";
 
+	private static final int DEFAULT_MAX_LENGTH = MsgPackInputStream.DEFAULT_MAX_LENGTH;
+
 	/** Default parser, string input encoded as BASE64. */
 	public static class Base64 extends MsgPackParser {
 
@@ -98,6 +100,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		private static final Cache<HashKey,MsgPackParser> CACHE = Cache.of(HashKey.class, MsgPackParser.class).build();
 
 		private boolean nativeMode;
+		private int maxLength = DEFAULT_MAX_LENGTH;
 
 		/**
 		 * Constructor, default settings.
@@ -105,6 +108,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		protected Builder() {
 			consumes("application/msgpack,octal/msgpack");
 			nativeMode = env("MsgPackParser.nativeMode", false);
+			maxLength = env("MsgPackParser.maxLength", DEFAULT_MAX_LENGTH);
 		}
 
 		/**
@@ -116,6 +120,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			nativeMode = copyFrom.nativeMode;
+			maxLength = copyFrom.maxLength;
 		}
 
 		/**
@@ -127,6 +132,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		protected Builder(MsgPackParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			nativeMode = copyFrom.nativeMode;
+			maxLength = copyFrom.maxLength;
 		}
 
 		/**
@@ -161,6 +167,22 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 			return this;
 		}
 
+		/**
+		 * The maximum allowed wire-declared length (in bytes) for MessagePack binary and string payloads.
+		 *
+		 * <p>
+		 * Guards against malformed or adversarial input where a small payload declares a huge length, which
+		 * would otherwise trigger {@link OutOfMemoryError}.  Malformed lengths are reported as a clean parse
+		 * error instead.
+		 *
+		 * @param value The maximum length in bytes.  Default is 16 MiB.  Values &le; 0 disable the cap.
+		 * @return This object.
+		 */
+		public Builder maxLength(int value) {
+			maxLength = value;
+			return this;
+		}
+
 		@Override /* Overridden from Context.Builder<?> */
 		public MsgPackParser build() {
 			return cache(CACHE).build(MsgPackParser.class);
@@ -173,7 +195,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 
 		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
-			return HashKey.of(super.hashKey(), nativeMode);
+			return HashKey.of(super.hashKey(), nativeMode, maxLength);
 		}
 	}
 
@@ -211,6 +233,8 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 
 	protected final boolean nativeMode;
 
+	private final int maxLength;
+
 	private final Map<ClassMeta<?>,MsgPackClassMeta> msgPackClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,MsgPackBeanPropertyMeta> msgPackBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -222,6 +246,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	public MsgPackParser(Builder builder) {
 		super(builder);
 		this.nativeMode = builder.nativeMode;
+		this.maxLength = builder.maxLength;
 	}
 
 	/**
@@ -231,6 +256,15 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	 */
 	public boolean isNativeMode() {
 		return nativeMode;
+	}
+
+	/**
+	 * Returns the maximum allowed wire-declared length (in bytes) for binary and string payloads.
+	 *
+	 * @return The maximum length in bytes.
+	 */
+	public int getMaxLength() {
+		return maxLength;
 	}
 
 	@Override /* Overridden from Context */

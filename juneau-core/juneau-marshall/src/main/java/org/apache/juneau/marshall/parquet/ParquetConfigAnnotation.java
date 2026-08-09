@@ -81,7 +81,10 @@ public class ParquetConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<ParquetConfig> ai, ParquetParser.Builder b) {
-			// No parser-specific config for now
+			var a = ai.inner();
+			integer(a.maxLength(), "maxLength").ifPresent(b::maxLength);
+			integer(a.maxCount(), "maxCount").ifPresent(b::maxCount);
+			integer(a.maxInputLength(), "maxInputLength").ifPresent(b::maxInputLength);
 		}
 	}
 

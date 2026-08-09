@@ -32,6 +32,9 @@ import org.junit.jupiter.api.*;
  * {@code 2026-07-28} has no {@code initialize} method (see {@link McpClient_Surface_Test}) - its handshake
  * is {@link McpClient#serverDiscover()} - so {@code connect(...)} performs that call exactly once instead.
  */
+@SuppressWarnings({
+	"resource" // Mock HttpTransport (including the deliberately-`failing` implementations used to pin close-failure/suppressed-exception behavior) and countingTransport(...) instances are short-lived test fixtures; some are intentionally unassigned/never closed since these tests pin McpClient.connect(...)'s own close behavior, not the mock transport's.
+})
 class McpClient_Connect_Test {
 
 	private static final String DISCOVER_WIRE =

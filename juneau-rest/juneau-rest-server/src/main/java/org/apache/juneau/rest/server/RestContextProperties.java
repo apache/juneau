@@ -55,18 +55,20 @@ import org.apache.juneau.commons.inject.*;
 @ConfigProperties(prefix = "RestContext")
 public class RestContextProperties {
 
+	private static final String FALSE = "false";
+
 	private String debugDefault = "";
 	private String allowedHeaderParams = "Accept,Content-Type";
 	private String allowedMethodHeaders = "";
 	private String allowedMethodParams = "HEAD,OPTIONS";
-	private String disableContentParam = "false";
-	private String renderResponseStackTraces = "false";
-	private String problemDetails = "false";
-	private String virtualThreads = "false";
+	private String disableContentParam = FALSE;
+	private String renderResponseStackTraces = FALSE;
+	private String problemDetails = FALSE;
+	private String virtualThreads = FALSE;
 	private String responseTraceparent = "true";
 	private String mdcAsyncPropagation = "true";
-	private String eagerInit = "false";
-	private String lazyChildren = "false";
+	private String eagerInit = FALSE;
+	private String lazyChildren = FALSE;
 	private String clientVersionHeader = "Client-Version";
 	private String uriRelativity = "";
 	private String uriResolution = "";

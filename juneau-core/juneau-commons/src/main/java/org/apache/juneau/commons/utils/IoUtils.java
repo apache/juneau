@@ -18,6 +18,7 @@ package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.utils.Exceptions.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.ioex;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
@@ -27,6 +28,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
+import java.util.zip.*;
 
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.commons.logging.*;
@@ -746,6 +748,88 @@ public class IoUtils {
 		try (var in2 = in) {
 			return read(in2, -1).getBytes();
 		}
+	}
+
+	/**
+	 * Inflates (decompresses) the specified compressed bytes with a hard ceiling on the total output size and an
+	 * effective output-to-input ratio guard.
+	 *
+	 * <p>
+	 * Building on the bounded-copy family in this class (such as {@link #readBytes(InputStream,int)} and
+	 * {@link #pipe(InputStream,OutputStream,long)}), this method decompresses untrusted input without letting a
+	 * small compressed payload expand into an unbounded allocation.  Two independent limits are enforced
+	 * <i>during</i> inflation, so a violating stream is aborted before its full output is ever materialized:
+	 * <ul>
+	 * 	<li><b>Absolute cap.</b> If the running output size would exceed <jv>maxOutputBytes</jv>, an
+	 * 		{@link IOException} is thrown.
+	 * 	<li><b>Ratio guard.</b> If the running output size would exceed <jv>maxRatio</jv> times the compressed
+	 * 		input length, an {@link IOException} is thrown &mdash; this catches a highly-compressible payload even
+	 * 		when the absolute cap is generous.
+	 * </ul>
+	 *
+	 * @param compressed
+	 * 	The compressed input bytes.
+	 * 	<br>Can be <jk>null</jk> (returns an empty array).
+	 * @param nowrap
+	 * 	Pass <jk>true</jk> for a raw (headerless) DEFLATE stream, or <jk>false</jk> for a zlib-wrapped stream.
+	 * 	<br>Must match the format used to compress the input.
+	 * @param maxOutputBytes
+	 * 	The maximum number of decompressed bytes to allow.
+	 * 	<br>Values <c>&lt;= 0</c> disable the absolute cap (mirroring the <c>maxLength</c> convention used
+	 * 	elsewhere); the ratio guard, if enabled, still applies.
+	 * @param maxRatio
+	 * 	The maximum allowed ratio of output size to compressed input size.
+	 * 	<br>Values <c>&lt;= 0</c> disable the ratio guard.
+	 * @return The decompressed bytes.  Never <jk>null</jk>.
+	 * @throws IOException
+	 * 	If the input is not valid for the selected format, or if either the absolute cap or the ratio guard is
+	 * 	exceeded.
+	 * @since 10.0.0
+	 */
+	public static byte[] inflate(byte[] compressed, boolean nowrap, long maxOutputBytes, int maxRatio) throws IOException {
+		if (compressed == null || compressed.length == 0)
+			return new byte[0];
+		var cap = maxOutputBytes <= 0 ? Long.MAX_VALUE : maxOutputBytes;
+		var ratioLimit = maxRatio <= 0 ? Long.MAX_VALUE : (long)compressed.length * maxRatio;
+		var inflater = new Inflater(nowrap);
+		// Inflater isn't AutoCloseable at this module's source/target level, so route end() through
+		// try-with-resources via a Closeable method reference (inflate() already declares throws IOException).
+		try (Closeable end = inflater::end) {
+			inflater.setInput(compressed);
+			return inflateAll(inflater, cap, ratioLimit, maxRatio);
+		}
+	}
+
+	private static byte[] inflateAll(Inflater inflater, long cap, long ratioLimit, int maxRatio) throws IOException {
+		var out = new ByteArrayOutputStream(BUFF_SIZE);
+		var buf = new byte[BUFF_SIZE];
+		var total = 0L;
+		while (true) {
+			var n = inflateChunk(inflater, buf);
+			if (n > 0) {
+				total += n;
+				checkInflateLimits(total, cap, ratioLimit, maxRatio);
+				out.write(buf, 0, n);
+			} else if (inflater.finished() || inflater.needsDictionary() || inflater.needsInput()) {
+				break;
+			}
+		}
+		return out.toByteArray();
+	}
+
+	private static int inflateChunk(Inflater inflater, byte[] buf) throws IOException {
+		try {
+			return inflater.inflate(buf);
+		} catch (DataFormatException e) {
+			throw ioex(e, "Invalid compressed data");
+		}
+	}
+
+	private static void checkInflateLimits(long total, long cap, long ratioLimit, int maxRatio) throws IOException {
+		if (total > cap)
+			throw ioex("Inflated output exceeds maximum allowed %s bytes", cap);
+		if (total > ratioLimit)
+			throw ioex("Inflated output-to-input ratio exceeds maximum allowed %s", maxRatio);
 	}
 
 	/**

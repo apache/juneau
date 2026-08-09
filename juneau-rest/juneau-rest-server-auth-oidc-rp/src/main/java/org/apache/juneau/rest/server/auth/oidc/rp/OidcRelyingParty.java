@@ -27,6 +27,7 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.auth.oauth.*;
 import org.apache.juneau.rest.server.auth.oauth.flow.*;
@@ -168,11 +169,16 @@ public class OidcRelyingParty {
 		 * Sets the IdP issuer URL.  OIDC discovery resolves the endpoints + JWKS URI lazily.  Either
 		 * this or {@link #metadata(OidcMetadata)} is required.
 		 *
-		 * @param value The issuer URL.  Must not be <jk>null</jk>.
+		 * <p>
+		 * The issuer (and every endpoint discovered from it) must use <js>"https"</js> or target a loopback
+		 * host; discovery, JWKS, and token exchanges carry trust-anchor key material and client credentials, so
+		 * a plaintext transport to a non-loopback host is rejected.
+		 *
+		 * @param value The issuer URL.  Must not be <jk>null</jk> and must use HTTPS or target a loopback host.
 		 * @return This object.
 		 */
 		public Builder issuer(URI value) {
-			issuer = assertArgNotNull("value", value);
+			issuer = UriUtils.assertSecureOrLoopback(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -842,19 +848,33 @@ public class OidcRelyingParty {
 			if (metadataCache != null) // HTT: DCL second-check; true branch requires concurrent initialization race
 				return metadataCache;
 			if (explicitMetadata != null) { // HTT: false branch = discovery path; all tests inject .metadata(...) directly so explicitMetadata is always non-null
-				metadataCache = explicitMetadata;
+				metadataCache = validateEndpoints(explicitMetadata);
 				return metadataCache;
 			}
 			try {
 				var clientBuilder = OidcDiscoveryClient.create().issuer(issuer);
 				if (httpRequestConfigurator != null) // HTT: true branch requires discovery path (no explicit metadata) plus httpRequestConfigurator; all tests inject metadata directly
 					clientBuilder.httpRequestConfigurator(httpRequestConfigurator);
-				metadataCache = clientBuilder.build().discover();
+				metadataCache = validateEndpoints(clientBuilder.build().discover());
 			} catch (IOException | OidcDiscoveryException e) {
 				throw isex(e, "OIDC discovery failed for issuer %s", issuer);
 			}
 			return metadataCache;
 		}
+	}
+
+	/**
+	 * Requires the token-bearing endpoints resolved from metadata (issuer, token, JWKS) to use https or a
+	 * loopback host, so key material and client credentials are never exchanged over plaintext to a remote host.
+	 */
+	private static OidcMetadata validateEndpoints(OidcMetadata m) {
+		if (m.issuer() != null) // HTT: null issuer unreachable; OIDC metadata always carries an issuer
+			UriUtils.assertSecureOrLoopback(m.issuer());
+		if (m.tokenEndpoint() != null)
+			UriUtils.assertSecureOrLoopback(m.tokenEndpoint());
+		if (m.jwksUri() != null)
+			UriUtils.assertSecureOrLoopback(m.jwksUri());
+		return m;
 	}
 
 	private OAuthAuthorizationCodeFlow codeFlow() {

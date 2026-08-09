@@ -26,6 +26,7 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.server.auth.*;
 
 import com.nimbusds.oauth2.sdk.*;
@@ -110,11 +111,16 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		/**
 		 * Sets the introspection endpoint URL.  Required.
 		 *
-		 * @param value The endpoint URL.  Must not be <jk>null</jk>.
+		 * <p>
+		 * Each introspection call transmits the client secret (HTTP Basic) and the access token under
+		 * validation to this endpoint, so the URL must use <js>"https"</js> or target a loopback host; a
+		 * plaintext transport to a non-loopback host is rejected.
+		 *
+		 * @param value The endpoint URL.  Must not be <jk>null</jk> and must use HTTPS or target a loopback host.
 		 * @return This object.
 		 */
 		public Builder introspectionEndpoint(URI value) {
-			introspectionEndpoint = assertArgNotNull("value", value);
+			introspectionEndpoint = UriUtils.assertSecureOrLoopback(assertArgNotNull("value", value));
 			return this;
 		}
 

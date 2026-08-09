@@ -35,6 +35,9 @@ import jakarta.servlet.*;
  * {@link MicroserviceTest_Test}).
  */
 @MicroserviceTest
+@SuppressWarnings({
+	"resource" // The injected Microservice/RestClient instances are owned and closed by the @MicroserviceTest extension.
+})
 class MicroserviceTestBuilderSupplier_Test extends TestBase {
 
 	@Rest(paths = "/*")

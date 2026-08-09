@@ -26,7 +26,8 @@ import org.apache.juneau.marshall.encoders.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"resource" // BasicBeanStore is a test-only fluent AutoCloseable with no real resources to release
 })
 class EncoderSet_Test extends TestBase {
 

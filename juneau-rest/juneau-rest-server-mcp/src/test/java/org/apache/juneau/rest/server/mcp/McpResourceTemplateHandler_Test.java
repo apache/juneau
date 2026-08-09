@@ -30,6 +30,9 @@ import org.junit.jupiter.api.*;
  * footgun in the first place, since {@link McpResourceTemplateHandler#read(String, Map, BeanStore)} already
  * took three parameters, which no bare lambda satisfying a single-abstract-method interface could implement).
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class McpResourceTemplateHandler_Test {
 
 	@Test void b01_ofWiresDescriptorAndDelegatesRead() {
@@ -55,7 +58,8 @@ class McpResourceTemplateHandler_Test {
 	}
 
 	@Test void c01_ofRejectsNullDescriptor() {
-		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(null, (uri, variables, ctx) -> new McpResourceOutcome()));
+		McpResourceTemplateHandler.ReadFunction read = (uri, variables, ctx) -> new McpResourceOutcome();
+		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(null, read));
 	}
 
 	@Test void c02_ofRejectsNullRead() {
@@ -64,8 +68,9 @@ class McpResourceTemplateHandler_Test {
 	}
 
 	@Test void c03_ofRejectsBlankUriTemplate() {
-		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(new McpResourceTemplateSpec(), (uri, variables, ctx) -> new McpResourceOutcome()));
+		McpResourceTemplateHandler.ReadFunction read = (uri, variables, ctx) -> new McpResourceOutcome();
+		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(new McpResourceTemplateSpec(), read));
 		var spec = new McpResourceTemplateSpec().setUriTemplate(" ");
-		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(spec, (uri, variables, ctx) -> new McpResourceOutcome()));
+		assertThrows(IllegalArgumentException.class, () -> McpResourceTemplateHandler.of(spec, read));
 	}
 }

@@ -410,6 +410,10 @@ public class RequestContent {
 	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * 	<li class='note'>
 	 * 		Automatically handles GZipped input streams.
+	 * 	<li class='note'>
+	 * 		The initial buffer is sized off the request's declared {@code Content-Length}, but never past the
+	 * 		effective {@code @Rest(maxInput)} ceiling &mdash; a client can send whatever length it likes in that
+	 * 		header, regardless of how much (or little) content actually follows.
 	 * </ul>
 	 *
 	 * @return The content contents as a reader.
@@ -420,8 +424,27 @@ public class RequestContent {
 		if (r instanceof BufferedReader r2)
 			return r2;
 		int len = req.getHttpServletRequest().getContentLength();
-		int buffSize = len <= 0 ? 8192 : Math.max(len, 8192);
-		return new BufferedReader(r, buffSize);
+		return new BufferedReader(r, computeReaderBufferSize(len, maxInput));
+	}
+
+	/**
+	 * Computes the initial char-buffer size for {@link #getReader()}.
+	 *
+	 * <p>
+	 * Package-private (rather than folded directly into {@link #getReader()}) so the sizing decision can be
+	 * exercised directly in unit tests independent of a live servlet request.
+	 *
+	 * @param declaredContentLength The request's declared {@code Content-Length}, as returned by
+	 * 	{@code HttpServletRequest.getContentLength()}. May be {@code <= 0} if absent/unparsable.
+	 * @param maxInput The effective {@code @Rest(maxInput)} ceiling in bytes. Values {@code <= 0} are
+	 * 	treated as "no additional ceiling beyond {@code Integer.MAX_VALUE}".
+	 * @return The buffer size to use, at least the historical {@code 8192}-byte default and never past
+	 * 	{@code min(maxInput, Integer.MAX_VALUE)}.
+	 */
+	static int computeReaderBufferSize(int declaredContentLength, long maxInput) {
+		long ceiling = maxInput > 0 ? maxInput : Integer.MAX_VALUE;
+		long buffSize = declaredContentLength <= 0 ? 8192 : Math.min(Math.max(declaredContentLength, 8192), ceiling);
+		return (int)Math.min(buffSize, Integer.MAX_VALUE);
 	}
 
 	/**

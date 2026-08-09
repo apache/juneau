@@ -18,6 +18,7 @@ package org.apache.juneau.rest.client.mcp.auth.flow;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.UriUtils.*;
 
 import java.net.*;
 import java.time.*;
@@ -92,7 +93,7 @@ public class OAuthClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder tokenEndpoint(URI value) {
-			tokenEndpoint = assertArgNotNull("value", value);
+			tokenEndpoint = assertSecureOrLoopback(assertArgNotNull("value", value));
 			return this;
 		}
 

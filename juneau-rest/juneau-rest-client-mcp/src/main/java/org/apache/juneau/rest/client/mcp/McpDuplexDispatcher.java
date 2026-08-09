@@ -18,6 +18,8 @@ package org.apache.juneau.rest.client.mcp;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.util.concurrent.atomic.*;
+
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.commons.inject.*;
 
@@ -36,9 +38,9 @@ import org.apache.juneau.commons.inject.*;
 public class McpDuplexDispatcher {
 
 	// Argument name constants for assertArgNotNull
-	private static final String ARG_request = "request";
+	private static final String ARG_REQUEST = "request";
 
-	private volatile McpServerRequestHandler handler;
+	private final AtomicReference<McpServerRequestHandler> handler = new AtomicReference<>();
 
 	/**
 	 * Registers (or de-registers) the handler invoked by {@link #dispatch(JsonRpcRequest, BeanStore)}.
@@ -49,7 +51,7 @@ public class McpDuplexDispatcher {
 	 * @return This object.
 	 */
 	public McpDuplexDispatcher register(McpServerRequestHandler value) {
-		handler = value;
+		handler.set(value);
 		return this;
 	}
 
@@ -70,8 +72,8 @@ public class McpDuplexDispatcher {
 	 * 	exception preserved as its cause).
 	 */
 	public Object dispatch(JsonRpcRequest request, BeanStore ctx) {
-		assertArgNotNull(ARG_request, request);
-		var h = handler;
+		assertArgNotNull(ARG_REQUEST, request);
+		var h = handler.get();
 		if (h == null) {
 			if (JsonRpcResponse.notification(request.getId()))
 				return null;

@@ -338,31 +338,31 @@ public class OtelTracerHook implements TracerHook {
 			span.setAttribute(TraceOperation.ATTR_ERROR_TYPE, errorType(code));
 			span.setStatus(StatusCode.ERROR, message == null ? "" : message);
 		}
-	}
 
-	/**
-	 * Maps a JSON-RPC 2.0 error code to a low-cardinality {@code error.type} category.
-	 *
-	 * <p>
-	 * The five codes reserved by the JSON-RPC 2.0 specification map to their exact category name;
-	 * any code in the specification's reserved-for-implementation-defined-server-errors range
-	 * ({@code -32000} to {@code -32099}, inclusive) maps to the generic {@code "server_error"}
-	 * category. An application-defined code outside every reserved range falls back to its own
-	 * decimal string so the attribute stays populated (if not maximally low-cardinality) rather than
-	 * silently empty.
-	 *
-	 * @param code The JSON-RPC error code (e.g. {@code -32601}).
-	 * @return The {@code error.type} category. Never <jk>null</jk>.
-	 */
-	private static String errorType(int code) {
-		switch (code) {
-			case -32700: return "parse_error";
-			case -32600: return "invalid_request";
-			case -32601: return "method_not_found";
-			case -32602: return "invalid_params";
-			case -32603: return "internal_error";
-			default:
-				return (code <= -32000 && code >= -32099) ? "server_error" : String.valueOf(code);
+		/**
+		 * Maps a JSON-RPC 2.0 error code to a low-cardinality {@code error.type} category.
+		 *
+		 * <p>
+		 * The five codes reserved by the JSON-RPC 2.0 specification map to their exact category name;
+		 * any code in the specification's reserved-for-implementation-defined-server-errors range
+		 * ({@code -32000} to {@code -32099}, inclusive) maps to the generic {@code "server_error"}
+		 * category. An application-defined code outside every reserved range falls back to its own
+		 * decimal string so the attribute stays populated (if not maximally low-cardinality) rather than
+		 * silently empty.
+		 *
+		 * @param code The JSON-RPC error code (e.g. {@code -32601}).
+		 * @return The {@code error.type} category. Never <jk>null</jk>.
+		 */
+		private static String errorType(int code) {
+			switch (code) {
+				case -32700: return "parse_error";
+				case -32600: return "invalid_request";
+				case -32601: return "method_not_found";
+				case -32602: return "invalid_params";
+				case -32603: return "internal_error";
+				default:
+					return (code <= -32000 && code >= -32099) ? "server_error" : String.valueOf(code);
+			}
 		}
 	}
 }

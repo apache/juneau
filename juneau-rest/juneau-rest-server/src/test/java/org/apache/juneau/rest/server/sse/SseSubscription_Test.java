@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.marshall.sse.*;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("resource") // 'sub' instances are short-lived in-memory test fixtures backed by a queue; nothing external to leak.
 class SseSubscription_Test {
 
 	private static SseEvent pollNoWait(SseSubscription sub) throws Exception {

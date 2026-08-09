@@ -30,18 +30,13 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link ResponseBody#asEventStream()}.
  */
+@SuppressWarnings("resource") // 'tr'/TransportResponse values below are handed to (and closed by) the enclosing RestResponse; test helpers return a RestResponse the caller closes via try-with-resources.
 class ResponseBody_AsEventStream_Test {
 
-	@SuppressWarnings({
-		"resource" // Returned RestResponse owns the inner RestClient; caller closes via try-with-resources at the call site.
-	})
 	private static RestResponse response(String sseText, Closeable closeCallback) {
 		return response(new ByteArrayInputStream(sseText.getBytes(StandardCharsets.UTF_8)), closeCallback);
 	}
 
-	@SuppressWarnings({
-		"resource" // Returned RestResponse owns the inner RestClient; caller closes via try-with-resources at the call site.
-	})
 	private static RestResponse response(InputStream bodyStream, Closeable closeCallback) {
 		var tr = TransportResponse.builder()
 			.statusCode(200)
@@ -54,8 +49,14 @@ class ResponseBody_AsEventStream_Test {
 
 	@Test
 	void a01_asEventStream_readsEventsInOrder() throws Exception {
-		var sse = "event: progress\ndata: {\"step\":1}\n\n"
-			+ "event: progress\ndata: {\"step\":2}\n\n";
+		var sse = """
+			event: progress
+			data: {"step":1}
+
+			event: progress
+			data: {"step":2}
+
+			""";
 		try (var resp = response(sse, () -> {})) {
 			try (SseEventReader r = resp.body().asEventStream()) {
 				assertTrue(r.hasNext());

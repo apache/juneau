@@ -33,6 +33,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.HttpPart;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.util.*;
@@ -134,6 +135,14 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	/**
 	 * Constructor.
 	 *
+	 * <p>
+	 * For a {@code multipart/form-data} request, the effective {@code @Rest(maxInput)} ceiling is enforced
+	 * against both the declared {@code Content-Length} (checked before the servlet container parses the body)
+	 * and the cumulative size of the parsed parts (checked afterward, as a backstop for a declared length that
+	 * was absent, chunked, or simply didn't match) &mdash; a request whose multipart body is too large is
+	 * rejected with a {@link PayloadTooLarge} (413) response rather than being handed off to the servlet
+	 * container's own (often much larger, or unset) multipart limits.
+	 *
 	 * @param req The request creating this bean.  Must not be <jk>null</jk>.
 	 * @param caseSensitive Whether case-sensitive name matching is enabled.
 	 * @throws Exception Any exception can be thrown.
@@ -163,7 +172,10 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 					m.put(e.getKey(), array(e.getValue(), String.class));
 			}
 		} else {
+			var maxInput = req.getOpContext().getMaxInput();
+			checkMultipartLength(maxInput, req.getHttpServletRequest().getContentLengthLong());
 			c = req.getHttpServletRequest().getParts();
+			checkMultipartLength(maxInput, c);
 			if (ie(c))
 				m = req.getHttpServletRequest().getParameterMap();
 		}
@@ -190,6 +202,48 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 			}
 		} else if (nn(c)) {
 			c.forEach(this::add);
+		}
+	}
+
+	/**
+	 * Rejects a {@code multipart/form-data} request outright when its declared {@code Content-Length} already
+	 * exceeds {@code maxInput}, before the servlet container is asked to parse (and potentially buffer to disk)
+	 * a body the resource has no intention of accepting.
+	 *
+	 * <p>
+	 * Package-private for direct unit-test coverage.
+	 *
+	 * @param maxInput The effective {@code @Rest(maxInput)} ceiling in bytes. Values {@code <= 0} disable the check.
+	 * @param declaredContentLength The request's declared {@code Content-Length}, as returned by
+	 * 	{@code HttpServletRequest.getContentLengthLong()}. Values {@code < 0} (absent/unparsable) are ignored;
+	 * 	the post-parse {@link #checkMultipartLength(long, Collection)} check still applies.
+	 * @throws PayloadTooLarge If {@code declaredContentLength} exceeds {@code maxInput}.
+	 */
+	static void checkMultipartLength(long maxInput, long declaredContentLength) {
+		if (maxInput > 0 && declaredContentLength > maxInput)
+			throw new PayloadTooLarge("Multipart request content exceeds the maximum allowed input size of %d bytes.", maxInput);
+	}
+
+	/**
+	 * Rejects a {@code multipart/form-data} request once the cumulative size of its parsed parts exceeds
+	 * {@code maxInput}, as a backstop for the case where the declared {@code Content-Length} was absent,
+	 * chunked, or simply didn't match what the container actually buffered.
+	 *
+	 * <p>
+	 * Package-private for direct unit-test coverage.
+	 *
+	 * @param maxInput The effective {@code @Rest(maxInput)} ceiling in bytes. Values {@code <= 0} disable the check.
+	 * @param parts The parts already parsed by the servlet container. Can be <jk>null</jk> or empty (no-op).
+	 * @throws PayloadTooLarge If the cumulative {@link Part#getSize()} across {@code parts} exceeds {@code maxInput}.
+	 */
+	static void checkMultipartLength(long maxInput, Collection<Part> parts) {
+		if (maxInput <= 0 || ie(parts))
+			return;
+		var total = 0L;
+		for (var p : parts) {
+			total += p.getSize();
+			if (total > maxInput)
+				throw new PayloadTooLarge("Multipart request content exceeds the maximum allowed input size of %d bytes.", maxInput);
 		}
 	}
 

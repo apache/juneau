@@ -51,7 +51,9 @@ public class CborConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<CborConfig> ai, CborParser.Builder b) {
-			// No-op: Annotation applier with no work to do
+			CborConfig a = ai.inner();
+
+			integer(a.maxLength(), "maxLength").ifPresent(b::maxLength);
 		}
 	}
 

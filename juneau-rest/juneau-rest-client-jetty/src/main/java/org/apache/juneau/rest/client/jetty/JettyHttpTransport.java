@@ -68,7 +68,7 @@ public final class JettyHttpTransport implements HttpTransport {
 	private final long responseTimeoutMs;
 
 	JettyHttpTransport(JettyHttpTransportBuilder builder) throws Exception {
-		this.httpClient = builder.httpClient != null ? builder.httpClient : new HttpClient();
+		this.httpClient = builder.httpClient != null ? builder.httpClient : new CredentialGuardingHttpClient();
 		this.responseTimeoutMs = builder.responseTimeoutMs;
 		if (!this.httpClient.isStarted())
 			this.httpClient.start();

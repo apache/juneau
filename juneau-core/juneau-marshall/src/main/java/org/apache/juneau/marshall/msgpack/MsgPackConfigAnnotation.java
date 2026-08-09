@@ -51,7 +51,9 @@ public class MsgPackConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<MsgPackConfig> ai, MsgPackParser.Builder b) {
-			// No-op: Annotation applier with no work to do
+			MsgPackConfig a = ai.inner();
+
+			integer(a.maxLength(), "maxLength").ifPresent(b::maxLength);
 		}
 	}
 

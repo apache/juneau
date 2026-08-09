@@ -43,7 +43,7 @@ class OAuthIntrospectionValidator_Cache_Test extends TestBase {
 		var seeded = new ClaimsPrincipal("alice", java.util.Map.of("sub", "alice", "scope", "read"));
 		cache.putPrincipal("token-1", seeded, Duration.ofMinutes(5));
 		var v = OAuthIntrospectionValidator.create()
-			.introspectionEndpoint(URI.create("http://invalid.invalid.invalid/introspect"))
+			.introspectionEndpoint(URI.create("https://invalid.invalid.invalid/introspect"))
 			.clientId("client")
 			.clientSecret("secret")
 			.tokenCache(cache)

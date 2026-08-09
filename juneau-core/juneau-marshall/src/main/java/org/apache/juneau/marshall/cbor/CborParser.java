@@ -89,6 +89,8 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 	// Property name constants
 	private static final String PROP_nativeMode = "nativeMode";
 
+	private static final int DEFAULT_MAX_LENGTH = CborInputStream.DEFAULT_MAX_LENGTH;
+
 	/** Default parser, string input encoded as BASE64. */
 	public static class Base64 extends CborParser {
 
@@ -110,6 +112,7 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 		private static final Cache<HashKey,CborParser> CACHE = Cache.of(HashKey.class, CborParser.class).build();
 
 		private boolean nativeMode;
+		private int maxLength = DEFAULT_MAX_LENGTH;
 
 		/**
 		 * Constructor, default settings.
@@ -117,6 +120,7 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 		protected Builder() {
 			consumes("application/cbor");
 			nativeMode = env("CborParser.nativeMode", false);
+			maxLength = env("CborParser.maxLength", DEFAULT_MAX_LENGTH);
 		}
 
 		/**
@@ -127,6 +131,7 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			nativeMode = copyFrom.nativeMode;
+			maxLength = copyFrom.maxLength;
 		}
 
 		/**
@@ -137,6 +142,7 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 		protected Builder(CborParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			nativeMode = copyFrom.nativeMode;
+			maxLength = copyFrom.maxLength;
 		}
 
 		/**
@@ -171,6 +177,22 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 			return this;
 		}
 
+		/**
+		 * The maximum allowed wire-declared length for CBOR byte/text strings and array/map element counts.
+		 *
+		 * <p>
+		 * Guards against malformed or adversarial input where a small payload declares a huge length or
+		 * element count, which would otherwise trigger {@link OutOfMemoryError}.  Malformed lengths are
+		 * reported as a clean parse error instead.
+		 *
+		 * @param value The maximum length.  Default is 16 MiB.  Values &le; 0 disable the cap.
+		 * @return This object.
+		 */
+		public Builder maxLength(int value) {
+			maxLength = value;
+			return this;
+		}
+
 		@Override /* Overridden from Context.Builder<?> */
 		public CborParser build() {
 			return cache(CACHE).build(CborParser.class);
@@ -183,7 +205,7 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 
 		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
-			return HashKey.of(super.hashKey(), nativeMode);
+			return HashKey.of(super.hashKey(), nativeMode, maxLength);
 		}
 	}
 
@@ -220,6 +242,8 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 
 	protected final boolean nativeMode;
 
+	private final int maxLength;
+
 	private final Map<ClassMeta<?>,CborClassMeta> cborClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,CborBeanPropertyMeta> cborBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -231,6 +255,7 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 	public CborParser(Builder builder) {
 		super(builder);
 		this.nativeMode = builder.nativeMode;
+		this.maxLength = builder.maxLength;
 	}
 
 	/**
@@ -240,6 +265,15 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 	 */
 	public boolean isNativeMode() {
 		return nativeMode;
+	}
+
+	/**
+	 * Returns the maximum allowed wire-declared length for byte/text strings and array/map element counts.
+	 *
+	 * @return The maximum length.
+	 */
+	public int getMaxLength() {
+		return maxLength;
 	}
 
 	@Override /* Overridden from Context */

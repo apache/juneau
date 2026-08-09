@@ -46,6 +46,7 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings("resource") // 'store' (BasicBeanStore/WritableBeanStore) instances are short-lived in-memory test fixtures backed by a Map; nothing external to leak.
 class RestServerVars_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------
@@ -60,8 +61,7 @@ class RestServerVars_Test extends TestBase {
 	}
 
 	@SuppressWarnings({
-		"unchecked", // Generic cast is safe: b.getClass() matches b's runtime type
-		"resource"   // addBean returns 'this'; no new resource is allocated
+		"unchecked" // Generic cast is safe: b.getClass() matches b's runtime type
 	})
 	private static <T> void addToStore(WritableBeanStore store, T b) {
 		store.addBean((Class<T>) b.getClass(), b);
@@ -195,7 +195,6 @@ class RestServerVars_Test extends TestBase {
 		assertEquals("value", new LocalizationVar().resolve(sessionWith(req), new String[]{"key"}));
 	}
 
-	@SuppressWarnings("resource")
 	@Test void b07_localizationVar_resolve_fallsBackToMessagesBean_whenReqMessagesNull() {
 		var req = mock(RestRequest.class);
 		when(req.getMessages()).thenReturn(null);
@@ -376,7 +375,8 @@ class RestServerVars_Test extends TestBase {
 
 	@Test void e05_serializedRequestAttrVar_resolveTo_serializerNotFound_noOutput() throws Exception {
 		var req = mock(RestRequest.class, RETURNS_DEEP_STUBS);
-		when(req.getAttribute(any())).thenReturn(mock(RequestAttribute.class));
+		var attr = mock(RequestAttribute.class);
+		when(req.getAttribute(any())).thenReturn(attr);
 		when(req.getOpContext().getSerializers().getSerializer(any(String.class))).thenReturn(oe());
 		var w = new StringWriter();
 		new SerializedRequestAttrVar().resolveTo(sessionWith(req), w, "text/plain,myKey");

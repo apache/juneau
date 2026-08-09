@@ -26,6 +26,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.bean.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // rs/md/blob/clob are Mockito mocks (no real JDBC/IO resources); ResultSetList itself closes rs internally
+})
 class ResultSetList_Test extends TestBase {
 
 	@Test void a01_basicUsage_noRowNums() throws Exception {

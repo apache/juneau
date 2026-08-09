@@ -26,12 +26,13 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link RestRequest#run()}.
  */
+@SuppressWarnings("resource") // 'transport' lambdas build a TransportResponse per call; the built response is handed to (and closed by) the enclosing RestResponse/RestClient under test.
 class RestRequest_Run_Test {
 
 	/**
-	 * TODO-321: a thrown {@code onConnect} interceptor must not leak the already-assigned {@link RestResponse} —
-	 * since it never reaches the caller (who would otherwise be responsible for closing it), {@link RestRequest#run()}
-	 * itself must close it before the exception propagates.
+	 * Ensures a thrown {@code onConnect} interceptor does not leave the already-assigned {@link RestResponse}
+	 * unclosed — since it never reaches the caller (who would otherwise be responsible for closing it),
+	 * {@link RestRequest#run()} itself must close it before the exception propagates.
 	 */
 	@Test
 	void a01_throwingOnConnectInterceptor_closesTheAssignedResponse() throws Exception {

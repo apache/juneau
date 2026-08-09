@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
@@ -29,6 +30,9 @@ import org.junit.jupiter.api.*;
  * Coverage for {@link McpResourceHandler#of(McpResourceSpec, java.util.function.BiFunction)} and the
  * two-abstract-method contract that replaced the misleading {@code @FunctionalInterface} annotation.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class McpResourceHandler_Test {
 
 	@Test void a01_interfaceIsNoLongerAnnotatedFunctional() {
@@ -63,7 +67,8 @@ class McpResourceHandler_Test {
 	}
 
 	@Test void c01_ofRejectsNullDescriptor() {
-		assertThrows(IllegalArgumentException.class, () -> McpResourceHandler.of(null, (uri, ctx) -> new McpResourceOutcome()));
+		BiFunction<String,BeanStore,McpResourceOutcome> read = (uri, ctx) -> new McpResourceOutcome();
+		assertThrows(IllegalArgumentException.class, () -> McpResourceHandler.of(null, read));
 	}
 
 	@Test void c02_ofRejectsNullRead() {
@@ -72,8 +77,9 @@ class McpResourceHandler_Test {
 	}
 
 	@Test void c03_ofRejectsBlankUri() {
-		assertThrows(IllegalArgumentException.class, () -> McpResourceHandler.of(new McpResourceSpec(), (uri, ctx) -> new McpResourceOutcome()));
+		BiFunction<String,BeanStore,McpResourceOutcome> read = (uri, ctx) -> new McpResourceOutcome();
+		assertThrows(IllegalArgumentException.class, () -> McpResourceHandler.of(new McpResourceSpec(), read));
 		var spec = new McpResourceSpec().setUri(" ");
-		assertThrows(IllegalArgumentException.class, () -> McpResourceHandler.of(spec, (uri, ctx) -> new McpResourceOutcome()));
+		assertThrows(IllegalArgumentException.class, () -> McpResourceHandler.of(spec, read));
 	}
 }

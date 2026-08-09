@@ -32,9 +32,14 @@ import org.apache.juneau.rest.server.servlet.*;
  * worker so the mixin and {@link LoggersResource resource} flavors cannot drift.
  *
  * <p>
- * The {@code GET} endpoints (list all / read one) are read-only and safe to expose; the {@code PUT}/{@code POST}
- * set-level endpoint <b>mutates runtime logging</b> and should be guarded (deny-by-default) when assembled into a
- * management group &mdash; see the actuator group's exposure policy.
+ * The {@code GET} endpoints (list all / read one) are read-only, but &mdash; unlike the {@code PUT}/{@code POST}
+ * set-level endpoint, which <b>mutates runtime logging</b> and is deny-by-default (returns {@code 403} unless a
+ * {@link LoggersSettings} bean with writes enabled is registered) &mdash; they carry <b>no built-in guard of their
+ * own</b>: once a resource composes this mixin, {@code GET /loggers} and {@code GET /loggers/{name}} are reachable
+ * by anyone who can reach the resource, exposing the set of registered logger names and their configured levels
+ * (topology information, not credentials or request data). Compose this mixin only into a resource, or a subpath
+ * of one, that's already covered by whatever authentication/authorization the app applies to its management
+ * endpoints generally; this mixin does not add any of its own for the read side.
  *
  * <h5 class='section'>Backend:</h5><ul>
  * 	<li>Drives {@link JulLogBackend java.util.logging} by default; declare a Logback / Log4j2 backend

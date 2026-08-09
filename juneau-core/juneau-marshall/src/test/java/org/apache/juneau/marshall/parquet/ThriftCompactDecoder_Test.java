@@ -26,7 +26,8 @@ import org.junit.jupiter.api.*;
  * Branch-coverage tests for {@link ThriftCompactDecoder}.
  */
 @SuppressWarnings({
-	"java:S5778" // assertThrows lambdas with chained calls; intermediate calls do not throw in practice.
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate calls do not throw in practice.
+	"resource" // combined is an anonymous in-memory InputStream test fixture; closure is irrelevant to the read-loop assertion
 })
 class ThriftCompactDecoder_Test {
 

@@ -28,7 +28,8 @@ import org.junit.jupiter.api.*;
  * Tests for {@link Logger}.
  */
 @SuppressWarnings({
-	"java:S117"  // Local variable name intentional for test readability.
+	"java:S117", // Local variable name intentional for test readability.
+	"resource" // g01 only asserts the returned capture's initial state; the listener is a test fixture, not a held resource
 })
 class Logger_Test extends TestBase {
 

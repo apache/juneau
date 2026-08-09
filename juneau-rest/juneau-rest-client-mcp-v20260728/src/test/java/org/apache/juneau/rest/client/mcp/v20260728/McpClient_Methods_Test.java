@@ -28,6 +28,9 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.mcp.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Mock HttpTransport lambdas and the ok(...)/client(...) test-helper factories (@Owning; callers close via try-with-resources) are short-lived test fixtures.
+})
 class McpClient_Methods_Test {
 
 	private static HttpTransport ok(String wireJson) {

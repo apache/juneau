@@ -71,6 +71,9 @@ public class SseResponseSupport implements AutoCloseable {
 	 * @param interval The heartbeat interval.
 	 * @return This object.
 	 */
+	@SuppressWarnings({
+		"resource" // The new heartbeat is stored in the 'heartbeat' field (owned by this wrapper, closed in close()/heartbeat()); any prior heartbeat is closed just above before being replaced.
+	})
 	public SseResponseSupport heartbeat(Duration interval) {
 		if (scheduler != null) {
 			if (heartbeat != null)
