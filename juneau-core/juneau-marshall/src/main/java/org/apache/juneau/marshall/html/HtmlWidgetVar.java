@@ -65,6 +65,14 @@ public class HtmlWidgetVar extends SimpleVar {
 		if (w == null)
 			return "unknown-widget-" + key;
 
-		return w.getHtml(session);
+		try {
+			return w.getHtml(session);
+		} catch (@SuppressWarnings("unused") Exception e) {
+			// Defensive per-widget degradation: an individual widget's render failure must not propagate out of
+			// var resolution, since that would abort the whole enclosing string and blank the surrounding page.
+			// Degrade to an empty fragment so the navlink renders empty and the rest of the page is unaffected.
+			// Only Exception is caught so JVM Errors (OOM, etc.) still propagate.
+			return "";
+		}
 	}
 }

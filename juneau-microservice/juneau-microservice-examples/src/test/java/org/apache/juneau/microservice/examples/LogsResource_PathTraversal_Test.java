@@ -139,7 +139,7 @@ class LogsResource_PathTraversal_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// CWE-22: direct ../ traversal across each operation surface (view, download, delete)
+	// direct ../ traversal across each operation surface (view, download, delete)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void t02_directTraversal_GET_returns403() throws Exception {

@@ -170,7 +170,7 @@ class Rest_AllowedMethodParams_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Security: Malformed method parameters should return 405, not 500 (CWE-74)
+	// Security: Malformed method parameters should return 405, not 500
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_malformedMethodParameter_returns405() throws Exception {

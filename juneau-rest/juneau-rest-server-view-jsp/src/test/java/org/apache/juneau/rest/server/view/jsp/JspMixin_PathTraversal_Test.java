@@ -83,7 +83,7 @@ class JspMixin_PathTraversal_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// CWE-22: direct .. traversal of basePath returns 403
+	// direct .. traversal of basePath returns 403
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void t02_directTraversal_returns403() throws Exception {

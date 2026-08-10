@@ -157,6 +157,10 @@ class PetstoreSpringboot_Test {
 	@Test void a01_rootRendersHtml() throws Exception {
 		var resp = get("/", "text/html");
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
+		// Fail fast if any rendered menu item / navlink returned a server error (e.g. a $W widget var that
+		// failed to resolve renders an inline "HTTP 500: Internal Server Error ..." fragment inside the 200
+		// page). Surface that fragment directly instead of the opaque "expected petstore link" failure below.
+		assertFalse(resp.body().contains("HTTP 500"), "root page rendered an inline server error: " + resp.body());
 		assertTrue(resp.body().contains("petstore"), "expected petstore link on root: " + resp.body());
 	}
 

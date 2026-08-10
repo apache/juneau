@@ -26,7 +26,7 @@ import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Path-traversal (CWE-22) boundary tests for {@link LocalDir#resolve(String)}.
+ * Path-traversal boundary tests for {@link LocalDir#resolve(String)}.
  *
  * <p>
  * Covers both the filesystem-root branch (delegates to {@code FileUtils.resolveSafely}) and

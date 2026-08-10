@@ -223,7 +223,7 @@ public class LocalDir {
 	 * 	LocalFile <jv>file2</jv> = <jv>dir</jv>.resolve(<js>"pages/about.html"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Security (CWE-22 / path-traversal):</h5>
+	 * <h5 class='section'>Security (path-traversal):</h5>
 	 * <p>
 	 * For filesystem-root {@code LocalDir} instances, path resolution is delegated to
 	 * {@link FileUtils#resolveSafely(java.io.File, String)} which enforces a strict boundary check:
