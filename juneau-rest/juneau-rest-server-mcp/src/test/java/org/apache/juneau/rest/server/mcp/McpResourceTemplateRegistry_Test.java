@@ -335,7 +335,7 @@ class McpResourceTemplateRegistry_Test {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// G: coverage for work item 316 - the per-handler compiled McpUriTemplateMatcher cache
+	// G: coverage for the per-handler compiled McpUriTemplateMatcher cache
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Nested class G_compiledMatcherCache {

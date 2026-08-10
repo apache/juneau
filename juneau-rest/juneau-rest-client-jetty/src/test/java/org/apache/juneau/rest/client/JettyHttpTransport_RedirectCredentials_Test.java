@@ -81,6 +81,10 @@ class JettyHttpTransport_RedirectCredentials_Test {
 
 	private static void redirect(HttpExchange exchange, String location) throws IOException {
 		exchange.getResponseHeaders().add("Location", location);
+		// Force connection close so Jetty's HttpClient always opens a fresh connection for the redirected
+		// request instead of racing to reuse this connection, which com.sun.net.httpserver may already be
+		// tearing down (observed as a same-origin-redirect EOFException on the reused socket).
+		exchange.getResponseHeaders().set("Connection", "close");
 		exchange.sendResponseHeaders(302, -1);
 		exchange.close();
 	}

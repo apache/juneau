@@ -28,7 +28,7 @@ package org.apache.juneau.rest.server.mcp;
  *
  * <p>
  * Introduced so callers {@code switch}/{@code instanceof}-pattern-match over a closed, compiler-checked
- * set of outcomes instead of casting the historical {@code Object}-typed return value (work item 331).
+ * set of outcomes instead of casting the historical {@code Object}-typed return value.
  *
  * @since 10.0.0
  */

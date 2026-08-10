@@ -26,9 +26,42 @@ Usage: python3 scripts/prompt-pgp-passphrase.py
 """
 
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
+
+
+def _resolve_gpg():
+    """
+    Resolve a usable path to the gpg binary.
+
+    Tries, in order: a PATH lookup, the path configured via
+    `git config --get gpg.program`, and a few common install locations
+    (Homebrew on Apple Silicon/Intel, and the typical Linux location).
+    Returns None if no usable gpg binary can be found.
+    """
+    found = shutil.which("gpg")
+    if found:
+        return found
+
+    try:
+        result = subprocess.run(
+            ["git", "config", "--get", "gpg.program"],
+            capture_output=True,
+            text=True
+        )
+        configured = result.stdout.strip()
+        if configured and os.path.isfile(configured) and os.access(configured, os.X_OK):
+            return configured
+    except (OSError, subprocess.SubprocessError):
+        pass
+
+    for candidate in ("/opt/homebrew/bin/gpg", "/usr/local/bin/gpg", "/usr/bin/gpg"):
+        if os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+            return candidate
+
+    return None
 
 
 def prompt_pgp_passphrase():
@@ -46,11 +79,14 @@ def prompt_pgp_passphrase():
             tmp_path = tmp.name
 
         try:
+            gpg_path = _resolve_gpg()
+            if gpg_path is None:
+                raise FileNotFoundError("gpg command not found")
             # Attempt to sign the dummy file (this will prompt for passphrase)
             # Don't use --batch so it will prompt interactively for passphrase
             # Use --yes to auto-confirm overwrite prompts, but allow passphrase prompt
             subprocess.run(
-                ["gpg", "--yes", "--clearsign", tmp_path],
+                [gpg_path, "--yes", "--clearsign", tmp_path],
                 capture_output=False,  # Don't capture output so user can see the prompt
                 text=True,
                 timeout=60  # 60 second timeout for passphrase entry
