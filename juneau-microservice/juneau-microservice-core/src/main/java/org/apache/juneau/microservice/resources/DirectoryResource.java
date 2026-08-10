@@ -26,6 +26,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.*;
+import org.apache.juneau.commons.utils.FileUtils;
 import org.apache.juneau.config.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
@@ -312,13 +313,27 @@ public class DirectoryResource extends BasicRestServlet {
 			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath());
 	}
 
+	/**
+	 * Resolves a request path against {@link #rootDir} with a canonical-path boundary check so
+	 * {@code ..} segments, absolute paths, and symlink-out cannot escape the configured root.
+	 *
+	 * <p>
+	 * Applied at this single funnel because every public operation on this resource (view,
+	 * download, delete, upload, info) resolves the user-supplied path through this method.
+	 * Delegates to {@link FileUtils#resolveSafely(File, String)}: boundary violation &rarr; 403
+	 * (Forbidden), non-existent target &rarr; 404 (NotFound).
+	 *
+	 * @param path The user-supplied path relative to the root directory.
+	 * @return The resolved file.
+	 * @throws NotFound If the resolved file does not exist inside the root directory.
+	 */
 	private File getFile(String path) throws NotFound {
-		if (path == null)
-			return rootDir;
-		var f = new File(rootDir.getAbsolutePath() + '/' + path);
-		if (f.exists())
-			return f;
-		throw new NotFound("File not found.");
+		try {
+			return FileUtils.resolveSafely(rootDir, path)
+				.orElseThrow(() -> new NotFound("File not found."));
+		} catch (IllegalArgumentException e) {
+			throw new Forbidden(e.getMessage());
+		}
 	}
 
 	/**

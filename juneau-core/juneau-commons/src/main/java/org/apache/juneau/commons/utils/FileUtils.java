@@ -24,12 +24,82 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.*;
 
 /**
  * File utilities.
  *
  */
 public class FileUtils {
+
+	// Shared message text — kept identical across boundary-check sites so attackers cannot
+	// distinguish "rejected by pre-existence check" from "rejected by symlink check".
+	private static final String MSG_pathEscape = "Path escapes configured root directory.";
+
+	/**
+	 * Resolves a user-supplied path against a configured root directory, rejecting any path that
+	 * escapes the root via {@code ..} segments, absolute paths, or out-of-root symlinks.
+	 *
+	 * <p>
+	 * Both {@code rootDir} and the resolved target are canonicalized via {@link Path#toRealPath()}
+	 * (with {@link Path#normalize()}) so symlinks are handled deterministically, then
+	 * {@code target.startsWith(root)} is asserted before returning.
+	 *
+	 * <p>
+	 * Boundary violation always wins over pre-existence: a path that escapes the root is rejected
+	 * with {@link IllegalArgumentException} (callers should map to {@code 403 Forbidden}), while a
+	 * non-existent in-root target returns {@link Optional#empty()} (callers should map to
+	 * {@code 404 Not Found}).
+	 *
+	 * @param rootDir The configured root directory. Must not be <jk>null</jk>.
+	 * @param userPath The user-supplied path relative to {@code rootDir}. May be <jk>null</jk> or
+	 * 	empty, in which case the resolved root itself is returned.
+	 * @return The resolved {@link File} if it exists inside {@code rootDir}, else empty.
+	 * @throws IllegalArgumentException If the resolved target escapes {@code rootDir}, or the path
+	 * 	string is invalid. Callers should map to {@code 403 Forbidden}.
+	 */
+	public static Optional<File> resolveSafely(File rootDir, String userPath) {
+		assertArgNotNull("rootDir", rootDir);
+		var root = canonicalizeRoot(rootDir.toPath());
+		if (userPath == null || userPath.isEmpty())
+			return Optional.of(root.toFile());
+		Path target;
+		try {
+			target = root.resolve(userPath).normalize();
+		} catch (@SuppressWarnings("unused") InvalidPathException e) {
+			throw new IllegalArgumentException(MSG_pathEscape);
+		}
+		if (! target.startsWith(root))
+			throw new IllegalArgumentException(MSG_pathEscape);
+		var f = target.toFile();
+		if (! f.exists())
+			return Optional.empty();
+		try {
+			if (! target.toRealPath().startsWith(root))
+				throw new IllegalArgumentException(MSG_pathEscape);
+		} catch (@SuppressWarnings("unused") NoSuchFileException e) {
+			return Optional.empty();
+		} catch (IOException e) {
+			throw new RuntimeException("Could not canonicalize '" + target + "'", e);
+		}
+		return Optional.of(f);
+	}
+
+	/**
+	 * Resolves {@code rootDir} via {@link Path#toRealPath()} so a symlinked root is normalized once,
+	 * falling back to {@link Path#toAbsolutePath()} + {@link Path#normalize()} if the directory does
+	 * not exist at call time.
+	 *
+	 * @param rootDir The root directory path.
+	 * @return The canonicalized root path.
+	 */
+	private static Path canonicalizeRoot(Path rootDir) {
+		try {
+			return rootDir.toRealPath();
+		} catch (@SuppressWarnings("unused") IOException e) {
+			return rootDir.toAbsolutePath().normalize();
+		}
+	}
 
 	/**
 	 * Creates a file if it doesn't already exist using {@link File#createNewFile()}.
