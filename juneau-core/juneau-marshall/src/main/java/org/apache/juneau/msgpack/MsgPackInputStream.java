@@ -115,7 +115,10 @@ public class MsgPackInputStream extends ParserInputStream {
 	 * Read a binary field from the stream.
 	 */
 	byte[] readBinary() throws IOException {
-		var b = new byte[(int)length];
+		// checkLength bounds the declared length against the configured maximum (always <= Integer.MAX_VALUE),
+		// so a 32-bit MessagePack length in [2^31, 2^32-1] is rejected here rather than truncating to a
+		// negative int and allocating the wrong size.
+		var b = new byte[checkLength(length, "binary")];
 		read(b);
 		return b;
 	}

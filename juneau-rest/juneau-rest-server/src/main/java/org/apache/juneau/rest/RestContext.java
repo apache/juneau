@@ -251,7 +251,7 @@ public class RestContext extends Context {
 		private List<MediaType> produces;
 		private List<Object> children = list();
 		private Logger logger;
-		private long maxInput = env("RestContext.maxInput").map(StringUtils::parseLongWithSuffix).orElse(100_000_000l);
+		private long maxInput = env("RestContext.maxInput").map(StringUtils::parseLongWithSuffix).orElse(1_000_000l);
 		private MethodExecStore.Builder methodExecStore;
 		private MethodList destroyMethods;
 		private MethodList endCallMethods;
@@ -6010,16 +6010,16 @@ public class RestContext extends Context {
 			if (r.value().length > 0)
 				code = r.value()[0];
 
+		var appThrown = e instanceof BasicHttpException;
 		var e2 = (e instanceof BasicHttpException e3 ? e3 : new BasicHttpException(code, e));
 
 		var req = session.getRequest();
 		var res = session.getResponse();
 
-		Throwable t = e2.getRootCause();
-		if (nn(t)) {
-			Thrown t2 = thrown(t);
+		var rpcDispatch = isRpcDispatch(session);
+		var t2 = resolveThrownHeader(e2, isRenderResponseStackTraces(), rpcDispatch);
+		if (nn(t2))
 			res.setHeader(t2.getName(), t2.getValue());
-		}
 
 		try {
 			res.setContentType("text/plain");
@@ -6040,13 +6040,84 @@ public class RestContext extends Context {
 					w2.append("HTTP ").append(String.valueOf(statusCode)).append(": ").append(httpMessage).append("\n\n");
 				if (isRenderResponseStackTraces())
 					e.printStackTrace(w2);
-				else
+				else if (rpcDispatch)
+					// RRPC is an internal transport whose client proxy relies on the full detail to reconstruct
+					// the server-side exception; it is not a general-purpose response surface, so it keeps the
+					// detailed body rather than the suppressed message used for ordinary responses.
 					w2.append(e2.getFullStackMessage(true));
+				else
+					w2.append(suppressedErrorBodyMessage(e2, appThrown));
 			}
 
 		} catch (Exception e1) {
 			req.setAttribute("Exception", e1);
 		}
+	}
+
+	/**
+	 * Determines whether a {@code Thrown} header carrying root-cause detail should be attached to an error response.
+	 *
+	 * <p>
+	 * The header echoes internal exception detail, so it is only emitted when stack-trace rendering is explicitly
+	 * enabled, or for RRPC dispatch targets where the client proxy relies on it to reconstruct the thrown exception.
+	 *
+	 * <p>
+	 * Package-private so it can be unit-tested directly.
+	 *
+	 * @param e2 The (possibly wrapped) exception being reported.  Must not be <jk>null</jk>.
+	 * @param renderResponseStackTraces Whether the resource is configured to render stack traces in responses.
+	 * @param rpcDispatch Whether the matched operation is an RRPC dispatch target.
+	 * @return The header to set, or <jk>null</jk> if none should be set.
+	 */
+	static Thrown resolveThrownHeader(BasicHttpException e2, boolean renderResponseStackTraces, boolean rpcDispatch) {
+		if (!renderResponseStackTraces && !rpcDispatch)
+			return null;
+		var t = e2.getRootCause();
+		return nn(t) ? thrown(t) : null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the operation matched for the given session is an RRPC dispatch target.
+	 *
+	 * <p>
+	 * Used by {@link #handleError(RestSession, Throwable)} to decide whether the {@code Thrown} header should be
+	 * included regardless of {@link #isRenderResponseStackTraces()}.
+	 *
+	 * @param session The rest call.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the matched operation (if any) is an RRPC dispatch target.
+	 */
+	static boolean isRpcDispatch(RestSession session) {
+		var opSession = session.getOpSessionOrNull();
+		return nn(opSession) && opSession.getContext() instanceof RrpcRestOpContext;
+	}
+
+	/**
+	 * Determines the message written to the plain-text error response body when stack-trace rendering is off.
+	 *
+	 * <p>
+	 * Only application-authored exceptions (those thrown as a {@link BasicHttpException} with a client-facing
+	 * message in mind) have their message echoed; anything else is treated as internal detail and suppressed.
+	 *
+	 * <p>
+	 * Package-private so it can be unit-tested directly.
+	 *
+	 * @param e2 The (possibly wrapped) exception being reported.  Must not be <jk>null</jk>.
+	 * @param appThrown <jk>true</jk> if the original, unwrapped exception was itself a {@link BasicHttpException}.
+	 * @return The scrubbed message to write, or an empty string if nothing should be written.
+	 */
+	static String suppressedErrorBodyMessage(BasicHttpException e2, boolean appThrown) {
+		return appThrown ? scrubForXss(e2.getMessage()) : "";
+	}
+
+	/**
+	 * Replaces {@code <}, {@code >}, and {@code &} in a message about to be written into a {@code text/plain} error
+	 * response body, as a simple defense against the body being reflected into an HTML context downstream.
+	 *
+	 * @param msg The message to scrub.  Can be <jk>null</jk>.
+	 * @return The scrubbed message, or an empty string if {@code msg} was <jk>null</jk>.
+	 */
+	private static String scrubForXss(String msg) {
+		return msg == null ? "" : msg.replace('<', ' ').replace('>', ' ').replace('&', ' ');
 	}
 
 	/**

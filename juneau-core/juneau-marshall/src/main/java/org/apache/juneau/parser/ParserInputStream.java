@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+
 import java.io.*;
 
 /**
@@ -36,6 +38,8 @@ public class ParserInputStream extends InputStream implements Positionable {
 
 	private final InputStream is;
 	int pos = 0;
+	// Default cap (16 MiB) for wire-declared lengths; overridable via setMaxLength.
+	private int maxLength = 16 * 1024 * 1024;
 
 	/**
 	 * Constructor.
@@ -46,6 +50,46 @@ public class ParserInputStream extends InputStream implements Positionable {
 	protected ParserInputStream(ParserPipe pipe) throws IOException {
 		this.is = pipe.getInputStream();
 		pipe.setPositionable(this);
+	}
+
+	/**
+	 * Sets the maximum length allowed for a single wire-declared length/count.
+	 *
+	 * @param value The maximum length in bytes.  Values &le; 0 disable the cap (only the negative-length check remains).
+	 */
+	public void setMaxLength(int value) {
+		maxLength = value <= 0 ? Integer.MAX_VALUE : value;
+	}
+
+	/**
+	 * Bounds a wire-declared length/count against the configured maximum before it is used to size an allocation.
+	 *
+	 * @param len The declared length/count read off the wire.
+	 * @param what A short description of the field being read (for the error message).
+	 * @return The length as an <c>int</c>, guaranteed to be non-negative and within the configured maximum.
+	 * @throws IOException If the length is negative (or beyond int range) or exceeds the configured maximum.
+	 */
+	public int checkLength(long len, String what) throws IOException {
+		return checkLength(len, maxLength, what);
+	}
+
+	/**
+	 * Bounds a wire-declared length/count against the specified maximum before it is used to size an allocation.
+	 *
+	 * @param len The declared length/count read off the wire.
+	 * @param maxLength The maximum allowed length.  Values &le; 0 are treated as {@link Integer#MAX_VALUE}
+	 * 	(only the negative-length check applies).
+	 * @param what A short description of the field being read (for the error message).
+	 * @return The length as an <c>int</c>, guaranteed to be non-negative and within the specified maximum.
+	 * @throws IOException If the length is negative (or beyond int range) or exceeds the configured maximum.
+	 */
+	public static int checkLength(long len, long maxLength, String what) throws IOException {
+		var max = maxLength <= 0 ? Integer.MAX_VALUE : maxLength;
+		if (len < 0)
+			throw ioex("Invalid {0} length (negative): {1}", what, len);
+		if (len > max)
+			throw ioex("{0} length {1} exceeds maximum allowed {2}", what, len, max);
+		return (int)len;
 	}
 
 	@Override /* Overridden from Positionable */

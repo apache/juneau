@@ -620,6 +620,8 @@ public class ParserSession extends BeanSession {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
+		} catch (@SuppressWarnings("unused") OutOfMemoryError e) {
+			throw new ParseException(this, "Out of memory occurred.  Input too large to parse.");
 		} catch (IOException e) {
 			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", cns(e), lm(e));
 		} catch (Exception e) {
@@ -655,6 +657,8 @@ public class ParserSession extends BeanSession {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
+		} catch (@SuppressWarnings("unused") OutOfMemoryError e) {
+			throw new ParseException(this, "Out of memory occurred.  Input too large to parse.");
 		} catch (IOException e) {
 			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", cns(e), lm(e));
 		} catch (Exception e) {
@@ -723,6 +727,8 @@ public class ParserSession extends BeanSession {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
+		} catch (@SuppressWarnings("unused") OutOfMemoryError e) {
+			throw new ParseException(this, "Out of memory occurred.  Input too large to parse.");
 		} catch (Exception e) {
 			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), lm(e));
 		} finally {

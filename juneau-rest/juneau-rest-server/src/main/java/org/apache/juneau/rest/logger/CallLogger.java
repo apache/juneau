@@ -33,6 +33,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
+import org.apache.juneau.http.RedactedHeaders;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.rest.util.*;
@@ -107,6 +108,7 @@ public class CallLogger {
 		Predicate<HttpServletRequest> enabledTest;
 		CallLoggingDetail requestDetail, responseDetail;
 		Level level;
+		Set<String> redactedHeaders = new LinkedHashSet<>(RedactedHeaders.DEFAULT);
 
 		/**
 		 * Constructor.
@@ -402,6 +404,41 @@ public class CallLogger {
 				thrownStore = value;
 			return this;
 		}
+
+		/**
+		 * Replaces the redacted-header set with the supplied values.
+		 *
+		 * <p>
+		 * Applies to request/response header values written at {@link CallLoggingDetail#HEADER HEADER}/
+		 * {@link CallLoggingDetail#ENTITY ENTITY} detail, regardless of matched rule.  Header names are
+		 * matched case-insensitively.  Pass an empty array to disable redaction and restore the old
+		 * unredacted behavior (not recommended outside of a trusted environment or integration tests).
+		 *
+		 * @param values The header names to redact.  Can be <jk>null</jk> (equivalent to an empty array
+		 * 	&mdash; disables redaction); <jk>null</jk> or blank elements are skipped.
+		 * @return This object.
+		 */
+		public Builder redactedHeaders(String...values) {
+			redactedHeaders.clear();
+			if (values != null)
+				for (var v : values)
+					if (v != null && ! v.isBlank())
+						redactedHeaders.add(v);
+			return this;
+		}
+
+		/**
+		 * Adds an additional header name to the redacted-header set.
+		 *
+		 * @param value The header name to redact (case-insensitive).  Must not be <jk>null</jk> or blank.
+		 * @return This object.
+		 */
+		public Builder redactHeader(String value) {
+			if (isBlank(value))
+				throw new IllegalArgumentException("Argument 'value' must not be null or blank");
+			redactedHeaders.add(value);
+			return this;
+		}
 	}
 
 	/** Represents no logger */
@@ -497,6 +534,7 @@ public class CallLogger {
 	private final Predicate<HttpServletRequest> enabledTest;
 	private final Level level;
 	private final CallLoggingDetail requestDetail, responseDetail;
+	private final Set<String> redactedHeaders;
 
 	/**
 	 * Constructor.
@@ -516,6 +554,7 @@ public class CallLogger {
 		this.requestDetail = builder.requestDetail;
 		this.responseDetail = builder.responseDetail;
 		this.level = builder.level;
+		this.redactedHeaders = Set.copyOf(builder.redactedHeaders);
 	}
 
 	/**
@@ -533,6 +572,7 @@ public class CallLogger {
 		this.requestDetail = builder.requestDetail;
 		this.responseDetail = builder.responseDetail;
 		this.level = builder.level;
+		this.redactedHeaders = Set.copyOf(builder.redactedHeaders);
 	}
 
 	/**
@@ -611,7 +651,7 @@ public class CallLogger {
 					sb.append("\n---Request Headers---");
 					while (hh.hasMoreElements()) {
 						var h = hh.nextElement();
-						sb.append("\n\t").append(h).append(": ").append(req.getHeader(h));
+						sb.append("\n\t").append(h).append(": ").append(RedactedHeaders.redact(h, req.getHeader(h), redactedHeaders));
 					}
 				}
 			}
@@ -621,7 +661,7 @@ public class CallLogger {
 				if (hh.size() > 0) {
 					sb.append("\n---Response Headers---");
 					for (var h : hh) {
-						sb.append("\n\t").append(h).append(": ").append(res.getHeader(h));
+						sb.append("\n\t").append(h).append(": ").append(RedactedHeaders.redact(h, res.getHeader(h), redactedHeaders));
 					}
 				}
 			}

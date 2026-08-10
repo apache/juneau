@@ -116,43 +116,43 @@ class Rest_PredefinedStatusCodes_Test extends TestBase {
 			.run()
 			.assertStatus(400)
 			.assertContent().isContains(
-				"Unknown property 'f2' encountered while trying to parse into class"
+				"Could not convert request content content to class type"
 			);
 		b.put("/a?noTrace=true", "{f1:'foo', f2:'foo'}", APPLICATION_JSON)
 			.run()
 			.assertStatus(400)
 			.assertContent().isContains(
-				"Unknown property 'f2' encountered while trying to parse into class"
+				"Could not convert request content content to class type"
 			);
 		b.put("/b?noTrace=true", "{f1:'foo'}", APPLICATION_JSON)
 			.run()
 			.assertStatus(400)
 			.assertContent().isContains(
-				"NumberFormatException"
+				"Could not convert request content content to class type"
 			);
 		b.put("/c?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
 			.assertStatus(400)
 			.assertContent().isContains(
-				"could not be instantiated"
+				"Could not convert request content content to class type"
 			);
 		b.put("/d?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
 			.assertStatus(400)
 			.assertContent().isContains(
-				"could not be instantiated"
+				"Could not convert request content content to class type"
 			);
 		b.put("/e?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
 			.assertStatus(400)
 			.assertContent().isContains(
-				"Class is not public"
+				"Could not convert request content content to class type"
 			);
 		b.put("/f?noTrace=true", "'foo'", APPLICATION_JSON)
 			.run()
 			.assertStatus(400)
 			.assertContent().isContains(
-				"Test error"
+				"Could not convert request content content to class type"
 			);
 		b.put("/g/123?noTrace=true&p1=foo", "'foo'", APPLICATION_JSON)
 			.run()

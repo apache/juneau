@@ -34,6 +34,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
@@ -143,7 +144,13 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		if (content.isLoaded() || ! req.getHeader(ContentType.class).orElse(ContentType.NULL).equalsIgnoreCase("multipart/form-data"))
 			m = RestUtils.parseQuery(content.getReader());
 		else {
+			// Enforce the effective maxInput ceiling against multipart bodies, which otherwise route around the
+			// bounded input stream used for non-multipart content.  Reject early on the declared content length,
+			// then again on the cumulative parsed-part size as a backstop when the length was absent or wrong.
+			var maxInput = req.getOpContext().getMaxInput();
+			checkMultipartLength(maxInput, req.getHttpServletRequest().getContentLengthLong());
 			c = req.getHttpServletRequest().getParts();
+			checkMultipartLength(maxInput, c);
 			if (c == null || c.isEmpty())
 				m = req.getHttpServletRequest().getParameterMap();
 		}
@@ -170,6 +177,46 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 			}
 		} else if (nn(c)) {
 			c.stream().forEach(this::add);
+		}
+	}
+
+	/**
+	 * Rejects a {@code multipart/form-data} request outright when its declared {@code Content-Length} already
+	 * exceeds {@code maxInput}, before the servlet container is asked to parse (and potentially buffer to disk)
+	 * the body.
+	 *
+	 * <p>
+	 * Package-private so it can be unit-tested directly.
+	 *
+	 * @param maxInput The effective maximum input ceiling in bytes.  Values {@code <= 0} disable the check.
+	 * @param declaredContentLength The request's declared content length.  Values {@code < 0} (absent/unparsable)
+	 * 	are ignored; the post-parse {@link #checkMultipartLength(long, Collection)} check still applies.
+	 * @throws PayloadTooLarge If {@code declaredContentLength} exceeds {@code maxInput}.
+	 */
+	static void checkMultipartLength(long maxInput, long declaredContentLength) {
+		if (maxInput > 0 && declaredContentLength > maxInput)
+			throw new PayloadTooLarge("Multipart request content exceeds the maximum allowed input size of {0} bytes.", maxInput);
+	}
+
+	/**
+	 * Rejects a {@code multipart/form-data} request once the cumulative size of its parsed parts exceeds
+	 * {@code maxInput}, as a backstop for the case where the declared {@code Content-Length} was absent or wrong.
+	 *
+	 * <p>
+	 * Package-private so it can be unit-tested directly.
+	 *
+	 * @param maxInput The effective maximum input ceiling in bytes.  Values {@code <= 0} disable the check.
+	 * @param parts The parsed request parts.  Can be {@code null} or empty (nothing is checked).
+	 * @throws PayloadTooLarge If the cumulative {@link Part#getSize()} across {@code parts} exceeds {@code maxInput}.
+	 */
+	static void checkMultipartLength(long maxInput, Collection<Part> parts) {
+		if (maxInput <= 0 || parts == null || parts.isEmpty())
+			return;
+		var total = 0L;
+		for (var p : parts) {
+			total += p.getSize();
+			if (total > maxInput)
+				throw new PayloadTooLarge("Multipart request content exceeds the maximum allowed input size of {0} bytes.", maxInput);
 		}
 	}
 

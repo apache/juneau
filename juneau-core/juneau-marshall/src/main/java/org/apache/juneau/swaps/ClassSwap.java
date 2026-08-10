@@ -35,6 +35,11 @@ public class ClassSwap extends StringSwap<Class<?>> {
 
 	@Override /* Overridden from ObjectSwap */
 	public Class<?> unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
-		return o == null ? null : Class.forName(o);
+		if (o == null)
+			return null;
+		// Resolve without initializing — a parsed class name must never trigger the named class's static
+		// initializer as a side effect.  The class loader matches Class.forName(String)'s implicit caller
+		// loader, so resolvable names continue to resolve exactly as before.
+		return Class.forName(o, false, ClassSwap.class.getClassLoader());
 	}
 }

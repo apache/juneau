@@ -409,8 +409,27 @@ public class RequestContent {
 		if (r instanceof BufferedReader r2)
 			return r2;
 		int len = req.getHttpServletRequest().getContentLength();
-		int buffSize = len <= 0 ? 8192 : Math.max(len, 8192);
-		return new BufferedReader(r, buffSize);
+		return new BufferedReader(r, computeReaderBufferSize(len, maxInput));
+	}
+
+	/**
+	 * Computes the initial char-buffer size for {@link #getReader()}.
+	 *
+	 * <p>
+	 * The buffer size is derived from the client-supplied content length, so it is clamped to the effective
+	 * maximum-input ceiling to keep a spoofed length from driving an oversized pre-allocation regardless of the
+	 * actual body size.  Package-private so the sizing decision can be exercised directly in unit tests.
+	 *
+	 * @param declaredContentLength The request's declared content length.  May be {@code <= 0} if absent/unparsable.
+	 * @param maxInput The effective maximum-input ceiling in bytes.  Values {@code <= 0} are treated as
+	 * 	"no additional ceiling beyond {@link Integer#MAX_VALUE}".
+	 * @return The buffer size to use, at least the historical {@code 8192}-byte default and never past
+	 * 	{@code min(maxInput, Integer.MAX_VALUE)}.
+	 */
+	static int computeReaderBufferSize(int declaredContentLength, long maxInput) {
+		long ceiling = maxInput > 0 ? maxInput : Integer.MAX_VALUE;
+		long buffSize = declaredContentLength <= 0 ? 8192 : Math.min(Math.max(declaredContentLength, 8192), ceiling);
+		return (int)Math.min(buffSize, Integer.MAX_VALUE);
 	}
 
 	/**

@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 
+import javax.xml.*;
 import javax.xml.namespace.*;
 import javax.xml.stream.*;
 import javax.xml.stream.util.*;
@@ -64,6 +65,16 @@ public class XmlReader implements XMLStreamReader, Positionable {
 			factory.setProperty(XMLInputFactory.IS_COALESCING, true);
 			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
 			factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+			// Disable DTD processing unconditionally.  DTD constructs are not needed for data binding, and
+			// keeping them off — regardless of the validating flag — bounds document/entity handling so a
+			// declared internal DTD cannot drive runaway entity expansion.
+			factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+			// Belt-and-suspenders: forbid resolving any external DTD/schema on factories that honor these
+			// properties, in case a StAX implementation handles external-entity support inconsistently.
+			if (factory.isPropertySupported(XMLConstants.ACCESS_EXTERNAL_DTD))
+				factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+			if (factory.isPropertySupported(XMLConstants.ACCESS_EXTERNAL_SCHEMA))
+				factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
 			if (factory.isPropertySupported(XMLInputFactory.REPORTER) && nn(reporter))
 				factory.setProperty(XMLInputFactory.REPORTER, reporter);
 			if (factory.isPropertySupported(XMLInputFactory.RESOLVER) && nn(resolver))

@@ -209,6 +209,22 @@ public class RestRequest extends HttpServletRequestWrapper {
 	private Charset charset;
 
 	/**
+	 * Returns <jk>true</jk> if <c>method</c> is one of the methods the <c>content</c> URL-parameter body
+	 * override (see {@link org.apache.juneau.rest.annotation.Rest#disableContentParam()}) is documented to apply to.
+	 *
+	 * <p>
+	 * Restricting the override to <c>PUT</c>/<c>POST</c> prevents a plain cross-origin <c>GET</c> (which triggers
+	 * no preflight and carries no attacker-controlled header) from smuggling an attacker-chosen request body into
+	 * an endpoint that would otherwise require a body-carrying method.
+	 *
+	 * @param method The request's HTTP method. Can be <jk>null</jk> (returns <jk>false</jk>).
+	 * @return <jk>true</jk> if <c>method</c> is <c>PUT</c> or <c>POST</c>, case-insensitively.
+	 */
+	static boolean isContentParamMethod(String method) {
+		return "PUT".equalsIgnoreCase(method) || "POST".equalsIgnoreCase(method);
+	}
+
+	/**
 	 * Constructor.
 	 */
 	RestRequest(RestOpContext opContext, RestSession session) throws Exception {
@@ -227,7 +243,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		content = new RequestContent(this);
 
-		if (context.isAllowContentParam()) {
+		if (context.isAllowContentParam() && isContentParamMethod(inner.getMethod())) {
 			var b = queryParams.get("content").asString().orElse(null);
 			if (nn(b)) {
 				headers.set("Content-Type", UonSerializer.DEFAULT.getResponseContentType());

@@ -363,6 +363,15 @@ public class RestSession extends ContextSession {
 	}
 
 	/**
+	 * Returns the operation session for this request, or <jk>null</jk> if one has not been created yet.
+	 *
+	 * @return The operation session, or <jk>null</jk> if not yet created.
+	 */
+	public RestOpSession getOpSessionOrNull() {
+		return opSession;
+	}
+
+	/**
 	 * Shortcut for calling <c>getRequest().getPathInfo()</c>.
 	 *
 	 * @return The request servlet path info.

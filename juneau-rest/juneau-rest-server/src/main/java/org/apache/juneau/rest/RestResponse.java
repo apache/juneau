@@ -122,7 +122,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	private Optional<HttpPartSchema> contentSchema;
 	private Serializer serializer;
 	private Optional<SerializerMatch> serializerMatch;
-	private boolean safeHeaders;
+	private boolean safeHeaders = true;
 	private int maxHeaderLength = 8096;
 
 	/**
@@ -530,6 +530,12 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * Relative URIs are always interpreted as relative to the context root.
 	 * This is similar to how WAS handles redirect requests, and is different from how Tomcat handles redirect requests.
 	 *
+	 * <p>
+	 * This method forwards <c>uri</c> to the container as-is.  If the target is built from request input (e.g.
+	 * a query parameter or header value), a caller can steer users to an arbitrary external site; use
+	 * {@link #sendSafeRedirect(String,String...) sendSafeRedirect(String,String...)} instead in that case, which
+	 * validates the target is either relative or points at an allow-listed host.
+	 *
 	 * @param uri The redirection URL.
 	 * @throws IOException If an input or output exception occurs
 	 */
@@ -539,6 +545,55 @@ public class RestResponse extends HttpServletResponseWrapper {
 		if (c != '/' && uri.indexOf("://") == -1)
 			uri = request.getContextPath() + '/' + uri;
 		inner.sendRedirect(uri);
+	}
+
+	/**
+	 * Redirects to the specified URI, but only if it's a relative path (interpreted per {@link #sendRedirect(String)
+	 * sendRedirect(String)}) or an absolute/protocol-relative URI whose host matches one of <c>allowedHosts</c>.
+	 *
+	 * <p>
+	 * Intended for use when the redirect target is derived from request input rather than a fixed, trusted
+	 * literal, so that input can't be used to redirect a user to an arbitrary external site.
+	 *
+	 * @param uri The redirection URL.
+	 * @param allowedHosts The hosts (case-insensitive) an absolute or protocol-relative <c>uri</c> is allowed to target.  Ignored for relative URIs.
+	 * @throws IOException If an input or output exception occurs.
+	 * @throws BadRequest If <c>uri</c> is absolute or protocol-relative and its host isn't in <c>allowedHosts</c>.
+	 */
+	public void sendSafeRedirect(String uri, String...allowedHosts) throws IOException {
+		if (! isSafeRedirectUri(uri, allowedHosts))
+			throw new BadRequest("Redirect target ''{0}'' is not a relative path or an allowed host.", uri);
+		sendRedirect(uri);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if <c>uri</c> is safe to pass to {@link #sendRedirect(String) sendRedirect(String)}
+	 * without risk of redirecting to an unintended external site: either a relative path, or an absolute/
+	 * protocol-relative URI whose host is in <c>allowedHosts</c>.
+	 *
+	 * @param uri The candidate redirection URL.
+	 * @param allowedHosts The hosts (case-insensitive) an absolute or protocol-relative <c>uri</c> is allowed to target.
+	 * @return <jk>true</jk> if the URI is safe to redirect to.
+	 */
+	static boolean isSafeRedirectUri(String uri, String...allowedHosts) {
+		if (uri == null || uri.isEmpty())
+			return true;
+		if (uri.charAt(0) == '/' && ! uri.startsWith("//"))
+			return true;
+		if (uri.indexOf("://") == -1 && ! uri.startsWith("//"))
+			return true;
+		String host;
+		try {
+			host = new java.net.URI(uri.startsWith("//") ? "http:" + uri : uri).getHost();
+		} catch (java.net.URISyntaxException e) {
+			return false;
+		}
+		if (host == null || allowedHosts == null)
+			return false;
+		for (var h : allowedHosts)
+			if (host.equalsIgnoreCase(h))
+				return true;
+		return false;
 	}
 
 	/**
@@ -798,10 +853,29 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * When enabled, invalid characters such as CTRL characters will be stripped from header values
 	 * before they get set.
 	 *
+	 * <p>
+	 * This is now the default behavior; this method is retained so callers that enabled it explicitly continue
+	 * to compile.  Use {@link #setUnsafeHeaders()} to opt back out in a fully-trusted setting.
+	 *
 	 * @return This object.
 	 */
 	public RestResponse setSafeHeaders() {
 		this.safeHeaders = true;
+		return this;
+	}
+
+	/**
+	 * Disables safe-header mode.
+	 *
+	 * <p>
+	 * Safe-header mode (stripping invalid characters such as CTRL characters from header values before they are
+	 * set) is enabled by default.  This method opts back out, restoring verbatim header pass-through for the rare
+	 * case where a caller needs it in a fully-trusted setting.
+	 *
+	 * @return This object.
+	 */
+	public RestResponse setUnsafeHeaders() {
+		this.safeHeaders = false;
 		return this;
 	}
 

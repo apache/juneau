@@ -6034,6 +6034,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (connectionManager == null)
 				connectionManager = createConnectionManager();
 			httpClientBuilder().setConnectionManager(connectionManager);
+			// Prevent the default redirect executor from replaying caller-set credential headers (Authorization,
+			// Cookie, etc.) to a redirect target on a different origin or a downgraded scheme.
+			httpClientBuilder().addInterceptorLast(new RedirectCredentialGuard());
 			return httpClientBuilder().build();
 		}
 
