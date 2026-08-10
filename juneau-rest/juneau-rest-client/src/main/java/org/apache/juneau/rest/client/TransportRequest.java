@@ -42,6 +42,10 @@ import java.util.*;
  */
 public final class TransportRequest {
 
+	// Methods defined as idempotent by RFC 7231 §4.2.2 — replaying them cannot change server state beyond a
+	// single application of the request, so a transport may safely re-send them once on a fresh connection.
+	private static final Set<String> IDEMPOTENT_METHODS = Set.of("GET", "HEAD", "PUT", "DELETE", "OPTIONS", "TRACE");
+
 	private final String method;
 	private final URI uri;
 	private final List<TransportHeader> headers;
@@ -108,6 +112,32 @@ public final class TransportRequest {
 	 */
 	public TransportBody getBody() {
 		return body;
+	}
+
+	/**
+	 * Returns {@code true} if this request can be transparently re-sent once after a stale-connection failure.
+	 *
+	 * <p>
+	 * A pooled keep-alive socket can be torn down by the server between requests; when a transport then reuses
+	 * that socket the first write fails before any response is received (e.g. an early {@code EOF} or a
+	 * {@code NoHttpResponseException}).  Such a failure is safe to retry on a fresh connection <b>only</b> when
+	 * replaying the request cannot cause a duplicate side effect, which requires both of:
+	 * <ul>
+	 * 	<li>an <a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7231#section-4.2.2">idempotent</a>
+	 * 		HTTP method ({@code GET}, {@code HEAD}, {@code PUT}, {@code DELETE}, {@code OPTIONS}, {@code TRACE}) — never
+	 * 		{@code POST} or any other non-idempotent method, and
+	 * 	<li>a body that is either absent or {@link TransportBody#isRepeatable() repeatable}, so the exact same bytes
+	 * 		can be written again.
+	 * </ul>
+	 *
+	 * <p>
+	 * When in doubt this returns {@code false} — the caller must fail closed rather than risk double-executing a
+	 * request.
+	 *
+	 * @return {@code true} if the request is provably safe to replay once.
+	 */
+	public boolean isSafeToReplay() {
+		return IDEMPOTENT_METHODS.contains(method.toUpperCase(Locale.ROOT)) && (body == null || body.isRepeatable());
 	}
 
 	/**

@@ -17,7 +17,10 @@
 package org.apache.juneau.rest.client.apachehttpclient45;
 
 import java.io.*;
+import java.net.*;
+import java.util.*;
 
+import org.apache.http.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
@@ -87,11 +90,33 @@ public final class ApacheHc45Transport implements HttpTransport {
 
 	@Override /* HttpTransport */
 	public TransportResponse execute(TransportRequest request) throws TransportException {
+		try {
+			return sendOnce(request);
+		} catch (StaleConnectionException e) {
+			// A pooled keep-alive connection was torn down by the server before any response was received.
+			// Replay once on a fresh connection, but only when it is provably safe (idempotent + repeatable body).
+			if (! request.isSafeToReplay())
+				throw e.asTransportException();
+			try {
+				return sendOnce(request);
+			} catch (StaleConnectionException e2) {
+				throw e2.asTransportException();
+			}
+		}
+	}
+
+	// Performs a single HTTP exchange.  Throws StaleConnectionException (a retryable signal) when the failure is a
+	// pre-response stale-connection failure; throws TransportException for every other failure.
+	private TransportResponse sendOnce(TransportRequest request) throws TransportException, StaleConnectionException {
 		var hcRequest = buildHcRequest(request);
 		CloseableHttpResponse hcResponse;
 		try {
 			hcResponse = httpClient.execute(hcRequest);
 		} catch (IOException e) {
+			// httpClient.execute() only returns once response headers have been read, so any IOException here
+			// occurred before any response bytes were received.
+			if (isStaleConnectionFailure(e))
+				throw new StaleConnectionException(e);
 			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}
 		try {
@@ -101,6 +126,16 @@ public final class ApacheHc45Transport implements HttpTransport {
 			closeQuietly(hcResponse);
 			throw e;
 		}
+	}
+
+	// A failure is a stale-connection (pre-response) failure when the server closed the pooled connection before
+	// sending any response.  Apache HttpClient 4.5 surfaces this as a NoHttpResponseException ("failed to respond")
+	// or a connection-reset SocketException.  HttpClient 4.5's default retry handler does not retry these for
+	// entity-enclosing idempotent methods (e.g. PUT) or for POST, so the transport applies its own idempotency-safe
+	// retry here.
+	private static boolean isStaleConnectionFailure(IOException e) {
+		return e instanceof NoHttpResponseException
+			|| (e instanceof SocketException && e.getMessage() != null && e.getMessage().toLowerCase(Locale.ROOT).contains("reset"));
 	}
 
 	private static void closeQuietly(CloseableHttpResponse hcResponse) {
@@ -156,6 +191,21 @@ public final class ApacheHc45Transport implements HttpTransport {
 	// -----------------------------------------------------------------------------------------------------------------
 	// TransportBodyEntity — bridges TransportBody to Apache HttpEntity
 	// -----------------------------------------------------------------------------------------------------------------
+
+	// Internal signal that a pre-response stale-connection failure occurred and may be retried once.  Carries the
+	// original cause so the caller can build the user-visible TransportException if the retry is not attempted or
+	// also fails.
+	private static final class StaleConnectionException extends Exception {
+		private static final long serialVersionUID = 1L;
+
+		StaleConnectionException(Throwable cause) {
+			super(cause);
+		}
+
+		TransportException asTransportException() {
+			return new TransportException("HTTP transport error: " + getCause().getMessage(), getCause());
+		}
+	}
 
 	/**
 	 * Bridges a {@link TransportBody} to Apache HttpClient's {@link AbstractHttpEntity}.

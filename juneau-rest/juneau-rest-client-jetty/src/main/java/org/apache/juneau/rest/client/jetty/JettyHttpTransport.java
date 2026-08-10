@@ -19,6 +19,7 @@ package org.apache.juneau.rest.client.jetty;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
+import java.nio.channels.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.rest.client.*;
@@ -95,6 +96,24 @@ public final class JettyHttpTransport implements HttpTransport {
 
 	@Override /* HttpTransport */
 	public TransportResponse execute(TransportRequest request) throws TransportException {
+		try {
+			return sendOnce(request);
+		} catch (StaleConnectionException e) {
+			// A pooled keep-alive connection was torn down by the server before any response was received.
+			// Replay once on a fresh connection, but only when it is provably safe (idempotent + repeatable body).
+			if (! request.isSafeToReplay())
+				throw e.asTransportException();
+			try {
+				return sendOnce(request);
+			} catch (StaleConnectionException e2) {
+				throw e2.asTransportException();
+			}
+		}
+	}
+
+	// Performs a single HTTP exchange.  Throws StaleConnectionException (a retryable signal) when the failure is a
+	// pre-response stale-connection failure; throws TransportException for every other failure.
+	private TransportResponse sendOnce(TransportRequest request) throws TransportException, StaleConnectionException {
 		var jettyRequest = buildJettyRequest(request);
 		var listener = new InputStreamResponseListener();
 		jettyRequest.send(listener);
@@ -112,9 +131,20 @@ public final class JettyHttpTransport implements HttpTransport {
 			throw new TransportException("HTTP request timed out", e);
 		} catch (ExecutionException e) {
 			abortQuietly(listener);
-			throw new TransportException("HTTP transport error: " + e.getCause().getMessage(), e.getCause());
+			var cause = e.getCause();
+			if (isStaleConnectionFailure(cause))
+				throw new StaleConnectionException(cause);
+			throw new TransportException("HTTP transport error: " + cause.getMessage(), cause);
 		}
 		return buildTransportResponse(jettyResponse, listener.getInputStream());
+	}
+
+	// A failure is a stale-connection (pre-response) failure when the server closed the pooled connection before
+	// sending any response.  Jetty surfaces this as an EOFException (org.eclipse.jetty.io.EofException extends
+	// EOFException) or a ClosedChannelException.  Because listener.get() only returns once response headers have
+	// arrived, any such failure here is guaranteed to have occurred before any response bytes were read.
+	private static boolean isStaleConnectionFailure(Throwable cause) {
+		return cause instanceof EOFException || cause instanceof ClosedChannelException;
 	}
 
 	// Releases the Jetty response content when the response never reaches the caller (interrupt/timeout/error),
@@ -176,5 +206,20 @@ public final class JettyHttpTransport implements HttpTransport {
 			.closeCallback(bodyStream);
 		jettyResponse.getHeaders().forEach(field -> builder.header(field.getName(), field.getValue()));
 		return builder.build();
+	}
+
+	// Internal signal that a pre-response stale-connection failure occurred and may be retried once.  Carries the
+	// original cause so the caller can build the user-visible TransportException if the retry is not attempted or
+	// also fails.
+	private static final class StaleConnectionException extends Exception {
+		private static final long serialVersionUID = 1L;
+
+		StaleConnectionException(Throwable cause) {
+			super(cause);
+		}
+
+		TransportException asTransportException() {
+			return new TransportException("HTTP transport error: " + getCause().getMessage(), getCause());
+		}
 	}
 }
