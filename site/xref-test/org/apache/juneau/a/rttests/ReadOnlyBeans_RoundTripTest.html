@@ -26,7 +26,7 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.bean.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.params.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.params.provider.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  	@ParameterizedTest
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">void</strong> a01_basic(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">void</strong> a01_basic(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">var</strong> x1 = <strong class="jxr_keyword">new</strong> B(1, <span class="jxr_string">"a"</span>);
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">var</strong> x2 = <strong class="jxr_keyword">new</strong> B(2, <span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">var</strong> x3 = <strong class="jxr_keyword">new</strong> A(x1, x2);
@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">private</strong> B f1;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> B f2;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		@Beanc(properties=<span class="jxr_string">"f2"</span>)
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		@BeanCtor(properties=<span class="jxr_string">"f2"</span>)
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">public</strong> A(B f2) {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  			<strong class="jxr_keyword">this</strong>.f2 = f2;
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		}
@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> f1;
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String f2;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		@Beanc(properties=<span class="jxr_string">"f2"</span>)
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		@BeanCtor(properties=<span class="jxr_string">"f2"</span>)
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">public</strong> B(String sField) {
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">this</strong>.f2 = sField;
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		}

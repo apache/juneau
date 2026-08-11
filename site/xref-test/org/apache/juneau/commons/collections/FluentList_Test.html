@@ -24,15 +24,15 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.commons.collections;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.TestAssertions.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">class</strong> <a name="FluentList_Test" href="../../../../../org/apache/juneau/commons/collections/FluentList_Test.html#FluentList_Test">FluentList_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">class</strong> <a name="FluentList_Test" href="../../../../../org/apache/juneau/commons/collections/FluentList_Test.html#FluentList_Test">FluentList_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/commons/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<em class="jxr_comment">// Basic functionality - a(E element)</em>
@@ -509,37 +509,50 @@
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 		list2.add(<span class="jxr_string">"item2"</span>);
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 		list2.add(<span class="jxr_string">"item3"</span>);
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		assertTrue(list1.equals(list2));
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		assertTrue(list2.equals(list1));
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	}
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	@Test
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	<strong class="jxr_keyword">void</strong> w03_equals_differentContents_returnsFalse() {
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<strong class="jxr_keyword">var</strong> list1 = <strong class="jxr_keyword">new</strong> FluentList&lt;&gt;(<strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;());
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		list1.a(<span class="jxr_string">"item1"</span>).a(<span class="jxr_string">"item2"</span>);
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">var</strong> list2 = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		list2.add(<span class="jxr_string">"item1"</span>);
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		list2.add(<span class="jxr_string">"item3"</span>);
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		assertFalse(list1.equals(list2));
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		assertFalse(list2.equals(list1));
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	}
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	@Test
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 	<strong class="jxr_keyword">void</strong> w04_hashCode_delegatesToUnderlyingList() {
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> FluentList&lt;&gt;(<strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;());
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		list.a(<span class="jxr_string">"item1"</span>).a(<span class="jxr_string">"item2"</span>).a(<span class="jxr_string">"item3"</span>);
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<strong class="jxr_keyword">var</strong> underlyingList = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		underlyingList.add(<span class="jxr_string">"item1"</span>);
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		underlyingList.add(<span class="jxr_string">"item2"</span>);
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		underlyingList.add(<span class="jxr_string">"item3"</span>);
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		assertEquals(underlyingList.hashCode(), list.hashCode());
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	}
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> }
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		assertEquals(list1.size(), list2.size());
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		assertEquals(<strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(list1), list2);
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		assertEquals(list2, <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(list1));
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	}
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	@Test
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	<strong class="jxr_keyword">void</strong> w03_equals_differentContents_returnsFalse() {
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">var</strong> list1 = <strong class="jxr_keyword">new</strong> FluentList&lt;&gt;(<strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;());
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		list1.a(<span class="jxr_string">"item1"</span>).a(<span class="jxr_string">"item2"</span>);
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		<strong class="jxr_keyword">var</strong> list2 = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		list2.add(<span class="jxr_string">"item1"</span>);
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		list2.add(<span class="jxr_string">"item3"</span>);
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		assertNotEquals(list1, list2);
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		assertNotEquals(list2, list1);
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	}
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 	@Test
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	<strong class="jxr_keyword">void</strong> w04_hashCode_delegatesToUnderlyingList() {
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> FluentList&lt;&gt;(<strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;());
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		list.a(<span class="jxr_string">"item1"</span>).a(<span class="jxr_string">"item2"</span>).a(<span class="jxr_string">"item3"</span>);
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">var</strong> underlyingList = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		underlyingList.add(<span class="jxr_string">"item1"</span>);
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		underlyingList.add(<span class="jxr_string">"item2"</span>);
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		underlyingList.add(<span class="jxr_string">"item3"</span>);
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		assertEquals(underlyingList.hashCode(), list.hashCode());
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 	}
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 	@Test
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 	<strong class="jxr_keyword">void</strong> z01_listIterator_withIndex() {
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> FluentList&lt;&gt;(<strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;());
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		list.add(<span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		list.add(<span class="jxr_string">"b"</span>);
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		list.add(<span class="jxr_string">"c"</span>);
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">var</strong> it = list.listIterator(1);
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		assertTrue(it.hasNext());
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		assertEquals(<span class="jxr_string">"b"</span>, it.next());
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	}
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> }
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

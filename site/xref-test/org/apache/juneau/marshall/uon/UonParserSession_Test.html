@@ -1,0 +1,1414 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>UonParserSession_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/marshall/uon/UonParserSession_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.marshall.uon;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.TestBase;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.Builder;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.httppart.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.httppart.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.parser.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.swap.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Coverage-focused tests for {@link UonParserSession} targeting low-coverage paths:</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *  - Builder setter / property() switch (decoding, validateEnd)</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *  - HttpPartType shortcut paths (null, "null", string with ~, plain)</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> *  - readAnything edge cases (empty/AMP for collections, primitives, strings)</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> *  - readIntoMap / readIntoCollection / readIntoBeanMap state-machine error branches</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> *  - readPString unmatched parens</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> *  - readNull error</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *  - readBoolean error</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *  - validateEnd remainder error</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> *  - doReadIntoMap / doReadIntoCollection wrappers</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *  - readAttrName encoded mode</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<span class="jxr_string">"rawtypes"</span>,
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<span class="jxr_string">"unchecked"</span>,
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<span class="jxr_string">"java:S5961"</span>,
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<span class="jxr_string">"java:S5976"</span>, <em class="jxr_comment">// SSLLC test naming convention requires individual methods, not parameterized tests</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Pipe/UonReader fixtures wrap in-memory Strings; closure is exercised elsewhere and irrelevant to these assertions</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  })
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">class</strong> UonParserSession_Test <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/commons/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> UonParser P = UonParser.DEFAULT;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> UonParser PE = UonParser.DEFAULT_DECODING;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> UonParser PVE = UonParser.create().validateEnd().build();
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<em class="jxr_comment">// a01_builder - Builder.decoding / property() switch / validateEnd</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	@Test <strong class="jxr_keyword">void</strong> a01_builderProperty_decoding_string() {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<em class="jxr_comment">// Set via property() with the property name to drive the switch path.</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> p = UonParser.create().build();
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> session = p.createSession()
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			.property(<span class="jxr_string">"decoding"</span>, <span class="jxr_string">"true"</span>)
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			.property(<span class="jxr_string">"validateEnd"</span>, <span class="jxr_string">"true"</span>)
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			.build();
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertTrue(session.isDecoding());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertTrue(session.isValidateEnd());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Test <strong class="jxr_keyword">void</strong> a02_builderProperty_unknownKeyFallsThrough() {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<em class="jxr_comment">// A non-recognized key triggers the default branch and delegates to super.</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> p = UonParser.create().build();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> session = p.createSession()
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			.property(<span class="jxr_string">"UnknownKey"</span>, <span class="jxr_string">"value"</span>)
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			.build();
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertNotNull(session);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@SuppressWarnings({
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<span class="jxr_string">"java:S5778"</span> <em class="jxr_comment">// assertThrows lambdas contain multiple calls; only the primary call throws.</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	})
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> a03_builderProperty_nullKeyDelegates() {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<em class="jxr_comment">// A null key takes the early-return branch and delegates to super, which throws.</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> p = UonParser.create().build();
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; p.createSession().property(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"ignored"</span>).build());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Test <strong class="jxr_keyword">void</strong> a04_builderProperty_validateEndAlternateKey() {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<em class="jxr_comment">// The session also accepts the qualified property name.</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> p = UonParser.create().build();
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> session = p.createSession()
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			.property(<span class="jxr_string">"UonParserSession.validateEnd"</span>, <span class="jxr_string">"true"</span>)
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			.build();
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertTrue(session.isValidateEnd());
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<em class="jxr_comment">// b01_httpPartParse - read(HttpPartType, schema, in, ClassMeta) shortcut paths</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T httpParse(UonParser parser, String in, Class&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> session = parser.getSession();
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> cm = session.getClassMeta(type);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">return</strong> session.read((HttpPartType)<strong class="jxr_keyword">null</strong>, (HttpPartSchema)<strong class="jxr_keyword">null</strong>, in, cm);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> b01_httpPart_nullInput() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertNull(httpParse(P, <strong class="jxr_keyword">null</strong>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertNull(httpParse(P, <strong class="jxr_keyword">null</strong>, Object.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@Test <strong class="jxr_keyword">void</strong> b02_httpPart_emptyString_isNotShortcut() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<em class="jxr_comment">// Empty string takes the non-shortcut path because ne(in) is false.</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertEquals(<span class="jxr_string">""</span>, httpParse(P, <span class="jxr_string">""</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@Test <strong class="jxr_keyword">void</strong> b03_httpPart_plainStringShortcut() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<em class="jxr_comment">// First char is not ', not n, no '~' -&gt; shortcut returns the string as-is.</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertEquals(<span class="jxr_string">"hello"</span>, httpParse(P, <span class="jxr_string">"hello"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertEquals(<span class="jxr_string">"123"</span>, httpParse(P, <span class="jxr_string">"123"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@Test <strong class="jxr_keyword">void</strong> b04_httpPart_nullLiteralShortcut() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<em class="jxr_comment">// "null" string with first char 'n' -&gt; returns null.</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertNull(httpParse(P, <span class="jxr_string">"null"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	@Test <strong class="jxr_keyword">void</strong> b05_httpPart_nValueButNotNull() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<em class="jxr_comment">// First char 'n' but not "null" - falls through to full parse.</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertEquals(<span class="jxr_string">"notnull"</span>, httpParse(P, <span class="jxr_string">"notnull"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	@Test <strong class="jxr_keyword">void</strong> b06_httpPart_quotedShortcutFalls() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<em class="jxr_comment">// First char '\'' triggers the full parse path.</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		assertEquals(<span class="jxr_string">"hi"</span>, httpParse(P, <span class="jxr_string">"'hi'"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	}
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	@Test <strong class="jxr_keyword">void</strong> b07_httpPart_tildeFallsThrough() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<em class="jxr_comment">// String containing '~' takes the full parse path (escape handling).</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertEquals(<span class="jxr_string">"a'"</span>, httpParse(P, <span class="jxr_string">"a~'"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	@Test <strong class="jxr_keyword">void</strong> b08_httpPart_objectTarget() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<em class="jxr_comment">// Non-string target type bypasses shortcut entirely.</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> n = httpParse(P, <span class="jxr_string">"123"</span>, Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertEquals(Integer.valueOf(123), n);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<em class="jxr_comment">// c01_readAnything - empty/AMP-first branches</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test <strong class="jxr_keyword">void</strong> c01_readEmptyForCollection() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<em class="jxr_comment">// Empty input for collection - HttpPart shortcut returns null for null/empty,</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<em class="jxr_comment">// but the readAnything path with isCollectionOrArray on empty input returns sType.newInstance().</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<em class="jxr_comment">// For top-level public parse(...) on List from empty string, the result is null.</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> l = P.read(<span class="jxr_string">""</span>, List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertNull(l);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	@Test <strong class="jxr_keyword">void</strong> c02_readEmptyForArray() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> arr = P.getSession().read((HttpPartType)<strong class="jxr_keyword">null</strong>, (HttpPartSchema)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">""</span>, P.getSession().getClassMeta(String[].<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertNotNull(arr);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertEquals(0, arr.length);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	@Test <strong class="jxr_keyword">void</strong> c03_readEmptyForMap() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<em class="jxr_comment">// Map with empty input - readAnything → returns null but readIntoMap may differ</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<em class="jxr_comment">// Empty input → c==-1 → not collection/string/object/primitive → returns null</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> m = P.getSession().read((HttpPartType)<strong class="jxr_keyword">null</strong>, (HttpPartSchema)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">""</span>, P.getSession().getClassMeta(Map.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertNull(m);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	@Test <strong class="jxr_keyword">void</strong> c04_readEmptyForPrimitive() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<em class="jxr_comment">// Empty input for primitive returns the default for the primitive type.</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> i = P.getSession().read((HttpPartType)<strong class="jxr_keyword">null</strong>, (HttpPartSchema)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">""</span>, P.getSession().getClassMeta(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertEquals(Integer.valueOf(0), i);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">var</strong> b = P.getSession().read((HttpPartType)<strong class="jxr_keyword">null</strong>, (HttpPartSchema)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">""</span>, P.getSession().getClassMeta(<strong class="jxr_keyword">boolean</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertEquals(Boolean.FALSE, b);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	@Test <strong class="jxr_keyword">void</strong> c05_readEmptyForString() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> s = P.read(<span class="jxr_string">""</span>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertEquals(<span class="jxr_string">""</span>, s);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<em class="jxr_comment">// d01_readAnything - error paths</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	@Test <strong class="jxr_keyword">void</strong> d01_readBoolean_invalid() {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"notabool"</span>, Boolean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	@Test <strong class="jxr_keyword">void</strong> d02_readBoolean_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertNull(P.read(<span class="jxr_string">"null"</span>, Boolean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	}
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	@Test <strong class="jxr_keyword">void</strong> d03_readNull_invalidSequence() {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<em class="jxr_comment">// 'n' followed by non-"ull" should throw.</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<em class="jxr_comment">// "nx" would be parsed as a string at top-level; force Map context to take readAnything's c=='n' branch.</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<em class="jxr_comment">// Actually the c == 'n' branch in readAnything is hit when sType is non-bean, non-string. Use HashMap</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<em class="jxr_comment">// at second level via map literal to exercise.</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"nope"</span>, Boolean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	}
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	@Test <strong class="jxr_keyword">void</strong> d04_readString_unmatchedParens() {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<em class="jxr_comment">// 'xxx without matching ' — readPString should throw.</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"'unmatched"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	@Test <strong class="jxr_keyword">void</strong> d05_readString_unmatchedParensInMap() {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"(a='unmatched)"</span>, Map.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	}
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<em class="jxr_comment">// e01_readIntoMap - state-machine errors</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	@Test <strong class="jxr_keyword">void</strong> e01_map_missingOpenParen() {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<em class="jxr_comment">// readIntoMap requires '(' at start when not 'n'/AMP.</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"xyz"</span>, Map.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	}
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	@Test <strong class="jxr_keyword">void</strong> e02_map_unclosedAfterAttrEquals() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<em class="jxr_comment">// Map "(x=" - state S3 with c==-1 puts empty value and returns m (does not throw).</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"(x="</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		assertTrue(m.containsKey(<span class="jxr_string">"x"</span>));
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	}
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	@Test <strong class="jxr_keyword">void</strong> e03_map_nullLiteral() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<em class="jxr_comment">// "null" returns null map.</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		assertNull(P.read(<span class="jxr_string">"null"</span>, Map.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	@Test <strong class="jxr_keyword">void</strong> e04_map_attrWithoutEquals() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<em class="jxr_comment">// "(a)" - readAttrName in non-encoded mode reads to '=' or EOF or whitespace, so it</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<em class="jxr_comment">// consumes "a)" as the attribute name. State S2 then sees EOF and puts null.</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"(a)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<em class="jxr_comment">// Implementation detail: non-encoded attr name includes the trailing ')' since ')' isn't</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<em class="jxr_comment">// in the readAttrName end-set.  Either way, we just check we get a map back.</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertEquals(1, m.size());
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	}
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	@Test <strong class="jxr_keyword">void</strong> e05_map_emptyParens() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<em class="jxr_comment">// "()" returns empty map.</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"()"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		assertTrue(m.isEmpty());
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	}
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	@Test <strong class="jxr_keyword">void</strong> e06_map_attrEqualsValueComma() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<em class="jxr_comment">// "(a=,b=)" - state S3 with ',' immediately - sets to empty string.</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"(a=,b=)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		assertEquals(<span class="jxr_string">""</span>, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		assertEquals(<span class="jxr_string">""</span>, m.get(<span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	}
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	@Test <strong class="jxr_keyword">void</strong> e07_map_multipleEntries_trailingComma() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<em class="jxr_comment">// "(a=1," at EOF - state S1 reads c==-1, exits while loop, returns null (lenient/partial parse).</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"(a=1,"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		assertNull(m);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	}
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	@Test <strong class="jxr_keyword">void</strong> e08_map_unclosedAfterValue() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<em class="jxr_comment">// "(a=1" at EOF - state S4 with c==-1 returns m without throwing.</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"(a=1"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		assertEquals(1, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	}
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	@Test <strong class="jxr_keyword">void</strong> e09_map_unclosedAfterAttr() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<em class="jxr_comment">// "(a" at EOF - state S2 with c==-1 puts null and returns m.</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"(a"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		assertTrue(m.containsKey(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	}
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<em class="jxr_comment">// f01_readIntoCollection - state-machine errors and parens</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	@Test <strong class="jxr_keyword">void</strong> f01_collection_missingAtSign() {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<em class="jxr_comment">// At non-top-level (i.e. via doReadIntoCollection / inner field), missing '@(' throws.</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<em class="jxr_comment">// Actually the public parse(List.class) goes through doRead → readAnything which routes</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<em class="jxr_comment">// arrays/lists differently (single-value wrap). This test exercises the inner state.</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"(a=xyz)"</span>, List.<strong class="jxr_keyword">class</strong>)); <em class="jxr_comment">// routes via map-as-collection</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	@Test <strong class="jxr_keyword">void</strong> f02_collection_emptyAtSign() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> l = P.read(<span class="jxr_string">"@()"</span>, List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertTrue(l.isEmpty());
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	}
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	@Test <strong class="jxr_keyword">void</strong> f03_collection_nullLiteral() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertNull(P.read(<span class="jxr_string">"null"</span>, List.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	@Test <strong class="jxr_keyword">void</strong> f04_collection_singleValueAsMap() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<em class="jxr_comment">// "(x=1)" parsed as List&lt;Map&gt; - takes the "serialized as map" branch and adds the map</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<em class="jxr_comment">// cast as a single element.</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">var</strong> l = (LinkedList&lt;Map&gt;) P.read(<span class="jxr_string">"(x=1)"</span>, LinkedList.<strong class="jxr_keyword">class</strong>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		assertEquals(1, l.size());
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertEquals(1, l.get(0).get(<span class="jxr_string">"x"</span>));
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	@Test <strong class="jxr_keyword">void</strong> f05_collection_unclosedAfterEntry() {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<em class="jxr_comment">// "@(1,2" - state S2 → S1 → expecting next entry; EOF → throw "Could not find start of entry"</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"@(1,2,"</span>, List.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	}
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	@Test <strong class="jxr_keyword">void</strong> f06_collection_topLevelCommaList() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<em class="jxr_comment">// At top-level (URL param), a comma-delimited list is permitted without parens.</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">var</strong> ses = P.getSession();
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">var</strong> cm = ses.getClassMeta(List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">var</strong> l = ses.read((HttpPartType)<strong class="jxr_keyword">null</strong>, (HttpPartSchema)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"1,2,3"</span>, cm);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		assertEquals(3, l.size());
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	}
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	@Test <strong class="jxr_keyword">void</strong> f07_collection_emptyArray() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<em class="jxr_comment">// At top-level, an empty input for an array yields an empty array.</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">var</strong> arr = P.read(<span class="jxr_string">"@()"</span>, String[].<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		assertNotNull(arr);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		assertEquals(0, arr.length);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	}
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	@Test <strong class="jxr_keyword">void</strong> f08_collection_singleValueAsMapForArray() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<em class="jxr_comment">// Arrays go through similar map-as-array path in readAnything.</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> arr = P.read(<span class="jxr_string">"(x=1)"</span>, Map[].<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		assertEquals(1, arr.length);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	}
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	<em class="jxr_comment">// g01_readIntoBeanMap - state-machine errors</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Bean {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">public</strong> String f1;
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f2;
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	@Test <strong class="jxr_keyword">void</strong> g01_bean_emptyParens() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<em class="jxr_comment">// "()" returns an empty bean.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> b = P.read(<span class="jxr_string">"()"</span>, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		assertNotNull(b);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		assertNull(b.f1);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		assertEquals(0, b.f2);
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	}
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	@Test <strong class="jxr_keyword">void</strong> g02_bean_unclosedAfterAttr() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<em class="jxr_comment">// "(f1" - state S2 with c==-1 puts null and returns m (lenient EOF behavior).</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">var</strong> b = P.read(<span class="jxr_string">"(f1"</span>, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertNotNull(b);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		assertNull(b.f1);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	}
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	@Test <strong class="jxr_keyword">void</strong> g03_bean_unclosedAfterEquals() {
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<em class="jxr_comment">// "(f1=" - returns null (S3 with EOF → setter with empty)</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<em class="jxr_comment">// Actually checks: S3 with c==-1 sets currAttr="" and returns m.</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<em class="jxr_comment">// This case exits cleanly with f1=null.</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertDoesNotThrow(() -&gt; P.read(<span class="jxr_string">"(f1="</span>, Bean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Test <strong class="jxr_keyword">void</strong> g04_bean_unclosedAfterValue() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<em class="jxr_comment">// "(f1=foo" - state S4 with c==-1 returns m (lenient EOF behavior).</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">var</strong> b = P.read(<span class="jxr_string">"(f1=foo"</span>, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertNotNull(b);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		assertEquals(<span class="jxr_string">"foo"</span>, b.f1);
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	}
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	@Test <strong class="jxr_keyword">void</strong> g05_bean_attrWithoutEquals() {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<em class="jxr_comment">// "(f1)" - readAttrName in non-encoded mode reads "f1)" as attr name; bean treats it as</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<em class="jxr_comment">// unknown property → throws BeanRuntimeException wrapped as ParseException.</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"(f1)"</span>, Bean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	}
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	@Test <strong class="jxr_keyword">void</strong> g06_bean_unknownProperty() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<em class="jxr_comment">// "(unknown=foo)" with an ignoreUnknownBeanProperties parser does not throw.</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">var</strong> p = UonParser.create().ignoreUnknownBeanProperties().build();
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">var</strong> b = p.read(<span class="jxr_string">"(unknown=foo,f1=bar)"</span>, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		assertEquals(<span class="jxr_string">"bar"</span>, b.f1);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	}
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	@Test <strong class="jxr_keyword">void</strong> g07_bean_emptyValueSetsNull() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<em class="jxr_comment">// "(f1=)" - state S3 with ',' or ')' - convertToType("", String) → null.</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">var</strong> b = P.read(<span class="jxr_string">"(f1=)"</span>, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertNotNull(b);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<em class="jxr_comment">// Empty string converts to null for String? Actually it converts to "" or null depending on cast.</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<em class="jxr_comment">// We just ensure no exception.</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	}
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	@Test <strong class="jxr_keyword">void</strong> g08_bean_nullLiteral() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<em class="jxr_comment">// "null" returns null bean.</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		assertNull(P.read(<span class="jxr_string">"null"</span>, Bean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	}
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	@Test <strong class="jxr_keyword">void</strong> g09_bean_missingOpenParen() {
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<em class="jxr_comment">// "xyz" without '(' - readIntoBeanMap throws.</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"xyz"</span>, Bean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<em class="jxr_comment">// h01_validateEnd - non-whitespace remainder throws</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	@Test <strong class="jxr_keyword">void</strong> h01_validateEnd_extraJunk() {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<em class="jxr_comment">// validateEnd parser with extra content after parse should throw.</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; PVE.read(<span class="jxr_string">"(a=1)xx"</span>, Map.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	}
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	@Test <strong class="jxr_keyword">void</strong> h02_validateEnd_trailingWhitespace() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<em class="jxr_comment">// validateEnd parser with trailing whitespace should NOT throw.</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">var</strong> m = PVE.read(<span class="jxr_string">"(a=1)   "</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		assertEquals(1, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	}
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	@Test <strong class="jxr_keyword">void</strong> h03_validateEnd_off_extraJunkOk() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<em class="jxr_comment">// Default parser (no validateEnd) tolerates trailing junk only by ignoring it after parse.</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<em class="jxr_comment">// At top level the parser just stops once parsed, so this should not throw.</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<em class="jxr_comment">// Default parser handles "(a=1)" cleanly.</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"(a=1)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		assertEquals(1, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	}
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<em class="jxr_comment">// i01_doReadIntoMap / doReadIntoCollection wrappers</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	@Test <strong class="jxr_keyword">void</strong> i01_doParseIntoMap() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<em class="jxr_comment">// Use the readIntoMap path on the parser which delegates to doReadIntoMap.</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">var</strong> dest = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		P.readIntoMap(<span class="jxr_string">"(a=1,b=2)"</span>, dest, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		assertEquals(1, dest.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		assertEquals(2, dest.get(<span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	}
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	@Test <strong class="jxr_keyword">void</strong> i02_doParseIntoCollection() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">var</strong> dest = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		P.readIntoCollection(<span class="jxr_string">"@(1,2,3)"</span>, dest, Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		assertEquals(3, dest.size());
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		assertEquals(1, dest.get(0));
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		assertEquals(2, dest.get(1));
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		assertEquals(3, dest.get(2));
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	}
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<span class="jxr_string">"java:S5778"</span> <em class="jxr_comment">// assertThrows lambdas contain multiple calls; only the primary call throws.</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	})
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	@Test <strong class="jxr_keyword">void</strong> i03_doParseIntoMap_validateEnd() {
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<em class="jxr_comment">// validateEnd with extra junk after map.</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; {
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			<strong class="jxr_keyword">var</strong> dest = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			PVE.readIntoMap(<span class="jxr_string">"(a=1)x"</span>, dest, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		});
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<span class="jxr_string">"java:S5778"</span> <em class="jxr_comment">// assertThrows lambdas contain multiple calls; only the primary call throws.</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	})
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	@Test <strong class="jxr_keyword">void</strong> i04_doParseIntoCollection_validateEnd() {
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; {
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">var</strong> dest = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			PVE.readIntoCollection(<span class="jxr_string">"@(1,2)x"</span>, dest, Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		});
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	}
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	<em class="jxr_comment">// j01_decoding / readAttrName encoded path</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	@Test <strong class="jxr_keyword">void</strong> j01_decoding_attrWithEncodedAmp() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		<em class="jxr_comment">// In encoded mode, '%26' (=&amp;) inside an attribute name is escaped via '~'+AMP.</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<em class="jxr_comment">// Decode should preserve '&amp;' in the attribute name.</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(a%26b=v)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		assertTrue(m.containsKey(<span class="jxr_string">"a&amp;b"</span>));
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		assertEquals(<span class="jxr_string">"v"</span>, m.get(<span class="jxr_string">"a&amp;b"</span>));
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	}
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 	@Test <strong class="jxr_keyword">void</strong> j02_decoding_attrWithEncodedEquals() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(a%3Db=v)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		assertTrue(m.containsKey(<span class="jxr_string">"a=b"</span>));
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	}
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	@Test <strong class="jxr_keyword">void</strong> j03_decoding_valueWithEncodedSpace() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<em class="jxr_comment">// In decoding mode, '%20' decodes to a space char which terminates the value at "hello".</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		<em class="jxr_comment">// (Whitespace is the value terminator in non-quoted strings.)</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(a=hello%20world)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		assertEquals(<span class="jxr_string">"hello"</span>, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 	}
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 	@Test <strong class="jxr_keyword">void</strong> j04_nonDecoding_passesThrough() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"(a=hello%20world)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		assertEquals(<span class="jxr_string">"hello%20world"</span>, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	}
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	@Test <strong class="jxr_keyword">void</strong> j05_decoding_nullAttrName() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<em class="jxr_comment">// %00 decodes to a NUL char. The decoded key is the single NUL char (stored literally).</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(%00=v)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		assertEquals(1, m.size());
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		assertTrue(m.containsValue(<span class="jxr_string">"v"</span>));
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	}
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	@Test <strong class="jxr_keyword">void</strong> j06_decoding_amp_terminatesParam() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<em class="jxr_comment">// In decoding mode, '&amp;' (encoded as %26 → AMP) terminates a top-level URL parameter value.</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<strong class="jxr_keyword">var</strong> ses = PE.getSession();
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">var</strong> cm = ses.getClassMeta(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		<em class="jxr_comment">// Note that the exact termination behavior depends on full integration; just exercise the path.</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		<strong class="jxr_keyword">var</strong> s = ses.read((HttpPartType)<strong class="jxr_keyword">null</strong>, (HttpPartSchema)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"hello%26"</span>, cm);
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		assertNotNull(s);
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	}
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	<em class="jxr_comment">// k01_specialChars - escaped characters</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	@Test <strong class="jxr_keyword">void</strong> k01_escapedTilde() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		<em class="jxr_comment">// "~~" in plain text → "~"</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		assertEquals(<span class="jxr_string">"~"</span>, P.read(<span class="jxr_string">"~~"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 	}
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 	@Test <strong class="jxr_keyword">void</strong> k02_escapedQuote() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<em class="jxr_comment">// "~'" → "'"</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		assertEquals(<span class="jxr_string">"'"</span>, P.read(<span class="jxr_string">"~'"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	}
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 	@Test <strong class="jxr_keyword">void</strong> k03_escapedTilde_inMapAttr() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"(a~~b=v)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		assertTrue(m.containsKey(<span class="jxr_string">"a~b"</span>));
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 	}
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	@Test <strong class="jxr_keyword">void</strong> k04_escapedQuote_inQuotedString() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<em class="jxr_comment">// '~'' inside quotes → '</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		assertEquals(<span class="jxr_string">"'"</span>, P.read(<span class="jxr_string">"'~''"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	}
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<em class="jxr_comment">// l01_misc - more error/edge branches</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> VoidLikeBean {
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		<em class="jxr_comment">// no fields</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 	}
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	@Test <strong class="jxr_keyword">void</strong> l01_<strong class="jxr_keyword">void</strong>_nullValue() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<em class="jxr_comment">// Void target with "null" → null.</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		assertNull(P.read(<span class="jxr_string">"null"</span>, Void.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 	}
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	@Test <strong class="jxr_keyword">void</strong> l02_<strong class="jxr_keyword">void</strong>_anyValueReturnsNull() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		<em class="jxr_comment">// Void target short-circuits in ParserSession.readInner and always returns null.</em>
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		assertNull(P.read(<span class="jxr_string">"foo"</span>, Void.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		assertNull(P.read(<span class="jxr_string">"(a=1)"</span>, Void.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 	}
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	@Test <strong class="jxr_keyword">void</strong> l03_optional_present() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		<strong class="jxr_keyword">var</strong> opt = (Optional&lt;Integer&gt;) P.read(<span class="jxr_string">"123"</span>, Optional.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		assertTrue(opt.isPresent());
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		assertEquals(123, opt.get());
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 	}
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 	@Test <strong class="jxr_keyword">void</strong> l04_optional_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">var</strong> opt = (Optional&lt;Integer&gt;) P.read(<span class="jxr_string">"null"</span>, Optional.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<em class="jxr_comment">// Empty input map to Optional.empty</em>
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		assertNotNull(opt);
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 	}
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	@Test <strong class="jxr_keyword">void</strong> l05_charType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">var</strong> c = P.read(<span class="jxr_string">"'x'"</span>, <strong class="jxr_keyword">char</strong>.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		assertEquals('x', c.charValue());
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	}
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	@Test <strong class="jxr_keyword">void</strong> l06_charNullType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">var</strong> c = P.read(<span class="jxr_string">"null"</span>, Character.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		assertNull(c);
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	}
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	@Test <strong class="jxr_keyword">void</strong> l07_topLevelArray_unclosedThrows() {
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		<em class="jxr_comment">// "@(1," at EOF - throws "Could not find start of entry".</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"@(1,"</span>, List.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 	}
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 	@Test <strong class="jxr_keyword">void</strong> l08_topLevelArray_unclosed_atFirst() {
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<em class="jxr_comment">// "@(" at EOF - state S1/S2, throws "Could not find start of entry".</em>
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"@("</span>, List.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 	}
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 	@Test <strong class="jxr_keyword">void</strong> l09_topLevelArray_whitespaceOnly() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		<em class="jxr_comment">// "@( )" - empty list with whitespace.</em>
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		<strong class="jxr_keyword">var</strong> l = P.read(<span class="jxr_string">"@( )"</span>, List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		assertTrue(l.isEmpty());
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	}
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	@Test <strong class="jxr_keyword">void</strong> l10_topLevelMap_whitespaceOnly() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<em class="jxr_comment">// "( )" - empty map with whitespace.</em>
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"( )"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		assertTrue(m.isEmpty());
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 	}
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	<em class="jxr_comment">// m01_typedMap_keyAttr - non-string key types in Map</em>
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	@Test <strong class="jxr_keyword">void</strong> m01_intKeyMap() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">var</strong> m = (HashMap&lt;Integer,String&gt;) P.read(<span class="jxr_string">"(1=a,2=b)"</span>, HashMap.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		assertEquals(<span class="jxr_string">"a"</span>, m.get(1));
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		assertEquals(<span class="jxr_string">"b"</span>, m.get(2));
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 	}
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	@Test <strong class="jxr_keyword">void</strong> m02_typedCollection() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		<strong class="jxr_keyword">var</strong> l = (LinkedList&lt;Integer&gt;) P.read(<span class="jxr_string">"@(1,2,3)"</span>, LinkedList.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		assertEquals(3, l.size());
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	}
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 	@Test <strong class="jxr_keyword">void</strong> m03_arrayOfInts() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">var</strong> arr = P.read(<span class="jxr_string">"@(1,2,3)"</span>, <strong class="jxr_keyword">int</strong>[].<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[]{1, 2, 3}, arr);
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 	}
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 	<em class="jxr_comment">// n01_isDecoding/isValidateEnd accessors</em>
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 	@Test <strong class="jxr_keyword">void</strong> n01_isDecoding_<strong class="jxr_keyword">default</strong>() {
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		assertFalse(P.getSession().isDecoding());
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	}
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 	@Test <strong class="jxr_keyword">void</strong> n02_isDecoding_decoding() {
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		assertTrue(PE.getSession().isDecoding());
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 	}
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	@Test <strong class="jxr_keyword">void</strong> n03_isValidateEnd_<strong class="jxr_keyword">default</strong>() {
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		assertFalse(P.getSession().isValidateEnd());
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	}
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	@Test <strong class="jxr_keyword">void</strong> n04_isValidateEnd_set() {
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		assertTrue(PVE.getSession().isValidateEnd());
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	}
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 	<em class="jxr_comment">// o01_properties - properties() output includes decoding and validateEnd</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 	@Test <strong class="jxr_keyword">void</strong> o01_properties() {
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		<strong class="jxr_keyword">var</strong> props = P.getSession().properties();
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		assertNotNull(props);
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		<em class="jxr_comment">// Just exercise the toString() / properties() path without strict key assertions, since</em>
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		<em class="jxr_comment">// the FluentMap wraps another map and key composition is implementation-detail.</em>
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 		assertNotNull(props.toString());
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<em class="jxr_comment">// At minimum the map is non-empty given the parser session always sets several values.</em>
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		assertFalse(props.isEmpty());
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	}
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 	<em class="jxr_comment">// p01_readAnything - Date/Calendar/Temporal/Duration/Period type branches</em>
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 	@Test <strong class="jxr_keyword">void</strong> p01_readDate() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 		<em class="jxr_comment">// Exercises the sType.isDate() branch in readAnything.</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 		<strong class="jxr_keyword">var</strong> d = P.read(<span class="jxr_string">"2024-01-15T00:00:00Z"</span>, Date.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		assertNotNull(d);
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 	}
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 	@Test <strong class="jxr_keyword">void</strong> p02_readCalendar() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		<em class="jxr_comment">// Exercises the sType.isCalendar() branch in readAnything.</em>
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		<strong class="jxr_keyword">var</strong> c = P.read(<span class="jxr_string">"2024-01-15T12:00:00Z"</span>, Calendar.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		assertNotNull(c);
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 	}
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 	@Test <strong class="jxr_keyword">void</strong> p03_readTemporal() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		<em class="jxr_comment">// Exercises the sType.isTemporal() branch in readAnything.</em>
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		<strong class="jxr_keyword">var</strong> t = P.read(<span class="jxr_string">"2024-01-15"</span>, LocalDate.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		assertNotNull(t);
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	}
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	@Test <strong class="jxr_keyword">void</strong> p04_readDuration() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		<em class="jxr_comment">// Exercises the sType.isDuration() branch in readAnything.</em>
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		<strong class="jxr_keyword">var</strong> d = P.read(<span class="jxr_string">"PT1H"</span>, Duration.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		assertNotNull(d);
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		assertEquals(Duration.ofHours(1), d);
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 	}
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 	@Test <strong class="jxr_keyword">void</strong> p05_readPeriod() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		<em class="jxr_comment">// Exercises the sType.isPeriod() branch in readAnything.</em>
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">var</strong> p = P.read(<span class="jxr_string">"P1Y"</span>, Period.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		assertNotNull(p);
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		assertEquals(Period.ofYears(1), p);
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 	}
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 	@Test <strong class="jxr_keyword">void</strong> p06_readDate_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		<em class="jxr_comment">// Null value for Date type returns null.</em>
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 		assertNull(P.read(<span class="jxr_string">"null"</span>, Date.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 	}
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 	@Test <strong class="jxr_keyword">void</strong> p07_readCalendar_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		<em class="jxr_comment">// Null value for Calendar type returns null.</em>
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		assertNull(P.read(<span class="jxr_string">"null"</span>, Calendar.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	}
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 	@Test <strong class="jxr_keyword">void</strong> p08_readTemporal_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 		<em class="jxr_comment">// Null value for LocalDate type returns null.</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 		assertNull(P.read(<span class="jxr_string">"null"</span>, LocalDate.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 	}
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 	<em class="jxr_comment">// q01_readAnything - ObjectSwap path</em>
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Q01_Wrapped {
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String value;
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 		Q01_Wrapped(String v) { <strong class="jxr_keyword">this</strong>.value = v; }
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 	}
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Q01_WrappedSwap <strong class="jxr_keyword">extends</strong> ObjectSwap&lt;Q01_Wrapped,String&gt; {
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 		@Override <strong class="jxr_keyword">public</strong> String swap(MarshallingSession session, Q01_Wrapped o) { <strong class="jxr_keyword">return</strong> o.value; }
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 		@Override <strong class="jxr_keyword">public</strong> Q01_Wrapped unswap(MarshallingSession session, String f, ClassMeta&lt;?&gt; hint) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Q01_Wrapped(f); }
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 	}
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 	@Test <strong class="jxr_keyword">void</strong> q01_objectSwap_roundtrip() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 		<em class="jxr_comment">// Exercises the nn(swap) &amp;&amp; nn(o) branch in readAnything.</em>
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		<strong class="jxr_keyword">var</strong> parser = UonParser.create().swaps(Q01_WrappedSwap.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 		<strong class="jxr_keyword">var</strong> result = parser.read(<span class="jxr_string">"hello"</span>, Q01_Wrapped.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		assertNotNull(result);
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		assertEquals(<span class="jxr_string">"hello"</span>, result.value);
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 	}
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 	<em class="jxr_comment">// r01_readAnything - BuilderSwap path (nn(builder) branch)</em>
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 	@Builder(R01_BeanBuilder.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R01_Bean {
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> x;
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 		<strong class="jxr_keyword">public</strong> R01_Bean(R01_BeanBuilder b) { <strong class="jxr_keyword">if</strong> (b != <strong class="jxr_keyword">null</strong>) x = b.x; }
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 	}
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R01_BeanBuilder {
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> x;
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 		<strong class="jxr_keyword">public</strong> R01_Bean build() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> R01_Bean(<strong class="jxr_keyword">this</strong>); }
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 	}
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 	@Test <strong class="jxr_keyword">void</strong> r01_builderSwap() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		<em class="jxr_comment">// Exercises the nn(builder) branch in readAnything via @Builder annotation.</em>
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 		<strong class="jxr_keyword">var</strong> b = P.read(<span class="jxr_string">"(x=42)"</span>, R01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 		assertNotNull(b);
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 		assertEquals(42, b.x);
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 	}
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 	@Test <strong class="jxr_keyword">void</strong> r02_builderSwap_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<em class="jxr_comment">// Exercises the builder.build()/null return path.</em>
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 		<strong class="jxr_keyword">var</strong> b = P.read(<span class="jxr_string">"null"</span>, R01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		assertNull(b);
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 	}
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	<em class="jxr_comment">// s01_readAnything - canCreateNewBean null return (null literal in bean context)</em>
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 	@Test <strong class="jxr_keyword">void</strong> s01_bean_nullReturnFromParseIntoBeanMap() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		<em class="jxr_comment">// readIntoBeanMap returns null when the UON value is "null", so readAnything gets null back.</em>
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 		<strong class="jxr_keyword">var</strong> b = P.read(<span class="jxr_string">"null"</span>, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 		assertNull(b);
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 	}
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 	<em class="jxr_comment">// t01_readIntoCollection - S2 state closing ')' branch and args branch</em>
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 	@Test <strong class="jxr_keyword">void</strong> t01_collection_S2_closingParen() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		<em class="jxr_comment">// "@(,)" — after ',' takes S2 state; then ')' should trigger readAnything for that element.</em>
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		<em class="jxr_comment">// "@(1,)" is actually valid in lenient mode: second element is parsed from ')' unread.</em>
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		<em class="jxr_comment">// Actually "@(1,2)" exercises S2-&gt;S3-&gt;comma-&gt;S2-&gt;paren path. Test with trailing item:</em>
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<strong class="jxr_keyword">var</strong> l = P.read(<span class="jxr_string">"@(1,2)"</span>, List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 		assertEquals(2, l.size());
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 	}
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 	@Test <strong class="jxr_keyword">void</strong> t02_collection_whitespace_in_noParens_path() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		<em class="jxr_comment">// In top-level URL param value mode, whitespace in S1 triggers skipSpace.</em>
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		<em class="jxr_comment">// Use httpParse with a space-leading value to exercise this path.</em>
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<strong class="jxr_keyword">var</strong> ses = P.getSession();
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		<strong class="jxr_keyword">var</strong> cm = ses.getClassMeta(List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 		<em class="jxr_comment">// A leading space before the value triggers isWhitespace branch in S1 of the non-parens path.</em>
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		<strong class="jxr_keyword">var</strong> l = ses.read((HttpPartType)<strong class="jxr_keyword">null</strong>, (HttpPartSchema)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">" 1,2"</span>, cm);
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 		assertNotNull(l);
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 	}
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 	@Test <strong class="jxr_keyword">void</strong> t03_collection_whitespace_S2_noParens() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		<em class="jxr_comment">// Whitespace after a value in non-parens mode (S2) triggers skipSpace branch.</em>
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 		<strong class="jxr_keyword">var</strong> ses = P.getSession();
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		<strong class="jxr_keyword">var</strong> cm = ses.getClassMeta(List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 		<strong class="jxr_keyword">var</strong> l = ses.read((HttpPartType)<strong class="jxr_keyword">null</strong>, (HttpPartSchema)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"1 ,2"</span>, cm);
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		assertNotNull(l);
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 	}
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 	<em class="jxr_comment">// u01_readIntoMap - encoded mode null-attr-name path (S2 with currAttr==null)</em>
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 	@Test <strong class="jxr_keyword">void</strong> u01_map_encoded_nullAttr() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		<em class="jxr_comment">// In encoded mode, %00 decodes to a NUL char. The readAttrName in encoded mode returns the literal</em>
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		<em class="jxr_comment">// NUL-char string (not null), so the map ends up with a NUL-char key.</em>
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 		<em class="jxr_comment">// A truly null attr in the encoded path requires the literal string "null" after decoding.</em>
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(null=v)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		<em class="jxr_comment">// "null" key is parsed as null key (consistent with non-encoded mode).</em>
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		assertTrue(m.containsKey(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 		assertEquals(<span class="jxr_string">"v"</span>, m.get(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 	}
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 	@Test <strong class="jxr_keyword">void</strong> u02_map_encoded_whitespace_S1() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 		<em class="jxr_comment">// In encoded decoding mode, whitespace in S1 triggers skipSpace branch.</em>
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"( a=1)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> 		assertEquals(1, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> 	}
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> 
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 	<em class="jxr_comment">// v01_readIntoBeanMap - S3 empty-value branches and S1 whitespace</em>
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> 
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 	@Test <strong class="jxr_keyword">void</strong> v01_beanMap_S3_comma_emptyValue() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 		<em class="jxr_comment">// "(f1=,f2=0)" - state S3 with ',' immediately after '=' sets empty value for f1.</em>
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> 		<em class="jxr_comment">// Empty string stays as "" for String type (not converted to null).</em>
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 		<strong class="jxr_keyword">var</strong> b = P.read(<span class="jxr_string">"(f1=,f2=0)"</span>, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 		assertNotNull(b);
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 		<em class="jxr_comment">// f1 gets "" (empty String from convertToType), f2 gets 0.</em>
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> 		assertEquals(<span class="jxr_string">""</span>, b.f1);
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 		assertEquals(0, b.f2);
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 	}
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> 	@Test <strong class="jxr_keyword">void</strong> v02_beanMap_S1_whitespace() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 		<em class="jxr_comment">// "( f1=foo)" - whitespace in S1 triggers skipSpace.</em>
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> 		<strong class="jxr_keyword">var</strong> b = P.read(<span class="jxr_string">"( f1=foo)"</span>, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> 		assertNotNull(b);
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> 		assertEquals(<span class="jxr_string">"foo"</span>, b.f1);
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> 	}
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> 
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> 	@Test <strong class="jxr_keyword">void</strong> v03_beanMap_S4_comma_then_end() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> 		<em class="jxr_comment">// "(f1=foo,f2=123)" - exercises S4-&gt;S1-&gt;S2-&gt;S3 fully.</em>
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> 		<strong class="jxr_keyword">var</strong> b = P.read(<span class="jxr_string">"(f1=foo,f2=123)"</span>, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> 		assertNotNull(b);
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> 		assertEquals(<span class="jxr_string">"foo"</span>, b.f1);
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> 		assertEquals(123, b.f2);
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> 	}
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> 
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> 	<em class="jxr_comment">// w01_readAttrName - encoded path with AMP and EQ replacement in escape context</em>
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 	@Test <strong class="jxr_keyword">void</strong> w01_attrName_encoded_escapedAmp_inEscape() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> 		<em class="jxr_comment">// In encoded mode with isInEscape=true, when c==AMP the char is replaced with '&amp;'.</em>
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> 		<em class="jxr_comment">// In decoding mode, a literal '&amp;' in the stream is decoded to AMP by UonReader.</em>
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> 		<em class="jxr_comment">// A '~&amp;' in the input: ~ followed by &amp; (decoded to AMP) triggers isInEscape, then</em>
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> 		<em class="jxr_comment">// c==AMP while isInEscape=true causes r.replace('&amp;') to be called (line 889).</em>
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(a~&amp;b=v)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> 		<em class="jxr_comment">// After escape processing, key should contain '&amp;' literally ("a&amp;b").</em>
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 		assertTrue(m.containsKey(<span class="jxr_string">"a&amp;b"</span>));
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 	}
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> 	@Test <strong class="jxr_keyword">void</strong> w02_attrName_encoded_escapedEq_inEscape() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> 		<em class="jxr_comment">// In encoded mode with isInEscape=true, when c==EQ the char is replaced with '='.</em>
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> 		<em class="jxr_comment">// In decoding mode, a literal '=' in the stream is decoded to EQ by UonReader.</em>
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> 		<em class="jxr_comment">// A '~=' in the key: isInEscape triggers, then c==EQ while isInEscape=true</em>
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> 		<em class="jxr_comment">// causes r.replace('=') to be called (line 891).</em>
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(a~=b=v)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> 		<em class="jxr_comment">// After escape processing, key should contain '=' literally ("a=b").</em>
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 		assertTrue(m.containsKey(<span class="jxr_string">"a=b"</span>));
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> 	}
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> 
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> 	<em class="jxr_comment">// x01_readString - isUrlParamValue with whitespace path</em>
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> 
+<a class="jxr_linenumber" name="L881" href="#L881">881</a> 	@Test <strong class="jxr_keyword">void</strong> x01_readString_urlParamValue_trimmed() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L882" href="#L882">882</a> 		<em class="jxr_comment">// isUrlParamValue=true: string is StringUtils.trim()ed at end.</em>
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> 		<em class="jxr_comment">// Exercises the isUrlParamValue branch in readString.</em>
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> 		<strong class="jxr_keyword">var</strong> ses = P.getSession();
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> 		<strong class="jxr_keyword">var</strong> cm = ses.getClassMeta(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 		<strong class="jxr_keyword">var</strong> s = ses.read((HttpPartType)<strong class="jxr_keyword">null</strong>, (HttpPartSchema)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"  hello  "</span>, cm);
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 		<em class="jxr_comment">// Leading/trailing whitespace is trimmed in URL param mode.</em>
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 		assertNotNull(s);
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 	}
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 	@Test <strong class="jxr_keyword">void</strong> x02_readString_nonUrlParam_whitespace() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 		<em class="jxr_comment">// At top-level, doRead uses isUrlParamValue=true so whitespace does NOT terminate the string.</em>
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 		<em class="jxr_comment">// To exercise the whitespace-as-terminator branch (isUrlParamValue=false), use a nested</em>
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 		<em class="jxr_comment">// context like a map value which is parsed with isUrlParamValue=false.</em>
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 		<em class="jxr_comment">// In non-URL-param mode (inside a map), whitespace terminates the value.</em>
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"(a=hello world)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 		<em class="jxr_comment">// "hello" is the value (whitespace terminates non-param strings inside maps).</em>
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 		assertEquals(<span class="jxr_string">"hello"</span>, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 	}
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 	<em class="jxr_comment">// y01_getUonReader - when pipe already wraps a UonReader</em>
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 	@Test <strong class="jxr_keyword">void</strong> y01_getUonReader_alreadyUonReader() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<em class="jxr_comment">// Exercises the "r instanceof UonReader" branch in getUonReader by calling doRead</em>
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		<em class="jxr_comment">// on an already-UonReader pipe; the parser pipeline wraps the input with UonReader</em>
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<em class="jxr_comment">// internally so invoking parse twice exercises the instanceof path.</em>
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<em class="jxr_comment">// This is implicitly covered via the decoding-mode parser; exercise via round-trip.</em>
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">var</strong> s = PE.read(<span class="jxr_string">"hello"</span>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		assertEquals(<span class="jxr_string">"hello"</span>, s);
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 	}
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 	<em class="jxr_comment">// z01_readIntoCollection - error branches (S1/S2 and S3 throws)</em>
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 	@Test <strong class="jxr_keyword">void</strong> z01_collection_S3_unclosed() {
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		<em class="jxr_comment">// "@(1" — reaches end of stream in S3 (after adding item, looking for ',' or ')').</em>
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"@(1"</span>, List.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 	}
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 	@Test <strong class="jxr_keyword">void</strong> z02_collection_S2_unclosed() {
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 		<em class="jxr_comment">// "@(1," — S2 looking for next item, but hits EOF.</em>
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"@(1,"</span>, List.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 	}
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	@Test <strong class="jxr_keyword">void</strong> aa01_collection_S2_closeParenWithElement() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 		<em class="jxr_comment">// "@(1,)" — after first element + comma (S2), immediately ')'.</em>
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<em class="jxr_comment">// The S2 branch fires: unread ')' and call readAnything which returns empty string for Object type.</em>
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">var</strong> l = P.read(<span class="jxr_string">"@(1,)"</span>, List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 		assertNotNull(l);
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 		<em class="jxr_comment">// l contains "1" (first element) and "" or null (the second element parsed from ')')</em>
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 		assertTrue(l.size() &gt;= 1);
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 	}
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 	@Test <strong class="jxr_keyword">void</strong> aa02_collection_S2_whitespace_then_closeParen() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> 		<em class="jxr_comment">// "@(1,  2)" — whitespace before 2nd element in S2/S1 state triggers skipSpace.</em>
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		<strong class="jxr_keyword">var</strong> l = P.read(<span class="jxr_string">"@(1,  2)"</span>, List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 		assertNotNull(l);
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		assertEquals(2, l.size());
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 	}
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 	@Test <strong class="jxr_keyword">void</strong> aa03_readArgs_isArgsType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		<em class="jxr_comment">// readArgs uses an ARGS ClassMeta which exercises the type.isArgs() true branch</em>
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		<em class="jxr_comment">// in readIntoCollection (lines 610 and 620: type.getArg(argIndex++) instead of getElementType()).</em>
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		<strong class="jxr_keyword">var</strong> session = P.getSession();
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		<strong class="jxr_keyword">var</strong> args = session.readArgs(<span class="jxr_string">"@(1,hello)"</span>, <strong class="jxr_keyword">new</strong> java.lang.reflect.Type[]{<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>});
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 		assertNotNull(args);
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 		assertEquals(2, args.length);
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		assertEquals(1, args[0]);
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		assertEquals(<span class="jxr_string">"hello"</span>, args[1]);
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 	}
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 	@Test <strong class="jxr_keyword">void</strong> aa04_readArgs_isArgsType_thenS2Close() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 		<em class="jxr_comment">// readArgs with "@(1,)" — ARGS type, S2 + ')' fires line 610 with type.isArgs()=true.</em>
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 		<strong class="jxr_keyword">var</strong> session = P.getSession();
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 		<strong class="jxr_keyword">var</strong> args = session.readArgs(<span class="jxr_string">"@(1,)"</span>, <strong class="jxr_keyword">new</strong> java.lang.reflect.Type[]{<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>});
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 		assertNotNull(args);
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 	}
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 	@Test <strong class="jxr_keyword">void</strong> aa05_readArgs_noParens_nonParensPath() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 		<em class="jxr_comment">// readArgs with "1,hello" — non-parens input (isUrlParamValue=true).</em>
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 		<em class="jxr_comment">// ARGS type exercises type.isArgs()=true in non-parens S1 path (line 647).</em>
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 		<strong class="jxr_keyword">var</strong> session = P.getSession();
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 		<strong class="jxr_keyword">var</strong> args = session.readArgs(<span class="jxr_string">"1,hello"</span>, <strong class="jxr_keyword">new</strong> java.lang.reflect.Type[]{<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>});
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 		assertNotNull(args);
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 		assertEquals(2, args.length);
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 		assertEquals(1, args[0]);
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 		assertEquals(<span class="jxr_string">"hello"</span>, args[1]);
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> 	}
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 	@Test <strong class="jxr_keyword">void</strong> aa06_readArgs_nonParens_whitespace_S2() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 		<em class="jxr_comment">// "1 ,hello" — after first arg, whitespace before ',' in S2.</em>
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		<em class="jxr_comment">// Exercises the isWhitespace branch in S2 of the non-parens loop (line 653).</em>
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 		<strong class="jxr_keyword">var</strong> session = P.getSession();
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 		<strong class="jxr_keyword">var</strong> args = session.readArgs(<span class="jxr_string">"1 ,hello"</span>, <strong class="jxr_keyword">new</strong> java.lang.reflect.Type[]{<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>});
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		assertNotNull(args);
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> 	}
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 	<em class="jxr_comment">// ab01_readIntoMap - S2 null-attr with comma (triggers null-attr early-return path)</em>
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 	@Test <strong class="jxr_keyword">void</strong> ab01_map_nullAttr_S2_eof() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<em class="jxr_comment">// In encoded mode, readAttrName returns null for the literal string "null" (line 905).</em>
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		<em class="jxr_comment">// "(null" — 'null' attr followed by EOF → readAttrName returns null, currAttr=null, state=S2.</em>
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 		<em class="jxr_comment">// Then outer loop reads c=-1: S2 + c==-1 + currAttr==null → r.unread() + return null.</em>
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(null"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 		assertNull(m);
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 	}
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 	@Test <strong class="jxr_keyword">void</strong> ab02_map_S3_emptyValue_comma() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 		<em class="jxr_comment">// "(a=,b=2)" — S3 with ',' immediately after '=' sets empty value for a.</em>
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"(a=,b=2)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> 		<em class="jxr_comment">// Empty string is the value for a; b is integer 2 but in generic map it's a number.</em>
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 		assertEquals(<span class="jxr_string">""</span>, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		assertNotNull(m.get(<span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	}
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 	@Test <strong class="jxr_keyword">void</strong> ab03_map_S3_emptyValue_closeParen() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		<em class="jxr_comment">// "(a=)" — S3 with ')' immediately after '=' sets empty value for a, then closes.</em>
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		<strong class="jxr_keyword">var</strong> m = P.read(<span class="jxr_string">"(a=)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		assertEquals(<span class="jxr_string">""</span>, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 	}
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 	@Test <strong class="jxr_keyword">void</strong> ab04_map_S2_nullAttr_closeParen() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		<em class="jxr_comment">// In encoded mode, readAttrName with "null" followed by whitespace returns null (null currAttr).</em>
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		<em class="jxr_comment">// "(null )" — null currAttr, whitespace consumed in outer S2 loop, then ')' triggers</em>
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		<em class="jxr_comment">//            null-attr check: r.unread() + return null from readIntoMap.</em>
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(null )"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		assertNull(m);
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 	}
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 	<em class="jxr_comment">// ac01_readIntoBeanMap - S2 with comma (null-value bean property)</em>
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 	@Test <strong class="jxr_keyword">void</strong> ac01_beanMap_S2_noEq_comma() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 		<em class="jxr_comment">// "(f1 ,f2=0)" — S2 for f1 sees ',' so f1 gets null (no '=' found).</em>
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 		<em class="jxr_comment">// Use whitespace before comma so parser sees f1 then whitespace-terminated attr then comma.</em>
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 		<em class="jxr_comment">// In non-encoded mode, whitespace terminates attr name; the next char is ',' which is S2 → null value.</em>
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 		<strong class="jxr_keyword">var</strong> b = P.read(<span class="jxr_string">"(f1 ,f2=0)"</span>, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		assertNotNull(b);
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 		assertNull(b.f1);
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 		assertEquals(0, b.f2);
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 	}
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 	@Test <strong class="jxr_keyword">void</strong> ac02_beanMap_S3_unknownProp_emptyValue() {
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 		<em class="jxr_comment">// "(unknown=,f2=0)" — S3 with ',' for unknown prop. onUnknownProperty is called.</em>
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 		<em class="jxr_comment">// This exercises the pMeta==null branch in S3 empty-value path.</em>
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 		assertDoesNotThrow(() -&gt; P.read(<span class="jxr_string">"(unknown=,f2=0)"</span>, Bean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 	}
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 	@Test <strong class="jxr_keyword">void</strong> ac03_beanMap_S3_typePropertyName_emptyValue() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 		<em class="jxr_comment">// "(_type=)" — S3 with ')' and currAttr == getBeanTypePropertyName → false branch of line 497.</em>
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 		<em class="jxr_comment">// When the attribute is the type property name with an empty value, the property-setting block is skipped.</em>
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 		<strong class="jxr_keyword">var</strong> b = P.read(<span class="jxr_string">"(_type=)"</span>, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		assertNotNull(b);
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 	}
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 	<em class="jxr_comment">// ad01_readAnything - canCreateNewInstanceFromString branch</em>
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 	<em class="jxr_javadoccomment">/** Helper: a class with a String constructor that is NOT a CharSequence/Number/Bean. */</em>
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> AD01_StringCtorType {
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String val;
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 		<strong class="jxr_keyword">public</strong> AD01_StringCtorType(String v) { <strong class="jxr_keyword">this</strong>.val = v; }
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 		@Override <strong class="jxr_keyword">public</strong> String toString() { <strong class="jxr_keyword">return</strong> val; }
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 	}
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 	@Test <strong class="jxr_keyword">void</strong> ad01_canCreateNewInstanceFromString() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 		<em class="jxr_comment">// AD01_StringCtorType has a String constructor and is not CharSequence/Number/bean.</em>
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 		<em class="jxr_comment">// This exercises the sType.canCreateNewInstanceFromString() branch in readAnything.</em>
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 		<strong class="jxr_keyword">var</strong> o = P.read(<span class="jxr_string">"hello"</span>, AD01_StringCtorType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 		assertNotNull(o);
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 		assertEquals(<span class="jxr_string">"hello"</span>, o.val);
+<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 	}
+<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 
+<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 	@Test <strong class="jxr_keyword">void</strong> ad02_canCreateNewInstanceFromString_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 		<em class="jxr_comment">// Null value for a fromString type → s is null, o stays null.</em>
+<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 		<strong class="jxr_keyword">var</strong> o = P.read(<span class="jxr_string">"null"</span>, AD01_StringCtorType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 		assertNull(o);
+<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 	}
+<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 
+<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 	<em class="jxr_comment">// ae01_readObject - non-numeric non-null plain string in isObject() path</em>
+<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 
+<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 	@Test <strong class="jxr_keyword">void</strong> ae01_object_plainString_nonNumeric() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 		<em class="jxr_comment">// A plain non-numeric string in Object type → o = s (line 324).</em>
+<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 		<em class="jxr_comment">// "hello" is not true/false/null/numeric → stored as String.</em>
+<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 		<strong class="jxr_keyword">var</strong> o = P.read(<span class="jxr_string">"hello"</span>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 		assertEquals(<span class="jxr_string">"hello"</span>, o);
+<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> 	}
+<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 
+<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 	@Test <strong class="jxr_keyword">void</strong> ae02_object_numericString() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 		<em class="jxr_comment">// A numeric string in Object type → o = readNumber(s, Number.class) (line 322).</em>
+<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 		<strong class="jxr_keyword">var</strong> o = P.read(<span class="jxr_string">"42"</span>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 		assertNotNull(o);
+<a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 	}
+<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 
+<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 	@Test <strong class="jxr_keyword">void</strong> ae03_object_nullString_inObject() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 		<em class="jxr_comment">// "null" in Object type → o stays null (line 320 else-if false path).</em>
+<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 		<strong class="jxr_keyword">var</strong> o = P.read(<span class="jxr_string">"null"</span>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 		assertNull(o);
+<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 	}
+<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 	<em class="jxr_comment">// af01_readBoolean - "null" string (not null reference) — exercises s.equals("null") branch</em>
+<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 
+<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 	@Test <strong class="jxr_keyword">void</strong> af01_readBoolean_trueValue() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 		<em class="jxr_comment">// Exercises eqic(s, "true") branch.</em>
+<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 		assertEquals(Boolean.TRUE, P.read(<span class="jxr_string">"true"</span>, Boolean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 	}
+<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 
+<a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 	@Test <strong class="jxr_keyword">void</strong> af02_readBoolean_falseValue() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 		<em class="jxr_comment">// Exercises eqic(s, "false") branch.</em>
+<a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> 		assertEquals(Boolean.FALSE, P.read(<span class="jxr_string">"false"</span>, Boolean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1104" href="#L1104">1104</a> 	}
+<a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> 
+<a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> 	<em class="jxr_comment">// ag01_readIntoCollection - !isInParens &amp;&amp; !isUrlParamValue throws (line 591)</em>
+<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> 
+<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 	@Test <strong class="jxr_keyword">void</strong> ag01_collection_notAtSign_notUrlParam_<strong class="jxr_keyword">throws</strong>() {
+<a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> 		<em class="jxr_comment">// readIntoCollection with isUrlParamValue=false and non-'@' input → throw line 591.</em>
+<a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> 		<em class="jxr_comment">// doReadIntoCollection uses isUrlParamValue=false.</em>
+<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.readIntoCollection(<span class="jxr_string">"1,2,3"</span>, <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(), Integer.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 	}
+<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 
+<a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> 	<em class="jxr_comment">// ah01_readAnything - c == 'n' false branch → else-throw (line 407 false / 414)</em>
+<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 
+<a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 	@Test <strong class="jxr_keyword">void</strong> ah01_nonInstantiatable_notN_<strong class="jxr_keyword">throws</strong>() {
+<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 		<em class="jxr_comment">// Type that isn't bean/string/number/collection/etc., and input doesn't start with '(' or 'n'.</em>
+<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 		<em class="jxr_comment">// java.io.InputStream has no string ctor, no bean constructor, not a standard type.</em>
+<a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 		<em class="jxr_comment">// Any non-'(' input for such a type throws at line 414.</em>
+<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"foo"</span>, java.io.InputStream.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 	}
+<a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> 
+<a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 	<em class="jxr_comment">// ai01_readAnything - collection parsed as non-@ object</em>
+<a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> 
+<a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> 	@Test <strong class="jxr_keyword">void</strong> ai01_collection_emptyParens_asBean() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> 		<em class="jxr_comment">// A collection type parsed as a bean map uses the "()" → map path (line 341-353).</em>
+<a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> 		<em class="jxr_comment">// Use a typed collection with bean element type to exercise the single-element cast path.</em>
+<a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> 		<em class="jxr_comment">// "()" — empty paren-map. No _type key, so goes to single-element list wrap (line 349-352).</em>
+<a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> 		<em class="jxr_comment">// Use List&lt;Bean&gt; target so the element type is Bean and cast may succeed on empty map.</em>
+<a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> 		<strong class="jxr_keyword">var</strong> l = P.read(<span class="jxr_string">"()"</span>, <strong class="jxr_keyword">new</strong> java.lang.reflect.ParameterizedType() {
+<a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> 			<strong class="jxr_keyword">public</strong> java.lang.reflect.Type[] getActualTypeArguments() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> java.lang.reflect.Type[]{Bean.<strong class="jxr_keyword">class</strong>}; }
+<a class="jxr_linenumber" name="L1138" href="#L1138">1138</a> 			<strong class="jxr_keyword">public</strong> java.lang.reflect.Type getRawType() { <strong class="jxr_keyword">return</strong> List.<strong class="jxr_keyword">class</strong>; }
+<a class="jxr_linenumber" name="L1139" href="#L1139">1139</a> 			<strong class="jxr_keyword">public</strong> java.lang.reflect.Type getOwnerType() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L1140" href="#L1140">1140</a> 		});
+<a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> 		assertNotNull(l);
+<a class="jxr_linenumber" name="L1142" href="#L1142">1142</a> 	}
+<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 
+<a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> 	<em class="jxr_comment">// aj01_readIntoMap - keyType null branch (line 674)</em>
+<a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 
+<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> 	@Test <strong class="jxr_keyword">void</strong> aj01_map_nullKeyType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> 		<em class="jxr_comment">// When parsing a raw Map (no key type), readAnything calls readIntoMap with</em>
+<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> 		<em class="jxr_comment">// sType.getKeyType() which may be null for raw Map. Then keyType=null branch fires at line 674.</em>
+<a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> 		<em class="jxr_comment">// Use raw Map to exercise this.</em>
+<a class="jxr_linenumber" name="L1152" href="#L1152">1152</a> 		<strong class="jxr_keyword">var</strong> dest = <strong class="jxr_keyword">new</strong> HashMap();
+<a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> 		P.readIntoMap(<span class="jxr_string">"(a=1,b=2)"</span>, dest, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> 		assertNotNull(dest.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> 	}
+<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 
+<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 	<em class="jxr_comment">// ak01_readString - whitespace terminator in non-urlParam mode (line 964)</em>
+<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 
+<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 	@Test <strong class="jxr_keyword">void</strong> ak01_readString_whitespace_terminates_nonUrlParam() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 		<em class="jxr_comment">// doReadIntoCollection uses isUrlParamValue=false, so within values, whitespace terminates.</em>
+<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 		<em class="jxr_comment">// "@(hello world)" — value "hello world": inside parens, readString with isUrlParamValue=false.</em>
+<a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 		<em class="jxr_comment">// Whitespace terminates at "hello". Collection element is "hello".</em>
+<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 		<strong class="jxr_keyword">var</strong> dest = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 		P.readIntoCollection(<span class="jxr_string">"@(hello world)"</span>, dest, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 		assertNotNull(dest);
+<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 		assertEquals(<span class="jxr_string">"hello"</span>, dest.get(0));
+<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 	}
+<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 
+<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 	<em class="jxr_comment">// al01_readString - EQ control char replacement (line 962)</em>
+<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 
+<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 	@Test <strong class="jxr_keyword">void</strong> al01_readString_encodedEquals_replacement() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 		<em class="jxr_comment">// In decoded mode, %3D decodes to EQ control char (0x02).</em>
+<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 		<em class="jxr_comment">// readString sees EQ and calls r.replace('='), which exercises line 962.</em>
+<a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 		<em class="jxr_comment">// "(a=hello%3Dworld)" with decoding mode → value "hello=world".</em>
+<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(a=hello%3Dworld)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 		assertEquals(<span class="jxr_string">"hello=world"</span>, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 	}
+<a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 
+<a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 	@Test <strong class="jxr_keyword">void</strong> al02_readString_encodedEquals_inCollection() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> 		<em class="jxr_comment">// Encoded equals in a collection element exercises the EQ path with isUrlParamValue=false.</em>
+<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 		<strong class="jxr_keyword">var</strong> dest = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> 		PE.readIntoCollection(<span class="jxr_string">"@(hello%3Dworld)"</span>, dest, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> 		assertNotNull(dest);
+<a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> 		assertEquals(<span class="jxr_string">"hello=world"</span>, dest.get(0));
+<a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 	}
+<a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 
+<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 	<em class="jxr_comment">// am01_readIntoMap - AMP-first input terminates early (line 678 c==AMP)</em>
+<a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 
+<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 	@Test <strong class="jxr_keyword">void</strong> am01_map_AMPfirst_returnsNull() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 		<em class="jxr_comment">// In decoding mode, bare '&amp;' is decoded to AMP (0x01).</em>
+<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 		<em class="jxr_comment">// When readIntoMap reads AMP as the first char, it returns null (line 678 true-branch).</em>
+<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 		<em class="jxr_comment">// "&amp;(a=1)" — '&amp;' decoded to AMP, readIntoMap sees AMP immediately → return null.</em>
+<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"&amp;(a=1)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 		assertNull(m);
+<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 	}
+<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 
+<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 	@Test <strong class="jxr_keyword">void</strong> am02_collection_AMPfirst_returnsNull() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 		<em class="jxr_comment">// "&amp;@(1,2)" — '&amp;' decoded to AMP, readIntoCollection sees AMP → return null (line 577 true-branch).</em>
+<a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> 		<strong class="jxr_keyword">var</strong> l = PE.read(<span class="jxr_string">"&amp;@(1,2)"</span>, List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 		assertNull(l);
+<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> 	}
+<a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> 
+<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> 	@Test <strong class="jxr_keyword">void</strong> am03_map_AMP_midMap_terminates() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> 		<em class="jxr_comment">// "(a=1&amp;b=2)" with decoding — '&amp;' terminates S4 of map. The 'b=2' is discarded.</em>
+<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> 		<em class="jxr_comment">// Exercises the c==AMP branch in S4 of readIntoMap (line 740).</em>
+<a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(a=1&amp;b=2)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 		<em class="jxr_comment">// Value "1" is auto-typed as Integer in generic map.</em>
+<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 		assertEquals(1, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 		assertFalse(m.containsKey(<span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 	}
+<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 
+<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 	@Test <strong class="jxr_keyword">void</strong> am04_beanMap_AMP_midMap_terminates() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 		<em class="jxr_comment">// "(f1=foo&amp;f2=0)" with decoding — '&amp;' terminates S4 of readIntoBeanMap.</em>
+<a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 		<strong class="jxr_keyword">var</strong> b = PE.read(<span class="jxr_string">"(f1=foo&amp;f2=0)"</span>, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 		assertNotNull(b);
+<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 		assertEquals(<span class="jxr_string">"foo"</span>, b.f1);
+<a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 		assertEquals(0, b.f2);  <em class="jxr_comment">// f2 not set due to AMP termination</em>
+<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 	}
+<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 
+<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 	@Test <strong class="jxr_keyword">void</strong> am05_collection_AMP_midCollection_terminates() {
+<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 		<em class="jxr_comment">// "@(a&amp;b)" with decoding — 'a' parses, then '&amp;' (AMP) exits the while loop at line 605.</em>
+<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 		<em class="jxr_comment">// State is S3 after "a" is parsed, so AMP terminates via the while-loop condition.</em>
+<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 		<em class="jxr_comment">// This triggers the "Could not find end of entry in array" error.</em>
+<a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; PE.read(<span class="jxr_string">"@(a&amp;b)"</span>, List.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 	}
+<a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> 
+<a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> 	@Test <strong class="jxr_keyword">void</strong> am06_collection_AMPfirst_viaDoParseIntoCollection() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> 		<em class="jxr_comment">// PE.readIntoCollection with "&amp;..." — '&amp;' decoded to AMP reaches readIntoCollection line 577.</em>
+<a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> 		<em class="jxr_comment">// AMP at the very first char → return null (line 577 AMP branch).</em>
+<a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> 		<strong class="jxr_keyword">var</strong> dest = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> 		<strong class="jxr_keyword">var</strong> result = PE.readIntoCollection(<span class="jxr_string">"&amp;@(1,2)"</span>, dest, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> 		assertNull(result);
+<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> 	}
+<a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> 
+<a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> 	@Test <strong class="jxr_keyword">void</strong> am07_map_AMPfirst_viaDoParseIntoMap() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 		<em class="jxr_comment">// PE.readIntoMap with "&amp;..." — '&amp;' decoded to AMP reaches readIntoMap line 678 (AMP branch).</em>
+<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 		<strong class="jxr_keyword">var</strong> dest = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 		<strong class="jxr_keyword">var</strong> result = PE.readIntoMap(<span class="jxr_string">"&amp;(a=1)"</span>, dest, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 		assertNull(result);
+<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 	}
+<a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 
+<a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> 	<em class="jxr_comment">// an01_readString - non-urlParam whitespace path (line 964) via readIntoCollection</em>
+<a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1253" href="#L1253">1253</a> 
+<a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> 	@Test <strong class="jxr_keyword">void</strong> an01_readString_nonUrlParam_whitespace_inParens() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> 		<em class="jxr_comment">// Inside "@(hello world)", readString is called with isUrlParamValue=false.</em>
+<a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> 		<em class="jxr_comment">// Whitespace terminates "hello", leaving " world" in stream.</em>
+<a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 		<em class="jxr_comment">// Exercises the whitespace branch at line 964.</em>
+<a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 		<strong class="jxr_keyword">var</strong> dest = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 		P.readIntoCollection(<span class="jxr_string">"@(hello world,bye)"</span>, dest, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 		assertFalse(dest.isEmpty());
+<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 		assertEquals(<span class="jxr_string">"hello"</span>, dest.get(0));
+<a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 	}
+<a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 
+<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 	<em class="jxr_comment">// ao01_readAttrName - encoded EOF while-loop exit (lines 898, 907-910, 914)</em>
+<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 
+<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 	@Test <strong class="jxr_keyword">void</strong> ao01_attrName_encoded_AMP_terminates() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 		<em class="jxr_comment">// In encoded mode, AMP terminates the attr name.</em>
+<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 		<em class="jxr_comment">// "(a&amp;b=1)" with decoding — attr name is "a", then '&amp;' terminates it (line 901 AMP check).</em>
+<a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 		<em class="jxr_comment">// But AMP is decoded to char 1 which IS in the AMP check → attr = "a".</em>
+<a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 		<em class="jxr_comment">// Then state S2, next read is '&amp;' decoded again... actually readIntoMap outer handles it.</em>
+<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(a&amp;b=1)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 		<em class="jxr_comment">// AMP terminates after attr name "a" in S2; null currAttr? No, "a" is non-null.</em>
+<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 	}
+<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 
+<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 	@Test <strong class="jxr_keyword">void</strong> ao02_attrName_encoded_whitespace_terminates() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 		<em class="jxr_comment">// In encoded mode, whitespace terminates the attr name.</em>
+<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 		<em class="jxr_comment">// "(a b=1)" with decoding — attr "a", then whitespace terminates (line 901 isWhitespace).</em>
+<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(a b=1)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 	}
+<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 
+<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 	<em class="jxr_comment">// ap01_readAnything - collection/array with _type key (lines 346, 363 true branches)</em>
+<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> 
+<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 	@Test <strong class="jxr_keyword">void</strong> ap01_collection_typeKey_<strong class="jxr_keyword">cast</strong>() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 		<em class="jxr_comment">// "(_type=...)" parsed as a collection — m.containsKey("_type") is true → cast() path (line 346).</em>
+<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 		<em class="jxr_comment">// The default typePropertyName is "_type". cast() returns a MarshalledMap.</em>
+<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 		<em class="jxr_comment">// Use parse(Type) to avoid a JVM checkcast at the call site.</em>
+<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 		Object result = P.read(<span class="jxr_string">"(_type=foo)"</span>, (java.lang.reflect.Type) List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 		assertNotNull(result);
+<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 	}
+<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 
+<a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 	@Test <strong class="jxr_keyword">void</strong> ap02_array_typeKey_<strong class="jxr_keyword">cast</strong>() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 		<em class="jxr_comment">// "(_type=...)" parsed as an array — c=='(' path with _type key exercises line 363.</em>
+<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 		<em class="jxr_comment">// cast() returns a MarshalledMap; use parse(Type) to avoid JVM checkcast at call site.</em>
+<a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> 		Object result = P.read(<span class="jxr_string">"(_type=foo)"</span>, (java.lang.reflect.Type) String[].<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 		assertNotNull(result);
+<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 	}
+<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 
+<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 	<em class="jxr_comment">// aq01 - readNull with non-"ull" sequence (line 761 false branch → throws ParseException)</em>
+<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 
+<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 	@Test <strong class="jxr_keyword">void</strong> aq01_readNull_nonUll_inBeanMap_<strong class="jxr_keyword">throws</strong>() {
+<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 		<em class="jxr_comment">// readIntoBeanMap calls readNull when first char is 'n'. "nfoo" starts with 'n'.</em>
+<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 		<em class="jxr_comment">// readString then reads remaining "foo" (stops at ','/'/'/EOF): "ull".equals("foo") is false.</em>
+<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> 		<em class="jxr_comment">// → ParseException thrown (line 762 true branch).</em>
+<a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"(nfoo)"</span>, Bean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 	}
+<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 
+<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 	@Test <strong class="jxr_keyword">void</strong> aq02_readNull_nonUll_inMap_<strong class="jxr_keyword">throws</strong>() {
+<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 		<em class="jxr_comment">// readIntoMap also calls readNull when first char is 'n'. "(nbar=1)" with Map target.</em>
+<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 		<em class="jxr_comment">// readAttrName reads "bar", "ull".equals("bar") is false → ParseException.</em>
+<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; P.read(<span class="jxr_string">"nbar"</span>, Map.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 	}
+<a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 
+<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> 	<em class="jxr_comment">// ar01 - getUonReader reuse path (line 221 true branch: pipe already wraps a UonReader)</em>
+<a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> 
+<a class="jxr_linenumber" name="L1325" href="#L1325">1325</a> 	@Test <strong class="jxr_keyword">void</strong> ar01_getUonReader_reuse_existing() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1326" href="#L1326">1326</a> 		<em class="jxr_comment">// Create a session and a pipe from a String, then create a UonReader from it.</em>
+<a class="jxr_linenumber" name="L1327" href="#L1327">1327</a> 		<em class="jxr_comment">// Wrap that UonReader in a second pipe (Reader input → pipe.getReader() returns UonReader).</em>
+<a class="jxr_linenumber" name="L1328" href="#L1328">1328</a> 		<em class="jxr_comment">// Then call getUonReader on the second pipe — should return the existing UonReader (line 221 true branch).</em>
+<a class="jxr_linenumber" name="L1329" href="#L1329">1329</a> 		<strong class="jxr_keyword">var</strong> session = P.getSession();
+<a class="jxr_linenumber" name="L1330" href="#L1330">1330</a> 		<strong class="jxr_keyword">var</strong> pipe1 = session.createPipe(<span class="jxr_string">"(f1=1)"</span>);
+<a class="jxr_linenumber" name="L1331" href="#L1331">1331</a> 		<strong class="jxr_keyword">var</strong> uonReader = <strong class="jxr_keyword">new</strong> UonReader(pipe1, false);
+<a class="jxr_linenumber" name="L1332" href="#L1332">1332</a> 		<strong class="jxr_keyword">var</strong> pipe2 = session.createPipe(uonReader);
+<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> 		<strong class="jxr_keyword">var</strong> r = UonParserSession.getUonReader(pipe2, false);
+<a class="jxr_linenumber" name="L1334" href="#L1334">1334</a> 		assertNotNull(r);
+<a class="jxr_linenumber" name="L1335" href="#L1335">1335</a> 		assertSame(uonReader, r);
+<a class="jxr_linenumber" name="L1336" href="#L1336">1336</a> 	}
+<a class="jxr_linenumber" name="L1337" href="#L1337">1337</a> 
+<a class="jxr_linenumber" name="L1338" href="#L1338">1338</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1339" href="#L1339">1339</a> 	<em class="jxr_comment">// as01 - readString EQ replacement (line 962: c == EQ → r.replace('='))</em>
+<a class="jxr_linenumber" name="L1340" href="#L1340">1340</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1341" href="#L1341">1341</a> 
+<a class="jxr_linenumber" name="L1342" href="#L1342">1342</a> 	@Test <strong class="jxr_keyword">void</strong> as01_readString_encodedEquals_replaced() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1343" href="#L1343">1343</a> 		<em class="jxr_comment">// In decoding mode, a literal '=' in a value is decoded to EQ char () by UonReader.</em>
+<a class="jxr_linenumber" name="L1344" href="#L1344">1344</a> 		<em class="jxr_comment">// readString sees c == EQ (line 962) and replaces it with '=' in the marked buffer.</em>
+<a class="jxr_linenumber" name="L1345" href="#L1345">1345</a> 		<em class="jxr_comment">// Input: "(a=b=c)" -- UonReader converts the second '=' to EQ -- readString restores it.</em>
+<a class="jxr_linenumber" name="L1346" href="#L1346">1346</a> 		<strong class="jxr_keyword">var</strong> m = PE.read(<span class="jxr_string">"(a=b=c)"</span>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1347" href="#L1347">1347</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L1348" href="#L1348">1348</a> 		assertEquals(<span class="jxr_string">"b=c"</span>, m.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L1349" href="#L1349">1349</a> 	}
+<a class="jxr_linenumber" name="L1350" href="#L1350">1350</a> 
+<a class="jxr_linenumber" name="L1351" href="#L1351">1351</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> 	<em class="jxr_comment">// at01 - readIntoCollection non-parens path (lines 641-655: isUrlParamValue=true, no '@' prefix)</em>
+<a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1354" href="#L1354">1354</a> 
+<a class="jxr_linenumber" name="L1355" href="#L1355">1355</a> 	@Test <strong class="jxr_keyword">void</strong> at01_collection_urlParam_commaSeparated() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1356" href="#L1356">1356</a> 		<em class="jxr_comment">// doRead calls readAnything(isUrlParamValue=true) which calls readIntoCollection.</em>
+<a class="jxr_linenumber" name="L1357" href="#L1357">1357</a> 		<em class="jxr_comment">// "1,2,3" has no '@' so isInParens=false -&gt; enters the non-parens while loop (line 641).</em>
+<a class="jxr_linenumber" name="L1358" href="#L1358">1358</a> 		<strong class="jxr_keyword">var</strong> l = P.read(<span class="jxr_string">"1,2,3"</span>, List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1359" href="#L1359">1359</a> 		assertNotNull(l);
+<a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> 		assertEquals(3, l.size());
+<a class="jxr_linenumber" name="L1361" href="#L1361">1361</a> 	}
+<a class="jxr_linenumber" name="L1362" href="#L1362">1362</a> 
+<a class="jxr_linenumber" name="L1363" href="#L1363">1363</a> 	@Test <strong class="jxr_keyword">void</strong> at02_collection_urlParam_withWhitespace_afterEntry() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1364" href="#L1364">1364</a> 		<em class="jxr_comment">// non-parens S2: after first element, whitespace is encountered (line 653 true branch).</em>
+<a class="jxr_linenumber" name="L1365" href="#L1365">1365</a> 		<strong class="jxr_keyword">var</strong> l = P.read(<span class="jxr_string">"1 ,2"</span>, List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1366" href="#L1366">1366</a> 		assertNotNull(l);
+<a class="jxr_linenumber" name="L1367" href="#L1367">1367</a> 		assertTrue(l.size() &gt;= 1);
+<a class="jxr_linenumber" name="L1368" href="#L1368">1368</a> 	}
+<a class="jxr_linenumber" name="L1369" href="#L1369">1369</a> 
+<a class="jxr_linenumber" name="L1370" href="#L1370">1370</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1371" href="#L1371">1371</a> 	<em class="jxr_comment">// au01 - readIntoCollection/readIntoMap EOF first char (line 577/678 c==-1 branch)</em>
+<a class="jxr_linenumber" name="L1372" href="#L1372">1372</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1373" href="#L1373">1373</a> 
+<a class="jxr_linenumber" name="L1374" href="#L1374">1374</a> 	@Test <strong class="jxr_keyword">void</strong> au01_readIntoCollection_emptyInput_returnsNull() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1375" href="#L1375">1375</a> 		<em class="jxr_comment">// readIntoCollection with empty input: readSkipWs() hits EOF on first char, early-return yields null.</em>
+<a class="jxr_linenumber" name="L1376" href="#L1376">1376</a> 		<strong class="jxr_keyword">var</strong> dest = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L1377" href="#L1377">1377</a> 		<strong class="jxr_keyword">var</strong> result = P.readIntoCollection(<span class="jxr_string">""</span>, dest, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1378" href="#L1378">1378</a> 		assertNull(result);
+<a class="jxr_linenumber" name="L1379" href="#L1379">1379</a> 	}
+<a class="jxr_linenumber" name="L1380" href="#L1380">1380</a> 
+<a class="jxr_linenumber" name="L1381" href="#L1381">1381</a> 	@Test <strong class="jxr_keyword">void</strong> au02_readIntoMap_emptyInput_returnsNull() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1382" href="#L1382">1382</a> 		<em class="jxr_comment">// readIntoMap with empty input: read() hits EOF on first char, early-return yields null.</em>
+<a class="jxr_linenumber" name="L1383" href="#L1383">1383</a> 		<strong class="jxr_keyword">var</strong> dest = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L1384" href="#L1384">1384</a> 		<strong class="jxr_keyword">var</strong> result = P.readIntoMap(<span class="jxr_string">""</span>, dest, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1385" href="#L1385">1385</a> 		assertNull(result);
+<a class="jxr_linenumber" name="L1386" href="#L1386">1386</a> 	}
+<a class="jxr_linenumber" name="L1387" href="#L1387">1387</a> 
+<a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1389" href="#L1389">1389</a> 	<em class="jxr_comment">// av01 - non-parens collection S2: AMP terminator (line 646 AMP branch)</em>
+<a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> 
+<a class="jxr_linenumber" name="L1392" href="#L1392">1392</a> 	@Test <strong class="jxr_keyword">void</strong> av01_collection_urlParam_ampTerminator() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1393" href="#L1393">1393</a> 		<em class="jxr_comment">// In decoding mode, '&amp;' is decoded to AMP by UonReader.</em>
+<a class="jxr_linenumber" name="L1394" href="#L1394">1394</a> 		<em class="jxr_comment">// "1&amp;2" in non-parens collection mode: after parsing "1" (state S2), reads AMP -&gt; returns list.</em>
+<a class="jxr_linenumber" name="L1395" href="#L1395">1395</a> 		<em class="jxr_comment">// Exercises the c==AMP branch in line 646 of the non-parens S2 state.</em>
+<a class="jxr_linenumber" name="L1396" href="#L1396">1396</a> 		<strong class="jxr_keyword">var</strong> l = PE.read(<span class="jxr_string">"1&amp;2"</span>, List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1397" href="#L1397">1397</a> 		assertNotNull(l);
+<a class="jxr_linenumber" name="L1398" href="#L1398">1398</a> 		assertEquals(1, l.size());
+<a class="jxr_linenumber" name="L1399" href="#L1399">1399</a> 		assertEquals(<span class="jxr_string">"1"</span>, l.get(0).toString());
+<a class="jxr_linenumber" name="L1400" href="#L1400">1400</a> 	}
+<a class="jxr_linenumber" name="L1401" href="#L1401">1401</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

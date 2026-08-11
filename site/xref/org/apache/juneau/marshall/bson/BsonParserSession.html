@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>BsonParserSession xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/marshall/bson/BsonParserSession.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.marshall.bson;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ObjectUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.bean.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.parser.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.stream.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.swap.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * Session object that lives for the duration of a single use of {@link BsonParser}.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='warn'&gt;This class is not thread safe and is typically discarded after one use.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/Bson" target="alexandria_uri">https://juneau.apache.org/docs/topics/Bson</a>"&gt;BSON Basics&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<span class="jxr_string">"rawtypes"</span>,
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<span class="jxr_string">"unchecked"</span>,
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<span class="jxr_string">"java:S115"</span>,
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<span class="jxr_string">"java:S125"</span>,  <em class="jxr_comment">// Explanatory comments contain BSON/JSON syntax (e.g. {"value":x}) that Sonar misreads as commented-out code</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<span class="jxr_string">"java:S3776"</span>,
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<span class="jxr_string">"java:S6541"</span>,
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<span class="jxr_string">"resource"</span>    <em class="jxr_comment">// RecordReader returned by RecordAdapter is a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  })
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> BsonParserSession <strong class="jxr_keyword">extends</strong> InputStreamParserSession <strong class="jxr_keyword">implements</strong> RecordReadable, ArrayRecordReadable {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_ctx = <span class="jxr_string">"ctx"</span>;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BSON_VALUE_KEY = <span class="jxr_string">"value"</span>;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * Builder class.</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> <strong class="jxr_keyword">extends</strong> InputStreamParserSession.Builder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String nullKeyString;
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> maxLength;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">		 * Constructor</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">		 * @param ctx The context creating this session.</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">		 * 	&lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">protected</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a>(BsonParser ctx) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">super</strong>(assertArgNotNull(ARG_ctx, ctx));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			nullKeyString = ctx.getNullKeyString();
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			maxLength = ctx.getMaxLength();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		}
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		@Override
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">public</strong> BsonParserSession build() {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BsonParserSession(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * Creates a new builder for a {@link BsonParserSession}.</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * @param ctx The BSON parser context creating this session.</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * @return A new builder.</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> create(BsonParser ctx) {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a>(assertArgNotNull(ARG_ctx, ctx));
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String nullKeyString;
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> maxLength;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">protected</strong> BsonParserSession(<a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> builder) {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">super</strong>(builder);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		nullKeyString = builder.nullKeyString;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		maxLength = builder.maxLength;
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	}
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">private</strong> String trimKey(String name) {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">return</strong> isTrimStrings() &amp;&amp; nn(name) ? name.trim() : name; <em class="jxr_comment">// HTT: name is always non-null here -- every call site passes BsonInputStream.readElementName()/readCString(), which never returns null (throws on premature EOF instead)</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">private</strong> Object readTypedValue(<a name="BsonInputStream" href="../../../../../org/apache/juneau/marshall/bson/BsonInputStream.html#BsonInputStream">BsonInputStream</a> is, <strong class="jxr_keyword">int</strong> elementType, ClassMeta&lt;?&gt; targetType, Object <strong class="jxr_keyword">outer</strong>, BeanPropertyMeta pMeta) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		Object o = <strong class="jxr_keyword">switch</strong> (elementType) {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">case</strong> 0x01 -&gt; is.readDouble();
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<strong class="jxr_keyword">case</strong> 0x02 -&gt; trim(is.readString());
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			<strong class="jxr_keyword">case</strong> 0x03 -&gt; readDocument(is, targetType, <strong class="jxr_keyword">outer</strong>, pMeta);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			<strong class="jxr_keyword">case</strong> 0x04 -&gt; readArray(is, targetType, <strong class="jxr_keyword">outer</strong>, pMeta);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">case</strong> 0x05 -&gt; is.readBinary();
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<strong class="jxr_keyword">case</strong> 0x07 -&gt; is.readObjectId();
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">case</strong> 0x08 -&gt; is.readBoolean();
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			<strong class="jxr_keyword">case</strong> 0x09 -&gt; is.readDateTime();
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<strong class="jxr_keyword">case</strong> 0x0A -&gt; <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			<strong class="jxr_keyword">case</strong> 0x10 -&gt; is.readInt32();
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			<strong class="jxr_keyword">case</strong> 0x12 -&gt; is.readInt64();
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<strong class="jxr_keyword">case</strong> 0x13 -&gt; is.readDecimal128();
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			<strong class="jxr_keyword">default</strong> -&gt; {
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 				is.skipValue(elementType);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 				yield <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			}
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		};
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">if</strong> (nn(parentBean()) &amp;&amp; nn(o))
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			setParent(targetType, o, parentBean());
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T readDocument(<a name="BsonInputStream" href="../../../../../org/apache/juneau/marshall/bson/BsonInputStream.html#BsonInputStream">BsonInputStream</a> is, ClassMeta&lt;?&gt; eType, Object <strong class="jxr_keyword">outer</strong>, BeanPropertyMeta pMeta) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		is.readDocumentSize();
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<em class="jxr_comment">// eType==null is provably unreachable -- readDocument's only two call sites are readTypedValue's</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<em class="jxr_comment">// case 0x03 (targetType is always one of: sType.getValueType()/bcm/object()/string(), none of which are</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<em class="jxr_comment">// ever null) and doRead's top-level `type` (which is guaranteed non-null by ParserSession.readInner's</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<em class="jxr_comment">// type.isVoid() call, executed before doRead is ever reached).</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>) <em class="jxr_comment">// HTT: dead -- see comment above; targetType/type are never null at either call site</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			eType = object(); <em class="jxr_comment">// HTT: dead -- unreachable body; see the HTT note on the guard immediately above.</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		ClassMeta&lt;?&gt; sType;
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">if</strong> (nn(builder))
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			sType = builder.getBuilderClassMeta(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(swap))
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			sType = swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			sType = eType;
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<em class="jxr_comment">// Do not recurse for Optional here - BSON wraps non-bean/map roots as {"value":x}.</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<em class="jxr_comment">// We must parse the document first, then unwrap via the map.size()==1 / "value" path below.</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> wrapInOptional = eType.isOptional();
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">if</strong> (sType.isOptional())
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			sType = eType.getElementType();
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		setCurrentClass(sType);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		Object result;
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<em class="jxr_comment">// Skip map path for Optional - we need fallback to unwrap {"value":x}</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">if</strong> (!eType.isOptional() &amp;&amp; sType.isMap()) {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">var</strong> map = sType.canCreateNewInstance(<strong class="jxr_keyword">outer</strong>) ? (Map)sType.newInstance(<strong class="jxr_keyword">outer</strong>) : newGenericMap(sType);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<em class="jxr_comment">// Coerce string keys to the declared key type when non-String (e.g. Map&lt;TestEnum,String&gt;)</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<em class="jxr_comment">// so map.get(EnumConstant) works.  Matches the JSON-family readIntoMap2 pattern.</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">var</strong> keyType = sType.getKeyType();
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">var</strong> coerceKeys = nn(keyType) &amp;&amp; !keyType.isObject() &amp;&amp; !keyType.isString();
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">while</strong> (!is.isDocumentEnd()) {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				<strong class="jxr_keyword">var</strong> et = is.readElementType();
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				<strong class="jxr_keyword">var</strong> name = is.readElementName();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				<strong class="jxr_keyword">var</strong> key = name.equals(nullKeyString) ? <strong class="jxr_keyword">null</strong> : trimKey(name);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				<strong class="jxr_keyword">var</strong> value = readTypedValue(is, et, sType.getValueType(), map, pMeta);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				setName(sType.getValueType(), value, key);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 				<strong class="jxr_keyword">var</strong> resolvedKey = coerceKeys ? convertAttrToType(map, key, keyType) : key;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				map.put(resolvedKey, value);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			}
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			is.readDocumentTerminator();
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">var</strong> raw = map instanceof MarshalledMap map2 ? <strong class="jxr_keyword">cast</strong>(map2, pMeta, eType) : map;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<em class="jxr_comment">// Convert JsonMap to target map type (TreeMap, LinkedHashMap, etc.) when needed</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">if</strong> (eType.isMap() &amp;&amp; raw instanceof Map raw2 &amp;&amp; !eType.<strong class="jxr_keyword">inner</strong>().isInstance(raw))
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				result = convertToMemberType(<strong class="jxr_keyword">null</strong>, raw2, eType);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 				result = raw;
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!eType.isOptional() &amp;&amp; (nn(builder) || sType.canCreateNewBean(<strong class="jxr_keyword">outer</strong>))) {
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">var</strong> beanMap = builder == <strong class="jxr_keyword">null</strong> ? newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>()) : toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType));
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">var</strong> pb = swapParentBean(beanMap.getBean(false));
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				<strong class="jxr_keyword">while</strong> (!is.isDocumentEnd()) {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 					<strong class="jxr_keyword">var</strong> et = is.readElementType();
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 					<strong class="jxr_keyword">var</strong> name = is.readElementName();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 					<strong class="jxr_keyword">var</strong> key = trimKey(name);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 					<strong class="jxr_keyword">var</strong> bpm = beanMap.getPropertyMeta(key);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 					Object value;
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 					<strong class="jxr_keyword">if</strong> (name.equals(getBeanTypePropertyName(eType))) {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 						value = readTypedValue(is, et, string(), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 						<strong class="jxr_keyword">if</strong> (nn(value))
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 							beanMap = applyTypeProperty(beanMap, value.toString(), eType);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (bpm != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 						<strong class="jxr_keyword">var</strong> bcm = (ClassMeta&lt;?&gt;) bpm.getBeanInfo();
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 						value = readTypedValue(is, et, bcm, beanMap.getBean(false), bpm);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 						setName(bcm, value, key);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 						<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 							bpm.set(beanMap, key, value);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 						} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../../../org/apache/juneau/commons/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 							onBeanSetterException(nn(pMeta) ? pMeta : bpm, e);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 							<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 						}
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 						onUnknownProperty(key, beanMap, readTypedValue(is, et, object(), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 					}
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 				}
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 				swapParentBean(pb);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			}
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			is.readDocumentTerminator();
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			result = builder == <strong class="jxr_keyword">null</strong> ? beanMap.getBean() : builder.build(<strong class="jxr_keyword">this</strong>, beanMap.getBean(), eType);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<em class="jxr_comment">// Fallback: read document elements. Handles scalar, array, Optional roots (all wrapped as {"value":x}).</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<em class="jxr_comment">// Do NOT call readArray here - at root the next bytes are type+name of first element, not array doc.</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<strong class="jxr_keyword">var</strong> map = newGenericMap();
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">while</strong> (!is.isDocumentEnd()) {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 				<strong class="jxr_keyword">var</strong> et = is.readElementType();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 				<strong class="jxr_keyword">var</strong> name = is.readElementName();
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 				<strong class="jxr_keyword">var</strong> key = name.equals(nullKeyString) ? <strong class="jxr_keyword">null</strong> : trimKey(name);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			map.put(key, readTypedValue(is, et, BSON_VALUE_KEY.equals(name) ? eType : object(), map, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		}
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		is.readDocumentTerminator();
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<em class="jxr_comment">// Unwrap {"value":x} when target is Optional or when scalar-like (BSON root wrap convention)</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">if</strong> (map.size() == 1 &amp;&amp; map.containsKey(BSON_VALUE_KEY)) {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			<strong class="jxr_keyword">var</strong> wrapped = map.get(BSON_VALUE_KEY);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 				<strong class="jxr_keyword">if</strong> (eType.isOptional() || (!sType.isMap() &amp;&amp; !sType.isBean() &amp;&amp; !sType.isObject())
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 					|| (wrapped == <strong class="jxr_keyword">null</strong> &amp;&amp; sType.isObject())) {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 					result = convertToMemberType(<strong class="jxr_keyword">null</strong>, wrapped, eType);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 					<strong class="jxr_keyword">if</strong> (eType.isOptional())
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 						wrapInOptional = false; <em class="jxr_comment">// convertToMemberType already wrapped</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 					<strong class="jxr_keyword">var</strong> castResult = <strong class="jxr_keyword">cast</strong>(map, pMeta, eType);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 					result = (eType.isMap() &amp;&amp; castResult instanceof Map &amp;&amp; !eType.<strong class="jxr_keyword">inner</strong>().isInstance(castResult))
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 						? convertToMemberType(<strong class="jxr_keyword">null</strong>, castResult, eType) : castResult;
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 				}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 				<strong class="jxr_keyword">var</strong> castResult = <strong class="jxr_keyword">cast</strong>(map, pMeta, eType);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 				result = (eType.isMap() &amp;&amp; castResult instanceof Map &amp;&amp; !eType.<strong class="jxr_keyword">inner</strong>().isInstance(castResult))
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 					? convertToMemberType(<strong class="jxr_keyword">null</strong>, castResult, eType) : castResult;
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			}
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		}
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<em class="jxr_comment">// Final fallback: when target is Optional and we have map with "value", unwrap</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<em class="jxr_comment">// HTT: dead in practice -- whenever eType.isOptional(), the block above always takes one of two paths,</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<em class="jxr_comment">// neither of which can leave `result` as a raw (unwrapped) size-1 {"value":x} Map: (1) if the outer</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<em class="jxr_comment">// document itself was size-1/keyed "value" (229 true), disjunct 1 at line 231 (`eType.isOptional()`)</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<em class="jxr_comment">// short-circuits true unconditionally, so line 233's convertToMemberType(null, wrapped, eType) always</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<em class="jxr_comment">// runs with eType itself being the Optional type -- and readTypedValue's own root-wrap plumbing at</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<em class="jxr_comment">// line 225 (passing `eType`, not the element type, for the "value" key) means any nested document/array</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<em class="jxr_comment">// value recurses back into this same eType==Optional logic and returns already Optional-wrapped (see</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<em class="jxr_comment">// the wrapInOptional/o(result) return at line 259), so `wrapped` here is never itself a naked Map in</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<em class="jxr_comment">// the size-1/"value" shape; or (2) if the outer document was NOT size-1/keyed "value" (241 else), the</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<em class="jxr_comment">// resulting castResult/result is -- by the exact negation of that same condition -- provably never</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<em class="jxr_comment">// size-1-and-keyed-"value" either (cast() cannot introduce a "value" key that wasn't already there,</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<em class="jxr_comment">// and if it resolves a bean via "_type" the result isn't a Map at all). This line is a redundant</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<em class="jxr_comment">// safety net for a shape that the two paths above can never actually produce.</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">if</strong> (eType.isOptional() &amp;&amp; result instanceof Map result2 &amp;&amp; result2.size() == 1 &amp;&amp; result2.containsKey(BSON_VALUE_KEY)) { <em class="jxr_comment">// HTT: dead -- see comment above</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			result = convertToMemberType(<strong class="jxr_keyword">null</strong>, result2.get(BSON_VALUE_KEY), eType); <em class="jxr_comment">// HTT: dead -- unreachable body; see the HTT note on the guard immediately above.</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			wrapInOptional = false; <em class="jxr_comment">// HTT: dead -- unreachable body; see the HTT note on the guard immediately above.</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		}
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<em class="jxr_comment">// Convert JsonMap to target Map type (TreeMap, LinkedHashMap, etc.) when needed</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">if</strong> (eType.isMap() &amp;&amp; result instanceof Map m2 &amp;&amp; !eType.<strong class="jxr_keyword">inner</strong>().isInstance(result))
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			result = convertToMemberType(<strong class="jxr_keyword">null</strong>, m2, eType);
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<em class="jxr_comment">// Unswap when result is in swapped form (e.g. JsonMap for bean with Map swap, String for Class).</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<em class="jxr_comment">// Skip when convertToMemberType already produced normal form (e.g. Class from String).</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">if</strong> (nn(swap) &amp;&amp; nn(result) &amp;&amp; swap.isSwappedObject(result))
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			result = unswap(swap, result, eType);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">return</strong> (T)(wrapInOptional ? o(result) : result);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	}
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<strong class="jxr_keyword">private</strong> BeanMap&lt;?&gt; applyTypeProperty(BeanMap&lt;?&gt; beanMap, String typeName, ClassMeta&lt;?&gt; eType) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<strong class="jxr_keyword">var</strong> cm = getBeanRegistry().getClassMeta(typeName);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<em class="jxr_comment">// eType is provably never null here -- applyTypeProperty's only call site (readDocument, above) always</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<em class="jxr_comment">// passes its own eType parameter, which is itself already established non-null (see the eType==null</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<em class="jxr_comment">// HTT comment at the top of readDocument).</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">if</strong> (nn(cm) &amp;&amp; nn(eType) &amp;&amp; eType.isAssignableFrom(cm)) <em class="jxr_comment">// HTT: nn(eType) is dead -- see comment above</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">return</strong> toBeanMap(newBean(cm.<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">return</strong> beanMap;
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	}
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<span class="jxr_string">"unused"</span>,    <em class="jxr_comment">// pMeta kept for API consistency with other readXxx methods</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<span class="jxr_string">"java:S1172"</span> <em class="jxr_comment">// Same as above</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	})
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	<strong class="jxr_keyword">private</strong> Object readArray(<a name="BsonInputStream" href="../../../../../org/apache/juneau/marshall/bson/BsonInputStream.html#BsonInputStream">BsonInputStream</a> is, ClassMeta&lt;?&gt; eType, Object <strong class="jxr_keyword">outer</strong>, BeanPropertyMeta pMeta) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		is.readDocumentSize();
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<em class="jxr_comment">// eType==null is provably unreachable -- readArray's only call site is readTypedValue's case 0x04,</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<em class="jxr_comment">// whose targetType argument is always one of sType.getValueType()/bcm/object()/string(), none of which</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<em class="jxr_comment">// are ever null (see the identical readDocument comment above for the full justification).</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>) <em class="jxr_comment">// HTT: dead -- see comment above; targetType is never null at the only call site</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			eType = object(); <em class="jxr_comment">// HTT: dead -- unreachable body; see the HTT note on the guard immediately above.</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> sType = eType;
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<em class="jxr_comment">// Do not recurse for Optional - parse array elements with inner type, wrap at end</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">if</strong> (sType.isOptional())
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			sType = eType.getElementType();
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<em class="jxr_comment">// Array types (String[], int[][], etc.) must use a Collection to gather elements; toArray() converts at the end.</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<em class="jxr_comment">// ClassMeta.newInstance() for array types returns an empty array, not a Collection - never use it for arrays.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<em class="jxr_comment">// Only use sType.newInstance() for actual Collection types (List, Set, etc.).</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		Collection coll;
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">if</strong> (sType.isArray() || sType.isArgs() || sType.<strong class="jxr_keyword">inner</strong>().isArray()) <em class="jxr_comment">// HTT: the "sType.isArgs()" and "sType.inner().isArray()" disjuncts are both dead - ClassInfo.isArray() (inherited by ClassMeta) is defined as exactly "inner.isArray()", so "sType.isArray()" and "sType.inner().isArray()" are the same computation (the third disjunct can never differ from the first); and an ARGS-category ClassMeta's inner class is always synthesized as Object[].class (see the args-array constructor), so "sType.isArgs()==true" already implies "sType.isArray()==true", meaning the first disjunct always short-circuits before the second is ever meaningfully evaluated as the deciding factor.</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			coll = newGenericList();
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">var</strong> instance = sType.canCreateNewInstance(<strong class="jxr_keyword">outer</strong>) ? sType.newInstance(<strong class="jxr_keyword">outer</strong>) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			coll = (instance instanceof Collection instance2) ? instance2 : newGenericList();
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		}
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">var</strong> elementType = coalesce(sType.getElementType(), object());
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">while</strong> (!is.isDocumentEnd()) {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">var</strong> et = is.readElementType();
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			is.readElementName();
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			coll.add(readTypedValue(is, et, elementType, coll, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		}
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		is.readDocumentTerminator();
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		Object result = sType.isArray() || sType.isArgs() ? toArray(sType, coll) : coll; <em class="jxr_comment">// HTT: "sType.isArgs()" is dead here for the same reason as the "isArgs()"/"inner().isArray()" disjuncts above - an ARGS-category ClassMeta's inner class is always Object[].class, so isArgs()==true already implies isArray()==true, and the first disjunct always short-circuits first.</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">return</strong> eType.isOptional() ? o(result) : result;
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	}
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	@Override
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; T doRead(ParserPipe pipe, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> is = <strong class="jxr_keyword">new</strong> <a name="BsonInputStream" href="../../../../../org/apache/juneau/marshall/bson/BsonInputStream.html#BsonInputStream">BsonInputStream</a>(pipe)) {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			is.setMaxLength(maxLength);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">return</strong> (T)readDocument(is, type, getOuter(), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		}
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	}
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 * Opens a whole-value pull-parser cursor over a BSON document, bound to this live session.</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 * {@link RecordReader#read(Class) read(...)} delegates to the polymorphic</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 * {@link ParserSession#read(Object, Class)} entry point.</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * @param input The input.</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * @return A new {@link RecordReader} cursor.</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * @throws IOException If a problem occurred opening the underlying input.</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	@Override <em class="jxr_comment">/* RecordReadable */</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<strong class="jxr_keyword">public</strong> <a name="RecordReader" href="../../../../../org/apache/juneau/marshall/stream/RecordReader.html#RecordReader">RecordReader</a> readRecords(Object input) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">return</strong> RecordAdapter.reader(<strong class="jxr_keyword">this</strong>, input);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	}
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * Buffered array-element {@link RecordReader} for BSON, bound to this live session.  Calls</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * {@code parse(input, List.class, Object.class)} once and iterates the result.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * @param input The input.</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 * @return A buffered {@link RecordReader}.</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * @throws IOException If a problem occurred reading the input.</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	@Override <em class="jxr_comment">/* ArrayRecordReadable */</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	<strong class="jxr_keyword">public</strong> <a name="RecordReader" href="../../../../../org/apache/juneau/marshall/stream/RecordReader.html#RecordReader">RecordReader</a> readArrayRecords(Object input) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">return</strong> RecordAdapter.arrayReader(<strong class="jxr_keyword">this</strong>, input);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * The BSON record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 * @return Always &lt;jk&gt;false&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	@Override <em class="jxr_comment">/* RecordReadable */</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isRecordStreaming() { <strong class="jxr_keyword">return</strong> false; }
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * The BSON array-record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * @return Always &lt;jk&gt;false&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	@Override <em class="jxr_comment">/* ArrayRecordReadable */</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isArrayRecordStreaming() { <strong class="jxr_keyword">return</strong> false; }
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

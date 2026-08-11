@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>McpSubscriptionsListenIntegration_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../testapidocs/org/apache/juneau/rest/client/mcp/v20260728/McpSubscriptionsListenIntegration_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.mcp.v20260728;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.net.URI;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.net.http.HttpClient;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.net.http.HttpRequest;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.net.http.HttpResponse.BodyHandlers;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.StandardCharsets;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.bean.mcp.v20260728.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.json.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.sse.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.microservice.*;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.*;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.v20260728.*;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.extension.*;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.*;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * End-to-end coverage for MCP {@code 2026-07-28} SEP-2575 {@code subscriptions/listen} (C8), driven through the</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * real {@link McpClient#listen} against a live embedded-Jetty server. This is the repo's first real-Jetty test to</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * exercise a held-open SSE response over the actual {@code AsyncContext}/{@code startAsync()} branch — every prior</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * SSE test uses {@code MockRestClient}'s synchronous fallback path, which cannot represent a held-open response at</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * all.</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * The fixture's {@link McpSubscriptionsConfig#getHeartbeatIntervalMs() heartbeatIntervalMs} is tuned down to</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * {@value #HEARTBEAT_INTERVAL_MS}&amp;nbsp;ms (from the 15s production default) so heartbeat-arrival coverage</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * ({@link #c01_heartbeat_arrivesRepeatedlyOverLiveConnection_whileIdle}) does not need to wait through a full</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * production-scale interval; this also means every other test in this class incidentally exercises the client</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * pump's "skip a named {@code ping} event" path for real, over the wire, on every run.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  @org.apache.juneau.testing.JettyMicroserviceTest
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">class</strong> <a name="McpSubscriptionsListenIntegration_Test" href="../../../../../../../org/apache/juneau/rest/client/mcp/v20260728/McpSubscriptionsListenIntegration_Test.html#McpSubscriptionsListenIntegration_Test">McpSubscriptionsListenIntegration_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> HEARTBEAT_INTERVAL_MS = 150L;
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpToolHandler publishTool() {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpToolHandler() {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			@Override <strong class="jxr_keyword">public</strong> McpToolSpec descriptor() {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpToolSpec().setName(<span class="jxr_string">"publish"</span>).setDescription(<span class="jxr_string">"Publishes a resources/updated change for the given uri"</span>);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			}
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			@Override <strong class="jxr_keyword">public</strong> McpToolOutcome call(Map&lt;String,Object&gt; arguments, BeanStore ctx) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  				<strong class="jxr_keyword">var</strong> uri = (String) arguments.get(<span class="jxr_string">"uri"</span>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  				ctx.getBean(McpSubscriptions.<strong class="jxr_keyword">class</strong>).get().resourceUpdated(uri);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  				<strong class="jxr_keyword">return</strong> McpToolOutcome.text(<span class="jxr_string">"published:"</span> + uri);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			}
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		};
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpToolHandler activeCountTool() {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpToolHandler() {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			@Override <strong class="jxr_keyword">public</strong> McpToolSpec descriptor() {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpToolSpec().setName(<span class="jxr_string">"activeCount"</span>).setDescription(<span class="jxr_string">"Returns the current active-subscription count"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			@Override <strong class="jxr_keyword">public</strong> McpToolOutcome call(Map&lt;String,Object&gt; arguments, BeanStore ctx) {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  				<strong class="jxr_keyword">var</strong> count = ctx.getBean(McpSubscriptionBroker.<strong class="jxr_keyword">class</strong>).get().activeCount();
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  				<strong class="jxr_keyword">return</strong> McpToolOutcome.text(String.valueOf(count));
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			}
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		};
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<em class="jxr_comment">// SseSerializer must be explicitly registered for Accept: text/event-stream negotiation to succeed against</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<em class="jxr_comment">// a real servlet container - unlike MockRestClient (which every prior MCP test relies on), a live Jetty</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<em class="jxr_comment">// container enforces strict content negotiation, and the neutral/v2 McpRestServlet base classes only wire</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<em class="jxr_comment">// JSON serializers by default (see ReactiveResponseProcessor_Test's "Accept-header-driven SSE opt-in" case).</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Rest(serializers = {JsonSerializer.<strong class="jxr_keyword">class</strong>, SseSerializer.<strong class="jxr_keyword">class</strong>}, parsers = JsonParser.<strong class="jxr_keyword">class</strong>, defaultAccept = <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Fixture <strong class="jxr_keyword">extends</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.v20260728.McpRestServlet {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		@Override
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">protected</strong> McpServerConfig createMcpConfig() {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpServerConfig().setName(<span class="jxr_string">"it-subscriptions-fixture"</span>).setVersion(<span class="jxr_string">"1.0.0"</span>)
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 				.addTool(publishTool()).addTool(activeCountTool());
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		}
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<em class="jxr_comment">// Short heartbeat so c01 (below) can observe repeated "ping" frames over a real held-open connection</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<em class="jxr_comment">// without waiting through the 15s production default.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		@Override
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">protected</strong> McpOptions createMcpOptions() {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpOptions()
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				.setCapabilities(<strong class="jxr_keyword">new</strong> ServerCapabilities()
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 					.setResources(<strong class="jxr_keyword">new</strong> ResourceCapability().setSubscribe(<strong class="jxr_keyword">true</strong>).setListChanged(<strong class="jxr_keyword">true</strong>))
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 					.setTools(<strong class="jxr_keyword">new</strong> ToolCapability().setListChanged(<strong class="jxr_keyword">true</strong>)))
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				.subscriptions(s -&gt; s.setHeartbeatIntervalMs(HEARTBEAT_INTERVAL_MS));
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		}
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@Configuration
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> FixtureConfig {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		@Bean <strong class="jxr_keyword">public</strong> Servlet mcpServlet() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Fixture(); }
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@RegisterExtension
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">static</strong> MicroserviceTestFixture fixture = MicroserviceTestFixture.create()
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		.configurations(FixtureConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> HttpClient HTTP = HttpClient.newBuilder()
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		.connectTimeout(Duration.ofSeconds(5)).followRedirects(HttpClient.Redirect.NEVER).build();
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpClient.Builder clientBuilder() {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">return</strong> McpClient.builder().endpoint(fixture.getRootUrl() + <span class="jxr_string">"/"</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * Bounded polling await shared by a01 and z01's server-side cleanup checks: cleanup is write-failure/close</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 * driven on the server side (it only notices a disconnect on its next write attempt), not proactive, so there</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * is no push notification to await deterministically - only the real {@code activeCount} condition, polled on</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * a bounded schedule. Returns the last observed count once it reads {@code "0"} or the deadline elapses.</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@SuppressWarnings(<span class="jxr_string">"java:S2925"</span>) <em class="jxr_comment">// pacing delay between condition polls; no push notification exists for this rollup</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String awaitActiveCountZero(McpClient client, <strong class="jxr_keyword">long</strong> timeoutMs, <strong class="jxr_keyword">long</strong> pollMs) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> deadline = System.currentTimeMillis() + timeoutMs;
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		String count;
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">do</strong> {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			Thread.sleep(pollMs);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			count = ((TextContent) client.callTool(<span class="jxr_string">"activeCount"</span>, Map.of()).getContent().get(0)).getText();
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		} <strong class="jxr_keyword">while</strong> (! <span class="jxr_string">"0"</span>.equals(count) &amp;&amp; System.currentTimeMillis() &lt; deadline);
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">return</strong> count;
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<em class="jxr_comment">// A: acknowledged -&gt; published notification round-trip -&gt; server-side cleanup on close (assertions 1, 2, 4).</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Test <strong class="jxr_keyword">void</strong> a01_listen_receivesAcknowledgedThenPublishedNotification_thenBrokerCleansUpOnClose() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = clientBuilder().build()) {
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">var</strong> events = <strong class="jxr_keyword">new</strong> LinkedBlockingQueue&lt;String&gt;();
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">var</strong> filter = <strong class="jxr_keyword">new</strong> SubscriptionFilter().setResourceSubscriptions(List.of(<span class="jxr_string">"file:///a.txt"</span>)).setResourcesListChanged(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">var</strong> acknowledged = <strong class="jxr_keyword">new</strong> LinkedBlockingQueue&lt;SubscriptionFilter&gt;();
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">var</strong> handle = client.listen(filter, <strong class="jxr_keyword">new</strong> McpSubscriptionListener() {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onAcknowledged(SubscriptionFilter honoredFilter) {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 					acknowledged.add(honoredFilter);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 					events.add(<span class="jxr_string">"ack"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				}
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 				@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onResourceUpdated(String uri) {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 					events.add(<span class="jxr_string">"updated:"</span> + uri);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 				}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 				@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onListChanged(McpListChangedKind kind) {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 					events.add(<span class="jxr_string">"listChanged:"</span> + kind);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 				}
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onError(Throwable t) {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 					events.add(<span class="jxr_string">"error:"</span> + t);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				}
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			});
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 				<em class="jxr_comment">// Assertion 1: no -32600 "Missing required header" error frame - the mandatory acknowledged</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				<em class="jxr_comment">// frame is the very first thing received. This is precisely what the McpClient.listen(...)</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				<em class="jxr_comment">// header fix enables: without it, this poll would instead see "error:..." (or time out, since</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				<em class="jxr_comment">// the client would never receive a well-formed acknowledged frame at all).</em>
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				assertEquals(<span class="jxr_string">"ack"</span>, events.poll(15, TimeUnit.SECONDS));
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 				<strong class="jxr_keyword">var</strong> honoredFilter = acknowledged.poll(15, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				assertNotNull(honoredFilter);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				<em class="jxr_comment">// Compared by content (List#equals), not by List#toString() format - the parsed list's</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 				<em class="jxr_comment">// concrete runtime type renders its toString() as JSON (quoting string elements), which is a</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 				<em class="jxr_comment">// distinct concern from the (unquoted) String content each element actually carries.</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				assertEquals(List.of(<span class="jxr_string">"file:///a.txt"</span>), honoredFilter.getResourceSubscriptions());
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 				assertEquals(Boolean.TRUE, honoredFilter.getResourcesListChanged());
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 				<strong class="jxr_keyword">var</strong> countBefore = client.callTool(<span class="jxr_string">"activeCount"</span>, Map.of());
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				assertEquals(<span class="jxr_string">"1"</span>, ((TextContent) countBefore.getContent().get(0)).getText());
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 				<em class="jxr_comment">// Idle window spanning several heartbeat intervals before publishing: the fixture's live</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 				<em class="jxr_comment">// heartbeat frames are certainly interleaved on the wire during this wait (proven directly by</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 				<em class="jxr_comment">// c01, below), so an empty poll here demonstrates the client pump silently skips them rather</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 				<em class="jxr_comment">// than raising a spurious callback (onError, a bogus "updated", etc.). BlockingQueue#poll's</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				<em class="jxr_comment">// bounded wait races against the real background pump thread - it returns the instant a</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 				<em class="jxr_comment">// (spurious) event arrives, and only blocks the full duration when none does.</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 				assertNull(events.poll(6 * HEARTBEAT_INTERVAL_MS, TimeUnit.MILLISECONDS),
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 					<span class="jxr_string">"a heartbeat frame must never surface as a listener callback"</span>);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 				<em class="jxr_comment">// Assertion 2: a server-emitted change (via the neutral McpSubscriptions SPI, reached through</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 				<em class="jxr_comment">// the tool handler's BeanStore) round-trips end-to-end to the decoded onResourceUpdated</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 				<em class="jxr_comment">// callback.</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 				client.callTool(<span class="jxr_string">"publish"</span>, Map.of(<span class="jxr_string">"uri"</span>, <span class="jxr_string">"file:///a.txt"</span>));
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				assertEquals(<span class="jxr_string">"updated:file:///a.txt"</span>, events.poll(15, TimeUnit.SECONDS));
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 				handle.close();
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			}
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<em class="jxr_comment">// Assertion 4: cleanup is write-failure/close-driven, not proactive (spec's "Transport/threading</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			<em class="jxr_comment">// detail") - the server only notices the client's disconnect on its next write attempt (heartbeat</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<em class="jxr_comment">// or otherwise), so poll rather than assert immediately. Bounded poll loop, not a fixed sleep for</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<em class="jxr_comment">// synchronization: each iteration's brief sleep is only the between-poll delay, gated by the outer</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<em class="jxr_comment">// deadline.</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">var</strong> countAfter = awaitActiveCountZero(client, 15_000, 200);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			assertEquals(<span class="jxr_string">"0"</span>, countAfter);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		}
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	}
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<em class="jxr_comment">// B: raw java.net.http.HttpClient + SseEventReader - validates the wire shape independent of the client facade.</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	@Test <strong class="jxr_keyword">void</strong> b01_rawHttpClient_holdsOpenSseResponse_deliversAcknowledgedFirst() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">var</strong> listenId = <span class="jxr_string">"raw-1"</span>;
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<em class="jxr_comment">// params._meta.protocolVersion/clientCapabilities are mandatory on every v2 request (see</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<em class="jxr_comment">// McpRevision.validateMeta) - McpClient builds this automatically; the raw path must supply it itself.</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> body = <span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;"</span> + listenId + <span class="jxr_string">"\&quot;,\&quot;method\&quot;:\&quot;subscriptions/listen\&quot;,"</span>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			+ <span class="jxr_string">"\&quot;params\&quot;:{\&quot;notifications\&quot;:{\&quot;resourcesListChanged\&quot;:true},\&quot;_meta\&quot;:{"</span>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			+ <span class="jxr_string">"\&quot;io.modelcontextprotocol/protocolVersion\&quot;:\&quot;2026-07-28\&quot;,\&quot;io.modelcontextprotocol/clientCapabilities\&quot;:{}}}}"</span>;
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">var</strong> req = HttpRequest.newBuilder()
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			.uri(URI.create(fixture.getRootUrl() + <span class="jxr_string">"/"</span>))
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			.header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"text/event-stream"</span>)
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<em class="jxr_comment">// SEP-2243 Mcp-Method/Mcp-Name headers - McpRevision.dispatch() validates these unconditionally</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<em class="jxr_comment">// before branching on the method (see the McpClient.listen() header fix, above); this raw request</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<em class="jxr_comment">// bypasses McpClient entirely, so it must stamp them itself exactly as McpClient.listen() does.</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, McpMethods.SUBSCRIPTIONS_LISTEN)
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			.header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			.timeout(Duration.ofSeconds(15))
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			.POST(HttpRequest.BodyPublishers.ofString(body))
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			.build();
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> resp = HTTP.send(req, BodyHandlers.ofInputStream());
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertEquals(200, resp.statusCode());
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> reader = <strong class="jxr_keyword">new</strong> SseEventReader(<strong class="jxr_keyword">new</strong> InputStreamReader(resp.body(), StandardCharsets.UTF_8))) {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			assertTrue(reader.hasNext());
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			<strong class="jxr_keyword">var</strong> first = reader.next();
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			assertTrue(first.getData() != <strong class="jxr_keyword">null</strong> &amp;&amp; first.getData().contains(<span class="jxr_string">"notifications/subscriptions/acknowledged"</span>), <span class="jxr_string">""</span> + first.getData());
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		}
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<em class="jxr_comment">// C: heartbeat frames actually arrive over a real held-open HTTP connection while idle (assertion 3).</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 * Opens a raw (client-facade-independent) SSE stream and, on a dedicated reader thread, counts named</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 * {@code "ping"} events with no {@code data:} payload arriving after the mandatory acknowledged frame - the</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 * fixture's tuned-down {@link #HEARTBEAT_INTERVAL_MS} means at least two must arrive well within the bounded</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * wait below. The read itself is a blocking I/O call (not a sleep-based poll); the bound comes from a</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * {@link CountDownLatch#await(long, TimeUnit)} racing the reader thread, and the connection is force-closed in</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 * {@code finally} to unblock that thread if the assertion path never reaches the expected count.</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	@Test <strong class="jxr_keyword">void</strong> c01_heartbeat_arrivesRepeatedlyOverLiveConnection_whileIdle() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">var</strong> body = <span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;hb-1\&quot;,\&quot;method\&quot;:\&quot;subscriptions/listen\&quot;,"</span>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			+ <span class="jxr_string">"\&quot;params\&quot;:{\&quot;notifications\&quot;:{},\&quot;_meta\&quot;:{"</span>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			+ <span class="jxr_string">"\&quot;io.modelcontextprotocol/protocolVersion\&quot;:\&quot;2026-07-28\&quot;,\&quot;io.modelcontextprotocol/clientCapabilities\&quot;:{}}}}"</span>;
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">var</strong> req = HttpRequest.newBuilder()
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			.uri(URI.create(fixture.getRootUrl() + <span class="jxr_string">"/"</span>))
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			.header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"text/event-stream"</span>)
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<em class="jxr_comment">// SEP-2243 Mcp-Method/Mcp-Name headers - see b01's comment for why the raw HTTP path must stamp</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<em class="jxr_comment">// these itself.</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, McpMethods.SUBSCRIPTIONS_LISTEN)
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			.header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			.timeout(Duration.ofSeconds(20))
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			.POST(HttpRequest.BodyPublishers.ofString(body))
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			.build();
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">var</strong> resp = HTTP.send(req, BodyHandlers.ofInputStream());
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertEquals(200, resp.statusCode());
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">var</strong> requiredPings = 2;
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">var</strong> pingsSeen = <strong class="jxr_keyword">new</strong> CountDownLatch(requiredPings);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">var</strong> failure = <strong class="jxr_keyword">new</strong> AtomicReference&lt;Throwable&gt;();
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">var</strong> readerThread = <strong class="jxr_keyword">new</strong> Thread(() -&gt; {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> reader = <strong class="jxr_keyword">new</strong> SseEventReader(<strong class="jxr_keyword">new</strong> InputStreamReader(resp.body(), StandardCharsets.UTF_8))) {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 				assertTrue(reader.hasNext());
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				<strong class="jxr_keyword">var</strong> first = reader.next();
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 				assertTrue(first.getData() != <strong class="jxr_keyword">null</strong> &amp;&amp; first.getData().contains(<span class="jxr_string">"notifications/subscriptions/acknowledged"</span>), first.getData());
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 				<strong class="jxr_keyword">while</strong> (reader.hasNext() &amp;&amp; pingsSeen.getCount() &gt; 0) {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 					<strong class="jxr_keyword">var</strong> event = reader.next();
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 					<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"ping"</span>.equals(event.getEvent())) {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 						assertNull(event.getData(), <span class="jxr_string">"a heartbeat frame must carry no data: payload"</span>);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 						pingsSeen.countDown();
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 					}
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 				}
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			} <strong class="jxr_keyword">catch</strong> (Throwable t) {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 				failure.set(t);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			}
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		}, <span class="jxr_string">"mcp-heartbeat-integration-reader"</span>);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		readerThread.setDaemon(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		readerThread.start();
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			assertTrue(pingsSeen.await(15, TimeUnit.SECONDS),
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 				<span class="jxr_string">"expected "</span> + requiredPings + <span class="jxr_string">" heartbeat frame(s) over the live connection; saw "</span>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 					+ (requiredPings - pingsSeen.getCount()));
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">if</strong> (failure.get() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> AssertionError(failure.get());
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			resp.body().close();
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			readerThread.join(5_000);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		}
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<em class="jxr_comment">// Z: dead-client cleanup, driven from a raw (client-facade-independent) connection abort (assertion 4).</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 * Complements a01's cleanup coverage (which closes via the {@code McpClient} facade's {@code handle.close()})</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * with a facade-independent path: a raw connection whose body is closed without ever calling any client-side</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * "unsubscribe" API, proving cleanup is driven by the server's own write-failure detection (P4/P5) rather than</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * any client-initiated protocol message.</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	@Test <strong class="jxr_keyword">void</strong> z01_rawClientAbort_triggersServerCleanup_withoutAnyClientFacade() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> body = <span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;z-1\&quot;,\&quot;method\&quot;:\&quot;subscriptions/listen\&quot;,"</span>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			+ <span class="jxr_string">"\&quot;params\&quot;:{\&quot;notifications\&quot;:{},\&quot;_meta\&quot;:{"</span>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			+ <span class="jxr_string">"\&quot;io.modelcontextprotocol/protocolVersion\&quot;:\&quot;2026-07-28\&quot;,\&quot;io.modelcontextprotocol/clientCapabilities\&quot;:{}}}}"</span>;
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> req = HttpRequest.newBuilder()
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			.uri(URI.create(fixture.getRootUrl() + <span class="jxr_string">"/"</span>))
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			.header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"text/event-stream"</span>)
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, McpMethods.SUBSCRIPTIONS_LISTEN)
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			.header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			.timeout(Duration.ofSeconds(20))
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			.POST(HttpRequest.BodyPublishers.ofString(body))
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			.build();
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">var</strong> resp = HTTP.send(req, BodyHandlers.ofInputStream());
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		assertEquals(200, resp.statusCode());
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> reader = <strong class="jxr_keyword">new</strong> SseEventReader(<strong class="jxr_keyword">new</strong> InputStreamReader(resp.body(), StandardCharsets.UTF_8))) {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			assertTrue(reader.hasNext());
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			reader.next(); <em class="jxr_comment">// ack</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		}
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		resp.body().close();
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> probe = clientBuilder().build()) {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">var</strong> countAfter = awaitActiveCountZero(probe, 15_000, 200);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			assertEquals(<span class="jxr_string">"0"</span>, countAfter);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		}
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	}
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

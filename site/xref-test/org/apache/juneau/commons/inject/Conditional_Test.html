@@ -1,0 +1,461 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Conditional_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/commons/inject/Conditional_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.commons.inject;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.settings.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Coverage for {@code @Conditional}, {@code @ConditionalOnClass},</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * {@code @ConditionalOnMissingBean}, and {@code @ConditionalOnProperty} on both</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * {@code @Configuration} types (class-level) and {@code @Bean} members (member-level).</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;The evaluation semantics asserted here mirror the plan:</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Class-level skip cascades to imports.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Member-level skip applies only to that specific {@code @Bean} member.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Evaluation is eager at registration time.</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<span class="jxr_string">"java:S2094"</span>, <em class="jxr_comment">// Empty fixture/config classes are intentional test fixtures.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<span class="jxr_string">"java:S2093"</span>, <em class="jxr_comment">// BasicBeanStore is AutoCloseable, but these try/finally blocks restore global Settings state, not the store; converting to try-with-resources would invoke store.close() (triggering @PreDestroy lifecycle these registration-semantics tests don't exercise) and dislocate the Settings setup/teardown.</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"resource"</span>    <em class="jxr_comment">// Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  })
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">class</strong> Conditional_Test <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/commons/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<em class="jxr_comment">// Fixtures.</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> SvcA { <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String tag; <strong class="jxr_keyword">public</strong> SvcA(String tag) { <strong class="jxr_keyword">this</strong>.tag = tag; } }
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> SvcB { <strong class="jxr_keyword">public</strong> SvcB() { <em class="jxr_comment">/* intentionally empty */</em> } }
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> AlwaysTrue <strong class="jxr_keyword">implements</strong> Condition {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">public</strong> AlwaysTrue() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(ConditionContext ctx) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>; }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> AlwaysFalse <strong class="jxr_keyword">implements</strong> Condition {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">public</strong> AlwaysFalse() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(ConditionContext ctx) { <strong class="jxr_keyword">return</strong> false; }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	}
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> HasBeanProperty <strong class="jxr_keyword">implements</strong> Condition {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">public</strong> HasBeanProperty() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(ConditionContext ctx) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			<strong class="jxr_keyword">return</strong> ctx.settings().get(<span class="jxr_string">"conditional.test.enabled"</span>).isPresent();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		}
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * Custom condition that exercises every {@link ConditionContext} accessor at least once.</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;Used to give the test suite coverage of {@code beanStore()}, {@code classLoader()}, and</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * {@code annotatedElement()} (in addition to {@code settings()}, which is reached by</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * {@link HasBeanProperty}).</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> FullContextSnapshot <strong class="jxr_keyword">implements</strong> Condition {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">public</strong> FullContextSnapshot() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(ConditionContext ctx) {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">return</strong> ctx.beanStore() != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  				&amp;&amp; ctx.classLoader() != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  				&amp;&amp; ctx.annotatedElement() != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  				&amp;&amp; ctx.settings() != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Configuration
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Conditional(FullContextSnapshot.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> FullContextGatedConfig {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">public</strong> FullContextGatedConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		@Bean <strong class="jxr_keyword">public</strong> SvcA svcA() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"full-context"</span>); }
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Configuration
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ClassLevelTrueConfig {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">public</strong> ClassLevelTrueConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		@Bean <strong class="jxr_keyword">public</strong> SvcA svcA() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"class-level-true"</span>); }
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Configuration
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Conditional(AlwaysFalse.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ClassLevelFalseConfig {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">public</strong> ClassLevelFalseConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		@Bean <strong class="jxr_keyword">public</strong> SvcA svcA() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"class-level-false"</span>); }
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	}
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@Configuration(imports = { ClassLevelFalseConfig.<strong class="jxr_keyword">class</strong> })
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ImporterOfFalse {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">public</strong> ImporterOfFalse() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		@Bean <strong class="jxr_keyword">public</strong> SvcB svcB() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcB(); }
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Configuration
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> MemberLevelConfig {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">public</strong> MemberLevelConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		@Bean @Conditional(AlwaysTrue.<strong class="jxr_keyword">class</strong>) <strong class="jxr_keyword">public</strong> SvcA enabled() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"enabled"</span>); }
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		@Bean @Conditional(AlwaysFalse.<strong class="jxr_keyword">class</strong>) <strong class="jxr_keyword">public</strong> SvcB disabled() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcB(); }
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">	 * Configuration that uses {@code @Conditional} on instance fields to exercise the field-level</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * conditional cascade in {@code BasicBeanStore.registerConfiguration}.  Both fields are non-static</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * which forces the lazy {@code instance = BeanInstantiator.of(configType, this).run()} path on the</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 * first eligible field AND the "instance != null" short-circuit on subsequent ones.</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	@Configuration
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> FieldConditionalConfig {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">public</strong> FieldConditionalConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		@Bean(name = <span class="jxr_string">"enabled"</span>) @Conditional(AlwaysTrue.<strong class="jxr_keyword">class</strong>) <strong class="jxr_keyword">public</strong> SvcA enabledField = <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"enabled-field"</span>);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		@Bean(name = <span class="jxr_string">"disabled"</span>) @Conditional(AlwaysFalse.<strong class="jxr_keyword">class</strong>) <strong class="jxr_keyword">public</strong> SvcA disabledField = <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"disabled-field"</span>);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		@Bean(name = <span class="jxr_string">"second"</span>) <strong class="jxr_keyword">public</strong> SvcA secondField = <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"second-field"</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	@Configuration
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> OnClassConfig {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">public</strong> OnClassConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		@Bean @ConditionalOnClass(<span class="jxr_string">"java.lang.String"</span>) <strong class="jxr_keyword">public</strong> SvcA presentBean() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"present"</span>); }
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		@Bean @ConditionalOnClass(<span class="jxr_string">"definitely.does.not.Exist"</span>) <strong class="jxr_keyword">public</strong> SvcB absentBean() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcB(); }
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Configuration
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> OnMissingBeanConfig {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">public</strong> OnMissingBeanConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		@Bean(name = <span class="jxr_string">"second"</span>) @ConditionalOnMissingBean(SvcA.<strong class="jxr_keyword">class</strong>) <strong class="jxr_keyword">public</strong> SvcA conditional() {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"conditional"</span>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		}
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	@Configuration
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> OnMissingBeanNamedConfig {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">public</strong> OnMissingBeanNamedConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<em class="jxr_comment">// type=Object.class signals "match by bean name only". The conditional bean is skipped if a</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<em class="jxr_comment">// bean of any type already exists under "primaryName" in the local store.</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		@Bean(name = <span class="jxr_string">"secondary"</span>)
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		@ConditionalOnMissingBean(name = <span class="jxr_string">"primaryName"</span>)
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">public</strong> SvcA conditional() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"conditional"</span>); }
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Configuration
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> OnPropertyConfig {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">public</strong> OnPropertyConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		@Bean @ConditionalOnProperty(name = <span class="jxr_string">"conditional.test.enabled"</span>) <strong class="jxr_keyword">public</strong> SvcA enabled() {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"enabled"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		}
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		@Bean @ConditionalOnProperty(name = <span class="jxr_string">"conditional.test.missing"</span>, matchIfMissing = <strong class="jxr_keyword">true</strong>) <strong class="jxr_keyword">public</strong> SvcB missing() {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcB();
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	@Configuration
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> OnPropertyHavingValueConfig {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">public</strong> OnPropertyHavingValueConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<em class="jxr_comment">// Property must equal "expected" — when it's present but different, registration is skipped.</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		@Bean @ConditionalOnProperty(name = <span class="jxr_string">"conditional.test.matchedValue"</span>, havingValue = <span class="jxr_string">"expected"</span>)
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">public</strong> SvcA matched() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"matched"</span>); }
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	@Configuration
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> CustomConditionalConfig {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">public</strong> CustomConditionalConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		@Bean @Conditional(HasBeanProperty.<strong class="jxr_keyword">class</strong>) <strong class="jxr_keyword">public</strong> SvcA gated() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"gated"</span>); }
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<em class="jxr_comment">// Tests - class-level conditionals.</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	@Test
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<strong class="jxr_keyword">void</strong> a01_classLevelFalse_skipsClass() {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		store.registerConfiguration(ClassLevelFalseConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertFalse(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent());
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	@Test
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">void</strong> a02_classLevelFalse_skipsImporterChain() {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<em class="jxr_comment">// The importer itself is registerable but its imported FalseConfig skips silently.</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		store.registerConfiguration(ImporterOfFalse.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertTrue(store.getBean(SvcB.<strong class="jxr_keyword">class</strong>).isPresent(),
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<span class="jxr_string">"Importer's own beans should still register when only the import is skipped"</span>);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertFalse(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent(),
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<span class="jxr_string">"Skipped class-level conditional should not contribute beans"</span>);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	@Test
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<strong class="jxr_keyword">void</strong> a03_classLevelTrue_registers() {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		store.registerConfiguration(ClassLevelTrueConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertTrue(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent());
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	}
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<em class="jxr_comment">// Tests - member-level conditionals.</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	@Test
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<strong class="jxr_keyword">void</strong> b01_memberLevelTrue_registers_falseSkips() {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		store.registerConfiguration(MemberLevelConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertTrue(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent(), <span class="jxr_string">"True member should register"</span>);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertFalse(store.getBean(SvcB.<strong class="jxr_keyword">class</strong>).isPresent(), <span class="jxr_string">"False member should be skipped"</span>);
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	@Test
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<strong class="jxr_keyword">void</strong> b02_fieldLevelConditional_appliesPerField() {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<em class="jxr_comment">// First eligible instance field forces lazy instantiation; subsequent eligible field reuses</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<em class="jxr_comment">// the cached instance (instance != null branch).  Disabled field is skipped entirely.</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		store.registerConfiguration(FieldConditionalConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		assertTrue(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"enabled"</span>).isPresent(),
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<span class="jxr_string">"AlwaysTrue field-level @Conditional must register the bean"</span>);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		assertTrue(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"second"</span>).isPresent(),
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<span class="jxr_string">"Unconditional field must still register (exercises instance != null branch)"</span>);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		assertFalse(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"disabled"</span>).isPresent(),
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<span class="jxr_string">"AlwaysFalse field-level @Conditional must skip the bean"</span>);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	}
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<em class="jxr_comment">// Tests - @ConditionalOnClass.</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	@Test
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">void</strong> c01_onClass_present_registers() {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		store.registerConfiguration(OnClassConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertTrue(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent());
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	}
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	@Test
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<strong class="jxr_keyword">void</strong> c02_onClass_absent_skips() {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		store.registerConfiguration(OnClassConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertFalse(store.getBean(SvcB.<strong class="jxr_keyword">class</strong>).isPresent());
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<em class="jxr_comment">// Tests - @ConditionalOnMissingBean.</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	@Test
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<strong class="jxr_keyword">void</strong> d01_onMissingBean_skipsWhenPresent() {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<em class="jxr_comment">// Pre-populate SvcA in the store; @ConditionalOnMissingBean should then skip the conditional bean.</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		store.addBean(SvcA.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"existing"</span>));
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		store.registerConfiguration(OnMissingBeanConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertEquals(<span class="jxr_string">"existing"</span>, store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).get().tag);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		assertFalse(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"second"</span>).isPresent(),
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<span class="jxr_string">"Conditional-on-missing-bean should skip when type already present"</span>);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	}
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	@Test
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<strong class="jxr_keyword">void</strong> d02_onMissingBean_registersWhenAbsent() {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		store.registerConfiguration(OnMissingBeanConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">var</strong> second = store.getBean(SvcA.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"second"</span>);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		assertTrue(second.isPresent(), <span class="jxr_string">"When no existing SvcA, conditional should register"</span>);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		assertEquals(<span class="jxr_string">"conditional"</span>, second.get().tag);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	}
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	@Test
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">void</strong> d03_onMissingBeanByName_skipsWhenNameAlreadyPresent() {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<em class="jxr_comment">// type=Object.class + name="primaryName" means "skip if anything with that name exists".</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		store.addBean(SvcB.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> SvcB(), <span class="jxr_string">"primaryName"</span>);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		store.registerConfiguration(OnMissingBeanNamedConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		assertFalse(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"secondary"</span>).isPresent(),
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<span class="jxr_string">"Name-only @ConditionalOnMissingBean should skip when a bean with that name exists"</span>);
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	}
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	@Test
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	<strong class="jxr_keyword">void</strong> d04_onMissingBeanByName_registersWhenNameAbsent() {
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		store.registerConfiguration(OnMissingBeanNamedConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		assertTrue(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"secondary"</span>).isPresent(),
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<span class="jxr_string">"Name-only @ConditionalOnMissingBean should register when no bean has that name"</span>);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	}
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	<em class="jxr_comment">// Tests - @ConditionalOnProperty.</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	@Test
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	<strong class="jxr_keyword">void</strong> e01_onProperty_skipsWhenMissing() {
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		Settings.get().unsetLocal(<span class="jxr_string">"conditional.test.enabled"</span>);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		store.registerConfiguration(OnPropertyConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		assertFalse(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent());
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		assertTrue(store.getBean(SvcB.<strong class="jxr_keyword">class</strong>).isPresent(), <span class="jxr_string">"matchIfMissing=true should register the bean"</span>);
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	}
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	@Test
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	<strong class="jxr_keyword">void</strong> e02_onProperty_registersWhenPresent() {
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			Settings.get().setLocal(<span class="jxr_string">"conditional.test.enabled"</span>, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			store.registerConfiguration(OnPropertyConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			assertTrue(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent());
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			Settings.get().unsetLocal(<span class="jxr_string">"conditional.test.enabled"</span>);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		}
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	}
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	@Test
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	<strong class="jxr_keyword">void</strong> e03_onProperty_havingValueMatches_registers() {
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			Settings.get().setLocal(<span class="jxr_string">"conditional.test.matchedValue"</span>, <span class="jxr_string">"expected"</span>);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			store.registerConfiguration(OnPropertyHavingValueConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			assertTrue(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent());
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			Settings.get().unsetLocal(<span class="jxr_string">"conditional.test.matchedValue"</span>);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		}
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	}
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	@Test
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	<strong class="jxr_keyword">void</strong> e04_onProperty_havingValueMismatch_skips() {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			Settings.get().setLocal(<span class="jxr_string">"conditional.test.matchedValue"</span>, <span class="jxr_string">"different"</span>);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			store.registerConfiguration(OnPropertyHavingValueConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			assertFalse(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent(),
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 				<span class="jxr_string">"Property is present but does not equal havingValue — bean must be skipped"</span>);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			Settings.get().unsetLocal(<span class="jxr_string">"conditional.test.matchedValue"</span>);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		}
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	<em class="jxr_comment">// Tests - custom @Conditional with ConditionContext access.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	@Test
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">void</strong> f01_customCondition_sees_settings() {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			Settings.get().setLocal(<span class="jxr_string">"conditional.test.enabled"</span>, <span class="jxr_string">"yes"</span>);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			store.registerConfiguration(CustomConditionalConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			assertTrue(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent());
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			Settings.get().unsetLocal(<span class="jxr_string">"conditional.test.enabled"</span>);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		}
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	}
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@Test
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	<strong class="jxr_keyword">void</strong> f02_customCondition_skipsWhenFalse() {
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		Settings.get().unsetLocal(<span class="jxr_string">"conditional.test.enabled"</span>);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		store.registerConfiguration(CustomConditionalConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		assertFalse(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent());
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	}
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	@Test
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<strong class="jxr_keyword">void</strong> f03_customCondition_seesEntireContext() {
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<em class="jxr_comment">// FullContextSnapshot dereferences beanStore(), classLoader(), and annotatedElement() so all</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<em class="jxr_comment">// four ConditionContext accessors are exercised at least once via the public API path.</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		store.registerConfiguration(FullContextGatedConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertTrue(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent(),
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<span class="jxr_string">"FullContextSnapshot must observe non-null beanStore/classLoader/element/settings"</span>);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<em class="jxr_comment">// Tests - WritableBeanStore.registerConfigurations defensive-null branch.</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	@Test
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<strong class="jxr_keyword">void</strong> g01_registerConfigurations_nullVarargs_isNoOp() {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">var</strong> result = store.registerConfigurations((Class&lt;?&gt;[]) <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertSame(store, result, <span class="jxr_string">"registerConfigurations(null) should return the same store"</span>);
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertFalse(store.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent(),
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<span class="jxr_string">"No bean should be registered when configTypes is null"</span>);
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	}
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	<em class="jxr_comment">// Tests - logger-fine lambda coverage.</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	<em class="jxr_comment">// BasicBeanStore.matchesConditions() emits two LOGGER.fine(...) messages for skip events.  When</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	<em class="jxr_comment">// the BasicBeanStore logger is at FINE level, the lambdas actually execute and their message-</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	<em class="jxr_comment">// construction bodies become observable to JaCoCo.  The tests below temporarily raise the level</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<em class="jxr_comment">// and verify the skip still happens (the captured handler is asserted on too).</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	@Configuration
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	@ConditionalOnClass(<span class="jxr_string">"definitely.does.not.Exist"</span>)
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ClassLevelOnClassMissingConfig {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">public</strong> ClassLevelOnClassMissingConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		@Bean <strong class="jxr_keyword">public</strong> SvcA svcA() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SvcA(<span class="jxr_string">"never"</span>); }
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	}
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	@Test
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<strong class="jxr_keyword">void</strong> h01_loggerFine_messageLambdasExecute() {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">var</strong> logger = java.util.logging.Logger.getLogger(BasicBeanStore.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">var</strong> originalLevel = logger.getLevel();
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">var</strong> originalUseParent = logger.getUseParentHandlers();
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> captured = <strong class="jxr_keyword">new</strong> java.util.ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">var</strong> handler = <strong class="jxr_keyword">new</strong> java.util.logging.Handler() {
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> publish(java.util.logging.LogRecord r) { captured.add(r.getMessage()); }
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> flush() { <em class="jxr_comment">/* no-op */</em> }
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() { <em class="jxr_comment">/* no-op */</em> }
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		};
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		handler.setLevel(java.util.logging.Level.FINE);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			logger.setLevel(java.util.logging.Level.FINE);
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			logger.setUseParentHandlers(false);
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			logger.addHandler(handler);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			<em class="jxr_comment">// 1) AlwaysFalse @Conditional path → "Skipping conditional element due to @Conditional: …"</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">var</strong> store1 = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			store1.registerConfiguration(ClassLevelFalseConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			assertFalse(store1.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent());
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<em class="jxr_comment">// 2) @ConditionalOnClass("definitely.does.not.Exist") → "Skipping conditional element due to missing class …"</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			<strong class="jxr_keyword">var</strong> store2 = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			store2.registerConfiguration(ClassLevelOnClassMissingConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			assertFalse(store2.getBean(SvcA.<strong class="jxr_keyword">class</strong>).isPresent());
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			assertTrue(captured.stream().anyMatch(m -&gt; m.contains(<span class="jxr_string">"@Conditional"</span>)),
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 				<span class="jxr_string">"Expected a @Conditional skip log; got: "</span> + captured);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			assertTrue(captured.stream().anyMatch(m -&gt; m.contains(<span class="jxr_string">"missing class"</span>)),
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 				<span class="jxr_string">"Expected a missing-class skip log; got: "</span> + captured);
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			logger.removeHandler(handler);
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			logger.setLevel(originalLevel);
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			logger.setUseParentHandlers(originalUseParent);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		}
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	}
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

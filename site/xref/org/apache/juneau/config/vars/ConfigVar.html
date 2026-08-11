@@ -24,8 +24,8 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.config.vars;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.config.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.svl.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.svl.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.config.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * Config file variable resolver.</em>
@@ -58,11 +58,11 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics" target="alexandria_uri">https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics</a>"&gt;Simple Variable Language Basics&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/VariableBasics" target="alexandria_uri">https://juneau.apache.org/docs/topics/VariableBasics</a>"&gt;Variable Basics&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage" target="alexandria_uri">https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage</a>"&gt;Simple Variable Language Basics&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/Variables" target="alexandria_uri">https://juneau.apache.org/docs/topics/Variables</a>"&gt;Variable Basics&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ConfigVar" href="../../../../../org/apache/juneau/config/vars/ConfigVar.html#ConfigVar">ConfigVar</a> <strong class="jxr_keyword">extends</strong> <a name="DefaultingVar" href="../../../../../org/apache/juneau/svl/DefaultingVar.html#DefaultingVar">DefaultingVar</a> {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ConfigVar" href="../../../../../org/apache/juneau/config/vars/ConfigVar.html#ConfigVar">ConfigVar</a> <strong class="jxr_keyword">extends</strong> <a name="DefaultingVar" href="../../../../../org/apache/juneau/commons/svl/DefaultingVar.html#DefaultingVar">DefaultingVar</a> {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<em class="jxr_javadoccomment">/** The name of this variable. */</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String NAME = <span class="jxr_string">"C"</span>;
@@ -75,12 +75,12 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	}
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	@Override <em class="jxr_comment">/* Overridden from Var */</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canResolve(<a name="VarResolverSession" href="../../../../../org/apache/juneau/svl/VarResolverSession.html#VarResolverSession">VarResolverSession</a> session) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canResolve(VarResolverSession session) {
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">return</strong> session.getBean(Config.<strong class="jxr_keyword">class</strong>).isPresent();
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Override <em class="jxr_comment">/* Overridden from Var */</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">public</strong> String resolve(<a name="VarResolverSession" href="../../../../../org/apache/juneau/svl/VarResolverSession.html#VarResolverSession">VarResolverSession</a> session, String key) {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">public</strong> String resolve(VarResolverSession session, String key) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">return</strong> session.getBean(Config.<strong class="jxr_keyword">class</strong>).map(x -&gt; x.get(key).orElse(<strong class="jxr_keyword">null</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  }

@@ -24,536 +24,504 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.http.response;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.assertions.Assertions.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpEntities.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpHeaders.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.text.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.entity.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.http.impl.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.http.params.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * Basic implementation of the {@link HttpResponse} interface for error responses.</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * Although this class implements the various setters defined on the {@link HttpResponse} interface, it's in general</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * going to be more efficient to set the status/headers/content of this bean through the builder.</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Base class for HTTP error response exceptions (4xx and 5xx) in the {@code org.apache.juneau.http} stack.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * Extends {@link RuntimeException} while also implementing {@link HttpResponseMessage}, so that HTTP</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * error responses can be both thrown as exceptions and used as response objects. Provides classic-style</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * fluent setters that mutate state and return {@code this}.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * Immutability is expressed with the "funnel + nested {@code Unmodifiable} snapshot" paradigm: every mutator routes</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * through the single protected {@link #modify(Runnable)} choke-point, and each concrete leaf gets a nested</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * {@code X.Unmodifiable} whose only behavioral override is a throwing {@code modify(...)}.  A leaf's</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * {@link #unmodifiable()} factory returns a point-in-time snapshot; any attempt to set a property on it throws an</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * {@link UnsupportedOperationException}.</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * If the &lt;c&gt;unmodifiable&lt;/c&gt; flag is set on this bean, calls to the setters will throw {@link UnsupportedOperationException} exceptions.</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='warn'&gt;Beans are not thread safe unless they're marked as unmodifiable.</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics" target="alexandria_uri">https://juneau.apache.org/docs/topics/JuneauRestCommonBasics</a>"&gt;juneau-rest-common Basics&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * This is a {@link Throwable}-rooted hierarchy, so (unlike {@link BasicHttpResponse}) it cannot be a self-typed (CRTP)</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * root — JLS &amp;sect;8.1.2 forbids a generic {@code Throwable}.  The funnel therefore returns the base type and each leaf</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * keeps its covariant setter overrides.</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * ({@code org.apache.juneau.marshall.ng.*}).</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * (and possibly earlier).</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * @serial exclude</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  @BeanIgnore <em class="jxr_comment">/* Use toString() to serialize */</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> <strong class="jxr_keyword">extends</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a> <strong class="jxr_keyword">implements</strong> HttpResponse {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	HeaderList headers = HeaderList.create();
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	BasicStatusLine statusLine = <strong class="jxr_keyword">new</strong> <a name="BasicStatusLine" href="../../../../../org/apache/juneau/http/BasicStatusLine.html#BasicStatusLine">BasicStatusLine</a>();
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	HttpEntity content;
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>() {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">super</strong>((Throwable)<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * This is the constructor used when parsing an HTTP response.</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * @param response The HTTP response being parsed.</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/NextGenRestClient" target="alexandria_uri">https://juneau.apache.org/docs/topics/NextGenRestClient</a>"&gt;juneau-ng REST client&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * @since 9.2.1</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<span class="jxr_string">"java:S3008"</span>, <em class="jxr_comment">// Concrete subclasses use UPPER_CASE singleton instance constants (e.g., INSTANCE fields).</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<span class="jxr_string">"java:S1948"</span>, <em class="jxr_comment">// HttpHeaderList is not Java-serializable; HTTP exceptions are not designed for Java serialization transport.</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<span class="jxr_string">"java:S1165"</span>  <em class="jxr_comment">// Mutable exception fields are intentional: HTTP exceptions support builder-style fluent setters.</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  })
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> BasicHttpException <strong class="jxr_keyword">extends</strong> RuntimeException <strong class="jxr_keyword">implements</strong> <a name="HttpResponseMessage" href="../../../../../org/apache/juneau/http/response/HttpResponseMessage.html#HttpResponseMessage">HttpResponseMessage</a> {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">private</strong> <a name="HttpStatusLine" href="../../../../../org/apache/juneau/http/HttpStatusLine.html#HttpStatusLine">HttpStatusLine</a> statusLine;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">private</strong> HttpHeaderList headers;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">private</strong> <a name="HttpBody" href="../../../../../org/apache/juneau/http/HttpBody.html#HttpBody">HttpBody</a> body;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">private</strong> Locale locale;
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * Constructor with no message body.</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * @param statusCode The HTTP status code.</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * @param reasonPhrase The reason phrase (e.g. {@code "Internal Server Error"}). May be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>(HttpResponse response) {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">super</strong>((Throwable)<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> h = response.getLastHeader(<span class="jxr_string">"Thrown"</span>);
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">if</strong> (nn(h))
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			setMessage(thrown(h.getValue()).asParts().get().get(0).getMessage());
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		setHeaders(response.getAllHeaders());
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		setContent(response.getEntity());
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		setStatusCode(response.getStatusLine().getStatusCode());
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * @param statusCode The HTTP status code.</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>(<strong class="jxr_keyword">int</strong> statusCode) {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">super</strong>((Throwable)<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		setStatusCode(statusCode);
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * @param statusCode The HTTP status code.</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * @param msg The message.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * @param args Optional {@link MessageFormat}-style arguments in the message.</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>(<strong class="jxr_keyword">int</strong> statusCode, String msg, Object...args) {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">super</strong>(msg, args);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		setStatusCode(statusCode);
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 * @param statusCode The HTTP status code.</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">	 * @param causedBy The cause.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">public</strong> BasicHttpException(<strong class="jxr_keyword">int</strong> statusCode, String reasonPhrase) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">this</strong>(statusCode, reasonPhrase, (Throwable)<strong class="jxr_keyword">null</strong>, (String)<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * Constructor with a status code and a cause.</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * @param statusCode The HTTP status code.</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * @param reasonPhrase The reason phrase. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * @param cause The cause. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">public</strong> BasicHttpException(<strong class="jxr_keyword">int</strong> statusCode, String reasonPhrase, Throwable cause) {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">this</strong>(statusCode, reasonPhrase, cause, cause != <strong class="jxr_keyword">null</strong> ? cause.getMessage() : <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * Constructor with a {@link String#format(String, Object...) String.format}-style message body.</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * @param statusCode The HTTP status code.</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * @param reasonPhrase The reason phrase. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * @param msg The exception message and response body. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 *    Treated as a {@link String#format(String, Object...) String.format}-style format string (&lt;c&gt;%s&lt;/c&gt; placeholders) when {@code args} is non-empty.</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * @param args Optional message arguments.</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException(<strong class="jxr_keyword">int</strong> statusCode, String reasonPhrase, String msg, Object...args) {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">this</strong>(statusCode, reasonPhrase, (Throwable)<strong class="jxr_keyword">null</strong>, msg, args);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * Constructor with a cause and a {@link String#format(String, Object...) String.format}-style message body.</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * @param statusCode The HTTP status code.</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * @param reasonPhrase The reason phrase. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * @param cause The cause. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 * @param msg The exception message. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 *    Treated as a {@link String#format(String, Object...) String.format}-style format string (&lt;c&gt;%s&lt;/c&gt; placeholders) when {@code args} is non-empty.</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">	 * @param args Optional message arguments.</em>
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>(<strong class="jxr_keyword">int</strong> statusCode, Throwable causedBy) {
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">super</strong>(causedBy);
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		setStatusCode(statusCode);
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	}
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * @param statusCode The HTTP status code.</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * @param cause The caused-by exception.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * @param msg The message.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * @param args The message arguments.</em>
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>(<strong class="jxr_keyword">int</strong> statusCode, Throwable cause, String msg, Object...args) {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">super</strong>(cause, msg, args);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		setStatusCode(statusCode);
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		setContent(f(msg, args));
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 * Copy constructor.</em>
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 * @param copyFrom The bean to copy.</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">protected</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>(<a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> copyFrom) {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">this</strong>(0, copyFrom.getCause(), copyFrom.getMessage());
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		setStatusLine(copyFrom.statusLine.copy());
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addHeader(Header value) {
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		headers.append(value);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException(<strong class="jxr_keyword">int</strong> statusCode, String reasonPhrase, Throwable cause, String msg, Object...args) {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">super</strong>(formatMessage(msg, args), cause);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">this</strong>.statusLine = HttpStatusLineBean.of(statusCode, reasonPhrase);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">this</strong>.headers = HttpHeaderList.create();
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> m = formatMessage(msg, args);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">this</strong>.body = m != <strong class="jxr_keyword">null</strong> ? StringBody.of(m) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String formatMessage(String msg, Object...args) {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">if</strong> (msg == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">if</strong> (args == <strong class="jxr_keyword">null</strong> || args.length == 0)
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">return</strong> msg;
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">return</strong> f(msg, args);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * Copy constructor.</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 * The mutable sub-beans are deep-copied by &lt;b&gt;direct field assignment&lt;/b&gt;, never through a funneled setter.  This is</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 * the snapshot path used by {@link #unmodifiable()}: the constructor runs inside an {@code Unmodifiable} instance</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 * whose {@link #modify(Runnable)} already throws, so a setter-based copy would blow up during construction.</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * @param copyFrom The instance to copy. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">protected</strong> BasicHttpException(BasicHttpException copyFrom) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">super</strong>(assertArgNotNull(<span class="jxr_string">"copyFrom"</span>, copyFrom).getMessage(), copyFrom.getCause());
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">this</strong>.statusLine = copyFrom.statusLine;
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">this</strong>.headers = copyFrom.headers.copy();
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">this</strong>.body = copyFrom.body;
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">this</strong>.locale = copyFrom.locale;
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addHeader(String name, String value) {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		headers.append(name, value);
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> containsHeader(String name) {
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">return</strong> headers.contains(name);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">public</strong> Header[] getAllHeaders() { <strong class="jxr_keyword">return</strong> headers.getAll(); }
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<strong class="jxr_keyword">public</strong> HttpEntity getEntity() {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<em class="jxr_comment">// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">if</strong> (content == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			content = stringEntity(getMessage());
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">return</strong> content;
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">public</strong> Header getFirstHeader(String name) {
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">return</strong> headers.getFirst(name).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	}
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * Returns all error messages from all errors in this stack.</em>
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * Typically useful if you want to render all the error messages in the stack, but don't want to render all the</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * stack traces too.</em>
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * @param scrubForXssVulnerabilities</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * 	If &lt;jk&gt;true&lt;/jk&gt;, replaces &lt;js&gt;'&amp;lt;'&lt;/js&gt;, &lt;js&gt;'&amp;gt;'&lt;/js&gt;, and &lt;js&gt;'&amp;amp;'&lt;/js&gt; characters with spaces.</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * @return All error messages from all errors in this stack.</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">public</strong> String getFullStackMessage(<strong class="jxr_keyword">boolean</strong> scrubForXssVulnerabilities) {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> msg = getMessage();
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">if</strong> (nn(msg)) {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">if</strong> (scrubForXssVulnerabilities)
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 				msg = msg.replace('&lt;', ' ').replace('&gt;', ' ').replace('&amp;', ' ');
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			sb.append(msg);
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		}
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		Throwable e = getCause();
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">while</strong> (nn(e)) {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			msg = e.getMessage();
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">if</strong> (nn(msg) &amp;&amp; scrubForXssVulnerabilities)
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 				msg = msg.replace('&lt;', ' ').replace('&gt;', ' ').replace('&amp;', ' ');
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">var</strong> cls = cns(e);
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">if</strong> (msg == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 				sb.append(f(<span class="jxr_string">"\nCaused by ({0})"</span>, cls));
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 				sb.append(f(<span class="jxr_string">"\nCaused by ({0}): {1}"</span>, cls, msg));
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			e = e.getCause();
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		}
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	}
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * Returns access to the underlying builder for the headers.</em>
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * @return The underlying builder for the headers.</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> getHeaders() {
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">return</strong> headers;
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	}
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">public</strong> Header[] getHeaders(String name) {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">return</strong> headers.getAll(name);
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	}
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	<strong class="jxr_keyword">public</strong> Header getLastHeader(String name) {
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">return</strong> headers.getLast(name).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	}
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<strong class="jxr_keyword">public</strong> Locale getLocale() { <strong class="jxr_keyword">return</strong> statusLine.getLocale(); }
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@Override <em class="jxr_comment">/* Overridden from Throwable */</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">public</strong> String getMessage() {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		String m = <strong class="jxr_keyword">super</strong>.getMessage();
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(getCause()))
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			m = getCause().getMessage();
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			m = statusLine.getReasonPhrase();
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	@SuppressWarnings(<span class="jxr_string">"deprecation"</span>)
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<strong class="jxr_keyword">public</strong> HttpParams getParams() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<strong class="jxr_keyword">public</strong> ProtocolVersion getProtocolVersion() { <strong class="jxr_keyword">return</strong> statusLine.getProtocolVersion(); }
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 * Returns the root cause of this exception.</em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 * The root cause is the first exception in the init-cause parent chain that's not one of the following:</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link BasicHttpException}</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link InvocationTargetException}</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 * @return The root cause of this exception, or &lt;jk&gt;null&lt;/jk&gt; if no root cause was found.</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	<strong class="jxr_keyword">public</strong> Throwable getRootCause() {
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		Throwable t = <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">while</strong> (nn(t)) {
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">if</strong> (! (t instanceof <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> || t instanceof InvocationTargetException))
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 				<strong class="jxr_keyword">return</strong> t;
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			t = t.getCause();
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		}
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	}
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<strong class="jxr_keyword">public</strong> StatusLine getStatusLine() { <strong class="jxr_keyword">return</strong> statusLine; }
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">int</strong> i = 0;
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		Throwable t = <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">while</strong> (nn(t)) {
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : t.getStackTrace())
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				i ^= e.hashCode();
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			t = t.getCause();
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		}
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">return</strong> i;
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	}
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<strong class="jxr_keyword">public</strong> HeaderIterator headerIterator() {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">return</strong> headers.headerIterator();
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<strong class="jxr_keyword">public</strong> HeaderIterator headerIterator(String name) {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">return</strong> headers.headerIterator(name);
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	}
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeHeader(Header value) {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		headers.remove(value);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeHeaders(String name) {
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		headers.remove(name);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	}
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * Sets the body on this response.</em>
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * @param value The body on this response.</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setContent(HttpEntity value) {
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		content = value;
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	}
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * Sets the body on this response.</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * @param value The body on this response.</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setContent(String value) {
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		setContent(stringEntity(value));
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	}
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEntity(HttpEntity entity) {
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">this</strong>.content = entity;
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	}
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setHeader(Header value) {
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		headers.set(value);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	}
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setHeader(String name, String value) {
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		headers.set(name, value);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	}
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 * Sets a header on this response.</em>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * @param name The header name.</em>
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 * @param value The header value.</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<em class="jxr_comment">// Read accessors</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Override <em class="jxr_comment">/* HttpResponseMessage */</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpStatusLine" href="../../../../../org/apache/juneau/http/HttpStatusLine.html#HttpStatusLine">HttpStatusLine</a> getStatusLine() {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">return</strong> statusLine;
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	@Override <em class="jxr_comment">/* HttpResponseMessage */</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">public</strong> List&lt;HttpHeader&gt; getHeaders() {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">return</strong> u(headers);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Override <em class="jxr_comment">/* HttpResponseMessage */</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpBody" href="../../../../../org/apache/juneau/http/HttpBody.html#HttpBody">HttpBody</a> getBody() {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">return</strong> body;
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	@Override <em class="jxr_comment">/* Throwable */</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<strong class="jxr_keyword">public</strong> String getMessage() {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">super</strong>.getMessage();
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong> &amp;&amp; getCause() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			m = getCause().getMessage();
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			m = statusLine.getReasonPhrase();
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * Returns the HTTP status code.</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * @return The status code.</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getStatusCode() {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">return</strong> statusLine.getStatusCode();
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * Returns the locale associated with this response, if any.</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * @return The locale, possibly &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<strong class="jxr_keyword">public</strong> Locale getLocale() {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">return</strong> locale;
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<em class="jxr_comment">// Fluent setters (mutate this instance)</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * Sets the status line.</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 * @param value New status line. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException setStatusLine(<a name="HttpStatusLine" href="../../../../../org/apache/juneau/http/HttpStatusLine.html#HttpStatusLine">HttpStatusLine</a> value) {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">return</strong> modify(() -&gt; statusLine = assertArgNotNull(<span class="jxr_string">"value"</span>, value));
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * Sets the status code, preserving the existing protocol version and reason phrase.</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * @param value New status code.</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException setStatusCode(<strong class="jxr_keyword">int</strong> value) {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">return</strong> modify(() -&gt; statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), value, statusLine.getReasonPhrase()));
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	}
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 * Sets the reason phrase, preserving the existing protocol version and status code.</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 * @param value New reason phrase. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException setReasonPhrase(String value) {
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">return</strong> modify(() -&gt; statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), statusLine.getStatusCode(), value));
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	}
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 * Sets the protocol version, preserving the existing status code and reason phrase.</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * @param value New protocol version. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException setProtocolVersion(<a name="HttpProtocolVersion" href="../../../../../org/apache/juneau/http/HttpProtocolVersion.html#HttpProtocolVersion">HttpProtocolVersion</a> value) {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">return</strong> modify(() -&gt; {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			assertArgNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			statusLine = HttpStatusLineBean.of(value, statusLine.getStatusCode(), statusLine.getReasonPhrase());
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		});
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	}
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * Replaces all headers with the given list.</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 * @param values New headers. {@code null} is treated as an empty list.</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException setHeaders(List&lt;HttpHeader&gt; values) {
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">return</strong> modify(() -&gt; {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			headers.clear();
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">if</strong> (values != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 				headers.append(values);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		});
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	}
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 * Replaces all headers with the given array.</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * @param values New headers. {@code null} is treated as an empty array.</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException setHeaders(HttpHeader...values) {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">return</strong> modify(() -&gt; {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			headers.clear();
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">if</strong> (values != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 				headers.append(values);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		});
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	}
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 * Sets a single header, replacing any existing header with the same name.</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * @param value The header to set. {@code null} is ignored.</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException setHeader(<a name="HttpHeader" href="../../../../../org/apache/juneau/http/HttpHeader.html#HttpHeader">HttpHeader</a> value) {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">return</strong> modify(() -&gt; headers.set(value));
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	}
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 * Sets a single header, replacing any existing header with the same name.</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 * @param name Header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * @param value Header value. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException setHeader(String name, String value) {
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">return</strong> modify(() -&gt; headers.set(name, value));
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * Appends a header to the end of the header list.</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * @param value The header to add. {@code null} is ignored.</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException addHeader(<a name="HttpHeader" href="../../../../../org/apache/juneau/http/HttpHeader.html#HttpHeader">HttpHeader</a> value) {
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">return</strong> modify(() -&gt; headers.append(value));
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 * Appends a header to the end of the header list.</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 * @param name Header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * @param value Header value. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException addHeader(String name, String value) {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">return</strong> modify(() -&gt; headers.append(name, value));
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	}
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 * Sets the response body.</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * @param value New body. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException setBody(<a name="HttpBody" href="../../../../../org/apache/juneau/http/HttpBody.html#HttpBody">HttpBody</a> value) {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">return</strong> modify(() -&gt; body = value);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	}
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * Sets the response body to a plain-text string body (UTF-8, {@code text/plain}).</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 * @param value Body text. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException setContent(String value) {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">return</strong> setBody(value != <strong class="jxr_keyword">null</strong> ? StringBody.of(value) : <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	}
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * Sets the response body.</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * @param value New body. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException setContent(<a name="HttpBody" href="../../../../../org/apache/juneau/http/HttpBody.html#HttpBody">HttpBody</a> value) {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">return</strong> setBody(value);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	}
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * Sets the locale associated with this response.</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 * @param value New locale. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setHeader2(String name, Object value) {
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		headers.set(name, value);
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setHeaders(Header[] values) {
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		headers.removeAll().append(values);
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	}
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * Sets the specified headers on this response.</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setHeaders(<a name="HeaderList" href="../../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> value) {
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		headers = value.copy();
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	}
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * Sets the specified headers on this response.</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 * @param values The headers to set.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setHeaders(List&lt;Header&gt; values) {
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		headers.set(values);
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	}
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException setLocale(Locale value) {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">return</strong> modify(() -&gt; locale = value);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	}
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * Returns whether this instance is an unmodifiable snapshot.</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this bean is an {@link UnmodifiableBean} snapshot.</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isUnmodifiable() {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong> instanceof UnmodifiableBean;
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	}
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * Returns an unmodifiable snapshot of this bean.</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 * The returned instance is a point-in-time copy of the leaf's nested {@code Unmodifiable} type; any attempt to set a</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * property on it throws an {@link UnsupportedOperationException}.  This method is idempotent: if this bean is already</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 * unmodifiable it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * modifiable unless it was already unmodifiable).</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">public</strong> BasicHttpException unmodifiable() {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong> instanceof Unmodifiable ? <strong class="jxr_keyword">this</strong> : <strong class="jxr_keyword">new</strong> Unmodifiable(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	}
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<em class="jxr_comment">// Stack/cause helpers</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * Sets multiple headers on this response.</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * Returns the root cause of this exception.</em>
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * @param values The headers to add.</em>
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setHeaders2(Header...values) {
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		headers.set(values);
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setLocale(Locale loc) {
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		statusLine.setLocale(loc);
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	}
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * Sets the locale used to retrieve reason phrases.</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * If not specified, uses {@link Locale#getDefault()}.</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setLocale2(Locale value) {
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		statusLine.setLocale(value);
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	}
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	@Override <em class="jxr_comment">/* Overridden from BasicRuntimeException */</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setMessage(String message, Object...args) {
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">super</strong>.setMessage(message, args);
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 	}
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	@SuppressWarnings(<span class="jxr_string">"deprecation"</span>)
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setParams(HttpParams params) {}
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * Sets the protocol version on the status line.</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 * If not specified, &lt;js&gt;"HTTP/1.1"&lt;/js&gt; will be used.</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setProtocolVersion(ProtocolVersion value) {
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		statusLine.setProtocolVersion(value);
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	}
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReasonPhrase(String reason) <strong class="jxr_keyword">throws</strong> IllegalStateException {
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		statusLine.setReasonPhrase(reason);
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	}
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * Sets the reason phrase on the status line.</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * If not specified, the reason phrase will be retrieved from the reason phrase catalog</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * using the locale on this builder.</em>
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setReasonPhrase2(String value) {
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		statusLine.setReasonPhrase(value);
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	}
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * Sets the reason phrase catalog used to retrieve reason phrases.</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * If not specified, uses {@link EnglishReasonPhraseCatalog}.</em>
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		statusLine.setReasonPhraseCatalog(value);
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	}
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStatusCode(<strong class="jxr_keyword">int</strong> code) <strong class="jxr_keyword">throws</strong> IllegalStateException {
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		statusLine.setStatusCode(code);
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	}
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * Same as {@link #setStatusCode(int)} but returns this object.</em>
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * @param code The new status code.</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * @throws IllegalStateException If status code could not be set.</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setStatusCode2(<strong class="jxr_keyword">int</strong> code) <strong class="jxr_keyword">throws</strong> IllegalStateException {
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		setStatusCode(code);
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	}
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * Sets the protocol version on the status line.</em>
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * If not specified, &lt;js&gt;"HTTP/1.1"&lt;/js&gt; will be used.</em>
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setStatusLine(<a name="BasicStatusLine" href="../../../../../org/apache/juneau/http/BasicStatusLine.html#BasicStatusLine">BasicStatusLine</a> value) {
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		statusLine = value.copy();
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	}
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStatusLine(ProtocolVersion ver, <strong class="jxr_keyword">int</strong> code) {
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		statusLine.setProtocolVersion(ver).setStatusCode(code);
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	}
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStatusLine(ProtocolVersion ver, <strong class="jxr_keyword">int</strong> code, String reason) {
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		statusLine.setProtocolVersion(ver).setReasonPhrase(reason).setStatusCode(code);
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 	}
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStatusLine(StatusLine value) {
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		setStatusLine(value.getProtocolVersion(), value.getStatusCode(), value.getReasonPhrase());
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	}
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 * Specifies whether this bean should be unmodifiable.</em>
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.</em>
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> setUnmodifiable() {
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		statusLine.setUnmodifiable();
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	}
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		<strong class="jxr_keyword">return</strong> emptyIfNull(getLocalizedMessage());
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 	}
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 * Asserts that the specified HTTP response has the same status code as the one on the status line of this bean.</em>
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 * @param response The HTTP response to check.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 * @throws AssertionError If status code is not what was expected.</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> assertStatusCode(HttpResponse response) <strong class="jxr_keyword">throws</strong> AssertionError {
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		assertArgNotNull(<span class="jxr_string">"response"</span>, response);
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		<strong class="jxr_keyword">int</strong> expected = getStatusLine().getStatusCode();
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">int</strong> actual = response.getStatusLine().getStatusCode();
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		assertInteger(actual).setMsg(<span class="jxr_string">"Unexpected status code.  Expected:[{0}], Actual:[{1}]"</span>, expected, actual).is(expected);
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 	}
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> }
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * The root cause is the first exception in the init-cause parent chain that's not one of the following:</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link BasicHttpException}</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link InvocationTargetException}</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 * @return The root cause of this exception, or &lt;jk&gt;null&lt;/jk&gt; if no root cause was found.</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<strong class="jxr_keyword">public</strong> Throwable getRootCause() {
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		Throwable t = <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">while</strong> (nn(t)) {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<strong class="jxr_keyword">if</strong> (! (t instanceof BasicHttpException || t instanceof InvocationTargetException))
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 				<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			t = t.getCause();
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		}
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	}
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * Returns all error messages from all errors in this exception's cause chain joined into a single string.</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 * @param scrubForXssVulnerabilities</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 * 	If {@code true}, replaces {@code &lt;}, {@code &gt;}, and {@code &amp;} characters with spaces.</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 * @return A multi-line string of messages. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	<strong class="jxr_keyword">public</strong> String getFullStackMessage(<strong class="jxr_keyword">boolean</strong> scrubForXssVulnerabilities) {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">var</strong> msg = getMessage();
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">if</strong> (nn(msg)) {
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			<strong class="jxr_keyword">if</strong> (scrubForXssVulnerabilities)
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 				msg = msg.replace('&lt;', ' ').replace('&gt;', ' ').replace('&amp;', ' ');
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			sb.append(msg);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		}
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">var</strong> e = getCause();
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">while</strong> (nn(e)) {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			msg = e.getMessage();
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">if</strong> (nn(msg) &amp;&amp; scrubForXssVulnerabilities)
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 				msg = msg.replace('&lt;', ' ').replace('&gt;', ' ').replace('&amp;', ' ');
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">var</strong> cls = cns(e);
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			<strong class="jxr_keyword">if</strong> (msg == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 				sb.append(f(<span class="jxr_string">"\nCaused by (%s)"</span>, cls));
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 				sb.append(f(<span class="jxr_string">"\nCaused by (%s): %s"</span>, cls, msg));
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			e = e.getCause();
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		}
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<em class="jxr_comment">// Immutability paradigm plumbing</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * Single mutation funnel — the only choke-point through which all state changes on this bean flow.</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * Every fluent setter routes through this method.  The nested {@code Unmodifiable} snapshot overrides only this</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * method to throw, which freezes the entire mutation surface with a single override.  Because this is a</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * {@link Throwable}-rooted hierarchy (no CRTP self-type), the funnel returns the base type.</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * @param mutation The state change to apply.</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<strong class="jxr_keyword">protected</strong> BasicHttpException modify(Runnable mutation) {
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		mutation.run();
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	}
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * Deep-freeze hook invoked from the nested {@code Unmodifiable} constructor after the snapshot copy completes.</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * The mutable sub-beans are frozen here by &lt;b&gt;direct field assignment&lt;/b&gt; (never via a setter, which would route</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * through the throwing {@link #modify(Runnable)} and blow up during construction).  A leaf that adds its own mutable</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * sub-bean overrides this method (calling {@code super.freeze()} first).</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> freeze() {
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		headers = headers.unmodifiable();   <em class="jxr_comment">// DIRECT field write — snapshot the copied HttpHeaderList.</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	}
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<em class="jxr_comment">// D3 content equality.  The 'body' HttpBody is deliberately excluded: it is a wrapper without value semantics</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		<em class="jxr_comment">// and is derived from the message (getMessage()), which is already compared here.</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">return</strong> o instanceof BasicHttpException other &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, other, (x, y) -&gt;
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			eq(x.statusLine, y.statusLine) &amp;&amp; eq(x.headers, y.headers) &amp;&amp; eq(x.getMessage(), y.getMessage()));
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	}
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<strong class="jxr_keyword">return</strong> h(statusLine, headers, getMessage());
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 	}
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<strong class="jxr_keyword">return</strong> statusLine.toString();
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 	}
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * Unmodifiable point-in-time snapshot of the enclosing {@link BasicHttpException}.</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * {@code modify(...)}, this single override freezes the entire mutation surface.</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Unmodifiable <strong class="jxr_keyword">extends</strong> BasicHttpException <strong class="jxr_keyword">implements</strong> <a name="UnmodifiableBean" href="../../../../../org/apache/juneau/http/UnmodifiableBean.html#UnmodifiableBean">UnmodifiableBean</a> {
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">		 * Constructor.</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">		 * @param copyFrom The exception to snapshot.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 			<span class="jxr_string">"java:S1699"</span> <em class="jxr_comment">// Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		})
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<strong class="jxr_keyword">protected</strong> Unmodifiable(BasicHttpException copyFrom) {
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 			<strong class="jxr_keyword">super</strong>(copyFrom);
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 			freeze();
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		}
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		@Override <em class="jxr_comment">/* Overridden from BasicHttpException */</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<strong class="jxr_keyword">protected</strong> BasicHttpException modify(Runnable mutation) {
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 			<strong class="jxr_keyword">throw</strong> uoex(<span class="jxr_string">"Bean is unmodifiable."</span>);
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		}
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 	}
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ElicitationResponses_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../testapidocs/org/apache/juneau/rest/client/mcp/v20260728/ElicitationResponses_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.mcp.v20260728;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.bean.mcp.v20260728.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Coverage for {@link ElicitationResponses}.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">class</strong> <a name="ElicitationResponses_Test" href="../../../../../../../org/apache/juneau/rest/client/mcp/v20260728/ElicitationResponses_Test.html#ElicitationResponses_Test">ElicitationResponses_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	@Test <strong class="jxr_keyword">void</strong> a01_toInputResponse_singleAnswer_encodesAcceptWithContent() {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">var</strong> result = <strong class="jxr_keyword">new</strong> ElicitResult().setAction(ElicitAction.ACCEPT).putContent(<span class="jxr_string">"choice"</span>, <span class="jxr_string">"red"</span>);
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">var</strong> encoded = ElicitationResponses.toInputResponse(<span class="jxr_string">"q1"</span>, result);
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertEquals(1, encoded.size());
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">var</strong> q1 = (JsonMap) encoded.get(<span class="jxr_string">"q1"</span>);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertEquals(<span class="jxr_string">"accept"</span>, q1.getString(<span class="jxr_string">"action"</span>));
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertEquals(<span class="jxr_string">"red"</span>, q1.getMap(<span class="jxr_string">"content"</span>).getString(<span class="jxr_string">"choice"</span>));
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	}
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Test <strong class="jxr_keyword">void</strong> a02_toInputResponses_multipleAnswers_encodesAll() {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">var</strong> results = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,ElicitResult&gt;();
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		results.put(<span class="jxr_string">"q1"</span>, <strong class="jxr_keyword">new</strong> ElicitResult().setAction(ElicitAction.ACCEPT).putContent(<span class="jxr_string">"choice"</span>, <span class="jxr_string">"red"</span>));
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		results.put(<span class="jxr_string">"q2"</span>, <strong class="jxr_keyword">new</strong> ElicitResult().setAction(ElicitAction.DECLINE));
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> encoded = ElicitationResponses.toInputResponses(results);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertEquals(2, encoded.size());
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">var</strong> q1 = (JsonMap) encoded.get(<span class="jxr_string">"q1"</span>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertEquals(<span class="jxr_string">"accept"</span>, q1.getString(<span class="jxr_string">"action"</span>));
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		assertEquals(<span class="jxr_string">"red"</span>, q1.getMap(<span class="jxr_string">"content"</span>).getString(<span class="jxr_string">"choice"</span>));
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">var</strong> q2 = (JsonMap) encoded.get(<span class="jxr_string">"q2"</span>);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertEquals(<span class="jxr_string">"decline"</span>, q2.getString(<span class="jxr_string">"action"</span>));
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertNull(q2.get(<span class="jxr_string">"content"</span>));
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	@Test <strong class="jxr_keyword">void</strong> a03_toInputResponse_nullIdThrows() {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> result = <strong class="jxr_keyword">new</strong> ElicitResult();
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'id' cannot be null."</span>,
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			() -&gt; ElicitationResponses.toInputResponse(<strong class="jxr_keyword">null</strong>, result));
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	@Test <strong class="jxr_keyword">void</strong> a04_toInputResponse_nullResultThrows() {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'result' cannot be null."</span>,
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			() -&gt; ElicitationResponses.toInputResponse(<span class="jxr_string">"q1"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	@Test <strong class="jxr_keyword">void</strong> a05_toInputResponses_nullMapThrows() {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'results' cannot be null."</span>,
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			() -&gt; ElicitationResponses.toInputResponses(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Test <strong class="jxr_keyword">void</strong> a06_toInputResponses_nullEntryThrows() {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> results = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,ElicitResult&gt;();
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		results.put(<span class="jxr_string">"q1"</span>, <strong class="jxr_keyword">new</strong> ElicitResult().setAction(ElicitAction.ACCEPT));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		results.put(<span class="jxr_string">"q2"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'results[q2]' cannot be null."</span>,
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			() -&gt; ElicitationResponses.toInputResponses(results));
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * Documents the wire-shape symmetry between this client module's {@link ElicitationRequests}/</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * {@link ElicitationResponses} pair and the server module's {@code ElicitationRequests}/</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * {@code ElicitationResponses} (Phase 4) without introducing an illegal cross-module test dependency:</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * {@code juneau-rest-client-mcp-v20260728} must not depend on {@code juneau-rest-server-mcp-v20260728}, so</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * the server-side raw shape is hand-built here to match it exactly (verified by inspection/spec</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * cross-reference against {@code ElicitationRequests.of}/{@code ElicitationResponses.get}, not a live</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * cross-module call).</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@Test <strong class="jxr_keyword">void</strong> a07_roundTrip_requestsToResponses_matchesServerSideHelpers() {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<em class="jxr_comment">// Mirrors the raw shape ElicitationRequests.of("q1", elicitRequest, ...) (server side) would place into</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<em class="jxr_comment">// McpInputRequiredSignal.getInputRequests(), which callRaw ultimately surfaces as raw's "inputRequests".</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> rawInputRequests = JsonMap.of(
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			<span class="jxr_string">"q1"</span>, JsonMap.of(<span class="jxr_string">"message"</span>, <span class="jxr_string">"Pick one"</span>, <span class="jxr_string">"requestedSchema"</span>, JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"object"</span>))
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> raw = Map.&lt;String,Object&gt;of(<span class="jxr_string">"resultType"</span>, <span class="jxr_string">"input_required"</span>, <span class="jxr_string">"requestState"</span>, <span class="jxr_string">"tok-abc"</span>, <span class="jxr_string">"inputRequests"</span>, rawInputRequests);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> decodedRequests = ElicitationRequests.requests(raw);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(<span class="jxr_string">"Pick one"</span>, decodedRequests.get(<span class="jxr_string">"q1"</span>).getMessage());
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertEquals(<span class="jxr_string">"tok-abc"</span>, ElicitationRequests.requestState(raw));
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> answer = <strong class="jxr_keyword">new</strong> ElicitResult().setAction(ElicitAction.ACCEPT).putContent(<span class="jxr_string">"choice"</span>, <span class="jxr_string">"red"</span>);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> encodedResponses = ElicitationResponses.toInputResponse(<span class="jxr_string">"q1"</span>, answer);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<em class="jxr_comment">// This is exactly the shape ElicitationResponses.get(ctx, "q1") (server side) decodes via</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<em class="jxr_comment">// Json.to(Json.of(ctx.inputResponses().get("q1")), ElicitResult.class).</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> q1 = (JsonMap) encodedResponses.get(<span class="jxr_string">"q1"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertEquals(<span class="jxr_string">"accept"</span>, q1.getString(<span class="jxr_string">"action"</span>));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertEquals(<span class="jxr_string">"red"</span>, q1.getMap(<span class="jxr_string">"content"</span>).getString(<span class="jxr_string">"choice"</span>));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>McpClientRegistrationManager_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../testapidocs/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.mcp.auth;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.lang.Flag;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.auth.oauth.oidc.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> com.sun.net.httpserver.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * Tests for {@link McpClientRegistrationManager} (SEP-2352 selection + issuer-keying + migration).</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">class</strong> <a name="McpClientRegistrationManager_Test" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager_Test.html#McpClientRegistrationManager_Test">McpClientRegistrationManager_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> URI A = URI.create(<span class="jxr_string">"https://as-a.example.com"</span>);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> URI B = URI.create(<span class="jxr_string">"https://as-b.example.com"</span>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> OidcMetadata as(URI issuer, <strong class="jxr_keyword">boolean</strong> withRegEndpoint) {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		Map&lt;String,Object&gt; extras = withRegEndpoint
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			? Map.of(<span class="jxr_string">"registration_endpoint"</span>, issuer + <span class="jxr_string">"/register"</span>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			: Map.of();
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> OidcMetadata(issuer, URI.create(issuer + <span class="jxr_string">"/token"</span>), URI.create(issuer + <span class="jxr_string">"/auth"</span>),
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, Set.of(), extras);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpClientRegistration reg(URI issuer, String clientId) {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpClientRegistration(clientId, Optional.of(<span class="jxr_string">"secret-"</span> + clientId), Optional.empty(), Optional.empty(),
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			Optional.empty(), issuer, List.of(URI.create(<span class="jxr_string">"http://127.0.0.1/callback"</span>)), McpApplicationType.NATIVE, Map.of());
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<em class="jxr_javadoccomment">/** A counting DCR stub that stamps the issuer of the AS it is asked to register with. */</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> AtomicInteger counter;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Function&lt;OidcMetadata,McpClientRegistration&gt; stubDcr() {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		counter = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">return</strong> md -&gt; {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">var</strong> n = counter.incrementAndGet();
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">return</strong> reg(md.issuer(), <span class="jxr_string">"dcr-"</span> + n);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		};
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	}
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	@Test <strong class="jxr_keyword">void</strong> a01_onDemandRegistersEveryCall() {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> m = McpClientRegistrationManager.create().registrarFunction(stubDcr()).build();
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		m.resolve(as(A, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		m.resolve(as(A, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertEquals(2, counter.get(), <span class="jxr_string">"on-demand mode (no store) must register on every resolve"</span>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	@Test <strong class="jxr_keyword">void</strong> a02_storeHitReused() {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> InMemoryMcpClientRegistrationStore();
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> m = McpClientRegistrationManager.create().store(store).registrarFunction(stubDcr()).build();
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> first = m.resolve(as(A, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> second = m.resolve(as(A, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertEquals(1, counter.get(), <span class="jxr_string">"store-hit must be reused without a second DCR round-trip"</span>);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertEquals(first.clientId(), second.clientId());
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> a03_migrationReregistersWithNewIssuer() {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> InMemoryMcpClientRegistrationStore();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> m = McpClientRegistrationManager.create().store(store).registrarFunction(stubDcr()).build();
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> forA = m.resolve(as(A, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> forB = m.resolve(as(B, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertEquals(2, counter.get(), <span class="jxr_string">"migration to a new issuer must trigger re-registration"</span>);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(A, forA.issuer());
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertEquals(B, forB.issuer());
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<em class="jxr_comment">// A's entry is untouched (never reused for B).</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertEquals(forA.clientId(), store.find(A).orElseThrow().clientId());
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertEquals(forB.clientId(), store.find(B).orElseThrow().clientId());
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> b01_preRegisteredMatchingIssuerUsed() {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> pre = reg(A, <span class="jxr_string">"pre-a"</span>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">var</strong> m = McpClientRegistrationManager.create().preRegistered(pre).registrarFunction(stubDcr()).build();
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertEquals(<span class="jxr_string">"pre-a"</span>, m.resolve(as(A, <strong class="jxr_keyword">true</strong>)).clientId());
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertEquals(0, counter.get(), <span class="jxr_string">"matching pre-registered creds must not trigger DCR"</span>);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> b02_preRegisteredMismatchSurfacesError() {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> pre = reg(A, <span class="jxr_string">"pre-a"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> m = McpClientRegistrationManager.create().preRegistered(pre).registrarFunction(stubDcr()).build();
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertThrowsWithMessage(McpAuthException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"different authorization server"</span>, () -&gt; m.resolve(as(B, <strong class="jxr_keyword">true</strong>)));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	@Test <strong class="jxr_keyword">void</strong> b03_noRegistrationEndpointAndNoPreRegisteredFails() {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> m = McpClientRegistrationManager.create()
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			.redirectUris(List.of(URI.create(<span class="jxr_string">"http://127.0.0.1/callback"</span>)))
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			.build();
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertThrowsWithMessage(McpAuthException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"no registration_endpoint"</span>, () -&gt; m.resolve(as(A, false)));
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	@Test <strong class="jxr_keyword">void</strong> b04_missingRedirectUrisForDcrFails() {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<em class="jxr_comment">// Real DCR path (no override, no redirect URIs) must fail fast rather than attempt a malformed registration.</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> m = McpClientRegistrationManager.create().build();
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertThrowsWithMessage(McpAuthException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"redirectUris"</span>, () -&gt; m.resolve(as(A, <strong class="jxr_keyword">true</strong>)));
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	@Test <strong class="jxr_keyword">void</strong> b04b_redirectUrisRejectsEmptyList() {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"redirectUris must not be empty"</span>, () -&gt;
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			McpClientRegistrationManager.create().redirectUris(List.of()));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@Test <strong class="jxr_keyword">void</strong> b04c_httpTimeoutRejectsZero() {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"httpTimeout must be positive"</span>, () -&gt;
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			McpClientRegistrationManager.create().httpTimeout(Duration.ZERO));
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	@Test <strong class="jxr_keyword">void</strong> b04d_httpTimeoutRejectsNegative() {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"httpTimeout must be positive"</span>, () -&gt;
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			McpClientRegistrationManager.create().httpTimeout(Duration.ofSeconds(-1)));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	}
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	@Test <strong class="jxr_keyword">void</strong> b05_preRegisteredMatchingIssuerAlsoUpdatesStore() {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<em class="jxr_comment">// LOW: when both a store and matching pre-registered credentials are configured, the store must still be</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<em class="jxr_comment">// stamped with the pre-registered entry (so a later resolve() against a plain store-backed manager would hit).</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> InMemoryMcpClientRegistrationStore();
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> pre = reg(A, <span class="jxr_string">"pre-a"</span>);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">var</strong> m = McpClientRegistrationManager.create().store(store).preRegistered(pre).registrarFunction(stubDcr()).build();
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> result = m.resolve(as(A, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertEquals(<span class="jxr_string">"pre-a"</span>, result.clientId());
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertEquals(<span class="jxr_string">"pre-a"</span>, store.find(A).orElseThrow().clientId());
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		assertEquals(0, counter.get(), <span class="jxr_string">"matching pre-registered creds must not trigger DCR"</span>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	}
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	@Test <strong class="jxr_keyword">void</strong> c01_registrationEndpointExtractedFromExtras() {
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertEquals(URI.create(<span class="jxr_string">"https://as-a.example.com/register"</span>),
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			McpClientRegistrationManager.registrationEndpoint(as(A, <strong class="jxr_keyword">true</strong>)).orElseThrow());
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertTrue(McpClientRegistrationManager.registrationEndpoint(as(A, false)).isEmpty());
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<em class="jxr_comment">// LOW: a hostile/misconfigured AS advertising a plaintext (non-loopback) registration_endpoint yields the</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<em class="jxr_comment">// documented McpAuthException rather than a raw IllegalStateException from the registrar's https gate.</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	@Test <strong class="jxr_keyword">void</strong> c02_plaintextRegistrationEndpointSurfacesMcpAuthException() {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> as = <strong class="jxr_keyword">new</strong> OidcMetadata(A, URI.create(A + <span class="jxr_string">"/token"</span>), URI.create(A + <span class="jxr_string">"/auth"</span>), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, Set.of(),
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			Map.of(<span class="jxr_string">"registration_endpoint"</span>, <span class="jxr_string">"http://as-a.example.com/register"</span>));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertThrowsWithMessage(McpAuthException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"non-https registration_endpoint"</span>,
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			() -&gt; McpClientRegistrationManager.registrationEndpoint(as));
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<em class="jxr_comment">// LOW: a malformed registration_endpoint URI yields McpAuthException rather than a raw IllegalArgumentException.</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	@Test <strong class="jxr_keyword">void</strong> c03_malformedRegistrationEndpointSurfacesMcpAuthException() {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> as = <strong class="jxr_keyword">new</strong> OidcMetadata(A, URI.create(A + <span class="jxr_string">"/token"</span>), URI.create(A + <span class="jxr_string">"/auth"</span>), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, Set.of(),
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			Map.of(<span class="jxr_string">"registration_endpoint"</span>, <span class="jxr_string">"http://  bad uri"</span>));
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertThrowsWithMessage(McpAuthException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"malformed registration_endpoint"</span>,
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			() -&gt; McpClientRegistrationManager.registrationEndpoint(as));
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<em class="jxr_comment">// LOW: a buggy durable store returning an entry keyed under the wrong issuer must NOT cause cross-AS credential</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<em class="jxr_comment">// reuse (SEP-2352); the manager defends against it.</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	@Test <strong class="jxr_keyword">void</strong> d01_buggyStoreCrossIssuerEntryRejected() {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> buggy = <strong class="jxr_keyword">new</strong> McpClientRegistrationStore() {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			@Override <strong class="jxr_keyword">public</strong> Optional&lt;McpClientRegistration&gt; find(URI issuer) { <strong class="jxr_keyword">return</strong> Optional.of(reg(B, <span class="jxr_string">"wrong-issuer"</span>)); }
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> put(URI issuer, McpClientRegistration registration) { <em class="jxr_comment">/* no-op */</em> }
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> remove(URI issuer) { <em class="jxr_comment">/* no-op */</em> }
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		};
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> m = McpClientRegistrationManager.create().store(buggy).registrarFunction(stubDcr()).build();
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertThrowsWithMessage(McpAuthException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"refusing to reuse credentials"</span>, () -&gt; m.resolve(as(A, <strong class="jxr_keyword">true</strong>)));
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<em class="jxr_comment">// Real (non-overridden) DCR path: exercises the manager's builder settings end-to-end through the actual</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<em class="jxr_comment">// McpDynamicClientRegistrar against an in-JVM loopback stub, rather than the stubDcr() override used above.</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpServer loopbackServer(HttpHandler handler) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> server = HttpServer.create(<strong class="jxr_keyword">new</strong> InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		server.createContext(<span class="jxr_string">"/register"</span>, handler);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		server.start();
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">return</strong> server;
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	}
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> respond(HttpExchange ex, String body) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">var</strong> b = body.getBytes(StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		ex.getResponseHeaders().add(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		ex.sendResponseHeaders(201, b.length);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> os = ex.getResponseBody()) {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			os.write(b);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		}
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	}
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; asExtrasFor(HttpServer server) {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">return</strong> Map.of(<span class="jxr_string">"registration_endpoint"</span>, <span class="jxr_string">"http://127.0.0.1:"</span> + server.getAddress().getPort() + <span class="jxr_string">"/register"</span>);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// HttpServer is stopped in the finally block below.</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	})
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	@Test <strong class="jxr_keyword">void</strong> e01_realDcrRoundTripAppliesAllManagerSettings() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">var</strong> configuratorCalled = Flag.create();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">var</strong> server = loopbackServer(ex -&gt; respond(ex,
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			<span class="jxr_string">"{\&quot;client_id\&quot;:\&quot;dcr-client\&quot;,\&quot;client_secret\&quot;:\&quot;sek\&quot;,\&quot;redirect_uris\&quot;:[\&quot;http://127.0.0.1/callback\&quot;],"</span>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 				+ <span class="jxr_string">"\&quot;application_type\&quot;:\&quot;web\&quot;,\&quot;token_endpoint_auth_method\&quot;:\&quot;client_secret_basic\&quot;}"</span>));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">var</strong> as = <strong class="jxr_keyword">new</strong> OidcMetadata(A, URI.create(A + <span class="jxr_string">"/token"</span>), URI.create(A + <span class="jxr_string">"/auth"</span>), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>,
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 				Set.of(), asExtrasFor(server));
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">var</strong> m = McpClientRegistrationManager.create()
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 				.applicationType(McpApplicationType.WEB)
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 				.redirectUris(List.of(URI.create(<span class="jxr_string">"http://127.0.0.1/callback"</span>)))
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 				.scope(<span class="jxr_string">"mcp:read"</span>, <span class="jxr_string">"mcp:write"</span>)
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 				.confidential(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 				.clientName(<span class="jxr_string">"test-client"</span>)
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 				.initialAccessToken(<span class="jxr_string">"iat-tok"</span>)
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 				.httpTimeout(Duration.ofSeconds(5))
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 				.httpRequestConfigurator(req -&gt; configuratorCalled.set())
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 				.build();
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<strong class="jxr_keyword">var</strong> reg = m.resolve(as);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			assertEquals(<span class="jxr_string">"dcr-client"</span>, reg.clientId());
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			assertEquals(McpApplicationType.WEB, reg.applicationType());
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			assertTrue(reg.isConfidential());
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			assertTrue(configuratorCalled.isSet(), <span class="jxr_string">"httpRequestConfigurator must reach the underlying registrar"</span>);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			server.stop(0);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// HttpServer is stopped in the finally block below.</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	})
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	@Test <strong class="jxr_keyword">void</strong> e02_redirectUrisSupplierUsedForRealDcr() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">var</strong> server = loopbackServer(ex -&gt; respond(ex,
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<span class="jxr_string">"{\&quot;client_id\&quot;:\&quot;dcr-supplier\&quot;,\&quot;redirect_uris\&quot;:[\&quot;http://127.0.0.1/cb\&quot;],"</span>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 				+ <span class="jxr_string">"\&quot;application_type\&quot;:\&quot;native\&quot;,\&quot;token_endpoint_auth_method\&quot;:\&quot;none\&quot;}"</span>));
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">var</strong> as = <strong class="jxr_keyword">new</strong> OidcMetadata(A, URI.create(A + <span class="jxr_string">"/token"</span>), URI.create(A + <span class="jxr_string">"/auth"</span>), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>,
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 				Set.of(), asExtrasFor(server));
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">var</strong> m = McpClientRegistrationManager.create()
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 				.redirectUrisSupplier(() -&gt; List.of(URI.create(<span class="jxr_string">"http://127.0.0.1/cb"</span>)))
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 				.build();
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			assertEquals(<span class="jxr_string">"dcr-supplier"</span>, m.resolve(as).clientId());
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			server.stop(0);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		}
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	}
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

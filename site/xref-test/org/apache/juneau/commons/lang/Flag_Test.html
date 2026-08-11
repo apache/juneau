@@ -24,13 +24,13 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.commons.lang;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">class</strong> <a name="Flag_Test" href="../../../../../org/apache/juneau/commons/lang/Flag_Test.html#Flag_Test">Flag_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">class</strong> <a name="Flag_Test" href="../../../../../org/apache/juneau/commons/lang/Flag_Test.html#Flag_Test">Flag_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/commons/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<em class="jxr_comment">// Basic tests</em>
@@ -128,7 +128,7 @@
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> a = Flag.of(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> b = Flag.create();
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		a.ifSet(() -&gt; b.set());
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		a.ifSet(b::set);
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertTrue(b.isSet());
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> a = Flag.create();
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> b = Flag.create();
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		a.ifSet(() -&gt; b.set());
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		a.ifSet(b::set);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertFalse(b.isSet());
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
@@ -148,7 +148,7 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> a = Flag.of(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> b = Flag.create();
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		a.ifNotSet(() -&gt; b.set());
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		a.ifNotSet(b::set);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertFalse(b.isSet());
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
@@ -158,7 +158,7 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> a = Flag.create();
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> b = Flag.create();
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		a.ifNotSet(() -&gt; b.set());
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		a.ifNotSet(b::set);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertTrue(b.isSet());
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<em class="jxr_comment">// Simulate initializing only once</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 5; i++) {
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			a.ifNotSet(() -&gt; a.set());
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			a.ifNotSet(a::set);
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		}
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertTrue(a.isSet());
@@ -268,28 +268,28 @@
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 	<strong class="jxr_keyword">void</strong> d03_equals_sameValue() {
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">var</strong> flag1 = Flag.of(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">var</strong> flag2 = Flag.of(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertTrue(flag1.equals(flag2));
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertTrue(flag2.equals(flag1));
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertEquals(flag1, flag2);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertEquals(flag2, flag1);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 	}
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 	@Test
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 	<strong class="jxr_keyword">void</strong> d04_equals_differentValue() {
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">var</strong> flag1 = Flag.of(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">var</strong> flag2 = Flag.of(false);
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		assertFalse(flag1.equals(flag2));
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		assertFalse(flag2.equals(flag1));
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		assertNotEquals(flag1, flag2);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		assertNotEquals(flag2, flag1);
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 	}
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 	@Test
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<strong class="jxr_keyword">void</strong> d05_equals_sameInstance() {
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">var</strong> flag = Flag.of(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertTrue(flag.equals(flag));
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertEquals(flag, flag);
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 	@Test
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<strong class="jxr_keyword">void</strong> d06_equals_notAFlag() {
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">var</strong> flag = Flag.of(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertFalse(flag.equals(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertNotNull(flag);
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@Test

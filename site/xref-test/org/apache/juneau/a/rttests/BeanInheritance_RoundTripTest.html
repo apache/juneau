@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  	@ParameterizedTest
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">void</strong> a01_beanInheritance(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">void</strong> a01_beanInheritance(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<em class="jxr_comment">// Skip tests that just return the same object.</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">if</strong> (t.returnOriginalObject)
@@ -134,7 +134,7 @@
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">void</strong> a02_beanInheritance(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">void</strong> a02_beanInheritance(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> t1 = <strong class="jxr_keyword">new</strong> B1().init();
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> t2 = t. roundTrip(t1, B1.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertEquals(json(t2), json(t1));

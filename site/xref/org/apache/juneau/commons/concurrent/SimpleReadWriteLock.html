@@ -28,59 +28,198 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * An extension of {@link ReentrantReadWriteLock} with convenience methods for creating</em>
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * auto-closeable locks.</em>
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="SimpleReadWriteLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a> <strong class="jxr_keyword">extends</strong> ReentrantReadWriteLock {
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">	 * A no-op lock.</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="SimpleReadWriteLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a> NO_OP = <strong class="jxr_keyword">new</strong> <a name="SimpleReadWriteLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>() {
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		@Override
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<strong class="jxr_keyword">public</strong> <a name="SimpleLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleLock.html#SimpleLock">SimpleLock</a> read() {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  			<strong class="jxr_keyword">return</strong> SimpleLock.NO_OP;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		}
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		@Override
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">public</strong> <a name="SimpleLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleLock.html#SimpleLock">SimpleLock</a> write() {
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  			<strong class="jxr_keyword">return</strong> SimpleLock.NO_OP;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		}
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	};
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">public</strong> <a name="SimpleReadWriteLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>() {}
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">	 * Constructor</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 * @param fair &lt;jk&gt;true&lt;/jk&gt; if this lock should use a fair ordering policy.</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">public</strong> <a name="SimpleReadWriteLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>(<strong class="jxr_keyword">boolean</strong> fair) {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">super</strong>(fair);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * Construct a read lock.</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * @return A new closeable read lock.</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">public</strong> <a name="SimpleLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleLock.html#SimpleLock">SimpleLock</a> read() {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="SimpleLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleLock.html#SimpleLock">SimpleLock</a>(readLock());
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * Construct a write lock.</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * @return A new closeable write lock.</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">public</strong> <a name="SimpleLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleLock.html#SimpleLock">SimpleLock</a> write() {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="SimpleLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleLock.html#SimpleLock">SimpleLock</a>(writeLock());
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  }
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * auto-closeable locks that work seamlessly with try-with-resources statements.</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * This class provides a simpler API than the standard {@link ReentrantReadWriteLock} by wrapping</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * read and write locks in {@link SimpleLock} instances that implement {@link AutoCloseable}.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * This allows locks to be automatically released when used in try-with-resources blocks, reducing</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * the risk of forgetting to unlock and preventing deadlocks.</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * The returned {@link SimpleLock} instances automatically acquire the lock when created and release</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * it when {@link SimpleLock#close()} is called (either explicitly or automatically via try-with-resources).</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Using read lock with try-with-resources&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;lock&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleReadWriteLock();</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;try&lt;/jk&gt; (&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;readLock&lt;/jv&gt; = &lt;jv&gt;lock&lt;/jv&gt;.read()) {</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 		&lt;jc&gt;// Read operations here - lock is automatically held&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 		&lt;jv&gt;sharedResource&lt;/jv&gt;.read();</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * 	}</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Lock is automatically released when exiting try block&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Using write lock with try-with-resources&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;try&lt;/jk&gt; (&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;writeLock&lt;/jv&gt; = &lt;jv&gt;lock&lt;/jv&gt;.write()) {</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * 		&lt;jc&gt;// Write operations here - lock is automatically held&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * 		&lt;jv&gt;sharedResource&lt;/jv&gt;.write(&lt;js&gt;"new value"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * 	}</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Lock is automatically released when exiting try block&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * This class inherits all thread-safety guarantees from {@link ReentrantReadWriteLock}.</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * Multiple threads can hold read locks simultaneously, but write locks are exclusive.</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * Read and write locks cannot be held simultaneously by different threads.</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='note'&gt;The returned {@link SimpleLock} instances are not thread-safe themselves and should</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * 		not be shared between threads. Each thread should call {@link #read()} or {@link #write()} separately.</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='note'&gt;Each call to {@link #read()} or {@link #write()} returns a new {@link SimpleLock} instance.</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='note'&gt;The lock is automatically acquired when {@link SimpleLock} is created and released when</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * 		{@link SimpleLock#close()} is called.</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='note'&gt;This class supports reentrant locking - the same thread can acquire multiple read locks</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 		or upgrade from read to write lock (if no other threads hold read locks).</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='note'&gt;For fair ordering, use {@link #SimpleReadWriteLock(boolean)} with &lt;jk&gt;true&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link SimpleLock} - The auto-closeable lock wrapper</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link ReentrantReadWriteLock} - The underlying lock implementation</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="SimpleReadWriteLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a> <strong class="jxr_keyword">extends</strong> ReentrantReadWriteLock {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * A no-op lock instance that performs no actual locking operations.</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * This instance can be used when locking is conditionally disabled or when you need a</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * {@link SimpleReadWriteLock} instance but don't want any actual synchronization overhead.</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * All lock operations on this instance are no-ops and return {@link SimpleLock#NO_OP}.</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Use NO_OP when locking is disabled&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;lock&lt;/jv&gt; = isLockingEnabled() ? &lt;jk&gt;new&lt;/jk&gt; SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;try&lt;/jk&gt; (&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;readLock&lt;/jv&gt; = &lt;jv&gt;lock&lt;/jv&gt;.read()) {</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * 		&lt;jc&gt;// Code works the same whether locking is enabled or not&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * 		&lt;jv&gt;sharedResource&lt;/jv&gt;.read();</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * 	}</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;Calling {@link #read()} or {@link #write()} on this instance returns {@link SimpleLock#NO_OP}.</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;Closing the returned {@link SimpleLock} has no effect.</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;This instance is thread-safe and can be shared across threads.</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="SimpleReadWriteLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a> NO_OP = <strong class="jxr_keyword">new</strong> <a name="SimpleReadWriteLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>() {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		@Override
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">public</strong> SimpleLock read() {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">return</strong> SimpleLock.NO_OP;
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		}
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		@Override
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">public</strong> SimpleLock write() {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<strong class="jxr_keyword">return</strong> SimpleLock.NO_OP;
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		}
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	};
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * Creates a new read-write lock with an unfair ordering policy. Unfair locks generally</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * provide better throughput under high contention but may not guarantee fairness.</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">public</strong> <a name="SimpleReadWriteLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>() {}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * Creates a new read-write lock with the specified fairness policy.</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Fair vs Unfair:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;&lt;b&gt;Fair locks&lt;/b&gt; (&lt;jk&gt;true&lt;/jk&gt;): Threads acquire locks in approximately</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * 		FIFO order. Provides fairness but may have lower throughput under high contention.</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;&lt;b&gt;Unfair locks&lt;/b&gt; (&lt;jk&gt;false&lt;/jk&gt;): No ordering guarantee. Generally provides</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * 		better throughput but may starve some threads under high contention.</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * @param fair &lt;jk&gt;true&lt;/jk&gt; if this lock should use a fair ordering policy, &lt;jk&gt;false&lt;/jk&gt; for unfair.</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">public</strong> <a name="SimpleReadWriteLock" href="../../../../../org/apache/juneau/commons/concurrent/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>(<strong class="jxr_keyword">boolean</strong> fair) {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">super</strong>(fair);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	}
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 * Acquires and returns a read lock.</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * The returned {@link SimpleLock} automatically acquires the read lock when created and releases</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 * it when {@link SimpleLock#close()} is called. Multiple threads can hold read locks simultaneously,</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 * but a write lock cannot be acquired while any read locks are held.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;lock&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleReadWriteLock();</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;try&lt;/jk&gt; (&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;readLock&lt;/jv&gt; = &lt;jv&gt;lock&lt;/jv&gt;.read()) {</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * 		&lt;jc&gt;// Multiple threads can hold read locks simultaneously&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 * 		&lt;jv&gt;sharedResource&lt;/jv&gt;.read();</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * 	}</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Lock is automatically released&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;This method blocks until the read lock can be acquired.</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;Multiple threads can hold read locks concurrently.</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;Read locks cannot be acquired while a write lock is held by another thread.</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;The same thread can acquire multiple read locks (reentrant).</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;Each call returns a new {@link SimpleLock} instance.</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 * @return A new {@link SimpleLock} that holds the read lock. The lock is automatically acquired.</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Caller takes ownership of the returned lock via try-with-resources</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	})
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">public</strong> SimpleLock read() {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SimpleLock(readLock());
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	}
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * Acquires and returns a write lock.</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * The returned {@link SimpleLock} automatically acquires the write lock when created and releases</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * it when {@link SimpleLock#close()} is called. Write locks are exclusive - only one thread can</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * hold a write lock at a time, and no read locks can be held while a write lock is active.</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;lock&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleReadWriteLock();</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;try&lt;/jk&gt; (&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;writeLock&lt;/jv&gt; = &lt;jv&gt;lock&lt;/jv&gt;.write()) {</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * 		&lt;jc&gt;// Only one thread can hold a write lock at a time&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * 		&lt;jv&gt;sharedResource&lt;/jv&gt;.write(&lt;js&gt;"new value"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 * 	}</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Lock is automatically released&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;This method blocks until the write lock can be acquired.</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;Write locks are exclusive - only one thread can hold a write lock at a time.</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;Write locks cannot be acquired while any read locks are held by other threads.</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;Read locks cannot be acquired while a write lock is held.</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;The same thread can acquire multiple write locks (reentrant).</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;Each call returns a new {@link SimpleLock} instance.</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 * @return A new {@link SimpleLock} that holds the write lock. The lock is automatically acquired.</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Caller takes ownership of the returned lock via try-with-resources</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	})
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<strong class="jxr_keyword">public</strong> SimpleLock write() {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SimpleLock(writeLock());
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	}
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

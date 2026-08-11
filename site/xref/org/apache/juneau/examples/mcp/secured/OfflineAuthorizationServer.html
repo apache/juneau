@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>OfflineAuthorizationServer xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/org/apache/juneau/examples/mcp/secured/OfflineAuthorizationServer.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.examples.mcp.secured;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.security.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.Json;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> com.nimbusds.jose.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> com.nimbusds.jose.crypto.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> com.nimbusds.jose.jwk.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> com.nimbusds.jose.jwk.gen.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> com.nimbusds.jose.jwk.source.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> com.nimbusds.jose.proc.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> com.nimbusds.jwt.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> com.sun.net.httpserver.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * A minimal, self-contained, in-process stand-in for a real OAuth 2.1 authorization server (AS), so the</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * {@code secured} MCP example (and its end-to-end test) run entirely offline &amp;mdash; no external IdP, no</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * network access, no pre-shared secrets checked into source control.</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;&lt;b&gt;DEMO ONLY &amp;mdash; NOT SUITABLE FOR PRODUCTION USE.&lt;/b&gt;&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * This is deliberately NOT a general-purpose or spec-complete authorization server. It exists purely to make</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * {@link SecuredExampleMcpServer}'s {@code JwtTokenValidator}-backed resource-server gate and</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * {@link SecuredExampleClient}'s {@code McpTokenProvider}-backed client-credentials flow both have something</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * real to talk to. Concretely, on {@link #start()} it:</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * &lt;ol&gt;</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Generates a fresh RSA-2048 signing key (a new key every run &amp;mdash; nothing is persisted, so restarting</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * 		the example invalidates any previously-issued token, which is exactly the offline-demo property we want).</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Publishes only the &lt;b&gt;public&lt;/b&gt; half of that key as a {@link JWKSource}, which</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * 		{@link SecuredExampleMcpServer} feeds directly to {@code JwtTokenValidator.jwkSource(...)} &amp;mdash; no JWKS</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * 		HTTP endpoint is needed because the server and "AS" share this JVM.</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Starts a tiny {@link HttpServer} exposing two routes:</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * 		&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * 			&lt;li&gt;{@code POST /token} &amp;mdash; the RFC 6749 &amp;sect;4.4 client-credentials grant against one fixed,</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * 				randomly-generated demo client id/secret pair (see {@link #clientId()} / {@link #clientSecret()}).</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * 				This is a REAL HTTP round trip: the client-side {@code OAuthClientCredentialsFlow} used by</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * 				{@code McpTokenProvider} talks to it exactly as it would talk to a production IdP's token</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * 				endpoint, just on {@code localhost}.</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * 			&lt;li&gt;{@code GET /.well-known/oauth-authorization-server} &amp;mdash; a minimal RFC 8414 Authorization</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 				Server Metadata document ({@code issuer} + {@code token_endpoint} only), so a real client can</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 				perform genuine discovery against {@link #issuerUri()} instead of being handed the token</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * 				endpoint out of band. See {@link SecuredExampleClient} for the client half of that handshake.</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * 		&lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;What this class intentionally does NOT implement&lt;/b&gt; (called out here and in the README so nobody mistakes</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * this demo for a template for a real deployment):</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;No real scope-authorization decision &amp;mdash; {@link #handleToken} only checks the requested scope</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * 		against a fixed allowlist ({@code mcp.read}/{@code mcp.write}); it never asks a resource owner or policy</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * 		engine whether the client is ALLOWED that scope, which is what a real AS's consent/policy step does.</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;No refresh tokens, no consent screen, no user authentication of any kind &amp;mdash; only the</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * 		machine-to-machine client-credentials grant, which is all an MCP server-to-server OAuth demo needs.</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;No persistence, replay protection beyond the JWT {@code exp}/{@code nbf} window, or key rotation. The</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * 		RFC 8414 document above is likewise minimal: no {@code jwks_uri}, no {@code scopes_supported}, no</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * 		dynamic client registration &amp;mdash; this AS's public key is handed directly to the validator in-process</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * 		(see {@link #jwkSource()}) rather than published for a real JWKS fetch.</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;TLS caveat:&lt;/b&gt; this class and {@link SecuredExampleServer} talk plain {@code http} only because both</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * ends are loopback-only ({@code 127.0.0.1}/{@code localhost}). OAuth 2.1 / RFC 9728 require {@code https} for</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * any non-loopback resource identifier or token endpoint; a bearer token sent over plaintext to a non-loopback</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * host is exposed to anyone on the network path.</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment"> * A real deployment would point {@code JwtTokenValidator} at an actual IdP's JWKS URL and issuer, and would</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment"> * never generate or hand out client secrets like {@link #start()} does here.</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="OfflineAuthorizationServer" href="../../../../../../org/apache/juneau/examples/mcp/secured/OfflineAuthorizationServer.html#OfflineAuthorizationServer">OfflineAuthorizationServer</a> <strong class="jxr_keyword">implements</strong> AutoCloseable {
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<em class="jxr_javadoccomment">/** The scope minted onto a token when the client's request omits one. */</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_SCOPE = <span class="jxr_string">"mcp.read"</span>;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * The fixed allowlist of scopes this offline AS will grant (H2): a client requesting anything outside this</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * set is rejected with RFC 6749 &amp;sect;5.2 {@code invalid_scope}, rather than being handed back whatever it</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * asked for.</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; GRANTABLE_SCOPES = Set.of(DEFAULT_SCOPE, <span class="jxr_string">"mcp.write"</span>);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<em class="jxr_javadoccomment">/** The RFC 6749 {@code scope} form parameter / JWT claim name, minted access tokens carry as {@code scope}. */</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SCOPE_PARAM = <span class="jxr_string">"scope"</span>;
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_javadoccomment">/** How long a minted access token is valid for. */</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Duration TOKEN_TTL = Duration.ofMinutes(5);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<em class="jxr_javadoccomment">/** RFC 8414 Authorization Server Metadata well-known path. */</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String WELL_KNOWN_AUTHORIZATION_SERVER = <span class="jxr_string">"/.well-known/oauth-authorization-server"</span>;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<em class="jxr_comment">// S2119: a single reused instance, not one per randomSecret() call - repeatedly constructing SecureRandom</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<em class="jxr_comment">// re-seeds it from the OS entropy source every time, which is wasteful and provides no security benefit</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<em class="jxr_comment">// over reusing one properly-seeded instance.</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> SecureRandom SECURE_RANDOM = <strong class="jxr_keyword">new</strong> SecureRandom();
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> RSAKey signingKey;
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String clientId;
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String clientSecret;
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> HttpServer httpServer;
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> URI issuer;
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicInteger tokenRequestCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">private</strong> <a name="OfflineAuthorizationServer" href="../../../../../../org/apache/juneau/examples/mcp/secured/OfflineAuthorizationServer.html#OfflineAuthorizationServer">OfflineAuthorizationServer</a>(RSAKey signingKey, String clientId, String clientSecret, HttpServer httpServer, URI issuer) {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">this</strong>.signingKey = signingKey;
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">this</strong>.clientId = clientId;
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">this</strong>.clientSecret = clientSecret;
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">this</strong>.httpServer = httpServer;
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">this</strong>.issuer = issuer;
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 * Generates a fresh signing key and demo client credentials, and starts the {@code /token} and RFC 8414</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 * discovery endpoints on an OS-assigned loopback-only port.</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * @return A running instance. Close it (or call {@link #close()}) to stop the HTTP endpoint.</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * @throws Exception If key generation or the HTTP endpoint fails to start.</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<span class="jxr_string">"java:S112"</span>, <em class="jxr_comment">// throws Exception intentional - example lifecycle method kept simple for demo readability</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// returned instance is owned and closed by the caller (see SecuredExampleServer.start()).</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	})
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="OfflineAuthorizationServer" href="../../../../../../org/apache/juneau/examples/mcp/secured/OfflineAuthorizationServer.html#OfflineAuthorizationServer">OfflineAuthorizationServer</a> start() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> signingKey = <strong class="jxr_keyword">new</strong> RSAKeyGenerator(2048).keyID(<span class="jxr_string">"demo-key-1"</span>).algorithm(JWSAlgorithm.RS256).generate();
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> clientId = <span class="jxr_string">"demo-client"</span>;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> clientSecret = randomSecret();
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> httpServer = HttpServer.create(<strong class="jxr_keyword">new</strong> InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<em class="jxr_comment">// H4/M10: the issuer is THIS instance's own loopback base URL, known as soon as the (possibly</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<em class="jxr_comment">// OS-assigned) listen socket is bound - a constructor-supplied instance field, not a shared constant,</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<em class="jxr_comment">// so two independently-started instances naturally have two different issuers (see</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<em class="jxr_comment">// SecuredExampleMcpEndToEnd_Test's wrong-issuer test).</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">var</strong> issuer = URI.create(<span class="jxr_string">"http://127.0.0.1:"</span> + httpServer.getAddress().getPort());
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> self = <strong class="jxr_keyword">new</strong> <a name="OfflineAuthorizationServer" href="../../../../../../org/apache/juneau/examples/mcp/secured/OfflineAuthorizationServer.html#OfflineAuthorizationServer">OfflineAuthorizationServer</a>(signingKey, clientId, clientSecret, httpServer, issuer);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		httpServer.createContext(<span class="jxr_string">"/token"</span>, self::handleToken);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		httpServer.createContext(WELL_KNOWN_AUTHORIZATION_SERVER, self::handleAuthorizationServerMetadata);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		httpServer.start();
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">return</strong> self;
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<em class="jxr_javadoccomment">/** Generates a random, never-checked-in demo client secret (32 bytes, URL-safe base64). */</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String randomSecret() {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> bytes = <strong class="jxr_keyword">new</strong> byte[32];
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		SECURE_RANDOM.nextBytes(bytes);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">return</strong> Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 * Returns a {@link JWKSource} publishing only the public half of this server's signing key, ready to hand</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 * straight to {@code JwtTokenValidator.jwkSource(...)}.</em>
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * @return The public-key JWK source. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	<strong class="jxr_keyword">public</strong> JWKSource&lt;SecurityContext&gt; jwkSource() {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ImmutableJWKSet&lt;&gt;(<strong class="jxr_keyword">new</strong> JWKSet(signingKey.toPublicJWK()));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * Returns this authorization server's issuer identity (its own loopback base URL) &amp;mdash; used as the JWT</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * {@code iss} claim, the PRM document's {@code authorization_servers} entry, and the RFC 8414 discovery</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * document's {@code issuer} field.</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * @return The issuer URI. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">public</strong> URI issuerUri() {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">return</strong> issuer;
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * Returns the loopback URL of the {@code /token} client-credentials endpoint.</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 * @return The token endpoint URL. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<strong class="jxr_keyword">public</strong> URI tokenEndpoint() {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">return</strong> URI.create(issuer + <span class="jxr_string">"/token"</span>);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 * Returns the fixed demo client id a caller must present (via HTTP Basic) to acquire a token.</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 * @return The client id. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<strong class="jxr_keyword">public</strong> String clientId() {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">return</strong> clientId;
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * Returns the randomly-generated demo client secret a caller must present (via HTTP Basic) to acquire a</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * token. Generated fresh on every {@link #start()}; never persisted anywhere &amp;mdash; {@link SecuredExampleServer#main}</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * prints it to the console purely so a reader running the demo by hand has something to copy/paste.</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * @return The client secret. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<strong class="jxr_keyword">public</strong> String clientSecret() {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">return</strong> clientSecret;
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 * Returns how many HTTP requests have hit the {@code /token} endpoint so far (M7): a test seam proving a</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 * caching {@code McpTokenProvider} genuinely reuses an acquired token across multiple dispatches instead of</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">	 * silently re-requesting one per call.</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 * @return The number of {@code /token} requests handled since {@link #start()}.</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> tokenRequestCount() {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">return</strong> tokenRequestCount.get();
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	}
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	@Override
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		httpServer.stop(0);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 * Implements RFC 6749 &amp;sect;4.4 (client-credentials grant) against the fixed demo client id/secret,</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * minting a signed JWT whose {@code aud} claim is exactly the RFC 8707 {@code resource} indicator the</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * caller supplied &amp;mdash; this is what lets {@code JwtTokenValidator} enforce the audience check on the</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * receiving end.</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> handleToken(HttpExchange exchange) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<em class="jxr_comment">// DEMO ONLY: see class javadoc - not a production AS.</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		tokenRequestCount.incrementAndGet();
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"POST"</span>.equals(exchange.getRequestMethod())) {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 				exchange.getResponseHeaders().add(<span class="jxr_string">"Allow"</span>, <span class="jxr_string">"POST"</span>);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 				sendJson(exchange, 405, error(<span class="jxr_string">"invalid_request"</span>, <span class="jxr_string">"must POST to /token"</span>));
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			}
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">if</strong> (! authenticateClient(exchange)) {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 				exchange.getResponseHeaders().add(<span class="jxr_string">"WWW-Authenticate"</span>, <span class="jxr_string">"Basic realm=\&quot;offline-authorization-server\&quot;"</span>);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 				sendJson(exchange, 401, error(<span class="jxr_string">"invalid_client"</span>, <span class="jxr_string">"unknown client id or secret"</span>));
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			}
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			Map&lt;String,String&gt; form;
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> body = exchange.getRequestBody()) {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 				form = parseForm(body);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			}
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"client_credentials"</span>.equals(form.get(<span class="jxr_string">"grant_type"</span>))) {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 				sendJson(exchange, 400, error(<span class="jxr_string">"unsupported_grant_type"</span>, <span class="jxr_string">"only client_credentials is supported"</span>));
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			}
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">var</strong> resource = form.get(<span class="jxr_string">"resource"</span>);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">if</strong> (resource == <strong class="jxr_keyword">null</strong> || resource.isBlank()) {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 				sendJson(exchange, 400, error(<span class="jxr_string">"invalid_target"</span>, <span class="jxr_string">"a resource indicator (RFC 8707) is required"</span>));
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			}
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<strong class="jxr_keyword">var</strong> scope = form.getOrDefault(SCOPE_PARAM, DEFAULT_SCOPE);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">if</strong> (! isGrantable(scope)) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 				sendJson(exchange, 400, error(<span class="jxr_string">"invalid_scope"</span>, <span class="jxr_string">"requested scope must be a subset of "</span> + GRANTABLE_SCOPES));
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			}
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<strong class="jxr_keyword">var</strong> token = mintAccessToken(resource, scope, Instant.now(), TOKEN_TTL);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			exchange.getResponseHeaders().add(<span class="jxr_string">"Cache-Control"</span>, <span class="jxr_string">"no-store"</span>);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			exchange.getResponseHeaders().add(<span class="jxr_string">"Pragma"</span>, <span class="jxr_string">"no-cache"</span>);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			sendJson(exchange, 200, Json.of(Map.&lt;String,Object&gt;of(
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				<span class="jxr_string">"access_token"</span>, token,
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				<span class="jxr_string">"token_type"</span>, <span class="jxr_string">"Bearer"</span>,
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 				<span class="jxr_string">"expires_in"</span>, TOKEN_TTL.toSeconds(),
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				SCOPE_PARAM, scope)));
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException | JOSEException e) {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			sendJson(exchange, 500, error(<span class="jxr_string">"server_error"</span>, e.getMessage() == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"internal error"</span> : e.getMessage()));
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		}
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	}
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	<em class="jxr_javadoccomment">/** Serves a minimal RFC 8414 Authorization Server Metadata document (M10): {@code issuer} + {@code token_endpoint} only. */</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> handleAuthorizationServerMetadata(HttpExchange exchange) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"GET"</span>.equals(exchange.getRequestMethod())) {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			exchange.getResponseHeaders().add(<span class="jxr_string">"Allow"</span>, <span class="jxr_string">"GET"</span>);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			exchange.sendResponseHeaders(405, -1);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		}
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		sendJson(exchange, 200, Json.of(Map.of(
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<span class="jxr_string">"issuer"</span>, issuer.toString(),
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<span class="jxr_string">"token_endpoint"</span>, tokenEndpoint().toString())));
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	<em class="jxr_javadoccomment">/** Returns whether every space-delimited token in {@code scope} is in the {@link #GRANTABLE_SCOPES} allowlist (H2). */</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isGrantable(String scope) {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : scope.split(<span class="jxr_string">"&#92;&#92;s+"</span>))
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			<strong class="jxr_keyword">if</strong> (! s.isBlank() &amp;&amp; ! GRANTABLE_SCOPES.contains(s))
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	}
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	<em class="jxr_javadoccomment">/** Validates the RFC 6749 HTTP Basic client-authentication header against the fixed demo credentials. */</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> authenticateClient(HttpExchange exchange) {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<em class="jxr_comment">// DEMO ONLY: see class javadoc - not a production AS.</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">var</strong> header = exchange.getRequestHeaders().getFirst(<span class="jxr_string">"Authorization"</span>);
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">if</strong> (header == <strong class="jxr_keyword">null</strong> || ! header.startsWith(<span class="jxr_string">"Basic "</span>))
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		byte[] decodedBytes;
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			decodedBytes = Base64.getDecoder().decode(header.substring(<span class="jxr_string">"Basic "</span>.length()));
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) { <em class="jxr_comment">// L1: malformed base64 -&gt; a clean 401, not a 500</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		}
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> decoded = <strong class="jxr_keyword">new</strong> String(decodedBytes, StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">var</strong> sep = decoded.indexOf(':');
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">if</strong> (sep &lt; 0)
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">var</strong> presentedId = URLDecoder.decode(decoded.substring(0, sep), StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">var</strong> presentedSecret = URLDecoder.decode(decoded.substring(sep + 1), StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<em class="jxr_comment">// M6: constant-time comparison - both MessageDigest.isEqual() calls below are unconditionally evaluated</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<em class="jxr_comment">// (regardless of the '&amp;&amp;' below) so neither the id nor the secret check can leak timing information</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<em class="jxr_comment">// about how many leading bytes matched. The boolean combinator itself has no side effects either way.</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">var</strong> idMatches = MessageDigest.isEqual(clientId.getBytes(StandardCharsets.UTF_8), presentedId.getBytes(StandardCharsets.UTF_8));
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">var</strong> secretMatches = MessageDigest.isEqual(clientSecret.getBytes(StandardCharsets.UTF_8), presentedSecret.getBytes(StandardCharsets.UTF_8));
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">return</strong> idMatches &amp;&amp; secretMatches;
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	}
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * Signs a fresh RS256 access token carrying the mandatory claims {@code JwtTokenValidator} requires.</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 * Package-private test seam (H4): exposing {@code issuedAt}/{@code ttl} lets</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">	 * {@link SecuredExampleMcpEndToEnd_Test} mint an already-expired token directly, without needing a real</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">	 * clock to actually elapse.</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 * @param audience The RFC 8707 {@code resource} indicator to mint the token's {@code aud} claim for.</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 * @param scope The (space-delimited) {@code scope} claim.</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * @param issuedAt The token's {@code iat}/{@code nbf} instant.</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * @param ttl How long after {@code issuedAt} the token expires.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 * @return The signed, serialized JWT.</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * @throws JOSEException If signing fails.</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	String mintAccessToken(String audience, String scope, Instant issuedAt, Duration ttl) <strong class="jxr_keyword">throws</strong> JOSEException {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">var</strong> claims = <strong class="jxr_keyword">new</strong> JWTClaimsSet.Builder()
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<em class="jxr_comment">// M4: a client-credentials grant has no resource owner - the subject IS the client, not a</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<em class="jxr_comment">// placeholder end user.</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			.subject(clientId)
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			.issuer(issuer.toString())
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			.audience(audience)
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			.claim(SCOPE_PARAM, scope)
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			.issueTime(Date.from(issuedAt))
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			.notBeforeTime(Date.from(issuedAt))
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			.expirationTime(Date.from(issuedAt.plus(ttl)))
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			.build();
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> header = <strong class="jxr_keyword">new</strong> JWSHeader.Builder(JWSAlgorithm.RS256).keyID(signingKey.getKeyID()).build();
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">var</strong> jwt = <strong class="jxr_keyword">new</strong> SignedJWT(header, claims);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		jwt.sign(<strong class="jxr_keyword">new</strong> RSASSASigner(signingKey));
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">return</strong> jwt.serialize();
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	}
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<em class="jxr_javadoccomment">/** Parses an {@code application/x-www-form-urlencoded} request body into a key/value map. */</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,String&gt; parseForm(InputStream body) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">var</strong> raw = <strong class="jxr_keyword">new</strong> String(body.readAllBytes(), StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,String&gt;();
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pair : raw.split(<span class="jxr_string">"&amp;"</span>)) {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">if</strong> (pair.isEmpty())
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			<strong class="jxr_keyword">var</strong> eq = pair.indexOf('=');
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<strong class="jxr_keyword">var</strong> key = eq &lt; 0 ? pair : pair.substring(0, eq);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			<strong class="jxr_keyword">var</strong> value = eq &lt; 0 ? <span class="jxr_string">""</span> : pair.substring(eq + 1);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			out.put(URLDecoder.decode(key, StandardCharsets.UTF_8), URLDecoder.decode(value, StandardCharsets.UTF_8));
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		}
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * Builds an RFC 6749 &amp;sect;5.2 JSON error body.</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 * M2/M3: built as a {@link Map} and serialized via {@link Json#of(Object)} (the same marshaller</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 * {@link SecuredExampleClient} already uses) instead of hand-concatenating strings, so a client-controlled</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 * {@code error_description} containing a quote or backslash can no longer reshape the JSON structure or</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * produce invalid JSON.</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String error(String code, String description) {
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">return</strong> Json.of(Map.of(<span class="jxr_string">"error"</span>, code, <span class="jxr_string">"error_description"</span>, description));
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	}
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> sendJson(HttpExchange exchange, <strong class="jxr_keyword">int</strong> status, String json) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">var</strong> bytes = json.getBytes(StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		exchange.getResponseHeaders().add(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		exchange.sendResponseHeaders(status, bytes.length);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> os = exchange.getResponseBody()) {
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			os.write(bytes);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		}
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

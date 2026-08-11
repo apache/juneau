@@ -27,13 +27,13 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.lang.StateEnum.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Tests for {@link StateEnum}.</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">class</strong> <a name="StateEnum_Test" href="../../../../../org/apache/juneau/commons/lang/StateEnum_Test.html#StateEnum_Test">StateEnum_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">class</strong> <a name="StateEnum_Test" href="../../../../../org/apache/juneau/commons/lang/StateEnum_Test.html#StateEnum_Test">StateEnum_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/commons/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<em class="jxr_comment">// Enum values() tests</em>
@@ -233,7 +233,7 @@
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<strong class="jxr_keyword">void</strong> d07_compareTo_ordering() {
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 		assertTrue(S1.compareTo(S2) &lt; 0);
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		assertTrue(S2.compareTo(S1) &gt; 0);
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		assertTrue(S1.compareTo(S1) == 0);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		assertEquals(0, S1.compareTo(S1));
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 		assertTrue(S10.compareTo(S20) &lt; 0);
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 		assertTrue(S50.compareTo(S1) &gt; 0);
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 	}

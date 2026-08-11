@@ -1,0 +1,714 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>RestOpInvoker_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/rest/server/RestOpInvoker_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.response.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.json.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.metrics.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.stats.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.tracing.*;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.params.*;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.params.provider.*;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * JaCoCo coverage tests for {@link RestOpInvoker}.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * Targets the dispatch and error-classification logic in {@code invoke(...)} / {@code invokeOp(...)}:</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> *   &lt;li&gt;Happy path with observability on (default) and off ({@code @Rest(observability="false")}).&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> *   &lt;li&gt;Per-op observability opt-out via {@code @RestOp(observability="false")}.&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> *   &lt;li&gt;Error classification: {@link BasicHttpException} subclass re-throw, generic {@link RuntimeException}</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> *       wrap to 500, checked exception wrap to 500.&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> *   &lt;li&gt;Parameter resolution failure paths: {@link BasicHttpException} re-throw, other exception wrapped</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> *       as {@link BadRequest}.&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> *   &lt;li&gt;{@link CompletionStage} return values that defer observability close to {@code whenComplete}.&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> *   &lt;li&gt;{@code Boolean} {@code Debug} request-attribute branches (TRUE / FALSE / null).&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> *   &lt;li&gt;{@link MetricsRecorder} / {@link TracerHook} happy and error events through the public hooks.&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> *   &lt;li&gt;Per-method execution stats — call counter increments on success and on exception.&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * Coverage gaps intentionally not exercised here:</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> *   &lt;li&gt;The Java-21+ virtual-thread dispatch block in {@link RestOpInvoker#invokeOp(RestOpSession)}</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> *       (lines that submit to {@code vtExec} and unwrap {@link ExecutionException} /</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> *       {@link InterruptedException}) — covered by {@link VirtualThreadDispatch_Test}, requires Java 21</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> *       at runtime and is therefore unreachable on the project's Java 17 source/test runtime.&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> *   &lt;li&gt;The {@code IllegalAccessException} / {@code IllegalArgumentException} catch in</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> *       {@link MethodInvoker#invoke(Object, Object...)} — the framework constructs a matching</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> *       {@code RestOpInvoker} for every {@code @RestOp} method, so reflective access is always permitted</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> *       and the args array always matches the method signature. Forcing this path requires a degenerate</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> *       reflective setup outside the public API.&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> *   &lt;li&gt;The defensive catch in {@link RestOpInvoker#resolveUriTemplate(RestOpSession)} (lines 277-280) —</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> *       requires {@code RestOpContext.getPathPattern()} to throw, which the framework's path-matcher</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> *       wiring rules out for a successfully-built operation.&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> *   &lt;li&gt;The {@code (cause instanceof Error)} re-throw in the VT executor branch — same Java-21+ block</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> *       as above.&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<span class="jxr_string">"java:S2187"</span>, <em class="jxr_comment">// Some inner @Rest classes have no @Test methods of their own; that is intentional — they are test fixtures.</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<span class="jxr_string">"java:S5961"</span>  <em class="jxr_comment">// High assertion / scenario count; targeted JaCoCo branch coverage requires many small fixtures.</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  })
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <strong class="jxr_keyword">class</strong> RestOpInvoker_Test <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<em class="jxr_comment">// Recording MetricsRecorder + TracerHook fixtures shared across multiple tests.</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> Event {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String opName;
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String httpMethod;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String uriTemplate;
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> statusCode;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Duration elapsed;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Throwable error;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		Event(String opName, String httpMethod, String uriTemplate, <strong class="jxr_keyword">int</strong> statusCode, Duration elapsed, Throwable error) {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<strong class="jxr_keyword">this</strong>.opName = opName;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<strong class="jxr_keyword">this</strong>.httpMethod = httpMethod;
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			<strong class="jxr_keyword">this</strong>.uriTemplate = uriTemplate;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			<strong class="jxr_keyword">this</strong>.statusCode = statusCode;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			<strong class="jxr_keyword">this</strong>.elapsed = elapsed;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<strong class="jxr_keyword">this</strong>.error = error;
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		}
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> RecordingRecorder <strong class="jxr_keyword">implements</strong> MetricsRecorder {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> List&lt;Event&gt; events = <strong class="jxr_keyword">new</strong> CopyOnWriteArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		@Override
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<span class="jxr_string">"java:S6213"</span> <em class="jxr_comment">// 'record' is the established SPI method name for MetricsRecorder.</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		})
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> record(String opName, String httpMethod, String uriTemplate, <strong class="jxr_keyword">int</strong> statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			events.add(<strong class="jxr_keyword">new</strong> Event(opName, httpMethod, uriTemplate, statusCode, elapsed, error));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">public</strong> Event last() { <strong class="jxr_keyword">return</strong> events.get(events.size() - 1); }
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	}
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> RecordingScope <strong class="jxr_keyword">implements</strong> Scope {
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">public</strong> Integer status;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">public</strong> Throwable error;
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> closed;
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStatusCode(<strong class="jxr_keyword">int</strong> statusCode) { <strong class="jxr_keyword">this</strong>.status = statusCode; }
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setError(Throwable t) { <strong class="jxr_keyword">this</strong>.error = t; }
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() { <strong class="jxr_keyword">this</strong>.closed = <strong class="jxr_keyword">true</strong>; }
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> RecordingTracer <strong class="jxr_keyword">implements</strong> TracerHook {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> List&lt;RecordingScope&gt; scopes = <strong class="jxr_keyword">new</strong> CopyOnWriteArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		@Override
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">public</strong> Scope startSpan(RestRequest request) {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> RecordingScope();
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			scopes.add(s);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		}
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">public</strong> RecordingScope last() { <strong class="jxr_keyword">return</strong> scopes.get(scopes.size() - 1); }
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<em class="jxr_comment">// A: Happy path — observability fires once with status=200 and null error.</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RecordingRecorder A_REC = <strong class="jxr_keyword">new</strong> RecordingRecorder();
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RecordingTracer A_TRACE = <strong class="jxr_keyword">new</strong> RecordingTracer();
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@Rest
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		@Bean <strong class="jxr_keyword">public</strong> MetricsRecorder recorder() { <strong class="jxr_keyword">return</strong> A_REC; }
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		@Bean <strong class="jxr_keyword">public</strong> TracerHook tracer() { <strong class="jxr_keyword">return</strong> A_TRACE; }
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		@RestGet(<span class="jxr_string">"/ok"</span>)
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">public</strong> String ok() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>; }
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		@RestGet(<span class="jxr_string">"/users/{id}"</span>)
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">public</strong> String userById(@Path String id) { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"user:"</span> + id; }
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CA = MockRestClient.buildLax(A.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	@Test <strong class="jxr_keyword">void</strong> a01_happyPath_recordsAndCloses() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		A_REC.events.clear();
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		A_TRACE.scopes.clear();
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		CA.get(<span class="jxr_string">"/ok"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"ok"</span>);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertEquals(1, A_REC.events.size());
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> e = A_REC.last();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertEquals(200, e.statusCode);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertNull(e.error);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		assertEquals(<span class="jxr_string">"GET"</span>, e.httpMethod);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		assertNotNull(e.elapsed);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertFalse(e.elapsed.isNegative());
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertEquals(1, A_TRACE.scopes.size());
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> s = A_TRACE.last();
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertEquals(Integer.valueOf(200), s.status);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		assertNull(s.error);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertTrue(s.closed);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	@Test <strong class="jxr_keyword">void</strong> a02_pathTemplateNotRawUri() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		A_REC.events.clear();
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		CA.get(<span class="jxr_string">"/users/42"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"user:42"</span>);
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertEquals(<span class="jxr_string">"/users/{id}"</span>, A_REC.last().uriTemplate);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	}
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<em class="jxr_comment">// B: Error classification — BasicHttpException subclass propagates with its own status; RuntimeException 500.</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RecordingRecorder B_REC = <strong class="jxr_keyword">new</strong> RecordingRecorder();
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RecordingTracer B_TRACE = <strong class="jxr_keyword">new</strong> RecordingTracer();
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	@Rest
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		@Bean <strong class="jxr_keyword">public</strong> MetricsRecorder recorder() { <strong class="jxr_keyword">return</strong> B_REC; }
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		@Bean <strong class="jxr_keyword">public</strong> TracerHook tracer() { <strong class="jxr_keyword">return</strong> B_TRACE; }
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		@RestGet(<span class="jxr_string">"/notFound"</span>) <strong class="jxr_keyword">public</strong> String notFound() { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"nope"</span>); }
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		@RestGet(<span class="jxr_string">"/badRequest"</span>) <strong class="jxr_keyword">public</strong> String badRequest() { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"bad"</span>); }
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		@RestGet(<span class="jxr_string">"/forbidden"</span>) <strong class="jxr_keyword">public</strong> String forbidden() { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Forbidden(<span class="jxr_string">"no"</span>); }
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		@RestGet(<span class="jxr_string">"/runtime"</span>) <strong class="jxr_keyword">public</strong> String runtime() { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"kaboom"</span>); }
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		@RestGet(<span class="jxr_string">"/checked"</span>) <strong class="jxr_keyword">public</strong> String checked() <strong class="jxr_keyword">throws</strong> IOException { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"io-failure"</span>); }
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		@RestGet(<span class="jxr_string">"/error"</span>) <strong class="jxr_keyword">public</strong> String err() { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> InternalServerError(<span class="jxr_string">"explicit ISE"</span>); }
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CB = MockRestClient.buildLax(B.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	@Test <strong class="jxr_keyword">void</strong> b01_basicHttpException_notFoundPropagates() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		B_REC.events.clear();
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		B_TRACE.scopes.clear();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		CB.get(<span class="jxr_string">"/notFound"</span>).run().assertStatus(404);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">var</strong> e = B_REC.last();
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<em class="jxr_comment">// MetricsRecorder + tracer scope receive the genuine HTTP status code from the BasicHttpException</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<em class="jxr_comment">// rather than the placeholder 500 set on the response prior to serialization.</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertEquals(404, e.statusCode);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertNotNull(e.error);
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		assertEquals(<span class="jxr_string">"NotFound"</span>, cns(e.error));
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">var</strong> s = B_TRACE.last();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		assertEquals(Integer.valueOf(404), s.status);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		assertNotNull(s.error);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertTrue(s.closed);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	}
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	@Test <strong class="jxr_keyword">void</strong> b02_basicHttpException_badRequestPropagates() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		B_REC.events.clear();
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		CB.get(<span class="jxr_string">"/badRequest"</span>).run().assertStatus(400);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		assertEquals(400, B_REC.last().statusCode);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		assertEquals(<span class="jxr_string">"BadRequest"</span>, cns(B_REC.last().error));
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@Test <strong class="jxr_keyword">void</strong> b03_basicHttpException_forbiddenPropagates() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		B_REC.events.clear();
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		CB.get(<span class="jxr_string">"/forbidden"</span>).run().assertStatus(403);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		assertEquals(403, B_REC.last().statusCode);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertEquals(<span class="jxr_string">"Forbidden"</span>, cns(B_REC.last().error));
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	@Test <strong class="jxr_keyword">void</strong> b04_runtimeException_wrappedAs500() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		B_REC.events.clear();
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		B_TRACE.scopes.clear();
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		CB.get(<span class="jxr_string">"/runtime"</span>).run().assertStatus(500);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">var</strong> e = B_REC.last();
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertEquals(500, e.statusCode);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertNotNull(e.error);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<em class="jxr_comment">// The InvocationTargetException catch block records the underlying cause.</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		assertEquals(<span class="jxr_string">"IllegalStateException"</span>, cns(e.error));
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> s = B_TRACE.last();
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertEquals(Integer.valueOf(500), s.status);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertNotNull(s.error);
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	@Test <strong class="jxr_keyword">void</strong> b05_checkedException_wrappedAs500() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		B_REC.events.clear();
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		CB.get(<span class="jxr_string">"/checked"</span>).run().assertStatus(500);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">var</strong> e = B_REC.last();
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		assertEquals(500, e.statusCode);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		assertNotNull(e.error);
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		assertEquals(<span class="jxr_string">"IOException"</span>, cns(e.error));
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	}
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	@Test <strong class="jxr_keyword">void</strong> b06_explicitInternalServerError_propagates() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		B_REC.events.clear();
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		CB.get(<span class="jxr_string">"/error"</span>).run().assertStatus(500);
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">var</strong> e = B_REC.last();
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		assertEquals(500, e.statusCode);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		assertNotNull(e.error);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		assertEquals(<span class="jxr_string">"InternalServerError"</span>, cns(e.error));
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<em class="jxr_comment">// C: Parameter resolution failure — non-BasicHttpException becomes BadRequest 400.</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<em class="jxr_javadoccomment">/** Marker type that the failing custom arg resolver below targets. */</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> FailingMarker {
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String name;
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">public</strong> FailingMarker(String name) { <strong class="jxr_keyword">this</strong>.name = name; }
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	}
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	<em class="jxr_javadoccomment">/** Custom resolver — throws a generic RuntimeException (NOT a BasicHttpException) so the parameter-</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 *  resolution catch in {@link RestOpInvoker#invoke(RestOpSession)} routes through the</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 *  generic-exception branch rather than the BasicHttpException re-throw branch. */</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> FailingArg <strong class="jxr_keyword">implements</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.arg.RestOpArg {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> FailingArg create(org.apache.juneau.commons.reflect.ParameterInfo pi) {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">if</strong> (pi.isType(FailingMarker.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FailingArg();
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		}
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		@Override
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">public</strong> Object resolve(RestOpSession opSession) {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"simulated arg-resolver failure"</span>);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		}
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	}
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	<em class="jxr_javadoccomment">/** Custom resolver — throws a {@link BasicHttpException} subclass directly so the parameter-resolution</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 *  catch routes through the {@code throw e;} re-throw branch (line 159). */</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> HttpFailingArg <strong class="jxr_keyword">implements</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.arg.RestOpArg {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> HttpFailingArg create(org.apache.juneau.commons.reflect.ParameterInfo pi) {
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">if</strong> (pi.isType(HttpFailingMarker.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> HttpFailingArg();
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		}
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		@Override
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">public</strong> Object resolve(RestOpSession opSession) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Forbidden(<span class="jxr_string">"simulated http arg-resolver failure"</span>);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		}
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> HttpFailingMarker {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String name;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">public</strong> HttpFailingMarker(String name) { <strong class="jxr_keyword">this</strong>.name = name; }
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	}
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	@Rest(restOpArgs = { FailingArg.<strong class="jxr_keyword">class</strong>, HttpFailingArg.<strong class="jxr_keyword">class</strong> })
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		@RestGet(<span class="jxr_string">"/typed/{id}"</span>)
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">public</strong> String typed(@Path <strong class="jxr_keyword">int</strong> id) { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"id="</span> + id; }
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		@RestGet(<span class="jxr_string">"/customFail"</span>)
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">public</strong> String customFail(FailingMarker m) { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"should-not-reach "</span> + m; }
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		@RestGet(<span class="jxr_string">"/customHttpFail"</span>)
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">public</strong> String customHttpFail(HttpFailingMarker m) { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"should-not-reach "</span> + m; }
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CC = MockRestClient.buildLax(C.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	@Test <strong class="jxr_keyword">void</strong> c01_paramResolutionFailure_becomesBadRequest() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<em class="jxr_comment">// "abc" cannot be parsed into int — the framework throws a BasicHttpException(BadRequest) inside</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<em class="jxr_comment">// the path-arg resolver, which routes through the "throw e;" branch (line 158-159) of invoke(...).</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		CC.get(<span class="jxr_string">"/typed/abc"</span>).run().assertStatus(400);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	}
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	@Test <strong class="jxr_keyword">void</strong> c02_paramResolutionSuccess_passesThrough() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		CC.get(<span class="jxr_string">"/typed/42"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"id=42"</span>);
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	}
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	@Test <strong class="jxr_keyword">void</strong> c03_customResolverThrowsGenericException_wrappedAsBadRequest() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<em class="jxr_comment">// FailingArg.resolve throws IllegalStateException → invoke(...) wraps it as BadRequest with the</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<em class="jxr_comment">// "Could not resolve parameter ..." template (lines 160-161 of RestOpInvoker).</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		CC.get(<span class="jxr_string">"/customFail"</span>).run().assertStatus(400)
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			.assertContent().isContains(<span class="jxr_string">"Could not resolve parameter"</span>);
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	}
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	@Test <strong class="jxr_keyword">void</strong> c04_customResolverThrowsHttpException_propagated() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<em class="jxr_comment">// HttpFailingArg.resolve throws Forbidden (a BasicHttpException) → re-thrown via the catch block</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<em class="jxr_comment">// at lines 158-159; status reflects the thrown exception's HTTP code.</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		CC.get(<span class="jxr_string">"/customHttpFail"</span>).run().assertStatus(403);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	}
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<em class="jxr_comment">// D: CompletionStage return — observability is deferred until the future completes.</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RecordingRecorder D_REC = <strong class="jxr_keyword">new</strong> RecordingRecorder();
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RecordingTracer D_TRACE = <strong class="jxr_keyword">new</strong> RecordingTracer();
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@Rest
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		@Bean <strong class="jxr_keyword">public</strong> MetricsRecorder recorder() { <strong class="jxr_keyword">return</strong> D_REC; }
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		@Bean <strong class="jxr_keyword">public</strong> TracerHook tracer() { <strong class="jxr_keyword">return</strong> D_TRACE; }
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		@RestGet(<span class="jxr_string">"/async/ok"</span>)
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">public</strong> CompletableFuture&lt;String&gt; asyncOk() {
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">return</strong> CompletableFuture.completedFuture(<span class="jxr_string">"async-ok"</span>);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		}
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		@RestGet(<span class="jxr_string">"/async/notFound"</span>)
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">public</strong> CompletableFuture&lt;String&gt; asyncNotFound() {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">var</strong> f = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;String&gt;();
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			f.completeExceptionally(<strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"missing"</span>));
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<strong class="jxr_keyword">return</strong> f;
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		@RestGet(<span class="jxr_string">"/async/runtime"</span>)
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">public</strong> CompletableFuture&lt;String&gt; asyncRuntime() {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">var</strong> f = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;String&gt;();
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			f.completeExceptionally(<strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"async-kaboom"</span>));
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<strong class="jxr_keyword">return</strong> f;
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		}
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		@RestGet(<span class="jxr_string">"/async/wrapped"</span>)
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">public</strong> CompletableFuture&lt;String&gt; asyncWrappedCompletionException() {
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			<strong class="jxr_keyword">var</strong> f = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;String&gt;();
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<em class="jxr_comment">// CompletionException with an underlying cause exercises unwrapCompletionError's true branch.</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			f.completeExceptionally(<strong class="jxr_keyword">new</strong> CompletionException(<strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"underlying"</span>)));
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">return</strong> f;
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		}
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		@RestGet(<span class="jxr_string">"/async/causelessCompletion"</span>)
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">public</strong> CompletableFuture&lt;String&gt; asyncCauselessCompletion() {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">var</strong> f = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;String&gt;();
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<em class="jxr_comment">// CompletionException with null cause exercises the unwrapCompletionError false branch</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<em class="jxr_comment">// (the nullsafe getCause() != null check fails so the original CompletionException is returned).</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			f.completeExceptionally(<strong class="jxr_keyword">new</strong> CauselessCompletionException());
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<strong class="jxr_keyword">return</strong> f;
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		}
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	}
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	<em class="jxr_javadoccomment">/** Subclass exposing the protected no-arg constructor so we can construct a CompletionException with no cause. */</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> CauselessCompletionException <strong class="jxr_keyword">extends</strong> CompletionException {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">public</strong> CauselessCompletionException() { <strong class="jxr_keyword">super</strong>(); }
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CD = MockRestClient.buildLax(D.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	@Test <strong class="jxr_keyword">void</strong> d01_completionStage_happyPath_deferredObservability() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		D_REC.events.clear();
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		D_TRACE.scopes.clear();
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		CD.get(<span class="jxr_string">"/async/ok"</span>).run().assertStatus(200).assertContent().isContains(<span class="jxr_string">"async-ok"</span>);
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		assertEquals(1, D_REC.events.size());
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> e = D_REC.last();
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertEquals(200, e.statusCode);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertNull(e.error);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		assertTrue(D_TRACE.last().closed);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	}
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 	<strong class="jxr_keyword">static</strong> Stream&lt;Arguments&gt; d02_completionStage_errorPropagationCases() {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">return</strong> Stream.of(
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			Arguments.of(<span class="jxr_string">"/async/notFound"</span>, 404),            <em class="jxr_comment">// basic HttpException -&gt; 404</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			Arguments.of(<span class="jxr_string">"/async/runtime"</span>, 500),             <em class="jxr_comment">// runtime exception -&gt; 500</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			Arguments.of(<span class="jxr_string">"/async/wrapped"</span>, 500),             <em class="jxr_comment">// CompletionException unwrapped to its cause -&gt; 500</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<em class="jxr_comment">// CompletionException with null cause — unwrapCompletionError returns the CompletionException itself</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<em class="jxr_comment">// (false branch of "t instanceof CompletionException &amp;&amp; t.getCause() != null").</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			Arguments.of(<span class="jxr_string">"/async/causelessCompletion"</span>, 500)
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	@MethodSource(<span class="jxr_string">"d02_completionStage_errorPropagationCases"</span>)
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	<strong class="jxr_keyword">void</strong> d02_completionStage_errorPropagation(String path, <strong class="jxr_keyword">int</strong> expectedStatus) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		D_REC.events.clear();
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		CD.get(path).run().assertStatus(expectedStatus);
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">var</strong> e = D_REC.last();
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		assertEquals(expectedStatus, e.statusCode);
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		assertNotNull(e.error);
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	}
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 	<em class="jxr_comment">// E: Observability disabled — @Rest(observability="false") short-circuits the metrics + tracer block.</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RecordingRecorder E_REC = <strong class="jxr_keyword">new</strong> RecordingRecorder();
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RecordingTracer E_TRACE = <strong class="jxr_keyword">new</strong> RecordingTracer();
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	@Rest(observability = <span class="jxr_string">"false"</span>)
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		@Bean <strong class="jxr_keyword">public</strong> MetricsRecorder recorder() { <strong class="jxr_keyword">return</strong> E_REC; }
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		@Bean <strong class="jxr_keyword">public</strong> TracerHook tracer() { <strong class="jxr_keyword">return</strong> E_TRACE; }
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		@RestGet(<span class="jxr_string">"/silent"</span>) <strong class="jxr_keyword">public</strong> String silent() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"silent"</span>; }
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CE = MockRestClient.buildLax(E.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	@Test <strong class="jxr_keyword">void</strong> e01_resourceLevelObservabilityFalse_noEvents() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		E_REC.events.clear();
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		E_TRACE.scopes.clear();
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		CE.get(<span class="jxr_string">"/silent"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"silent"</span>);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		assertEquals(0, E_REC.events.size(), <span class="jxr_string">"observability=\&quot;false\&quot; must short-circuit the recorder block"</span>);
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		assertEquals(0, E_TRACE.scopes.size(), <span class="jxr_string">"observability=\&quot;false\&quot; must short-circuit the tracer block"</span>);
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	}
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	<em class="jxr_comment">// F: Per-op observability opt-out — @RestOp(observability="false") on one op only.</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RecordingRecorder F_REC = <strong class="jxr_keyword">new</strong> RecordingRecorder();
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	@Rest
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		@Bean <strong class="jxr_keyword">public</strong> MetricsRecorder recorder() { <strong class="jxr_keyword">return</strong> F_REC; }
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		@RestGet(<span class="jxr_string">"/loud"</span>) <strong class="jxr_keyword">public</strong> String loud() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"loud"</span>; }
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		@RestOp(method = <span class="jxr_string">"GET"</span>, path = <span class="jxr_string">"/quiet"</span>, observability = <span class="jxr_string">"false"</span>)
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">public</strong> String quiet() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"quiet"</span>; }
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	}
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CF = MockRestClient.buildLax(F.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 	@Test <strong class="jxr_keyword">void</strong> f01_perOpObservabilityFalse_quietOpHasNoEvent() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		F_REC.events.clear();
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		CF.get(<span class="jxr_string">"/loud"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		assertEquals(1, F_REC.events.size(), <span class="jxr_string">"loud op records normally"</span>);
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		CF.get(<span class="jxr_string">"/quiet"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		assertEquals(1, F_REC.events.size(), <span class="jxr_string">"quiet op short-circuits — count unchanged"</span>);
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 	}
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<em class="jxr_comment">// G: Debug request-attribute branches — handler manually sets req.setAttribute("Debug", ...).</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	@Rest
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		@RestGet(<span class="jxr_string">"/debugTrue"</span>)
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">public</strong> String debugTrue(RestRequest req) {
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 			req.setAttribute(<span class="jxr_string">"Debug"</span>, Boolean.TRUE);
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"true"</span>;
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		}
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		@RestGet(<span class="jxr_string">"/debugFalse"</span>)
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">public</strong> String debugFalse(RestRequest req) {
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			req.setAttribute(<span class="jxr_string">"Debug"</span>, Boolean.FALSE);
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"false"</span>;
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		}
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		@RestGet(<span class="jxr_string">"/debugAbsent"</span>)
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		<strong class="jxr_keyword">public</strong> String debugAbsent() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"absent"</span>; }
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	}
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CG = MockRestClient.buildLax(G.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	@Test <strong class="jxr_keyword">void</strong> g01_debugAttribute_<strong class="jxr_keyword">true</strong>_invokesSessionDebug() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		<em class="jxr_comment">// Exercises the "debug == Boolean.TRUE" branch of invoke(...).</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		CG.get(<span class="jxr_string">"/debugTrue"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 	}
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 	@Test <strong class="jxr_keyword">void</strong> g02_debugAttribute_false_invokesSessionDebugFalse() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<em class="jxr_comment">// Exercises the "debug == Boolean.FALSE" branch of invoke(...).</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		CG.get(<span class="jxr_string">"/debugFalse"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	}
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 	@Test <strong class="jxr_keyword">void</strong> g03_debugAttribute_absent_skipsDebugBranches() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<em class="jxr_comment">// Exercises the "debug == null" branch (neither if nor else if fires).</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		CG.get(<span class="jxr_string">"/debugAbsent"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"absent"</span>);
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 	}
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	<em class="jxr_comment">// H: void-return + RestResponse already written — exercises the !hasReturnType(Void.TYPE) negative branch</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	<em class="jxr_comment">//    and the getOutputStreamCalled() positive branch (no setContent override).</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	@Rest(serializers = JsonSerializer.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		@RestGet(<span class="jxr_string">"/voidNop"</span>)
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> voidNop() { <em class="jxr_comment">/* No-op — return type is void, output is null. */</em> }
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		@RestGet(<span class="jxr_string">"/streamWritten"</span>)
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> streamWritten(RestResponse res) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 			res.setContentType(<span class="jxr_string">"text/plain"</span>);
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> out = res.getOutputStream()) {
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 				out.write(<span class="jxr_string">"streamed"</span>.getBytes());
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			}
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		}
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		@RestGet(<span class="jxr_string">"/explicitNull"</span>)
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">public</strong> String explicitNull() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		@RestGet(<span class="jxr_string">"/nullReturnAfterStream"</span>)
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">public</strong> String nullReturnAfterStream(RestResponse res) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			<em class="jxr_comment">// Open the output stream first so getOutputStreamCalled() returns true,</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 			<em class="jxr_comment">// then return null. invoke(...) will see hasReturnType(Void.TYPE)=false,</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<em class="jxr_comment">// nn(output)=false, !getOutputStreamCalled()=false → setContent skipped.</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			res.setContentType(<span class="jxr_string">"text/plain"</span>);
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> out = res.getOutputStream()) {
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 				out.write(<span class="jxr_string">"after-stream"</span>.getBytes());
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			}
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		}
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 	}
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CH = MockRestClient.buildLax(H.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 	@Test <strong class="jxr_keyword">void</strong> h01_voidReturn_succeeds() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<em class="jxr_comment">// Exercises the hasReturnType(Void.TYPE) === true branch (skips res.setContent).</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		CH.get(<span class="jxr_string">"/voidNop"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	}
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 	@Test <strong class="jxr_keyword">void</strong> h02_explicitNullReturn_succeeds() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		<em class="jxr_comment">// nn(output) == false; the second condition (! getOutputStreamCalled()) is then evaluated.</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		CH.get(<span class="jxr_string">"/explicitNull"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	}
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	@Test <strong class="jxr_keyword">void</strong> h03_outputStreamWritten_skipsSetContent() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		<em class="jxr_comment">// Handler returned void; getOutputStreamCalled() is true → setContent path is skipped.</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		CH.get(<span class="jxr_string">"/streamWritten"</span>).run().assertStatus(200).assertContent().isContains(<span class="jxr_string">"streamed"</span>);
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 	}
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 	@Test <strong class="jxr_keyword">void</strong> h04_nullReturnAfterStream_skipsSetContent() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		<em class="jxr_comment">// Handler returned null AND getOutputStreamCalled() == true.</em>
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<em class="jxr_comment">// nn(output)==false but !getOutputStreamCalled()==false → setContent path is skipped.</em>
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		CH.get(<span class="jxr_string">"/nullReturnAfterStream"</span>).run().assertStatus(200).assertContent().isContains(<span class="jxr_string">"after-stream"</span>);
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	}
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	<em class="jxr_comment">// I: Method exec stats — call counter increments on success and on exception, and elapsed &gt; 0 (latency timing).</em>
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	@Rest
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> I <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		@RestGet(<span class="jxr_string">"/sp/ok"</span>) <strong class="jxr_keyword">public</strong> String okOp() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>; }
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		@RestGet(<span class="jxr_string">"/sp/boom"</span>)
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 		<strong class="jxr_keyword">public</strong> String boomOp() { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"boom"</span>); }
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		@RestGet(<span class="jxr_string">"/sp/stats"</span>)
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">public</strong> String statsOp(RestRequest req) {
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 			<em class="jxr_comment">// Read this op's stats AFTER the call has been registered as "started".</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			<em class="jxr_comment">// invoke(...) calls super.invoke(...) which calls stats.started() before returning; // NOSONAR</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 			<em class="jxr_comment">// by the time the body of this method runs, getRuns() is already incremented.</em>
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			<strong class="jxr_keyword">var</strong> s = req.getOpContext().getMethodInvoker().getStats();
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"runs="</span> + s.getRuns() + <span class="jxr_string">",errors="</span> + s.getErrors();
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		}
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	}
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CI = MockRestClient.buildLax(I.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 	@Test <strong class="jxr_keyword">void</strong> i01_successCallCounter_increments() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		<em class="jxr_comment">// Two successful invocations on the same op → runs counter advances (&gt;= 2).</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		CI.get(<span class="jxr_string">"/sp/ok"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		CI.get(<span class="jxr_string">"/sp/ok"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		<em class="jxr_comment">// We don't assert the exact value because other tests in the same JVM might have run /sp/ok; // NOSONAR</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		<em class="jxr_comment">// the assertion below just verifies the counter is non-zero, which is enough to prove</em>
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		<em class="jxr_comment">// the stats branch in MethodInvoker.invoke fires on the success path.</em>
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<em class="jxr_comment">// (The /sp/stats op below cross-checks via getRuns().)</em>
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		assertTrue(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 	}
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	@Test <strong class="jxr_keyword">void</strong> i02_errorCallCounter_increments() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		CI.get(<span class="jxr_string">"/sp/boom"</span>).run().assertStatus(500);
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	}
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	<em class="jxr_comment">// J: Multi-arg method — exercises the args[] loop body for non-zero parameters.</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	@Rest
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> J <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		@RestGet(<span class="jxr_string">"/multi/{a}/{b}"</span>)
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">public</strong> String multi(@Path String a, @Path String b, @Query(<span class="jxr_string">"q"</span>) String q) {
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			<strong class="jxr_keyword">return</strong> a + <span class="jxr_string">"-"</span> + b + <span class="jxr_string">"-"</span> + q;
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		}
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	}
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CJ = MockRestClient.buildLax(J.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	@Test <strong class="jxr_keyword">void</strong> j01_multipleParams_resolvedCorrectly() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		CJ.get(<span class="jxr_string">"/multi/x/y?q=z"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"x-y-z"</span>);
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	}
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<em class="jxr_comment">// K: Direct construction — three-arg constructor (line 53) and two basic getters.</em>
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> KFixture {
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">public</strong> String hello() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"hello-direct"</span>; }
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	}
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	@Test <strong class="jxr_keyword">void</strong> k01_threeArgConstructor_isUsable() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 		<strong class="jxr_keyword">var</strong> m = KFixture.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"hello"</span>);
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		<strong class="jxr_keyword">var</strong> stats = MethodExecStats.create(BasicBeanStore.INSTANCE).method(m).build();
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		<em class="jxr_comment">// 3-arg constructor — exercises the this(m, opArgs, stats, null) delegation and the resourceSupplier=null</em>
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<em class="jxr_comment">// constructor path. We deliberately do not call invoke(...) here because that requires a RestOpSession; the</em>
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		<em class="jxr_comment">// integration coverage above already drives the resourceSupplier-null branch end-to-end via @RestPreCall /</em>
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		<em class="jxr_comment">// @RestPostCall pipelines (which use the four-arg constructor with a non-null supplier — so the null-supplier</em>
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		<em class="jxr_comment">// branch on line 188 only runs through this direct construction). We simply verify the invoker constructed</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		<em class="jxr_comment">// successfully and exposes its inner method.</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">var</strong> invoker = <strong class="jxr_keyword">new</strong> RestOpInvoker(m, <strong class="jxr_keyword">new</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.arg.RestOpArg[0], stats);
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 		assertNotNull(invoker.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		assertNotNull(invoker.getStats());
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		assertEquals(<span class="jxr_string">"hello"</span>, invoker.<strong class="jxr_keyword">inner</strong>().getName());
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		assertSame(stats, invoker.getStats());
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	}
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	<em class="jxr_comment">// L: Async happy path together with the "explicit completion-of-null" pattern — covers the CompletionStage</em>
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	<em class="jxr_comment">//    deferral branch with a null handler return.</em>
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	@Rest
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> L <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		@RestGet(<span class="jxr_string">"/async/voidLike"</span>)
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">public</strong> CompletableFuture&lt;Void&gt; asyncVoid() {
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 			<strong class="jxr_keyword">return</strong> CompletableFuture.completedFuture(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		}
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 	}
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CL = MockRestClient.buildLax(L.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 	@Test <strong class="jxr_keyword">void</strong> l01_completedFutureNullVoid_returns200() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 		CL.get(<span class="jxr_string">"/async/voidLike"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 	}
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

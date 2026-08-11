@@ -24,18 +24,18 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.commons.collections;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.collections.CacheMode.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.TestAssertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.collections.CacheMode.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">class</strong> <a name="Cache_Test" href="../../../../../org/apache/juneau/commons/collections/Cache_Test.html#Cache_Test">Cache_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">class</strong> <a name="Cache_Test" href="../../../../../org/apache/juneau/commons/collections/Cache_Test.html#Cache_Test">Cache_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/commons/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<em class="jxr_comment">// Basic cache operations - get, hit, miss</em>
@@ -446,7 +446,7 @@
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<em class="jxr_comment">// Thread safety and concurrency</em>
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	@Test <strong class="jxr_keyword">void</strong> a21_concurrentAccess() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	@Test <strong class="jxr_keyword">void</strong> a21_concurrentAccess() <strong class="jxr_keyword">throws</strong> InterruptedException, ExecutionException, TimeoutException {
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">var</strong> executor = Executors.newFixedThreadPool(10);
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
@@ -473,7 +473,7 @@
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 		executor.shutdown();
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 	}
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	@Test <strong class="jxr_keyword">void</strong> a22_concurrentDifferentKeys() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	@Test <strong class="jxr_keyword">void</strong> a22_concurrentDifferentKeys() <strong class="jxr_keyword">throws</strong> InterruptedException, ExecutionException, TimeoutException {
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">var</strong> executor = Executors.newFixedThreadPool(10);
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 
@@ -930,7 +930,7 @@
 <a class="jxr_linenumber" name="L922" href="#L922">922</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L923" href="#L923">923</a> 
 <a class="jxr_linenumber" name="L924" href="#L924">924</a> 	@Test <strong class="jxr_keyword">void</strong> a51_create_basic() {
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.&lt;String, String&gt;create()
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.&lt;String,String&gt;create()
 <a class="jxr_linenumber" name="L926" href="#L926">926</a> 			.supplier(k -&gt; <span class="jxr_string">"value-"</span> + k)
 <a class="jxr_linenumber" name="L927" href="#L927">927</a> 			.build();
 <a class="jxr_linenumber" name="L928" href="#L928">928</a> 
@@ -940,7 +940,7 @@
 <a class="jxr_linenumber" name="L932" href="#L932">932</a> 	}
 <a class="jxr_linenumber" name="L933" href="#L933">933</a> 
 <a class="jxr_linenumber" name="L934" href="#L934">934</a> 	@Test <strong class="jxr_keyword">void</strong> a52_create_withConfiguration() {
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.&lt;String, Integer&gt;create()
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.&lt;String,Integer&gt;create()
 <a class="jxr_linenumber" name="L936" href="#L936">936</a> 			.maxSize(50)
 <a class="jxr_linenumber" name="L937" href="#L937">937</a> 			.cacheMode(WEAK)
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 			.supplier(k -&gt; k.length())
@@ -979,7 +979,7 @@
 <a class="jxr_linenumber" name="L971" href="#L971">971</a> 	<em class="jxr_comment">// Thread-local cache mode</em>
 <a class="jxr_linenumber" name="L972" href="#L972">972</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L973" href="#L973">973</a> 
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> 	@Test <strong class="jxr_keyword">void</strong> a54_threadLocal_basicCaching() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 	@Test <strong class="jxr_keyword">void</strong> a54_threadLocal_basicCaching() {
 <a class="jxr_linenumber" name="L975" href="#L975">975</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L976" href="#L976">976</a> 			.threadLocal()
 <a class="jxr_linenumber" name="L977" href="#L977">977</a> 			.build();
@@ -1005,12 +1005,12 @@
 <a class="jxr_linenumber" name="L997" href="#L997">997</a> 		assertEquals(1, cache.getCacheHits());
 <a class="jxr_linenumber" name="L998" href="#L998">998</a> 	}
 <a class="jxr_linenumber" name="L999" href="#L999">999</a> 
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	@Test <strong class="jxr_keyword">void</strong> a55_threadLocal_eachThreadHasOwnCache() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	@Test <strong class="jxr_keyword">void</strong> a55_threadLocal_eachThreadHasOwnCache() <strong class="jxr_keyword">throws</strong> InterruptedException, ExecutionException, TimeoutException {
 <a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 			.threadLocal()
 <a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 			.build();
 <a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		<strong class="jxr_keyword">var</strong> executor = Executors.newFixedThreadPool(2);
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<strong class="jxr_keyword">var</strong> threadValues = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;Thread, String&gt;();
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<strong class="jxr_keyword">var</strong> threadValues = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;Thread,String&gt;();
 <a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 
 <a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		<em class="jxr_comment">// Each thread caches "key1" with its own value</em>
 <a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 		<strong class="jxr_keyword">var</strong> future1 = CompletableFuture.runAsync(() -&gt; {
@@ -1031,7 +1031,7 @@
 <a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 		assertTrue(threadValues.containsValue(<span class="jxr_string">"thread2-value"</span>));
 <a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 
 <a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 		<em class="jxr_comment">// Verify each thread's cache is independent - same thread should get same cached value</em>
-<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		<strong class="jxr_keyword">var</strong> threadValues2 = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;Thread, String&gt;();
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		<strong class="jxr_keyword">var</strong> threadValues2 = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;Thread,String&gt;();
 <a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 		<strong class="jxr_keyword">var</strong> threads = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(threadValues.keySet());
 <a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 
 <a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 		future1 = CompletableFuture.runAsync(() -&gt; {
@@ -1161,13 +1161,13 @@
 <a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> 		assertEquals(1, cache.getCacheHits());
 <a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> 	}
 <a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> 
-<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 	@Test <strong class="jxr_keyword">void</strong> a61_threadLocal_weakMode_eachThreadHasOwnCache() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 	@Test <strong class="jxr_keyword">void</strong> a61_threadLocal_weakMode_eachThreadHasOwnCache() <strong class="jxr_keyword">throws</strong> InterruptedException, ExecutionException, TimeoutException {
 <a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 			.threadLocal()
 <a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 			.cacheMode(WEAK)
 <a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 			.build();
 <a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 		<strong class="jxr_keyword">var</strong> executor = Executors.newFixedThreadPool(2);
-<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 		<strong class="jxr_keyword">var</strong> threadValues = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;Thread, String&gt;();
+<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 		<strong class="jxr_keyword">var</strong> threadValues = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;Thread,String&gt;();
 <a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 
 <a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 		<em class="jxr_comment">// Each thread caches "key1" with its own value</em>
 <a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 		<strong class="jxr_keyword">var</strong> future1 = CompletableFuture.runAsync(() -&gt; {
@@ -1224,8 +1224,72 @@
 <a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 		cache.get(<span class="jxr_string">"five"</span>, () -&gt; 5);
 <a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 		assertSize(1, cache);
 <a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 	}
-<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> }
-<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 
+<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 
+<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 	<em class="jxr_comment">// cleanup() - Thread-local cleanup</em>
+<a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 
+<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 	@Test <strong class="jxr_keyword">void</strong> a64_cleanup_threadLocal() {
+<a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 			.threadLocal()
+<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 			.build();
+<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 
+<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 		<em class="jxr_comment">// Use the cache to populate ThreadLocal</em>
+<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 		cache.get(<span class="jxr_string">"key2"</span>, () -&gt; <span class="jxr_string">"value2"</span>);
+<a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> 		assertSize(2, cache);
+<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 
+<a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> 		<em class="jxr_comment">// Cleanup should remove ThreadLocal values</em>
+<a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> 		cache.cleanup();
+<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> 
+<a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> 		<em class="jxr_comment">// After cleanup, cache should be empty (ThreadLocal was cleared)</em>
+<a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> 		assertEmpty(cache);
+<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> 
+<a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> 		<em class="jxr_comment">// Call cleanup again to ensure it's safe to call multiple times</em>
+<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> 		cache.cleanup();
+<a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> 		<em class="jxr_comment">// Should not throw</em>
+<a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> 	}
+<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 
+<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 	@Test <strong class="jxr_keyword">void</strong> a65_cleanup_nonThreadLocal_noEffect() {
+<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 			.build(); <em class="jxr_comment">// Not thread-local</em>
+<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 
+<a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> 		cache.get(<span class="jxr_string">"key2"</span>, () -&gt; <span class="jxr_string">"value2"</span>);
+<a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> 		assertSize(2, cache);
+<a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> 
+<a class="jxr_linenumber" name="L1253" href="#L1253">1253</a> 		<em class="jxr_comment">// Cleanup on non-thread-local cache should not affect the cache</em>
+<a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> 		cache.cleanup();
+<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> 
+<a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> 		<em class="jxr_comment">// Cache should still have values (cleanup only affects thread-local caches)</em>
+<a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 		assertSize(2, cache);
+<a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 	}
+<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 
+<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 	@Test <strong class="jxr_keyword">void</strong> a66_cleanup_threadLocal_weakMode() {
+<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 			.threadLocal()
+<a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 			.cacheMode(WEAK)
+<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 			.build();
+<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 
+<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 		cache.get(<span class="jxr_string">"key2"</span>, () -&gt; <span class="jxr_string">"value2"</span>);
+<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 		assertSize(2, cache);
+<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 
+<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 		<em class="jxr_comment">// Cleanup should work with weak mode too</em>
+<a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 		cache.cleanup();
+<a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 		assertEmpty(cache);
+<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 	}
+<a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 
+<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 	@Test <strong class="jxr_keyword">void</strong> a67_cleanup_threadLocal_notYetPopulated() {
+<a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 			.threadLocal()
+<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 			.build();
+<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 
+<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 		<em class="jxr_comment">// Cleanup before any access - threadLocalMap and threadLocalWrapperCache are null; should not throw</em>
+<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		assertDoesNotThrow(cache::cleanup);
+<a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 	}
+<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> }
+<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

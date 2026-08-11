@@ -1,0 +1,554 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>TomlParserSession xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/marshall/toml/TomlParserSession.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.marshall.toml;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.isEmpty;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.isEmpty;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.time.temporal.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.Map.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.bean.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.parser.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.stream.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * Session for parsing TOML into POJOs.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_comment"> * Suppression rationale:</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_comment"> * - rawtypes, unchecked: TOML maps use Map&lt;String,Object&gt; with dynamic values requiring casts.</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_comment"> * - java:S3776: Cognitive complexity; parser logic is inherently branched for TOML syntax.</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_comment"> * - java:S6541: Brain method; parser orchestration spans many concerns.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_comment"> * - java:S135: Multiple break/continue per loop needed for TOML state-machine parsing.</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_comment"> * - java:S115: ARG_ctx follows project assertion-param naming convention (ARG_&lt;param&gt;).</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<span class="jxr_string">"rawtypes"</span>, <em class="jxr_comment">// Raw types necessary for generic Map/List handling</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<span class="jxr_string">"unchecked"</span>, <em class="jxr_comment">// Type erasure requires unchecked casts in convertValue</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity acceptable for readMessage</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<span class="jxr_string">"java:S6541"</span>, <em class="jxr_comment">// Brain method acceptable for readMessage</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<span class="jxr_string">"java:S135"</span>, <em class="jxr_comment">// Multiple breaks acceptable in parse loop</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<span class="jxr_string">"java:S115"</span>, <em class="jxr_comment">// ARG_ prefix follows framework convention</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<span class="jxr_string">"java:S1612"</span>, <em class="jxr_comment">// Class.isAssignableFrom necessary when checking target type (Class&lt;?&gt;), not object instance</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<span class="jxr_string">"resource"</span>   <em class="jxr_comment">// Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  })
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> TomlParserSession <strong class="jxr_keyword">extends</strong> ReaderParserSession <strong class="jxr_keyword">implements</strong> <a name="RecordReadable" href="../../../../../org/apache/juneau/marshall/stream/RecordReadable.html#RecordReadable">RecordReadable</a> {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_ctx = <span class="jxr_string">"ctx"</span>;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MSG_INVALID_NUMBER = <span class="jxr_string">"Invalid number: "</span>;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * Builder for TOML parser session.</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> ReaderParserSession.Builder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">private</strong> TomlParser ctx;
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">protected</strong> Builder(TomlParser ctx) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">super</strong>(assertArgNotNull(ARG_ctx, ctx));
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">this</strong>.ctx = ctx;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		}
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		@Override
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">public</strong> TomlParserSession build() {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> TomlParserSession(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * Creates a session builder.</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * @param ctx The parser context.</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * @return The builder.</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create(TomlParser ctx) {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(assertArgNotNull(ARG_ctx, ctx));
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TomlParser ctx;
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">protected</strong> TomlParserSession(Builder builder) {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">super</strong>(builder);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		ctx = builder.ctx;
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Override <em class="jxr_comment">/* RecordReadable */</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">public</strong> <a name="RecordReader" href="../../../../../org/apache/juneau/marshall/stream/RecordReader.html#RecordReader">RecordReader</a> readRecords(Object input) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">return</strong> RecordAdapter.reader(<strong class="jxr_keyword">this</strong>, input);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Override <em class="jxr_comment">/* RecordReadable */</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isRecordStreaming() {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@Override
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; T doRead(ParserPipe pipe, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">try</strong> (Reader r = pipe.getParserReader()) {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<strong class="jxr_keyword">if</strong> (r == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			Map&lt;String,Object&gt; root = readTomlDocument(<strong class="jxr_keyword">new</strong> TomlTokenizer(r));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">if</strong> (isEmpty(root))
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				<strong class="jxr_keyword">return</strong> type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<em class="jxr_comment">// Root _value wrapper: document has exactly one key _value</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			<strong class="jxr_keyword">if</strong> (root.size() == 1 &amp;&amp; root.containsKey(<span class="jxr_string">"_value"</span>)) {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 				Object <strong class="jxr_keyword">inner</strong> = root.get(<span class="jxr_string">"_value"</span>);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 				<strong class="jxr_keyword">return</strong> (T) convertValue(<strong class="jxr_keyword">inner</strong>, type);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			}
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<strong class="jxr_keyword">return</strong> convertMapToType(root, type);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<strong class="jxr_keyword">private</strong> Map&lt;String,Object&gt; readTomlDocument(TomlTokenizer t) <strong class="jxr_keyword">throws</strong> IOException, ParseException {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		Map&lt;String,Object&gt; root = m();
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		Map&lt;String,Object&gt; currentTable = root;
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">while</strong> (!t.isEof()) {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			t.skipWhitespaceAndComments();
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">if</strong> (t.isEof())
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">int</strong> c = t.peek();
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">if</strong> (c == '[') {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 				t.read();
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 				<strong class="jxr_keyword">if</strong> (t.peek() == '[') {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 					t.read();
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 					String path = readTablePath(t);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 					Object existing = getOrCreateAt(root, path);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 					<strong class="jxr_keyword">if</strong> (!(existing instanceof List)) {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 						<strong class="jxr_keyword">if</strong> (existing != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 							<strong class="jxr_keyword">throw</strong> t.parseException(<span class="jxr_string">"Key "</span> + path + <span class="jxr_string">" redefined"</span>);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 						setAt(root, path, l());
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 						existing = getOrCreateAt(root, path);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 					}
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 					Map&lt;String,Object&gt; newTable = m();
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 					((List)existing).add(newTable);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 					currentTable = newTable;
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 					String path = readTablePath(t);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 					currentTable = getOrCreateTableAt(root, path);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				}
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '=' || Character.isLetterOrDigit(c) || c == '&quot;' || c == '\'' || c == '_' || c == '-') {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 				List&lt;String&gt; keyPath = readKey(t);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				<strong class="jxr_keyword">if</strong> (keyPath.isEmpty())
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 					<strong class="jxr_keyword">throw</strong> t.parseException(<span class="jxr_string">"Expected key"</span>);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				t.skipWhitespace();
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 				<strong class="jxr_keyword">if</strong> (t.read() != '=')
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 					<strong class="jxr_keyword">throw</strong> t.parseException(<span class="jxr_string">"Expected '='"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				t.skipWhitespace();
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 				Object value = readValue(t);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 				setValueAt(currentTable, keyPath, value);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			}
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		}
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">return</strong> root;
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String readTablePath(TomlTokenizer t) <strong class="jxr_keyword">throws</strong> IOException, ParseException {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		t.skipWhitespace();
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> parts = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			String key = t.readBareKey();
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">if</strong> (key == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			parts.add(key);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			t.skipWhitespace();
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<strong class="jxr_keyword">if</strong> (t.peek() != '.')
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			t.read();
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			t.skipWhitespace();
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">if</strong> (t.peek() == ']')
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			t.read();
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">if</strong> (t.peek() == ']')
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			t.read();
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">return</strong> String.join(<span class="jxr_string">"."</span>, parts);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; readKey(TomlTokenizer t) <strong class="jxr_keyword">throws</strong> IOException, ParseException {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> parts = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			String key = t.readBareKey();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">if</strong> (key == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			parts.add(key);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			t.skipWhitespace();
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">if</strong> (t.peek() != '.')
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			t.read();
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			t.skipWhitespace();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		}
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">return</strong> parts;
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<strong class="jxr_keyword">private</strong> Object readValue(TomlTokenizer t) <strong class="jxr_keyword">throws</strong> IOException, ParseException {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">int</strong> c = t.peek();
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">if</strong> (c == '&quot;') {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">if</strong> (isTripleQuote(t, '&quot;'))
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 				<strong class="jxr_keyword">return</strong> t.readMultiLineBasicString();
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">return</strong> t.readBasicString();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		}
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">if</strong> (c == '\'') {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">if</strong> (isTripleQuote(t, '\''))
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 				<strong class="jxr_keyword">return</strong> t.readMultiLineLiteralString();
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">return</strong> t.readLiteralString();
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		}
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">if</strong> (c == 't' || c == 'f')
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<strong class="jxr_keyword">return</strong> t.readBoolean();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">if</strong> (c == '[') {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			t.read();
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			t.skipWhitespaceAndComments();
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">var</strong> list = l();
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			<strong class="jxr_keyword">while</strong> (t.peek() != ']') {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 				list.add(readValue(t));
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 				t.skipWhitespaceAndComments();
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 				<strong class="jxr_keyword">if</strong> (t.peek() == ',') {
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 					t.read();
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 					t.skipWhitespaceAndComments();
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			}
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			t.read();
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<strong class="jxr_keyword">return</strong> list;
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		}
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">if</strong> (c == '{') {
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			t.read();
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			t.skipWhitespace();
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">var</strong> map = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			<strong class="jxr_keyword">while</strong> (t.peek() != '}') {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 				t.skipWhitespace();
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 				List&lt;String&gt; k = readKey(t);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 				<strong class="jxr_keyword">if</strong> (k.isEmpty())
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 					<strong class="jxr_keyword">throw</strong> t.parseException(<span class="jxr_string">"Expected key in inline table"</span>);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 				t.skipWhitespace();
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 				<strong class="jxr_keyword">if</strong> (t.read() != '=')
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 					<strong class="jxr_keyword">throw</strong> t.parseException(<span class="jxr_string">"Expected '='"</span>);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 				t.skipWhitespace();
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 				Object v = readValue(t);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 				map.put(k.get(0), v);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 				t.skipWhitespace();
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 				<strong class="jxr_keyword">if</strong> (t.peek() == ',') {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 					t.read();
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 					t.skipWhitespace();
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 				}
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			}
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			t.read();
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">return</strong> map;
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		}
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">if</strong> (Character.isDigit(c) || c == '+' || c == '-') {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			String s = readUntilValueEnd(t);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">if</strong> (isEmpty(s)) <em class="jxr_comment">// HTT: provably dead -- both call sites of this branch (here and the 'i'/'n' branch below) only invoke readUntilValueEnd() after peek() already confirmed the current character is not a terminator, so the returned string always contains at least that one character</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 				<strong class="jxr_keyword">throw</strong> t.parseException(<span class="jxr_string">"Expected value"</span>);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			Number special = readSpecialFloat(s);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">if</strong> (special != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 				<strong class="jxr_keyword">return</strong> special;
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			Number radix = readRadixInteger(s, t);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">if</strong> (radix != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 				<strong class="jxr_keyword">return</strong> radix;
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			String noUnderscore = s.replace(<span class="jxr_string">"_"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<strong class="jxr_keyword">if</strong> (s.length() &gt;= 10 &amp;&amp; s.charAt(4) == '-' &amp;&amp; (s.contains(<span class="jxr_string">"T"</span>) || s.contains(<span class="jxr_string">":"</span>) || s.contains(<span class="jxr_string">" "</span>)))
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 				<strong class="jxr_keyword">return</strong> TomlTokenizer.parseDateTimeString(s);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<em class="jxr_comment">// Date-like patterns kept as string for convertValue to parse as LocalDate, YearMonth, Year</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">if</strong> (isDateLikeString(noUnderscore))
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">if</strong> (s.contains(<span class="jxr_string">"."</span>) || s.toLowerCase(Locale.ROOT).contains(<span class="jxr_string">"e"</span>))
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 				<strong class="jxr_keyword">return</strong> Double.parseDouble(noUnderscore);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 				<strong class="jxr_keyword">return</strong> Long.parseLong(noUnderscore);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NumberFormatException e) {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				<em class="jxr_comment">// May be date/time string that slipped through (e.g. LocalDate, LocalTime)</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				<strong class="jxr_keyword">if</strong> (s.contains(<span class="jxr_string">"-"</span>) || s.contains(<span class="jxr_string">":"</span>))
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 					<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				<strong class="jxr_keyword">throw</strong> t.parseException(MSG_INVALID_NUMBER + s);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			}
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		}
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">if</strong> (c == 'i' || c == 'n') {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			String s = readUntilValueEnd(t);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			Number special = readSpecialFloat(s);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<strong class="jxr_keyword">if</strong> (special != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 				<strong class="jxr_keyword">return</strong> special;
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">throw</strong> t.parseException(<span class="jxr_string">"Expected inf or nan"</span>);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		}
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">throw</strong> t.parseException(<span class="jxr_string">"Unexpected character: "</span> + (<strong class="jxr_keyword">char</strong>)c);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	}
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isTripleQuote(TomlTokenizer t, <strong class="jxr_keyword">char</strong> q) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">if</strong> (t.peek() != q) <strong class="jxr_keyword">return</strong> false; <em class="jxr_comment">// HTT: provably dead -- both call sites (readValue's '&quot;'/'\'' dispatch) already peek() the identical character immediately before calling, with nothing consumed in between, so peek() here always still equals q</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">int</strong> c1 = t.read();
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">int</strong> c2 = t.read();
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">int</strong> c3 = t.peek();
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">if</strong> (c2 == q &amp;&amp; c3 == q) {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			t.read();
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		}
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">if</strong> (c2 &gt;= 0)
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			t.unread(c2);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		t.unread(c1);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	}
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isDateLikeString(String s) {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> || s.length() &lt; 7) <em class="jxr_comment">// HTT: the "s == null" half is provably dead -- the sole call site passes noUnderscore (s.replace(...)), which is never null since s (from readUntilValueEnd()) is never null (see note above)</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<em class="jxr_comment">// yyyy-MM-dd (LocalDate) | yyyy-MM (YearMonth) - exclude plain 4-digit (e.g. port numbers)</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">return</strong> (s.length() == 10 &amp;&amp; s.charAt(4) == '-' &amp;&amp; s.charAt(7) == '-')
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			|| (s.length() == 7 &amp;&amp; s.charAt(4) == '-');
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	}
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String readUntilValueEnd(TomlTokenizer t) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">int</strong> c;
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">while</strong> ((c = t.peek()) &gt;= 0 &amp;&amp; c != ' ' &amp;&amp; c != '\t' &amp;&amp; c != '\n' &amp;&amp; c != '\r' &amp;&amp; c != '#' &amp;&amp; c != ',' &amp;&amp; c != ']' &amp;&amp; c != '}') {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			sb.append((<strong class="jxr_keyword">char</strong>) t.read());
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		}
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">return</strong> sb.isEmpty() ? <strong class="jxr_keyword">null</strong> : sb.toString().trim(); <em class="jxr_comment">// HTT: the "sb.isEmpty()" true-arm is provably dead -- both call sites first peek() a non-terminator character before calling, so at least one character is always appended (see note on the "Expected value" check above)</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	}
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Number readSpecialFloat(String s) {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) <em class="jxr_comment">// HTT: provably dead -- both call sites pass the (guaranteed non-null, per the note above) result of readUntilValueEnd() directly</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">if</strong> (s.equals(<span class="jxr_string">"inf"</span>) || s.equals(<span class="jxr_string">"+inf"</span>))
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">return</strong> Double.POSITIVE_INFINITY;
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">if</strong> (s.equals(<span class="jxr_string">"-inf"</span>))
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">return</strong> Double.NEGATIVE_INFINITY;
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">if</strong> (s.equals(<span class="jxr_string">"nan"</span>) || s.equals(<span class="jxr_string">"+nan"</span>) || s.equals(<span class="jxr_string">"-nan"</span>))
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			<strong class="jxr_keyword">return</strong> Double.NaN;
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	}
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Number readRadixInteger(String s, TomlTokenizer t) <strong class="jxr_keyword">throws</strong> ParseException {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> || s.length() &lt; 3 || s.charAt(0) != '0') <em class="jxr_comment">// HTT: the "s == null" third is provably dead -- the sole call site passes the (guaranteed non-null, per the note above) result of readUntilValueEnd() directly</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">char</strong> p = s.charAt(1);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">int</strong> radix;
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">if</strong> (p == 'x' || p == 'X')
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			radix = 16;
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (p == 'o' || p == 'O')
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			radix = 8;
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (p == 'b' || p == 'B')
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			radix = 2;
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		String digits = s.substring(2).replace(<span class="jxr_string">"_"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">if</strong> (digits.isEmpty())
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			<strong class="jxr_keyword">throw</strong> t.parseException(MSG_INVALID_NUMBER + s);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<strong class="jxr_keyword">return</strong> Long.parseUnsignedLong(digits, radix);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NumberFormatException e) {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<strong class="jxr_keyword">throw</strong> t.parseException(MSG_INVALID_NUMBER + s);
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		}
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	}
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object getOrCreateAt(Map&lt;String,Object&gt; root, String path) {
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		String[] parts = path.split(<span class="jxr_string">"&#92;&#92;."</span>);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		Object current = root;
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parts.length - 1; i++) {
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			current = ((Map)current).computeIfAbsent(parts[i], k -&gt; <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;());
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		}
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">return</strong> ((Map)current).get(parts[parts.length - 1]);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; getOrCreateTableAt(Map&lt;String,Object&gt; root, String path) {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		String[] parts = path.split(<span class="jxr_string">"&#92;&#92;."</span>);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		Object current = root;
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">for</strong> (String part : parts) {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			current = ((Map)current).computeIfAbsent(part, k -&gt; <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;());
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">return</strong> (Map&lt;String,Object&gt;) current;
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setAt(Map&lt;String,Object&gt; root, String path, Object value) {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		String[] parts = path.split(<span class="jxr_string">"&#92;&#92;."</span>);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		Object current = root;
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parts.length - 1; i++) {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			current = ((Map)current).computeIfAbsent(parts[i], k -&gt; <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;());
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		}
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		((Map)current).put(parts[parts.length - 1], value);
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setValueAt(Map&lt;String,Object&gt; root, List&lt;String&gt; keyPath, Object value) {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">if</strong> (keyPath.size() == 1) {
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			root.put(keyPath.get(0), value);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		}
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		Object current = root;
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; keyPath.size() - 1; i++) {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			current = ((Map)current).computeIfAbsent(keyPath.get(i), k -&gt; <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;());
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		}
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		((Map)current).put(keyPath.get(keyPath.size() - 1), value);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T convertMapToType(Map&lt;String,Object&gt; map, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> ParseException, <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">if</strong> (type.isMap()) {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<strong class="jxr_keyword">var</strong> keyType = type.getKeyType();
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<strong class="jxr_keyword">var</strong> valueType = type.getValueType();
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			Map m = type.canCreateNewInstance(getOuter()) ? (Map) type.newInstance(getOuter()) : newGenericMap(type);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : map.entrySet()) {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 				String keyStr = <span class="jxr_string">"null"</span>.equals(e.getKey()) ? <strong class="jxr_keyword">null</strong> : e.getKey();
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 				Object key = convertAttrToType(m, keyStr, keyType);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 				Object val = convertValue(e.getValue(), valueType);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 				m.put(key, val);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			}
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">return</strong> (T) m;
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		}
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		BeanMap&lt;?&gt; bm = toBeanMap(type.newInstance(getOuter()));
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		populateBeanMap(bm, map);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">return</strong> (T) bm.getBean();
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	}
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	<strong class="jxr_keyword">private</strong> JsonMap toJsonMap(Map&lt;?,?&gt; map) <strong class="jxr_keyword">throws</strong> ParseException, <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">var</strong> jm = <strong class="jxr_keyword">new</strong> JsonMap();
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">for</strong> (Entry&lt;?,?&gt; e : map.entrySet()) {
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			Object k = e.getKey();
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			Object v = e.getValue();
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			Object converted = v instanceof Map v2 ? toJsonMap(v2) : convertValue(v, object());
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			jm.put(k == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"null"</span> : k.toString(), converted); <em class="jxr_comment">// HTT: the "k == null" true-arm is provably dead -- every map reaching toJsonMap() was built by readTomlDocument()/readValue(), whose keys always come from readKey()/readBareKey() (TOML has no null-key syntax), so k is always a non-null String</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		}
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">return</strong> jm;
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	}
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> populateBeanMap(BeanMap&lt;?&gt; bm, Map&lt;String,Object&gt; map) <strong class="jxr_keyword">throws</strong> ParseException, <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">for</strong> (Entry&lt;String,Object&gt; e : map.entrySet()) {
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			String key = e.getKey();
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			Object val = e.getValue();
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			BeanPropertyMeta pMeta = bm.getMeta().getProperties().get(key);
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			<strong class="jxr_keyword">if</strong> (pMeta == <strong class="jxr_keyword">null</strong> &amp;&amp; isIgnoreUnknownBeanProperties())
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">if</strong> (pMeta == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ParseException(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Unknown property '%s'"</span>, key);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			ClassMeta&lt;?&gt; targetType = (ClassMeta&lt;?&gt;) pMeta.getBeanInfo();
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			Object converted = convertValue(val, targetType);
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			bm.put(key, converted);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		}
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	}
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	<strong class="jxr_keyword">private</strong> Object convertValue(Object val, ClassMeta&lt;?&gt; targetType) <strong class="jxr_keyword">throws</strong> ParseException, <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<strong class="jxr_keyword">if</strong> (val == <strong class="jxr_keyword">null</strong>) <em class="jxr_comment">// HTT: provably dead -- every call site passes a value sourced from the parsed document tree (readValue()'s return value, or a container built from it), and TOML's grammar has no null literal, so val is never null here</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		String nv = ctx != <strong class="jxr_keyword">null</strong> ? ctx.getNullValue() : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">if</strong> (val instanceof String val2 &amp;&amp; nv != <strong class="jxr_keyword">null</strong> &amp;&amp; val2.equals(nv))
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">if</strong> (val instanceof Map val2) {
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">if</strong> (JsonMap.<strong class="jxr_keyword">class</strong>.isAssignableFrom(targetType.<strong class="jxr_keyword">inner</strong>()))
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 				<strong class="jxr_keyword">return</strong> toJsonMap(val2);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			<strong class="jxr_keyword">if</strong> (targetType.isBean()) {
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 				BeanMap&lt;?&gt; child = toBeanMap(targetType.newInstance(getOuter()));
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 				populateBeanMap(child, val2);
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 				<strong class="jxr_keyword">return</strong> child.getBean();
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 			}
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		}
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">if</strong> (val instanceof List val2 &amp;&amp; targetType.isCollectionOrArray()) {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			ClassMeta&lt;?&gt; elType = targetType.getElementType();
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			List result = <strong class="jxr_keyword">new</strong> ArrayList();
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			<strong class="jxr_keyword">for</strong> (Object item : val2) {
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 				result.add(convertValue(item, elType));
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			}
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			<strong class="jxr_keyword">return</strong> targetType.isArray() ? toArray(targetType, result) : result;
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		}
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		<em class="jxr_comment">// Bare numeric wire literals (e.g. "2024", "8100000000000") arrive here as Number values</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<em class="jxr_comment">// from the TOML tokenizer.  Route them through the format-aware parsers so the configured</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<em class="jxr_comment">// MarshallingContext.get&lt;Format&gt;() hint (NANOS, ISO_YEAR, MILLIS, …) reaches the coercion.</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<em class="jxr_comment">// Without this routing the generic Number → T coercion below would silently drop the hint</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<em class="jxr_comment">// (e.g. treating Long(2024) as epoch-millis → 1970-01-01T00:00:02.024Z instead of year 2024).</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">if</strong> (val instanceof Number val2) {
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">if</strong> (targetType.isNumber())
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 				<strong class="jxr_keyword">return</strong> convertToMemberType(<strong class="jxr_keyword">null</strong>, val2, targetType);
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<strong class="jxr_keyword">if</strong> (targetType.isDuration())
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 				<strong class="jxr_keyword">return</strong> readDuration(val2.toString());
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<strong class="jxr_keyword">if</strong> (targetType.isPeriod())
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 				<strong class="jxr_keyword">return</strong> readPeriod(val2.toString());
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 			<strong class="jxr_keyword">if</strong> (targetType.isDate())
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 				<strong class="jxr_keyword">return</strong> readDate(val2.toString(), targetType);
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<strong class="jxr_keyword">if</strong> (targetType.isCalendar())
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 				<strong class="jxr_keyword">return</strong> readCalendar(val2.toString(), targetType);
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<strong class="jxr_keyword">if</strong> (targetType.isTemporal())
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 				<strong class="jxr_keyword">return</strong> readTemporal(val2.toString(), targetType);
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		}
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">if</strong> (val instanceof String val2) {
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 			<strong class="jxr_keyword">if</strong> (targetType.isDate())
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 				<strong class="jxr_keyword">return</strong> readDate(val2, targetType);
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 			<strong class="jxr_keyword">if</strong> (targetType.isCalendar())
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 				<strong class="jxr_keyword">return</strong> readCalendar(val2, targetType);
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			<strong class="jxr_keyword">if</strong> (targetType.isTemporal())
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 				<strong class="jxr_keyword">return</strong> readTemporal(val2, targetType);
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 			<strong class="jxr_keyword">if</strong> (targetType.isDuration())
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 				<strong class="jxr_keyword">return</strong> readDuration(val2);
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 			<strong class="jxr_keyword">if</strong> (targetType.isPeriod())
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 				<strong class="jxr_keyword">return</strong> readPeriod(val2);
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		}
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<em class="jxr_comment">// Native TOML datetime literals (Z-zoned / offset / local) are returned by TomlTokenizer as</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<em class="jxr_comment">// java.time.OffsetDateTime / LocalDateTime / LocalDate / LocalTime objects.  Re-stringify</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<em class="jxr_comment">// through the temporal's own ISO toString() and route through readTemporal so the</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<em class="jxr_comment">// configured TemporalFormat hint (e.g. ISO_INSTANT) is honored — otherwise the generic</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<em class="jxr_comment">// Temporal → T coercion below applies the local zone and we lose the wire's UTC anchor.</em>
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">if</strong> (val instanceof TemporalAccessor val2 &amp;&amp; targetType.isTemporal())
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 			<strong class="jxr_keyword">return</strong> readTemporal(val2.toString(), targetType);
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<em class="jxr_comment">// Route String-shaped byte[] values (collection-element + top-level dispatch sites) through</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<em class="jxr_comment">// the configured BinaryFormat's variant binarySwap before falling through to the default</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<em class="jxr_comment">// String → byte[] coercion.  The bean-property path is unaffected because the per-property</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<em class="jxr_comment">// MPP install hides the type-level default swap behind the per-property swap.</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		<strong class="jxr_keyword">var</strong> binBytes = tryUnswapByteArray(val, targetType);
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		<strong class="jxr_keyword">if</strong> (binBytes != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 			<strong class="jxr_keyword">return</strong> binBytes;
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		<strong class="jxr_keyword">return</strong> convertToMemberType(<strong class="jxr_keyword">null</strong>, val, targetType);
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	}
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * Routes a {@link String}-shaped {@code byte[]} value through the session-aware</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * {@link org.apache.juneau.marshall.swaps.BinarySwap} when one is matched.</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Collection-element and top-level dispatch sites don't go through</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * {@code MarshalledPropertyPostProcessor}'s per-property swap install, so they fall back to the</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 * {@link org.apache.juneau.marshall.swap.DefaultSwaps} registry.  Returns {@code null} when the target isn't</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * {@code byte[]}, the value isn't a {@link String}, or no swap is matched on the current session</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * (e.g. {@link BinaryFormat#NOT_SET} is configured).</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<span class="jxr_string">"java:S1168"</span> <em class="jxr_comment">// Null is a meaningful 'no byte[] unswap applies' signal; callers fall through on null (an empty array would wrongly mean 'unswapped to empty bytes').</em>
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	})
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 	<strong class="jxr_keyword">private</strong> byte[] tryUnswapByteArray(Object val, ClassMeta&lt;?&gt; targetType) <strong class="jxr_keyword">throws</strong> ParseException {
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<strong class="jxr_keyword">if</strong> (!(val instanceof String val2) || targetType == <strong class="jxr_keyword">null</strong> || targetType.<strong class="jxr_keyword">inner</strong>() != byte[].<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">var</strong> swap = targetType.getSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">if</strong> (swap == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<strong class="jxr_keyword">return</strong> (byte[]) unswap(swap, val2, targetType);
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	}
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>RestObservabilitySvl_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/rest/observability/RestObservabilitySvl_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.observability;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.metrics.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.parallel.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Tests SVL variable support in observability annotation attributes.</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * The resource-level {@code @Rest(observability)} attribute is resolved at {@code RestContext} build time</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * (the constructor pre-warms the memoizer via the startup-fail check). Op-level attributes</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * ({@code metricName}, {@code metricTags}) are resolved lazily on first request.</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * Note: {@code MockRestClient} caches the {@link org.apache.juneau.rest.server.server.RestContext} per resource class.</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * Each scenario uses a distinct static inner class so the SVL state at build time is deterministic.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  @ResourceLock(Resources.SYSTEM_PROPERTIES)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">class</strong> <a name="RestObservabilitySvl_Test" href="../../../../../org/apache/juneau/rest/observability/RestObservabilitySvl_Test.html#RestObservabilitySvl_Test">RestObservabilitySvl_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> RecordingMetricsRecorder <strong class="jxr_keyword">implements</strong> MetricsRecorder {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> List&lt;Event&gt; events = <strong class="jxr_keyword">new</strong> CopyOnWriteArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		@SuppressWarnings({
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			<span class="jxr_string">"java:S6213"</span> <em class="jxr_comment">// 'record' mirrors the MetricsRecorder SPI method name; renaming would break the @Override contract.</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		})
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		@Override
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> record(String opName, String httpMethod, String uriTemplate, <strong class="jxr_keyword">int</strong> statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			events.add(<strong class="jxr_keyword">new</strong> Event(metricName, metricTags));
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		}
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">public</strong> Event last() { <strong class="jxr_keyword">return</strong> events.get(events.size() - 1); }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> clear() { events.clear(); }
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> Event {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String metricName, metricTags;
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		Event(String metricName, String metricTags) {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">this</strong>.metricName = metricName; <strong class="jxr_keyword">this</strong>.metricTags = metricTags;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		}
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	}
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<em class="jxr_comment">// A: metricName and metricTags with literal values flow correctly to record().</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RecordingMetricsRecorder A_REC = <strong class="jxr_keyword">new</strong> RecordingMetricsRecorder();
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Rest
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		@org.apache.juneau.commons.inject.Bean
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">public</strong> MetricsRecorder recorder() { <strong class="jxr_keyword">return</strong> A_REC; }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		@RestGet(path = <span class="jxr_string">"/op"</span>, metricName = <span class="jxr_string">"my.service.requests"</span>, metricTags = <span class="jxr_string">"svc=orders"</span>)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">public</strong> String op() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>; }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CA = MockRestClient.buildLax(A.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	@Test <strong class="jxr_keyword">void</strong> a01_literalMetricNameAndTags_resolvedCorrectly() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		A_REC.clear();
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		CA.get(<span class="jxr_string">"/op"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(<span class="jxr_string">"my.service.requests"</span>, A_REC.last().metricName,
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			<span class="jxr_string">"literal metricName must reach MetricsRecorder.record() unchanged"</span>);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEquals(<span class="jxr_string">"svc=orders"</span>, A_REC.last().metricTags,
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<span class="jxr_string">"literal metricTags must reach MetricsRecorder.record() unchanged"</span>);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<em class="jxr_comment">// B: SVL variable in @Rest(observability) is resolved at RestContext build time.</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<em class="jxr_comment">//    When the system property resolves to "false", metrics are suppressed for the entire resource.</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<em class="jxr_comment">//    The static initializer sets the property before building the client and then clears it; // NOSONAR</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<em class="jxr_comment">//    this works because the resource-level observability attribute IS resolved eagerly (the</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<em class="jxr_comment">//    startup-fail check pre-warms it inside the RestContext constructor).</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RecordingMetricsRecorder B_REC = <strong class="jxr_keyword">new</strong> RecordingMetricsRecorder();
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	@Rest(observability = <span class="jxr_string">"$S{test.svl.obs.b,}"</span>)
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		@org.apache.juneau.commons.inject.Bean
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">public</strong> MetricsRecorder recorder() { <strong class="jxr_keyword">return</strong> B_REC; }
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		@RestGet(<span class="jxr_string">"/ping"</span>)
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">public</strong> String ping() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"pong"</span>; }
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<em class="jxr_comment">// Build the client while the property is "false" so the context captures observability=false.</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CB;
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		System.setProperty(<span class="jxr_string">"test.svl.obs.b"</span>, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		CB = MockRestClient.buildLax(B.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		System.clearProperty(<span class="jxr_string">"test.svl.obs.b"</span>);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@Test <strong class="jxr_keyword">void</strong> b01_svlObservability_resolvedAtBuildTime_suppressesMetrics() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		B_REC.clear();
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		CB.get(<span class="jxr_string">"/ping"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertEquals(0, B_REC.events.size(),
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<span class="jxr_string">"$S{} SVL variable resolving to 'false' at context build time must suppress observability block"</span>);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

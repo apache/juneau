@@ -1,0 +1,747 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>McpResourceServerBinding_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../testapidocs/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerBinding_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.v20260728;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.security.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.bean.jsonrpc.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.bean.mcp.v20260728.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.json.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.auth.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.McpServerConfig;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.McpToolHandler;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.McpToolOutcome;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.McpToolSpec;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.*;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * End-to-end HTTP coverage for the READY-312f F2 OAuth 2.1 resource-server baseline on the {@code 2026-07-28}</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * {@link McpRestServlet} and {@link McpEndpoint} bindings: RFC 9728 PRM serving + SEP-2351 well-known routing, bearer</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * validation, the {@code 401 WWW-Authenticate} challenge with {@code resource_metadata}, RFC 8707 audience enforcement,</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * baseline insufficient-scope handling, and the auth-disabled default leaving behavior unchanged.</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Test helpers return Closeables; Eclipse JDT @Owning warning is by design.</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  })
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">class</strong> McpResourceServerBinding_Test <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String RESOURCE = <span class="jxr_string">"http://localhost/mcp"</span>;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String PRM_URL = <span class="jxr_string">"http://localhost/.well-known/oauth-protected-resource/mcp"</span>;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ROOT_PRM_URL = <span class="jxr_string">"http://localhost/.well-known/oauth-protected-resource"</span>;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * Fake validator: {@code good} = correct audience + required scope; {@code noscope} = correct audience, wrong scope;</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * {@code wrongaud} = wrong audience; anything else throws.</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> TokenValidator VALIDATOR = token -&gt; <strong class="jxr_keyword">switch</strong> (token) {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">case</strong> <span class="jxr_string">"good"</span> -&gt; <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, Map.of(<span class="jxr_string">"aud"</span>, RESOURCE, <span class="jxr_string">"scope"</span>, <span class="jxr_string">"mcp.read mcp.write"</span>));
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<em class="jxr_comment">// Cross-identity fixture: a DIFFERENT authenticated principal (bob) with the same audience + baseline</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<em class="jxr_comment">// scope, so it clears the gate but binds a different requestState identity than 'good' (alice).</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">case</strong> <span class="jxr_string">"good2"</span> -&gt; <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"bob"</span>, Map.of(<span class="jxr_string">"aud"</span>, RESOURCE, <span class="jxr_string">"scope"</span>, <span class="jxr_string">"mcp.read mcp.write"</span>));
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<em class="jxr_comment">// Real iss|sub claim fixtures: 'good'/'good2' above carry no iss/sub claims, so the requestState</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<em class="jxr_comment">// binding they exercise end-to-end is only the getName() fallback. 'good3'/'good4' carry the SAME subject</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<em class="jxr_comment">// (alice) but a DIFFERENT issuer, so they exercise the actual, primary iss|sub claim-read path (settled</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<em class="jxr_comment">// decision 1) end-to-end, not the fallback.</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">case</strong> <span class="jxr_string">"good3"</span> -&gt; <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, Map.of(<span class="jxr_string">"aud"</span>, RESOURCE, <span class="jxr_string">"scope"</span>, <span class="jxr_string">"mcp.read mcp.write"</span>, <span class="jxr_string">"iss"</span>, <span class="jxr_string">"https://idp-a"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"alice"</span>));
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">case</strong> <span class="jxr_string">"good4"</span> -&gt; <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, Map.of(<span class="jxr_string">"aud"</span>, RESOURCE, <span class="jxr_string">"scope"</span>, <span class="jxr_string">"mcp.read mcp.write"</span>, <span class="jxr_string">"iss"</span>, <span class="jxr_string">"https://idp-b"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"alice"</span>));
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">case</strong> <span class="jxr_string">"noscope"</span> -&gt; <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, Map.of(<span class="jxr_string">"aud"</span>, RESOURCE, <span class="jxr_string">"scope"</span>, <span class="jxr_string">"other"</span>));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">case</strong> <span class="jxr_string">"wrongaud"</span> -&gt; <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, Map.of(<span class="jxr_string">"aud"</span>, <span class="jxr_string">"http://evil.example.com"</span>, <span class="jxr_string">"scope"</span>, <span class="jxr_string">"mcp.read"</span>));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<em class="jxr_comment">// SEP-2350 step-up fixtures: baseline mcp.read + the per-operation tools.exec (exact and hierarchical grants).</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">case</strong> <span class="jxr_string">"opok"</span> -&gt; <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, Map.of(<span class="jxr_string">"aud"</span>, RESOURCE, <span class="jxr_string">"scope"</span>, <span class="jxr_string">"mcp.read tools.exec"</span>));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">case</strong> <span class="jxr_string">"broad"</span> -&gt; <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, Map.of(<span class="jxr_string">"aud"</span>, RESOURCE, <span class="jxr_string">"scope"</span>, <span class="jxr_string">"mcp.read tools"</span>));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<em class="jxr_comment">// H1 baseline-hierarchy fixture: granted ONLY the broad ancestor "mcp", which satisfies the baseline</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<em class="jxr_comment">// "mcp.read" hierarchically (never exact-string).</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">case</strong> <span class="jxr_string">"basehier"</span> -&gt; <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, Map.of(<span class="jxr_string">"aud"</span>, RESOURCE, <span class="jxr_string">"scope"</span>, <span class="jxr_string">"mcp"</span>));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">default</strong> -&gt; <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> AuthenticationException(<span class="jxr_string">"bad token"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	};
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object validMeta() {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">return</strong> JsonMap.of(
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			RequestMeta.KEY_PROTOCOL_VERSION, <span class="jxr_string">"2026-07-28"</span>,
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			RequestMeta.KEY_CLIENT_INFO, JsonMap.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"fixture-client"</span>, <span class="jxr_string">"version"</span>, <span class="jxr_string">"1.0"</span>),
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			RequestMeta.KEY_CLIENT_CAPABILITIES, JsonMap.of());
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object withMeta(Object baseParams) {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> p = baseParams instanceof Map&lt;?,?&gt; m ? <strong class="jxr_keyword">new</strong> JsonMap(m) : <strong class="jxr_keyword">new</strong> JsonMap();
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		p.put(<span class="jxr_string">"_meta"</span>, validMeta());
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">return</strong> p;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String body(Object id, String method, Object params) {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">return</strong> org.apache.juneau.marshall.marshaller.Json.of(<strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(method).setParams(withMeta(params)));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpToolHandler echo() {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpToolHandler() {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			@Override <strong class="jxr_keyword">public</strong> McpToolSpec descriptor() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpToolSpec().setName(<span class="jxr_string">"echo"</span>).setDescription(<span class="jxr_string">"Echoes back"</span>); }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			@Override <strong class="jxr_keyword">public</strong> McpToolOutcome call(Map&lt;String,Object&gt; arguments, BeanStore ctx) { <strong class="jxr_keyword">return</strong> McpToolOutcome.text(String.valueOf(arguments.get(<span class="jxr_string">"text"</span>))); }
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		};
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpOptions rsEnabled() {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpOptions().resourceServer(rs -&gt; rs
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			.setEnabled(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			.setResource(URI.create(RESOURCE))
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			.setTokenValidator(VALIDATOR)
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			.addAuthorizationServer(URI.create(<span class="jxr_string">"http://as.example.com"</span>))
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			.addRequiredScope(<span class="jxr_string">"mcp.read"</span>));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<em class="jxr_comment">// Servlet path (POST /) with RS auth ENABLED.</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@Rest(serializers = JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers = JsonParser.<strong class="jxr_keyword">class</strong>, defaultAccept = <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A <strong class="jxr_keyword">extends</strong> McpRestServlet {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		@Override <strong class="jxr_keyword">protected</strong> McpServerConfig createMcpConfig() {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpServerConfig().setName(<span class="jxr_string">"test"</span>).setVersion(<span class="jxr_string">"1.0.0"</span>).addTool(echo());
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		}
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		@Override <strong class="jxr_keyword">protected</strong> McpOptions createMcpOptions() { <strong class="jxr_keyword">return</strong> rsEnabled(); }
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<em class="jxr_comment">// M1 probe: a non-MCP POST op that is still gated (the servlet gates every effective POST); asserts the</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<em class="jxr_comment">// authenticated principal reached the framework-standard PRINCIPAL_ATTR so @Auth Principal resolves.</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		@RestPost(path = <span class="jxr_string">"/whoami"</span>)
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">public</strong> String whoami(@Auth Principal p) {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">return</strong> p == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"&lt;none&gt;"</span> : p.getName();
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		}
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">private</strong> MockRestClient clientA() {
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(A.<strong class="jxr_keyword">class</strong>).json().contentType(<span class="jxr_string">"application/json"</span>).accept(<span class="jxr_string">"application/json"</span>).ignoreErrors().build();
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	@Test <strong class="jxr_keyword">void</strong> a01_validToken_dispatches() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		clientA().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good"</span>)
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			.run().assertStatus(200);
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> a02_missingToken_401WithResourceMetadataAndScopeHint() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<em class="jxr_comment">// M1/SEP-2350: the initial 401 carries no error code but DOES hint the baseline scope.</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		clientA().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			.run()
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			.assertStatus(401)
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			.assertHeader(<span class="jxr_string">"WWW-Authenticate"</span>).is(<span class="jxr_string">"Bearer realm=\&quot;mcp\&quot;, scope=\&quot;mcp.read\&quot;, resource_metadata=\&quot;"</span> + PRM_URL + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test <strong class="jxr_keyword">void</strong> a03_invalidToken_401WithInvalidTokenError() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		clientA().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer nope"</span>)
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			.run()
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			.assertStatus(401)
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			.assertHeader(<span class="jxr_string">"WWW-Authenticate"</span>).is(<span class="jxr_string">"Bearer realm=\&quot;mcp\&quot;, error=\&quot;invalid_token\&quot;, resource_metadata=\&quot;"</span> + PRM_URL + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	@Test <strong class="jxr_keyword">void</strong> a04_wrongAudience_rejected() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		clientA().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer wrongaud"</span>)
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			.run()
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			.assertStatus(401)
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			.assertHeader(<span class="jxr_string">"WWW-Authenticate"</span>).is(<span class="jxr_string">"Bearer realm=\&quot;mcp\&quot;, error=\&quot;invalid_token\&quot;, resource_metadata=\&quot;"</span> + PRM_URL + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	@Test <strong class="jxr_keyword">void</strong> a05_insufficientScope_403WithScope() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		clientA().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer noscope"</span>)
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			.run()
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			.assertStatus(403)
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			.assertHeader(<span class="jxr_string">"WWW-Authenticate"</span>).is(<span class="jxr_string">"Bearer realm=\&quot;mcp\&quot;, error=\&quot;insufficient_scope\&quot;, scope=\&quot;mcp.read\&quot;, resource_metadata=\&quot;"</span> + PRM_URL + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	}
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	@Test <strong class="jxr_keyword">void</strong> a06_wellKnownPathInserted_servesPrmUnauthenticated() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">var</strong> json = clientA().get(<span class="jxr_string">"/.well-known/oauth-protected-resource/mcp"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertContains(<span class="jxr_string">"\&quot;resource\&quot;:\&quot;"</span> + RESOURCE + <span class="jxr_string">"\&quot;"</span>, json);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertContains(<span class="jxr_string">"\&quot;authorization_servers\&quot;:[\&quot;http://as.example.com\&quot;]"</span>, json);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertContains(<span class="jxr_string">"\&quot;scopes_supported\&quot;:[\&quot;mcp.read\&quot;]"</span>, json);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertContains(<span class="jxr_string">"\&quot;bearer_methods_supported\&quot;:[\&quot;header\&quot;]"</span>, json);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	@Test <strong class="jxr_keyword">void</strong> a07_wellKnownRootFallback_servesPrm() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">var</strong> json = clientA().get(ROOT_PRM_URL.substring(<span class="jxr_string">"http://localhost"</span>.length())).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertContains(<span class="jxr_string">"\&quot;resource\&quot;:\&quot;"</span> + RESOURCE + <span class="jxr_string">"\&quot;"</span>, json);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	}
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	<em class="jxr_comment">// M1: the authenticated principal reaches the framework-standard PRINCIPAL_ATTR so @Auth Principal resolves on a</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<em class="jxr_comment">// gated request.</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	@Test <strong class="jxr_keyword">void</strong> a09_principalResolvesViaAuthArg() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> s = clientA().post(<span class="jxr_string">"/whoami"</span>).contentString(<span class="jxr_string">""</span>).header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertContains(<span class="jxr_string">"alice"</span>, s);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	<em class="jxr_comment">// H1: a token granted ONLY the broad ancestor "mcp" satisfies the baseline "mcp.read" hierarchically and</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<em class="jxr_comment">// dispatches.  The old exact-string containsAll baseline gate would have 403'd this.</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	@Test <strong class="jxr_keyword">void</strong> a10_baselineHierarchicalScope_dispatches() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		clientA().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer basehier"</span>)
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			.run().assertStatus(200);
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	}
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<em class="jxr_comment">// M5: the wildcard well-known route must not serve this endpoint's PRM for an arbitrary suffix.</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	@Test <strong class="jxr_keyword">void</strong> a08_wellKnownWrongSuffix_404() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		clientA().get(<span class="jxr_string">"/.well-known/oauth-protected-resource/some-other-resource"</span>).run().assertStatus(404);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	}
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<em class="jxr_comment">// SEP-2350 (F3) per-operation step-up: an end-to-end HTTP round-trip exercising the POST-parse enforcement</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<em class="jxr_comment">// point in McpRevision.dispatch (a token satisfying the endpoint-wide baseline but not the operation's scope</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<em class="jxr_comment">// yields a scoped 403 insufficient_scope challenge; the correct scope, exact or hierarchical, dispatches).</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpOptions rsEnabledWithOpScope() {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpOptions().resourceServer(rs -&gt; rs
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			.setEnabled(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			.setResource(URI.create(RESOURCE))
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			.setTokenValidator(VALIDATOR)
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			.addAuthorizationServer(URI.create(<span class="jxr_string">"http://as.example.com"</span>))
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			.addRequiredScope(<span class="jxr_string">"mcp.read"</span>)
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			.addOperationScope(<span class="jxr_string">"tools/call"</span>, <span class="jxr_string">"echo"</span>, <span class="jxr_string">"tools.exec"</span>));
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	}
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	@Rest(serializers = JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers = JsonParser.<strong class="jxr_keyword">class</strong>, defaultAccept = <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D <strong class="jxr_keyword">extends</strong> McpRestServlet {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		@Override <strong class="jxr_keyword">protected</strong> McpServerConfig createMcpConfig() {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpServerConfig().setName(<span class="jxr_string">"test"</span>).setVersion(<span class="jxr_string">"1.0.0"</span>).addTool(echo());
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		@Override <strong class="jxr_keyword">protected</strong> McpOptions createMcpOptions() { <strong class="jxr_keyword">return</strong> rsEnabledWithOpScope(); }
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	}
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">private</strong> MockRestClient clientD() {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(D.<strong class="jxr_keyword">class</strong>).json().contentType(<span class="jxr_string">"application/json"</span>).accept(<span class="jxr_string">"application/json"</span>).ignoreErrors().build();
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	}
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object callEcho() {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">return</strong> JsonMap.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"echo"</span>, <span class="jxr_string">"arguments"</span>, JsonMap.of(<span class="jxr_string">"text"</span>, <span class="jxr_string">"hi"</span>));
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	}
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<em class="jxr_comment">// Baseline-only token (mcp.read) cannot invoke the tools.exec-gated echo tool: scoped 403 step-up challenge.</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	@Test <strong class="jxr_keyword">void</strong> d01_stepUp_insufficientOperationScope_403() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		clientD().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"tools/call"</span>, callEcho()))
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"tools/call"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">"echo"</span>)
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good"</span>)
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			.run()
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			.assertStatus(403)
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			.assertHeader(<span class="jxr_string">"WWW-Authenticate"</span>).is(<span class="jxr_string">"Bearer realm=\&quot;mcp\&quot;, error=\&quot;insufficient_scope\&quot;, scope=\&quot;tools.exec\&quot;, resource_metadata=\&quot;"</span> + PRM_URL + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	}
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<em class="jxr_comment">// A token carrying the exact operation scope dispatches.</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	@Test <strong class="jxr_keyword">void</strong> d02_stepUp_exactOperationScope_dispatches() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		clientD().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"tools/call"</span>, callEcho()))
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"tools/call"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">"echo"</span>)
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer opok"</span>)
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			.run().assertStatus(200);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	}
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<em class="jxr_comment">// A broader ancestor scope (tools) satisfies the narrower required tools.exec (server MUST: hierarchy-aware).</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	@Test <strong class="jxr_keyword">void</strong> d03_stepUp_hierarchicalScope_dispatches() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		clientD().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"tools/call"</span>, callEcho()))
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"tools/call"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">"echo"</span>)
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer broad"</span>)
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			.run().assertStatus(200);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	}
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	<em class="jxr_comment">// An operation with no per-operation scope configured is unaffected: baseline mcp.read alone dispatches it.</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	@Test <strong class="jxr_keyword">void</strong> d04_stepUp_unconfiguredOperation_dispatches() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		clientD().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good"</span>)
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			.run().assertStatus(200);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	}
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	<em class="jxr_comment">// The baseline @RestStartCall bearer gate still fires first: a token-less step-up-gated call is a clean 401.</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	@Test <strong class="jxr_keyword">void</strong> d05_stepUp_missingToken_401BeforeDispatch() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		clientD().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"tools/call"</span>, callEcho()))
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"tools/call"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">"echo"</span>)
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			.run()
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			.assertStatus(401)
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			.assertHeader(<span class="jxr_string">"WWW-Authenticate"</span>).is(<span class="jxr_string">"Bearer realm=\&quot;mcp\&quot;, scope=\&quot;mcp.read\&quot;, resource_metadata=\&quot;"</span> + PRM_URL + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<em class="jxr_comment">// M6: the per-operation resolver seam sees the RAW JSON-RPC params (for tools/call that is</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<em class="jxr_comment">// {name:..., arguments:{...}}), NOT the unwrapped tool arguments.  A resolver capturing the context proves</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<em class="jxr_comment">// exactly what McpRevision hands a future dynamic resolver.</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;McpOperationContext&gt; CAPTURED = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;();
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpOptions rsEnabledWithCapturingResolver() {
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		CAPTURED.set(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpOptions().resourceServer(rs -&gt; rs
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			.setEnabled(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			.setResource(URI.create(RESOURCE))
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			.setTokenValidator(VALIDATOR)
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			.addAuthorizationServer(URI.create(<span class="jxr_string">"http://as.example.com"</span>))
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			.addRequiredScope(<span class="jxr_string">"mcp.read"</span>)
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			.setOperationScopeResolver(ctx -&gt; { CAPTURED.set(ctx); <strong class="jxr_keyword">return</strong> Set.of(); }));
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	@Rest(serializers = JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers = JsonParser.<strong class="jxr_keyword">class</strong>, defaultAccept = <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E <strong class="jxr_keyword">extends</strong> McpRestServlet {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		@Override <strong class="jxr_keyword">protected</strong> McpServerConfig createMcpConfig() {
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpServerConfig().setName(<span class="jxr_string">"test"</span>).setVersion(<span class="jxr_string">"1.0.0"</span>).addTool(echo());
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		}
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		@Override <strong class="jxr_keyword">protected</strong> McpOptions createMcpOptions() { <strong class="jxr_keyword">return</strong> rsEnabledWithCapturingResolver(); }
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	}
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<strong class="jxr_keyword">private</strong> MockRestClient clientE() {
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(E.<strong class="jxr_keyword">class</strong>).json().contentType(<span class="jxr_string">"application/json"</span>).accept(<span class="jxr_string">"application/json"</span>).ignoreErrors().build();
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	}
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	@Test <strong class="jxr_keyword">void</strong> e01_resolverSeesRawJsonRpcParamsForToolsCall() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		clientE().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"tools/call"</span>, callEcho()))
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"tools/call"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">"echo"</span>)
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good"</span>)
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			.run().assertStatus(200);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">var</strong> ctx = CAPTURED.get();
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		assertNotNull(ctx);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		assertEquals(<span class="jxr_string">"tools/call"</span>, ctx.method());
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		assertEquals(<span class="jxr_string">"echo"</span>, ctx.name());
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<em class="jxr_comment">// The raw JSON-RPC params for tools/call: {name:echo, arguments:{text:hi}} — NOT {text:hi}.</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		assertEquals(<span class="jxr_string">"echo"</span>, ctx.params().get(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		assertEquals(Map.of(<span class="jxr_string">"text"</span>, <span class="jxr_string">"hi"</span>), ctx.params().get(<span class="jxr_string">"arguments"</span>));
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		assertNull(ctx.params().get(<span class="jxr_string">"text"</span>));  <em class="jxr_comment">// the footgun: reading an argument off params directly is null.</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	}
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<em class="jxr_comment">// F4 (READY-312f): the F2-authenticated principal is threaded into the RequestStateCodec seal/unseal seam so</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<em class="jxr_comment">// a hardened codec can bind the requestState to who requested it.  A capturing codec records the principal it</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	<em class="jxr_comment">// receives; an end-to-end pause (seal) then resume (unseal), both under the same bearer token, proves the</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	<em class="jxr_comment">// authenticated principal reaches the codec at BOTH points.</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> J_CapturingCodec <strong class="jxr_keyword">implements</strong> RequestStateCodec {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">final</strong> RequestStateCodec delegate = <strong class="jxr_keyword">new</strong> AeadRequestStateCodec();
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">final</strong> AtomicReference&lt;String&gt; sealPrincipal = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;(<span class="jxr_string">"&lt;unset&gt;"</span>);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">final</strong> AtomicReference&lt;String&gt; unsealPrincipal = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;(<span class="jxr_string">"&lt;unset&gt;"</span>);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		@Override <strong class="jxr_keyword">public</strong> String seal(McpRequestState state, String aad, Principal principal) {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			sealPrincipal.set(principal == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : principal.getName());
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<strong class="jxr_keyword">return</strong> delegate.seal(state, aad, principal);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		}
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		@Override <strong class="jxr_keyword">public</strong> Optional&lt;McpRequestState&gt; unseal(String token, String aad, Principal principal) {
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			unsealPrincipal.set(principal == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : principal.getName());
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<strong class="jxr_keyword">return</strong> delegate.unseal(token, aad, principal);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		}
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	}
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> J_CapturingCodec J_CODEC = <strong class="jxr_keyword">new</strong> J_CapturingCodec();
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object validMetaElicit() {
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">return</strong> JsonMap.of(
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			RequestMeta.KEY_PROTOCOL_VERSION, <span class="jxr_string">"2026-07-28"</span>,
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			RequestMeta.KEY_CLIENT_INFO, JsonMap.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"fixture-client"</span>, <span class="jxr_string">"version"</span>, <span class="jxr_string">"1.0"</span>),
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			RequestMeta.KEY_CLIENT_CAPABILITIES, JsonMap.of(<span class="jxr_string">"elicitation"</span>, JsonMap.of()));
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	}
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String bodyElicit(Object id, String method, Object params) {
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">var</strong> p = params instanceof Map&lt;?,?&gt; m ? <strong class="jxr_keyword">new</strong> JsonMap(m) : <strong class="jxr_keyword">new</strong> JsonMap();
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		p.put(<span class="jxr_string">"_meta"</span>, validMetaElicit());
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">return</strong> org.apache.juneau.marshall.marshaller.Json.of(<strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(id).setMethod(method).setParams(p));
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	}
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	<em class="jxr_comment">// Pauses on the first call (emits input_required -&gt; seals) and completes on resume (unseals first, then returns).</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpToolHandler pausingAsk() {
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpToolHandler() {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			@Override <strong class="jxr_keyword">public</strong> McpToolSpec descriptor() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpToolSpec().setName(<span class="jxr_string">"ask"</span>); }
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			@Override <strong class="jxr_keyword">public</strong> McpToolOutcome call(Map&lt;String,Object&gt; arguments, BeanStore ctx) {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 				<strong class="jxr_keyword">if</strong> (ctx.getBean(McpMrtrResumeContext.<strong class="jxr_keyword">class</strong>).isPresent())
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 					<strong class="jxr_keyword">return</strong> McpToolOutcome.text(<span class="jxr_string">"done"</span>);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpInputRequiredSignal(Map.of(<span class="jxr_string">"q1"</span>, Map.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"elicitation"</span>)), <span class="jxr_string">"cont-1"</span>);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			}
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		};
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	}
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpOptions rsEnabledWithCapturingCodec() {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">return</strong> rsEnabled().mrtr(m -&gt; m.setCodec(J_CODEC));
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	}
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	@Rest(serializers = JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers = JsonParser.<strong class="jxr_keyword">class</strong>, defaultAccept = <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> J <strong class="jxr_keyword">extends</strong> McpRestServlet {
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		@Override <strong class="jxr_keyword">protected</strong> McpServerConfig createMcpConfig() {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpServerConfig().setName(<span class="jxr_string">"test"</span>).setVersion(<span class="jxr_string">"1.0.0"</span>).addTool(pausingAsk());
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		}
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		@Override <strong class="jxr_keyword">protected</strong> McpOptions createMcpOptions() { <strong class="jxr_keyword">return</strong> rsEnabledWithCapturingCodec(); }
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	}
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	<strong class="jxr_keyword">private</strong> MockRestClient clientJ() {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(J.<strong class="jxr_keyword">class</strong>).json().contentType(<span class="jxr_string">"application/json"</span>).accept(<span class="jxr_string">"application/json"</span>).ignoreErrors().build();
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	@Test <strong class="jxr_keyword">void</strong> j01_authenticatedPrincipalReachesCodecAtSealAndUnseal() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		J_CODEC.sealPrincipal.set(<span class="jxr_string">"&lt;unset&gt;"</span>);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		J_CODEC.unsealPrincipal.set(<span class="jxr_string">"&lt;unset&gt;"</span>);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<em class="jxr_comment">// Round 1: pause -&gt; seal.  The bearer 'good' authenticates as principal 'alice' (see VALIDATOR).</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">var</strong> pauseJson = clientJ().post(<span class="jxr_string">"/"</span>).contentString(bodyElicit(1, <span class="jxr_string">"tools/call"</span>, JsonMap.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"ask"</span>)))
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"tools/call"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">"ask"</span>)
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good"</span>)
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			.run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">var</strong> token = org.apache.juneau.marshall.marshaller.Json.to(pauseJson, JsonMap.<strong class="jxr_keyword">class</strong>).getMap(<span class="jxr_string">"result"</span>).getString(<span class="jxr_string">"requestState"</span>);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertNotNull(token);
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		assertEquals(<span class="jxr_string">"alice"</span>, J_CODEC.sealPrincipal.get());  <em class="jxr_comment">// the authenticated principal reached seal</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<em class="jxr_comment">// Round 2: resume -&gt; unseal, same bearer token / same principal.</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">var</strong> resumeParams = JsonMap.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"ask"</span>, <span class="jxr_string">"requestState"</span>, token, <span class="jxr_string">"inputResponses"</span>, JsonMap.of(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"answer"</span>));
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		clientJ().post(<span class="jxr_string">"/"</span>).contentString(bodyElicit(2, <span class="jxr_string">"tools/call"</span>, resumeParams))
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"tools/call"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">"ask"</span>)
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good"</span>)
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			.run().assertStatus(200);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		assertEquals(<span class="jxr_string">"alice"</span>, J_CODEC.unsealPrincipal.get());  <em class="jxr_comment">// the authenticated principal reached unseal</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	}
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	<em class="jxr_comment">// A requestState sealed under one authenticated identity (alice, bearer 'good') cannot be resumed under</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<em class="jxr_comment">// a DIFFERENT authenticated identity (bob, bearer 'good2'); the principal is folded into the AAD, so unseal fails</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<em class="jxr_comment">// GCM tag verification and surfaces as a JSON-RPC -32602 invalid-params error rather than re-invoking the handler.</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	@Test <strong class="jxr_keyword">void</strong> j02_crossIdentityResumeIsRejected() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<em class="jxr_comment">// Round 1: pause -&gt; seal under alice.</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">var</strong> pauseJson = clientJ().post(<span class="jxr_string">"/"</span>).contentString(bodyElicit(1, <span class="jxr_string">"tools/call"</span>, JsonMap.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"ask"</span>)))
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"tools/call"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">"ask"</span>)
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good"</span>)
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			.run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">var</strong> token = org.apache.juneau.marshall.marshaller.Json.to(pauseJson, JsonMap.<strong class="jxr_keyword">class</strong>).getMap(<span class="jxr_string">"result"</span>).getString(<span class="jxr_string">"requestState"</span>);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		assertNotNull(token);
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<em class="jxr_comment">// Round 2: resume the SAME token under a different bearer -&gt; different principal (bob) -&gt; unseal rejects it.</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">var</strong> resumeParams = JsonMap.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"ask"</span>, <span class="jxr_string">"requestState"</span>, token, <span class="jxr_string">"inputResponses"</span>, JsonMap.of(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"answer"</span>));
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">var</strong> resumeJson = clientJ().post(<span class="jxr_string">"/"</span>).contentString(bodyElicit(2, <span class="jxr_string">"tools/call"</span>, resumeParams))
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"tools/call"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">"ask"</span>)
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good2"</span>)
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			.run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">var</strong> resp = org.apache.juneau.marshall.marshaller.Json.to(resumeJson, JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		assertNull(resp.get(<span class="jxr_string">"result"</span>), <span class="jxr_string">"a cross-identity resume must not produce a successful result"</span>);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		assertEquals(-32602, resp.getMap(<span class="jxr_string">"error"</span>).getInt(<span class="jxr_string">"code"</span>), <span class="jxr_string">"a cross-identity resume must be rejected as invalid params"</span>);
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	}
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	<em class="jxr_comment">// End-to-end proof of the PRIMARY iss|sub claim-bound path (not the getName() fallback j01/j02</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<em class="jxr_comment">// exercise). 'good3' (iss-a|alice) and 'good4' (iss-b|alice) are real ClaimsPrincipal fixtures carrying iss/sub</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	<em class="jxr_comment">// claims: same subject, different issuer. A requestState sealed under good3 must not be resumable under good4</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	<em class="jxr_comment">// (cross-IdP), proving the codec actually reads and binds iss|sub over real HTTP dispatch, and the SAME token</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	<em class="jxr_comment">// still round-trips when resumed under the original issuer/subject.</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	@Test <strong class="jxr_keyword">void</strong> j03_crossIssuerResumeIsRejected() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<em class="jxr_comment">// Round 1: pause -&gt; seal under good3 (iss-a|alice).</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">var</strong> pauseJson = clientJ().post(<span class="jxr_string">"/"</span>).contentString(bodyElicit(1, <span class="jxr_string">"tools/call"</span>, JsonMap.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"ask"</span>)))
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"tools/call"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">"ask"</span>)
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good3"</span>)
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 			.run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">var</strong> token = org.apache.juneau.marshall.marshaller.Json.to(pauseJson, JsonMap.<strong class="jxr_keyword">class</strong>).getMap(<span class="jxr_string">"result"</span>).getString(<span class="jxr_string">"requestState"</span>);
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		assertNotNull(token);
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<em class="jxr_comment">// Round 2: resume the SAME token under good4 -&gt; same sub (alice) but a DIFFERENT iss (idp-b) -&gt; a different</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		<em class="jxr_comment">// bound identity -&gt; unseal rejects it (GCM tag mismatch surfaced as -32602 invalid params).</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">var</strong> resumeParams = JsonMap.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"ask"</span>, <span class="jxr_string">"requestState"</span>, token, <span class="jxr_string">"inputResponses"</span>, JsonMap.of(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"answer"</span>));
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">var</strong> resumeJson = clientJ().post(<span class="jxr_string">"/"</span>).contentString(bodyElicit(2, <span class="jxr_string">"tools/call"</span>, resumeParams))
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"tools/call"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">"ask"</span>)
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good4"</span>)
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			.run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">var</strong> resp = org.apache.juneau.marshall.marshaller.Json.to(resumeJson, JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		assertNull(resp.get(<span class="jxr_string">"result"</span>), <span class="jxr_string">"a cross-issuer resume must not produce a successful result"</span>);
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		assertEquals(-32602, resp.getMap(<span class="jxr_string">"error"</span>).getInt(<span class="jxr_string">"code"</span>), <span class="jxr_string">"a cross-issuer resume must be rejected as invalid params"</span>);
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		<em class="jxr_comment">// Round 3: the SAME token resumed under the ORIGINAL issuer/subject (good3) still round-trips cleanly -</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<em class="jxr_comment">// the rejection above is specific to the mismatched iss, not a side effect on the token itself.</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		clientJ().post(<span class="jxr_string">"/"</span>).contentString(bodyElicit(3, <span class="jxr_string">"tools/call"</span>, resumeParams))
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"tools/call"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">"ask"</span>)
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good3"</span>)
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			.run().assertStatus(200);
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	}
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 	<em class="jxr_comment">// Servlet path with RS auth DISABLED (default) - behavior unchanged.</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	@Rest(serializers = JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers = JsonParser.<strong class="jxr_keyword">class</strong>, defaultAccept = <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B <strong class="jxr_keyword">extends</strong> McpRestServlet {
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		@Override <strong class="jxr_keyword">protected</strong> McpServerConfig createMcpConfig() {
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpServerConfig().setName(<span class="jxr_string">"test"</span>).setVersion(<span class="jxr_string">"1.0.0"</span>).addTool(echo());
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		}
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	}
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 	<strong class="jxr_keyword">private</strong> MockRestClient clientB() {
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(B.<strong class="jxr_keyword">class</strong>).json().contentType(<span class="jxr_string">"application/json"</span>).accept(<span class="jxr_string">"application/json"</span>).ignoreErrors().build();
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	}
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	@Test <strong class="jxr_keyword">void</strong> b01_authDisabled_postSucceedsWithoutToken() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		clientB().post(<span class="jxr_string">"/"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 			.run().assertStatus(200);
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	}
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	@Test <strong class="jxr_keyword">void</strong> b02_authDisabled_wellKnownReturns404() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		clientB().get(<span class="jxr_string">"/.well-known/oauth-protected-resource/mcp"</span>).run().assertStatus(404);
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	}
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 	<em class="jxr_comment">// Mixin path (POST /mcp) with RS auth ENABLED - parity.</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 	<em class="jxr_comment">// Root-mounted (no @Rest(path=...)) so the advertised origin-root PRM URL genuinely resolves; see the H1</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	<em class="jxr_comment">// origin-root-mount constraint enforced by McpResourceServerSupport.assertOriginRootMount and exercised by</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	<em class="jxr_comment">// fixture G below.</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	@Rest(serializers = JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers = JsonParser.<strong class="jxr_keyword">class</strong>, defaultAccept = <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C <strong class="jxr_keyword">extends</strong> BasicRestServlet <strong class="jxr_keyword">implements</strong> McpEndpoint {
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 		@Override <strong class="jxr_keyword">public</strong> McpServerConfig getMcpConfig() {
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpServerConfig().addTool(echo());
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		}
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		@Override <strong class="jxr_keyword">public</strong> McpOptions getMcpOptions() { <strong class="jxr_keyword">return</strong> rsEnabled(); }
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	}
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	<strong class="jxr_keyword">private</strong> MockRestClient clientC() {
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(C.<strong class="jxr_keyword">class</strong>).json().contentType(<span class="jxr_string">"application/json"</span>).accept(<span class="jxr_string">"application/json"</span>).ignoreErrors().build();
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	}
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 	@Test <strong class="jxr_keyword">void</strong> c01_mixinValidToken_dispatches() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		clientC().post(<span class="jxr_string">"/mcp"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good"</span>)
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 			.run().assertStatus(200);
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	}
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	@Test <strong class="jxr_keyword">void</strong> c02_mixinMissingToken_401WithResourceMetadata() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		clientC().post(<span class="jxr_string">"/mcp"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			.run()
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 			.assertStatus(401)
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 			.assertHeader(<span class="jxr_string">"WWW-Authenticate"</span>).is(<span class="jxr_string">"Bearer realm=\&quot;mcp\&quot;, scope=\&quot;mcp.read\&quot;, resource_metadata=\&quot;"</span> + PRM_URL + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 	}
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 	@Test <strong class="jxr_keyword">void</strong> c03_mixinWellKnown_servesPrm() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">var</strong> json = clientC().get(<span class="jxr_string">"/.well-known/oauth-protected-resource/mcp"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		assertContains(<span class="jxr_string">"\&quot;resource\&quot;:\&quot;"</span> + RESOURCE + <span class="jxr_string">"\&quot;"</span>, json);
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	}
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 	<em class="jxr_comment">// B1 - BLOCKER: the bearer gate must not be bypassable via a trailing slash on the resolved MCP path.</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 	<em class="jxr_comment">// The router is trailing-slash tolerant, so POST /mcp/ still dispatches to the MCP JSON-RPC handler and MUST be</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 	<em class="jxr_comment">// gated.  (Sent as an absolute URL because MockPathResolver trims trailing slashes off relative paths.)</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	@Test <strong class="jxr_keyword">void</strong> c04_mixinTrailingSlash_gated() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		clientC().post(<span class="jxr_string">"http://localhost/mcp/"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 			.run()
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			.assertStatus(401)
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 			.assertHeader(<span class="jxr_string">"WWW-Authenticate"</span>).is(<span class="jxr_string">"Bearer realm=\&quot;mcp\&quot;, scope=\&quot;mcp.read\&quot;, resource_metadata=\&quot;"</span> + PRM_URL + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	}
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	<em class="jxr_comment">// B1 - BLOCKER: the gate must not be bypassable via percent-encoding.  The router decodes %6D to 'm', so</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	<em class="jxr_comment">// POST /%6Dcp dispatches to the MCP handler and MUST be gated.</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 	@Test <strong class="jxr_keyword">void</strong> c05_mixinPercentEncoded_gated() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		clientC().post(<span class="jxr_string">"/%6Dcp"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			.run()
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			.assertStatus(401)
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 			.assertHeader(<span class="jxr_string">"WWW-Authenticate"</span>).is(<span class="jxr_string">"Bearer realm=\&quot;mcp\&quot;, scope=\&quot;mcp.read\&quot;, resource_metadata=\&quot;"</span> + PRM_URL + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 	}
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	<em class="jxr_comment">// H3 - HIGH: method-override channels must not bypass the gate.  A host allowing ?method=POST lets</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 	<em class="jxr_comment">// GET /?method=POST route to the MCP POST endpoint; the gate must see the RESOLVED method, not the raw GET.</em>
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	@Rest(allowedMethodParams = <span class="jxr_string">"*"</span>, allowedMethodHeaders = <span class="jxr_string">"*"</span>, serializers = JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers = JsonParser.<strong class="jxr_keyword">class</strong>, defaultAccept = <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F <strong class="jxr_keyword">extends</strong> McpRestServlet {
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		@Override <strong class="jxr_keyword">protected</strong> McpServerConfig createMcpConfig() {
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpServerConfig().setName(<span class="jxr_string">"test"</span>).setVersion(<span class="jxr_string">"1.0.0"</span>).addTool(echo());
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		}
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		@Override <strong class="jxr_keyword">protected</strong> McpOptions createMcpOptions() { <strong class="jxr_keyword">return</strong> rsEnabled(); }
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	}
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	<strong class="jxr_keyword">private</strong> MockRestClient clientF() {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(F.<strong class="jxr_keyword">class</strong>).json().contentType(<span class="jxr_string">"application/json"</span>).accept(<span class="jxr_string">"application/json"</span>).ignoreErrors().build();
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 	}
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 	<em class="jxr_comment">// No body: the gate must reject on the RESOLVED method before dispatch, so a token-less override request is a</em>
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 	<em class="jxr_comment">// clean 401 regardless of body (and the classic client refuses to attach a body to a GET anyway).</em>
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 	@Test <strong class="jxr_keyword">void</strong> f01_methodParamOverride_gated() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		clientF().get(<span class="jxr_string">"/?method=POST"</span>)
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 			.run()
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 			.assertStatus(401)
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 			.assertHeader(<span class="jxr_string">"WWW-Authenticate"</span>).is(<span class="jxr_string">"Bearer realm=\&quot;mcp\&quot;, scope=\&quot;mcp.read\&quot;, resource_metadata=\&quot;"</span> + PRM_URL + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	}
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	@Test <strong class="jxr_keyword">void</strong> f02_methodHeaderOverride_gated() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		clientF().get(<span class="jxr_string">"/"</span>)
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 			.header(<span class="jxr_string">"X-Method"</span>, <span class="jxr_string">"POST"</span>)
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 			.run()
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 			.assertStatus(401)
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 			.assertHeader(<span class="jxr_string">"WWW-Authenticate"</span>).is(<span class="jxr_string">"Bearer realm=\&quot;mcp\&quot;, scope=\&quot;mcp.read\&quot;, resource_metadata=\&quot;"</span> + PRM_URL + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	}
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	<em class="jxr_comment">// H1 - HIGH: on a non-origin-root mount the advertised origin-root PRM URL cannot be served, so RS auth must</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 	<em class="jxr_comment">// fail fast with a clear 500 rather than silently 404 the discovery document.</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 	@Rest(path = <span class="jxr_string">"/api"</span>, serializers = JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers = JsonParser.<strong class="jxr_keyword">class</strong>, defaultAccept = <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G <strong class="jxr_keyword">extends</strong> BasicRestServlet <strong class="jxr_keyword">implements</strong> McpEndpoint {
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		@Override <strong class="jxr_keyword">public</strong> McpServerConfig getMcpConfig() {
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpServerConfig().addTool(echo());
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		}
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		@Override <strong class="jxr_keyword">public</strong> McpOptions getMcpOptions() { <strong class="jxr_keyword">return</strong> rsEnabled(); }
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 	}
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 	<strong class="jxr_keyword">private</strong> MockRestClient clientG() {
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(G.<strong class="jxr_keyword">class</strong>).json().contentType(<span class="jxr_string">"application/json"</span>).accept(<span class="jxr_string">"application/json"</span>).ignoreErrors().build();
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 	}
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 	@Test <strong class="jxr_keyword">void</strong> g01_nonRootMount_mcpPostFailsFast() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		<strong class="jxr_keyword">var</strong> s = clientG().post(<span class="jxr_string">"/mcp"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good"</span>)
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			.run().assertStatus(500).getContent().asString();
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 		assertContains(<span class="jxr_string">"origin-root"</span>, s);
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	}
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	@Test <strong class="jxr_keyword">void</strong> g02_nonRootMount_wellKnownFailsFast() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<strong class="jxr_keyword">var</strong> s = clientG().get(<span class="jxr_string">"/.well-known/oauth-protected-resource/mcp"</span>).run().assertStatus(500).getContent().asString();
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		assertContains(<span class="jxr_string">"origin-root"</span>, s);
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	}
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	<em class="jxr_comment">// H - BLOCKER: @Mixin(path=...) re-mount must not bypass the bearer gate.</em>
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 	<em class="jxr_comment">// The host is itself ROOT-mounted (no @Rest(path=...)) but re-mounts the MCP mixin under a host-chosen</em>
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	<em class="jxr_comment">// prefix, so POST /api/mcp routes to the MCP JSON-RPC handler while contextPath/servletPath stay empty.  A</em>
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 	<em class="jxr_comment">// gate that reconstructs a hardcoded "/mcp" path constant sees ["api","mcp"] != ["mcp"], returns WITHOUT</em>
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 	<em class="jxr_comment">// authenticating, and serves full unauthenticated MCP dispatch.  The router-aligned gate must identify the</em>
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 	<em class="jxr_comment">// RESOLVED operation instead.</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	<em class="jxr_comment">// H1 UNIFICATION: identifying the resolved operation is not enough on its own - the same re-mount that</em>
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 	<em class="jxr_comment">// defeats a hardcoded path also moves the well-known PRM route off the origin root (h03), so a 401 here would</em>
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	<em class="jxr_comment">// advertise a resource_metadata URL that itself 500s.  The gate therefore also consults the resolved op's</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 	<em class="jxr_comment">// mixin mount prefixes (the same signal assertWellKnownMountReachable uses) and fails fast with the SAME</em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	<em class="jxr_comment">// origin-root 500 as the well-known route, instead of authenticating, so the two routes never disagree.</em>
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 	<em class="jxr_comment">// A plain class implementing McpEndpoint, used as a re-mountable @Mixin (models McpEndpointOptionsCache_Test's</em>
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	<em class="jxr_comment">// mixin shape).</em>
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> McpMixinFixture <strong class="jxr_keyword">implements</strong> McpEndpoint {
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		@Override <strong class="jxr_keyword">public</strong> McpServerConfig getMcpConfig() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpServerConfig().addTool(echo()); }
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		@Override <strong class="jxr_keyword">public</strong> McpOptions getMcpOptions() { <strong class="jxr_keyword">return</strong> rsEnabled(); }
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 	}
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	@Rest(mixinDefs = @Mixin(type = McpMixinFixture.<strong class="jxr_keyword">class</strong>, path = <span class="jxr_string">"/api"</span>), serializers = JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers = JsonParser.<strong class="jxr_keyword">class</strong>, defaultAccept = <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H <strong class="jxr_keyword">extends</strong> BasicRestServlet {
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	}
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 	<strong class="jxr_keyword">private</strong> MockRestClient clientH() {
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(H.<strong class="jxr_keyword">class</strong>).json().contentType(<span class="jxr_string">"application/json"</span>).accept(<span class="jxr_string">"application/json"</span>).ignoreErrors().build();
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 	}
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	<em class="jxr_comment">// B1/H1 - BLOCKER repro, now unified with the well-known route: a @Mixin re-mount is not merely unauthenticated</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	<em class="jxr_comment">// (401) but UNSUPPORTED for MCP RS auth - the gate must fail fast with the same origin-root 500 diagnostic as</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 	<em class="jxr_comment">// the well-known route (h03), because the resource_metadata URL a 401 would advertise is itself unreachable</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 	<em class="jxr_comment">// under the re-mount (see h03). Was 401 (it authenticated) before the gate consulted the mixin mount prefixes.</em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 	@Test <strong class="jxr_keyword">void</strong> h01_mixinRemount_missingToken_gated() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		<strong class="jxr_keyword">var</strong> s = clientH().post(<span class="jxr_string">"/api/mcp"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 			.run()
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 			.assertStatus(500).getContent().asString();
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		assertContains(<span class="jxr_string">"origin-root"</span>, s);
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	}
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	<em class="jxr_comment">// The origin-root mount check runs BEFORE authentication, so even a valid token cannot dispatch through a</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	<em class="jxr_comment">// re-mounted MCP RS-auth endpoint - it is simply unsupported and fails fast exactly like a token-less request</em>
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	<em class="jxr_comment">// (h01) and the well-known route (h03). Was 200 (dispatched) before the gate consulted the mixin mount prefixes.</em>
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 	@Test <strong class="jxr_keyword">void</strong> h02_mixinRemount_validToken_stillFailsFast() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">var</strong> s = clientH().post(<span class="jxr_string">"/api/mcp"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 			.header(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer good"</span>)
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 			.run()
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 			.assertStatus(500).getContent().asString();
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		assertContains(<span class="jxr_string">"origin-root"</span>, s);
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 	}
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 	<em class="jxr_comment">// Secondary MEDIUM: under re-mount the well-known PRM route also moves to /api/.well-known/..., so the advertised</em>
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 	<em class="jxr_comment">// origin-root PRM URL is unreachable; discovery must fail fast rather than serve from an inconsistent location.</em>
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 	@Test <strong class="jxr_keyword">void</strong> h03_mixinRemount_wellKnownFailsFast() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 		<strong class="jxr_keyword">var</strong> s = clientH().get(<span class="jxr_string">"/api/.well-known/oauth-protected-resource/mcp"</span>).run().assertStatus(500).getContent().asString();
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 		assertContains(<span class="jxr_string">"origin-root"</span>, s);
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 	}
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	<em class="jxr_comment">// I - BLOCKER: @Mixin(paths={...}) multi-mount gates every mounted copy of the MCP endpoint.</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 	<em class="jxr_comment">// A single hardcoded path constant can never cover more than one mount.</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	@Rest(mixinDefs = @Mixin(type = McpMixinFixture.<strong class="jxr_keyword">class</strong>, paths = {<span class="jxr_string">"/a"</span>, <span class="jxr_string">"/b"</span>}), serializers = JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers = JsonParser.<strong class="jxr_keyword">class</strong>, defaultAccept = <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> I <strong class="jxr_keyword">extends</strong> BasicRestServlet {
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 	}
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 	<strong class="jxr_keyword">private</strong> MockRestClient clientI() {
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(I.<strong class="jxr_keyword">class</strong>).json().contentType(<span class="jxr_string">"application/json"</span>).accept(<span class="jxr_string">"application/json"</span>).ignoreErrors().build();
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 	}
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 	<em class="jxr_comment">// Same H1 unification as h01: a multi-mount @Mixin(paths=...) re-mount fails fast with the origin-root 500</em>
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 	<em class="jxr_comment">// diagnostic rather than authenticating. Was 401 before the gate consulted the mixin mount prefixes.</em>
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 	@Test <strong class="jxr_keyword">void</strong> i01_multiMount_pathA_gated() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 		<strong class="jxr_keyword">var</strong> s = clientI().post(<span class="jxr_string">"/a/mcp"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 			.run()
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 			.assertStatus(500).getContent().asString();
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 		assertContains(<span class="jxr_string">"origin-root"</span>, s);
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 	}
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 	@Test <strong class="jxr_keyword">void</strong> i02_multiMount_pathB_gated() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 		<strong class="jxr_keyword">var</strong> s = clientI().post(<span class="jxr_string">"/b/mcp"</span>).contentString(body(1, <span class="jxr_string">"server/discover"</span>, <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 			.header(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"server/discover"</span>).header(<span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 			.run()
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 			.assertStatus(500).getContent().asString();
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 		assertContains(<span class="jxr_string">"origin-root"</span>, s);
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 	}
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

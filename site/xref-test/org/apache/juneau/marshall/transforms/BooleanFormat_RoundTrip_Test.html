@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>BooleanFormat_RoundTrip_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/marshall/transforms/BooleanFormat_RoundTrip_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.marshall.transforms;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.a.rttests.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.jena.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.params.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.params.provider.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Cross-pair round-trip coverage for {@link BooleanFormat} across every supported serializer/parser pair.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * Sibling of {@link BinaryFormat_RoundTrip_Test} — same shape, same 12 RDF tester templates, varied across</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * every {@link BooleanFormat} value.  Round-trips representative {@link Boolean} / &lt;code&gt;&lt;jk&gt;boolean&lt;/jk&gt;&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * values:</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;As a primitive {@code boolean} bean property (exercises the</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 		{@code MarshalledPropertyPostProcessor.applyContextFormats} install path for primitives).</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;As a boxed {@link Boolean} bean property (exercises the boxed-{@code Boolean} path including</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * 		{@code null} handling).</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;As a {@link List} element (exercises the {@code DefaultSwaps} fallback for non-bean-property</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * 		booleans — currently a no-op since {@link Boolean} has no registered swap; collection elements</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * 		flow through each serializer's native boolean handling).</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;As a top-level value (exercises the per-format dispatch sites in each {@code *SerializerSession}</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * 		/ {@code *ParserSession}).</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * Test combos = (tester templates) &amp;times; ({@link BooleanFormat} values).  At the time of writing this</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * comes to 12 &amp;times; 6 = 72 testers per test method.</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * Per the {@link BooleanFormat} class-level "Binary serializers" note, the binary serializer family</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * (BSON / CBOR / MsgPack / Prototext / Parquet) emits a native boolean wire type regardless of the</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * configured constant.  The variant {@code booleanSwap} installed by</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * {@link MarshalledPropertyPostProcessor} respects that by returning the raw</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * {@link Boolean} to {@link org.apache.juneau.marshall.serializer.OutputStreamSerializerSession} subtypes</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * instead of the formatted wire token, so bean-property round-trips through binary serializers stay</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * lossless via native handling.  Per the class-level "Parser leniency" note, parsers accept any of</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * the textual shapes regardless of the parser-side setting, so the unswap path on the parser side is</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * format-agnostic.</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <strong class="jxr_keyword">class</strong> <a name="BooleanFormat_RoundTrip_Test" href="../../../../../org/apache/juneau/marshall/transforms/BooleanFormat_RoundTrip_Test.html#BooleanFormat_RoundTrip_Test">BooleanFormat_RoundTrip_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	@FunctionalInterface
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">interface</strong> TesterBuilder {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		RoundTrip_Tester build(BooleanFormat fmt);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;TesterBuilder&gt; BUILDERS = List.of(
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		fmt -&gt; RoundTrip_Tester.create(18, <span class="jxr_string">"RdfXml | "</span> + fmt)
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			.serializer(RdfXmlSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			.parser(RdfXmlParser.create().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			.build(),
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		fmt -&gt; RoundTrip_Tester.create(19, <span class="jxr_string">"RdfThrift | "</span> + fmt)
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			.serializer(RdfThriftSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			.parser(RdfThriftParser.create().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			.build(),
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		fmt -&gt; RoundTrip_Tester.create(20, <span class="jxr_string">"RdfProto | "</span> + fmt)
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			.serializer(RdfProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.parser(RdfProtoParser.create().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.build(),
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		fmt -&gt; RoundTrip_Tester.create(21, <span class="jxr_string">"RdfXmlAbbrev | "</span> + fmt)
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			.serializer(RdfXmlAbbrevSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			.parser(RdfXmlParser.create().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			.build(),
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		fmt -&gt; RoundTrip_Tester.create(22, <span class="jxr_string">"RdfTurtle | "</span> + fmt)
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			.serializer(TurtleSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			.parser(TurtleParser.create().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			.build(),
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		fmt -&gt; RoundTrip_Tester.create(23, <span class="jxr_string">"RdfN3 | "</span> + fmt)
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			.serializer(N3Serializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			.parser(N3Parser.create().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			.build(),
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		fmt -&gt; RoundTrip_Tester.create(24, <span class="jxr_string">"RdfNtriple | "</span> + fmt)
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			.serializer(NTripleSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			.parser(NTripleParser.create().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			.build(),
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		fmt -&gt; RoundTrip_Tester.create(25, <span class="jxr_string">"RdfNquads | "</span> + fmt)
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			.serializer(NQuadsSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			.parser(NQuadsParser.create().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			.build(),
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		fmt -&gt; RoundTrip_Tester.create(26, <span class="jxr_string">"RdfTrig | "</span> + fmt)
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			.serializer(TriGSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			.parser(TriGParser.create().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			.build(),
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		fmt -&gt; RoundTrip_Tester.create(27, <span class="jxr_string">"RdfJsonLd | "</span> + fmt)
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			.serializer(JsonLdSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			.parser(JsonLdParser.create().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			.build(),
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		fmt -&gt; RoundTrip_Tester.create(28, <span class="jxr_string">"RdfJson | "</span> + fmt)
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			.serializer(RdfJsonSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			.parser(RdfJsonParser.create().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			.build(),
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		fmt -&gt; RoundTrip_Tester.create(29, <span class="jxr_string">"RdfTriX | "</span> + fmt)
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			.serializer(TriXSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			.parser(TriXParser.create().booleanFormat(fmt))
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			.build()
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;Arguments&gt; COMBOS = buildCombos();
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Arguments&gt; buildCombos() {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">return</strong> Stream.of(BooleanFormat.values())
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			.flatMap(fmt -&gt; BUILDERS.stream().map(b -&gt; Arguments.of(b.build(fmt), fmt)))
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			.toList();
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">static</strong> Stream&lt;Arguments&gt; combos() {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">return</strong> COMBOS.stream();
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<em class="jxr_comment">// Canonical test values — pinned so failures are reproducible across runs.</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> TRUE_VAL = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> FALSE_VAL = false;
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Boolean BOXED_TRUE = Boolean.TRUE;
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Boolean BOXED_FALSE = Boolean.FALSE;
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<em class="jxr_comment">// Bean with one primitive boolean field — exercises the MPP swap-install for primitives</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A01Bean {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> b;
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	@ParameterizedTest(name = <span class="jxr_string">"{0} | {1}"</span>)
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@MethodSource(<span class="jxr_string">"combos"</span>)
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">void</strong> a01_booleanProperty_basic(RoundTrip_Tester t, BooleanFormat fmt) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> A01Bean();
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		x.b = TRUE_VAL;
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		x = t.roundTrip(x);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertEquals(TRUE_VAL, x.b, <span class="jxr_string">"fmt="</span> + fmt);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	}
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<em class="jxr_comment">// Bean with both primitive and boxed boolean fields — multi-property cross-section</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A02Bean {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> primitiveTrue;
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> primitiveFalse;
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">public</strong> Boolean boxedTrue;
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">public</strong> Boolean boxedFalse;
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	@ParameterizedTest(name = <span class="jxr_string">"{0} | {1}"</span>)
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	@MethodSource(<span class="jxr_string">"combos"</span>)
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<strong class="jxr_keyword">void</strong> a02_booleanProperty_multipleFields(RoundTrip_Tester t, BooleanFormat fmt) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> A02Bean();
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		x.primitiveTrue = TRUE_VAL;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		x.primitiveFalse = FALSE_VAL;
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		x.boxedTrue = BOXED_TRUE;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		x.boxedFalse = BOXED_FALSE;
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		x = t.roundTrip(x);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertEquals(TRUE_VAL, x.primitiveTrue, <span class="jxr_string">"fmt="</span> + fmt + <span class="jxr_string">" field=primitiveTrue"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertEquals(FALSE_VAL, x.primitiveFalse, <span class="jxr_string">"fmt="</span> + fmt + <span class="jxr_string">" field=primitiveFalse"</span>);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertEquals(BOXED_TRUE, x.boxedTrue, <span class="jxr_string">"fmt="</span> + fmt + <span class="jxr_string">" field=boxedTrue"</span>);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertEquals(BOXED_FALSE, x.boxedFalse, <span class="jxr_string">"fmt="</span> + fmt + <span class="jxr_string">" field=boxedFalse"</span>);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<em class="jxr_comment">// Bean with edge-case boxed Boolean values — both polarities of true/false, exercises the</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<em class="jxr_comment">// MPP swap-install path under both wire-shape constants (Boolean / Integer / String) of every</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<em class="jxr_comment">// format.</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A03Bean {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">public</strong> Boolean boxedTrue;
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">public</strong> Boolean boxedFalse;
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	}
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	@ParameterizedTest(name = <span class="jxr_string">"{0} | {1}"</span>)
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	@MethodSource(<span class="jxr_string">"combos"</span>)
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<strong class="jxr_keyword">void</strong> a03_booleanProperty_edgeCases(RoundTrip_Tester t, BooleanFormat fmt) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> A03Bean();
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		x.boxedTrue = BOXED_TRUE;
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		x.boxedFalse = BOXED_FALSE;
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		x = t.roundTrip(x);
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertEquals(BOXED_TRUE, x.boxedTrue, <span class="jxr_string">"fmt="</span> + fmt + <span class="jxr_string">" field=boxedTrue"</span>);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertEquals(BOXED_FALSE, x.boxedFalse, <span class="jxr_string">"fmt="</span> + fmt + <span class="jxr_string">" field=boxedFalse"</span>);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<em class="jxr_comment">// Bean with a list-of-Boolean property — collection-element dispatch</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<em class="jxr_comment">// &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<em class="jxr_comment">// {@code List&lt;Boolean&gt;} bypasses the per-property {@code booleanSwap} install (that swap is keyed</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<em class="jxr_comment">// on the bean property's class being {@link Boolean}, not {@code List&lt;Boolean&gt;}).  Collection</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<em class="jxr_comment">// elements instead route through each serializer's native boolean handling.  The boxed wrapper</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<em class="jxr_comment">// elements preserve their {@code true} / {@code false} identity through every format.</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A04Bean {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">public</strong> List&lt;Boolean&gt; list;
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	@ParameterizedTest(name = <span class="jxr_string">"{0} | {1}"</span>)
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	@MethodSource(<span class="jxr_string">"combos"</span>)
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<strong class="jxr_keyword">void</strong> a04_booleanProperty_inList(RoundTrip_Tester t, BooleanFormat fmt) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> A04Bean();
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		x.list = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		x.list.add(BOXED_TRUE);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		x.list.add(BOXED_FALSE);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		x.list.add(BOXED_TRUE);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		x = t.roundTrip(x);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		assertNotNull(x.list, <span class="jxr_string">"fmt="</span> + fmt);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		assertEquals(3, x.list.size(), <span class="jxr_string">"fmt="</span> + fmt);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		assertEquals(BOXED_TRUE, x.list.get(0), <span class="jxr_string">"fmt="</span> + fmt + <span class="jxr_string">" index=0"</span>);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertEquals(BOXED_FALSE, x.list.get(1), <span class="jxr_string">"fmt="</span> + fmt + <span class="jxr_string">" index=1"</span>);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertEquals(BOXED_TRUE, x.list.get(2), <span class="jxr_string">"fmt="</span> + fmt + <span class="jxr_string">" index=2"</span>);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<em class="jxr_comment">// Bean with a null Boolean field — sentinel-style null preservation</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<em class="jxr_comment">// &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<em class="jxr_comment">// {@code BooleanSwap} returns {@code null} on {@code null} input per the swap contract, so the</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<em class="jxr_comment">// wire form for the null field varies by serializer ({@code null}, omitted, empty string, etc.).</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<em class="jxr_comment">// On parse, {@code unswap} returns {@code null} for {@code null} input, preserving the</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<em class="jxr_comment">// boxed-{@link Boolean}-null semantics.</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A05Bean {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">public</strong> Boolean nullable;
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	}
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	@ParameterizedTest(name = <span class="jxr_string">"{0} | {1}"</span>)
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	@MethodSource(<span class="jxr_string">"combos"</span>)
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<strong class="jxr_keyword">void</strong> a05_booleanProperty_nullField(RoundTrip_Tester t, BooleanFormat fmt) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> A05Bean();
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		x = t.roundTrip(x);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		assertNull(x.nullable, <span class="jxr_string">"fmt="</span> + fmt);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	}
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	<em class="jxr_comment">// Standalone top-level Boolean — exercises per-format dispatch in *SerializerSession / *ParserSession</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	@ParameterizedTest(name = <span class="jxr_string">"{0} | {1}"</span>)
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	@MethodSource(<span class="jxr_string">"combos"</span>)
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<strong class="jxr_keyword">void</strong> a06_booleanTopLevel(RoundTrip_Tester t, BooleanFormat fmt) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<em class="jxr_comment">// Validation-only testers (Json schema, Csv, Parquet) have no parser-side round-trip semantics</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<em class="jxr_comment">// for a standalone Boolean value — they assert that the serializer accepts it without throwing.</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">if</strong> (t.isValidationOnly())
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">var</strong> s = t.getSerializer();
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<strong class="jxr_keyword">var</strong> p = t.getParser();
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">var</strong> x = BOXED_TRUE;
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">var</strong> out = t.serialize(x, s);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			<strong class="jxr_keyword">var</strong> x2 = p.read(out, Boolean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			assertEquals(x, x2, <span class="jxr_string">"fmt="</span> + fmt);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<em class="jxr_comment">// Mirror UuidFormat_RoundTrip_Test.a06: some serializers (URL-encoding, CSV-style) don't</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<em class="jxr_comment">// support a top-level non-bean value cleanly.  Bean-property tests above already cover the</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<em class="jxr_comment">// per-property dispatch path; this case is best-effort.</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		}
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	}
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

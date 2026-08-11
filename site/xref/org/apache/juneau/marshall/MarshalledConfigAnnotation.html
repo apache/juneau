@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>MarshalledConfigAnnotation xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../apidocs/org/apache/juneau/marshall/MarshalledConfigAnnotation.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.marshall;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.http.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.svl.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Utility classes and methods for the {@link MarshalledConfig @MarshalledConfig} annotation.</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="MarshalledConfigAnnotation" href="../../../../org/apache/juneau/marshall/MarshalledConfigAnnotation.html#MarshalledConfigAnnotation">MarshalledConfigAnnotation</a> {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">	 * Prevents instantiation.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">private</strong> <a name="MarshalledConfigAnnotation" href="../../../../org/apache/juneau/marshall/MarshalledConfigAnnotation.html#MarshalledConfigAnnotation">MarshalledConfigAnnotation</a>() {}
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">	 * Applies {@link MarshalledConfig} annotations to a {@link MarshallingContext.Builder}.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Applier <strong class="jxr_keyword">extends</strong> AnnotationApplier&lt;MarshalledConfig,MarshallingContext.Builder&gt; {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">		 * Constructor.</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">		 * @param vr The resolver for resolving values in annotations. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">public</strong> Applier(VarResolverSession vr) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  			<strong class="jxr_keyword">super</strong>(MarshalledConfig.<strong class="jxr_keyword">class</strong>, MarshallingContext.Builder.<strong class="jxr_keyword">class</strong>, vr);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		}
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		@Override
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		@SuppressWarnings({
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// Cognitive complexity acceptable for the flat per-attribute config-applier sequence.</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		})
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> apply(AnnotationInfo&lt;MarshalledConfig&gt; ai, MarshallingContext.Builder b) {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			MarshalledConfig a = ai.<strong class="jxr_keyword">inner</strong>();
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			bool(a.debug()).ifPresent(b::debug);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			string(a.typePropertyName()).ifPresent(b::typePropertyName);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			string(a.locale()).map(Locale::forLanguageTag).ifPresent(b::locale);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			string(a.mediaType()).map(MediaType::of).ifPresent(b::mediaType);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			string(a.timeZone()).map(TimeZone::getTimeZone).ifPresent(b::timeZone);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">if</strong> (a.durationFormat() != DurationFormat.NOT_SET) b.durationFormat(a.durationFormat());
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			<strong class="jxr_keyword">if</strong> (a.periodFormat() != PeriodFormat.NOT_SET) b.periodFormat(a.periodFormat());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">if</strong> (a.calendarFormat() != CalendarFormat.NOT_SET) b.calendarFormat(a.calendarFormat());
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">if</strong> (a.dateFormat() != DateFormat.NOT_SET) b.dateFormat(a.dateFormat());
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			<strong class="jxr_keyword">if</strong> (a.temporalFormat() != TemporalFormat.NOT_SET) b.temporalFormat(a.temporalFormat());
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">if</strong> (a.timeZoneFormat() != TimeZoneFormat.NOT_SET) b.timeZoneFormat(a.timeZoneFormat());
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">if</strong> (a.localeFormat() != LocaleFormat.NOT_SET) b.localeFormat(a.localeFormat());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">if</strong> (a.binaryFormat() != BinaryFormat.NOT_SET) b.binaryFormat(a.binaryFormat());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">if</strong> (a.enumFormat() != EnumFormat.NOT_SET) b.enumFormat(a.enumFormat());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">if</strong> (a.uuidFormat() != UuidFormat.NOT_SET) b.uuidFormat(a.uuidFormat());
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			<strong class="jxr_keyword">if</strong> (a.bitSetFormat() != BitSetFormat.NOT_SET) b.bitSetFormat(a.bitSetFormat());
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">if</strong> (a.bigNumberFormat() != BigNumberFormat.NOT_SET) b.bigNumberFormat(a.bigNumberFormat());
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">if</strong> (a.booleanFormat() != BooleanFormat.NOT_SET) b.booleanFormat(a.booleanFormat());
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">if</strong> (a.floatFormat() != FloatFormat.NOT_SET) b.floatFormat(a.floatFormat());
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">if</strong> (a.currencyFormat() != CurrencyFormat.NOT_SET) b.currencyFormat(a.currencyFormat());
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">if</strong> (a.classFormat() != ClassFormat.NOT_SET) b.classFormat(a.classFormat());
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			classes(a.dictionary()).ifPresent(b::beanDictionary);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			classes(a.dictionary_replace()).ifPresent(x -&gt; { b.beanDictionary().clear(); b.beanDictionary(x);});
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			classes(a.swaps()).ifPresent(b::swaps);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			classes(a.swaps_replace()).ifPresent(x -&gt; { b.swaps().clear(); b.swaps(x);});
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

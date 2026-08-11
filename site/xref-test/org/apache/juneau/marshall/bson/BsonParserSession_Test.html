@@ -1,0 +1,852 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>BsonParserSession_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/marshall/bson/BsonParserSession_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.marshall.bson;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.Builder;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.parser.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Coverage-focused tests for {@link BsonParserSession} targeting branches not already exercised by</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * {@link BsonRoundTrip_Test} / {@link BsonEdgeCases_Test} / {@link BsonConformanceFixes_Test} / {@link BsonIntArray_Test}:</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *  - {@code trimKey}'s {@code isTrimStrings()} branch for map/bean-property keys (as opposed to string values,</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *    already covered by {@link BsonTrimStrings_Test}).</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *  - {@code readDocument}'s {@code BuilderSwap} dispatch arm.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *  - Non-{@link CharSequence}/non-{@link Object} map key-type coercion, and result conversion into a declared</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> *    concrete {@link Map} subtype (e.g. {@link TreeMap}).</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> *  - {@code readTypedValue}'s ObjectId (0x07) and unknown-type/skip (default) arms, via hand-built documents.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">class</strong> <a name="BsonParserSession_Test" href="../../../../../org/apache/juneau/marshall/bson/BsonParserSession_Test.html#BsonParserSession_Test">BsonParserSession_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/commons/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<em class="jxr_comment">// ================================================================</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<em class="jxr_comment">// Helpers (byte-level construction mirrors BsonConformanceFixes_Test / BsonInputStream_Test)</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<em class="jxr_comment">// ================================================================</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] le4(<strong class="jxr_keyword">int</strong> v) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> byte[]{(byte) v, (byte) (v &gt;&gt; 8), (byte) (v &gt;&gt; 16), (byte) (v &gt;&gt; 24)};
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	}
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] cat(byte[]... arrs) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">var</strong> total = 0;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : arrs)
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  			total += a.length;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> byte[total];
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">var</strong> pos = 0;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : arrs) {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			System.arraycopy(a, 0, out, pos, a.length);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			pos += a.length;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		}
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] cstring(String s) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">var</strong> b = s.getBytes(StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">return</strong> cat(b, <strong class="jxr_keyword">new</strong> byte[]{0x00});
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<em class="jxr_javadoccomment">/** Builds a single-element BSON document {@code {name: &lt;value&gt;}} of the given element type. */</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] doc(<strong class="jxr_keyword">int</strong> type, String name, byte[] value) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> body = cat(<strong class="jxr_keyword">new</strong> byte[]{(byte) type}, cstring(name), value, <strong class="jxr_keyword">new</strong> byte[]{0x00});
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">return</strong> cat(le4(body.length + 4), body);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<em class="jxr_comment">// a0x - trimKey: isTrimStrings() branch for map keys and bean-property names (readElementName() results).</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	@Test <strong class="jxr_keyword">void</strong> a01_mapKeyTrimmed_whenTrimStringsEnabled() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> p = BsonParser.create().trimStrings().build();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		m.put(<span class="jxr_string">" padded "</span>, 1);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> bytes = s.write(m);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> result = (Map&lt;String,Object&gt;) p.read(bytes, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertTrue(result.containsKey(<span class="jxr_string">"padded"</span>), result.toString());
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	}
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	@Test <strong class="jxr_keyword">void</strong> a02_mapKeyNotTrimmed_byDefault() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> p = BsonParser.create().build();
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		m.put(<span class="jxr_string">" padded "</span>, 1);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> bytes = s.write(m);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> result = (Map&lt;String,Object&gt;) p.read(bytes, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertTrue(result.containsKey(<span class="jxr_string">" padded "</span>), result.toString());
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A03_Bean {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">public</strong> String name;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Test <strong class="jxr_keyword">void</strong> a03_beanPropertyNameTrimmed_whenTrimStringsEnabled() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<em class="jxr_comment">// Bean property names come through readElementName() too, but bean field names never carry</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<em class="jxr_comment">// whitespace in practice; trimKey's true-branch on this path is exercised via getPropertyMeta lookup</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<em class="jxr_comment">// succeeding regardless (trim is a no-op here). Guard that a normal bean still round-trips under</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<em class="jxr_comment">// trimStrings() so the trimKey call site on the bean path stays covered end-to-end.</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().build();
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">var</strong> p = BsonParser.create().trimStrings().build();
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> A03_Bean();
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		b.name = <span class="jxr_string">" Alice "</span>;
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(b);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">var</strong> result = p.read(bytes, A03_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertEquals(<span class="jxr_string">"Alice"</span>, result.name);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<em class="jxr_comment">// b0x - readDocument: BuilderSwap dispatch (nn(builder) branch), mirroring the same @Builder-annotated pattern</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<em class="jxr_comment">// used for YamlParserSession_Test.</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	@Builder(B01_BeanBuilder.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B01_Bean {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> x;
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">public</strong> B01_Bean(B01_BeanBuilder b) { <strong class="jxr_keyword">if</strong> (b != <strong class="jxr_keyword">null</strong>) x = b.x; }
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	}
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B01_BeanBuilder {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> x;
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">public</strong> B01_Bean build() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> B01_Bean(<strong class="jxr_keyword">this</strong>); }
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	@Test <strong class="jxr_keyword">void</strong> b01_builderSwapRoundTrip() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">var</strong> p = BsonParser.create().build();
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		m.put(<span class="jxr_string">"x"</span>, 42);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(m);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> result = p.read(bytes, B01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertNotNull(result);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertEquals(42, result.x);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<em class="jxr_comment">// c0x - non-CharSequence/non-Object map key-type coercion (Map&lt;TestEnum,String&gt;), and conversion of the parsed</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<em class="jxr_comment">// raw map into a declared concrete Map subtype (TreeMap) that the generic-map path doesn't natively produce.</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	enum C_Color { RED, GREEN, BLUE }
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C01_Bean {
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">public</strong> Map&lt;C_Color,String&gt; byColor;
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	}
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	@Test <strong class="jxr_keyword">void</strong> c01_nonStringKeyTypeCoercion() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().build();
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> p = BsonParser.create().build();
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> C01_Bean();
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		b.byColor = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		b.byColor.put(C_Color.RED, <span class="jxr_string">"stop"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(b);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> result = p.read(bytes, C01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertNotNull(result.byColor);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertEquals(<span class="jxr_string">"stop"</span>, result.byColor.get(C_Color.RED));
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	@Test <strong class="jxr_keyword">void</strong> c02_rawMapConvertedToDeclaredTreeMapType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> p = BsonParser.create().build();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		m.put(<span class="jxr_string">"b"</span>, 2);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		m.put(<span class="jxr_string">"a"</span>, 1);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(m);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">var</strong> result = (TreeMap&lt;?,?&gt;) p.read(bytes, TreeMap.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertInstanceOf(TreeMap.<strong class="jxr_keyword">class</strong>, result);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertEquals(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>), List.copyOf(result.keySet()));
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	}
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	@Test <strong class="jxr_keyword">void</strong> c04_beanMapTargetHasNullKeyTypeSkipsCoercion() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<em class="jxr_comment">// BeanMap.class itself is classified isMap()==true but isBeanMap()==true too, and ClassMeta's</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<em class="jxr_comment">// findKeyValueTypes() only resolves a non-null key/value type for the "MAP but not BEANMAP" case --</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<em class="jxr_comment">// so getKeyType() returns null here, and coerceKeys' nn(keyType) guard is false (as opposed to c01's</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<em class="jxr_comment">// non-String enum key, where it's true).</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		m.put(<span class="jxr_string">"x"</span>, 1);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(m);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		Object result = BsonParser.DEFAULT.read(bytes, (Class&lt;Object&gt;)(Class&lt;?&gt;)org.apache.juneau.commons.bean.BeanMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertInstanceOf(Map.<strong class="jxr_keyword">class</strong>, result);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertEquals(1, ((Map&lt;?,?&gt;)result).get(<span class="jxr_string">"x"</span>));
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	@Test <strong class="jxr_keyword">void</strong> c03_rawMapConvertedToDeclaredSortedMapInterface() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<em class="jxr_comment">// sType.canCreateNewInstance() is false for the bare SortedMap interface, so the map is first</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<em class="jxr_comment">// built via newGenericMap(sType) and then must be converted to the resolved implementation</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<em class="jxr_comment">// (TreeMap) afterward -- exercises the true arm of readDocument's post-map-loop conversion check.</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> p = BsonParser.create().build();
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		m.put(<span class="jxr_string">"b"</span>, 2);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		m.put(<span class="jxr_string">"a"</span>, 1);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(m);
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">var</strong> result = (SortedMap&lt;?,?&gt;) p.read(bytes, SortedMap.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertInstanceOf(TreeMap.<strong class="jxr_keyword">class</strong>, result);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertEquals(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>), List.copyOf(result.keySet()));
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	@Marshalled(typeName = <span class="jxr_string">"C05_RawBean"</span>)
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C05_RawBean {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">public</strong> String name;
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	}
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	@Test <strong class="jxr_keyword">void</strong> c05_mapPathCastResolvesToNonMapBean_skipsConversion() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<em class="jxr_comment">// The map-building loop's cast(map2, pMeta, eType) call resolves the "_type" discriminator to a</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<em class="jxr_comment">// registered bean type (rather than leaving the MarshalledMap as-is) -- "raw" ends up as a bean</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<em class="jxr_comment">// instance, not a Map, so "raw instanceof Map raw2" is false and the whole conversion condition</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<em class="jxr_comment">// short-circuits false even though eType.isMap() is true. This is the only reachable way to make</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<em class="jxr_comment">// "raw" not a Map at this point, since the map-building loop otherwise always produces one.</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">var</strong> p = BsonParser.create().beanDictionary(C05_RawBean.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		m.put(<span class="jxr_string">"_type"</span>, <span class="jxr_string">"C05_RawBean"</span>);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		m.put(<span class="jxr_string">"name"</span>, <span class="jxr_string">"n"</span>);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(m);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		Object result = p.read(bytes, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		assertInstanceOf(C05_RawBean.<strong class="jxr_keyword">class</strong>, result);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		assertEquals(<span class="jxr_string">"n"</span>, ((C05_RawBean)result).name);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	}
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<em class="jxr_comment">// cc0x - readDocument bean-path arms: unknown property (default throws / ignored) and setter exception.</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Cc01_Bean {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">public</strong> String x;
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	@Test <strong class="jxr_keyword">void</strong> cc01_unknownPropertyDefaultThrows() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(<strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(Map.of(<span class="jxr_string">"x"</span>, <span class="jxr_string">"hello"</span>, <span class="jxr_string">"y"</span>, <span class="jxr_string">"world"</span>)));
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; BsonParser.DEFAULT.read(bytes, Cc01_Bean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	@Test <strong class="jxr_keyword">void</strong> cc02_unknownPropertyIgnored() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		m.put(<span class="jxr_string">"x"</span>, <span class="jxr_string">"hello"</span>);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		m.put(<span class="jxr_string">"y"</span>, <span class="jxr_string">"world"</span>);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(m);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">var</strong> p = BsonParser.create().ignoreUnknownBeanProperties().build();
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> bean = p.read(bytes, Cc01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertEquals(<span class="jxr_string">"hello"</span>, bean.x);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	}
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Cc03_BadSetterBean {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">public</strong> String f1;
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setF1(@SuppressWarnings(<span class="jxr_string">"unused"</span>) String v) {
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"bad setter"</span>);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		}
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	}
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	@Test <strong class="jxr_keyword">void</strong> cc03_beanSetterException() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(Map.of(<span class="jxr_string">"f1"</span>, <span class="jxr_string">"v"</span>));
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; BsonParser.DEFAULT.read(bytes, Cc03_BadSetterBean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	}
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Cc04_OuterBean {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">public</strong> Cc03_BadSetterBean <strong class="jxr_keyword">inner</strong>;
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	}
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	@Test <strong class="jxr_keyword">void</strong> cc04_beanSetterExceptionNestedUsesPropertyMeta() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<em class="jxr_comment">// Unlike cc03 (root-level, pMeta==null), here the bad-setter bean is a nested property of an outer</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<em class="jxr_comment">// bean, so pMeta (the outer's BeanPropertyMeta for "inner") is non-null when the recursive readDocument</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<em class="jxr_comment">// call's setter throws -- exercises the nn(pMeta) guard's true arm (as opposed to cc03's false arm).</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		m.put(<span class="jxr_string">"inner"</span>, Map.of(<span class="jxr_string">"f1"</span>, <span class="jxr_string">"v"</span>));
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.create().keepNullProperties().build().write(m);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; BsonParser.DEFAULT.read(bytes, Cc04_OuterBean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<em class="jxr_comment">// d0x - readTypedValue: ObjectId (0x07) dispatch and unknown-type/skip (default) arm, via hand-built documents</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<em class="jxr_comment">// (no serializer support exists for either, so bytes are constructed directly).</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	@Test <strong class="jxr_keyword">void</strong> d01_objectIdParsedAsHexString() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">var</strong> oid = <strong class="jxr_keyword">new</strong> byte[]{0x50, 0x7F, 0x1F, 0x77, (byte) 0xBC, (byte) 0xF8, 0x6C, (byte) 0xD7,
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			(byte) 0x99, 0x43, (byte) 0x90, 0x11};
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">var</strong> bytes = doc(0x07, <span class="jxr_string">"id"</span>, oid);
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">var</strong> result = (Map&lt;String,Object&gt;) BsonParser.DEFAULT.read(bytes, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertEquals(<span class="jxr_string">"507f1f77bcf86cd799439011"</span>, result.get(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> d02_unknownTypeCode_skippedAsNull() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<em class="jxr_comment">// Type 0x06 (Undefined, deprecated) has zero-length payload; readTypedValue's default arm must skip it</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<em class="jxr_comment">// (via skipValue) rather than fail, yielding a null value for that key.</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">var</strong> bytes = doc(0x06, <span class="jxr_string">"u"</span>, <strong class="jxr_keyword">new</strong> byte[0]);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">var</strong> result = (Map&lt;String,Object&gt;) BsonParser.DEFAULT.read(bytes, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertTrue(result.containsKey(<span class="jxr_string">"u"</span>), result.toString());
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertNull(result.get(<span class="jxr_string">"u"</span>));
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<em class="jxr_comment">// e0x - readArray: Optional-wrapped array/collection root (parallels BsonEdgeCases_Test.a06's scalar Optional).</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	@Test <strong class="jxr_keyword">void</strong> e01_optionalWrappedListRoundTrip() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">var</strong> p = BsonParser.create().build();
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(Optional.of(List.of(1, 2, 3)));
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">var</strong> result = (Optional&lt;List&lt;Integer&gt;&gt;)(Optional&lt;?&gt;) p.read(bytes, Optional.<strong class="jxr_keyword">class</strong>, List.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		assertNotNull(result);
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		assertTrue(result.isPresent());
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		assertEquals(List.of(1, 2, 3), result.get());
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	}
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	@Test <strong class="jxr_keyword">void</strong> e02_optionalWrappedMapRoundTrip_readDocumentDisjunct1() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<em class="jxr_comment">// eType.isOptional() is the FIRST disjunct of readDocument's line-231 unwrap condition -- short-circuits</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<em class="jxr_comment">// true before sType.isMap()/isBean()/isObject() (disjunct 2) or the null-check (disjunct 3) are ever</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<em class="jxr_comment">// evaluated. f01/f02/f03/f04/f06 above only exercise disjuncts 2 and 3 (and the all-false else); this</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<em class="jxr_comment">// is the only case in the suite that exercises disjunct 1 itself.</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">var</strong> p = BsonParser.create().build();
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		Map&lt;String,Object&gt; m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		m.put(<span class="jxr_string">"a"</span>, <span class="jxr_string">"hi"</span>);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		m.put(<span class="jxr_string">"b"</span>, <span class="jxr_string">"bye"</span>);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(Optional.of(m));
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">var</strong> result = (Optional&lt;Map&lt;String,Object&gt;&gt;)(Optional&lt;?&gt;) p.read(bytes, Optional.<strong class="jxr_keyword">class</strong>, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		assertNotNull(result);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		assertTrue(result.isPresent());
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		assertEquals(<span class="jxr_string">"hi"</span>, result.get().get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		assertEquals(<span class="jxr_string">"bye"</span>, result.get().get(<span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	}
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	<em class="jxr_comment">// f0x - readDocument's root {"value":x} unwrap logic: scalar root, Object-typed root (both null and non-null</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<em class="jxr_comment">// wrapped values), and the plain-map-cast else arm (no wrap, or wrap ambiguous with real data).</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	@Test <strong class="jxr_keyword">void</strong> f01_scalarRootUnwrapped() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<em class="jxr_comment">// sType (Integer) is neither Map, Bean, nor Object -- disjunct 2 of the unwrap condition is true.</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(42);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		assertEquals(42, result);
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	}
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	@Test <strong class="jxr_keyword">void</strong> f02_objectRootWithNonNullScalarFallsThroughToCastArm() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<em class="jxr_comment">// sType.isObject() is true and the wrapped value is non-null, so neither disjunct 2 nor 3 fires --</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<em class="jxr_comment">// falls through to the else (cast) arm even though the root is single-key {"value":x}. Unlike the</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<em class="jxr_comment">// unwrap arm (f01/f03), cast(map, pMeta, eType) for an Object.class target returns the map itself</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<em class="jxr_comment">// rather than unwrapping "value" -- a quirk of the Object.class root case that f01 (Integer.class)</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<em class="jxr_comment">// and e01 (Optional.class) avoid via their own disjuncts.</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(<span class="jxr_string">"hello"</span>);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertEquals(Map.of(<span class="jxr_string">"value"</span>, <span class="jxr_string">"hello"</span>), result);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	}
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	@Test <strong class="jxr_keyword">void</strong> f03_objectRootWithNullValueUnwrapped() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<em class="jxr_comment">// Disjunct 3 (wrapped == null &amp;&amp; sType.isObject()) fires: the type code 0x0A (BSON null) round-trips</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<em class="jxr_comment">// through the {"value":x} wrapper as a literal null for an Object.class target.</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> bytes = doc(0x0A, <span class="jxr_string">"value"</span>, <strong class="jxr_keyword">new</strong> byte[0]);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertNull(result);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Test <strong class="jxr_keyword">void</strong> f03b_mapRootWithNullValueFallsThroughToCastArm() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<em class="jxr_comment">// Same null-wrapped "value" as f03, but the target is Map.class (not Object.class) -- disjunct 2's</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<em class="jxr_comment">// "!sType.isMap()" sub-check is false (short-circuits disjunct 2 to false without evaluating isBean()/</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<em class="jxr_comment">// isObject()), then disjunct 3's "wrapped == null" is true but its "sType.isObject()" sub-check is</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<em class="jxr_comment">// false (a Map is not classified as isObject()) -- so disjunct 3 also evaluates false, exercising the</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<em class="jxr_comment">// "wrapped==null but sType is NOT object-shaped" combination that f03's Object.class case can't reach</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<em class="jxr_comment">// (there, sType.isObject() is always true whenever wrapped==null is even checked).</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">var</strong> bytes = doc(0x0A, <span class="jxr_string">"value"</span>, <strong class="jxr_keyword">new</strong> byte[0]);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">var</strong> result = (Map&lt;String,Object&gt;) BsonParser.DEFAULT.read(bytes, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertNull(result.get(<span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		assertTrue(result.containsKey(<span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	@Test <strong class="jxr_keyword">void</strong> f04_rawMapWithLiteralValueKeyAmbiguousWithWrapConvention() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<em class="jxr_comment">// The parsed document happens to have exactly one key literally named "value" (a real map entry, not the</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<em class="jxr_comment">// {"value":x} root-wrap convention), and the target is a concrete Map subtype (TreeMap) that the raw</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<em class="jxr_comment">// LinkedHashMap result doesn't already satisfy -- exercises the else-if's isInstance/convertToMemberType</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<em class="jxr_comment">// ternary (sType.isMap() is true so disjunct 2 doesn't fire; wrapped is non-null so disjunct 3 doesn't fire).</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		m.put(<span class="jxr_string">"value"</span>, <span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(m);
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">var</strong> result = (TreeMap&lt;?,?&gt;) BsonParser.DEFAULT.read(bytes, TreeMap.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertInstanceOf(TreeMap.<strong class="jxr_keyword">class</strong>, result);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		assertEquals(<span class="jxr_string">"x"</span>, result.get(<span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	}
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	@Test <strong class="jxr_keyword">void</strong> f06_singleValueKeyMapAlreadySatisfiesDeclaredType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<em class="jxr_comment">// Same ambiguous single-"value"-key wrap as f04, but the target (raw Map.class) is already satisfied</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<em class="jxr_comment">// by the parsed LinkedHashMap -- exercises the inner if-branch's ternary false arm (plain castResult,</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<em class="jxr_comment">// no convertToMemberType), as opposed to f04's true arm (TreeMap needs conversion).</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		m.put(<span class="jxr_string">"value"</span>, <span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(m);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">var</strong> result = (Map&lt;String,Object&gt;) BsonParser.DEFAULT.read(bytes, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		assertEquals(<span class="jxr_string">"x"</span>, result.get(<span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	}
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	@Test <strong class="jxr_keyword">void</strong> f07_multiKeyRawMapConvertedToDeclaredTreeMapType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<em class="jxr_comment">// Same multi-key (no ambiguous wrap) shape as f05, but the target (TreeMap.class) is NOT already</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<em class="jxr_comment">// satisfied by the parsed LinkedHashMap -- exercises the outer else's ternary true arm</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<em class="jxr_comment">// (convertToMemberType), as opposed to f05's false arm (plain castResult).</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		m.put(<span class="jxr_string">"b"</span>, 2);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		m.put(<span class="jxr_string">"a"</span>, 1);
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(m);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> result = (TreeMap&lt;?,?&gt;) BsonParser.DEFAULT.read(bytes, TreeMap.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertInstanceOf(TreeMap.<strong class="jxr_keyword">class</strong>, result);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertEquals(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>), List.copyOf(result.keySet()));
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	}
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	@Test <strong class="jxr_keyword">void</strong> f05_multiKeyRawMapCastElseArm() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<em class="jxr_comment">// map.size() != 1, so the size==1/&amp;&amp;containsKey("value") guard is false outright, routing straight to</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<em class="jxr_comment">// the outer else's cast/convert ternary -- and since Map.class (raw) is already satisfied by the parsed</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<em class="jxr_comment">// LinkedHashMap, eType.inner().isInstance(castResult) is true, so the ternary's false arm (plain castResult)</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<em class="jxr_comment">// is exercised here (as opposed to f04's true arm).</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		m.put(<span class="jxr_string">"a"</span>, 1);
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		m.put(<span class="jxr_string">"b"</span>, 2);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(m);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">var</strong> result = (Map&lt;String,Object&gt;) BsonParser.DEFAULT.read(bytes, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertEquals(1, result.get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		assertEquals(2, result.get(<span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	}
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	@Test <strong class="jxr_keyword">void</strong> f08_multiKeyRawMapIntoObjectRootLeftUnconvertedAsMap() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<em class="jxr_comment">// Same multi-key document as f05/f07, but the target is Object.class (not a Map subtype) -- exercises</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<em class="jxr_comment">// the outer else's ternary's "eType.isMap()" sub-condition false arm (short-circuits before even</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<em class="jxr_comment">// checking castResult instanceof Map / isInstance), landing on the plain-castResult false arm. f05/f07</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<em class="jxr_comment">// (and dd3 above) only ever exercise this ternary with a Map-typed eType, leaving the "not a map at</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<em class="jxr_comment">// all" combination uncovered.</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">var</strong> s = BsonSerializer.create().keepNullProperties().build();
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		m.put(<span class="jxr_string">"a"</span>, 1);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		m.put(<span class="jxr_string">"b"</span>, 2);
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">var</strong> bytes = s.write(m);
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		assertInstanceOf(Map.<strong class="jxr_keyword">class</strong>, result);
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		assertEquals(1, ((Map&lt;?,?&gt;) result).get(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		assertEquals(2, ((Map&lt;?,?&gt;) result).get(<span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	}
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	<em class="jxr_comment">// dd0x - readDocument fallback path (217+) reached with eType.isMap()==true: only possible when a @Swap on a</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 	<em class="jxr_comment">// Map-subtype declared type resolves sType to something non-Map (here, a bean), forcing line 162's</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	<em class="jxr_comment">// "sType.isMap()" check false despite eType itself being a Map.</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Dd1_SwapTarget {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">public</strong> String value;
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	}
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Dd1_Swap <strong class="jxr_keyword">extends</strong> org.apache.juneau.marshall.swap.ObjectSwap&lt;Dd1_MapType,Dd1_SwapTarget&gt; {
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		@Override
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">public</strong> Dd1_SwapTarget swap(MarshallingSession session, Dd1_MapType o) {
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> Dd1_SwapTarget();
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			t.value = String.valueOf(o.get(<span class="jxr_string">"k"</span>));
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		}
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		@Override
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">public</strong> Dd1_MapType unswap(MarshallingSession session, Dd1_SwapTarget f, ClassMeta&lt;?&gt; hint) {
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> Dd1_MapType();
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			m.put(<span class="jxr_string">"k"</span>, f.value);
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		}
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	}
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	@Swap(Dd1_Swap.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Dd1_MapType <strong class="jxr_keyword">extends</strong> LinkedHashMap&lt;String,Object&gt; {
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	}
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	@Test <strong class="jxr_keyword">void</strong> dd1_mapTypeWithBeanSwap_fallbackPathCastResultConvertedToDeclaredMapType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 		<em class="jxr_comment">// eType (Dd1_MapType) isMap()==true, but its @Swap resolves sType to Dd1_SwapTarget (a creatable</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		<em class="jxr_comment">// bean, not a Map) -&gt; readDocument's line 184 "sType.canCreateNewBean()" check is true, so this</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<em class="jxr_comment">// actually still takes the ordinary bean-instantiation path (184-216), unswapping back to</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		<em class="jxr_comment">// Dd1_MapType at the very end (line 257) -- a useful contrast with dd2 below, where the swap</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<em class="jxr_comment">// target is NOT bean/map-creatable and genuinely reaches the 217+ fallback path instead.</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<strong class="jxr_keyword">var</strong> src = <strong class="jxr_keyword">new</strong> Dd1_MapType();
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		src.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"hi"</span>);
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(src);
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, Dd1_MapType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		assertNotNull(result);
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		assertEquals(<span class="jxr_string">"hi"</span>, result.get(<span class="jxr_string">"k"</span>));
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	}
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Dd2_Swap <strong class="jxr_keyword">extends</strong> org.apache.juneau.marshall.swap.ObjectSwap&lt;Dd2_MapType,Object&gt; {
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		@Override
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<strong class="jxr_keyword">public</strong> Object swap(MarshallingSession session, Dd2_MapType o) {
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 			<strong class="jxr_keyword">return</strong> String.valueOf(o.get(<span class="jxr_string">"k"</span>));
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		}
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		@Override
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">public</strong> Dd2_MapType unswap(MarshallingSession session, Object f, ClassMeta&lt;?&gt; hint) {
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 			<em class="jxr_comment">// readDocument's fallback path (BsonParserSession L238/239) and its trailing unswap guard (L257)</em>
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 			<em class="jxr_comment">// both fire for a loose Object-typed swap like this one (isSwappedObject() can't distinguish</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 			<em class="jxr_comment">// "still swapped" from "already unswapped" when the swap's declared swapped-type is Object), so</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 			<em class="jxr_comment">// unswap() is invoked twice on the same read. Guard for idempotency rather than corrupting the</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 			<em class="jxr_comment">// already-unswapped result on the second call.</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			<strong class="jxr_keyword">if</strong> (f instanceof Dd2_MapType already)
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 				<strong class="jxr_keyword">return</strong> already;
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 			<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> Dd2_MapType();
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 			m.put(<span class="jxr_string">"k"</span>, f instanceof Map&lt;?,?&gt; fm ? fm.get(<span class="jxr_string">"value"</span>) : f);
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 			<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		}
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	}
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 	@Swap(Dd2_Swap.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Dd2_MapType <strong class="jxr_keyword">extends</strong> LinkedHashMap&lt;String,Object&gt; {
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	}
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	@Test <strong class="jxr_keyword">void</strong> dd2_mapTypeWithObjectSwap_fallbackPathCastResultConvertedToDeclaredMapType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<em class="jxr_comment">// eType (Dd2_MapType) isMap()==true, and its @Swap resolves sType to plain Object (isObject()==true,</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<em class="jxr_comment">// not map/bean/creatable-bean) -&gt; BOTH the line 162 "sType.isMap()" check AND the line 184</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<em class="jxr_comment">// "sType.canCreateNewBean()" check are false, so readDocument genuinely reaches the 217+ fallback</em>
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<em class="jxr_comment">// path despite eType being a Map. The swapped scalar value round-trips through BSON's {"value":x}</em>
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<em class="jxr_comment">// root-wrap convention, producing the single-key {"value":x} shape that reaches the 231-else (236)</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		<em class="jxr_comment">// cast arm; castResult (a plain parsed map, not yet Dd2_MapType) is then converted to the declared</em>
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<em class="jxr_comment">// Dd2_MapType via the "eType.isMap() &amp;&amp; ... &amp;&amp; !isInstance()" ternary's true arm (238/239), and</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<em class="jxr_comment">// finally unswapped back (line 257, since the loose Object-typed swap always reports "swapped").</em>
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">var</strong> src = <strong class="jxr_keyword">new</strong> Dd2_MapType();
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		src.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"hi"</span>);
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(src);
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, Dd2_MapType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		assertNotNull(result);
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		assertEquals(<span class="jxr_string">"hi"</span>, result.get(<span class="jxr_string">"k"</span>));
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 	}
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> Dd3_View {
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		String getA();
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		String getB();
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 	}
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Dd3_ViewImpl <strong class="jxr_keyword">implements</strong> Dd3_View {
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">private</strong> String a, b;
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">public</strong> Dd3_ViewImpl() {}
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">public</strong> Dd3_ViewImpl(String a, String b) { <strong class="jxr_keyword">this</strong>.a = a; <strong class="jxr_keyword">this</strong>.b = b; }
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		@Override <strong class="jxr_keyword">public</strong> String getA() { <strong class="jxr_keyword">return</strong> a; }
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		@Override <strong class="jxr_keyword">public</strong> String getB() { <strong class="jxr_keyword">return</strong> b; }
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setA(String a) { <strong class="jxr_keyword">this</strong>.a = a; }
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setB(String b) { <strong class="jxr_keyword">this</strong>.b = b; }
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 	}
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Dd3_Swap <strong class="jxr_keyword">extends</strong> org.apache.juneau.marshall.swap.ObjectSwap&lt;Dd3_MapType,Dd3_View&gt; {
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		@Override
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">public</strong> Dd3_View swap(MarshallingSession session, Dd3_MapType o) {
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Dd3_ViewImpl(String.valueOf(o.get(<span class="jxr_string">"a"</span>)), String.valueOf(o.get(<span class="jxr_string">"b"</span>)));
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		}
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		@Override
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">public</strong> Dd3_MapType unswap(MarshallingSession session, Dd3_View f, ClassMeta&lt;?&gt; hint) {
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> Dd3_MapType();
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			m.put(<span class="jxr_string">"a"</span>, f.getA());
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			m.put(<span class="jxr_string">"b"</span>, f.getB());
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		}
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	}
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	@Swap(Dd3_Swap.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Dd3_MapType <strong class="jxr_keyword">extends</strong> LinkedHashMap&lt;String,Object&gt; {
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 	}
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	@Test <strong class="jxr_keyword">void</strong> dd4_mapTypeWithNonCreatableInterfaceSwap_singleValueKeyDocumentHitsDisjunct2IsBeanSubcheck() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<em class="jxr_comment">// Hand-crafted (not round-tripped through BsonSerializer, since the writer's own sType.isBean() check</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<em class="jxr_comment">// would never actually produce a single-"value"-key document for a bean-shaped sType -- see dd3's</em>
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<em class="jxr_comment">// comment) single-key {"value":"hi"} document read as Dd3_MapType. sType (post-swap) is the Dd3_View</em>
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		<em class="jxr_comment">// interface: isMap()==false (disjunct-2's "!sType.isMap()" sub-check is true) but isBean()==true</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		<em class="jxr_comment">// (disjunct-2's "!sType.isBean()" sub-check is false), so disjunct 2 evaluates to false via its SECOND</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		<em class="jxr_comment">// sub-condition rather than its first (as in dd2) or third (never reached elsewhere) -- the one</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		<em class="jxr_comment">// sub-condition-false combination the rest of the suite doesn't exercise. wrapped ("hi") is non-null,</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<em class="jxr_comment">// so disjunct 3 is also false, landing in the same else (236-239) / castResult-conversion path as dd3,</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		<em class="jxr_comment">// and hitting the same convertToMemberType-returns-null bug flagged there for the same reason (Dd3_View</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		<em class="jxr_comment">// is neither Map- nor Number-shaped).</em>
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">var</strong> strVal = cstring(<span class="jxr_string">"hi"</span>);
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">var</strong> bytes = doc(0x02, <span class="jxr_string">"value"</span>, cat(le4(strVal.length), strVal));
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, Dd3_MapType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		assertNull(result);
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 	}
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	@Test <strong class="jxr_keyword">void</strong> dd3_mapTypeWithNonCreatableInterfaceSwap_fallbackPathMultiKeyDocumentHitsMapConversionBranch() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		<em class="jxr_comment">// eType (Dd3_MapType) isMap()==true, and its @Swap resolves sType to the Dd3_View interface --</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		<em class="jxr_comment">// interfaces are beans (readable getters) but never canCreateNewBean(), so on WRITE the serializer's</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		<em class="jxr_comment">// own sType.isBean() check takes the direct writeBeanMap path (multi-key document, no "value" wrap),</em>
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		<em class="jxr_comment">// while on READ neither the isMap() (162) nor the canCreateNewBean() (184) guard is satisfied, so</em>
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		<em class="jxr_comment">// readDocument reaches the 217+ fallback with a genuinely multi-key document -- landing in line 241's</em>
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<em class="jxr_comment">// "else" arm (not the single-"value"-key arm at 229-240) and exercising the 243/244</em>
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<em class="jxr_comment">// "eType.isMap() &amp;&amp; castResult instanceof Map &amp;&amp; !isInstance()" true arm.</em>
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<em class="jxr_comment">// BUG (flagged, not fixed -- lives in MarshallingContext.findConversion, not BsonParserSession):</em>
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		<em class="jxr_comment">// convertToMemberType(null, castResult, eType) at line 244 silently returns null here instead of</em>
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<em class="jxr_comment">// copying the parsed map's entries into a new Dd3_MapType. findConversion's ObjectSwap-conversion</em>
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<em class="jxr_comment">// branch (MarshallingContext ~L4424-L4446) matches purely on eType having *a* registered swap and</em>
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 		<em class="jxr_comment">// unconditionally wins the dispatch, but its body only knows how to bridge a Map/Number swap-class</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		<em class="jxr_comment">// input to the unswap() call -- it has no path for "swap-class is some other type (e.g. a bean or</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<em class="jxr_comment">// interface) and the input is already the correct Map shape, just needs a plain copy-construct".</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<em class="jxr_comment">// It returns null rather than falling through to the simpler Map-copy conversion that would apply</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<em class="jxr_comment">// if eType had no swap at all. This makes the 243/244 Map-repair branch a no-op (worse: a silent</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<em class="jxr_comment">// data-loss null) for any Map subtype whose swap target isn't itself Map/Number-shaped.</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<strong class="jxr_keyword">var</strong> src = <strong class="jxr_keyword">new</strong> Dd3_MapType();
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		src.put(<span class="jxr_string">"a"</span>, <span class="jxr_string">"hi"</span>);
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		src.put(<span class="jxr_string">"b"</span>, <span class="jxr_string">"bye"</span>);
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(src);
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, Dd3_MapType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		assertNull(result);
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 	}
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 	<em class="jxr_comment">// g0x - readDocument: bean-with-Map-swap (eType stays a bean while sType becomes the swap's Map target), and</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 	<em class="jxr_comment">// the type-property value resolving to an explicit null (readTypedValue returning null for the "_type" key).</em>
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G01_Target {
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; m;
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 	}
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G01_Swap <strong class="jxr_keyword">extends</strong> org.apache.juneau.marshall.swap.ObjectSwap&lt;G01_Bean,Map&lt;String,Object&gt;&gt; {
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 		@Override
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; swap(MarshallingSession session, G01_Bean o) {
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 			<strong class="jxr_keyword">return</strong> Map.of(<span class="jxr_string">"v"</span>, o.v);
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		}
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		@Override
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		<strong class="jxr_keyword">public</strong> G01_Bean unswap(MarshallingSession session, Map&lt;String,Object&gt; f, ClassMeta&lt;?&gt; hint) {
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 			<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> G01_Bean();
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 			b.v = (String)f.get(<span class="jxr_string">"v"</span>);
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 			<strong class="jxr_keyword">return</strong> b;
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		}
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	}
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	@Swap(G01_Swap.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G01_Bean {
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">public</strong> String v;
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 	}
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G00_Impl {
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		<strong class="jxr_keyword">public</strong> String v;
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	}
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G00_Swap <strong class="jxr_keyword">extends</strong> org.apache.juneau.marshall.swap.ObjectSwap&lt;G00_Bean,G00_Impl&gt; {
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		@Override
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">public</strong> G00_Impl swap(MarshallingSession session, G00_Bean o) {
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			<strong class="jxr_keyword">var</strong> i = <strong class="jxr_keyword">new</strong> G00_Impl();
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			i.v = o.v;
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			<strong class="jxr_keyword">return</strong> i;
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		}
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		@Override
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">public</strong> G00_Bean unswap(MarshallingSession session, G00_Impl f, ClassMeta&lt;?&gt; hint) {
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> G00_Bean();
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			b.v = f.v;
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			<strong class="jxr_keyword">return</strong> b;
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 		}
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	}
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 	@Swap(G00_Swap.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G00_Bean {
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		<strong class="jxr_keyword">public</strong> String v;
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	}
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	@Test <strong class="jxr_keyword">void</strong> g00_beanToBeanSwapUnswapsResultAtEnd() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<em class="jxr_comment">// The swap's target (G00_Impl) is itself a creatable bean (not Map/String), so readDocument routes</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 		<em class="jxr_comment">// through the ordinary bean-instantiation path (184-216) using sType=G00_Impl, producing a G00_Impl</em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<em class="jxr_comment">// instance as `result` that's still "in swapped form" relative to the declared eType (G00_Bean) --</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		<em class="jxr_comment">// exercises the final nn(swap)&amp;&amp;nn(result)&amp;&amp;isSwappedObject(result) unswap arm (line 257's true side),</em>
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		<em class="jxr_comment">// which the Map-swap (g01) and Object-swap (d02 in ProtobufSerializerSession-style tests elsewhere)</em>
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		<em class="jxr_comment">// scenarios don't reach because their own conversion paths already normalize the result first.</em>
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> G00_Bean();
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		b.v = <span class="jxr_string">"hi"</span>;
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(b);
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, G00_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		assertNotNull(result);
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		assertEquals(<span class="jxr_string">"hi"</span>, result.v);
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	}
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	@Test <strong class="jxr_keyword">void</strong> g01_beanWithMapSwapRoundTrip() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<em class="jxr_comment">// eType (G01_Bean) is not itself a Map, but the swap resolves sType to a Map -- exercises the</em>
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		<em class="jxr_comment">// eType.isMap()==false arm of readDocument's post-map-loop conversion check (raw result kept as-is,</em>
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<em class="jxr_comment">// then unswapped back to G01_Bean at the end via swap.isSwappedObject/unswap).</em>
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> G01_Bean();
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		b.v = <span class="jxr_string">"hi"</span>;
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(b);
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, G01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 		assertNotNull(result);
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		assertEquals(<span class="jxr_string">"hi"</span>, result.v);
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 	}
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G02_Bean {
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 		<strong class="jxr_keyword">public</strong> String name;
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 	}
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	@Test <strong class="jxr_keyword">void</strong> g02_typePropertyWithNullValueSkipsApply() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 		<em class="jxr_comment">// The "_type" key is present but its own BSON value is an explicit null (0x0A, zero-length payload) --</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 		<em class="jxr_comment">// readTypedValue returns null for it, so applyTypeProperty is never invoked (the nn(value) guard's</em>
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 		<em class="jxr_comment">// false arm). A second "name" element (a normal string) verifies parsing continues correctly afterward.</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 		<strong class="jxr_keyword">var</strong> nameValue = cat(le4(<span class="jxr_string">"n"</span>.getBytes(StandardCharsets.UTF_8).length + 1), cstring(<span class="jxr_string">"n"</span>));
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		<strong class="jxr_keyword">var</strong> body = cat(
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			<strong class="jxr_keyword">new</strong> byte[]{0x0A}, cstring(<span class="jxr_string">"_type"</span>),
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 			<strong class="jxr_keyword">new</strong> byte[]{0x02}, cstring(<span class="jxr_string">"name"</span>), nameValue);
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">var</strong> bytes = cat(le4(body.length + 4), body, <strong class="jxr_keyword">new</strong> byte[]{0x00});
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, G02_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		assertNotNull(result);
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		assertEquals(<span class="jxr_string">"n"</span>, result.name);
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 	}
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 	<em class="jxr_comment">// h0x - applyTypeProperty: unknown type name (cm resolves to null) and a resolved type that eType cannot</em>
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 	<em class="jxr_comment">// be assigned from (both fall through to returning the original beanMap unchanged).</em>
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H01_Bean {
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 		<strong class="jxr_keyword">public</strong> String name;
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 	}
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 	@Test <strong class="jxr_keyword">void</strong> h01_unknownTypeNameLeavesBeanMapUnchanged() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		m.put(<span class="jxr_string">"_type"</span>, <span class="jxr_string">"com.example.NoSuchBeanTypeXyz"</span>);
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		m.put(<span class="jxr_string">"name"</span>, <span class="jxr_string">"n"</span>);
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.create().keepNullProperties().build().write(m);
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, H01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 		assertEquals(<span class="jxr_string">"n"</span>, result.name);
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 	}
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 	@Marshalled(typeName=<span class="jxr_string">"H02_Other"</span>)
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H02_Other {
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> x;
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> 	}
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H03_Base {
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 		<strong class="jxr_keyword">public</strong> String name;
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 	}
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 	@Marshalled(typeName=<span class="jxr_string">"H03_Sub"</span>)
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H03_Sub <strong class="jxr_keyword">extends</strong> H03_Base {
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> extra;
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 	}
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 	@Test <strong class="jxr_keyword">void</strong> h03_resolvedAssignableTypeSwapsBeanInstance() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 		<em class="jxr_comment">// "_type" resolves to a registered subtype (H03_Sub) that IS assignable from the target (H03_Base) --</em>
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 		<em class="jxr_comment">// the true arm of applyTypeProperty's guard, swapping in a fresh H03_Sub instance via newBean/toBeanMap.</em>
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		m.put(<span class="jxr_string">"_type"</span>, <span class="jxr_string">"H03_Sub"</span>);
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 		m.put(<span class="jxr_string">"name"</span>, <span class="jxr_string">"n"</span>);
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		m.put(<span class="jxr_string">"extra"</span>, 5);
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.create().keepNullProperties().build().write(m);
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">var</strong> p = BsonParser.create().beanDictionary(H03_Sub.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		<strong class="jxr_keyword">var</strong> result = p.read(bytes, H03_Base.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 		assertInstanceOf(H03_Sub.<strong class="jxr_keyword">class</strong>, result);
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 		assertEquals(<span class="jxr_string">"n"</span>, result.name);
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		assertEquals(5, ((H03_Sub)result).extra);
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 	}
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 	@Test <strong class="jxr_keyword">void</strong> h02_resolvedTypeNotAssignableLeavesBeanMapUnchanged() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		<em class="jxr_comment">// "_type" resolves to a real registered bean type (H02_Other), but the target class (H01_Bean) is not</em>
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 		<em class="jxr_comment">// assignable from it -- eType.isAssignableFrom(cm) is false, so applyTypeProperty falls through to</em>
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 		<em class="jxr_comment">// returning the original beanMap rather than swapping in a new bean instance.</em>
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		m.put(<span class="jxr_string">"_type"</span>, <span class="jxr_string">"H02_Other"</span>);
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 		m.put(<span class="jxr_string">"name"</span>, <span class="jxr_string">"n"</span>);
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.create().keepNullProperties().build().write(m);
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 		<strong class="jxr_keyword">var</strong> p = BsonParser.create().beanDictionary(H02_Other.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		<strong class="jxr_keyword">var</strong> result = p.read(bytes, H01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 		assertEquals(<span class="jxr_string">"n"</span>, result.name);
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 	}
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 	<em class="jxr_comment">// i0x - readDocument's non-string/non-Object key type (raw Map, not just bean property) with a nullKeyString</em>
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 	<em class="jxr_comment">// override that collides with a legitimate root-wrap key name -- exercises the key.equals(nullKeyString) true</em>
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 	<em class="jxr_comment">// arm at the fallback (root scalar) path, which is otherwise unreachable since "value" != the default sentinel.</em>
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 	@Test <strong class="jxr_keyword">void</strong> i01_nullKeyStringMatchingRootWrapKeyNameYieldsNullResult() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		<em class="jxr_comment">// Configuring nullKeyString to literally "value" collides with the fallback (root-scalar) loop's own</em>
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<em class="jxr_comment">// wrap-key name -- the parsed root key becomes null instead of "value", so the subsequent</em>
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		<em class="jxr_comment">// map.containsKey(BSON_VALUE_KEY) check (which only ever looks for the literal String "value") misses,</em>
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 		<em class="jxr_comment">// routing to the outer else/cast arm instead of the normal unwrap arm. Exercises key.equals(nullKeyString)</em>
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		<em class="jxr_comment">// == true in the fallback loop, which is otherwise unreachable (BSON_VALUE_KEY never equals the default</em>
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 		<em class="jxr_comment">// nullKeyString sentinel).</em>
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<strong class="jxr_keyword">var</strong> p = BsonParser.create().nullKeyString(<span class="jxr_string">"value"</span>).build();
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 		<strong class="jxr_keyword">var</strong> bytes = doc(0x10, <span class="jxr_string">"value"</span>, le4(7));
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		<strong class="jxr_keyword">var</strong> result = p.read(bytes, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		assertNotNull(result);
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 	}
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 	<em class="jxr_comment">// j0x - readArray: sType.inner().isArray() true (nested primitive array element, e.g. int[][]) forces the</em>
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 	<em class="jxr_comment">// Collection-gathering arm even though sType itself isn't classified isArray()/isArgs() at this call.</em>
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 	@Test <strong class="jxr_keyword">void</strong> j01_nestedPrimitiveArrayUsesCollectionGatheringArm() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][]{{1, 2}, {3, 4}};
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(a);
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, <strong class="jxr_keyword">int</strong>[][].<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		assertEquals(2, result.length);
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[]{1, 2}, result[0]);
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[]{3, 4}, result[1]);
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 	}
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 	@Test <strong class="jxr_keyword">void</strong> j03_concreteCollectionTypeIsUsedDirectly() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 		<em class="jxr_comment">// sType (LinkedList.class) is a concrete, creatable Collection type -&gt; canCreateNewInstance(outer)</em>
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 		<em class="jxr_comment">// is true AND the resulting instance IS a Collection -- exercises both ternaries' true arms</em>
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		<em class="jxr_comment">// (as opposed to j02's Object.class target, which hits both false arms).</em>
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(List.of(1, 2, 3));
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, LinkedList.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 		assertInstanceOf(LinkedList.<strong class="jxr_keyword">class</strong>, result);
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> 		assertEquals(List.of(1, 2, 3), result);
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> 	}
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> 
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> 	@Test <strong class="jxr_keyword">void</strong> j04_nonCreatableCollectionInterfaceFallsBackToGenericList() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 		<em class="jxr_comment">// sType (the bare Collection interface) is not directly instantiable -&gt; canCreateNewInstance(outer)</em>
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 		<em class="jxr_comment">// is false -- exercises the "instance" ternary's false arm (as opposed to j03's true arm).</em>
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(List.of(1, 2, 3));
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> 		Collection&lt;?&gt; result = BsonParser.DEFAULT.read(bytes, Collection.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 		assertEquals(List.of(1, 2, 3), List.copyOf(result));
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 	}
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> 
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 	@Test <strong class="jxr_keyword">void</strong> j02_arrayIntoObjectTargetUsesGenericListFallback() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 		<em class="jxr_comment">// sType (Object.class) is neither array/args, canCreateNewInstance() is true (Object has a no-arg</em>
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 		<em class="jxr_comment">// ctor), but the resulting instance isn't a Collection -- exercises the instanceof-Collection ternary's</em>
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> 		<em class="jxr_comment">// false arm (newGenericList() fallback) inside readArray, which still runs during the outer document's</em>
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 		<em class="jxr_comment">// "value"-field parse loop even though the root-level wrap/unwrap logic (Object.class isn't unwrapped</em>
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 		<em class="jxr_comment">// per f02's quirk) then surfaces it wrapped in a map rather than as a bare List.</em>
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 		<strong class="jxr_keyword">var</strong> bytes = BsonSerializer.DEFAULT.write(List.of(1, 2, 3));
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> 		<strong class="jxr_keyword">var</strong> result = BsonParser.DEFAULT.read(bytes, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 		assertEquals(Map.of(<span class="jxr_string">"value"</span>, List.of(1, 2, 3)), result);
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> 	}
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

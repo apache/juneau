@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>VersionMixin_AsMixin_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/rest/server/convention/VersionMixin_AsMixin_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.convention;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.jar.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.json.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Validates {@link VersionMixin} mounted as a mixin via {@code @Rest(mixins=...)} on a</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * vanilla {@link RestServlet}.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * Cases:</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@code /version} returns the JSON map (single SVL-configurable default mount).</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@code Content-Type: application/json}.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Importer's {@code @Bean VersionMixin} factory drives the entries map (manifest</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 		read, programmatic entries, custom Manifest).</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Missing manifest gracefully resolves to {@code (unknown)}.</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * Per the multi-path collapse, the historical {@code /info} and {@code /about}</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * mount aliases (formerly a triple default on a single op) are now reached via</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * {@code -Djuneau.version.path=info} (or {@code about}); that behavior is covered by</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * {@code VersionMixin_SvlPathOverride_Test}.</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">class</strong> <a name="VersionMixin_AsMixin_Test" href="../../../../../../org/apache/juneau/rest/server/convention/VersionMixin_AsMixin_Test.html#VersionMixin_AsMixin_Test">VersionMixin_AsMixin_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	@Rest(mixins=VersionMixin.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		@RestGet(path=<span class="jxr_string">"/items"</span>) <strong class="jxr_keyword">public</strong> String items() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"items"</span>; }
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient ca = MockRestClient.buildLax(A.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	@Test <strong class="jxr_keyword">void</strong> a01_versionEndpointServed() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		ca.get(<span class="jxr_string">"/version"</span>)
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			.run()
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			.assertStatus(200)
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			.assertHeader(<span class="jxr_string">"Content-Type"</span>).isContains(<span class="jxr_string">"application/json"</span>);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	}
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	@Test <strong class="jxr_keyword">void</strong> a02_legacyAliasesNotMountedByDefault() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<em class="jxr_comment">// /info and /about are no longer multi-path defaults. They only mount when</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<em class="jxr_comment">// the deployer overrides juneau.version.path. Default-build hosts get 404 here.</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		ca.get(<span class="jxr_string">"/info"</span>).run().assertStatus(404);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		ca.get(<span class="jxr_string">"/about"</span>).run().assertStatus(404);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Test <strong class="jxr_keyword">void</strong> a03_defaultPayloadHasJavaVersionAtMinimum() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> body = ca.get(<span class="jxr_string">"/version"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">var</strong> parsed = JsonParser.DEFAULT.read(body, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		Assertions.assertNotNull(parsed.get(<span class="jxr_string">"javaVersion"</span>), <span class="jxr_string">"javaVersion present"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test <strong class="jxr_keyword">void</strong> a04_hostEndpointStillReachable() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		ca.get(<span class="jxr_string">"/items"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"items"</span>);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<em class="jxr_javadoccomment">/** Host providing a programmatic version map via @Bean factory. */</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Rest(mixins=VersionMixin.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		@Bean <strong class="jxr_keyword">public</strong> VersionMixin version() {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			<strong class="jxr_keyword">return</strong> VersionMixin.create()
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  				.entry(<span class="jxr_string">"name"</span>, <span class="jxr_string">"my-app"</span>)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  				.entry(<span class="jxr_string">"version"</span>, <span class="jxr_string">"1.2.3"</span>)
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  				.entry(<span class="jxr_string">"gitCommit"</span>, <span class="jxr_string">"abc123"</span>)
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  				.entry(<span class="jxr_string">"gitBranch"</span>, <span class="jxr_string">"main"</span>)
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  				.entry(<span class="jxr_string">"buildTime"</span>, <span class="jxr_string">"2026-05-24T18:00:00Z"</span>)
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				.fromJavaVersion()
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  				.build();
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		}
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient cb = MockRestClient.buildLax(B.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Test <strong class="jxr_keyword">void</strong> b01_programmaticEntriesSurface() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> body = cb.get(<span class="jxr_string">"/version"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> parsed = JsonParser.DEFAULT.read(body, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		Assertions.assertEquals(<span class="jxr_string">"my-app"</span>, parsed.get(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		Assertions.assertEquals(<span class="jxr_string">"1.2.3"</span>, parsed.get(<span class="jxr_string">"version"</span>));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		Assertions.assertEquals(<span class="jxr_string">"abc123"</span>, parsed.get(<span class="jxr_string">"gitCommit"</span>));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		Assertions.assertEquals(<span class="jxr_string">"main"</span>, parsed.get(<span class="jxr_string">"gitBranch"</span>));
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		Assertions.assertEquals(<span class="jxr_string">"2026-05-24T18:00:00Z"</span>, parsed.get(<span class="jxr_string">"buildTime"</span>));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		Assertions.assertNotNull(parsed.get(<span class="jxr_string">"javaVersion"</span>));
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<em class="jxr_javadoccomment">/** Host providing a synthetic Manifest via fromManifest(Manifest). */</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@Rest(mixins=VersionMixin.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		@Bean <strong class="jxr_keyword">public</strong> VersionMixin version() {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			<strong class="jxr_keyword">var</strong> manifest = <strong class="jxr_keyword">new</strong> Manifest();
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			<strong class="jxr_keyword">var</strong> attrs = manifest.getMainAttributes();
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			attrs.putValue(<span class="jxr_string">"Manifest-Version"</span>, <span class="jxr_string">"1.0"</span>);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			attrs.putValue(<span class="jxr_string">"Implementation-Title"</span>, <span class="jxr_string">"synthetic-app"</span>);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			attrs.putValue(<span class="jxr_string">"Implementation-Version"</span>, <span class="jxr_string">"9.9.9"</span>);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			attrs.putValue(<span class="jxr_string">"Implementation-Vendor"</span>, <span class="jxr_string">"Acme"</span>);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			attrs.putValue(<span class="jxr_string">"Build-Jdk"</span>, <span class="jxr_string">"21.0.0"</span>);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">return</strong> VersionMixin.create().fromManifest(manifest).build();
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		}
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient cc = MockRestClient.buildLax(C.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	@Test <strong class="jxr_keyword">void</strong> c01_syntheticManifestSurfaces() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> body = cc.get(<span class="jxr_string">"/version"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> parsed = JsonParser.DEFAULT.read(body, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		Assertions.assertEquals(<span class="jxr_string">"synthetic-app"</span>, parsed.get(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		Assertions.assertEquals(<span class="jxr_string">"9.9.9"</span>, parsed.get(<span class="jxr_string">"version"</span>));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		Assertions.assertEquals(<span class="jxr_string">"Acme"</span>, parsed.get(<span class="jxr_string">"vendor"</span>));
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		Assertions.assertEquals(<span class="jxr_string">"21.0.0"</span>, parsed.get(<span class="jxr_string">"javaVersion"</span>));
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	}
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	@Test <strong class="jxr_keyword">void</strong> d01_missingManifestGracefulFallback() {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> v = VersionMixin.create()
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			.fromManifest(<strong class="jxr_keyword">new</strong> java.net.URLClassLoader(<strong class="jxr_keyword">new</strong> java.net.URL[0], <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			.build();
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		Assertions.assertEquals(VersionMixin.UNKNOWN, v.getInfoMap().get(<span class="jxr_string">"name"</span>),
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<span class="jxr_string">"missing manifest must yield (unknown) name"</span>);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		Assertions.assertEquals(VersionMixin.UNKNOWN, v.getInfoMap().get(<span class="jxr_string">"version"</span>),
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<span class="jxr_string">"missing manifest must yield (unknown) version"</span>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	}
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

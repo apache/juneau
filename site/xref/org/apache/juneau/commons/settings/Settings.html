@@ -24,10 +24,10 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.commons.settings;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.reflect.ReflectionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.function.Suppliers.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.reflect.ReflectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
@@ -55,23 +55,23 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;ol&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Per-thread store (if set via {@link #setLocal(String, String)})</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Global store (if set via {@link #setGlobal(String, String)})</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Sources in reverse order (last source added via {@link Builder#addSource(SettingSource)} is checked first)</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Sources in reverse order (last source added via {@link Builder#addSource(PropertySource)} is checked first)</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;System property source (default, always second-to-last)</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;System environment variable source (default, always last)</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * &lt;/ol&gt;</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Sources vs Stores:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Sources&lt;/b&gt; ({@link SettingSource}) - Provide read-only access to property values. Examples: {@link FunctionalSource}</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Stores&lt;/b&gt; ({@link SettingStore}) - Provide read/write access to property values. Examples: {@link MapStore}, {@link FunctionalStore}</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Stores can be used as sources (they extend {@link SettingSource}), so you can add stores via {@link Builder#addSource(SettingSource)}</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Sources&lt;/b&gt; ({@link PropertySource}) - Provide read-only access to property values. Examples: {@link FunctionalPropertySource}</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Stores&lt;/b&gt; ({@link PropertyStore}) - Provide read/write access to property values. Examples: {@link MapStore}, {@link FunctionalPropertyStore}</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Stores can be used as sources (they extend {@link PropertySource}), so you can add stores via {@link Builder#addSource(PropertySource)}</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;System property access - read Java system properties with type conversion via {@link StringSetting}</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Global overrides - override system properties globally for all threads (stored in a {@link SettingStore})</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Per-thread overrides - override system properties for specific threads (stored in a per-thread {@link SettingStore})</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Global overrides - override system properties globally for all threads (stored in a {@link PropertyStore})</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Per-thread overrides - override system properties for specific threads (stored in a per-thread {@link PropertyStore})</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Custom sources - add arbitrary property sources (e.g., Spring properties, environment variables, config files) via the {@link Builder}</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Disable override support - system property to prevent new global overrides from being set</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Type-safe accessors - type conversion methods on {@link StringSetting} for common types: Integer, Long, Boolean, Double, Float, File, Path, URI, Charset</em>
@@ -120,7 +120,7 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment"> * 	&lt;jv&gt;springSource&lt;/jv&gt;.set(&lt;js&gt;"spring.datasource.url"&lt;/js&gt;, &lt;js&gt;"jdbc:postgresql://localhost/db"&lt;/js&gt;);</em>
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment"> * 	Settings &lt;jv&gt;custom&lt;/jv&gt; = Settings.&lt;jsf&gt;create&lt;/jsf&gt;()</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment"> * 		.addSource(&lt;jv&gt;springSource&lt;/jv&gt;)</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment"> * 		.addSource(FunctionalSource.&lt;jsf&gt;of&lt;/jsf&gt;(System::getProperty))</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment"> * 		.addSource(FunctionalPropertySource.&lt;jsf&gt;of&lt;/jsf&gt;(System::getProperty))</em>
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment"> * 		.build();</em>
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment"> *</em>
@@ -137,464 +137,650 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment"> * 		&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="Settings" href="../../../../../org/apache/juneau/commons/settings/Settings.html#Settings">Settings</a> {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * System property source that delegates to {@link System#getProperty(String)}.</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="SettingSource" href="../../../../../org/apache/juneau/commons/settings/SettingSource.html#SettingSource">SettingSource</a> SYSTEM_PROPERTY_SOURCE = FunctionalSource.of(System::getProperty);
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; FROM_STRING_METHOD_NAMES = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(Arrays.asList(<span class="jxr_string">"fromString"</span>, <span class="jxr_string">"parse"</span>, <span class="jxr_string">"forName"</span>, <span class="jxr_string">"valueOf"</span>));
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * System environment variable source that delegates to {@link System#getenv(String)}.</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="SettingSource" href="../../../../../org/apache/juneau/commons/settings/SettingSource.html#SettingSource">SettingSource</a> SYSTEM_ENV_SOURCE = FunctionalSource.of(System::getenv);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DISABLE_GLOBAL_PROP = <span class="jxr_string">"juneau.settings.disableGlobal"</span>;
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MSG_globalDisabled = <span class="jxr_string">"Global settings not enabled"</span>;
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MSG_localDisabled = <span class="jxr_string">"Local settings not enabled"</span>;
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> @SuppressWarnings({
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<span class="jxr_string">"java:S115"</span> <em class="jxr_comment">// Constants use UPPER_snakeCase convention (e.g., ARG_sources, MSG_globalDisabled)</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> })
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> Settings {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<em class="jxr_comment">// Argument name constants for assertArgNoNulls</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_sources = <span class="jxr_string">"sources"</span>;
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<em class="jxr_comment">// Argument name constants for assertArgNotNull</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_name = <span class="jxr_string">"name"</span>;
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_def = <span class="jxr_string">"def"</span>;
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_s = <span class="jxr_string">"s"</span>;
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_c = <span class="jxr_string">"c"</span>;
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_supplier = <span class="jxr_string">"supplier"</span>;
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_source = <span class="jxr_string">"source"</span>;
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_type = <span class="jxr_string">"type"</span>;
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_function = <span class="jxr_string">"function"</span>;
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * Returns properties for this Settings object itself.</em>
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 * Note that these are initialized at startup and not changeable through System.setProperty().</em>
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Optional&lt;String&gt; initProperty(String property) {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> v = SYSTEM_PROPERTY_SOURCE.get(property);
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">if</strong> (v != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">return</strong> v;  <em class="jxr_comment">// Not testable</em>
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		v = SYSTEM_ENV_SOURCE.get(property.replace('.', '_').toUpperCase());
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">if</strong> (v != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<strong class="jxr_keyword">return</strong> v;  <em class="jxr_comment">// Not testable</em>
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">return</strong> opte();
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * Creates a new builder for constructing a Settings instance.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * System property source that delegates to {@link System#getProperty(String)}.</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="PropertySource" href="../../../../../org/apache/juneau/commons/settings/PropertySource.html#PropertySource">PropertySource</a> SYSTEM_PROPERTY_SOURCE = FunctionalPropertySource.of(System::getProperty);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; FROM_STRING_METHOD_NAMES = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(Arrays.asList(<span class="jxr_string">"fromString"</span>, <span class="jxr_string">"parse"</span>, <span class="jxr_string">"forName"</span>, <span class="jxr_string">"valueOf"</span>));
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * System environment variable source that delegates to {@link System#getenv(String)}.</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="PropertySource" href="../../../../../org/apache/juneau/commons/settings/PropertySource.html#PropertySource">PropertySource</a> SYSTEM_ENV_SOURCE = FunctionalPropertySource.of(System::getenv);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 * {@link #SYSTEM_ENV_SOURCE} wrapped with {@link RelaxedPropertySource relaxed binding}, so a single logical key</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 * resolves from any of the common environment-variable spellings (e.g. {@code my.prop} / {@code myProp} /</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * {@code MySection/myKey} all satisfied by {@code MY_PROP} / {@code MY_SECTION_MY_KEY}).</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 * This method provides a convenient way to create custom Settings instances with specific</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 * configuration. The builder allows you to configure stores, sources, and other settings</em>
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 * before building the final Settings instance.</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Create a custom Settings instance&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 * 	Settings &lt;jv&gt;custom&lt;/jv&gt; = Settings.&lt;jsf&gt;create&lt;/jsf&gt;()</em>
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 * 		.globalStore(() -&amp;gt; &lt;jk&gt;new&lt;/jk&gt; MapStore())</em>
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 * 		.localStore(() -&amp;gt; &lt;jk&gt;new&lt;/jk&gt; MapStore())</em>
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 * 		.addSource(FunctionalSource.&lt;jsf&gt;of&lt;/jsf&gt;(System::getProperty))</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * 		.build();</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * @return A new Builder instance.</em>
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 * Builder for creating Settings instances.</em>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">private</strong> Supplier&lt;SettingStore&gt; globalStoreSupplier = () -&gt; <strong class="jxr_keyword">new</strong> <a name="MapStore" href="../../../../../org/apache/juneau/commons/settings/MapStore.html#MapStore">MapStore</a>();
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">private</strong> Supplier&lt;SettingStore&gt; localStoreSupplier = () -&gt; <strong class="jxr_keyword">new</strong> <a name="MapStore" href="../../../../../org/apache/juneau/commons/settings/MapStore.html#MapStore">MapStore</a>();
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;SettingSource&gt; sources = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,Function&lt;String,?&gt;&gt; customTypeFunctions = <strong class="jxr_keyword">new</strong> IdentityHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">		 * Sets the supplier for the global store.</em>
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">		 * @param supplier The supplier for the global store.  Must not be &lt;c&gt;null&lt;/c&gt;.  Can supply null to disable global store.</em>
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">public</strong> Builder globalStore(OptionalSupplier&lt;SettingStore&gt; supplier) {
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">this</strong>.globalStoreSupplier = assertArgNotNull(<span class="jxr_string">"supplier"</span>, supplier);
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		}
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">		 * Sets the supplier for the local (per-thread) store.</em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">		 * @param supplier The supplier for the local store. Must not be &lt;c&gt;null&lt;/c&gt;.</em>
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">public</strong> Builder localStore(OptionalSupplier&lt;SettingStore&gt; supplier) {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">this</strong>.localStoreSupplier = assertArgNotNull(<span class="jxr_string">"supplier"</span>, supplier);
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		}
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">		 * Sets the sources list, replacing any existing sources.</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">		 * @param sources The sources to set. Must not be &lt;c&gt;null&lt;/c&gt; or contain &lt;c&gt;null&lt;/c&gt; elements.</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		@SafeVarargs
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Builder setSources(SettingSource...sources) {
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			assertArgNoNulls(<span class="jxr_string">"sources"</span>, sources);
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<strong class="jxr_keyword">this</strong>.sources.clear();
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> source : sources) {
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 				<strong class="jxr_keyword">this</strong>.sources.add(source);
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			}
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		}
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">		 * Adds a source to the sources list.</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">		 * @param source The source to add. Must not be &lt;c&gt;null&lt;/c&gt;.</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">public</strong> Builder addSource(<a name="SettingSource" href="../../../../../org/apache/juneau/commons/settings/SettingSource.html#SettingSource">SettingSource</a> source) {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			assertArgNotNull(<span class="jxr_string">"source"</span>, source);
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			<strong class="jxr_keyword">this</strong>.sources.add(source);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		}
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">		 * Adds a functional source to the sources list.</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">		 * @param source The functional source to add. Must not be &lt;c&gt;null&lt;/c&gt;.</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">public</strong> Builder addSource(<a name="FunctionalSource" href="../../../../../org/apache/juneau/commons/settings/FunctionalSource.html#FunctionalSource">FunctionalSource</a> source) {
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">return</strong> addSource((<a name="SettingSource" href="../../../../../org/apache/juneau/commons/settings/SettingSource.html#SettingSource">SettingSource</a>)source);
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		}
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">		 * Registers a custom type conversion function for the specified type.</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">		 * This allows you to add support for converting string values to custom types when using</em>
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">		 * {@link Settings#get(String, Object)}. The function will be used to convert string values</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">		 * to the specified type.</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Register a custom converter for a custom type&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">		 * 	Settings &lt;jv&gt;custom&lt;/jv&gt; = Settings.&lt;jsf&gt;create&lt;/jsf&gt;()</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">		 * 		.addTypeFunction(Integer.&lt;jk&gt;class&lt;/jk&gt;, Integer::valueOf)</em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">		 * 		.addTypeFunction(MyCustomType.&lt;jk&gt;class&lt;/jk&gt;, MyCustomType::fromString)</em>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">		 * 		.build();</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Now you can use get() with these types&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">		 * 	Integer &lt;jv&gt;intValue&lt;/jv&gt; = &lt;jv&gt;custom&lt;/jv&gt;.get(&lt;js&gt;"my.int.property"&lt;/js&gt;, 0);</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">		 * 	MyCustomType &lt;jv&gt;customValue&lt;/jv&gt; = &lt;jv&gt;custom&lt;/jv&gt;.get(&lt;js&gt;"my.custom.property"&lt;/js&gt;, MyCustomType.DEFAULT);</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">		 * @param &lt;T&gt; The type to register a converter for.</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">		 * @param type The class type to register a converter for. Must not be &lt;c&gt;null&lt;/c&gt;.</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">		 * @param function The function that converts a string to the specified type. Must not be &lt;c&gt;null&lt;/c&gt;.</em>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">public</strong> &lt;T&gt; Builder addTypeFunction(Class&lt;T&gt; type, Function&lt;String,T&gt; function) {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			assertArgNotNull(<span class="jxr_string">"type"</span>, type);
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			assertArgNotNull(<span class="jxr_string">"function"</span>, function);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			customTypeFunctions.put(type, function);
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		}
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">		 * Builds a Settings instance from this builder.</em>
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">		 * @return A new Settings instance.</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">public</strong> <a name="Settings" href="../../../../../org/apache/juneau/commons/settings/Settings.html#Settings">Settings</a> build() {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Settings" href="../../../../../org/apache/juneau/commons/settings/Settings.html#Settings">Settings</a>(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		}
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	}
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Settings" href="../../../../../org/apache/juneau/commons/settings/Settings.html#Settings">Settings</a> INSTANCE = <strong class="jxr_keyword">new</strong> Builder()
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		.globalStore(initProperty(DISABLE_GLOBAL_PROP).map(Boolean::valueOf).orElse(false) ? () -&gt; <strong class="jxr_keyword">null</strong> : () -&gt; <strong class="jxr_keyword">new</strong> <a name="MapStore" href="../../../../../org/apache/juneau/commons/settings/MapStore.html#MapStore">MapStore</a>())
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		.setSources(SYSTEM_ENV_SOURCE, SYSTEM_PROPERTY_SOURCE)
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		.build();
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 * This is the env source used by the default {@link #get() singleton}.  It is verbatim-first, so exact-match</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 * behavior is unchanged &amp;mdash; a relaxed variant is only probed when the exact name misses.</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="PropertySource" href="../../../../../org/apache/juneau/commons/settings/PropertySource.html#PropertySource">PropertySource</a> RELAXED_SYSTEM_ENV_SOURCE = <strong class="jxr_keyword">new</strong> <a name="RelaxedPropertySource" href="../../../../../org/apache/juneau/commons/settings/RelaxedPropertySource.html#RelaxedPropertySource">RelaxedPropertySource</a>(SYSTEM_ENV_SOURCE);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DISABLE_GLOBAL_PROP = <span class="jxr_string">"juneau.settings.disableGlobal"</span>;
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MSG_globalDisabled = <span class="jxr_string">"Global settings not enabled"</span>;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MSG_localDisabled = <span class="jxr_string">"Local settings not enabled"</span>;
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * Returns properties for this Settings object itself.</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * Note that these are initialized at startup and not changeable through System.setProperty().</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Optional&lt;String&gt; initProperty(String property) {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> v = SYSTEM_PROPERTY_SOURCE.get(property);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">if</strong> (v.isPresent())
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">return</strong> v.value();  <em class="jxr_comment">// Not testable</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		v = SYSTEM_ENV_SOURCE.get(ucr(property.replace('.', '_')));
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">if</strong> (v.isPresent())
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">return</strong> v.value();  <em class="jxr_comment">// Not testable</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">return</strong> oe();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * Creates a new builder for constructing a Settings instance.</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * This method provides a convenient way to create custom Settings instances with specific</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * configuration. The builder allows you to configure stores, sources, and other settings</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 * before building the final Settings instance.</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Create a custom Settings instance&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * 	Settings &lt;jv&gt;custom&lt;/jv&gt; = Settings.&lt;jsf&gt;create&lt;/jsf&gt;()</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * 		.globalStore(() -&amp;gt; &lt;jk&gt;new&lt;/jk&gt; MapStore())</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 * 		.localStore(() -&amp;gt; &lt;jk&gt;new&lt;/jk&gt; MapStore())</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 * 		.addSource(FunctionalPropertySource.&lt;jsf&gt;of&lt;/jsf&gt;(System::getProperty))</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 * 		.build();</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 * @return A new Builder instance.</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	}
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * Builder for creating Settings instances.</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">private</strong> Supplier&lt;PropertyStore&gt; globalStoreSupplier = MapStore::<strong class="jxr_keyword">new</strong>;
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">private</strong> Supplier&lt;PropertyStore&gt; localStoreSupplier = MapStore::<strong class="jxr_keyword">new</strong>;
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;PropertySource&gt; sources = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,Function&lt;String,?&gt;&gt; customTypeFunctions = <strong class="jxr_keyword">new</strong> IdentityHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">		 * Sets the supplier for the global store.</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">		 * @param supplier The supplier for the global store.  Must not be &lt;c&gt;null&lt;/c&gt;.  Can supply null to disable global store.</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">public</strong> Builder globalStore(NullableSupplier&lt;PropertyStore&gt; supplier) {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">this</strong>.globalStoreSupplier = assertArgNotNull(ARG_supplier, supplier);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		}
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">		 * Sets the supplier for the local (per-thread) store.</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">		 * @param supplier The supplier for the local store. Must not be &lt;c&gt;null&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">public</strong> Builder localStore(NullableSupplier&lt;PropertyStore&gt; supplier) {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<strong class="jxr_keyword">this</strong>.localStoreSupplier = assertArgNotNull(ARG_supplier, supplier);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		}
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">		 * Sets the sources list, replacing any existing sources.</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">		 * @param sources The sources to set. Must not be &lt;c&gt;null&lt;/c&gt; or contain &lt;c&gt;null&lt;/c&gt; elements.</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		@SafeVarargs
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Builder setSources(PropertySource...sources) {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			assertArgNoNulls(ARG_sources, sources);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">this</strong>.sources.clear();
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> source : sources) {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 				<strong class="jxr_keyword">this</strong>.sources.add(source);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			}
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		}
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">		 * Adds a source to the sources list.</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">		 * @param source The source to add. Must not be &lt;c&gt;null&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">public</strong> Builder addSource(<a name="PropertySource" href="../../../../../org/apache/juneau/commons/settings/PropertySource.html#PropertySource">PropertySource</a> source) {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			assertArgNotNull(ARG_source, source);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">this</strong>.sources.add(source);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		}
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">		 * Adds a functional source to the sources list.</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">		 * @param source The functional source to add. Must not be &lt;c&gt;null&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">public</strong> Builder addSource(<a name="FunctionalPropertySource" href="../../../../../org/apache/juneau/commons/settings/FunctionalPropertySource.html#FunctionalPropertySource">FunctionalPropertySource</a> source) {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			<strong class="jxr_keyword">return</strong> addSource((<a name="PropertySource" href="../../../../../org/apache/juneau/commons/settings/PropertySource.html#PropertySource">PropertySource</a>)source);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		}
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">		 * Discovers and registers {@link PropertySourceProvider} instances via {@link ServiceLoader}.</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">		 * Providers are sorted by {@link PropertySourceProvider#order()} ascending.</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">public</strong> Builder useServiceLoader() {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			ServiceLoader.load(PropertySourceProvider.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 				.stream()
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 				.map(ServiceLoader.Provider::get)
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 				.sorted(Comparator.comparingInt(PropertySourceProvider::order))
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 				.map(PropertySourceProvider::create)
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				.filter(Objects::nonNull)
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 				.forEach(<strong class="jxr_keyword">this</strong>::addSource);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		}
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * Returns the singleton instance of Settings.</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * @return The singleton Settings instance.</em>
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="Settings" href="../../../../../org/apache/juneau/commons/settings/Settings.html#Settings">Settings</a> get() {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">return</strong> INSTANCE;
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	}
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ResettableSupplier&lt;SettingStore&gt; globalStore;
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ThreadLocal&lt;SettingStore&gt; localStore;
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;SettingSource&gt; sources;
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,Function&lt;String,?&gt;&gt; toTypeFunctions;
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<strong class="jxr_keyword">private</strong> <a name="Settings" href="../../../../../org/apache/juneau/commons/settings/Settings.html#Settings">Settings</a>(Builder builder) {
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">this</strong>.globalStore = memr(builder.globalStoreSupplier);
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">this</strong>.localStore = ThreadLocal.withInitial(builder.localStoreSupplier);
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">this</strong>.sources = <strong class="jxr_keyword">new</strong> CopyOnWriteArrayList&lt;&gt;(builder.sources);
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">this</strong>.toTypeFunctions = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;(builder.customTypeFunctions);
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	}
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 * Returns a {@link StringSetting} for the specified system property.</em>
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">	 * The returned {@link StringSetting} is a resettable supplier that caches the lookup result.</em>
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 * Use the {@link StringSetting#asInteger()}, {@link StringSetting#asBoolean()}, etc. methods</em>
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 * to convert to different types.</em>
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * The lookup order is:</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Per-thread override (if set via {@link #setLocal(String, String)})</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Global override (if set via {@link #setGlobal(String, String)})</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Sources in reverse order (last source added via {@link Builder#addSource(SettingSource)} is checked first)</em>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;System property source (default, always second-to-last)</em>
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;System environment variable source (default, always last)</em>
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * @return A {@link StringSetting} that provides the property value, or &lt;jk&gt;null&lt;/jk&gt; if not found.</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	<strong class="jxr_keyword">public</strong> <a name="StringSetting" href="../../../../../org/apache/juneau/commons/settings/StringSetting.html#StringSetting">StringSetting</a> get(String name) {
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		assertArgNotNull(<span class="jxr_string">"name"</span>, name);
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="StringSetting" href="../../../../../org/apache/juneau/commons/settings/StringSetting.html#StringSetting">StringSetting</a>(<strong class="jxr_keyword">this</strong>, () -&gt; {
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<em class="jxr_comment">// 1. Check thread-local override</em>
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			<strong class="jxr_keyword">var</strong> v = localStore.get().get(name);
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<strong class="jxr_keyword">if</strong> (v != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 				<strong class="jxr_keyword">return</strong> v.orElse(<strong class="jxr_keyword">null</strong>); <em class="jxr_comment">// v is Optional.empty() if key exists with null value, or Optional.of(value) if present</em>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			<em class="jxr_comment">// 2. Check global override</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			v = globalStore.get().get(name);
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<strong class="jxr_keyword">if</strong> (v != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 				<strong class="jxr_keyword">return</strong> v.orElse(<strong class="jxr_keyword">null</strong>); <em class="jxr_comment">// v is Optional.empty() if key exists with null value, or Optional.of(value) if present</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">		 * Registers a custom type conversion function for the specified type.</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">		 * This allows you to add support for converting string values to custom types when using</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">		 * {@link Settings#get(String, Object)}. The function will be used to convert string values</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">		 * to the specified type.</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Register a custom converter for a custom type&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">		 * 	Settings &lt;jv&gt;custom&lt;/jv&gt; = Settings.&lt;jsf&gt;create&lt;/jsf&gt;()</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">		 * 		.addTypeFunction(Integer.&lt;jk&gt;class&lt;/jk&gt;, Integer::valueOf)</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">		 * 		.addTypeFunction(MyCustomType.&lt;jk&gt;class&lt;/jk&gt;, MyCustomType::fromString)</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">		 * 		.build();</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Now you can use get() with these types&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">		 * 	Integer &lt;jv&gt;intValue&lt;/jv&gt; = &lt;jv&gt;custom&lt;/jv&gt;.get(&lt;js&gt;"my.int.property"&lt;/js&gt;, 0);</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">		 * 	MyCustomType &lt;jv&gt;customValue&lt;/jv&gt; = &lt;jv&gt;custom&lt;/jv&gt;.get(&lt;js&gt;"my.custom.property"&lt;/js&gt;, MyCustomType.DEFAULT);</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">		 * @param &lt;T&gt; The type to register a converter for.</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">		 * @param type The class type to register a converter for. Must not be &lt;c&gt;null&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">		 * @param function The function that converts a string to the specified type. Must not be &lt;c&gt;null&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">		 * @return This builder for method chaining.</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">public</strong> &lt;T&gt; Builder addTypeFunction(Class&lt;T&gt; type, Function&lt;String,T&gt; function) {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			assertArgNotNull(ARG_type, type);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			assertArgNotNull(ARG_function, function);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			customTypeFunctions.put(type, function);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		}
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">		 * Builds a Settings instance from this builder.</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">		 * @return A new Settings instance.</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">public</strong> Settings build() {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Settings(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		}
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Settings INSTANCE = <strong class="jxr_keyword">new</strong> Builder()
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		.globalStore(initProperty(DISABLE_GLOBAL_PROP).map(Boolean::valueOf).orElse(false) ? () -&gt; <strong class="jxr_keyword">null</strong> : MapStore::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		.setSources(RELAXED_SYSTEM_ENV_SOURCE, SYSTEM_PROPERTY_SOURCE)
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		.useServiceLoader()
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		.build();
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * Returns the singleton instance of Settings.</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * @return The singleton Settings instance.</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Settings get() {
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">return</strong> INSTANCE;
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	}
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<em class="jxr_comment">// 3. Check sources in reverse order (last added first)</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = sources.size() - 1; i &gt;= 0; i--) {
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 				<strong class="jxr_keyword">var</strong> source = sources.get(i);
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 				<strong class="jxr_keyword">var</strong> result = source.get(name);
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				<strong class="jxr_keyword">if</strong> (result != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 					<strong class="jxr_keyword">return</strong> result.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			}
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Memoizer&lt;PropertyStore&gt; globalStore;
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<span class="jxr_string">"java:S5164"</span> <em class="jxr_comment">// Cleanup method provided: cleanup()</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	})
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ThreadLocal&lt;PropertyStore&gt; localStore;
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;PropertySource&gt; sources;
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,Function&lt;String,?&gt;&gt; toTypeFunctions;
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		});
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 * Looks up a system property, returning a default value if not found.</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * This method searches for a value using the same lookup order as {@link #get(String)}.</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * If a value is found, it is converted to the type of the default value using {@link #toType(String, Class)}.</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 * Supported types include any type that has a static method with signature &lt;c&gt;public static &amp;lt;T&amp;gt; T anyName(String arg)&lt;/c&gt;</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * or a public constructor with signature &lt;c&gt;public T(String arg)&lt;/c&gt;, such as {@link Boolean}, {@link Integer}, {@link java.nio.charset.Charset}, {@link java.io.File}, etc.</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	<strong class="jxr_keyword">private</strong> Settings(Builder builder) {
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">this</strong>.globalStore = memoizer(builder.globalStoreSupplier);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">this</strong>.localStore = ThreadLocal.withInitial(builder.localStoreSupplier);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">this</strong>.sources = <strong class="jxr_keyword">new</strong> CopyOnWriteArrayList&lt;&gt;(builder.sources);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">this</strong>.toTypeFunctions = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;(builder.customTypeFunctions);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	}
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * Adds a property source after this settings instance has been built.</em>
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// System property: -Dmy.property=true&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * 	Boolean &lt;jv&gt;flag&lt;/jv&gt; = get(&lt;js&gt;"my.property"&lt;/js&gt;, &lt;jk&gt;false&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Environment variable: MY_PROPERTY=UTF-8&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 * 	Charset &lt;jv&gt;charset&lt;/jv&gt; = get(&lt;js&gt;"my.property"&lt;/js&gt;, Charset.defaultCharset());  &lt;jc&gt;// UTF-8&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Not found, returns default&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * 	String &lt;jv&gt;value&lt;/jv&gt; = get(&lt;js&gt;"nonexistent"&lt;/js&gt;, &lt;js&gt;"default"&lt;/js&gt;);  &lt;jc&gt;// "default"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The type to convert the value to.</em>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">	 * @param name The property name.</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * @param def The default value to return if not found.</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * @return The found value (converted to type T), or the default value if not found.</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * @see #get(String)</em>
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * @see #toType(String, Class)</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T get(String name, T def) {
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertArgNotNull(<span class="jxr_string">"def"</span>, def);
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">return</strong> get(name).asType((Class&lt;T&gt;)def.getClass()).orElse(def);
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	}
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 * Sets a global override for the specified property.</em>
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 * This override will apply to all threads and takes precedence over system properties.</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 * However, per-thread overrides (set via {@link #setLocal(String, String)}) will still take precedence</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 * over global overrides.</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 * If the &lt;c&gt;juneau.settings.disableGlobal&lt;/c&gt; system property is set to &lt;c&gt;true&lt;/c&gt;,</em>
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * this method will throw an exception. This allows system administrators</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * to prevent applications from overriding system properties globally.</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * Setting a value to &lt;c&gt;null&lt;/c&gt; will store an empty optional, effectively overriding the system</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 * property to return empty. Use {@link #unsetGlobal(String)} to completely remove the override.</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * @param name The property name.</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * @param value The override value, or &lt;c&gt;null&lt;/c&gt; to set an empty override.</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 * @see #unsetGlobal(String)</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * @see #clearGlobal()</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<strong class="jxr_keyword">public</strong> <a name="Settings" href="../../../../../org/apache/juneau/commons/settings/Settings.html#Settings">Settings</a> setGlobal(String name, String value) {
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		assertArgNotNull(<span class="jxr_string">"name"</span>, name);
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		globalStore.orElseThrow(()-&gt;illegalState(MSG_globalDisabled)).set(name, value);
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	}
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * Removes a global override for the specified property.</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * After calling this method, the property will fall back to the system property value</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * (or per-thread override if one exists).</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * @param name The property name.</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * @see #setGlobal(String, String)</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * @see #clearGlobal()</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> unsetGlobal(String name) {
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		assertArgNotNull(<span class="jxr_string">"name"</span>, name);
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		globalStore.orElseThrow(()-&gt;illegalState(MSG_globalDisabled)).unset(name);
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	}
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * Sets a per-thread override for the specified property.</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * This override will only apply to the current thread and takes precedence over global overrides</em>
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * and system properties. This is particularly useful in unit tests where you need to temporarily</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * change a system property value without affecting other threads or tests.</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * Setting a value to &lt;c&gt;null&lt;/c&gt; will store an empty optional, effectively overriding the property</em>
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * to return empty for this thread. Use {@link #unsetLocal(String)} to completely remove the override.</em>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * @param name The property name.</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * @param value The override value, or &lt;c&gt;null&lt;/c&gt; to set an empty override.</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * @see #unsetLocal(String)</em>
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * @see #clearLocal()</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	<strong class="jxr_keyword">public</strong> <a name="Settings" href="../../../../../org/apache/juneau/commons/settings/Settings.html#Settings">Settings</a> setLocal(String name, String value) {
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		assertArgNotNull(<span class="jxr_string">"name"</span>, name);
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		assertState(nn(localStore.get()), MSG_localDisabled);
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		localStore.get().set(name, value);
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	}
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * Removes a per-thread override for the specified property.</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * After calling this method, the property will fall back to the global override (if set)</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * or the system property value for the current thread.</em>
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * @param name The property name.</em>
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * @see #setLocal(String, String)</em>
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * @see #clearLocal()</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> unsetLocal(String name) {
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		assertArgNotNull(<span class="jxr_string">"name"</span>, name);
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		assertState(nn(localStore.get()), MSG_localDisabled);
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		localStore.get().unset(name);
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	}
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * Clears all per-thread overrides for the current thread.</em>
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 * After calling this method, all properties will fall back to global overrides (if set)</em>
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * or system property values for the current thread.</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * This is typically called in a &lt;c&gt;@AfterEach&lt;/c&gt; or &lt;c&gt;@After&lt;/c&gt; test method to clean up</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 * thread-local overrides after a test completes.</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 * @see #setLocal(String, String)</em>
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 * @see #unsetLocal(String)</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 * @param source The property source to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<strong class="jxr_keyword">public</strong> Settings addSource(<a name="PropertySource" href="../../../../../org/apache/juneau/commons/settings/PropertySource.html#PropertySource">PropertySource</a> source) {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertArgNotNull(ARG_source, source);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		sources.add(source);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 * Returns the number of {@link PropertySource}s currently registered with this</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 * {@code Settings} instance.</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * Intended primarily for tests that need to verify nothing has leaked extra sources into the</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * process-wide {@link #get() Settings.get()} singleton &amp;mdash; the historical failure mode</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * documented where a per-{@code RestContext}</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * config bridge added a {@code ConfigPropertySource} per cached {@code RestContext} via</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * {@link #addSource(PropertySource)} and never removed it.</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * @return The current source count. Always {@code &amp;gt;= 0}.</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> sourceCount() {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">return</strong> sources.size();
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	}
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 * Removes a previously-added property source.</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 * The match is by identity ({@code ==}), not equality.  Callers that mutate the singleton</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 * {@link #get() Settings.get()} from a test should capture the exact reference returned to/passed</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 * into {@link #addSource(PropertySource)} and pass it back here in their teardown to avoid</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * cross-test bleed.</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * @param source The property source to remove. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the source was present and removed, &lt;jk&gt;false&lt;/jk&gt; otherwise.</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> removeSource(<a name="PropertySource" href="../../../../../org/apache/juneau/commons/settings/PropertySource.html#PropertySource">PropertySource</a> source) {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		assertArgNotNull(ARG_source, source);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<em class="jxr_comment">// Identity-based removal so that PropertySource impls without a sensible equals() still</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<em class="jxr_comment">// round-trip cleanly through add/remove pairs.</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; sources.size(); i++) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">if</strong> (sources.get(i) == source) {
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 				sources.remove(i);
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			}
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		}
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	}
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * Returns a {@link StringSetting} for the specified system property.</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * The returned {@link StringSetting} is a resettable supplier that caches the lookup result.</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * Use the {@link StringSetting#asInteger()}, {@link StringSetting#asBoolean()}, etc. methods</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * to convert to different types.</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * The lookup order is:</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Per-thread override (if set via {@link #setLocal(String, String)})</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Global override (if set via {@link #setGlobal(String, String)})</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Sources in reverse order (last source added via {@link Builder#addSource(PropertySource)} is checked first)</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;System property source (default, always second-to-last)</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;System environment variable source (default, always last)</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 * @return A {@link StringSetting} that provides the resolved property value.</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	<strong class="jxr_keyword">public</strong> StringSetting get(String name) {
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		assertArgNotNull(ARG_name, name);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StringSetting(<strong class="jxr_keyword">this</strong>, () -&gt; {
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<em class="jxr_comment">// 1. Check thread-local override</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			<strong class="jxr_keyword">var</strong> v = localStore.get().get(name);
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<strong class="jxr_keyword">if</strong> (v.isPresent())
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 				<strong class="jxr_keyword">return</strong> v.value().orElse(<strong class="jxr_keyword">null</strong>); <em class="jxr_comment">// Present result: Optional.empty() means explicit null override.</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 			<em class="jxr_comment">// 2. Check global override</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			v = globalStore.get().get(name);
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			<strong class="jxr_keyword">if</strong> (v.isPresent())
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 				<strong class="jxr_keyword">return</strong> v.value().orElse(<strong class="jxr_keyword">null</strong>); <em class="jxr_comment">// Present result: Optional.empty() means explicit null override.</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			<em class="jxr_comment">// 3. Check sources in reverse order (last added first)</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = sources.size() - 1; i &gt;= 0; i--) {
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 				<strong class="jxr_keyword">var</strong> source = sources.get(i);
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 				<strong class="jxr_keyword">var</strong> result = source.get(name);
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 				<strong class="jxr_keyword">if</strong> (result.isPresent())
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 					<strong class="jxr_keyword">return</strong> result.value().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 			}
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		});
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	}
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * Returns the override value for the specified property, consulting only the per-thread</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * (local) and global stores &amp;mdash; &lt;i&gt;not&lt;/i&gt; the sources list.</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * Intended for callers (notably the {@code @Value} resolution path) that interleave a</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * caller-scoped property source between the Settings override stores and the sources list.</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * Using this method, the caller can honor the "{@link #setLocal(String, String) local}</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * / {@link #setGlobal(String, String) global} override wins" contract before consulting</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * its own scoped sources, and still fall through to {@link #get(String)} (which checks</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * the sources list) afterwards without the override stores accidentally being consulted twice.</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * Lookup order honored by this method:</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Per-thread (local) store</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Global store</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * If a store is present with an empty value (i.e. an explicit null override), the returned</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 * {@link Optional} is {@code Optional.empty()} but {@link #isOverridden(String)} would</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * return {@code true}. Callers needing to distinguish "absent" from "explicit null" should</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * use {@link #isOverridden(String)} alongside this method.</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 * @return The override value, or {@link Optional#empty()} if neither store carries an override.</em>
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 * @see #isOverridden(String)</em>
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 * @see #get(String)</em>
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	<strong class="jxr_keyword">public</strong> <a name="Settings" href="../../../../../org/apache/juneau/commons/settings/Settings.html#Settings">Settings</a> clearLocal() {
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		assertState(nn(localStore.get()), MSG_localDisabled);
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		localStore.get().clear();
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 	}
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 * Clears all global overrides.</em>
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * After calling this method, all properties will fall back to resolver values</em>
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * (or per-thread overrides if they exist).</em>
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * @see #setGlobal(String, String)</em>
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 * @see #unsetGlobal(String)</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 	<strong class="jxr_keyword">public</strong> <a name="Settings" href="../../../../../org/apache/juneau/commons/settings/Settings.html#Settings">Settings</a> clearGlobal() {
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		globalStore.orElseThrow(()-&gt;illegalState(MSG_globalDisabled)).clear();
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	}
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">	 * Converts a string to the specified type using reflection to find conversion methods or constructors.</em>
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 * This method attempts to convert a string to the specified type using the following lookup order:</em>
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Custom type functions registered via {@link Builder#addTypeFunction(Class, Function)}&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Special handling for {@link String} (returns the string as-is)&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Special handling for {@link Enum} types (uses {@link Enum#valueOf(Class, String)})&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Reflection lookup for static methods with signature &lt;c&gt;public static &amp;lt;T&amp;gt; T anyName(String arg)&lt;/c&gt;</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">	 * 		on the target class&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Reflection lookup for static methods on the superclass (for abstract classes like {@link Charset}</em>
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">	 * 		where concrete implementations need to use the abstract class's static method)&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Reflection lookup for public constructors with signature &lt;c&gt;public T(String arg)&lt;/c&gt;&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">	 * When a conversion method or constructor is found via reflection, it is cached in the</em>
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 * &lt;c&gt;toTypeFunctions&lt;/c&gt; map for future use.</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;String&gt; getOverride(String name) {
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		assertArgNotNull(ARG_name, name);
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">var</strong> v = localStore.get().get(name);
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		<strong class="jxr_keyword">if</strong> (v.isPresent())
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 			<strong class="jxr_keyword">return</strong> v.value();
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		v = globalStore.get().get(name);
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		<strong class="jxr_keyword">if</strong> (v.isPresent())
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 			<strong class="jxr_keyword">return</strong> v.value();
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		<strong class="jxr_keyword">return</strong> oe();
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	}
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified property has an override in either the per-thread</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * (local) or global store.</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * Distinguishes the "explicit null override" case &amp;mdash; where {@link #getOverride(String)}</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * returns {@link Optional#empty()} because the override value itself was {@code null} &amp;mdash;</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 * from the "no override" case.</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">	 * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if either store carries an override (even with a {@code null} value).</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isOverridden(String name) {
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		assertArgNotNull(ARG_name, name);
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">return</strong> localStore.get().get(name).isPresent() || globalStore.get().get(name).isPresent();
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 	}
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 * Looks up a system property, returning a default value if not found.</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">	 * This method searches for a value using the same lookup order as {@link #get(String)}.</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">	 * If a value is found, it is converted to the type of the default value using {@link #toType(String, Class)}.</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">	 * Supported types include any type that has a static method with signature &lt;c&gt;public static &amp;lt;T&amp;gt; T anyName(String arg)&lt;/c&gt;</em>
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">	 * or a public constructor with signature &lt;c&gt;public T(String arg)&lt;/c&gt;, such as {@link Boolean}, {@link Integer}, {@link Charset}, {@link java.io.File}, etc.</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// System property: -Dmy.property=true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 * 	Boolean &lt;jv&gt;flag&lt;/jv&gt; = get(&lt;js&gt;"my.property"&lt;/js&gt;, &lt;jk&gt;false&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 * &lt;ul class='spaced-list'&gt;</em>
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;Boolean&lt;/c&gt; - Uses &lt;c&gt;Boolean.valueOf(String)&lt;/c&gt; static method</em>
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;Integer&lt;/c&gt; - Uses &lt;c&gt;Integer.valueOf(String)&lt;/c&gt; static method</em>
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;Charset&lt;/c&gt; - Uses &lt;c&gt;Charset.forName(String)&lt;/c&gt; static method (even for concrete implementations)</em>
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;File&lt;/c&gt; - Uses &lt;c&gt;File(String)&lt;/c&gt; constructor</em>
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> <em class="jxr_javadoccomment">	 * @param s The string to convert. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">	 * @param c The target class. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">	 * @return The converted value.</em>
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException If the type is not supported for conversion (no static method or constructor found).</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Environment variable: MY_PROPERTY=UTF-8&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 * 	Charset &lt;jv&gt;charset&lt;/jv&gt; = get(&lt;js&gt;"my.property"&lt;/js&gt;, Charset.defaultCharset());  &lt;jc&gt;// UTF-8&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Not found, returns default&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> <em class="jxr_javadoccomment">	 * 	String &lt;jv&gt;value&lt;/jv&gt; = get(&lt;js&gt;"nonexistent"&lt;/js&gt;, &lt;js&gt;"default"&lt;/js&gt;);  &lt;jc&gt;// "default"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The type to convert the value to.</em>
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> <em class="jxr_javadoccomment">	 * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> <em class="jxr_javadoccomment">	 * @param def The default value to return if not found. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">	 * @return The found value (converted to type T), or the default value if not found.</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">	 * @see #get(String)</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">	 * @see #toType(String, Class)</em>
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; T toType(String s, Class&lt;T&gt; c) {
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		assertArgNotNull(<span class="jxr_string">"s"</span>, s);
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		assertArgNotNull(<span class="jxr_string">"c"</span>, c);
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">var</strong> f = (Function&lt;String,T&gt;)toTypeFunctions.get(c);
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 			<strong class="jxr_keyword">if</strong> (c == String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 				<strong class="jxr_keyword">return</strong> (T)s;
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 			<strong class="jxr_keyword">if</strong> (c.isEnum())
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 				<strong class="jxr_keyword">return</strong> (T)Enum.valueOf((Class&lt;? <strong class="jxr_keyword">extends</strong> Enum&gt;)c, s);
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 			ClassInfoTyped&lt;T&gt; ci = info(c);
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 			f = ci.getDeclaredMethod(x -&gt; x.isStatic() &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>) &amp;&amp; x.hasReturnType(c) &amp;&amp; FROM_STRING_METHOD_NAMES.contains(x.getName())).map(x -&gt; (Function&lt;String,T&gt;)s2 -&gt; x.invoke(<strong class="jxr_keyword">null</strong>, s2)).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 			<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 				f = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).map(x -&gt; (Function&lt;String,T&gt;)s2 -&gt; x.newInstance(s2)).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 			<strong class="jxr_keyword">if</strong> (f != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 				toTypeFunctions.putIfAbsent(c, f);
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		}
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid env type: {0}"</span>, c);
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">return</strong> f.apply(s);
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 	}
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> }
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Type erasure requires unchecked cast</em>
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 	})
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T get(String name, T def) {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		assertArgNotNull(ARG_def, def);
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<strong class="jxr_keyword">return</strong> get(name).asType((Class&lt;T&gt;)def.getClass()).orElse(def);
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	}
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">	 * Sets a global override for the specified property.</em>
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">	 * This override will apply to all threads and takes precedence over system properties.</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">	 * However, per-thread overrides (set via {@link #setLocal(String, String)}) will still take precedence</em>
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">	 * over global overrides.</em>
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 * If the &lt;c&gt;juneau.settings.disableGlobal&lt;/c&gt; system property is set to &lt;c&gt;true&lt;/c&gt;,</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 * this method will throw an exception. This allows system administrators</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 * to prevent applications from overriding system properties globally.</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">	 * Setting a value to &lt;c&gt;null&lt;/c&gt; will store an empty optional, effectively overriding the system</em>
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">	 * property to return empty. Use {@link #unsetGlobal(String)} to completely remove the override.</em>
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> <em class="jxr_javadoccomment">	 * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> <em class="jxr_javadoccomment">	 * @param value The override value, or &lt;c&gt;null&lt;/c&gt; to set an empty override.</em>
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">	 * @see #unsetGlobal(String)</em>
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">	 * @see #clearGlobal()</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	<strong class="jxr_keyword">public</strong> Settings setGlobal(String name, String value) {
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		assertArgNotNull(ARG_name, name);
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		globalStore.orElseThrow(()-&gt;isex(MSG_globalDisabled)).set(name, value);
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 	}
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> <em class="jxr_javadoccomment">	 * Removes a global override for the specified property.</em>
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">	 * After calling this method, the property will fall back to the system property value</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">	 * (or per-thread override if one exists).</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">	 * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">	 * @see #setGlobal(String, String)</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 * @see #clearGlobal()</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> unsetGlobal(String name) {
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		assertArgNotNull(ARG_name, name);
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		globalStore.orElseThrow(()-&gt;isex(MSG_globalDisabled)).unset(name);
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	}
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">	 * Sets a per-thread override for the specified property.</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">	 * This override will only apply to the current thread and takes precedence over global overrides</em>
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> <em class="jxr_javadoccomment">	 * and system properties. This is particularly useful in unit tests where you need to temporarily</em>
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">	 * change a system property value without affecting other threads or tests.</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">	 * Setting a value to &lt;c&gt;null&lt;/c&gt; will store an empty optional, effectively overriding the property</em>
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">	 * to return empty for this thread. Use {@link #unsetLocal(String)} to completely remove the override.</em>
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">	 * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 * @param value The override value, or &lt;c&gt;null&lt;/c&gt; to set an empty override.</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">	 * @see #unsetLocal(String)</em>
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">	 * @see #clearLocal()</em>
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	<strong class="jxr_keyword">public</strong> Settings setLocal(String name, String value) {
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		assertArgNotNull(ARG_name, name);
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		assertState(nn(localStore.get()), MSG_localDisabled);
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		localStore.get().set(name, value);
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 	}
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">	 * Removes a per-thread override for the specified property.</em>
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> <em class="jxr_javadoccomment">	 * After calling this method, the property will fall back to the global override (if set)</em>
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">	 * or the system property value for the current thread.</em>
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">	 * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> <em class="jxr_javadoccomment">	 * @see #setLocal(String, String)</em>
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> <em class="jxr_javadoccomment">	 * @see #clearLocal()</em>
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> unsetLocal(String name) {
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		assertArgNotNull(ARG_name, name);
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		assertState(nn(localStore.get()), MSG_localDisabled);
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		localStore.get().unset(name);
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 	}
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> <em class="jxr_javadoccomment">	 * Clears all per-thread overrides for the current thread.</em>
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">	 * After calling this method, all properties will fall back to global overrides (if set)</em>
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> <em class="jxr_javadoccomment">	 * or system property values for the current thread.</em>
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> <em class="jxr_javadoccomment">	 * This is typically called in a &lt;c&gt;@AfterEach&lt;/c&gt; or &lt;c&gt;@After&lt;/c&gt; test method to clean up</em>
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> <em class="jxr_javadoccomment">	 * thread-local overrides after a test completes.</em>
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 * @see #setLocal(String, String)</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 * @see #unsetLocal(String)</em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	<strong class="jxr_keyword">public</strong> Settings clearLocal() {
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		assertState(nn(localStore.get()), MSG_localDisabled);
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		localStore.get().clear();
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 	}
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">	 * Cleans up thread-local storage for the current thread.</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> <em class="jxr_javadoccomment">	 * This method should be called when a thread is finished using this Settings instance to prevent memory leaks</em>
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> <em class="jxr_javadoccomment">	 * in thread pool environments where threads are reused.</em>
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> cleanup() {
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">if</strong> (localStore != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 			localStore.remove();
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		}
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 	}
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> <em class="jxr_javadoccomment">	 * Clears all global overrides.</em>
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> <em class="jxr_javadoccomment">	 * After calling this method, all properties will fall back to resolver values</em>
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">	 * (or per-thread overrides if they exist).</em>
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 * @see #setGlobal(String, String)</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">	 * @see #unsetGlobal(String)</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 	<strong class="jxr_keyword">public</strong> Settings clearGlobal() {
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 		globalStore.orElseThrow(()-&gt;isex(MSG_globalDisabled)).clear();
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 	}
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 * Converts a string to the specified type using reflection to find conversion methods or constructors.</em>
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">	 * This method attempts to convert a string to the specified type using the following lookup order:</em>
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Custom type functions registered via {@link Builder#addTypeFunction(Class, Function)}&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Special handling for {@link String} (returns the string as-is)&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Special handling for {@link Enum} types (uses {@link Enum#valueOf(Class, String)})&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Reflection lookup for static methods with signature &lt;c&gt;public static &amp;lt;T&amp;gt; T anyName(String arg)&lt;/c&gt;</em>
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> <em class="jxr_javadoccomment">	 * 		on the target class&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Reflection lookup for static methods on the superclass (for abstract classes like {@link Charset}</em>
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> <em class="jxr_javadoccomment">	 * 		where concrete implementations need to use the abstract class's static method)&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Reflection lookup for public constructors with signature &lt;c&gt;public T(String arg)&lt;/c&gt;&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 * When a conversion method or constructor is found via reflection, it is cached in the</em>
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">	 * &lt;c&gt;toTypeFunctions&lt;/c&gt; map for future use.</em>
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> <em class="jxr_javadoccomment">	 * &lt;ul class='spaced-list'&gt;</em>
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;Boolean&lt;/c&gt; - Uses &lt;c&gt;Boolean.valueOf(String)&lt;/c&gt; static method</em>
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;Integer&lt;/c&gt; - Uses &lt;c&gt;Integer.valueOf(String)&lt;/c&gt; static method</em>
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;Charset&lt;/c&gt; - Uses &lt;c&gt;Charset.forName(String)&lt;/c&gt; static method (even for concrete implementations)</em>
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;File&lt;/c&gt; - Uses &lt;c&gt;File(String)&lt;/c&gt; constructor</em>
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> <em class="jxr_javadoccomment">	 * @param s The string to convert. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> <em class="jxr_javadoccomment">	 * @param c The target class. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> <em class="jxr_javadoccomment">	 * @return The converted value.</em>
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException If the type is not supported for conversion (no static method or constructor found).</em>
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 		<span class="jxr_string">"unchecked"</span>, <em class="jxr_comment">// Type erasure requires unchecked cast</em>
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 		<span class="jxr_string">"rawtypes"</span> <em class="jxr_comment">// Raw types necessary for generic type handling</em>
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 	})
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T toType(String s, Class&lt;T&gt; c) {
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 		assertArgNotNull(ARG_s, s);
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 		assertArgNotNull(ARG_c, c);
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 		<strong class="jxr_keyword">var</strong> f = (Function&lt;String,T&gt;)toTypeFunctions.get(c);
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 			<strong class="jxr_keyword">if</strong> (c == String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 				<strong class="jxr_keyword">return</strong> (T)s;
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 			<strong class="jxr_keyword">if</strong> (c.isEnum())
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 				<strong class="jxr_keyword">return</strong> (T)Enum.valueOf((Class&lt;? <strong class="jxr_keyword">extends</strong> Enum&gt;)c, s);
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 			ClassInfoTyped&lt;T&gt; ci = info(c);
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 			f = ci.getDeclaredMethod(x -&gt; x.isStatic() &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>) &amp;&amp; x.hasReturnType(c) &amp;&amp; FROM_STRING_METHOD_NAMES.contains(x.getName())).map(x -&gt; (Function&lt;String,T&gt;)s2 -&gt; x.invoke(<strong class="jxr_keyword">null</strong>, s2)).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 			<em class="jxr_comment">// Also accept `static T parse(CharSequence)` etc. — common for java.time types (Instant,</em>
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 			<em class="jxr_comment">// LocalDate, Duration) whose static factories declare the wider CharSequence parameter.</em>
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 			<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 				f = ci.getDeclaredMethod(x -&gt; x.isStatic() &amp;&amp; x.hasParameterTypes(CharSequence.<strong class="jxr_keyword">class</strong>) &amp;&amp; x.hasReturnType(c) &amp;&amp; FROM_STRING_METHOD_NAMES.contains(x.getName())).map(x -&gt; (Function&lt;String,T&gt;)s2 -&gt; x.invoke(<strong class="jxr_keyword">null</strong>, s2)).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 			<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 				f = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).map(x -&gt; (Function&lt;String,T&gt;)x::newInstance).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 			<strong class="jxr_keyword">if</strong> (f != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 				toTypeFunctions.putIfAbsent(c, f);
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		}
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid env type: %s"</span>, c);
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		<strong class="jxr_keyword">return</strong> f.apply(s);
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 	}
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> }
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

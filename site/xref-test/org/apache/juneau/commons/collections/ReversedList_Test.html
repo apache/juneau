@@ -24,15 +24,15 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.commons.collections;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.TestAssertions.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">class</strong> <a name="ReversedList_Test" href="../../../../../org/apache/juneau/commons/collections/ReversedList_Test.html#ReversedList_Test">ReversedList_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">class</strong> <a name="ReversedList_Test" href="../../../../../org/apache/juneau/commons/collections/ReversedList_Test.html#ReversedList_Test">ReversedList_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/commons/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<em class="jxr_comment">// Basic functionality</em>
@@ -190,7 +190,7 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">var</strong> original = List.of(<span class="jxr_string">"A"</span>, <span class="jxr_string">"B"</span>, <span class="jxr_string">"C"</span>);
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> reversed = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original);
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertThrows(UnsupportedOperationException.<strong class="jxr_keyword">class</strong>, () -&gt; reversed.clear());
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertThrows(UnsupportedOperationException.<strong class="jxr_keyword">class</strong>, reversed::clear);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Test
@@ -200,7 +200,7 @@
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">var</strong> it = reversed.iterator();
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		it.next();
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertThrows(UnsupportedOperationException.<strong class="jxr_keyword">class</strong>, () -&gt; it.remove());
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertThrows(UnsupportedOperationException.<strong class="jxr_keyword">class</strong>, it::remove);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 	}
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<em class="jxr_comment">//====================================================================================================</em>
@@ -290,7 +290,7 @@
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">var</strong> it = reversed.listIterator();
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 		it.next();
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		assertThrows(UnsupportedOperationException.<strong class="jxr_keyword">class</strong>, () -&gt; it.remove());
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		assertThrows(UnsupportedOperationException.<strong class="jxr_keyword">class</strong>, it::remove);
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 		assertThrows(UnsupportedOperationException.<strong class="jxr_keyword">class</strong>, () -&gt; it.set(<span class="jxr_string">"X"</span>));
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		assertThrows(UnsupportedOperationException.<strong class="jxr_keyword">class</strong>, () -&gt; it.add(<span class="jxr_string">"X"</span>));
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 	}
@@ -542,8 +542,8 @@
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<strong class="jxr_keyword">var</strong> reversed2 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original2);
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<em class="jxr_comment">// ReversedList.equals() compares in reversed order</em>
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		assertTrue(reversed1.equals(reversed2));
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		assertTrue(reversed2.equals(reversed1));
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		assertEquals(reversed1, reversed2);
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		assertEquals(reversed2, reversed1);
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 	}
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 	@Test
@@ -554,8 +554,8 @@
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">var</strong> original2 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"d"</span>));
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 		<strong class="jxr_keyword">var</strong> reversed2 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original2);
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		assertFalse(reversed1.equals(reversed2));
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		assertFalse(reversed2.equals(reversed1));
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		assertNotEquals(reversed1, reversed2);
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		assertNotEquals(reversed2, reversed1);
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 	}
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 	@Test
@@ -566,97 +566,89 @@
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<em class="jxr_comment">// A reversed list ["c", "b", "a"] should equal a regular list ["c", "b", "a"]</em>
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">var</strong> regularList = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"c"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"a"</span>));
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		assertTrue(reversed.equals(regularList));
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		assertTrue(regularList.equals(reversed));
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	}
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	@Test
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 	<strong class="jxr_keyword">void</strong> k05_equals_notAList() {
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">var</strong> original = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<strong class="jxr_keyword">var</strong> reversed = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original);
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		assertFalse(reversed.equals(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	}
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	@Test
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	<strong class="jxr_keyword">void</strong> k06_hashCode_sameContents() {
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">var</strong> original1 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		<strong class="jxr_keyword">var</strong> reversed1 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original1);
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		<strong class="jxr_keyword">var</strong> original2 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">var</strong> reversed2 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original2);
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		assertEquals(reversed1.hashCode(), reversed2.hashCode());
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	}
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	@Test
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	<strong class="jxr_keyword">void</strong> k07_hashCode_regularList() {
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">var</strong> original = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		<strong class="jxr_keyword">var</strong> reversed = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original);
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<em class="jxr_comment">// A reversed list ["c", "b", "a"] should have same hash as a regular list ["c", "b", "a"]</em>
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">var</strong> regularList = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"c"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"a"</span>));
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		assertEquals(reversed.hashCode(), regularList.hashCode());
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 	}
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 	<em class="jxr_comment">// Additional coverage for specific lines</em>
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	@Test
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	<strong class="jxr_keyword">void</strong> l01_equals_differentLengths() {
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<em class="jxr_comment">// Line 320: while (e1.hasNext() &amp;&amp; e2.hasNext())</em>
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<em class="jxr_comment">// Line 326: return !(e1.hasNext() || e2.hasNext());</em>
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<em class="jxr_comment">// Test when lists have different lengths - one iterator exhausted before the other</em>
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">var</strong> original1 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		<strong class="jxr_keyword">var</strong> reversed1 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original1);
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<strong class="jxr_keyword">var</strong> original2 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>));
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 		<strong class="jxr_keyword">var</strong> reversed2 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original2);
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<em class="jxr_comment">// reversed1: ["c", "b", "a"]</em>
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<em class="jxr_comment">// reversed2: ["d", "c", "b", "a"]</em>
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<em class="jxr_comment">// After comparing first 3 elements, e1 is exhausted but e2 has more</em>
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<em class="jxr_comment">// Line 326: return !(e1.hasNext() || e2.hasNext()) should return false</em>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		assertFalse(reversed1.equals(reversed2));
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		assertFalse(reversed2.equals(reversed1));
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	}
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		assertEquals(reversed.size(), regularList.size());
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		assertEquals(<strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(reversed), regularList);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		assertEquals(regularList, <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(reversed));
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	}
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 	@Test
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 	<strong class="jxr_keyword">void</strong> k05_equals_notAList() {
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<strong class="jxr_keyword">var</strong> original = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">var</strong> reversed = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original);
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		assertNotNull(reversed);
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 	}
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	@Test
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	<strong class="jxr_keyword">void</strong> k06_hashCode_sameContents() {
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		<strong class="jxr_keyword">var</strong> original1 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<strong class="jxr_keyword">var</strong> reversed1 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original1);
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">var</strong> original2 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">var</strong> reversed2 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original2);
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		assertEquals(reversed1.hashCode(), reversed2.hashCode());
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 	}
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	@Test
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	<strong class="jxr_keyword">void</strong> k07_hashCode_regularList() {
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		<strong class="jxr_keyword">var</strong> original = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		<strong class="jxr_keyword">var</strong> reversed = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original);
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<em class="jxr_comment">// A reversed list ["c", "b", "a"] should have same hash as a regular list ["c", "b", "a"]</em>
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">var</strong> regularList = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"c"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		assertEquals(reversed.hashCode(), regularList.hashCode());
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 	}
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	<em class="jxr_comment">// Additional coverage for specific lines</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	@Test
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	<strong class="jxr_keyword">void</strong> l01_equals_differentLengths() {
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">var</strong> original1 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">var</strong> reversed1 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original1);
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		<strong class="jxr_keyword">var</strong> original2 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>));
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<strong class="jxr_keyword">var</strong> reversed2 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original2);
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 		assertNotEquals(reversed1, reversed2);
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		assertNotEquals(reversed2, reversed1);
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	}
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	@Test
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 	<strong class="jxr_keyword">void</strong> l02_equals_oneExhausted() {
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<em class="jxr_comment">// Test when one iterator is exhausted before the other</em>
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">var</strong> original1 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">var</strong> reversed1 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original1);
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	@Test
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	<strong class="jxr_keyword">void</strong> l02_equals_oneExhausted() {
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<em class="jxr_comment">// Line 326: return !(e1.hasNext() || e2.hasNext());</em>
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<em class="jxr_comment">// Test when one iterator is exhausted before the other</em>
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">var</strong> original1 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>));
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		<strong class="jxr_keyword">var</strong> reversed1 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original1);
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		<strong class="jxr_keyword">var</strong> original2 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		<strong class="jxr_keyword">var</strong> reversed2 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original2);
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		<em class="jxr_comment">// reversed1: ["b", "a"]</em>
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<em class="jxr_comment">// reversed2: ["c", "b", "a"]</em>
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<em class="jxr_comment">// After comparing first 2 elements, e1 is exhausted but e2 has more</em>
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		assertFalse(reversed1.equals(reversed2));
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	}
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 	@Test
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	<strong class="jxr_keyword">void</strong> l03_hashCode_withNullElements() {
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<em class="jxr_comment">// Line 356: hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());</em>
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		<em class="jxr_comment">// Test hashCode with null elements</em>
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 		<strong class="jxr_keyword">var</strong> original = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(Arrays.asList(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<strong class="jxr_keyword">var</strong> reversed = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original);
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<em class="jxr_comment">// Calculate expected hashCode manually (null contributes 0)</em>
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<em class="jxr_comment">// Reversed order: ["c", null, "a"]</em>
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<strong class="jxr_keyword">int</strong> expectedHashCode = 1;
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		expectedHashCode = 31 * expectedHashCode + <span class="jxr_string">"c"</span>.hashCode();
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		expectedHashCode = 31 * expectedHashCode + 0; <em class="jxr_comment">// null</em>
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		expectedHashCode = 31 * expectedHashCode + <span class="jxr_string">"a"</span>.hashCode();
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		assertEquals(expectedHashCode, reversed.hashCode());
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	}
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> }
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<strong class="jxr_keyword">var</strong> original2 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<strong class="jxr_keyword">var</strong> reversed2 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original2);
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<em class="jxr_comment">// reversed1: ["b", "a"]</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<em class="jxr_comment">// reversed2: ["c", "b", "a"]</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		<em class="jxr_comment">// After comparing first 2 elements, e1 is exhausted but e2 has more</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		assertNotEquals(reversed1, reversed2);
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 	}
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 	@Test
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 	<strong class="jxr_keyword">void</strong> l03_hashCode_withNullElements() {
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<em class="jxr_comment">// Test hashCode with null elements</em>
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<strong class="jxr_keyword">var</strong> original = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(Arrays.asList(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		<strong class="jxr_keyword">var</strong> reversed = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original);
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 		<em class="jxr_comment">// Calculate expected hashCode manually (null contributes 0)</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		<em class="jxr_comment">// Reversed order: ["c", null, "a"]</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">int</strong> expectedHashCode = 1;
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		expectedHashCode = 31 * expectedHashCode + <span class="jxr_string">"c"</span>.hashCode();
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		expectedHashCode = 31 * expectedHashCode + 0; <em class="jxr_comment">// null</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 		expectedHashCode = 31 * expectedHashCode + <span class="jxr_string">"a"</span>.hashCode();
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		assertEquals(expectedHashCode, reversed.hashCode());
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	}
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> }
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

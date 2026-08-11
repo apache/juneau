@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>SignedCookieSessionStore_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../../testapidocs/org/apache/juneau/rest/server/auth/oidc/rp/SignedCookieSessionStore_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.auth.oidc.rp;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.auth.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Tests for {@link SignedCookieSessionStore} &amp;mdash; stateless HMAC-signed cookie round-trip, tamper</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * rejection, expiry, and the size cap.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<span class="jxr_string">"java:S5778"</span>  <em class="jxr_comment">// assertThrows lambdas with chained calls; intermediate invocations do not throw in practice</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  })
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">class</strong> SignedCookieSessionStore_Test <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String KEY = <span class="jxr_string">"0123456789abcdef0123456789abcdef"</span>;  <em class="jxr_comment">// 32 bytes</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<em class="jxr_comment">// Fixed time seam: session timestamps are anchored to a constant and the round-trip store is</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<em class="jxr_comment">// driven by a matching fixed Clock, instead of reading the system clock (java:S8692).</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Instant NOW = Instant.parse(<span class="jxr_string">"2026-01-01T00:00:00Z"</span>);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Clock CLOCK = Clock.fixed(NOW, ZoneOffset.UTC);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> OidcSession session(Instant now, String sid) {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> OidcSession(<span class="jxr_string">"id-1"</span>, <span class="jxr_string">"alice"</span>, o(sid),
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			<strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, Map.of(<span class="jxr_string">"sub"</span>, <span class="jxr_string">"alice"</span>, <span class="jxr_string">"email"</span>, <span class="jxr_string">"alice@example.com"</span>)),
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(List.of(<span class="jxr_string">"user"</span>, <span class="jxr_string">"admin"</span>)),
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  			oe(), now, now.plus(Duration.ofHours(8)));
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	}
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	@Test <strong class="jxr_keyword">void</strong> a01_roundTrip_recoversClaimsAndRoles() {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">var</strong> store = SignedCookieSessionStore.create().signingKey(KEY).clock(CLOCK).build();
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">var</strong> now = NOW;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> cookie = store.createSessionCookieValue(session(now, <span class="jxr_string">"sess-1"</span>));
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> s = store.lookup(cookie);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertTrue(s.isPresent());
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertEquals(<span class="jxr_string">"alice"</span>, s.get().subject());
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertEquals(<span class="jxr_string">"alice"</span>, s.get().principal().getName());
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertEquals(Set.of(<span class="jxr_string">"user"</span>, <span class="jxr_string">"admin"</span>), s.get().roles());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertEquals(<span class="jxr_string">"sess-1"</span>, s.get().sid().orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		assertEquals(<span class="jxr_string">"alice@example.com"</span>, s.get().principal().getClaim(<span class="jxr_string">"email"</span>, String.<strong class="jxr_keyword">class</strong>).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertTrue(s.get().token().isEmpty(), <span class="jxr_string">"cookie store must NOT retain raw tokens"</span>);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	@Test <strong class="jxr_keyword">void</strong> b01_tamperedCookie_isRejected() {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> store = SignedCookieSessionStore.create().signingKey(KEY).build();
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> cookie = store.createSessionCookieValue(session(NOW, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> tampered = cookie.substring(0, cookie.length() - 3) + <span class="jxr_string">"AAA"</span>;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertTrue(store.lookup(tampered).isEmpty());
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@Test <strong class="jxr_keyword">void</strong> b02_wrongKey_isRejected() {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> signer = SignedCookieSessionStore.create().signingKey(KEY).build();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> cookie = signer.createSessionCookieValue(session(NOW, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">var</strong> other = SignedCookieSessionStore.create().signingKey(<span class="jxr_string">"ffffffffffffffffffffffffffffffff"</span>).build();
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertTrue(other.lookup(cookie).isEmpty());
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test <strong class="jxr_keyword">void</strong> b03_garbageCookie_isRejected() {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> store = SignedCookieSessionStore.create().signingKey(KEY).build();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertTrue(store.lookup(<span class="jxr_string">"not-a-jwt"</span>).isEmpty());
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test <strong class="jxr_keyword">void</strong> c01_expiredCookie_isRejected() {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> base = Instant.parse(<span class="jxr_string">"2026-01-01T00:00:00Z"</span>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> clock = <strong class="jxr_keyword">new</strong> EphemeralStore_Test.MutableClock(base);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> store = SignedCookieSessionStore.create().signingKey(KEY).clock(clock).build();
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> cookie = store.createSessionCookieValue(session(base, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		clock.advance(Duration.ofHours(9));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertTrue(store.lookup(cookie).isEmpty());
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test <strong class="jxr_keyword">void</strong> d01_doesNotSupportServerSideRevocation() {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> store = SignedCookieSessionStore.create().signingKey(KEY).build();
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertFalse(store.supportsServerSideRevocation());
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertThrows(UnsupportedOperationException.<strong class="jxr_keyword">class</strong>, () -&gt; store.invalidateBySubject(<span class="jxr_string">"alice"</span>));
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertThrows(UnsupportedOperationException.<strong class="jxr_keyword">class</strong>, () -&gt; store.invalidateBySessionId(<span class="jxr_string">"sess-1"</span>));
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@Test <strong class="jxr_keyword">void</strong> e01_overCapPayload_<strong class="jxr_keyword">throws</strong>() {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> store = SignedCookieSessionStore.create().signingKey(KEY).maxCookieBytes(128).build();
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			() -&gt; store.createSessionCookieValue(session(NOW, <span class="jxr_string">"sess-1"</span>)));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@Test <strong class="jxr_keyword">void</strong> f01_shortKey_rejected() {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; SignedCookieSessionStore.create().signingKey(<span class="jxr_string">"too-short"</span>));
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	@Test <strong class="jxr_keyword">void</strong> f02_missingKey_rejected() {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; SignedCookieSessionStore.create().build());
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

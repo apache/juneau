@@ -24,8 +24,8 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.bean.swagger;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Comparator&lt;String&gt; OP_SORTER = <strong class="jxr_keyword">new</strong> Comparator&lt;&gt;() {
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,String&gt; methods = mapb(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,String&gt; methods = mb(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  			.add(<span class="jxr_string">"get"</span>, <span class="jxr_string">"0"</span>)
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  			.add(<span class="jxr_string">"put"</span>, <span class="jxr_string">"1"</span>)
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  			.add(<span class="jxr_string">"post"</span>, <span class="jxr_string">"2"</span>)
@@ -113,12 +113,12 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		@Override
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compare(String o1, String o2) {
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<em class="jxr_comment">// Since keys are now stored in lowercase, we need to normalize them for comparison</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">var</strong> s1 = methods.get(emptyIfNull(o1).toLowerCase());
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">var</strong> s2 = methods.get(emptyIfNull(o2).toLowerCase());
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">var</strong> s1 = methods.get(lcr(emptyIfNull(o1)));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">var</strong> s2 = methods.get(lcr(emptyIfNull(o2)));
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">if</strong> (s1 == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				s1 = emptyIfNull(o1).toLowerCase();
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				s1 = lcr(emptyIfNull(o1));
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<strong class="jxr_keyword">if</strong> (s2 == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 				s2 = emptyIfNull(o2).toLowerCase();
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 				s2 = lcr(emptyIfNull(o2));
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 			<strong class="jxr_keyword">return</strong> StringUtils.compare(s1, s2);
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 		}
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	};
@@ -137,7 +137,7 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * @param operation The operation.</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<strong class="jxr_keyword">public</strong> <a name="OperationMap" href="../../../../../org/apache/juneau/bean/swagger/OperationMap.html#OperationMap">OperationMap</a> append(String httpMethodName, <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> operation) {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<strong class="jxr_keyword">public</strong> <a name="OperationMap" href="../../../../../org/apache/juneau/bean/swagger/OperationMap.html#OperationMap">OperationMap</a> append(String httpMethodName, Operation operation) {
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		put(httpMethodName, operation);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
@@ -147,11 +147,11 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 * @param key The key.</em>
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 * @param value The value.</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * @return The previous value associated with key, or null if there was no mapping for key.</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * @return The previous value associated with key, or &lt;jk&gt;null&lt;/jk&gt; if there was no mapping for key.</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	@Override
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">public</strong> <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> put(String key, <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> value) {
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.put(emptyIfNull(key).toLowerCase(), value);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">public</strong> Operation put(String key, Operation value) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.put(lcr(emptyIfNull(key)), value);
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> }
 </pre>

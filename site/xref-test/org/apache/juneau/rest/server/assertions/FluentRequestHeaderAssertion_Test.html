@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>FluentRequestHeaderAssertion_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/rest/server/assertions/FluentRequestHeaderAssertion_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.assertions;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.mockito.Mockito.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.httppart.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.test.assertions.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Validates {@link FluentRequestHeaderAssertion}.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * Regression: the chained constructor used to hard-code {@code super(null, ...)}, discarding its {@code creator}</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * argument, so config (custom failure message, output stream, etc.) set on the creating assertion was lost when a</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * header assertion was built via the chained constructor.  The sibling query/form-param assertions correctly pass</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * {@code super(creator, ...)}.</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">class</strong> <a name="FluentRequestHeaderAssertion_Test" href="../../../../../../org/apache/juneau/rest/server/assertions/FluentRequestHeaderAssertion_Test.html#FluentRequestHeaderAssertion_Test">FluentRequestHeaderAssertion_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@Test <strong class="jxr_keyword">void</strong> a01_creatorMsgPropagates() {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">var</strong> header = mock(RequestHeader.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		when(header.asString()).thenReturn(Optional.of(<span class="jxr_string">"actual"</span>));
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<em class="jxr_comment">// The custom failure message configured on the creating assertion must propagate to the header assertion</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<em class="jxr_comment">// (it did not before the fix, because the chained ctor hard-coded super(null, ...)).</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">var</strong> creator = <strong class="jxr_keyword">new</strong> FluentStringAssertion&lt;&gt;(<span class="jxr_string">"ignored"</span>, <strong class="jxr_keyword">null</strong>).setMsg(<span class="jxr_string">"CUSTOM {msg}"</span>);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> h = <strong class="jxr_keyword">new</strong> FluentRequestHeaderAssertion&lt;&gt;(creator, header, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; h.is(<span class="jxr_string">"expected"</span>));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertTrue(e.getMessage().startsWith(<span class="jxr_string">"CUSTOM "</span>), () -&gt; <span class="jxr_string">"Message did not carry creator config: "</span> + e.getMessage());
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	@Test <strong class="jxr_keyword">void</strong> a02_noCreatorUsesDefaultMsg() {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">var</strong> header = mock(RequestHeader.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		when(header.asString()).thenReturn(Optional.of(<span class="jxr_string">"actual"</span>));
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> h = <strong class="jxr_keyword">new</strong> FluentRequestHeaderAssertion&lt;&gt;(header, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; h.is(<span class="jxr_string">"expected"</span>));
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertFalse(e.getMessage().startsWith(<span class="jxr_string">"CUSTOM "</span>));
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<em class="jxr_comment">// A null RequestHeader used to NPE in the constructor (value.asString()) and in every</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<em class="jxr_comment">// transform method (value.asBoolean(), etc.). Verify null is now tolerated end-to-end.</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Test <strong class="jxr_keyword">void</strong> a03_nullValue_chainedConstructor_doesNotThrow() {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> h = <strong class="jxr_keyword">new</strong> FluentRequestHeaderAssertion&lt;&gt;(<strong class="jxr_keyword">null</strong>, (RequestHeader)<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertDoesNotThrow(h::isNull);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@Test <strong class="jxr_keyword">void</strong> a04_nullValue_directConstructor_doesNotThrow() {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">var</strong> h = <strong class="jxr_keyword">new</strong> FluentRequestHeaderAssertion&lt;&gt;((RequestHeader)<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertDoesNotThrow(h::isNull);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Test <strong class="jxr_keyword">void</strong> a05_nullValue_transformMethodsDoNotThrowAndYieldNull() {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> h = <strong class="jxr_keyword">new</strong> FluentRequestHeaderAssertion&lt;&gt;((RequestHeader)<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertDoesNotThrow(() -&gt; h.asBoolean().isNull());
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertDoesNotThrow(() -&gt; h.asInteger().isNull());
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertDoesNotThrow(() -&gt; h.asLong().isNull());
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertDoesNotThrow(() -&gt; h.asZonedDateTime().isNull());
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertDoesNotThrow(() -&gt; h.as(String.<strong class="jxr_keyword">class</strong>).isNull());
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

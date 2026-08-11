@@ -1,0 +1,607 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>McpResourceServerSupport xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../apidocs/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.v20260728;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.security.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.response.Forbidden;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.response.InternalServerError;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.response.NotFound;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.RestContext;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.RestOpContext;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.RestRequest;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.RestServerConstants;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.auth.AuthenticationException;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.auth.AuthResult;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.McpEndpointMixin;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.util.RestUtils;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.util.UrlPath;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.http.*;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * Request-time glue for the F2 OAuth 2.1 resource-server baseline &amp;mdash; bearer validation, RFC 8707 audience</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * enforcement, {@code 401}/{@code 403} challenge emission, and RFC 9728 Protected Resource Metadata construction &amp;mdash;</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * driven by an {@link McpResourceServerConfig}.</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * Bearer extraction and token validation are delegated to the reusable</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * {@link org.apache.juneau.rest.server.auth.oauth.OAuthFilter} (RFC 6750) from</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * {@code juneau-rest-server-auth-oauth}; this class layers on the MCP-specific {@code resource_metadata} challenge</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * parameter, RFC 8707 audience matching ({@link McpAudienceValidator}), and baseline required-scope enforcement.</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="McpResourceServerSupport" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#McpResourceServerSupport">McpResourceServerSupport</a> {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String WWW_AUTHENTICATE = <span class="jxr_string">"WWW-Authenticate"</span>;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<em class="jxr_javadoccomment">/** Java method name of the MCP JSON-RPC dispatch operation ({@link McpEndpointMixin#handleMcpRequest}). */</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MCP_DISPATCH_METHOD = <span class="jxr_string">"handleMcpRequest"</span>;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * Request attribute under which {@link #authenticate} stashes the caller's granted scopes (the validated token's</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * roles) so the POST-parse dispatch point can enforce SEP-2350 per-operation step-up scopes.</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String GRANTED_SCOPES_ATTR = <span class="jxr_string">"org.apache.juneau.rest.server.mcp.v20260728.grantedScopes"</span>;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">private</strong> <a name="McpResourceServerSupport" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#McpResourceServerSupport">McpResourceServerSupport</a>() {}
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * Router-identity bearer gate for the {@link McpEndpoint} mixin's MCP JSON-RPC endpoint (READY-312f F2, B1/H3).</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * A no-op unless RS auth is {@link McpResourceServerConfig#isEnabled() enabled} and this request resolves to the MCP</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 * JSON-RPC dispatch operation.  See {@link #resolvesToMcpDispatch(RestContext, HttpServletRequest)} for how the target</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * operation is identified without any hand-rolled path reconstruction &amp;mdash; the key change that makes this gate</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * immune to {@code @Mixin(path/paths)} re-mounts and to trailing-slash / percent-encoding / method-override drift.</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * Fails fast with the same origin-root {@code 500} diagnostic as the well-known route (see</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * {@link #assertWellKnownMountReachable(RestRequest)}) &amp;mdash; rather than authenticating &amp;mdash; whenever the</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * resolved MCP dispatch operation is itself mounted under a {@code @Mixin(path/paths)} re-mount prefix (H1</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * unification): a {@code 401} on such a mount would advertise a {@code resource_metadata} URL that the re-mount</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * has already made unreachable, so the two routes must agree rather than leaving a broken half-state.</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * @param cfg The RS config.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * @param ctx The host {@link RestContext} handling this request (injected into the {@code @RestStartCall} hook).</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * 	Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * @param req The raw HTTP request.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * @param res The raw HTTP response (used to emit the challenge header on rejection).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> gateMcpEndpoint(McpResourceServerConfig cfg, RestContext ctx, HttpServletRequest req, HttpServletResponse res) {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">if</strong> (!cfg.isEnabled())
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">if</strong> (!isEffectivePost(req))
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> op = resolveMcpDispatchOp(ctx, req);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">if</strong> (op == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertOriginRootMount(req);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertNotMixinRemounted(op.getContext().getMixinMountPrefixes());
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		authenticate(cfg, req, res);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * Router-aligned bearer gate for the {@link McpRestServlet}'s {@code POST /} endpoint (READY-312f F2, H3).</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * A no-op unless RS auth is {@link McpResourceServerConfig#isEnabled() enabled} and this request resolves to a</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * {@code POST} (the dedicated MCP servlet's only writable surface).  Gating every effective {@code POST} is correct for</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * a dedicated MCP servlet: there is no non-MCP writable surface to distinguish, so no per-operation identity check is</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 * needed.</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * @param cfg The RS config.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * @param req The raw HTTP request.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 * @param res The raw HTTP response (used to emit the challenge header on rejection).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> gateMcpServlet(McpResourceServerConfig cfg, HttpServletRequest req, HttpServletResponse res) {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">if</strong> (!cfg.isEnabled())
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">if</strong> (!isEffectivePost(req))
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertOriginRootMount(req);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		authenticate(cfg, req, res);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * Returns whether this request resolves to the MCP JSON-RPC dispatch operation ({@link McpEndpointMixin#handleMcpRequest}).</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Why this cannot drift from the router (B1/H3):&lt;/b&gt; instead of reconstructing the MCP endpoint's path from a</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * hardcoded constant &amp;mdash; which the previous gate did, so a {@code @Mixin(path="/api")} re-mount routed</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 * {@code POST /api/mcp} to the handler while the gate compared {@code ["api","mcp"]} against {@code ["mcp"]} and</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * silently skipped authentication &amp;mdash; this identifies the &lt;i&gt;operation&lt;/i&gt; the router actually selected:</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Mixin sub-context&lt;/b&gt; (the {@code McpEndpoint} mixin's {@code @RestStartCall} fires from</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * 		{@code RestSession.run()} &lt;i&gt;after&lt;/i&gt; the operation is resolved): the resolved Java method is available, so we</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 * 		gate iff it is {@link McpEndpointMixin#handleMcpRequest} (or an override).  No path logic at all &amp;mdash; zero drift,</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * 		and re-mounts / multi-mounts are handled for free because the router already routed to the op.</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Host {@code implements McpEndpoint}&lt;/b&gt; (the host's {@code @RestStartCall} fires &lt;i&gt;before&lt;/i&gt; routing, so the</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 * 		resolved op is not yet known): we look up the dispatch operation's OWN {@link org.apache.juneau.rest.server.util.UrlPathMatcher}</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 * 		objects from {@link RestContext#getRestOperations()} and match the request against them &amp;mdash; reusing the router's</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * 		own matchers, so re-mounts, {@code /*}, trailing slashes and percent-encoding are all handled exactly as the router</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * 		handles them.</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 * @param ctx The host {@link RestContext} handling this request.</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 * @param req The raw HTTP request.</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the request resolves to the MCP dispatch operation.</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> resolvesToMcpDispatch(RestContext ctx, HttpServletRequest req) {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">return</strong> resolveMcpDispatchOp(ctx, req) != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	}
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * Returns the resolved MCP JSON-RPC dispatch operation's {@link RestOpContext} for this request, or</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * &lt;jk&gt;null&lt;/jk&gt; if the request does not resolve to it.</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * Same two-case resolution as {@link #resolvesToMcpDispatch(RestContext, HttpServletRequest)}, but returns the</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 * matched operation's own {@link RestOpContext} (rather than a boolean) so callers can also inspect the</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 * operation's owning {@link RestContext#getMixinMountPrefixes() mixin mount prefixes} &amp;mdash; e.g. to detect a</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * {@code @Mixin(path/paths)} re-mount, the same signal {@link #assertWellKnownMountReachable(RestRequest)} uses</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 * for the well-known route.</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * @param ctx The host {@link RestContext} handling this request.</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * @param req The raw HTTP request.</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 * @return The resolved MCP dispatch operation's {@link RestOpContext}, or &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<strong class="jxr_keyword">static</strong> RestOpContext resolveMcpDispatchOp(RestContext ctx, HttpServletRequest req) {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> opSession = ctx.getLocalSession().getOpSessionOrNull();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">if</strong> (opSession != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			<strong class="jxr_keyword">var</strong> oc = opSession.getContext();
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">return</strong> isMcpDispatchMethod(oc.getJavaMethod()) ? oc : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">return</strong> matchMcpDispatchOp(ctx, req);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * Returns whether the specified Java method is the MCP JSON-RPC dispatch operation</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * ({@link McpEndpointMixin#handleMcpRequest}, or an override of it).</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * @param m The resolved operation's Java method.  May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if it is the MCP dispatch method.</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isMcpDispatchMethod(<a name="Method" href="../../../../../../../org/apache/juneau/rest/server/Method.html#Method">Method</a> m) {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">return</strong> m != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			&amp;&amp; MCP_DISPATCH_METHOD.equals(m.getName())
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			&amp;&amp; McpEndpointMixin.<strong class="jxr_keyword">class</strong>.isAssignableFrom(m.getDeclaringClass());
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * Returns whether the request path matches the MCP dispatch operation's own router matchers (host</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 * {@code implements McpEndpoint} case, where the resolved op is not yet available).</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * @param ctx The host {@link RestContext} handling this request.</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * @param req The raw HTTP request.</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * @return The MCP dispatch operation's {@link RestOpContext} if the request path matches its matchers, else</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<strong class="jxr_keyword">static</strong> RestOpContext matchMcpDispatchOp(RestContext ctx, HttpServletRequest req) {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> ops = ctx.getRestOperations();
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">if</strong> (ops == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> urlPath = UrlPath.of(RestUtils.getPathInfoUndecoded(req));
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> oc : ops.getOpContexts())
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">if</strong> (isMcpDispatchMethod(oc.getJavaMethod()))
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> matcher : oc.getPathMatchers())
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 					<strong class="jxr_keyword">if</strong> (matcher.match(urlPath) != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 						<strong class="jxr_keyword">return</strong> oc;
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	}
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * Returns whether this request resolves to a {@code POST} once method-override channels are honored (H3).</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * Mirrors {@code RestSession.getMethod()}: an explicit {@code POST}, or a {@code ?method=POST} query parameter, or an</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * {@code X-Method: POST} header.  Because a {@code @RestStartCall} hook cannot see the host's</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * {@code allowedMethodParams}/{@code allowedMethodHeaders} allow-lists, any override to {@code POST} is treated as a</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 * {@code POST} &amp;mdash; this is fail-closed: the only cost is that a {@code ?method=POST} aimed at the MCP path on a</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 * host that does &lt;i&gt;not&lt;/i&gt; allow overrides is challenged rather than 404'd, which never weakens the gate.</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isEffectivePost(HttpServletRequest req) {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"POST"</span>.equalsIgnoreCase(req.getMethod()))
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> mp = RestUtils.parseQuery(req.getQueryString()).get(<span class="jxr_string">"method"</span>);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">if</strong> (mp != <strong class="jxr_keyword">null</strong> &amp;&amp; !mp.isEmpty() &amp;&amp; <span class="jxr_string">"POST"</span>.equalsIgnoreCase(mp.get(0)))
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"POST"</span>.equalsIgnoreCase(req.getHeader(<span class="jxr_string">"X-Method"</span>));
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	}
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 * Fails fast when this endpoint is not mounted at the origin root (READY-312f F2, H1).</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * RFC 9728 requires the Protected Resource Metadata document at an origin-root well-known location</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * ({@code <a href="https://host/.well-known/oauth-protected-resource" target="alexandria_uri">https://host/.well-known/oauth-protected-resource</a>[/path]}), which is exactly the URL advertised in the</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * {@code resource_metadata} challenge parameter.  Juneau registers the well-known {@code @RestGet} routes</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 * servlet-relative, so on any non-origin-root mount (a non-empty servlet path or servlet-context path) the advertised</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 * URL would resolve to a different location and 404.  Rather than silently advertising an unreachable document, RS</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 * auth refuses to operate on such a mount.</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * A container that reports the root context / root servlet mapping as {@code "/"} (rather than the empty string) is</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * treated as origin-root &amp;mdash; the tolerance is symmetric across {@code contextPath} and {@code servletPath} (H1 LOW).</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * @param req The HTTP request.</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * @throws InternalServerError Always, when a non-root context path or non-root servlet path is present.</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertOriginRootMount(HttpServletRequest req) {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> ctx = emptyIfNull(req.getContextPath());
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">var</strong> svl = emptyIfNull(req.getServletPath());
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">if</strong> (!isOriginRootPath(ctx) || !isOriginRootPath(svl))
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> InternalServerError(
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 				<span class="jxr_string">"MCP resource-server auth requires an origin-root mount so the advertised RFC 9728 well-known PRM URL "</span>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 				+ <span class="jxr_string">"resolves; found contextPath='%s' servletPath='%s'.  Mount the MCP endpoint at the origin root "</span>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 				+ <span class="jxr_string">"(no servlet path / no context path)."</span>,
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 				ctx, svl);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	}
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<em class="jxr_javadoccomment">/** Returns whether a context/servlet path denotes the origin root ({@code ""} or {@code "/"}). */</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isOriginRootPath(String p) {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">return</strong> p.isEmpty() || p.equals(<span class="jxr_string">"/"</span>);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * Fails fast when the well-known PRM route cannot be served from the origin root (READY-312f F2, H1 + secondary MEDIUM).</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * Extends {@link #assertOriginRootMount(HttpServletRequest)} with the {@code @Mixin(path/paths)} re-mount case: when the</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 * MCP endpoint is mounted as a mixin under one or more host-chosen prefixes, the well-known {@code @RestGet} routes are</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 * re-mounted along with every other mixin op (to {@code /&lt;prefix&gt;/.well-known/...}), so the origin-root PRM URL</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * advertised in the {@code resource_metadata} challenge is unreachable.  {@code contextPath}/{@code servletPath} are both</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * empty in that case (the host is root-mounted), so the servlet-path check alone cannot detect it &amp;mdash; we consult the</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 * resolved operation's {@link RestContext#getMixinMountPrefixes() mixin mount prefixes} instead, and fail fast with the</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 * same origin-root diagnostic so discovery can never silently advertise an unreachable URL.</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * @param req The REST request (its resolved operation identifies the possibly re-mounted sub-context).</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * @throws InternalServerError When a non-root mount or a {@code @Mixin(path/paths)} re-mount is detected.</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertWellKnownMountReachable(RestRequest req) {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		assertOriginRootMount(req.getHttpServletRequest());
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">var</strong> opCtx = req.getOpContext();
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertNotMixinRemounted(opCtx == <strong class="jxr_keyword">null</strong> ? List.of() : opCtx.getContext().getMixinMountPrefixes());
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 * Fails fast when the resolved MCP operation is mounted under one or more host-chosen {@code @Mixin(path/paths)}</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * re-mount prefixes (READY-312f F2, H1 unification) &amp;mdash; the SAME diagnostic used by</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * {@link #assertWellKnownMountReachable(RestRequest)}, shared so the {@code POST} bearer gate</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 * ({@link #gateMcpEndpoint}) and the well-known route never disagree on whether a given mount is supported.</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * @param mixinMountPrefixes The resolved operation's owning {@link RestContext#getMixinMountPrefixes() mixin</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * 	mount prefixes}; empty when the operation is not mixin-mounted (or not re-mounted).</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * @throws InternalServerError When {@code mixinMountPrefixes} is non-empty.</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertNotMixinRemounted(List&lt;String&gt; mixinMountPrefixes) {
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">if</strong> (!mixinMountPrefixes.isEmpty())
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> InternalServerError(
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				<span class="jxr_string">"MCP resource-server auth requires an origin-root mount so the advertised RFC 9728 well-known PRM URL "</span>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 				+ <span class="jxr_string">"resolves; the MCP endpoint is re-mounted under host-chosen @Mixin prefix(es) %s, which moves the "</span>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 				+ <span class="jxr_string">"well-known PRM route off the origin root.  Mount the MCP mixin at the origin root (no @Mixin(path/paths))."</span>,
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 				mixinMountPrefixes);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 * Serves this endpoint's PRM from the SEP-2351 root well-known location (fallback), failing fast on a non-root or</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * re-mounted mount (H1); a no-op-throwing {@code 404} when RS auth is disabled.</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * @param cfg The RS config.</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 * @param req The REST request.</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * @return The PRM document.</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="McpProtectedResourceMetadata" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpProtectedResourceMetadata.html#McpProtectedResourceMetadata">McpProtectedResourceMetadata</a> metadataForWellKnownRoot(McpResourceServerConfig cfg, RestRequest req) {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">if</strong> (!cfg.isEnabled())
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound();
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		assertWellKnownMountReachable(req);
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">return</strong> buildMetadata(cfg);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	}
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * Serves this endpoint's PRM from the RFC 9728 path-inserted well-known location, but only when the requested suffix</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * matches this resource's expected well-known path (M5); otherwise {@code 404}.  Fails fast on a non-root or re-mounted</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 * mount (H1); a {@code 404} when RS auth is disabled.</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">	 * @param cfg The RS config.</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">	 * @param req The REST request.</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * @return The PRM document.</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="McpProtectedResourceMetadata" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpProtectedResourceMetadata.html#McpProtectedResourceMetadata">McpProtectedResourceMetadata</a> metadataForWellKnownPathInserted(McpResourceServerConfig cfg, RestRequest req) {
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">if</strong> (!cfg.isEnabled())
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound();
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		assertWellKnownMountReachable(req);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">var</strong> expected = McpWellKnownRouting.wellKnownRequestPath(cfg.getResource());
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">if</strong> (!expected.equals(trimTrailingSlash(req.getHttpServletRequest().getPathInfo())))
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound();
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">return</strong> buildMetadata(cfg);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	}
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String trimTrailingSlash(String p) {
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">while</strong> (p.length() &gt; 1 &amp;&amp; p.endsWith(<span class="jxr_string">"/"</span>))
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			p = p.substring(0, p.length() - 1);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">return</strong> p;
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * Builds the RFC 9728 Protected Resource Metadata document from the config.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * @param cfg The RS config.  Must be {@link McpResourceServerConfig#isEnabled() enabled} and valid.</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 * @return The PRM bean.</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="McpProtectedResourceMetadata" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpProtectedResourceMetadata.html#McpProtectedResourceMetadata">McpProtectedResourceMetadata</a> buildMetadata(McpResourceServerConfig cfg) {
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		cfg.validateEnabled();
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="McpProtectedResourceMetadata" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpProtectedResourceMetadata.html#McpProtectedResourceMetadata">McpProtectedResourceMetadata</a>().setResource(cfg.getResource());
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">if</strong> (!cfg.getAuthorizationServers().isEmpty())
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			m.setAuthorizationServers(<strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(cfg.getAuthorizationServers()));
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">if</strong> (!cfg.getScopesSupported().isEmpty())
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			m.setScopesSupported(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(cfg.getScopesSupported()));
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">if</strong> (!cfg.getBearerMethodsSupported().isEmpty())
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			m.setBearerMethodsSupported(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(cfg.getBearerMethodsSupported()));
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	}
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * Returns the path-inserted well-known PRM URI advertised in the {@code resource_metadata} challenge parameter.</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * @param cfg The RS config.</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 * @return The PRM document URI.</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> URI metadataUri(McpResourceServerConfig cfg) {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">return</strong> McpWellKnownRouting.metadataUri(cfg.getResource());
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 * Authenticates the request against the RS config, establishing the authenticated principal.</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * On success the principal is stashed under {@link RestServerConstants#PRINCIPAL_ATTR} and returned.  On failure the</em>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 * {@code WWW-Authenticate: Bearer ...} challenge (carrying the {@code resource_metadata} pointer) is written directly</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * to {@code res} &amp;mdash; because an exception thrown from a {@code @RestStartCall} hook does not route through the</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 * response processors that would otherwise copy an {@link AuthenticationException}'s headers &amp;mdash; and then a</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 * {@code 401 Unauthorized} ({@link AuthenticationException}) or {@code 403 Forbidden} (insufficient scope) is thrown.</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * @param cfg The RS config.  Must be {@link McpResourceServerConfig#isEnabled() enabled} and valid.</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * @param req The HTTP request.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * @param res The HTTP response, used to write the challenge header on failure.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * @return The authenticated principal.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Principal authenticate(McpResourceServerConfig cfg, HttpServletRequest req, HttpServletResponse res) {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		cfg.validateEnabled();
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">var</strong> filter = cfg.oauthFilter();
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		Optional&lt;AuthResult&gt; result;
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			result = filter.authenticate(req);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		} <strong class="jxr_keyword">catch</strong> (AuthenticationException e) {
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			res.setHeader(WWW_AUTHENTICATE, invalidTokenChallenge(cfg));
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> AuthenticationException(e, <span class="jxr_string">"Invalid bearer token"</span>);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		}
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<strong class="jxr_keyword">if</strong> (result.isEmpty()) {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			res.setHeader(WWW_AUTHENTICATE, missingTokenChallenge(cfg));
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> AuthenticationException(<span class="jxr_string">"Bearer token required"</span>);
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		}
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">var</strong> auth = result.get();
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">var</strong> principal = auth.getPrincipal();
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">if</strong> (!McpAudienceValidator.matches(principal, cfg.getAudience(), cfg.isRequireAudienceClaim())) {
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			res.setHeader(WWW_AUTHENTICATE, invalidTokenChallenge(cfg));
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> AuthenticationException(<span class="jxr_string">"Token audience mismatch"</span>);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		}
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">if</strong> (!satisfies(auth.getRoles(), cfg.getRequiredScopes())) {
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			res.setHeader(WWW_AUTHENTICATE, insufficientScopeChallenge(cfg));
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Forbidden(<span class="jxr_string">"Insufficient scope"</span>);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		}
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<em class="jxr_comment">// M1: write the framework-standard principal attribute so @Auth Principal resolves downstream.</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		req.setAttribute(RestServerConstants.PRINCIPAL_ATTR, principal);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<em class="jxr_comment">// SEP-2350: stash the granted scopes so the POST-parse dispatch point can enforce per-operation step-up scopes.</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		req.setAttribute(GRANTED_SCOPES_ATTR, Set.copyOf(auth.getRoles()));
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">return</strong> principal;
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	}
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * Returns the granted scopes stashed by {@link #authenticate} for this request (SEP-2350).</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 * @param req The HTTP request.  May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * @return The granted scopes, or an empty set when none were stashed (RS auth disabled / gate not run).</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; grantedScopes(HttpServletRequest req) {
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">if</strong> (req == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<strong class="jxr_keyword">return</strong> Set.of();
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">var</strong> v = req.getAttribute(GRANTED_SCOPES_ATTR);
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">return</strong> v instanceof Set ? (Set&lt;String&gt;)v : Set.of();
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	}
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * Returns the authenticated {@link Principal} {@link #authenticate} stashed for this request (READY-312f F4).</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * Reads the same framework-standard {@link RestServerConstants#PRINCIPAL_ATTR} attribute {@link #authenticate}</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * writes on success, so this is the single source of truth for "who is calling this MCP request".  It is the seam</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * the {@code 2026-07-28} dispatcher threads into {@link RequestStateCodec#seal}/{@link RequestStateCodec#unseal}</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * for principal-bound {@code requestState} AAD.  Mirrors {@link #grantedScopes(HttpServletRequest)}:</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * a &lt;jk&gt;null&lt;/jk&gt; request, an absent attribute, or a non-{@link Principal} value all return &lt;jk&gt;null&lt;/jk&gt; &amp;mdash; the</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * anonymous / RS-auth-disabled path, which every caller must handle without an NPE.  Unlike</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * {@link #grantedScopes(HttpServletRequest)}, which falls back to an empty {@link Set} in that same situation, this</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * returns &lt;jk&gt;null&lt;/jk&gt; rather than an empty value in that case; the divergence is intentional &amp;mdash; a scalar</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * identity has no natural "empty" representative the way a collection does.</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * @param req The HTTP request.  May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 * @return The authenticated principal, or &lt;jk&gt;null&lt;/jk&gt; when none was stashed (RS auth disabled / gate not run /</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 * 	anonymous caller).</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Principal principal(HttpServletRequest req) {
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">if</strong> (req == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">var</strong> v = req.getAttribute(RestServerConstants.PRINCIPAL_ATTR);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">return</strong> v instanceof Principal p ? p : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	}
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * Enforces SEP-2350 per-operation step-up scopes at the POST-parse dispatch point.</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 * A no-op unless RS auth is {@link McpResourceServerConfig#isEnabled() enabled} and the resolved operation has a</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * non-empty {@link McpResourceServerConfig#requiredScopesFor(McpOperationContext) required-scope set}.  When the</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * caller's {@code grantedScopes} do not {@link #satisfies satisfy} the operation's required scopes, throws a</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * {@code 403 Forbidden} carrying a {@code WWW-Authenticate: Bearer ..., error="insufficient_scope", scope="..."}</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * step-up challenge that names exactly the scopes required for this operation.</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 * This is the enforcement point the F2 security review mandated: unlike the {@code @RestStartCall} bearer gate (which</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * fires before the JSON-RPC body is parsed), this runs once the MCP method &amp;mdash; and thus the operation &amp;mdash; is</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 * known, so the challenge can be scoped to the specific operation.  It layers on top of, and never weakens, the</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 * baseline gate (op-identity, origin-root fail-fast, audience, and baseline required-scope enforcement all still run</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 * first in {@link #authenticate}).</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * @param cfg The RS config.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * @param grantedScopes The caller's granted scopes.  May be &lt;jk&gt;null&lt;/jk&gt; (treated as empty).</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * @param ctx The resolved operation.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * @throws Forbidden {@code 403 insufficient_scope} when the granted scopes do not satisfy the operation's required</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * 	scopes.</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> enforceOperationScopes(McpResourceServerConfig cfg, Collection&lt;String&gt; grantedScopes, <a name="McpOperationContext" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpOperationContext.html#McpOperationContext">McpOperationContext</a> ctx) {
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">if</strong> (!cfg.isEnabled())
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">var</strong> required = cfg.requiredScopesFor(ctx);
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		<strong class="jxr_keyword">if</strong> (required.isEmpty())
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		<strong class="jxr_keyword">var</strong> granted = grantedScopes == <strong class="jxr_keyword">null</strong> ? Set.&lt;String&gt;of() : grantedScopes;
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">if</strong> (satisfies(granted, required))
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<strong class="jxr_keyword">var</strong> e = <strong class="jxr_keyword">new</strong> Forbidden(<span class="jxr_string">"Insufficient scope for operation '%s'"</span>, ctx.method());
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		e.setHeader(WWW_AUTHENTICATE, stepUpChallenge(cfg, required));
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	}
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 * Builds the SEP-2350 scoped step-up {@code WWW-Authenticate} challenge naming the scopes required to invoke a</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 * specific operation ({@code error="insufficient_scope"}, with the operation's {@code scope} set).</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 * @param cfg The RS config.</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * @param operationScopes The scopes required to invoke the operation.</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * @return The challenge value.</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String stepUpChallenge(McpResourceServerConfig cfg, Collection&lt;String&gt; operationScopes) {
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">return</strong> McpBearerChallenge.create()
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 			.realm(cfg.getRealm())
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 			.error(<span class="jxr_string">"insufficient_scope"</span>)
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 			.scope(operationScopes)
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 			.resourceMetadata(metadataUri(cfg))
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 			.build();
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 	}
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 * Returns whether the granted scopes satisfy every required scope, honoring OAuth scope hierarchies where a broader</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 * granted scope implies its narrower children.</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 * A required scope {@code r} is satisfied when some granted scope {@code g} either equals {@code r} exactly, or is a</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * hierarchical &lt;em&gt;ancestor&lt;/em&gt; of it &amp;mdash; i.e. {@code r} begins with {@code g} followed by a {@code :} or</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * {@code .} delimiter (so granted {@code repo} implies required {@code repo:read} / {@code repo.write}, but granted</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 * {@code repo:read} does &lt;b&gt;not&lt;/b&gt; imply required {@code repo}).</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * @param grantedScopes The caller's granted scopes.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 * @param requiredScopes The scopes required to invoke the operation.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if every required scope is satisfied.</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> satisfies(Collection&lt;String&gt; grantedScopes, Collection&lt;String&gt; requiredScopes) {
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : requiredScopes) {
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 			<strong class="jxr_keyword">var</strong> ok = false;
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> g : grantedScopes) {
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 				<strong class="jxr_keyword">if</strong> (g.equals(r) || r.startsWith(g + <span class="jxr_string">":"</span>) || r.startsWith(g + <span class="jxr_string">"."</span>)) {
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 					ok = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 					<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 				}
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 			}
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 			<strong class="jxr_keyword">if</strong> (!ok)
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		}
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 	}
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">	 * Builds the {@code WWW-Authenticate} challenge for a request that presented no bearer credentials (RFC 6750</em>
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">	 * &amp;sect;3: no {@code error} code).</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 * Carries a {@code scope} hint listing the endpoint-wide baseline required scopes (SEP-2350) when any are</em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">	 * configured, so a client can request them on its first authorization; the hint is omitted (no {@code scope=""})</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 * when no baseline scope is required.</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">	 * @param cfg The RS config.</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 * @return The challenge value.</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String missingTokenChallenge(McpResourceServerConfig cfg) {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		<strong class="jxr_keyword">return</strong> McpBearerChallenge.create()
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 			.realm(cfg.getRealm())
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 			.scope(cfg.getRequiredScopes())  <em class="jxr_comment">// SEP-2350: hint the baseline scope on the initial 401 (no-op when empty).</em>
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			.resourceMetadata(metadataUri(cfg))
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 			.build();
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	}
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">	 * Builds the {@code WWW-Authenticate} challenge for an invalid/expired token or an audience mismatch</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">	 * ({@code error="invalid_token"}).</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">	 * @param cfg The RS config.</em>
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> <em class="jxr_javadoccomment">	 * @return The challenge value.</em>
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String invalidTokenChallenge(McpResourceServerConfig cfg) {
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<strong class="jxr_keyword">return</strong> McpBearerChallenge.create()
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 			.realm(cfg.getRealm())
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 			.error(<span class="jxr_string">"invalid_token"</span>)
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 			.resourceMetadata(metadataUri(cfg))
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 			.build();
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	}
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">	 * Builds the {@code WWW-Authenticate} challenge for a token missing a required baseline scope</em>
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">	 * ({@code error="insufficient_scope"}, with the required {@code scope} set).</em>
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">	 * @param cfg The RS config.</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 * @return The challenge value.</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String insufficientScopeChallenge(McpResourceServerConfig cfg) {
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		<strong class="jxr_keyword">return</strong> McpBearerChallenge.create()
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 			.realm(cfg.getRealm())
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 			.error(<span class="jxr_string">"insufficient_scope"</span>)
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 			.scope(cfg.getRequiredScopes())
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			.resourceMetadata(metadataUri(cfg))
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 			.build();
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 	}
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

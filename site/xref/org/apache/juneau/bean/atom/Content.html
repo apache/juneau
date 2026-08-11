@@ -25,11 +25,11 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.bean.atom;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.xml.annotation.XmlFormat.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.marshall.xml.XmlFormat.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.net.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.xml.annotation.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.xml.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Represents the content of an Atom entry.</em>
@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment"> * 	&lt;li class='extlink'&gt;&lt;a class="doclink" href="<a href="https://tools.ietf.org/html/rfc4287" target="alexandria_uri">https://tools.ietf.org/html/rfc4287</a>"&gt;RFC 4287 - The Atom Syndication Format&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="Content" href="../../../../../org/apache/juneau/bean/atom/Content.html#Content">Content</a> <strong class="jxr_keyword">extends</strong> <a name="Text" href="../../../../../org/apache/juneau/bean/atom/Text.html#Text">Text</a> {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="Content" href="../../../../../org/apache/juneau/bean/atom/Content.html#Content">Content</a> <strong class="jxr_keyword">extends</strong> Text {
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<strong class="jxr_keyword">private</strong> URI src;
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * Normal content.</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * @param type The content type of this content.</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * @param type The content type of this content.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</em>
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">public</strong> <a name="Content" href="../../../../../org/apache/juneau/bean/atom/Content.html#Content">Content</a>(String type) {
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">super</strong>(type);
