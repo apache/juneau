@@ -360,7 +360,9 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 		} else {
 			tc = STRING;
 			type = TYPE_string;
-			if (sType.isUri())
+			// Check both the declared and serialized types so that JDK URI value types keep their "uri" format
+			// even when a default string swap (e.g. UrlSwap for java.net.URL) has rewritten the serialized type to String.
+			if (sType.isUri() || eType.isUri())
 				format = FORMAT_uri;
 		}
 

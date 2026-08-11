@@ -42,7 +42,14 @@ Options:
     --rule java:Sxxx                Filter by rule id. Repeatable.
     --type TYPE[,TYPE...]           Filter by issue type. Comma-separated.
                                     CODE_SMELL,BUG,VULNERABILITY,SECURITY_HOTSPOT
-    --branch <branch>               SonarCloud branch (default: master).
+    --branch <branch>               SonarCloud branch to query (default: master).
+                                    Mutually exclusive with --pr.
+    --pr <id>                       SonarCloud pull-request analysis to query,
+                                    keyed by the PR number/id (maps to the
+                                    pullRequest= Web API param). Mutually
+                                    exclusive with --branch. When neither
+                                    --branch nor --pr is given, behavior is
+                                    unchanged (master branch).
     --with-suppress-hint            Append @SuppressWarnings hint per finding.
     --detail                        Whole-repo mode only: also print the
                                     per-file findings blocks after the
@@ -55,6 +62,12 @@ Options:
                                     affects the process exit code. Intended
                                     for use as a CI/pre-push gate primitive,
                                     e.g. `--all --run --fail-on-issues`.
+
+                                    Exit codes: 0 = clean/normal, 2 = issues
+                                    remain (with --fail-on-issues), 3 = the
+                                    requested --branch/--pr has no SonarCloud
+                                    analysis yet (graceful skip, not a crash and
+                                    not a false pass), 1 = error.
     --help, -h                      Show this help message.
 
 Authentication:
@@ -74,7 +87,11 @@ Examples:
     ./scripts/sonarqube.py --all --rule java:S3776 --detail
     ./scripts/sonarqube.py --all --run --fail-on-issues
     ./scripts/sonarqube.py --all --severity BLOCKER,CRITICAL --fail-on-issues
+    ./scripts/sonarqube.py --all --branch my-feature-branch --run
+    ./scripts/sonarqube.py --all --pr 1234 --run --fail-on-issues
 """
+
+from __future__ import annotations
 
 import json
 import os
@@ -101,10 +118,24 @@ ISSUE_TYPES = ["CODE_SMELL", "BUG", "VULNERABILITY", "SECURITY_HOTSPOT"]
 
 USE_COLOR = sys.stdout.isatty()
 
+# Process exit codes (see module docstring).
+EXIT_OK = 0
+EXIT_ERROR = 1
+EXIT_ISSUES = 2
+EXIT_NO_ANALYSIS = 3
+
+
+class SonarHttpError(Exception):
+    """Raised by http_get_json(soft=True) instead of die()-ing, so callers can decide."""
+
+    def __init__(self, code: int):
+        super().__init__(f"HTTP {code}")
+        self.code = code
+
 
 def die(msg):
     print(f"ERROR: {msg}", file=sys.stderr)
-    sys.exit(1)
+    sys.exit(EXIT_ERROR)
 
 
 def color(text, code):
@@ -157,8 +188,15 @@ def pct(covered, total):
     return f"{covered / total * 100:.0f}%"
 
 
-def http_get_json(url: str) -> dict:
-    """GET <url> as JSON. Honors SONAR_TOKEN from env if set. Never echoes it."""
+def http_get_json(url: str, soft: bool = False) -> dict:
+    """
+    GET <url> as JSON. Honors SONAR_TOKEN from env if set. Never echoes it.
+
+    When soft=True, any HTTP/URL error is re-raised as SonarHttpError instead of
+    calling die(), so callers (e.g. the branch/PR existence preflight) can treat
+    a not-found scope as "no analysis" rather than a hard failure. The default
+    (soft=False) behavior is unchanged.
+    """
     headers = {"Accept": "application/json", "User-Agent": "juneau-sonarqube.py/1.0"}
     token = os.environ.get("SONAR_TOKEN")
     if token:
@@ -168,6 +206,8 @@ def http_get_json(url: str) -> dict:
         with urllib.request.urlopen(req, timeout=30) as resp:
             return json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
+        if soft:
+            raise SonarHttpError(e.code)
         if e.code == 429:
             die(
                 "SonarCloud rate limit hit (HTTP 429). "
@@ -180,6 +220,8 @@ def http_get_json(url: str) -> dict:
             )
         die(f"SonarCloud HTTP {e.code}: {e.reason} for {scrub_url(url)}")
     except urllib.error.URLError as e:
+        if soft:
+            raise SonarHttpError(0)
         die(
             f"SonarCloud network error: {e.reason}. Check connectivity / VPN. "
             "TODO: a future --from-tsv <path> flag could load a manually-exported TSV as a fallback."
@@ -192,13 +234,16 @@ def scrub_url(url: str) -> str:
     return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, parsed.path, "", ""))
 
 
-def fetch_all_issues(branch: str) -> dict:
+def fetch_all_issues(branch: str, pr: str | None = None) -> dict:
     """
-    Fetch all project-wide issues for apache_juneau on the given branch.
+    Fetch all project-wide issues for apache_juneau on the given branch or PR.
 
-    The cache is intentionally project-wide (not path-scoped) so subsequent
-    invocations on different paths can reuse it without re-hitting the API.
-    Path / severity / rule / type filtering is applied client-side.
+    Exactly one of branch / pr scopes the query: when pr is given it is passed
+    as the SonarCloud `pullRequest=` param (PR analysis); otherwise `branch=` is
+    used (default: master). The cache is intentionally project-wide (not
+    path-scoped) so subsequent invocations on different paths can reuse it
+    without re-hitting the API. Path / severity / rule / type filtering is
+    applied client-side.
     """
     issues = []
     components = {}
@@ -208,11 +253,14 @@ def fetch_all_issues(branch: str) -> dict:
         params = {
             "componentKeys": SONAR_PROJECT_KEY,
             "organization": SONAR_ORG,
-            "branch": branch,
             "p": str(page),
             "ps": str(SONAR_PAGE_SIZE),
             "additionalFields": "rules",
         }
+        if pr:
+            params["pullRequest"] = pr
+        else:
+            params["branch"] = branch
         url = f"{SONAR_HOST}/api/issues/search?{urllib.parse.urlencode(params)}"
         data = http_get_json(url)
         page_issues = data.get("issues", [])
@@ -232,13 +280,39 @@ def fetch_all_issues(branch: str) -> dict:
     return {
         "meta": {
             "fetched_at": fetched_at,
-            "branch": branch,
+            "branch": None if pr else branch,
+            "pr": pr,
             "total": total or len(issues),
             "project_key": SONAR_PROJECT_KEY,
         },
         "issues": issues,
         "components": components,
     }
+
+
+def scope_analyzed(branch: str, pr: str | None) -> bool:
+    """
+    Return True if SonarCloud has an analysis for the given branch/PR, False if
+    it is definitively absent (or unreachable).
+
+    Used as a preflight for non-default scopes so a brand-new branch/PR that CI
+    has not analyzed yet degrades to a clear warning + graceful skip instead of a
+    crash or a silent false-pass. Uses the soft-error http_get_json path: any
+    HTTP/URL error (e.g. 404 for an unknown branch/PR) is treated as "not
+    analyzed" rather than aborting.
+    """
+    try:
+        if pr:
+            params = {"project": SONAR_PROJECT_KEY, "organization": SONAR_ORG}
+            url = f"{SONAR_HOST}/api/project_pull_requests/list?{urllib.parse.urlencode(params)}"
+            data = http_get_json(url, soft=True)
+            return any(str(p.get("key")) == str(pr) for p in (data.get("pullRequests") or []))
+        params = {"project": SONAR_PROJECT_KEY, "organization": SONAR_ORG}
+        url = f"{SONAR_HOST}/api/project_branches/list?{urllib.parse.urlencode(params)}"
+        data = http_get_json(url, soft=True)
+        return any(b.get("name") == branch for b in (data.get("branches") or []))
+    except SonarHttpError:
+        return False
 
 
 def load_cache() -> dict | None:
@@ -465,7 +539,7 @@ def report(  # NOSONAR java:S3776 -- top-level report orchestrator; complexity t
     types: set,
     with_suppress_hint: bool,
     max_print: int,
-    branch: str,
+    scope_label: str,
 ):
     issues = payload.get("issues", [])
     matched = filter_issues(issues, target_path, is_file, severities, rules, types)
@@ -474,7 +548,7 @@ def report(  # NOSONAR java:S3776 -- top-level report orchestrator; complexity t
     total_matched = len(matched)
     counts = severity_counts(matched)
 
-    print(f"Project:  {SONAR_PROJECT_KEY}  (branch: {branch})")
+    print(f"Project:  {SONAR_PROJECT_KEY}  ({scope_label})")
     print(f"Scope:    {target_path}{'  [file]' if is_file else '  [directory]'}")
     print(f"Cache:    {CACHE_PATH.relative_to(REPO_ROOT)}")
     flt_parts = []
@@ -534,7 +608,7 @@ def report_whole_repo(  # NOSONAR java:S3776 -- top-level report orchestrator; c
     types: set,
     with_suppress_hint: bool,
     max_print: int,
-    branch: str,
+    scope_label: str,
     detail: bool,
 ):
     issues = payload.get("issues", [])
@@ -544,7 +618,7 @@ def report_whole_repo(  # NOSONAR java:S3776 -- top-level report orchestrator; c
     total_matched = len(matched)
     counts = severity_counts(matched)
 
-    print(f"Project:  {SONAR_PROJECT_KEY}  (branch: {branch})")
+    print(f"Project:  {SONAR_PROJECT_KEY}  ({scope_label})")
     print("Scope:    WHOLE REPO")
     print(f"Cache:    {CACHE_PATH.relative_to(REPO_ROOT)}")
     flt_parts = []
@@ -624,6 +698,8 @@ def parse_args(argv):  # NOSONAR java:S3776 -- argparse-by-hand mirror of covera
     rules = set()
     types = set()
     branch = "master"
+    branch_set = False
+    pr = None
     with_suppress_hint = False
     max_print = 200
     fail_on_issues = False
@@ -665,8 +741,17 @@ def parse_args(argv):  # NOSONAR java:S3776 -- argparse-by-hand mirror of covera
             if i >= len(args):
                 die("--branch requires a value")
             branch = args[i]
+            branch_set = True
         elif a.startswith("--branch="):
             branch = a.split("=", 1)[1]
+            branch_set = True
+        elif a == "--pr":
+            i += 1
+            if i >= len(args):
+                die("--pr requires a value")
+            pr = args[i]
+        elif a.startswith("--pr="):
+            pr = a.split("=", 1)[1]
         elif a == "--with-suppress-hint":
             with_suppress_hint = True
         elif a == "--max":
@@ -684,6 +769,11 @@ def parse_args(argv):  # NOSONAR java:S3776 -- argparse-by-hand mirror of covera
             path_arg = a
         i += 1
 
+    if pr is not None and branch_set:
+        die("--branch and --pr are mutually exclusive")
+    if pr is not None and not pr.strip():
+        die("--pr requires a non-empty value")
+
     whole_repo = do_all or not path_arg
 
     return {
@@ -695,6 +785,7 @@ def parse_args(argv):  # NOSONAR java:S3776 -- argparse-by-hand mirror of covera
         "rules": rules,
         "types": types,
         "branch": branch,
+        "pr": pr,
         "with_suppress_hint": with_suppress_hint,
         "max_print": max_print,
         "fail_on_issues": fail_on_issues,
@@ -722,25 +813,63 @@ def main():  # NOSONAR java:S3776 -- thin orchestrator with simple branching
         if path.is_file() and not module:
             die(f"Could not determine Maven module for path: {path}")
 
+    # A non-default scope is any explicit --pr, or a --branch other than the
+    # default master. These are the scopes that may not have been analyzed yet.
+    scope_is_default = opts["pr"] is None and opts["branch"] == "master"
+
     payload = None
     if not opts["do_run"]:
         payload = load_cache()
 
     if payload is None:
+        if not scope_is_default and not scope_analyzed(opts["branch"], opts["pr"]):
+            scope_desc = f"PR {opts['pr']}" if opts["pr"] else f"branch '{opts['branch']}'"
+            print(
+                f"WARNING: SonarCloud has no analysis for {scope_desc} yet — skipping the Sonar check "
+                "for this scope.",
+                file=sys.stderr,
+            )
+            print(
+                "  A branch/PR is only analyzed after CI runs SonarCloud on it; a brand-new "
+                "branch/PR has nothing to report against yet.",
+                file=sys.stderr,
+            )
+            return EXIT_NO_ANALYSIS
         if not opts["do_run"]:
             print("No cache found. Fetching from SonarCloud...")
+        elif opts["pr"]:
+            print(f"Refreshing cache from SonarCloud (PR={opts['pr']})...")
         else:
             print(f"Refreshing cache from SonarCloud (branch={opts['branch']})...")
-        payload = fetch_all_issues(opts["branch"])
+        payload = fetch_all_issues(opts["branch"], opts["pr"])
         save_cache(payload)
         print(
             f"Fetched {len(payload.get('issues', []))} issues "
             f"(total reported: {payload.get('meta', {}).get('total')})."
         )
+    elif opts["pr"]:
+        meta = payload.get("meta", {})
+        cached_pr = meta.get("pr")
+        if str(cached_pr) != str(opts["pr"]):
+            cached_desc = f"PR {cached_pr}" if cached_pr else f"branch {meta.get('branch', '?')}"
+            print(
+                f"Cached scope ({cached_desc}) differs from --pr {opts['pr']}. "
+                "Re-run with --run to refresh."
+            )
+        else:
+            print(
+                f"Using cached issues (fetched {meta.get('fetched_at', '?')}, "
+                f"PR={cached_pr}). Use --run to refresh."
+            )
     else:
         meta = payload.get("meta", {})
         cached_branch = meta.get("branch", "?")
-        if cached_branch != opts["branch"]:
+        if meta.get("pr") is not None:
+            print(
+                f"Cached scope (PR {meta.get('pr')}) differs from --branch {opts['branch']}. "
+                "Re-run with --run to refresh."
+            )
+        elif cached_branch != opts["branch"]:
             print(
                 f"Cached branch ({cached_branch}) differs from --branch {opts['branch']}. "
                 "Re-run with --run to refresh."
@@ -751,6 +880,8 @@ def main():  # NOSONAR java:S3776 -- thin orchestrator with simple branching
                 f"branch={cached_branch}). Use --run to refresh."
             )
 
+    scope_label = f"PR: {opts['pr']}" if opts["pr"] else f"branch: {opts['branch']}"
+
     if whole_repo:
         total_matched = report_whole_repo(
             payload,
@@ -759,7 +890,7 @@ def main():  # NOSONAR java:S3776 -- thin orchestrator with simple branching
             opts["types"],
             opts["with_suppress_hint"],
             opts["max_print"],
-            opts["branch"],
+            scope_label,
             opts["detail"],
         )
     else:
@@ -772,12 +903,12 @@ def main():  # NOSONAR java:S3776 -- thin orchestrator with simple branching
             opts["types"],
             opts["with_suppress_hint"],
             opts["max_print"],
-            opts["branch"],
+            scope_label,
         )
 
     if opts["fail_on_issues"] and (total_matched or 0) > 0:
-        return 2
-    return 0
+        return EXIT_ISSUES
+    return EXIT_OK
 
 
 if __name__ == "__main__":

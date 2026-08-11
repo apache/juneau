@@ -14,27 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.auth.oauth.oidc;
+package org.apache.juneau.rest.auth.oauth.oidc;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.net.*;
+import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
 import com.nimbusds.oauth2.sdk.*;
+import com.nimbusds.oauth2.sdk.as.*;
 import com.nimbusds.oauth2.sdk.http.*;
 import com.nimbusds.oauth2.sdk.id.*;
 import com.nimbusds.openid.connect.sdk.op.*;
 
 /**
- * Fetches a Juneau-native {@link OidcMetadata} record from an OpenID Connect provider's
- * {@code /.well-known/openid-configuration} document.
+ * Fetches a Juneau-native {@link OidcMetadata} record describing an authorization server, supporting both the RFC 8414
+ * OAuth Authorization Server Metadata endpoint ({@code /.well-known/oauth-authorization-server}) and the OpenID Connect
+ * Discovery endpoint ({@code /.well-known/openid-configuration}).
  *
  * <p>
- * Wraps Nimbus's {@code OIDCProviderMetadata.resolve(Issuer)}.  The metadata is fetched once on each call
- * to {@link #discover()}; result is not cached internally &mdash; callers cache themselves if needed.
+ * {@link #discover()} tries {@code AuthorizationServerMetadata.resolve(...)} (RFC 8414) first and falls back to
+ * {@code OIDCProviderMetadata.resolve(...)} (OIDC Discovery); both perform the RFC 8414 / OIDC Discovery issuer identity
+ * check (the returned document's {@code issuer} must exactly equal the requested issuer).  The metadata is fetched on
+ * each call to {@link #discover()}; the result is not cached internally &mdash; callers cache themselves if needed.
  *
  * <h5 class='topic'>Usage</h5>
  *
@@ -47,7 +52,13 @@ import com.nimbusds.openid.connect.sdk.op.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value)
+})
 public class OidcDiscoveryClient {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
 
 	/**
 	 * Static creator.
@@ -63,6 +74,7 @@ public class OidcDiscoveryClient {
 	 */
 	public static class Builder {
 		private URI issuer;
+		private Duration httpTimeout = DEFAULT_HTTP_TIMEOUT;
 		private Consumer<HTTPRequest> httpRequestConfigurator;
 
 		/** Constructor. */
@@ -75,7 +87,20 @@ public class OidcDiscoveryClient {
 		 * @return This object.
 		 */
 		public Builder issuer(URI value) {
-			issuer = assertArgNotNull("value", value);
+			issuer = assertArgNotNull(ARG_value, value);
+			return this;
+		}
+
+		/**
+		 * Sets the connect/read timeout applied to the discovery request.  Default 10 seconds.
+		 *
+		 * @param value The timeout.  Must not be <jk>null</jk> and must be positive.
+		 * @return This object.
+		 */
+		public Builder httpTimeout(Duration value) {
+			assertArgNotNull(ARG_value, value);
+			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
+			httpTimeout = value;
 			return this;
 		}
 
@@ -86,7 +111,7 @@ public class OidcDiscoveryClient {
 		 * @return This object.
 		 */
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
-			httpRequestConfigurator = assertArgNotNull("value", value);
+			httpRequestConfigurator = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -102,7 +127,11 @@ public class OidcDiscoveryClient {
 		}
 	}
 
+	/** Default connect/read timeout applied to a discovery request when the caller sets none. */
+	static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(10);
+
 	private final URI issuer;
+	private final Duration httpTimeout;
 	private final Consumer<HTTPRequest> httpRequestConfigurator;
 
 	/**
@@ -112,6 +141,7 @@ public class OidcDiscoveryClient {
 	 */
 	protected OidcDiscoveryClient(Builder b) {
 		this.issuer = b.issuer;
+		this.httpTimeout = b.httpTimeout;
 		this.httpRequestConfigurator = b.httpRequestConfigurator;
 	}
 
@@ -125,22 +155,35 @@ public class OidcDiscoveryClient {
 	}
 
 	/**
-	 * Fetches the IdP's OIDC metadata.
+	 * Fetches the authorization server's metadata, trying RFC 8414 first then OIDC Discovery.
 	 *
 	 * @return The parsed metadata record.
-	 * @throws IOException If the HTTP fetch fails.
-	 * @throws OidcDiscoveryException If the metadata cannot be parsed.
+	 * @throws IOException If both discovery HTTP fetches fail.
+	 * @throws OidcDiscoveryException If the metadata cannot be parsed or the issuer identity check fails.
 	 */
 	public OidcMetadata discover() throws IOException, OidcDiscoveryException {
-		OIDCProviderMetadata md;
+		var iss = new Issuer(issuer.toString());
+		HTTPRequestModifier cfg = http -> {
+			http.setConnectTimeout((int) httpTimeout.toMillis());
+			http.setReadTimeout((int) httpTimeout.toMillis());
+			if (httpRequestConfigurator != null)
+				httpRequestConfigurator.accept(http);
+			return http;
+		};
+		// RFC 8414 OAuth Authorization Server Metadata first, OIDC Discovery as fallback (spec requires both).
 		try {
-			md = OIDCProviderMetadata.resolve(new Issuer(issuer.toString()), http -> {
-				if (httpRequestConfigurator != null)
-					httpRequestConfigurator.accept(http);
-			});
-		} catch (GeneralException e) {
-			throw new OidcDiscoveryException("Failed to parse OIDC metadata for " + issuer, e);
+			return toMetadata(AuthorizationServerMetadata.resolve(iss, null, cfg, false));
+		} catch (IOException | GeneralException asFailure) {
+			try {
+				return toMetadata(OIDCProviderMetadata.resolve(iss, null, cfg, false));
+			} catch (GeneralException oidcFailure) {
+				throw new OidcDiscoveryException("Failed to resolve authorization-server metadata for " + issuer
+					+ " via RFC 8414 or OIDC Discovery", oidcFailure);
+			}
 		}
+	}
+
+	private static OidcMetadata toMetadata(AuthorizationServerMetadata md) {
 		var extras = new LinkedHashMap<String,Object>();
 		var json = md.toJSONObject();
 		for (var e : json.entrySet()) {
@@ -148,20 +191,26 @@ public class OidcDiscoveryClient {
 			if (!STANDARD_FIELDS.contains(k))
 				extras.put(k, e.getValue());
 		}
+		URI userInfo = null;
+		URI endSession = null;
+		if (md instanceof OIDCProviderMetadata md2) {
+			userInfo = md2.getUserInfoEndpointURI();
+			endSession = md2.getEndSessionEndpointURI();
+		}
 		return new OidcMetadata(
 			URI.create(md.getIssuer().getValue()),
 			md.getTokenEndpointURI(),
 			md.getAuthorizationEndpointURI(),
 			md.getIntrospectionEndpointURI(),
 			md.getJWKSetURI(),
-			md.getUserInfoEndpointURI(),
-			md.getEndSessionEndpointURI(),
+			userInfo,
+			endSession,
 			toScopeSet(md),
 			extras
 		);
 	}
 
-	private static Set<String> toScopeSet(OIDCProviderMetadata md) {
+	private static Set<String> toScopeSet(AuthorizationServerMetadata md) {
 		var s = md.getScopes();
 		if (s == null)
 			return Collections.emptySet();

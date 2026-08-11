@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.client.mcp.auth.flow.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 import org.junit.jupiter.api.*;
 
 /**

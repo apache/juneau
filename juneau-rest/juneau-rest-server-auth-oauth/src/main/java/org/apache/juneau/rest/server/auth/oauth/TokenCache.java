@@ -20,6 +20,8 @@ import java.security.*;
 import java.time.*;
 import java.util.*;
 
+import org.apache.juneau.rest.auth.oauth.flow.*;
+
 /**
  * SPI for caching the result of an OAuth introspection or token-acquisition call.
  *

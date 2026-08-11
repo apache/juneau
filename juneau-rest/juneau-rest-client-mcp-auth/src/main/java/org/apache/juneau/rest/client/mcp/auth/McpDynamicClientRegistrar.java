@@ -62,7 +62,7 @@ import com.nimbusds.openid.connect.sdk.rp.*;
  *
  * <h5 class='topic'>Security</h5>
  * <p>
- * The registration endpoint MUST originate from validated AS metadata ({@link org.apache.juneau.rest.client.mcp.auth.oidc.OidcDiscoveryClient}
+ * The registration endpoint MUST originate from validated AS metadata ({@link org.apache.juneau.rest.auth.oauth.oidc.OidcDiscoveryClient}
  * enforces the RFC 8414 / OIDC issuer-identity check) and MUST be {@code https} (loopback exempt for local testing,
  * matching {@code McpProtectedResourceMetadataClient.requireSecure}).  Client secrets are never logged &mdash;
  * {@link #toString()} discloses only non-secret configuration and {@link McpClientRegistration} redacts its

@@ -15,17 +15,16 @@
  * limitations under the License.
  */
 /**
- * OAuth 2.0 client-side flow helpers.
+ * Server-only OAuth 2.0 flow helpers.
  *
  * <p>
- * Thin facades over Nimbus SDK grant types and {@code TokenRequest}.  Each helper exposes a Juneau-style
- * builder and returns a Juneau-native {@link org.apache.juneau.rest.server.auth.oauth.OAuthToken} record.
+ * The role-neutral grant flows (client-credentials, authorization-code with PKCE, refresh-token) plus the shared
+ * {@code Flows} / {@code OAuthToken} / {@code OAuthFlowException} primitives live in
+ * {@code org.apache.juneau.rest.auth.oauth.flow} (module {@code juneau-rest-auth-oauth-flow}).  This package retains
+ * only the server-side flow that has no client-side counterpart.
  *
  * <h5 class='topic'>Flow inventory</h5>
  * <ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.flow.OAuthClientCredentialsFlow}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.flow.OAuthAuthorizationCodeFlow} (with PKCE)
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.flow.OAuthRefreshTokenFlow}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow} (discouraged)
  * </ul>
  *

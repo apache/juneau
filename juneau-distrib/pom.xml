@@ -197,6 +197,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-auth-oauth-flow</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-auth-oauth</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
@@ -890,6 +896,31 @@
 									<artifactId>juneau-rest-server-auth-saml</artifactId>
 									<version>${project.version}</version>
 									<destFileName>org.apache.juneau.rest.server.saml_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-rest-auth-oauth-flow -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-auth-oauth-flow</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-rest-auth-oauth-flow-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-auth-oauth-flow</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-rest-auth-oauth-flow-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-auth-oauth-flow</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.rest.auth.oauth.flow_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<!-- juneau-rest-server-auth-oauth -->

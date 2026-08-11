@@ -15,14 +15,21 @@
  * limitations under the License.
  */
 /**
- * OpenID Connect / RFC 8414 authorization-server metadata discovery used by the MCP client-side token acquisition
- * layer.
+ * Role-neutral OAuth 2.0 grant-flow helpers.
  *
  * <p>
- * Relocated from {@code org.apache.juneau.rest.server.auth.oauth.oidc} (module {@code juneau-rest-server-auth-oauth})
- * for the same reason as the sibling {@code flow} package &mdash; see that package's javadoc.  Sub-project D is
- * expected to later rationalize this relocation.
+ * Thin facades over Nimbus SDK grant types and {@code TokenRequest}.  Each helper exposes a Juneau-style
+ * builder and returns a Juneau-native {@link org.apache.juneau.rest.auth.oauth.flow.OAuthToken} record.  These
+ * primitives are role-neutral (neither client- nor server-specific) and are consumed by both the REST server
+ * OAuth/OIDC modules and the MCP client-side token-acquisition layer.
+ *
+ * <h5 class='topic'>Flow inventory</h5>
+ * <ul>
+ * 	<li class='jc'>{@link org.apache.juneau.rest.auth.oauth.flow.OAuthClientCredentialsFlow}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.auth.oauth.flow.OAuthAuthorizationCodeFlow} (with PKCE)
+ * 	<li class='jc'>{@link org.apache.juneau.rest.auth.oauth.flow.OAuthRefreshTokenFlow}
+ * </ul>
  *
  * @since 10.0.0
  */
-package org.apache.juneau.rest.client.mcp.auth.oidc;
+package org.apache.juneau.rest.auth.oauth.flow;

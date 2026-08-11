@@ -38,6 +38,7 @@
 		<module>juneau-rest-server-mcp</module>
 		<module>juneau-rest-server-mcp-v20250618</module>
 		<module>juneau-rest-server-mcp-v20260728</module>
+		<module>juneau-rest-auth-oauth-flow</module>
 		<module>juneau-rest-server-auth-jwt</module>
 		<module>juneau-rest-server-auth-saml</module>
 		<module>juneau-rest-server-auth-oauth</module>

@@ -27,7 +27,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.client.mcp.auth.flow.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 import org.junit.jupiter.api.*;
 
 import com.sun.net.httpserver.*;

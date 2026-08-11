@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.client.mcp.auth.flow;
+package org.apache.juneau.rest.auth.oauth.flow;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -25,12 +25,8 @@ import java.util.*;
  * Immutable record returned by every OAuth 2.0 flow helper on a successful token acquisition.
  *
  * <p>
- * Relocated from {@code juneau-rest-server-auth-oauth} for client-side use &mdash; see this package's javadoc.
- *
- * <p>
  * <b>Never log {@code accessToken} / {@code refreshToken} / {@code idToken}.</b>  {@link #toString()} redacts the
- * secret-bearing fields (mirroring the {@code KeyedSecret} redaction discipline used elsewhere in this module) so
- * token material never reaches logs via this record's auto-generated form.
+ * secret-bearing fields so token material never reaches logs via this record's auto-generated form.
  *
  * @param accessToken The opaque or JWT access-token string.  Never {@code null}.
  * @param tokenType The token type per RFC 6749 &sect;5.1 (typically {@code "Bearer"}).  Never {@code null}.
@@ -38,7 +34,7 @@ import java.util.*;
  * 	IdP returned no {@code expires_in}.
  * @param refreshToken The refresh token, if the IdP issued one.
  * @param scope The granted scopes, if the IdP returned a {@code scope} field.
- * @param idToken The OIDC ID token (a JWT), if the flow scope included {@code openid}.  <b>Not validated in F1</b>
+ * @param idToken The OIDC ID token (a JWT), if the flow scope included {@code openid}.  <b>Not validated</b>
  * 	&mdash; see {@link #idToken()}.
  * @since 10.0.0
  */
@@ -82,10 +78,10 @@ public record OAuthToken(
 	 * The OIDC ID token (a JWT), if the flow scope included {@code openid}.
 	 *
 	 * <p>
-	 * <b>SECURITY CAVEAT (F1):</b> this ID token is returned verbatim and is <b>NOT validated</b> &mdash; its
-	 * signature and its {@code iss} / {@code aud} / {@code exp} / {@code nonce} claims are not checked.  Callers MUST
-	 * NOT trust its claims for authentication or authorization decisions in F1.  Full {@code IDTokenValidator}-based
-	 * verification is deferred to a later slice (F2/F3).
+	 * <b>SECURITY CAVEAT:</b> this ID token is returned verbatim and is <b>NOT validated</b> by the flow helpers
+	 * &mdash; its signature and its {@code iss} / {@code aud} / {@code exp} / {@code nonce} claims are not checked.
+	 * Callers MUST NOT trust its claims for authentication or authorization decisions without performing full
+	 * {@code IDTokenValidator}-based verification first.
 	 *
 	 * @return The raw ID token, or an empty {@link Optional} if the IdP issued none.
 	 */

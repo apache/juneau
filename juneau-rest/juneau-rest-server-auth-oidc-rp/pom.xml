@@ -41,13 +41,22 @@
 
 	<dependencies>
 		<!--
-			Compile dependency on the OAuth building-block module (FINISHED-94c): OidcDiscoveryClient,
-			OAuthAuthorizationCodeFlow, OAuthRefreshTokenFlow, OAuthToken.  This transitively brings
-			juneau-rest-server (the AuthFilter framework + ClaimsPrincipal) onto the classpath.
+			Compile dependency on the role-neutral OAuth flow / OIDC discovery primitives: OidcDiscoveryClient,
+			OAuthAuthorizationCodeFlow, OAuthRefreshTokenFlow, OAuthToken.
 		-->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-auth-oauth</artifactId>
+			<artifactId>juneau-rest-auth-oauth-flow</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
+			The AuthFilter framework + ClaimsPrincipal + AuthenticationException.  Previously inherited transitively
+			via juneau-rest-server-auth-oauth; declared explicitly now that this module consumes the role-neutral
+			flow module (which does not depend on juneau-rest-server).
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

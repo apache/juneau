@@ -23,7 +23,7 @@ import java.net.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.rest.server.auth.oauth.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 
 import com.nimbusds.oauth2.sdk.*;
 import com.nimbusds.oauth2.sdk.auth.*;
@@ -253,6 +253,6 @@ public class OAuthResourceOwnerFlow {
 		var req = new TokenRequest.Builder(tokenEndpoint, clientAuth, grant)
 			.scope(nimbusScope)
 			.build();
-		return Flows.send(req, httpRequestConfigurator);
+		return Flows.send(req, null, httpRequestConfigurator);
 	}
 }

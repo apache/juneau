@@ -25,7 +25,7 @@ import java.time.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.auth.oauth.flow.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 import org.junit.jupiter.api.*;
 
 import com.sun.net.httpserver.*;
@@ -170,7 +170,7 @@ class Flows_Live_Test extends TestBase {
 	@Test void i01_tokenCachePutAfterAcquire() {
 		nextResponse = "{\"access_token\":\"at-cached\",\"token_type\":\"Bearer\",\"expires_in\":3600}";
 		var cache = BoundedLruTokenCache.create();
-		var f = OAuthClientCredentialsFlow.create()
+		var f = CachingClientCredentialsFlow.create()
 			.tokenEndpoint(tokenEndpoint())
 			.clientId("id")
 			.clientSecret("s")

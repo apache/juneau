@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.client.mcp.auth.oidc;
+package org.apache.juneau.rest.auth.oauth.oidc;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -24,9 +24,6 @@ import java.util.*;
 /**
  * Immutable record produced by {@link OidcDiscoveryClient} carrying the metadata fields a Juneau OAuth /
  * OIDC consumer typically needs.
- *
- * <p>
- * Relocated from {@code juneau-rest-server-auth-oauth} for client-side use &mdash; see this package's javadoc.
  *
  * <p>
  * Unknown fields (IdP-specific extensions) are preserved in {@link #extras()} as a read-only
@@ -74,8 +71,7 @@ public record OidcMetadata(
 	 *
 	 * <p>
 	 * When {@code true}, a compliant client MUST reject an authorization response that omits the {@code iss}
-	 * parameter (SEP-2468); callers can thread this into
-	 * {@code McpAuthorizationCodeAcquirer.Builder.requireIssuerResponseParameter(boolean)}.
+	 * parameter.
 	 *
 	 * @return <jk>true</jk> if the {@code authorization_response_iss_parameter_supported} extra is present and set to
 	 * 	{@code true}.

@@ -14,24 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.auth.oauth.oidc;
-
 /**
- * Thrown by {@link OidcDiscoveryClient#discover()} when the IdP returns metadata that cannot be parsed.
+ * Role-neutral OpenID Connect / RFC 8414 authorization-server metadata discovery.
+ *
+ * <p>
+ * Fetches and parses authorization-server metadata into a Juneau-native
+ * {@link org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata} record via
+ * {@link org.apache.juneau.rest.auth.oauth.oidc.OidcDiscoveryClient}.  These primitives are role-neutral and are
+ * consumed by both the REST server OAuth/OIDC modules and the MCP client-side token-acquisition layer.
  *
  * @since 10.0.0
  */
-public class OidcDiscoveryException extends Exception {
-
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param msg The detail message.
-	 * @param cause The cause.
-	 */
-	public OidcDiscoveryException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-}
+package org.apache.juneau.rest.auth.oauth.oidc;

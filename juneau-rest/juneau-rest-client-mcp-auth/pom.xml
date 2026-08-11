@@ -53,11 +53,21 @@
 		</dependency>
 
 		<!--
+			Role-neutral OAuth flow / OIDC discovery primitives (OAuthClientCredentialsFlow,
+			OAuthAuthorizationCodeFlow, OAuthRefreshTokenFlow, OAuthToken, OidcDiscoveryClient, OidcMetadata).
+			This module depends only on juneau-commons + Nimbus (both non-server), so it can be consumed here
+			without pulling in juneau-rest-server.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-auth-oauth-flow</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!--
 			Nimbus OAuth 2.0 SDK is declared `provided` so it does NOT leak as a transitive dependency of this
 			module or anything downstream.  `provided` is non-transitive, so this re-declaration is required (and
-			legal) even though juneau-rest-server-auth-oauth already declares it the same way — see READY-312f V2.
-			This module deliberately relocates the minimal role-neutral flow/discovery code rather than depending
-			on juneau-rest-server-auth-oauth (which compile-depends on juneau-rest-server).
+			legal) even though juneau-rest-auth-oauth-flow already declares it the same way — see READY-312f V2.
 		-->
 		<dependency>
 			<groupId>com.nimbusds</groupId>

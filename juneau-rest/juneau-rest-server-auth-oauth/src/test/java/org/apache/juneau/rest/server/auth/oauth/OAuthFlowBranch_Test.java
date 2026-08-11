@@ -24,8 +24,9 @@ import java.time.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
+import org.apache.juneau.rest.auth.oauth.oidc.*;
 import org.apache.juneau.rest.server.auth.oauth.flow.*;
-import org.apache.juneau.rest.server.auth.oauth.oidc.*;
 import org.junit.jupiter.api.*;
 
 import com.nimbusds.oauth2.sdk.pkce.*;
@@ -111,7 +112,7 @@ class OAuthFlowBranch_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// B: OAuthClientCredentialsFlow — tokenCache null vs. non-null, scope empty branch.
+	// B: OAuthClientCredentialsFlow (no cache) + CachingClientCredentialsFlow (cache hit/miss), scope empty branch.
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_acquire_noCache_noScope_hitsPeers() {
@@ -140,7 +141,7 @@ class OAuthFlowBranch_Test extends TestBase {
 		var seeded = new OAuthToken("at", "Bearer", Instant.parse("2099-01-01T00:00:00Z"),
 			oe(), oe(), oe());
 		// Build the flow first to discover the cache key pattern.
-		var f = OAuthClientCredentialsFlow.create()
+		var f = CachingClientCredentialsFlow.create()
 			.tokenEndpoint(URI.create("http://127.0.0.1:1/token"))
 			.clientId("id")
 			.clientSecret("s")
@@ -154,7 +155,7 @@ class OAuthFlowBranch_Test extends TestBase {
 
 	@Test void b04_acquire_cacheMiss_attemptsNetwork() {
 		var cache = BoundedLruTokenCache.create();
-		var f = OAuthClientCredentialsFlow.create()
+		var f = CachingClientCredentialsFlow.create()
 			.tokenEndpoint(URI.create("http://127.0.0.1:1/token"))
 			.clientId("id")
 			.clientSecret("s")
@@ -284,11 +285,11 @@ class OAuthFlowBranch_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// H: OAuthClientCredentialsFlow.cacheSkew — negative value rejected (line 168)
+	// H: CachingClientCredentialsFlow.cacheSkew — negative value rejected, zero accepted
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void h01_clientCredentials_negativeCacheSkewRejected() {
-		assertThrows(IllegalArgumentException.class, () -> OAuthClientCredentialsFlow.create()
+		assertThrows(IllegalArgumentException.class, () -> CachingClientCredentialsFlow.create()
 			.tokenEndpoint(URI.create("https://x.example.com/token"))
 			.clientId("id")
 			.clientSecret("secret")
@@ -296,7 +297,7 @@ class OAuthFlowBranch_Test extends TestBase {
 	}
 
 	@Test void h02_clientCredentials_zeroCacheSkewAccepted() {
-		assertNotNull(OAuthClientCredentialsFlow.create()
+		assertNotNull(CachingClientCredentialsFlow.create()
 			.tokenEndpoint(URI.create("https://x.example.com/token"))
 			.clientId("id")
 			.clientSecret("secret")

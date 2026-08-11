@@ -14,53 +14,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.client.mcp.auth.flow;
+package org.apache.juneau.rest.server.auth.oauth;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
-import static org.apache.juneau.commons.utils.UriUtils.*;
 
 import java.net.*;
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
-import com.nimbusds.oauth2.sdk.*;
-import com.nimbusds.oauth2.sdk.auth.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
+
 import com.nimbusds.oauth2.sdk.http.*;
-import com.nimbusds.oauth2.sdk.id.*;
 
 /**
- * Client-credentials grant (RFC 6749 &sect;4.4) flow helper.
+ * Server-side caching decorator layering an optional {@link TokenCache} over the role-neutral
+ * {@link OAuthClientCredentialsFlow}.
  *
  * <p>
- * Relocated from {@code juneau-rest-server-auth-oauth} for client-side use &mdash; see this package's javadoc.  This
- * client-side copy drops the server module's optional {@code TokenCache} coupling (caching is owned by
- * {@code McpTokenProvider}) and adds RFC 8707 resource-indicator support via {@link Builder#resource(URI)}.
+ * The neutral flow performs the RFC 6749 &sect;4.4 client-credentials token acquisition; this decorator adds the
+ * server-side {@code (clientId, scope)}-keyed cache so repeat callers within the cache window reuse the token rather
+ * than hitting the IdP on each call.  When no {@link Builder#tokenCache(TokenCache) cache} is configured the decorator
+ * simply delegates to the neutral flow.
  *
  * <h5 class='topic'>Usage</h5>
  *
  * <p class='bjava'>
- * 	<jk>var</jk> token = OAuthClientCredentialsFlow.<jsm>create</jsm>()
+ * 	<jk>var</jk> token = CachingClientCredentialsFlow.<jsm>create</jsm>()
  * 		.tokenEndpoint(URI.<jsm>create</jsm>(<js>"https://idp.example.com/oauth2/token"</js>))
  * 		.clientId(<js>"worker-service"</js>)
  * 		.clientSecret(<js>"..."</js>)
- * 		.scope(<js>"read:orders"</js>, <js>"write:orders"</js>)
+ * 		.scope(<js>"read:orders"</js>)
+ * 		.tokenCache(BoundedLruTokenCache.<jsm>create</jsm>())
  * 		.build()
  * 		.acquire();
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.4">RFC 6749 &sect;4.4</a>
- * </ul>
- *
  * @since 10.0.0
  */
-@SuppressWarnings({
-	"java:S1192" // Duplicate string literals are OAuth protocol parameter names (e.g. "grant_type", "client_id"); intentional
-})
-public class OAuthClientCredentialsFlow {
+public class CachingClientCredentialsFlow {
 
 	/**
 	 * Static creator.
@@ -79,8 +72,8 @@ public class OAuthClientCredentialsFlow {
 		private String clientId;
 		private Supplier<String> clientSecretSupplier;
 		private Set<String> scopes = st();
-		private URI resource;
-		private Duration httpTimeout = Flows.DEFAULT_HTTP_TIMEOUT;
+		private TokenCache tokenCache;
+		private Duration cacheSkew = Duration.ofSeconds(30);
 		private Consumer<HTTPRequest> httpRequestConfigurator;
 
 		/** Constructor. */
@@ -93,7 +86,7 @@ public class OAuthClientCredentialsFlow {
 		 * @return This object.
 		 */
 		public Builder tokenEndpoint(URI value) {
-			tokenEndpoint = assertSecureOrLoopback(assertArgNotNull("value", value));
+			tokenEndpoint = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -147,30 +140,27 @@ public class OAuthClientCredentialsFlow {
 		}
 
 		/**
-		 * Sets the RFC 8707 {@code resource} indicator sent on the token request.
+		 * Configures the cache for the acquired token.
 		 *
-		 * <p>
-		 * The canonical URI of the protected resource (the MCP server) the acquired token is intended for.  Setting
-		 * this binds the token's audience so a malicious server cannot replay it against a different resource.
-		 *
-		 * @param value The canonical resource URI.  Must not be <jk>null</jk>.
+		 * @param value The cache.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder resource(URI value) {
-			resource = assertArgNotNull("value", value);
+		public Builder tokenCache(TokenCache value) {
+			tokenCache = assertArgNotNull("value", value);
 			return this;
 		}
 
 		/**
-		 * Sets the connect/read timeout applied to the token request.  Default 10 seconds.
+		 * Sets the skew tolerance subtracted from the cached token's expiry.  Default 30s.
 		 *
-		 * @param value The timeout.  Must not be <jk>null</jk> and must be positive.
+		 * @param value The skew.  Must be non-negative.
 		 * @return This object.
 		 */
-		public Builder httpTimeout(Duration value) {
+		public Builder cacheSkew(Duration value) {
 			assertArgNotNull("value", value);
-			assertArg(!value.isZero() && !value.isNegative(), "httpTimeout must be positive (was %s)", value);
-			httpTimeout = value;
+			if (value.isNegative())
+				throw new IllegalArgumentException("cacheSkew must be non-negative");
+			cacheSkew = value;
 			return this;
 		}
 
@@ -188,54 +178,59 @@ public class OAuthClientCredentialsFlow {
 		/**
 		 * Builds the flow.
 		 *
-		 * @return A new {@link OAuthClientCredentialsFlow}.
+		 * @return A new {@link CachingClientCredentialsFlow}.
 		 */
-		public OAuthClientCredentialsFlow build() {
+		public CachingClientCredentialsFlow build() {
 			if (tokenEndpoint == null)
-				throw new IllegalStateException("OAuthClientCredentialsFlow requires tokenEndpoint(...)");
+				throw new IllegalStateException("CachingClientCredentialsFlow requires tokenEndpoint(...)");
 			if (clientId == null)
-				throw new IllegalStateException("OAuthClientCredentialsFlow requires clientId(...)");
+				throw new IllegalStateException("CachingClientCredentialsFlow requires clientId(...)");
 			if (clientSecretSupplier == null)
-				throw new IllegalStateException("OAuthClientCredentialsFlow requires clientSecret(...) or clientSecretSupplier(...)");
-			return new OAuthClientCredentialsFlow(this);
+				throw new IllegalStateException("CachingClientCredentialsFlow requires clientSecret(...) or clientSecretSupplier(...)");
+			return new CachingClientCredentialsFlow(this);
 		}
 	}
 
-	private final URI tokenEndpoint;
-	private final String clientId;
-	private final Supplier<String> clientSecretSupplier;
-	private final Set<String> scopes;
-	private final URI resource;
-	private final Duration httpTimeout;
-	private final Consumer<HTTPRequest> httpRequestConfigurator;
+	private final OAuthClientCredentialsFlow delegate;
+	private final TokenCache tokenCache;
+	private final Duration cacheSkew;
+	private final String cacheKey;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param b The builder.
 	 */
-	protected OAuthClientCredentialsFlow(Builder b) {
-		this.tokenEndpoint = b.tokenEndpoint;
-		this.clientId = b.clientId;
-		this.clientSecretSupplier = b.clientSecretSupplier;
-		this.scopes = u(cp(b.scopes));
-		this.resource = b.resource;
-		this.httpTimeout = b.httpTimeout;
-		this.httpRequestConfigurator = b.httpRequestConfigurator;
+	protected CachingClientCredentialsFlow(Builder b) {
+		var scopes = u(cp(b.scopes));
+		var db = OAuthClientCredentialsFlow.create()
+			.tokenEndpoint(b.tokenEndpoint)
+			.clientId(b.clientId)
+			.clientSecretSupplier(b.clientSecretSupplier);
+		if (!scopes.isEmpty())
+			db.scope(scopes.toArray(new String[0]));
+		if (b.httpRequestConfigurator != null)
+			db.httpRequestConfigurator(b.httpRequestConfigurator);
+		this.delegate = db.build();
+		this.tokenCache = b.tokenCache;
+		this.cacheSkew = b.cacheSkew;
+		this.cacheKey = "cc|" + b.clientId + "|" + String.join(" ", scopes);
 	}
 
 	/**
-	 * Acquires a token from the IdP.
+	 * Acquires a token, returning the cached token when a fresh one is present.
 	 *
 	 * @return The acquired token.
 	 */
 	public OAuthToken acquire() {
-		var clientAuth = new ClientSecretBasic(new ClientID(clientId), new Secret(clientSecretSupplier.get()));
-		Scope nimbusScope = scopes.isEmpty() ? null : new Scope(scopes.toArray(new String[0]));
-		var reqBuilder = new TokenRequest.Builder(tokenEndpoint, clientAuth, new ClientCredentialsGrant())
-			.scope(nimbusScope);
-		if (resource != null)
-			reqBuilder.resource(resource);
-		return Flows.send(reqBuilder.build(), httpTimeout, httpRequestConfigurator);
+		if (tokenCache != null) {
+			var hit = tokenCache.getToken(cacheKey, Instant.now(), cacheSkew);
+			if (hit.isPresent())
+				return hit.get();
+		}
+		var token = delegate.acquire();
+		if (tokenCache != null)
+			tokenCache.putToken(cacheKey, token);
+		return token;
 	}
 }

@@ -25,45 +25,32 @@
 		<version>10.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-rest-server-auth-oauth</artifactId>
-	<name>Apache Juneau REST Server OAuth</name>
-	<description>Apache Juneau REST Server - OAuth 2.0 / OIDC validation and client flows (opt-in, Nimbus SDK)</description>
+	<artifactId>juneau-rest-auth-oauth-flow</artifactId>
+	<name>Apache Juneau REST Auth OAuth Flow</name>
+	<description>Apache Juneau REST - Role-neutral OAuth 2.0 grant-flow and OIDC discovery primitives (opt-in, Nimbus SDK)</description>
 	<packaging>bundle</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!--
-			Nimbus OAuth 2.0 SDK pin.  11.37.2 (May 2026) is the
-			current stable on Maven Central as of land time.
+			Nimbus OAuth 2.0 SDK pin.  Matches the juneau-rest-server-auth-oauth pin (11.38.2).
 		-->
 		<nimbus-oauth2-oidc-sdk.version>11.38.2</nimbus-oauth2-oidc-sdk.version>
 	</properties>
 
 	<dependencies>
+		<!-- Imported directly (Shorts / AssertionUtils / UriUtils). -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server</artifactId>
+			<artifactId>juneau-commons</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-auth-oauth-flow</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-auth-jwt</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<!--
-			Nimbus OAuth 2.0 SDK is declared `provided` so it does NOT leak as a transitive dependency
-			of juneau-rest-server-auth-oauth or any upstream module.  Mirrors the FINISHED-69 nimbus-jose-jwt
-			containment pattern.
-
-			The Nimbus OAuth SDK pulls `nimbus-jose-jwt` transitively, which is fine: it composes with
-			(does not conflict with) the JWT validator's `nimbus-jose-jwt` dep.
+			Nimbus OAuth 2.0 SDK is declared `provided` so it does NOT leak as a transitive dependency of this
+			module or anything downstream.  `provided` is non-transitive, so this re-declaration is required (and
+			legal) even though downstream modules (juneau-rest-server-auth-oauth, juneau-rest-client-mcp-auth)
+			already declare it the same way.
 		-->
 		<dependency>
 			<groupId>com.nimbusds</groupId>
@@ -71,12 +58,7 @@
 			<version>${nimbus-oauth2-oidc-sdk.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>5.23.0</version>
-			<scope>test</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>

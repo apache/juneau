@@ -34,15 +34,14 @@
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.OAuthFilter}
  * 		&mdash; servlet filter that recognizes {@code Authorization: Bearer ...} OAuth tokens.
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.TokenCache}
- * 		&mdash; cache SPI used by the validator (and flow helpers); default impl
+ * 		&mdash; cache SPI used by the validator (and the caching flow decorator); default impl
  * 		{@link org.apache.juneau.rest.server.auth.oauth.BoundedLruTokenCache}.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.OAuthToken}
- * 		&mdash; immutable token record produced by every flow helper.
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.CachingClientCredentialsFlow}
+ * 		&mdash; server-side caching decorator layering a {@link org.apache.juneau.rest.server.auth.oauth.TokenCache}
+ * 		over the role-neutral {@code OAuthClientCredentialsFlow}.
  * 	<li class='jp'>{@link org.apache.juneau.rest.server.auth.oauth.flow flow}
- * 		&mdash; client-side flow helpers (client-credentials, authorization-code with PKCE, refresh-token,
- * 		and the discouraged resource-owner password-credentials).
- * 	<li class='jp'>{@link org.apache.juneau.rest.server.auth.oauth.oidc oidc}
- * 		&mdash; OIDC discovery client + metadata record.
+ * 		&mdash; the discouraged resource-owner password-credentials flow (the role-neutral grant flows and the
+ * 		{@code OAuthToken} record live in module {@code juneau-rest-auth-oauth-flow}).
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>

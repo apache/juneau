@@ -22,7 +22,7 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.rest.server.auth.*;
-import org.apache.juneau.rest.server.auth.oauth.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 
 /**
  * Immutable record describing a logged-in OpenID Connect Relying Party session.

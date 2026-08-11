@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.auth.oauth.flow;
+package org.apache.juneau.rest.auth.oauth.flow;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -23,22 +23,21 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.rest.server.auth.oauth.*;
-
 import com.nimbusds.oauth2.sdk.*;
 import com.nimbusds.oauth2.sdk.http.*;
-import com.nimbusds.oauth2.sdk.token.*;
 
 /**
- * Package-private helpers shared across all flow types.
+ * Helpers shared across all flow types.
  *
  * <p>
- * Centralizes the Nimbus {@code TokenRequest}-to-{@code OAuthToken} round-trip plus the standard error
- * mapping.  All flow classes delegate here so the wire-shape handling lives in one place.
+ * Centralizes the Nimbus {@code TokenRequest}-to-{@code OAuthToken} round-trip plus the standard error mapping.
  *
  * @since 10.0.0
  */
-final class Flows {
+public final class Flows {
+
+	/** Default connect/read timeout applied to every token-endpoint request when the caller sets none. */
+	static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(10);
 
 	private Flows() {}
 
@@ -46,16 +45,22 @@ final class Flows {
 	 * Sends the supplied {@link TokenRequest} via Nimbus's HTTP client and maps the response to
 	 * {@link OAuthToken}.
 	 *
+	 * <p>
+	 * A finite connect/read timeout is applied BEFORE the caller's {@code httpConfigurator} runs, so an unresponsive
+	 * IdP can never wedge the call indefinitely while still letting callers override the value.
+	 *
 	 * @param req The Nimbus {@code TokenRequest}.  Never {@code null}.
+	 * @param timeout The connect/read timeout.  {@code null} selects {@link #DEFAULT_HTTP_TIMEOUT}.
 	 * @param httpConfigurator Optional pre-send hook on the {@link HTTPRequest}.
 	 * @return The acquired token.
 	 * @throws OAuthFlowException If the IdP returns an error or the HTTP round-trip fails.
 	 */
-	static OAuthToken send(TokenRequest req, Consumer<HTTPRequest> httpConfigurator) {
+	public static OAuthToken send(TokenRequest req, Duration timeout, Consumer<HTTPRequest> httpConfigurator) {
 		var http = req.toHTTPRequest();
+		applyTimeout(http, timeout);
 		if (httpConfigurator != null)
 			httpConfigurator.accept(http);
-		com.nimbusds.oauth2.sdk.http.HTTPResponse httpResp;
+		HTTPResponse httpResp;
 		try {
 			httpResp = http.send();
 		} catch (IOException e) {
@@ -67,10 +72,25 @@ final class Flows {
 		} catch (ParseException e) {
 			throw new OAuthFlowException("OAuth token-endpoint response could not be parsed", e);
 		}
-		if (!resp.indicatesSuccess())
-			throw new OAuthFlowException("OAuth token endpoint error: "
-				+ resp.toErrorResponse().getErrorObject().getCode());
+		if (!resp.indicatesSuccess()) {
+			var err = resp.toErrorResponse().getErrorObject();
+			var code = (err == null || err.getCode() == null) ? "unknown_error" : err.getCode();
+			throw new OAuthFlowException("OAuth token endpoint error: " + code, code);
+		}
 		return toOAuthToken(resp.toSuccessResponse());
+	}
+
+	/**
+	 * Applies a finite connect/read timeout to a Nimbus {@link HTTPRequest} (Nimbus defaults to infinite).
+	 *
+	 * @param http The request.  Never {@code null}.
+	 * @param timeout The timeout.  {@code null} selects {@link #DEFAULT_HTTP_TIMEOUT}.
+	 */
+	static void applyTimeout(HTTPRequest http, Duration timeout) {
+		var t = timeout == null ? DEFAULT_HTTP_TIMEOUT : timeout;
+		var ms = (int) Math.min(t.toMillis(), Integer.MAX_VALUE);
+		http.setConnectTimeout(ms);
+		http.setReadTimeout(ms);
 	}
 
 	private static OAuthToken toOAuthToken(AccessTokenResponse success) {
@@ -86,11 +106,9 @@ final class Flows {
 			: oe();
 		Optional<String> idToken = oe();
 		var custom = success.getCustomParameters();
-		if (custom != null) { // HTT: null branch unreachable; Nimbus returns an empty map (never null) for standard responses
-			var v = custom.get("id_token");
-			if (v instanceof String v2)
-				idToken = o(v2);
-		}
+		var v = custom.get("id_token");
+		if (v instanceof String v2)
+			idToken = o(v2);
 		return new OAuthToken(access.getValue(), tokenType, expiresAt, refreshToken, scope, idToken);
 	}
 
@@ -99,15 +117,5 @@ final class Flows {
 		if (lifetime <= 0L)
 			return Instant.MAX;
 		return Instant.now().plusSeconds(lifetime);
-	}
-
-	/**
-	 * Helper to coerce Nimbus's {@code BearerAccessToken} cast safely when needed.
-	 *
-	 * @param token The token.
-	 * @return The cast token, or {@code null}.
-	 */
-	static BearerAccessToken asBearer(com.nimbusds.oauth2.sdk.token.AccessToken token) {
-		return token instanceof BearerAccessToken token2 ? token2 : null; // HTT: null return unreachable in current callers; all token-endpoint responses produce BearerAccessToken
 	}
 }

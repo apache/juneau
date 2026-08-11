@@ -26,7 +26,7 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.rest.client.mcp.auth.flow.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 
 import com.nimbusds.oauth2.sdk.*;
 import com.nimbusds.oauth2.sdk.http.*;
@@ -222,7 +222,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * <p>
 		 * Set this when the discovered authorization-server metadata advertises
 		 * {@code authorization_response_iss_parameter_supported} (RFC 9207); see
-		 * {@link org.apache.juneau.rest.client.mcp.auth.oidc.OidcMetadata#authorizationResponseIssParameterSupported()}.
+		 * {@link org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata#authorizationResponseIssParameterSupported()}.
 		 *
 		 * @param value <jk>true</jk> to reject a response with no {@code iss} parameter.
 		 * @return This object.

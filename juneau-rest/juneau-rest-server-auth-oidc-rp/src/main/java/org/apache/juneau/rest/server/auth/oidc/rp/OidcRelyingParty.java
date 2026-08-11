@@ -29,9 +29,8 @@ import java.util.function.*;
 
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.server.auth.*;
-import org.apache.juneau.rest.server.auth.oauth.*;
-import org.apache.juneau.rest.server.auth.oauth.flow.*;
-import org.apache.juneau.rest.server.auth.oauth.oidc.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
+import org.apache.juneau.rest.auth.oauth.oidc.*;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.jwk.*;

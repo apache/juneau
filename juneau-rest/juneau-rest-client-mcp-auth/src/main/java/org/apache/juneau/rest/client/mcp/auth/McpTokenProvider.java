@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.rest.client.mcp.*;
-import org.apache.juneau.rest.client.mcp.auth.flow.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 
 import com.nimbusds.oauth2.sdk.http.*;
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.client.mcp.auth.flow;
+package org.apache.juneau.rest.auth.oauth.flow;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -23,9 +23,6 @@ import java.util.*;
 /**
  * Runtime exception thrown by any OAuth flow helper when the IdP rejects the request, the HTTP round-trip
  * fails, or the response can't be parsed.
- *
- * <p>
- * Relocated from {@code juneau-rest-server-auth-oauth} for client-side use &mdash; see this package's javadoc.
  *
  * <p>
  * Unchecked because flow acquisition is typically called from startup or service-initialization code where

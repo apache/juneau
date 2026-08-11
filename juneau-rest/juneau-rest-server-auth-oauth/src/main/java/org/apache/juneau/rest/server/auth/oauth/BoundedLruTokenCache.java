@@ -23,6 +23,8 @@ import java.security.*;
 import java.time.*;
 import java.util.*;
 
+import org.apache.juneau.rest.auth.oauth.flow.*;
+
 /**
  * Thread-safe bounded LRU implementation of {@link TokenCache}.
  *

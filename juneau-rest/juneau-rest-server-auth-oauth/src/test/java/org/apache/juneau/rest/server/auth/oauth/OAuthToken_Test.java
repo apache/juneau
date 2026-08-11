@@ -23,6 +23,7 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 import org.junit.jupiter.api.*;
 
 /**

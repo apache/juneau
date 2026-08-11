@@ -34,6 +34,9 @@ import org.apache.juneau.marshall.serializer.*;
  * round-trip is covered by {@link org.apache.juneau.marshall.marshaller.RdfThrift_Test},
  * {@link org.apache.juneau.marshall.marshaller.RdfProto_Test}, and other combo tests with simpler inputs.
  */
+@SuppressWarnings({
+	"java:S2187" // Test methods are inherited from ComboRoundTripTest_Base (@ParameterizedTest + @MethodSource("testers")); this subclass only supplies the tester data.
+})
 class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
 	private static <T> ComboRoundTrip_Tester.Builder<T> tester(int index, String label, Type type, T bean) {

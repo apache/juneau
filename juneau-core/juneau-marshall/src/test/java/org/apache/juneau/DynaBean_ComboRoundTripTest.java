@@ -29,6 +29,9 @@ import org.apache.juneau.marshall.serializer.*;
 /**
  * Exhaustive serialization tests DynaBean support.
  */
+@SuppressWarnings({
+	"java:S2187" // Test methods are inherited from ComboRoundTripTest_Base (@ParameterizedTest + @MethodSource("testers")); this subclass only supplies the tester data.
+})
 class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
 	private static final Calendar SINGLE_DATE = new GregorianCalendar(TimeZone.getTimeZone("PST"));

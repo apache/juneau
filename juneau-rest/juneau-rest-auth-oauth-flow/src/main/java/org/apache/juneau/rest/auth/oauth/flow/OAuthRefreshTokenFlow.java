@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.client.mcp.auth.flow;
+package org.apache.juneau.rest.auth.oauth.flow;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -35,8 +35,7 @@ import com.nimbusds.oauth2.sdk.token.*;
  * Refresh-token grant (RFC 6749 &sect;6) flow helper.
  *
  * <p>
- * Relocated from {@code juneau-rest-server-auth-oauth} for client-side use &mdash; see this package's javadoc.  Adds
- * RFC 8707 resource-indicator support via {@link Builder#resource(URI)}.
+ * Supports RFC 8707 resource-indicator binding via {@link Builder#resource(URI)}.
  *
  * <p>
  * Wraps Nimbus's {@link RefreshTokenGrant}.  The IdP may return a rotated refresh token; callers should

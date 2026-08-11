@@ -31,6 +31,9 @@ import org.apache.juneau.commons.bean.*;
  * produce output that is brittle to assert. RDF round-trip is covered by other combo tests and
  * dedicated RDF tests.
  */
+@SuppressWarnings({
+	"java:S2187" // Test methods are inherited from ComboRoundTripTest_Base (@ParameterizedTest + @MethodSource("testers")); this subclass only supplies the tester data.
+})
 class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
 	private static <T> ComboRoundTrip_Tester.Builder<T> tester(int index, String label, Type type, T bean) {

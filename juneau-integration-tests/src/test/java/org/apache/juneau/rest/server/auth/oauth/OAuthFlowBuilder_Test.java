@@ -21,13 +21,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.net.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 import org.apache.juneau.rest.server.auth.oauth.flow.*;
 import org.junit.jupiter.api.*;
 
 import com.nimbusds.oauth2.sdk.pkce.*;
 
 /**
- * Builder validation tests for the four flow helpers in {@link org.apache.juneau.rest.server.server.auth.oauth.flow}.
+ * Builder validation tests for the flow helpers: the role-neutral client-credentials, authorization-code, and
+ * refresh-token flows plus the server-only resource-owner flow.
  * Network round-trips are not exercised here; those need a stub IdP fixture.
  *
  * @since 10.0.0

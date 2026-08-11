@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.jsonschema.TypeCategory.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 
+import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.TestBase;
@@ -68,6 +69,41 @@ class JsonSchemaGenerator_Test extends TestBase {
 
 	public static class SimpleBean {
 		public String f1;
+	}
+
+	//====================================================================================================
+	// JDK URI value types (TODO-313)
+	//
+	// java.net.URI and java.net.URL are JDK value types that serialize as strings and must produce an
+	// inline {"type":"string","format":"uri"} schema rather than being treated as beans or losing the
+	// "uri" format. URL is registered with a default string swap (UrlSwap), so its serialized type is
+	// String; the format must still be derived from the declared type.
+	//====================================================================================================
+
+	@Test void a01a_uriTypesRaw() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		assertBean(s.getSchema(URI.class), "type,format", "string,uri");
+		assertBean(s.getSchema(URL.class), "type,format", "string,uri");
+	}
+
+	@Test void a01b_uriTypesInBean() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		assertBean(
+			s.getSchema(A01b_UriBean.class),
+			"type,properties{f1{type,format},f2{type,format}}",
+			"object,{{string,uri},{string,uri}}"
+		);
+	}
+
+	public static class A01b_UriBean {
+		public URI f1;
+		public URL f2;
+	}
+
+	@Test void a01c_uriTypesInBean_useBeanDefs() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.copy().useBeanDefs().build().getSession();
+		assertJson("{'$ref':'#/definitions/A01b_UriBean'}", s.getSchema(A01b_UriBean.class));
+		assertJson("{A01b_UriBean:{type:'object',properties:{f1:{type:'string',format:'uri'},f2:{type:'string',format:'uri'}}}}", s.getBeanDefs());
 	}
 
 	//====================================================================================================

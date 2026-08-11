@@ -24,7 +24,7 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.rest.client.mcp.auth.oidc.*;
+import org.apache.juneau.rest.auth.oauth.oidc.*;
 
 import com.nimbusds.oauth2.sdk.http.*;
 

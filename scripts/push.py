@@ -207,23 +207,41 @@ def _python310():
 def run_sonarqube_gate(juneau_root, step_num):
     """
     Run scripts/sonarqube.py in whole-repo fresh-fetch mode and block the push if
-    SonarCloud currently reports ANY issue (all severities).
+    SonarCloud currently reports ANY issue (all severities) for the branch being
+    pushed.
 
     This is a REPORT gate, not a diff gate: it reflects SonarCloud's last
-    CI-analyzed commit, not the local working tree — i.e. it's a ratchet against
-    the project's overall issue count. Honors SONAR_TOKEN from the environment
-    if set (sonarqube.py reads it directly).
+    CI-analyzed commit for the current branch, not the local working tree — i.e.
+    it's a ratchet against that branch's overall issue count. Honors SONAR_TOKEN
+    from the environment if set (sonarqube.py reads it directly).
+
+    Branch wiring (TODO-340): the gate resolves the current git branch and passes
+    it through as `--branch <current-branch>` so the gate reflects the branch
+    actually being pushed rather than always `master`. On `master` (or when the
+    branch can't be resolved) it runs exactly as before — no `--branch` argument.
+    If SonarCloud has no analysis for the current branch yet (a brand-new branch
+    CI hasn't scanned), sonarqube.py exits 3 and this gate degrades to a
+    non-blocking warning/skip instead of failing the push.
 
     Args:
         juneau_root: Repository root (cwd for the subprocess).
         step_num: The current step number (for output formatting).
 
     Returns:
-        True if SonarCloud currently reports zero issues (clean); False if the
-        gate is blocked by open issues, or if no suitable interpreter was found.
+        One of the status strings:
+          "pass"  — SonarCloud reports zero issues for this scope (proceed).
+          "fail"  — the gate is blocked by open issues (abort the push).
+          "skip"  — no SonarCloud analysis for this branch yet (warn, proceed).
+          "error" — could not run the gate (no interpreter / unexpected error);
+                    treated as a blocking failure by the caller.
     """
-    print(f"\n🔎 Step {step_num}: Running SonarQube gate (scripts/sonarqube.py --all --run --fail-on-issues)...")
-    print("   ⚠ Caveat: this reflects SonarCloud's last CI-analyzed commit, NOT your local diff (it's a ratchet).")
+    branch = current_branch(juneau_root)
+    scoped_to_branch = branch not in ("master", "unknown")
+    scope_desc = f"branch '{branch}'" if scoped_to_branch else "master"
+
+    cmd_suffix = f" --branch {branch}" if scoped_to_branch else ""
+    print(f"\n🔎 Step {step_num}: Running SonarQube gate (scripts/sonarqube.py --all --run --fail-on-issues{cmd_suffix})...")
+    print(f"   ⚠ Caveat: this reflects SonarCloud's last CI-analyzed commit for {scope_desc}, NOT your local diff (it's a ratchet).")
 
     py310 = _python310()
     if not py310:
@@ -233,15 +251,22 @@ def run_sonarqube_gate(juneau_root, step_num):
             "(e.g. `brew install python3`) so it's discoverable as python3.1x/python3 on "
             "PATH, or make sure /opt/homebrew/bin/python3 exists, then retry."
         )
-        return False
+        return "error"
 
     sonarqube_script = Path(__file__).parent / "sonarqube.py"
-    result = subprocess.run(
-        [py310, str(sonarqube_script), "--all", "--run", "--fail-on-issues"],
-        cwd=juneau_root,
-        check=False
-    )
-    return result.returncode == 0
+    cmd = [py310, str(sonarqube_script), "--all", "--run", "--fail-on-issues"]
+    if scoped_to_branch:
+        cmd += ["--branch", branch]
+    result = subprocess.run(cmd, cwd=juneau_root, check=False)
+
+    # Exit-code contract (see sonarqube.py): 0 clean, 2 issues, 3 no-analysis, else error.
+    if result.returncode == 0:
+        return "pass"
+    if result.returncode == 2:
+        return "fail"
+    if result.returncode == 3:
+        return "skip"
+    return "error"
 
 
 def check_git_status(repo_dir):
@@ -492,7 +517,9 @@ Examples:
         print("\nSteps that would be executed:")
         step_num = 1
         if args.sonarqube:
-            print(f"  {step_num}. Run SonarQube gate: python3 scripts/sonarqube.py --all --run --fail-on-issues (blocks push if any issues)")
+            _branch = current_branch(juneau_root)
+            _branch_arg = f" --branch {_branch}" if _branch not in ("master", "unknown") else ""
+            print(f"  {step_num}. Run SonarQube gate: python3 scripts/sonarqube.py --all --run --fail-on-issues{_branch_arg} (blocks push if any issues; skips gracefully if this branch has no SonarCloud analysis yet)")
             step_num += 1
         print(f"  {step_num}. Prompt for PGP passphrase (dummy call)")
         step_num += 1
@@ -520,13 +547,24 @@ Examples:
     # Step 0 (opt-in, --sonarqube/--sonar): SonarQube report gate. Runs first so it
     # aborts cheaply, before the container-tags/BOM checks, tests, and build.
     if args.sonarqube:
-        if not run_sonarqube_gate(juneau_root, step_num):
-            print("\n❌ Push aborted: SonarCloud currently reports open issues for this project.")
+        gate_status = run_sonarqube_gate(juneau_root, step_num)
+        if gate_status == "fail":
+            print("\n❌ Push aborted: SonarCloud currently reports open issues for this branch.")
             print("   Note: this reflects SonarCloud's last CI-analyzed commit (a ratchet), not your local diff.")
             print("   Resolve/triage the reported issues, or omit --sonarqube to push without this gate.")
             play_sound(success=False)
             return 1
-        print(f"✅ Step {step_num}: SonarQube gate passed — SonarCloud reports zero issues.")
+        if gate_status == "error":
+            print("\n❌ Push aborted: the SonarQube gate could not be run.")
+            print("   Fix the issue reported above (e.g. install a Python >= 3.10 interpreter), "
+                  "or omit --sonarqube to push without this gate.")
+            play_sound(success=False)
+            return 1
+        if gate_status == "skip":
+            print(f"⚠ Step {step_num}: SonarQube gate skipped — SonarCloud has no analysis for this "
+                  "branch yet (a new branch CI hasn't scanned). Continuing without the Sonar gate.")
+        else:  # "pass"
+            print(f"✅ Step {step_num}: SonarQube gate passed — SonarCloud reports zero issues for this branch.")
         step_num += 1
 
     # Prompt for PGP passphrase early (before any time-consuming operations)

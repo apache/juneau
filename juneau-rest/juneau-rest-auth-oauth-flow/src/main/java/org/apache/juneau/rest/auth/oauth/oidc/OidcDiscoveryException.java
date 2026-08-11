@@ -14,13 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.client.mcp.auth.oidc;
+package org.apache.juneau.rest.auth.oauth.oidc;
 
 /**
  * Thrown by {@link OidcDiscoveryClient#discover()} when the IdP returns metadata that cannot be parsed.
- *
- * <p>
- * Relocated from {@code juneau-rest-server-auth-oauth} for client-side use &mdash; see this package's javadoc.
  *
  * @since 10.0.0
  */

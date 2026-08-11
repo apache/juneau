@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.client.mcp.auth.flow;
+package org.apache.juneau.rest.auth.oauth.flow;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -30,15 +30,18 @@ import com.nimbusds.oauth2.sdk.auth.*;
 import com.nimbusds.oauth2.sdk.http.*;
 import com.nimbusds.oauth2.sdk.id.*;
 import com.nimbusds.oauth2.sdk.pkce.*;
+import com.nimbusds.openid.connect.sdk.*;
 
 /**
  * Authorization-code grant (RFC 6749 &sect;4.1) flow helper with mandatory PKCE per RFC 7636.
  *
  * <p>
- * Relocated from {@code juneau-rest-server-auth-oauth} for client-side use &mdash; see this package's javadoc.  This
- * client-side copy drops the server module's OIDC {@code nonce} authentication-request variant (F1 validates the
- * authorization-response {@code iss} rather than an ID-token {@code nonce}) and adds RFC 8707 resource-indicator
- * support via {@link Builder#resource(URI)} on both the authorization request and the token exchange.
+ * Wraps Nimbus's {@link AuthorizationRequest} (for URL construction) + {@link AuthorizationCodeGrant} +
+ * {@link TokenRequest} (for the exchange) + {@link CodeChallenge#compute(CodeChallengeMethod, CodeVerifier)
+ * PKCE S256 challenge generation}.  {@link #buildAuthorizationUrl(String, CodeChallenge)} emits a plain OAuth
+ * 2.0 authorization request; {@link #buildAuthenticationUrl(String, CodeChallenge, String, Consumer)} emits an
+ * OpenID Connect authentication request carrying a {@code nonce}.  Supports RFC 8707 resource-indicator binding
+ * via {@link Builder#resource(URI)}.
  *
  * <h5 class='topic'>Usage</h5>
  *
@@ -46,8 +49,8 @@ import com.nimbusds.oauth2.sdk.pkce.*;
  * 	<jk>var</jk> flow = OAuthAuthorizationCodeFlow.<jsm>create</jsm>()
  * 		.authorizationEndpoint(URI.<jsm>create</jsm>(<js>"https://idp.example.com/oauth2/authorize"</js>))
  * 		.tokenEndpoint(URI.<jsm>create</jsm>(<js>"https://idp.example.com/oauth2/token"</js>))
- * 		.clientId(<js>"cli-app"</js>)
- * 		.redirectUri(URI.<jsm>create</jsm>(<js>"http://127.0.0.1:PORT/callback"</js>))
+ * 		.clientId(<js>"web-app"</js>)
+ * 		.redirectUri(URI.<jsm>create</jsm>(<js>"https://app.example.com/callback"</js>))
  * 		.scope(<js>"openid"</js>, <js>"profile"</js>)
  * 		.build();
  *
@@ -281,6 +284,48 @@ public class OAuthAuthorizationCodeFlow {
 		if (resource != null)
 			requestBuilder.resource(resource);
 		return requestBuilder.build().toURI();
+	}
+
+	/**
+	 * Builds an OpenID Connect {@code authorize?...} URL carrying an OIDC {@code nonce} parameter.
+	 *
+	 * <p>
+	 * Unlike {@link #buildAuthorizationUrl(String, CodeChallenge)} (which emits a plain OAuth 2.0
+	 * {@link AuthorizationRequest} with no {@code nonce}), this method emits an OIDC
+	 * {@link AuthenticationRequest} so the IdP echoes the supplied {@code nonce} back inside the issued
+	 * ID token.  An OpenID Connect relying party stores the {@code nonce} before the redirect and
+	 * verifies the {@code nonce} claim on the returned ID token to defeat token replay.
+	 *
+	 * <p>
+	 * The configured {@code scope(...)} set is used as-is; OIDC requires it to contain {@code openid}.
+	 * The optional {@code customizer} receives the underlying {@link com.nimbusds.openid.connect.sdk.AuthenticationRequest.Builder} so
+	 * callers can set OIDC-specific parameters (e.g. {@code prompt}, {@code max_age}, {@code acr_values})
+	 * without this module needing to surface each one.
+	 *
+	 * @param state The opaque {@code state} parameter (CSRF protection).  Must not be <jk>null</jk> or
+	 * 	blank.
+	 * @param codeChallenge The PKCE code challenge.  Must not be <jk>null</jk>.  Always uses S256.
+	 * @param nonce The OIDC {@code nonce} value.  Must not be <jk>null</jk> or blank.
+	 * @param customizer Optional hook on the {@link com.nimbusds.openid.connect.sdk.AuthenticationRequest.Builder} for OIDC-specific
+	 * 	parameters.  May be <jk>null</jk>.
+	 * @return The authorization URL.
+	 */
+	@SuppressWarnings({
+		"deprecation" // Nimbus CodeChallenge overload is deprecated; no simpler alternative yet.
+	})
+	public URI buildAuthenticationUrl(String state, CodeChallenge codeChallenge, String nonce, Consumer<AuthenticationRequest.Builder> customizer) {
+		assertArgNotNullOrBlank("state", state);
+		assertArgNotNull("codeChallenge", codeChallenge);
+		assertArgNotNullOrBlank("nonce", nonce);
+		Scope nimbusScope = scopes.isEmpty() ? new Scope("openid") : new Scope(scopes.toArray(new String[0]));
+		var builder = new AuthenticationRequest.Builder(new ResponseType(ResponseType.Value.CODE), nimbusScope, new ClientID(clientId), redirectUri)
+			.endpointURI(authorizationEndpoint)
+			.state(new State(state))
+			.nonce(new Nonce(nonce))
+			.codeChallenge(codeChallenge, CodeChallengeMethod.S256);
+		if (customizer != null)
+			customizer.accept(builder);
+		return builder.build().toURI();
 	}
 
 	/**

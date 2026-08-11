@@ -184,4 +184,57 @@ class InMemoryMcpResponseCache_Test {
 		var cache = new InMemoryMcpResponseCache();
 		assertThrows(IllegalArgumentException.class, () -> cache.get("scope1", null));
 	}
+
+	// ==========================================================================
+	// f — bounded size / LRU eviction
+	// ==========================================================================
+
+	@Test
+	void f01_boundedSize_evictsLeastRecentlyUsedEntry() {
+		var cache = new InMemoryMcpResponseCache(2);
+		cache.put("s", "k1", "v1", 0);
+		cache.put("s", "k2", "v2", 0);
+		cache.put("s", "k3", "v3", 0);
+		assertTrue(cache.get("s", "k1").isEmpty());
+		assertEquals("v2", cache.get("s", "k2").get());
+		assertEquals("v3", cache.get("s", "k3").get());
+	}
+
+	@Test
+	void f02_accessRefreshesRecency_evictsTrulyLeastRecentlyUsed() {
+		var cache = new InMemoryMcpResponseCache(2);
+		cache.put("s", "k1", "v1", 0);
+		cache.put("s", "k2", "v2", 0);
+		cache.get("s", "k1");
+		cache.put("s", "k3", "v3", 0);
+		assertEquals("v1", cache.get("s", "k1").get());
+		assertTrue(cache.get("s", "k2").isEmpty());
+		assertEquals("v3", cache.get("s", "k3").get());
+	}
+
+	@Test
+	void f03_boundedSize_evictionSpansAllScopes() {
+		var cache = new InMemoryMcpResponseCache(2);
+		cache.put("a", "k", "v1", 0);
+		cache.put("b", "k", "v2", 0);
+		cache.put("c", "k", "v3", 0);
+		assertTrue(cache.get("a", "k").isEmpty());
+		assertEquals("v2", cache.get("b", "k").get());
+		assertEquals("v3", cache.get("c", "k").get());
+	}
+
+	@Test
+	void f04_zeroMaxEntries_throwsIllegalArgumentException() {
+		assertThrows(IllegalArgumentException.class, () -> new InMemoryMcpResponseCache(0));
+	}
+
+	@Test
+	void f05_negativeMaxEntries_throwsIllegalArgumentException() {
+		assertThrows(IllegalArgumentException.class, () -> new InMemoryMcpResponseCache(-1));
+	}
+
+	@Test
+	void f06_defaultMaxEntries_isPositive() {
+		assertTrue(InMemoryMcpResponseCache.DEFAULT_MAX_ENTRIES > 0);
+	}
 }

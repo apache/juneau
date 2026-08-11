@@ -27,7 +27,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.server.auth.*;
-import org.apache.juneau.rest.server.auth.oauth.oidc.*;
+import org.apache.juneau.rest.auth.oauth.oidc.*;
 import org.junit.jupiter.api.*;
 
 import com.nimbusds.jose.jwk.*;
