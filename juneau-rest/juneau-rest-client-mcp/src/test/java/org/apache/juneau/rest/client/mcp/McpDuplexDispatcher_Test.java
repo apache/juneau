@@ -16,16 +16,18 @@
  */
 package org.apache.juneau.rest.client.mcp;
 
+import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.commons.inject.BasicBeanStore;
 import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.api.*;
 
-class McpDuplexDispatcher_Test {
+class McpDuplexDispatcher_Test extends TestBase {
 
 	@Test
 	void a01_dispatch_passesRawRequestWithoutTypedProjection() {
@@ -89,17 +91,14 @@ class McpDuplexDispatcher_Test {
 			throw new IllegalStateException("boom");
 		});
 		var req = new JsonRpcRequest().setJsonrpc("2.0").setId("8").setMethod("sampling/createMessage").setParams(JsonMap.of());
-		var e = assertThrows(McpException.class, () -> d.dispatch(req, BasicBeanStore.INSTANCE));
+		var e = assertThrowsWithMessage(McpException.class, "sampling/createMessage", () -> d.dispatch(req, BasicBeanStore.INSTANCE));
 		assertEquals(-32603, e.getCode());
-		assertNotNull(e.getMessage());
-		assertTrue(e.getMessage().contains("sampling/createMessage"));
 		assertInstanceOf(IllegalStateException.class, e.getCause());
 	}
 
 	@Test
 	void a06_dispatch_nullRequest_throwsIllegalArgumentException() {
 		var d = new McpDuplexDispatcher();
-		var e = assertThrows(IllegalArgumentException.class, () -> d.dispatch(null, BasicBeanStore.INSTANCE));
-		assertEquals("Argument 'request' cannot be null.", e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'request' cannot be null.", () -> d.dispatch(null, BasicBeanStore.INSTANCE));
 	}
 }

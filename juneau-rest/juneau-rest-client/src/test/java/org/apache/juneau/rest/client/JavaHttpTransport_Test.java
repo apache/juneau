@@ -27,10 +27,11 @@ import java.security.cert.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
 
 import javax.net.ssl.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.entity.*;
 import org.junit.jupiter.api.*;
 
@@ -42,7 +43,7 @@ import com.sun.net.httpserver.*;
 @SuppressWarnings({
 	"resource" // Transport/client instances are short-lived test fixtures; closing is irrelevant to these assertions.
 })
-class JavaHttpTransport_Test {
+class JavaHttpTransport_Test extends TestBase {
 
 	private static HttpServer server;
 	private static int port;
@@ -287,11 +288,11 @@ class JavaHttpTransport_Test {
 
 	@Test
 	void g01_close_closesUnderlyingJdkBodyStream() throws Exception {
-		var bodyClosed = new AtomicBoolean();
+		var bodyClosed = Flag.create();
 		var body = new ByteArrayInputStream("ignored".getBytes(StandardCharsets.UTF_8)) {
 			@Override /* ByteArrayInputStream */
 			public void close() throws IOException {
-				bodyClosed.set(true);
+				bodyClosed.set();
 				super.close();
 			}
 		};
@@ -392,6 +393,6 @@ class JavaHttpTransport_Test {
 				assertEquals(200, res.getStatusCode());
 			}
 		}
-		assertTrue(bodyClosed.get());
+		assertTrue(bodyClosed.isSet());
 	}
 }

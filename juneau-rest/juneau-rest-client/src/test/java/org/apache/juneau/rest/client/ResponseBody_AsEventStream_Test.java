@@ -16,14 +16,16 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.sse.*;
 import org.junit.jupiter.api.*;
 
@@ -31,7 +33,7 @@ import org.junit.jupiter.api.*;
  * Unit tests for {@link ResponseBody#asEventStream()}.
  */
 @SuppressWarnings("resource") // 'tr'/TransportResponse values below are handed to (and closed by) the enclosing RestResponse; test helpers return a RestResponse the caller closes via try-with-resources.
-class ResponseBody_AsEventStream_Test {
+class ResponseBody_AsEventStream_Test extends TestBase {
 
 	private static RestResponse response(String sseText, Closeable closeCallback) {
 		return response(new ByteArrayInputStream(sseText.getBytes(StandardCharsets.UTF_8)), closeCallback);
@@ -84,12 +86,12 @@ class ResponseBody_AsEventStream_Test {
 
 	@Test
 	void b01_close_alsoClosesParentResponse() throws Exception {
-		var closed = new AtomicBoolean();
-		try (var resp = response("event: x\ndata: y\n\n", () -> closed.set(true))) {
+		var closed = Flag.create();
+		try (var resp = response("event: x\ndata: y\n\n", closed::set)) {
 			try (SseEventReader r = resp.body().asEventStream()) {
-				assertFalse(closed.get());
+				assertFalse(closed.isSet());
 				r.close();
-				assertTrue(closed.get());
+				assertTrue(closed.isSet());
 			}
 		}
 	}
@@ -97,18 +99,18 @@ class ResponseBody_AsEventStream_Test {
 	@Test
 	void c01_close_closesResponseBeforeReader() throws Exception {
 		var closed = new ArrayList<String>();
-		var responseClosed = new AtomicBoolean();
-		var readerClosed = new AtomicBoolean();
+		var responseClosed = Flag.create();
+		var readerClosed = Flag.create();
 		var a = new ByteArrayInputStream("event: x\ndata: y\n\n".getBytes(StandardCharsets.UTF_8)) {
 			@Override
 			public void close() throws IOException {
-				if (readerClosed.compareAndSet(false, true))
+				if (! readerClosed.getAndSet())
 					closed.add("reader");
 				super.close();
 			}
 		};
 		try (var b = response(a, () -> {
-			if (responseClosed.compareAndSet(false, true))
+			if (! responseClosed.getAndSet())
 				closed.add("response");
 		})) {
 			try (var c = b.body().asEventStream()) {
@@ -120,11 +122,11 @@ class ResponseBody_AsEventStream_Test {
 
 	@Test
 	void c02_close_responseCloseThrows_stillClosesReader() throws Exception {
-		var readerClosed = new AtomicBoolean();
+		var readerClosed = Flag.create();
 		var a = new ByteArrayInputStream("event: x\ndata: y\n\n".getBytes(StandardCharsets.UTF_8)) {
 			@Override
 			public void close() throws IOException {
-				readerClosed.set(true);
+				readerClosed.set();
 				super.close();
 			}
 		};
@@ -133,9 +135,8 @@ class ResponseBody_AsEventStream_Test {
 		});
 		var c = b.body().asEventStream();
 		try {
-			var d = assertThrows(IOException.class, c::close);
-			assertEquals("boom", d.getMessage());
-			assertTrue(readerClosed.get());
+			assertThrowsWithMessage(IOException.class, "boom", c::close);
+			assertTrue(readerClosed.isSet());
 		} finally {
 			try {
 				c.close();

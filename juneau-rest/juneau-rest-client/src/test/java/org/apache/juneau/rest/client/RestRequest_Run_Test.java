@@ -19,15 +19,16 @@ package org.apache.juneau.rest.client;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
-import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.commons.lang.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Unit tests for {@link RestRequest#run()}.
  */
 @SuppressWarnings("resource") // 'transport' lambdas build a TransportResponse per call; the built response is handed to (and closed by) the enclosing RestResponse/RestClient under test.
-class RestRequest_Run_Test {
+class RestRequest_Run_Test extends TestBase {
 
 	/**
 	 * Ensures a thrown {@code onConnect} interceptor does not leave the already-assigned {@link RestResponse}
@@ -36,10 +37,10 @@ class RestRequest_Run_Test {
 	 */
 	@Test
 	void a01_throwingOnConnectInterceptor_closesTheAssignedResponse() throws Exception {
-		var closed = new AtomicBoolean();
+		var closed = Flag.create();
 		HttpTransport transport = tReq -> TransportResponse.builder()
 			.statusCode(200)
-			.closeCallback(() -> closed.set(true))
+			.closeCallback(closed::set)
 			.build();
 		RestCallInterceptor faulty = new RestCallInterceptor() {
 			@Override public void onConnect(RestRequest req, RestResponse res) throws Exception {
@@ -48,7 +49,7 @@ class RestRequest_Run_Test {
 		};
 		try (var client = RestClient.builder().transport(transport).interceptors(faulty).build()) {
 			assertThrows(TransportException.class, () -> client.get("http://x/").run());
-			assertTrue(closed.get(), "a throwing onConnect interceptor must not leak the assigned response");
+			assertTrue(closed.isSet(), "a throwing onConnect interceptor must not leak the assigned response");
 		}
 	}
 
@@ -58,16 +59,16 @@ class RestRequest_Run_Test {
 	 */
 	@Test
 	void a02_successfulRun_leavesTheResponseOpenForTheCaller() throws Exception {
-		var closed = new AtomicBoolean();
+		var closed = Flag.create();
 		HttpTransport transport = tReq -> TransportResponse.builder()
 			.statusCode(200)
-			.closeCallback(() -> closed.set(true))
+			.closeCallback(closed::set)
 			.build();
 		try (var client = RestClient.builder().transport(transport).build()) {
 			try (var res = client.get("http://x/").run()) {
-				assertFalse(closed.get(), "run() must not close a response it successfully returns to the caller");
+				assertFalse(closed.isSet(), "run() must not close a response it successfully returns to the caller");
 			}
 		}
-		assertTrue(closed.get(), "the caller's own try-with-resources close must still work as normal");
+		assertTrue(closed.isSet(), "the caller's own try-with-resources close must still work as normal");
 	}
 }

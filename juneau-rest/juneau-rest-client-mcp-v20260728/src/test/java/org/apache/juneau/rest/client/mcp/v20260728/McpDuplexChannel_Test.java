@@ -22,8 +22,10 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.marshaller.Json;
@@ -33,15 +35,15 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Mock HttpTransport lambdas (`transport`) and the client `c` are short-lived test fixtures; `c` is deliberately left open (no try-with-resources) across these tests since only pumpNextServerMessage()'s single-shot duplex behavior is under test, not client lifecycle.
 })
-class McpDuplexChannel_Test {
+class McpDuplexChannel_Test extends TestBase {
 
 	@Test
 	void a01_openDuplexChannel_dispatchesOpaqueRequest_andPostsRawResponse() throws Exception {
 		var inbound = "data: {\"jsonrpc\":\"2.0\",\"id\":\"42\",\"method\":\"sampling/createMessage\",\"params\":{\"name\":\"opaque\",\"experimental\":{\"x\":1}}}\n\n";
 		var posted = new AtomicReference<String>();
-		var first = new AtomicBoolean(true);
+		var first = Flag.of(true);
 		HttpTransport transport = tReq -> {
-			if (first.getAndSet(false))
+			if (first.getAndUnset())
 				return TransportResponse.builder().statusCode(200).header("Content-Type", "text/event-stream")
 					.body(new ByteArrayInputStream(inbound.getBytes(StandardCharsets.UTF_8))).build();
 			try {
@@ -73,9 +75,9 @@ class McpDuplexChannel_Test {
 	void a02_handlerFailure_postsJsonRpcErrorEnvelope() throws Exception {
 		var inbound = "data: {\"jsonrpc\":\"2.0\",\"id\":\"77\",\"method\":\"sampling/createMessage\",\"params\":{\"name\":\"opaque\"}}\n\n";
 		var posted = new AtomicReference<String>();
-		var first = new AtomicBoolean(true);
+		var first = Flag.of(true);
 		HttpTransport transport = tReq -> {
-			if (first.getAndSet(false))
+			if (first.getAndUnset())
 				return TransportResponse.builder().statusCode(200).header("Content-Type", "text/event-stream")
 					.body(new ByteArrayInputStream(inbound.getBytes(StandardCharsets.UTF_8))).build();
 			try {
@@ -112,9 +114,9 @@ class McpDuplexChannel_Test {
 		var inbound = "data: {\"jsonrpc\":\"2.0\",\"id\":\"99\",\"method\":\"" + McpMethods.SAMPLING_CREATE_MESSAGE + "\",\"params\":"
 			+ wireJson + "}\n\n";
 		var posted = new AtomicReference<String>();
-		var first = new AtomicBoolean(true);
+		var first = Flag.of(true);
 		HttpTransport transport = tReq -> {
-			if (first.getAndSet(false))
+			if (first.getAndUnset())
 				return TransportResponse.builder().statusCode(200).header("Content-Type", "text/event-stream")
 					.body(new ByteArrayInputStream(inbound.getBytes(StandardCharsets.UTF_8))).build();
 			try {

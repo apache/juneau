@@ -16,12 +16,15 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.sse.*;
 import org.junit.jupiter.api.*;
 
@@ -31,7 +34,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Test helpers return Closeables; Eclipse JDT @Owning warning is by design.
 })
-class RestRequest_OpenEventStream_Test {
+class RestRequest_OpenEventStream_Test extends TestBase {
 
 	@Test
 	void a01_get_readsEvents() throws Exception {
@@ -123,31 +126,31 @@ class RestRequest_OpenEventStream_Test {
 
 	@Test
 	void b01_noResponseBody_closesResponseAndThrows() throws Exception {
-		var closed = new AtomicBoolean();
+		var closed = Flag.create();
 		HttpTransport transport = tReq -> TransportResponse.builder()
 			.statusCode(204)
-			.closeCallback(() -> closed.set(true))
+			.closeCallback(closed::set)
 			.build();
 		try (var client = RestClient.builder().transport(transport).build()) {
-			var a = assertThrows(IOException.class, () -> client.get("http://x/events").openEventStream());
-			assertEquals("Response has no body to open an event stream over.", a.getMessage());
+			assertThrowsWithMessage(IOException.class, "Response has no body to open an event stream over.",
+				() -> client.get("http://x/events").openEventStream());
 		}
-		assertTrue(closed.get());
+		assertTrue(closed.isSet());
 	}
 
 	@Test
 	void b02_non2xxResponse_closesResponseAndThrows() throws Exception {
-		var closed = new AtomicBoolean();
+		var closed = Flag.create();
 		HttpTransport transport = tReq -> TransportResponse.builder()
 			.statusCode(500)
 			.reasonPhrase("Internal Server Error")
 			.header("Content-Type", "application/json")
 			.body(new ByteArrayInputStream("{\"error\":\"nope\"}".getBytes(StandardCharsets.UTF_8)))
-			.closeCallback(() -> closed.set(true))
+			.closeCallback(closed::set)
 			.build();
 		try (var client = RestClient.builder().transport(transport).build()) {
 			assertThrows(RestCallException.class, () -> client.get("http://x/events").openEventStream());
 		}
-		assertTrue(closed.get());
+		assertTrue(closed.isSet());
 	}
 }

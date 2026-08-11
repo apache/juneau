@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp;
 
+import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -23,7 +24,9 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonrpc.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;
@@ -32,7 +35,7 @@ import org.junit.jupiter.api.*;
  * Unit tests for {@link AbstractMcpClient#send(JsonRpcRequest)}.
  */
 @SuppressWarnings("resource") // mock transports/clients are in-memory no-op closeables; test bodies close what matters via try-with-resources.
-class AbstractMcpClient_Test {
+class AbstractMcpClient_Test extends TestBase {
 
 	/** Minimal concrete subclass so the abstract neutral core can be instantiated for testing. */
 	static class TestClient extends AbstractMcpClient {
@@ -159,51 +162,51 @@ class AbstractMcpClient_Test {
 
 	@Test
 	void a06_send_closesTransportResponse_onAllPaths() throws Exception {
-		var successClosed = new AtomicBoolean();
+		var successClosed = Flag.create();
 		HttpTransport successTransport = tReq -> TransportResponse.builder()
 			.statusCode(200)
 			.header("Content-Type", "application/json")
 			.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{}}".getBytes(StandardCharsets.UTF_8)))
-			.closeCallback(() -> successClosed.set(true))
+			.closeCallback(successClosed::set)
 			.build();
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(successTransport).build()) {
 			client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("ping"));
 		}
-		assertTrue(successClosed.get());
+		assertTrue(successClosed.isSet());
 
-		var errorClosed = new AtomicBoolean();
+		var errorClosed = Flag.create();
 		HttpTransport errorTransport = tReq -> TransportResponse.builder()
 			.statusCode(500)
 			.header("Content-Type", "application/json")
 			.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"2\",\"error\":{\"code\":-32000,\"message\":\"boom\"}}".getBytes(StandardCharsets.UTF_8)))
-			.closeCallback(() -> errorClosed.set(true))
+			.closeCallback(errorClosed::set)
 			.build();
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(errorTransport).build()) {
 			client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("2").setMethod("ping"));
 		}
-		assertTrue(errorClosed.get());
+		assertTrue(errorClosed.isSet());
 
-		var notificationClosed = new AtomicBoolean();
+		var notificationClosed = Flag.create();
 		HttpTransport notificationTransport = tReq -> TransportResponse.builder()
 			.statusCode(202)
-			.closeCallback(() -> notificationClosed.set(true))
+			.closeCallback(notificationClosed::set)
 			.build();
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(notificationTransport).build()) {
 			client.send(new JsonRpcRequest().setJsonrpc("2.0").setMethod("notifications/x"));
 		}
-		assertTrue(notificationClosed.get());
+		assertTrue(notificationClosed.isSet());
 
-		var parseFailureClosed = new AtomicBoolean();
+		var parseFailureClosed = Flag.create();
 		HttpTransport parseFailureTransport = tReq -> TransportResponse.builder()
 			.statusCode(200)
 			.header("Content-Type", "application/json")
 			.body(new ByteArrayInputStream("{".getBytes(StandardCharsets.UTF_8)))
-			.closeCallback(() -> parseFailureClosed.set(true))
+			.closeCallback(parseFailureClosed::set)
 			.build();
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(parseFailureTransport).build()) {
 			assertThrows(IOException.class, () -> client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("3").setMethod("ping")));
 		}
-		assertTrue(parseFailureClosed.get());
+		assertTrue(parseFailureClosed.isSet());
 	}
 
 	@Test
@@ -214,8 +217,8 @@ class AbstractMcpClient_Test {
 			.body(new ByteArrayInputStream("server down".getBytes(StandardCharsets.UTF_8)))
 			.build();
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
-			var e = assertThrows(IOException.class, () -> client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("7").setMethod("ping")));
-			assertEquals("MCP server returned HTTP 500 and the body was not a JSON-RPC envelope.", e.getMessage());
+			assertThrowsWithMessage(IOException.class, "MCP server returned HTTP 500 and the body was not a JSON-RPC envelope.",
+				() -> client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("7").setMethod("ping")));
 		}
 	}
 
@@ -243,8 +246,7 @@ class AbstractMcpClient_Test {
 			.build();
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("9").setMethod("ping");
-			var e = assertThrows(IOException.class, () -> client.send(req));
-			assertEquals("No response body received for JSON-RPC request id '9' (HTTP 200).", e.getMessage());
+			assertThrowsWithMessage(IOException.class, "No response body received for JSON-RPC request id '9' (HTTP 200).", () -> client.send(req));
 		}
 	}
 
@@ -291,8 +293,7 @@ class AbstractMcpClient_Test {
 			.build();
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("12").setMethod("ping");
-			var e = assertThrows(IOException.class, () -> client.send(req));
-			assertTrue(e.getMessage().contains("MCP server returned HTTP 199"));
+			assertThrowsWithMessage(IOException.class, "MCP server returned HTTP 199", () -> client.send(req));
 		}
 	}
 
@@ -360,8 +361,7 @@ class AbstractMcpClient_Test {
 	void c02_openEventStream_nullRequest_throwsIllegalArgumentException() throws Exception {
 		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
-			var e = assertThrows(IllegalArgumentException.class, () -> client.openStream(null));
-			assertEquals("Argument 'request' cannot be null.", e.getMessage());
+			assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'request' cannot be null.", () -> client.openStream(null));
 		}
 	}
 
@@ -434,9 +434,8 @@ class AbstractMcpClient_Test {
 			.build();
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
-			var e = assertThrows(McpException.class, () -> client.openStream(req));
+			var e = assertThrowsWithMessage(McpException.class, "subscriptions/listen requires Accept: text/event-stream", () -> client.openStream(req));
 			assertEquals(-32600, e.getCode());
-			assertEquals("subscriptions/listen requires Accept: text/event-stream", e.getMessage());
 		}
 	}
 
@@ -453,9 +452,8 @@ class AbstractMcpClient_Test {
 			.build();
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
-			var e = assertThrows(McpException.class, () -> client.openStream(req));
+			var e = assertThrowsWithMessage(McpException.class, "Too many concurrent subscriptions", () -> client.openStream(req));
 			assertEquals(-32000, e.getCode());
-			assertEquals("Too many concurrent subscriptions", e.getMessage());
 		}
 	}
 
@@ -480,60 +478,52 @@ class AbstractMcpClient_Test {
 	void c05_openEventStream_headersOverload_nullRequest_throwsIllegalArgumentException() throws Exception {
 		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
-			var e = assertThrows(IllegalArgumentException.class, () -> client.openStream(null, Map.of()));
-			assertEquals("Argument 'request' cannot be null.", e.getMessage());
+			assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'request' cannot be null.", () -> client.openStream(null, Map.of()));
 		}
 	}
 
 	@Test
 	void b01_constructor_nullBuilder_throwsIllegalArgumentException() {
-		var e = assertThrows(IllegalArgumentException.class, () -> new TestClient(null));
-		assertEquals("Argument 'builder' cannot be null.", e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'builder' cannot be null.", () -> new TestClient(null));
 	}
 
 	@Test
 	void b02_builder_endpoint_null_throwsIllegalArgumentException() {
 		var builder = TestClient.builder();
-		var e = assertThrows(IllegalArgumentException.class, () -> builder.endpoint(null));
-		assertEquals("Argument 'endpoint' cannot be null.", e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'endpoint' cannot be null.", () -> builder.endpoint(null));
 	}
 
 	@Test
 	void b03_builder_noEndpoint_throwsIllegalArgumentException() {
 		var builder = TestClient.builder();
-		var e = assertThrows(IllegalArgumentException.class, () -> builder.build());
-		assertEquals("Argument 'endpoint' cannot be null.", e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'endpoint' cannot be null.", builder::build);
 	}
 
 	@Test
 	void b04_builder_endpoint_blank_throwsIllegalArgumentException() {
 		var builder = TestClient.builder();
-		var e = assertThrows(IllegalArgumentException.class, () -> builder.endpoint(""));
-		assertEquals("Argument 'endpoint' cannot be blank.", e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'endpoint' cannot be blank.", () -> builder.endpoint(""));
 	}
 
 	/** A non-http(s)-scheme endpoint is rejected at construction, not just non-blank. */
 	@Test
 	void b08_build_ftpSchemeEndpoint_throwsIllegalArgumentException() {
 		var builder = TestClient.builder().endpoint("ftp://x/mcp");
-		var e = assertThrows(IllegalArgumentException.class, () -> builder.build());
-		assertTrue(e.getMessage().contains("http or https"), e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "http or https", builder::build);
 	}
 
 	/** A scheme-less (relative) endpoint is rejected at construction. */
 	@Test
 	void b09_build_schemelessEndpoint_throwsIllegalArgumentException() {
 		var builder = TestClient.builder().endpoint("x/mcp");
-		var e = assertThrows(IllegalArgumentException.class, () -> builder.build());
-		assertTrue(e.getMessage().contains("http or https"), e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "http or https", builder::build);
 	}
 
 	/** A syntactically malformed endpoint is rejected at construction with a clear message. */
 	@Test
 	void b10_build_malformedEndpoint_throwsIllegalArgumentException() {
 		var builder = TestClient.builder().endpoint("http://x y/mcp");
-		var e = assertThrows(IllegalArgumentException.class, () -> builder.build());
-		assertTrue(e.getMessage().contains("Invalid MCP endpoint URL"), e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid MCP endpoint URL", builder::build);
 	}
 
 	/** https is accepted alongside http. */
@@ -549,8 +539,7 @@ class AbstractMcpClient_Test {
 	void b05_send_nullRequest_throwsIllegalArgumentException() throws Exception {
 		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
-			var e = assertThrows(IllegalArgumentException.class, () -> client.send(null));
-			assertEquals("Argument 'request' cannot be null.", e.getMessage());
+			assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'request' cannot be null.", () -> client.send(null));
 		}
 	}
 
@@ -569,7 +558,7 @@ class AbstractMcpClient_Test {
 
 	@Test
 	void b07_builder_interceptor_allowsFluentChaining() throws Exception {
-		var called = new AtomicBoolean();
+		var called = Flag.create();
 		HttpTransport transport = tReq -> TransportResponse.builder()
 			.statusCode(200)
 			.header("Content-Type", "application/json")
@@ -578,20 +567,19 @@ class AbstractMcpClient_Test {
 		var interceptor = new RestCallInterceptor() {
 			@Override
 			public void onInit(RestRequest req) {
-				called.set(true);
+				called.set();
 			}
 		};
 		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).interceptor(interceptor).build()) {
 			client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("ping"));
-			assertTrue(called.get());
+			assertTrue(called.isSet());
 		}
 	}
 
 	@Test
 	void b08_builder_interceptor_null_throwsIllegalArgumentException() {
 		var builder = TestClient.builder();
-		var e = assertThrows(IllegalArgumentException.class, () -> builder.interceptor(null));
-		assertEquals("Argument 'interceptor' cannot be null.", e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'interceptor' cannot be null.", () -> builder.interceptor(null));
 	}
 
 }

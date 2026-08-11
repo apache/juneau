@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.charset.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.rest.client.assertion.*;
 import org.junit.jupiter.api.*;
 
@@ -36,7 +37,7 @@ import org.junit.jupiter.api.*;
 	"resource",   // RestResponse is created for assertion testing; closed inline or not needed.
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice.
 })
-class ResponseAssertion_Test {
+class ResponseAssertion_Test extends TestBase {
 
 	// -----------------------------------------------------------------------
 	// Helpers

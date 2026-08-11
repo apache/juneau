@@ -23,6 +23,7 @@ import java.net.*;
 import java.nio.charset.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.client.remote.*;
@@ -40,7 +41,7 @@ import com.sun.net.httpserver.*;
 @SuppressWarnings({
 	"resource" // RestClient/RestResponse instances used inline; closed via try-with-resources where needed.
 })
-class RemoteClient_Test {
+class RemoteClient_Test extends TestBase {
 
 	// -----------------------------------------------------------------------
 	// Embedded server — shared across all tests

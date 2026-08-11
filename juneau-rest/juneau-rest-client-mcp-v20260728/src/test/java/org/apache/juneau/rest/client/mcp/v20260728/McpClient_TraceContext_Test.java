@@ -22,6 +22,7 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import org.apache.juneau.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.mcp.*;
@@ -30,7 +31,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Mock HttpTransport lambdas are short-lived test fixtures whose clients are already closed via try-with-resources.
 })
-class McpClient_TraceContext_Test {
+class McpClient_TraceContext_Test extends TestBase {
 
 	@Test
 	void a01_traceFieldsSupplier_stampsRequestMeta() throws Exception {

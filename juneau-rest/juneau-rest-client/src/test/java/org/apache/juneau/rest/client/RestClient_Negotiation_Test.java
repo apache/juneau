@@ -18,6 +18,7 @@ package org.apache.juneau.rest.client;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.jsonl.*;
 import org.apache.juneau.marshall.parser.*;
@@ -32,7 +33,7 @@ import org.junit.jupiter.api.*;
  * resolved only by an exact media-type match or by an explicitly-configured {@code defaultSerializer(...)} /
  * {@code defaultParser(...)}; otherwise the resolver is genuinely empty (and callers throw 415 / a client-side error).
  */
-class RestClient_Negotiation_Test {
+class RestClient_Negotiation_Test extends TestBase {
 
 	@Test
 	void a01_unconfigured_resolvesEmpty() throws Exception {

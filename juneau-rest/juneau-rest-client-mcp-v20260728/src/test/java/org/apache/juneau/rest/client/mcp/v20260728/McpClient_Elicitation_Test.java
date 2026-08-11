@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.v20260728;
 
+import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -23,8 +24,10 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;
@@ -40,7 +43,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // The Recorder HttpTransport test double (`t`) and the client(...) test-helper factory (@Owning; callers close via try-with-resources) are short-lived test fixtures.
 })
-class McpClient_Elicitation_Test {
+class McpClient_Elicitation_Test extends TestBase {
 
 	/**
 	 * A stub transport that returns a fixed sequence of canned JSON-RPC wire responses (the last one repeats for
@@ -187,15 +190,15 @@ class McpClient_Elicitation_Test {
 
 	@Test void a06_callTool_noPause_terminalResultReturnedWithoutInvokingHandler() throws Exception {
 		var t = new Recorder(completeTool("done"));
-		var invoked = new AtomicBoolean();
+		var invoked = Flag.create();
 		try (var c = client(t)) {
 			var result = c.callToolWithElicitation("ask", null, requests -> {
-				invoked.set(true);
+				invoked.set();
 				return acceptAll().elicit(requests);
 			});
 			assertEquals("done", ((TextContent) result.getContent().get(0)).getText());
 		}
-		assertFalse(invoked.get());
+		assertFalse(invoked.isSet());
 		assertEquals(1, t.requests.size());
 	}
 
@@ -282,40 +285,38 @@ class McpClient_Elicitation_Test {
 
 	@Test void d01_nullHandlerThrows() throws Exception {
 		try (var c = client(new Recorder(completeTool("done")))) {
-			var e = assertThrows(IllegalArgumentException.class, () -> c.callToolWithElicitation("ask", null, null));
-			assertEquals("Argument 'handler' cannot be null.", e.getMessage());
+			assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'handler' cannot be null.",
+				() -> c.callToolWithElicitation("ask", null, null));
 		}
 	}
 
 	@Test void d02_nonPositiveMaxRoundsThrows() throws Exception {
 		try (var c = client(new Recorder(completeTool("done")))) {
 			var handler = acceptAll();
-			var eZero = assertThrows(IllegalArgumentException.class, () -> c.callToolWithElicitation("ask", null, handler, 0));
-			assertEquals("maxRounds must be >= 1 (was 0).", eZero.getMessage());
-			var eNegative = assertThrows(IllegalArgumentException.class, () -> c.callToolWithElicitation("ask", null, handler, -1));
-			assertEquals("maxRounds must be >= 1 (was -1).", eNegative.getMessage());
+			assertThrowsWithMessage(IllegalArgumentException.class, "maxRounds must be >= 1 (was 0).",
+				() -> c.callToolWithElicitation("ask", null, handler, 0));
+			assertThrowsWithMessage(IllegalArgumentException.class, "maxRounds must be >= 1 (was -1).",
+				() -> c.callToolWithElicitation("ask", null, handler, -1));
 		}
 	}
 
 	@Test void d03_handlerReturnsNullResultThrows() throws Exception {
 		var t = new Recorder(inputRequired("tok1", "q1"), completeTool("done"));
 		try (var c = client(t)) {
-			var e = assertThrows(IllegalArgumentException.class,
+			assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'handler result' cannot be null.",
 				() -> c.callToolWithElicitation("ask", null, requests -> null));
-			assertEquals("Argument 'handler result' cannot be null.", e.getMessage());
 		}
 	}
 
 	@Test void d04_handlerReturnsMapWithNullValueForRequestedIdThrows() throws Exception {
 		var t = new Recorder(inputRequired("tok1", "q1"), completeTool("done"));
 		try (var c = client(t)) {
-			var e = assertThrows(IllegalArgumentException.class,
+			assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'results[q1]' cannot be null.",
 				() -> c.callToolWithElicitation("ask", null, requests -> {
 					var out = new LinkedHashMap<String,ElicitResult>();
 					out.put("q1", null);
 					return out;
 				}));
-			assertEquals("Argument 'results[q1]' cannot be null.", e.getMessage());
 		}
 	}
 

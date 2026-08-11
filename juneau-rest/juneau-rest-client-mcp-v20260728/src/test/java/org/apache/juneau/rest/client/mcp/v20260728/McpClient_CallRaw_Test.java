@@ -23,6 +23,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.rest.client.*;
@@ -37,7 +38,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Mock HttpTransport lambdas and the client(...) test-helper factory (@Owning; callers close via try-with-resources) are short-lived test fixtures.
 })
-class McpClient_CallRaw_Test {
+class McpClient_CallRaw_Test extends TestBase {
 
 	private static HttpTransport ok(String wireJson) {
 		return tReq -> TransportResponse.builder()

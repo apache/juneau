@@ -18,10 +18,11 @@ package org.apache.juneau.rest.client.mcp.v20260728;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.junit.jupiter.api.*;
 
-class McpSubscriptionListener_Test {
+class McpSubscriptionListener_Test extends TestBase {
 
 	@Test
 	void a01_defaultMethods_areNoOpsAndDoNotThrow() {

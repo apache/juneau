@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
@@ -29,7 +31,7 @@ import org.junit.jupiter.params.provider.*;
  * Unit tests for {@link McpAuthInterceptor}.
  */
 @SuppressWarnings("resource") // mock transports are in-memory no-op closeables; test bodies close the RestClient/RestResponse that matters via try-with-resources.
-class McpAuthInterceptor_Test {
+class McpAuthInterceptor_Test extends TestBase {
 
 	@Test
 	void a01_onInit_setsAuthorizationHeader_fromTokenSupplier() throws Exception {
@@ -73,9 +75,9 @@ class McpAuthInterceptor_Test {
 	@NullSource
 	@ValueSource(strings = {"", "   "})
 	void a03_onInit_blankToken_omitsAuthorizationHeader(String token) throws Exception {
-		var sawHeader = new AtomicBoolean(true);
+		var sawHeader = Flag.of(true);
 		HttpTransport transport = tReq -> {
-			sawHeader.set(tReq.getFirstHeader("Authorization") != null);
+			if (tReq.getFirstHeader("Authorization") != null) sawHeader.set(); else sawHeader.unset();
 			return TransportResponse.builder().statusCode(204).build();
 		};
 		var interceptor = new McpAuthInterceptor(() -> token);
@@ -84,7 +86,7 @@ class McpAuthInterceptor_Test {
 				assertEquals(204, res.getStatusCode());
 			}
 		}
-		assertFalse(sawHeader.get());
+		assertFalse(sawHeader.isSet());
 	}
 
 	@Test

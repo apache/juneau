@@ -20,9 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class RedirectSecurity_Test {
+class RedirectSecurity_Test extends TestBase {
 
 	@Test void a01_sameOrigin_exactMatch_forwards() {
 		var from = URI.create("https://example.com/api");

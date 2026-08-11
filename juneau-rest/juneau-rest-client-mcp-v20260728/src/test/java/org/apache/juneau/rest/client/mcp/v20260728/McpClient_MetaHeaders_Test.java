@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.charset.*;
 import java.util.concurrent.atomic.*;
+import org.apache.juneau.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;
@@ -28,7 +29,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Mock HttpTransport lambda is a short-lived test fixture whose client is already closed via try-with-resources.
 })
-class McpClient_MetaHeaders_Test {
+class McpClient_MetaHeaders_Test extends TestBase {
 
 	@Test
 	void a01_resourcesRead_stampsMetaAndHeaders() throws Exception {

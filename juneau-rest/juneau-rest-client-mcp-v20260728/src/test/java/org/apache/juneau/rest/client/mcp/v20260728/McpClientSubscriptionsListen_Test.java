@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.client.*;
@@ -32,7 +33,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Mock HttpTransport lambdas and McpSubscriptionHandle test doubles are exercised/closed via cancel()/close() or the try-with-resources client elsewhere in each test; suppressing resource-leak noise class-wide rather than per call site.
 })
-class McpClientSubscriptionsListen_Test {
+class McpClientSubscriptionsListen_Test extends TestBase {
 
 	@Test
 	void a01_listen_singleStream_deliversAckThenNotificationsThenComplete_inOrder() throws Exception {

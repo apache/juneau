@@ -25,6 +25,25 @@ every module's target/jacoco.exec and feeds them all -- together with each
 owning module's target/classes -- to the JaCoCo CLI to produce one combined,
 repo-wide report.
 
+Hard-To-Test (HTT) exclusion:
+    A source line can be marked as intentionally out of coverage scope by
+    adding a "HTT" token to a comment on that line, e.g.:
+        // HTT
+        x++;  // HTT: cannot reach on this platform
+        /* HTT */
+    The marker must be the standalone word "HTT" (word-boundaried, so it does
+    NOT match "HTTP"/"HTTPS"), and must appear inside a comment -- not inside
+    a string literal. Lines marked this way are dropped from the "Uncovered
+    lines" list and their missed/covered branch and instruction counts are
+    subtracted from the file's (and the total summary's) totals, so they no
+    longer affect the reported percentages. Any file with >=1 excluded line
+    is flagged "(HTT-adjusted)", and the excluded line numbers are printed
+    for transparency along with their reason (the text after "HTT:", or
+    "(no reason given)" for a bare marker) -- e.g.:
+        Excluded 2 hard-to-test line(s) (HTT):
+          L123: cannot reach on this platform
+          L145: (no reason given)
+
 Usage:
     ./scripts/coverage.py <path> [options]
 
@@ -154,6 +173,90 @@ def collect_jacoco_inputs() -> tuple[list[Path], list[Path], list[Path]]:
     return execfiles, classdirs, srcdirs
 
 
+# Hard-To-Test (HTT) exclusion marker: a standalone "HTT" word in a comment.
+# Word-boundaried so it does not match "HTTP"/"HTTPS".
+HTT_TOKEN_RE = re.compile(r"\bHTT\b")
+
+
+def extract_comment_portion(line: str) -> str | None:
+    """
+    Best-effort isolation of the comment portion of a single physical source line,
+    for HTT marker detection.
+
+    Heuristic only, and intentionally simple: returns the text after the first
+    '//' on the line, or (if no '//') the text inside the first '/* ... */' on
+    the line. Limitations: it does not track block-comment state across lines
+    (a "HTT" token on its own line inside a multi-line /* ... */ block, with no
+    '//' or '/*' on that same physical line, will NOT be detected), and it does
+    not know about string/char literals, so a '//' or '/*' occurring inside a
+    string literal earlier on the line would be mistaken for the start of a
+    comment. This is acceptable for the intended use (short, single-line HTT
+    annotations) but is not a real Java lexer.
+    """
+    slash_slash = line.find("//")
+    if slash_slash != -1:
+        return line[slash_slash + 2:]
+    block_start = line.find("/*")
+    if block_start != -1:
+        block_end = line.find("*/", block_start + 2)
+        end = block_end if block_end != -1 else len(line)
+        return line[block_start + 2:end]
+    return None
+
+
+def htt_marker_reason(line: str) -> str | None:
+    """
+    If the line's comment portion (see extract_comment_portion) carries a standalone HTT
+    marker, return its reason: the trimmed text following "HTT:" (e.g. "// HTT: cannot
+    reach on this platform" -> "cannot reach on this platform"), or the literal string
+    "(no reason given)" for a bare marker ("// HTT", "/* HTT */") or one with an empty
+    reason after the colon. Returns None if the line has no HTT marker at all.
+    """
+    comment = extract_comment_portion(line)
+    if comment is None:
+        return None
+    m = HTT_TOKEN_RE.search(comment)
+    if m is None:
+        return None
+    remainder = comment[m.end():].lstrip()
+    if remainder.startswith(":"):
+        reason = remainder[1:].strip()
+        if reason:
+            return reason
+    return "(no reason given)"
+
+
+def is_htt_marked(line: str) -> bool:
+    """True if the line's comment portion (see extract_comment_portion) contains a standalone HTT token."""
+    return htt_marker_reason(line) is not None
+
+
+def find_source_file(pkg_name: str, fname: str, srcdirs: list[Path]) -> Path | None:
+    """Locate the source file for a JaCoCo package+filename among the given src/main/java dirs."""
+    for src in srcdirs:
+        candidate = src / pkg_name / fname
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def find_htt_lines(pkg_name: str, fname: str, srcdirs: list[Path]) -> dict[int, str]:
+    """Return {1-based physical line number: reason} for every HTT-marked line in the owning source file."""
+    src_file = find_source_file(pkg_name, fname, srcdirs)
+    if src_file is None:
+        return {}
+    try:
+        lines = src_file.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return {}
+    result = {}
+    for i, text in enumerate(lines):
+        reason = htt_marker_reason(text)
+        if reason is not None:
+            result[i + 1] = reason
+    return result
+
+
 def jacoco_version() -> str:
     """Read <jacoco.plugin.version> from the root pom (fallback to a known-good default)."""
     pom = (REPO_ROOT / "pom.xml").read_text(encoding="utf-8")
@@ -262,8 +365,8 @@ def pct(covered, total):
     return f"{covered / total * 100:.0f}%"
 
 
-def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_only: bool):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for XML report parsing and output formatting
-    """Parse jacoco.xml and print coverage for the matching package/file."""
+def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_only: bool, srcdirs: list[Path]):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for XML report parsing and output formatting
+    """Parse jacoco.xml and print coverage for the matching package/file, excluding HTT-marked lines (see find_htt_lines)."""
     if not xml_path.exists():
         die(f"JaCoCo report not found at {xml_path}. Run with --run to generate it.")
 
@@ -282,8 +385,8 @@ def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_on
             "Make sure the module is built and the exec file is up to date (use --run).")
 
     # Collect per-file data
-    files_data = []  # list of (pkg_name, fname, lines_with_issues)
-    total_mb = total_cb = total_mi = total_ci = 0
+    files_data = []  # list of (pkg_name, fname, mb, cb, mi, ci, uncovered, excluded_lines)
+    total_mb = total_cb = total_mi = total_ci = total_excluded = 0
 
     for pkg in matched_packages:
         pkg_name = pkg.get("name", "")
@@ -303,38 +406,58 @@ def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_on
                 elif t == "INSTRUCTION":
                     mi, ci = m, c
 
+            # Hard-To-Test (HTT) exclusion: lines marked "HTT" in a comment in the
+            # owning source file are dropped from "uncovered", and their per-line
+            # counter contributions are subtracted from this file's mb/cb/mi/ci
+            # totals so the reported percentages no longer reflect them.
+            htt_lines = find_htt_lines(pkg_name, fname, srcdirs)
+
+            uncovered = []
+            excluded_lines = []
+            for line in sf.findall("line"):
+                ln = int(line.get("nr", 0))
+                lmb = int(line.get("mb", 0))
+                lcb = int(line.get("cb", 0))
+                lmi = int(line.get("mi", 0))
+                lci = int(line.get("ci", 0))
+                if ln in htt_lines and (lmb or lcb or lmi or lci):
+                    mb -= lmb
+                    cb -= lcb
+                    mi -= lmi
+                    ci -= lci
+                    excluded_lines.append((ln, htt_lines[ln]))
+                    continue
+                if lmb > 0 or (not branches_only and lmi > 0):
+                    uncovered.append((ln, lmb, lmb + lcb, lmi))
+
             total_mb += mb
             total_cb += cb
             total_mi += mi
             total_ci += ci
+            total_excluded += len(excluded_lines)
 
-            # Collect uncovered lines
-            uncovered = []
-            for line in sf.findall("line"):
-                ln = int(line.get("nr", 0))
-                lmb = int(line.get("mb", 0))
-                lmi = int(line.get("mi", 0))
-                if lmb > 0 or (not branches_only and lmi > 0):
-                    lcb = int(line.get("cb", 0))
-                    uncovered.append((ln, lmb, lmb + lcb, lmi))
-
-            files_data.append((pkg_name, fname, mb, cb, mi, ci, uncovered))
+            files_data.append((pkg_name, fname, mb, cb, mi, ci, uncovered, excluded_lines))
 
     if not files_data:
         print("No data found for the specified path.")
         return
 
     # Print per-file results
-    for pkg_name, fname, mb, cb, mi, ci, uncovered in sorted(files_data):
+    for pkg_name, fname, mb, cb, mi, ci, uncovered, excluded_lines in sorted(files_data):
         branch_total = mb + cb
         instr_total = mi + ci
         branch_pct = pct(cb, branch_total)
         instr_pct = pct(ci, instr_total)
+        htt_note = "  (HTT-adjusted)" if excluded_lines else ""
         print(f"\n{'='*70}")
         print(f"  {pkg_name.replace('/', '.')}.{fname.removesuffix('.java')}")
         print(f"{'='*70}")
-        print(f"  Branches:     {bar(cb, branch_total)}  {branch_pct:>4}  ({cb}/{branch_total} covered, {mb} missed)")
-        print(f"  Instructions: {bar(ci, instr_total)}  {instr_pct:>4}  ({ci}/{instr_total} covered, {mi} missed)")
+        print(f"  Branches:     {bar(cb, branch_total)}  {branch_pct:>4}  ({cb}/{branch_total} covered, {mb} missed){htt_note}")
+        print(f"  Instructions: {bar(ci, instr_total)}  {instr_pct:>4}  ({ci}/{instr_total} covered, {mi} missed){htt_note}")
+        if excluded_lines:
+            print(f"  Excluded {len(excluded_lines)} hard-to-test line(s) (HTT):")
+            for ln, reason in sorted(excluded_lines):
+                print(f"    L{ln}: {reason}")
         if uncovered:
             print("\n  Uncovered lines:")
             for ln, lmb, ltotal, lmi in sorted(uncovered):
@@ -351,11 +474,15 @@ def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_on
     if len(files_data) > 1:
         branch_total = total_mb + total_cb
         instr_total = total_mi + total_ci
+        total_htt_note = "  (HTT-adjusted)" if total_excluded else ""
         print(f"\n{'='*70}")
         print("  TOTAL SUMMARY")
         print(f"{'='*70}")
-        print(f"  Branches:     {bar(total_cb, branch_total)}  {pct(total_cb, branch_total):>4}  ({total_cb}/{branch_total} covered, {total_mb} missed)")
-        print(f"  Instructions: {bar(total_ci, instr_total)}  {pct(total_ci, instr_total):>4}  ({total_ci}/{instr_total} covered, {total_mi} missed)")
+        print(f"  Branches:     {bar(total_cb, branch_total)}  {pct(total_cb, branch_total):>4}  ({total_cb}/{branch_total} covered, {total_mb} missed){total_htt_note}")
+        print(f"  Instructions: {bar(total_ci, instr_total)}  {pct(total_ci, instr_total):>4}  ({total_ci}/{instr_total} covered, {total_mi} missed){total_htt_note}")
+        if total_excluded:
+            files_with_excl = sum(1 for f in files_data if f[7])
+            print(f"  Excluded {total_excluded} hard-to-test line(s) (HTT) across {files_with_excl} file(s)")
         print()
 
 
@@ -403,7 +530,8 @@ def main():  # NOSONAR: always returns 0 by design — standard POSIX exit code 
 
     xml_path = generate_combined_report()
 
-    report(xml_path, pkg_filter, file_filter, branches_only)
+    _, _, srcdirs = collect_jacoco_inputs()
+    report(xml_path, pkg_filter, file_filter, branches_only, srcdirs)
     return 0
 
 

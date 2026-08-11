@@ -23,6 +23,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.mcp.*;
 import org.junit.jupiter.api.*;
@@ -30,7 +31,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Mock HttpTransport lambdas are short-lived test fixtures whose clients are already closed via try-with-resources at each call site.
 })
-class McpClient_CacheHints_Test {
+class McpClient_CacheHints_Test extends TestBase {
 
 	static final class RecordingCache implements McpResponseCache {
 		String lastScope;

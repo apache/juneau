@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.charset.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.jsonl.*;
 import org.apache.juneau.marshall.stream.*;
@@ -29,7 +30,7 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link ResponseBody#asCursor(Class)} / {@link ResponseBody#asCursor(org.apache.juneau.marshall.parser.Parser, Class)}.
  */
-class ResponseBody_Cursor_Test {
+class ResponseBody_Cursor_Test extends TestBase {
 
 	public static class Bean {
 		public String name;

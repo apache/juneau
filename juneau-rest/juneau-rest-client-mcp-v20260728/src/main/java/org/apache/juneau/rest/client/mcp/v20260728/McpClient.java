@@ -872,10 +872,13 @@ public final class McpClient extends AbstractMcpClient {
 		}
 	}
 
-	// C5/C6 duplex return-channel header contract remains unsettled: Mcp-Name is always empty here because
-	// DUPLEX_RETURN_METHOD has no routing-name mapping in McpRoutingNames. It is unclear whether the real
-	// contract instead wants it to echo the correlated inbound request's tool/prompt/resource name; that
-	// requires spec clarification and is deliberately left open rather than guessed at here.
+	// C5/C6 duplex return-channel Mcp-Name contract (TODO-327, resolved): Mcp-Name is empty by design on this
+	// channel. Per SEP-2243, Mcp-Name is a body-mirror routing header defined only for the three forward
+	// client->server named methods (tools/call, prompts/get, resources/read); the spec does not define it for
+	// server->client requests or return channels. So McpRoutingNames intentionally has no case for
+	// DUPLEX_RETURN_METHOD (mcp/clientResult) - it falls to the default empty arm - and the response envelope has
+	// no name/uri to mirror anyway. If correlating a server-initiated request back to its originating client
+	// request is ever needed, key it on the JSON-RPC id (SEP-2260 relatedRequestId), not on Mcp-Name.
 	//
 	// payload must be routed through toWireParams(...) exactly like every other outbound envelope (see #call):
 	// AbstractMcpClient.send(...) posts through restClient, whose serializer is JsonSerializer.DEFAULT

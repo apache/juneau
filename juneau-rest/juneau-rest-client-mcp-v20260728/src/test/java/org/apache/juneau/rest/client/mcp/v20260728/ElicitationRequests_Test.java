@@ -16,17 +16,19 @@
  */
 package org.apache.juneau.rest.client.mcp.v20260728;
 
+import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Coverage for {@link ElicitationRequests}.
  */
-class ElicitationRequests_Test {
+class ElicitationRequests_Test extends TestBase {
 
 	@Test void a01_isInputRequired_trueOnInputRequiredResultType() {
 		assertTrue(ElicitationRequests.isInputRequired(Map.of("resultType", "input_required")));
@@ -37,8 +39,8 @@ class ElicitationRequests_Test {
 	}
 
 	@Test void a03_isInputRequired_nullRawThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationRequests.isInputRequired(null));
-		assertEquals("Argument 'raw' cannot be null.", e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'raw' cannot be null.",
+			() -> ElicitationRequests.isInputRequired(null));
 	}
 
 	@Test void a04_requests_decodesTypedElicitRequestsFromRawMap() {

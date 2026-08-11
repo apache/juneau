@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.charset.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.plaintext.*;
 import org.junit.jupiter.api.*;
@@ -28,7 +29,7 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for the next-generation {@link RecordStreamBody} streaming request body.
  */
-class RecordStreamBody_Test {
+class RecordStreamBody_Test extends TestBase {
 
 	public static class Bean {
 		public String name;

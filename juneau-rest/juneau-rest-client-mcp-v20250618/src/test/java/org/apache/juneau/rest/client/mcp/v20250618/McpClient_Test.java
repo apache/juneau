@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.v20250618;
 
+import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -23,6 +24,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.rest.client.*;
@@ -32,7 +34,7 @@ import org.junit.jupiter.api.*;
  * Unit tests for {@link McpClient}.
  */
 @SuppressWarnings("resource") // mock transports/clients are in-memory no-op closeables; test bodies close what matters via try-with-resources.
-class McpClient_Test {
+class McpClient_Test extends TestBase {
 
 	private static String bodyOf(TransportRequest req) {
 		try {
@@ -93,9 +95,8 @@ class McpClient_Test {
 	void a03_initialize_errorResponse_throwsMcpException() throws Exception {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32601,\"message\":\"Method not found: initialize\"}}";
 		try (var client = client(ok(wire))) {
-			var e = assertThrows(McpException.class, client::initialize);
+			var e = assertThrowsWithMessage(McpException.class, "Method not found: initialize", client::initialize);
 			assertEquals(-32601, e.getCode());
-			assertEquals("Method not found: initialize", e.getMessage());
 		}
 	}
 
@@ -204,9 +205,8 @@ class McpClient_Test {
 	void d03_callTool_unknownTool_throwsMcpException() throws Exception {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32601,\"message\":\"Tool not found: no-such-tool\"}}";
 		try (var client = client(ok(wire))) {
-			var e = assertThrows(McpException.class, () -> client.callTool("no-such-tool", Map.of()));
+			var e = assertThrowsWithMessage(McpException.class, "Tool not found: no-such-tool", () -> client.callTool("no-such-tool", Map.of()));
 			assertEquals(-32601, e.getCode());
-			assertEquals("Tool not found: no-such-tool", e.getMessage());
 		}
 	}
 

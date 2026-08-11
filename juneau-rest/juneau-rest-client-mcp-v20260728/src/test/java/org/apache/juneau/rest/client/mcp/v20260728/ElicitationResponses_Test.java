@@ -16,10 +16,12 @@
  */
 package org.apache.juneau.rest.client.mcp.v20260728;
 
+import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.api.*;
@@ -27,7 +29,7 @@ import org.junit.jupiter.api.*;
 /**
  * Coverage for {@link ElicitationResponses}.
  */
-class ElicitationResponses_Test {
+class ElicitationResponses_Test extends TestBase {
 
 	@Test void a01_toInputResponse_singleAnswer_encodesAcceptWithContent() {
 		var result = new ElicitResult().setAction(ElicitAction.ACCEPT).putContent("choice", "red");
@@ -54,26 +56,26 @@ class ElicitationResponses_Test {
 
 	@Test void a03_toInputResponse_nullIdThrows() {
 		var result = new ElicitResult();
-		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationResponses.toInputResponse(null, result));
-		assertEquals("Argument 'id' cannot be null.", e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'id' cannot be null.",
+			() -> ElicitationResponses.toInputResponse(null, result));
 	}
 
 	@Test void a04_toInputResponse_nullResultThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationResponses.toInputResponse("q1", null));
-		assertEquals("Argument 'result' cannot be null.", e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'result' cannot be null.",
+			() -> ElicitationResponses.toInputResponse("q1", null));
 	}
 
 	@Test void a05_toInputResponses_nullMapThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationResponses.toInputResponses(null));
-		assertEquals("Argument 'results' cannot be null.", e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'results' cannot be null.",
+			() -> ElicitationResponses.toInputResponses(null));
 	}
 
 	@Test void a06_toInputResponses_nullEntryThrows() {
 		var results = new LinkedHashMap<String,ElicitResult>();
 		results.put("q1", new ElicitResult().setAction(ElicitAction.ACCEPT));
 		results.put("q2", null);
-		var e = assertThrows(IllegalArgumentException.class, () -> ElicitationResponses.toInputResponses(results));
-		assertEquals("Argument 'results[q2]' cannot be null.", e.getMessage());
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'results[q2]' cannot be null.",
+			() -> ElicitationResponses.toInputResponses(results));
 	}
 
 	/**

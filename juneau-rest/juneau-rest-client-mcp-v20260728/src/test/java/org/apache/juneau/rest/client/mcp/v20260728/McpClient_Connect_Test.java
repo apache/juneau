@@ -16,12 +16,15 @@
  */
 package org.apache.juneau.rest.client.mcp.v20260728;
 
+import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;
 
@@ -35,7 +38,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Mock HttpTransport (including the deliberately-`failing` implementations used to pin close-failure/suppressed-exception behavior) and countingTransport(...) instances are short-lived test fixtures; some are intentionally unassigned/never closed since these tests pin McpClient.connect(...)'s own close behavior, not the mock transport's.
 })
-class McpClient_Connect_Test {
+class McpClient_Connect_Test extends TestBase {
 
 	private static final String DISCOVER_WIRE =
 		"{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"supportedVersions\":[\"2026-07-28\"],\"capabilities\":{}}}";
@@ -96,20 +99,19 @@ class McpClient_Connect_Test {
 
 	@Test
 	void b01_connect_closesClientAndPropagatesOnHandshakeFailure() {
-		var closed = new AtomicBoolean();
+		var closed = Flag.create();
 		HttpTransport failing = new HttpTransport() {
 			@Override public TransportResponse execute(TransportRequest request) throws TransportException {
 				throw new TransportException("boom");
 			}
 
 			@Override public void close() {
-				closed.set(true);
+				closed.set();
 			}
 		};
 		var builder = McpClient.builder().endpoint("http://x/mcp").transport(failing);
-		var ex = assertThrows(IOException.class, () -> McpClient.connect(builder));
-		assertEquals("boom", ex.getMessage());
-		assertTrue(closed.get());
+		assertThrowsWithMessage(IOException.class, "boom", () -> McpClient.connect(builder));
+		assertTrue(closed.isSet());
 	}
 
 	@Test
@@ -124,8 +126,7 @@ class McpClient_Connect_Test {
 			}
 		};
 		var builder = McpClient.builder().endpoint("http://x/mcp").transport(failing);
-		var ex = assertThrows(IOException.class, () -> McpClient.connect(builder));
-		assertEquals("boom", ex.getMessage());
+		var ex = assertThrowsWithMessage(IOException.class, "boom", () -> McpClient.connect(builder));
 		assertEquals(1, ex.getSuppressed().length);
 		assertEquals("close-boom", ex.getSuppressed()[0].getMessage());
 	}
@@ -142,28 +143,26 @@ class McpClient_Connect_Test {
 			}
 		};
 		var builder = McpClient.builder().endpoint("http://x/mcp").transport(failing);
-		var ex = assertThrows(IOException.class, () -> McpClient.connect(builder));
-		assertEquals("boom", ex.getMessage());
+		var ex = assertThrowsWithMessage(IOException.class, "boom", () -> McpClient.connect(builder));
 		assertEquals(1, ex.getSuppressed().length);
 		assertEquals("close-boom", ex.getSuppressed()[0].getMessage());
 	}
 
 	@Test
 	void b04_connect_closesClientAndPropagatesOnUncheckedHandshakeError() {
-		var closed = new AtomicBoolean();
+		var closed = Flag.create();
 		HttpTransport failing = new HttpTransport() {
 			@Override public TransportResponse execute(TransportRequest request) {
 				throw new StackOverflowError("boom");
 			}
 
 			@Override public void close() {
-				closed.set(true);
+				closed.set();
 			}
 		};
 		var builder = McpClient.builder().endpoint("http://x/mcp").transport(failing);
-		var err = assertThrows(StackOverflowError.class, () -> McpClient.connect(builder));
-		assertEquals("boom", err.getMessage());
-		assertTrue(closed.get());
+		assertThrowsWithMessage(StackOverflowError.class, "boom", () -> McpClient.connect(builder));
+		assertTrue(closed.isSet());
 	}
 
 	@Test

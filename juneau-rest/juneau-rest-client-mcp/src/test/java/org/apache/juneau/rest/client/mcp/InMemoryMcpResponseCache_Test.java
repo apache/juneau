@@ -20,13 +20,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Unit tests for {@link InMemoryMcpResponseCache}.
  */
-class InMemoryMcpResponseCache_Test {
+class InMemoryMcpResponseCache_Test extends TestBase {
 
 	// ==========================================================================
 	// a — basic get/put

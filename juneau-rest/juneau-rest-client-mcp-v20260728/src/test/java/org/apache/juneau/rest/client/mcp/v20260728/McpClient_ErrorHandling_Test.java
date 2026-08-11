@@ -16,10 +16,12 @@
  */
 package org.apache.juneau.rest.client.mcp.v20260728;
 
+import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.nio.charset.*;
+import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;
@@ -27,7 +29,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Mock HttpTransport lambda is a short-lived test fixture whose client is already closed via try-with-resources.
 })
-class McpClient_ErrorHandling_Test {
+class McpClient_ErrorHandling_Test extends TestBase {
 
 	@Test
 	void a01_jsonRpcError_throwsMcpException() throws Exception {
@@ -40,9 +42,8 @@ class McpClient_ErrorHandling_Test {
 				.build();
 		};
 		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
-			var ex = assertThrows(McpException.class, c::ping);
+			var ex = assertThrowsWithMessage(McpException.class, "Method not found", c::ping);
 			assertEquals(-32601, ex.getCode());
-			assertTrue(ex.getMessage().contains("Method not found"));
 		}
 	}
 }
